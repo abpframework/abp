@@ -10,9 +10,10 @@ export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }
   const injector = new DummyInjector({
     PermissionService: mockPermissionService(),
     ConfigStateService: { createOnUpdateStream: () => updateStream$ },
+    OTHERS_GROUP: 'OthersGroup',
     ...injectorPayload,
   });
-  return new RoutesService(injector, 'OthersGroup');
+  return new RoutesService(injector);
 };
 
 describe('Routes Service', () => {
@@ -71,9 +72,8 @@ describe('Routes Service', () => {
       expect(visible[0].children[0].name).toBe('x');
     });
   });
-
   describe('#groupedVisible', () => {
-    it('should have groups and items', async () => {
+    it('should return grouped route list', () => {
       service.add(groupedRoutes);
 
       const tree = service.groupedVisible;

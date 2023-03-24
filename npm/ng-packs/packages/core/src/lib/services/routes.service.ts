@@ -1,4 +1,4 @@
-import { Injectable, Injector, Inject, OnDestroy} from '@angular/core';
+import { Injectable, Injector, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ABP } from '../models/common';
 import { OTHERS_GROUP } from '../tokens';
@@ -182,9 +182,13 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 
 @Injectable({ providedIn: 'root' })
 export class RoutesService extends AbstractNavTreeService<ABP.Route> {
-  constructor(injector: Injector, @Inject(OTHERS_GROUP) private readonly othersGroup: string) {
+  private readonly othersGroup: string;
+
+  constructor(injector: Injector) {
     super(injector);
+    this.othersGroup = injector.get(OTHERS_GROUP);
   }
+
   get groupedVisible(): ABP.RouteGroup[] | undefined {
     const hasGroup = this.visible.some(node => !!node.group);
     if (!hasGroup) return;
