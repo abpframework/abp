@@ -55,6 +55,7 @@
     "LanguageCode": "Kielikoodi",
     "FileName": "Tiedoston nimi",
     "LastCachedTime": "Välimuistin aika",
-    "Project": "Projekti"
+    "Project": "Projekti",
+    "AdvancedFilters": "Edistyneet suodattimet"
   }
 }

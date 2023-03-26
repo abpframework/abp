@@ -39,6 +39,7 @@
     "ExtraProperties": "Lisäominaisuudet",
     "MaxDuration": "Maks. Kesto",
     "MinDuration": "Min. Kesto",
+    "MinMaxDuration": "Kesto (Min. - Max.)",
     "{0}Milliseconds": "{0} millisekuntia",
     "ExecutionTime": "Aika",
     "Parameters": "Parametrit",

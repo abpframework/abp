@@ -11,6 +11,7 @@
     "CommercialSupportWebSite": "Kaupallisen tuen verkkosivusto",
     "CommunityWebSite": "ABP-yhteisön verkkosivusto",
     "ManageAccount": "Oma tili | ABP.IO",
-    "ManageYourAccount": "Hallitse tiliäsi"
+    "ManageYourProfile": "Hallinnoi profiiliasi",
+    "ReturnToApplication": "Palaa sovellukseen"
   }
 }

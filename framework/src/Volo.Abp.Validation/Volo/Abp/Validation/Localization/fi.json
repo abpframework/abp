@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Tämän kentän on oltava merkkijono- tai taulukotyyppi, jonka vähimmäispituus on {0}.",
     "ThisFieldIsNotAValidPhoneNumber.": "Tämä kenttä ei ole kelvollinen puhelinnumero.",
     "ThisFieldMustBeBetween{0}And{1}": "Tämän kentän on oltava välillä {0} - {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Tämän kentän on oltava suurempi tai yhtä suuri kuin {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "Tämän kentän on oltava pienempi tai yhtä suuri kuin {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "Tämän kentän on vastattava säännöllistä lauseketta {0}.",
     "ThisFieldIsRequired.": "Tämä kenttä pitää täyttää.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Tämän kentän on oltava merkkijono, jonka enimmäispituus on {0}.",

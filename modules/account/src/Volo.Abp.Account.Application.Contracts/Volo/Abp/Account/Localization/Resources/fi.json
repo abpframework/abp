@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Puhelinnumero",
     "PersonalSettings": "Henkilökohtaiset asetukset",
     "PersonalSettingsSaved": "Henkilökohtaiset asetukset tallennettu",
+    "PersonalSettingsChangedConfirmationModalTitle": "Henkilötiedot muuttuneet",
+    "PersonalSettingsChangedConfirmationModalDescription": "Jos haluat ottaa nämä muutokset käyttöön, sinun on kirjauduttava sisään. Haluatko kirjautua ulos?",
     "PasswordChanged": "Salasana vaihdettu",
     "NewPasswordConfirmFailed": "Vahvista uusi salasana.",
     "NewPasswordSameAsOld": "Uusi salasana ei voi olla sama kuin vanha salasana.",

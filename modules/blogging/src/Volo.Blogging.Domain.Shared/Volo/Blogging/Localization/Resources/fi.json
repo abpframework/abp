@@ -56,6 +56,9 @@
     "ShareOn": "Jaa",
     "TitleLengthWarning": "Pidä otsikkokoko alle 60 merkkiä SEO-ystävällisenä!",
     "ClearCache": "Tyhjennä välimuisti",
-    "ClearCacheConfirmationMessage": "Haluatko varmasti tyhjentää välimuistin?"
+    "ClearCacheConfirmationMessage": "Haluatko varmasti tyhjentää välimuistin?",
+    "MarkdownSupported": "Markdown on tuettu",
+    "FileUploadInfo": "Vedä, pudota tai liitä kopioitu kuva.",
+    "PostDescriptionHint": "* Näytetään artikkelin linkin esikatselussa, tukee HTML:ää"
   }
 }
