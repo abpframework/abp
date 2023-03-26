@@ -6,7 +6,7 @@ In this post, I'll briefly mention the new features of .NET 8 and the changes.
 
 With this new version, `dotnet publish` and `dotnet pack` commands will build and pack with the `Release` mode. Before it was producing in `Debug` mode. To be able to produce in Debug mode, you need to set this parameter `-p:PublishRelease` as false.
 
-```
+```bash
 dotnet publish -> /app/bin/Release/net8.0/app.dll
 dotnet publish -p:PublishRelease=false -> /app/bin/Debug/net8.0/app.dll
 ```
@@ -31,7 +31,7 @@ The latest version of the [source generator](https://learn.microsoft.com/en-us/d
 
 Two new methods: [Random.GetItems](https://learn.microsoft.com/en-us/dotnet/api/system.random.getitems) and [RandomNumberGenerator.GetItems](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator.getitems) have been introduced that enable developers to randomly select a set number  of items from a given input set. The example below demonstrates the  usage of the `System.Random.GetItems<T>()` method using an instance obtained from the `Random.Shared` property to randomly insert 31 items into an array.
 
-```
+```csharp
 private static ReadOnlySpan<CountryPhoneCodePhoneCode> countries = new[]
 {
     new CountryPhoneCode("Turkey", "90"),
@@ -62,7 +62,7 @@ Finland -> 358
 
 If you need to randomize the order of a span in your program, you can take advantage of two new methods: [Random.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.random.shuffle) and [RandomNumberGenerator.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator.shuffle#system-security-cryptography-randomnumbergenerator-shuffle-1(system-span((-0)). These methods are particularly handy when you want to minimize the impact of training bias in machine learning by varying the order in which training and testing data are presented. Using these methods, you can ensure that the first thing in your dataset is only sometimes used for training, and the last is only sometimes reserved for testing.
 
-```
+```csharp
 var trainingData = GetData();
 Random.Shared.Shuffle(trainingData);
 
@@ -128,13 +128,13 @@ Lastly, the [Lerp(TSelf, TSelf, TSelf)](https://learn.microsoft.com/en-us/dotnet
 
 The [DataAnnotations](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations) namespace, aimed specifically for  validation in cloud-native services. The existing `DataAnnotations` validators are primarily used for validating user data, like form fields. However, the new attributes are meant to validate data, not entered by users, like [configuration options](https://learn.microsoft.com/en-us/dotnet/core/extensions/options#options-validation). Apart from the new attributes, the [RangeAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.rangeattribute) and [RequiredAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.requiredattribute) types also received new properties.
 
-| API                                                          | Description                                                  |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [RequiredAttribute.DisallowAllDefaultValues](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.requiredattribute.disallowalldefaultvalues#system-componentmodel-dataannotations-requiredattribute-disallowalldefaultvalues) | The attribute forces that structs for inequality with their default values. |
-| [RangeAttribute.MinimumIsExclusive](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.rangeattribute.minimumisexclusive#system-componentmodel-dataannotations-rangeattribute-minimumisexclusive) [RangeAttribute.MaximumIsExclusive](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.rangeattribute.maximumisexclusive#system-componentmodel-dataannotations-rangeattribute-maximumisexclusive) | Specifies whether the allowable range includes its boundaries or not. |
-| [DataAnnotations.LengthAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.lengthattribute) | Specifies the lower and upper limits for strings or collections using the `Length` attribute. For instance, the `[Length(5, 100)]` attribute specifies that a collection must have at least 5 elements and at most 100 elements. |
-| [DataAnnotations.Base64StringAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.base64stringattribute) | Validates a valid `Base64` format.                           |
-| [DataAnnotations.AllowedValuesAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.allowedvaluesattribute), [DataAnnotations.DeniedValuesAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.deniedvaluesattribute) | Specifies accepted allow lists or not allowed deny lists. For instance: `[AllowedValues("red", "green", "blue")]` or `[DeniedValues("yellow", "purple")]`. |
+- [RequiredAttribute.DisallowAllDefaultValues](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.requiredattribute.disallowalldefaultvalues#system-componentmodel-dataannotations-requiredattribute-disallowalldefaultvalues): The attribute forces that structs for inequality with their default values.
+- [RangeAttribute.MinimumIsExclusive](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.rangeattribute.minimumisexclusive#system-componentmodel-dataannotations-rangeattribute-minimumisexclusive) & [RangeAttribute.MaximumIsExclusive](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.rangeattribute.maximumisexclusive#system-componentmodel-dataannotations-rangeattribute-maximumisexclusive): Specifies whether the allowable range includes its boundaries or not.
+- [DataAnnotations.LengthAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.lengthattribute): Specifies the lower and upper limits for strings or collections using the `Length` attribute. For instance, the `[Length(5, 100)]` attribute specifies that a collection must have at least 5 elements and at most 100 elements.
+- [DataAnnotations.Base64StringAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.base64stringattribute): Validates a valid `Base64` format.
+- [DataAnnotations.AllowedValuesAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.allowedvaluesattribute) & [DataAnnotations.DeniedValuesAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.deniedvaluesattribute): Specifies accepted allow lists or not allowed deny lists. For instance: `[AllowedValues("red", "green", "blue")]` or `[DeniedValues("yellow", "purple")]`.
+
+
 
 ---
 
@@ -154,10 +154,14 @@ The [publishing as native AOT](https://learn.microsoft.com/en-us/dotnet/core/dep
 
 In .NET 8, the support for native AOT now encompasses the `x64` and `Arm64` architectures on macOS. Moreover, native AOT applications on Linux are now up to 50% smaller in size. Here's the table, illustrates the size of a minimal app published with native AOT, containing the entire .NET runtime:
 
-| Operating System                        | .NET 7  | .NET 8  | Output |
-| --------------------------------------- | ------- | ------- | ------ |
-| Linux x64 (with `-p:StripSymbols=true`) | 3.76 MB | 1.84 MB | %49    |
-| Windows x64                             | 2.85 MB | 1.77 MB | %62    |
+
+
+* **Linux x64** (with `-p:StripSymbols=true`) 
+  * .NET 7 ➡ 3.76MB
+  * .NET 8 ➡ 1.84 MB
+* **Windows x64**
+  * .NET 7 ➡ 2.85 MB
+  * .NET 8 ➡ 1.77 MB 
 
 ---
 
