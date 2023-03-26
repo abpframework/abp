@@ -1,8 +1,8 @@
 {
   "culture": "fi",
   "texts": {
-    "Features": "ominaisuudet",
-    "NoFeatureFoundMessage": "Ei ole mitään käytettävissä olevaa ominaisuutta.",
+    "Features": "Ominaisuudet",
+    "NoFeatureFoundMessage": "Käytettävissä olevia ominaisuuksia ei löydy.",
     "ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
     "ManageHostFeaturesText": "Voit hallita isäntäpuolen ominaisuuksia napsauttamalla seuraavaa painiketta.",
     "Permission:FeatureManagement": "Ominaisuuden hallinta",
