@@ -89,13 +89,11 @@ function configureRoutes(routes: RoutesService) {
 ```
 
 Also we can define group for navigation elements. It's an optional property
- - **Note:** It'll also include groups that included from modules
+ - **Note:** It'll also include groups that defined at modules
 
 ```js
 // route.provider.ts
-import { ABP } from '@abp/ng.core';
-
-type GroupType = ABP.Group<string>;
+import { RoutesService } from '@abp/ng.core';
 
 function configureRoutes(routes: RoutesService) {  
   return () => {
@@ -116,16 +114,18 @@ function configureRoutes(routes: RoutesService) {
 }
 ```
 
-To get route items as grouped we can use `groupedVisible` getter method
- - It will return `RouteGroup[]` if there is any group in route tree otherwise it'll return undefined
+To get route items as grouped we can use `groupedVisible` (or Observable one `groupedVisible$`)  getter methods
+ - It will return `RouteGroup[]` if there is any group in route tree otherwise it'll return `undefined`
 
 ```js
-import { ABP, RoutesService } from "@abp/ng.core";
+import { ABP, RoutesService, RouteGroup } from "@abp/ng.core";
 import { Component } from "@angular/core";
 
 @Component(/* component metadata */)
 export class AppComponent {
-  visible: ABP.RouteGroup[] | undefined = routes.groupedVisible;
+  visible: RouteGroup<ABP.Route>[] | undefined = this.routes.groupedVisible;
+  //Or
+  visible$:Observable<RouteGroup<ABP.Route>[] | undefined> = this.routes.groupedVisible$;
   
   constructor(routes: RoutesService) {}
 }
