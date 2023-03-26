@@ -1,9 +1,15 @@
 import { Injectable, Injector, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, map } from 'rxjs';
 import { ABP } from '../models/common';
 import { OTHERS_GROUP } from '../tokens';
 import { pushValueTo } from '../utils/array-utils';
-import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils';
+import {
+  BaseTreeNode,
+  createTreeFromList,
+  TreeNode,
+  RouteGroup,
+  createGroupMap,
+} from '../utils/tree-utils';
 import { ConfigStateService } from './config-state.service';
 import { PermissionService } from './permission.service';
 
@@ -17,6 +23,8 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
   private _flat$ = new BehaviorSubject<T[]>([]);
   private _tree$ = new BehaviorSubject<TreeNode<T>[]>([]);
   private _visible$ = new BehaviorSubject<TreeNode<T>[]>([]);
+
+  protected othersGroup: string;
 
   get flat(): T[] {
     return this._flat$.value;
@@ -49,6 +57,11 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
       item => item[this.parentId],
       item => BaseTreeNode.create(item),
     );
+  }
+
+  protected createGroupedTree(list: TreeNode<T>[]): RouteGroup<T>[] | undefined {
+    const map = createGroupMap<T>(list, this.othersGroup);
+    return !map ? undefined : Array.from(map, ([key, items]) => ({ group: key, items }));
   }
 
   private filterWith(setOrMap: Set<string> | Map<string, T>): T[] {
@@ -158,6 +171,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
       .createOnUpdateStream(state => state)
       .subscribe(() => this.refresh());
     this.permissionService = injector.get(PermissionService);
+    this.othersGroup = injector.get(OTHERS_GROUP);
   }
 
   protected isGranted({ requiredPolicy }: T): boolean {
@@ -182,24 +196,11 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 
 @Injectable({ providedIn: 'root' })
 export class RoutesService extends AbstractNavTreeService<ABP.Route> {
-  private readonly othersGroup: string;
-
-  constructor(injector: Injector) {
-    super(injector);
-    this.othersGroup = injector.get(OTHERS_GROUP);
+  get groupedVisible(): RouteGroup<ABP.Route>[] | undefined {
+    return this.createGroupedTree(this.visible);
   }
 
-  get groupedVisible(): ABP.RouteGroup[] | undefined {
-    const hasGroup = this.visible.some(node => !!node.group);
-    if (!hasGroup) return;
-
-    const groups = this.visible.reduce((acc, node) => {
-      const groupName = node.group ?? this.othersGroup;
-      acc[groupName] ||= [];
-      acc[groupName].push(node);
-      return acc;
-    }, {} as Record<string, TreeNode<ABP.Route>[]>);
-
-    return Object.entries(groups).map(([group, items]) => ({ group, items }));
+  get groupedVisible$(): Observable<RouteGroup<ABP.Route>[] | undefined> {
+    return this.visible$.pipe(map(visible => this.createGroupedTree(visible)));
   }
 }

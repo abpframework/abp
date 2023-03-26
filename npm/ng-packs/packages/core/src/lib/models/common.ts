@@ -2,7 +2,6 @@ import { EventEmitter, Type } from '@angular/core';
 import { Routes } from '@angular/router';
 import { Subject } from 'rxjs';
 import { eLayoutType } from '../enums/common';
-import { TreeNode } from '../utils';
 import { Environment } from './environment';
 
 export namespace ABP {
@@ -73,11 +72,6 @@ export namespace ABP {
     layout?: eLayoutType;
     iconClass?: string;
     group?: string;
-  }
-
-  export interface RouteGroup {
-    group: string;
-    items: TreeNode<Route>[];
   }
 
   export interface Tab extends Nav {

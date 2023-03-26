@@ -74,12 +74,39 @@ export function createTreeNodeFilterCreator<T extends object>(
   };
 }
 
+export function createGroupMap<T extends { [key: string]: string }>(
+  list: TreeNode<T>[],
+  othersGroupKey: string,
+): Map<string, TreeNode<T>[]> | undefined {
+  if (!list || !Array.isArray(list) || !list.some(node => Boolean(node.group))) return undefined;
+
+  const mapGroup = new Map<string, TreeNode<T>[]>();
+
+  for (const node of list) {
+    const group = node?.group || othersGroupKey;
+    if (typeof group !== 'string') {
+      throw new Error(`Invalid group: ${group}`);
+    }
+
+    const items = mapGroup.get(group) || [];
+    items.push(node);
+    mapGroup.set(group, items);
+  }
+
+  return mapGroup;
+}
+
 export type TreeNode<T extends object> = {
   [K in keyof T]: T[K];
 } & {
   children: TreeNode<T>[];
   isLeaf: boolean;
   parent?: TreeNode<T>;
+};
+
+export type RouteGroup<T extends object> = {
+  readonly group: string;
+  readonly items: TreeNode<T>[];
 };
 
 export type NodeKey = number | string | symbol | undefined | null;

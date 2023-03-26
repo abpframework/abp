@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { Subject, lastValueFrom } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { RoutesService } from '../services/routes.service';
 import { DummyInjector } from './utils/common.utils';
@@ -47,9 +47,9 @@ describe('Routes Service', () => {
     it('should add given routes as flat$, tree$, and visible$', async () => {
       service.add(routes);
 
-      const flat = await service.flat$.pipe(take(1)).toPromise();
-      const tree = await service.tree$.pipe(take(1)).toPromise();
-      const visible = await service.visible$.pipe(take(1)).toPromise();
+      const flat = await lastValueFrom(service.flat$.pipe(take(1)));
+      const tree = await lastValueFrom(service.tree$.pipe(take(1)));
+      const visible = await lastValueFrom(service.visible$.pipe(take(1)));
 
       expect(flat.length).toBe(5);
       expect(flat[0].name).toBe('baz');
@@ -72,11 +72,37 @@ describe('Routes Service', () => {
       expect(visible[0].children[0].name).toBe('x');
     });
   });
+
   describe('#groupedVisible', () => {
-    it('should return grouped route list', () => {
+    it('should return undefined when there are no visible routes', async () => {
+      service.add(routes);
+      const result = await lastValueFrom(service.groupedVisible$.pipe(take(1)));
+      expect(result).toBeUndefined();
+    });
+
+    it(
+      'should group visible routes under "' + othersGroup + '" when no group is specified',
+      async () => {
+        service.add([
+          { path: '/foo', name: 'foo' },
+          { path: '/foo/bar', name: 'bar', group: '' },
+          { path: '/foo/bar/baz', name: 'baz', group: undefined },
+          { path: '/x', name: 'y', group: 'z' },
+        ]);
+
+        const result = await lastValueFrom(service.groupedVisible$.pipe(take(1)));
+
+        expect(result[0].group).toBe(othersGroup);
+        expect(result[0].items[0].name).toBe('foo');
+        expect(result[0].items[1].name).toBe('bar');
+        expect(result[0].items[2].name).toBe('baz');
+      },
+    );
+
+    it('should return grouped route list', async () => {
       service.add(groupedRoutes);
 
-      const tree = service.groupedVisible;
+      const tree = await lastValueFrom(service.groupedVisible$.pipe(take(1)));
 
       expect(tree.length).toBe(3);
 
