@@ -197,7 +197,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 @Injectable({ providedIn: 'root' })
 export class RoutesService extends AbstractNavTreeService<ABP.Route> {
   get groupedVisible(): RouteGroup<ABP.Route>[] | undefined {
-    return this.createGroupedTree(this.visible);
+    return this.createGroupedTree(this.visible.filter(f => f.path || f.children?.length > 0));
   }
 
   get groupedVisible$(): Observable<RouteGroup<ABP.Route>[] | undefined> {

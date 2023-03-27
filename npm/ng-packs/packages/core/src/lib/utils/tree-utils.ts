@@ -1,3 +1,5 @@
+import { isArray } from './common-utils';
+
 /* eslint-disable @typescript-eslint/ban-types */
 export class BaseTreeNode<T extends object> {
   children: TreeNode<T>[] = [];
@@ -77,8 +79,8 @@ export function createTreeNodeFilterCreator<T extends object>(
 export function createGroupMap<T extends { [key: string]: string }>(
   list: TreeNode<T>[],
   othersGroupKey: string,
-): Map<string, TreeNode<T>[]> | undefined {
-  if (!list || !Array.isArray(list) || !list.some(node => Boolean(node.group))) return undefined;
+) {
+  if (!isArray(list) || !list.some(node => Boolean(node.group))) return undefined;
 
   const mapGroup = new Map<string, TreeNode<T>[]>();
 
