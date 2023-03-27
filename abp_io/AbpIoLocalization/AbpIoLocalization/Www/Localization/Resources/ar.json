@@ -405,6 +405,6 @@
     "Details": "التفاصيل",
     "ApplicationModuleExplanation1": "إنشاء حل وحدة تطبيق ذات طبقات كاملة وقابلة لإعادة الاستخدام.",
     "ApplicationModuleExplanation2": "يمكنك استخدام هذا الخيار لإنشاء وحدات نمطية لتطبيقك المعياري.",
-    "Books_Page_Title": "كتب ABP"
+    "BooksPageTitle": "كتب ABP"
   }
 }

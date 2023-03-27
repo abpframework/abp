@@ -821,10 +821,10 @@
     "SpringCampaignDiscount": "Spring Campaign Discount",
     "WhyUseAbpIoPlatform": "Why should I use the ABP.IO Platform instead of creating a new solution from scratch?",
     "WhyUseAbpIoPlatformFaqExplanation": "See <a href=\"https://docs.abp.io/en/commercial/latest/why-abp-io-platform \"> that document </a> for a detailed explanation of why using ABP.IO Platform has a significant advantage over doing everything yourself.",
-    "Eula_Page_Title": "End User License Agreement (EULA)",
-    "PrivacyPolicy_Page_Title": "Privacy Policy - Cookie Policy",
-    "TermsConditions_Page_Title": "Terms and Conditions",
-    "Trainings_Page_Title": "ABP Training Packages",
-    "Modules_Page_Title": "ABP Pre-Built Application Modules"
+    "EulaPageTitle": "End User License Agreement (EULA)",
+    "PrivacyPolicyPageTitle": "Privacy Policy - Cookie Policy",
+    "TermsConditionsPageTitle": "Terms and Conditions",
+    "TrainingsPageTitle": "ABP Training Packages",
+    "ModulesPageTitle": "ABP Pre-Built Application Modules"
   }
 }

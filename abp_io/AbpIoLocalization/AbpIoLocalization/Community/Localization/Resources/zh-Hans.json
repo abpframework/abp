@@ -187,6 +187,6 @@
     "IConsentToMedium": "我同意在 https://medium.com/volosoft 上发布这篇文章。",
     "SearchResultsFor": " span class=\"fw-bold\">\"{0}\"</span>的搜索结果",
     "SeeMoreVideos": "查看更多视频",
-    "Discord_Page_Title": "ABP Discord社区"
+    "DiscordPageTitle": "ABP Discord社区"
   }
 }

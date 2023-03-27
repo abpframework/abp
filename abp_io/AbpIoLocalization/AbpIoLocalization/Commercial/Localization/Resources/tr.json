@@ -746,10 +746,10 @@
     "GetConfirmationEmail": "Daha önce bir onay e-postası almadıysanız <a href=\"javascript:void(0);\" id=\"{0}\" class=\"text-decoration-underline\"> almak için buraya tıklayın.</a>",
     "WhichLicenseTypeYouAreInterestedIn":  "Hangi lisans türüyle ilgileniyorsunuz?",
     "BlackFridayDiscount": "Kara Cuma İndirimi",
-    "Eula_Page_Title": "Son Kullanıcı Lisans Sözleşmesi (EULA)",
-    "PrivacyPolicy_Page_Title": "Gizlilik Politikası - Çerez Politikası",
-    "TermsConditions_Page_Title": "Şartlar ve Koşullar",
-    "Trainings_Page_Title": "ABP Eğitim Paketleri",
-    "Modules_Page_Title": "ABP Önceden Oluşturulmuş Uygulama Modülleri"
+    "EulaPageTitle": "Son Kullanıcı Lisans Sözleşmesi (EULA)",
+    "PrivacyPolicyPageTitle": "Gizlilik Politikası - Çerez Politikası",
+    "TermsConditionsPageTitle": "Şartlar ve Koşullar",
+    "TrainingsPageTitle": "ABP Eğitim Paketleri",
+    "ModulesPageTitle": "ABP Önceden Oluşturulmuş Uygulama Modülleri"
   }
 }

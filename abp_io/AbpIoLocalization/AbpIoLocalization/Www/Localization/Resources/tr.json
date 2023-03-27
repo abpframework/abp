@@ -375,6 +375,6 @@
     "ComputersAndTechnology": "Bilgisayar ve Teknoloji",
     "ThisBookIsInDraftStageAndIsNotCompletedYet": "Bu kitap taslak aşamasındadır ve henüz tamamlanmamıştır.",
     "SelectUITheme": "UI Temasını Seçin",
-    "Books_Page_Title": "ABP Kitapları"
+    "BooksPageTitle": "ABP Kitapları"
   }
 }
