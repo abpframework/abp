@@ -2,6 +2,11 @@
   "culture": "fi",
   "texts": {
     "ThisFieldIsRequired": "Tämä kenttä pitää täyttää",
-    "MaxLenghtErrorMessage": "Tämä kenttä voi olla enintään {0} merkkiä"
+    "MaxLenghtErrorMessage": "Tämä kenttä voi olla enintään {0} merkkiä",
+    "Enum:BookType.Undefined": "Määrittämätön ValidationResourcesta",
+    "Enum:BookType.0": "Määrittämätön arvo 0 ValidationResourcesta",
+    "BookType.Adventure": "Seikkailu ValidationResourcesta",
+    "BookType.1": "Seikkailu arvolla 1 ValidationResourcesta",
+    "Biography": "Elämäkerta ValidationResourcesta"
   }
 }

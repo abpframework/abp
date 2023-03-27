@@ -186,6 +186,7 @@
     "TagsInArticle": "文章中的标签",
     "IConsentToMedium": "我同意在 https://medium.com/volosoft 上发布这篇文章。",
     "SearchResultsFor": " span class=\"fw-bold\">\"{0}\"</span>的搜索结果",
-    "SeeMoreVideos": "查看更多视频"
+    "SeeMoreVideos": "查看更多视频",
+    "DiscordPageTitle": "ABP Discord社区"
   }
 }
