@@ -2,14 +2,14 @@
 
 ### Introduction
 
-In today's digital world, providing reliable and transparent information about your platform's availability is essential for fostering trust among your community and customers. With the growing number of abp.io users, we needed a dedicated status page to keep everyone informed about our platform's health. We already had an internal alert system with health checks for our abp.io websites, but we needed a public-facing status page [status.abp.io](https://status.abp.io/) to share this information with our community and customers, especially during important events like migrating the abp.io platform from on-premises to Azure. To achieve this, we utilized the open-source project [Upptime](https://upptime.js.org/) and built a custom status page on [GitHub Pages](https://pages.github.com/). In this article, we'll guide you through the process of creating our own status page and customizing it to suit our needs.
+In today's digital world, providing reliable and transparent information about your platform's availability is essential to maintain trust among your community and customers. With the growing number of abp.io users, we needed a dedicated status page to keep everyone informed about our platform's health. We've already had an internal alert system with health checks for our abp.io websites, but we needed a public-facing status page [status.abp.io](https://status.abp.io/) to share this information with our community and customers, especially during important events like migrating the abp.io platform from on-premise to Azure. To achieve this, we utilized the open-source project [Upptime](https://upptime.js.org/) and built a custom status page on [GitHub Pages](https://pages.github.com/). In this article, we'll guide you through the process of creating our own status page and customizing it to suit our needs.
 
 
 ### Choosing Upptime as our monitoring tool
-[Upptime](https://github.com/upptime/upptime) is an open-source, easy-to-use, and cost-effective solution for monitoring websites and APIs. It offers essential features, such as downtime alerts, response time monitoring, and status history. We decided to use Upptime because of its compatibility with GitHub Pages, ease of customization, comprehensive documentation (https://upptime.js.org/docs/) and discord notification.
+[Upptime](https://github.com/upptime/upptime) is an open-source, easy-to-use, and cost-effective solution for monitoring websites and APIs. It offers essential features, such as downtime alerts, response time monitoring, and status history. We decided to use Upptime because of its compatibility with GitHub Pages, ease of customization, comprehensive documentation (https://upptime.js.org/docs/) and discord notifications.
 
 Advantages of Upptime
-Open-source: Allows for easy customization and community support.
+Open-source: Allows easy customization and community support.
 GitHub Pages compatibility: Seamless integration with GitHub Pages for hosting.
 Cost-effective: Utilizes GitHub Actions, which provides free monitoring within the GitHub Actions usage limits.
 Comprehensive documentation: Easy-to-follow instructions for setting up and customizing the status page.
@@ -23,7 +23,7 @@ b. Configure the GitHub Actions workflow
 We then configured our GitHub Actions workflow by editing the .github/workflows files. This included setting up the monitoring frequency, notification settings, and adding our API keys for third-party services if needed.
 
 c. Add the monitored endpoints
-We added the monitored endpoints (our abp.io websites) to the repositories.json file. This file is located in the root of the repository and contains a list of URLs that Upptime monitors.
+We added the monitored endpoints (our abp.io websites) to the repositories.json file. This file is located in the root of the repository and contains a list of URLs that are monitored by Upptime.
 
 json
 Copy code
