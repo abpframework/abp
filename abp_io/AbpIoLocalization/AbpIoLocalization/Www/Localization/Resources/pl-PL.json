@@ -274,7 +274,8 @@
     "FirstEdition": "Pierwsza edycja",
     "ThankYou": "Dziękuję Ci!",
     "CheckboxMandatory": "Musisz to sprawdzić, aby kontynuować!",
-    "SelectUITheme": "Wybierz motyw interfejsu"
-
+    "SelectUITheme": "Wybierz motyw interfejsu",
+    "CreateSolutionFolder": "Utwórz folder rozwiązania",
+    "CreateSolutionFolderOption": "Określa, czy projekt znajdzie się w nowym folderze w folderze wyjściowym, czy bezpośrednio w folderze wyjściowym."
   }
 }

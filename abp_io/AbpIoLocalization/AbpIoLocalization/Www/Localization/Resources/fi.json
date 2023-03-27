@@ -274,7 +274,8 @@
     "FirstEdition": "Ensimmäinen painos",
     "ThankYou": "Kiitos!",
     "CheckboxMandatory": "Sinun on tarkistettava tämä jatkaaksesi!",
-    "SelectUITheme": "Valitse käyttöliittymän teema"
-
+    "SelectUITheme": "Valitse käyttöliittymän teema",
+    "CreateSolutionFolder": "Luo ratkaisukansio",
+    "CreateSolutionFolderOption": "Määrittää, onko projekti tuloskansion uudessa kansiossa vai suoraan tulostekansiossa."
   }
 }

@@ -274,7 +274,8 @@
     "FirstEdition": "Primeira edição",
     "ThankYou": "Obrigado!",
     "CheckboxMandatory": "Você precisa verificar isso para continuar!",
-    "SelectUITheme": "Selecione o tema da interface do usuário"
-
+    "SelectUITheme": "Selecione o tema da interface do usuário",
+    "CreateSolutionFolder": "Criar Pasta de Solução",
+    "CreateSolutionFolderOption": "Especifica se o projeto estará em uma nova pasta na pasta de saída ou diretamente na pasta de saída."
   }
 }
