@@ -41,6 +41,8 @@ public class YourModule : AbpModule
 
 > Hangfire后台工作者集成提供了 `HangfirePeriodicBackgroundWorkerAdapter` 来适配 `PeriodicBackgroundWorkerBase` 和 `AsyncPeriodicBackgroundWorkerBase` 派生类. 所以你依然可以按照[后台工作者文档](Background-Workers.md)来定义后台作业.
 
+> 你必须为Hangfire配置一个存储
+
 ## 创建后台工作者
 
 `HangfireBackgroundWorkerBase` 是创建一个后台工作者简单的方法.

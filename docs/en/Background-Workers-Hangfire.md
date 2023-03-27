@@ -40,6 +40,8 @@ public class YourModule : AbpModule
 
 > Hangfire background worker integration provides an adapter `HangfirePeriodicBackgroundWorkerAdapter` to automatically load any `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived classes as `IHangfireBackgroundWorker` instances. This allows you to still to easily switch over to use Hangfire as the background manager even you have existing background workers that are based on the [default background workers implementation](Background-Workers.md).
 
+> You have to configure a storage for Hangfire.
+
 ## Create a Background Worker
 
 `HangfireBackgroundWorkerBase` is an easy way to create a background worker.
