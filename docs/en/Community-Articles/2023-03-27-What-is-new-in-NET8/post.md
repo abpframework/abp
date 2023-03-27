@@ -60,7 +60,7 @@ Finland -> 358
 
 ### Shuffle<T>() 🔀
 
-If you need to randomize the order of a span in your program, you can take advantage of two new methods: [Random.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.random.shuffle) and [RandomNumberGenerator.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator.shuffle#system-security-cryptography-randomnumbergenerator-shuffle-1(system-span((-0)). These methods are particularly handy when you want to minimize the impact of training bias in machine learning by varying the order in which training and testing data are presented. Using these methods, you can ensure that the first thing in your dataset is only sometimes used for training, and the last is only sometimes reserved for testing.
+If you need to randomize the order of a span in your application, you can take advantage of two new methods: [Random.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.random.shuffle) and [RandomNumberGenerator.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator.shuffle?view=net-8.0). These methods are particularly handy when you want to minimize the impact of training bias in machine learning by varying the order in which training and testing data are presented. Using these methods, you can ensure that the first thing in your dataset is only sometimes used for training, and the last is only sometimes reserved for testing.
 
 ```csharp
 var trainingData = GetData();
