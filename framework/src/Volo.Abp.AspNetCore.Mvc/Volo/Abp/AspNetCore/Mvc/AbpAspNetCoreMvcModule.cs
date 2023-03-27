@@ -103,14 +103,14 @@ public class AbpAspNetCoreMvcModule : AbpModule
         {
             options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
 
-            options.CacheProfiles.Add(AbpApiDefinitionController.CacheProfileName, new CacheProfile());
-            options.CacheProfiles.Add(AbpApplicationLocalizationController.CacheProfileName, new CacheProfile());
-            options.CacheProfiles.Add(AbpApplicationLocalizationScriptController.CacheProfileName, new CacheProfile());
-            options.CacheProfiles.Add(AbpServiceProxyScriptController.CacheProfileName, new CacheProfile());
+            options.CacheProfiles.Add(AbpApiDefinitionController.CacheProfileName, new CacheProfile(){ NoStore = true });
+            options.CacheProfiles.Add(AbpApplicationLocalizationController.CacheProfileName, new CacheProfile(){ NoStore = true });
+            options.CacheProfiles.Add(AbpApplicationLocalizationScriptController.CacheProfileName, new CacheProfile(){ NoStore = true });
+            options.CacheProfiles.Add(AbpServiceProxyScriptController.CacheProfileName, new CacheProfile(){ NoStore = true });
 
             // TODO: Below ResponseCache not working because of the AntiForgeryManager.SetCookie()
-            options.CacheProfiles.Add(AbpApplicationConfigurationScriptController.CacheProfileName, new CacheProfile());
-            options.CacheProfiles.Add(AbpApplicationConfigurationController.CacheProfileName, new CacheProfile());
+            options.CacheProfiles.Add(AbpApplicationConfigurationScriptController.CacheProfileName, new CacheProfile(){ NoStore = true });
+            options.CacheProfiles.Add(AbpApplicationConfigurationController.CacheProfileName, new CacheProfile(){ NoStore = true });
 
         });
         context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
