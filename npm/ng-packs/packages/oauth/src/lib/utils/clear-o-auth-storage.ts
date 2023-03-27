@@ -1,7 +1,5 @@
-import { OAuthStorage } from 'angular-oauth2-oidc';
-import { oAuthStorage } from './oauth-storage';
-
-export function clearOAuthStorage(storage: OAuthStorage = oAuthStorage) {
+ 
+export function clearOAuthStorage(storage: { removeItem: (arg0: string) => void;}) {
   const keys = [
     'access_token',
     'id_token',

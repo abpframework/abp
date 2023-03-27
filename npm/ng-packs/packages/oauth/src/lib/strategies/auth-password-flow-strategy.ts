@@ -81,7 +81,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
 
   protected refreshToken() {
     return this.oAuthService.refreshToken().catch(() => {
-      clearOAuthStorage();
+      clearOAuthStorage(this.localStorageService);
       removeRememberMe(this.localStorageService);
     });
   }

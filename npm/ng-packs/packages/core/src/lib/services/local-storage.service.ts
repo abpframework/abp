@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { AbpStorageService } from './storage.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AbpLocalStorageService implements Storage {
+@Injectable(
+  { providedIn: 'root' }
+)
+export class AbpLocalStorageService implements AbpStorageService {
   constructor() {}
   [name: string]: any;
   get length(): number {

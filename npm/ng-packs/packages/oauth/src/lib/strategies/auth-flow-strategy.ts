@@ -18,7 +18,6 @@ import {
   TENANT_KEY,
 } from '@abp/ng.core';
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
-import { oAuthStorage } from '../utils/oauth-storage';
 import { HttpErrorResponse } from '@angular/common/http';
 
 export abstract class AuthFlowStrategy {
@@ -55,14 +54,14 @@ export abstract class AuthFlowStrategy {
     this.localStorageService = injector.get(AbpLocalStorageService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig || {};
     this.tenantKey = injector.get(TENANT_KEY);
-
+ 
     this.listenToOauthErrors();
   }
 
   async init(): Promise<any> {
     if (this.oAuthConfig.clientId) {
-      const shouldClear = shouldStorageClear(this.oAuthConfig.clientId, oAuthStorage);
-      if (shouldClear) clearOAuthStorage(oAuthStorage);
+      const shouldClear = shouldStorageClear(this.oAuthConfig.clientId, this.localStorageService);
+      if (shouldClear) clearOAuthStorage(this.localStorageService);
     }
 
     this.oAuthService.configure(this.oAuthConfig);
@@ -84,14 +83,14 @@ export abstract class AuthFlowStrategy {
   }
 
   protected refreshToken() {
-    return this.oAuthService.refreshToken().catch(() => clearOAuthStorage());
+    return this.oAuthService.refreshToken().catch(() => clearOAuthStorage(this.localStorageService));
   }
 
   protected listenToOauthErrors() {
     this.oAuthService.events
       .pipe(
         filter(event => event instanceof OAuthErrorEvent),
-        tap(() => clearOAuthStorage()),
+        tap(() => clearOAuthStorage(this.localStorageService)),
         switchMap(() => this.configState.refreshAppState()),
       )
       .subscribe();

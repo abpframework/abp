@@ -1,6 +1,5 @@
-import { inject, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { OAuthStorage, TokenResponse } from 'angular-oauth2-oidc';
 import { pipe } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import {

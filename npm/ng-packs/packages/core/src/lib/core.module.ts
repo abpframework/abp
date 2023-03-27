@@ -1,6 +1,7 @@
+import { AbpLocalStorageService } from '@abp/ng.core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
-import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
@@ -36,6 +37,8 @@ import { ShortDatePipe } from './pipes/short-date.pipe';
 import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
+import { AbpStorageService } from './services';
+import { AbpCookieStorageService } from './services/cookie-storage.service';
 
 /**
  * BaseCoreModule is the module that holds
@@ -176,6 +179,18 @@ export class CoreModule {
           provide: QUEUE_MANAGER,
           useClass: DefaultQueueManager,
         },
+        {
+          provide: AbpStorageService,
+          deps: [Injector],
+          useFactory: (injector: Injector) => {
+            const isSSR = typeof window?.localStorage === 'undefined';
+            if (isSSR) {
+              return injector.get(AbpCookieStorageService);
+            }
+            return injector.get(AbpLocalStorageService);
+          },
+        },
+        
         IncludeLocalizationResourcesProvider,
       ],
     };

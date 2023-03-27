@@ -1,6 +1,8 @@
+import { AbpLocalStorageService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 import { OAuthStorage } from 'angular-oauth2-oidc';
-import { oAuthStorage } from './oauth-storage';
-
+ 
 export function storageFactory(): OAuthStorage {
-  return oAuthStorage;
+  const storage = inject(AbpLocalStorageService)
+  return storage;
 }
