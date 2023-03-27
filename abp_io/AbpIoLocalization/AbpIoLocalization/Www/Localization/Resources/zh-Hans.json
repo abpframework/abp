@@ -416,6 +416,9 @@
     "CompanyInfo": "公司信息",
     "Date": "日期",
     "WhoWeAre_Partner": "关于我们",
-    "WhoWeAre_Expert": "关于我"
+    "WhoWeAre_Expert": "关于我",
+    "CreateSolutionFolder": "创建解决方案文件夹",
+    "CreateSolutionFolderOption": "指定项目是位于输出文件夹中的新文件夹中，还是直接位于输出文件夹中。",
+    "BooksPageTitle": "ABP书籍"
   }
 }
