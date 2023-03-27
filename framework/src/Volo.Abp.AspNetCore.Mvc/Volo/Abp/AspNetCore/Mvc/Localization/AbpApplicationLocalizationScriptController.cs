@@ -20,6 +20,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpApplicationLocalizationScriptController : AbpController
 {
+    public const string CacheProfileName = $"{nameof(AbpApplicationLocalizationScriptController)}.{nameof(AbpApplicationLocalizationScriptController.GetAsync)}";
+
     protected AbpApplicationLocalizationAppService LocalizationAppService { get; }
     protected AbpAspNetCoreMvcOptions Options { get; }
     protected IJsonSerializer JsonSerializer { get; }
@@ -39,6 +41,7 @@ public class AbpApplicationLocalizationScriptController : AbpController
 
     [HttpGet]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
+    [ResponseCache(CacheProfileName = CacheProfileName)]
     public virtual async Task<ActionResult> GetAsync(ApplicationLocalizationRequestDto input)
     {
         var script = CreateScript(

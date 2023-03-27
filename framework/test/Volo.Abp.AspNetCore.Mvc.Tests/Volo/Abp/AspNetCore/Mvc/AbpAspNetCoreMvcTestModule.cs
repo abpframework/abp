@@ -132,6 +132,8 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         {
             options.Contributors.Add(new TestApplicationConfigurationContributor());
         });
+
+        context.Services.AddResponseCaching();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -139,6 +141,7 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         var app = context.GetApplicationBuilder();
 
         app.UseCorrelationId();
+        app.UseResponseCaching();
         app.UseStaticFiles();
         app.UseAbpRequestLocalization();
         app.UseAbpSecurityHeaders();

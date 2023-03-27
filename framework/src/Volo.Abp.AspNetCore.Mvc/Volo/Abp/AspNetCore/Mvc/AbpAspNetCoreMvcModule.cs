@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,23 +22,21 @@ using Volo.Abp.ApiVersioning;
 using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.ApiExploring;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Json;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
-using Volo.Abp.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.ProxyScripting;
 using Volo.Abp.Http;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
-using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Validation.Localization;
 
@@ -107,6 +102,16 @@ public class AbpAspNetCoreMvcModule : AbpModule
         var mvcCoreBuilder = context.Services.AddMvcCore(options =>
         {
             options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
+
+            options.CacheProfiles.Add(AbpApiDefinitionController.CacheProfileName, new CacheProfile());
+            options.CacheProfiles.Add(AbpApplicationLocalizationController.CacheProfileName, new CacheProfile());
+            options.CacheProfiles.Add(AbpApplicationLocalizationScriptController.CacheProfileName, new CacheProfile());
+            options.CacheProfiles.Add(AbpServiceProxyScriptController.CacheProfileName, new CacheProfile());
+
+            // TODO: Below ResponseCache not working because of the AntiForgeryManager.SetCookie()
+            options.CacheProfiles.Add(AbpApplicationConfigurationScriptController.CacheProfileName, new CacheProfile());
+            options.CacheProfiles.Add(AbpApplicationConfigurationController.CacheProfileName, new CacheProfile());
+
         });
         context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
 

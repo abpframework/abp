@@ -9,6 +9,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 [Route("api/abp/application-configuration")]
 public class AbpApplicationConfigurationController : AbpControllerBase, IAbpApplicationConfigurationAppService
 {
+    public const string CacheProfileName = $"{nameof(AbpApplicationConfigurationController)}.{nameof(AbpApplicationConfigurationController.GetAsync)}";
+
     protected readonly IAbpApplicationConfigurationAppService ApplicationConfigurationAppService;
     protected readonly IAbpAntiForgeryManager AntiForgeryManager;
 
@@ -21,6 +23,7 @@ public class AbpApplicationConfigurationController : AbpControllerBase, IAbpAppl
     }
 
     [HttpGet]
+    [ResponseCache(CacheProfileName = CacheProfileName)]
     public virtual async Task<ApplicationConfigurationDto> GetAsync(
         ApplicationConfigurationRequestOptions options)
     {
