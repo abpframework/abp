@@ -1,8 +1,8 @@
-import { APP_INITIALIZER, ModuleWithProviders, NgModule, Provider } from '@angular/core';
+import { APP_INITIALIZER, inject, ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import {
-  AbpLocalStorageService,
+  AbpStorageService,
   ApiInterceptor,
   AuthGuard,
   AuthService,
@@ -59,7 +59,12 @@ export class AbpOAuthModule {
           useFactory: noop,
         },
         OAuthModule.forRoot().providers as Provider[],
-        { provide: OAuthStorage, useClass: AbpLocalStorageService },
+        {
+          provide: OAuthStorage,
+          useFactory: function () {
+            return inject(AbpStorageService);
+          },
+        },
       ],
     };
   }

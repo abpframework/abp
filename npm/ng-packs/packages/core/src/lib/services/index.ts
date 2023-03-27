@@ -19,4 +19,5 @@ export * from './session-state.service';
 export * from './subscription.service';
 export * from './track-by.service';
 export * from './local-storage.service';
-export * from './storage.service'
+export * from './storage.service';
+export * from './cookie-storage.service';

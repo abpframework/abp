@@ -1,7 +1,14 @@
 import { AbpLocalStorageService } from '@abp/ng.core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
-import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule, inject } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  Injector,
+  ModuleWithProviders,
+  NgModule,
+  inject,
+  Provider,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
@@ -38,7 +45,7 @@ import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 import { AbpStorageService } from './services';
-import { AbpCookieStorageService } from './services/cookie-storage.service';
+import { cookieBasedStorageProvider, localStorageBasedStorageProvider } from './providers';
 
 /**
  * BaseCoreModule is the module that holds
@@ -129,6 +136,10 @@ export class RootCoreModule {}
 })
 export class CoreModule {
   static forRoot(options = {} as ABP.Root): ModuleWithProviders<RootCoreModule> {
+    const storageProvider: Provider = options.useCookieBasedStorage
+      ? cookieBasedStorageProvider
+      : localStorageBasedStorageProvider;
+
     return {
       ngModule: RootCoreModule,
       providers: [
@@ -179,18 +190,7 @@ export class CoreModule {
           provide: QUEUE_MANAGER,
           useClass: DefaultQueueManager,
         },
-        {
-          provide: AbpStorageService,
-          deps: [Injector],
-          useFactory: (injector: Injector) => {
-            const isSSR = typeof window?.localStorage === 'undefined';
-            if (isSSR) {
-              return injector.get(AbpCookieStorageService);
-            }
-            return injector.get(AbpLocalStorageService);
-          },
-        },
-        
+        storageProvider,
         IncludeLocalizationResourcesProvider,
       ],
     };

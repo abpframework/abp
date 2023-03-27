@@ -12,6 +12,7 @@ export namespace ABP {
     sendNullsAsQueryParam?: boolean;
     tenantKey?: string;
     localizations?: Localization[];
+    useCookieBasedStorage?: boolean;
   }
 
   export interface Child {

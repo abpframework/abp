@@ -26,6 +26,7 @@ import { AbpOAuthModule } from '@abp/ng.oauth';
       registerLocaleFn: registerLocale(),
       sendNullsAsQueryParam: false,
       skipGetAppConfiguration: false,
+      useCookieBasedStorage: true,
     }),
     AbpOAuthModule.forRoot(),
     ThemeSharedModule.forRoot(),
