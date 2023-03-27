@@ -125,6 +125,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             output.Attributes.Add("data-autocomplete-selected-item-value", TagHelper.AutocompleteSelectedItemValue);
             output.Attributes.Add("data-autocomplete-allow-clear", TagHelper.AllowClear);
             output.Attributes.Add("data-autocomplete-placeholder", TagHelper.Placeholder);
+            output.Attributes.Add("data-autocomplete-parent-selector", TagHelper.AutocompleteParentSelector);
         }
     }
 
