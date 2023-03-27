@@ -274,7 +274,8 @@
     "FirstEdition": "První vydání",
     "ThankYou": "Děkuji!",
     "CheckboxMandatory": "Chcete-li pokračovat, musíte toto zaškrtnout!",
-    "SelectUITheme": "Vyberte téma uživatelského rozhraní"
-
+    "SelectUITheme": "Vyberte téma uživatelského rozhraní",
+    "CreateSolutionFolder": "Vytvořit složku řešení",
+    "CreateSolutionFolderOption": "Určuje, zda bude projekt v nové složce ve výstupní složce nebo přímo výstupní složce."
   }
 }

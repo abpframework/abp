@@ -279,6 +279,8 @@
     "FirstEdition": "Ensimmäinen painos",
     "ThankYou": "Kiitos!",
     "CheckboxMandatory": "Sinun on tarkistettava tämä jatkaaksesi!",
+    "CreateSolutionFolder": "Luo ratkaisukansio",
+    "CreateSolutionFolderOption": "Määrittää, onko projekti tuloskansion uudessa kansiossa vai suoraan tulostekansiossa.",
     "UserInterface": "Käyttöliittymä",
     "APIGateway": "API-yhdyskäytävä",
     "Database": "Tietokanta",

@@ -274,7 +274,8 @@
     "FirstEdition": "Première édition",
     "ThankYou": "Merci!",
     "CheckboxMandatory": "Vous devez vérifier cela pour continuer !",
-    "SelectUITheme": "Sélectionnez le thème de l'interface utilisateur"
-
+    "SelectUITheme": "Sélectionnez le thème de l'interface utilisateur",
+    "CreateSolutionFolder": "Créer un dossier de solutions",
+    "CreateSolutionFolderOption": "Spécifie si le projet sera dans un nouveau dossier dans le dossier de sortie ou directement dans le dossier de sortie."
   }
 }
