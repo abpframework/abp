@@ -1,0 +1,8 @@
+{
+  "culture": "fi",
+  "texts": {
+    "AbpTitle": "ABP Framework - avoimen lähdekoodin verkkosovelluskehys",
+    "AbpDescription": "ABP on avoimen lähdekoodin sovelluskehys, joka keskittyy AspNet Core -pohjaiseen verkkosovelluskehitykseen. Älä toista itseäsi, vaan keskity omaan yrityskoodiisi.",
+    "AbpDefinition": "ABP-blogi .NET-kehityksestä, useista alustoista, ASP.NET-sovellusmalleista, ABP:hen liittyvistä uutisista ja muusta..."
+  }
+}
