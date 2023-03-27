@@ -10,13 +10,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="..\..\Volo.Abp.AuditLogging.abpmdl.json" />
-      <EmbeddedResource Include="..\..\Volo.Abp.AuditLogging.abpmdl.json" />
+      <Content Include="..\..\Volo.Abp.AuditLogging.abpmdl.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
     </ItemGroup>
 
 </Project>

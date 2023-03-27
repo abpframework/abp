@@ -16,7 +16,10 @@
 
     <ItemGroup>
       <None Remove="..\..\Volo.Abp.IdentityServer.abpmdl.json" />
-      <EmbeddedResource Include="..\..\Volo.Abp.IdentityServer.abpmdl.json" />
+      <Content Include="..\..\Volo.Abp.IdentityServer.abpmdl.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
     </ItemGroup>
 
 </Project>

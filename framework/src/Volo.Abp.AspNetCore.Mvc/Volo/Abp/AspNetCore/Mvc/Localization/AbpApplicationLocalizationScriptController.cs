@@ -39,7 +39,7 @@ public class AbpApplicationLocalizationScriptController : AbpController
 
     [HttpGet]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
-    public async Task<ActionResult> GetAsync(ApplicationLocalizationRequestDto input)
+    public virtual async Task<ActionResult> GetAsync(ApplicationLocalizationRequestDto input)
     {
         var script = CreateScript(
             await LocalizationAppService.GetAsync(input)
@@ -53,7 +53,7 @@ public class AbpApplicationLocalizationScriptController : AbpController
         );
     }
 
-    private string CreateScript(ApplicationLocalizationDto localizationDto)
+    protected virtual string CreateScript(ApplicationLocalizationDto localizationDto)
     {
         var script = new StringBuilder();
 
