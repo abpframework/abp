@@ -40,7 +40,7 @@ public static class AbpIdentityMongoDbContextExtensions
 
         builder.Entity<IdentityUserDelegation>(b =>
         {
-            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "LinkUsers";
+            b.CollectionName = AbpIdentityDbProperties.DbTablePrefix + "UserDelegations";
         });
     }
 }
