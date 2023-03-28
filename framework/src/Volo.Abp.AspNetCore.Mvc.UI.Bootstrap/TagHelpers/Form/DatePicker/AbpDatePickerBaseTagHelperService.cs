@@ -535,8 +535,10 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         {
             return "";
         }
+        
+        var isHaveRequiredAttribute = context.AllAttributes.Any(a => a.Name == "required");
 
-        return GetAttribute<RequiredAttribute>() != null ? "<span> * </span>" : "";
+        return GetAttribute<RequiredAttribute>() != null || isHaveRequiredAttribute ? "<span> * </span>" : "";
     }
 
     protected abstract ModelExpression GetModelExpression();

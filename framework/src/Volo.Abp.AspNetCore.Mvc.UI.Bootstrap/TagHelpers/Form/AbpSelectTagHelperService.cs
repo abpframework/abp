@@ -196,8 +196,10 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         {
             return "";
         }
+        
+        var isHaveRequiredAttribute = context.AllAttributes.Any(a => a.Name == "required");
 
-        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>" : "";
+        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null || isHaveRequiredAttribute ? "<span> * </span>" : "";
     }
 
     protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
