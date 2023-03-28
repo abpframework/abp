@@ -12,6 +12,9 @@ public class AbpDynamicFormTagHelper : AbpTagHelper<AbpDynamicFormTagHelper, Abp
     [HtmlAttributeName("abp-model")]
     public ModelExpression Model { get; set; }
 
+    [HtmlAttributeName("abp-column")]
+    public int Column { get; set; }
+
     public bool? SubmitButton { get; set; }
 
     public bool? RequiredSymbols { get; set; } = true;

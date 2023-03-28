@@ -97,10 +97,14 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
     {
         var contentBuilder = new StringBuilder("");
 
+        contentBuilder.AppendLine("<div class=\"row\">");
+
         foreach (var item in items.OrderBy(o => o.Order))
         {
-            contentBuilder.AppendLine(item.HtmlContent);
+            contentBuilder.AppendLine(SetColumn(item.HtmlContent));
         }
+
+        contentBuilder.AppendLine("</div>");
 
         var content = childContent.GetContent();
         if (content.Contains(AbpFormContentPlaceHolder))
@@ -113,6 +117,18 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         }
 
         output.Content.SetHtmlContent(content);
+    }
+
+    protected virtual string SetColumn(string htmlContent)
+    {
+        if (TagHelper.Column < 2 || TagHelper.Column > 6)
+        {
+            return htmlContent;
+        }
+
+        var col_class = $"col-12 col-sm-" + (12 / TagHelper.Column);
+
+        return $"<div class=\"{col_class}\">{htmlContent}</div>";
     }
 
     protected virtual async Task SetSubmitButton(TagHelperContext context, TagHelperOutput output)
