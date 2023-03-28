@@ -13,6 +13,7 @@ In this document we will explain how to convert BookStore's Books create & edit 
 Books.razor page is the main page of the books management. Create & Update operations are done in this page. So we'll remove create & update operations from this page and move a separate blazor component for each operation. Each component will be a page.
 
 - Remove both Create & Update modals.
+
     ![remove-all-modals](images/books-remove-modals.png)
 
 - Replace **NewBook** button with a link to **CreateBook** page.
