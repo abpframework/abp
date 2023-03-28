@@ -110,6 +110,10 @@ public class DynamicFormsModel : PageModel
 
 为动态表单设置c#模型,模型的属性以表单形式转化为输入.
 
+### abp-column
+
+设置动态表单控件展示列数，值范围：1~6.
+
 ### submit-button
 
 可以为 `True` 或 `False`.
