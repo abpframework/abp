@@ -359,7 +359,8 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
 * `label`: Sets the label of input.
 * `display-required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
 * `open-button`: A button to open the datepicker will be added when its `True`. The default value is `True`.
-* `clear-button`: A button to clear the datepicker will be added when its `True`. The default value is `True`
+* `clear-button`: A button to clear the datepicker will be added when its `True`. The default value is `True`.
+* `single-open-and-clear-button`: Shows the open and clear buttons in a single button when it's `True`. The default value is `True`.
 * `is-utc`: Converts the date to UTC when its `True`. The default value is `False`.
 * `is-iso`: Converts the date to ISO format when its `True`. The default value is `False`.
 * `date-format`: Sets the date format of the input. The default format is the user's culture date format. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
@@ -418,12 +419,13 @@ newPicker.insertAfter($('body'));
   - `AbpFormControlSize.Small`
   - `AbpFormControlSize.Medium`
   - `AbpFormControlSize.Large`
-* `open-button`: A button to open the datepicker will be added when its `True`. The default value is `True`.
-* `clear-button`: A button to clear the datepicker will be added when its `True`. The default value is `True`
-* `is-utc`: Converts the date to UTC when its `True`. The default value is `False`.
-* `is-iso`: Converts the date to ISO format when its `True`. The default value is `False`.
-* `date-format`: Sets the date format of the input. The default format is the user's culture date format. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
-* `date-separator`: Sets a character to separate start and end dates. The default value is `-`.
+* `openButton`: A button to open the datepicker will be added when its `True`. The default value is `True`.
+* `clearButton`: A button to clear the datepicker will be added when its `True`. The default value is `True`.
+* `singleOpenAndClearButton`: Shows the open and clear buttons in a single button when it's `True`. The default value is `True`.
+* `isUtc`: Converts the date to UTC when its `True`. The default value is `False`.
+* `isIso`: Converts the date to ISO format when its `True`. The default value is `False`.
+* `dateFormat`: Sets the date format of the input. The default format is the user's culture date format. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
+* `dateSeparator`: Sets a character to separate start and end dates. The default value is `-`.
 * `startDateName`: Sets the name of the hidden start date input.
 * `endDateName`: Sets the name of the hidden end date input.
 * `dateName`: Sets the name of the hidden date input.
