@@ -610,7 +610,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         return Task.CompletedTask;
     }
 
-    private void TriggerEntityCreateEvents(TEntity entity)
+    protected virtual void TriggerEntityCreateEvents(TEntity entity)
     {
         EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
     }
