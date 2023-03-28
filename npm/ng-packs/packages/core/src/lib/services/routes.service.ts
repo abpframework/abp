@@ -61,7 +61,11 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
 
   protected createGroupedTree(list: TreeNode<T>[]): RouteGroup<T>[] | undefined {
     const map = createGroupMap<T>(list, this.othersGroup);
-    return Boolean(map) ? Array.from(map, ([key, items]) => ({ group: key, items })) : undefined;
+    if (!map) {
+      return undefined;
+    }
+
+    return Array.from(map, ([key, items]) => ({ group: key, items }));
   }
 
   private filterWith(setOrMap: Set<string> | Map<string, T>): T[] {
