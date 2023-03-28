@@ -61,7 +61,7 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
 
   protected createGroupedTree(list: TreeNode<T>[]): RouteGroup<T>[] | undefined {
     const map = createGroupMap<T>(list, this.othersGroup);
-    return !map ? undefined : Array.from(map, ([key, items]) => ({ group: key, items }));
+    return Boolean(map) ? Array.from(map, ([key, items]) => ({ group: key, items })) : undefined;
   }
 
   private filterWith(setOrMap: Set<string> | Map<string, T>): T[] {
@@ -196,11 +196,18 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 
 @Injectable({ providedIn: 'root' })
 export class RoutesService extends AbstractNavTreeService<ABP.Route> {
+  private hasPathOrChild(item: TreeNode<ABP.Route>): boolean {
+    return Boolean(item.path) || Boolean(item.children?.length);
+  }
+
   get groupedVisible(): RouteGroup<ABP.Route>[] | undefined {
-    return this.createGroupedTree(this.visible.filter(f => f.path || f.children?.length > 0));
+    return this.createGroupedTree(this.visible.filter(item => this.hasPathOrChild(item)));
   }
 
   get groupedVisible$(): Observable<RouteGroup<ABP.Route>[] | undefined> {
-    return this.visible$.pipe(map(visible => this.createGroupedTree(visible)));
+    return this.visible$.pipe(
+      map(items => items.filter(item => this.hasPathOrChild(item))),
+      map(visible => this.createGroupedTree(visible)),
+    );
   }
 }

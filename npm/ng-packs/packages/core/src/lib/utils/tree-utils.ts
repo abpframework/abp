@@ -76,7 +76,7 @@ export function createTreeNodeFilterCreator<T extends object>(
   };
 }
 
-export function createGroupMap<T extends { [key: string]: string }>(
+export function createGroupMap<T extends { group?: string }>(
   list: TreeNode<T>[],
   othersGroupKey: string,
 ) {
