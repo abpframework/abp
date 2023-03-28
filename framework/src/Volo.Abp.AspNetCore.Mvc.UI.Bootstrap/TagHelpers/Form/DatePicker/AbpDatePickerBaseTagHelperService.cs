@@ -101,7 +101,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             new TagHelperAttributeList(new[] { new TagHelperAttribute("class", "input-group") }),
             (_, _) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
         inputGroup.Content.AppendHtml(
-            TagHelperOutput.Render(Encoder) + openButtonContent + clearButtonContent + infoContent
+            TagHelperOutput.Render(Encoder) + openButtonContent + clearButtonContent
         );
 
         var abpDatePickerTag = new TagHelperOutput(TagName, GetBaseTagAttributes(context, output, TagHelper),
@@ -110,7 +110,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         abpDatePickerTag.Content.AppendHtml(validationContent);
         abpDatePickerTag.Content.AppendHtml(GetExtraInputHtml(context, output));
 
-        var innerHtml = labelContent + abpDatePickerTag.Render(Encoder);
+        var innerHtml = labelContent + abpDatePickerTag.Render(Encoder) + infoContent;
 
         var order = GetOrder();
 
@@ -475,6 +475,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         }
 
         var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+        modelExplorer ??= GetModelExpression().ModelExplorer;
         var localizedText = TagHelperLocalizer.GetLocalizedText(text, modelExplorer);
 
         var div = new TagBuilder("div");
