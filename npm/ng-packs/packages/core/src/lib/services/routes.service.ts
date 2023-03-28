@@ -201,7 +201,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 @Injectable({ providedIn: 'root' })
 export class RoutesService extends AbstractNavTreeService<ABP.Route> {
   private hasPathOrChild(item: TreeNode<ABP.Route>): boolean {
-    return Boolean(item.path) || Boolean(item.children?.length);
+    return Boolean(item.path) || this.hasChildren(item.name);
   }
 
   get groupedVisible(): RouteGroup<ABP.Route>[] | undefined {

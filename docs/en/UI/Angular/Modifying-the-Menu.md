@@ -127,7 +127,7 @@ export class AppComponent {
   //Or
   visible$:Observable<RouteGroup<ABP.Route>[] | undefined> = this.routes.groupedVisible$;
   
-  constructor(routes: RoutesService) {}
+  constructor(private routes: RoutesService) {}
 }
 ```
 
