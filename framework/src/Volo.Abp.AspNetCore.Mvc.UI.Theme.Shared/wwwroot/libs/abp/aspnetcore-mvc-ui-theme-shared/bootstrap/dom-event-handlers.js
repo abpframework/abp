@@ -483,12 +483,8 @@
         
         function addExtraButtons(options, $dateRangePicker, $input) {
             var extraButtons = [getTodayButton(options, $input), getClearButton(options, $input, $dateRangePicker)];
-            if ($dateRangePicker.container.find('.drp-buttons').css('display') !== 'none') {
-
-                $.each(extraButtons, function (index, value) {
-                    $dateRangePicker.container.find('.drp-buttons').prepend(value);
-                });
-            } else {
+            
+            if ($dateRangePicker.container.hasClass('auto-apply')) {
                 var $div = $('<div class="drp-buttons extra-buttons"></div>');
                 $div.css('display', 'block');
                 $.each(extraButtons, function (index, value) {
@@ -496,6 +492,10 @@
                 });
 
                 $div.insertAfter($dateRangePicker.container.find('.drp-buttons'));
+            } else {
+                $.each(extraButtons, function (index, value) {
+                    $dateRangePicker.container.find('.drp-buttons').prepend(value);
+                });
             }
         }
         
