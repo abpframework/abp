@@ -88,8 +88,8 @@ function configureRoutes(routes: RoutesService) {
 }
 ```
 
-Also we can define group for navigation elements. It's an optional property
- - **Note:** It'll also include groups that defined at modules
+We can also define a group for navigation elements. It's an optional property
+ - **Note:** It'll also include groups that were defined at the modules
 
 ```js
 // route.provider.ts
@@ -114,8 +114,8 @@ function configureRoutes(routes: RoutesService) {
 }
 ```
 
-To get route items as grouped we can use `groupedVisible` (or Observable one `groupedVisible$`)  getter methods
- - It will return `RouteGroup<T>[]` if there is any group in route tree otherwise it'll return `undefined`
+To get the route items as grouped we can use the `groupedVisible` (or Observable one `groupedVisible$`)  getter methods
+ - It returns `RouteGroup<T>[]` if there is any group in the route tree, otherwise it returns `undefined`
 
 ```js
 import { ABP, RoutesService, RouteGroup } from "@abp/ng.core";
@@ -132,7 +132,7 @@ export class AppComponent {
 ```
 
 ...and then in app.module.ts...
- - `groupedVisible` method will return `Others` group for ungrouped items, Default key is `AbpUi::OthersGroup` we can change this `key` via `OTHERS_GROUP` injection token
+ - The `groupedVisible` method will return the `Others` group for ungrouped items, the default key is `AbpUi::OthersGroup`, we can change this `key` via the `OTHERS_GROUP` injection token
 
 ```js
 import { NgModule } from '@angular/core';
@@ -160,7 +160,7 @@ Here is what every property works as:
 - `requiredPolicy` is the permission key to access the page. See the [Permission Management document](./Permission-Management.md)
 - `order` is the order of the navigation element. "Administration" has an order of `100`, so keep that in mind when ordering top level menu items.
 - `iconClass` is the class of the `i` tag, which is placed to the left of the navigation label.
-- `layout` defines in which layout the route will be loaded. (default: `eLayoutType.empty`)
+- `layout` defines in which layout the route is loaded. (default: `eLayoutType.empty`)
 - `invisible` makes the item invisible in the menu. (default: `false`)
 - `group` is an optional property that is used to group together related routes in an application. (type: `string`, default: `AbpUi::OthersGroup`)
 
