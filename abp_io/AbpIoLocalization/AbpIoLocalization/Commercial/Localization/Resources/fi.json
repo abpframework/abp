@@ -202,7 +202,7 @@
     "WhatHappensWhenLicenseEndsExplanation4": "Et voi asentaa uusia moduuleja ja teemoja, jotka on lisätty ABP Commercial -alustaan lisenssisi päätyttyä.",
     "WhatHappensWhenLicenseEndsExplanation5": "Et voi käyttää ABP Suitea.",
     "WhatHappensWhenLicenseEndsExplanation6": "Et voi enää saada <a href=\"{0}\">premium-tukea</a>.",
-    "WhatHappensWhenLicenseEndsExplanation7": "Voit jatkaa (uusia) lisenssiäsi, jos haluat jatkaa näiden etujen saamista. Jos jatkat lisenssiäsi <strong>yhden kuukauden</strong> kuluessa lisenssin vanhenemisesta, seuraavat alennukset sovelletaan: Tiimilisenssi {0}; Toimilupa {1}; Yrityslisenssi {2}.",
+    "WhatHappensWhenLicenseEndsExplanation7": "Voit jatkaa (uusia) lisenssiäsi, jos haluat jatkaa näiden etujen saamista. Jos jatkat lisenssiäsi <strong>{3} päivää</strong> kuluessa lisenssin vanhenemisesta, seuraavat alennukset sovelletaan: Tiimilisenssi {0}; Toimilupa {1}; Yrityslisenssi {2}.",
     "discountForYears": "{0}% de remise pendant {1} an(s)",
     "WhatHappensWhenLicenseEndsExplanation8": "Luomiasi ABP-projekteja ei tallenneta palvelimillemme. Siksi on sinun vastuullasi säilyttää lataamasi lähdekoodi. Kun lisenssisi vanhenee, luotua ABP-projektin lähdekoodia ei ole mahdollista saada.",
     "WhenShouldIRenewMyLicense": "Milloin minun pitäisi uusia lisenssini?",
