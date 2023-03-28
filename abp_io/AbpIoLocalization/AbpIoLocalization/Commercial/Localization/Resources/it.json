@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Posso cambiare gli sviluppatori registrati della mia organizzazione in futuro?",
     "ChangingDevelopersExplanation": "Oltre ad aggiungere nuovi sviluppatori alla tua licenza, puoi anche Modifica gli sviluppatori esistenti (puoi rimuovere uno sviluppatore e aggiungerne uno nuovo alla stessa postazione) senza alcun costo aggiuntivo.",
     "WhenShouldIRenewMyLicense": "Quando devo rinnovare la mia licenza?",
-    "WhenShouldIRenewMyLicenseExplanation": "Se rinnovi la licenza entro <strong>1 mese</strong> dopo la scadenza della licenza, verranno applicati i seguenti sconti: Licenza Team {0} ; Licenza Business {1} ; Licenza Enterprise {2} . Se rinnovi la licenza <strong>1 mese</strong> dopo la data di scadenza della licenza, il prezzo di rinnovo sarà lo stesso del prezzo di acquisto della licenza e non ci saranno sconti sul rinnovo.",
+    "WhenShouldIRenewMyLicenseExplanation": "Se rinnovi la licenza entro <strong>{3} giorni</strong> dopo la scadenza della licenza, verranno applicati i seguenti sconti: Licenza Team {0} ; Licenza Business {1} ; Licenza Enterprise {2} . Se rinnovi la licenza <strong>{3} giorni</strong> dopo la data di scadenza della licenza, il prezzo di rinnovo sarà lo stesso del prezzo di acquisto della licenza e non ci saranno sconti sul rinnovo.",
     "TrialPlan": "Hai un piano di prova?",
     "DoYouAcceptBankWireTransfer": "Accettate bonifici bancari?",
     "DoYouAcceptBankWireTransferExplanation": "Sì, accettiamo bonifico bancario.<br />Dopo aver inviato il canone tramite bonifico bancario, inviaci un'e-mail a accounting@abp.io con la ricevuta e il tipo di licenza richiesta. Le nostre informazioni sul conto bancario internazionale:",
@@ -398,7 +398,7 @@
     "WhatHappensWhenLicenseEndsExplanation4": "Non è possibile installare nuovi moduli e temi aggiunti alla piattaforma ABP Commercial dopo la scadenza della licenza.",
     "WhatHappensWhenLicenseEndsExplanation5": "Non è possibile utilizzare la suite ABP.",
     "WhatHappensWhenLicenseEndsExplanation6": "Non è più possibile ottenere il <a href=\"{0}\">supporto premium</a>.",
-    "WhatHappensWhenLicenseEndsExplanation7": "Puoi estendere (rinnovare) la tua licenza se desideri continuare a ottenere questi vantaggi. Se estendi la licenza entro <strong>1 mese</strong> dalla scadenza della licenza, verranno applicati i seguenti sconti: Licenza Team {0}; Licenza commerciale {1}; Licenza aziendale {2}.",
+    "WhatHappensWhenLicenseEndsExplanation7": "Puoi estendere (rinnovare) la tua licenza se desideri continuare a ottenere questi vantaggi. Se estendi la licenza entro <strong>{3} giorni</strong> dalla scadenza della licenza, verranno applicati i seguenti sconti: Licenza Team {0}; Licenza commerciale {1}; Licenza aziendale {2}.",
     "BlazoriseLicense": "Dobbiamo acquistare la licenza di Blazorise?",
     "BlazoriseLicenseExplanation": "Abbiamo un accordo tra Volosoft e Megabit, con il quale la licenza di Blazorise viene fornita in bundle con i prodotti commerciali ABP, pertanto i nostri clienti non hanno bisogno di acquistare una licenza Blazorise aggiuntiva."
   }
