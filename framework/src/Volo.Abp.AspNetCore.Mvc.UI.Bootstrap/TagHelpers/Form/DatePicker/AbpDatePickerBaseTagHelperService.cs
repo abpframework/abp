@@ -264,7 +264,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
                 attrList.Add("data-show-week-numbers", "true");
                 break;
             case AbpDatePickerWeekNumbers.Iso:
-                attrList.Add("data-show-iso-week-numbers", "true");
+                attrList.Add("data-show-i-s-o-week-numbers", "true");
                 break;
         }
 
