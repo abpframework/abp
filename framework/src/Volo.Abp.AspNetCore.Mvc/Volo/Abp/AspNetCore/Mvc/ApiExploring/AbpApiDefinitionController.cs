@@ -8,16 +8,16 @@ namespace Volo.Abp.AspNetCore.Mvc.ApiExploring;
 [Route("api/abp/api-definition")]
 public class AbpApiDefinitionController : AbpController, IRemoteService
 {
-    private readonly IApiDescriptionModelProvider _modelProvider;
+    protected readonly IApiDescriptionModelProvider ModelProvider;
 
     public AbpApiDefinitionController(IApiDescriptionModelProvider modelProvider)
     {
-        _modelProvider = modelProvider;
+        ModelProvider = modelProvider;
     }
 
     [HttpGet]
-    public ApplicationApiDescriptionModel Get(ApplicationApiDescriptionModelRequestDto model)
+    public virtual ApplicationApiDescriptionModel Get(ApplicationApiDescriptionModelRequestDto model)
     {
-        return _modelProvider.CreateApiModel(model);
+        return ModelProvider.CreateApiModel(model);
     }
 }

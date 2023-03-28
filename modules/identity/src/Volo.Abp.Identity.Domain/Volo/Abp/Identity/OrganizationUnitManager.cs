@@ -122,7 +122,7 @@ public class OrganizationUnitManager : DomainService
 
     public virtual async Task<string> GetCodeOrDefaultAsync(Guid id)
     {
-        var ou = await OrganizationUnitRepository.GetAsync(id);
+        var ou = await OrganizationUnitRepository.FindAsync(id);
         return ou?.Code;
     }
 

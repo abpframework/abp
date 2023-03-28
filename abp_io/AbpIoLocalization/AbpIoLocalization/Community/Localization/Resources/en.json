@@ -186,6 +186,7 @@
     "TagsInArticle": "Tags in article",
     "IConsentToMedium": "I consent to the publication of this post at https://medium.com/volosoft.",
     "SearchResultsFor": "Search results for <span class=\"fw-bold\">\"{0}\"</span>",
-    "SeeMoreVideos": "See more videos"
+    "SeeMoreVideos": "See more videos",
+    "DiscordPageTitle": "ABP Discord Community"
   }
 }

@@ -275,7 +275,7 @@
 	"ThankYou": "Vă mulţumim!",
 	"CheckboxMandatory": "Trebuie să bifaţi asta pentru a continua!",
     "SelectUITheme": "Selectați Tema UI",
-    
-
+    "CreateSolutionFolder": "Creați folderul de soluții",
+    "CreateSolutionFolderOption": "Specifică dacă proiectul va fi într-un folder nou în folderul de ieșire sau direct folderul de ieșire."
   }
 }

@@ -274,7 +274,8 @@
     "FirstEdition": "Eerste editie",
     "ThankYou": "Bedankt!",
     "CheckboxMandatory": "Je moet dit aanvinken om verder te gaan!",
-    "SelectUITheme": "Selecteer UI-thema"
-
+    "SelectUITheme": "Selecteer UI-thema",
+    "CreateSolutionFolder": "Oplossingsmap maken",
+    "CreateSolutionFolderOption": "Geeft aan of het project zich in een nieuwe map in de uitvoermap bevindt of direct in de uitvoermap."
   }
 }
