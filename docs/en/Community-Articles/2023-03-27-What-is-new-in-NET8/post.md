@@ -15,7 +15,7 @@ dotnet publish -p:PublishRelease=false -> /app/bin/Debug/net8.0/app.dll
 
 
 
-## `System.Text.Json` Serialization 🧱
+## System.Text.Json Serialization 🧱
 
 [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/api/system.text.json) replaced Newtonsoft.Json in the recent versions. We are also using `System.Text.Json` in the [ABP Framework](https://abp.io) now. There are several enhancements to object serialization and deserialization.
 
