@@ -115,7 +115,7 @@ function configureRoutes(routes: RoutesService) {
 ```
 
 To get route items as grouped we can use `groupedVisible` (or Observable one `groupedVisible$`)  getter methods
- - It will return `RouteGroup[]` if there is any group in route tree otherwise it'll return `undefined`
+ - It will return `RouteGroup<T>[]` if there is any group in route tree otherwise it'll return `undefined`
 
 ```js
 import { ABP, RoutesService, RouteGroup } from "@abp/ng.core";
