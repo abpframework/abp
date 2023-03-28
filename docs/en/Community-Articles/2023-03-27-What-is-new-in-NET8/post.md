@@ -15,7 +15,7 @@ dotnet publish -p:PublishRelease=false -> /app/bin/Debug/net8.0/app.dll
 
 
 
-## `System.Text.Json` Serialization 🧱
+## System.Text.Json Serialization 🧱
 
 [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/api/system.text.json) replaced Newtonsoft.Json in the recent versions. We are also using `System.Text.Json` in the [ABP Framework](https://abp.io) now. There are several enhancements to object serialization and deserialization.
 
@@ -25,7 +25,9 @@ The latest version of the [source generator](https://learn.microsoft.com/en-us/d
 
 
 
-## Randomness 
+## Randomness
+
+AI programming is very popular these days. And the need to produce more random content arose. 
 
 ### GetItems<T>() 🧮
 
@@ -60,7 +62,7 @@ Finland -> 358
 
 ### Shuffle<T>() 🔀
 
-If you need to randomize the order of a span in your program, you can take advantage of two new methods: [Random.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.random.shuffle) and [RandomNumberGenerator.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator.shuffle#system-security-cryptography-randomnumbergenerator-shuffle-1(system-span((-0)). These methods are particularly handy when you want to minimize the impact of training bias in machine learning by varying the order in which training and testing data are presented. Using these methods, you can ensure that the first thing in your dataset is only sometimes used for training, and the last is only sometimes reserved for testing.
+If you need to randomize the order of a span in your application, you can take advantage of two new methods: [Random.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.random.shuffle) and [RandomNumberGenerator.Shuffle](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator.shuffle?view=net-8.0). These methods are particularly handy when you want to minimize the impact of training bias in machine learning by varying the order in which training and testing data are presented. Using these methods, you can ensure that the first thing in your dataset is only sometimes used for training, and the last is only sometimes reserved for testing.
 
 ```csharp
 var trainingData = GetData();
@@ -110,7 +112,7 @@ In .NET 8, various new types have been introduced to enhance application perform
 
 
 
-## Improvements in `System.Numerics` and `System.Runtime.Intrinsics` 🔥
+## Improvements in System.Numerics  and System.Runtime.Intrinsics 🔥
 
 There are several enhancements made to the  [System.Numerics](https://learn.microsoft.com/en-us/dotnet/api/system.numerics) and [System.Runtime.Intrinsics](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics)  namespaces. These improvements include better  hardware acceleration for [Vector256](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector256-1), [Matrix3x2](https://learn.microsoft.com/en-us/dotnet/api/system.numerics.matrix3x2), and [Matrix4x4](https://learn.microsoft.com/en-us/dotnet/api/system.numerics.matrix4x4)  in .NET 8. 
 
@@ -183,7 +185,7 @@ In .NET 8, the support for native AOT now encompasses the `x64` and `Arm64` arch
 
 
 
-## .NET 8 Devops Improvements 📦
+## .NET 8 DevOps Improvements 📦
 
 ### NET Container Image Changes 
 
@@ -210,7 +212,9 @@ The support requirements for Linux have been updated for .NET 8, with changes to
 
 For further details, please refer to the [support for Red Hat Enterprise Linux Family](https://github.com/dotnet/core/blob/main/linux-support.md#red-hat-enterprise-linux-family-support) page.
 
-〰️〰️〰️
+
+
+---
 
 Become a pioneer and try the new features of .NET 8 now. 
 Adapt it to your project or start a new .NET 8 project. 

@@ -37,6 +37,8 @@ public class AbpSelectTagHelper : AbpTagHelper<AbpSelectTagHelper, AbpSelectTagH
     public string AutocompleteSelectedItemName { get; set; }
 
     public string AutocompleteSelectedItemValue { get; set; }
+    
+    public string AutocompleteParentSelector { get; set; }
 
     public string AllowClear { get; set; }
 
