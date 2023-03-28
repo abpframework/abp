@@ -247,6 +247,10 @@
             if (options.readonly) {
                 $dateInput.attr('readonly', true)
             }
+            
+            if(options.placeholder) {
+                $dateInput.attr('placeholder', options.placeholder)
+            }
 
             if (options.size) {
                 switch (options.size) {
@@ -269,11 +273,17 @@
             if (options.openButton !== false) {
                 var $openButton = $('<button type="button" class="btn btn-outline-secondary" tabindex="-1" data-type="open"><i class="fa fa-calendar"></i></button>');
                 $inputGroup.append($openButton);
+                if(options.disabled) {
+                    $openButton.attr('disabled', 'disabled')
+                }
             }
 
             if (options.clearButton !== false) {
                 var $clearButton = $('<button type="button" class="btn btn-outline-secondary" tabindex="-1" data-type="clear"><i class="fa fa-times"></i></button>');
                 $inputGroup.append($clearButton);
+                if(options.disabled) {
+                    $clearButton.attr('disabled', 'disabled')
+                }
             }
 
             $datePicker.append($inputGroup);
