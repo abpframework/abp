@@ -86,7 +86,7 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
 * `disabled`: Sets the input as disabled.
 * `readonly`: Sets the input as read-only.
 * `label`: Sets the label of input.
-* `display-required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
+* `required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
 
 `asp-format`, `name` and `value` attributes of [Asp.Net Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-7.0#the-input-tag-helper) are also valid for `abp-input` tag helper.
 
@@ -193,7 +193,7 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
   - `AbpFormControlSize.Medium`
   - `AbpFormControlSize.Large`
 - `label`: Sets the label of input.
-- `display-required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
+- `required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
 
 ### Label & Localization
 
@@ -357,7 +357,7 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
 * `disabled`: Sets the input as disabled.
 * `readonly`: Sets the input as read-only.
 * `label`: Sets the label of input.
-* `display-required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
+* `required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
 * `open-button`: A button to open the datepicker will be added when its `True`. The default value is `True`.
 * `clear-button`: A button to clear the datepicker will be added when its `True`. The default value is `True`.
 * `single-open-and-clear-button`: Shows the open and clear buttons in a single button when it's `True`. The default value is `True`.
