@@ -19,7 +19,6 @@ describe("HomeComponent", () => {
         imports: [
           CoreTestingModule.withConfig(),
           ThemeSharedTestingModule.withConfig(),
-          //ThemeLeptonXModule.withConfig(),
           NgxValidateCoreModule,
         ],
         providers: [
