@@ -15,12 +15,9 @@ describe('SafeHtmlPipe', () => {
     expect(pipe).toBeTruthy();
   });
 
-  it('should return empty string for non-string inputs', () => {
-    const inputs = [42, false, {}, []];
-    for (const input of inputs) {
-      const result = pipe.transform(input as any);
-      expect(result).toBe('');
-    }
+  test.each([42, false, {}, []])('should return empty string for "%p" input', input => {
+    const result = pipe.transform(input as any);
+    expect(result).toBe('');
   });
 
   it('should be equals with input after sanitized', () => {
