@@ -48,6 +48,7 @@
     "Search": "Hae",
     "ItemWillBeDeletedMessageWithFormat": "{0} poistetaan!",
     "ItemWillBeDeletedMessage": "Tämä kohde poistetaan!",
-    "ManageYourAccount": "Hallitse tiliäsi"
+    "ManageYourAccount": "Hallitse tiliäsi",
+    "OthersGroup": "Muut"
   }
 }
