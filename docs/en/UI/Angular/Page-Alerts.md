@@ -63,10 +63,10 @@ this.service.show({
 
 ## Render HTML content
 
-We can pass html content to `title` and `message` parameters
+We can pass html content to the `title` and `message` parameters
 
-* It allows to both case static message and localization value
-* [abpSafeHtml](https://github.com/abpframework/abp/blob/37b59a7f05202264505d002397dbb27d275740e1/npm/ng-packs/packages/core/src/lib/pipes/safe-html.pipe.ts#L6) pipe will sanitize html values
+* It allows for both case static message and the localization value
+* [abpSafeHtml](https://github.com/abpframework/abp/blob/37b59a7f05202264505d002397dbb27d275740e1/npm/ng-packs/packages/core/src/lib/pipes/safe-html.pipe.ts#L6) pipe will sanitize the html values
 
 ```typescript
 this.service.show({
