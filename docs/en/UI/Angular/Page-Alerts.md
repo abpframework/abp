@@ -65,7 +65,7 @@ this.service.show({
 
 We can pass html content to `title` and `message` parameters
 
-* It allows to both case static message and localization value
+* It allows static message or localization key
 * [abpSafeHtml](https://github.com/abpframework/abp/blob/37b59a7f05202264505d002397dbb27d275740e1/npm/ng-packs/packages/core/src/lib/pipes/safe-html.pipe.ts#L6) pipe will sanitize html values
 
 ```typescript
