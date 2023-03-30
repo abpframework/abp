@@ -102,18 +102,26 @@ namespace Volo.Abp.EventBus.Boxes
 
                         foreach (var waitingEvent in waitingEvents)
                         {
-                            using (var uow = UnitOfWorkManager.Begin(isTransactional: true, requiresNew: true))
+                            try
                             {
-                                await DistributedEventBus
-                                    .AsSupportsEventBoxes()
-                                    .ProcessFromInboxAsync(waitingEvent, InboxConfig);
+                                using (var uow = UnitOfWorkManager.Begin(isTransactional: true, requiresNew: true))
+                                {
+                                    await DistributedEventBus
+                                        .AsSupportsEventBoxes()
+                                        .ProcessFromInboxAsync(waitingEvent, InboxConfig);
 
-                                await Inbox.MarkAsProcessedAsync(waitingEvent.Id);
+                                    await Inbox.MarkAsProcessedAsync(waitingEvent.Id);
 
-                                await uow.CompleteAsync();
+                                    await uow.CompleteAsync(StoppingToken);
+
+                                    Logger.LogInformation($"Processed the incoming event with id = {waitingEvent.Id:N}");
+                                }
                             }
-
-                            Logger.LogInformation($"Processed the incoming event with id = {waitingEvent.Id:N}");
+                            catch (Exception e)
+                            {
+                                Logger.LogError($"An exception occurred when processed the incoming event with id = {waitingEvent.Id:N}");
+                                Logger.LogException(e);
+                            }
                         }
                     }
                 }
