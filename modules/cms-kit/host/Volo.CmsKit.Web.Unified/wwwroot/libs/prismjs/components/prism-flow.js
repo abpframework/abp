@@ -4,8 +4,8 @@
 	Prism.languages.insertBefore('flow', 'keyword', {
 		'type': [
 			{
-				pattern: /\b(?:[Bb]oolean|Function|[Nn]umber|[Ss]tring|any|mixed|null|void)\b/,
-				alias: 'tag'
+				pattern: /\b(?:[Bb]oolean|Function|[Nn]umber|[Ss]tring|[Ss]ymbol|any|mixed|null|void)\b/,
+				alias: 'class-name'
 			}
 		]
 	});

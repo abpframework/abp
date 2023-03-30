@@ -1,8 +1,8 @@
 /**
- * Shades of Purple Theme — for Highlightjs.
+ * Shades of Purple Theme â for Highlightjs.
  *
  * @author (c) Ahmad Awais <https://twitter.com/mrahmadawais/>
- * @link GitHub Repo → https://github.com/ahmadawais/Shades-of-Purple-HighlightJS
+ * @link GitHub Repo â https://github.com/ahmadawais/Shades-of-Purple-HighlightJS
  * @version 1.5.0
  */
 
@@ -11,8 +11,7 @@
   overflow-x: auto;
   /* Custom font is optional */
   /* font-family: 'Operator Mono', 'Fira Code', 'Menlo', 'Monaco', 'Courier New', 'monospace';  */
-  line-height: 1.45;
-  padding: 2rem;
+  padding: 0.5em;
   background: #2d2b57;
   font-weight: normal;
 }

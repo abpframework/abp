@@ -40,6 +40,50 @@ public class YourModule : AbpModule
 
 > Hangfire background worker integration provides an adapter `HangfirePeriodicBackgroundWorkerAdapter` to automatically load any `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived classes as `IHangfireBackgroundWorker` instances. This allows you to still to easily switch over to use Hangfire as the background manager even you have existing background workers that are based on the [default background workers implementation](Background-Workers.md).
 
+## Configuration
+
+You can install any storage for Hangfire. The most common one is SQL Server (see the [Hangfire.SqlServer](https://www.nuget.org/packages/Hangfire.SqlServer) NuGet package).
+
+After you have installed these NuGet packages, you need to configure your project to use Hangfire.
+
+1.First, we change the `Module` class (example: `<YourProjectName>HttpApiHostModule`) to add Hangfire configuration of the storage and connection string in the `ConfigureServices` method:
+
+````csharp
+  public override void ConfigureServices(ServiceConfigurationContext context)
+  {
+      var configuration = context.Services.GetConfiguration();
+      var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+      //... other configarations.
+
+      ConfigureHangfire(context, configuration);
+  }
+
+  private void ConfigureHangfire(ServiceConfigurationContext context, IConfiguration configuration)
+  {
+      context.Services.AddHangfire(config =>
+      {
+          config.UseSqlServerStorage(configuration.GetConnectionString("Default"));
+      });
+  }
+````
+
+> You have to configure a storage for Hangfire.
+
+2. If you want to use hangfire's dashboard, you can add `UseHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class
+
+````csharp
+ public override void OnApplicationInitialization(ApplicationInitializationContext context)
+ {
+    var app = context.GetApplicationBuilder();
+            
+    // ... others
+    
+    app.UseHangfireDashboard(); //should add to the request pipeline before the app.UseConfiguredEndpoints()
+    app.UseConfiguredEndpoints();
+ }
+````
+
 ## Create a Background Worker
 
 `HangfireBackgroundWorkerBase` is an easy way to create a background worker.

@@ -247,6 +247,25 @@ body {
                 }
             }
 
+            .search-all-document-container{
+
+                border-bottom: 1px solid rgb(170 170 170 / 20%);
+                padding-bottom: 5px;
+
+                button{
+                    color: #aaa;
+                    font-size: 14px;
+                    width: 100%;
+                    text-align: start;
+
+                    i{
+                        transform: rotate(90deg);
+                        margin-right: 9px;
+                        font-size: 13px;
+                    }
+                }
+            }
+            
             > ul {
                 display: block;
                 height: calc(100vh - 310px);

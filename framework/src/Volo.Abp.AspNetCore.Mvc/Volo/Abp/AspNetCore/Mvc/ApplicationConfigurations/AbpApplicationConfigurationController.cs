@@ -9,22 +9,22 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 [Route("api/abp/application-configuration")]
 public class AbpApplicationConfigurationController : AbpControllerBase, IAbpApplicationConfigurationAppService
 {
-    private readonly IAbpApplicationConfigurationAppService _applicationConfigurationAppService;
-    private readonly IAbpAntiForgeryManager _antiForgeryManager;
+    protected readonly IAbpApplicationConfigurationAppService ApplicationConfigurationAppService;
+    protected readonly IAbpAntiForgeryManager AntiForgeryManager;
 
     public AbpApplicationConfigurationController(
         IAbpApplicationConfigurationAppService applicationConfigurationAppService,
         IAbpAntiForgeryManager antiForgeryManager)
     {
-        _applicationConfigurationAppService = applicationConfigurationAppService;
-        _antiForgeryManager = antiForgeryManager;
+        ApplicationConfigurationAppService = applicationConfigurationAppService;
+        AntiForgeryManager = antiForgeryManager;
     }
 
     [HttpGet]
     public virtual async Task<ApplicationConfigurationDto> GetAsync(
         ApplicationConfigurationRequestOptions options)
     {
-        _antiForgeryManager.SetCookie();
-        return await _applicationConfigurationAppService.GetAsync(options);
+        AntiForgeryManager.SetCookie();
+        return await ApplicationConfigurationAppService.GetAsync(options);
     }
 }

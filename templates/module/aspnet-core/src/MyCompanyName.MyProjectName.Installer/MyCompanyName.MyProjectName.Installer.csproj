@@ -15,7 +15,10 @@
 
     <ItemGroup>
       <None Remove="..\..\MyCompanyName.MyProjectName.abpmdl.json" />
-      <EmbeddedResource Include="..\..\MyCompanyName.MyProjectName.abpmdl.json" />
+      <Content Include="..\..\MyCompanyName.MyProjectName.abpmdl.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
     </ItemGroup>
 
 </Project>

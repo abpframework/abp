@@ -125,4 +125,10 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         bool includeDetails = true,
         CancellationToken cancellationToken = default
     );
+
+    Task<List<IdentityUser>> GetListByIdsAsync(
+        IEnumerable<Guid> ids,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
 }

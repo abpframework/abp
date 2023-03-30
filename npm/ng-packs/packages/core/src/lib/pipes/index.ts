@@ -1,4 +1,5 @@
 export * from './localization.pipe';
+export * from './safe-html.pipe';
 export * from './sort.pipe';
 export * from './to-injector.pipe';
 export * from './short-date.pipe';

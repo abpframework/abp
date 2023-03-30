@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} silinecektir!",
     "ItemWillBeDeletedMessage": "Bu nesne silinecektir!",
     "ManageYourAccount": "Hesap yönetimi",
-    "OthersGroup": "Diğer"
+    "OthersGroup": "Diğer",
+    "Today": "Bugün",
+    "Apply": "Uygula"
   }
 }

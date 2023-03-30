@@ -40,6 +40,10 @@ This sample simply shows a message. In real life, you probably want to call an H
 Now, we can create a class implementing the `IToolbarContributor` interface:
 
 ````csharp
+using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
+
+// ...
+
 public class MyToolbarContributor : IToolbarContributor
 {
     public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
@@ -58,12 +62,16 @@ This class adds the `NotificationViewComponent` as the first item in the `Main` 
 
 Finally, you need to add this contributor to the `AbpToolbarOptions`, in the `ConfigureServices` of your [module](../../Module-Development-Basics.md):
 
-````csharp
+```csharp
+using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
+```
+
+```csharp
 Configure<AbpToolbarOptions>(options =>
 {
     options.Contributors.Add(new MyToolbarContributor());
 });
-````
+```
 
 That's all, you will see the notification icon on the toolbar when you run the application:
 

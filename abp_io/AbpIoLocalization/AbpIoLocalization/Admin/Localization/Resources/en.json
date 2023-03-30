@@ -452,6 +452,11 @@
     "WhoWeAreItem": "Who We Are Item",
     "FieldIsRequired": "{0} is required.",
     "FieldIsNotValid": " {0} is not valid.",
-    "InterestedLicenseType": "Interested License Type"
+    "InterestedLicenseType": "Interested License Type",
+    "MoveWaitList": "Move to wait list",
+    "CommunityLinkTitle": "Open on the community website",
+    "CommunityLink": "Community Link",
+    "ReloadFromSource": "Reload From the Source",
+    "ReloadFromSourceConfirmationMessage": "This post will be refreshed from \"{0}\". Do you want to continue?"
   }
 }
