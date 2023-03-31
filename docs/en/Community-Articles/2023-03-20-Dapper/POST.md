@@ -35,7 +35,7 @@ dotnet tool install -g Volo.Abp.Cli
 
 Create a new solution with the ABP Framework's non-layered startup template with MVC UI and EF Core database:
 
-````
+````bash
 abp new DapperDemo -t app-nolayers
 ````
 
