@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "简称 {ShortName} 已经存在.",
     "Preview": "预览",
     "Search": "搜索",
-    "SearchResults": "搜索结果"
+    "SearchResults": "搜索结果",
+    "SearchInTheAllDocuments": "搜索所有文档"
   }
 }

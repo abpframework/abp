@@ -48,6 +48,7 @@
     "Search": "بحث",
     "ItemWillBeDeletedMessageWithFormat": "سيتم حذف {0}!",
     "ItemWillBeDeletedMessage": "سوف يتم حذف هذا البند!",
-    "ManageYourAccount": "إدارة حسابك"
+    "ManageYourAccount": "إدارة حسابك",
+    "OthersGroup": "آخرون"
   }
 }

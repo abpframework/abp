@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Ali lahko v prihodnosti spremenim registrirane razvijalce svoje organizacije?",
     "ChangingDevelopersExplanation": "Poleg dodajanja novih razvijalcev vaši licenci lahko spremenite tudi obstoječe razvijalce (lahko odstranite razvijalca in dodate novega na isto mesto) brez dodatnih stroškov.",
     "WhenShouldIRenewMyLicense": "Kdaj naj podaljšam licenco?",
-    "WhenShouldIRenewMyLicenseExplanation": "Če licenco podaljšate v <strong>1 mesecu</strong> po poteku licence, bodo uporabljeni naslednji popusti: licenca za ekipo {0} % popusta, poslovna licenca {1} % popusta, licenca za podjetje {2} % popusta . Če podaljšate licenco <strong>1 mesec</strong> po datumu poteka veljavnosti licence, bo cena podaljšanja enaka nakupni ceni licence in pri podaljšanju ne bo popusta.",
+    "WhenShouldIRenewMyLicenseExplanation": "Če licenco podaljšate v <strong>{3} dni</strong> po poteku licence, bodo uporabljeni naslednji popusti: licenca za ekipo {0} % popusta, poslovna licenca {1} % popusta, licenca za podjetje {2} % popusta . Če podaljšate licenco <strong>{3} dni</strong> po datumu poteka veljavnosti licence, bo cena podaljšanja enaka nakupni ceni licence in pri podaljšanju ne bo popusta.",
     "TrialPlan": "Ali imate poskusni načrt?",
     "DoYouAcceptBankWireTransfer": "Ali sprejemate bančno nakazilo?",
     "DoYouAcceptBankWireTransferExplanation": "Da, sprejemamo bančno nakazilo.<br />Ko pošljete licenčnino prek bančnega nakazila, nam pošljite e-pošto na accounting@abp.io vaše potrdilo o prejemu in vrsto zahtevane licence. Naši podatki o mednarodnem bančnem računu:",

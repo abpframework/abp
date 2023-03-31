@@ -48,6 +48,7 @@
     "Search": "Pretraga",
     "ItemWillBeDeletedMessageWithFormat": "{0} zapis će biti obrisan!",
     "ItemWillBeDeletedMessage": "Ovaj zapis će biti obrisan!",
-    "ManageYourAccount": "Upravljaj korisničkim računom"
+    "ManageYourAccount": "Upravljaj korisničkim računom",
+    "OthersGroup": "Drugi"
   }
 }
