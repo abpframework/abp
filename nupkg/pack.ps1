@@ -23,8 +23,8 @@ foreach($project in $projects) {
 	# Create nuget pack
     Write-Info "[$i / $projectsCount] - Packing project: $projectName"
 	Set-Location $projectFolder
-#     dotnet clean
-    dotnet pack -c Release /maxcpucount
+    #dotnet clean
+    dotnet pack -c Release --no-build
 
     if (-Not $?) {
         Write-Error "Packaging failed for the project: $projectName" 

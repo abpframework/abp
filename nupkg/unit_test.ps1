@@ -4,7 +4,5 @@
 foreach($solution in $solutions) {
     $solutionFolder = Join-Path $rootFolder $solution
     Set-Location $solutionFolder
-    dotnet test --no-build --logger trx
- 
- 
+    dotnet test --configuration Release --logger trx -- /maxcpucount
 }
