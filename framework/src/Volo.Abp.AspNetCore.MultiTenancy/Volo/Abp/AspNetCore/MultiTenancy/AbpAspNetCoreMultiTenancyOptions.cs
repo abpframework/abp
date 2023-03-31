@@ -58,7 +58,7 @@ public class AbpAspNetCoreMultiTenancyOptions
                 }
             }
 
-            if (isCookieAuthentication)
+            if (isCookieAuthentication && context.Request.Method.Equals("Get", StringComparison.OrdinalIgnoreCase) && !context.Request.IsAjax())
             {
                 context.Response.Headers.Add("Abp-Tenant-Resolve-Error", exception.Message);
                 context.Response.Redirect(context.Request.GetEncodedUrl());
