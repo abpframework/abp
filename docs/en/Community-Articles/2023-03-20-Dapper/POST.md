@@ -1,31 +1,31 @@
 # Using Dapper with the ABP Framework
 
-[Dapper](https://github.com/DapperLib/Dapper) is a simple and lightweight object mapper for .NET. A key feature of Dapper is its [high performance](https://github.com/DapperLib/Dapper#performance) compared to other ORMs. In this article, I will show how to use it in your ABP projects. But, first look at when to use it.
+[Dapper](https://github.com/DapperLib/Dapper) is a simple and lightweight object mapper for .NET. A key feature of Dapper is its [high performance](https://github.com/DapperLib/Dapper#performance) compared to other ORMs. In this article, I will show how to use it in your ABP projects. But, we'll see when to use it first.
 
 ### Source Code
 
 You can find the [full source code of the demo application here](https://github.com/abpframework/abp-samples/tree/master/Dapper).
 
-## When to use Dapper?
+## When to Use Dapper?
 
-In ABP Framework, we suggest to use Dapper in a combination with Entity Framework Core (EF Core) for the following reasons:
+In the ABP Framework, we suggest to use Dapper in combination with Entity Framework Core (EF Core) for the following reasons:
 
 * EF Core is much easier to use (you don't need to manually write SQL queries and work with low level database objects).
 * EF Core abstracts different DBMS dialects, so it will be easier to change your DBMS later.
-* EF Core's change tracking system automatically update changes in the database.
-* EF Core is better compatible with Object Oriented Programming (OOP) practices and is more type safe to work with. So, EF Core code is more understandable and maintainable.
+* The EF Core's change tracking system automatically updates the changes in the database.
+* EF Core is better compatible with Object Oriented Programming (OOP) practices and is more type safe to work with. So, the EF Core code is more understandable and maintainable.
 
 In most of your use cases, you typically work with one or a few entities and a maintainable codebase can be chosen instead of a slight performance difference. However, there may be certain places in your application where it matters:
 
-* You may work with a lot of entities, so want to query faster (Indeed, EF Core's [AsNoTracking()](https://learn.microsoft.com/en-us/ef/core/querying/tracking) extension can help in most cases).
+* You may work with a lot of entities, so you'd like to query faster (Indeed, EF Core's [AsNoTracking()](https://learn.microsoft.com/en-us/ef/core/querying/tracking) extension can help in most cases).
 * You may be performing too many database operations in a single request.
-* EF Core may not create an optimized SQL query and you may want to manually write it for a better performance.
+* EF Core may not create an optimized SQL query and you may want to manually write it for better performance.
 
 For such cases, Dapper can be a good choice. You can easily write SQL queries and bind the result to your objects.
 
 ## Creating a new ABP Solution
 
-To demonstrate the Dapper usage, I've created an ABP solution. You can find the [full source code of the demo application here](https://github.com/abpframework/abp-samples/tree/master/Dapper). If you want to create the same solution from scratch, follow the steps below:
+To demonstrate the useage of Dapper, I've created an ABP solution. You can find the [full source code of the demo application here](https://github.com/abpframework/abp-samples/tree/master/Dapper). If you want to create the same solution from scratch, follow the steps below:
 
 Install the ABP CLI if you haven't installed it before:
 
@@ -39,7 +39,7 @@ Create a new solution with the ABP Framework's non-layered startup template with
 abp new DapperDemo -t app-nolayers
 ````
 
-> The startup template or a different UI selection don't matter for this article. I selected these options to keep the demo solution simple.
+> The startup template and UI selection don't matter for this article. I selected these options to keep the demo solution simple.
 
 After creating the solution, run the following command to migrate the database (run the command in the folder of the `.csproj` file:
 
@@ -51,7 +51,7 @@ dotnet run --migrate-database
 
 ## Setting Up the Entity Framework Core Part
 
-We will use EF Core with Dapper, so we need to configure the EF Core first. I will use the following `Book` entity as an example:
+We will use EF Core with Dapper, so we need to configure EF Core first. I will use the following `Book` entity as an example:
 
 ````csharp
 public class Book : AuditedAggregateRoot<Guid>
@@ -62,7 +62,7 @@ public class Book : AuditedAggregateRoot<Guid>
 }
 ````
 
-If you are using a layered solution, entities are located in the `Domain` project. For my demo solution, I just placed it in the `Entities` folder of the single project:
+If you are using a layered solution, entities are located in the `Domain` project. For my demo solution, I just placed it in the `Entities` folder of the single-layer project:
 
 ![book-class-in-rider](book-class-in-rider.png)
 
@@ -100,13 +100,13 @@ Now, we can add a new database migration:
 dotnet ef migrations add Added_Book
 ````
 
-And apply changes to database:
+And apply the changes to the database:
 
 ````bash
 dotnet ef database update
 ````
 
-At this point, you should see the Books table if you check your database:
+At this point, you should be able to see the Books table if you check your database:
 
 ![book-database-table](book-database-table.png)
 
@@ -164,15 +164,15 @@ Now, I can see the records in the database:
 
 ![book-table-data](book-table-data.png)
 
-Now, all ready to try Dapper to query from the `Books` table.
+Now, everything is ready to try querying from the `Books` table with Dapper.
 
 ## Using Dapper Without the Integration Package
 
-ABP provides an integration package for Dapper. However, first I want to show using Dapper without the integration package.
+ABP provides an integration package for Dapper. However, I first want to demonstrate using Dapper without the integration package.
 
 ### Installing the Dapper Package
 
-First, install the [Dapper](https://www.nuget.org/packages/Dapper) package to your project. You can use a command-line terminal, locate the root path of your project (`.csproj` file that you want to install it) and run the following command:
+First, install the [Dapper](https://www.nuget.org/packages/Dapper) package to your project. You can use a command-line terminal, locate the root path of your project (`.csproj` file that you want to install it in) and run the following command:
 
 ````bash
 dotnet add package Dapper
@@ -182,7 +182,7 @@ dotnet add package Dapper
 
 ### Executing a Dapper Query
 
-I will query from the `Books` table, but I don't want to use the `Book` entity to map the result (because I don't need to all properties). So, I am creating a new class for the query result:
+I will query from the `Books` table, but I don't want to use the `Book` entity to map the result (because I don't need all the properties). So, I am creating a new class for the query result:
 
 ````csharp
 public class BookDataView
@@ -222,13 +222,13 @@ public class DemoService : ITransientDependency
 }
 ````
 
-Let's examine that class:
+Let's examine this class:
 
-* I am injecting ABP's standard [generic repository](https://docs.abp.io/en/abp/latest/Repositories) service in to the `DemoService` constructor.
-* `_bookRepository.GetDbContextAsync()` returns the underlying `DbContext` object of EF Core. We need to have the [Volo.Abp.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore) package reference to be able to access that method. If you have created a single-layer solution, the reference does already exists. If you have created a layered solution you may need to manually add this package to the project that contains the `DemoService` class. Because the layered solution isolates the EF Core dependency from rest of the solution.
-* Dapper needs a `DbConnection` and a `DbTransaction` object (as optional) to execute a query. We are getting them over the `database` object obtained from the `DbContext`. We suggest to always pass the current `DbTransaction` object while working with Dapper. Because, if there is a database transaction on the same database connection that you execute queries, and you don't pass the transaction object, you get an exception.
+* I've injected the ABP's standard [generic repository](https://docs.abp.io/en/abp/latest/Repositories) service into the `DemoService` constructor.
+* `_bookRepository.GetDbContextAsync()` returns the underlying `DbContext` object of EF Core. We need to have the [Volo.Abp.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore) package reference to be able to access that method. If you have created a single-layer solution, the reference will already have existed. If you have created a layered solution you may need to manually add this package to the project that contains the `DemoService` class. Because the layered solution isolates the EF Core dependency from the rest of the solution.
+* Dapper needs a `DbConnection` and a `DbTransaction` object (as optional) to execute a query. We are getting them over the `database` object obtained from the `DbContext`. We suggest to always pass the current `DbTransaction` object while working with Dapper. Because, if there is a database transaction on the same database connection that you execute queries on, and you don't pass the transaction object, you'll get an exception.
 * Finally, we can use Dapper's `QueryAsync` extension method to execute the database query.
-* Notice that the `GetListAsync` method is made as `virtual` and marked with `UnitOfWork` attribute to enable the [Unit Of Work](https://docs.abp.io/en/abp/latest/Unit-Of-Work) for that method. It ensures the database connection is available in the body of the `GetListAsync` method.
+* Notice that the `GetListAsync` method is made as `virtual` and marked with the `UnitOfWork` attribute to enable the [Unit Of Work](https://docs.abp.io/en/abp/latest/Unit-Of-Work) for that method. It ensures the database connection is available in the body of the `GetListAsync` method.
 
 That's all. You can execute any Dapper operation using the `DbConnection` and `DbTransaction` objects obtained from the `_bookRepository` object. Please refer to Dapper's documentation for other operations.
 
@@ -236,11 +236,11 @@ That's all. You can execute any Dapper operation using the `DbConnection` and `D
 
 ## Using the Volo.Abp.Dapper Package
 
-In the previous section, you saw that you don't need to an ABP integration package to be able to use Dapper in your ABP applications. However, there is an integration package here: [Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper). Actually, that package doesn't contain much services. It just provides a convenient base class to create Dapper based repository classes.
+In the previous section, you saw that you don't need an ABP integration package to be able to use Dapper in your ABP applications. However, there is an integration package here: [Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper). In fact, that package doesn't contain much services. It just provides a convenient base class to create Dapper based repository classes.
 
 ### Installing the Volo.Abp.Dapper Package
 
-You can use [ABP CLI](https://docs.abp.io/en/abp/latest/CLI#add-package) to easily install ABP packages to your projects. Execute the following command in the folder of `.csproj` you want to install the package:
+You can use the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI#add-package) to easily install ABP packages to your projects. Execute the following command in the folder of the `.csproj` file that you want to install the package on:
 
 ````
 abp add-package Volo.Abp.Dapper
@@ -250,9 +250,9 @@ abp add-package Volo.Abp.Dapper
 
 ### Creating a Repository Class
 
-In the `DemoService` example, we have used database objects out of a [repository](https://docs.abp.io/en/abp/latest/Repositories) class. If you want to implement layering your solution and abstracting database operations, it can be better to create a repository class to execute Dapper operations.
+In the `DemoService` example, we used database objects out of a [repository](https://docs.abp.io/en/abp/latest/Repositories) class. If you want to implement layering to your solution and abstracting database operations, it can be better to create a repository class to execute the Dapper operations.
 
-Here, a repository class that executes the same database query:
+Here's a repository class that executes the same database query:
 
 ````csharp
 public class BookRepository : DapperRepository<DapperDemoDbContext>, ITransientDependency
@@ -274,11 +274,11 @@ public class BookRepository : DapperRepository<DapperDemoDbContext>, ITransientD
 }
 ````
 
-Let's examine that class:
+Let's examine this class:
 
 * It inherits from the `DapperRepository` class, which provides useful methods and properties for database operations. It also implements the `IUnitOfWorkEnabled` interface, so ABP makes the database connection (and transaction if requested) available in the method body by implementing dynamic proxies (a.k.a. interception).
-* `GetListAsync` method made `virtual`.  That's needed to make the interception process working. It wouldn't be needed if we introduce `IBookRepository` for that class and always use it by injecting the `BookRepository` class (in this case, it will use interface proxying - however, this is too much details for the purpose of this article).
-* We are using the `GetDbConnectionAsync` and `GetDbTransactionAsync` methods to obtain the current database connection and transaction (that is managed by ABP's [unit of work](https://docs.abp.io/en/abp/latest/Unit-Of-Work) system).
+* The `GetListAsync` method's been made `virtual`.  That's needed to make the interception process working. It wouldn't be needed if we introduce `IBookRepository` to that class and always use it by injecting the `BookRepository` class (in this case, it will use interface proxying - however, this is too much details for the purpose of this article).
+* We've used the `GetDbConnectionAsync` and `GetDbTransactionAsync` methods to obtain the current database connection and transaction (that is managed by ABP's [unit of work](https://docs.abp.io/en/abp/latest/Unit-Of-Work) system).
 
 You can then inject the `BookRepository` class when you want to get a list of `BookDataView` whenever it is needed. In the demo project, I used it inside the `IndexModel.cshtml.cs` to show a list of books on the page:
 
