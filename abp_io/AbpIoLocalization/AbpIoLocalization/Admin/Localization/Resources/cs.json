@@ -348,6 +348,11 @@
     "Volo.AbpIo.Commercial:030008": "Datum nákupu lze nastavit pouze ve stavu Zakoupeno!",
     "Volo.AbpIo.Commercial:030009": "Uživatel nenalezen!",
     "Volo.AbpIo.Commercial:030010": "Chcete-li zakoupit zkušební licenci, musíte nejprve aktivovat zkušební licenci!",
-    "Volo.AbpIo.Commercial:030011": "Po zakoupení zkušební licence nelze odstranit!"
+    "Volo.AbpIo.Commercial:030011": "Po zakoupení zkušební licence nelze odstranit!",
+    "MoveWaitList": "Přejít na čekací listinu",
+    "CommunityLinkTitle": "Otevřít na webu komunity",
+    "CommunityLink": "Odkaz na komunitu",
+    "ReloadFromSource": "Znovu načíst ze zdroje",
+    "ReloadFromSourceConfirmationMessage": "Tento příspěvek bude obnoven z „{0}“. Chceš pokračovat?"
   }
 }

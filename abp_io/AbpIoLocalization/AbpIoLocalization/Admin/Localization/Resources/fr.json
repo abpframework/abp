@@ -348,6 +348,11 @@
     "Volo.AbpIo.Commercial:030008": "La date d'achat ne peut être définie que lorsque le statut est Acheté !",
     "Volo.AbpIo.Commercial:030009": "Utilisateur non trouvé!",
     "Volo.AbpIo.Commercial:030010": "Pour acheter la licence d'essai, vous devez d'abord activer votre licence d'essai !",
-    "Volo.AbpIo.Commercial:030011": "Vous ne pouvez pas supprimer une licence d'essai lorsqu'elle est achetée !"
+    "Volo.AbpIo.Commercial:030011": "Vous ne pouvez pas supprimer une licence d'essai lorsqu'elle est achetée !",
+    "MoveWaitList": "Passer à la liste d'attente",
+    "CommunityLinkTitle": "Ouvert sur le site communautaire",
+    "CommunityLink": "Lien communautaire",
+    "ReloadFromSource": "Recharger à partir de la source",
+    "ReloadFromSourceConfirmationMessage": "Ce message sera actualisé à partir de \"{0}\". Voulez-vous continuer?"
   }
 }
