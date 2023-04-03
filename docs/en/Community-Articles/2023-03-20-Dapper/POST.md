@@ -242,7 +242,7 @@ In the previous section, you saw that you don't need an ABP integration package 
 
 You can use the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI#add-package) to easily install ABP packages to your projects. Execute the following command in the folder of the `.csproj` file that you want to install the package on:
 
-````
+````bash
 abp add-package Volo.Abp.Dapper
 ````
 
