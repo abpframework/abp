@@ -14,7 +14,7 @@ To add `LeptonX-lite` into your project,
 
 - Install `@abp/ng.theme.lepton-x`
 
-`yarn add @abp/ng.theme.lepton-x@preview`
+`yarn add @abp/ng.theme.lepton-x`
 
 - Install `bootstrap-icons`
 
@@ -22,11 +22,8 @@ To add `LeptonX-lite` into your project,
 
 - Then, we need to edit the styles array in `angular.json` to replace the existing style with the new one.
 
-Add the following style
-
-```json
-"node_modules/bootstrap-icons/font/bootstrap-icons.css",
-```
+Note: If you are moved from `ThemeBasic` or `Lepton`, you should remove the old styles from `angular.json`
+Check the list of styles [Theme Configurations](../../UI/Angular/Theme-Configurations). When you change your styles on angular.json depend on your theme.
 
 - Finally, remove `ThemeBasicModule` from `app.module.ts`, and import the related modules in `app.module.ts`
 
@@ -38,7 +35,7 @@ import { SideMenuLayoutModule } from "@abp/ng.theme.lepton-x/layouts";
   imports: [
     // ...
 
-    // do not forget to remove ThemeBasicModule
+    // do not forget to remove ThemeBasicModule or other old theme module
     //  ThemeBasicModule.forRoot(),
     ThemeLeptonXModule.forRoot(),
     SideMenuLayoutModule.forRoot(),
