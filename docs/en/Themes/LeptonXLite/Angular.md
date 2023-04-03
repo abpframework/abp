@@ -22,9 +22,8 @@ To add `LeptonX-lite` into your project,
 
 - Then, we need to edit the styles array in `angular.json` to replace the existing style with the new one.
 
-Note: If you are moved from `ThemeBasic` or `Lepton`, you should remove the old styles from `angular.json`
-Check the list of styles [Theme Configurations](../../UI/Angular/Theme-Configurations). When you change your styles on angular.json depend on your theme.
-
+Note: You should remove the old theme styles from "angular.json" if you are switching from "ThemeBasic" or "Lepton."
+Look at the [Theme Configurations](../../UI/Angular/Theme-Configurations) list of styles. Depending on your theme, you can alter your styles in angular.json.
 - Finally, remove `ThemeBasicModule` from `app.module.ts`, and import the related modules in `app.module.ts`
 
 ```js
