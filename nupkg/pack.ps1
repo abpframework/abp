@@ -24,7 +24,7 @@ foreach($project in $projects) {
     Write-Info "[$i / $projectsCount] - Packing project: $projectName"
 	Set-Location $projectFolder
 #   dotnet clean
-    dotnet pack -c Release --no-build 
+    dotnet pack -c Release -- /maxcpucount
 
     if (-Not $?) {
         Write-Error "Packaging failed for the project: $projectName" 
