@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Túngumála kóði",
     "DisplayName:Version": "Útgáfa",
     "Documents": "Skjöl",
-    "RemoveFromCache": "Fjarlægja úr skyndiminni",
+    "RemoveFromCache": "Fjarlægðu úr skyndiminni og ReIndex",
     "Reindex": "Endurindexa",
     "ReindexCompleted": "Endurindexum lokið",
-    "RemovedFromCache": "Fjarlægja úr skyndiminni",
+    "RemovedFromCache": "Fjarlægt úr skyndiminni og endurtryggt",
     "RemoveFromCacheConfirmation": "Ertu viss um að þú viljir fjarlægja þetta atriði úr skyndiminni?",
-    "ReIndexDocumentConfirmation": "Ertu viss um að þú viljir endurindexa þennan hlut?",
+    "ReIndexDocumentConfirmation": "Ertu viss um að þú viljir endurskrá \"{0}\"?",
     "DeleteFromDatabase": "Eyða úr gagnagrunni",
     "Deleted": "Eyða",
     "Search": "Leita",
@@ -55,6 +55,7 @@
     "LanguageCode": "Túngumála kóði",
     "FileName": "Skráar nafn",
     "LastCachedTime": "Tími geymt í skyndiminni",
-    "Project": "Verkefni"
+    "Project": "Verkefni",
+    "RemoveCacheAndReIndexConfirmation": "Skjalið \"{0}\" verður fjarlægt úr skyndiminni og endurtryggt. Staðfestir þú?"
   }
 }
