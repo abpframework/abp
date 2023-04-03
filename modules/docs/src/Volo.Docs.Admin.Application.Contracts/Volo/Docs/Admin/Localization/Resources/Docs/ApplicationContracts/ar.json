@@ -42,7 +42,7 @@
     "ReindexCompleted": "تمت إعادة الفهرسة",
     "RemovedFromCache": "تمت إزالته من ذاكرة التخزين المؤقت وإعادة فهرسته",
     "RemoveFromCacheConfirmation": "هل تريد بالتأكيد إعادة فهرسة  \"{0} \"؟",
-    "ReIndexDocumentConfirmation": "هل أنت متأكد من إعادة فهرسة هذا العنصر؟",
+    "ReIndexDocumentConfirmation": "هل تريد بالتأكيد إعادة فهرسة \"{0}\"؟",
     "DeleteFromDatabase": "حذف من قاعدة البيانات",
     "Deleted": "محذوف",
     "Search": "بحث",

@@ -37,10 +37,10 @@
     "DisplayName:LanguageCode": "Language code",
     "DisplayName:Version": "Version",
     "Documents": "Documents",
-    "RemoveFromCache": "Remove from cache and ReIndex",
+    "RemoveFromCache": "Remove from cache and re-index",
     "Reindex": "Reindex",
     "ReindexCompleted": "Reindex completed",
-    "RemovedFromCache": "Removed from cache and reIndexed",
+    "RemovedFromCache": "Removed from cache and re-indexed",
     "RemoveFromCacheConfirmation": "Are you sure you want to remove this item from cache?",
     "ReIndexDocumentConfirmation": "Are you sure you want to re-index \"{0}\"?",
     "DeleteFromDatabase": "Delete from database",
@@ -57,6 +57,6 @@
     "LastCachedTime": "Cache time",
     "Project": "Project",
     "AdvancedFilters": "Advanced Filters",
-    "RemoveCacheAndReIndexConfirmation": "The document \"{0}\" will be removed from the cache and reindexed. Do you confirm?"
+    "RemoveCacheAndReIndexConfirmation": "The document \"{0}\" will be removed from the cache and re-indexed. Do you confirm?"
   }
 }
