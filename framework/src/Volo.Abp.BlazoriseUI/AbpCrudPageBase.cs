@@ -309,7 +309,7 @@ public abstract class AbpCrudPageBase<
     {
         CurrentSorting = e.Columns
             .Where(c => c.SortDirection != SortDirection.Default)
-            .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
+            .Select(c => c.SortField + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
             .JoinAsString(",");
         CurrentPage = e.Page;
 
