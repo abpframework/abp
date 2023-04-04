@@ -190,6 +190,7 @@
     "Layout_Title": "{0} | ABP Topluluğu",
     "Layout_MetaDescription":  "ABP Topluluğu, insanların ABP çerçevesi hakkında paylaşımlarda bulunabileceği ve projeleri takip edebileceği bir ortamdır.",
     "Index_Page_CommunityIntroduction": "Burası ABP Çerçevesi, .NET ve yazılım geliştirme için bir merkezdir. Makaleleri okuyabilir, eğitim videolarını izleyebilir, ABP'nin gelişim süreci ve ABP ile ilgili etkinlikler hakkında bilgi alabilir, diğer geliştiricilere yardımcı olabilir ve uzmanlığınızı ABP topluluğu ile paylaşabilirsiniz.",
-    "IConsentToMedium": "Bu yazının https://medium.com/volosoft adresinde yayınlanmasına izin veriyorum."
+    "IConsentToMedium": "Bu yazının https://medium.com/volosoft adresinde yayınlanmasına izin veriyorum.",
+    "DiscordPageTitle": "ABP Discord Topluluğu"
   }
 }

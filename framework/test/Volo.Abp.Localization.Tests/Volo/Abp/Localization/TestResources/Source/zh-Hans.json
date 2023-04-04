@@ -6,6 +6,11 @@
     "CarPlural": "汽车",
     "MaxLenghtErrorMessage": "此字段的长度最多为'{0}'个字符",
     "Universe": "宇宙",
-    "FortyTwo": "四十二"
+    "FortyTwo": "四十二",
+    "Enum:BookType.Undefined": "Undefined",
+    "Enum:BookType.0": "",
+    "BookType.Adventure": "",
+    "BookType.1": "",
+    "Biography": ""
   }
 }

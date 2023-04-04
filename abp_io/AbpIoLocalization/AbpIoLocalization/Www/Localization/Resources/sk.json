@@ -274,7 +274,8 @@
     "FirstEdition": "Prvá edícia",
     "ThankYou": "Ďakujem!",
     "CheckboxMandatory": "Ak chcete pokračovať, musíte to skontrolovať!",
-    "SelectUITheme": "Vyberte tému používateľského rozhrania"
-
+    "SelectUITheme": "Vyberte tému používateľského rozhrania",
+    "CreateSolutionFolder": "Vytvorte priečinok riešení",
+    "CreateSolutionFolderOption": "Určuje, či bude projekt v novom priečinku vo výstupnom priečinku alebo priamo vo výstupnom priečinku."
   }
 }

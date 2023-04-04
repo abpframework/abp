@@ -404,6 +404,9 @@
     "SeeTheScreenshot": "انظر الى الصورة",
     "Details": "التفاصيل",
     "ApplicationModuleExplanation1": "إنشاء حل وحدة تطبيق ذات طبقات كاملة وقابلة لإعادة الاستخدام.",
-    "ApplicationModuleExplanation2": "يمكنك استخدام هذا الخيار لإنشاء وحدات نمطية لتطبيقك المعياري."
+    "ApplicationModuleExplanation2": "يمكنك استخدام هذا الخيار لإنشاء وحدات نمطية لتطبيقك المعياري.",
+    "CreateSolutionFolder": "إنشاء مجلد الحل",
+    "CreateSolutionFolderOption": "يحدد ما إذا كان المشروع سيكون في مجلد جديد في مجلد الإخراج أو مجلد الإخراج مباشرة.",
+    "BooksPageTitle": "كتب ABP"
   }
 }

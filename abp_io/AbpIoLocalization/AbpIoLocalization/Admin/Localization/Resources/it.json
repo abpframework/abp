@@ -348,6 +348,11 @@
     "Volo.AbpIo.Commercial:030008": "La data di acquisto può essere impostata solo quando lo stato è Acquistato!",
     "Volo.AbpIo.Commercial:030009": "Utente non trovato!",
     "Volo.AbpIo.Commercial:030010": "Per acquistare la licenza di prova, devi prima attivare la tua licenza di prova!",
-    "Volo.AbpIo.Commercial:030011": "Non è possibile eliminare una licenza di prova al momento dell'acquisto!"
+    "Volo.AbpIo.Commercial:030011": "Non è possibile eliminare una licenza di prova al momento dell'acquisto!",
+    "MoveWaitList": "Passa alla lista d'attesa",
+    "CommunityLinkTitle": "Apri sul sito web della comunità",
+    "CommunityLink": "Collegamento comunitario",
+    "ReloadFromSource": "Ricarica dalla sorgente",
+    "ReloadFromSourceConfirmationMessage": "Questo post verrà aggiornato da \"{0}\". Volete continuare?"
   }
 }

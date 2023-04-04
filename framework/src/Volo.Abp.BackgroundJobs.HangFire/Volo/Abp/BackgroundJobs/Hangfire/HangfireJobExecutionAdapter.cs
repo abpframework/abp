@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -21,8 +22,8 @@ public class HangfireJobExecutionAdapter<TArgs>
         Options = options.Value;
     }
 
-    [Queue("{0}")] 
-    public async Task ExecuteAsync(string queue, TArgs args)
+    [Queue("{0}")]
+    public async Task ExecuteAsync(string queue, TArgs args, CancellationToken cancellationToken = default)
     {
         if (!Options.IsJobExecutionEnabled)
         {
@@ -38,7 +39,7 @@ public class HangfireJobExecutionAdapter<TArgs>
         using (var scope = ServiceScopeFactory.CreateScope())
         {
             var jobType = Options.GetJob(typeof(TArgs)).JobType;
-            var context = new JobExecutionContext(scope.ServiceProvider, jobType, args);
+            var context = new JobExecutionContext(scope.ServiceProvider, jobType, args, cancellationToken: cancellationToken);
             await JobExecuter.ExecuteAsync(context);
         }
     }

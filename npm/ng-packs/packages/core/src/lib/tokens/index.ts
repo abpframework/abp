@@ -12,3 +12,4 @@ export * from './pipe-to-login.token';
 export * from './set-token-response-to-storage.token';
 export * from './check-authentication-state';
 export * from './http-context.token';
+export * from './others-group.token'

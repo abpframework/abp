@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Shouldly;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -214,6 +215,40 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         }
     }
 
+    [Fact]
+    public async Task ShouldPeriodicallyChangePasswordAsync_Return_False()
+    {
+        var user = CreateRandomUser();
+        AddPeriodicallyChangePasswordSettings();
+
+        (await _identityUserManager.CreateAsync(user)).CheckErrors();
+        (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user)).ShouldBeFalse();
+
+        await _identityUserManager.AddPasswordAsync(user, IdentityDataSeedContributor.AdminPasswordDefaultValue);
+        (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user)).ShouldBeFalse();
+
+        user.CreationTime = DateTime.Now;
+        user.SetLastPasswordChangeTime(null);
+        (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user)).ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task ShouldPeriodicallyChangePasswordAsync_Return_True()
+    {
+        var user = CreateRandomUser();
+        AddPeriodicallyChangePasswordSettings();
+
+        (await _identityUserManager.CreateAsync(user)).CheckErrors();
+        await _identityUserManager.AddPasswordAsync(user, IdentityDataSeedContributor.AdminPasswordDefaultValue);
+
+        user.SetLastPasswordChangeTime(DateTime.UtcNow.AddDays(-3));
+        (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user)).ShouldBeTrue();
+
+        user.CreationTime = DateTime.Now.AddDays(-3);
+        user.SetLastPasswordChangeTime(null);
+        (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user)).ShouldBeTrue();
+    }
+
     private async Task CreateRandomDefaultRoleAsync()
     {
         await _identityRoleRepository.InsertAsync(
@@ -234,5 +269,11 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
             Guid.NewGuid().ToString(),
             Guid.NewGuid().ToString() + "@abp.io"
         );
+    }
+
+    private static void AddPeriodicallyChangePasswordSettings()
+    {
+        TestSettingValueProvider.AddSetting(IdentitySettingNames.Password.PasswordChangePeriodDays, 2.ToString());
+        TestSettingValueProvider.AddSetting(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword, true.ToString());
     }
 }

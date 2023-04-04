@@ -421,7 +421,7 @@
     "ContentCacheSlidingExpirationByDay": "Content Cache Sliding Expiration By Day",
     "MaxDaysForCaching": "Max Days For Caching",
     "Enabled": "Enabled",
-    "Menu:NugetPackagesContentCache": "NuGet Packages Content Cache",
+    "Menu:NugetPackagesContentCache": "NuGet Cache",
     "NugetPackagesContentCache": "NuGet Content Cache",
     "SlidingExpritionByDayInfo": "Gets or sets how long a cache entry can be inactive (e.g. not accessed) before it will be removed. This will not extend the entry lifetime beyond the absolute expiration.",
     "MaxDaysForCachingInfo": "Gets or sets an absolute expiration time, relative to now.",
@@ -452,6 +452,11 @@
     "WhoWeAreItem": "Who We Are Item",
     "FieldIsRequired": "{0} is required.",
     "FieldIsNotValid": " {0} is not valid.",
-    "InterestedLicenseType": "Interested License Type"
+    "InterestedLicenseType": "Interested License Type",
+    "MoveWaitList": "Move to wait list",
+    "CommunityLinkTitle": "Open on the community website",
+    "CommunityLink": "Community Link",
+    "ReloadFromSource": "Reload From the Source",
+    "ReloadFromSourceConfirmationMessage": "This post will be refreshed from \"{0}\". Do you want to continue?"
   }
 }

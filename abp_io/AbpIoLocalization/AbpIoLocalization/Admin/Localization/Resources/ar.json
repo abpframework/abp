@@ -348,6 +348,11 @@
     "Volo.AbpIo.Commercial:030008": "يمكن تحديد تاريخ الشراء فقط عند شراء الحالة!",
     "Volo.AbpIo.Commercial:030009": "لم يتم العثور على المستخدم!",
     "Volo.AbpIo.Commercial:030010": "لشراء الترخيص التجريبي ، تحتاج أولاً إلى تنشيط الترخيص التجريبي الخاص بك!",
-    "Volo.AbpIo.Commercial:030011": "لا يمكنك حذف ترخيص تجريبي عند شرائه!"
+    "Volo.AbpIo.Commercial:030011": "لا يمكنك حذف ترخيص تجريبي عند شرائه!",
+    "MoveWaitList": "الانتقال إلى قائمة الانتظار",
+    "CommunityLinkTitle": "افتح على موقع المجتمع",
+    "CommunityLink": "رابط المجتمع",
+    "ReloadFromSource": "إعادة التحميل من المصدر",
+    "ReloadFromSourceConfirmationMessage": "سيتم تحديث هذه المشاركة من \"{0}\". هل تريد الاستمرار؟"
   }
 }
