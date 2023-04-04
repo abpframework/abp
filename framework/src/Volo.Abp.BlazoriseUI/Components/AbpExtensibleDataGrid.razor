@@ -105,7 +105,7 @@
                         }
                         else
                         {
-                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" Caption="@column.Title">
+                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Caption="@column.Title">
                                 <DisplayTemplate>
                                     @{
                                         var entity = context as IHasExtraProperties;
