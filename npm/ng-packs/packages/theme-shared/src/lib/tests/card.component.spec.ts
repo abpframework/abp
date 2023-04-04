@@ -4,10 +4,10 @@ import {
   CardBodyComponent,
   CardFooterComponent,
   CardHeaderComponent,
-  CardHeader,
-  CardTitle,
-  CardImgTop,
-  CardSubtitle,
+  CardHeaderDirective,
+  CardTitleDirective,
+  CardImgTopDirective,
+  CardSubtitleDirective,
 } from '../components/card';
 
 describe('CardComponent', () => {
@@ -17,10 +17,10 @@ describe('CardComponent', () => {
     component: CardComponent,
     declarations: [
       CardHeaderComponent,
-      CardTitle,
-      CardSubtitle,
+      CardTitleDirective,
+      CardSubtitleDirective,
       CardBodyComponent,
-      CardImgTop,
+      CardImgTopDirective,
       CardFooterComponent,
     ],
   });

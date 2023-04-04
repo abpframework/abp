@@ -1,10 +1,10 @@
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator';
-import { CardHeader } from '../components';
+import { CardHeaderDirective } from '../components';
 
 describe('AbpCardHeaderDirective', () => {
-  let spectator: SpectatorHost<CardHeader>;
+  let spectator: SpectatorHost<CardHeaderDirective>;
 
-  const createHost = createHostFactory(CardHeader);
+  const createHost = createHostFactory(CardHeaderDirective);
 
   beforeEach(
     () =>
