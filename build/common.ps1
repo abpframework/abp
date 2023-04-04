@@ -36,7 +36,8 @@ if ($full -eq "-f")
 		"../templates/console",
 		"../templates/wpf",
 		"../templates/app-nolayers/aspnet-core",
-		"../abp_io/AbpIoLocalization"
+		"../abp_io/AbpIoLocalization",
+		"../source-code"
 	) 
 }else{ 
 	Write-host ""
