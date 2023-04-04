@@ -193,7 +193,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
         if (_databaseApis.ContainsKey(key))
         {
-            throw new AbpException("There is already a database API in this unit of work with given key: " + key);
+            throw new AbpException("There is already a database API in this unit of work with given key.");
         }
 
         _databaseApis.Add(key, api);
@@ -221,7 +221,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
         if (_transactionApis.ContainsKey(key))
         {
-            throw new AbpException("There is already a transaction API in this unit of work with given key: " + key);
+            throw new AbpException("There is already a transaction API in this unit of work with given key.");
         }
 
         _transactionApis.Add(key, api);

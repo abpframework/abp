@@ -24,6 +24,7 @@ import { ToInjectorPipe } from './pipes/to-injector.pipe';
 import { CookieLanguageProvider } from './providers/cookie-language.provider';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
+import { OTHERS_GROUP } from './tokens';
 import { localizationContributor, LOCALIZATIONS } from './tokens/localization.token';
 import { CORE_OPTIONS, coreOptionsFactory } from './tokens/options.token';
 import { TENANT_KEY } from './tokens/tenant-key.token';
@@ -178,6 +179,10 @@ export class CoreModule {
         {
           provide: QUEUE_MANAGER,
           useClass: DefaultQueueManager,
+        },
+        {
+          provide: OTHERS_GROUP,
+          useValue: options.othersGroup || 'AbpUi::OthersGroup',
         },
         IncludeLocalizationResourcesProvider,
       ],

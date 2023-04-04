@@ -41,6 +41,36 @@ public class YourModule : AbpModule
 
 > Hangfire后台工作者集成提供了 `HangfirePeriodicBackgroundWorkerAdapter` 来适配 `PeriodicBackgroundWorkerBase` 和 `AsyncPeriodicBackgroundWorkerBase` 派生类. 所以你依然可以按照[后台工作者文档](Background-Workers.md)来定义后台作业.
 
+## 配置
+
+你可以安装任何Hangfire存储. 最常用的是SQL Server(参阅[Hangfire.SqlServer](https://www.nuget.org/packages/Hangfire.SqlServer)NuGet包).
+
+当你安装NuGet包后,你需要为你的项目配置Hangfire.
+
+1.首先, 我们需要更改 `Module` 类 (例如: `<YourProjectName>HttpApiHostModule`) 的 `ConfigureServices` 方法去配置Hangfire存储和连接字符串:
+
+````csharp
+  public override void ConfigureServices(ServiceConfigurationContext context)
+  {
+      var configuration = context.Services.GetConfiguration();
+      var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+      //... other configarations.
+
+      ConfigureHangfire(context, configuration);
+  }
+
+  private void ConfigureHangfire(ServiceConfigurationContext context, IConfiguration configuration)
+  {
+      context.Services.AddHangfire(config =>
+      {
+          config.UseSqlServerStorage(configuration.GetConnectionString("Default"));
+      });
+  }
+````
+
+> 你必须为Hangfire配置一个存储
+
 ## 创建后台工作者
 
 `HangfireBackgroundWorkerBase` 是创建一个后台工作者简单的方法.

@@ -22,6 +22,8 @@ public class IdentityDbContext : AbpDbContext<IdentityDbContext>, IIdentityDbCon
 
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }
 
+    public DbSet<IdentityUserDelegation> UserDelegations { get; set; }
+
     public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
         : base(options)
     {

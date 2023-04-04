@@ -1,8 +1,11 @@
-﻿
+﻿using System;
+
 namespace Volo.Abp.Cli.Auth;
 
 public class LoginInfo
 {
+    public Guid? Id { get; set; }
+    
     public string Name { get; set; }
 
     public string Surname { get; set; }

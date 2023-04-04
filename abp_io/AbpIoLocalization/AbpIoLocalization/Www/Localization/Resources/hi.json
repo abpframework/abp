@@ -274,7 +274,8 @@
     "FirstEdition": "प्रथम संस्करण",
     "ThankYou": "शुक्रिया!",
     "CheckboxMandatory": "आगे बढ़ने के लिए आपको इसे जांचना होगा!",
-    "SelectUITheme": "यूआई थीम का चयन करें"
-
+    "SelectUITheme": "यूआई थीम का चयन करें",
+    "CreateSolutionFolder": "समाधान फ़ोल्डर बनाएँ",
+    "CreateSolutionFolderOption": "निर्दिष्ट करता है कि प्रोजेक्ट आउटपुट फ़ोल्डर या सीधे आउटपुट फ़ोल्डर में एक नए फ़ोल्डर में होगा या नहीं।"
   }
 }

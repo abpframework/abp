@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Get ég breytt skráðum forriturum fyrirtækisins míns í framtíðinni?",
     "ChangingDevelopersExplanation": "Til viðbótar við að bæta nýjum verktaka við leyfi þitt geturðu einnig breytt núverandi forriturum (þú getur fjarlægt verktaka og bætt nýjum við) án aukakostnaðar.",
     "WhenShouldIRenewMyLicense": "Hvenær ætti ég að endurnýja leyfið mitt?",
-    "WhenShouldIRenewMyLicenseExplanation": "Ef þú endurnýjar leyfið þitt innan <strong>eins mánaðar</strong> eftir að leyfið þitt rennur út verða eftirfarandi afslættir notaðir: Team Leyfi {0}% afsláttur, Business License {1}% afsláttur, Enterprise License {2}% afsláttur . Ef þú endurnýjar leyfið þitt <strong>1 mánuði</strong> eftir að leyfið rennur út, verður endurnýjunarverðið það sama og kaupverð leyfisins og enginn afsláttur af endurnýjun þinni.",
+    "WhenShouldIRenewMyLicenseExplanation": "Ef þú endurnýjar leyfið þitt innan <strong>{3} dagar</strong> eftir að leyfið þitt rennur út verða eftirfarandi afslættir notaðir: Team Leyfi {0}% afsláttur, Business License {1}% afsláttur, Enterprise License {2}% afsláttur . Ef þú endurnýjar leyfið þitt <strong>{3} dagar</strong> eftir að leyfið rennur út, verður endurnýjunarverðið það sama og kaupverð leyfisins og enginn afsláttur af endurnýjun þinni.",
     "TrialPlan": "Ertu með prufuáætlun?",
     "DoYouAcceptBankWireTransfer": "Samþykki þið bankamillifærslu?",
     "DoYouAcceptBankWireTransferExplanation": "Já, við tökum við bankamillifærslu.<br />Eftir að hafa sent leyfisgjaldið með millifærslu skaltu senda okkur tölvupóst á accounting@abp.io kvittun þína og tegund leyfis sem óskað er eftir. Upplýsingar um alþjóðlega bankareikninginn okkar:",

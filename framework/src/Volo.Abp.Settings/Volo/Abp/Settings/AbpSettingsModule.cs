@@ -36,7 +36,7 @@ public class AbpSettingsModule : AbpModule
     {
         var definitionProviders = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(ISettingDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {

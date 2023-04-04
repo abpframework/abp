@@ -25,8 +25,7 @@ foreach($project in $projects) {
 
     #dotnet clean
     dotnet pack -c Release --no-build
-
-
+    
     if (-Not $?) {
         Write-Error "Packaging failed for the project: $projectName" 
         exit $LASTEXITCODE
