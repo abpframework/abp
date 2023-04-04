@@ -825,6 +825,7 @@
     "PrivacyPolicyPageTitle": "Privacy Policy - Cookie Policy",
     "TermsConditionsPageTitle": "Terms and Conditions",
     "TrainingsPageTitle": "ABP Training Packages",
-    "ModulesPageTitle": "ABP Pre-Built Application Modules"
+    "ModulesPageTitle": "ABP Pre-Built Application Modules",
+    "Volo.AbpIo.Commercial:040001": "API Access Key is incorrect."
   }
 }
