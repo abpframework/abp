@@ -6,7 +6,7 @@ using Volo.CmsKit.Comments;
 namespace Volo.CmsKit.Public.Comments;
 
 [Serializable]
-public class CreateCommentWithParameteresInput
+public class CreateCommentWithParametersInput
 {
     [Required]
     [DynamicStringLength(typeof(CommentConsts), nameof(CommentConsts.MaxTextLength))]
@@ -17,6 +17,8 @@ public class CreateCommentWithParameteresInput
     
     [Required]
     public string EntityId { get; set; }
+
+    public bool AllowExternalUrls { get; set; } = true;
 
     public Guid? RepliedCommentId { get; set; }
     

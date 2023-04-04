@@ -13,4 +13,10 @@ public class CmsKitCommentOptions
     /// Default: false
     /// </summary>
     public bool IsRecaptchaEnabled { get; set; }
+
+    /// <summary>
+    /// Indicates the allowed external URLs, which can be included in a comment.
+    /// If it's not specified, all external URLs will be allowed.
+    /// </summary>
+    public List<string> AllowedExternalUrls { get; set; } = new();
 }

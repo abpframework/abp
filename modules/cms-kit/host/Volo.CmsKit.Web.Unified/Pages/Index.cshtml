@@ -90,7 +90,7 @@
     <abp-column size-md="_12">
         @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
         {
-            @await Component.InvokeAsync(typeof(CommentingViewComponent), new {entityType = "quote", entityId = "2"})
+            @await Component.InvokeAsync(typeof(CommentingViewComponent), new {entityType = "quote", entityId = "2", allowExternalUrls = false})
         }
     </abp-column>
 </abp-row>

@@ -14,4 +14,6 @@ public class UpdateCommentInput : IHasConcurrencyStamp
     public string Text { get; set; }
 
     public string ConcurrencyStamp { get; set; }
+
+    public bool AllowExternalUrls { get; set; } = true;
 }

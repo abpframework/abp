@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Data;
@@ -23,24 +25,27 @@ namespace Volo.CmsKit.Public.Comments;
 [RequiresGlobalFeature(typeof(CommentsFeature))]
 public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPublicAppService
 {
+    protected string RegexMarkdownUrlPattern = @"\[[^\]]*\]\((?<url>.*?)\)(?![^\x60]*\x60)";
+    
     protected ICommentRepository CommentRepository { get; }
     protected ICmsUserLookupService CmsUserLookupService { get; }
     public IDistributedEventBus DistributedEventBus { get; }
     protected CommentManager CommentManager { get; }
-    protected IAuthorizationService AuthorizationService { get; }
+    
+    protected CmsKitCommentOptions CmsCommentOptions { get; }
 
     public CommentPublicAppService(
         ICommentRepository commentRepository,
         ICmsUserLookupService cmsUserLookupService,
         IDistributedEventBus distributedEventBus,
         CommentManager commentManager,
-        IAuthorizationService authorizationService)
+        IOptionsSnapshot<CmsKitCommentOptions> cmsCommentOptions)
     {
         CommentRepository = commentRepository;
         CmsUserLookupService = cmsUserLookupService;
         DistributedEventBus = distributedEventBus;
         CommentManager = commentManager;
-        AuthorizationService = authorizationService;
+        CmsCommentOptions = cmsCommentOptions.Value;
     }
 
     public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
@@ -56,6 +61,8 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     [Authorize]
     public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
     {
+        CheckExternalUrls(input.AllowExternalUrls, input.Text);
+        
         var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
         if (input.RepliedCommentId.HasValue)
@@ -86,6 +93,8 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     [Authorize]
     public virtual async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
     {
+        CheckExternalUrls(input.AllowExternalUrls, input.Text);
+
         var comment = await CommentRepository.GetAsync(id);
 
         if (comment.CreatorId != CurrentUser.GetId())
@@ -147,5 +156,42 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthorQueryResultItem> comments, Guid commentId)
     {
         return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
+    }
+
+    private void CheckExternalUrls(bool allowExternalUrls, string text)
+    {
+        if (allowExternalUrls || !CmsCommentOptions.AllowedExternalUrls.Any())
+        {
+            return;
+        }
+
+        var matches = Regex.Matches(text, RegexMarkdownUrlPattern,
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        foreach (Match match in matches)
+        {
+            if (!match.Success || match.Groups.Count < 2)
+            {
+                continue;
+            }
+
+            var url = match.Groups[1].Value;
+            if (!IsExternalUrl(url))
+            {
+                continue;
+            }
+
+            if (!CmsCommentOptions.AllowedExternalUrls.Contains(url.Replace("www.", "").RemovePostFix("/"),
+                    StringComparer.InvariantCultureIgnoreCase))
+            {
+                throw new UserFriendlyException(L["UnAllowedExternalUrlMessage"]);
+            }
+        }
+    }
+
+    private static bool IsExternalUrl(string url)
+    {
+        return url.StartsWith("https", StringComparison.InvariantCultureIgnoreCase) ||
+               url.StartsWith("http", StringComparison.InvariantCultureIgnoreCase);
     }
 }

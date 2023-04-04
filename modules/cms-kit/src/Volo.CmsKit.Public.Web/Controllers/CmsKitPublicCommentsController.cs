@@ -29,14 +29,14 @@ public class CmsKitPublicCommentsController : AbpController
     }
 
     [HttpPost]
-    public async Task ValidateAsync([FromBody] CreateCommentWithParameteresInput input)
+    public async Task ValidateAsync([FromBody] CreateCommentWithParametersInput input)
     {
         if (CmsKitCommentOptions.IsRecaptchaEnabled && input.CaptchaToken.HasValue)
         {
             SimpleMathsCaptchaGenerator.Validate(input.CaptchaToken.Value, input.CaptchaAnswer);
         }
 
-        var dto = ObjectMapper.Map<CreateCommentWithParameteresInput, CreateCommentInput> (input);
+        var dto = ObjectMapper.Map<CreateCommentWithParametersInput, CreateCommentInput> (input);
         await CommentPublicAppService.CreateAsync(input.EntityType, input.EntityId, dto);
     }
 }
