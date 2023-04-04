@@ -19,10 +19,16 @@ Configure<CmsKitCommentOptions>(options =>
 {
     options.EntityTypes.Add(new CommentEntityTypeDefinition("Product"));
     options.IsRecaptchaEnabled = true; //false by default
-    options.AllowedExternalUrls = new List<string>
+    options.AllowedExternalUrls = new Dictionary<string, List<string>>
     {
-      "https://abp.io/"
-    }
+      {
+        "quote",
+        new List<string>
+        {
+          "https://abp.io/"
+        }
+      }
+    };
 });
 ```
 
@@ -32,7 +38,7 @@ Configure<CmsKitCommentOptions>(options =>
 
 - `EntityTypes`: List of defined entity types(`CmsKitCommentOptions`) in the comment system.
 - `IsRecaptchaEnabled`: This flag enables or disables the reCaptcha for the comment system. You can set it as **true** if you want to use reCaptcha in your comment system.
-- `AllowedExternalUrls`: Indicates the allowed external URLs, which can be included in a comment. These external URLs are only taken into consideration if the external URLs are not allowed in a comment widget.
+- `AllowedExternalUrls`: Indicates the allowed external URLs by entity types, which can be included in a comment. If it's specified for a certain entity type, then only the specified external URLs are allowed in the comments. 
 
 `CommentEntityTypeDefinition` properties:
 
@@ -47,12 +53,11 @@ The comment system provides a commenting [widget](../../UI/AspNetCore/Widgets.md
 {
   entityType = "Product",
   entityId = "...",
-  referralLinks  = new [] {"nofollow"},
-  allowExternalUrls = false //default: "true"
+  referralLinks  = new [] {"nofollow"}
 })
 ```
 
-`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. `referralLinks` is an optional parameter. You can use this parameter to add values (such as "nofollow", "noreferrer", or any other values) to the [rel attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel) of links. `allowExternalUrls` is also an optional parameter and by default, external URLs are allowed. You can use this parameter to specify the allowed external URLs (and disallow other external URLs) by configuring the `CmsKitCommentOptions` as mentioned in the previous section.
+`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. `referralLinks` is an optional parameter. You can use this parameter to add values (such as "nofollow", "noreferrer", or any other values) to the [rel attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel) of links. 
 
 ## User Interface
 
