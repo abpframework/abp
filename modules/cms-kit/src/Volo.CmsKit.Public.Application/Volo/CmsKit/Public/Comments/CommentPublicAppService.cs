@@ -160,9 +160,14 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
 
     private void CheckExternalUrls(bool allowExternalUrls, string text)
     {
-        if (allowExternalUrls || !CmsCommentOptions.AllowedExternalUrls.Any())
+        if (allowExternalUrls)
         {
             return;
+        }
+
+        if (!CmsCommentOptions.AllowedExternalUrls.Any())
+        {
+            throw new UserFriendlyException(L["UnAllowedExternalUrlMessage"]);
         }
 
         var matches = Regex.Matches(text, RegexMarkdownUrlPattern,

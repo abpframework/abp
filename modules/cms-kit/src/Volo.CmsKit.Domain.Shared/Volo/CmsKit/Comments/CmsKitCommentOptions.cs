@@ -16,7 +16,6 @@ public class CmsKitCommentOptions
 
     /// <summary>
     /// Indicates the allowed external URLs, which can be included in a comment.
-    /// If it's not specified, all external URLs will be allowed.
     /// </summary>
     public List<string> AllowedExternalUrls { get; set; } = new();
 }
