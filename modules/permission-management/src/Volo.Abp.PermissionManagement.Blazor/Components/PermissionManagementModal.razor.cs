@@ -260,6 +260,6 @@ public partial class PermissionManagementModal
         var permissions = group.Permissions;
         var grantedProviders = permissions.SelectMany(x => x.GrantedProviders);
 
-        return permissions.All(x => x.IsGranted) && grantedProviders.All(p => p.ProviderName != _providerName);
+        return permissions.All(x => x.IsGranted) && grantedProviders.Any(p => p.ProviderName != _providerName);
     }
 }
