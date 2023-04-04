@@ -7,7 +7,7 @@ import { Component, HostBinding, Input } from '@angular/core';
   </div>`,
 })
 export class CardBodyComponent {
-  @HostBinding('class') class = 'card-body';
+  @HostBinding('class') componentClass = 'card-body';
   @Input() cardBodyClass: string;
   @Input() cardBodyStyle: string;
 }

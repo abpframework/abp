@@ -4,5 +4,5 @@ import { Directive, HostBinding } from '@angular/core';
   selector: `abp-card-header, [abp-card-header], [abpCardHeader]`,
 })
 export class CardHeaderDirective {
-  @HostBinding('class') class = 'card-header';
+  @HostBinding('class') directiveClass = 'card-header';
 }

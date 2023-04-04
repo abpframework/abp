@@ -4,5 +4,5 @@ import { Directive, HostBinding } from '@angular/core';
   selector: `abp-card-title, [abp-card-title], [abpCardTitle]`,
 })
 export class CardTitleDirective {
-  @HostBinding('class') class = 'card-title';
+  @HostBinding('class') directiveClass = 'card-title';
 }

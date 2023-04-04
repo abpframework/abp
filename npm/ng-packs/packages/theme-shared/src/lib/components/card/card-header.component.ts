@@ -10,7 +10,7 @@ import { Component, HostBinding, Input } from '@angular/core';
   styles: [],
 })
 export class CardHeaderComponent {
-  @HostBinding('class') class = 'card-header';
+  @HostBinding('class') componentClass = 'card-header';
   @Input() cardHeaderClass: string;
   @Input() cardHeaderStyle: string;
 }

@@ -4,5 +4,5 @@ import { Directive, HostBinding } from '@angular/core';
   selector: `abp-card-img-top, [abp-card-img-top], [abpCardImgTop]`,
 })
 export class CardImgTopDirective {
-  @HostBinding('class') class = 'card-img-top';
+  @HostBinding('class') directiveClass = 'card-img-top';
 }
