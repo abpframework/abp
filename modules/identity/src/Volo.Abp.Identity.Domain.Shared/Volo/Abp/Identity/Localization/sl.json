@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "Statičnih vlog ni mogoče izbrisati.",
     "Volo.Abp.Identity:010007": "Nastavitve dveh faktorjev ne morete spremeniti.",
     "Volo.Abp.Identity:010008": "Ni dovoljeno spreminjati nastavitve dveh faktorjev.",
+    "Volo.Abp.Identity:010009": "Ne morete delegirati svojih pravic.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Največje dovoljeno število članov v organizacijski enoti za uporabnika",
     "ThisUserIsNotActiveMessage": "Ta uporabnik ni aktiven.",
     "Permission:IdentityManagement": "Upravljanje identitet",

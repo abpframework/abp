@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "Los roles estáticos no pueden ser borrados.",
     "Volo.Abp.Identity:010007": "No puedes cambiar tu configuración de autentificación de dos pasos.",
     "Volo.Abp.Identity:010008": "No está permitido cambiar la configuración de autenticación de dos pasos.",
+    "Volo.Abp.Identity:010009": "No puedes delegar tu propia cuenta!",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Número máximo de unidades organizativas por usuario",
     "ThisUserIsNotActiveMessage": "Este usuario no está activo.",
     "Permission:IdentityManagement": "Gestión de identidades",

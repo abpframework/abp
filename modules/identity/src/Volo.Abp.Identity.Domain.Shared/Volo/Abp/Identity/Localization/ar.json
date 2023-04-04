@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "لا يمكن حذف الأدوار الثابتة.",
     "Volo.Abp.Identity:010007": "لا يمكنك تغيير إعداد العاملين.",
     "Volo.Abp.Identity:010008": "لا يجوز تغيير إعداد عاملين.",
+    "Volo.Abp.Identity:010009": "لا يمكنك تفويض نفسك.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "العدد الأقصى المسموح به لعضوية الوحدة التنظيمية للمستخدم",
     "ThisUserIsNotActiveMessage": "هذا المستخدم غير نشط.",
     "Permission:IdentityManagement": "إدارة الهوية",

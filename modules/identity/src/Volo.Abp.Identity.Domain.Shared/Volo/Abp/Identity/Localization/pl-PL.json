@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "Statyczna rola nie może zostać usunięta.",
     "Volo.Abp.Identity:010007": "Nie możesz zmienić ustawienia dwóch czynników.",
     "Volo.Abp.Identity:010008": "Nie wolno zmieniać ustawienia dwuczynnikowego.",
+    "Volo.Abp.Identity:010009": "Nie możesz delegować swoich uprawnień.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maksymalna dozwolona liczba członków jednostki organizacyjnej dla użytkownika",
     "ThisUserIsNotActiveMessage": "Ten użytkownik nie jest aktywny.",
     "Permission:IdentityManagement": "Zarządzanie tożsamością",
