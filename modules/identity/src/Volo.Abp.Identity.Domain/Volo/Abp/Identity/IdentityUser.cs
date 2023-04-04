@@ -113,9 +113,19 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual int AccessFailedCount { get; protected internal set; }
 
     /// <summary>
+    /// Should change password on next login.
+    /// </summary>
+    public virtual bool ShouldChangePasswordOnNextLogin { get; protected internal set; }
+
+    /// <summary>
     /// A version value that is increased whenever the entity is changed.
     /// </summary>
     public virtual int EntityVersion { get; protected set; }
+
+    /// <summary>
+    /// Gets or sets the last password change time for the user.
+    /// </summary>
+    public virtual DateTimeOffset? LastPasswordChangeTime { get; protected set; }
 
     //TODO: Can we make collections readonly collection, which will provide encapsulation. But... can work for all ORMs?
 
@@ -366,6 +376,16 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual void SetIsActive(bool isActive)
     {
         IsActive = isActive;
+    }
+
+    public virtual void SetShouldChangePasswordOnNextLogin(bool shouldChangePasswordOnNextLogin)
+    {
+        ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
+    }
+
+    public virtual void SetLastPasswordChangeTime(DateTimeOffset? lastPasswordChangeTime)
+    {
+        LastPasswordChangeTime = lastPasswordChangeTime;
     }
 
     public override string ToString()

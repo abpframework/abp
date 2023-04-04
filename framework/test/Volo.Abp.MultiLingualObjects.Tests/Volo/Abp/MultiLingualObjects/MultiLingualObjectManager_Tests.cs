@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiLingualObjects.TestObjects;
 using Volo.Abp.Testing;
@@ -14,30 +16,53 @@ public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingual
 {
     private readonly IMultiLingualObjectManager _multiLingualObjectManager;
     private readonly MultiLingualBook _book;
+    private readonly List<MultiLingualBook> _books;
+    private readonly IMapperAccessor _mapperAccessor;
+    private readonly Dictionary<string, string> _testTranslations = new()
+    {
+        ["ar"] = "C# التعمق في",
+        ["zh-Hans"] = "深入理解C#",
+        ["en"] = "C# in Depth"
+    };
 
     public MultiLingualObjectManager_Tests()
     {
         _multiLingualObjectManager = ServiceProvider.GetRequiredService<IMultiLingualObjectManager>();
 
+        //Single Lookup
+        _book = GetTestBook("en", "zh-Hans");
+        //Bulk lookup
+        _books = new List<MultiLingualBook>
+        {
+            //has no translations
+            GetTestBook(),
+            //english only
+            GetTestBook("en"),
+            //arabic only
+            GetTestBook("ar"),
+            //arabic + english
+            GetTestBook("en","ar"),
+            //arabic + english + chineese
+            GetTestBook("en", "ar", "zh-Hans")
+        };
+        _mapperAccessor = ServiceProvider.GetRequiredService<IMapperAccessor>();
+    }
+    MultiLingualBook GetTestBook(params string[] included)
+    {
         var id = Guid.NewGuid();
-        _book = new MultiLingualBook(id, 100)
-        {
-            Translations = new List<MultiLingualBookTranslation>()
-        };
+        //Single book
+        var res = new MultiLingualBook(id, 100);
 
-        var en = new MultiLingualBookTranslation
+        foreach (var language in included)
         {
-            Language = "en",
-            Name = "C# in Depth",
-        };
-        var zh = new MultiLingualBookTranslation
-        {
-            Language = "zh-Hans",
-            Name = "深入理解C#",
-        };
+            res.Translations.Add(new MultiLingualBookTranslation
+            {
+                Language = language,
+                Name = _testTranslations[language],
+            });
+        }
 
-        _book.Translations.Add(en);
-        _book.Translations.Add(zh);
+        return res;
     }
 
     [Fact]
@@ -46,8 +71,8 @@ public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingual
         using (CultureHelper.Use("en-us"))
         {
             var translation = await _multiLingualObjectManager.GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book);
-
-            translation.Name.ShouldBe("C# in Depth");
+            translation.ShouldNotBeNull();
+            translation.Name.ShouldBe(_testTranslations["en"]);
         }
     }
 
@@ -57,8 +82,8 @@ public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingual
         using (CultureHelper.Use("en-us"))
         {
             var translation = await _multiLingualObjectManager.GetTranslationAsync(_book.Translations);
-
-            translation.Name.ShouldBe("C# in Depth");
+            translation.ShouldNotBeNull();
+            translation.Name.ShouldBe(_testTranslations["en"]);
         }
     }
 
@@ -68,8 +93,64 @@ public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingual
         using (CultureHelper.Use("zh-Hans"))
         {
             var translation = await _multiLingualObjectManager.GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book, culture: "en");
+            translation.ShouldNotBeNull();
+            translation.Name.ShouldBe(_testTranslations["en"]);
+        }
+    }
 
-            translation.Name.ShouldBe("C# in Depth");
+
+    [Fact]
+    public async Task GetBulkTranslationsAsync()
+    {
+        using (CultureHelper.Use("en-us"))
+        {
+            var translations = await _multiLingualObjectManager.GetBulkTranslationsAsync<MultiLingualBook, MultiLingualBookTranslation>(_books);
+            foreach (var (entity, translation) in translations)
+            {
+                if (entity.Translations.Any(x => x.Language == "en"))
+                {
+                    translation.ShouldNotBeNull();
+                    translation.Name.ShouldBe(_testTranslations["en"]);
+                }
+                else
+                {
+                    translation.ShouldBeNull();
+                }
+            }
+        }
+    }
+
+    [Fact]
+    public async Task GetBulkTranslationsFromListAsync()
+    {
+        using (CultureHelper.Use("en-us"))
+        {
+            var translations = await _multiLingualObjectManager.GetBulkTranslationsAsync(_books.Select(x => x.Translations));
+            foreach (var translation in translations)
+            {
+                translation?.Name.ShouldBe(_testTranslations["en"]);
+            }
+        }
+    }
+
+    [Fact]
+    public async Task TestBulkMapping()
+    {
+        using (CultureHelper.Use("en-us"))
+        {
+            var translations = await _multiLingualObjectManager.GetBulkTranslationsAsync<MultiLingualBook, MultiLingualBookTranslation>(_books);
+            var translationsDict = translations.ToDictionary(x => x.entity.Id, x => x.translation);
+            var mapped = _mapperAccessor.Mapper.Map<List<MultiLingualBook>, List<MultiLingualBookDto>>(_books, options =>
+            {
+                options.Items.Add(nameof(MultiLingualBookTranslation), translationsDict);
+            });
+            Assert.Equal(mapped.Count, _books.Count);
+            for (int i = 0; i < mapped.Count; i++)
+            {
+                var og = _books[i];
+                var m = mapped[i];
+                Assert.Equal(og.Translations.FirstOrDefault(x => x.Language == "en")?.Name, m.Name);
+            }
         }
     }
 }

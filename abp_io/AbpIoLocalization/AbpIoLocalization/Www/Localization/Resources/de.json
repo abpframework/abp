@@ -274,7 +274,8 @@
     "FirstEdition": "Erste Ausgabe",
     "ThankYou": "Dankeschön!",
     "CheckboxMandatory": "Sie müssen dies überprüfen, um fortzufahren!",
-    "SelectUITheme": "Wählen Sie UI-Design aus"
-
+    "SelectUITheme": "Wählen Sie UI-Design aus",
+    "CreateSolutionFolder": "Lösungsordner erstellen",
+    "CreateSolutionFolderOption": "Gibt an, ob sich das Projekt in einem neuen Ordner im Ausgabeordner oder direkt im Ausgabeordner befindet."
   }
 }

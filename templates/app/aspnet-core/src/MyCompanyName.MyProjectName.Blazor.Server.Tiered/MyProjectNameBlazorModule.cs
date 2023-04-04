@@ -4,6 +4,7 @@ using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -163,6 +164,7 @@ public class MyProjectNameBlazorModule : AbpModule
             .AddCookie("Cookies", options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromDays(365);
+                options.IntrospectAccessToken();
             })
             .AddAbpOpenIdConnect("oidc", options =>
             {
