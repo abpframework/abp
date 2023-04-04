@@ -115,8 +115,7 @@
                         formAsObject.id,
                         {
                             text: formAsObject.commentText,
-                            concurrencyStamp: formAsObject.commentConcurrencyStamp,
-                            allowExternalUrls: formAsObject.allowExternalUrls
+                            concurrencyStamp: formAsObject.commentConcurrencyStamp
                         }
                     ).then(function () {
                         widgetManager.refresh($widget);
@@ -152,8 +151,7 @@
                             repliedCommentId: formAsObject.repliedCommentId,
                             text: formAsObject.commentText,
                             captchaToken: formAsObject.captchaId,
-                            captchaAnswer: formAsObject.input?.captcha,
-                            allowExternalUrls: formAsObject.allowExternalUrls
+                            captchaAnswer: formAsObject.input?.captcha
                         }),
                         success: function () {
                             widgetManager.refresh($widget);

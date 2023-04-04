@@ -60,8 +60,7 @@ public class CommentingViewComponent : AbpViewComponent
     public virtual async Task<IViewComponentResult> InvokeAsync(
         string entityType,
         string entityId,
-        IEnumerable<string> referralLinks = null,
-        bool allowExternalUrls = true)
+        IEnumerable<string> referralLinks = null)
     {
         referralLinks ??= Enumerable.Empty<string>();
         var comments = (await CommentPublicAppService
@@ -73,7 +72,6 @@ public class CommentingViewComponent : AbpViewComponent
         {
             EntityId = entityId,
             EntityType = entityType,
-            AllowExternalUrls = allowExternalUrls,
             ReferralLinks = referralLinks,
             LoginUrl = loginUrl,
             Comments = comments.OrderByDescending(i => i.CreationTime).ToList()
@@ -124,8 +122,6 @@ public class CommentingViewComponent : AbpViewComponent
 
         public string EntityId { get; set; }
 
-        public bool AllowExternalUrls { get; set; }
-        
         public IEnumerable<string> ReferralLinks { get; set; }
 
         public string LoginUrl { get; set; }

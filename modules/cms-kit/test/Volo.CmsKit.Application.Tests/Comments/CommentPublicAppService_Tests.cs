@@ -72,10 +72,10 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
             await _commentAppService.CreateAsync(
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
-                new CreateCommentInput {
+                new CreateCommentInput 
+                {
                     RepliedCommentId = null,
                     Text = "[ABP Community](https://community.abp.io/)", //not allowed URL
-                    AllowExternalUrls = false
                 }
             ));
     }
@@ -102,14 +102,14 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
     [Fact]
     public async Task UpdateAsync_ShouldThrowUserFriendlyException_If_Url_UnAllowed()
     {
-        _currentUser.Id.Returns(_cmsKitTestData.User2Id);
+        _currentUser.Id.Returns(_cmsKitTestData.User1Id);
 
         await Should.ThrowAsync<UserFriendlyException>(async () =>
             await _commentAppService.UpdateAsync(
                 _cmsKitTestData.CommentWithChildId,
-                new UpdateCommentInput {
+                new UpdateCommentInput 
+                {
                     Text = "[ABP Community - Update](https://community.abp.io/)", //not allowed URL
-                    AllowExternalUrls = false
                 }
             ));
     }

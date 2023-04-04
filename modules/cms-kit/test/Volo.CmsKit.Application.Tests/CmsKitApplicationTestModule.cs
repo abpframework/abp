@@ -14,7 +14,16 @@ public class CmsKitApplicationTestModule : AbpModule
     {
         Configure<CmsKitCommentOptions>(options =>
         {
-            options.AllowedExternalUrls = new List<string> { "https://abp.io" };
+            options.AllowedExternalUrls = new Dictionary<string, List<string>>
+            {
+                {
+                    "EntityName1",
+                    new List<string>
+                    {
+                        "https://abp.io/"
+                    }
+                }
+            };
         });
     }
 }

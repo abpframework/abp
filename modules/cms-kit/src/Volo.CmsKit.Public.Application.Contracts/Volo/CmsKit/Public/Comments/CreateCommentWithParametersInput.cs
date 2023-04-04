@@ -18,8 +18,6 @@ public class CreateCommentWithParametersInput
     [Required]
     public string EntityId { get; set; }
 
-    public bool AllowExternalUrls { get; set; } = true;
-
     public Guid? RepliedCommentId { get; set; }
     
     public Guid? CaptchaToken { get; set; }

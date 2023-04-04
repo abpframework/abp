@@ -169,9 +169,15 @@ public class CmsKitWebUnifiedModule : AbpModule
         {
             options.EntityTypes.Add(new CommentEntityTypeDefinition("quote"));
             options.IsRecaptchaEnabled = true;
-            options.AllowedExternalUrls = new List<string>
+            options.AllowedExternalUrls = new Dictionary<string, List<string>>
             {
-                "https://abp.io/"
+                {
+                    "quote",
+                    new List<string>
+                    {
+                        "https://abp.io/"
+                    }
+                }
             };
         });
 

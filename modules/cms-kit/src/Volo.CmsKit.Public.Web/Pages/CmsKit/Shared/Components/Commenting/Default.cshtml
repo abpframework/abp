@@ -32,7 +32,6 @@
           style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
         <form class="cms-comment-form">
             <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId" />
-            <input hidden asp-for="Input.AllowExternalUrls" name="allowExternalUrls" />
             <div class="row">
                 <div class="col">
                     <div class="mb-3 m-0">
@@ -121,7 +120,6 @@
         <div class="card bg-light p-3 mx-0 mt-3">
             <form class="cms-comment-update-form">
                 <input hidden value="@id.ToString()" name="id" />
-                <input hidden asp-for="Input.AllowExternalUrls" name="allowExternalUrls" />
                 <div class="row">
                     <div class="col">
                         <div class="mb-3 m-0">

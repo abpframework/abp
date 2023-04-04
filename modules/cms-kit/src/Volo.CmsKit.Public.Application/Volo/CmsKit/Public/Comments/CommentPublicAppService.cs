@@ -61,7 +61,7 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     [Authorize]
     public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
     {
-        CheckExternalUrls(input.AllowExternalUrls, input.Text);
+        CheckExternalUrls(entityType, input.Text);
         
         var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
@@ -93,14 +93,13 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     [Authorize]
     public virtual async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
     {
-        CheckExternalUrls(input.AllowExternalUrls, input.Text);
-
         var comment = await CommentRepository.GetAsync(id);
-
         if (comment.CreatorId != CurrentUser.GetId())
         {
             throw new AbpAuthorizationException();
         }
+        
+        CheckExternalUrls(comment.EntityType, input.Text);
 
         comment.SetText(input.Text);
         comment.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -158,16 +157,11 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
         return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
     }
 
-    private void CheckExternalUrls(bool allowExternalUrls, string text)
+    private void CheckExternalUrls(string entityType, string text)
     {
-        if (allowExternalUrls)
+        if (!CmsCommentOptions.AllowedExternalUrls.TryGetValue(entityType, out var allowedExternalUrls))
         {
             return;
-        }
-
-        if (!CmsCommentOptions.AllowedExternalUrls.Any())
-        {
-            throw new UserFriendlyException(L["UnAllowedExternalUrlMessage"]);
         }
 
         var matches = Regex.Matches(text, RegexMarkdownUrlPattern,
@@ -180,14 +174,14 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
                 continue;
             }
 
-            var url = match.Groups[1].Value;
+            var url = NormalizeUrl(match.Groups[1].Value);
             if (!IsExternalUrl(url))
             {
                 continue;
             }
 
-            if (!CmsCommentOptions.AllowedExternalUrls.Contains(url.Replace("www.", "").RemovePostFix("/"),
-                    StringComparer.InvariantCultureIgnoreCase))
+            if (!allowedExternalUrls.Any(allowedExternalUrl =>
+                    url.Contains(NormalizeUrl(allowedExternalUrl), StringComparison.OrdinalIgnoreCase)))
             {
                 throw new UserFriendlyException(L["UnAllowedExternalUrlMessage"]);
             }
@@ -198,5 +192,10 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     {
         return url.StartsWith("https", StringComparison.InvariantCultureIgnoreCase) ||
                url.StartsWith("http", StringComparison.InvariantCultureIgnoreCase);
+    }
+
+    private static string NormalizeUrl(string url)
+    {
+        return url.Replace("www.", "").RemovePostFix("/");
     }
 }
