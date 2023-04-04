@@ -32,7 +32,7 @@ async function getApiDefinition(sourceUrl: string) {
   let body: ApiDefinition;
 
   try {
-    ({ body } = await got(url, {
+    ({ body } = await got<ApiDefinition>(url, {
       responseType: 'json',
       searchParams: { includeTypes: true },
       https: { rejectUnauthorized: false },

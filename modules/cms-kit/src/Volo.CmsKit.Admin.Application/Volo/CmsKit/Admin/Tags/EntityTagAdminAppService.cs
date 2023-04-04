@@ -1,10 +1,13 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Admin.Tags;
 
+[RequiresFeature(CmsKitFeatures.TagEnable)]
 [RequiresGlobalFeature(typeof(TagsFeature))]
 public class EntityTagAdminAppService : CmsKitAdminAppServiceBase, IEntityTagAdminAppService
 {

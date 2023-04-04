@@ -29,7 +29,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         StringLocalizerFactory = stringLocalizerFactory;
         Options = options.Value;
 
-        //TODO: Instead, use IHybridServiceScopeFactory and create a scope..?
+        //TODO: Instead, use IServiceScopeFactory and create a scope..?
 
         _lazyProviders = new Lazy<List<IFeatureManagementProvider>>(
             () => Options
@@ -75,7 +75,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
     {
         Check.NotNull(providerName, nameof(providerName));
 
-        var featureDefinitions = FeatureDefinitionManager.GetAll();
+        var featureDefinitions = await FeatureDefinitionManager.GetAllAsync();
         var providers = Enumerable.Reverse(Providers).SkipWhile(c => c.Name != providerName);
 
         if (!fallback)
@@ -130,7 +130,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         Check.NotNull(name, nameof(name));
         Check.NotNull(providerName, nameof(providerName));
 
-        var feature = FeatureDefinitionManager.Get(name);
+        var feature = await FeatureDefinitionManager.GetAsync(name);
 
         if (feature.ValueType?.Validator.IsValid(value) == false)
         {
@@ -186,7 +186,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         string providerKey,
         bool fallback = true) //TODO: Fallback is not used
     {
-        var feature = FeatureDefinitionManager.Get(name);
+        var feature = await FeatureDefinitionManager.GetAsync(name);
         var providers = Enumerable
             .Reverse(Providers);
 
@@ -214,5 +214,34 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         }
 
         return featureNameValueWithGrantedProvider;
+    }
+
+    public virtual async Task DeleteAsync(string providerName, string providerKey)
+    {
+        var featureNameValues = await GetAllAsync(providerName, providerKey);
+
+        var providers = Enumerable
+          .Reverse(Providers)
+          .SkipWhile(p => p.Name != providerName)
+          .ToList();
+
+        if (!providers.Any())
+        {
+            return;
+        }
+
+        providers = providers
+            .TakeWhile(p => p.Name == providerName)
+            .ToList(); //Getting list for case of there are more than one provider with same providerName
+
+        foreach (var featureNameValue in featureNameValues)
+        {
+            var feature = await FeatureDefinitionManager.GetAsync(featureNameValue.Name);
+
+            foreach (var provider in providers)
+            {
+                await provider.ClearAsync(feature, providerKey);
+            }
+        }
     }
 }

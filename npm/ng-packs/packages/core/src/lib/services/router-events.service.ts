@@ -6,6 +6,7 @@ import {
   NavigationStart,
   Router,
   RouterEvent,
+  Event
 } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -23,7 +24,7 @@ export class RouterEvents {
   getEvents<T extends RouterEventConstructors>(...eventTypes: T) {
     type FilteredRouterEvent = T extends Type<infer Ctor>[] ? Ctor : never;
 
-    const filterRouterEvents = (event: RouterEvent): event is FilteredRouterEvent =>
+    const filterRouterEvents = (event: Event): event is FilteredRouterEvent =>
       eventTypes.some(type => event instanceof type);
 
     return this.router.events.pipe(filter(filterRouterEvents));
@@ -36,7 +37,7 @@ export class RouterEvents {
         : never
       : never;
 
-    const filterNavigationEvents = (event: RouterEvent): event is FilteredNavigationEvent =>
+    const filterNavigationEvents = (event: Event): event is FilteredNavigationEvent =>
       navigationEventKeys.some(key => event instanceof NavigationEvent[key]);
 
     return this.router.events.pipe(filter(filterNavigationEvents));

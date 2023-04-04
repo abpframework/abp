@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,10 +9,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
-using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.EventBus.Boxes;
+namespace Volo.Abp.EventBus.Distributed;
 
 public class OutboxSender : IOutboxSender, ITransientDependency
 {

@@ -35,6 +35,7 @@
     "PersonalSettingsSaved": "Personlige indstillinger gemt",
     "PasswordChanged": "Kodeord gemt",
     "NewPasswordConfirmFailed": "Bekræft venligst det nye kodeord.",
+    "NewPasswordSameAsOld": "Det nye kodeord skal være anderledes end det gamle.",
     "Manage": "Administrer",
     "MyAccount": "Min konto",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Er registrering aktiveret",

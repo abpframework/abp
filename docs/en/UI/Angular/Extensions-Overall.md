@@ -11,7 +11,7 @@ See the documents below for the details:
 
 ##  Extensible Table Component
 
-Using [ngx-datatable](https://github.com/swimlane/ngx-datatable) in extensinble table.
+Using [ngx-datatable](https://github.com/swimlane/ngx-datatable) in extensible table.
 
 ````ts
       <abp-extensible-table

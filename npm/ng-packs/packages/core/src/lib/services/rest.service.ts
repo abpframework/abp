@@ -20,7 +20,7 @@ export class RestService {
     protected httpErrorReporter: HttpErrorReporterService,
   ) {}
 
-  protected getApiFromStore(apiName: string): string {
+  protected getApiFromStore(apiName: string | undefined): string {
     return this.environment.getApiUrl(apiName);
   }
 
@@ -51,13 +51,12 @@ export class RestService {
   }
 
   private getParams(params: Rest.Params, encoder?: HttpParameterCodec): HttpParams {
-    const filteredParams = Object.keys(params).reduce((acc, key) => {
-      const value = params[key];
+    const filteredParams = Object.entries(params).reduce((acc, [key, value]) => {
       if (isUndefinedOrEmptyString(value)) return acc;
       if (value === null && !this.options.sendNullsAsQueryParam) return acc;
       acc[key] = value;
       return acc;
-    }, {});
+    }, {} as any);
     return encoder
       ? new HttpParams({ encoder, fromObject: filteredParams })
       : new HttpParams({ fromObject: filteredParams });

@@ -35,6 +35,7 @@
     "PersonalSettingsSaved": "Đã lưu cài đặt cá nhân",
     "PasswordChanged": "mật khẩu đã được thay đổi",
     "NewPasswordConfirmFailed": "Vui lòng xác nhận mật khẩu mới.",
+    "NewPasswordSameAsOld": "Mật khẩu mới không được giống như mật khẩu cũ.",
     "Manage": "Quản lý",
     "MyAccount": "Tài khoản của tôi",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Tự đăng ký có được bật không",

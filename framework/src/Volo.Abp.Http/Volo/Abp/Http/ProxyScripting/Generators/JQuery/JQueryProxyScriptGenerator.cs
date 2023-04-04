@@ -13,7 +13,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDependency
 {
     //TODO: Should move this to Ddd package by adding an option to AbpHttpAbstractions module. Also duplicated of ApplicationService.CommonPostfixes
-    private static string[] AppServiceCommonPostfixes { get; } = { "AppService", "ApplicationService", "Service" };
+    private static string[] AppServiceCommonPostfixes { get; } = { "AppService", "ApplicationService",  "IntService", "IntegrationService", "Service" };
 
     /// <summary>
     /// "jquery".

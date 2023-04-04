@@ -26,7 +26,7 @@ export class ManageProfileComponent implements OnInit {
 
   profile$ = this.manageProfileState.getProfile$();
 
-  hideChangePasswordTab: boolean;
+  hideChangePasswordTab?: boolean;
 
   constructor(
     protected profileService: ProfileService,

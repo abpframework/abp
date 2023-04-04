@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Είστε βέβαιοι ότι θα διαγράψετε αυτήν τη σελίδα;",
     "PageId": "Σελίδα",
     "Pages": "Σελίδες",
-    "PageSlugInformation": "Το Slug χρησιμοποιείται στο url. Το url σας θα είναι '/pages/{{slug}}'.",
+    "PageSlugInformation": "Το Slug χρησιμοποιείται στο url. Το url σας θα είναι '/{{slug}}'.",
     "Permission:BlogManagement": "Διαχείριση ιστολογίου",
     "Permission:BlogManagement.Create": "Δημιουργώ",
     "Permission:BlogManagement.Delete": "Διαγράφω",

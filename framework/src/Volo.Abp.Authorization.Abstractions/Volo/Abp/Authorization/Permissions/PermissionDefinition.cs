@@ -7,7 +7,9 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions;
 
-public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition>
+public class PermissionDefinition : 
+    IHasSimpleStateCheckers<PermissionDefinition>,
+    ICanAddChildPermission
 {
     /// <summary>
     /// Unique name of the permission.
@@ -110,6 +112,16 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
 
         return child;
     }
+    
+    PermissionDefinition ICanAddChildPermission.AddPermission(
+        string name,
+        ILocalizableString displayName = null,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+        bool isEnabled = true)
+    {
+        return this.AddChild(name, displayName, multiTenancySide, isEnabled);
+    }
+
 
     /// <summary>
     /// Sets a property in the <see cref="Properties"/> dictionary.

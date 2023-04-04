@@ -273,6 +273,8 @@
     "SubscribeToNewsletter": "Assine o boletim informativo para obter informações sobre os acontecimentos na Plataforma ABP.IO, como novos lançamentos, artigos, ofertas e muito mais.",
     "FirstEdition": "Primeira edição",
     "ThankYou": "Obrigado!",
-    "CheckboxMandatory": "Você precisa verificar isso para continuar!"
+    "CheckboxMandatory": "Você precisa verificar isso para continuar!",
+    "SelectUITheme": "Selecione o tema da interface do usuário"
+
   }
 }

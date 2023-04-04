@@ -153,7 +153,7 @@ public class SolutionModuleAdder : ITransientDependency
         var documentationLink = module.GetFirstDocumentationLinkOrNull();
         if (documentationLink != null)
         {
-            CmdHelper.OpenWebPage(documentationLink);
+            CmdHelper.Open(documentationLink);
         }
 
         return module;

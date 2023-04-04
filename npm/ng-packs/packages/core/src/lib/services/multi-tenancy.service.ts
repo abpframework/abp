@@ -12,7 +12,7 @@ import { SessionStateService } from './session-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class MultiTenancyService {
-  domainTenant: CurrentTenantDto = null;
+  domainTenant: CurrentTenantDto | null = null;
 
   isTenantBoxVisible = true;
 

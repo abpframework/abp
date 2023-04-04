@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp;
 using Xunit;
 
 namespace Volo.CmsKit.Pages;
@@ -66,5 +67,39 @@ public class PageManager_Test : CmsKitDomainTestBase
                             await pageManager.SetSlugAsync(page, newSlug));
 
         exception.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task SetHomePageAsync_ShouldWorkProperly_IfExistHomePage()
+    {
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var page = await pageRepository.GetAsync(testData.Page_1_Id);
+
+            await pageManager.SetHomePageAsync(page);
+        });
+
+        var page = await pageRepository.GetAsync(testData.Page_1_Id);
+        page.IsHomePage.ShouldBeTrue();
+
+        var pageSetAsHomePageAsFalse = await pageRepository.GetAsync(testData.Page_2_Id);
+        pageSetAsHomePageAsFalse.IsHomePage.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task SetHomePageAsync_ShouldThrowException_WhenMultipleHomePageExist()
+    {
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var page1 = await pageRepository.GetAsync(testData.Page_1_Id);
+            var page2 = await pageRepository.GetAsync(testData.Page_2_Id);
+
+            page1.SetIsHomePage(true);
+            page2.SetIsHomePage(true);
+
+            await pageRepository.UpdateManyAsync(new[] { page1, page2 }, autoSave: true);
+
+            await Assert.ThrowsAsync<BusinessException>(async () => await pageManager.SetHomePageAsync(page1));
+        });
     }
 }

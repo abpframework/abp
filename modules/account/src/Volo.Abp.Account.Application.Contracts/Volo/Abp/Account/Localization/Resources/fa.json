@@ -36,6 +36,7 @@
     "PersonalSettingsSaved": "تنظیمات شخصی ذخیره گردید",
     "PasswordChanged": "گذرواژه تغییر کرد",
     "NewPasswordConfirmFailed": "لطفاً گذرواژه جدید را تأیید کنید.",
+    "NewPasswordSameAsOld": "گذرواژه جدید نباید با گذرواژه قبلی یکسان باشد.",
     "Manage": "مدیریت",
     "MyAccount": "حساب من",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "آیا امکان ثبت نام فعال است",

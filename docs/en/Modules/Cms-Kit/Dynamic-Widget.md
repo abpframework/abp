@@ -3,7 +3,7 @@
 CMS kit provides a dynamic [widget](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) used to render the components previously developed by the software in the content of the pages and blog posts. Its means, that in static content you can use dynamic content. We will mention how you can do it. You have two choices to define the widget in the system: Writing and UI.
 
 ### Adding the widget
-Firstly we will show how to use the widget system via writing manually in the page and blogpost contents.
+Firstly we will show how to use the widget system via writing manually in the page and blog post contents.
 
 Let's define the view component
 

@@ -58,6 +58,7 @@
     "ClearCache": "Clear cache",
     "ClearCacheConfirmationMessage": "Are you sure you want to clear the cache?",
     "MarkdownSupported": "Markdown is supported",
-    "FileUploadInfo": "Drag, drop, or paste a copied image."
+    "FileUploadInfo": "Drag, drop, or paste a copied image.",
+    "PostDescriptionHint": "* Will be rendered in the article link preview, supports HTML"
   }
 }

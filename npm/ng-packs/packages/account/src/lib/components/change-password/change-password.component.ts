@@ -1,7 +1,12 @@
 import { ProfileService } from '@abp/ng.account.core/proxy';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
 import { Account } from '../../models/account';
@@ -19,14 +24,14 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 export class ChangePasswordComponent
   implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs
 {
-  form: UntypedFormGroup;
+  form!: UntypedFormGroup;
 
-  inProgress: boolean;
+  inProgress?: boolean;
 
-  hideCurrentPassword: boolean;
+  hideCurrentPassword?: boolean;
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
-    if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
+    if (PASSWORD_FIELDS.indexOf(String(control?.name)) < 0) return errors;
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };
@@ -73,8 +78,8 @@ export class ChangePasswordComponent
     this.inProgress = true;
     this.profileService
       .changePassword({
-        ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password').value }),
-        newPassword: this.form.get('newPassword').value,
+        ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password')?.value }),
+        newPassword: this.form.get('newPassword')?.value,
       })
       .pipe(finalize(() => (this.inProgress = false)))
       .subscribe({

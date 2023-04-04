@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Posso cambiare gli sviluppatori registrati della mia organizzazione in futuro?",
     "ChangingDevelopersExplanation": "Oltre ad aggiungere nuovi sviluppatori alla tua licenza, puoi anche Modifica gli sviluppatori esistenti (puoi rimuovere uno sviluppatore e aggiungerne uno nuovo alla stessa postazione) senza alcun costo aggiuntivo.",
     "WhenShouldIRenewMyLicense": "Quando devo rinnovare la mia licenza?",
-    "WhenShouldIRenewMyLicenseExplanation": "Se rinnovi la licenza entro <strong>1 mese</strong> dopo la scadenza della licenza, verranno applicati i seguenti sconti: Licenza Team {0}% di sconto, Licenza Business {1}% di sconto, Licenza Enterprise {2}% di sconto . Se rinnovi la licenza <strong>1 mese</strong> dopo la data di scadenza della licenza, il prezzo di rinnovo sarà lo stesso del prezzo di acquisto della licenza e non ci saranno sconti sul rinnovo.",
+    "WhenShouldIRenewMyLicenseExplanation": "Se rinnovi la licenza entro <strong>1 mese</strong> dopo la scadenza della licenza, verranno applicati i seguenti sconti: Licenza Team {0} ; Licenza Business {1} ; Licenza Enterprise {2} . Se rinnovi la licenza <strong>1 mese</strong> dopo la data di scadenza della licenza, il prezzo di rinnovo sarà lo stesso del prezzo di acquisto della licenza e non ci saranno sconti sul rinnovo.",
     "TrialPlan": "Hai un piano di prova?",
     "DoYouAcceptBankWireTransfer": "Accettate bonifici bancari?",
     "DoYouAcceptBankWireTransferExplanation": "Sì, accettiamo bonifico bancario.<br />Dopo aver inviato il canone tramite bonifico bancario, inviaci un'e-mail a accounting@abp.io con la ricevuta e il tipo di licenza richiesta. Le nostre informazioni sul conto bancario internazionale:",
@@ -360,7 +360,7 @@
     "Next": "Prossimo",
     "StartTrial": "Inizia la mia prova gratuita",
     "ContactUsIssues": "Contattaci per qualsiasi problema",
-    "TrialActivatedWarning": "Caro {0}, un utente ha diritto di avere 1 solo periodo di prova gratuito. Hai già utilizzato il tuo periodo di prova.",
+    "TrialActivatedWarning": "Un utente ha diritto a un solo periodo di prova gratuito. Hai già utilizzato il periodo di prova.",
     "SaveAndDownload": "Salva e Scarica",
     "CompanyNameValidationMessage": "Il nome dell'azienda è troppo lungo!",
     "AddressValidationMessage": "L'indirizzo è troppo lungo!",
@@ -373,11 +373,13 @@
     "TrialLicenseModelInvalidErrorMessage": "Uno dei seguenti campi non è valido: nome del paese, dimensione dell'azienda, settore o scopo di utilizzo.",
     "Trial": "Processo",
     "Purchased": "Acquistato",
-    "PurchaseLicense": "Acquista licenza",
+    "PurchaseLicense": "Acquista {0} licenza",
     "PurchaseTrialLicenseMessage": "La data di scadenza della tua licenza è {0}. <br> Se desideri continuare a utilizzare i progetti che hai creato durante il periodo di prova gratuito, devi modificare le chiavi di licenza nei file <code>appsettings.secrets.json</code>. Ecco la tua chiave di licenza:",
     "TrialLicenseExpireMessage": "Stai utilizzando la licenza di prova e la tua licenza di prova scadrà il {0}.",
     "TryForFree": "Prova gratis",
     "TrialLicenseExpiredInfo": "Il periodo della tua licenza di prova è scaduto!",
-    "CommercialNewsletterConfirmationMessage": "Accetto i <a href=\"https://commercial.abp.io/TermsConditions\">Termini e condizioni</a> e la <a href=\"https://commercial.abp.io/Privacy\">Informativa sulla privacy </a>."
+    "CommercialNewsletterConfirmationMessage": "Accetto i <a href=\"https://commercial.abp.io/TermsConditions\">Termini e condizioni</a> e la <a href=\"https://commercial.abp.io/Privacy\">Informativa sulla privacy </a>.",
+    "discountForYears": "{0}% di sconto per {1} anno/i",
+    "BlackFridayDiscount": "Sconto Black Friday"
   }
 }

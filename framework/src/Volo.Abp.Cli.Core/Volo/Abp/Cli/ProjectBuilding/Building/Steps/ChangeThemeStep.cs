@@ -225,6 +225,12 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ChangeThemeToLeptonForNoLayersBlazorServerProjects(context);
 
         #endregion
+
+        #region MyCompanyName.MyProjectName.MauiBlazor
+
+        ChangeThemeToLeptonForMauiBlazorProjects(context);
+
+        #endregion
     }
 
     private void ConfigureLeptonManagementPackagesForNoLayersMvc(ProjectBuildContext context, string targetProjectPath, string[] projectNames)
@@ -252,7 +258,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     {
         var projectNames = new[]
         {
-            ".Web", ".HttpApi.Host", ".AuthServer",
+            ".Web", ".HttpApi.Host", ".AuthServer", ".Web.Public", ".Web.Public.Host",
             "" //for app-nolayers-mvc
         };
 
@@ -488,6 +494,33 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         file.SetLines(lines);
     }
 
+    protected void ChangeKeyword(
+        ProjectBuildContext context,
+        string targetModuleFilePath,
+        string oldKeyword,
+        string newKeyword)
+    {
+        var file = context.Files.FirstOrDefault(x => x.Name.Contains(targetModuleFilePath));
+        if (file == null)
+        {
+            return;
+        }
+
+        file.NormalizeLineEndings();
+
+        var lines = file.GetLines();
+
+        for (var i = 0; i < lines.Length; i++)
+        {
+            if (lines[i].Contains(oldKeyword))
+            {
+                lines[i] = lines[i].Replace(oldKeyword, newKeyword);
+            }
+        }
+
+        file.SetLines(lines);
+    }
+
     protected void ReplaceImportPackage(
         ProjectBuildContext context,
         string filePath,
@@ -698,6 +731,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {".Web", "MyProjectNameWebModule"},
             {".HttpApi.Host", "MyProjectNameHttpApiHostModule"},
             {".AuthServer", "MyProjectNameAuthServerModule"},
+            {".Web.Public", "MyProjectNameWebPublicModule"},
+            {".Web.Public.Host", "MyProjectNameWebPublicModule"},
             {"", "MyProjectNameWebModule"}
         };
 
@@ -972,5 +1007,54 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 "BlazorLeptonThemeBundles.Scripts.Global"
             );
         }
+    }
+
+    private void ChangeThemeToLeptonForMauiBlazorProjects(ProjectBuildContext context)
+    {
+        ReplacePackageReferenceWithProjectReference(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/MyCompanyName.MyProjectName.MauiBlazor.csproj",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonXTheme",
+            @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme\Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme.csproj"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/MyProjectNameMauiBlazorModule.cs",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonXTheme",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme",
+            "AbpAspNetCoreComponentsMauiBlazorLeptonXThemeModule",
+            "AbpAspNetCoreComponentsMauiBlazorLeptonThemeModule"
+        );
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/MainPage.xaml",
+            "clr-namespace:Volo.Abp.AspNetCore.Components.Web.LeptonXTheme.Components;assembly=Volo.Abp.AspNetCore.Components.Web.LeptonXTheme",
+            "clr-namespace:Volo.Abp.AspNetCore.Components.Web.LeptonTheme.Components;assembly=Volo.Abp.AspNetCore.Components.Web.LeptonTheme");
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/MainPage.xaml",
+            "leptonXTheme",
+            "leptonTheme");
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/Pages/Account/Login.razor",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonXTheme.Components.AccountLayout",
+            "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme.Components.AccountLayout");
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/Pages/Account/RedirectToLogout.razor",
+            "LeptonXResource",
+            "LeptonThemeManagementResource");
+
+        ChangeKeyword(
+            context,
+            "/MyCompanyName.MyProjectName.MauiBlazor/Pages/Account/RedirectToLogout.razor",
+            "Volo.Abp.LeptonX.Shared.Localization",
+            "Volo.Abp.LeptonTheme.Management.Localization");
     }
 }

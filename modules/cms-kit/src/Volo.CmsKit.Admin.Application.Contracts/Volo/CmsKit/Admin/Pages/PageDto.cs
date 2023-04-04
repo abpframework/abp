@@ -17,5 +17,7 @@ public class PageDto : AuditedEntityDto<Guid>, IHasConcurrencyStamp
 
     public string Style { get; set; }
 
+    public bool IsHomePage { get; set; }
+    
     public string ConcurrencyStamp { get; set; }
 }

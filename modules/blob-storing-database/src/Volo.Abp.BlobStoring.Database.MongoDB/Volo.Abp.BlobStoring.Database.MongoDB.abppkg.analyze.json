@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BlobStoring.Database.MongoDB",
-  "hash": "ee379665ac8db3ec65da05ffa5c419cc",
+  "hash": "d0d45fc623e9180d60e60935449cb69b",
   "contents": [
     {
       "namespace": "Volo.Abp.BlobStoring.Database.MongoDB",
@@ -16,50 +16,6 @@
           "name": "AbpMongoDbModule"
         }
       ],
-      "implementingInterfaces": [
-        {
-          "name": "IAbpModule",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IAbpModule"
-        },
-        {
-          "name": "IOnPreApplicationInitialization",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
-        },
-        {
-          "name": "IOnApplicationInitialization",
-          "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.IOnApplicationInitialization"
-        },
-        {
-          "name": "IOnPostApplicationInitialization",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
-        },
-        {
-          "name": "IOnApplicationShutdown",
-          "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.IOnApplicationShutdown"
-        },
-        {
-          "name": "IPreConfigureServices",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
-        },
-        {
-          "name": "IPostConfigureServices",
-          "namespace": "Volo.Abp.Modularity",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
-        }
-      ],
       "contentType": "abpModule",
       "name": "BlobStoringDatabaseMongoDbModule",
       "summary": null
@@ -69,36 +25,16 @@
       "connectionStringName": "AbpBlobStoring",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlob",
-          "contentType": "databaseCollection",
-          "name": "AbpBlobs",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlobContainer",
           "contentType": "databaseCollection",
           "name": "AbpBlobContainers",
           "summary": null
-        }
-      ],
-      "implementingInterfaces": [
-        {
-          "name": "IAbpMongoDbContext",
-          "namespace": "Volo.Abp.MongoDB",
-          "declaringAssemblyName": "Volo.Abp.MongoDB",
-          "fullName": "Volo.Abp.MongoDB.IAbpMongoDbContext"
         },
         {
-          "name": "ITransientDependency",
-          "namespace": "Volo.Abp.DependencyInjection",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
-        },
-        {
-          "name": "IBlobStoringMongoDbContext",
-          "namespace": "Volo.Abp.BlobStoring.Database.MongoDB",
-          "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.MongoDB",
-          "fullName": "Volo.Abp.BlobStoring.Database.MongoDB.IBlobStoringMongoDbContext"
+          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlob",
+          "contentType": "databaseCollection",
+          "name": "AbpBlobs",
+          "summary": null
         }
       ],
       "contentType": "mongoDbContext",

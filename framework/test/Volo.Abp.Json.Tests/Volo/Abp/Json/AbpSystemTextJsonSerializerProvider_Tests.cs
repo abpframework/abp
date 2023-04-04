@@ -9,13 +9,13 @@ using Xunit;
 
 namespace Volo.Abp.Json;
 
-public abstract class AbpSystemTextJsonSerializerProvider_TestBase : AbpJsonTestBase
+public abstract class AbpSystemTextJsonSerializerProviderTestBase : AbpJsonSystemTextJsonTestBase
 {
-    protected AbpSystemTextJsonSerializerProvider JsonSerializer;
+    protected AbpSystemTextJsonSerializer JsonSerializer;
 
-    public AbpSystemTextJsonSerializerProvider_TestBase()
+    public AbpSystemTextJsonSerializerProviderTestBase()
     {
-        JsonSerializer = GetRequiredService<AbpSystemTextJsonSerializerProvider>();
+        JsonSerializer = GetRequiredService<AbpSystemTextJsonSerializer>();
     }
 
     public class TestExtensibleObjectClass : ExtensibleObject
@@ -72,7 +72,7 @@ public abstract class AbpSystemTextJsonSerializerProvider_TestBase : AbpJsonTest
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_Tests : AbpSystemTextJsonSerializerProvider_TestBase
+public class AbpSystemTextJsonSerializerProviderTests : AbpSystemTextJsonSerializerProviderTestBase
 {
     [Fact]
     public void Serialize_Deserialize_With_Boolean()
@@ -214,13 +214,14 @@ public class AbpSystemTextJsonSerializerProvider_Tests : AbpSystemTextJsonSerial
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_DateTimeFormat_Tests : AbpSystemTextJsonSerializerProvider_TestBase
+public class AbpSystemTextJsonSerializerProviderDateTimeFormatTests : AbpSystemTextJsonSerializerProviderTestBase
 {
     protected override void AfterAddApplication(IServiceCollection services)
     {
         services.Configure<AbpJsonOptions>(options =>
         {
-            options.DefaultDateTimeFormat = "yyyy*MM*dd";
+            options.InputDateTimeFormats.Add("yyyy*MM*dd");
+            options.OutputDateTimeFormat = "yyyy*MM*dd HH*mm*ss";
         });
     }
 
@@ -233,8 +234,12 @@ public class AbpSystemTextJsonSerializerProvider_DateTimeFormat_Tests : AbpSyste
         file.CreationTime.Month.ShouldBe(11);
         file.CreationTime.Day.ShouldBe(20);
 
-        var newJson = JsonSerializer.Serialize(file);
-        newJson.ShouldBe(json);
+        json = JsonSerializer.Serialize(new FileWithDatetime()
+        {
+            Name = "abp",
+            CreationTime = new DateTime(2020, 11, 20, 12, 34, 56)
+        });
+        json.ShouldContain("\"2020*11*20 12*34*56\"");
     }
 
     [Fact]
@@ -256,12 +261,16 @@ public class AbpSystemTextJsonSerializerProvider_DateTimeFormat_Tests : AbpSyste
         file.CreationTime.Value.Month.ShouldBe(11);
         file.CreationTime.Value.Day.ShouldBe(20);
 
-        var newJson = JsonSerializer.Serialize(file);
-        newJson.ShouldBe(json);
+        json = JsonSerializer.Serialize(new FileWithDatetime()
+        {
+            Name = "abp",
+            CreationTime = new DateTime(2020, 11, 20, 12, 34, 56)
+        });
+        json.ShouldContain("\"2020*11*20 12*34*56\"");
     }
 }
 
-public abstract class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests : AbpSystemTextJsonSerializerProvider_TestBase
+public abstract class AbpSystemTextJsonSerializerProviderDatetimeKindTests : AbpSystemTextJsonSerializerProviderTestBase
 {
     protected DateTimeKind Kind { get; set; } = DateTimeKind.Unspecified;
 
@@ -274,7 +283,7 @@ public abstract class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests : 
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_UTC_Tests : AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests
+public class AbpSystemTextJsonSerializerProviderDatetimeKindUtcTests : AbpSystemTextJsonSerializerProviderDatetimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)
     {
@@ -283,7 +292,7 @@ public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_UTC_Tests : AbpSy
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Local_Tests : AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests
+public class AbpSystemTextJsonSerializerProviderDatetimeKindLocalTests : AbpSystemTextJsonSerializerProviderDatetimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)
     {
@@ -292,7 +301,7 @@ public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Local_Tests : Abp
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Unspecified_Tests : AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests
+public class AbpSystemTextJsonSerializerProviderDatetimeKindUnspecifiedTests : AbpSystemTextJsonSerializerProviderDatetimeKindTests
 {
 
 }

@@ -54,6 +54,7 @@
     "Version": "Različica",
     "LanguageCode": "Jezikovna koda",
     "FileName": "Ime datoteke",
-    "LastCachedTime": "Čas predpomnilnika"
+    "LastCachedTime": "Čas pred pomnilnika",
+    "Project": "Projekt"
   }
 }
