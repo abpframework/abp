@@ -29,6 +29,6 @@ describe('SafeHtmlPipe', () => {
   it('should sanitize unsafe HTML content', () => {
     const input = `<script>alert("hello world");</script><p><a href='#' onclick="alert('This is an XSS attack!')">Click here!</a></p>`;
     const result = pipe.transform(input);
-    expect(result).toBe(`<p><a href=\"#\">Click here!</a></p>`);
+    expect(result).toBe(`<p><a href="#">Click here!</a></p>`);
   });
 });
