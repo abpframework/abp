@@ -537,6 +537,7 @@
     "Pricing_Page_Testimonial_3": "我们大爱 ABP。 我们不必从头开始编写所有内容。 我们从\"开箱即用\"的功能开始，只需关注我们真正需要编写的内容。 此外，ABP 架构良好，代码质量高，错误少。 如果我们需要自己来编写所需的一切，我们可能需要花费数年时间。 另一点让我们喜欢的是新版本、问题修复或改进每隔一周很快地就会出现。 我们不会等太久。",
     "Pricing_Page_Testimonial_4": "ABP 商业版 是一款很值得推荐的出色产品。 是在一个可配置的平台上为我们的客户推向市场的商业产品。 其框架和工具为任何团队提供的快速启动值得每一分钱。 ABP 商业版 最适合我们的需求。",
     "Pricing_Page_Testimonial_5": "ABP Framework 不仅是一个框架，它还是项目开发/管理的指南，因为它提供了 DDD、GenericRepository、DI、微服务和模块化培训。 即使你不打算使用框架本身，你也可以通过 docs.abp.io 进行自己的开发，该文档已经做好了专业的准备（OpenIddict、Redis、Quartz 等）。 因为很多东西都是预先构建的，它大大缩短了项目开发时间（例如登录页面、异常处理、数据过滤、种子、审计日志、本地化、自动 API 控制器等）。 作为我们应用程序的一个示例，我使用本地事件总线进行库存控制。 因此我可以通过编写库存处理程序来管理订单移动。 不为 CreationTime，CreatorId 浪费时间真是太好了。 它们正在自动填充。",
+    "Pricing_Page_Testimonial_6": "ABP Framework 是一个很好的框架，但需要时间来理解它使用的不同层、类和库（尤其是 abp ）。 我花了很多时间阅读代码库，但使用 ABP Commercial 为我们节省了创建项目专业实体 (AR) 和与之链接的存储库的时间。\n\n我也喜欢 abp 中使用的方法非常成熟，我们知道它基于 DDD 和单体。",
     "AbpBookDownloadArea_ClaimYourEBook": "领取您的<span class='gradient-framework'>掌握ABP框架</span>电子书",
     "AddMemberModal_Warning_1": "如果您尝试添加的<strong>用户名</strong>在系统中不存在，请让您的团队成员在 <a href='{0}/账户/注册'>{0}</ 上注册 a> 并与您分享他/她帐户的用户名。",
     "MyOrganizations_Detail_WelcomeMessage": "欢迎加入您的组织，{0}",
