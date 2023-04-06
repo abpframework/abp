@@ -20,6 +20,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpApplicationConfigurationScriptController : AbpController
 {
+    public const string GetCacheProfileName = $"{nameof(AbpApplicationConfigurationScriptController)}.{nameof(AbpApplicationConfigurationScriptController.Get)}";
+
     protected readonly AbpApplicationConfigurationAppService ConfigurationAppService;
     protected readonly IJsonSerializer JsonSerializer;
     protected readonly AbpAspNetCoreMvcOptions Options;
@@ -44,6 +46,7 @@ public class AbpApplicationConfigurationScriptController : AbpController
     }
 
     [HttpGet]
+    [ResponseCache(CacheProfileName = GetCacheProfileName)]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
     public virtual async Task<ActionResult> Get()
     {

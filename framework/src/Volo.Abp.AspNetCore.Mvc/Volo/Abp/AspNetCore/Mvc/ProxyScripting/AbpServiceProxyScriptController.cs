@@ -18,6 +18,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpServiceProxyScriptController : AbpController
 {
+    public const string GetAllCacheProfileName = $"{nameof(AbpServiceProxyScriptController)}.{nameof(AbpServiceProxyScriptController.GetAll)}";
+
     protected readonly IProxyScriptManager ProxyScriptManager;
     protected readonly AbpAspNetCoreMvcOptions Options;
     protected readonly IJavascriptMinifier JavascriptMinifier;
@@ -36,6 +38,7 @@ public class AbpServiceProxyScriptController : AbpController
     }
 
     [HttpGet]
+    [ResponseCache(CacheProfileName = GetAllCacheProfileName)]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
     public virtual async Task<ActionResult> GetAll(ServiceProxyGenerationModel model)
     {

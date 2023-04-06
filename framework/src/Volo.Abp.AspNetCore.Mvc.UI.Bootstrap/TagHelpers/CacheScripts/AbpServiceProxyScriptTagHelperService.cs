@@ -53,15 +53,15 @@ public class AbpServiceProxyScriptTagHelperService : AbpTagHelperService<AbpServ
     {
         var model = new ServiceProxyGenerationModel
         {
-            Actions = TagHelper.Actions,
-            Controllers = TagHelper.Controllers,
-            Modules = TagHelper.Modules,
             Type = TagHelper.Type,
-            UseCache = TagHelper.UseCache
+            UseCache = TagHelper.UseCache,
+            Modules = TagHelper.Modules,
+            Controllers = TagHelper.Controllers,
+            Actions = TagHelper.Actions
         };
         model.Normalize();
         var script = ProxyScriptManager.GetScript(model.CreateOptions());
         await Cache.SetAsync(nameof(AbpServiceProxyScriptController), new AbpControllerScriptCacheItem(script));
-        return script.ToMd5().ToLower();
+        return $"{script}{TagHelper.Type}{TagHelper.UseCache}{TagHelper.Modules}{TagHelper.Controllers}{TagHelper.Actions}".ToMd5().ToLower();
     }
 }

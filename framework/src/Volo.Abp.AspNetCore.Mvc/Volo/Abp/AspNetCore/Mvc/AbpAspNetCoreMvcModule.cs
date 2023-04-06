@@ -25,11 +25,13 @@ using Volo.Abp.ApiVersioning;
 using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.ApiExploring;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Json;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.ProxyScripting;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
@@ -107,6 +109,22 @@ public class AbpAspNetCoreMvcModule : AbpModule
         var mvcCoreBuilder = context.Services.AddMvcCore(options =>
         {
             options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
+
+            options.CacheProfiles.Add(AbpApplicationLocalizationScriptController.GetCacheProfileName, new CacheProfile
+            {
+                Duration = 60,
+                VaryByQueryKeys = new []{ "hash" }
+            });
+            options.CacheProfiles.Add(AbpServiceProxyScriptController.GetAllCacheProfileName, new CacheProfile
+            {
+                Duration = 60,
+                VaryByQueryKeys = new []{ "hash" }
+            });
+            options.CacheProfiles.Add(AbpApplicationConfigurationScriptController.GetCacheProfileName, new CacheProfile
+            {
+                Duration = 60,
+                VaryByQueryKeys = new []{ "hash" }
+            });
         });
         context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
 
