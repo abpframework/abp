@@ -1,9 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
+using Volo.Abp.AspNetCore.Mvc.ControllerScriptCacheItem;
 using Volo.Abp.Auditing;
+using Volo.Abp.Caching;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 using Volo.Abp.Minify.Scripts;
@@ -22,34 +25,31 @@ public class AbpApplicationConfigurationScriptController : AbpController
     protected readonly AbpAspNetCoreMvcOptions Options;
     protected readonly IJavascriptMinifier JavascriptMinifier;
     protected readonly IAbpAntiForgeryManager AntiForgeryManager;
+    protected readonly IDistributedCache<AbpControllerScriptCacheItem> ScriptCache;
 
     public AbpApplicationConfigurationScriptController(
         AbpApplicationConfigurationAppService configurationAppService,
         IJsonSerializer jsonSerializer,
         IOptions<AbpAspNetCoreMvcOptions> options,
         IJavascriptMinifier javascriptMinifier,
-        IAbpAntiForgeryManager antiForgeryManager)
+        IAbpAntiForgeryManager antiForgeryManager,
+        IDistributedCache<AbpControllerScriptCacheItem> scriptCache)
     {
         ConfigurationAppService = configurationAppService;
         JsonSerializer = jsonSerializer;
         Options = options.Value;
         JavascriptMinifier = javascriptMinifier;
         AntiForgeryManager = antiForgeryManager;
+        ScriptCache = scriptCache;
     }
 
     [HttpGet]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
     public virtual async Task<ActionResult> Get()
     {
-        var script = CreateAbpExtendScript(
-            await ConfigurationAppService.GetAsync(
-                new ApplicationConfigurationRequestOptions {
-                    IncludeLocalizationResources = false
-                }
-            )
-        );
-
         AntiForgeryManager.SetCookie();
+
+        var script = await CreateAbpExtendScript();
 
         return Content(
             Options.MinifyGeneratedScript == true
@@ -59,13 +59,22 @@ public class AbpApplicationConfigurationScriptController : AbpController
         );
     }
 
-    protected virtual string CreateAbpExtendScript(ApplicationConfigurationDto config)
+    protected virtual async Task<string> CreateAbpExtendScript()
     {
+        var json = (await ScriptCache.GetAsync(nameof(AbpApplicationConfigurationScriptController)))?.Script;
+        if (json.IsNullOrWhiteSpace())
+        {
+            json = JsonSerializer.Serialize(await ConfigurationAppService.GetAsync(new ApplicationConfigurationRequestOptions
+            {
+                IncludeLocalizationResources = false
+            }), indented: true);
+        }
+
         var script = new StringBuilder();
 
         script.AppendLine("(function(){");
         script.AppendLine();
-        script.AppendLine($"$.extend(true, abp, {JsonSerializer.Serialize(config, indented: true)})");
+        script.AppendLine($"$.extend(true, abp, {json})");
         script.AppendLine();
         script.AppendLine("abp.event.trigger('abp.configurationInitialized');");
         script.AppendLine();

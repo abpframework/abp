@@ -2,13 +2,13 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
+using Volo.Abp.AspNetCore.Mvc.ControllerScriptCacheItem;
 using Volo.Abp.Auditing;
+using Volo.Abp.Caching;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
-using Volo.Abp.Localization;
 using Volo.Abp.Minify.Scripts;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization;
@@ -24,16 +24,19 @@ public class AbpApplicationLocalizationScriptController : AbpController
     protected AbpAspNetCoreMvcOptions Options { get; }
     protected IJsonSerializer JsonSerializer { get; }
     protected IJavascriptMinifier JavascriptMinifier { get; }
+    protected IDistributedCache<AbpControllerScriptCacheItem> ScriptCache { get; }
 
     public AbpApplicationLocalizationScriptController(
         AbpApplicationLocalizationAppService localizationAppService,
         IOptions<AbpAspNetCoreMvcOptions> options,
         IJsonSerializer jsonSerializer,
-        IJavascriptMinifier javascriptMinifier)
+        IJavascriptMinifier javascriptMinifier,
+        IDistributedCache<AbpControllerScriptCacheItem> scriptCache)
     {
         LocalizationAppService = localizationAppService;
         JsonSerializer = jsonSerializer;
         JavascriptMinifier = javascriptMinifier;
+        ScriptCache = scriptCache;
         Options = options.Value;
     }
 
@@ -41,9 +44,7 @@ public class AbpApplicationLocalizationScriptController : AbpController
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
     public virtual async Task<ActionResult> GetAsync(ApplicationLocalizationRequestDto input)
     {
-        var script = CreateScript(
-            await LocalizationAppService.GetAsync(input)
-        );
+        var script = await CreateScript(input);
 
         return Content(
             Options.MinifyGeneratedScript == true
@@ -53,14 +54,19 @@ public class AbpApplicationLocalizationScriptController : AbpController
         );
     }
 
-    protected virtual string CreateScript(ApplicationLocalizationDto localizationDto)
+    protected virtual async Task<string> CreateScript(ApplicationLocalizationRequestDto input)
     {
+        var json = (await ScriptCache.GetAsync(nameof(AbpApplicationLocalizationScriptController)))?.Script;
+        if (json.IsNullOrWhiteSpace())
+        {
+            json = JsonSerializer.Serialize(await LocalizationAppService.GetAsync(input), indented: true);
+        }
+
         var script = new StringBuilder();
 
         script.AppendLine("(function(){");
         script.AppendLine();
-        script.AppendLine(
-            $"$.extend(true, abp.localization, {JsonSerializer.Serialize(localizationDto, indented: true)})");
+        script.AppendLine($"$.extend(true, abp.localization, {json})");
         script.AppendLine();
         script.Append("})();");
 
