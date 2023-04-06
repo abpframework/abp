@@ -31,7 +31,9 @@
 
   <ItemGroup>
     <Content Remove="Views\Components\Themes\Shared\**\*.cshtml" />
-    <EmbeddedResource Include="Views\Components\Themes\Shared\**\*.cshtml" />
+    <EmbeddedResource Include="Views\Components\Themes\Shared\**\*.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
