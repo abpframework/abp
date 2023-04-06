@@ -106,23 +106,25 @@ public class AbpAspNetCoreMvcModule : AbpModule
             }
         });
 
+        var abpAspNetCoreMvcOptions = context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcOptions>();
+
         var mvcCoreBuilder = context.Services.AddMvcCore(options =>
         {
             options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
 
             options.CacheProfiles.Add(AbpApplicationLocalizationScriptController.GetCacheProfileName, new CacheProfile
             {
-                Duration = 60,
+                Duration = abpAspNetCoreMvcOptions.ScriptCacheDuration,
                 VaryByQueryKeys = new []{ "hash" }
             });
             options.CacheProfiles.Add(AbpServiceProxyScriptController.GetAllCacheProfileName, new CacheProfile
             {
-                Duration = 60,
+                Duration = abpAspNetCoreMvcOptions.ScriptCacheDuration,
                 VaryByQueryKeys = new []{ "hash" }
             });
             options.CacheProfiles.Add(AbpApplicationConfigurationScriptController.GetCacheProfileName, new CacheProfile
             {
-                Duration = 60,
+                Duration = abpAspNetCoreMvcOptions.ScriptCacheDuration,
                 VaryByQueryKeys = new []{ "hash" }
             });
         });
@@ -161,7 +163,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
             .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
         if (context.Services.GetHostingEnvironment().IsDevelopment() &&
-            context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcOptions>().EnableRazorRuntimeCompilationOnDevelopment)
+            abpAspNetCoreMvcOptions.EnableRazorRuntimeCompilationOnDevelopment)
         {
             mvcCoreBuilder.AddAbpRazorRuntimeCompilation();
         }

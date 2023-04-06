@@ -18,6 +18,11 @@ public class AbpAspNetCoreMvcOptions
 
     public bool ChangeControllerModelApiExplorerGroupName { get; set; }
 
+    /// <summary>
+    /// Gets or sets the duration in seconds for which the response is cached.
+    /// </summary>
+    public int? ScriptCacheDuration { get; set; }
+
     public AbpAspNetCoreMvcOptions()
     {
         ConventionalControllers = new AbpConventionalControllerOptions();
@@ -25,5 +30,6 @@ public class AbpAspNetCoreMvcOptions
         AutoModelValidation = true;
         EnableRazorRuntimeCompilationOnDevelopment = true;
         ChangeControllerModelApiExplorerGroupName = true;
+        ScriptCacheDuration = 30;
     }
 }

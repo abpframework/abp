@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Shouldly;
 using Xunit;
@@ -18,10 +19,10 @@ public class AbpServiceProxiesController_Tests : AspNetCoreMvcTestBase
     public async Task GetAllWithMinify()
     {
         GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value.MinifyGeneratedScript = false;
-        var script = await GetResponseAsStringAsync("/Abp/ServiceProxyScript");
+        var script = await GetResponseAsStringAsync($"/Abp/ServiceProxyScript?hash={Guid.NewGuid()}");
 
         GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value.MinifyGeneratedScript = true;
-        var minifyScript = await GetResponseAsStringAsync("/Abp/ServiceProxyScript?minify=true");
+        var minifyScript = await GetResponseAsStringAsync($"/Abp/ServiceProxyScript?minify=true&hash={Guid.NewGuid()}");
 
         script.Length.ShouldBeGreaterThan(0);
         minifyScript.Length.ShouldBeGreaterThan(0);
