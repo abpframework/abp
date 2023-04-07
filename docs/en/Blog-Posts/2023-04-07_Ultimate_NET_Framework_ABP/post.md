@@ -24,7 +24,7 @@ Another advantage of ABP Framework is that it provides rapid web application dev
 
 ABP Framework is also compatible with Microsoft's Clean Architecture, a software design pattern that promotes separation of concerns and maintainability. This integration ensures that the applications developed using ABP Framework are well-structured, easy to maintain, and scalable. Many application marketplace reviewers commented about ABP as the best web application framework. While ABP supports multiple UI choices like MVC, Angular, Blazor Web Assembly and Blazor Server, the most downloaded one is MVC microservice architecture. If you are here to find a NET application framework for your next NET Core application, you are in the right place!
 
-![ABP Framework Project Hierarchy](images/module-layers-and-packages.jpg)
+![ABP Framework Project Hierarchy](images/module-layers-and-packages.png)
 
 Clean Architecture is a design pattern that emphasizes the separation of concerns, ensuring that the code is organized in independent layers. This helps developers to write code that is easy to maintain, test and refactor. ABP Framework uses this pattern to structure its application code and ensure that it is easy to manage.
 
@@ -38,7 +38,7 @@ ABP Framework provides different templates, which are ASPNET Core web app compat
 
 The ABP Framework also implements Domain-Driven Design (DDD), a software design methodology that emphasizes the importance of the domain model. The framework provides a guide for implementing DDD through an implementing domain-driven design. It helps developers to create a domain model that is easy to understand, test, and maintain. As ABP is a C# framework, it supports most of the common application framework features for a core framework.
 
-![ABP Framework - Domain Driven Design e-book](images/ddd-book.jpg)
+![ABP Framework - Domain Driven Design e-book](images/ddd-book.png)
 
 There is also a free PDF e-book for Dotnet developers that explains the Domain Driven Design principle with real-world examples. You can download this e-book at https://abp.io/books/implementing-domain-driven-design
 
