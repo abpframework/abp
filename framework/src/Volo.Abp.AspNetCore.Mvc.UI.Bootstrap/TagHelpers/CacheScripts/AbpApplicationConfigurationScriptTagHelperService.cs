@@ -52,6 +52,6 @@ public class AbpApplicationConfigurationScriptTagHelperService : AbpTagHelperSer
 
         var json = JsonSerializer.Serialize(dto, indented: true);
         await Cache.SetAsync(nameof(AbpApplicationConfigurationScriptController), new AbpControllerScriptCacheItem(json));
-        return $"{json}{TagHelper.IncludeLocalizationResources}".ToLower();
+        return $"{json}{TagHelper.IncludeLocalizationResources}".ToMd5().ToLower();
     }
 }
