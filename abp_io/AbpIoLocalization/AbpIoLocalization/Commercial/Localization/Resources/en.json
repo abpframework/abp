@@ -760,6 +760,7 @@
     "ViewLiveDemo": "View Live Theme Demo",
     "GetLeptonX": "Get LeptonX Now",
     "SeeLeptonXDocumentation": "See LeptonX Documentation",
+    "SeeLeptonDocumentation": "See Lepton Documentation",
     "SimplifiedMenu": "Simplified menu",
     "SimplifiedMenuDescription": "You can easily find the page you are looking for by filtering the menu",
     "YourFavoritePages": "Your favorite pages at your reach",
@@ -827,6 +828,7 @@
     "TermsConditionsPageTitle": "Terms and Conditions",
     "TrainingsPageTitle": "ABP Training Packages",
     "ModulesPageTitle": "ABP Pre-Built Application Modules",
-    "Volo.AbpIo.Commercial:040001": "API Access Key is incorrect."
+    "Volo.AbpIo.Commercial:040001": "API Access Key is incorrect.",
+    "GetLepton": "Get Lepton Now"
   }
 }

@@ -30,7 +30,7 @@
     "Permission:License": "Lisans",
     "Permission:UserInfo": "kullanıcı bilgisi",
     "SeeDocuments": "Dokümanlara Göz Atın",
-    "Samples": "örnekler",
+    "Samples": "Örnekler",
     "Framework": "Çerçeve",
     "Support": "Destek",
     "FreeDDDBook": "Ücretsiz DDD Kitabı",
@@ -96,7 +96,7 @@
     "MySupportQuestions": "Destek Sorularım",
     "MyProfile": "Profilim",
     "Logout": "Çıkış Yap",
-    "Home": "Ev",
+    "Home": "Ana Sayfa",
     "Posts": "Gönderiler",
     "JoinTheABPCommunity": "ABP Topluluğuna Katılın",
     "SubmitYourPost": "Gönderinizi Gönderin",
@@ -166,6 +166,12 @@
     "ABPCommunityTalks": "ABP Topluluk Konuşmaları",
     "ABPCommunityPosts": "ABP Topluluk Gönderileri",
     "WelcomeFallCampaign": "Hoş Geldin Sonbahar Kampanyası!",
-    "GiveAwayForNewPurchases": "Yeni alımlar için Uygulama Geliştirme Sınıfı Eğitimi hediye edilecektir!"
+    "GiveAwayForNewPurchases": "Yeni alımlar için Uygulama Geliştirme Sınıfı Eğitimi hediye edilecektir!",
+    "ExploreTheContentsCreatedByTheCoreABPTeamAndTheABPCommunity": "ABP ekibi ve ABP topluluğu tarafından oluşturulan içerikleri keşfedin.",
+    "CheckAllCommunityTalks": "Tüm Topluluk Gönderilerine Göz Atın",
+    "ExploreTheBook": "Kitabı Keşfedin",
+    "ExploreTheEBook": "E-Kitabı Keşfedin",
+    "LatestVideos": "Son Videolar",
+    "Videos": "Videolar"
   }
 }
