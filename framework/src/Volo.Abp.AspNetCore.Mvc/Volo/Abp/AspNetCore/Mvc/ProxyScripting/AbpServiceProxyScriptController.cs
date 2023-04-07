@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ControllerScriptCacheItem;
+using Volo.Abp.AspNetCore.Mvc.ResponseCache;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.Http;
@@ -38,7 +39,7 @@ public class AbpServiceProxyScriptController : AbpController
     }
 
     [HttpGet]
-    [ResponseCache(CacheProfileName = GetAllCacheProfileName)]
+    [AbpResponseCache(CacheProfileName = GetAllCacheProfileName)]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
     public virtual async Task<ActionResult> GetAll(ServiceProxyGenerationModel model)
     {

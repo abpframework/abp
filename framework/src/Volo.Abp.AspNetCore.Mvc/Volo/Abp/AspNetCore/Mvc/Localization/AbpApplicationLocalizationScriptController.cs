@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ControllerScriptCacheItem;
+using Volo.Abp.AspNetCore.Mvc.ResponseCache;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.Http;
@@ -43,7 +44,7 @@ public class AbpApplicationLocalizationScriptController : AbpController
     }
 
     [HttpGet]
-    [ResponseCache(CacheProfileName = GetCacheProfileName)]
+    [AbpResponseCache(CacheProfileName = GetCacheProfileName)]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
     public virtual async Task<ActionResult> GetAsync(ApplicationLocalizationRequestDto input)
     {

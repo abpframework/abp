@@ -20,6 +20,7 @@ public class AbpAspNetCoreMvcOptions
 
     /// <summary>
     /// Gets or sets the duration in seconds for which the response is cached.
+    /// Default: 30.
     /// </summary>
     public int? ScriptCacheDuration { get; set; }
 
