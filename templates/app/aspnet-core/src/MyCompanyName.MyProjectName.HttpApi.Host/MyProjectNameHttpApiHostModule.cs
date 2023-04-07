@@ -183,6 +183,7 @@ public class MyProjectNameHttpApiHostModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseCors();
+        app.UseResponseCaching();
         app.UseAuthentication();
 
         if (MultiTenancyConsts.IsEnabled)

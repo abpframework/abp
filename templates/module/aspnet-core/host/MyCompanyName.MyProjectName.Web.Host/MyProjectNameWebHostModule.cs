@@ -242,6 +242,7 @@ public class MyProjectNameWebHostModule : AbpModule
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseResponseCaching();
         app.UseAuthentication();
 
         if (MultiTenancyConsts.IsEnabled)

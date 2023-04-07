@@ -241,6 +241,7 @@ public class MyProjectNameBlazorModule : AbpModule
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseResponseCaching();
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
 

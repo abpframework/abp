@@ -160,6 +160,7 @@ public class MyProjectNameWebUnifiedModule : AbpModule
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseResponseCaching();
         app.UseAuthentication();
 
         if (MultiTenancyConsts.IsEnabled)

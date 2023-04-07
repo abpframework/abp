@@ -128,6 +128,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
                 VaryByQueryKeys = new []{ "hash" }
             });
         });
+        context.Services.AddResponseCaching();
         context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
 
         var abpMvcDataAnnotationsLocalizationOptions = context.Services

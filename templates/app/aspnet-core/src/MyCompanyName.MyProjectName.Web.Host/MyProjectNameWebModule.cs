@@ -232,7 +232,7 @@ public class MyProjectNameWebModule : AbpModule
             dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
         }
     }
-    
+
     private void ConfigureDistributedLocking(
         ServiceConfigurationContext context,
         IConfiguration configuration)
@@ -265,6 +265,7 @@ public class MyProjectNameWebModule : AbpModule
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseResponseCaching();
         app.UseAuthentication();
 
         if (MultiTenancyConsts.IsEnabled)

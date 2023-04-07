@@ -185,6 +185,7 @@ public class MyProjectNameAuthServerModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseCors();
+        app.UseResponseCaching();
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
 
