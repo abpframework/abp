@@ -54,7 +54,7 @@ export class RestService {
       .pipe(catchError(err => (skipHandleError ? throwError(err) : this.handleError(err))));
   }
   private getHttpClient(isExternal: boolean) {
-    return isExternal ? this.http : this.externalHttp;
+    return isExternal ? this.externalHttp : this.http;
   }
 
   private getParams(params: Rest.Params, encoder?: HttpParameterCodec): HttpParams {
