@@ -24,6 +24,11 @@ public class GenerateProxyArgs
     public string Source { get; }
 
     public string Folder { get; }
+    public string EntryPoint { get; }
+
+    public ServiceType? ServiceType { get; }
+
+    public bool WithoutContracts { get; }
 
     [NotNull]
     public Dictionary<string, string> ExtraProperties { get; set; }
@@ -38,6 +43,9 @@ public class GenerateProxyArgs
         string apiName,
         string source,
         string folder,
+        ServiceType? serviceType,
+        string entryPoint,
+        bool withoutContracts,
         Dictionary<string, string> extraProperties = null)
     {
         CommandName = Check.NotNullOrWhiteSpace(commandName, nameof(commandName));
@@ -49,6 +57,9 @@ public class GenerateProxyArgs
         ApiName = apiName;
         Source = source;
         Folder = folder;
+        ServiceType = serviceType;
+        EntryPoint = entryPoint;
+        WithoutContracts = withoutContracts;
         ExtraProperties = extraProperties ?? new Dictionary<string, string>();
     }
 }

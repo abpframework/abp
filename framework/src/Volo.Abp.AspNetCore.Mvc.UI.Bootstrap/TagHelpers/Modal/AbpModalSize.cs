@@ -5,5 +5,11 @@ public enum AbpModalSize
     Default,
     Small,
     Large,
-    ExtraLarge
+    ExtraLarge,
+    Fullscreen,
+    FullscreenSmDown,
+    FullscreenMdDown,
+    FullscreenLgDown,
+    FullscreenXlDown,
+    FullscreenXxlDown
 }

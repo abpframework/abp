@@ -16,27 +16,27 @@ namespace Volo.Blogging.MongoDB
 
             builder.Entity<BlogUser>(b =>
             {
-                b.CollectionName = BloggingDbProperties.DbTablePrefix + "Users";
+                b.CollectionName = AbpBloggingDbProperties.DbTablePrefix + "Users";
             });
 
             builder.Entity<Blog>(b =>
             {
-                b.CollectionName = BloggingDbProperties.DbTablePrefix + "Blogs";
+                b.CollectionName = AbpBloggingDbProperties.DbTablePrefix + "Blogs";
             });
 
             builder.Entity<Post>(b =>
             {
-                b.CollectionName = BloggingDbProperties.DbTablePrefix + "Posts";
+                b.CollectionName = AbpBloggingDbProperties.DbTablePrefix + "Posts";
             });
 
             builder.Entity<Tagging.Tag>(b =>
             {
-                b.CollectionName = BloggingDbProperties.DbTablePrefix + "Tags";
+                b.CollectionName = AbpBloggingDbProperties.DbTablePrefix + "Tags";
             });
 
             builder.Entity<Comment>(b =>
             {
-                b.CollectionName = BloggingDbProperties.DbTablePrefix + "Comments";
+                b.CollectionName = AbpBloggingDbProperties.DbTablePrefix + "Comments";
             });
         }
     }

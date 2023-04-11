@@ -3,11 +3,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Public.Comments;
 
+[RequiresFeature(CmsKitFeatures.CommentEnable)]
 [RequiresGlobalFeature(typeof(CommentsFeature))]
 [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]

@@ -9,11 +9,11 @@ namespace Volo.CmsKit.Tags;
 public abstract class EntityTagRepository_Test<TStartupModule> : CmsKitTestBase<TStartupModule>
     where TStartupModule : IAbpModule
 {
-    private CmsKitTestData _cmsKitTestData;
-    private IEntityTagRepository _entityTagRepository;
-    private ITagRepository _tagRepository;
+    private readonly CmsKitTestData _cmsKitTestData;
+    private readonly IEntityTagRepository _entityTagRepository;
+    private readonly ITagRepository _tagRepository;
 
-    public EntityTagRepository_Test()
+    protected EntityTagRepository_Test()
     {
         _cmsKitTestData = GetRequiredService<CmsKitTestData>();
         _entityTagRepository = GetRequiredService<IEntityTagRepository>();
@@ -25,7 +25,7 @@ public abstract class EntityTagRepository_Test<TStartupModule> : CmsKitTestBase<
     {
         var relatedTags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
 
-        await _entityTagRepository.DeleteManyAsync(relatedTags.Select(s => s.Id).ToArray());
+        await _entityTagRepository.DeleteManyAsync(relatedTags.Select(s => s.Id).ToArray(), _cmsKitTestData.Content_1_EntityId);
 
         relatedTags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
 
@@ -35,7 +35,7 @@ public abstract class EntityTagRepository_Test<TStartupModule> : CmsKitTestBase<
     [Fact]
     public async Task GetEntityIdsFilteredByTagNameAsync_ShouldWorkProperly()
     {
-        var entityIds =  await _entityTagRepository.GetEntityIdsFilteredByTagNameAsync(_cmsKitTestData.TagName_1, _cmsKitTestData.EntityType1);
+        var entityIds = await _entityTagRepository.GetEntityIdsFilteredByTagNameAsync(_cmsKitTestData.TagName_1, _cmsKitTestData.EntityType1);
 
         entityIds.ShouldNotBeNull();
         entityIds.ShouldNotBeEmpty();

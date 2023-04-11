@@ -2,29 +2,29 @@ import {
   ABP,
   ApplicationLocalizationConfigurationDto,
   ConfigStateService,
+  ExtensionEnumDto,
   ExtensionPropertyUiLookupDto,
-} from '@abp/ng.core';
-import { Observable, pipe, zip } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
-import { ePropType } from '../enums/props.enum';
-import { EntityProp, EntityPropList } from '../models/entity-props';
-import { FormProp, FormPropList } from '../models/form-props';
-import { ObjectExtensions } from '../models/object-extensions';
-import { PropCallback } from '../models/props';
-import { createEnum, createEnumOptions, createEnumValueResolver } from './enum.util';
-import { createDisplayNameLocalizationPipeKeyGenerator } from './localization.util';
-import { createExtraPropertyValueResolver } from './props.util';
+  ObjectExtensionsDto
+} from "@abp/ng.core";
+import { Observable, pipe, zip } from "rxjs";
+import { filter, map, switchMap, take } from "rxjs/operators";
+import { ePropType } from "../enums/props.enum";
+import { EntityProp, EntityPropList } from "../models/entity-props";
+import { FormProp, FormPropList } from "../models/form-props";
+import { ObjectExtensions } from "../models/object-extensions";
+import { PropCallback } from "../models/props";
+import { createEnum, createEnumOptions, createEnumValueResolver } from "./enum.util";
+import { createDisplayNameLocalizationPipeKeyGenerator } from "./localization.util";
+import { createExtraPropertyValueResolver } from "./props.util";
 import {
   createTypeaheadDisplayNameGenerator,
   createTypeaheadOptions,
   getTypeaheadType,
-  hasTypeaheadTextSuffix,
-} from './typeahead.util';
-import { getValidatorsFromProperty } from './validation.util';
+  hasTypeaheadTextSuffix
+} from "./typeahead.util";
+import { getValidatorsFromProperty } from "./validation.util";
 
-function selectObjectExtensions(
-  configState: ConfigStateService,
-): Observable<ObjectExtensions.ObjectExtensionsDto> {
+function selectObjectExtensions(configState: ConfigStateService): Observable<ObjectExtensionsDto> {
   return configState.getOne$('objectExtensions');
 }
 
@@ -36,9 +36,9 @@ function selectLocalization(
 
 function selectEnums(
   configState: ConfigStateService,
-): Observable<Record<string, ObjectExtensions.ExtensionEnumDto>> {
+): Observable<Record<string, ExtensionEnumDto>> {
   return selectObjectExtensions(configState).pipe(
-    map((extensions: ObjectExtensions.ObjectExtensionsDto) =>
+    map((extensions: ObjectExtensionsDto) =>
       Object.keys(extensions.enums).reduce((acc, key) => {
         const { fields, localizationResource } = extensions.enums[key];
         acc[key] = {
@@ -63,7 +63,7 @@ export function getObjectExtensionEntitiesFromStore(
       return (extensions.modules[moduleKey] || ({} as ObjectExtensions.ModuleExtensionDto))
         .entities;
     }),
-    map(entities => (isUndefined(entities) ? {} : entities)),
+    map(entities => (isUndefined(entities) ? ({} as any) : entities)),
     filter<ObjectExtensions.EntityExtensions>(Boolean),
     take(1),
   );
@@ -141,8 +141,8 @@ function createPropertiesToContributorsMapper<T = any>(
       if (property.ui.onTable.isVisible) {
         const sortable = Boolean(property.ui.onTable.isSortable);
         const columnWidth = type === ePropType.Boolean ? 150 : 250;
-        const valueResolver =
-          type === ePropType.Enum
+        const valueResolver: PropCallback<T, Observable<any>> =
+          type === ePropType.Enum && property.type
             ? createEnumValueResolver(property.type, enums[property.type], propName)
             : createExtraPropertyValueResolver<T>(propName);
 

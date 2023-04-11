@@ -1,5 +1,5 @@
 import { LinkedList } from '@abp/utils';
-import { InjectFlags, InjectionToken, Type } from '@angular/core';
+import { InjectFlags, InjectionToken, InjectOptions, Type } from '@angular/core';
 import { O } from 'ts-toolbelt';
 import { ePropType } from '../enums/props.enum';
 
@@ -9,7 +9,7 @@ export abstract class PropData<R = any> {
   abstract getInjected: <T>(
     token: Type<T> | InjectionToken<T>,
     notFoundValue?: T,
-    flags?: InjectFlags,
+    options?: InjectOptions | InjectFlags,
   ) => T;
   index?: number;
   abstract record: R;
@@ -56,7 +56,7 @@ export abstract class PropsFactory<C extends Props<any>> {
   }
 }
 
-export abstract class Props<L extends PropList> {
+export abstract class Props<L extends PropList<any, InferredProp<L>>> {
   protected abstract _ctor: Type<L>;
 
   get props(): L {
@@ -78,11 +78,14 @@ export abstract class Props<L extends PropList> {
   }
 }
 
-export type PropContributorCallbacks<L extends PropList<any>> = Record<
+export type PropContributorCallbacks<L extends PropList<any, InferredProp<L>>> = Record<
   string,
   PropContributorCallback<L>[]
 >;
 
-export type PropContributorCallback<L extends PropList<any>> = (propList: L) => any;
+export type PropContributorCallback<L extends PropList<any, InferredProp<L>>> = (
+  propList: L,
+) => any;
 
 type InferredPropList<C> = C extends Props<infer L> ? L : never;
+export type InferredProp<T> = T extends PropList<any, infer U> ? U : T;

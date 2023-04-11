@@ -21,7 +21,7 @@
                 <div id="HideSectionWhenUseDefaultCredentialsIsChecked" @Html.Raw(Model.SmtpUseDefaultCredentials ? "style=\"display: none;\"" : "")>
                     <abp-input asp-for="SmtpDomain"/>
                     <abp-input asp-for="SmtpUserName"/>
-                    <abp-input type="password" asp-for="SmtpPassword"/>
+                    <abp-input type="password" autocomplete="new-password" asp-for="SmtpPassword"/>
                 </div>
             </div>
             <hr class="my-4"/>

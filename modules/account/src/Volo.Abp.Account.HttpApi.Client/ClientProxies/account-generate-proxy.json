@@ -7,6 +7,8 @@
         "Volo.Abp.Account.AccountController": {
           "controllerName": "Account",
           "controllerGroupName": "Account",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.Abp.Account.AccountController",
           "interfaces": [
             {
@@ -88,6 +90,43 @@
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.Account.IAccountAppService"
             },
+            "VerifyPasswordResetTokenAsyncByInput": {
+              "uniqueName": "VerifyPasswordResetTokenAsyncByInput",
+              "name": "VerifyPasswordResetTokenAsync",
+              "httpMethod": "POST",
+              "url": "api/account/verify-password-reset-token",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Account.VerifyPasswordResetTokenInput, Volo.Abp.Account.Application.Contracts",
+                  "type": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                  "typeSimple": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                  "typeSimple": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IAccountAppService"
+            },
             "ResetPasswordAsyncByInput": {
               "uniqueName": "ResetPasswordAsyncByInput",
               "name": "ResetPasswordAsync",
@@ -130,6 +169,8 @@
         "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController": {
           "controllerName": "Account",
           "controllerGroupName": "Login",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController",
           "interfaces": [],
           "actions": {
@@ -227,6 +268,8 @@
         "Volo.Abp.Account.ProfileController": {
           "controllerName": "Profile",
           "controllerGroupName": "Profile",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.Abp.Account.ProfileController",
           "interfaces": [
             {

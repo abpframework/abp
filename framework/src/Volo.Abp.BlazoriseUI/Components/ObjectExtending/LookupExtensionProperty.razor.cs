@@ -23,7 +23,7 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending;
 public partial class LookupExtensionProperty<TEntity, TResourceType>
     where TEntity : IHasExtraProperties
 {
-    protected List<SelectItem<object>> lookupItems;
+    protected List<SelectItem<object>> lookupItems = new();
 
     [Inject] public ILookupApiRequestService LookupApiService { get; set; }
 
@@ -37,17 +37,28 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
         }
     }
 
-    public string SelectedText => Entity.GetProperty<string>(TextPropertyName);
-
-    public LookupExtensionProperty()
+    protected override void OnParametersSet()
     {
-        lookupItems = new List<SelectItem<object>>();
+        var value = Entity.GetProperty(PropertyInfo.Name);
+        var text = Entity.GetProperty(TextPropertyName);
+        if (value != null && text != null)
+        {
+            lookupItems.Add(new SelectItem<object>
+            {
+                Text = Entity.GetProperty(TextPropertyName).ToString(),
+                Value = value
+            });
+        }
     }
-
-    protected async override Task OnInitializedAsync()
+    
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        await base.OnInitializedAsync();
-        await SearchFilterChangedAsync(string.Empty);
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await SearchFilterChangedAsync(string.Empty);
+        }
     }
 
     protected virtual void UpdateLookupTextProperty(object value)

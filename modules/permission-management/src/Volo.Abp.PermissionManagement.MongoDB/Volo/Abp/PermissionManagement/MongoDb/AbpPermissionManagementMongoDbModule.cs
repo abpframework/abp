@@ -16,6 +16,8 @@ public class AbpPermissionManagementMongoDbModule : AbpModule
         {
             options.AddDefaultRepositories<IPermissionManagementMongoDbContext>();
 
+            options.AddRepository<PermissionGroupDefinitionRecord, MongoPermissionGroupDefinitionRecordRepository>();
+            options.AddRepository<PermissionDefinitionRecord, MongoPermissionDefinitionRecordRepository>();
             options.AddRepository<PermissionGrant, MongoPermissionGrantRepository>();
         });
     }

@@ -83,6 +83,7 @@ export class ErrorHandler {
   protected cfRes: ComponentFactoryResolver;
   protected rendererFactory: RendererFactory2;
   protected httpErrorConfig: HttpErrorConfig;
+  private authService: AuthService;
 
   constructor(protected injector: Injector) {
     this.httpErrorReporter = injector.get(HttpErrorReporterService);
@@ -91,6 +92,7 @@ export class ErrorHandler {
     this.cfRes = injector.get(ComponentFactoryResolver);
     this.rendererFactory = injector.get(RendererFactory2);
     this.httpErrorConfig = injector.get('HTTP_ERROR_CONFIG');
+    this.authService = this.injector.get(AuthService);
 
     this.listenToRestError();
     this.listenToRouterError();
@@ -145,6 +147,8 @@ export class ErrorHandler {
           this.navigateToLogin();
         });
       }
+    } if(err instanceof HttpErrorResponse && err.headers.get('Abp-Tenant-Resolve-Error')){
+      this.authService.logout().subscribe();
     } else {
       switch (err.status) {
         case 401:
@@ -174,7 +178,7 @@ export class ErrorHandler {
             status: 403,
           });
           break;
-        case 404:
+        case 404:{
           this.canCreateCustomError(404)
             ? this.show404Page()
             : this.showError(
@@ -187,7 +191,9 @@ export class ErrorHandler {
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
                 },
               );
-          break;
+              break;
+        }
+          
         case 500:
           this.createErrorComponent({
             title: {
@@ -284,7 +290,7 @@ export class ErrorHandler {
   }
 
   private navigateToLogin() {
-    this.injector.get(AuthService).navigateToLogin();
+    this.authService.navigateToLogin();
   }
 
   createErrorComponent(instance: Partial<HttpErrorWrapperComponent>) {

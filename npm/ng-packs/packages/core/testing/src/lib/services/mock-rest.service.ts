@@ -1,4 +1,10 @@
-import { ABP, CORE_OPTIONS, EnvironmentService, RestService } from '@abp/ng.core';
+import {
+  ABP,
+  CORE_OPTIONS,
+  EnvironmentService,
+  HttpErrorReporterService,
+  RestService,
+} from '@abp/ng.core';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
@@ -12,7 +18,7 @@ export class MockRestService extends RestService {
     protected http: HttpClient,
     protected environment: EnvironmentService,
   ) {
-    super(options, http, environment, null);
+    super(options, http, environment, null as unknown as HttpErrorReporterService);
   }
 
   handleError(err: any): Observable<any> {

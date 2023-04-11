@@ -7,7 +7,7 @@ Form prop extension system allows you to add a new field to the create and/or ed
 
 <img alt="Form Prop Extension Example: 'Date of Birth' Field" src="./images/form-prop-extensions---birthday-field.gif" width="800px" style="max-width:100%">
 
-You can validate the field, perform visibility checks, and do more. You will also have access to the current entity when creating a contibutor for an edit form.
+You can validate the field, perform visibility checks, and do more. You will also have access to the current entity when creating a contributor for an edit form.
 
 ## How to Set Up
 
@@ -235,9 +235,34 @@ const options: FormPropOptions<IdentityUserDto> = {
   },
   autocomplete: 'off',
   isExtra: true,
+  template: undefined | Type<any> // Custom angular component
 };
 
 const prop = new FormProp(options);
+```
+FormProp has the template option since version 6.0. it can accept custom angular component.
+The component can access PropData and Prop. 
+Example of the custom prop component.
+```js
+import {
+  EXTENSIBLE_FORM_VIEW_PROVIDER,
+  EXTENSIONS_FORM_PROP,
+  EXTENSIONS_FORM_PROP_DATA,
+} from '@abp/ng.theme.shared/extensions';
+
+
+@Component({
+  selector: 'my-custom-custom-prop',
+  templateUrl: './my-custom-custom-prop.component.html',
+  viewProviders: [EXTENSIBLE_FORM_VIEW_PROVIDER], //you should add this, otherwise form-group doesn't work.
+})
+export class MyCustomPropComponent {
+  constructor(
+    @Inject(EXTENSIONS_FORM_PROP) private formProp: FormProp,
+    @Inject(EXTENSIONS_FORM_PROP_DATA) private propData: ProfileDto,
+    ...)
+  ...
+}
 ```
 
 It also has two static methods to create its instances:

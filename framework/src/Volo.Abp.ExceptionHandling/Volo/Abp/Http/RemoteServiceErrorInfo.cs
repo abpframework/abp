@@ -24,6 +24,9 @@ public class RemoteServiceErrorInfo
     /// </summary>
     public string Details { get; set; }
 
+    /// <summary>
+    /// Error data.
+    /// </summary>
     public IDictionary Data { get; set; }
 
     /// <summary>
@@ -45,10 +48,12 @@ public class RemoteServiceErrorInfo
     /// <param name="code">Error code</param>
     /// <param name="details">Error details</param>
     /// <param name="message">Error message</param>
-    public RemoteServiceErrorInfo(string message, string details = null, string code = null)
+    /// <param name="data">Error data</param>
+    public RemoteServiceErrorInfo(string message, string details = null, string code = null, IDictionary data = null)
     {
         Message = message;
         Details = details;
         Code = code;
+        Data = data;
     }
 }

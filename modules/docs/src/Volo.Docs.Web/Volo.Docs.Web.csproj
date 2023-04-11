@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>Volo.Docs.Web</AssemblyName>
     <PackageId>Volo.Docs.Web</PackageId>
     <OutputType>Library</OutputType>
@@ -22,8 +22,8 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
     <ProjectReference Include="..\Volo.Docs.Application.Contracts\Volo.Docs.Application.Contracts.csproj" />
     <PackageReference Include="Markdig.Signed" Version="0.26.0" />
-    <PackageReference Include="Scriban" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
+    <PackageReference Include="Scriban" Version="5.5.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
 

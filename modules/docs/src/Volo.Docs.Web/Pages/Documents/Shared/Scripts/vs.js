@@ -20,7 +20,7 @@
         );
 
         var scrollTopBtn = $('.scroll-top-btn');
-        var enoughHeight = $('.docs-sidebar-wrapper > .docs-top').height() + 60;
+        var enoughHeight = $('.docs-sidebar-wrapper > .docs-top').height();
         var enoughHeightPlus = 500;
 
         $(window).scroll(function () {
@@ -133,6 +133,12 @@
             theme: 'minimal-dark',
             alwaysShowScrollbar: 0,
         });
+
+        $('.mCustomScrollbar-1').mCustomScrollbar({
+            theme: 'minimal-dark',
+            alwaysShowScrollbar: 0,
+            horizontalScroll: true,
+        });
     }
 
     window.Toc.helpers.createNavList = function () {
@@ -155,7 +161,7 @@
     };
 
     function docsCriteria() {
-        var docsContentWidth = $('.docs-content').width() - 20;
+        var docsContentWidth = $('.docs-content').width() - 90;
         $('.alert-criteria').width(docsContentWidth);
     }
     $(document).ready(function () {

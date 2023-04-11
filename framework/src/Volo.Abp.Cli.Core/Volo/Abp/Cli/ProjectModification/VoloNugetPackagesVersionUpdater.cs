@@ -182,8 +182,13 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
 
                     var versionAttribute = package.Attributes["Version"];
                     var currentVersion = versionAttribute.Value;
-                    var currentSemanticVersion = SemanticVersion.Parse(currentVersion);
-                    
+                    var isVersionParsed = SemanticVersion.TryParse(currentVersion, out var currentSemanticVersion);
+                    if (!isVersionParsed)
+                    {
+                        Logger.LogWarning("Could not parse package \"{0}\" version v{1}. Skipped.", packageId, currentVersion);
+                        continue;
+                    }
+
                     var isLeptonXPackage = packageId.Contains("LeptonX");
 
                     Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, currentSemanticVersion);
@@ -194,7 +199,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                         {
                             continue;
                         }
-                        
+
                         if (await SpecifiedVersionExists(specifiedVersion, packageId))
                         {
                             var specifiedSemanticVersion = SemanticVersion.Parse(specifiedVersion);
@@ -235,12 +240,12 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                             SemanticVersion latestVersion;
                             if (currentSemanticVersion.IsPrerelease && !switchToStable)
                             {
-                                latestVersion = latestNugetReleaseCandidateVersion == null || isLeptonXPackage ? 
+                                latestVersion = latestNugetReleaseCandidateVersion == null || isLeptonXPackage ?
                                     await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: true) : latestNugetReleaseCandidateVersion;
                             }
                             else
                             {
-                                latestVersion = latestNugetVersion == null || isLeptonXPackage ? 
+                                latestVersion = latestNugetVersion == null || isLeptonXPackage ?
                                     await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: includeReleaseCandidates) : latestNugetVersion;
                             }
 

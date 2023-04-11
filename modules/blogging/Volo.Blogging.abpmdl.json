@@ -7,20 +7,24 @@
     }
   },
   "packages": {
-    "Volo.Blogging.Domain.Shared": {
-      "path": "src/Volo.Blogging.Domain.Shared/Volo.Blogging.Domain.Shared.abppkg.json",
-      "folder": "src"
+    "Volo.BloggingTestApp": {
+      "path": "app/Volo.BloggingTestApp/Volo.BloggingTestApp.abppkg.json",
+      "folder": "app"
     },
     "Volo.Blogging.Domain": {
       "path": "src/Volo.Blogging.Domain/Volo.Blogging.Domain.abppkg.json",
       "folder": "src"
     },
-    "Volo.Blogging.Application.Contracts": {
-      "path": "src/Volo.Blogging.Application.Contracts/Volo.Blogging.Application.Contracts.abppkg.json",
+    "Volo.Blogging.Domain.Shared": {
+      "path": "src/Volo.Blogging.Domain.Shared/Volo.Blogging.Domain.Shared.abppkg.json",
       "folder": "src"
     },
     "Volo.Blogging.Application": {
       "path": "src/Volo.Blogging.Application/Volo.Blogging.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Blogging.Application.Contracts": {
+      "path": "src/Volo.Blogging.Application.Contracts/Volo.Blogging.Application.Contracts.abppkg.json",
       "folder": "src"
     },
     "Volo.Blogging.EntityFrameworkCore": {
@@ -41,10 +45,6 @@
     },
     "Volo.BloggingTestApp.EntityFrameworkCore": {
       "path": "app/Volo.BloggingTestApp.EntityFrameworkCore/Volo.BloggingTestApp.EntityFrameworkCore.abppkg.json",
-      "folder": "app"
-    },
-    "Volo.BloggingTestApp": {
-      "path": "app/Volo.BloggingTestApp/Volo.BloggingTestApp.abppkg.json",
       "folder": "app"
     },
     "Volo.Blogging.TestBase": {

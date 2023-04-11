@@ -1,6 +1,7 @@
 {
   "culture": "hu",
   "texts": {
+    "Menu:Account": "Fiók",
     "UserName": "Felhasználónév",
     "EmailAddress": "Email cím",
     "UserNameOrEmailAddress": "Felhasználónév és email cím",
@@ -35,6 +36,7 @@
     "PersonalSettingsSaved": "Személyes beállítások mentve",
     "PasswordChanged": "Jelszó megváltoztatva",
     "NewPasswordConfirmFailed": "Kérjük, erősítse meg az új jelszót.",
+    "NewPasswordSameAsOld": "Az új jelszó nem lehet azonos a régi jelszóval.",
     "Manage": "Kezelés",
     "MyAccount": "A fiókom",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Engedélyezve van az önregisztráció",

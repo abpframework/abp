@@ -1,5 +1,3 @@
-using System;
-
 namespace Volo.Abp.DependencyInjection;
 
 /// <summary>
@@ -8,7 +6,7 @@ namespace Volo.Abp.DependencyInjection;
 /// This service's lifetime is transient.
 /// <see cref="ICachedServiceProvider"/> for the one with scoped lifetime.
 /// </summary>
-public interface ITransientCachedServiceProvider : IServiceProvider
+public interface ITransientCachedServiceProvider : ICachedServiceProviderBase
 {
 
 }

@@ -27,7 +27,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
         SettingEncryptionService = settingEncryptionService;
         Options = options.Value;
 
-        //TODO: Instead, use IHybridServiceScopeFactory and create a scope..?
+        //TODO: Instead, use IServiceScopeFactory and create a scope..?
 
         _lazyProviders = new Lazy<List<ISettingManagementProvider>>(
             () => Options

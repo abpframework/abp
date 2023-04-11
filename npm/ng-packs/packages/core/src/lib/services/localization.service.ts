@@ -1,10 +1,13 @@
 import { registerLocaleData } from '@angular/common';
 import { Injectable, Injector, isDevMode, Optional, SkipSelf } from '@angular/core';
 import { BehaviorSubject, combineLatest, from, Observable, Subject } from 'rxjs';
-import { filter, map, mapTo, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { ABP } from '../models/common';
 import { LocalizationWithDefault } from '../models/localization';
-import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
+import {
+  ApplicationConfigurationDto,
+  ApplicationLocalizationResourceDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { localizations$ } from '../tokens/localization.token';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
@@ -58,18 +61,27 @@ export class LocalizationService {
   private initLocalizationValues() {
     localizations$.subscribe(val => this.addLocalization(val));
 
-    const remoteLocalizations$ = this.configState.getDeep$('localization.values') as Observable<
+    const legacyResources$ = this.configState.getDeep$('localization.values') as Observable<
       Record<string, Record<string, string>>
     >;
+
+    const remoteLocalizations$ = this.configState.getDeep$('localization.resources') as Observable<
+      Record<string, ApplicationLocalizationResourceDto>
+    >;
+
     const currentLanguage$ = this.sessionState.getLanguage$();
 
     const uiLocalizations$ = combineLatest([currentLanguage$, this.uiLocalizations$]).pipe(
       map(([currentLang, localizations]) => localizations.get(currentLang)),
     );
 
-    combineLatest([remoteLocalizations$, uiLocalizations$])
+    combineLatest([legacyResources$, remoteLocalizations$, uiLocalizations$])
       .pipe(
-        map(([remote, local]) => {
+        map(([legacy, resource, local]) => {
+          if (!resource) {
+            return;
+          }
+          const remote = combineLegacyandNewResources(legacy || {}, resource);
           if (remote) {
             if (!local) {
               local = new Map();
@@ -78,15 +90,16 @@ export class LocalizationService {
             Object.entries(remote).forEach(entry => {
               const resourceName = entry[0];
               const remoteTexts = entry[1];
-              let resource = local.get(resourceName) || {};
+              let resource = local?.get(resourceName) || {};
               resource = { ...resource, ...remoteTexts };
 
-              local.set(resourceName, resource);
+              local?.set(resourceName, resource);
             });
           }
 
           return local;
         }),
+        filter(Boolean)
       )
       .subscribe(val => this.localizations$.next(val));
   }
@@ -121,7 +134,8 @@ export class LocalizationService {
         filter(
           lang => this.configState.getDeep('localization.currentCulture.cultureName') !== lang,
         ),
-        switchMap(lang => this.configState.refreshAppState().pipe(mapTo(lang))),
+        switchMap(lang => this.configState.refreshAppState().pipe(map(() => lang))),
+        filter(Boolean),
         switchMap(lang => from(this.registerLocale(lang).then(() => lang))),
       )
       .subscribe(lang => this._languageChange$.next(lang));
@@ -164,14 +178,14 @@ export class LocalizationService {
     return this.getLocalization(this.configState.getAll(), key, ...interpolateParams);
   }
 
-  localize(resourceName: string, key: string, defaultValue: string): Observable<string> {
+  localize(resourceName: string, key: string, defaultValue: string): Observable<string | null> {
     return this.configState.getOne$('localization').pipe(
       map(createLocalizer),
       map(localize => localize(resourceName, key, defaultValue)),
     );
   }
 
-  localizeSync(resourceName: string, key: string, defaultValue: string): string {
+  localizeSync(resourceName: string, key: string, defaultValue: string): string | null {
     const localization = this.configState.getOne('localization');
     return createLocalizer(localization)(resourceName, key, defaultValue);
   }
@@ -198,7 +212,7 @@ export class LocalizationService {
     ...interpolateParams: string[]
   ) {
     if (!key) key = '';
-    let defaultValue: string;
+    let defaultValue = '';
 
     if (typeof key !== 'string') {
       defaultValue = key.defaultValue;
@@ -207,7 +221,7 @@ export class LocalizationService {
 
     const keys = key.split('::') as string[];
     const warn = (message: string) => {
-      if (isDevMode) console.warn(message);
+      if (isDevMode()) console.warn(message);
     };
 
     if (keys.length < 2) {
@@ -250,3 +264,39 @@ export class LocalizationService {
     return localization || defaultValue || (key as string);
   }
 }
+
+function recursivelyMergeBaseResources(baseResourceName: string, source: ResourceDto): ApplicationLocalizationResourceDto {
+  const item = source[baseResourceName];
+
+  if (item.baseResources.length === 0) {
+    return item;
+  }
+
+  return item.baseResources.reduce((acc, baseResource) => {
+    const baseItem = recursivelyMergeBaseResources(baseResource, source);
+    const texts = { ...baseItem.texts, ...item.texts };
+    return { ...acc, texts };
+  }, item);
+}
+
+function mergeResourcesWithBaseResource(resource: ResourceDto): ResourceDto {
+  const entities: Array<[string, ApplicationLocalizationResourceDto]> = Object.keys(resource).map(key => {
+    const newValue = recursivelyMergeBaseResources(key, resource);
+    return [key, newValue];
+  });
+  return entities.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+}
+
+function combineLegacyandNewResources(
+  legacy: LegacyLanguageDto,
+  resource: ResourceDto,
+): LegacyLanguageDto {
+  const mergedResource = mergeResourcesWithBaseResource(resource);
+
+  return Object.entries(mergedResource).reduce((acc, [key, value]) => {
+    return { ...acc, [key]: value.texts };
+  }, legacy);
+}
+
+export type LegacyLanguageDto = Record<string, Record<string, string>>;
+export type ResourceDto = Record<string, ApplicationLocalizationResourceDto>;

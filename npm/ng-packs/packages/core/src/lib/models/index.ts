@@ -1,4 +1,3 @@
-export * from './auth';
 export * from './common';
 export * from './dtos';
 export * from './environment';
@@ -7,3 +6,4 @@ export * from './replaceable-components';
 export * from './rest';
 export * from './session';
 export * from './utility';
+export * from './auth';

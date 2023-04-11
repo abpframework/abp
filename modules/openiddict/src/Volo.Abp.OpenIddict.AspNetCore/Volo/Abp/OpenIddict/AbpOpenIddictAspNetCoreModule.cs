@@ -54,19 +54,19 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             .AddServer(builder =>
             {
                 builder
-                    .SetAuthorizationEndpointUris("/connect/authorize", "/connect/authorize/callback")
-                    // /.well-known/oauth-authorization-server
-                    // /.well-known/openid-configuration
+                    .SetAuthorizationEndpointUris("connect/authorize", "connect/authorize/callback")
+                    // .well-known/oauth-authorization-server
+                    // .well-known/openid-configuration
                     //.SetConfigurationEndpointUris()
-                    // /.well-known/jwks
+                    // .well-known/jwks
                     //.SetCryptographyEndpointUris()
-                    .SetDeviceEndpointUris("/device")
-                    .SetIntrospectionEndpointUris("/connect/introspect")
-                    .SetLogoutEndpointUris("/connect/logout")
-                    .SetRevocationEndpointUris("/connect/revocat")
-                    .SetTokenEndpointUris("/connect/token")
-                    .SetUserinfoEndpointUris("/connect/userinfo")
-                    .SetVerificationEndpointUris("/connect/verify");
+                    .SetDeviceEndpointUris("device")
+                    .SetIntrospectionEndpointUris("connect/introspect")
+                    .SetLogoutEndpointUris("connect/logout")
+                    .SetRevocationEndpointUris("connect/revocat")
+                    .SetTokenEndpointUris("connect/token")
+                    .SetUserinfoEndpointUris("connect/userinfo")
+                    .SetVerificationEndpointUris("connect/verify");
 
                 builder
                     .AllowAuthorizationCodeFlow()
@@ -127,6 +127,9 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
 
                     builder.RemoveEventHandler(OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter.Descriptor);
                     builder.AddEventHandler(AbpValidatePostLogoutRedirectUriParameter.Descriptor);
+
+                    builder.RemoveEventHandler(OpenIddictServerHandlers.Session.ValidateAuthorizedParty.Descriptor);
+                    builder.AddEventHandler(AbpValidateAuthorizedParty.Descriptor);
                 }
 
                 builder.AddEventHandler(RemoveClaimsFromClientCredentialsGrantType.Descriptor);

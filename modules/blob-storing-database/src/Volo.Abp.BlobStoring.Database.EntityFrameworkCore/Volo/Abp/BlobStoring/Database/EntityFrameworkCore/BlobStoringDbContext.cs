@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 
-[ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
+[ConnectionStringName(AbpBlobStoringDatabaseDbProperties.ConnectionStringName)]
 public class BlobStoringDbContext : AbpDbContext<BlobStoringDbContext>, IBlobStoringDbContext
 {
     public DbSet<DatabaseBlobContainer> BlobContainers { get; set; }

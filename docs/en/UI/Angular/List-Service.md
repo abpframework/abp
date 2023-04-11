@@ -201,3 +201,4 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 
 <input type="text" name="search" [(ngModel)]="list.filter">
 ```
+ABP doesn't have a built-in filtering mechanism. You need to implement it yourself and handle the `filter` property in the backend.

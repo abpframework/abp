@@ -14,9 +14,9 @@ const { maxLength, required } = Validators;
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
-  form: UntypedFormGroup;
+  form!: UntypedFormGroup;
 
-  inProgress: boolean;
+  inProgress?: boolean;
 
   isSelfRegistrationEnabled = true;
 
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
             err.error?.error_description ||
               err.error?.error.message ||
               'AbpAccount::DefaultErrorMessage',
-            null,
+            '',
             { life: 7000 },
           );
           return throwError(err);

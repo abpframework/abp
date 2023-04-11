@@ -8,6 +8,10 @@
     transform: rotate(360deg);
   }
 }
+:root  {
+  --lpx-logo: url('/assets/images/logo/logo-light.png');
+  --lpx-logo-icon: url('/assets/images/logo/logo-light-thumbnail.png');
+}
 .donut {
   display: inline-block;
   border: 4px solid rgba(0, 0, 0, 0.1);
@@ -23,4 +27,5 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
 }

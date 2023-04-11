@@ -28,7 +28,7 @@ export interface GenerateFromFilesOptions {
   name: string;
   path?: string;
   prefix?: string;
-  project?: string;
+  project: string;
   skipTests?: boolean;
 }
 
@@ -37,7 +37,7 @@ export function generateFromFiles(
   extraTemplateValues: Record<string, string | ((v: string) => string)> = {},
 ): Rule {
   return async (host: Tree) => {
-    options.path ??= await createDefaultPath(host, options.project as string);
+    options.path ??= await createDefaultPath(host, options.project);
     options.prefix ??= '';
     options.flat ??= true;
 
@@ -48,7 +48,7 @@ export function generateFromFiles(
     validateClassName(strings.classify(options.name));
 
     const templateSource = apply(url('./files'), [
-      options.skipTests ? filter((path) => !path.endsWith('.spec.ts.template')) : noop(),
+      options.skipTests ? filter(path => !path.endsWith('.spec.ts.template')) : noop(),
       applyTemplates({
         ...strings,
         ...options,

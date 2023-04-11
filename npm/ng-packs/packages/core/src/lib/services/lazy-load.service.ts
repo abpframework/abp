@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { concat, Observable, of, throwError } from 'rxjs';
+import { concat, Observable, of, pipe, throwError } from 'rxjs';
 import { delay, retryWhen, shareReplay, take, tap } from 'rxjs/operators';
 import { LoadingStrategy } from '../strategies';
 import { ResourceWaitService } from './resource-wait.service';
@@ -15,11 +15,13 @@ export class LazyLoadService {
   load(strategy: LoadingStrategy, retryTimes?: number, retryDelay?: number): Observable<Event> {
     if (this.loaded.has(strategy.path)) return of(new CustomEvent('load'));
     this.resourceWaitService.addResource(strategy.path);
+    const delayOperator = retryDelay ? pipe(delay(retryDelay)) : pipe();
+    const takeOp = retryTimes ? pipe(take(retryTimes)) : pipe();
     return strategy.createStream().pipe(
       retryWhen(error$ =>
         concat(
-          error$.pipe(delay(retryDelay), take(retryTimes)),
-          throwError(new CustomEvent('error')),
+          error$.pipe(delayOperator, takeOp),
+          throwError(() => new CustomEvent('error')),
         ),
       ),
       tap(() => {
@@ -36,7 +38,7 @@ export class LazyLoadService {
 
     if (!element) return false;
 
-    element.parentNode.removeChild(element);
+    element.parentNode?.removeChild(element);
     this.loaded.delete(path);
     return true;
   }
