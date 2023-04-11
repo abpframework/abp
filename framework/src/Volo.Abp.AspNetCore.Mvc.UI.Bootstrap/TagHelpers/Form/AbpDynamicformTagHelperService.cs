@@ -127,7 +127,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
             return htmlContent;
         }
 
-        var col_class = $"col-12 col-sm-" + TagHelper.ColumnSize;
+        var col_class = $"col-12 col-sm-" + ((int)TagHelper.ColumnSize);
 
         return $"<div class=\"{col_class}\">{htmlContent}</div>";
     }
