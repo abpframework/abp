@@ -14,21 +14,21 @@ ShortDate, ShortTime and ShortDateTime format data like angular's data pipe but 
 # ShortDate Pipe
 
 ```html
-<span>{{today | shortDatePipe }}</span>
+<span> {{today | shortDate }}</span>
 ```
 
 
 # ShortTime Pipe
 
 ```html
-<span>{{today | shortTimePipe }}</span>
+<span> {{today | shortTime }}</span>
 ```
 
 
 # ShortDateTime Pipe
 
 ```html
-<span>{{today | shortDateTimePipe }}</span>
+<span> {{today | shortDateTime }}</span>
 ```
 
 }%}
