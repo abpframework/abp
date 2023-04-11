@@ -14,6 +14,7 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
@@ -98,10 +99,14 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
     {
         var contentBuilder = new StringBuilder("");
 
+        contentBuilder.AppendLine("<div class=\"row\">");
+
         foreach (var item in items.OrderBy(o => o.Order))
         {
-            contentBuilder.AppendLine(item.HtmlContent);
+            contentBuilder.AppendLine(SetColumn(item.HtmlContent));
         }
+
+        contentBuilder.AppendLine("</div>");
 
         var content = childContent.GetContent();
         if (content.Contains(AbpFormContentPlaceHolder))
@@ -114,6 +119,18 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         }
 
         output.Content.SetHtmlContent(content);
+    }
+
+    protected virtual string SetColumn(string htmlContent)
+    {
+        if (TagHelper.ColumnSize == ColumnSize.Undefined || TagHelper.ColumnSize == ColumnSize._)
+        {
+            return htmlContent;
+        }
+
+        var col_class = $"col-12 col-sm-" + ((int)TagHelper.ColumnSize);
+
+        return $"<div class=\"{col_class}\">{htmlContent}</div>";
     }
 
     protected virtual async Task SetSubmitButton(TagHelperContext context, TagHelperOutput output)
