@@ -56,7 +56,7 @@ Please do the following:
 > When you are using OpenIddict, You should remove 'clientSecret' on Environment.js (if exists) and disable "HTTPS-only" settings. (Openiddict has default since Version 6.0)
 
 ### How to disable Https-only in Openiddict.
-You should add this code on `MyProjectName`HttpApiHostModule.
+You should add this code on {{ if Tiered == "No"}}`MyProjectNameHttpApiHostModule`{{ else if Tiered == "Yes" }}`MyProjectNameAuthServerModule`{{ end }}.
 
 ```csharp
   public override void PreConfigureServices(ServiceConfigurationContext context)
