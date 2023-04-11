@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
@@ -12,8 +13,8 @@ public class AbpDynamicFormTagHelper : AbpTagHelper<AbpDynamicFormTagHelper, Abp
     [HtmlAttributeName("abp-model")]
     public ModelExpression Model { get; set; }
 
-    [HtmlAttributeName("abp-column")]
-    public int Column { get; set; }
+    [HtmlAttributeName("column-size")]
+    public ColumnSize ColumnSize { get; set; }
 
     public bool? SubmitButton { get; set; }
 

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
@@ -121,12 +122,12 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     protected virtual string SetColumn(string htmlContent)
     {
-        if (TagHelper.Column < 2 || TagHelper.Column > 6)
+        if (TagHelper.ColumnSize == ColumnSize.Undefined || TagHelper.ColumnSize == ColumnSize._)
         {
             return htmlContent;
         }
 
-        var col_class = $"col-12 col-sm-" + (12 / TagHelper.Column);
+        var col_class = $"col-12 col-sm-" + TagHelper.ColumnSize;
 
         return $"<div class=\"{col_class}\">{htmlContent}</div>";
     }

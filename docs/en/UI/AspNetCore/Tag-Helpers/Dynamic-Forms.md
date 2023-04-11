@@ -108,9 +108,9 @@ See the [dynamic forms demo page](https://bootstrap-taghelpers.abp.io/Components
 
 Sets the c# model for dynamic form. Properties of this modal are turned into inputs in the form.
 
-### abp-column
+### column-size
 
-Set up columns in a dynamic form. The value is between 1~6 .
+Here, use 'col-sm' to set the size . When setting this property 'col-12' will be added at the same time.
 
 ### submit-button
 
