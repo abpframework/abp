@@ -829,6 +829,8 @@
     "TrainingsPageTitle": "ABP Training Packages",
     "ModulesPageTitle": "ABP Pre-Built Application Modules",
     "Volo.AbpIo.Commercial:040001": "API Access Key is incorrect.",
-    "GetLepton": "Get Lepton Now"
+    "GetLepton": "Get Lepton Now",
+    "MyOrganizations_Detail_LicenseStartDate": "License Start Date",
+    "MyOrganizations_Detail_LicenseExpiryDate": "Expiry Date"
   }
 }
