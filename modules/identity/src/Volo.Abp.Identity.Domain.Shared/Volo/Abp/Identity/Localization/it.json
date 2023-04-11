@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "I ruoli statici non possono essere eliminati.",
     "Volo.Abp.Identity:010007": "Non puoi modificare l'impostazione dei due fattori.",
     "Volo.Abp.Identity:010008": "Non è consentito modificare l'impostazione a due fattori.",
+    "Volo.Abp.Identity:010009": "Non puoi delegare te stesso.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Numero massimo consentito di membri dell'unità organizzativa per un utente",
     "ThisUserIsNotActiveMessage": "Questo utente non è attivo.",
     "Permission:IdentityManagement": "Gestione identità",

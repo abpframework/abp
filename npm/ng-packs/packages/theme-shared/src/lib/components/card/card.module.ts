@@ -4,20 +4,20 @@ import { CardBodyComponent } from './card-body.component';
 import { CardComponent } from './card.component';
 import { CardHeaderComponent } from './card-header.component';
 import { CardFooterComponent } from './card-footer.component';
-import { CardTitle } from './card-title.directive';
-import { CardSubtitle } from './card-subtitle.directive';
-import { CardImgTop } from './card-img-top.directive';
-import { CardHeader } from './card-header.directive';
+import { CardTitleDirective } from './card-title.directive';
+import { CardSubtitleDirective } from './card-subtitle.directive';
+import { CardImgTopDirective } from './card-img-top.directive';
+import { CardHeaderDirective } from './card-header.directive';
 
 const declarationsWithExports = [
   CardComponent,
   CardBodyComponent,
   CardHeaderComponent,
   CardFooterComponent,
-  CardTitle,
-  CardSubtitle,
-  CardImgTop,
-  CardHeader,
+  CardTitleDirective,
+  CardSubtitleDirective,
+  CardImgTopDirective,
+  CardHeaderDirective,
 ];
 
 @NgModule({
@@ -25,4 +25,4 @@ const declarationsWithExports = [
   imports: [CommonModule],
   exports: [...declarationsWithExports],
 })
-export class CardModule { }
+export class CardModule {}

@@ -6,7 +6,7 @@ using Volo.CmsKit.Comments;
 namespace Volo.CmsKit.Public.Comments;
 
 [Serializable]
-public class CreateCommentWithParameteresInput
+public class CreateCommentWithParametersInput
 {
     [Required]
     [DynamicStringLength(typeof(CommentConsts), nameof(CommentConsts.MaxTextLength))]

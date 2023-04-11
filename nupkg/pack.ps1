@@ -1,4 +1,6 @@
 . ".\common.ps1"
+# Delete existing nupkg files
+del *.nupkg
 
 # Rebuild all solutions
 foreach($solution in $solutions) {
@@ -6,9 +8,6 @@ foreach($solution in $solutions) {
     Set-Location $solutionFolder
     dotnet restore
 }
-
-# Delete old packages
-del *.nupkg
 
 # Create all packages
 $i = 0
@@ -25,7 +24,7 @@ foreach($project in $projects) {
 	Set-Location $projectFolder
 
     #dotnet clean
-    dotnet pack -c Release --no-build -- /maxcpucount
+   dotnet pack -c Release --no-build -- /maxcpucount
 
     if (-Not $?) {
         Write-Error "Packaging failed for the project: $projectName" 

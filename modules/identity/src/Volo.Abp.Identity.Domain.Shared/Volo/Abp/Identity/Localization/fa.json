@@ -70,6 +70,7 @@
     "Volo.Abp.Identity:010006": "نقش/وظیفه ی استاتیک را نمی توان حذف کرد.",
     "Volo.Abp.Identity:010007": "شما نمی توانید تنظیمات دو مرحله ای خود را تغییر دهید.",
     "Volo.Abp.Identity:010008": "تغییر دادن تنظیمات دو مرحله ای مجاز نمی باشد.",
+    "Volo.Abp.Identity:010009": "شما نمی توانید خودتان را معرفی کنید.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "حداکثر تعداد مجاز عضویت در یک واحد سازمان برای یک کاربر",
     "ThisUserIsNotActiveMessage": "این کاربر غیرفعال میباشد.",
     "Permission:IdentityManagement": "مدیریت هویت",

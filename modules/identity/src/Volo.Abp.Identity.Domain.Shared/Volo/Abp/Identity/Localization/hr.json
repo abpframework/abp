@@ -71,6 +71,7 @@
         "Volo.Abp.Identity:010006": "Statičke uloge nije moguće izbrisati.",
         "Volo.Abp.Identity:010007": "Ne možete promijeniti postavku dva faktora.",
         "Volo.Abp.Identity:010008": "Nije dopušteno mijenjati postavke dvofaktorske autentifikacije.",
+        "Volo.Abp.Identity:010009": "Ne možete delegirati sami sebi.",
         "Identity.OrganizationUnit.MaxUserMembershipCount": "Maksimalni dopušteni broj članstva u organizacijskoj jedinici za korisnika",
         "ThisUserIsNotActiveMessage": "Ovaj korisnik nije aktivan.",
         "Permission:IdentityManagement": "Upravljanje identitetom",

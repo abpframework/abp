@@ -22,6 +22,7 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
     private readonly OrganizationUnitManager _organizationUnitManager;
     private readonly IIdentityLinkUserRepository _identityLinkUserRepository;
     private readonly IdentityLinkUserManager _identityLinkUserManager;
+    private readonly IIdentityUserDelegationRepository _identityUserDelegationRepository;
 
     private IdentityRole _adminRole;
     private IdentityRole _moderatorRole;
@@ -42,7 +43,8 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         IdentityTestData testData,
         OrganizationUnitManager organizationUnitManager,
         IIdentityLinkUserRepository identityLinkUserRepository,
-        IdentityLinkUserManager identityLinkUserManager)
+        IdentityLinkUserManager identityLinkUserManager,
+        IIdentityUserDelegationRepository identityUserDelegationRepository)
     {
         _guidGenerator = guidGenerator;
         _userRepository = userRepository;
@@ -55,6 +57,7 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         _organizationUnitManager = organizationUnitManager;
         _identityLinkUserRepository = identityLinkUserRepository;
         _identityLinkUserManager = identityLinkUserManager;
+        _identityUserDelegationRepository = identityUserDelegationRepository;
         _identitySecurityLogRepository = identitySecurityLogRepository;
     }
 
@@ -66,6 +69,7 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         await AddLinkUsers();
         await AddClaimTypes();
         await AddSecurityLogs();
+        await AddUserDelegations();
     }
 
     private async Task AddRoles()
@@ -196,5 +200,29 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
 
             CreationTime = new DateTime(2020, 01, 02, 10, 0, 0)
         }));
+    }
+
+    private async Task AddUserDelegations()
+    {
+        await _identityUserDelegationRepository.InsertAsync(
+            new IdentityUserDelegation(_guidGenerator.Create(), 
+                _testData.UserJohnId,
+                _testData.UserDavidId, 
+                DateTime.Now.AddDays(-2), 
+                DateTime.Now.AddDays(-1)));
+        
+        await _identityUserDelegationRepository.InsertAsync(
+            new IdentityUserDelegation(_guidGenerator.Create(), 
+                _testData.UserJohnId,
+                _testData.UserDavidId, 
+                DateTime.Now.AddDays(-1), 
+                DateTime.Now.AddDays(1)));
+        
+        await _identityUserDelegationRepository.InsertAsync(
+            new IdentityUserDelegation(_guidGenerator.Create(), 
+                _testData.UserNeoId,
+                _testData.UserDavidId, 
+                DateTime.Now.AddDays(-1), 
+                DateTime.Now.AddDays(1)));
     }
 }
