@@ -417,7 +417,6 @@
     "RenewLicenseEarly": "Lisansımı erken yenilersem, tüm yılı alacak mıyım?",
     "RenewLicenseEarylExplanation": "Lisansınızı lisans bitiş tarihinizden önce yenilediğinizde, lisans bitiş tarihinize 1 yıl eklenecektir. Örneğin, lisansınızın süresi {0}-06-06 tarihinde doluyorsa ve lisansınızı {0}-01-01 tarihinde yenilediyseniz, yeni lisans bitiş tarihiniz {1}-06-06 olacaktır.",
     "OpenSourceWebApplication": "Açık Kaynak Web Uygulaması",
-    "CompleteWebDevelopment": "Tam Web Geliştirme",
     "ABPFrameworkDescription": "ABP Framework, yazılım geliştirme ve sözleşmelerin en iyi uygulamalarını takip ederek modern web uygulamaları oluşturmak için eksiksiz bir altyapıdır.",
     "CommunityDescription": "ABP Çerçevesi ile ilgili deneyimlerinizi paylaşın!",
     "GetStarted": "Başlayın",
