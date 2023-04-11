@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Kielikoodi",
     "DisplayName:Version": "Versio",
     "Documents": "Asiakirjat",
-    "RemoveFromCache": "Poista välimuistista",
+    "RemoveFromCache": "Poista välimuistista ja indeksoi uudelleen",
     "Reindex": "Uudelleen indeksoi",
     "ReindexCompleted": "Uudelleen indeksointi valmis",
-    "RemovedFromCache": "Poistettu välimuistista",
+    "RemovedFromCache": "Poistettu välimuistista ja indeksoitu uudelleen.",
     "RemoveFromCacheConfirmation": "Haluatko varmasti poistaa tämän kohteen välimuistista?",
-    "ReIndexDocumentConfirmation": "Haluatko varmasti indeksoida tämän kohteen uudelleen?",
+    "ReIndexDocumentConfirmation": "Oletko varma, että haluat indeksoida \"{0}\" uudelleen?",
     "DeleteFromDatabase": "Poista tietokannasta",
     "Deleted": "Poistettu",
     "Search": "Hae",
@@ -56,6 +56,7 @@
     "FileName": "Tiedoston nimi",
     "LastCachedTime": "Välimuistin aika",
     "Project": "Projekti",
-    "AdvancedFilters": "Edistyneet suodattimet"
+    "AdvancedFilters": "Edistyneet suodattimet",
+    "RemoveCacheAndReIndexConfirmation": "Dokumentti \"{0}\" poistetaan välimuistista ja indeksoidaan uudelleen. Vahvistatko?"
   }
 }

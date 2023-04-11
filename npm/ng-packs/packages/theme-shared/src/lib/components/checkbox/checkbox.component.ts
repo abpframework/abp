@@ -33,7 +33,12 @@ export class FormCheckboxComponent extends AbstractNgModelComponent {
   @Input() label?: string;
   @Input() labelClass = 'form-check-label';
   @Input() checkboxId!: string;
-  @Input() checkboxStyle = '';
+  @Input() checkboxStyle:
+    | {
+        [klass: string]: any;
+      }
+    | null
+    | undefined;
   @Input() checkboxClass = 'form-check-input';
   @Input() checkboxReadonly = false;
   @Output() checkboxBlur = new EventEmitter<void>();

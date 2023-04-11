@@ -48,6 +48,7 @@
     "Search": "Buscar",
     "ItemWillBeDeletedMessageWithFormat": "{0} serán borrados!",
     "ItemWillBeDeletedMessage": "Este elemento será borrado",
-    "ManageYourAccount": "Administrar cuenta"
+    "ManageYourAccount": "Administrar cuenta",
+    "OthersGroup": "Otra"
   }
 }

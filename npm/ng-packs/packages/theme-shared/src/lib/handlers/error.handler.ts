@@ -147,6 +147,8 @@ export class ErrorHandler {
           this.navigateToLogin();
         });
       }
+    } if(err instanceof HttpErrorResponse && err.headers.get('Abp-Tenant-Resolve-Error')){
+      this.authService.logout().subscribe();
     } else {
       switch (err.status) {
         case 401:
@@ -176,7 +178,7 @@ export class ErrorHandler {
             status: 403,
           });
           break;
-        case 404:
+        case 404:{
           this.canCreateCustomError(404)
             ? this.show404Page()
             : this.showError(
@@ -189,7 +191,9 @@ export class ErrorHandler {
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
                 },
               );
-          break;
+              break;
+        }
+          
         case 500:
           this.createErrorComponent({
             title: {

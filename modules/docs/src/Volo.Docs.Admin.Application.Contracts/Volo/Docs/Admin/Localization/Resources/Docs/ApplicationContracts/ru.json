@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Код языка",
     "DisplayName:Version": "Версия",
     "Documents": "Документы",
-    "RemoveFromCache": "Удалить из кеша",
+    "RemoveFromCache": "Удаление из кэша и повторное индексирование",
     "Reindex": "Переиндексировать",
     "ReindexCompleted": "Переиндекс завершен",
-    "RemovedFromCache": "Удалено из кеша",
+    "RemovedFromCache": "Удалены из кэша и переиндексированы",
     "RemoveFromCacheConfirmation": "Вы уверены, что хотите удалить этот элемент из кеша?",
-    "ReIndexDocumentConfirmation": "Вы уверены, что хотите переиндексировать этот элемент?",
+    "ReIndexDocumentConfirmation": "Вы уверены, что хотите переиндексировать \"{0}\"?",
     "DeleteFromDatabase": "Удалить из базы данных",
     "Deleted": "Удалено",
     "Search": "Поиск",
@@ -55,6 +55,7 @@
     "LanguageCode": "Код языка",
     "FileName": "Имя файла",
     "LastCachedTime": "Время кеширования",
-    "Project": "Проект"
+    "Project": "Проект",
+    "RemoveCacheAndReIndexConfirmation": "Документ \"{0}\" будет удален из кэша и переиндексирован. Вы подтверждаете?"
   }
 }

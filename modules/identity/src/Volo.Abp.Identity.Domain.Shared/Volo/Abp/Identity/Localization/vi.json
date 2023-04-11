@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "Vai trò này là cố định không được phép xóa.",
     "Volo.Abp.Identity:010007": "Bạn không thể thay đổi cài đặt hai yếu tố của mình.",
     "Volo.Abp.Identity:010008": "Không được phép thay đổi cài đặt hai yếu tố.",
+    "Volo.Abp.Identity:010009": "Bạn không thể ủy quyền cho chính mình.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Số lượng thành viên đơn vị tổ chức tối đa được phép cho một người dùng",
     "ThisUserIsNotActiveMessage": "Người dùng này không hoạt động.",
     "Permission:IdentityManagement": "Quản lý danh tính",

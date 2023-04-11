@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "Les rôles statiques ne peuvent pas être supprimés.",
     "Volo.Abp.Identity:010007": "Vous ne pouvez pas modifier votre paramètre à deux facteurs.",
     "Volo.Abp.Identity:010008": "Il n’est pas permis de changer deux facteurs de réglage.",
+    "Volo.Abp.Identity:010009": "Vous ne pouvez pas vous déléguer vous-même.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Nombre maximal d’adhésions autorisées à l’unité d’organisation pour un utilisateur",
     "ThisUserIsNotActiveMessage": "Cet utilisateur n'est pas actif.",
     "Permission:IdentityManagement": "Gestion de l’identité",

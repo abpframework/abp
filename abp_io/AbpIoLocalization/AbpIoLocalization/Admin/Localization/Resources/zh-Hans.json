@@ -452,6 +452,11 @@
     "WhoWeAreItem": "关于我们",
     "FieldIsRequired": "{0}是必须的。",
     "FieldIsNotValid": "{0}是无效的。",
-    "InterestedLicenseType": "感兴趣的许可证类型"
+    "InterestedLicenseType": "感兴趣的许可证类型",
+    "MoveWaitList": "移至候补名单",
+    "CommunityLinkTitle": "在社区网站上打开",
+    "CommunityLink": "在社区网站上打开",
+    "ReloadFromSource": "从源重新加载",
+    "ReloadFromSourceConfirmationMessage": "此帖子将从“{0}”刷新。 你想继续吗？"
   }
 }

@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "Perfis estáticos não podem ser excluídos.",
     "Volo.Abp.Identity:010007": "Você não pode alterar sua configuração de dois fatores.",
     "Volo.Abp.Identity:010008": "Não é permitido alterar a configuração de dois fatores.",
+    "Volo.Abp.Identity:010009": "Você não pode delegar a si mesmo.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Contagem máxima permitida de membros da unidade organizacional para um usuário",
     "ThisUserIsNotActiveMessage": "Este usuário não está ativo.",
     "Permission:IdentityManagement": "Acessos",
