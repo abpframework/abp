@@ -224,3 +224,11 @@ Adapt it to your project or start a new .NET 8 project.
 
 Happy Coding ⌨️
 
+---
+
+> I'm Alper Ebicoglu 🧑🏽‍💻 ABP Framework Core Team Member\
+> Follow me for the latest news about .NET and software development:\
+> 📌 [twitter.com/alperebicoglu](https://twitter.com/alperebicoglu)\
+> 📌 [github.com/ebicoglu](https://github.com/ebicoglu)\
+> 📌 [linkedin.com/in/ebicoglu](https://www.linkedin.com/in/ebicoglu)\
+> 📌 [medium.com/@alperonline](https://medium.com/@alperonline)
