@@ -41,11 +41,96 @@ Please see the following migration documents, if you are upgrading from v7.1:
 * [ABP Commercial 7.1 to 7.2 Migration Guide](https://docs.abp.io/en/commercial/7.2/migration-guides/v7_2)
 
 
-## What's New with ABP Framework 7.1?
+## What's New with ABP Framework 7.2?
 
-//TODO:
+In this section, I will introduce some major features released in this version. Here is a brief list of titles explained in the next sections:
 
-## What's New with ABP Commercial 7.1?
+* Grouping of Navigation Menu Items
+* Introducing the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService`
+* CMS Kit Comments: Don't Allow External URLs
+* Angular UI New Components
+* Others
+
+### Grouping of Navigation Menu Items
+
+Some applications may need to group their main menus to tidy up their menu structure. For example: you may want to group ABP's menu items, which came from modules in a group named *Admin*. For this purpose, we have added the grouping support to navigation menus. 
+
+You can allow to define groups and associate menu items with a group. Then, your theme can render your menu items within the specified groups. 
+
+**Example:**
+
+```csharp
+private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+{
+    //Creating a new group
+    context.Menu.AddGroup("Dashboards", l["Dashboards"]);
+
+    //Setting the group name for menu items
+    context.Menu
+        .AddItem(new ApplicationMenuItem("Home", l["Menu:Home"], groupName: "Dashboards")
+        .AddItem(new ApplicationMenuItem("Home", l["Menu:Dashboard"], groupName: "Dashboards");
+}
+```
+
+Currently, only the [LeptonX Theme](https://leptontheme.com/) render groups for menu items. See the following figure for an example:
+
+![leptonx-group-menu-render](leptonx-group-render.png)
+
+### Introducing the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService`
+
+In this version, we have introduced the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService` service to re-initialize application configurations. This service can be helpful, if you want to reset the application configurations after you have changed some configurations through your code. For example, you might have changed some values of some settings and might want to be able to get the new settings without needing to refresh the page, for this purposes `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService.ResetAsync()` method can be used to re-initialize the application configurations and cache the updated configurations for further usages.
+
+> For more information, please see [https://github.com/abpframework/abp/issues/15887](https://github.com/abpframework/abp/issues/15887).
+
+### CMS Kit Comments: Don't Allow External URLs
+
+CMS Kit provides a [comment system](https://docs.abp.io/en/abp/7.2/Modules/Cms-Kit/Comments) to add the comment feature to any kind of resource, like blog posts for an example. CMS Kit comments section is good for visitor comments and can improve your interaction with your application users. 
+
+Sometimes, malicious users (or bots) can submit advertisement links into the comment sections. In this version, we have allowed you to specify *allowed external URLs* for a specific comment sections and disallow the any other external URLs. You just need to configure the `CmsKitCommentOptions` as follows:
+
+```csharp
+Configure<CmsKitCommentOptions>(options =>
+{
+    options.AllowedExternalUrls = new Dictionary<string, List<string>>
+    {
+      {
+        "Product",
+        new List<string>
+        {
+          "https://abp.io/"
+        }
+      }
+    };
+});
+```
+
+If you don't specify any allowed external URLs for a specific comment section, all external URLs will be allowed to be used in comments. For more information, please refers to [CMS Kit: Comments documentation](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments).
+
+### Angular UI New Components
+
+In this version, we have created some useful UI components for Angular UI, which are `abp-checkbox`, `abp-form-input` and `abp-card`. Instead of using the related HTML elements and specifying bootstrap classes, from this version on, you can use these components. 
+
+You can see the following examples for usage of `abp-card` component:
+
+```html
+<abp-card cardClass="mt-4 mb-5">
+    <abp-card-body>
+        <div>...</div>    
+    </abp-card-body>
+</abp-card>        
+```
+
+> See [Card Component documentation](https://docs.abp.io/en/abp/7.2/UI/Angular/Card-Component) for more information.
+
+### Others
+
+* OpenIddict registered custom scopes have been added to the openid-configuration endpoint (`/.well-known/openid-configuration`) automatically. See [#16141](https://github.com/abpframework/abp/issues/16141) for more information.
+* Two new tag-helpers have been added to MVC UI, which are `abp-date-picker` and `abp-date-range-picker`. See [#15806](https://github.com/abpframework/abp/pull/15806) for more information.
+* Filtering/searching has been improved in the Docs Module and unified under a single *Search* section. See [#15787](https://github.com/abpframework/abp/issues/15787) for more information.
+
+## What's New with ABP Commercial 7.2?
+
+We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 7.2.
 
 //TODO:
 
