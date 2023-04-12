@@ -110,6 +110,10 @@ public class DynamicFormsModel : PageModel
 
 为动态表单设置c#模型,模型的属性以表单形式转化为输入.
 
+### column-size
+
+此处使用 `col-sm` 来设置大小。当设置该属性是会同时添加 `col-12` .
+
 ### submit-button
 
 可以为 `True` 或 `False`.
