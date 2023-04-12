@@ -43,7 +43,7 @@ Please see the following migration documents, if you are upgrading from v7.1:
 
 ## What's New with ABP Framework 7.2?
 
-In this section, I will introduce some major features released in this version. Here is a brief list of titles explained in the next sections:
+In this section, I will introduce some major features released in this version. Here is a brief list of the titles that will be explained in the next sections:
 
 * Grouping of Navigation Menu Items
 * Introducing the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService`
@@ -53,9 +53,9 @@ In this section, I will introduce some major features released in this version. 
 
 ### Grouping of Navigation Menu Items
 
-Some applications may need to group their main menus to tidy up their menu structure. For example, you may want to group ABP's menu items, which came from modules in a group named *Admin*. 
+Some applications may need to group their main menus to tidy up their menu structure. For example, you may want to group ABP's menu items, which came from modules in a group named *Admin*.
 
-In this version, you can allow defining groups and associate menu items with a group. Then, your theme can render your menu items within the specified groups. 
+In this version, you can allow to define groups and associate menu items with a group. Then your theme can render your menu items within the specified groups. 
 
 **Example:**
 
@@ -72,19 +72,19 @@ private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
 }
 ```
 
-> **Note**: Currently, only the [LeptonX Theme](https://leptontheme.com/) renders groups for menu items. 
+> **Note**: Currently, only the [LeptonX Theme](https://leptontheme.com/) renders groups for menu items. See the "LeptonX - Render Groups for Menu Items" below for a demonstration
 
 ### Introducing the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService`
 
-In this version, we have introduced the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService` service to re-initialize application configurations. This service can be helpful, if you want to reset the application configurations after you have changed some configurations through your code. For example, you might have changed some values of some settings and might want to be able to get the new settings without needing to refresh the page, for this purpose `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService.ResetAsync()` method can be used to re-initialize the application configurations and cache the updated configurations for further usages.
+In this version, we have introduced the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService` service to re-initialize application configurations. This service can be helpful, if you want to reset the application configurations after changing some configurations through your code. For example, you might have changed the values of some settings and might want to be able to get the new settings without the need to refresh the page. For this purpose, the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService.ResetAsync()` method can be used to re-initialize the application configurations and cache the updated configurations for further usages.
 
 > For more information, please see [https://github.com/abpframework/abp/issues/15887](https://github.com/abpframework/abp/issues/15887).
 
 ### CMS Kit Comments: Disallowing External URLs
 
-CMS Kit provides a [comment system](https://docs.abp.io/en/abp/7.2/Modules/Cms-Kit/Comments) to add the comment feature to any kind of resource, like blog posts for an example. CMS Kit comments section is good for visitor comments and can improve your interaction with your application users. 
+CMS Kit provides a [comment system](https://docs.abp.io/en/abp/7.2/Modules/Cms-Kit/Comments) to add the comment feature to any kind of resource, like blog posts for an example. The CMS Kit comment section is good for visitor comments and can improve your interaction with your application users. 
 
-Sometimes, malicious users (or bots) can submit advertisement links into the comment sections. With this version, you can specify *allowed external URLs* for a specific comment section and disallow the any other external URLs. You just need to configure the `CmsKitCommentOptions` as follows:
+Sometimes, malicious users (or bots) can submit advertisement links into the comment sections. With this version, you can specify *allowed external URLs* for a specific comment section and disallow any other external URLs. You just need to configure the `CmsKitCommentOptions` as follows:
 
 ```csharp
 Configure<CmsKitCommentOptions>(options =>
@@ -102,13 +102,13 @@ Configure<CmsKitCommentOptions>(options =>
 });
 ```
 
-If you don't specify any allowed external URLs for a specific comment section, all external URLs will be allowed to be used in comments. For more information, please refers to [CMS Kit: Comments documentation](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments).
+If you don't specify any allowed external URLs for a specific comment section, all external URLs are allowed to be used in comments. For more information, please refer to the [CMS Kit: Comments documentation](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments).
 
 ### New Components for Angular UI
 
 In this version, we have created some useful UI components for Angular UI, which are `abp-checkbox`, `abp-form-input`, and `abp-card`. Instead of using the related HTML elements and specifying bootstrap classes, from this version on, you can use these components. 
 
-You can see the following examples for usage of the `abp-card` component:
+You can see the following examples for the usage of the `abp-card` component:
 
 ```html
 <abp-card cardClass="mt-4 mb-5">
@@ -118,7 +118,7 @@ You can see the following examples for usage of the `abp-card` component:
 </abp-card>        
 ```
 
-> See [Card Component documentation](https://docs.abp.io/en/abp/7.2/UI/Angular/Card-Component) for more information.
+> See the [Card Component documentation](https://docs.abp.io/en/abp/7.2/UI/Angular/Card-Component) for more information.
 
 ### Others
 
@@ -132,7 +132,7 @@ We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the f
 
 ### Authority Delegation
 
-Authority Delegation is a way of delegating the responsibility of the current user to a different user(s) for a limited time. Thus, a user can be switched to the delegated users' account and perform actions on their behalf.
+Authority Delegation is a way of delegating the responsibility of the current user to a different user(s) for a limited time. Thus, a user can be switched to the delegated user's/users' account and perform actions on their behalf.
 
 This version introduces support for the **Authority Delegation** in the [Account Module](https://docs.abp.io/en/commercial/latest/modules/account). You can check the following gif for a demonstration:
 
@@ -140,19 +140,19 @@ This version introduces support for the **Authority Delegation** in the [Account
 
 ### Force Password Change at Next Logon
 
-It's a typical need to force users to change their password after their first successful login. Especially, if you as an admin create a new user (*from thee Users page of the Identity Pro module*, for example) with an easy initial password or a randomly generated password. The user should change his/her password with a more secure password that only his/her knows. 
+It's a typical need to force users to change their password after their first successful login. Especially, if you as admin create a new user (*from thee Users page of the Identity Pro module*, for example) with an easy initial password or a randomly generated password. The user should change his/her password with a more secure password that only they know. 
 
-In this version, the "Forcing Password Change at Next Logon" feature has been added for this kind of purposes. Now, it's possible to force a user to change his/her password for the next login.
+In this version, the "Forcing Password Change at Next Logon" feature has been added for this kind of purpose. Now, it's possible to force a user to change their password on the next login.
 
-Admin only needs to check the *Should change password on next login* option, while creating a new user:
+The admin only needs to check the *Should change password on next login* option, while creating a new user:
 
 ![force password change](force-password-change.png)
 
-After the first successful login, a password change page will open and force the user to change his/her own password:
+After the first successful login, a password change page will open and force the user to change their password:
 
 ![password change form](password-change-form.png)
 
-Then, the user starts using his/her account with a secure password that only his/her knows.
+Then, the user starts using their account with a secure password that only they know.
 
 ### Periodic Password Changes (Password Aging)
 
@@ -170,7 +170,7 @@ As mentioned in the *Grouping of Navigation Menu Items* section above, the [Lept
 
 ### Suite: Show Properties on Create/Update/List Pages
 
-In this version, ABP Suite allows you to select a property to be visible/invisible on the create/update modals and list page. Also, it allows you to set specific properties to *readonly* on the update modals.
+In this version, ABP Suite allows you to choose whether a property is visible/invisible on the create/update modals and list page. It also allows you to set specific properties to *readonly* on the update modals.
 
 ![suite property](suite-property.png)
 
@@ -196,6 +196,6 @@ Thanks to the ABP Community for all the content they have published. You can als
 
 ## Conclusion
 
-This version comes with some new features and a lot of enhancements to the existing features. You can see the [Road Map](https://docs.abp.io/en/abp/7.2/Road-Map) documentation to learn about the release schedule and planned features for the next releases. Please try the ABP v7.2 RC and provide feedback to help us release a more stable version.
+This version comes with some new features and a lot of enhancements to the existing features. You can see the [Road Map](https://docs.abp.io/en/abp/7.2/Road-Map) documentation to learn about the release schedule and planned features for the next releases. Please try ABP v7.2 RC and provide feedback to help us release a more stable version.
 
 Thanks for being a part of this community!
