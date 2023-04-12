@@ -22,7 +22,7 @@ Configure<CmsKitCommentOptions>(options =>
     options.AllowedExternalUrls = new Dictionary<string, List<string>>
     {
       {
-        "quote",
+        "Product",
         new List<string>
         {
           "https://abp.io/"
