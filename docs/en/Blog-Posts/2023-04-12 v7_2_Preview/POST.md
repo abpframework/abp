@@ -72,7 +72,7 @@ private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
 }
 ```
 
-> **Note**: Currently, only the [LeptonX Theme](https://leptontheme.com/) renders groups for menu items. See the "LeptonX - Render Groups for Menu Items" below for a demonstration
+> **Note**: Currently, only the [LeptonX Theme](https://leptontheme.com/) renders groups for menu items. See the "LeptonX - Render Groups for Menu Items" section below for a demonstration.
 
 ### Introducing the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService`
 
@@ -132,7 +132,7 @@ We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the f
 
 ### Authority Delegation
 
-Authority Delegation is a way of delegating the responsibility of the current user to a different user(s) for a limited time. Thus, a user can be switched to the delegated user's/users' account and perform actions on their behalf.
+Authority Delegation is a way of delegating the responsibility of the current user to a different user(s) for a limited time. Thus, a user can be switched to the delegated users' account and perform actions on their behalf.
 
 This version introduces support for the **Authority Delegation** in the [Account Module](https://docs.abp.io/en/commercial/latest/modules/account). You can check the following gif for a demonstration:
 
@@ -140,7 +140,7 @@ This version introduces support for the **Authority Delegation** in the [Account
 
 ### Force Password Change at Next Logon
 
-It's a typical need to force users to change their password after their first successful login. Especially, if you as admin create a new user (*from thee Users page of the Identity Pro module*, for example) with an easy initial password or a randomly generated password. The user should change his/her password with a more secure password that only they know. 
+It's a typical need to force users to change their password after their first successful login. Especially, if you as admin create a new user (*from the Users page of the Identity Pro module*, for example) with an easy initial password or a randomly generated password. The user should change his/her password with a more secure password that only they know. 
 
 In this version, the "Forcing Password Change at Next Logon" feature has been added for this kind of purpose. Now, it's possible to force a user to change their password on the next login.
 
