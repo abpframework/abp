@@ -53,9 +53,9 @@ In this section, I will introduce some major features released in this version. 
 
 ### Grouping of Navigation Menu Items
 
-Some applications may need to group their main menus to tidy up their menu structure. For example: you may want to group ABP's menu items, which came from modules in a group named *Admin*. For this purpose, we have added the grouping support to navigation menus. 
+Some applications may need to group their main menus to tidy up their menu structure. For example, you may want to group ABP's menu items, which came from modules in a group named *Admin*. 
 
-You can allow to define groups and associate menu items with a group. Then, your theme can render your menu items within the specified groups. 
+In this version, you can allow defining groups and associate menu items with a group. Then, your theme can render your menu items within the specified groups. 
 
 **Example:**
 
@@ -72,21 +72,19 @@ private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
 }
 ```
 
-Currently, only the [LeptonX Theme](https://leptontheme.com/) render groups for menu items. See the following figure for an example:
-
-![leptonx-group-menu-render](leptonx-group-render.png)
+> **Note**: Currently, only the [LeptonX Theme](https://leptontheme.com/) renders groups for menu items. 
 
 ### Introducing the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService`
 
-In this version, we have introduced the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService` service to re-initialize application configurations. This service can be helpful, if you want to reset the application configurations after you have changed some configurations through your code. For example, you might have changed some values of some settings and might want to be able to get the new settings without needing to refresh the page, for this purposes `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService.ResetAsync()` method can be used to re-initialize the application configurations and cache the updated configurations for further usages.
+In this version, we have introduced the `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService` service to re-initialize application configurations. This service can be helpful, if you want to reset the application configurations after you have changed some configurations through your code. For example, you might have changed some values of some settings and might want to be able to get the new settings without needing to refresh the page, for this purpose `BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService.ResetAsync()` method can be used to re-initialize the application configurations and cache the updated configurations for further usages.
 
 > For more information, please see [https://github.com/abpframework/abp/issues/15887](https://github.com/abpframework/abp/issues/15887).
 
-### CMS Kit Comments: Don't Allow External URLs
+### CMS Kit Comments: Disallowing External URLs
 
 CMS Kit provides a [comment system](https://docs.abp.io/en/abp/7.2/Modules/Cms-Kit/Comments) to add the comment feature to any kind of resource, like blog posts for an example. CMS Kit comments section is good for visitor comments and can improve your interaction with your application users. 
 
-Sometimes, malicious users (or bots) can submit advertisement links into the comment sections. In this version, we have allowed you to specify *allowed external URLs* for a specific comment sections and disallow the any other external URLs. You just need to configure the `CmsKitCommentOptions` as follows:
+Sometimes, malicious users (or bots) can submit advertisement links into the comment sections. With this version, you can specify *allowed external URLs* for a specific comment section and disallow the any other external URLs. You just need to configure the `CmsKitCommentOptions` as follows:
 
 ```csharp
 Configure<CmsKitCommentOptions>(options =>
@@ -106,11 +104,11 @@ Configure<CmsKitCommentOptions>(options =>
 
 If you don't specify any allowed external URLs for a specific comment section, all external URLs will be allowed to be used in comments. For more information, please refers to [CMS Kit: Comments documentation](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments).
 
-### Angular UI New Components
+### New Components for Angular UI
 
-In this version, we have created some useful UI components for Angular UI, which are `abp-checkbox`, `abp-form-input` and `abp-card`. Instead of using the related HTML elements and specifying bootstrap classes, from this version on, you can use these components. 
+In this version, we have created some useful UI components for Angular UI, which are `abp-checkbox`, `abp-form-input`, and `abp-card`. Instead of using the related HTML elements and specifying bootstrap classes, from this version on, you can use these components. 
 
-You can see the following examples for usage of `abp-card` component:
+You can see the following examples for usage of the `abp-card` component:
 
 ```html
 <abp-card cardClass="mt-4 mb-5">
@@ -132,7 +130,50 @@ You can see the following examples for usage of `abp-card` component:
 
 We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 7.2.
 
-//TODO:
+### Authority Delegation
+
+Authority Delegation is a way of delegating the responsibility of the current user to a different user(s) for a limited time. Thus, a user can be switched to the delegated users' account and perform actions on their behalf.
+
+This version introduces support for the **Authority Delegation** in the [Account Module](https://docs.abp.io/en/commercial/latest/modules/account). You can check the following gif for a demonstration:
+
+//TODO: change the gif!!!
+![authority delegation](authority-delegation.gif)
+
+### Force Password Change at Next Logon
+
+It's a typical need to force users to change their password after their first successful login. Especially, if you as an admin create a new user (*from thee Users page of the Identity Pro module*, for example) with an easy initial password or a randomly generated password. The user should change his/her password with a more secure password that only his/her knows. 
+
+In this version, the "Forcing Password Change at Next Logon" feature has been added for this kind of purposes. Now, it's possible to force a user to change his/her password for the next login.
+
+Admin only needs to check the *Should change password on next login* option, while creating a new user:
+
+![force password change](force-password-change.png)
+
+After the first successful login, a password change page will open and force the user to change his/her own password:
+
+![password change form](password-change-form.png)
+
+Then, the user starts using his/her account with a secure password that only his/her knows.
+
+### Periodic Password Changes (Password Aging)
+
+**Password aging** is a mechanism to force users to periodically change their passwords. It allows you to specify a max number of days that a password can be used before it has to be changed.
+
+![password aging](password-aging.png)
+
+You can force this behavior in the "Password renewing settings" section of the Settings page as can be seen in the image above. Then, after the specified time has passed, users will have to renew their passwords.
+
+### LeptonX - Render Groups for Menu Items
+
+As mentioned in the *Grouping of Navigation Menu Items* section above, the [LeptonX Theme](https://leptontheme.com/) renders groups for menu items:
+
+![leptonx-group-menu-render](leptonx-group-render.png)
+
+### Suite: Show Properties on Create/Update/List Pages
+
+In this version, ABP Suite allows you to select a property to be visible/invisible on the create/update modals and list page. Also, it allows you to set specific properties to *readonly* on the update modals.
+
+![suite property](suite-property.png)
 
 ## Community News
 
@@ -152,7 +193,7 @@ There are exciting articles contributed by the ABP community as always. I will h
 * [Converting Create/Edit Modal to Page - Blazor](https://community.abp.io/posts/converting-createedit-modal-to-page-blazor-eexdex8y) by [Enis Necipoglu](https://twitter.com/EnisNecipoglu).
 * [Using Dapper with the ABP Framework](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l) by [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan).
 
-Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://community.abp.io/articles/submit) to the ABP Community.
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://community.abp.io/articles/submit) to the ABP Community.
 
 ## Conclusion
 
