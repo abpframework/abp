@@ -136,7 +136,6 @@ Authority Delegation is a way of delegating the responsibility of the current us
 
 This version introduces support for the **Authority Delegation** in the [Account Module](https://docs.abp.io/en/commercial/latest/modules/account). You can check the following gif for a demonstration:
 
-//TODO: change the gif!!!
 ![authority delegation](authority-delegation.gif)
 
 ### Force Password Change at Next Logon
