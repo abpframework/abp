@@ -6,6 +6,11 @@
     "CarPlural": "اتومبیل ها",
     "MaxLenghtErrorMessage": "طول این فیلد میتواند نهایتا '{0}' کاراکتر باشد",
     "Universe": "کائنات",
-    "FortyTwo": "چهل و دو"
+    "FortyTwo": "چهل و دو",
+    "Enum:BookType.Undefined": "تعریف نشده است",
+    "Enum:BookType.0": "با مقدار 0 تعریف نشده است",
+    "BookType.Adventure": "مخاطره رخ داده است",
+    "BookType.1": "مخاطره با ارزش 1 رخ داده است",
+    "Biography": "بیوگرافی رخ داده است"
   }
 }

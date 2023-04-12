@@ -40,7 +40,7 @@
     "Selected": "انتخاب شده",
     "PagerShowMenuEntries": "نمایش _MENU_ مورد",
     "DatatableActionDropdownDefaultText": "عملیات",
-    "ChangePassword": "تغییر رمز",
+    "ChangePassword": "تغییر گذرواژه",
     "PersonalInfo": "پروفایل من",
     "AreYouSureYouWantToCancelEditingWarningMessage": "شما تغییرات ذخیره نشده ای دارید.",
     "GoHomePage": "برو به صفحه اصلی",
@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} حذف خواهد شد!",
     "ItemWillBeDeletedMessage": "این مورد حذف خواهد شد!",
     "ManageYourAccount": "حساب خود را مدیریت کنید",
-    "OthersGroup": "دیگر"
+    "OthersGroup": "دیگر",
+    "Today": "امروز",
+    "Apply": "اعمال کردن"
   }
 }

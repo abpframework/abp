@@ -11,7 +11,7 @@
     "Description:Abp.Ldap.Domain": "دامنه",
     "DisplayName:Abp.Ldap.UserName": "نام کاربری",
     "Description:Abp.Ldap.UserName": "نام کاربری",
-    "DisplayName:Abp.Ldap.Password": "رمز عبور",
-    "Description:Abp.Ldap.Password": "رمز عبور"
+    "DisplayName:Abp.Ldap.Password": "گذرواژه",
+    "Description:Abp.Ldap.Password": "گذرواژه"
   }
 }
