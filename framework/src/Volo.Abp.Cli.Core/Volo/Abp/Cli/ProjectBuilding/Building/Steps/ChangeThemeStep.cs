@@ -844,6 +844,13 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 $"Blazor{defaultThemeName}ThemeBundles.Scripts.Global",
                 "BlazorBasicThemeBundles.Scripts.Global"
             );
+
+            ChangeNamespace(
+                context,
+                $"/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
+                $"Volo.Abp.AspNetCore.Components.Web.{defaultThemeName}Theme.Themes.{defaultThemeName}",
+                "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic"
+            );
         }
     }
 
