@@ -1,4 +1,6 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   EventEmitter,
@@ -26,6 +28,7 @@ export type DropEvent = NzFormatEmitEvent & { pos: number };
   styleUrls: ['tree.component.scss'],
   encapsulation: ViewEncapsulation.None,
   providers: [SubscriptionService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeComponent implements OnInit {
   dropPosition: number;
@@ -38,6 +41,7 @@ export class TreeComponent implements OnInit {
     @Optional()
     @Inject(DISABLE_TREE_STYLE_LOADING_TOKEN)
     private disableTreeStyleLoading: boolean | undefined,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   @ContentChild('menu') menu: TemplateRef<any>;
@@ -115,5 +119,10 @@ export class TreeComponent implements OnInit {
 
   initDropdown(key: string, dropdown: NgbDropdown) {
     this.dropdowns[key] = dropdown;
+  }
+
+  setSelectedNode(node: any) {
+    this.selectedNode = { ...node };
+    this.cdr.markForCheck();
   }
 }
