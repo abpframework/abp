@@ -191,8 +191,18 @@ There are exciting articles contributed by the ABP community as always. I will h
 * [What’s New in .NET 8 🧐 ? Discover ALL .NET 8 Features](https://community.abp.io/posts/whats-new-in-.net-8-discover-all-.net-8-features-llcmrdre) by [Alper Ebicoglu](https://twitter.com/alperebicoglu).
 * [Converting Create/Edit Modal to Page - Blazor](https://community.abp.io/posts/converting-createedit-modal-to-page-blazor-eexdex8y) by [Enis Necipoglu](https://twitter.com/EnisNecipoglu).
 * [Using Dapper with the ABP Framework](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l) by [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan).
+* [ABP React Template](https://community.abp.io/posts/abp-react-template-33pjmran) by [](https://twitter.com/antosubash).
+* [How to Export Data to Excel Files with ASP.NET Core Minimal API](https://community.abp.io/posts/how-to-export-data-to-excel-files-with-asp.net-core-minimal-api-79o45u3s) by [Berkan Sasmaz](https://twitter.com/berkansasmazz).
 
 Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://community.abp.io/articles/submit) to the ABP Community.
+
+### New ABP Blog Posts
+
+There are also some exciting blog posts written by the ABP team. You can see the following list for some of those articles:
+
+* [ABP Framework: Open Source Web Application Development Framework](https://blog.abp.io/abp/open-source-web-application-development-framework) by [Alper Ebicoglu](https://twitter.com/alperebicoglu).
+* [ABP Framework: The Ultimate .NET Web Framework for Rapid Application Development](https://blog.abp.io/abp/ultimate-net-web-framework-for-rapid-application-development) by [Alper Ebicoglu](https://twitter.com/alperebicoglu).
+* [Top 10 .NET Core Libraries Every Developer Should Know 🔥](https://blog.abp.io/abp/Top-10-.NET-Core-Libraries-Every-Developer-Should-Know) by [Alper Ebicoglu](https://twitter.com/alperebicoglu)
 
 ## Conclusion
 
