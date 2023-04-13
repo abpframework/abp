@@ -1,10 +1,6 @@
 @page
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.DatePickerModel
 
-@{
-    ViewData["Title"] = "DatePicker";
-}
-
 @section styles {
     <abp-style-bundle>
         <abp-style src="/css/demo.css"/>
@@ -21,7 +17,7 @@
                 singleOpenAndClearButton: false,
                 placeholder: "New Picker",
             });
-        newPicker.insertBefore($('.test-picker').parent());
+        newPicker.insertAfter($('.test-picker').parent());
     </script>
 }
 
@@ -30,7 +26,7 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-<h2>DatePicker</h2>
+<h2>DatePicker & DateRangePicker</h2>
 
 
 <div class="demo-with-code">
