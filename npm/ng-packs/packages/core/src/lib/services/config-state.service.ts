@@ -15,6 +15,10 @@ import { InternalStore } from '../utils/internal-store-utils';
 })
 export class ConfigStateService {
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
+  
+  setState(config: ApplicationConfigurationDto){
+    this.store.set(config)
+  }
 
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
