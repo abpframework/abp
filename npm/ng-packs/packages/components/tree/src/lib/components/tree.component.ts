@@ -81,6 +81,21 @@ export class TreeComponent implements OnInit {
     this.subscriptionService.addOne(loaded$);
   }
 
+  private findNode(target: any, nodes: any[]) {
+    for (const node of nodes) {
+      if (node.key === target.id) {
+        return node;
+      }
+      if (node.children) {
+        let res = this.findNode(target, node.children);
+        if (res) {
+          return res;
+        }
+      }
+    }
+    return null;
+  }
+
   onSelectedNodeChange(node: NzTreeNode) {
     this.selectedNode = node.origin.entity;
     if (this.changeCheckboxWithNode) {
@@ -122,7 +137,8 @@ export class TreeComponent implements OnInit {
   }
 
   setSelectedNode(node: any) {
-    this.selectedNode = { ...node };
+    let newSelectedNode = this.findNode(node, this.nodes);
+    this.selectedNode = { ...newSelectedNode };
     this.cdr.markForCheck();
   }
 }
