@@ -238,7 +238,7 @@ context.Menu.AddItem(
             "BooksStore.Authors",
             l["Menu:Authors"],
             url: "/Authors"
-        ).RequirePermissions(BookStorePermissions.Books.Default)
+        ).RequirePermissions(BookStorePermissions.Authors.Default)
     )
 );
 ````
