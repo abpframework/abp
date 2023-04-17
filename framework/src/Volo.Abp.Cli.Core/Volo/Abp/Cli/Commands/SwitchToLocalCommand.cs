@@ -37,7 +37,6 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
         }
 
         await _localReferenceConverter.ConvertAsync(workingDirectory, GetPaths(commandLineArgs));
-
     }
 
     private List<string> GetPaths(CommandLineArgs commandLineArgs)
