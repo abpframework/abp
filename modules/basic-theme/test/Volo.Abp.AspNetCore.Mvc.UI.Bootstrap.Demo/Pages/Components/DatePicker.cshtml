@@ -17,7 +17,7 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-date-picker placeholder="New" single-open-and-clear-button="false" week-numbers="Iso" time-picker="true" required today-button-classes="btn primary" picker-id="testPicker" asp-for="DateTime"></abp-date-picker>
+        <abp-date-picker placeholder="New" single-open-and-clear-button="false" week-numbers="Iso" time-picker="true" required today-button-classes="btn-primary" picker-id="testPicker" asp-for="DateTime"></abp-date-picker>
     </div>
     <div class="code-area" id="test-picker">
         <abp-tabs>
@@ -37,14 +37,14 @@ public class DatePickerModel : PageModel
             </abp-tab>
             <abp-tab title="Tag Helper" active="true">
                 <pre><code>
-&lt;abp-date-picker placeholder="New" single-open-and-clear-button="false" week-numbers="Iso" time-picker="true" required today-button-classes="btn primary" picker-id="testPicker" asp-for="DateTime"/&gt;
+&lt;abp-date-picker placeholder="New" single-open-and-clear-button="false" week-numbers="Iso" time-picker="true" required today-button-classes="btn-primary" picker-id="testPicker" asp-for="DateTime"/&gt;
 </code></pre>
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
 &lt;div class="mb-3"&gt;
     &lt;label class="form-label" for="DateTime"&gt;DateTime&lt;/label&gt;&lt;span&gt; * &lt;/span&gt;
-    &lt;abp-date-picker placeholder="New" required="" data-show-i-s-o-week-numbers="true" data-time-picker="true" data-today-button-classes="btn primary" id="testPicker" data-single-open-and-clear-button="false" data-date="2023-04-12T17:56:33.1115260+03:00"&gt;
+    &lt;abp-date-picker placeholder="New" required="" data-show-i-s-o-week-numbers="true" data-time-picker="true" data-today-button-classes="btn-primary" id="testPicker" data-single-open-and-clear-button="false" data-date="2023-04-12T17:56:33.1115260+03:00"&gt;
         &lt;div class="input-group"&gt;
             &lt;input placeholder="New" required="" type="text" autocomplete="off" class="form-control"&gt;
             &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
@@ -167,7 +167,7 @@ public class DatePickerModel : PageModel
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-date-picker auto-update-input="true" today-button-classes="btn primary" asp-for="NullableDateTime"></abp-date-picker>
+        <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="NullableDateTime"></abp-date-picker>
     </div>
     <div class="code-area">
         <abp-tabs>
@@ -182,14 +182,14 @@ public class DatePickerModel : PageModel
             </abp-tab>
             <abp-tab title="Tag Helper" active="true">
                 <pre><code>
-&lt;abp-date-picker auto-update-input="true" today-button-classes="btn primary" asp-for="NullableDateTime"/&gt;
+&lt;abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="NullableDateTime"/&gt;
 </code></pre>
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
 &lt;div class="mb-3"&gt;
     &lt;label class="form-label" for="NullableDateTime"&gt;NullableDateTime&lt;/label&gt;
-    &lt;abp-date-picker data-today-button-classes="btn primary" data-auto-update-input="true"&gt;
+    &lt;abp-date-picker data-today-button-classes="btn-primary" data-auto-update-input="true"&gt;
         &lt;div class="input-group"&gt;
             &lt;input type="text" autocomplete="off" class="form-control"&gt;
             &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary d-none" data-busy-text="Processing..."&gt;
@@ -227,7 +227,7 @@ public class DatePickerModel : PageModel
             </abp-tab>
             <abp-tab title="Tag Helper" active="true">
                 <pre><code>
-&lt;abp-date-picker auto-update-input="true" today-button-classes="btn primary" asp-for="NullableDateTime"/&gt;
+&lt;abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="NullableDateTime"/&gt;
 </code></pre>
             </abp-tab>
             <abp-tab title="Rendered">
@@ -251,7 +251,7 @@ public class DatePickerModel : PageModel
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-date-picker auto-update-input="true" today-button-classes="btn primary" asp-for="DateTimeDateTimeOffset"></abp-date-picker>
+        <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="DateTimeDateTimeOffset"></abp-date-picker>
     </div>
     <div class="code-area">
         <abp-tabs>
@@ -271,14 +271,14 @@ public class DatePickerModel : PageModel
             </abp-tab>
             <abp-tab title="Tag Helper" active="true">
                 <pre><code>
-&lt;abp-date-picker auto-update-input="true" today-button-classes="btn primary" asp-for="DateTimeDateTimeOffset"/&gt;
+&lt;abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="DateTimeDateTimeOffset"/&gt;
 </code></pre>
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
 &lt;div class="mb-3"&gt;
     &lt;label class="form-label" for="DateTimeDateTimeOffset"&gt;DateTimeDateTimeOffset&lt;/label&gt;
-    &lt;abp-date-picker data-today-button-classes="btn primary" data-auto-update-input="true" data-date="2023-04-12T18:10:05.6171150+03:00"&gt;
+    &lt;abp-date-picker data-today-button-classes="btn-primary" data-auto-update-input="true" data-date="2023-04-12T18:10:05.6171150+03:00"&gt;
         &lt;div class="input-group"&gt;
             &lt;input type="text" autocomplete="off" class="form-control"&gt;
             &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary d-none" data-busy-text="Processing..."&gt;
@@ -346,7 +346,7 @@ public class DatePickerModel : PageModel
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-date-picker auto-update-input="true" today-button-classes="btn primary" asp-for="NullableDateTimeDateTimeOffset"></abp-date-picker>
+        <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="NullableDateTimeDateTimeOffset"></abp-date-picker>
     </div>
     <div class="code-area">
         <abp-tabs>
@@ -361,14 +361,14 @@ public class DatePickerModel : PageModel
             </abp-tab>
             <abp-tab title="Tag Helper" active="true">
                 <pre><code>
-&lt;abp-date-picker auto-update-input="true" today-button-classes="btn primary" asp-for="NullableDateTimeDateTimeOffset"/&gt;
+&lt;abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="NullableDateTimeDateTimeOffset"/&gt;
 </code></pre>
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
 &lt;div class="mb-3"&gt;
     &lt;label class="form-label" for="NullableDateTimeDateTimeOffset"&gt;NullableDateTimeDateTimeOffset&lt;/label&gt;
-    &lt;abp-date-picker data-today-button-classes="btn primary" data-auto-update-input="true"&gt;
+    &lt;abp-date-picker data-today-button-classes="btn-primary" data-auto-update-input="true"&gt;
         &lt;div class="input-group"&gt;
             &lt;input type="text" autocomplete="off" class="form-control"&gt;
             &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary d-none" data-busy-text="Processing..."&gt;
@@ -430,7 +430,7 @@ public class DatePickerModel : PageModel
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-date-picker auto-update-input="true" today-button-classes="btn primary" asp-for="StringDate"></abp-date-picker>
+        <abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="StringDate"></abp-date-picker>
     </div>
     <div class="code-area">
         <abp-tabs>
@@ -445,14 +445,14 @@ public class DatePickerModel : PageModel
             </abp-tab>
             <abp-tab title="Tag Helper" active="true">
                 <pre><code>
-&lt;abp-date-picker auto-update-input="true" today-button-classes="btn primary" asp-for="StringDate"/&gt;
+&lt;abp-date-picker auto-update-input="true" today-button-classes="btn-primary" asp-for="StringDate"/&gt;
 </code></pre>
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
 &lt;div class="mb-3"&gt;
     &lt;label class="form-label" for="StringDate"&gt;StringDate&lt;/label&gt;
-    &lt;abp-date-picker data-today-button-classes="btn primary" data-auto-update-input="true"&gt;
+    &lt;abp-date-picker data-today-button-classes="btn-primary" data-auto-update-input="true"&gt;
         &lt;div class="input-group"&gt;
             &lt;input type="text" autocomplete="off" class="form-control"&gt;
             &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary d-none" data-busy-text="Processing..."&gt;
