@@ -10,26 +10,26 @@ public class RandomizeAuthServerPassPhraseStep : ProjectBuildPipelineStep
 
     public override void Execute(ProjectBuildContext context)
     {
-        var appSettings = context.Files
+        var files = context.Files
             .Where(x => !x.IsDirectory)
             .Where(x => x.Content.IndexOf(DefaultPassPhrase, StringComparison.InvariantCultureIgnoreCase) >= 0)
             .ToList();
 
         var randomPassPhrase = Guid.NewGuid().ToString("D");
-        foreach (var appSetting in appSettings)
+        foreach (var file in files)
         {
-            appSetting.NormalizeLineEndings();
+            file.NormalizeLineEndings();
 
-            var appSettingLines = appSetting.GetLines();
-            for (var i = 0; i < appSettingLines.Length; i++)
+            var lines = file.GetLines();
+            for (var i = 0; i < lines.Length; i++)
             {
-                if (appSettingLines[i].Contains(DefaultPassPhrase))
+                if (lines[i].Contains(DefaultPassPhrase))
                 {
-                    appSettingLines[i] = appSettingLines[i].Replace(DefaultPassPhrase, randomPassPhrase);
+                    lines[i] = lines[i].Replace(DefaultPassPhrase, randomPassPhrase);
                 }
             }
 
-            appSetting.SetLines(appSettingLines);
+            file.SetLines(lines);
         }
     }
 }
