@@ -6,16 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands;
 
 public class SwitchToLocal : IConsoleCommand, ITransientDependency
 {
+    private readonly LocalReferenceConverter _localReferenceConverter;
     public const string Name = "switch-to-local";
     
     public ILogger<SwitchToLocal> Logger { get; set; }
 
+    public SwitchToLocal(LocalReferenceConverter localReferenceConverter)
+    {
+        _localReferenceConverter = localReferenceConverter;
+    }
+    
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
         var workingDirectory = GetWorkingDirectory(commandLineArgs) ?? Directory.GetCurrentDirectory();
@@ -29,8 +36,8 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
             );
         }
 
-        var paths = GetPaths(commandLineArgs);
-        
+        await _localReferenceConverter.ConvertAsync(workingDirectory, GetPaths(commandLineArgs));
+
     }
 
     private List<string> GetPaths(CommandLineArgs commandLineArgs)
@@ -74,7 +81,8 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
 
     public string GetShortDescription()
     {
-        return "Bundles all third party styles and scripts required by modules and updates index.html file.";
+        return "Changes all NuGet package references to local project references for all the .csproj files in the specified folder" +
+               " (and all its subfolders with any deep)";
     }
 
     public string GetUsageInfo()
@@ -88,9 +96,14 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
         sb.AppendLine("Options:");
         sb.AppendLine("");
-        sb.AppendLine("-s|--solution <directory-path>                (default: current directory)");
-        sb.AppendLine("-p | --paths <local-paths>                    (Required)");
+        sb.AppendLine("-s |--solution <directory-path>                (default: current directory)");
+        sb.AppendLine("-p | --paths <local-paths>                     (Required)");
         sb.AppendLine("");
+        sb.AppendLine("Examples:");
+        sb.AppendLine("");
+        sb.AppendLine("  abp switch-to-local --paths D:\\Github\\abp");
+        sb.AppendLine("  abp switch-to-local --paths D:\\Github\\abp --solution D:\\test\\MyProject");
+        sb.AppendLine("  abp switch-to-local --paths \"D:\\Github\\abp|D:\\Github\\volo\"");
         sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
         return sb.ToString();
