@@ -36,7 +36,7 @@ public class LocalReferenceConverter : ITransientDependency
         Logger.LogInformation($"Converted {targetProjects.Length} projects to local references.");
     }
 
-    private async Task ConvertProjectToLocalReferences(string targetProject, LocalProjectList localProjects)
+    private async Task ConvertProjectToLocalReferences(string targetProject, List<string> localProjects)
     {
         var xmlDocument = new XmlDocument() { PreserveWhitespace = true };
         xmlDocument.Load(GenerateStreamFromString(File.ReadAllText(targetProject)));
@@ -52,7 +52,10 @@ public class LocalReferenceConverter : ITransientDependency
         {
             var packageName = matchedNode!.Attributes!["Include"].Value;
 
-            var localProject = localProjects.GetByName(packageName);
+            var localProject = localProjects.Find(x =>
+                x.EndsWith($"\\{packageName}.csproj") ||
+                x.EndsWith($"/{packageName}.csproj")
+            );
 
             if (localProject == null)
             {
@@ -72,9 +75,9 @@ public class LocalReferenceConverter : ITransientDependency
         File.WriteAllText(targetProject, XDocument.Parse(xmlDocument.OuterXml).ToString());
     }
 
-    private LocalProjectList GetLocalProjects(List<string> localPaths)
+    private List<string> GetLocalProjects(List<string> localPaths)
     {
-        var list = new LocalProjectList();
+        var list = new List<string>();
 
         foreach (var localPath in localPaths)
         {
@@ -97,13 +100,5 @@ public class LocalReferenceConverter : ITransientDependency
         writer.Flush();
         stream.Position = 0;
         return stream;
-    }
-    
-    private class LocalProjectList : List<string>
-    {
-        public string GetByName(string projectName)
-        {
-            return Find(x => x.EndsWith($"{projectName}.csproj") || x.EndsWith(projectName));
-        }
     }
 }
