@@ -18,7 +18,7 @@ public class AbpValidateClientRedirectUri : AbpOpenIddictWildcardDomainBase<Open
     public AbpValidateClientRedirectUri(
         IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions,
         IOpenIddictApplicationManager applicationManager)
-        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Authentication.ValidateClientRedirectUri())
+        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Authentication.ValidateClientRedirectUri(applicationManager))
     {
         Handler = new OpenIddictServerHandlers.Authentication.ValidateClientRedirectUri(applicationManager);
     }
