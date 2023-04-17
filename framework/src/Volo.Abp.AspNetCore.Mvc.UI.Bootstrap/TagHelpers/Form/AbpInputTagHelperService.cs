@@ -294,8 +294,10 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         {
             return "";
         }
+        
+        var isHaveRequiredAttribute = context.AllAttributes.Any(a => a.Name == "required");
 
-        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>" : "";
+        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null || isHaveRequiredAttribute ? "<span> * </span>" : "";
     }
 
     protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)

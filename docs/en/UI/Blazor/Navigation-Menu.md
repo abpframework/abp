@@ -104,6 +104,7 @@ There are more options of a menu item (the constructor of the `ApplicationMenuIt
 * `target` (`string`): Target of the menu item. Can be `null` (default), "\_*blank*", "\_*self*", "\_*parent*", "\_*top*" or a frame name for web applications.
 * `elementId` (`string`): Can be used to render the element with a specific HTML `id` attribute.
 * `cssClass` (`string`): Additional string classes for the menu item.
+* `groupName` (`string`): Can be used to group menu items.
 
 ### Authorization
 
@@ -159,6 +160,58 @@ userMenu.Icon = "fa fa-users";
 ````
 
 > `context.Menu` gives you ability to access to all the menu items those have been added by the previous menu contributors.
+
+### Menu Groups
+
+You can define groups and associate menu items with a group.
+
+Example:
+
+```csharp
+using System.Threading.Tasks;
+using MyProject.Localization;
+using Volo.Abp.UI.Navigation;
+
+namespace MyProject.Web.Menus
+{
+    public class MyProjectMenuContributor : IMenuContributor
+    {
+        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        {
+            if (context.Menu.Name == StandardMenus.Main)
+            {
+                await ConfigureMainMenuAsync(context);
+            }
+        }
+
+        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        {
+            var l = context.GetLocalizer<MyProjectResource>();
+
+            context.Menu.AddGroup(
+                new ApplicationMenuGroup(
+                    name: "Main",
+                    displayName: l["Main"]
+                )
+            )
+            context.Menu.AddItem(
+                new ApplicationMenuItem("MyProject.Crm", l["Menu:CRM"], groupName: "Main")
+                    .AddItem(new ApplicationMenuItem(
+                        name: "MyProject.Crm.Customers", 
+                        displayName: l["Menu:Customers"], 
+                        url: "/crm/customers")
+                    ).AddItem(new ApplicationMenuItem(
+                        name: "MyProject.Crm.Orders", 
+                        displayName: l["Menu:Orders"],
+                        url: "/crm/orders")
+                     )
+            );      
+        }
+    }
+}
+```
+
+> The UI theme will decide whether to render the groups or not, and if it decides to render, the way it's rendered is up to the theme. Only the LeptonX theme implements the menu group.
 
 ## Standard Menus
 

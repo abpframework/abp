@@ -14,30 +14,30 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpServiceProxyScriptController : AbpController
 {
-    private readonly IProxyScriptManager _proxyScriptManager;
-    private readonly AbpAspNetCoreMvcOptions _options;
-    private readonly IJavascriptMinifier _javascriptMinifier;
+    protected readonly IProxyScriptManager ProxyScriptManager;
+    protected readonly AbpAspNetCoreMvcOptions Options;
+    protected readonly IJavascriptMinifier JavascriptMinifier;
 
     public AbpServiceProxyScriptController(IProxyScriptManager proxyScriptManager,
         IOptions<AbpAspNetCoreMvcOptions> options,
         IJavascriptMinifier javascriptMinifier)
     {
-        _proxyScriptManager = proxyScriptManager;
-        _options = options.Value;
-        _javascriptMinifier = javascriptMinifier;
+        ProxyScriptManager = proxyScriptManager;
+        Options = options.Value;
+        JavascriptMinifier = javascriptMinifier;
     }
 
     [HttpGet]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
-    public ActionResult GetAll(ServiceProxyGenerationModel model)
+    public virtual ActionResult GetAll(ServiceProxyGenerationModel model)
     {
         model.Normalize();
 
-        var script = _proxyScriptManager.GetScript(model.CreateOptions());
+        var script = ProxyScriptManager.GetScript(model.CreateOptions());
 
         return Content(
-            _options.MinifyGeneratedScript == true
-                ? _javascriptMinifier.Minify(script)
+            Options.MinifyGeneratedScript == true
+                ? JavascriptMinifier.Minify(script)
                 : script,
             MimeTypes.Application.Javascript
         );

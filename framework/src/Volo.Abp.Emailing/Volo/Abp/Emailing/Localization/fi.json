@@ -4,7 +4,7 @@
     "DisplayName:Abp.Mailing.DefaultFromAddress": "Oletus osoitteesta",
     "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Oletus näyttönimestä",
     "DisplayName:Abp.Mailing.Smtp.Host": "Isäntä",
-    "DisplayName:Abp.Mailing.Smtp.Port": "Satama",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Portti",
     "DisplayName:Abp.Mailing.Smtp.UserName": "Käyttäjänimi",
     "DisplayName:Abp.Mailing.Smtp.Password": "Salasana",
     "DisplayName:Abp.Mailing.Smtp.Domain": "Verkkotunnus",

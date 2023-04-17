@@ -17,11 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpApplicationConfigurationScriptController : AbpController
 {
-    private readonly AbpApplicationConfigurationAppService _configurationAppService;
-    private readonly IJsonSerializer _jsonSerializer;
-    private readonly AbpAspNetCoreMvcOptions _options;
-    private readonly IJavascriptMinifier _javascriptMinifier;
-    private readonly IAbpAntiForgeryManager _antiForgeryManager;
+    protected readonly AbpApplicationConfigurationAppService ConfigurationAppService;
+    protected readonly IJsonSerializer JsonSerializer;
+    protected readonly AbpAspNetCoreMvcOptions Options;
+    protected readonly IJavascriptMinifier JavascriptMinifier;
+    protected readonly IAbpAntiForgeryManager AntiForgeryManager;
 
     public AbpApplicationConfigurationScriptController(
         AbpApplicationConfigurationAppService configurationAppService,
@@ -30,42 +30,42 @@ public class AbpApplicationConfigurationScriptController : AbpController
         IJavascriptMinifier javascriptMinifier,
         IAbpAntiForgeryManager antiForgeryManager)
     {
-        _configurationAppService = configurationAppService;
-        _jsonSerializer = jsonSerializer;
-        _options = options.Value;
-        _javascriptMinifier = javascriptMinifier;
-        _antiForgeryManager = antiForgeryManager;
+        ConfigurationAppService = configurationAppService;
+        JsonSerializer = jsonSerializer;
+        Options = options.Value;
+        JavascriptMinifier = javascriptMinifier;
+        AntiForgeryManager = antiForgeryManager;
     }
 
     [HttpGet]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
-    public async Task<ActionResult> Get()
+    public virtual async Task<ActionResult> Get()
     {
         var script = CreateAbpExtendScript(
-            await _configurationAppService.GetAsync(
+            await ConfigurationAppService.GetAsync(
                 new ApplicationConfigurationRequestOptions {
                     IncludeLocalizationResources = false
                 }
             )
         );
 
-        _antiForgeryManager.SetCookie();
+        AntiForgeryManager.SetCookie();
 
         return Content(
-            _options.MinifyGeneratedScript == true
-                ? _javascriptMinifier.Minify(script)
+            Options.MinifyGeneratedScript == true
+                ? JavascriptMinifier.Minify(script)
                 : script,
             MimeTypes.Application.Javascript
         );
     }
 
-    private string CreateAbpExtendScript(ApplicationConfigurationDto config)
+    protected virtual string CreateAbpExtendScript(ApplicationConfigurationDto config)
     {
         var script = new StringBuilder();
 
         script.AppendLine("(function(){");
         script.AppendLine();
-        script.AppendLine($"$.extend(true, abp, {_jsonSerializer.Serialize(config, indented: true)})");
+        script.AppendLine($"$.extend(true, abp, {JsonSerializer.Serialize(config, indented: true)})");
         script.AppendLine();
         script.AppendLine("abp.event.trigger('abp.configurationInitialized');");
         script.AppendLine();

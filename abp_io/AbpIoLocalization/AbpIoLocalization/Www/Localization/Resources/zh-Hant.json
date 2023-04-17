@@ -274,7 +274,8 @@
     "FirstEdition": "第一版",
     "ThankYou": "謝謝！",
     "CheckboxMandatory": "你需要檢查這個才能繼續！",
-    "SelectUITheme": "選擇 UI 主題"
-
+    "SelectUITheme": "選擇 UI 主題",
+    "CreateSolutionFolder": "創建解決方案文件夾",
+    "CreateSolutionFolderOption": "指定項目是位於輸出文件夾中的新文件夾中，還是直接位於輸出文件夾中。"
   }
 }

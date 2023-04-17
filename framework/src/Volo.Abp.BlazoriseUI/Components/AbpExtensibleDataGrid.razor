@@ -34,15 +34,16 @@
             {
                 if (column.Actions.Any())
                 {
+                    var entityActionType = column.Actions.Count == 1 ? ActionType.Button : ActionType.Dropdown;
                     <DataGridEntityActionsColumn TItem="TItem" @ref="ActionColumns[column.Title]" Caption="@column.Title">
                         <DisplayTemplate>
-                            <EntityActions TItem="TItem" EntityActionsColumn="ActionColumns[column.Title]">
+                            <EntityActions Type="entityActionType" TItem="TItem" EntityActionsColumn="ActionColumns[column.Title]">
                                 @foreach (var action in column.Actions)
                                 {
                                     if (action.ConfirmationMessage != null)
                                     {
                                         <EntityAction TItem="TItem"
-                                                      Color="@(action.Color != null ? (Blazorise.Color) action.Color : Blazorise.Color.Primary)"
+                                                      Color="@(action.Color != null ? (Blazorise.Color)action.Color : Blazorise.Color.Primary)"
                                                       Icon="@action.Icon"
                                                       Clicked="async () => await action.Clicked(context)"
                                                       ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
@@ -55,7 +56,7 @@
                                     {
                                         <EntityAction TItem="TItem"
                                                       Clicked="async () => await action.Clicked(context)"
-                                                      Color="@(action.Color != null ? (Blazorise.Color) action.Color : Blazorise.Color.Default)"
+                                                      Color="@(action.Color != null ? (Blazorise.Color)action.Color : Blazorise.Color.Primary)"
                                                       Icon="@action.Icon"
                                                       Visible="@(action.Visible != null ? action.Visible(context) : true)"
                                                       Text="@action.Text"
@@ -104,7 +105,7 @@
                         }
                         else
                         {
-                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" Caption="@column.Title">
+                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Caption="@column.Title">
                                 <DisplayTemplate>
                                     @{
                                         var entity = context as IHasExtraProperties;

@@ -348,6 +348,11 @@
     "Volo.AbpIo.Commercial:030008": "購買日期只能在狀態為已購買時設置！",
     "Volo.AbpIo.Commercial:030009": "未找到用戶！",
     "Volo.AbpIo.Commercial:030010": "要購買試用許可證，首先您需要激活您的試用許可證！",
-    "Volo.AbpIo.Commercial:030011": "購買試用許可證後，您無法刪除它！"
+    "Volo.AbpIo.Commercial:030011": "購買試用許可證後，您無法刪除它！",
+    "MoveWaitList": "移至候补名单",
+    "CommunityLinkTitle": "在社区网站上打开",
+    "CommunityLink": "社区链接",
+    "ReloadFromSource": "從源重新加載",
+    "ReloadFromSourceConfirmationMessage": "此帖子將從“{0}”刷新。 你想繼續嗎？"
   }
 }
