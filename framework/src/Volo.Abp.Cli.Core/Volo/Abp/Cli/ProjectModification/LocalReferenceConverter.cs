@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
@@ -67,12 +68,17 @@ public class LocalReferenceConverter : ITransientDependency
 
             var newNode = xmlDocument.CreateElement("ProjectReference");
             var includeAttr = xmlDocument.CreateAttribute("Include");
-            includeAttr.Value = localProject;
+            includeAttr.Value = CalculateRelativePath(targetProject, localProject);
             newNode.Attributes.Append(includeAttr);
             parentNode.AppendChild(newNode);
         }
         
         File.WriteAllText(targetProject, XDocument.Parse(xmlDocument.OuterXml).ToString());
+    }
+    
+    private string CalculateRelativePath(string targetProject, string localProject)
+    {
+        return new Uri(targetProject).MakeRelativeUri(new Uri(localProject)).ToString();
     }
 
     private List<string> GetLocalProjects(List<string> localPaths)
