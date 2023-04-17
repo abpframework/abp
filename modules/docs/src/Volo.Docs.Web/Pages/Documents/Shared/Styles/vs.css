@@ -146,14 +146,14 @@ body.scrolledMore .alert-criteria p.alert-p {
   overflow: hidden;
 }
 .docs-page .docs-sidebar .docs-tree-list .docs-version .version-select .input-group-text {
-  padding: 0 0;
+  padding: 0 0 !important;
   font-size: 0.75rem;
   width: 15px;
   height: 24px;
   line-height: 1;
   border-radius: 0px;
   border: 0;
-  background: transparent;
+  background: transparent !important;
   top: 1px;
 }
 .docs-page .docs-sidebar .docs-tree-list .docs-version .version-select .input-group-text i {
@@ -386,7 +386,7 @@ body.scrolledMore .alert-criteria p.alert-p {
   height: 100%;
 }
 .docs-page .docs-content .docs-link-btns .search-area .input-group-text {
-  background: transparent;
+  background: transparent !important;
   border: 0;
   color: rgba(41, 45, 51, 0.5);
   font-size: 1em;
@@ -546,7 +546,7 @@ body.scrolledMore .alert-criteria p.alert-p {
   background-color: #f4f6fa;
   border-color: #f4f6fa;
   border-radius: 12px;
-  background: hsla(199deg, 59%, 84%, 0.82);
+  background: hsla(199, 59%, 84%, 0.82);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   z-index: 3;
