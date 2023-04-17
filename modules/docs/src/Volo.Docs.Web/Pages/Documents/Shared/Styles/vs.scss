@@ -177,14 +177,14 @@ body {
                     }
 
                     .input-group-text {
-                        padding: 0 0;
+                        padding: 0 0 !important;
                         font-size: 0.75rem;
                         width: 15px;
                         height: 24px;
                         line-height: 1;
                         border-radius: 0px;
                         border: 0;
-                        background: transparent;
+                        background: transparent !important;
                         top: 1px;
 
                         i {
@@ -483,7 +483,7 @@ body {
                 }
 
                 .input-group-text {
-                    background: transparent;
+                    background: transparent !important;
                     border: 0;
                     color: rgb(41 45 51 / 50%);
                     font-size: 1em;

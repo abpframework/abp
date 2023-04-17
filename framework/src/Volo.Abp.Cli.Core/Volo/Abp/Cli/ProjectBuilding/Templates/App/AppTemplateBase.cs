@@ -41,6 +41,7 @@ public abstract class AppTemplateBase : TemplateInfo
         RemoveUnnecessaryPorts(context, steps);
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
+        RandomizeAuthServerPassPhrase(context, steps);
         UpdateNuGetConfig(context, steps);
         ConfigureDockerFiles(context, steps);
         ChangeConnectionString(context, steps);
@@ -240,7 +241,7 @@ public abstract class AppTemplateBase : TemplateInfo
 
     private static bool IsDefaultThemeForTemplate(ProjectBuildArgs args)
     {
-        var templateThemes = new Dictionary<string, Theme> 
+        var templateThemes = new Dictionary<string, Theme>
         {
             { AppTemplate.TemplateName, AppTemplate.DefaultTheme },
             { AppProTemplate.TemplateName, AppProTemplate.DefaultTheme },
@@ -608,6 +609,11 @@ public abstract class AppTemplateBase : TemplateInfo
     protected void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RandomizeStringEncryptionStep());
+    }
+
+    protected static void RandomizeAuthServerPassPhrase(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new RandomizeAuthServerPassPhraseStep());
     }
 
     protected void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
