@@ -32,7 +32,7 @@ public class BootstrapDemoMenuContributor : IMenuContributor
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.Cards, "Cards", url: "/Components/Cards"),
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.Carousel, "Carousel", url: "/Components/Carousel"),
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.Collapse, "Collapse", url: "/Components/Collapse"),
-                new ApplicationMenuItem(BootstrapDemoMenus.Components.DatePicker, "DatePicker & DateRangePicker", url: "/Components/DatePicker"),
+                new ApplicationMenuItem(BootstrapDemoMenus.Components.DatePicker, "Date Picker & Date Range Picker", url: "/Components/DatePicker"),
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.Dropdowns, "Dropdowns", url: "/Components/Dropdowns"),
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.DynamicForms, "Dynamic Forms", url: "/Components/DynamicForms"),
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.FormElements, "Form Elements", url: "/Components/FormElements"),
