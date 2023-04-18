@@ -1,6 +1,6 @@
 # Convert Create/Edit Modals to Page
 
-In this document we will explain how to convert BookStore's Books create & edit modals to regular angular component pages.
+In this document we will explain how to convert the BookStore's Books create & edit modals to regular Angular component pages.
 
 ## Before
 
@@ -12,13 +12,13 @@ In this document we will explain how to convert BookStore's Books create & edit 
 
 # BooksComponent
 
-This is the main component of the books management. Create & Update operations are done in this page. So we'll remove create & update operations from this page and move a separate angular component for each operation. Each component will be a page.
+This is the main component of the books management. The create & update operations are done in this page. So we'll remove the create & update operations from this page and move a separate angular component for each operation. Each component will be a page.
 
-- Remove Create & Update modal on template
+- Remove the Create & Update modal on template
 
   ![remove-modal](images/books-remove-modals.png)
 
-- Modify **NewBook** button with a link to **CreateBookComponent** page.
+- Modify the **NewBook** button with a link to the **CreateBookComponent** page.
 
   ```html
   <button
@@ -33,7 +33,7 @@ This is the main component of the books management. Create & Update operations a
   </button>
   ```
 
-- Modify **Edit** button with a link to **EditBookComponent** page.
+- Modify the **Edit** button with a link to the **EditBookComponent** page.
 
   ```html
   <button
@@ -45,7 +45,7 @@ This is the main component of the books management. Create & Update operations a
   </button>
   ```
 
-- Remove all unused methods and variables in the `BookComponent` except **book** variable, **ngOnInit** and **delete** methods.
+- Remove all unused methods and variables in the `BookComponent` except the **book** variable, the **ngOnInit** and **delete** methods.
 
 
   ![bookstore-remove-unsued](images/books-remove-unused.png)
@@ -58,7 +58,7 @@ This is the main component of the books management. Create & Update operations a
 
 # CreateBookComponent Page
 
-Create new component by name `create-book` in your project.
+Create a new component by the name `create-book` in your project.
 ```bash
   yarn ng g c book/create-book --skip-tests --style=none
 ```
@@ -179,7 +179,7 @@ export class CreateBookComponent {
 
 # EditBookComponent Page
 
-Create new component by name **edit-book** in your project.
+Create a new component by the name **edit-book** in your project.
 
 ```bash
   yarn ng g c book/edit-book --skip-tests --style=none
@@ -309,7 +309,7 @@ export class EditBookComponent {
 ```
 
 # Update BookRoutingModule
-Finally add 2 item to routes array in the `book-routing.module.ts`
+Finally add 2 items to the routes array in the `book-routing.module.ts`
 ```ts
 import { CreateBookComponent } from './create-book/create-book.component';
 import { EditBookComponent } from './edit-book/edit-book.component';
@@ -322,4 +322,4 @@ const routes: Routes = [
 ```
 
 
-You can check the following commit for details: https://github.com/abpframework/abp-samples/commit/351ad5e093036702edbb15169968935496afea0e
+You can check the following commit for more details: https://github.com/abpframework/abp-samples/commit/351ad5e093036702edbb15169968935496afea0e
