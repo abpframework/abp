@@ -26,13 +26,11 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf {0}": "این قسمت باید یک رشته یا نوع آرایه با حداکثر طول '{0}' باشد.",
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf {0}": "این فیلد باید یک رشته یا نوع آرایه با حداقل طول '{0}' باشد.",
     "ThisFieldIsNotAValidPhoneNumber.": "این قسمت شماره تلفن معتبری نیست.",
-    "ThisFieldMustBeBetween{0}And{1}": "این قسمت باید بین {0} و {1} باشد.",
-    "ThisFieldMustBeGreaterThanOrEqual{0}": "این فیلد باید بزرگتر یا مساوی با {0} باشد.",
-    "ThisFieldMustBeLessOrEqual{0}": "این فیلد باید کمتر یا مساوی با {0} باشد.",
-    "ThisFieldMustMatchTheRegularExpression{0}": "این قسمت باید با عبارت معمولی '{0}' مطابقت داشته باشد.",
+    "ThisFieldMustBeBetween {0} And {1}": "این قسمت باید بین {0} و {1} باشد.",
+    "ThisFieldMustMatchTheRegularExpression {0}": "این قسمت باید با عبارت معمولی '{0}' مطابقت داشته باشد.",
     "ThisFieldIsRequired.": "این فیلد الزامی است.",
-    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "این فیلد باید یک رشته با حداکثر طول {0} باشد.",
-    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf {0}": "این فیلد باید رشته ای با حداقل طول {1} و حداکثر طول {0} باشد.",
+    "ThisFieldMustBeAStringWithAMaximumLengthOf {0}": "این فیلد باید یک رشته با حداکثر طول {0} باشد.",
+    "ThisFieldMustBeAStringWithAMinimumLengthOf {1} AndAMaximumLengthOf {0}": "این فیلد باید رشته ای با حداقل طول {1} و حداکثر طول {0} باشد.",
     "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "این قسمت آدرس http , https , یا ftp کاملاً واجد شرایط نیست.",
     "ThisFieldIsInvalid.": "این قسمت نامعتبر است."
   }
