@@ -5,15 +5,14 @@ If you want your ASP.NET application to perform well, you need to optimize it fo
 ## 🚀 Use Response Compression in Your ASP.NET Application
 You can use ASP.NET Core's built-in response compression middleware to compress the response data and reduce the amount of data that needs to be transferred over the network. To use response compression, add the following code to your application's Startup.cs file:
     
-```javascript
-
+```csharp
 services.AddResponseCompression(options =>
 {
     options.EnableForHttps = true;
 });
 
 app.UseResponseCompression();
-```	
+```
 
 ## 🖼️ Optimize Images in Your ASP.NET Application:
 
@@ -37,10 +36,10 @@ Images can be a major contributor to page bloat and slow load times. Here are so
     <source media="(min-width: 465px)" data-srcset="image_small.webp">
     <img src="placeholder.png" data-src="image.webp" alt="Image" width="100" height="100" class="lazy" />
 </picture>
+```
 
-<script>
-    var lazyLoadInstance = new LazyLoad();
-</script>
+```javascript
+var lazyLoadInstance = new LazyLoad();
 ```
 
 ## 🧱 Optimize HTML in Your ASP.NET Application:
@@ -78,13 +77,13 @@ To improve the perceived performance of your website, you can use placeholders a
 <div id="placeholder" data-url="/slow-loading-content">
   <p>Loading...</p>
 </div>
-<script>
-  const placeholder = document.querySelector('#placeholder');
+```
+
+```javascript
+const placeholder = document.querySelector('#placeholder');
   fetch(placeholder.dataset.url)
     .then(response => response.text())
     .then(html => placeholder.innerHTML = html);
-</script>
-
 ```
 
 ## 🔗 Use the Appropriate Link Text and ARIA Labels:
