@@ -188,6 +188,17 @@ namespace Volo.Blogging.Posts
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
 
+        public async Task<List<PostWithDetailsDto>> GetListByUserIdAsync(Guid userId)
+        {
+            var posts = await PostRepository.GetListByUserIdAsync(userId);
+
+            if (CurrentUser != null)
+            {
+                
+            }
+            return ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts);
+        }
+
         [Authorize(BloggingPermissions.Posts.Create)]
         public async Task<PostWithDetailsDto> CreateAsync(CreatePostDto input)
         {

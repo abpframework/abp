@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -59,6 +60,13 @@ namespace Volo.Blogging
         public Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input)
         {
             return _postAppService.UpdateAsync(id, input);
+        }
+        
+        [HttpGet]
+        [Route("user/{userId}")]
+        public Task<List<PostWithDetailsDto>> GetListByUserIdAsync(Guid userId)
+        {
+            return _postAppService.GetListByUserIdAsync(userId);
         }
 
         [HttpDelete]
