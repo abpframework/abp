@@ -277,7 +277,7 @@ public class MainNavbarMenuViewComponent : AbpViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var menu = await _menuManager.GetAsync(StandardMenus.Main);
+        var menu = await _menuManager.GetAsync(StandardMenus.Application.Main);
         return View("~/Themes/Basic/Components/Menu/Default.cshtml", menu);
     }
 }
@@ -318,10 +318,10 @@ Language Selection toolbar item is generally a dropdown that is used to switch b
 
 ##### User Menu
 
-User menu includes links related to the user account. `IMenuManager` is used just like the Main Menu, but this time with `StandardMenus.User` parameter like shown below:
+User menu includes links related to the user account. `IMenuManager` is used just like the Main Menu, but this time with `StandardMenus.Application.User` parameter like shown below:
 
 ````csharp
-var menu = await _menuManager.GetAsync(StandardMenus.User);
+var menu = await _menuManager.GetAsync(StandardMenus.Application.User);
 ````
 
 [ICurrentUser](../../CurrentUser.md) and [ICurrentTenant](../../Multi-Tenancy.md) services can be used to obtain the current user and tenant names.

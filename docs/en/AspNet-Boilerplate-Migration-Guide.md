@@ -685,7 +685,7 @@ public class AbpTenantManagementWebMainMenuContributor : IMenuContributor
     public async Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
         //Add items only to the main menu
-        if (context.Menu.Name != StandardMenus.Main)
+        if (context.Menu.Name != StandardMenus.Application.Main)
         {
             return;
         }

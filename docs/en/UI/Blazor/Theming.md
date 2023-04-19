@@ -164,7 +164,7 @@ public partial class NavMenu
     
     protected override async Task OnInitializedAsync()
     {
-        var menu = await _menuManager.GetAsync(StandardMenus.Main);
+        var menu = await _menuManager.GetAsync(StandardMenus.Application.Main);
         //...
     }
 }
@@ -252,10 +252,10 @@ NavigationManager.NavigateTo(
 
 ##### User Menu
 
-User menu includes links related to the user account. `IMenuManager` is used just like the Main Menu, but this time with `StandardMenus.User` parameter like shown below:
+User menu includes links related to the user account. `IMenuManager` is used just like the Main Menu, but this time with `StandardMenus.Application.User` parameter like shown below:
 
 ````csharp
-var menu = await _menuManager.GetAsync(StandardMenus.User);
+var menu = await _menuManager.GetAsync(StandardMenus.Application.User);
 ````
 
 [ICurrentUser](../../CurrentUser.md) and [ICurrentTenant](../../Multi-Tenancy.md) services can be used to obtain the current user and tenant names.

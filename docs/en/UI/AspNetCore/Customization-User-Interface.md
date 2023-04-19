@@ -293,12 +293,14 @@ There are some common ways to **customize the layout** described in the next sec
 
 ### Menu Contributors
 
-There are two **standard menus** defined by the ABP Framework:
+There are four **standard menus** defined by the ABP Framework per **standard layouts**:
 
 ![bookstore-menus-highlighted](../../images/bookstore-menus-highlighted.png)
 
-* `StandardMenus.Main`: The main menu of the application.
-* `StandardMenus.User`: The user menu (generally at the top right of the screen).
+* `StandardMenus.{StandardLayoutName}.Main`: The main menu of the current layout (Application, Public, Account).
+* `StandardMenus.{StandardLayoutName}.User`: The user menu (generally at the top right of the screen).
+* `StandardMenus.{StandardLayoutName}.Shortcut`: The shortcut menu (generally at the right sidebar).
+* `StandardMenus.{StandardLayoutName}.Footer`: The footer navigation items.
 
 Rendering the menus is a responsibility of the theme, but **menu items** are determined by the modules and your application code. Just implement the `IMenuContributor` interface and **manipulate the menu items** in the `ConfigureMenuAsync` method.
 

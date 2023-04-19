@@ -28,7 +28,7 @@ namespace MyProject.Web.Menus
     {
         public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
-            if (context.Menu.Name == StandardMenus.Main)
+            if (context.Menu.Name == StandardMenus.Application.Main)
             {
                 await ConfigureMainMenuAsync(context);
             }
@@ -55,7 +55,7 @@ namespace MyProject.Web.Menus
 }
 ```
 
-* This example adds items only to the main menu (`StandardMenus.Main`: see the *Standard Menus* section below).
+* This example adds items only to the main menu (`StandardMenus.Application.Main`: see the *Standard Menus* section below).
 * It gets a `IStringLocalizer` from `context` to [localize](../../Localization.md) the display names of the menu items.
 * Adds the Customers and Orders as children of the CRM menu.
 
@@ -197,7 +197,7 @@ namespace MyProject.Web.Menus
     {
         public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
-            if (context.Menu.Name == StandardMenus.Main)
+            if (context.Menu.Name == StandardMenus.Application.Main)
             {
                 await ConfigureMainMenuAsync(context);
             }
@@ -234,10 +234,12 @@ namespace MyProject.Web.Menus
 
 ## Standard Menus
 
-A menu is a **named** component. An application may contain more than one menus with different, unique names. There are two pre-defined standard menus:
+A menu is a **named** component. An application may contain more than one menus with different, unique names. There are four pre-defined standard menus per standard layouts:
 
-* `Main`: The main menu of the application. Contains links to the page of the application. Defined as a constant: `Volo.Abp.UI.Navigation.StandardMenus.Main`.
-* `User`: User profile menu. Defined as a constant: `Volo.Abp.UI.Navigation.StandardMenus.User`.
+* `Main`: The main menu of the current layout. Defined as a constant: `Volo.Abp.UI.Navigation.StandardMenus.{StandardLayoutName}.Main`.
+* `User`: User profile menu. This can be different in different layouts. Defined as a constant: `Volo.Abp.UI.Navigation.StandardMenus.{StandardLayoutName}.User`.
+* `Shortcut`: Contains the shortcuts of menus to simplify your navigation. Defined as a constant: `Volo.Abp.UI.Navigation.StandardMenus.{StandardLayoutName}.Shortcut`.
+* `Footer`: The footer navigation menu items. Defined as a constant: `Volo.Abp.UI.Navigation.StandardMenus.{StandardLayoutName}.Shortcut`.
 
 The `Main` menu already covered above. The `User` menu is available when a user has logged in:
 
@@ -246,7 +248,7 @@ The `Main` menu already covered above. The `User` menu is available when a user 
 You can add items to the `User` menu by checking the `context.Menu.Name` as shown below:
 
 ```csharp
-if (context.Menu.Name == StandardMenus.User)
+if (context.Menu.Name == StandardMenus.Public.User)
 {
     //...add items
 }
@@ -276,7 +278,7 @@ namespace MyProject.Web.Pages
         
         public async Task OnGetAsync()
         {
-            var mainMenu = await _menuManager.GetAsync(StandardMenus.Main);
+            var mainMenu = await _menuManager.GetAsync(StandardMenus.Application.Main);
             
             foreach (var menuItem in mainMenu.Items)
             {
