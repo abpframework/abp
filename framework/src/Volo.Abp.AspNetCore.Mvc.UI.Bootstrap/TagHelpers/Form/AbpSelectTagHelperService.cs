@@ -183,7 +183,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             var label = new TagBuilder("label");
             label.AddCssClass("form-label");
             label.Attributes.Add("for", GetIdAttributeValue(selectTag));
-            label.InnerHtml.AppendHtml(TagHelper.Label);
+            label.InnerHtml.AppendHtml(_encoder.Encode(TagHelper.Label));
 
             return label.ToHtmlString() + GetRequiredSymbol(context, output);
         }
@@ -197,7 +197,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         {
             return "";
         }
-        
+
         var isHaveRequiredAttribute = context.AllAttributes.Any(a => a.Name == "required");
 
         return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null || isHaveRequiredAttribute ? "<span> * </span>" : "";
