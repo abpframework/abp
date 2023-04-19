@@ -15,7 +15,7 @@ public class DefaultMenuContributor : IMenuContributor
     {
         var l = context.GetLocalizer<AbpUiNavigationResource>();
 
-        if (context.Menu.Name == StandardMenus.Main)
+        if (context.Menu.Name == StandardMenus.Application.Main)
         {
             context.Menu.AddItem(
                 new ApplicationMenuItem(

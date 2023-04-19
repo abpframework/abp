@@ -42,9 +42,9 @@ public class MenuManager_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
     [Fact]
     public async Task Should_Get_Menu()
     {
-        var mainMenu = await _menuManager.GetAsync(StandardMenus.Main);
+        var mainMenu = await _menuManager.GetAsync(StandardMenus.Application.Main);
 
-        mainMenu.Name.ShouldBe(StandardMenus.Main);
+        mainMenu.Name.ShouldBe(StandardMenus.Application.Main);
         mainMenu.DisplayName.ShouldBe("Main Menu");
         mainMenu.Items.Count.ShouldBe(5);
         mainMenu.Items[0].Name.ShouldBe("Dashboard");
@@ -61,7 +61,7 @@ public class MenuManager_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
     {
         var mainMenu = await _menuManager.GetMainMenuAsync();
 
-        mainMenu.Name.ShouldBe(StandardMenus.Main);
+        mainMenu.Name.ShouldBe(StandardMenus.Application.Main);
 
         mainMenu.Items.Count.ShouldBe(6);
 
@@ -74,7 +74,7 @@ public class MenuManager_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
     {
         var mainMenu = await _menuManager.GetMainMenuAsync();
 
-        mainMenu.Name.ShouldBe(StandardMenus.Main);
+        mainMenu.Name.ShouldBe(StandardMenus.Application.Main);
         mainMenu.Items.Count.ShouldBe(6);
 
         mainMenu.Items[2].GroupName.ShouldBe("Layouts");
@@ -95,7 +95,7 @@ public class MenuManager_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
     {
         public Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
-            if (context.Menu.Name != StandardMenus.Main)
+            if (context.Menu.Name != StandardMenus.Application.Main)
             {
                 return Task.CompletedTask;
             }
@@ -120,7 +120,7 @@ public class MenuManager_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
     {
         public Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
-            if (context.Menu.Name != StandardMenus.Main)
+            if (context.Menu.Name != StandardMenus.Application.Main)
             {
                 return Task.CompletedTask;
             }
@@ -176,7 +176,7 @@ public class MenuManager_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
     {
         public Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
-            if (context.Menu.Name != StandardMenus.Main)
+            if (context.Menu.Name != StandardMenus.Application.Main)
             {
                 return Task.CompletedTask;
             }

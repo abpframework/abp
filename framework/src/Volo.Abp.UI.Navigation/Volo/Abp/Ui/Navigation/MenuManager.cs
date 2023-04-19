@@ -40,7 +40,7 @@ public class MenuManager : IMenuManager, ITransientDependency
     {
         if (menuNames.IsNullOrEmpty())
         {
-            return new ApplicationMenu(StandardMenus.Main);
+            return new ApplicationMenu(StandardMenus.Application.Main);
         }
 
         var menus = new List<ApplicationMenu>();

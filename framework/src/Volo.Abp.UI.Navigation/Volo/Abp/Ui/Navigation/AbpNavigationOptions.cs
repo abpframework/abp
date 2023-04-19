@@ -9,7 +9,7 @@ public class AbpNavigationOptions
     public List<IMenuContributor> MenuContributors { get; }
 
     /// <summary>
-    /// Includes the <see cref="StandardMenus.Main"/> by default.
+    /// Includes the <see cref="StandardMenus.Application.Main"/> by default.
     /// </summary>
     public List<string> MainMenuNames { get; }
 
@@ -19,7 +19,7 @@ public class AbpNavigationOptions
 
         MainMenuNames = new List<string>
             {
-                StandardMenus.Main
+                StandardMenus.Application.Main
             };
     }
 }
