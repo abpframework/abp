@@ -2,7 +2,6 @@
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 @using Volo.Abp.Users
-@using Volo.Blogging.Helpers
 @using Volo.Blogging.Localization
 @model Volo.Blogging.Pages.Members.IndexModel
 @inject IStringLocalizer<BloggingResource> L
@@ -15,15 +14,14 @@
     <abp-style src="/Pages/Members/Index.css"/>
 }
 
-
-<main class="pt-4" id="MemberDetail">
+<main>
     <div class="container">
         <div class="row gx-lg-5">
             <div class="col-md-4 mb-5 mb-md-0">
                 <div class="card h-auto member-profile-info">
                     <div class="card-body">
                         <div class="d-inline-block position-relative">
-                            <img src="https://localhost:44333/api/account/profile-picture-file/@Model.User.Id" class="post-member-img rounded-circle d-block">
+                            <img gravatar-email="@Model.User.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
                         </div>
                         @if (Model.User.UserName != null)
                         {
@@ -36,7 +34,7 @@
             </div>
             <div class="col-md-8">
                 <abp-tabs>
-                    <abp-tab name="all-posts" title="All Blogs">
+                    <abp-tab name="all-posts" title="All Blog Posts">
                         <div class="mt-4 pt-3">
                             @foreach (var post in Model.Posts)
                             {
@@ -44,7 +42,7 @@
                                     <div class="post-type-cont">
 
                                         <a href="/members/@Model.User.UserName" class="text-decoration-none">
-                                            <img src="https://localhost:44333/api/account/profile-picture-file/@Model.User.Id" class="post-member-img rounded-circle d-block">
+                                            <img gravatar-email="@Model.User.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
                                         </a>
                                         <span class="post-type">
                                             <i class="fas fa-pen-nib"></i>
@@ -65,16 +63,16 @@
                                             </a>
                                         </h3>
                                         <p class="post-desc">
-                                            <a href="/">
+                                            <a href="/..">
                                                 @(post.Description.Length >= 150 ? post.Description.Substring(0, 150) + "..." : post.Description)
                                             </a>
                                             <a href="/" class="readMore">@L["ReadMore"]</a>
                                         </p>
                                     </div>
                                     <div class="post-img-cont">
-                                        <div class="post-list-span text-center post" style="background: @(PostCoverImageHelper.GetRandomColor(post.Title))">
-                                                                <span>@PostCoverImageHelper.GetTitleCapitals(post.Title)</span>
-                                                            </div>
+                                        <div class="post-list-span text-center post">
+                                            <img src="@post.CoverImage" class="box-articles">
+                                        </div>
                                     </div>
                                 </div>
                             }

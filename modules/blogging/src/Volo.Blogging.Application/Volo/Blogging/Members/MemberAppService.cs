@@ -14,10 +14,10 @@ public class MemberAppService : BloggingAppServiceBase, IMemberAppService
     {
         _userRepository = userRepository;
     }
-
-    public async Task<BlogUserDto> FindAsync(string username)
+    
+    public async Task<BlogUserDto> GetAsync(string username)
     {
-        var user = await _userRepository.FindAsync(x => x.UserName == username);
+        var user = await _userRepository.GetAsync(x => x.UserName == username);
         
         return ObjectMapper.Map<BlogUser, BlogUserDto>(user);
     }

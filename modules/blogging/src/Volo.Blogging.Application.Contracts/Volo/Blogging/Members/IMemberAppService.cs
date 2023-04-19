@@ -6,5 +6,5 @@ namespace Volo.Blogging.Members;
 
 public interface IMemberAppService : IApplicationService
 {
-    Task<BlogUserDto> FindAsync(string username);
+    Task<BlogUserDto> GetAsync(string username);
 }
