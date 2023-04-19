@@ -17,7 +17,7 @@ public class MyProjectNameHostMenuContributor : IMenuContributor
 
     public async Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
-        if (context.Menu.Name == StandardMenus.User)
+        if (context.Menu.Name == StandardMenus.Application.User)
         {
             await ConfigureUserMenuAsync(context);
         }

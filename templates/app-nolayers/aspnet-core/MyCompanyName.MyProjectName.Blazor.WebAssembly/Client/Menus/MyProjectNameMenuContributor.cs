@@ -21,11 +21,11 @@ public class MyProjectNameMenuContributor : IMenuContributor
 
     public async Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
-        if (context.Menu.Name == StandardMenus.Main)
+        if (context.Menu.Name == StandardMenus.Application.Main)
         {
             await ConfigureMainMenuAsync(context);
         }
-        else if (context.Menu.Name == StandardMenus.User)
+        else if (context.Menu.Name == StandardMenus.Application.User)
         {
             await ConfigureUserMenuAsync(context);
         }
