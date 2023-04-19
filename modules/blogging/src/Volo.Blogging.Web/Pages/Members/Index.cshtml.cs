@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Members;
 using Volo.Blogging.Posts;
 
