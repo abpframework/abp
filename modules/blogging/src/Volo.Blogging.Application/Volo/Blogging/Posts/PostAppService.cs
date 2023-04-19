@@ -191,11 +191,7 @@ namespace Volo.Blogging.Posts
         public async Task<List<PostWithDetailsDto>> GetListByUserIdAsync(Guid userId)
         {
             var posts = await PostRepository.GetListByUserIdAsync(userId);
-
-            if (CurrentUser != null)
-            {
-                
-            }
+            
             return ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts);
         }
 
