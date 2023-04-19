@@ -9,7 +9,7 @@ public class BasicThemeDemoMenuContributor : IMenuContributor
 {
     public Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
-        if (context.Menu.Name == StandardMenus.Main)
+        if (context.Menu.Name == StandardMenus.Application.Main)
         {
             AddMainMenuItems(context);
         }

@@ -23,7 +23,7 @@ public partial class LoginDisplay : IDisposable
 
     protected async override Task OnInitializedAsync()
     {
-        Menu = await MenuManager.GetAsync(StandardMenus.User);
+        Menu = await MenuManager.GetAsync(StandardMenus.Application.User);
 
         Navigation.LocationChanged += OnLocationChanged;
 
@@ -37,7 +37,7 @@ public partial class LoginDisplay : IDisposable
 
     private async void ApplicationConfigurationChanged()
     {
-        Menu = await MenuManager.GetAsync(StandardMenus.User);
+        Menu = await MenuManager.GetAsync(StandardMenus.Application.User);
         await InvokeAsync(StateHasChanged);
     }
 

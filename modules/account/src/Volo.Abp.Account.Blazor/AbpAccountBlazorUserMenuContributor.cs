@@ -8,7 +8,7 @@ public class AbpAccountBlazorUserMenuContributor : IMenuContributor
 {
     public Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
-        if (context.Menu.Name != StandardMenus.User)
+        if (context.Menu.Name != StandardMenus.Application.User)
         {
             return Task.CompletedTask;
         }

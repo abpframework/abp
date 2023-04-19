@@ -9,7 +9,7 @@ public class TenantManagementBlazorMenuContributor : IMenuContributor
 {
     public virtual Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
-        if (context.Menu.Name != StandardMenus.Main)
+        if (context.Menu.Name != StandardMenus.Application.Main)
         {
             return Task.CompletedTask;
         }

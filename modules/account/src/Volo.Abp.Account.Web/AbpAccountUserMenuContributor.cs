@@ -11,7 +11,7 @@ public class AbpAccountUserMenuContributor : IMenuContributor
 {
     public virtual Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
-        if (context.Menu.Name != StandardMenus.User)
+        if (context.Menu.Name != StandardMenus.Application.User)
         {
             return Task.CompletedTask;
         }
