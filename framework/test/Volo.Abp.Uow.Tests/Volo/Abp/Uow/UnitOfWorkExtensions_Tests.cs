@@ -20,14 +20,14 @@ public class UnitOfWorkExtensions_Tests : AbpIntegratedTest<AbpUnitOfWorkModule>
         uow.AddItem("testKey", "testValue");
 
         uow.Items.ShouldContainKey("testKey");
-        uow.Items.ContainsValue("testValue");
+        uow.Items.ShouldContainKeyAndValue("testKey","testValue");
     }
 
     [Fact]
     public void GetItemOrDefault()
     {
         var uow = _unitOfWorkManager.Begin();
-        uow.Items.Add("testKey", new NameValue("TestKey","TestValue"));
+        uow.Items.TryAdd("testKey", new NameValue("TestKey", "TestValue"));
 
         uow.GetItemOrDefault<NameValue>("testKey").ShouldBeOfType<NameValue>();
         uow.GetItemOrDefault<NameValue>("testKey").Value.ShouldBe("TestValue");
@@ -49,7 +49,7 @@ public class UnitOfWorkExtensions_Tests : AbpIntegratedTest<AbpUnitOfWorkModule>
     public void RemoveItem()
     {
         var uow = _unitOfWorkManager.Begin();
-        uow.Items.Add("testKey", "testValue");
+        uow.Items.TryAdd("testKey", "testValue");
 
         uow.RemoveItem("testKey");
 
