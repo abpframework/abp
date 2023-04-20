@@ -63,12 +63,12 @@ public class ApplicationMenuGroup
 
     private string GetDefaultElementId()
     {
-        return "MenuGroup" + Name;
+        return "MenuGroup_" + Name;
     }
 
     private string NormalizeElementId(string elementId)
     {
-        return elementId?.Replace("_", "").Replace(".", "");
+        return elementId?.Replace(".", "");
     }
 
     public override string ToString()

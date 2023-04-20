@@ -155,12 +155,12 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
 
     private string GetDefaultElementId()
     {
-        return "MenuItem" + Name;
+        return "MenuItem_" + Name;
     }
     
     private string NormalizeElementId(string elementId)
     {
-        return elementId?.Replace("_", "").Replace(".", "");
+        return elementId?.Replace(".", "");
     }
 
     public override string ToString()
