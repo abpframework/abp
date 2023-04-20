@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.AzureServiceBus;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -40,14 +41,16 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IAzureServiceBusSerializer serializer,
         IAzureServiceBusMessageConsumerFactory messageConsumerFactory,
         IPublisherPool publisherPool,
-        IEventHandlerInvoker eventHandlerInvoker)
+        IEventHandlerInvoker eventHandlerInvoker,
+        ILocalEventBus localEventBus)
         : base(serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
             abpDistributedEventBusOptions,
             guidGenerator,
             clock,
-            eventHandlerInvoker)
+            eventHandlerInvoker,
+            localEventBus)
     {
         _options = abpAzureEventBusOptions.Value;
         _serializer = serializer;
@@ -88,12 +91,19 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         var eventData = _serializer.Deserialize(message.Body.ToArray(), eventType);
 
-        await TriggerHandlersAsync(eventType, eventData);
+        await TriggerHandlersDirectAsync(eventType, eventData);
     }
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
         await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id);
+
+        await TriggerDistributedEventSentAsync(new DistributedEventSent()
+        {
+            Source = DistributedEventSource.Outbox,
+            EventName = outgoingEvent.EventName,
+            EventData = outgoingEvent.EventData
+        });
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -123,6 +133,16 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
 
         await publisher.SendMessagesAsync(messageBatch);
+
+        foreach (var outgoingEvent in outgoingEventArray)
+        {
+            await TriggerDistributedEventSentAsync(new DistributedEventSent()
+            {
+                Source = DistributedEventSource.Outbox,
+                EventName = outgoingEvent.EventName,
+                EventData = outgoingEvent.EventData
+            });
+        }
     }
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
@@ -135,7 +155,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         var eventData = _serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
-        await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+        await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);

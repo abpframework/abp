@@ -11,6 +11,7 @@ using Rebus.Pipeline;
 using Rebus.Transport;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -41,7 +42,8 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IRebusSerializer serializer,
         IGuidGenerator guidGenerator,
         IClock clock,
-        IEventHandlerInvoker eventHandlerInvoker) :
+        IEventHandlerInvoker eventHandlerInvoker,
+        ILocalEventBus localEventBus) :
         base(
             serviceScopeFactory,
             currentTenant,
@@ -49,7 +51,8 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             abpDistributedEventBusOptions,
             guidGenerator,
             clock,
-            eventHandlerInvoker)
+            eventHandlerInvoker,
+            localEventBus)
     {
         Rebus = rebus;
         Serializer = serializer;
@@ -147,7 +150,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             return;
         }
 
-        await TriggerHandlersAsync(eventType, eventData);
+        await TriggerHandlersDirectAsync(eventType, eventData);
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
@@ -225,14 +228,21 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return false;
     }
 
-    public override Task PublishFromOutboxAsync(
+    public override async Task PublishFromOutboxAsync(
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
         var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
         var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
 
-        return PublishAsync(eventType, eventData, eventId: outgoingEvent.Id);
+        await PublishAsync(eventType, eventData, eventId: outgoingEvent.Id);
+
+        await TriggerDistributedEventSentAsync(new DistributedEventSent()
+        {
+            Source = DistributedEventSource.Outbox,
+            EventName = outgoingEvent.EventName,
+            EventData = outgoingEvent.EventData
+        });
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -244,8 +254,15 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             foreach (var outgoingEvent in outgoingEventArray)
             {
                 await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
+
+                await TriggerDistributedEventSentAsync(new DistributedEventSent()
+                {
+                    Source = DistributedEventSource.Outbox,
+                    EventName = outgoingEvent.EventName,
+                    EventData = outgoingEvent.EventData
+                });
             }
-            
+
             await scope.CompleteAsync();
         }
     }
@@ -262,7 +279,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
-        await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+        await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);

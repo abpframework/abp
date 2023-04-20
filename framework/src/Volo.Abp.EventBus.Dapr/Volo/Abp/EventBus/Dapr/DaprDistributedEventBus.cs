@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Dapr;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -37,8 +38,9 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         IEventHandlerInvoker eventHandlerInvoker,
         IDaprSerializer serializer,
         IOptions<AbpDaprEventBusOptions> daprEventBusOptions,
-        IAbpDaprClientFactory daprClientFactory)
-        : base(serviceScopeFactory, currentTenant, unitOfWorkManager, abpDistributedEventBusOptions, guidGenerator, clock, eventHandlerInvoker)
+        IAbpDaprClientFactory daprClientFactory,
+        ILocalEventBus localEventBus)
+        : base(serviceScopeFactory, currentTenant, unitOfWorkManager, abpDistributedEventBusOptions, guidGenerator, clock, eventHandlerInvoker, localEventBus)
     {
         Serializer = serializer;
         DaprEventBusOptions = daprEventBusOptions.Value;
@@ -142,6 +144,12 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
     public override async Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
         await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
+        await TriggerDistributedEventSentAsync(new DistributedEventSent()
+        {
+            Source = DistributedEventSource.Outbox,
+            EventName = outgoingEvent.EventName,
+            EventData = outgoingEvent.EventData
+        });
     }
 
     public override async Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -151,7 +159,18 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         foreach (var outgoingEvent in outgoingEventArray)
         {
             await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
+            await TriggerDistributedEventSentAsync(new DistributedEventSent()
+            {
+                Source = DistributedEventSource.Outbox,
+                EventName = outgoingEvent.EventName,
+                EventData = outgoingEvent.EventData
+            });
         }
+    }
+
+    public virtual async Task DaprTriggerHandlersDirectAsync(Type eventType, object eventData)
+    {
+        await TriggerHandlersDirectAsync(eventType, eventData);
     }
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
@@ -164,7 +183,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
         var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
-        await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+        await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);
