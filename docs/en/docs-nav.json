@@ -826,6 +826,15 @@
                   "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
                 }
               ]
+            },
+            {
+              "text": "Security",
+              "items": [
+                {
+                  "text": "Security Headers",
+                  "path": "UI/AspNetCore/Security-Headers.md"
+                }
+              ]
             }
           ]
         },
