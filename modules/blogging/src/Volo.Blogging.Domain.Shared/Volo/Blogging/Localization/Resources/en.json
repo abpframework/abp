@@ -60,6 +60,7 @@
     "MarkdownSupported": "Markdown is supported",
     "FileUploadInfo": "Drag, drop, or paste a copied image.",
     "PostDescriptionHint": "* Will be rendered in the article link preview, supports HTML",
-    "ReadMore": "Continue Reading"
+    "ReadMore": "Continue Reading",
+    "MemberNotPublishedPostYet": "This member hasn't published any posts yet."
   }
 }

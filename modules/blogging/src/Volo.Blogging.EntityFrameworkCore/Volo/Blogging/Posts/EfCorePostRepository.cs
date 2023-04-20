@@ -65,7 +65,7 @@ namespace Volo.Blogging.Posts
         public async Task<List<Post>> GetListByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             var query = (await GetDbSetAsync()).Where(p => p.CreatorId == userId)
-                .OrderBy(p => p.CreationTime);
+                .OrderByDescending(p => p.CreationTime);
             
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
