@@ -8,6 +8,7 @@ namespace Volo.Abp.UI.Navigation;
 public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<ApplicationMenuItem>
 {
     private string _displayName;
+    private string _elementId;
 
     /// <summary>
     /// Default <see cref="Order"/> value of a menu item.
@@ -85,7 +86,12 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
     /// <summary>
     /// Can be used to render the element with a specific Id for DOM selections.
     /// </summary>
-    public string ElementId { get; set; }
+    public string ElementId {
+        get { return _elementId; }
+        set {
+            _elementId = NormalizeElementId(value);
+        }
+    }
 
     /// <summary>
     /// Can be used to render the element with extra CSS classes.
@@ -149,7 +155,12 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
 
     private string GetDefaultElementId()
     {
-        return "MenuItem_" + Name;
+        return "MenuItem" + Name;
+    }
+    
+    private string NormalizeElementId(string elementId)
+    {
+        return elementId?.Replace("_", "").Replace(".", "");
     }
 
     public override string ToString()
