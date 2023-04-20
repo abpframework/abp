@@ -192,7 +192,7 @@ public static class RepositoryExtensions
     {
         var hardDeleteEntities = (HashSet<IEntity>)currentUow.Items.GetOrAdd(
             UnitOfWorkItemNames.HardDeletedEntities,
-            () => new HashSet<IEntity>()
+            _ => new HashSet<IEntity>()
         );
 
         hardDeleteEntities.UnionWith(entities);
@@ -210,8 +210,7 @@ public static class RepositoryExtensions
     {
         var hardDeleteEntities = (HashSet<IEntity>)currentUow.Items.GetOrAdd(
             UnitOfWorkItemNames.HardDeletedEntities,
-            () => new HashSet<IEntity>()
-        );
+            _ => new HashSet<IEntity>());
 
         hardDeleteEntities.Add(entity);
         await repository.DeleteAsync(entity, autoSave, cancellationToken);
