@@ -25,7 +25,7 @@ public static class UnitOfWorkExtensions
         }
         else
         {
-            unitOfWork.Items.Add(key, value);
+            unitOfWork.Items.TryAdd(key, value);
         }
     }
 

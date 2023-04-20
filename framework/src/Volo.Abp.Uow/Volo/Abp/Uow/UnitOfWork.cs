@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -44,7 +45,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
     protected IUnitOfWorkEventPublisher UnitOfWorkEventPublisher { get; }
 
     [NotNull]
-    public Dictionary<string, object> Items { get; }
+    public ConcurrentDictionary<string, object> Items { get; }
 
     private readonly Dictionary<string, IDatabaseApi> _databaseApis;
     private readonly Dictionary<string, ITransactionApi> _transactionApis;
@@ -66,7 +67,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
         _databaseApis = new Dictionary<string, IDatabaseApi>();
         _transactionApis = new Dictionary<string, ITransactionApi>();
 
-        Items = new Dictionary<string, object>();
+        Items = new ConcurrentDictionary<string, object>();
     }
 
     public virtual void Initialize(AbpUnitOfWorkOptions options)
