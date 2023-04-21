@@ -136,33 +136,6 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         await TriggerHandlersAsync(localEventMessage.EventType, localEventMessage.EventData);
     }
 
-    // Internal for unit testing
-    internal Func<Type, object, Task> OnPublishing { get; set; }
-
-    // For unit testing
-    public async override Task PublishAsync(
-        Type eventType,
-        object eventData,
-        bool onUnitOfWorkComplete = true)
-    {
-        if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
-        {
-            AddToUnitOfWork(
-                UnitOfWorkManager.Current,
-                new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext())
-            );
-            return;
-        }
-
-        // For unit testing
-        if (OnPublishing != null && eventType != typeof(DistributedEventSent) && eventType != typeof(DistributedEventReceived))
-        {
-            await OnPublishing(eventType, eventData);
-        }
-
-        await PublishToEventBusAsync(eventType, eventData);
-    }
-
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
@@ -209,5 +182,32 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         }
 
         await base.InvokeEventHandlerAsync(eventHandler, eventData, eventType);
+    }
+
+    // Internal for unit testing
+    internal Func<Type, object, Task> OnPublishing { get; set; }
+
+    // For unit testing
+    public async override Task PublishAsync(
+        Type eventType,
+        object eventData,
+        bool onUnitOfWorkComplete = true)
+    {
+        if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
+        {
+            AddToUnitOfWork(
+                UnitOfWorkManager.Current,
+                new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext())
+            );
+            return;
+        }
+
+        // For unit testing
+        if (OnPublishing != null && eventType != typeof(DistributedEventSent) && eventType != typeof(DistributedEventReceived))
+        {
+            await OnPublishing(eventType, eventData);
+        }
+
+        await PublishToEventBusAsync(eventType, eventData);
     }
 }
