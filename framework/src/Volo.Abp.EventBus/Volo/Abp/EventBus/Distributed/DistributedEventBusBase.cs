@@ -147,7 +147,6 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         string messageId,
         string eventName,
         Type eventType,
-        byte[] eventBytes,
         object eventData)
     {
         if (AbpDistributedEventBusOptions.Inboxes.Count <= 0)
@@ -184,7 +183,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                             GuidGenerator.Create(),
                             messageId,
                             eventName,
-                            eventBytes,
+                            Serialize(eventData),
                             Clock.Now
                         )
                     );

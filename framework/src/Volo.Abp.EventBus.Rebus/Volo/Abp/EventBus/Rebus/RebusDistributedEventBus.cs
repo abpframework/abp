@@ -145,7 +145,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var messageId = MessageContext.Current.TransportMessage.GetMessageId();
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
 
-        if (await AddToInboxAsync(messageId, eventName, eventType, MessageContext.Current.TransportMessage.Body, eventData))
+        if (await AddToInboxAsync(messageId, eventName, eventType, eventData))
         {
             return;
         }

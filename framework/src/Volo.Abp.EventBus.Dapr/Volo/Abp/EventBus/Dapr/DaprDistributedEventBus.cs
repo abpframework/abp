@@ -169,13 +169,12 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         }
     }
 
-    public virtual async Task DaprTriggerHandlersDirectAsync(Type eventType, object eventData)
+    public virtual async Task TriggerHandlersAsync(string messageId, Type eventType, object eventData)
     {
-        // TODO: Implement inbox
-        // if (await AddToInboxAsync(message.MessageId, EventNameAttribute.GetNameOrDefault(eventType), eventType, message.Body.ToArray()))
-        // {
-        //     return;
-        // }
+        if (await AddToInboxAsync(messageId, EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData))
+        {
+            return;
+        }
 
         await TriggerHandlersDirectAsync(eventType, eventData);
     }

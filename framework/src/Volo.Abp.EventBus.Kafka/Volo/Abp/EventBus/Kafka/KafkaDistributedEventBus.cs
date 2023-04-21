@@ -83,10 +83,9 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
 
         var messageId = message.GetMessageId();
-        var eventBytes = message.Value;
         var eventData = Serializer.Deserialize(message.Value, eventType);
 
-        if (await AddToInboxAsync(messageId, eventName, eventType, eventBytes, eventData))
+        if (await AddToInboxAsync(messageId, eventName, eventType, eventData))
         {
             return;
         }

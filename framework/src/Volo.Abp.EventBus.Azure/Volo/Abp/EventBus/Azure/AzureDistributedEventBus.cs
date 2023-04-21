@@ -84,10 +84,9 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             return;
         }
 
-        var eventBytes = message.Body.ToArray();
-        var eventData = _serializer.Deserialize(eventBytes, eventType);
+        var eventData = _serializer.Deserialize(message.Body.ToArray(), eventType);
 
-        if (await AddToInboxAsync(message.MessageId, eventName, eventType, eventBytes, eventData))
+        if (await AddToInboxAsync(message.MessageId, eventName, eventType, eventData))
         {
             return;
         }

@@ -101,10 +101,9 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
             return;
         }
 
-        var eventBytes = ea.Body.ToArray();
-        var eventData = Serializer.Deserialize(eventBytes, eventType);
+        var eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
 
-        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventBytes, eventData))
+        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventData))
         {
             return;
         }
