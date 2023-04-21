@@ -84,26 +84,27 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             return;
         }
 
-        if (await AddToInboxAsync(message.MessageId, eventName, eventType, message.Body.ToArray()))
+        var eventBytes = message.Body.ToArray();
+        var eventData = _serializer.Deserialize(eventBytes, eventType);
+
+        if (await AddToInboxAsync(message.MessageId, eventName, eventType, eventBytes, eventData))
         {
             return;
         }
-
-        var eventData = _serializer.Deserialize(message.Body.ToArray(), eventType);
 
         await TriggerHandlersDirectAsync(eventType, eventData);
     }
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id);
-
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Outbox,
             EventName = outgoingEvent.EventName,
             EventData = outgoingEvent.EventData
         });
+
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id);
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -130,12 +131,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 throw new AbpException(
                     "The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
             }
-        }
 
-        await publisher.SendMessagesAsync(messageBatch);
-
-        foreach (var outgoingEvent in outgoingEventArray)
-        {
             await TriggerDistributedEventSentAsync(new DistributedEventSent()
             {
                 Source = DistributedEventSource.Outbox,
@@ -143,6 +139,8 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 EventData = outgoingEvent.EventData
             });
         }
+
+        await publisher.SendMessagesAsync(messageBatch);
     }
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)

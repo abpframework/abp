@@ -143,13 +143,14 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     public override async Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Outbox,
             EventName = outgoingEvent.EventName,
             EventData = outgoingEvent.EventData
         });
+
+        await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
     }
 
     public override async Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -158,18 +159,24 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
         foreach (var outgoingEvent in outgoingEventArray)
         {
-            await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
             await TriggerDistributedEventSentAsync(new DistributedEventSent()
             {
                 Source = DistributedEventSource.Outbox,
                 EventName = outgoingEvent.EventName,
                 EventData = outgoingEvent.EventData
             });
+            await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
         }
     }
 
     public virtual async Task DaprTriggerHandlersDirectAsync(Type eventType, object eventData)
     {
+        // TODO: Implement inbox
+        // if (await AddToInboxAsync(message.MessageId, EventNameAttribute.GetNameOrDefault(eventType), eventType, message.Body.ToArray()))
+        // {
+        //     return;
+        // }
+
         await TriggerHandlersDirectAsync(eventType, eventData);
     }
 

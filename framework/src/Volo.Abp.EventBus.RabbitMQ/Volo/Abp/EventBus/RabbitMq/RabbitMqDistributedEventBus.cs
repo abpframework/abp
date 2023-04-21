@@ -102,13 +102,12 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         }
 
         var eventBytes = ea.Body.ToArray();
+        var eventData = Serializer.Deserialize(eventBytes, eventType);
 
-        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventBytes))
+        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventBytes, eventData))
         {
             return;
         }
-
-        var eventData = Serializer.Deserialize(eventBytes, eventType);
 
         await TriggerHandlersDirectAsync(eventType, eventData);
     }
@@ -200,13 +199,14 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, null, eventId: outgoingEvent.Id);
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Outbox,
             EventName = outgoingEvent.EventName,
             EventData = outgoingEvent.EventData
         });
+
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, null, eventId: outgoingEvent.Id);
     }
 
     public async override Task PublishManyFromOutboxAsync(
@@ -220,19 +220,19 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
 
             foreach (var outgoingEvent in outgoingEventArray)
             {
-                await PublishAsync(
-                    channel,
-                    outgoingEvent.EventName,
-                    outgoingEvent.EventData,
-                    properties: null,
-                    eventId: outgoingEvent.Id);
-
                 await TriggerDistributedEventSentAsync(new DistributedEventSent()
                 {
                     Source = DistributedEventSource.Outbox,
                     EventName = outgoingEvent.EventName,
                     EventData = outgoingEvent.EventData
                 });
+
+                await PublishAsync(
+                    channel,
+                    outgoingEvent.EventName,
+                    outgoingEvent.EventData,
+                    properties: null,
+                    eventId: outgoingEvent.Id);
             }
 
             channel.WaitForConfirmsOrDie();

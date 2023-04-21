@@ -145,7 +145,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var messageId = MessageContext.Current.TransportMessage.GetMessageId();
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
 
-        if (await AddToInboxAsync(messageId, eventName, eventType, MessageContext.Current.TransportMessage.Body))
+        if (await AddToInboxAsync(messageId, eventName, eventType, MessageContext.Current.TransportMessage.Body, eventData))
         {
             return;
         }
@@ -235,14 +235,14 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
         var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
 
-        await PublishAsync(eventType, eventData, eventId: outgoingEvent.Id);
-
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Outbox,
             EventName = outgoingEvent.EventName,
             EventData = outgoingEvent.EventData
         });
+
+        await PublishAsync(eventType, eventData, eventId: outgoingEvent.Id);
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -253,14 +253,14 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             foreach (var outgoingEvent in outgoingEventArray)
             {
-                await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
-
                 await TriggerDistributedEventSentAsync(new DistributedEventSent()
                 {
                     Source = DistributedEventSource.Outbox,
                     EventName = outgoingEvent.EventName,
                     EventData = outgoingEvent.EventData
                 });
+
+                await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
             }
 
             await scope.CompleteAsync();
