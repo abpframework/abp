@@ -110,7 +110,7 @@ You can use any of the [ClientConfig](https://docs.confluent.io/current/clients/
 
 ### The Options Classes
 
-`AbpRabbitMqOptions` and `AbpRabbitMqEventBusOptions` classes can be used to configure the connection strings and event bus options for the RabbitMQ.
+`AbpKafkaOptions` and `AbpKafkaEventBusOptions` classes can be used to configure the connection strings and event bus options for the Kafka.
 
 You can configure this options inside the `ConfigureServices` of your [module](Module-Development-Basics.md).
 

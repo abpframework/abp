@@ -118,7 +118,14 @@ public class AbpPermissionManagementDomainModule : AbpModule
 
         await Policy
             .Handle<Exception>()
-            .WaitAndRetryAsync(8, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) * 10))
+            .WaitAndRetryAsync(
+                8,
+                retryAttempt => TimeSpan.FromSeconds(
+                    RandomHelper.GetRandom(
+                        (int)Math.Pow(2, retryAttempt) * 8,
+                        (int)Math.Pow(2, retryAttempt) * 12)
+                )
+            )
             .ExecuteAsync(async _ =>
             {
                 try
