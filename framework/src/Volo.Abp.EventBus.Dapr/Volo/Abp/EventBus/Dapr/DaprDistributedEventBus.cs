@@ -165,6 +165,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
                 EventName = outgoingEvent.EventName,
                 EventData = outgoingEvent.EventData
             });
+
             await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
         }
     }
@@ -201,6 +202,12 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         return Serializer.Serialize(eventData);
     }
 
+    protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
+    {
+        EventTypes.GetOrAdd(eventName, eventType);
+        return base.OnAddToOutboxAsync(eventName, eventType, eventData);
+    }
+
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
     {
         return HandlerFactories.GetOrAdd(
@@ -208,7 +215,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
             type =>
             {
                 var eventName = EventNameAttribute.GetNameOrDefault(type);
-                EventTypes[eventName] = type;
+                EventTypes.GetOrAdd(eventName, eventType);
                 return new List<IEventHandlerFactory>();
             }
         );

@@ -105,7 +105,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         IncomingEventInfo incomingEvent,
         InboxConfig inboxConfig);
 
-    private async Task<bool> AddToOutboxAsync(Type eventType, object eventData)
+    protected virtual async Task<bool> AddToOutboxAsync(Type eventType, object eventData)
     {
         var unitOfWork = UnitOfWorkManager.Current;
         if (unitOfWork == null)
@@ -117,9 +117,10 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         {
             if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
-                var eventOutbox =
-                    (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
+                var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
                 var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+
+                await OnAddToOutboxAsync(eventName, eventType, eventData);
 
                 await TriggerDistributedEventSentAsync(new DistributedEventSent()
                 {
@@ -141,6 +142,11 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         }
 
         return false;
+    }
+
+    protected virtual Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
+    {
+        return Task.CompletedTask;
     }
 
     protected async Task<bool> AddToInboxAsync(

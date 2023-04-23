@@ -282,6 +282,12 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             });
     }
 
+    protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
+    {
+        EventTypes.GetOrAdd(eventName, eventType);
+        return base.OnAddToOutboxAsync(eventName, eventType, eventData);
+    }
+
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
     {
         return HandlerFactories.GetOrAdd(
@@ -289,7 +295,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             type =>
             {
                 var eventName = EventNameAttribute.GetNameOrDefault(type);
-                EventTypes[eventName] = type;
+                EventTypes.GetOrAdd(eventName, eventType);
                 return new List<IEventHandlerFactory>();
             }
         );
