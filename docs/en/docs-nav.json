@@ -16,6 +16,7 @@
     },
     {
       "text": "Getting Started",
+      "path":"Getting-Started-Overall.md",
       "items": [
         {
           "text": "Web Application - Layered Architecture",
