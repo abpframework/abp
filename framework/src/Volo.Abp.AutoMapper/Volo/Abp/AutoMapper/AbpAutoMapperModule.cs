@@ -32,15 +32,14 @@ public class AbpAutoMapperModule : AbpModule
             {
                 var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
 
-                var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression =>
-                {
-                    var autoMapperConfigurationContext = new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider);
+                var mapperConfigurationExpression = sp.GetRequiredService<IOptions<MapperConfigurationExpression>>().Value;
+                var autoMapperConfigurationContext = new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider);
 
-                    foreach (var configurator in options.Configurators)
-                    {
-                        configurator(autoMapperConfigurationContext);
-                    }
-                });
+                foreach (var configurator in options.Configurators)
+                {
+                    configurator(autoMapperConfigurationContext);
+                }
+                var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression);
 
                 foreach (var profileType in options.ValidatingProfiles)
                 {
