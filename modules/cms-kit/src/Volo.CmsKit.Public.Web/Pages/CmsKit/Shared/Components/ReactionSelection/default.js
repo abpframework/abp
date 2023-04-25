@@ -60,7 +60,7 @@ $(document).ready(function () {
             $selectIcon.popover({
                 placement: 'left',
                 html: true,
-                trigger: 'focus',
+                trigger: 'click',
                 title: l('PickYourReaction'),
                 content: $popoverContent.html()
             }).on('shown.bs.popover', function () {
