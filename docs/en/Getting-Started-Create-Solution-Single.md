@@ -39,7 +39,7 @@ The [startup template](Startup-templates/Index.md) **disables** transactions in 
   ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
 {
-	options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+	options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled; //or UnitOfWorkTransactionBehavior.Auto
 });
   ```
 
