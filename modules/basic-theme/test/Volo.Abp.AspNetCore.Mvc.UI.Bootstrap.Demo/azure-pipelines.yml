@@ -37,7 +37,7 @@ stages:
     - checkout: devops
 
     - script: |
-        cd ${bootstrapTaghelpersDir} && dotnet publish -c Release -o bin/Release/publish
+        cd $(bootstrapTaghelpersDir) && dotnet publish -c Release -o bin/Release/publish
 
     - task: Docker@2
       displayName: Build Image
