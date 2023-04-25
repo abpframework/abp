@@ -62,7 +62,7 @@ namespace Volo.Blogging.Posts
         public async Task<List<Post>> GetListByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             var query = (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.CreatorId == userId)
-                .OrderBy(x => x.CreationTime);
+                .OrderByDescending(x => x.CreationTime);
             
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }

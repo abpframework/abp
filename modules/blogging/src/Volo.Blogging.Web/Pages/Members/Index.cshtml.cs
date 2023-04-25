@@ -32,7 +32,7 @@ public class IndexModel : AbpPageModel
 
     public async Task<IActionResult> OnGetAsync(string userName)
     {
-        User = await _memberAppService.GetAsync(userName);
+        User = await _memberAppService.FindAsync(userName);
 
         if (User is null)
         {

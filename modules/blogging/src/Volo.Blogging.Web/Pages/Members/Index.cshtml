@@ -66,7 +66,7 @@
                                             </h3>
                                             <p class="post-desc">
                                                 <a href="@Model.GetBlogPostUrl(post)">
-                                                    @(post.Description.Length >= 150 ? post.Description.Substring(0, 150) + "..." : post.Description)
+                                                    @post.Description.TruncateWithPostfix(150)
                                                 </a>
                                                 <a href="@Model.GetBlogPostUrl(post)" class="readMore">@L["ReadMore"]</a>
                                             </p>
