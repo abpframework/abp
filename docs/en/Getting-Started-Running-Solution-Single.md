@@ -85,7 +85,7 @@ You can run the application using the following (or `yarn start`) command:
 npm start
 ````
 
-This command takes time, but eventually runs and opens the application in your default browser:
+This command takes time, but eventually runs and opens the application in your default browser.
 
 {{end}}
 
