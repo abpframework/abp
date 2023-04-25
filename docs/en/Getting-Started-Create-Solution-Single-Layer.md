@@ -14,7 +14,7 @@
 
 We will use the ABP CLI to create a new ABP project.
 
-> Alternatively, you can **create and download** projects from the [ABP Framework website](https://abp.io/get-started) by easily selecting all options from the page.
+> You can also use the ABP CLI Command Generator on the [ABP Framework website](https://abp.io/get-started) by easily selecting all options from the page.
 
 Use the `new` command of the ABP CLI to create a new project:
 
@@ -49,4 +49,4 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 
 ## Next Step
 
-* [Running the solution](Getting-Started-Running-Solution.md)
+* [Running the solution](Getting-Started-Running-Solution-Single-Layer.md)

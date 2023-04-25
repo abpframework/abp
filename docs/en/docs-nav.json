@@ -42,15 +42,15 @@
           "items": [
             {
               "text": "1: Setup Your Development Environment",
-              "path": "Getting-Started-Setup-Environment-Single.md"
+              "path": "Getting-Started-Setup-Environment-Single-Layer.md"
             },
             {
               "text": "2: Creating a New Solution",
-              "path": "Getting-Started-Create-Solution-Single.md"
+              "path": "Getting-Started-Create-Solution-Single-Layer.md"
             },
             {
               "text": "3: Running the Solution",
-              "path": "Getting-Started-Running-Solution-Single.md"
+              "path": "Getting-Started-Running-Solution-Single-Layer.md"
             }
           ]
         },

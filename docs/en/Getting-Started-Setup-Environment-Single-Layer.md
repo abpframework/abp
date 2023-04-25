@@ -46,4 +46,4 @@ dotnet tool update -g Volo.Abp.Cli
 
 ## Next Step
 
-* [Creating a new solution](Getting-Started-Create-Solution.md)
+* [Creating a new solution](Getting-Started-Create-Solution-Single-Layer.md)
