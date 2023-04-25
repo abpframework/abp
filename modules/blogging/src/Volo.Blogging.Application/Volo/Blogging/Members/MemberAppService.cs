@@ -19,6 +19,11 @@ public class MemberAppService : BloggingAppServiceBase, IMemberAppService
     {
         var user = await _userRepository.FindAsync(x => x.UserName == username);
         
+        if (user == null)
+        {
+            return null;
+        }
+        
         return ObjectMapper.Map<BlogUser, BlogUserDto>(user);
     }
 }
