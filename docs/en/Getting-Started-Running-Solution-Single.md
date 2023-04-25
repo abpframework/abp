@@ -64,7 +64,7 @@ Running the application is pretty straight-forward, you just need to run the `To
 
 > **Note:** The `host` application hosts and serves the `blazor` application. Therefore, you should run the `host` application only.
 
-After the application runs, open the application in your default browser:
+After the application runs, open the application in your default browser.
 
 {{else if UI=="NG"}}
 
