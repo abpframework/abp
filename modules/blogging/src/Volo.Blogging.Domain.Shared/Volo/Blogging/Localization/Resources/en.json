@@ -61,6 +61,6 @@
     "FileUploadInfo": "Drag, drop, or paste a copied image.",
     "PostDescriptionHint": "* Will be rendered in the article link preview, supports HTML",
     "ReadMore": "Continue Reading",
-    "MemberNotPublishedPostYet": "This member hasn't published any posts yet."
+    "MemberNotPublishedPostYet": "No posts yet!"
   }
 }
