@@ -56,10 +56,6 @@ jobs:
     - name: t1
       run: |
         printenv HOME
-        
-    - name: t11
-      run: |
-        printenv NUGET_PACKAGES
 
     - name: t12
       run: |
