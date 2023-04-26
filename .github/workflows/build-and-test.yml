@@ -53,6 +53,15 @@ jobs:
       run: |
         sudo chown -R $USER:$USER /home/runneradmin
 
-    - name: test chown
-      run: |
-        ls /home/runneradmin -a
+    - name: Build All
+      run: ./build-all.ps1
+      working-directory: ./build
+      shell: pwsh
+
+    - name: Test All
+      run: sudo ./test-all.ps1
+      working-directory: ./build
+      shell: pwsh
+
+    - name: Codecov
+      uses: codecov/codecov-action@v2
