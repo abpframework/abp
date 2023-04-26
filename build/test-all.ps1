@@ -8,7 +8,7 @@ foreach ($solutionPath in $solutionPaths) {
     $solutionAbsPath = (Join-Path $rootFolder $solutionPath)
     Set-Location $solutionAbsPath
 
-    sudo -u  dotnet test --no-build --no-restore --collect:"XPlat Code Coverage"
+    sudo -u runner dotnet test --no-build --no-restore --collect:"XPlat Code Coverage"
     if (-Not $?) {
         Write-Host ("Test failed for the solution: " + $solutionPath)
         Set-Location $rootFolder
