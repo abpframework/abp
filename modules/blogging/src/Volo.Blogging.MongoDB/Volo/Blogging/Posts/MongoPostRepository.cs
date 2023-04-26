@@ -58,5 +58,13 @@ namespace Volo.Blogging.Posts
 
             return await query.OrderByDescending(x => x.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
         }
+
+        public async Task<List<Post>> GetListByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            var query = (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.CreatorId == userId)
+                .OrderByDescending(x => x.CreationTime);
+            
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
     }
 }

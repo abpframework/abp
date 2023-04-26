@@ -65,14 +65,19 @@
                                             <div class="col-auto pe-1">
                                                 @if (Model.Post.Writer != null)
                                                 {
-                                                    <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                    <a href="/Members/@Model.Post.Writer.UserName">
+                                                        <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar"/>
+                                                    </a>
                                                 }
                                             </div>
                                             <div class="col ps-1">
                                                 @if (Model.Post.Writer != null)
                                                 {
-                                                    <h5 class="mt-2 mb-1">@(Model.Post.Writer.UserName) <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span></h5>
-
+                                                    <a href="/Members/@Model.Post.Writer.UserName">
+                                                        <h5 class="mt-2 mb-1">
+                                                            @(Model.Post.Writer.UserName) <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span>
+                                                        </h5>
+                                                    </a>
                                                 }
 
                                                 <i class="fa fa-eye"></i> @L["WiewsWithCount", @Model.Post.ReadCount]
