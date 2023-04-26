@@ -53,15 +53,14 @@ jobs:
       run: |
         sudo chown -R $USER:$USER /home/runneradmin
 
-    - name: Build All
-      run: ./build-all.ps1
-      working-directory: ./build
-      shell: pwsh
+    - name: t1
+      run: |
+        printenv HOME
+        
+    - name: t11
+      run: |
+        printenv NUGET_PACKAGES
 
-    - name: Test All
-      run: ./test-all.ps1
-      working-directory: ./build
-      shell: pwsh
-
-    - name: Codecov
-      uses: codecov/codecov-action@v2
+    - name: t12
+      run: |
+        dotnet nuget locals all --list
