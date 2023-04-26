@@ -49,7 +49,11 @@ jobs:
     - uses: actions/setup-dotnet@master
       with:
         dotnet-version: 7.0.100
-    
+
+    - name: echo
+      run: |
+        echo $USER
+        
     - name: chown
       run: |
         sudo chown -R $USER:$USER /home/runneradmin
