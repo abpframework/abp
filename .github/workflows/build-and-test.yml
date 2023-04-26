@@ -59,7 +59,7 @@ jobs:
       shell: pwsh
 
     - name: Test All
-      run: sudo ./test-all.ps1
+      run: ./test-all.ps1
       working-directory: ./build
       shell: pwsh
 
