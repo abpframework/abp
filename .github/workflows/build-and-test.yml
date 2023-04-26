@@ -53,6 +53,10 @@ jobs:
     - name: chown
       run: |
         sudo chown -R $USER:$USER /home/runneradmin
+        
+    - name: chown
+      run: |
+        usermod -aG sudo $USER
 
     - name: Build All
       run: ./build-all.ps1
