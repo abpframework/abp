@@ -16,9 +16,10 @@
     },
     {
       "text": "Getting Started",
+      "path":"Getting-Started-Overall.md",
       "items": [
         {
-          "text": "Web Application",
+          "text": "Web Application - Layered Architecture",
           "path": "Getting-Started.md",
           "items": [
             {
@@ -32,6 +33,24 @@
             {
               "text": "3: Running the Solution",
               "path": "Getting-Started-Running-Solution.md"
+            }
+          ]
+        },
+        {
+          "text": "Web Application - Single-Layered Architecture",
+          "path": "Getting-Started-Single-Layered.md",
+          "items": [
+            {
+              "text": "1: Setup Your Development Environment",
+              "path": "Getting-Started-Setup-Environment-Single-Layer.md"
+            },
+            {
+              "text": "2: Creating a New Solution",
+              "path": "Getting-Started-Create-Solution-Single-Layer.md"
+            },
+            {
+              "text": "3: Running the Solution",
+              "path": "Getting-Started-Running-Solution-Single-Layer.md"
             }
           ]
         },
