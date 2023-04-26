@@ -51,17 +51,8 @@ jobs:
     
     - name: chown
       run: |
-        sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+        sudo chown -R $USER:$USER /home/runneradmin
 
-    - name: Build All
-      run: ./build-all.ps1 -f
-      working-directory: ./build
-      shell: pwsh
-
-    - name: Test All
-      run: ./test-all.ps1 -f
-      working-directory: ./build
-      shell: pwsh
-
-    - name: Codecov
-      uses: codecov/codecov-action@v2
+    - name: test chown
+      run: |
+        ls /home/runneradmin -a
