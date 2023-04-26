@@ -48,6 +48,10 @@ jobs:
     - uses: actions/setup-dotnet@master
       with:
         dotnet-version: 7.0.100
+    
+    - name: chown
+      run: |
+        sudo chown -R $USER:$USER $GITHUB_WORKSPACE
 
     - name: Build All
       run: ./build-all.ps1 -f
