@@ -83,7 +83,7 @@ You typically will change the `appsettings.json` inside the `.DbMigrator` and `.
 
 MySQL DBMS has some slight differences than the SQL Server. Some module database mapping configuration (especially the field lengths) causes problems with MySQL. For example, some of the the [IdentityServer module](Modules/IdentityServer.md) tables has such problems and it provides an option to configure the fields based on your DBMS.
 
-The module may provide some built-in solutions. You can configure it via `ModelBuilder`. eg: `Identity Server` module.
+The module may provide some built-in solutions. You can configure it via `ModelBuilder`. eg: `Auth Server` module.
 
 ```csharp
 builder.ConfigureIdentityServer(options =>
