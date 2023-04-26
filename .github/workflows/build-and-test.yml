@@ -1,4 +1,5 @@
 name: "build and test"
+
 on:
   push:
     branches:
@@ -53,10 +54,15 @@ jobs:
       run: |
         sudo chown -R $USER:$USER /home/runneradmin
 
-    - name: t1
-      run: |
-        printenv HOME
+    - name: Build All
+      run: ./build-all.ps1
+      working-directory: ./build
+      shell: pwsh
 
-    - name: t12
-      run: |
-        dotnet nuget locals all --list
+    - name: Test All
+      run: ./test-all.ps1
+      working-directory: ./build
+      shell: pwsh
+
+    - name: Codecov
+      uses: codecov/codecov-action@v2
