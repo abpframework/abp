@@ -20,14 +20,9 @@ public class OpenIddictMongoDbTestModule : AbpModule
     
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var stringArray = MongoDbFixture.ConnectionString.Split('?');
-        _connectionString = stringArray[0].EnsureEndsWith('/') +
-                           "Db_" +
-                           Guid.NewGuid().ToString("N") + "/?" + stringArray[1];
-
         Configure<AbpDbConnectionOptions>(options =>
         {
-            options.ConnectionStrings.Default = _connectionString;
+            options.ConnectionStrings.Default = MongoDbFixture.GetRandomConnectionString();
         });
     }
 

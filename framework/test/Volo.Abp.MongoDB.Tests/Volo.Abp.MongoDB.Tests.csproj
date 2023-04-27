@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mongo2Go" Version="$(Mongo2GoPackageVersion)" />
+    <PackageReference Include="EphemeralMongo6" Version="1.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
   </ItemGroup>
 

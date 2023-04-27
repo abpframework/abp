@@ -1,5 +1,5 @@
 using System;
-using Mongo2Go;
+using EphemeralMongo;
 
 namespace MyCompanyName.MyProjectName.MongoDB;
 
