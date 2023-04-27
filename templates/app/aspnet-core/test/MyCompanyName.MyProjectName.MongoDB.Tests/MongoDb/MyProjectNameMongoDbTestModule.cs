@@ -14,7 +14,7 @@ public class MyProjectNameMongoDbTestModule : AbpModule
     {
         Configure<AbpDbConnectionOptions>(options =>
         {
-            options.ConnectionStrings.Default = MongoDbFixture.GetRandomConnectionString();
+            options.ConnectionStrings.Default = MyProjectNameMongoDbFixture.GetRandomConnectionString();
         });
     }
 }
