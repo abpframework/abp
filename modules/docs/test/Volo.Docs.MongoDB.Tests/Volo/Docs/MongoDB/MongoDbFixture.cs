@@ -9,8 +9,7 @@ public class MongoDbFixture : IDisposable
     {
         MongoDbRunner = MongoRunner.Run(new MongoRunnerOptions
         {
-            UseSingleNodeReplicaSet = true,
-            KillMongoProcessesWhenCurrentProcessExits = true
+            UseSingleNodeReplicaSet = true
         });
     }
 
