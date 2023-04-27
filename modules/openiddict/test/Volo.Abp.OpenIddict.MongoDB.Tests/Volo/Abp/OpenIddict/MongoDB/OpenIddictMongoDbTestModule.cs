@@ -17,12 +17,13 @@ namespace Volo.Abp.OpenIddict.MongoDB;
 public class OpenIddictMongoDbTestModule : AbpModule
 {
     private static string _connectionString;
-    
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        _connectionString = MongoDbFixture.GetRandomConnectionString();
         Configure<AbpDbConnectionOptions>(options =>
         {
-            options.ConnectionStrings.Default = MongoDbFixture.GetRandomConnectionString();
+            options.ConnectionStrings.Default = _connectionString;
         });
     }
 
