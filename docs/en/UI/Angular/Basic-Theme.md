@@ -72,7 +72,7 @@ Or, you can download the [source code](https://github.com/abpframework/abp/blob/
             "prefix": "abp",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
                     "options": {
                         "tsConfig": "projects/theme-basic/tsconfig.lib.json",
                         "project": "projects/theme-basic/ng-package.json"
