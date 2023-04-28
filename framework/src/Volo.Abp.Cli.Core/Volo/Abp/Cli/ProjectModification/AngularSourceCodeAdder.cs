@@ -91,7 +91,7 @@ public class AngularSourceCodeAdder : ITransientDependency
                 new JProperty("prefix", "abp"),
                 new JProperty("architect", new JObject(
                     new JProperty("build", new JObject(
-                        new JProperty("builder", "@angular-devkit/build-ng-packagr:build"),
+                        new JProperty("builder", "@angular-devkit/build-angular:ng-packagr"),
                         new JProperty("options", new JObject(
                             new JProperty("tsConfig", $"projects/{project}/tsconfig.lib.json"),
                             new JProperty("project", $"projects/{project}/ng-package.json")
