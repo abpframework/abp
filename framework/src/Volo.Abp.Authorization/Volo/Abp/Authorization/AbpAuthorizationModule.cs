@@ -30,6 +30,10 @@ public class AbpAuthorizationModule : AbpModule
     {
         context.Services.AddAuthorizationCore();
 
+        context.Services.AddSingleton<IAuthorizationHandler, UserRequirementHandler>();
+        context.Services.AddSingleton<IAuthorizationHandler, UsersRequirementHandler>();
+        context.Services.AddSingleton<IAuthorizationHandler, RoleRequirementHandler>();
+        context.Services.AddSingleton<IAuthorizationHandler, RolesRequirementHandler>();
         context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
         context.Services.AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
 

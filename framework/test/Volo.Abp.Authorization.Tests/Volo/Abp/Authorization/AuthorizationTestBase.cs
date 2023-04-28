@@ -23,7 +23,7 @@ public class AuthorizationTestBase : AbpIntegratedTest<AbpAuthorizationTestModul
                                 new Claim(AbpClaimTypes.Role, "MyRole")
                             };
 
-        var identity = new ClaimsIdentity(claims);
+        var identity = new ClaimsIdentity(claims, "Test");
         var claimsPrincipal = new ClaimsPrincipal(identity);
         var principalAccessor = Substitute.For<ICurrentPrincipalAccessor>();
         principalAccessor.Principal.Returns(ci => claimsPrincipal);
