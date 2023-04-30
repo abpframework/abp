@@ -82,6 +82,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         "using System;",
         "using System.Collections.Generic;",
         "using System.Threading.Tasks;",
+        "using Volo.Abp;",
         "using Volo.Abp.Application.Dtos;",
         "using Volo.Abp.Http.Client;",
         "using Volo.Abp.Http.Modeling;",
@@ -94,6 +95,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         "using System;",
         "using System.Collections.Generic;",
         "using System.Threading.Tasks;",
+        "using Volo.Abp;",
         "using Volo.Abp.Application.Dtos;",
         "using Volo.Abp.Application.Services;"
     };
@@ -102,6 +104,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
     {
         "using System;",
         "using System.Collections.Generic;",
+        "using Volo.Abp;",
         "using Volo.Abp.Application.Dtos;",
         "using Volo.Abp.ObjectExtending;",
     };
