@@ -1,5 +1,6 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authorization
+@using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.OwlCarousel
 @using Volo.Blogging
 @inject IAuthorizationService Authorization
@@ -59,11 +60,17 @@
                                             <div class="user-card">
                                                 <div class="row">
                                                     <div class="col-auto pe-1">
-                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                        <a href="/Members/@post.Writer.UserName">
+                                                            <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar"/>
+                                                        </a>
                                                     </div>
                                                     <div class="col ps-1">
-                                                        <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
-                                                        <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
+                                                        <a href="/Members/@post.Writer.UserName">
+                                                            <h5 class="mt-2 mb-1">
+                                                                @post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                            </h5>
+                                                        </a>
+                                                        <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                         @*<span class="vs-seperator">|</span>
                                                         <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]*@
                                                     </div>

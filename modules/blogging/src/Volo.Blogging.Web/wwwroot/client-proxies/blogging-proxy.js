@@ -160,6 +160,12 @@
       }, ajaxParams));
     };
 
+    volo.blogging.posts.getListByUserId = function (userId, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/blogging/posts/user/' + userId + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
   })();
 
   // controller volo.blogging.tags
@@ -176,7 +182,20 @@
     };
 
   })();
+  
+  // controller volo.blogging.members
 
+    (function() {
+      abp.utils.createNamespace(window, 'volo.blogging.members');
+
+      volo.blogging.members.get = function (username, ajaxParams) {
+        return abp.ajax($.extend(true, {
+          url: abp.appPath + 'api/blogging/members/' + username + '',
+          type: 'GET'
+        }, ajaxParams));
+      };
+    })();
+    
 })();
 
 

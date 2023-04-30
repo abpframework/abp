@@ -58,3 +58,22 @@ Here you can see them in table with the GitHub stars, GitHub release counts, rec
 
 In conclusion, these 10 .NET Core libraries are essential tools for any .NET Core developer. They offer a wide range of functionality, from handling errors to mocking for unit testing and simplifying object mapping. Whether you're working on a large-scale enterprise application or a small project, these libraries can help you build more reliable, efficient, and effective applications.
 
+
+---
+
+
+### What is ABP Framework?
+ABP Framework offers an opinionated architecture to build enterprise software solutions with best practices on top of the .NET and the ASP.NET Core platforms. It provides the fundamental infrastructure, production-ready startup templates, modules, themes, tooling, guides and documentation to implement that architecture properly and automate the details and repetitive work as much as possible. 
+
+If you are starting a new ASP.NET Core project, try [abp.io](https://abp.io) now...
+
+ **IT IS FREE AND OPEN-SOURCE!**
+
+---
+
+> Alper Ebicoglu 🧑🏽‍💻 ABP Framework Core Team Member\
+> Follow me for the latest news about .NET and software development:\
+> 📌 [twitter.com/alperebicoglu](https://twitter.com/alperebicoglu)\
+> 📌 [github.com/ebicoglu](https://github.com/ebicoglu)\
+> 📌 [linkedin.com/in/ebicoglu](https://www.linkedin.com/in/ebicoglu)\
+> 📌 [medium.com/@alperonline](https://medium.com/@alperonline)
