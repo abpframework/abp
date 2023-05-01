@@ -466,7 +466,14 @@ abp switch-to-local [options]
 #### Options
 
 * `--solution` or `-s`: Specifies the solution directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
-* `--paths` or `-p`: Specifies the local paths that the projects are inside.
+
+* `--paths` or `-p`: Specifies the local paths that the projects are inside. You can use `|` character to separate the paths.
+
+Example:
+
+````bash
+abp switch-to-local --paths "D:\Github\abp|D:\Github\my-repo"
+````
 
 ### translate
 
