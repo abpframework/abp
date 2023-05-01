@@ -12,6 +12,6 @@
 
 This tutorial explains how to **create and run** a new Single-Layered web application using the ABP Framework. Follow the steps below:
 
-1. [Setup your development environment](Getting-Started-Setup-Environment-Single.md)
-2. [Creating a new solution](Getting-Started-Create-Solution-Single.md)
-3. [Running the solution](Getting-Started-Running-Solution-Single.md)
+1. [Setup your development environment](Getting-Started-Setup-Environment-Single-Layer.md)
+2. [Creating a new solution](Getting-Started-Create-Solution-Single-Layer.md)
+3. [Running the solution](Getting-Started-Running-Solution-Single-Layer.md)
