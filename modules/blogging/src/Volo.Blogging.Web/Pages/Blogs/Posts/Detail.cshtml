@@ -73,13 +73,14 @@
                                             <div class="col ps-1">
                                                 @if (Model.Post.Writer != null)
                                                 {
-                                                    <a href="/Members/@Model.Post.Writer.UserName">
-                                                        <h5 class="mt-2 mb-1">
-                                                            @(Model.Post.Writer.UserName) <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span>
-                                                        </h5>
-                                                    </a>
+                                                    <h5 class="mt-2 mb-1">
+                                                        <a href="/Members/@Model.Post.Writer.UserName">
+                                                            @(Model.Post.Writer.UserName)
+                                                        </a>
+                                                        <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span>
+                                                    </h5>
                                                 }
-
+                                                
                                                 <i class="fa fa-eye"></i> @L["WiewsWithCount", @Model.Post.ReadCount]
                                                 <span class="vs-seperator">|</span>
                                                 <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
