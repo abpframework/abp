@@ -65,7 +65,7 @@
                                             <div class="col-auto pe-1">
                                                 @if (Model.Post.Writer != null)
                                                 {
-                                                    <a href="/Members/@Model.Post.Writer.UserName">
+                                                    <a href="/Members/@Model.Post.Writer.UserName" aria-label="Go to user profile">
                                                         <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" alt="User Avatar" />
                                                     </a>
                                                 }
