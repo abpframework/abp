@@ -5,7 +5,7 @@ from github import Github
 def update_latest_versions():
     version = os.environ["GITHUB_REF"].split("/")[-1]
 
-    if "rc" not in version:
+    if "rc" in version:
         return False
 
     with open("latest-versions.json", "r") as f:
