@@ -160,7 +160,7 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
     
     private string NormalizeElementId(string elementId)
     {
-        return elementId?.Replace(".", "");
+        return elementId?.Replace(".", "_");
     }
 
     public override string ToString()
