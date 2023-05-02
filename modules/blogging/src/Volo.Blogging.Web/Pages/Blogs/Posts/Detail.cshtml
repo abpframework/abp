@@ -66,7 +66,7 @@
                                                 @if (Model.Post.Writer != null)
                                                 {
                                                     <a href="/Members/@Model.Post.Writer.UserName">
-                                                        <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar"/>
+                                                        <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" alt="User Avatar" />
                                                     </a>
                                                 }
                                             </div>
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                         <div class="img-container mb-3">
-                            <img src="@Model.Post.CoverImage" />
+                            <img src="@Model.Post.CoverImage" alt="Cover Image" />
                         </div>
                     </div>
                 </section>
@@ -170,7 +170,7 @@
                         @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
                         {
                             <div class="media">
-                                <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex me-3 rounded-circle comment-avatar" />
+                                <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex me-3 rounded-circle comment-avatar" alt="User Avatar" />
                                 <div class="media-body">
                                     <h5 class="comment-owner">
                                         @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
@@ -250,7 +250,7 @@
                                     @foreach (var reply in commentWithRepliesDto.Replies)
                                     {
                                         <div class="media">
-                                            <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex me-3 rounded-circle comment-avatar" />
+                                            <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex me-3 rounded-circle comment-avatar" alt="User Avatar" />
                                             <div class="media-body">
                                                 <h5 class="comment-owner">
                                                     @(reply.Writer == null ? "" : reply.Writer.UserName)
