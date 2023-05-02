@@ -40,7 +40,7 @@
                             <div class="hero-articles">
                                 <div class="img-container">
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                        <img src="@post.CoverImage" class="hero-article-img">
+                                        <img src="@post.CoverImage" class="hero-article-img" alt="@post.Title cover image">
                                     </a>
                                 </div>
                                 <div class="hero-content pt-3">
@@ -61,7 +61,7 @@
                                                 <div class="row">
                                                     <div class="col-auto pe-1">
                                                         <a href="/Members/@post.Writer.UserName">
-                                                            <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar"/>
+                                                            <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
                                                         </a>
                                                     </div>
                                                     <div class="col ps-1">
@@ -110,7 +110,7 @@
                                         <div class="col-4">
                                             <div class="img-container">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                    <img src="@post.CoverImage" class="box-article-img">
+                                                    <img src="@post.CoverImage" class="box-article-img" alt="@post.Title cover image">
                                                 </a>
                                             </div>
                                         </div>
@@ -170,7 +170,7 @@
                                         <div class="col-md-4">
                                             <div class="img-container">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                    <img src="@post.CoverImage" class="box-article-img">
+                                                    <img src="@post.CoverImage" class="box-article-img" alt="@post.Title cover image">
                                                 </a>
                                             </div>
                                         </div>
@@ -191,7 +191,7 @@
                                                             <div class="row">
                                                                 <div class="col-auto pe-1">
                                                                     <a href="/Members/@post.Writer.UserName">
-                                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar"/>
+                                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
                                                                     </a>
                                                                 </div>
                                                                 <div class="col ps-1">
