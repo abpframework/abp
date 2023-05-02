@@ -62,9 +62,28 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
                 .ShouldBeTrue();
         });
     }
+    
+    [Theory]
+    [InlineData("https://abp.io/features")]
+    public async Task CreateAsync_ShouldCreateComment_If_Url_Allowed(string text)
+    {
+        _currentUser.Id.Returns(_cmsKitTestData.User2Id);
 
-    [Fact]
-    public async Task CreateAsync_ShouldThrowUserFriendlyException_If_Url_UnAllowed()
+        await _commentAppService.CreateAsync(
+            _cmsKitTestData.EntityType1,
+            _cmsKitTestData.EntityId1,
+            new CreateCommentInput
+            {
+                RepliedCommentId = null,
+                Text = text
+            }
+        );
+    }
+
+    [Theory]
+    [InlineData("[ABP Community](https://community.abp.io/)")]
+    [InlineData("<a href='https://docs.abp.io/en/abp/latest'>docs.abp.io</a>")]
+    public async Task CreateAsync_ShouldThrowUserFriendlyException_If_Url_UnAllowed(string text)
     {
         _currentUser.Id.Returns(_cmsKitTestData.User2Id);
 
@@ -75,7 +94,7 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
                 new CreateCommentInput 
                 {
                     RepliedCommentId = null,
-                    Text = "[ABP Community](https://community.abp.io/)", //not allowed URL
+                    Text = text, //not allowed URL
                 }
             ));
     }

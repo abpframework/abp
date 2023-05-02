@@ -25,7 +25,8 @@ namespace Volo.CmsKit.Public.Comments;
 [RequiresGlobalFeature(typeof(CommentsFeature))]
 public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPublicAppService
 {
-    protected string RegexMarkdownUrlPattern = @"\[[^\]]*\]\((?<url>.*?)\)(?![^\x60]*\x60)";
+    protected string RegexUrlPattern =
+        @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)";
     
     protected ICommentRepository CommentRepository { get; }
     protected ICmsUserLookupService CmsUserLookupService { get; }
@@ -124,7 +125,41 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
             throw new AbpAuthorizationException();
         }
     }
+    
+    protected virtual void CheckExternalUrls(string entityType, string text)
+    {
+        if (!CmsCommentOptions.AllowedExternalUrls.TryGetValue(entityType, out var allowedExternalUrls))
+        {
+            return;
+        }
 
+        text = text.Replace("www.", "https://www.").Replace("://https", "");
+
+        var matches = Regex.Matches(text, RegexUrlPattern,
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        foreach (Match match in matches)
+        {
+            if (!match.Success || match.Groups.Count <= 0)
+            {
+                continue;
+            }
+
+            var normalizedFullUrl = NormalizeUrl(match.Groups[0].Value);
+            
+            if (!allowedExternalUrls.Any(allowedExternalUrl =>
+                    normalizedFullUrl.Contains(NormalizeUrl(allowedExternalUrl), StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new UserFriendlyException(L["UnAllowedExternalUrlMessage"]);
+            }
+        }
+    }
+    
+    private static string NormalizeUrl(string url)
+    {
+        return url.Replace("www.", "").RemovePostFix("/");
+    }
+    
     private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthorQueryResultItem> comments)
     {
         //TODO: I think this method can be optimized if you use dictionaries instead of straight search
@@ -155,47 +190,5 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthorQueryResultItem> comments, Guid commentId)
     {
         return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
-    }
-
-    private void CheckExternalUrls(string entityType, string text)
-    {
-        if (!CmsCommentOptions.AllowedExternalUrls.TryGetValue(entityType, out var allowedExternalUrls))
-        {
-            return;
-        }
-
-        var matches = Regex.Matches(text, RegexMarkdownUrlPattern,
-            RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        foreach (Match match in matches)
-        {
-            if (!match.Success || match.Groups.Count < 2)
-            {
-                continue;
-            }
-
-            var url = NormalizeUrl(match.Groups[1].Value);
-            if (!IsExternalUrl(url))
-            {
-                continue;
-            }
-
-            if (!allowedExternalUrls.Any(allowedExternalUrl =>
-                    url.Contains(NormalizeUrl(allowedExternalUrl), StringComparison.OrdinalIgnoreCase)))
-            {
-                throw new UserFriendlyException(L["UnAllowedExternalUrlMessage"]);
-            }
-        }
-    }
-
-    private static bool IsExternalUrl(string url)
-    {
-        return url.StartsWith("https", StringComparison.InvariantCultureIgnoreCase) ||
-               url.StartsWith("http", StringComparison.InvariantCultureIgnoreCase);
-    }
-
-    private static string NormalizeUrl(string url)
-    {
-        return url.Replace("www.", "").RemovePostFix("/");
     }
 }
