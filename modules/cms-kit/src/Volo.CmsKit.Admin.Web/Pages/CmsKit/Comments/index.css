@@ -1,3 +1,10 @@
 .datatableCell{
     cursor: pointer;
 }
+a.copy-link {
+    display: inline-block !important; 
+}
+a.copy-link {
+    display: none !important;
+    padding-left: 0.375em; 
+}

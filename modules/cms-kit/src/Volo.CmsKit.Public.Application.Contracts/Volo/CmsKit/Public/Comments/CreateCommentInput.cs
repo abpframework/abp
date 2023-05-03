@@ -17,4 +17,6 @@ public class CreateCommentInput
     public Guid? CaptchaToken { get; set; }
     
     public int CaptchaAnswer { get; set; }
+    
+    public string CommentUrl { get; set; }
 }

@@ -193,7 +193,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             _cmsKitTestData.EntityId1,
             "comment",
             null,
-            _cmsKitTestData.User1Id
+            _cmsKitTestData.User1Id,
+            ""
         ));
 
         await _commentRepository.InsertAsync(new Comment(_guidGenerator.Create(),
@@ -201,7 +202,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             _cmsKitTestData.EntityId1,
             "reply",
             comment1.Id,
-            _cmsKitTestData.User2Id
+            _cmsKitTestData.User2Id,
+            ""
         ));
 
         await _commentRepository.InsertAsync(new Comment(_guidGenerator.Create(),
@@ -209,7 +211,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             _cmsKitTestData.EntityId1,
             "reply",
             comment1.Id,
-            _cmsKitTestData.User1Id
+            _cmsKitTestData.User1Id,
+            ""
         ));
 
         await _commentRepository.InsertAsync(new Comment(_guidGenerator.Create(),
@@ -217,7 +220,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             _cmsKitTestData.EntityId1,
             "comment",
             null,
-            _cmsKitTestData.User2Id
+            _cmsKitTestData.User2Id,
+            ""
         ));
 
         await _commentRepository.InsertAsync(new Comment(_guidGenerator.Create(),
@@ -225,7 +229,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             _cmsKitTestData.EntityId2,
             "comment",
             null,
-            _cmsKitTestData.User2Id
+            _cmsKitTestData.User2Id,
+            ""
         ));
 
         await _commentRepository.InsertAsync(new Comment(_guidGenerator.Create(),
@@ -233,7 +238,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             _cmsKitTestData.EntityId1,
             "comment",
             null,
-            _cmsKitTestData.User2Id
+            _cmsKitTestData.User2Id,
+            ""
         ));
     }
 

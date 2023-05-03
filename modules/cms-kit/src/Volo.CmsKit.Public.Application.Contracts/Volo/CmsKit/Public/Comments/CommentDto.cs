@@ -23,4 +23,6 @@ public class CommentDto : IHasConcurrencyStamp
     public CmsUserDto Author { get; set; } //TODO: Should only have AuthorId for the basic dto. see https://docs.abp.io/en/abp/latest/Best-Practices/Application-Services
 
     public string ConcurrencyStamp { get; set; }
+
+    public string CommentUrl { get; set; }
 }
