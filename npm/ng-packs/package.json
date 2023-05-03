@@ -45,7 +45,6 @@
   "devDependencies": {
     "@abp/utils": "~7.2.1",
     "@angular-devkit/build-angular": "~15.0.1",
-    "@angular-devkit/build-ng-packagr": "^0.1002.0",
     "@angular-devkit/schematics-cli": "~15.0.1",
     "@angular-eslint/eslint-plugin": "15.1.0",
     "@angular-eslint/eslint-plugin-template": "15.1.0",
@@ -124,16 +123,14 @@
     "ts-jest": "28.0.5",
     "ts-node": "10.9.1",
     "ts-toolbelt": "6.15.4",
-    "tsickle": "^0.39.1",
     "tslib": "^2.3.0",
     "tslint": "~6.1.0",
     "typescript": "4.8.4",
-    "zone.js": "0.11.4"
-  },
-  "dependencies": {
-    "@abp/ng.theme.lepton-x": "^2.2.0-rc.1",
+    "zone.js": "0.11.4",
+    "@abp/ng.theme.lepton-x": "^2.2.0",
     "bootstrap-icons": "^1.10.3"
   },
+  "dependencies": {},
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,html,css,scss}": [
       "npx prettier --write --config .prettierrc "
