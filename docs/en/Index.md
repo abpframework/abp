@@ -12,13 +12,13 @@ ABP Framework offers an **opinionated architecture** to build enterprise softwar
 
 ABP Framework can work with any UI framework, while the following frameworks are supported out of the box:
 
-<img width="500" src="images/ui-options.png">
+<img width="500" height="56" src="images/ui-options.png" alt="ui options">
 
 ### Database Provider Options
 
 ABP Framework can work with any database provider, while the following providers are supported out of the box:
 
-<img width="500" src="images/db-options.png">
+<img width="500" height="56" src="images/db-options.png" alt="database options">
 
 ## Exploring the Documentation
 

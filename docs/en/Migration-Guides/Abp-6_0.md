@@ -14,9 +14,9 @@ If you have customized the `MultiTenancyMiddlewareErrorPageBuilder` of the `AbpM
 
 LeptonX Lite is now being introduced and you can follow the guides below to migrate your existing applications:
 
-- [Migrating to LeptonX MVC UI](../themes/LeptonXLite/AspNetCore.md)
-- [Migrating to LeptonX Angular UI](../themes/LeptonXLite/angular.md)
-- [Migrating to LeptonX Blazor UI](../themes/LeptonXLite/blazor.md)
+- [Migrating to LeptonX MVC UI](../Themes/LeptonXLite/AspNetCore.md)
+- [Migrating to LeptonX Angular UI](../Themes/LeptonXLite/Angular.md)
+- [Migrating to LeptonX Blazor UI](../Themes/LeptonXLite/Blazor.md)
 
 ## Migrating to OpenIddict
 

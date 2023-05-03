@@ -79,7 +79,7 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
                 ? ServiceType.Application
                 : serviceTypeArg.ToLower() == "integration"
                     ? ServiceType.Integration
-                    : null;
+                    : ServiceType.All;
         }
 
         var withoutContracts = commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Short) ||

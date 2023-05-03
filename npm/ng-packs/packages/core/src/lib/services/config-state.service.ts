@@ -14,14 +14,16 @@ import { InternalStore } from '../utils/internal-store-utils';
   providedIn: 'root',
 })
 export class ConfigStateService {
+  private updateSubject = new Subject<void>();
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
+
+  setState(config: ApplicationConfigurationDto) {
+    this.store.set(config);
+  }
 
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
   }
-
-  private updateSubject = new Subject<void>();
-
   constructor(
     private abpConfigService: AbpApplicationConfigurationService,
     private abpApplicationLocalizationService: AbpApplicationLocalizationService,

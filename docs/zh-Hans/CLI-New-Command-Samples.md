@@ -12,7 +12,7 @@
   abp new Acme.BookStore -u angular --mobile none --database-provider ef -csf
   ````
   
-* 在新文件夹中创建项目, **Entity Framework Core**, 默认应用程序模板, **拆分Identity Server**:
+* 在新文件夹中创建项目, **Entity Framework Core**, 默认应用程序模板, **拆分Auth Server**:
 
   ```bash
   abp new Acme.BookStore -t app -u angular -m none --separate-auth-server --database-provider ef -csf
@@ -30,7 +30,7 @@
   abp new Acme.BookStore -u angular --database-provider mongodb --output-folder C:\MyProjects\Acme.BookStore
   ```
 
-* 在新文件夹中创建项目, **MongoDB**, 默认应用程序模板, 不创建移动端应用程序, **拆分Identity Server**:
+* 在新文件夹中创建项目, **MongoDB**, 默认应用程序模板, 不创建移动端应用程序, **拆分Auth Server**:
 
   ```bash
   abp new Acme.BookStore -t app -u angular -m none --separate-auth-server --database-provider mongodb -csf
@@ -75,7 +75,7 @@
   abp new Acme.BookStore -t app -u blazor --mobile none
   ```
 
-* **Entity Framework Core**, **拆分Identity Server**, 包含移动端应用程序:
+* **Entity Framework Core**, **拆分Auth Server**, 包含移动端应用程序:
   
   ```bash
   abp new Acme.BookStore -u blazor --separate-auth-server
@@ -97,7 +97,7 @@
   abp new Acme.BookStore -t app -u blazor-server --mobile none
   ```
 
-* **Entity Framework Core**, **拆分Identity Server**, **拆分API Host**, 包含移动端应用程序:
+* **Entity Framework Core**, **拆分Auth Server**, **拆分API Host**, 包含移动端应用程序:
   
   ```bash
   abp new Acme.BookStore -u blazor-server --tiered
@@ -113,7 +113,7 @@
 
 在默认应用程序模板中, 始终有一个前端项目. 在这个选项中没有前端项目. 它有一个`HttpApi.Host`项目为你的HTTP WebAPI提供服务. 这个选项适合在你想创建一个WebAPI服务时使用.
 
-* 在新文件夹中创建项目, **Entity Framework Core**, 拆分Identity Server:
+* 在新文件夹中创建项目, **Entity Framework Core**, 拆分Auth Server:
 
     ```bash
     abp new Acme.BookStore -u none --separate-auth-server -csf
