@@ -115,6 +115,17 @@ $(function (){
                 }
             },
             {
+                title: l("CommentUrl"),
+                data: "commentUrl",
+                render: function (data, type, row) {
+                    console.log(data);
+                    if (data !== null) {
+                        return '<a href="' + data + '#answer-'+ row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
+                    }
+                    return "";
+                }
+            },
+            {
                 title: l("Text"),
                 data: "text",
                 orderable: false,
