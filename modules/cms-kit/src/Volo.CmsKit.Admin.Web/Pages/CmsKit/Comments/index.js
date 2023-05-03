@@ -120,7 +120,7 @@ $(function (){
                 render: function (data, type, row) {
                     console.log(data);
                     if (data !== null) {
-                        return '<a href="' + data + '#answer-'+ row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
+                        return '<a href="' + data + '#comment-'+ row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
                     }
                     return "";
                 }
