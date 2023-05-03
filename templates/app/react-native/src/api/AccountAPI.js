@@ -2,10 +2,11 @@ import api from './API';
 import { getEnvVars } from '../../Environment';
 
 const { oAuthConfig } = getEnvVars();
+
 getLoginData = (username, password) => {
 
-  const formData ={
-    grant_type:'password',
+  const formData = {
+    grant_type: 'password',
     scope: oAuthConfig.scope,
     username: username,
     password: password,
@@ -13,11 +14,11 @@ getLoginData = (username, password) => {
   };
 
   if (oAuthConfig.clientSecret)
-    formData['client_secret']=oAuthConfig.clientSecret;
+    formData['client_secret'] = oAuthConfig.clientSecret;
 
-  return Array.from(Object.entries(formData))
-              .reduce((prev, [key, value]) => prev+=`&${key}=${value}`, '')
-              .slice(1);
+  return Object.entries(formData)
+    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+    .join('&');
 }
 
 export const login = ({ username, password }) =>
@@ -25,9 +26,10 @@ export const login = ({ username, password }) =>
     method: 'POST',
     url: '/connect/token',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    data: getLoginData(username,password),
-    baseURL: oAuthConfig.issuer,
+    data: getLoginData(username, password),
+    baseURL: oAuthConfig.issuer
   }).then(({ data }) => data);
+
 
 export const Logout = () =>
   api({
