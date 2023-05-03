@@ -56,7 +56,7 @@ Please see the following migration documents, if you are upgrading from v7.1:
 
 ![abp-conf](abp-conf.png)
 
-As the ABP team, we've organized 10+ [online events](https://community.abp.io/events) and gained a good experience with software talks. We are organizing ABP Dotnet Conference 2023, a full-featured software conference, on May 10. You can visit [https://abp.io/conference](https://abp.io/conference) to see speakers, talks, schedules, and other details.
+As the ABP team, we've organized 10+ [online events](https://community.abp.io/events) and gained a good experience with software talks. We are organizing ABP Dotnet Conference 2023, a full-featured software conference, on May 10. You can visit [https://abp.io/conference](https://abp.io/conference) to see the speakers, talks, schedules, and other details.
 
 Don't forget to take your seat and buy a ticket from [https://kommunity.com/volosoft/events/1st-abp-conference-96db1a54](https://kommunity.com/volosoft/events/1st-abp-conference-96db1a54)!
 
