@@ -2,13 +2,30 @@ import api from './API';
 import { getEnvVars } from '../../Environment';
 
 const { oAuthConfig } = getEnvVars();
+getLoginData = (username, password) => {
+
+  const formData ={
+    grant_type:'password',
+    scope: oAuthConfig.scope,
+    username: username,
+    password: password,
+    client_id: oAuthConfig.clientId
+  };
+
+  if (oAuthConfig.clientSecret)
+    formData['client_secret']=oAuthConfig.clientSecret;
+
+  return Array.from(Object.entries(formData))
+              .reduce((prev, [key, value]) => prev+=`&${key}=${value}`, '')
+              .slice(1);
+}
 
 export const login = ({ username, password }) =>
   api({
     method: 'POST',
     url: '/connect/token',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    data: `grant_type=password&scope=${oAuthConfig.scope}&username=${username}&password=${password}&client_id=${oAuthConfig.clientId}`,
+    data: getLoginData(username,password),
     baseURL: oAuthConfig.issuer,
   }).then(({ data }) => data);
 
