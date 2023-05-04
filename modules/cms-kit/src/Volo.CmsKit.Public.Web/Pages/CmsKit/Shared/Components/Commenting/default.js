@@ -150,7 +150,7 @@
                             entityType: $commentArea.attr('data-entity-type'),
                             repliedCommentId: formAsObject.repliedCommentId,
                             text: formAsObject.commentText,
-                            commentUrl: window.location.href,
+                            url: window.location.href,
                             captchaToken: formAsObject.captchaId,
                             captchaAnswer: formAsObject.input?.captcha
                         }),

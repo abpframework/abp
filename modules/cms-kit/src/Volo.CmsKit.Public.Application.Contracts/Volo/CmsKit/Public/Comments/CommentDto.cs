@@ -24,5 +24,5 @@ public class CommentDto : IHasConcurrencyStamp
 
     public string ConcurrencyStamp { get; set; }
 
-    public string CommentUrl { get; set; }
+    public string Url { get; set; }
 }

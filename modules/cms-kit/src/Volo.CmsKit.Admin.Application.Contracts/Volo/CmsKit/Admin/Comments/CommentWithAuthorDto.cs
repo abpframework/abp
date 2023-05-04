@@ -21,5 +21,5 @@ public class CommentWithAuthorDto
 
     public CmsUserDto Author { get; set; }
     
-    public string CommentUrl { get; set; }
+    public string Url { get; set; }
 }
