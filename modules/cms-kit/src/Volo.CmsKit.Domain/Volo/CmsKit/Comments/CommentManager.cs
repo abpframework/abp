@@ -21,7 +21,7 @@ public class CommentManager : DomainService
                                                    [NotNull] string entityType,
                                                    [NotNull] string entityId,
                                                    [NotNull] string text,
-                                                   [CanBeNull] string commentUrl = null,
+                                                   [CanBeNull] string url = null,
                                                    [CanBeNull] Guid? repliedCommentId = null)
     {
         Check.NotNull(creator, nameof(creator));
@@ -41,7 +41,7 @@ public class CommentManager : DomainService
                 text,
                 repliedCommentId,
                 creator.Id,
-                commentUrl,
+                url,
                 CurrentTenant.Id);
     }
 }

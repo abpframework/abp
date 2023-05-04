@@ -24,5 +24,5 @@ public class CreateCommentWithParametersInput
     
     public int CaptchaAnswer { get; set; }
 
-    public string CommentUrl { get; set; }
+    public string Url { get; set; }
 }

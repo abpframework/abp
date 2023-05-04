@@ -77,7 +77,7 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
                 entityType,
                 entityId,
                 input.Text,
-                input.CommentUrl,
+                input.Url,
                 input.RepliedCommentId
             )
         );

@@ -422,7 +422,7 @@ namespace Volo.CmsKit.Migrations
                     RepliedCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CommentUrl = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    Url = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
                 },
