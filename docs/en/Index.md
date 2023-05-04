@@ -18,7 +18,7 @@ ABP Framework can work with any UI framework, while the following frameworks are
 
 ABP Framework can work with any database provider, while the following providers are supported out of the box:
 
-<img width="500" height="56" src="images/db-options.png" alt="database options">
+<img width="500" height="56" src="images/db-options.png" alt="ABP Database Providers" />
 
 ## Exploring the Documentation
 
@@ -60,7 +60,7 @@ The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio 
 
 ### Mastering ABP Framework
 
-<img width="302" height="372" src="images/abp-book.png" alt="abp book">
+<img width="302" height="372" src="images/abp-book.png" alt="Mastering ABP Framework - Halil İbrahim Kalkan" />
 
 *Mastering ABP Framework* is an ultimate guide to get started and expertise with the ABP Framework. It is authored by Halil İbrahim Kalkan, the creator and the lead developer of the ABP Framework.
 
