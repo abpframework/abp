@@ -104,11 +104,10 @@ export function createActionToSignatureMapper() {
     ];
 
     signature.parameters = parameters.map(p => {
-      const isFormData = isRemoteStreamContent(p.typeSimple);
-      if (isFormData) {
-        const formDataParameter = new Property({ name: p.name, type: 'FormData' });
-        formDataParameter.setOptional(false);
-        return formDataParameter;
+      const isFormData = isRemoteStreamContent(p.type);
+      const isFormArray = isRemoteStreamContentArray(p.type);
+      if (isFormData || isFormArray) {
+        return new Property({ name: p.name, type: 'FormData' });
       }
       const type = adaptType(p.typeSimple);
       const parameter = new Property({ name: p.name, type });
@@ -124,6 +123,10 @@ export function createActionToSignatureMapper() {
 
 export function isRemoteStreamContent(type: string) {
   return VOLO_REMOTE_STREAM_CONTENT.some(x => x === type);
+}
+
+export function isRemoteStreamContentArray(type: string) {
+  return VOLO_REMOTE_STREAM_CONTENT.map(x => `${x}[]`).some(x => x === type);
 }
 
 function getMethodNameFromAction(action: Action): string {
