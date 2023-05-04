@@ -61,6 +61,17 @@
     "FileUploadInfo": "Drag, drop, or paste a copied image.",
     "PostDescriptionHint": "* Will be rendered in the article link preview, supports HTML",
     "ReadMore": "Continue Reading",
-    "MemberNotPublishedPostYet": "No posts yet!"
+    "MemberNotPublishedPostYet": "No posts yet!",
+    "UpdateUserWebSiteInfo": "Example: https://johndoe.com",
+    "UpdateUserTwitterInfo": "Example: johndoe",
+    "UpdateUserGithubInfo": "Example: johndoe",
+    "UpdateUserLinkedinInfo": "Example: https://www.linkedin.com/...",
+    "UpdateUserCompanyInfo": "Example: Volosoft",
+    "UpdateUserJobTitleInfo": "Example: Software Developer",
+    "WebSite": "Web Site",
+    "UserName": "Username",
+    "FullURL": "Full URL",
+    "JobTitle": "Job Title",
+    "PersonalWebsite": "PERSONAL WEBSITE"
   }
 }

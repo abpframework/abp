@@ -1,4 +1,5 @@
 ﻿@page
+@using System.Globalization
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Http.Extensions
 @using Microsoft.Extensions.Options
@@ -11,6 +12,13 @@
 @inject IAuthorizationService Authorization
 @inject IOptionsSnapshot<BloggingTwitterOptions> twitterOptions
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 @using Volo.Blogging.Localization
 @using Volo.Blogging.Pages.Blog
 @inject IHtmlLocalizer<BloggingResource> L
@@ -355,6 +363,51 @@
                 {
                     <a abp-button="Primary" class="btn-rounded float-end active mt-3" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
                 }
+            <div class="hero articles">
+                <div class="hero content">
+                    <h3>More from @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.Post.Writer.UserName)</h3>
+                    @for (var index = 1; index < Model.PostsList.Count && index < 5; index++)
+                    {
+                        var post = Model.PostsList[index];
+                        <div class="post-item">
+                            <div class="post-type-cont">
+
+                                <a href="/members/@Model.Post.Writer.UserName" class="text-decoration-none">
+                                    <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
+                                </a>
+                                <span class="post-type">
+                                    <i class="fas fa-pen-nib"></i>
+                                    @L["Blog"].Value.ToUpper()
+                                </span>
+                            </div>
+                            <div class="post-detail-cont">
+                                <div class="post-info fs-12 mb-2">
+                                    <a href="/members/@Model.Post.Writer.UserName" class="text-decoration-none">
+                                        <span class="text-dark dot">@Model.Post.Writer.UserName</span>
+                                    </a>
+                                    <span class="text-dark-200">@post.CreationTime.ToString("MMMM yyyy")</span>
+                                </div>
+                                <h2 class="post-title mt-2">
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url">
+                                        @post.Title
+                                    </a>
+                                </h2>
+                                <p class="post-desc">
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url">
+                                        @post.Description.TruncateWithPostfix(150)
+                                    </a>
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" class="readMore">@L["ReadMore"]</a>
+                                </p>
+                            </div>
+                            <div class="post-img-cont">
+                                <div class="post-list-span text-center post">
+                                    <img src="@post.CoverImage" class="box-articles">
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
             </div>
         </div>
     </div>

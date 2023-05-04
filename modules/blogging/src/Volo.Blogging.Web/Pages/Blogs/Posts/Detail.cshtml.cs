@@ -40,6 +40,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public BlogDto Blog { get; set; }
 
+        public List<PostWithDetailsDto> PostsList { get; set; }
+
         public DetailModel(IPostAppService postAppService, IBlogAppService blogAppService, ICommentAppService commentAppService)
         {
             _postAppService = postAppService;
@@ -79,6 +81,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
+            PostsList = await _postAppService.GetListByUserIdAsync(Post.Writer.Id);
             CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(Post.Id);
             CountComments();
         }
