@@ -320,3 +320,9 @@ div.vs-blog {
       text-decoration: none; }
   div.vs-blog > .form-group {
     margin: 0 !important; }
+.last-post-title{
+  font-size: 0.9rem;
+  font-weight: 550;
+  text-decoration: none;
+  color: black;
+}

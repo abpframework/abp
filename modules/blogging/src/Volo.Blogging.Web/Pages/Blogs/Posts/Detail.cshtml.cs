@@ -41,6 +41,11 @@ namespace Volo.Blogging.Pages.Blog.Posts
         public BlogDto Blog { get; set; }
 
         public List<PostWithDetailsDto> PostsList { get; set; }
+        
+        public IReadOnlyList<PostWithDetailsDto> LatestPosts { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string TagName { get; set; }
 
         public DetailModel(IPostAppService postAppService, IBlogAppService blogAppService, ICommentAppService commentAppService)
         {
@@ -82,6 +87,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
             PostsList = await _postAppService.GetListByUserIdAsync(Post.Writer.Id);
+            LatestPosts = (await _postAppService.GetListByBlogIdAndTagNameAsync(Blog.Id, TagName)).Items;
             CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(Post.Id);
             CountComments();
         }

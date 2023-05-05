@@ -15,6 +15,12 @@
                     pageHeader + ' | ' + blogName + ' | ' + window.location.href
                 )
         );
+        
+        $('#FacebookShareLink').attr(
+            'href',
+            'https://www.facebook.com/sharer/sharer.php?u=' +
+                encodeURI(window.location.href)
+        );
 
         $('#LinkedinShareLink').attr(
             'href',
@@ -43,6 +49,10 @@
                 encodeURI(pageHeader + ' | ' + blogName) +
                 '&'
         );
+        
+        $(".copy-link").click(function() {
+            var copiedLink = $(this);
+        });
     };
 
     $('div .replyForm').hide();
