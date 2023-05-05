@@ -1,4 +1,4 @@
 ﻿$(function (){
-    let preLoads = $("link[rel=preload][as=style]");
+    let preLoads = $("link[abp-csp-style]");
     preLoads.attr("rel", "stylesheet");
 })
