@@ -31,7 +31,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         
         var contentSecurityPolicyValueDictionary = Options.Value.ContentSecurityPolicyValueDictionary.ToDictionary(x=>x.Key, x=>x.Value);
 
-        if (Options.Value.UseContentSecurityPolicyHeader)
+        if (Options.Value.UseContentSecurityPolicyHeader && !Options.Value.IgnoredUrls.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'))))
         {
             if (Options.Value.UseContentSecurityPolicyNonce)
             {

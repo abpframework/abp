@@ -11,10 +11,13 @@ public class AbpSecurityHeadersOptions
     public Dictionary<string,IEnumerable<string>> ContentSecurityPolicyValueDictionary { get; }
 
     public Dictionary<string, string> Headers { get; }
+    
+    public List<string> IgnoredUrls { get; }
 
     public AbpSecurityHeadersOptions()
     {
         Headers = new Dictionary<string, string>();
         ContentSecurityPolicyValueDictionary = new Dictionary<string, IEnumerable<string>>();
+        IgnoredUrls = new List<string> { "/swagger" };
     }
 }
