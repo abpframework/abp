@@ -66,6 +66,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
             }
 
             function _initAndShowModal() {
+                abp.dom.initializers.initializeAll(_$modalContainer);
                 _$modal = _$modalContainer.find('.modal');
                 _$form = _$modalContainer.find('form');
                 if (_$form.length) {
