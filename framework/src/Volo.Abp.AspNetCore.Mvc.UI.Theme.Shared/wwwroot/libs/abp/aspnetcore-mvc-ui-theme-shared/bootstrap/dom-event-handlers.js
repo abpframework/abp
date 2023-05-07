@@ -644,7 +644,7 @@
                     if (momentStartDate.isValid()) {
                         picker.setStartDate(momentStartDate);
                     }
-                    if (momentEndDate.isValid()) {
+                    if (momentEndDate.isValid() && !singleDatePicker) {
                         picker.setEndDate(momentEndDate);
                     }
                 });
