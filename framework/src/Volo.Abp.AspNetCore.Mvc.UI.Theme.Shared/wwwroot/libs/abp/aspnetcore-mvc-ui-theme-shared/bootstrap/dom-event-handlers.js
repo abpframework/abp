@@ -772,17 +772,20 @@
     abp.event.on('abp.configurationInitialized', function () {
         abp.libs.bootstrapDatepicker.normalizeLanguageConfig();
     });
+    
+    abp.dom.initializers.initializeAll = function ($rootNode) {
+        abp.dom.initializers.initializeToolTips($rootNode.findWithSelf('[data-toggle="tooltip"]'));
+        abp.dom.initializers.initializePopovers($rootNode.findWithSelf('[data-toggle="popover"]'));
+        abp.dom.initializers.initializeTimeAgos($rootNode.findWithSelf('.timeago'));
+        abp.dom.initializers.initializeDatepickers($rootNode);
+        abp.dom.initializers.initializeDateRangePickers($rootNode);
+        abp.dom.initializers.initializeForms($rootNode.findWithSelf('form'));
+        abp.dom.initializers.initializeAutocompleteSelects($rootNode.findWithSelf('.auto-complete-select'));
+        $rootNode.findWithSelf('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
+    };
 
     $(function () {
-        abp.dom.initializers.initializeToolTips($('[data-toggle="tooltip"]'));
-        abp.dom.initializers.initializePopovers($('[data-toggle="popover"]'));
-        abp.dom.initializers.initializeTimeAgos($('.timeago'));
-        abp.dom.initializers.initializeDatepickers($(document));
-        abp.dom.initializers.initializeDateRangePickers($(document));
-        abp.dom.initializers.initializeForms($('form'));
-        abp.dom.initializers.initializeAutocompleteSelects($('.auto-complete-select'));
-        $('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
-
+        abp.dom.initializers.initializeAll($(document));
     });
 
 })(jQuery);
