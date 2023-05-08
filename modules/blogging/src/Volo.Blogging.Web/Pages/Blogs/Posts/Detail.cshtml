@@ -52,7 +52,7 @@
 
 <div class="vs-blog vs-blog-detail">
 <abp-input asp-for="FocusCommentId" class="m-0"/>
-<div class="container-xxl">
+<div class="container-xl">
 <div class="row">
     <div class="col-12 col-md-8 col-lg-8 mx-auto">
         <section class="hero-section">
@@ -114,9 +114,9 @@
                                             <a href="#" target="_blank" class="me-2" id="EmailShareLink" title="E-mail">
                                                 <i class="fa fa-envelope-square fa-lg"></i>
                                             </a>
-                                            <a class="copy-link">
+                                            <button class="copy-link me-2" id="CopyLink" title="CopyLink">
                                                 <i class="fa fa-link fa-lg"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -130,8 +130,8 @@
             </div>
         </section>
     </div>
-    <div class="col-lg-2">
-        <div class="list-group">
+    <div class="col-12 col-md-4 col-lg-3">
+        <div class="card list-group">
             <div class="col-auto pe-2">
                 @if (Model.Post.Writer != null)
                 {
@@ -159,10 +159,14 @@
                         <p class="fw-lighter">@Model.Post.Writer.JobTitle</p>
                     }
                 </div>
+                @if (CurrentUser.UserName == Model.Post.Writer.UserName)
+                {
+                    <a class="fw-lighter" href="/Members/@Model.Post.Writer.UserName#edit-profile">@L["EditProfile"] <i class="fas fa-edit"></i></a>   
+                }
             </div>
             <hr/>
             <p class="fs-4 fw-bold text-dark">Last Blog Posts</p>
-            @for (var index = 0; index < Model.LatestPosts.Count && index < 4; index++)
+            @for (var index = 0; index < Model.LatestPosts.Count && index < 5; index++)
             {
                 if (Model.LatestPosts[index].Id != Model.Post.Id)
                 {
@@ -178,12 +182,12 @@
                                                 @if (post.Writer != null)
                                                 {
                                                     <a href="/Members/@post.Writer.UserName" aria-label="Go to user profile">
-                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="User Avatar"/>
+                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="last-post-image" alt="User Avatar"/>
                                                     </a>
                                                 }
                                             </div>
                                             <div class="col">
-                                                <h5 class="mt-3">
+                                                <h5 class="last-post-name">
                                                     <a href="/Members/@post.Writer.UserName">
                                                         @(post.Writer.UserName)
                                                     </a>
@@ -214,7 +218,7 @@
             </p>
         </section>
     </div>
-    <div class="col-12 col-md-4 col-lg-2">
+    <div class="col-12 col-md-4 col-lg-3">
         
     </div>
 </div>
@@ -487,7 +491,7 @@ else
     </div>
 </div>
 </div>
-<div class="col-12 col-md-4 col-lg-2">
+<div class="col-12 col-md-4 col-lg-3">
         
     </div>
 </div>

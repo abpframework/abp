@@ -15,6 +15,10 @@
     ViewBag.Title = @Model.User.UserName.ToUpper() + " - " + L["Blogs"].Value;
 }
 
+@section scripts {
+    <abp-script src="/Pages/Members/Index.js" />
+}
+
 @section styles {
     <abp-style src="/Pages/Members/Index.css"/>
 }
@@ -146,7 +150,7 @@
                         {
                             <abp-tab name="edit-profile" title="Edit Profile">
                                 <div class="mt-4 mb-3 pt-3">
-                                    <form method="post" id="UpdateUserProfileForm">
+                                    <form method="post">
                                         <abp-row>
                                             <abp-column size="_12" v-align="Center">
                                                 <abp-input class="form-control" asp-for="CustomUserUpdate.Name" required-symbol="false" label="@($"{L["Name"].Value} ({L["Optional"].Value})")" value="@Model.User.Name"></abp-input>

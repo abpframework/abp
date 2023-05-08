@@ -49,12 +49,17 @@
                 encodeURI(pageHeader + ' | ' + blogName) +
                 '&'
         );
-        
-        $(".copy-link").click(function() {
-            var copiedLink = $(this);
-        });
     };
-
+    
+    $('#CopyLink').click(function (event) {
+        event.preventDefault();
+        var $temp = $('<input>');
+        $('body').append($temp);
+        $temp.val(window.location.href).select();
+        document.execCommand('copy');
+        $temp.remove();
+    });
+    
     $('div .replyForm').hide();
 
     $('div .editForm').hide();
