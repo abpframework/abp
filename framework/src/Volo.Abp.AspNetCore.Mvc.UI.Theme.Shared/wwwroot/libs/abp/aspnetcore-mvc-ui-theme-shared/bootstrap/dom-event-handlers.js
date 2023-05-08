@@ -643,6 +643,7 @@
                     var momentEndDate = getMoment(endDate, options);
                     if (momentStartDate.isValid()) {
                         picker.setStartDate(momentStartDate);
+                        picker.setEndDate(momentEndDate);
                     }
                     if (momentEndDate.isValid() && !singleDatePicker) {
                         picker.setEndDate(momentEndDate);
@@ -761,6 +762,7 @@
         abp.dom.initializers.initializeForms(args.$el.findWithSelf('form'), true);
         abp.dom.initializers.initializeScript(args.$el);
         abp.dom.initializers.initializeAutocompleteSelects(args.$el.findWithSelf('.auto-complete-select'));
+        abp.dom.initializers.initializeDateRangePickers(args.$el);
     });
 
     abp.dom.onNodeRemoved(function (args) {
@@ -773,19 +775,16 @@
         abp.libs.bootstrapDatepicker.normalizeLanguageConfig();
     });
     
-    abp.dom.initializers.initializeAll = function ($rootNode) {
-        abp.dom.initializers.initializeToolTips($rootNode.findWithSelf('[data-toggle="tooltip"]'));
-        abp.dom.initializers.initializePopovers($rootNode.findWithSelf('[data-toggle="popover"]'));
-        abp.dom.initializers.initializeTimeAgos($rootNode.findWithSelf('.timeago'));
-        abp.dom.initializers.initializeDatepickers($rootNode);
-        abp.dom.initializers.initializeDateRangePickers($rootNode);
-        abp.dom.initializers.initializeForms($rootNode.findWithSelf('form'));
-        abp.dom.initializers.initializeAutocompleteSelects($rootNode.findWithSelf('.auto-complete-select'));
-        $rootNode.findWithSelf('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
-    };
 
     $(function () {
-        abp.dom.initializers.initializeAll($(document));
+        abp.dom.initializers.initializeToolTips($(document).findWithSelf('[data-toggle="tooltip"]'));
+        abp.dom.initializers.initializePopovers($(document).findWithSelf('[data-toggle="popover"]'));
+        abp.dom.initializers.initializeTimeAgos($(document).findWithSelf('.timeago'));
+        abp.dom.initializers.initializeDatepickers($(document));
+        abp.dom.initializers.initializeDateRangePickers($(document));
+        abp.dom.initializers.initializeForms($(document).findWithSelf('form'));
+        abp.dom.initializers.initializeAutocompleteSelects($(document).findWithSelf('.auto-complete-select'));
+        $(document).findWithSelf('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
     });
 
 })(jQuery);
