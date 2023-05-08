@@ -123,7 +123,8 @@ public class PackageVersionCheckerService : ITransientDependency
         {
             return true;
         }
-        
+
+        await SetApiKeyResultAsync();
         if (_apiKeyResult?.ApiKey == null)
         {
             return false;
