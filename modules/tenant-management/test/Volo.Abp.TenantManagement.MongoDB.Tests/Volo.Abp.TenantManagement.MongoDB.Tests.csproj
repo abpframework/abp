@@ -18,7 +18,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
-    <PackageReference Include="Mongo2Go" Version="$(Mongo2GoPackageVersion)" />
+    <PackageReference Include="EphemeralMongo.Core" Version="1.1.0" />
+    <PackageReference Include="EphemeralMongo6.runtime.linux-x64" Version="1.1.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+    <PackageReference Include="EphemeralMongo6.runtime.osx-x64" Version="1.1.0" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+    <PackageReference Include="EphemeralMongo6.runtime.win-x64" Version="1.1.0" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.Transactions;
 
+[Collection(MongoTestCollection.Name)]
 public class Transaction_Tests : TestAppTestBase<AbpMongoDbTestModule>
 {
     private readonly IBasicRepository<Person, Guid> _personRepository;
