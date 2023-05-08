@@ -143,9 +143,9 @@ public abstract class HardDelete_Tests<TStartupModule> : TestAppTestBase<TStartu
         await WithUnitOfWorkAsync(async () =>
         {
             var hardDeleteEntities = (HashSet<IEntity>)UnitOfWorkManager.Current.Items.GetOrAdd(
-                  UnitOfWorkItemNames.HardDeletedEntities,
-                  _ => new HashSet<IEntity>()
-                  );
+                UnitOfWorkItemNames.HardDeletedEntities,
+                _ => new HashSet<IEntity>()
+            );
             hardDeleteEntities.UnionWith(persons);
             await PersonRepository.DeleteManyAsync(persons);
         });

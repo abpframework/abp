@@ -210,7 +210,8 @@ public static class RepositoryExtensions
     {
         var hardDeleteEntities = (HashSet<IEntity>)currentUow.Items.GetOrAdd(
             UnitOfWorkItemNames.HardDeletedEntities,
-            () => new HashSet<IEntity>());
+            () => new HashSet<IEntity>()
+        );
 
         hardDeleteEntities.Add(entity);
         await repository.DeleteAsync(entity, autoSave, cancellationToken);

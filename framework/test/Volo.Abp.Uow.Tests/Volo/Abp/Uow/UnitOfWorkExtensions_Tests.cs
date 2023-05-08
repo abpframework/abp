@@ -27,7 +27,7 @@ public class UnitOfWorkExtensions_Tests : AbpIntegratedTest<AbpUnitOfWorkModule>
     public void GetItemOrDefault()
     {
         var uow = _unitOfWorkManager.Begin();
-        uow.Items.Add("testKey", new NameValue("TestKey", "TestValue"));
+        uow.Items.Add("testKey", new NameValue("TestKey","TestValue"));
 
         uow.GetItemOrDefault<NameValue>("testKey").ShouldBeOfType<NameValue>();
         uow.GetItemOrDefault<NameValue>("testKey").Value.ShouldBe("TestValue");
