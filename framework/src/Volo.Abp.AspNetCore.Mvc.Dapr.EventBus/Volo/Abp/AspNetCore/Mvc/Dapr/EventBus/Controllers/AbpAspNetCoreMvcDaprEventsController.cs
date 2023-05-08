@@ -21,6 +21,7 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
         var daprSerializer = HttpContext.RequestServices.GetRequiredService<IDaprSerializer>();
         var body = (await JsonDocument.ParseAsync(HttpContext.Request.Body));
 
+        var id = body.RootElement.GetProperty("id").GetString();
         var pubSubName = body.RootElement.GetProperty("pubsubname").GetString();
         var topic = body.RootElement.GetProperty("topic").GetString();
         var data = body.RootElement.GetProperty("data").GetRawText();
@@ -32,7 +33,7 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
 
         var distributedEventBus = HttpContext.RequestServices.GetRequiredService<DaprDistributedEventBus>();
         var eventData = daprSerializer.Deserialize(data, distributedEventBus.GetEventType(topic));
-        await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(topic), eventData);
+        await distributedEventBus.TriggerHandlersAsync(id, distributedEventBus.GetEventType(topic), eventData);
         return Ok();
     }
 }

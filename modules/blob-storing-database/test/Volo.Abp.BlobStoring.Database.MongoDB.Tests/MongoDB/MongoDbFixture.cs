@@ -1,17 +1,30 @@
 using System;
-using Mongo2Go;
+using EphemeralMongo;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB;
 
 public class MongoDbFixture : IDisposable
 {
-    private static readonly MongoDbRunner MongoDbRunner;
-    public static readonly string ConnectionString;
+    public readonly static IMongoRunner MongoDbRunner;
 
     static MongoDbFixture()
     {
-        MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 20);
-        ConnectionString = MongoDbRunner.ConnectionString;
+        MongoDbRunner = MongoRunner.Run(new MongoRunnerOptions
+        {
+            UseSingleNodeReplicaSet = true
+        });
+    }
+
+    public static string GetRandomConnectionString()
+    {
+        return GetConnectionString("Db_" + Guid.NewGuid().ToString("N"));
+    }
+
+    public static string GetConnectionString(string databaseName)
+    {
+        var stringArray = MongoDbRunner.ConnectionString.Split('?');
+        var connectionString = stringArray[0].EnsureEndsWith('/') + databaseName + "/?" + stringArray[1];
+        return connectionString;
     }
 
     public void Dispose()

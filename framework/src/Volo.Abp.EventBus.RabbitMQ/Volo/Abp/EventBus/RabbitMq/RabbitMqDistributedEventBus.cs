@@ -9,6 +9,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.RabbitMQ;
@@ -47,7 +48,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         IUnitOfWorkManager unitOfWorkManager,
         IGuidGenerator guidGenerator,
         IClock clock,
-        IEventHandlerInvoker eventHandlerInvoker)
+        IEventHandlerInvoker eventHandlerInvoker,
+        ILocalEventBus localEventBus)
         : base(
             serviceScopeFactory,
             currentTenant,
@@ -55,7 +57,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
             distributedEventBusOptions,
             guidGenerator,
             clock,
-            eventHandlerInvoker)
+            eventHandlerInvoker,
+            localEventBus)
     {
         ConnectionPool = connectionPool;
         Serializer = serializer;
@@ -98,16 +101,14 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
             return;
         }
 
-        var eventBytes = ea.Body.ToArray();
+        var eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
 
-        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventBytes))
+        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventData))
         {
             return;
         }
 
-        var eventData = Serializer.Deserialize(eventBytes, eventType);
-
-        await TriggerHandlersAsync(eventType, eventData);
+        await TriggerHandlersDirectAsync(eventType, eventData);
     }
 
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
@@ -193,11 +194,18 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 
-    public override Task PublishFromOutboxAsync(
+    public override async Task PublishFromOutboxAsync(
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
-        return PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, null, eventId: outgoingEvent.Id);
+        await TriggerDistributedEventSentAsync(new DistributedEventSent()
+        {
+            Source = DistributedEventSource.Outbox,
+            EventName = outgoingEvent.EventName,
+            EventData = outgoingEvent.EventData
+        });
+
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, null, eventId: outgoingEvent.Id);
     }
 
     public async override Task PublishManyFromOutboxAsync(
@@ -211,10 +219,17 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
 
             foreach (var outgoingEvent in outgoingEventArray)
             {
+                await TriggerDistributedEventSentAsync(new DistributedEventSent()
+                {
+                    Source = DistributedEventSource.Outbox,
+                    EventName = outgoingEvent.EventName,
+                    EventData = outgoingEvent.EventData
+                });
+
                 await PublishAsync(
                     channel,
-                    outgoingEvent.EventName, 
-                    outgoingEvent.EventData,  
+                    outgoingEvent.EventName,
+                    outgoingEvent.EventData,
                     properties: null,
                     eventId: outgoingEvent.Id);
             }
@@ -235,7 +250,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
 
         var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
-        await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+        await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);
@@ -249,7 +264,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
 
     public Task PublishAsync(
         Type eventType,
-        object eventData, 
+        object eventData,
         IBasicProperties properties,
         Dictionary<string, object> headersArguments = null)
     {
@@ -343,6 +358,12 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         }
     }
 
+    protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
+    {
+        EventTypes.GetOrAdd(eventName, eventType);
+        return base.OnAddToOutboxAsync(eventName, eventType, eventData);
+    }
+
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
     {
         return HandlerFactories.GetOrAdd(
@@ -350,7 +371,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
             type =>
             {
                 var eventName = EventNameAttribute.GetNameOrDefault(type);
-                EventTypes[eventName] = type;
+                EventTypes.GetOrAdd(eventName, eventType);
                 return new List<IEventHandlerFactory>();
             }
         );
