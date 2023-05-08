@@ -37,7 +37,7 @@ public class Comment : AggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, 
         [NotNull] string text,
         Guid? repliedCommentId,
         Guid creatorId,
-        [CanBeNull] string url,
+        [CanBeNull] string url = null,
         Guid? tenantId = null)
         : base(id)
     {

@@ -115,7 +115,7 @@ $(function (){
                 }
             },
             {
-                title: l("CommentUrl"),
+                title: l("URL"),
                 data: "url",
                 render: function (data, type, row) {
                     if (data !== null) {
