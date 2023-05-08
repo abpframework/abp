@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +27,7 @@ internal class ChildUnitOfWork : IUnitOfWork
 
     public IServiceProvider ServiceProvider => _parent.ServiceProvider;
 
-    public ConcurrentDictionary<string, object> Items => _parent.Items;
+    public Dictionary<string, object> Items => _parent.Items;
 
     private readonly IUnitOfWork _parent;
 

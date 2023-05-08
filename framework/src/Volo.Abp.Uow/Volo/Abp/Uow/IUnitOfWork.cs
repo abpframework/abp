@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -10,7 +10,7 @@ public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, 
 {
     Guid Id { get; }
 
-    ConcurrentDictionary<string, object> Items { get; }
+    Dictionary<string, object> Items { get; }
 
     //TODO: Switch to OnFailed (sync) and OnDisposed (sync) methods to be compatible with OnCompleted
     event EventHandler<UnitOfWorkFailedEventArgs> Failed;
