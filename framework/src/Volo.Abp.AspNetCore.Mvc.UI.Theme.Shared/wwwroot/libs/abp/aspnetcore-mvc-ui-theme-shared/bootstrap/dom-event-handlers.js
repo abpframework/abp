@@ -643,11 +643,12 @@
                     var momentEndDate = getMoment(endDate, options);
                     if (momentStartDate.isValid()) {
                         picker.setStartDate(momentStartDate);
-                        picker.setEndDate(momentEndDate);
+                        picker.setEndDate(momentStartDate);
                     }
                     if (momentEndDate.isValid() && !singleDatePicker) {
                         picker.setEndDate(momentEndDate);
                     }
+                    picker.updateView();
                 });
 
                 $clearButton.on('click', function () {
