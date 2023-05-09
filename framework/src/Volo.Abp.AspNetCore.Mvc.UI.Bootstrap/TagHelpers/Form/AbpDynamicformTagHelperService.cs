@@ -98,14 +98,16 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
     {
         var contentBuilder = new StringBuilder("");
 
-        contentBuilder.AppendLine("<div class=\"row\">");
-
         foreach (var item in items.OrderBy(o => o.Order))
         {
             contentBuilder.AppendLine(SetColumn(item.HtmlContent));
         }
 
-        contentBuilder.AppendLine("</div>");
+        if (TagHelper.ColumnSize != ColumnSize.Undefined && TagHelper.ColumnSize != ColumnSize._)
+        {
+            contentBuilder.Insert(0, "<div class=\"row\">");
+            contentBuilder.AppendLine("</div>");
+        }
 
         var content = childContent.GetContent();
         if (content.Contains(AbpFormContentPlaceHolder))
