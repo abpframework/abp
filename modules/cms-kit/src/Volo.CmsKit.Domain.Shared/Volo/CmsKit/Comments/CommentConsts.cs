@@ -10,4 +10,6 @@ public static class CommentConsts
     public static int MaxEntityIdLength { get; set; } = CmsEntityConsts.MaxEntityIdLength;
 
     public static int MaxTextLength { get; set; } = 512;
+    
+    public static int MaxUrlLength { get; set; } = 512;
 }
