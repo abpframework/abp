@@ -131,7 +131,7 @@
         </section>
     </div>
     <div class="col-12 col-md-4 col-lg-3">
-        <div class="card list-group">
+        <div class="list-group">
             <div class="col-auto pe-2">
                 @if (Model.Post.Writer != null)
                 {
@@ -165,7 +165,7 @@
                 }
             </div>
             <hr/>
-            <p class="fs-4 fw-bold text-dark">Last Blog Posts</p>
+            <p class="fs-3 fw-bold text-dark">More from Blog</p>
             @for (var index = 0; index < Model.LatestPosts.Count && index < 5; index++)
             {
                 if (Model.LatestPosts[index].Id != Model.Post.Id)
