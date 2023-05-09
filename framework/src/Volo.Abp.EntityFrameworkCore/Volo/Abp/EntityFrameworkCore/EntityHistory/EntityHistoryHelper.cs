@@ -93,7 +93,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         }
 
         var entityId = GetEntityId(entity);
-        if (entityId == null && changeType != EntityChangeType.Created && !(entity is ValueObject))
+        if (entityId == null && changeType != EntityChangeType.Created && !EntityHelper.IsValueObject(entity))
         {
             return null;
         }
@@ -151,7 +151,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             return keys.JoinAsString(",");
         }
 
-        if (entityAsObj is ValueObject)
+        if (EntityHelper.IsValueObject(entityAsObj))
         {
             return null;
         }

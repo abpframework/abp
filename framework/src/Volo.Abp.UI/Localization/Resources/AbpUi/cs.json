@@ -48,6 +48,7 @@
     "Search": "Vyhledávání",
     "ItemWillBeDeletedMessageWithFormat": "{0} bude smazáno!",
     "ItemWillBeDeletedMessage": "Tato položka bude smazána!",
-    "ManageYourAccount": "Spravujte svůj účet"
+    "ManageYourAccount": "Spravujte svůj účet",
+    "OthersGroup": "Jiný"
   }
 }

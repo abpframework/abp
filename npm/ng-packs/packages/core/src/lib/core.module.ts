@@ -24,6 +24,7 @@ import { ToInjectorPipe } from './pipes/to-injector.pipe';
 import { CookieLanguageProvider } from './providers/cookie-language.provider';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
+import { OTHERS_GROUP } from './tokens';
 import { localizationContributor, LOCALIZATIONS } from './tokens/localization.token';
 import { CORE_OPTIONS, coreOptionsFactory } from './tokens/options.token';
 import { TENANT_KEY } from './tokens/tenant-key.token';
@@ -33,6 +34,7 @@ import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
@@ -63,6 +65,7 @@ import { IncludeLocalizationResourcesProvider } from './providers/include-locali
     ReplaceableTemplateDirective,
     RouterOutletComponent,
     SortPipe,
+    SafeHtmlPipe,
     StopPropagationDirective,
     ToInjectorPipe,
     ShortDateTimePipe,
@@ -90,6 +93,7 @@ import { IncludeLocalizationResourcesProvider } from './providers/include-locali
     ReplaceableTemplateDirective,
     RouterOutletComponent,
     SortPipe,
+    SafeHtmlPipe,
     StopPropagationDirective,
     ToInjectorPipe,
     ShortDateTimePipe,
@@ -175,6 +179,10 @@ export class CoreModule {
         {
           provide: QUEUE_MANAGER,
           useClass: DefaultQueueManager,
+        },
+        {
+          provide: OTHERS_GROUP,
+          useValue: options.othersGroup || 'AbpUi::OthersGroup',
         },
         IncludeLocalizationResourcesProvider,
       ],

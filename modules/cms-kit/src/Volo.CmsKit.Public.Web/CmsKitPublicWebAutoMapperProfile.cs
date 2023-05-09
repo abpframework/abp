@@ -8,6 +8,6 @@ public class CmsKitPublicWebAutoMapperProfile : Profile
 {
     public CmsKitPublicWebAutoMapperProfile()
     {
-        CreateMap<CreateCommentWithParameteresInput, CreateCommentInput>();
+        CreateMap<CreateCommentWithParametersInput, CreateCommentInput>();
     }
 }

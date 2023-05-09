@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "Statické role nemohou být smazány.",
     "Volo.Abp.Identity:010007": "Nastavení dvou faktorů nemůžete změnit.",
     "Volo.Abp.Identity:010008": "Není povoleno měnit nastavení dvou faktorů.",
+    "Volo.Abp.Identity:010009": "Nemůžete delegovat své vlastní oprávnění.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximální povolený počet členů organizační jednotky pro uživatele",
     "ThisUserIsNotActiveMessage": "Tento uživatel není aktivní.",
     "Permission:IdentityManagement": "Správa identit",

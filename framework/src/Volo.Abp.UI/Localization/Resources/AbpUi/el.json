@@ -48,6 +48,7 @@
     "Search": "Αναζήτηση",
     "ItemWillBeDeletedMessageWithFormat": "Το {0} θα διαγραφεί",
     "ItemWillBeDeletedMessage": "Αυτό το στοιχείο θα διαγραφεί!",
-    "ManageYourAccount": "Διαχείριση Λογαριασμού"
+    "ManageYourAccount": "Διαχείριση Λογαριασμού",
+    "OthersGroup":"άλλος"
   }
 }

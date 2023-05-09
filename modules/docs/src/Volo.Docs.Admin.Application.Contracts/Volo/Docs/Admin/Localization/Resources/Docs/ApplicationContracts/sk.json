@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Kód jazyka",
     "DisplayName:Version": "Verzia",
     "Documents": "Dokumenty",
-    "RemoveFromCache": "Odstrániť z vyrovnávacej pamäte",
+    "RemoveFromCache": "Odstránenie z vyrovnávacej pamäte a opätovné indexovanie",
     "Reindex": "Reindexovať",
     "ReindexCompleted": "Reindexácia dokončená",
-    "RemovedFromCache": "Odstránené z vyrovnávacej pamäte",
+    "RemovedFromCache": "Odstránené z vyrovnávacej pamäte a znovu zaindexované",
     "RemoveFromCacheConfirmation": "Ste si istý, že chcete túto položku odstrániť z vyrovnávacej pamäte?",
-    "ReIndexDocumentConfirmation": "Ste si istý, že chcete túto položku reindexovať?",
+    "ReIndexDocumentConfirmation": "Ste si istí, že chcete znovu indexovať \"{0}\"?",
     "DeleteFromDatabase": "Zmazať z databázy",
     "Deleted": "Zmazané",
     "Search": "Hľadať",
@@ -55,6 +55,7 @@
     "LanguageCode": "Kód jazyka",
     "FileName": "Názov súboru",
     "LastCachedTime": "Čas vyrovnávacej pamäte",
-    "Project": "Projekt"
+    "Project": "Projekt",
+    "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" sa odstráni z vyrovnávacej pamäte a znovu sa zaindexuje. Potvrdzujete?"
   }
 }

@@ -452,6 +452,11 @@
     "WhoWeAreItem": "Keitä me olemme -tuote",
     "FieldIsRequired": "{0} vaaditaan.",
     "FieldIsNotValid": " {0} ei kelpaa.",
-    "InterestedLicenseType": "Kiinnostunut lisenssityyppi"
+    "InterestedLicenseType": "Kiinnostunut lisenssityyppi",
+    "MoveWaitList": "Siirrä jonotuslistalle",
+    "CommunityLinkTitle": "Avaa yhteisön verkkosivuilla",
+    "CommunityLink": "Yhteisön linkki",
+    "ReloadFromSource": "Lataa uudelleen lähteestä",
+    "ReloadFromSourceConfirmationMessage": "Tämä viesti päivitetään kohteesta \"{0}\". Haluatko jatkaa?"
   }
 }

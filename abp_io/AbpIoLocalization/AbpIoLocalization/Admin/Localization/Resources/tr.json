@@ -412,6 +412,11 @@
     "CustomPaymentFlexSwitchDescription": "Lisanslı",
     "AllowFeatureUpgradeOnLicenseExpire": "Lisans süresi dolunca özellik yükseltmesine izin ver",
     "Deleted{0}": "[{0} silindi]",
-    "Permission:BookDiscount": "Kitap indirimleri"
+    "Permission:BookDiscount": "Kitap indirimleri",
+    "MoveWaitList": "Bekleme listesine geç",
+    "CommunityLinkTitle": "Topluluk web sitesinde açın",
+    "CommunityLink": "Topluluk Bağlantısı",
+    "ReloadFromSource": "Kaynaktan Yeniden Yükle",
+    "ReloadFromSourceConfirmationMessage": "Bu gönderi \"{0}\" adresinden yenilenecek. Devam etmek istiyor musun?"
   }
 }

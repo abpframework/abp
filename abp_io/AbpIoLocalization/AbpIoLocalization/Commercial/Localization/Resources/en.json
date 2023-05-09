@@ -202,11 +202,11 @@
     "WhatHappensWhenLicenseEndsExplanation4": "You can not install new modules and themes added to the ABP Commercial platform after your license ends.",
     "WhatHappensWhenLicenseEndsExplanation5": "You can not use the ABP Suite.",
     "WhatHappensWhenLicenseEndsExplanation6": "You can not get the <a href=\"{0}\">premium support</a> anymore.",
-    "WhatHappensWhenLicenseEndsExplanation7": "You can extend (renew) your license if you want to continue getting these benefits. If you extend your license within <strong>1 month</strong> after your license expires, the following discounts will be applied: Team License {0}; Business License {1}; Enterprise License {2}.",
+    "WhatHappensWhenLicenseEndsExplanation7": "You can extend (renew) your license if you want to continue getting these benefits. If you extend your license within <strong>{3} days</strong> after your license expires, the following discounts will be applied: Team License {0}; Business License {1}; Enterprise License {2}.",
     "discountForYears": "{0}% discount for {1} year(s)",
     "WhatHappensWhenLicenseEndsExplanation8": "The ABP projects you generated are not stored on our servers. Therefore, it is your responsibility to keep the source code you download. When your license expires, there's no way to get your generated ABP project source code.",
     "WhenShouldIRenewMyLicense": "When should I renew my license?",
-    "WhenShouldIRenewMyLicenseExplanation": "If you renew your license within <strong>1 month</strong> after your license expires, the following discounts will be applied: Team License {0}; Business License {1}; Enterprise License {2}. However, if you renew your license after <strong>1 month</strong> since the expiry date of your license, the renewal price will be the same as the license purchase price and there will be no discount on your renewal.",
+    "WhenShouldIRenewMyLicenseExplanation": "If you renew your license within <strong>{3} days</strong> after your license expires, the following discounts will be applied: Team License {0}; Business License {1}; Enterprise License {2}. However, if you renew your license after <strong>{3} days</strong> since the expiry date of your license, the renewal price will be the same as the license purchase price and there will be no discount on your renewal.",
     "TrialPlan": "Do you have a trial plan?",
     "TrialPlanExplanation": "No, there is no trial version for ABP Commercial. You can check the community edition to understand the code quality and approaches. We also offer a 30-day money-back guarantee for the Team license, no questions asked! You can request a refund within the first 30 days. We provide a 60% refund within 30 days for Business and Enterprise licenses. This is because the Business and Enterprise licenses contain the full source-code of all the modules and themes.",
     "DoYouAcceptBankWireTransfer": "Do you accept bank wire transfers?",
@@ -537,6 +537,7 @@
     "Pricing_Page_Testimonial_3": "We love ABP. We don't have to write everything from scratch. We start from out-of-the-box features and just focus on what we really need to write. Also, ABP is well-architected and the code is high quality with fewer bugs. If we would have to write everything we needed on our own, we might have to spend years. Once more things we like is that the new version, or issue fixing, or improvement come out very soon every other week. We don't wait too long.",
     "Pricing_Page_Testimonial_4": "ABP Commercial is a fantastic product would recommend. Commercial products to market for our customers in a single configurable platform. The jump start that the framework and tooling provide any team is worth every cent. ABP Commercial was the best fit for our needs.",
     "Pricing_Page_Testimonial_5": "ABP Framework is not only a framework, but it is also a guide for project development/management, because it provides DDD, GenericRepository, DI, Microservice, and Modularity training. Even if you are not going to use the framework itself, you can develop yourself with docs.abp.io which is well and professionally prepared (OpenIddict, Redis, Quartz etc.). Because many things are pre-built, it shortens project development time significantly (Such as login page, exception handling, data filtering, seeding, audit logging, localization, auto API controller etc.). As an example from our application, I have used Local Event Bus for stock control. So, I am able to manage order movements by writing stock handler. It is wonderful not to lose time for CreationTime, CreatorId. They are being filled automatically.",
+    "Pricing_Page_Testimonial_6": "ABP Framework is a good framework but it needs time to understand the different layers, classes, and libraries it used (specially ABP). I spent a lot of time reading the code base, but ABP Commercial save us time to create the project specialty entities (AR) and the repository linked to each of them. I liked also the approach used in ABP is very mature, we know is based on DDD and monolith.",
     "AbpBookDownloadArea_ClaimYourEBook": "Claim your <span class='gradient-framework'>Mastering ABP Framework</span> E-Book",
     "AddMemberModal_Warning_1": "If the <strong>username</strong> you are trying to add doesn't exist in the system, please ask your team member to register on <a href='{0}/Account/Register'>{0}</a> and share the username of his/her account with you.",
     "MyOrganizations_Detail_WelcomeMessage": "Welcome to your organization, {0}",
@@ -759,6 +760,7 @@
     "ViewLiveDemo": "View Live Theme Demo",
     "GetLeptonX": "Get LeptonX Now",
     "SeeLeptonXDocumentation": "See LeptonX Documentation",
+    "SeeLeptonDocumentation": "See Lepton Documentation",
     "SimplifiedMenu": "Simplified menu",
     "SimplifiedMenuDescription": "You can easily find the page you are looking for by filtering the menu",
     "YourFavoritePages": "Your favorite pages at your reach",
@@ -825,6 +827,10 @@
     "PrivacyPolicyPageTitle": "Privacy Policy - Cookie Policy",
     "TermsConditionsPageTitle": "Terms and Conditions",
     "TrainingsPageTitle": "ABP Training Packages",
-    "ModulesPageTitle": "ABP Pre-Built Application Modules"
+    "ModulesPageTitle": "ABP Pre-Built Application Modules",
+    "Volo.AbpIo.Commercial:040001": "API Access Key is incorrect.",
+    "GetLepton": "Get Lepton Now",
+    "MyOrganizations_Detail_LicenseStartDate": "License Start Date",
+    "MyOrganizations_Detail_LicenseExpiryDate": "Expiry Date"
   }
 }

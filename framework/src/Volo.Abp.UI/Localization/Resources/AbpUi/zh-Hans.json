@@ -48,6 +48,7 @@
     "Search": "搜索",
     "ItemWillBeDeletedMessageWithFormat": "{0} 将被删除!",
     "ItemWillBeDeletedMessage": "此项将被删除!",
-    "ManageYourAccount": "管理你的账户"
+    "ManageYourAccount": "管理你的账户",
+    "OthersGroup": "其他"
   }
 }

@@ -4,11 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
@@ -72,6 +74,16 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     protected async Task<DbSet<TEntity>> GetDbSetAsync()
     {
         return (await GetDbContextAsync()).Set<TEntity>();
+    }
+    
+    protected async Task<IDbConnection> GetDbConnectionAsync()
+    {
+        return (await GetDbContextAsync()).Database.GetDbConnection();
+    }
+
+    protected async Task<IDbTransaction> GetDbTransactionAsync()
+    {
+        return (await GetDbContextAsync()).Database.CurrentTransaction?.GetDbTransaction();
     }
 
     protected virtual AbpEntityOptions<TEntity> AbpEntityOptions => _entityOptionsLazy.Value;

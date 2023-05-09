@@ -38,12 +38,12 @@
     "DisplayName:Version": "Verzió",
     "DisplayName:Role": "Szerepkör",
     "Documents": "Dokumentumok",
-    "RemoveFromCache": "Távolítsa el a gyorsítótárból",
+    "RemoveFromCache": "Eltávolítás a gyorsítótárból és újraindexelés",
     "Reindex": "Újraindexálás",
     "ReindexCompleted": "Újraindexálás teljes.",
-    "RemovedFromCache": "Távolítsa el a gyorsítótárból",
+    "RemovedFromCache": "Eltávolítva a gyorsítótárból és újraindexelve",
     "RemoveFromCacheConfirmation": "Biztosan eltávolítja ezt az elemet a gyorsítótárból?",
-    "ReIndexDocumentConfirmation": "Biztosan újraindexeli ezt az elemet?",
+    "ReIndexDocumentConfirmation": "Biztos, hogy újra akarja indexelni a \"{0}\"-t?",
     "DeleteFromDatabase": "Törlés az adatbázisból",
     "Deleted": "Törölt",
     "Search": "Keresés",
@@ -57,6 +57,7 @@
     "FileName": "Filenév",
     "LastCachedTime": "Cache idő",
     "Project": "Projekt",
-    "AdvancedFilters": "Speciális szűrők"
+    "AdvancedFilters": "Speciális szűrők",
+    "RemoveCacheAndReIndexConfirmation": "A \"{0}\" dokumentumot eltávolítjuk a gyorsítótárból és újraindexeljük. Megerősíti?"
   }
 }

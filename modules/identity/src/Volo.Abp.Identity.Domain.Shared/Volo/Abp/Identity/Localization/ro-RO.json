@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "Rolurile statice nu pot fi şterse.",
     "Volo.Abp.Identity:010007": "Nu vă puteţi schimba setările de autentificare în doi paşi.",
     "Volo.Abp.Identity:010008": "Nu este permisă modificarea setărilor autentificării în doi paşi.",
+    "Volo.Abp.Identity:010009": "Nu vă puteţi delega singur.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Numărul maxim de unităţi organizaţionale permise pentru un utilizator",
     "ThisUserIsNotActiveMessage": "Acest utilizator nu este activ.",
     "Permission:IdentityManagement": "Administrare identităţii",

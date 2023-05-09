@@ -71,6 +71,7 @@
     "Volo.Abp.Identity:010006": "Staattisia rooleja ei voi poistaa.",
     "Volo.Abp.Identity:010007": "Et voi muuttaa kahden tekijän asetusta.",
     "Volo.Abp.Identity:010008": "Kahden tekijän asetusta ei saa muuttaa.",
+    "Volo.Abp.Identity:010009": "Et voi delegoida itseäsi.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Suurin sallittu organisaatioyksikön jäsenmäärä käyttäjälle",
     "ThisUserIsNotActiveMessage": "Tämä käyttäjä ei ole aktiivinen.",
     "Permission:IdentityManagement": "Identiteetin hallinta",
