@@ -90,7 +90,7 @@ Create a new razor page, `Index.cshtml` under the `Pages/Authors` folder of the 
 
 This is a simple page similar to the Books page we had created before. It imports a JavaScript file which will be introduced below.
 
-### Index.cshtml.cs
+### IndexModel.cshtml.cs
 
 ````csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
