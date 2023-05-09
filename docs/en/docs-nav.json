@@ -16,7 +16,7 @@
     },
     {
       "text": "Getting Started",
-      "path":"Getting-Started-Overall.md",
+      "path": "Getting-Started-Overall.md",
       "items": [
         {
           "text": "Web Application - Layered Architecture",
@@ -1167,6 +1167,10 @@
                       "path": "UI/Angular/Theming.md"
                     },
                     {
+                      "text": "Configuration",
+                      "path": "UI/Angular/Theme-Configurations.md"
+                    },
+                    {
                       "text": "The Basic Theme",
                       "path": "UI/Angular/Basic-Theme.md"
                     },
@@ -1405,8 +1409,8 @@
           "path": "Modules/IdentityServer.md",
           "items": [
             {
-             "text": "IdentityServer Migration Guide",
-             "path": "Migration-Guides/IdentityServer4-Step-by-Step.md"
+              "text": "IdentityServer Migration Guide",
+              "path": "Migration-Guides/IdentityServer4-Step-by-Step.md"
             }
           ]
         },
@@ -1438,7 +1442,7 @@
         },
         {
           "text": "Common",
-          "items":[
+          "items": [
             {
               "text": "Database Tables",
               "path": "Modules/Database-Tables.md"
