@@ -79,6 +79,7 @@ public static class CmsKitDbContextModelCreatingExtensions
                 b.Property(x => x.EntityId).IsRequired().HasMaxLength(CommentConsts.MaxEntityIdLength);
                 b.Property(x => x.Text).IsRequired().HasMaxLength(CommentConsts.MaxTextLength);
                 b.Property(x => x.RepliedCommentId);
+                b.Property(x => x.Url).HasMaxLength(CommentConsts.MaxUrlLength);
 
                 b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
                 b.HasIndex(x => new { x.TenantId, x.RepliedCommentId });

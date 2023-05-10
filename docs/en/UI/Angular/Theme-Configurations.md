@@ -69,7 +69,7 @@ Theme packages no longer import styles as CSS modules as of ABP version 6.0. The
 },
 ```
 
-## Lepton X
+## Lepton X [commercial](https://docs.abp.io/en/commercial)
 ```json
 {
     "input": "node_modules/@volosoft/ngx-lepton-x/assets/css/dark.css",
@@ -174,7 +174,7 @@ Theme packages no longer import styles as CSS modules as of ABP version 6.0. The
 
 ```
 
-## Theme Lepton
+## Theme Lepton [commercial](https://docs.abp.io/en/commercial)
 ```json
 {
     "input": "node_modules/@volo/abp.ng.theme.lepton/dist/global/styles/lepton1.min.css",
