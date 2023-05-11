@@ -29,38 +29,80 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         /*The X-Frame-Options HTTP response header can be used to indicate whether or not a browser should be allowed to render a page in a <frame>, <iframe> or <object>. SAMEORIGIN makes it being displayed in a frame on the same origin as the page itself. The spec leaves it up to browser vendors to decide whether this option applies to the top level, the parent, or the whole chain*/
         AddHeader(context, "X-Frame-Options", "SAMEORIGIN");
         
-        var contentSecurityPolicyValueDictionary = Options.Value.ContentSecurityPolicyValueDictionary.ToDictionary(x=>x.Key, x=>x.Value);
+        var requestAcceptTypeHtml = context.Request.Headers["Accept"].Any(x => x.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
+        
+        var endpoint = context.GetEndpoint();
 
-        if (Options.Value.UseContentSecurityPolicyHeader && !Options.Value.IgnoredUrls.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'))))
+        if (!requestAcceptTypeHtml || !Options.Value.UseContentSecurityPolicyHeader || Options.Value.IgnoredUrls.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'))) || endpoint is null)
         {
-            if (Options.Value.UseContentSecurityPolicyNonce)
+            await next.Invoke(context);
+            return;
+        }
+
+        if (Options.Value.UseContentSecurityPolicyNonce)
+        {
+            var randomValue = Guid.NewGuid().ToString("N");
+            context.Items.Add(AbpAspNetCoreConsts.ScriptNonceKey, randomValue);
+        }
+
+
+        context.Response.OnStarting(() =>
+        {
+            // is response already have CSP header?
+            if (context.Response.Headers.ContainsKey("Content-Security-Policy"))
             {
-                if (!context.Items.ContainsKey(AbpAspNetCoreConsts.ScriptNonceKey))
-                {
-                    var randomValue = Guid.NewGuid().ToString("N");
-                    context.Items.Add(AbpAspNetCoreConsts.ScriptNonceKey, randomValue);
-                    if (contentSecurityPolicyValueDictionary.TryGetValue("script-src", out var scriptSrc))
-                    {
-                        contentSecurityPolicyValueDictionary["script-src"] = scriptSrc.Append($"'nonce-{randomValue}'");
-                    }
-                    else
-                    {
-                        contentSecurityPolicyValueDictionary.Add("script-src", new[] { $"'nonce-{randomValue}'" });
-                    }
-                }
+                return Task.CompletedTask;
             }
+        
+            if(context.Response.ContentType?.StartsWith("text/html") != true)
+            {
+                return Task.CompletedTask;
+            }
+        
+            // is response successfully?
+            if (context.Response.StatusCode is < 200 or > 299)
+            {
+                return Task.CompletedTask;
+            }
+            
             AddHeader(context, "Content-Security-Policy",
                 Options.Value.ContentSecurityPolicyValueDictionary.Any()
-                    ? string.Join("; ", contentSecurityPolicyValueDictionary.Select(x => $"{x.Key} {string.Join(" ", x.Value)}"))
+                    ? BuildContentSecurityPolicyValue(context)
                     : "object-src 'none'; form-action 'self'; frame-ancestors 'none'");
-        }
         
+        
+            AddOtherHeaders(context);
+            return Task.CompletedTask;
+        });
+        
+        await next.Invoke(context);
+    }
+
+    private void AddOtherHeaders(HttpContext context)
+    {
         foreach (var (key, value) in Options.Value.Headers)
         {
             AddHeader(context, key, value, true);
         }
+    }
 
-        await next.Invoke(context);
+    protected virtual string BuildContentSecurityPolicyValue(HttpContext context)
+    {
+        const string scriptSrcKey = "script-src";
+        if (!(Options.Value.UseContentSecurityPolicyNonce && context.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) && nonce is string nonceValue && !string.IsNullOrEmpty(nonceValue)))
+        {
+            return string.Join("; ",
+                Options.Value.ContentSecurityPolicyValueDictionary.Select(x => $"{x.Key} {string.Join(" ", x.Value)}"));
+        }
+        
+        var scriptSrcValue = "";
+        if (Options.Value.ContentSecurityPolicyValueDictionary.TryGetValue(scriptSrcKey, out var scriptSrc))
+        {
+            scriptSrcValue = string.Join(" ", scriptSrc);
+        }
+        scriptSrcValue += $" 'nonce-{nonceValue}'";
+        
+        return string.Join("; ", Options.Value.ContentSecurityPolicyValueDictionary.Where(x => x.Key != scriptSrcKey).Select(x => $"{x.Key} {string.Join(" ", x.Value)}")) + $"; {scriptSrcKey} {scriptSrcValue}";
     }
 
     protected virtual void AddHeader(HttpContext context, string key, string value, bool overrideIfExists = false)
