@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
-using Volo.Abp.Cli.NuGet;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -18,14 +18,14 @@ public class CliCommand : IConsoleCommand, ITransientDependency
     private const string CliPackageName = "Volo.Abp.Cli";
 
     private readonly ICmdHelper _cmdHelper;
-    private readonly NuGetService _nuGetService;
+    private readonly PackageVersionCheckerService _packageVersionCheckerService;
     private readonly AbpNuGetIndexUrlService _nuGetIndexUrlService;
     public ILogger<CliCommand> Logger { get; set; }
 
-    public CliCommand(ICmdHelper cmdHelper, NuGetService nuGetService, AbpNuGetIndexUrlService nuGetIndexUrlService)
+    public CliCommand(ICmdHelper cmdHelper, PackageVersionCheckerService packageVersionCheckerService, AbpNuGetIndexUrlService nuGetIndexUrlService)
     {
         _cmdHelper = cmdHelper;
-        _nuGetService = nuGetService;
+        _packageVersionCheckerService = packageVersionCheckerService;
         _nuGetIndexUrlService = nuGetIndexUrlService;
 
         Logger = NullLogger<CliCommand>.Instance;
@@ -104,13 +104,13 @@ public class CliCommand : IConsoleCommand, ITransientDependency
 
     private async Task<string> GetLatestPreviewVersion()
     {
-        var latestPreviewVersion = await _nuGetService
+        var latestPreviewVersionInfo = await _packageVersionCheckerService
             .GetLatestVersionOrNullAsync(
                 packageId: CliPackageName,
                 includeReleaseCandidates: true
             );
 
-        return latestPreviewVersion.IsPrerelease ? latestPreviewVersion.ToString() : null;
+        return latestPreviewVersionInfo.Version.IsPrerelease ? latestPreviewVersionInfo.Version.ToString() : null;
     }
 
     private void ShowCliManualUpdateCommand()

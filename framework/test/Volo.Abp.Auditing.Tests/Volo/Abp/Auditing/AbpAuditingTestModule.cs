@@ -49,6 +49,12 @@ public class AbpAuditingTestModule : AbpModule
                     "AppEntityWithSoftDelete",
                     type => type == typeof(AppEntityWithSoftDelete))
             );
+
+            options.EntityHistorySelectors.Add(
+                new NamedTypeSelector(
+                    "AppEntityWithValueObject",
+                    type => type == typeof(AppEntityWithValueObject) || type == typeof(AppEntityWithValueObjectAddress))
+            );
         });
 
         context.Services.AddType<Auditing_Tests.MyAuditedObject1>();

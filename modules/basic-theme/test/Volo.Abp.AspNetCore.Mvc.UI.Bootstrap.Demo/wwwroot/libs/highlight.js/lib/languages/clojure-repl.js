@@ -3,7 +3,7 @@ module.exports = function(hljs) {
     contains: [
       {
         className: 'meta',
-        begin: /^([\w.-]+|\s*#_)=>/,
+        begin: /^([\w.-]+|\s*#_)?=>/,
         starts: {
           end: /$/,
           subLanguage: 'clojure'

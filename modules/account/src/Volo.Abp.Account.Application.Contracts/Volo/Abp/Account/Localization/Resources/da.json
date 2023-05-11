@@ -50,7 +50,7 @@
     "SendPasswordResetLink_Information": "Et link til at nulstille dit kodeord vil blive sendt til din email. Hvis du ikke modtager en email indenfor et par minutter, venligst prøv igen.",
     "PasswordResetMailSentMessage": "Gendannelse af konto er sendt til din email. Hvis du ikke har modtaget emailen indenfor 15 minutter, kig i din spam folder. Hvis du finder den dér, venligst markér den som -Ikke Spam-. ",
     "ResetPassword": "Nulstil Kodeord",
-    "ConfirmPassword": "Bekræft (gentag) kodeordet",
+    "ConfirmPassword": "Bekræft kodeordet",
     "ResetPassword_Information": "Venligst indtast dit nye kodeord.",
     "YourPasswordIsSuccessfullyReset": "Dit kodeord blev ændret.",
     "GoToTheApplication": "Gå til applikationen",

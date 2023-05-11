@@ -142,6 +142,7 @@
     "MinimumSearchContent": "Вы должны ввести минимум 3 символа!",
     "Volo.AbpIo.Domain:060001": "Исходный URL (\"{PostUrl}\") не является URL-адресом Github",
     "Volo.AbpIo.Domain:060002": "Контент статьи недоступен на ресурсе Github (\"{PostUrl}\").",
-    "Volo.AbpIo.Domain:060003": "Контент статьи не найден!"
+    "Volo.AbpIo.Domain:060003": "Контент статьи не найден!",
+    "IConsentToMedium": "Я даю согласие на публикацию этого поста на https://medium.com/volosoft."
   }
 }

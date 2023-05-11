@@ -1,0 +1,11 @@
+{
+    "culture": "hr",
+    "texts": {
+        "Permissions": "Dozvole",
+        "OnlyProviderPermissons": "Samo ovaj pružatelj usluga",
+        "All": "Svi",
+        "SelectAllInAllTabs": "Dodijelite sva dopuštenja",
+        "SelectAllInThisTab": "Odaberi sve",
+        "SaveWithoutAnyPermissionsWarningMessage": "Jeste li sigurni da želite spremiti bez ikakvih dopuštenja?"
+    }
+}

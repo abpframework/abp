@@ -20,9 +20,9 @@ public class CliHttpClientFactory : ISingletonDependency
         _cancellationTokenProvider = cancellationTokenProvider;
     }
 
-    public HttpClient CreateClient(bool needsAuthentication = true, TimeSpan? timeout = null)
+    public HttpClient CreateClient(bool needsAuthentication = true, TimeSpan? timeout = null, string clientName = null)
     {
-        var httpClient = _clientFactory.CreateClient(CliConsts.HttpClientName);
+        var httpClient = _clientFactory.CreateClient(clientName ?? CliConsts.HttpClientName);
         httpClient.Timeout = timeout ?? DefaultTimeout;
 
         if (needsAuthentication)

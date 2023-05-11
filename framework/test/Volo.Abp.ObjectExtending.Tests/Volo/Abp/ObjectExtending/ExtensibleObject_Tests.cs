@@ -16,11 +16,13 @@ public class ExtensibleObject_Tests : AbpObjectExtendingTestBase
         person.HasProperty("Age").ShouldBeTrue();
         person.HasProperty("NoPairCheck").ShouldBeTrue();
         person.HasProperty("CityName").ShouldBeTrue();
+        person.HasProperty("EnumProperty").ShouldBeTrue();
 
         person.GetProperty<string>("Name").ShouldBeNull();
         person.GetProperty<int>("Age").ShouldBe(0);
         person.GetProperty<string>("NoPairCheck").ShouldBeNull();
         person.GetProperty<string>("CityName").ShouldBeNull();
+        person.GetProperty<ExtensibleTestEnumProperty>("EnumProperty").ShouldBe(default);
     }
 
     [Fact]
@@ -32,5 +34,6 @@ public class ExtensibleObject_Tests : AbpObjectExtendingTestBase
         person.HasProperty("Age").ShouldBeFalse();
         person.HasProperty("NoPairCheck").ShouldBeFalse();
         person.HasProperty("CityName").ShouldBeFalse();
+        person.HasProperty("EnumProperty").ShouldBeFalse();
     }
 }

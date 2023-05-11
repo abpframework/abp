@@ -6,6 +6,7 @@
 
 	var LINE_NUMBERS_CLASS = 'line-numbers';
 	var LINKABLE_LINE_NUMBERS_CLASS = 'linkable-line-numbers';
+	var NEW_LINE_EXP = /\n(?!$)/g;
 
 	/**
 	 * @param {string} selector
@@ -136,7 +137,8 @@
 			var codeElement = pre.querySelector('code');
 			var parentElement = hasLineNumbers ? pre : codeElement || pre;
 			var mutateActions = /** @type {(() => void)[]} */ ([]);
-
+			var lineBreakMatch = codeElement.textContent.match(NEW_LINE_EXP);
+			var numberOfLines = lineBreakMatch ? lineBreakMatch.length + 1 : 1;
 			/**
 			 * The top offset between the content box of the <code> element and the content box of the parent element of
 			 * the line highlight element (either `<pre>` or `<code>`).
@@ -154,6 +156,11 @@
 
 				var start = +range[0];
 				var end = +range[1] || start;
+				end = Math.min(numberOfLines + offset, end);
+
+				if (end < start) {
+					return;
+				}
 
 				/** @type {HTMLElement} */
 				var line = pre.querySelector('.line-highlight[data-range="' + currentRange + '"]') || document.createElement('div');

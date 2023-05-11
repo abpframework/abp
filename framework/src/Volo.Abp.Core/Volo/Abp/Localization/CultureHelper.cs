@@ -29,11 +29,12 @@ public static class CultureHelper
         CultureInfo.CurrentCulture = culture;
         CultureInfo.CurrentUICulture = uiCulture ?? culture;
 
-        return new DisposeAction(() =>
+        return new DisposeAction<ValueTuple<CultureInfo, CultureInfo>>(static (state) =>
         {
+            var (currentCulture, currentUiCulture) = state;
             CultureInfo.CurrentCulture = currentCulture;
             CultureInfo.CurrentUICulture = currentUiCulture;
-        });
+        }, (currentCulture, currentUiCulture));
     }
 
     public static bool IsRtl => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;

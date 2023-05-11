@@ -139,6 +139,24 @@
 			"title": "ARFF",
 			"owner": "Golmote"
 		},
+		"armasm": {
+			"title": "ARM Assembly",
+			"alias": "arm-asm",
+			"owner": "RunDevelopment"
+		},
+		"arturo": {
+			"title": "Arturo",
+			"alias": "art",
+			"optional": [
+				"bash",
+				"css",
+				"javascript",
+				"markup",
+				"markdown",
+				"sql"
+			],
+			"owner": "drkameleon"
+		},
 		"asciidoc": {
 			"alias": "adoc",
 			"title": "AsciiDoc",
@@ -175,10 +193,19 @@
 			"alias": "avdl",
 			"owner": "RunDevelopment"
 		},
+		"awk": {
+			"title": "AWK",
+			"alias": "gawk",
+			"aliasTitles": {
+				"gawk": "GAWK"
+			},
+			"owner": "RunDevelopment"
+		},
 		"bash": {
 			"title": "Bash",
-			"alias": "shell",
+			"alias": ["sh", "shell"],
 			"aliasTitles": {
+				"sh": "Shell",
 				"shell": "Shell"
 			},
 			"owner": "zeitgeist87"
@@ -198,6 +225,10 @@
 				"shortcode": "Shortcode"
 			},
 			"owner": "RunDevelopment"
+		},
+		"bbj": {
+			"title": "BBj",
+			"owner": "hyyan"
 		},
 		"bicep": {
 			"title": "Bicep",
@@ -220,6 +251,10 @@
 				"rbnf": "RBNF"
 			},
 			"owner": "RunDevelopment"
+		},
+		"bqn": {
+			"title": "BQN",
+			"owner": "yewscion"
 		},
 		"brainfuck": {
 			"title": "Brainfuck",
@@ -272,6 +307,18 @@
 			"title": "CIL",
 			"owner": "sbrl"
 		},
+		"cilkc": {
+			"title": "Cilk/C",
+			"require": "c",
+			"alias": "cilk-c",
+			"owner": "OpenCilk"
+		},
+		"cilkcpp": {
+			"title": "Cilk/C++",
+			"require": "cpp",
+			"alias": ["cilk-cpp", "cilk"],
+			"owner": "OpenCilk"
+		},
 		"clojure": {
 			"title": "Clojure",
 			"owner": "troglotit"
@@ -299,6 +346,10 @@
 			"title": "Content-Security-Policy",
 			"owner": "ScottHelme"
 		},
+		"cooklang": {
+			"title": "Cooklang",
+			"owner": "ahue"
+		},
 		"coq": {
 			"title": "Coq",
 			"owner": "RunDevelopment"
@@ -316,6 +367,10 @@
 		},
 		"csv": {
 			"title": "CSV",
+			"owner": "RunDevelopment"
+		},
+		"cue": {
+			"title": "CUE",
 			"owner": "RunDevelopment"
 		},
 		"cypher": {
@@ -472,6 +527,11 @@
 			"title": "GEDCOM",
 			"owner": "Golmote"
 		},
+		"gettext": {
+			"title": "gettext",
+			"alias": "po",
+			"owner": "RunDevelopment"
+		},
 		"gherkin": {
 			"title": "Gherkin",
 			"owner": "hason"
@@ -490,6 +550,11 @@
 			"alias": "gni",
 			"owner": "RunDevelopment"
 		},
+		"linker-script": {
+			"title": "GNU Linker Script",
+			"alias": "ld",
+			"owner": "RunDevelopment"
+		},
 		"go": {
 			"title": "Go",
 			"require": "clike",
@@ -499,6 +564,11 @@
 			"title": "Go module",
 			"alias": "go-mod",
 			"owner": "RunDevelopment"
+		},
+		"gradle": {
+			"title": "Gradle",
+			"require": "clike",
+			"owner": "zeabdelkhalek-badido18"
 		},
 		"graphql": {
 			"title": "GraphQL",
@@ -529,7 +599,10 @@
 		"handlebars": {
 			"title": "Handlebars",
 			"require": "markup-templating",
-			"alias": "hbs",
+			"alias": ["hbs", "mustache"],
+			"aliasTitles": {
+				"mustache": "Mustache"
+			},
 			"owner": "Golmote"
 		},
 		"haskell": {
@@ -830,6 +903,10 @@
 			"require": "markup",
 			"owner": "Golmote"
 		},
+		"mata": {
+			"title": "Mata",
+			"owner": "RunDevelopment"
+		},
 		"matlab": {
 			"title": "MATLAB",
 			"owner": "Golmote"
@@ -845,6 +922,10 @@
 		"mermaid": {
 			"title": "Mermaid",
 			"owner": "RunDevelopment"
+		},
+		"metafont": {
+			"title": "METAFONT",
+			"owner": "LaeriExNihilo"
 		},
 		"mizar": {
 			"title": "Mizar",
@@ -922,6 +1003,10 @@
 			"title": "OCaml",
 			"owner": "Golmote"
 		},
+		"odin": {
+			"title": "Odin",
+			"owner": "edukisto"
+		},
 		"opencl": {
 			"title": "OpenCL",
 			"require": "c",
@@ -995,6 +1080,11 @@
 			"require": "php",
 			"modify": "php",
 			"owner": "milesj"
+		},
+		"plant-uml": {
+			"title": "PlantUML",
+			"alias": "plantuml",
+			"owner": "RunDevelopment"
 		},
 		"plsql": {
 			"title": "PL/SQL",
@@ -1152,6 +1242,11 @@
 			"alias": "rpy",
 			"owner": "HyuchiaDiego"
 		},
+		"rescript": {
+			"title": "ReScript",
+			"alias": "res",
+			"owner": "vmarcosp"
+		},
 		"rest": {
 			"title": "reST (reStructuredText)",
 			"owner": "Golmote"
@@ -1191,7 +1286,7 @@
 			"owner": "Golmote"
 		},
 		"scss": {
-			"title": "Sass (Scss)",
+			"title": "Sass (SCSS)",
 			"require": "css",
 			"optional": "css-extras",
 			"owner": "MoOx"
@@ -1277,6 +1372,11 @@
 			"title": "Stan",
 			"owner": "RunDevelopment"
 		},
+		"stata": {
+			"title": "Stata Ado",
+			"require": ["mata", "java", "python"],
+			"owner": "RunDevelopment"
+		},
 		"iecst": {
 			"title": "Structured Text (IEC 61131-3)",
 			"owner": "serhioromano"
@@ -1284,6 +1384,11 @@
 		"stylus": {
 			"title": "Stylus",
 			"owner": "vkbansal"
+		},
+		"supercollider": {
+			"title": "SuperCollider",
+			"alias": "sclang",
+			"owner": "RunDevelopment"
 		},
 		"swift": {
 			"title": "Swift",
@@ -1442,6 +1547,10 @@
 			"title": "Web IDL",
 			"alias": "webidl",
 			"owner": "RunDevelopment"
+		},
+		"wgsl": {
+			"title": "WGSL",
+			"owner": "Dr4gonthree"
 		},
 		"wiki": {
 			"title": "Wiki markup",

@@ -7,4 +7,6 @@ public interface IAuditPropertySetter
     void SetModificationProperties(object targetObject);
 
     void SetDeletionProperties(object targetObject);
+
+    void IncrementEntityVersionProperty(object targetObject);
 }
