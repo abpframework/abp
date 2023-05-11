@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.Domain.Entities.Events.Distributed;
 
