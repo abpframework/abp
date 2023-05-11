@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "nx",
     "nx": "nx",
-    "start": "ng serve",
+    "start": "nx serve",
     "build": "ng build",
     "build:all": "nx run-many --target=build --all --exclude=dev-app,schematics --prod  ",
     "test": "ng test --detect-open-handles=true --run-in-band=true --watch-all=true",

@@ -19,6 +19,16 @@
         "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
         "styles": [
           {
+            "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
+            "inject": false,
+            "bundleName": "bootstrap-rtl.min"
+          },
+          {
+              "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "inject": true,
+              "bundleName": "bootstrap-ltr.min"
+          },
+          {
             "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.css",
             "inject": false,
             "bundleName": "bootstrap-dim"
