@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Collections;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Reflection;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus;
@@ -214,7 +213,7 @@ public abstract class EventBusBase : IEventBus
 
                 using (CurrentTenant.Change(GetEventDataTenantId(eventData)))
                 {
-                    await EventHandlerInvoker.InvokeAsync(eventHandlerWrapper.EventHandler, eventData, eventType);
+                    await InvokeEventHandlerAsync(eventHandlerWrapper.EventHandler, eventData, eventType);
                 }
             }
             catch (TargetInvocationException ex)
@@ -226,6 +225,11 @@ public abstract class EventBusBase : IEventBus
                 exceptions.Add(ex);
             }
         }
+    }
+
+    protected virtual Task InvokeEventHandlerAsync(IEventHandler eventHandler, object eventData, Type eventType)
+    {
+        return EventHandlerInvoker.InvokeAsync(eventHandler, eventData, eventType);
     }
 
     protected virtual Guid? GetEventDataTenantId(object eventData)
