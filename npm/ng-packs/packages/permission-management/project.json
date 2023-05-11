@@ -1,0 +1,45 @@
+{
+  "name": "permission-management",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/permission-management/src",
+  "prefix": "abp",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/permission-management"],
+      "options": {
+        "project": "packages/permission-management/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/permission-management/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/permission-management/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/packages/permission-management"],
+      "options": {
+        "jestConfig": "packages/permission-management/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/permission-management/src/**/*.ts",
+          "packages/permission-management/src/**/*.html"
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared"]
+}
