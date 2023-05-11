@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "手机号码",
     "PersonalSettings": "个人设置",
     "PersonalSettingsSaved": "个人设置已保存",
+    "PersonalSettingsChangedConfirmationModalTitle": "个人信息已更改",
+    "PersonalSettingsChangedConfirmationModalDescription": "重新登录以应用这些更改，您要退出登录吗？",
     "PasswordChanged": "修改密码",
     "NewPasswordConfirmFailed": "请确认新密码",
     "NewPasswordSameAsOld": "新密码不能与旧密码相同",

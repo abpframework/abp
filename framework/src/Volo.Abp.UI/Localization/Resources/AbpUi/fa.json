@@ -48,6 +48,7 @@
     "Search": "جستجو",
     "ItemWillBeDeletedMessageWithFormat": "{0} حذف خواهد شد!",
     "ItemWillBeDeletedMessage": "این مورد حذف خواهد شد!",
-    "ManageYourAccount": "حساب خود را مدیریت کنید"
+    "ManageYourAccount": "حساب خود را مدیریت کنید",
+    "OthersGroup": "دیگر"
   }
 }

@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizationKeySynchronizer", "src\LocalizationKeySynchronizer.csproj", "{FFD8DF5E-2724-4D15-9C84-7ACFEEF6F270}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFD8DF5E-2724-4D15-9C84-7ACFEEF6F270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD8DF5E-2724-4D15-9C84-7ACFEEF6F270}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD8DF5E-2724-4D15-9C84-7ACFEEF6F270}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD8DF5E-2724-4D15-9C84-7ACFEEF6F270}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

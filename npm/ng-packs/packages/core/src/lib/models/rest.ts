@@ -4,6 +4,7 @@ export namespace Rest {
   export type Config = Partial<{
     apiName: string;
     skipHandleError: boolean;
+    skipAddingHeader: boolean;
     observe: Observe;
     httpParamEncoder?: HttpParameterCodec;
   }>;

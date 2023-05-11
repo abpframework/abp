@@ -187,6 +187,7 @@
     "Index_Page_CommunityIntroduction": "إن هذا محور لإطار عمل ABP و.NET وتطوير البرامج. يمكنك قراءة المقالات ومشاهدة مقاطع الفيديو التعليمية والحصول على معلومات حول تقدم تطوير ABP والأحداث المتعلقة بـ ABP ومساعدة المطورين الآخرين ومشاركة خبرتك مع منتدى ABP.",
     "TagsInArticle": "العلامات في المقال",
     "WelcomeToABP": "أهلا بكم في ABP",
-    "IConsentToMedium": ".https://medium.com/volosoft أوافق على نشر هذا المنشور على"
+    "IConsentToMedium": ".https://medium.com/volosoft أوافق على نشر هذا المنشور على",
+    "DiscordPageTitle": "مجتمع ABP Discord"
   }
 }

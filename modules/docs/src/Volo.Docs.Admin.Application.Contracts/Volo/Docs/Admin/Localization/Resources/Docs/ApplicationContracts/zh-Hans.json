@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "语言代码",
     "DisplayName:Version": "版本",
     "Documents": "文档",
-    "RemoveFromCache": "从缓存中删除",
+    "RemoveFromCache": "从缓存中清除并重新索引",
     "Reindex": "重新索引",
     "ReindexCompleted": "重新索引完成",
-    "RemovedFromCache": "已从缓存中删除",
+    "RemovedFromCache": "从缓存中删除并重新索引",
     "RemoveFromCacheConfirmation": "你确定要从缓存中删除该项吗?",
-    "ReIndexDocumentConfirmation": "你确定要为该项重新索引吗",
+    "ReIndexDocumentConfirmation": "您确定要重新索引“{0}”吗？",
     "DeleteFromDatabase": "从数据库中删除",
     "Deleted": "删除",
     "Search": "搜索",
@@ -55,6 +55,7 @@
     "LanguageCode": "语言代码",
     "FileName": "文件名称",
     "LastCachedTime": "缓存项",
-    "Project": "项目"
+    "Project": "项目",
+    "RemoveCacheAndReIndexConfirmation": "文档“{0}”将从缓存中删除并重新编制索引。 你确认吗？"
   }
 }

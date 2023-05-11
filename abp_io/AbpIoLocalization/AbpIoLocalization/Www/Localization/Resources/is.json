@@ -274,7 +274,8 @@
     "FirstEdition": "Fyrsta útgáfa",
     "ThankYou": "Þakka þér!",
     "CheckboxMandatory": "Þú þarft að smella hér til að halda áfram!",
-    "SelectUITheme": "Veldu UI þema"
-
+    "SelectUITheme": "Veldu UI þema",
+    "CreateSolutionFolder": "Búðu til lausnarmöppu",
+    "CreateSolutionFolderOption": "Tilgreinir hvort verkefnið verður í nýrri möppu í úttaksmöppunni eða beint í framleiðslumöppunni."
   }
 }

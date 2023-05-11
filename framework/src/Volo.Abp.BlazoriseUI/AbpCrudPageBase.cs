@@ -309,7 +309,7 @@ public abstract class AbpCrudPageBase<
     {
         CurrentSorting = e.Columns
             .Where(c => c.SortDirection != SortDirection.Default)
-            .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
+            .Select(c => c.SortField + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
             .JoinAsString(",");
         CurrentPage = e.Page;
 
@@ -608,7 +608,8 @@ public abstract class AbpCrudPageBase<
                     yield return new TableColumn
                     {
                         Title = lookupPropertyDefinition.GetLocalizedDisplayName(StringLocalizerFactory),
-                        Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        Data = $"ExtraProperties[{propertyInfo.Name}]",
+                        PropertyName = propertyInfo.Name
                     };
                 }
                 else
@@ -616,7 +617,8 @@ public abstract class AbpCrudPageBase<
                     var column = new TableColumn
                     {
                         Title = propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory),
-                        Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        Data = $"ExtraProperties[{propertyInfo.Name}]",
+                        PropertyName = propertyInfo.Name
                     };
 
                     if (propertyInfo.IsDate() || propertyInfo.IsDateTime())

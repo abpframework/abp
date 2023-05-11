@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Kód jazyka",
     "DisplayName:Version": "Verze",
     "Documents": "Dokumenty",
-    "RemoveFromCache": "Odebrat z mezipaměti",
+    "RemoveFromCache": "Odstranit z mezipaměti a znovu indexovat",
     "Reindex": "Reindex",
     "ReindexCompleted": "Reindex dokončen",
-    "RemovedFromCache": "Odebráno z mezipaměti",
+    "RemovedFromCache": "Odstraněno z mezipaměti a znovu zaindexováno",
     "RemoveFromCacheConfirmation": "Opravdu chcete tuto položku odebrat z mezipaměti?",
-    "ReIndexDocumentConfirmation": "Opravdu chcete tuto položku reindexovat?",
+    "ReIndexDocumentConfirmation": "Jste si jisti, že chcete znovu indexovat \"{0}\"?",
     "DeleteFromDatabase": "Odstranit z databáze",
     "Deleted": "Vymazáno",
     "Search": "Vyhledávání",
@@ -55,6 +55,7 @@
     "LanguageCode": "Kód jazyka",
     "FileName": "Název souboru",
     "LastCachedTime": "Čas uložení v mezipaměti",
-    "Project": "Projekt"
+    "Project": "Projekt",
+    "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" bude odstraněn z mezipaměti a znovu zaindexován. Potvrzujete to?"
   }
 }

@@ -5,12 +5,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Identity.Settings;
+using Volo.Abp.Settings;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
 public class AbpSignInManager : SignInManager<IdentityUser>
 {
     protected AbpIdentityOptions AbpOptions { get; }
+
+    protected ISettingProvider SettingProvider { get; }
+
+    private readonly IdentityUserManager _identityUserManager;
 
     public AbpSignInManager(
         IdentityUserManager userManager,
@@ -20,8 +27,8 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         ILogger<SignInManager<IdentityUser>> logger,
         IAuthenticationSchemeProvider schemes,
         IUserConfirmation<IdentityUser> confirmation,
-        IOptions<AbpIdentityOptions> options
-    ) : base(
+        IOptions<AbpIdentityOptions> options,
+        ISettingProvider settingProvider) : base(
         userManager,
         contextAccessor,
         claimsFactory,
@@ -30,7 +37,9 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         schemes,
         confirmation)
     {
+        SettingProvider = settingProvider;
         AbpOptions = options.Value;
+        _identityUserManager = userManager;
     }
 
     public override async Task<SignInResult> PasswordSignInAsync(
@@ -82,6 +91,17 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         if (!user.IsActive)
         {
             Logger.LogWarning($"The user is not active therefore cannot login! (username: \"{user.UserName}\", id:\"{user.Id}\")");
+            return SignInResult.NotAllowed;
+        }
+
+        if (user.ShouldChangePasswordOnNextLogin)
+        {
+            Logger.LogWarning($"The user should change password! (username: \"{user.UserName}\", id:\"{user.Id}\")");
+            return SignInResult.NotAllowed;
+        }
+
+        if (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user))
+        {
             return SignInResult.NotAllowed;
         }
 

@@ -1,0 +1,15 @@
+{
+  "culture": "fi",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "OpenID Connect -pyyntöä ei voi noutaa.",
+    "TheUserDetailsCannotBbeRetrieved": "Käyttäjätietoja ei voi hakea.",
+    "TheApplicationDetailsCannotBeFound": "Sovelluksen tietoja ei löydy.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Kutsuvan asiakassovelluksen tietoja ei löydy.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Määritettyä lupatyyppiä {0} ei ole otettu käyttöön.",
+    "Authorization": "Valtuutus",
+    "DoYouWantToGrantAccessToYourData": "Haluatko myöntää käyttäjälle {0} pääsyn tietoihisi?",
+    "ScopesRequested": "Laajuudet pyydetty",
+    "Accept": "Hyväksy",
+    "Deny": "Kiellä"
+  }
+}

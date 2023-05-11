@@ -316,4 +316,11 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
                 GetCancellationToken(cancellationToken)
             );
     }
+
+    public virtual async Task<List<IdentityUser>> GetListByIdsAsync(IEnumerable<Guid> ids, bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
 }

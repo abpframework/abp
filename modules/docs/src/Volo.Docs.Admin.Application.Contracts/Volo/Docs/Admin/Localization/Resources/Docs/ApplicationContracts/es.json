@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Código de idioma",
     "DisplayName:Version": "Versión",
     "Documents": "Documentos",
-    "RemoveFromCache": "Borrado de caché",
+    "RemoveFromCache": "Eliminar de la caché y volver a indexar",
     "Reindex": "Reindexado",
     "ReindexCompleted": "Reindexado completado",
-    "RemovedFromCache": "Borrar la caché",
+    "RemovedFromCache": "Eliminado de la caché y reIndexado",
     "RemoveFromCacheConfirmation": "¿Estás seguro que quieres borrar este elemento de la caché?",
-    "ReIndexDocumentConfirmation": "¿Estás seguro que quieres reindexar este elemento?",
+    "ReIndexDocumentConfirmation": "¿Estás seguro de que quieres reindexar \"{0}\"?",
     "DeleteFromDatabase": "Eliminado de la base de datos",
     "Deleted": "Eliminado",
     "Search": "Buscar",
@@ -55,6 +55,7 @@
     "LanguageCode": "Código de idioma",
     "FileName": "Nombre de fichero",
     "LastCachedTime": "Última actualización de caché",
-    "Project": "Proyecto"
+    "Project": "Proyecto",
+    "RemoveCacheAndReIndexConfirmation": "El documento \"{0}\" será eliminado de la caché y reindexado. ¿Lo confirma?"
   }
 }
