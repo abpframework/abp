@@ -18,6 +18,6 @@ public class AbpSecurityHeadersOptions
     {
         Headers = new Dictionary<string, string>();
         ContentSecurityPolicyValueDictionary = new Dictionary<string, IEnumerable<string>>();
-        IgnoredUrls = new List<string> { "/swagger" };
+        IgnoredUrls = new List<string> ();
     }
 }
