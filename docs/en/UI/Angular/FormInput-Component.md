@@ -1,6 +1,6 @@
 # Form Input Component
 
-The ABP FormInput Component is a reusable form input component for text type.
+The ABP FormInput Component is a reusable form input component for the text type.
 
 # Inputs
 * `label`
@@ -15,7 +15,7 @@ The ABP FormInput Component is a reusable form input component for text type.
 
 # Usage
 
-ABP FormInput component is a part of the `ThemeSharedModule` module. If you've imported that module into your module, you don't need to import it again. If not, first import it as shown below:
+The ABP FormInput component is a part of the `ThemeSharedModule` module. If you've imported that module into your module, there's no need to import it again. If not, then first import it as shown below:
 
 ```ts
 import { ThemeSharedModule } from "@abp/ng.theme.shared";
