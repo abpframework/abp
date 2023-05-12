@@ -2,7 +2,19 @@
 
 The ABP Checkbox Component is a reusable form input component for checkbox type.
 
-It takes `label`, `labelClass` (default form-check-label), `checkboxId`,`checkboxReadonly`,`checkboxReadonly` (default form-check-input) and `checkboxStyle` as input to customize component. Also, it emits `checkboxBlur` and `checkboxFocus` events when component gain or lose focus.
+# Inputs
+
+-   `label`
+-   `labelClass (default form-check-label)`
+-   `checkboxId`
+-   `checkboxReadonly`
+-   `checkboxReadonly (default form-check-input)`
+-   `checkboxStyle`
+
+# Outputs
+
+-   `checkboxBlur`
+-   `checkboxFocus`
 
 # Usage
 
@@ -36,4 +48,4 @@ Then, the `abp-checkbox` component can be used. See the example below:
 
 See the checkbox input result below:
 
-![abp-form-input](./images/form-checkbox.png)
+![abp-checkbox](./images/form-checkbox.png)

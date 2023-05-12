@@ -2,7 +2,16 @@
 
 The ABP FormInput Component is a reusable form input component for text type.
 
-It takes `label`, `labelClass` (default form-label), `inputId`,`inputPlaceholder`,`inputReadonly`,`inputClass` (default form-control) and `inputStyle` as input to customize component. Also, it emits `formBlur` and `formFocus` events when component gain or lose focus.
+# Inputs
+* `label`
+* `labelClass (default form-label)`
+* `inputPlaceholder`
+* `inputReadonly`
+* `inputClass (default form-control)`
+
+# Outputs
+* `formBlur`
+* `formFocus`
 
 # Usage
 
@@ -12,14 +21,14 @@ ABP FormInput component is a part of the `ThemeSharedModule` module. If you've i
 // my-feature.module.ts
 
 import { ThemeSharedModule } from "@abp/ng.theme.shared";
-import { FomrInputDemoComponent } from "./FomrInputDemoComponent.component";
+import { FormInputDemoComponent } from "./FomrInputDemoComponent.component";
 
 @NgModule({
 	imports: [
 		ThemeSharedModule,
 		// ...
 	],
-	declarations: [FomrInputDemoComponent],
+	declarations: [FormInputDemoComponent],
 	// ...
 })
 export class MyFeatureModule {}
