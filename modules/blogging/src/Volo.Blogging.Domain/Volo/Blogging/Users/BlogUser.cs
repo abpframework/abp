@@ -26,25 +26,25 @@ namespace Volo.Blogging.Users
         public virtual bool PhoneNumberConfirmed { get; protected set; }
         
         [CanBeNull]
-        public string WebSite { get; set; }
+        public virtual string WebSite { get; set; }
 
         [CanBeNull]
-        public string Twitter { get; set; }
+        public virtual string Twitter { get; set; }
 
         [CanBeNull]
-        public string Github { get; set; }
+        public virtual string Github { get; set; }
 
         [CanBeNull]
-        public string Linkedin { get; set; }
+        public virtual string Linkedin { get; set; }
 
         [CanBeNull]
-        public string Company { get; set; }
+        public virtual string Company { get; set; }
 
         [CanBeNull]
-        public string JobTitle { get; set; }
+        public virtual string JobTitle { get; set; }
 
         [CanBeNull]
-        public string Biography { get; set; }
+        public virtual string Biography { get; set; }
 
         protected BlogUser()
         {

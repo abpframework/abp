@@ -69,6 +69,13 @@ namespace Volo.Blogging
             return _postAppService.GetListByUserIdAsync(userId);
         }
 
+        [HttpGet]
+        [Route("{blogId}/latest/{count}")]
+        public Task<List<PostWithDetailsDto>> GetLatestBlogPostsAsync(Guid blogId, int count)
+        {
+            return _postAppService.GetLatestBlogPostsAsync(blogId, count);
+        }
+
         [HttpDelete]
         [Route("{id}")]
         public Task DeleteAsync(Guid id)
