@@ -27,8 +27,8 @@ import { ThemeSharedModule } from "@abp/ng.theme.shared";
 import { CheckboxDemoComponent } from "./CheckboxDemoComponent.component";
 
 @NgModule({
-	imports: [
-		ThemeSharedModule,
+imports: [
+	ThemeSharedModule,
 		// ...
 	],
 	declarations: [CheckboxDemoComponent],
