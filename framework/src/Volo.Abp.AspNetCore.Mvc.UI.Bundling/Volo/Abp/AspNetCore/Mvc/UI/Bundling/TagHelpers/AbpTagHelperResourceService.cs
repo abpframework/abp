@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
@@ -68,7 +67,9 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
 
             if (file == null || !file.Exists)
             {
-                throw new AbpException($"Could not find the bundle file '{bundleFile}' for the bundle '{bundleName}'!");
+                Logger.LogError($"Could not find the bundle file '{bundleFile}' for the bundle '{bundleName}'!");
+                AddErrorScript(viewContext, tagHelper, context, output, bundleFile, bundleName);
+                continue;
             }
 
             if (file.Length > 0)
@@ -86,6 +87,11 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
     protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName);
 
     protected abstract void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file);
+
+    protected virtual void AddErrorScript(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file, string bundleName)
+    {
+        output.Content.AppendHtml($"<script>console.log(\"%cCould not find the bundle file '{file}' for the bundle '{bundleName}'!\", 'background: yellow; font-size:20px;');</script>{Environment.NewLine}");
+    }
 
     protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)
     {
