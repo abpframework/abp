@@ -1,6 +1,6 @@
 # Checkbox Component
 
-The ABP Checkbox Component is a reusable form input component for checkbox type.
+The ABP Checkbox Component is a reusable form input component for the checkbox type.
 
 # Inputs
 
@@ -18,7 +18,7 @@ The ABP Checkbox Component is a reusable form input component for checkbox type.
 
 # Usage
 
-ABP Checkbox component is a part of the `ThemeSharedModule` module. If you've imported that module into your module, you don't need to import it again. If not, first import it as shown below:
+The ABP Checkbox component is a part of the `ThemeSharedModule` module. If you've imported that module into your module, there's no need to import it again. If not, then first import it as shown below:
 
 ```ts
 // my-feature.module.ts
