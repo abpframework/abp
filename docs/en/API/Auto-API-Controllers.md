@@ -53,7 +53,7 @@ ABP uses a naming convention while determining the HTTP method for a service met
 - **Patch**: Used if the method name starts with 'Patch'.
 - Otherwise, **Post** is used **by default**.
 
-If you need to customize HTTP method for a particular method, then you can use one of the standard ASP.NET Core attributes ([HttpPost], [HttpGet], [HttpPut]... etc.). This requires to add [Microsoft.AspNetCore.Mvc.Core](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.Core) nuget package to your project that contains the service.
+If you need to customize HTTP method for a particular method, then you can use one of the standard ASP.NET Core attributes ([HttpPost], [HttpGet], [HttpPut]... etc.). This requires you to add [Microsoft.AspNetCore.App] framework reference to your project that contains the service. Consult [this document](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/target-aspnetcore?view=aspnetcore-7.0&tabs=visual-studio#use-the-aspnet-core-shared-framework) to add the framework reference.
 
 ### Route
 
