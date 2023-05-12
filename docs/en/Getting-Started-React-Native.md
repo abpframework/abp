@@ -79,17 +79,17 @@ A React Native application running on an Android emulator or a physical phone **
 {{ if Tiered == "No"}}
 ![React Native host project local IP entry](images/rn-host-local-ip.png)
 
--   Open the `appsettings.json` in the `.HttpApi.Host` folder. Replace the `localhost` address on the `SelfUrl` and `Authority` properties with your local IP address.
--   Open the `launchSettings.json` in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
+-   Open the `appsettings.json` file in the `.HttpApi.Host` folder. Replace the `localhost` address on the `SelfUrl` and `Authority` properties with your local IP address.
+-   Open the `launchSettings.json` file in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
 
 {{ else if Tiered == "Yes" }}
 
 ![React Native tiered project local IP entry](images/rn-tiered-local-ip.png)
 
--   Open the `appsettings.json` in the `.AuthServer` folder. Replace the `localhost` address on the `SelfUrl` property with your local IP address.
--   Open the `launchSettings.json` in the `.AuthServer/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
--   Open the `appsettings.json` in the `.HttpApi.Host` folder. Replace the `localhost` address on the `Authority` property with your local IP address.
--   Open the `launchSettings.json` in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
+-   Open the `appsettings.json` file in the `.AuthServer` folder. Replace the `localhost` address on the `SelfUrl` property with your local IP address.
+-   Open the `launchSettings.json` file in the `.AuthServer/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
+-   Open the `appsettings.json` file in the `.HttpApi.Host` folder. Replace the `localhost` address on the `Authority` property with your local IP address.
+-   Open the `launchSettings.json` file in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
 
 {{ end }}
 
@@ -99,7 +99,7 @@ Run the backend application as described in the [getting started document](Getti
 
 ## How to disable the Https-only settings of OpenIddict
 
-Go to MyProjectNameHttpApiHostModule.cs under the host project. Add put these codes under the `PreConfigureServices` function.
+Go to MyProjectNameHttpApiHostModule.cs under the host project. And put these codes under the `PreConfigureServices` function.
 
 ```csharp
 #if DEBUG
@@ -128,13 +128,13 @@ Go to MyProjectNameHttpApiHostModule.cs under the host project. Add put these co
 
 {{ end }}
 
-4. Run `yarn start` or `npm start`. Wait Expo CLI to print opitons.
+4. Run `yarn start` or `npm start`. Wait for the Expo CLI to print the opitons.
 
 > The React Native application was generated with [Expo](https://expo.io/). Expo is a set of tools built around React Native to help you quickly start an app and, while it has many features.
 
 ![expo-cli-options](images/rn-options.png)
 
-In the above image, you can start the application with an Android emulator, an iOS simulator or a physical phone by the scan the QR code with the [Expo Client](https://expo.io/tools#client) or choosing the option.
+In the above image, you can start the application with an Android emulator, an iOS simulator or a physical phone by scanning the QR code with the [Expo Client](https://expo.io/tools#client) or choosing the option.
 
 ![React Native login screen on iPhone 11](images/rn-login-iphone.png)
 
