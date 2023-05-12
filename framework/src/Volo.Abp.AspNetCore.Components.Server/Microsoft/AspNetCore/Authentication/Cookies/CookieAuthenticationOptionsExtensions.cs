@@ -1,7 +1,9 @@
 using System;
+using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.AspNetCore.Authentication.Cookies;
@@ -23,6 +25,8 @@ public static class CookieAuthenticationOptionsExtensions
 
             if (principalContext.Principal != null && principalContext.Principal.Identity != null && principalContext.Principal.Identity.IsAuthenticated)
             {
+                var logger = principalContext.HttpContext.RequestServices.GetRequiredService<ILogger<CookieAuthenticationOptions>>();
+
                 var accessToken = principalContext.Properties.GetTokenValue("access_token");
                 if (!accessToken.IsNullOrWhiteSpace())
                 {
@@ -40,17 +44,36 @@ public static class CookieAuthenticationOptionsExtensions
                         Token = accessToken
                     });
 
-                    if (response.IsActive)
+                    if (response.IsError)
                     {
+                        logger.LogError(response.Error);
+                        await SignOutAsync(principalContext);
                         return;
                     }
-                }
 
-                principalContext.RejectPrincipal();
-                await principalContext.HttpContext.SignOutAsync(principalContext.Scheme.Name);
+                    if (!response.IsActive)
+                    {
+                        logger.LogError("The access_token is not active.");
+                        await SignOutAsync(principalContext);
+                        return;
+                    }
+
+                    logger.LogInformation("The access_token is active.");
+                }
+                else
+                {
+                    logger.LogError("The access_token is not found in the cookie properties, Please make sure SaveTokens of OpenIdConnectOptions is set as true.");
+                    await SignOutAsync(principalContext);
+                }
             }
         };
 
         return options;
+    }
+
+    private async static Task SignOutAsync(CookieValidatePrincipalContext principalContext)
+    {
+        principalContext.RejectPrincipal();
+        await principalContext.HttpContext.SignOutAsync(principalContext.Scheme.Name);
     }
 }
