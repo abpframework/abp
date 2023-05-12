@@ -10,9 +10,10 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
 public class ChangeThemeStep : ProjectBuildPipelineStep
 {
-    private const string BasicTheme = "Basic";
-    private const string LeptonXTheme = "LeptonX";
-    private const string LeptonTheme = "Lepton";
+    private const string Basic = "Basic";
+    private const string LeptonXLite = "LeptonXLite";
+    private const string LeptonX = "LeptonX";
+    private const string Lepton = "Lepton";
     
     public override void Execute(ProjectBuildContext context)
     {
@@ -35,27 +36,39 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     protected virtual void ChangeToBasicTheme(ProjectBuildContext context)
     {
         var defaultThemeName = context.BuildArgs.TemplateName is AppTemplate.TemplateName or AppNoLayersTemplate.TemplateName
-            ? "LeptonXLite" : "LeptonX";
+            ? LeptonXLite : LeptonX;
 
         ChangeThemeToBasicForMvcProjects(context, defaultThemeName);
         ChangeThemeToBasicForBlazorProjects(context, defaultThemeName);
         ChangeThemeToBasicForBlazorServerProjects(context, defaultThemeName);
-        ChangeThemeToBasicForAngularProjects(context, defaultThemeName);
+        ChangeThemeForAngularProjects(context, defaultThemeName, Basic, GetAngularPackageName(context.BuildArgs.Theme!.Value), GetAngularPackageName(Theme.Basic));
     }
 
     protected virtual void ChangeToLeptonTheme(ProjectBuildContext context)
     {
         //common
-        RenameLeptonXFolders(context, folderName: "Lepton");
+        RenameFolders(context, oldFolderName: LeptonX , newFolderName: Lepton);
         AddLeptonThemeManagementReferenceToProjects(context);
 
         ChangeThemeToLeptonForMvcProjects(context);
         ChangeThemeToLeptonForBlazorProjects(context);
         ChangeThemeToLeptonForBlazorServerProjects(context);
-        ChangeThemeToLeptonForAngularProjects(context);
+        ChangeThemeForAngularProjects(context, oldThemeName: LeptonX, Lepton, GetAngularPackageName(Theme.LeptonX), GetAngularPackageName(Theme.Lepton));
+
         ConfigureLeptonManagementPackagesForNoLayersMvc(context, "/MyCompanyName.MyProjectName.Mvc/MyCompanyName.MyProjectName.csproj", new[] { "Web", "HttpApi", "Application" });
         ChangeThemeToLeptonForNoLayersBlazorServerProjects(context);
         ChangeThemeToLeptonForMauiBlazorProjects(context);
+    }
+    
+    private static string GetAngularPackageName(Theme theme)
+    {
+        return theme switch
+        {
+            Theme.LeptonX => "@volosoft/abp.ng.theme.lepton-x",
+            Theme.LeptonXLite => "@abp/ng.theme.lepton-x",
+            Theme.Basic => "@abp/ng.theme.basic",
+            _ => string.Empty
+        };
     }
     
     private static void ChangeThemeToBasicForBlazorProjects(ProjectBuildContext context, string defaultThemeName)
@@ -78,7 +91,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             defaultThemeName,
-            BasicTheme
+            Basic
         );
         
         ReplacePackageReferenceWithProjectReference(
@@ -92,47 +105,38 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             context,
             "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
             defaultThemeName, 
-            BasicTheme
+            Basic
         );
     }
 
-    private static void ChangeThemeToBasicForAngularProjects(ProjectBuildContext context, string defaultThemeName)
+    private static void ChangeThemeForAngularProjects(ProjectBuildContext context, string oldThemeName, string newThemeName, string oldPackageName, string newPackageName)
     {
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
         {
             return;
         }
         
-        var angularPackageName = context.BuildArgs.TemplateName is AppTemplate.TemplateName or AppNoLayersTemplate.TemplateName
-            ? "@abp/ng.theme.lepton-x" : "@volosoft/abp.ng.theme.lepton-x";
-
         ReplaceImportPackage(
             context,
             "/angular/src/app/app.module.ts",
-            angularPackageName,
-            "@abp/ng.theme.basic"
+            oldPackageName,
+            newPackageName
         );
-
+        
         RemoveLinesByStatement(
             context,
             "/angular/src/app/app.module.ts",
             "SideMenuLayoutModule"
         );
-
+        
         ReplaceAllKeywords(
             context,
             "/angular/src/app/app.module.ts",
-            "ThemeLeptonXModule",
-            "ThemeBasicModule"
+            $"Theme{oldThemeName}Module",
+            $"Theme{newThemeName}Module"
         );
 
-        RemoveLinesByStatement(
-            context,
-            "/angular/angular.json",
-            "node_modules/bootstrap-icons/font/bootstrap-icons.css"
-        );
-
-        if (defaultThemeName != "LeptonX")
+        if (oldThemeName != LeptonX)
         {
             return;
         }
@@ -165,8 +169,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ReplaceAllKeywords(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
-            LeptonXTheme,
-            LeptonTheme
+            LeptonX,
+            Lepton
         );
 
         ReplacePackageReferenceWithProjectReference(
@@ -179,42 +183,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ReplaceAllKeywords(
             context,
             "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
-            LeptonXTheme,
-            LeptonTheme
-        );
-    }
-
-    private static void ChangeThemeToLeptonForAngularProjects(ProjectBuildContext context)
-    {
-        if (context.BuildArgs.UiFramework != UiFramework.Angular)
-        {
-            return;
-        }
-        
-        ReplaceImportPackage(
-            context,
-            "/angular/src/app/app.module.ts",
-            "@volosoft/abp.ng.theme.lepton-x",
-            "@volo/abp.ng.theme.lepton"
-        );
-
-        RemoveLinesByStatement(
-            context,
-            "/angular/src/app/app.module.ts",
-            "SideMenuLayoutModule"
-        );
-        
-        ReplaceAllKeywords(
-            context,
-            "/angular/src/app/app.module.ts",
-            "ThemeLeptonXModule",
-            "ThemeLeptonModule"
-        );
-
-        RemoveLinesByStatement(
-            context,
-            "/angular/angular.json",
-            "node_modules/bootstrap-icons/font/bootstrap-icons.css"
+            LeptonX,
+            Lepton
         );
     }
 
@@ -272,8 +242,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             ReplaceAllKeywords(
                 context,
                 moduleFile.Name,
-                LeptonXTheme,
-                LeptonTheme
+                LeptonX,
+                Lepton
             );
 
             RemoveLinesByStatement(
@@ -561,11 +531,11 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         return moduleName.Replace(".", "");
     }
 
-    private static void RenameLeptonXFolders(ProjectBuildContext context, string folderName)
+    private static void RenameFolders(ProjectBuildContext context, string oldFolderName, string newFolderName)
     {
-        foreach (var file in context.Files.Where(x => x.Name.Contains("LeptonX") && x.IsDirectory))
+        foreach (var file in context.Files.Where(x => x.Name.Contains(oldFolderName) && x.IsDirectory))
         {
-            new MoveFolderStep(file.Name, file.Name.Replace("LeptonX", folderName)).Execute(context);
+            new MoveFolderStep(file.Name, file.Name.Replace(oldFolderName, newFolderName)).Execute(context);
         }
     }
 
@@ -619,7 +589,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 context,
                 $"/MyCompanyName.MyProjectName{project.Key}/{project.Value}.cs",
                 defaultThemeName,
-                BasicTheme
+                Basic
             );
         }
     }
@@ -654,21 +624,21 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 context,
                 $"/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
                 $"{defaultThemeName}Theme.Components",
-                BasicTheme
+                Basic
             );
             
             ReplaceAllKeywords(
                 context,
                 $"/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
                 defaultThemeName,
-                BasicTheme
+                Basic
             );
             
             ReplaceAllKeywords(
                 context,
                 $"/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
                 defaultThemeName,
-                BasicTheme
+                Basic
             );
         }
     }
@@ -696,15 +666,15 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             ReplaceAllKeywords(
                 context,
                 $"/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
-                LeptonXTheme,
-                LeptonTheme
+                LeptonX,
+                Lepton
             );
             
             ReplaceAllKeywords(
                 context,
                 $"/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
-                LeptonXTheme,
-                LeptonTheme
+                LeptonX,
+                Lepton
             );
 
             RemoveLinesByStatement(
@@ -745,15 +715,15 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             ReplaceAllKeywords(
                 context,
                 $"/MyCompanyName.MyProjectName.{projectName}/MyProjectNameModule.cs",
-                LeptonXTheme,
-                LeptonTheme
+                LeptonX,
+                Lepton
             );
             
             ReplaceAllKeywords(
                 context,
                 $"/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
-                LeptonXTheme,
-                LeptonTheme
+                LeptonX,
+                Lepton
             );
         }
     }
@@ -800,8 +770,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ReplaceAllKeywords(
             context,
             "/MyCompanyName.MyProjectName.MauiBlazor/MyProjectNameMauiBlazorModule.cs",
-            LeptonXTheme,
-            LeptonTheme
+            LeptonX,
+            Lepton
         );
     }
 }
