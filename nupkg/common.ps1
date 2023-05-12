@@ -164,6 +164,7 @@ $projects = (
     "framework/src/Volo.Abp.Ddd.Application",
     "framework/src/Volo.Abp.Ddd.Application.Contracts",
     "framework/src/Volo.Abp.Ddd.Domain",
+    "framework/src/Volo.Abp.Ddd.Domain.Shared",
     "framework/src/Volo.Abp.DistributedLocking.Abstractions",
     "framework/src/Volo.Abp.DistributedLocking",
     "framework/src/Volo.Abp.DistributedLocking.Dapr",
