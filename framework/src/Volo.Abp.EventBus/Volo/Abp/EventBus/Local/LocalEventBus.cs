@@ -139,26 +139,19 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
-        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
-
-        var handlerWithTypes = new List<Tuple<IEventHandlerFactory, Type, int>>();
+        var handlerFactoryList = new List<Tuple<IEventHandlerFactory, Type, int>>();
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
             foreach (var factory in handlerFactory.Value)
             {
-                handlerWithTypes.Add(new Tuple<IEventHandlerFactory, Type, int>(
+                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
                     factory,
                     handlerFactory.Key,
                     ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(factory.GetHandler().EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
             }
         }
 
-        foreach (var handlerWithType in handlerWithTypes.OrderBy(x => x.Item3))
-        {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerWithType.Item2, new List<IEventHandlerFactory>{ handlerWithType.Item1 }));
-        }
-
-        return handlerFactoryList.ToArray();
+        return handlerFactoryList.OrderBy(x => x.Item3).Select(x => new EventTypeWithEventHandlerFactories(x.Item2, new List<IEventHandlerFactory> {x.Item1})).ToArray();
     }
 
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
