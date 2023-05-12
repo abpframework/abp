@@ -129,6 +129,11 @@
                 </div>
             </div>
         </section>
+        <section class="post-content">
+            <p>
+                @Html.Raw(BloggingPageHelper.RenderMarkdownToHtml(Model.Post.Content))
+            </p>
+        </section>
     </div>
     <div class="col-12 col-md-4 col-lg-3">
         <div class="list-group">
@@ -207,19 +212,6 @@
                 }
             }
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12 col-md-8 col-lg-8 mx-auto">
-        <section class="post-content">
-            <p>
-                @Html.Raw(BloggingPageHelper.RenderMarkdownToHtml(Model.Post.Content))
-            </p>
-        </section>
-    </div>
-    <div class="col-12 col-md-4 col-lg-3">
-        
     </div>
 </div>
 
