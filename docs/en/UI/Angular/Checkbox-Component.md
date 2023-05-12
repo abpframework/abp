@@ -27,12 +27,12 @@ import { ThemeSharedModule } from "@abp/ng.theme.shared";
 import { CheckboxDemoComponent } from "./CheckboxDemoComponent.component";
 
 @NgModule({
-imports: [
-	ThemeSharedModule,
-		// ...
-	],
-	declarations: [CheckboxDemoComponent],
-	// ...
+  imports: [
+    ThemeSharedModule,
+    // ...
+  ],
+  declarations: [CheckboxDemoComponent],
+  // ...
 })
 export class MyFeatureModule {}
 ```
@@ -41,8 +41,8 @@ Then, the `abp-checkbox` component can be used. See the example below:
 
 ```html
 <div class="form-check">
-	<abp-checkbox label="Yes,I Agree" checkboxId="checkbox-input">
-	</abp-checkbox>
+  <abp-checkbox label="Yes,I Agree" checkboxId="checkbox-input">
+  </abp-checkbox>
 </div>
 ```
 
