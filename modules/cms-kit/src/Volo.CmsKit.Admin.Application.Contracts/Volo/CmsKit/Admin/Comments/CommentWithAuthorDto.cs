@@ -20,4 +20,6 @@ public class CommentWithAuthorDto
     public DateTime CreationTime { get; set; }
 
     public CmsUserDto Author { get; set; }
+    
+    public string Url { get; set; }
 }

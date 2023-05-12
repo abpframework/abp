@@ -29,6 +29,11 @@ public static class CliUrls
         return $"{NuGetRootPath}{apiKey}/v3/package/{packageId}/index.json";
     }
 
+    public static string GetNuGetPackageSearchUrl(string apiKey, string packageId)
+    {
+        return $"{NuGetRootPath}{apiKey}/v3/search?q={packageId}";
+    }
+
     public static string GetApiDefinitionUrl(string url, ApplicationApiDescriptionModelRequestDto model = null)
     {
         url = url.EnsureEndsWith('/');
