@@ -134,7 +134,6 @@ A service can implement the `ILocalEventHandler<TEvent>` to handle the event.
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
-using Volo.Abp.EventBus.Local;
 
 namespace AbpDemo
 {
