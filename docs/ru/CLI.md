@@ -50,32 +50,32 @@ dotnet tool update -g Volo.Abp.Cli
 
 ### help
 
-Shows basic usages of the ABP CLI.
+Показывает основные возможности использования ABP CLI.
 
 Usage:
 
 ````bash
-abp help [command-name]
+abp help [имя команды]
 ````
 
-Examples:
+Например:
 
 ````bash
-abp help        # Shows a general help.
-abp help new    # Shows help about the "new" command.
+abp help        # Показывает главную справку.
+abp help new    # Показывает справку по команде "new".
 ````
 
 ### cli
 
-Update or remove ABP CLI.
+Обновляет или удаляет ABP CLI.
 
-Usage:
+Использование:
 
 ````bash
-abp cli [command-name]
+abp cli [имя команды]
 ````
 
-Examples:
+Например:
 
 ````bash
 abp cli update
@@ -86,38 +86,38 @@ abp cli remove
 
 ### new
 
-Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
+Генерирует новое решение на основе [стартовых шаблонов ABP](Startup-Templates/Index.md).
 
-Usage:
+Использование:
 
 ````bash
-abp new <solution-name> [options]
+abp new <имя решения> [параметры]
 ````
 
-Example:
+Например:
 
 ````bash
 abp new Acme.BookStore
 ````
 
-* `Acme.BookStore` is the solution name here.
-* Common convention is to name a solution is like *YourCompany.YourProject*. However, you can use different naming like *YourProject* (single level namespacing) or *YourCompany.YourProduct.YourModule* (three levels namespacing).
+* `Acme.BookStore` имя решения.
+* Обычно принято называть решение в формате YourCompany.YourProject. Однако, вы можете использовать другие варианты именования, такие как YourProject (одноуровневое пространство имен) или YourCompany.YourProduct.YourModule (трехуровневое пространство имен).
 
-For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Samples.md)
+Чтобы посмотреть больше примеров, переходите [ABP CLI Примеры создания решений](CLI-New-Command-Samples.md)
 
-#### Options
+#### Параметры
 
-* `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a web application. Available templates:
-  * **`app`** (default): [Application template](Startup-Templates/Application.md). Additional options:
-    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
-      * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
-        * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
-      * `angular`: Angular UI. There are some additional options for this template:
-        * `--separate-auth-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
-        * `--pwa`: Specifies the project as Progressive Web Application.
-      * `blazor`: Blazor UI. There are some additional options for this template:
-        * `--separate-auth-server`The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
-        * `--pwa`: Specifies the project as Progressive Web Application.
+* `--template` или `-t`: Указывает имя шаблона. Имя шаблона по умолчанию - `app`, которое генерирует веб-приложение. Доступные шаблоны:
+  * **`app`** (по умолчанию): [шаблон приложения](Startup-Templates/Application.md). Дополнительные параметры:
+    * `--ui` или `-u`: Указывает фреймворк пользовательского интерфейса. Фреймворк по умолчанию - mvc. Доступные фреймворки:
+      * `mvc`: ASP.NET Core MVC. Для этого шаблона есть несколько дополнительных опций:
+        * `--tiered`: создает многоуровневое решение, в котором уровни веб-API и HTTP физически разделены. Если этот параметр не указан, создается многоуровневое решение, которое является менее сложным и подходит для большинства сценариев.
+      * `angular`: Angular пользовательский интерфейс. Для этого шаблона есть несколько дополнительных опций:
+        * `--separate-auth-server`: Проект Identity Server поставляется как отдельный проект и выполняется в другой конечной точке. Он отделяет Identity Server от приложения API Host. Если этот параметр не указан, у вас будет одна конечная точка на стороне сервера.
+        * `--pwa`: указывает проект как Progressive Web Application.
+      * `blazor`: пользовательский интерфейс Blazor. Для этого шаблона есть несколько дополнительных опций:
+        * `--separate-auth-server` Проект Identity Server поставляется как отдельный проект и выполняется в другой конечной точке. Он отделяет Identity Server от приложения API Host. Если этот параметр не указан, у вас будет одна конечная точка на стороне сервера.
+        * `--pwa`: указывает проект как Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
         * `--tiered`: The Identity Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `none`: Without UI. No front-end layer will be created. There are some additional options for this template:
