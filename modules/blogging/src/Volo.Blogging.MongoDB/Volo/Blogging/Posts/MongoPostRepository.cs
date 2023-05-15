@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Nito.AsyncEx;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
@@ -63,6 +64,15 @@ namespace Volo.Blogging.Posts
         {
             var query = (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.CreatorId == userId)
                 .OrderByDescending(x => x.CreationTime);
+            
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<List<Post>> GetLatestBlogPostsAsync(Guid blogId, int count, CancellationToken cancellationToken = default)
+        {
+            var query = (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.BlogId == blogId)
+                .OrderByDescending(x => x.CreationTime)
+                .Take(count);
             
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }

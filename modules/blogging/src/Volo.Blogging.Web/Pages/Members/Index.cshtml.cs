@@ -23,6 +23,9 @@ public class IndexModel : AbpPageModel
 
     public Dictionary<Guid, string> BlogShortNameMap { get; set; }
     
+    [BindProperty]
+    public CustomIdentityBlogUserUpdateDto CustomUserUpdate { get; set; }
+    
     public IndexModel(IPostAppService postAppService, IMemberAppService memberAppService, IBlogAppService blogAppService)
     {
         _postAppService = postAppService;
@@ -51,6 +54,14 @@ public class IndexModel : AbpPageModel
         
         return Page();
     }
+    
+    public async Task<IActionResult> OnPostAsync()
+    {
+        await _memberAppService.UpdateUserProfileAsync(CustomUserUpdate);
+
+        return Redirect($"/members/{CurrentUser.UserName}");
+    }
+    
     public string GetBlogPostUrl(PostWithDetailsDto post)
     {
         var blogShortName = BlogShortNameMap[post.BlogId];
