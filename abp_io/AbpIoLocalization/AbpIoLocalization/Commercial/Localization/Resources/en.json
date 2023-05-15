@@ -837,10 +837,10 @@
     "MyOrganizations_Detail_LicenseExpiryDate": "Expiry Date",
     "BlazoriseSupport": "How do I get the Blazorise license key and support from the Blazorise team?",
     "BlazoriseSupportExplanation": "Follow the steps below to get support from the Blazorise team and get your Blazorise license key:",
-    "BlazoriseSupportExplanation1": "Sign up for a new account at blazorise.com/support/register with the same email address as your abp.io account. Leave the \"License Key\" entry blank. It must be the same email address as your email account on abp.io.",
+    "BlazoriseSupportExplanation1": "Sign up for a new account at <a href=\"blazorise.com/support/register\">blazorise.com/support/register</a> with the same email address as your abp.io account. Leave the \"License Key\" entry blank. <strong>It must be the same email address as your email account on abp.io</strong>.",
     "BlazoriseSupportExplanation2": "Verify your email address by checking your email box. Check your spam box if you don't see an email in your inbox!",
-    "BlazoriseSupportExplanation3": "Log into the Blazorise support website at blazorise.com/support/login.",
-    "BlazoriseSupportExplanation4": "If you have an active ABP Commercial license, you will also have a Blazorise PRO license. You can get your Blazorise license key at blazorise.com/support/user/manage/license.",
+    "BlazoriseSupportExplanation3": "Log into the Blazorise support website at <a href=\"blazorise.com/support/login\">blazorise.com/support/login</a>.",
+    "BlazoriseSupportExplanation4": "If you have an active ABP Commercial license, you will also have a Blazorise PRO license. You can get your Blazorise license key at <a href=\"blazorise.com/support/user/manage/license\">blazorise.com/support/user/manage/license</a>.",
     "BlazoriseSupportExplanation5": "You can post your questions on the support website and generate a product token for your application."
   }
 }
