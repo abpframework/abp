@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
@@ -36,8 +34,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         var requestAcceptTypeHtml = context.Request.Headers["Accept"].Any(x =>
             x.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
 
-        if (!requestAcceptTypeHtml || !Options.Value.UseContentSecurityPolicyHeader ||
-            Options.Value.IgnoredUrls.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'))) || context.GetEndpoint() == null)
+        if (!requestAcceptTypeHtml || !Options.Value.UseContentSecurityPolicyHeader || await AlwaysIgnoreContentTypes(context) || context.GetEndpoint() == null)
         {
             await next.Invoke(context);
             return;
@@ -77,6 +74,19 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         });
 
         await next.Invoke(context);
+    }
+    
+    private async Task<bool> AlwaysIgnoreContentTypes(HttpContext context)
+    {
+        foreach (var selector in Options.Value.AlwaysIgnoreSecurityHeadersSelectors)
+        {
+            if(await selector(context))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     private void AddOtherHeaders(HttpContext context)

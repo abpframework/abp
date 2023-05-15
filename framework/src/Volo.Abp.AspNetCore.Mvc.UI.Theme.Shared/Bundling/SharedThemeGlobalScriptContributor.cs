@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDaterangepicker;
@@ -16,7 +13,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.SweetAlert2;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr;
-using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
@@ -53,11 +49,6 @@ public class SharedThemeGlobalScriptContributor : BundleContributor
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert2/abp-sweetalert2.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js"
-            });
-
-        if (context.ServiceProvider.GetRequiredService<IOptions<AbpSecurityHeadersOptions>>().Value.UseContentSecurityPolicyNonce)
-        {
-            context.Files.AddIfNotContains("/libs/abp/aspnetcore-mvc-ui-theme-shared/csp/abp-csp-style-loader.js");
-        }
+        });
     }
 }

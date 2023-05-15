@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Volo.Abp.AspNetCore.Security;
 
@@ -12,12 +15,12 @@ public class AbpSecurityHeadersOptions
 
     public Dictionary<string, string> Headers { get; }
     
-    public List<string> IgnoredUrls { get; }
+    public List<Func<HttpContext, Task<bool>>> AlwaysIgnoreSecurityHeadersSelectors { get; }
 
     public AbpSecurityHeadersOptions()
     {
         Headers = new Dictionary<string, string>();
         ContentSecurityPolicyValueDictionary = new Dictionary<string, IEnumerable<string>>();
-        IgnoredUrls = new List<string> ();
+        AlwaysIgnoreSecurityHeadersSelectors = new List<Func<HttpContext, Task<bool>>>();
     }
 }
