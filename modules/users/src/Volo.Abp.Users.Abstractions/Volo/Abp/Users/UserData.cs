@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Data;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Users;
 
-public class UserData : IUserData
+public class UserData : ExtensibleObject, IUserData
 {
     public Guid Id { get; set; }
 
@@ -42,6 +45,7 @@ public class UserData : IUserData
         PhoneNumber = userData.PhoneNumber;
         PhoneNumberConfirmed = userData.PhoneNumberConfirmed;
         TenantId = userData.TenantId;
+        ExtraProperties = userData.ExtraProperties;
     }
 
     public UserData(
@@ -54,7 +58,8 @@ public class UserData : IUserData
         [CanBeNull] string phoneNumber = null,
         bool phoneNumberConfirmed = false,
         Guid? tenantId = null,
-        bool isActive = true)
+        bool isActive = true,
+        ExtraPropertyDictionary extraProperties = null)
     {
         Id = id;
         UserName = userName;
@@ -66,5 +71,6 @@ public class UserData : IUserData
         PhoneNumber = phoneNumber;
         PhoneNumberConfirmed = phoneNumberConfirmed;
         TenantId = tenantId;
+        ExtraProperties = extraProperties;
     }
 }
