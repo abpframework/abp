@@ -587,7 +587,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         abpButtonTagHelper.ButtonType = AbpButtonType.Outline_Secondary;
         abpButtonTagHelper.Icon = icon;
 
-        abpButtonTagHelper.Disabled = TagHelper.IsDisabled;
+        abpButtonTagHelper.Disabled = TagHelper.IsDisabled || GetAttribute<DisabledInput>() != null;
 
         if (!visible)
         {
