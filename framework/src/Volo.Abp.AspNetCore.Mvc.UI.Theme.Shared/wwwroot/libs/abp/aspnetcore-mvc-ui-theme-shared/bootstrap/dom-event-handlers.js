@@ -777,14 +777,14 @@
     
 
     $(function () {
-        abp.dom.initializers.initializeToolTips($(document).findWithSelf('[data-toggle="tooltip"]'));
-        abp.dom.initializers.initializePopovers($(document).findWithSelf('[data-toggle="popover"]'));
-        abp.dom.initializers.initializeTimeAgos($(document).findWithSelf('.timeago'));
+        abp.dom.initializers.initializeToolTips($('[data-toggle="tooltip"]'));
+        abp.dom.initializers.initializePopovers($('[data-toggle="popover"]'));
+        abp.dom.initializers.initializeTimeAgos($('.timeago'));
         abp.dom.initializers.initializeDatepickers($(document));
         abp.dom.initializers.initializeDateRangePickers($(document));
-        abp.dom.initializers.initializeForms($(document).findWithSelf('form'));
-        abp.dom.initializers.initializeAutocompleteSelects($(document).findWithSelf('.auto-complete-select'));
-        $(document).findWithSelf('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
+        abp.dom.initializers.initializeForms($('form'));
+        abp.dom.initializers.initializeAutocompleteSelects($('.auto-complete-select'));
+        $('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
     });
 
 })(jQuery);
