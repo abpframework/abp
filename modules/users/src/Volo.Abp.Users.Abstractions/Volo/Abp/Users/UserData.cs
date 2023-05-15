@@ -6,7 +6,7 @@ using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Users;
 
-public class UserData : ExtensibleObject, IUserData
+public class UserData : IUserData
 {
     public Guid Id { get; set; }
 
@@ -27,6 +27,8 @@ public class UserData : ExtensibleObject, IUserData
     public string PhoneNumber { get; set; }
 
     public bool PhoneNumberConfirmed { get; set; }
+    
+    public ExtraPropertyDictionary ExtraProperties { get; }
 
     public UserData()
     {
