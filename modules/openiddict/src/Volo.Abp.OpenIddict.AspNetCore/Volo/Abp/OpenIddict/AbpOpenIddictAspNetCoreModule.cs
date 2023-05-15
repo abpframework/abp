@@ -22,9 +22,9 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
     {
         AddOpenIddictServer(context.Services);
 
-        Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
+        Configure<AbpOpenIddictClaimsPrincipalOptions>(options =>
         {
-            options.ClaimDestinationsProvider.Add<AbpDefaultOpenIddictClaimDestinationsProvider>();
+            options.ClaimsPrincipalHandlers.Add<AbpDefaultOpenIddictClaimsPrincipalHandler>();
         });
 
         Configure<RazorViewEngineOptions>(options =>
