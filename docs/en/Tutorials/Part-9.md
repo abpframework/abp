@@ -90,7 +90,7 @@ Create a new razor page, `Index.cshtml` under the `Pages/Authors` folder of the 
 
 This is a simple page similar to the Books page we had created before. It imports a JavaScript file which will be introduced below.
 
-### IndexModel.cshtml.cs
+### Index.cshtml.cs
 
 ````csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -238,7 +238,7 @@ context.Menu.AddItem(
             "BooksStore.Authors",
             l["Menu:Authors"],
             url: "/Authors"
-        ).RequirePermissions(BookStorePermissions.Books.Default)
+        ).RequirePermissions(BookStorePermissions.Authors.Default)
     )
 );
 ````

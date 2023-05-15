@@ -69,19 +69,19 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
-                
+
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server",
                      "MyCompanyName.MyProjectName.Host"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client",
                      "MyCompanyName.MyProjectName.Blazor"));
-                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", 
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared",
                     "MyCompanyName.MyProjectName.Contracts"));
-                
+
                 steps.Add(new AppNoLayersMoveProjectsStep());
                 steps.Add(new AppNoLayersMigrateDatabaseChangeStep());
                 steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
                 break;
-            
+
             case UiFramework.BlazorServer:
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
@@ -98,7 +98,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Mvc", "MyCompanyName.MyProjectName"));
                 RemoveBlazorWasmProjects(steps);
                 break;
-            
+
             default:
                 throw new AbpException("Unkown UI framework: " + context.BuildArgs.UiFramework);
         }
@@ -107,6 +107,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Host/Migrations"));
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
+        RandomizeAuthServerPassPhrase(context, steps);
         UpdateNuGetConfig(context, steps);
         ChangeConnectionString(context, steps);
         ConfigureDockerFiles(context, steps);

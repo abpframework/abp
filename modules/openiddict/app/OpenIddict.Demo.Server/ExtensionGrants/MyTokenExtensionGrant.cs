@@ -78,7 +78,7 @@ public class MyTokenExtensionGrant : ITokenExtensionGrant
         var claimsPrincipal = await userClaimsPrincipalFactory.CreateAsync(user);
         claimsPrincipal.SetScopes(principal.GetScopes());
         claimsPrincipal.SetResources(await GetResourcesAsync(context, principal.GetScopes()));
-        await context.HttpContext.RequestServices.GetRequiredService<AbpOpenIddictClaimDestinationsManager>().SetAsync(principal);
+        await context.HttpContext.RequestServices.GetRequiredService<AbpOpenIddictClaimsPrincipalManager>().HandleAsync(context.Request, principal);
         return new SignInResult(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, claimsPrincipal);
     }
 

@@ -1,0 +1,96 @@
+@page
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+@using Volo.Abp.Users
+@using Volo.Blogging.Localization
+@model Volo.Blogging.Pages.Members.IndexModel
+@inject IStringLocalizer<BloggingResource> L
+@inject ICurrentUser CurrentUser
+@{
+    ViewBag.Title = @Model.User.UserName.ToUpper() + " - " + L["Blogs"].Value;
+}
+
+@section styles {
+    <abp-style src="/Pages/Members/Index.css"/>
+}
+
+<main>
+    <div class="container">
+        <div class="row gx-lg-5">
+            <div class="col-md-4 mb-5 mb-md-0">
+                <div class="card h-auto member-profile-info">
+                    <div class="card-body">
+                        <div class="d-inline-block position-relative">
+                            <img gravatar-email="@Model.User.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
+                        </div>
+                        @if (Model.User.UserName != null)
+                        {
+                            <h2 class="m-0">@Model.User.UserName</h2>
+                        }
+                        <small class="d-block mt-4">@L["UserName"].Value.ToUpper()</small>
+                        <h5>@Model.User.UserName</h5>
+                    </div>
+                </div>
+            </div>
+            @if (Model.Posts is not null && Model.Posts.Any())
+            {
+                <div class="col-md-8">
+                    <abp-tabs>
+                        <abp-tab name="all-posts" title="All Blog Posts">
+                            <div class="mt-4 pt-3">
+                                @foreach (var post in Model.Posts)
+                                {
+                                    <div class="post-item">
+                                        <div class="post-type-cont">
+
+                                            <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
+                                                <img gravatar-email="@Model.User.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
+                                            </a>
+                                            <span class="post-type">
+                                                <i class="fas fa-pen-nib"></i>
+                                                @L["Blog"].Value.ToUpper()
+                                            </span>
+                                        </div>
+                                        <div class="post-detail-cont">
+                                            <div class="post-info fs-12 mb-2">
+                                                <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
+                                                    <span class="text-dark dot">@Model.User.UserName</span>
+                                                </a>
+                                                <span class="text-dark-200 dot">@post.CreationTime.ToString("MMMM yyyy")</span>
+                                                <span class="text-dark-200">@post.ReadCount.ToString() @L["Views"]</span>
+                                            </div>
+                                            <h3 class="post-title mb-3">
+                                                <a href="@Model.GetBlogPostUrl(post)">
+                                                    @post.Title
+                                                </a>
+                                            </h3>
+                                            <p class="post-desc">
+                                                <a href="@Model.GetBlogPostUrl(post)">
+                                                    @post.Description.TruncateWithPostfix(150)
+                                                </a>
+                                                <a href="@Model.GetBlogPostUrl(post)" class="readMore">@L["ReadMore"]</a>
+                                            </p>
+                                        </div>
+                                        <div class="post-img-cont">
+                                            <div class="post-list-span text-center post">
+                                                <img src="@post.CoverImage" class="box-articles">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </abp-tab>
+                    </abp-tabs>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-8">
+                    <div class="mt-5 pt-6">
+                        <p>@L["MemberNotPublishedPostYet"]</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</main>
