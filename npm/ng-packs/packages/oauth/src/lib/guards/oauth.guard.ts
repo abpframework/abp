@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { UrlTree } from '@angular/router';
+import { UrlTree, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, delay, of, tap } from 'rxjs';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 import { AuthService, HttpErrorReporterService, IAbpGuard } from '@abp/ng.core';
@@ -15,13 +15,24 @@ export class AbpOAuthGuard implements IAbpGuard {
   protected readonly authService = inject(AuthService);
   protected readonly httpErrorReporter = inject(HttpErrorReporterService);
 
-  canActivate(): Observable<boolean> | boolean | UrlTree {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Observable<boolean> | boolean | UrlTree {
     const hasValidAccessToken = this.oAuthService.hasValidAccessToken();
     if (hasValidAccessToken) {
       return true;
     }
 
-    this.httpErrorReporter.reportError({ status: 401 } as HttpErrorResponse);
-    return false;
+    return of(false).pipe(
+      tap(() => {
+        this.httpErrorReporter.reportError({ status: 401 } as HttpErrorResponse);
+      }),
+      delay(1500),
+      tap(() => {
+        const params = { returnUrl: state.url };
+        this.authService.navigateToLogin(params);
+      }),
+    );
   }
 }
