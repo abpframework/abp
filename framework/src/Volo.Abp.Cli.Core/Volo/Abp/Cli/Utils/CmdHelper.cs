@@ -12,12 +12,12 @@ public class CmdHelper : ICmdHelper, ITransientDependency
     private const int SuccessfulExitCode = 0;
 
     protected AbpCliOptions CliOptions { get; }
-    
+
     public CmdHelper(IOptionsSnapshot<AbpCliOptions> cliOptions)
     {
         CliOptions = cliOptions.Value;
     }
-    
+
     public void Open(string pathOrUrl)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -35,29 +35,26 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         }
     }
 
-    public void Run(string file, string arguments)
+    public void Run(string file, string arguments, bool isAdministrative = false)
     {
-        var procStartInfo = new ProcessStartInfo(file, arguments);
+        var procStartInfo = GetProcessStartInfo(file, arguments, isAdministrative);
 
         if (CliOptions.AlwaysHideExternalCommandOutput)
         {
             HideNewCommandWindow(procStartInfo);
         }
-        
+
         Process.Start(procStartInfo)?.WaitForExit();
     }
 
-    public void RunCmd(string command, string workingDirectory = null)
+    public void RunCmd(string command, string workingDirectory = null, bool isAdministrative = false)
     {
-        RunCmd(command, out _, workingDirectory);
+        RunCmd(command, out _, workingDirectory, isAdministrative);
     }
 
-    public void RunCmd(string command, out int exitCode, string workingDirectory = null)
+    public void RunCmd(string command, out int exitCode, string workingDirectory = null, bool isAdministrative = false)
     {
-        var procStartInfo = new ProcessStartInfo(
-            GetFileName(),
-            GetArguments(command)
-        );
+        var procStartInfo = GetProcessStartInfo(GetFileName(), GetArguments(command), isAdministrative);
 
         if (CliOptions.AlwaysHideExternalCommandOutput)
         {
@@ -77,12 +74,34 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         }
     }
 
-    public Process RunCmdAndGetProcess(string command, string workingDirectory = null)
+    private ProcessStartInfo GetProcessStartInfo(string fileName, string arguments, bool isAdministrative = false)
     {
-        var procStartInfo = new ProcessStartInfo(
-            GetFileName(),
-            GetArguments(command)
-        );
+        if (isAdministrative)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return new ProcessStartInfo(fileName, arguments)
+                {
+                    Verb = "runas",
+                    UseShellExecute = true
+                };
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return new ProcessStartInfo("osascript", $"-e \"do shell script \\\"{fileName} {arguments}\\\" with administrator privileges\"");
+            }
+            else
+            {
+                return new ProcessStartInfo("sudo", $"{fileName} {arguments}");
+            }
+        }
+
+        return new ProcessStartInfo(fileName, arguments);
+    }
+
+    public Process RunCmdAndGetProcess(string command, string workingDirectory = null, bool isAdministrative = false)
+    {
+        var procStartInfo = GetProcessStartInfo(GetFileName(), GetArguments(command), isAdministrative);
 
         if (CliOptions.AlwaysHideExternalCommandOutput)
         {
@@ -97,33 +116,31 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         return Process.Start(procStartInfo);
     }
 
-    public string RunCmdAndGetOutput(string command, string workingDirectory = null)
+    public string RunCmdAndGetOutput(string command, string workingDirectory = null, bool isAdministrative = false)
     {
-        return RunCmdAndGetOutput(command, out int _, workingDirectory);
+        return RunCmdAndGetOutput(command, out int _, workingDirectory, isAdministrative);
     }
 
-    public string RunCmdAndGetOutput(string command, out bool isExitCodeSuccessful, string workingDirectory = null)
+    public string RunCmdAndGetOutput(string command, out bool isExitCodeSuccessful, string workingDirectory = null, bool isAdministrative = false)
     {
-        var output = RunCmdAndGetOutput(command, out int exitCode, workingDirectory);
+        var output = RunCmdAndGetOutput(command, out int exitCode, workingDirectory, isAdministrative);
         isExitCodeSuccessful = exitCode == SuccessfulExitCode;
         return output;
     }
 
-    public string RunCmdAndGetOutput(string command, out int exitCode, string workingDirectory = null)
+    public string RunCmdAndGetOutput(string command, out int exitCode, string workingDirectory = null, bool isAdministrative = false)
     {
         string output;
 
         using (var process = new Process())
         {
-            process.StartInfo = new ProcessStartInfo(GetFileName())
-            {
-                Arguments = GetArguments(command),
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
+            process.StartInfo = GetProcessStartInfo(GetFileName(), GetArguments(command), isAdministrative);
+
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
 
             if (!string.IsNullOrEmpty(workingDirectory))
             {
@@ -149,18 +166,19 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         return output.Trim();
     }
 
-    public void RunCmdAndExit(string command, string workingDirectory = null, int? delaySeconds = null)
+    public void RunCmdAndExit(string command, string workingDirectory = null, int? delaySeconds = null, bool isAdministrative = false)
     {
-        var procStartInfo = new ProcessStartInfo(
+        var procStartInfo = GetProcessStartInfo(
             GetFileName(),
-            GetArguments(command, delaySeconds)
+            GetArguments(command, delaySeconds),
+            isAdministrative
         );
 
         if (!string.IsNullOrEmpty(workingDirectory))
         {
             procStartInfo.WorkingDirectory = workingDirectory;
         }
-        
+
         if (CliOptions.AlwaysHideExternalCommandOutput)
         {
             HideNewCommandWindow(procStartInfo);
