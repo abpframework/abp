@@ -15,7 +15,7 @@
     "got": "^11.5.2",
     "jsonc-parser": "^2.3.0",
     "should-quote": "^1.0.0",
-    "typescript": "4.8.4"
+    "typescript": "~4.8.4"
   },
   "devDependencies": {
     "@schematics/angular": "~14.2.1",

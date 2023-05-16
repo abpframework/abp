@@ -27,6 +27,6 @@
     "esm": "^3.2.25",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "4.7.4"
+    "typescript": "~4.8.4"
   }
 }
