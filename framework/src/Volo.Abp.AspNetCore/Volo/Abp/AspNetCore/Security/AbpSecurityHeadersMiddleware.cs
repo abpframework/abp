@@ -34,8 +34,13 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         var requestAcceptTypeHtml = context.Request.Headers["Accept"].Any(x =>
             x.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
 
-        if (!requestAcceptTypeHtml || !Options.Value.UseContentSecurityPolicyHeader || await AlwaysIgnoreContentTypes(context) || context.GetEndpoint() == null)
+        if (!requestAcceptTypeHtml 
+            || !Options.Value.UseContentSecurityPolicyHeader 
+            || await AlwaysIgnoreContentTypes(context) 
+            || context.GetEndpoint() == null
+            || Options.Value.IgnoredNonceScriptPaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'))))
         {
+            AddOtherHeaders(context);
             await next.Invoke(context);
             return;
         }
@@ -68,17 +73,16 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 
             AddHeader(context, "Content-Security-Policy", BuildContentSecurityPolicyValue(context));
 
-
-            AddOtherHeaders(context);
             return Task.CompletedTask;
         });
 
+        AddOtherHeaders(context);
         await next.Invoke(context);
     }
     
     private async Task<bool> AlwaysIgnoreContentTypes(HttpContext context)
     {
-        foreach (var selector in Options.Value.AlwaysIgnoreSecurityHeadersSelectors)
+        foreach (var selector in Options.Value.IgnoredNonceScriptSelectors)
         {
             if(await selector(context))
             {
@@ -103,26 +107,26 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
               context.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) &&
               nonce is string nonceValue && !string.IsNullOrEmpty(nonceValue)))
         {
-            return ContentSecurityPolicyValueDictionaryToCSPString();
+            return ContentSecurityPolicyValuesToCSPString();
         }
 
         var scriptSrcValue = "";
-        if (Options.Value.ContentSecurityPolicyValueDictionary.TryGetValue(ScriptSrcKey, out var scriptSrc))
+        if (Options.Value.ContentSecurityPolicyValues.TryGetValue(ScriptSrcKey, out var scriptSrc))
         {
             scriptSrcValue = string.Join(" ", scriptSrc);
         }
 
         scriptSrcValue += $" 'nonce-{nonceValue}'";
 
-        return ContentSecurityPolicyValueDictionaryToCSPString(true) + $"; {ScriptSrcKey} {scriptSrcValue}";
+        return ContentSecurityPolicyValuesToCSPString(true) + $"; {ScriptSrcKey} {scriptSrcValue}";
     }
 
-    protected virtual string ContentSecurityPolicyValueDictionaryToCSPString(bool ignoreScriptSrc = false)
+    protected virtual string ContentSecurityPolicyValuesToCSPString(bool ignoreScriptSrc = false)
     {
-        if (Options.Value.ContentSecurityPolicyValueDictionary.Any())
+        if (Options.Value.ContentSecurityPolicyValues.Any())
         {
             return string.Join("; ",
-                Options.Value.ContentSecurityPolicyValueDictionary.WhereIf(ignoreScriptSrc, x => x.Key != ScriptSrcKey)
+                Options.Value.ContentSecurityPolicyValues.WhereIf(ignoreScriptSrc, x => x.Key != ScriptSrcKey)
                     .Select(x => $"{x.Key} {string.Join(" ", x.Value)}"));
         }
 

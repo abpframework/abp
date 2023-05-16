@@ -11,16 +11,19 @@ public class AbpSecurityHeadersOptions
     
     public bool UseContentSecurityPolicyNonce { get; set; }
 
-    public Dictionary<string,IEnumerable<string>> ContentSecurityPolicyValueDictionary { get; }
+    public Dictionary<string,IEnumerable<string>> ContentSecurityPolicyValues { get; }
 
     public Dictionary<string, string> Headers { get; }
     
-    public List<Func<HttpContext, Task<bool>>> AlwaysIgnoreSecurityHeadersSelectors { get; }
+    public List<Func<HttpContext, Task<bool>>> IgnoredNonceScriptSelectors { get; }
+    
+    public IEnumerable<string> IgnoredNonceScriptPaths { get; }
 
     public AbpSecurityHeadersOptions()
     {
         Headers = new Dictionary<string, string>();
-        ContentSecurityPolicyValueDictionary = new Dictionary<string, IEnumerable<string>>();
-        AlwaysIgnoreSecurityHeadersSelectors = new List<Func<HttpContext, Task<bool>>>();
+        ContentSecurityPolicyValues = new Dictionary<string, IEnumerable<string>>();
+        IgnoredNonceScriptSelectors = new List<Func<HttpContext, Task<bool>>>();
+        IgnoredNonceScriptPaths = new List<string>();
     }
 }

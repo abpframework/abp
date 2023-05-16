@@ -15,9 +15,9 @@ public static class AbpSecurityHeaderNonceHelper
         return string.Empty;
     }
     
-    public static string GetScriptNonceAttribute(this IHtmlHelper htmlHelper)
+    public static IHtmlContent GetScriptNonceAttribute(this IHtmlHelper htmlHelper)
     {
         var nonce = htmlHelper.GetScriptNonce();
-        return string.IsNullOrEmpty(nonce) ? string.Empty : $"nonce=\"{nonce}\"";
+        return nonce == string.Empty ? HtmlString.Empty : new HtmlString($"nonce=\"{nonce}\"");
     }
 }
