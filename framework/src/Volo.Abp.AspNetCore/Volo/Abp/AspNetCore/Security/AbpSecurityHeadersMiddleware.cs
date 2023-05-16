@@ -54,7 +54,6 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 
         context.Response.OnStarting(() =>
         {
-            // is response already have CSP header?
             if (context.Response.Headers.ContainsKey("Content-Security-Policy"))
             {
                 return Task.CompletedTask;
@@ -64,8 +63,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
             {
                 return Task.CompletedTask;
             }
-
-            // is response successfully?
+            
             if (context.Response.StatusCode is < 200 or > 299)
             {
                 return Task.CompletedTask;

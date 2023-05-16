@@ -14,7 +14,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
 
 public class AbpTagHelperStyleService : AbpTagHelperResourceService
 {
-    private readonly IOptions<AbpSecurityHeadersOptions> _securityHeadersOptions;
+    protected AbpSecurityHeadersOptions SecurityHeadersOptions;
     public AbpTagHelperStyleService(
         IBundleManager bundleManager,
         IOptions<AbpBundlingOptions> options,
@@ -24,7 +24,7 @@ public class AbpTagHelperStyleService : AbpTagHelperResourceService
             options,
             hostingEnvironment)
     {
-        _securityHeadersOptions = securityHeadersOptions;
+        SecurityHeadersOptions = securityHeadersOptions.Value;
     }
 
     protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
@@ -52,7 +52,7 @@ public class AbpTagHelperStyleService : AbpTagHelperResourceService
 
         if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
         {
-            output.Content.AppendHtml(_securityHeadersOptions.Value.UseContentSecurityPolicyNonce
+            output.Content.AppendHtml(SecurityHeadersOptions.UseContentSecurityPolicyNonce
                 ? $"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" abp-csp-style />{Environment.NewLine}"
                 : $"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" onload=\"this.rel='stylesheet'\" />{Environment.NewLine}");
         }
