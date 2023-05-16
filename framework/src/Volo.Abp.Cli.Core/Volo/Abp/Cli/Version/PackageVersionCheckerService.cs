@@ -109,20 +109,54 @@ public class PackageVersionCheckerService : ITransientDependency
             return await GetPackageVersionsFromMyGet(packageId);
         }
 
-        if (CommercialPackages.IsCommercial(packageId))
+        if (await IsCommercialPackageAsync(packageId))
         {
             return await GetPackageVersionsFromAbpCommercialNuGetAsync(packageId);
         }
-        else
+        
+        return await GetPackageVersionsFromNuGetOrgAsync(packageId) ?? new List<string>();
+    }
+
+    private async Task<bool> IsCommercialPackageAsync(string packageId)
+    {
+        if (CommercialPackages.IsCommercial(packageId))
         {
-            var packagesFromNugetOrg = await GetPackageVersionsFromNuGetOrgAsync(packageId);
-            if (packagesFromNugetOrg != null)
-            {
-                return packagesFromNugetOrg;
-            }
+            return true;
         }
 
-        return await GetPackageVersionsFromAbpCommercialNuGetAsync(packageId);
+        await SetApiKeyResultAsync();
+        if (_apiKeyResult?.ApiKey == null)
+        {
+            return false;
+        }
+
+        var searchUrl = CliUrls.GetNuGetPackageSearchUrl(_apiKeyResult.ApiKey, packageId);
+        return await HasAnyPackageAsync(searchUrl);
+    }
+
+    private async Task<bool> HasAnyPackageAsync(string url)
+    {
+        try
+        {
+            var client = _cliHttpClientFactory.CreateClient(needsAuthentication: false);
+
+            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
+                       url,
+                       cancellationToken: CancellationTokenProvider.Token,
+                       logger: Logger
+                   ))
+            {
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+
+                var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                
+                return JsonSerializer.Deserialize<NuGetSearchResultDto>(responseContent).TotalHits > 0;
+            }
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     private async Task<List<string>> GetPackageVersionsFromAbpCommercialNuGetAsync(string packageId)
@@ -175,17 +209,13 @@ public class PackageVersionCheckerService : ITransientDependency
 
     private async Task<string> GetNuGetUrlForCommercialPackage(string packageId)
     {
-        if (_apiKeyResult == null)
-        {
-            _apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
-
-            if (_apiKeyResult == null)
-            {
-                return null;
-            }
-        }
-
+        await SetApiKeyResultAsync();
         return CliUrls.GetNuGetPackageInfoUrl(_apiKeyResult.ApiKey, packageId);
+    }
+
+    private async Task SetApiKeyResultAsync()
+    {
+        _apiKeyResult ??= await _apiKeyService.GetApiKeyOrNullAsync();
     }
 
     private async Task<LatestStableVersionResult> GetLatestStableVersionOrNullAsync()
@@ -214,6 +244,12 @@ public class PackageVersionCheckerService : ITransientDependency
         }
     }
 
+    public class NuGetSearchResultDto
+    {
+        [JsonProperty("totalHits")]
+        public int TotalHits { get; set; }
+    }
+    
     public class NuGetVersionResultDto
     {
         [JsonProperty("versions")]

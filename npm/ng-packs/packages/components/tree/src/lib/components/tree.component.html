@@ -45,6 +45,7 @@
           class="fas fa-caret-down text-muted"
           ngbDropdownToggle
           [class.dropdown-toggle]="false"
+          aria-hidden="true"
         ></i>
         <div ngbDropdownMenu>
           <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }"></ng-template>

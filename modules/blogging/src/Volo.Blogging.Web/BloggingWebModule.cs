@@ -95,6 +95,7 @@ namespace Volo.Blogging
                 options.Conventions.AddPageRoute("/Blogs/Posts/Detail", routePrefix + "{blogShortName:blogNameConstraint}/{postUrl}");
                 options.Conventions.AddPageRoute("/Blogs/Posts/Edit", routePrefix + "{blogShortName}/posts/{postId}/edit");
                 options.Conventions.AddPageRoute("/Blogs/Posts/New", routePrefix + "{blogShortName}/posts/new");
+                options.Conventions.AddPageRoute("/Members/Index", routePrefix + "members/{userName}");
             });
 
             Configure<DynamicJavaScriptProxyOptions>(options =>

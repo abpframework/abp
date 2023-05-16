@@ -44,6 +44,10 @@ public class AbpSelectTagHelper : AbpTagHelper<AbpSelectTagHelper, AbpSelectTagH
 
     public string Placeholder { get; set; }
 
+    [HtmlAttributeName("floating-label")]
+
+    public bool FloatingLabel { get; set; }
+
     public AbpSelectTagHelper(AbpSelectTagHelperService tagHelperService)
         : base(tagHelperService)
     {

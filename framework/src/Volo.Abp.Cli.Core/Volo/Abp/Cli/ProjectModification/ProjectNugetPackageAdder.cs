@@ -248,6 +248,7 @@ public class ProjectNugetPackageAdder : ITransientDependency
 
         if (projectFileContent.Contains($"\"{package.Name}\""))
         {
+            Logger.LogInformation($"Package '{package.Name}' is already installed to the project '{Path.GetFileNameWithoutExtension(projectFile)}'.");
             return;
         }
 
