@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using Volo.Abp.Content;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -35,12 +36,10 @@ public static class AbpSwaggerGenServiceCollectionExtensions
         [NotNull] Dictionary<string, string> scopes,
         Action<SwaggerGenOptions> setupAction = null,
         string authorizationEndpoint = "/connect/authorize",
-        string tokenEndpoint = "/connect/token",
-        string openIdConnectDiscoveryEndpoint = "/.well-known/openid-configuration")
+        string tokenEndpoint = "/connect/token")
     {
         var authorizationUrl = new Uri($"{authority.TrimEnd('/')}{authorizationEndpoint.EnsureStartsWith('/')}");
         var tokenUrl = new Uri($"{authority.TrimEnd('/')}{tokenEndpoint.EnsureStartsWith('/')}");
-        var openIdConnectDiscoveryUrl = new Uri($"{authority.TrimEnd('/')}{openIdConnectDiscoveryEndpoint.EnsureStartsWith('/')}");
         
         return services
             .AddAbpSwaggerGen()
@@ -49,8 +48,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
                 {
                     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                     {
-                        Type = SecuritySchemeType.OpenIdConnect,
-                        OpenIdConnectUrl = openIdConnectDiscoveryUrl,
+                        Type = SecuritySchemeType.OAuth2,
                         Flows = new OpenApiOAuthFlows
                         {
                             AuthorizationCode = new OpenApiOAuthFlow
@@ -64,19 +62,64 @@ public static class AbpSwaggerGenServiceCollectionExtensions
 
                     options.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
+                        {
+                            new OpenApiSecurityScheme
                             {
-                                new OpenApiSecurityScheme
+                                Reference = new OpenApiReference
                                 {
-                                    Reference = new OpenApiReference
-                                    {
-                                        Type = ReferenceType.SecurityScheme,
-                                        Id = "oauth2"
-                                    }
-                                },
-                                Array.Empty<string>()
-                            }
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "oauth2"
+                                }
+                            },
+                            Array.Empty<string>()
+                        }
                     });
 
+                    setupAction?.Invoke(options);
+                });
+    }
+
+    public static IServiceCollection AddAbpSwaggerGenWithOidc(
+        this IServiceCollection services,
+        [NotNull] string authority,
+        Action<SwaggerGenOptions> setupAction = null,
+        List<string> flows = null,
+        string openIdConnectDiscoveryEndpoint = "/.well-known/openid-configuration")
+    {
+        var openIdConnectDiscoveryUrl = new Uri($"{authority.TrimEnd('/')}{openIdConnectDiscoveryEndpoint.EnsureStartsWith('/')}");
+        flows ??= new List<string> { "authorization_code"};
+
+        services.Configure<SwaggerUIOptions>(swaggerUiOptions =>
+        {
+            swaggerUiOptions.ConfigObject.AdditionalItems["oidcSupportedFlows"] = flows;
+        });
+        
+        return services
+            .AddAbpSwaggerGen()
+            .AddSwaggerGen(
+                options =>
+                {
+                    options.AddSecurityDefinition("oidc", new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.OpenIdConnect,
+                        OpenIdConnectUrl = openIdConnectDiscoveryUrl,
+                        
+                    });
+
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "oidc"
+                                }
+                            },
+                            Array.Empty<string>()
+                        }
+                    });
                     setupAction?.Invoke(options);
                 });
     }

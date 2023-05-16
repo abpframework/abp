@@ -6,9 +6,11 @@ var abp = abp || {};
 
         var excludeUrl = ["swagger.json", "connect/token"]
         var firstRequest = true;
+        var oidcSupportedFlows = configObject.oidcSupportedFlows || [];
         abp.appPath = configObject.baseUrl || abp.appPath;
 
         var requestInterceptor = configObject.requestInterceptor;
+        var responseInterceptor = configObject.responseInterceptor;
 
         configObject.requestInterceptor = async function(request) {
 
@@ -36,6 +38,19 @@ var abp = abp || {};
                 requestInterceptor(request);
             }
             return request;
+        };
+
+        configObject.responseInterceptor = async function(response) {
+            if(response.url.endsWith(".well-known/openid-configuration") && response.status === 200 && oidcSupportedFlows.length > 0) {
+                var openIdConnectData = JSON.parse(response.text);
+                openIdConnectData.grant_types_supported = oidcSupportedFlows;
+                response.text = JSON.stringify(openIdConnectData);
+            }
+
+            if (responseInterceptor) {
+                responseInterceptor(response);
+            }
+            return response;
         };
 
         return SwaggerUIBundle(configObject);
