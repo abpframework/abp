@@ -17,7 +17,7 @@ public class AbpSecurityHeadersOptions
     
     public List<Func<HttpContext, Task<bool>>> IgnoredNonceScriptSelectors { get; }
     
-    public IEnumerable<string> IgnoredNonceScriptPaths { get; }
+    public List<string> IgnoredNonceScriptPaths { get; }
 
     public AbpSecurityHeadersOptions()
     {
