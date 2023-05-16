@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { Params } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import {
   AuthConfig,
   OAuthErrorEvent,
@@ -7,7 +7,7 @@ import {
   OAuthStorage,
 } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import {
   ConfigStateService,
   EnvironmentService,
@@ -30,6 +30,7 @@ export abstract class AuthFlowStrategy {
   protected oAuthConfig!: AuthConfig;
   protected sessionState: SessionStateService;
   protected tenantKey: string;
+  protected router: Router;
 
   abstract checkIfInternalAuth(queryParams?: Params): boolean;
 
@@ -52,6 +53,7 @@ export abstract class AuthFlowStrategy {
     this.sessionState = injector.get(SessionStateService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig || {};
     this.tenantKey = injector.get(TENANT_KEY);
+    this.router = injector.get(Router);
 
     this.listenToOauthErrors();
   }
@@ -68,6 +70,8 @@ export abstract class AuthFlowStrategy {
       .pipe(filter(event => event.type === 'token_refresh_error'))
       .subscribe(() => this.navigateToLogin());
 
+    this.navigateToPreviousUrl();
+
     return this.oAuthService
       .loadDiscoveryDocument()
       .then(() => {
@@ -78,6 +82,28 @@ export abstract class AuthFlowStrategy {
         return this.refreshToken();
       })
       .catch(this.catchError);
+  }
+
+  protected navigateToPreviousUrl() {
+    this.oAuthService.events
+      .pipe(
+        filter(event => event.type === 'token_received' && !!this.oAuthService.state),
+        map(() => {
+          const redirect_uri = decodeURIComponent(this.oAuthService.state);
+
+          if (redirect_uri && redirect_uri !== '/') {
+            return redirect_uri;
+          }
+          return '/';
+        }),
+        switchMap(redirectUri =>
+          this.configState.getOne$('currentUser').pipe(
+            filter(user => Boolean(user?.isAuthenticated)),
+            tap(() => this.router.navigate([redirectUri])),
+          ),
+        ),
+      )
+      .subscribe();
   }
 
   protected refreshToken() {
