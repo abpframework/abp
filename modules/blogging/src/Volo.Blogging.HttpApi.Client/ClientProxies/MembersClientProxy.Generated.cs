@@ -25,4 +25,12 @@ public partial class MembersClientProxy : ClientProxyBase<IMemberAppService>, IM
             { typeof(string), username }
         });
     }
+
+    public Task UpdateUserProfileAsync(CustomIdentityBlogUserUpdateDto input)
+    {
+        return RequestAsync(nameof(UpdateUserProfileAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(CustomIdentityBlogUserUpdateDto), input }
+        });
+    }
 }

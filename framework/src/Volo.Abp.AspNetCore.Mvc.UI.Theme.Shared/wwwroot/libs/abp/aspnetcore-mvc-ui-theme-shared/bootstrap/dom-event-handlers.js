@@ -643,8 +643,9 @@
                     var momentEndDate = getMoment(endDate, options);
                     if (momentStartDate.isValid()) {
                         picker.setStartDate(momentStartDate);
+                        picker.setEndDate(momentEndDate);
                     }
-                    if (momentEndDate.isValid()) {
+                    if (momentEndDate.isValid() && !singleDatePicker) {
                         picker.setEndDate(momentEndDate);
                     }
                 });
@@ -766,6 +767,7 @@
         abp.dom.initializers.initializeScript(args.$el);
         abp.dom.initializers.initializeAutocompleteSelects(args.$el.findWithSelf('.auto-complete-select'));
         abp.dom.initializers.initializeAbpCspStyles($("link[abp-csp-style]"));
+        abp.dom.initializers.initializeDateRangePickers(args.$el);
     });
 
     abp.dom.onNodeRemoved(function (args) {
@@ -777,6 +779,7 @@
     abp.event.on('abp.configurationInitialized', function () {
         abp.libs.bootstrapDatepicker.normalizeLanguageConfig();
     });
+    
 
     $(function () {
         abp.dom.initializers.initializeToolTips($('[data-toggle="tooltip"]'));

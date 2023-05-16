@@ -14,7 +14,8 @@ public static class AbpUserExtensions
             emailConfirmed: user.EmailConfirmed,
             phoneNumber: user.PhoneNumber,
             phoneNumberConfirmed: user.PhoneNumberConfirmed,
-            tenantId: user.TenantId
+            tenantId: user.TenantId,
+            extraProperties: user.ExtraProperties
         );
     }
 }

@@ -9,16 +9,16 @@ using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.OpenIddict;
 
-public class AbpDefaultOpenIddictClaimDestinationsProvider : IAbpOpenIddictClaimDestinationsProvider, ITransientDependency
+public class AbpDefaultOpenIddictClaimsPrincipalHandler : IAbpOpenIddictClaimsPrincipalHandler, ITransientDependency
 {
-    public virtual Task SetDestinationsAsync(AbpOpenIddictClaimDestinationsProviderContext context)
+    public virtual Task HandleAsync(AbpOpenIddictClaimsPrincipalHandlerContext context)
     {
         var securityStampClaimType = context
             .ScopeServiceProvider
             .GetRequiredService<IOptions<IdentityOptions>>().Value
             .ClaimsIdentity.SecurityStampClaimType;
 
-        foreach (var claim in context.Claims)
+        foreach (var claim in context.Principal.Claims)
         {
             if (claim.Type == AbpClaimTypes.TenantId)
             {

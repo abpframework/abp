@@ -26,4 +26,21 @@ public class MemberAppService : BloggingAppServiceBase, IMemberAppService
         
         return ObjectMapper.Map<BlogUser, BlogUserDto>(user);
     }
+
+    public async Task UpdateUserProfileAsync(CustomIdentityBlogUserUpdateDto input)
+    {
+        var user = await _userRepository.GetAsync(CurrentUser.Id.Value);
+
+        user.Name = input.Name;
+        user.Surname = input.Surname;
+        user.WebSite = input.WebSite;
+        user.Twitter = input.Twitter;
+        user.Github = input.Github;
+        user.Linkedin = input.Linkedin;
+        user.Company = input.Company;
+        user.JobTitle = input.JobTitle;
+        user.Biography = input.Biography;
+            
+        await _userRepository.UpdateAsync(user);
+    }
 }

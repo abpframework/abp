@@ -23,5 +23,7 @@ namespace Volo.Blogging.Posts
         Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input);
         
         Task<List<PostWithDetailsDto>> GetListByUserIdAsync(Guid userId);
+        
+        Task<List<PostWithDetailsDto>> GetLatestBlogPostsAsync(Guid blogId, int count);
     }
 }
