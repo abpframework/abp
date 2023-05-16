@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Czy mogę w przyszłości zmienić zarejestrowanych programistów mojej organizacji?",
     "ChangingDevelopersExplanation": "Oprócz dodawania nowych programistów do swojej licencji możesz również zmieniać istniejących programistów (możesz usunąć programistę i dodać nowego do tego samego stanowiska) bez żadnych dodatkowych kosztów.",
     "WhenShouldIRenewMyLicense": "Kiedy powinienem odnowić licencję?",
-    "WhenShouldIRenewMyLicenseExplanation": "Jeśli odnowisz licencję w ciągu <strong>1 miesiąca</strong> po wygaśnięciu licencji, zostaną zastosowane następujące rabaty: licencja zespołowa {0}% rabatu, licencja biznesowa {1}% rabatu, licencja Enterprise {2}% rabatu . Jeśli odnowisz licencję <strong>1 miesiąc</strong> po dacie wygaśnięcia licencji, cena odnowienia będzie taka sama jak cena zakupu licencji i nie będzie rabatu na odnowienie.",
+    "WhenShouldIRenewMyLicenseExplanation": "Jeśli odnowisz licencję w ciągu <strong>{3} dni</strong> po wygaśnięciu licencji, zostaną zastosowane następujące rabaty: licencja zespołowa {0}% rabatu, licencja biznesowa {1}% rabatu, licencja Enterprise {2}% rabatu . Jeśli odnowisz licencję <strong>1 miesiąc</strong> po dacie wygaśnięcia licencji, cena odnowienia będzie taka sama jak cena zakupu licencji i nie będzie rabatu na odnowienie.",
     "TrialPlan": "Czy masz plan próbny?",
     "DoYouAcceptBankWireTransfer": "Czy akceptujesz przelew bankowy?",
     "DoYouAcceptBankWireTransferExplanation": "Tak, akceptujemy przelew bankowy.<br />Po wysłaniu opłaty licencyjnej przelewem bankowym wyślij nam e-mail na adres accounting@abp.io z potwierdzeniem odbioru i rodzajem żądanej licencji. Informacje o naszych międzynarodowych kontach bankowych:",

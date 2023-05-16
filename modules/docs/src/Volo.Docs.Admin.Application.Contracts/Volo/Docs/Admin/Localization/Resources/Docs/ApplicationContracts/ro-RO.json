@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Codul limbii",
     "DisplayName:Version": "Versiune",
     "Documents": "Documente",
-    "RemoveFromCache": "Şterge din cache",
+    "RemoveFromCache": "Eliminarea din memoria cache și reintroducerea indexării",
     "Reindex": "Reindexează",
     "ReindexCompleted": "Reindexare completă",
-    "RemovedFromCache": "Şters din cache",
+    "RemovedFromCache": "Eliminat din memoria cache și reintrodus în index",
     "RemoveFromCacheConfirmation": "Sunteţi sigur(ă) că vreţi să ştergeţi acest obiect din cache?",
-    "ReIndexDocumentConfirmation": "Sunteţi sigur(ă) că vreţi să reindexaţi acest obiect?",
+    "ReIndexDocumentConfirmation": "Sunteți sigur că doriți să re-indexați \"{0}\"?",
     "DeleteFromDatabase": "Şterge din baza de date",
     "Deleted": "Şters",
     "Search": "Caută",
@@ -55,6 +55,7 @@
     "LanguageCode": "Codul limbii",
     "FileName": "Nume fişier",
     "LastCachedTime": "Durată cache",
-    "Project": "Proiect"
+    "Project": "Proiect",
+    "RemoveCacheAndReIndexConfirmation": "Documentul \"{0}\" va fi eliminat din memoria cache și va fi reindexat. Confirmați?"
   }
 }

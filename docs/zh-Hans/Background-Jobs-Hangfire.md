@@ -66,6 +66,8 @@ public class YourModule : AbpModule
   }
 ````
 
+> 你必须为Hangfire配置一个存储
+
 ### 指定队列
 
 你可以使用 [`QueueAttribute`](https://docs.hangfire.io/en/latest/background-processing/configuring-queues.html) 来指定队列.

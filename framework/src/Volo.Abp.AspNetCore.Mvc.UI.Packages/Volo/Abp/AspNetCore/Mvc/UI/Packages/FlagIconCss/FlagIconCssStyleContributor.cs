@@ -7,6 +7,13 @@ public class FlagIconCssStyleContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddIfNotContains("/libs/flag-icon-css/css/flag-icons.min.css");
+        if (context.FileProvider.GetFileInfo("/libs/flag-icons/css/flag-icons.min.css").Exists)
+        {
+            context.Files.AddIfNotContains("/libs/flag-icons/css/flag-icons.min.css");
+        }
+        else if (context.FileProvider.GetFileInfo("/libs/flag-icon-css/css/flag-icons.min.css").Exists)
+        {
+            context.Files.AddIfNotContains("/libs/flag-icon-css/css/flag-icons.min.css");
+        }
     }
 }

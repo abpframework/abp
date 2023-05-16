@@ -274,7 +274,8 @@
     "FirstEdition": "Primera edición",
     "ThankYou": "¡Gracias!",
     "CheckboxMandatory": "¡Debes marcar esto para continuar!",
-    "SelectUITheme": "Seleccione el tema de la interfaz de usuario"
-
+    "SelectUITheme": "Seleccione el tema de la interfaz de usuario",
+    "CreateSolutionFolder": "Crear carpeta de soluciones",
+    "CreateSolutionFolderOption": "Especifica si el proyecto estará en una nueva carpeta en la carpeta de salida o directamente en la carpeta de salida."
   }
 }

@@ -9,6 +9,9 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using Volo.Abp;
+using Volo.CmsKit.Localization;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 using Color = SixLabors.ImageSharp.Color;
 using PointF = SixLabors.ImageSharp.PointF;
@@ -17,6 +20,12 @@ namespace Volo.CmsKit.Public.Web.Security.Captcha;
 
 public class SimpleMathsCaptchaGenerator : ISingletonDependency
 {
+    private readonly IStringLocalizer<CmsKitResource> _localizer;
+
+    public SimpleMathsCaptchaGenerator(IStringLocalizer<CmsKitResource> localizer)
+    {
+        _localizer = localizer;
+    }
     private static Dictionary<Guid, CaptchaRequest> Session { get; set; } = new Dictionary<Guid, CaptchaRequest>();
 
     public CaptchaOutput Generate()
@@ -74,7 +83,7 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
         var request = Session[requestId];
         if (request.Output.Result != value)
         {
-            throw new CaptchaException("The captcha code doesn't match text on the picture! Please try again.");
+            throw new UserFriendlyException(_localizer["CaptchaCodeErrorMessage"]);
         }
     }
 
@@ -86,7 +95,7 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
         }
         else
         {
-            throw new CaptchaException("The captcha code is missing!");
+            throw new UserFriendlyException(_localizer["CaptchaCodeMissingMessage"]);
         }
     }
 

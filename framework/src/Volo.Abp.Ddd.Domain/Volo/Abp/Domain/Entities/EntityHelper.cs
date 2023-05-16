@@ -123,10 +123,17 @@ public static class EntityHelper
         return typeof(IEntity).IsAssignableFrom(type);
     }
 
+    public static Func<Type, bool> IsValueObjectPredicate = type => typeof(ValueObject).IsAssignableFrom(type);
+
     public static bool IsValueObject([NotNull] Type type)
     {
         Check.NotNull(type, nameof(type));
-        return typeof(ValueObject).IsAssignableFrom(type);
+        return IsValueObjectPredicate(type);
+    }
+
+    public static bool IsValueObject(object obj)
+    {
+        return obj != null && IsValueObject(obj.GetType());
     }
 
     public static void CheckEntity([NotNull] Type type)
