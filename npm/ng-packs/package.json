@@ -125,7 +125,7 @@
     "ts-toolbelt": "6.15.4",
     "tslib": "^2.3.0",
     "tslint": "~6.1.0",
-    "typescript": "4.8.4",
+    "typescript": "~4.8.4",
     "zone.js": "0.11.4",
     "@abp/ng.theme.lepton-x": "^2.2.0",
     "bootstrap-icons": "^1.10.3"
