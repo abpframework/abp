@@ -35,10 +35,12 @@ public static class AbpSwaggerGenServiceCollectionExtensions
         [NotNull] Dictionary<string, string> scopes,
         Action<SwaggerGenOptions> setupAction = null,
         string authorizationEndpoint = "/connect/authorize",
-        string tokenEndpoint = "/connect/token")
+        string tokenEndpoint = "/connect/token",
+        string openIdConnectDiscoveryEndpoint = "/.well-known/openid-configuration")
     {
         var authorizationUrl = new Uri($"{authority.TrimEnd('/')}{authorizationEndpoint.EnsureStartsWith('/')}");
         var tokenUrl = new Uri($"{authority.TrimEnd('/')}{tokenEndpoint.EnsureStartsWith('/')}");
+        var openIdConnectDiscoveryUrl = new Uri($"{authority.TrimEnd('/')}{openIdConnectDiscoveryEndpoint.EnsureStartsWith('/')}");
         
         return services
             .AddAbpSwaggerGen()
@@ -47,7 +49,8 @@ public static class AbpSwaggerGenServiceCollectionExtensions
                 {
                     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                     {
-                        Type = SecuritySchemeType.OAuth2,
+                        Type = SecuritySchemeType.OpenIdConnect,
+                        OpenIdConnectUrl = openIdConnectDiscoveryUrl,
                         Flows = new OpenApiOAuthFlows
                         {
                             AuthorizationCode = new OpenApiOAuthFlow
