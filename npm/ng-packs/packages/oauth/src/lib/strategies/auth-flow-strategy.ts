@@ -33,11 +33,8 @@ export abstract class AuthFlowStrategy {
   protected router: Router;
 
   abstract checkIfInternalAuth(queryParams?: Params): boolean;
-
   abstract navigateToLogin(queryParams?: Params): void;
-
   abstract logout(queryParams?: Params): Observable<any>;
-
   abstract login(params?: LoginParams | Params): Observable<any>;
 
   private catchError = (err: HttpErrorResponse) => {
@@ -84,26 +81,29 @@ export abstract class AuthFlowStrategy {
       .catch(this.catchError);
   }
 
-  protected navigateToPreviousUrl() {
-    this.oAuthService.events
-      .pipe(
-        filter(event => event.type === 'token_received' && !!this.oAuthService.state),
-        map(() => {
-          const redirect_uri = decodeURIComponent(this.oAuthService.state);
+  protected navigateToPreviousUrl(): void {
+    const { responseType } = this.oAuthConfig;
+    if (responseType === 'code') {
+      this.oAuthService.events
+        .pipe(
+          filter(event => event.type === 'token_received' && !!this.oAuthService.state),
+          map(() => {
+            const redirect_uri = decodeURIComponent(this.oAuthService.state);
 
-          if (redirect_uri && redirect_uri !== '/') {
-            return redirect_uri;
-          }
-          return '/';
-        }),
-        switchMap(redirectUri =>
-          this.configState.getOne$('currentUser').pipe(
-            filter(user => Boolean(user?.isAuthenticated)),
-            tap(() => this.router.navigate([redirectUri])),
+            if (redirect_uri && redirect_uri !== '/') {
+              return redirect_uri;
+            }
+            return '/';
+          }),
+          switchMap(redirectUri =>
+            this.configState.getOne$('currentUser').pipe(
+              filter(user => Boolean(user?.isAuthenticated)),
+              tap(() => this.router.navigate([redirectUri])),
+            ),
           ),
-        ),
-      )
-      .subscribe();
+        )
+        .subscribe();
+    }
   }
 
   protected refreshToken() {
