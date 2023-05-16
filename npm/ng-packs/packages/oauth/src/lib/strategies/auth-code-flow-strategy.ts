@@ -14,10 +14,10 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   navigateToLogin(queryParams?: Params) {
-    this.oAuthService.initCodeFlow(
-      this.getAdditionalState(queryParams),
-      this.getCultureParams(queryParams),
-    );
+    const additionalState = queryParams.returnUrl;
+    const cultureParams = this.getCultureParams(queryParams);
+
+    this.oAuthService.initCodeFlow(additionalState, cultureParams);
   }
 
   checkIfInternalAuth(queryParams?: Params) {
@@ -32,11 +32,6 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   login(queryParams?: Params) {
     this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
     return of(null);
-  }
-
-  private getAdditionalState(queryParams?: Params): string {
-    const { returnUrl } = queryParams;
-    return returnUrl;
   }
 
   private getCultureParams(queryParams?: Params) {
