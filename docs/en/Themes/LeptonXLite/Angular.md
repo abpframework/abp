@@ -14,7 +14,9 @@ To add `LeptonX-lite` into your project,
 
 - Install `@abp/ng.theme.lepton-x`
 
-`yarn add @abp/ng.theme.lepton-x`
+```bash
+yarn add @abp/ng.theme.lepton-x
+```
 
 - Install `bootstrap-icons`
 

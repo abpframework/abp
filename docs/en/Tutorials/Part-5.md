@@ -363,7 +363,7 @@ Open the `/src/app/book/book.component.html` file and replace the create button 
 ````html
 <!-- Add the abpPermission directive -->
 <button *abpPermission="'BookStore.Books.Create'" id="create" class="btn btn-primary" type="button" (click)="createBook()">
-  <i class="fa fa-plus mr-1"></i>
+  <i class="fa fa-plus me-1"></i>
   <span>{%{{{ '::NewBook' | abpLocalization }}}%}</span>
 </button>
 ````

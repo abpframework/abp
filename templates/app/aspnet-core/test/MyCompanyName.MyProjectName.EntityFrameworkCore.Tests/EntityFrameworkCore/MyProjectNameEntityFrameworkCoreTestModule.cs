@@ -20,7 +20,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
     )]
 public class MyProjectNameEntityFrameworkCoreTestModule : AbpModule
 {
-    private SqliteConnection _sqliteConnection;
+    private SqliteConnection? _sqliteConnection;
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
@@ -54,7 +54,7 @@ public class MyProjectNameEntityFrameworkCoreTestModule : AbpModule
 
     public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        _sqliteConnection.Dispose();
+        _sqliteConnection?.Dispose();
     }
 
     private static SqliteConnection CreateDatabaseAndGetConnection()

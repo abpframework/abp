@@ -277,24 +277,11 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
 
     public virtual async ValueTask PruneAsync(DateTimeOffset threshold, CancellationToken cancellationToken)
     {
-        for (var index = 0; index < 1_000; index++)
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
-            {
-                var date = threshold.UtcDateTime;
-
-                var authorizations = await Repository.GetPruneListAsync(date, 1_000, cancellationToken);
-                if (!authorizations.Any())
-                {
-                    break;
-                }
-
-                await TokenRepository.DeleteManyByAuthorizationIdsAsync(authorizations.Select(x => x.Id).ToArray(), cancellationToken: cancellationToken);
-                await Repository.DeleteManyAsync(authorizations, autoSave: true, cancellationToken: cancellationToken);
-                await uow.CompleteAsync(cancellationToken);
-            }
+            var date = threshold.UtcDateTime;
+            await Repository.PruneAsync(date, cancellationToken: cancellationToken);
+            await uow.CompleteAsync(cancellationToken);
         }
     }
 

@@ -4,10 +4,14 @@
     [ngClass]="{ 'alert-dismissible fade show': alert.dismissible }"
     role="alert"
   >
-    <h4 class="alert-heading" *ngIf="alert.title">
-      {{ alert.title | abpLocalization: alert.titleLocalizationParams }}
-    </h4>
-    {{ alert.message | abpLocalization: alert.messageLocalizationParams }}
+    <h4
+      class="alert-heading"
+      *ngIf="alert.title"
+      [innerHTML]="alert.title | abpSafeHtml | abpLocalization: alert.titleLocalizationParams"
+    ></h4>
+    <span
+      [innerHTML]="alert.message | abpSafeHtml | abpLocalization: alert.messageLocalizationParams"
+    ></span>
     <button
       *ngIf="alert.dismissible"
       type="button"

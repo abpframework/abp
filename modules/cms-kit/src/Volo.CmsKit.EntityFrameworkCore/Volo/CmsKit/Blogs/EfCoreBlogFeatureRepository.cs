@@ -10,9 +10,9 @@ using Volo.CmsKit.EntityFrameworkCore;
 
 namespace Volo.CmsKit.Blogs;
 
-public class EfCoreBlogFeatureRepository : EfCoreRepository<CmsKitDbContext, BlogFeature, Guid>, IBlogFeatureRepository
+public class EfCoreBlogFeatureRepository : EfCoreRepository<ICmsKitDbContext, BlogFeature, Guid>, IBlogFeatureRepository
 {
-    public EfCoreBlogFeatureRepository(IDbContextProvider<CmsKitDbContext> dbContextProvider) : base(dbContextProvider)
+    public EfCoreBlogFeatureRepository(IDbContextProvider<ICmsKitDbContext> dbContextProvider) : base(dbContextProvider)
     {
     }
 

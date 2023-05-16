@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
         _htmlSanitizer = new HtmlSanitizer();
     }
 
-    public Task<string> RenderAsync(string rawMarkdown, bool allowHtmlTags = true, bool preventXSS = true)
+    public Task<string> RenderAsync(string rawMarkdown, bool allowHtmlTags = true, bool preventXSS = true, string referralLinks = null)
     {
         if (!allowHtmlTags)
         {
@@ -33,8 +34,22 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
         {
             html = _htmlSanitizer.Sanitize(html);
         }
+        
+        if(!referralLinks.IsNullOrWhiteSpace())
+        {
+            html = SetReferralLinks(html, referralLinks);
+        }
 
         return Task.FromResult(html);
+    }
+
+    private string SetReferralLinks(string html, string referralLinks)
+    {
+        var regex = new Regex("<a(.*?>)", RegexOptions.IgnoreCase |
+                                          RegexOptions.Singleline |
+                                          RegexOptions.Multiline |
+                                          RegexOptions.Compiled);
+        return regex.Replace(html, $"<a rel=\"{referralLinks}\" $1");
     }
 
 
