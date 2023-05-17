@@ -172,7 +172,7 @@
             @if (Model.LatestPosts.Count > 1)
             {
                 <hr/>
-                <p class="fs-3 fw-bold text-dark">More from Blog</p>
+                <p class="fs-3 fw-bold text-dark">@L["MoreFromBlog"]</p>
                 @for (var index = 0; index < Model.LatestPosts.Count && index < 5; index++)
                 {
                     if (Model.LatestPosts[index].Id != Model.Post.Id)
@@ -440,7 +440,8 @@ else
     <div class="hero content">
         @if (Model.PostsList.Count > 1)
         {
-            <p class="fs-3 fw-bold text-dark">More from @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.Post.Writer.UserName)</p>
+            var userName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.Post.Writer.UserName);
+            <p class="fs-3 fw-bold text-dark">@L["MoreFromUser", userName]</p>
             for (var index = 0; index < Model.PostsList.Count; index++)
             {
                 if (Model.PostsList[index].Id != Model.Post.Id)
