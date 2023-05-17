@@ -14,20 +14,22 @@ public class ImageSharpImageCompressor : IImageCompressor, ITransientDependency
 {
     public async Task<Stream> CompressAsync(Stream stream, CancellationToken cancellationToken = default)
     {
-        var newStream = await stream.CreateMemoryStreamAsync(cancellationToken: cancellationToken);
-        using var image = await SixLabors.ImageSharp.Image.LoadAsync(newStream, cancellationToken);
-        newStream.Position = 0;
-        var format = await SixLabors.ImageSharp.Image.DetectFormatAsync(newStream, cancellationToken);
-        newStream.Position = 0;
+        var memoryStream = await stream.CreateMemoryStreamAsync(cancellationToken: cancellationToken);
+        
+        using var image = await SixLabors.ImageSharp.Image.LoadAsync(memoryStream, cancellationToken);
+        memoryStream.Position = 0;
+        
+        var format = await SixLabors.ImageSharp.Image.DetectFormatAsync(memoryStream, cancellationToken);
+        memoryStream.Position = 0;
+        
         var encoder = image.GetConfiguration().ImageFormatsManager.FindEncoder(format);
-
         switch (encoder)
         {
             case JpegEncoder jpegEncoder:
                 jpegEncoder.Quality = 60;
                 break;
             case PngEncoder pngEncoder:
-                pngEncoder.CompressionLevel = PngCompressionLevel.BestCompression;
+                pngEncoder.CompressionLevel = PngCompressionLevel.BestCompression; //TODO: AbpImageSharpOptions (others too)
                 pngEncoder.IgnoreMetadata = true;
                 break;
             case WebpEncoder webPEncoder:
@@ -35,12 +37,13 @@ public class ImageSharpImageCompressor : IImageCompressor, ITransientDependency
                 webPEncoder.UseAlphaCompression = true;
                 break;
             case null:
-                throw new NotSupportedException($"No encoder available for provided path: {format.Name}");
+                throw new NotSupportedException($"No encoder available for the given format: {format.Name}");
         }
 
-        await image.SaveAsync(newStream, encoder, cancellationToken: cancellationToken);
-        newStream.SetLength(newStream.Position);
-        return newStream;
+        await image.SaveAsync(memoryStream, encoder, cancellationToken: cancellationToken);
+        memoryStream.SetLength(memoryStream.Position);
+        
+        return memoryStream;
     }
 
     public Stream Compress(Stream stream)
@@ -77,6 +80,7 @@ public class ImageSharpImageCompressor : IImageCompressor, ITransientDependency
 
     public bool CanCompress(IImageFormat format)
     {
+        //TODO: Use MimeTypes (after moving it to Volo.Abp.Core)
         return format?.MimeType switch {
             "image/jpeg" => true,
             "image/png" => true,

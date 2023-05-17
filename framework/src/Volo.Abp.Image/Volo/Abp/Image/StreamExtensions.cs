@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.Image;
 
-public static class StreamExtensions
+public static class StreamExtensions //TODO: Remove
 {
     public static Stream CompressImage(this Stream stream, IImageFormat imageFormat, IImageCompressor imageCompressor)
     {

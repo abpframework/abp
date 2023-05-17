@@ -11,6 +11,8 @@ using Volo.Abp.Content;
 
 namespace Volo.Abp.Image;
 
+//Rename: CompressImageAttribute
+//Also introduce ResizeImageAttribute(...)
 public class AbpImageCompressActionFilterAttribute : ActionFilterAttribute
 {
     public string[] Parameters { get; }

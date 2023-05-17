@@ -13,7 +13,7 @@ public class MagickImageCompressor : IImageCompressor, ITransientDependency
     public async Task<Stream> CompressAsync(Stream stream, CancellationToken cancellationToken = default)
     {
         var newStream = await stream.CreateMemoryStreamAsync(cancellationToken:cancellationToken);
-        try
+        try //TODO: Remove try/catch
         {
             _optimizer.IsSupported(newStream);
             newStream.Position = 0;

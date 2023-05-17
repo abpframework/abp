@@ -4,7 +4,7 @@ namespace Volo.Abp.Http;
 
 /* Taken from https://gist.github.com/markwhitaker/b29c0142360714688a7cf863ab33e5c9 */
 
-public static class MimeTypes
+public static class MimeTypes //TODO: Move to Volo.Abp.Core with the same namespace
 {
     public static class Application
     {

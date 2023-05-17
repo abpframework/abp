@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Image;
 
-public interface IImageResizeParameter
+public interface IImageResizeParameter //TODO: Remove
 {
     int? Width { get; }
     int? Height { get; }

@@ -10,6 +10,6 @@ public class MagickImageFormatDetector : IImageFormatDetector, ITransientDepende
     {
         using var magickImage = new MagickImage(image);
         var format = magickImage.FormatInfo;
-        return format == null ? null : new ImageFormat(format.Format.ToString(), format.MimeType ?? string.Empty);
+        return format == null ? null : new ImageFormat(format.MimeType ?? string.Empty);
     }
 }

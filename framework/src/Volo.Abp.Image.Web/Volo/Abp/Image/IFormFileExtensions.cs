@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.Image;
 
-public static class IFormFileExtensions
+public static class IFormFileExtensions //TODO: Remove
 {
     public async static Task<IFormFile> CompressImageAsync(
         this IFormFile formFile,

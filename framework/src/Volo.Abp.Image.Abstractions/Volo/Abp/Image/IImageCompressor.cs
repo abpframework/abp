@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 
 namespace Volo.Abp.Image;
 
-public interface IImageCompressor
+public interface IImageCompressor // TODO: RENAME: IImageCompressorContributor
 {
-    Task<Stream> CompressAsync(Stream stream, CancellationToken cancellationToken = default);
+    //TODO: new extension method that works with byte arrays
+    Task<Stream> CompressAsync(Stream stream, CancellationToken cancellationToken = default); // TODO: TryCompressAsync & remove CanCompress
 
     Stream Compress(Stream stream);
 

@@ -13,7 +13,7 @@ public class MagickImageResizer : IImageResizer, ITransientDependency
         CancellationToken cancellationToken = default)
     {
         var newStream = await stream.CreateMemoryStreamAsync(cancellationToken: cancellationToken);
-        try
+        try //TODO: Remove try/catch
         {
             using var image = new MagickImage(newStream);
             ApplyMode(image, resizeParameter);

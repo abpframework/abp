@@ -2,12 +2,10 @@
 
 public class ImageFormat : IImageFormat
 {
-    public ImageFormat(string name, string mimeType)
+    public ImageFormat(string mimeType)
     {
-        Name = name;
         MimeType = mimeType;
     }
 
-    public string Name { get; }
     public string MimeType { get; }
 }

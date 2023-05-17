@@ -8,6 +8,6 @@ public class ImageSharpImageFormatDetector : IImageFormatDetector, ITransientDep
     public IImageFormat FindFormat(Stream stream)
     {
         var format = SixLabors.ImageSharp.Image.DetectFormat(stream);
-        return new ImageFormat(format.Name, format.DefaultMimeType);
+        return new ImageFormat(format.DefaultMimeType);
     }
 }

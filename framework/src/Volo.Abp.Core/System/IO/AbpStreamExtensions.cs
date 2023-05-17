@@ -37,6 +37,7 @@ public static class AbpStreamExtensions
         {
             stream.Position = 0;
         }
+        
         return stream.CopyToAsync(
             destination,
             81920, //this is already the default value, but needed to set to be able to pass the cancellationToken
@@ -50,12 +51,15 @@ public static class AbpStreamExtensions
         {
             stream.Position = 0;
         }
+        
         var memoryStream = new MemoryStream();
         await stream.CopyToAsync(memoryStream, cancellationToken);
+        
         if (stream.CanSeek)
         {
             stream.Position = 0;
         }
+        
         memoryStream.Position = 0;
         return memoryStream;
     }
@@ -66,12 +70,15 @@ public static class AbpStreamExtensions
         {
             stream.Position = 0;
         }
+        
         var memoryStream = new MemoryStream();
         stream.CopyTo(memoryStream);
+        
         if (stream.CanSeek)
         {
             stream.Position = 0;
         }
+        
         memoryStream.Position = 0;
         return memoryStream;
     }
