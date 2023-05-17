@@ -30,6 +30,8 @@ public class Person : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVe
 
     public virtual DateTime LastActiveTime { get; set; }
 
+    public virtual DateTime HasDefaultValue { get; set; }
+
     public int EntityVersion { get; set; }
 
     private Person()

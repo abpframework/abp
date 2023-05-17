@@ -3,13 +3,14 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Ddd.Domain.Shared\Volo.Abp.Ddd.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
   </ItemGroup>
 

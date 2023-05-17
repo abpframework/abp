@@ -23,19 +23,21 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
 
         DeleteUnrelatedProjects(context, steps);
         RandomizeStringEncryption(context, steps);
+        RandomizeAuthServerPassPhrase(context, steps);
         UpdateNuGetConfig(context, steps);
+        UpdateDockerImages(context, steps);
         ConfigureTheme(context, steps);
 
         return steps;
     }
-    
+
     protected void ConfigureTheme(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (!context.BuildArgs.Theme.HasValue)
         {
             return;
         }
-        
+
         if (context.BuildArgs.Theme != Theme.NotSpecified)
         {
             context.Symbols.Add(context.BuildArgs.Theme.Value.ToString().ToUpper());
@@ -54,7 +56,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
     private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, UiFramework uiFramework)
     {
         var mvcUiPackageName = "@volo/abp.aspnetcore.mvc.ui.theme.leptonx";
-        var packageJsonFilePaths = new List<string> 
+        var packageJsonFilePaths = new List<string>
         {
             "/MyCompanyName.MyProjectName.AuthServer/package.json",
             "/MyCompanyName.MyProjectName.Web/package.json"
@@ -68,11 +70,11 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
         if (uiFramework == UiFramework.BlazorServer)
         {
             var blazorServerUiPackageName = "@volo/aspnetcore.components.server.leptonxtheme";
-            var blazorServerPackageJsonFilePaths = new List<string> 
+            var blazorServerPackageJsonFilePaths = new List<string>
             {
                 "/MyCompanyName.MyProjectName.Blazor/package.json"
             };
-            
+
             foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
             {
                 steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
@@ -82,11 +84,11 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
         else if (uiFramework == UiFramework.Angular)
         {
             var ngUiPackageName = "@volosoft/abp.ng.theme.lepton-x";
-            var angularPackageJsonFilePaths = new List<string> 
+            var angularPackageJsonFilePaths = new List<string>
             {
                 "/angular/package.json"
             };
-            
+
             foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
             {
                 steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
@@ -138,7 +140,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new RemoveFolderStep("/apps/blazor"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
-                
+
                 context.Symbols.Add("ui:angular");
                 break;
 
@@ -157,7 +159,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                     null,
                     "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
-                
+
                 context.Symbols.Add("ui:blazor");
                 break;
 
@@ -180,7 +182,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server",
                     "MyCompanyName.MyProjectName.Blazor"));
                 steps.Add(new RenameProjectInTyeStep("blazor-server", "blazor"));
-                
+
                 context.Symbols.Add("ui:blazor-server");
                 break;
 
@@ -198,7 +200,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
 
                 steps.Add(new RemoveFolderStep("/apps/angular"));
-                
+
                 context.Symbols.Add("ui:mvc");
                 break;
         }
@@ -214,5 +216,15 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
     private static void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new UpdateNuGetConfigStep("/NuGet.Config"));
+    }
+
+    private static void RandomizeAuthServerPassPhrase(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new RandomizeAuthServerPassPhraseStep());
+    }
+
+    private static void UpdateDockerImages(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new UpdateDockerImagesStep("/etc/docker/docker-compose.infrastructure.yml"));
     }
 }

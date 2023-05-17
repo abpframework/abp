@@ -43,7 +43,6 @@
   },
   "private": true,
   "devDependencies": {
-    "@abp/utils": "~7.2.2",
     "@angular-devkit/build-angular": "~15.0.1",
     "@angular-devkit/schematics-cli": "~15.0.1",
     "@angular-eslint/eslint-plugin": "15.1.0",
@@ -73,6 +72,7 @@
     "@abp/ng.tenant-management": "~7.2.2",
     "@abp/ng.theme.basic": "~7.2.2",
     "@abp/ng.theme.shared": "~7.2.2",
+    "@abp/utils": "~7.2.2",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@ng-bootstrap/ng-bootstrap": "^14.0.0",
     "@ngneat/spectator": "^10.0.0",
@@ -93,6 +93,7 @@
     "@typescript-eslint/parser": "5.44.0",
     "angular-oauth2-oidc": "^15.0.1",
     "bootstrap": "^5.1.1",
+    "bootstrap-icons": "^1.10.3",
     "chart.js": "^3.5.1",
     "cypress": "^7.3.0",
     "dotenv": "10.0.0",
@@ -112,8 +113,10 @@
     "ng-packagr": "15.0.1",
     "ng-zorro-antd": "^15.0.0",
     "nx": "15.2.1",
+    "perfect-scrollbar": "^1.5.5",
     "postcss": "^8.3.9",
     "postcss-import": "14.1.0",
+    "perfect-scrollbar": "^1.5.5",
     "postcss-preset-env": "7.5.0",
     "postcss-url": "10.1.3",
     "prettier": "2.7.1",
@@ -130,7 +133,6 @@
     "@abp/ng.theme.lepton-x": "^2.2.0",
     "bootstrap-icons": "^1.10.3"
   },
-  "dependencies": {},
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,html,css,scss}": [
       "npx prettier --write --config .prettierrc "

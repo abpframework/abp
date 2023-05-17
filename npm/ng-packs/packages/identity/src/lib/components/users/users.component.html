@@ -1,5 +1,4 @@
 <abp-page [title]="'AbpIdentity::Users' | abpLocalization" [toolbar]="data.items">
-
   <div id="identity-roles-wrapper" class="card">
     <div class="card-body">
       <div id="data-tables-table-filter" class="data-tables-filter mb-3">
@@ -27,10 +26,8 @@
     </ng-template>
 
     <ng-template #abpBody>
-      <ng-template #loaderRef
-      >
-        <div class="text-center"><i class="fa fa-pulse fa-spinner"></i></div
-        >
+      <ng-template #loaderRef>
+        <div class="text-center"><i class="fa fa-pulse fa-spinner" aria-hidden="true"></i></div>
       </ng-template>
 
       <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()">
@@ -49,15 +46,15 @@
                 *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"
                 class="form-check mb-2"
               >
-                <abp-checkbox 
+                <abp-checkbox
                   *abpReplaceableTemplate="{
-                    inputs:{
-                      checkboxId:'roles-' + i,
-                      label:roles[i].name,
-                      formControl:roleGroup.controls[roles[i].name]
+                    inputs: {
+                      checkboxId: 'roles-' + i,
+                      label: roles[i].name,
+                      formControl: roleGroup.controls[roles[i].name]
                     },
                     componentKey: inputKey
-                  }" 
+                  }"
                   [checkboxId]="'roles-' + i"
                   [formControl]="roleGroup.controls[roles[i].name]"
                   [label]="roles[i].name"
@@ -77,24 +74,24 @@
       </button>
       <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">{{
         'AbpIdentity::Save' | abpLocalization
-        }}</abp-button>
+      }}</abp-button>
     </ng-template>
   </abp-modal>
 
   <abp-permission-management
     #abpPermissionManagement="abpPermissionManagement"
     *abpReplaceableTemplate="
-    {
-      inputs: {
-        providerName: { value: 'U' },
-        providerKey: { value: providerKey },
-        visible: { value: visiblePermissions, twoWay: true }
-      },
-      outputs: { visibleChange: onVisiblePermissionChange },
-      componentKey: permissionManagementKey
-    };
-    let init = initTemplate
-  "
+      {
+        inputs: {
+          providerName: { value: 'U' },
+          providerKey: { value: providerKey },
+          visible: { value: visiblePermissions, twoWay: true }
+        },
+        outputs: { visibleChange: onVisiblePermissionChange },
+        componentKey: permissionManagementKey
+      };
+      let init = initTemplate
+    "
     [entityDisplayName]="entityDisplayName"
     (abpInit)="init(abpPermissionManagement)"
   >

@@ -188,6 +188,43 @@ namespace Volo.Blogging.Posts
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
 
+        public async Task<List<PostWithDetailsDto>> GetListByUserIdAsync(Guid userId)
+        {
+            var posts = await PostRepository.GetListByUserIdAsync(userId);
+            
+            return ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts);
+        }
+
+        public async Task<List<PostWithDetailsDto>> GetLatestBlogPostsAsync(Guid blogId, int count)
+        {
+            var posts = await PostRepository.GetLatestBlogPostsAsync(blogId, count);
+            var userDictionary = new Dictionary<Guid, BlogUserDto>();
+            var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
+
+            foreach (var postDto in postDtos)
+            {
+                if (!postDto.CreatorId.HasValue)
+                {
+                    continue;
+                }
+
+                if (userDictionary.TryGetValue(postDto.CreatorId.Value, out var creatorUserDto))
+                {
+                    postDto.Writer = creatorUserDto;
+                    continue;
+                }
+                
+                var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+                if (creatorUser != null)
+                {
+                    postDto.Writer = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
+                    userDictionary[creatorUser.Id] = postDto.Writer;
+                }
+            }
+
+            return new List<PostWithDetailsDto>(postDtos);
+        }
+
         [Authorize(BloggingPermissions.Posts.Create)]
         public async Task<PostWithDetailsDto> CreateAsync(CreatePostDto input)
         {
