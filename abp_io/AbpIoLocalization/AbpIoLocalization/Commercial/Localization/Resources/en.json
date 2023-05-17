@@ -841,6 +841,7 @@
     "BlazoriseSupportExplanation2": "Verify your email address by checking your email box. Check your spam box if you don't see an email in your inbox!",
     "BlazoriseSupportExplanation3": "Log into the Blazorise support website at <a href=\"https://blazorise.com/support/login\">blazorise.com/support/login</a>.",
     "BlazoriseSupportExplanation4": "If you have an active ABP Commercial license, you will also have a Blazorise PRO license. You can get your Blazorise license key at <a href=\"https://blazorise.com/support/user/manage/license\">blazorise.com/support/user/manage/license</a>.",
-    "BlazoriseSupportExplanation5": "You can post your questions on the support website and generate a product token for your application."
+    "BlazoriseSupportExplanation5": "You can post your questions on the support website and generate a product token for your application.",
+    "AbpLiveTrainingPackages": "ABP Live Training Packages"
   }
 }
