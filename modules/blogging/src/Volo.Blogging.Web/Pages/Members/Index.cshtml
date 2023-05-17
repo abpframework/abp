@@ -99,7 +99,7 @@
                 </div>
             </div>
             <div class="col-md-8">
-            @if (CurrentUser.UserName == Model.User.UserName)
+            @if (CurrentUser.Id == Model.User.Id)
             {
                 <abp-tabs>
                     @if (Model.Posts is not null && Model.Posts.Any())
@@ -196,7 +196,7 @@
                 {
                     if (Model.Posts is not null && Model.Posts.Any())
                     {
-                        <h2 class="m-lg-2">@L["BlogPosts"]</h2>
+                        <h2>@L["BlogPosts"]</h2>
                         <div class="mt-4 pt-3">
                             @foreach (var post in Model.Posts)
                             {
