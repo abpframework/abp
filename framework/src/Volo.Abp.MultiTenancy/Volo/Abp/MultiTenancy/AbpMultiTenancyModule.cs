@@ -31,7 +31,7 @@ public class AbpMultiTenancyModule : AbpModule
 
         Configure<AbpTenantResolveOptions>(options =>
         {
-            options.TenantResolvers.Add(new CurrentUserTenantResolveContributor());
+            options.TenantResolvers.Insert(0, new CurrentUserTenantResolveContributor());
         });
     }
 }
