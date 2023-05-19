@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
@@ -30,7 +31,7 @@ public class CreateModalModel : CmsKitAdminPageModel
     }
 
     [AutoMap(typeof(CreateBlogDto), ReverseMap = true)]
-    public class CreateBlogViewModel
+    public class CreateBlogViewModel : ExtensibleObject
     {
         [Required]
         [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxNameLength))]

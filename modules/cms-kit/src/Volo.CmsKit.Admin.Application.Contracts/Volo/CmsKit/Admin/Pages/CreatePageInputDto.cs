@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Admin.Pages;
 
 [Serializable]
-public class CreatePageInputDto
+public class CreatePageInputDto: ExtensibleObject
 {
     [Required]
     [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]
