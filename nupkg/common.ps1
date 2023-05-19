@@ -211,6 +211,7 @@ $projects = (
     "framework/src/Volo.Abp.Localization",
     "framework/src/Volo.Abp.MemoryDb",
     "framework/src/Volo.Abp.MongoDB",
+    "framework/src/Volo.Abp.MultiTenancy.Abstractions",
     "framework/src/Volo.Abp.MultiTenancy",
     "framework/src/Volo.Abp.Minify",
     "framework/src/Volo.Abp.ObjectExtending",

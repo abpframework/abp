@@ -10,6 +10,7 @@ using Volo.Abp.Authorization;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
@@ -25,6 +26,7 @@ namespace Volo.Abp.AspNetCore;
     typeof(AbpHttpModule),
     typeof(AbpAuthorizationModule),
     typeof(AbpValidationModule),
+    typeof(AbpMultiTenancyModule),
     typeof(AbpExceptionHandlingModule)
     )]
 public class AbpAspNetCoreModule : AbpModule

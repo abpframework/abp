@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.MultiTenancy.ConfigurationStore;
+﻿using System;
+
+namespace Volo.Abp.MultiTenancy.ConfigurationStore;
 
 public class AbpDefaultTenantStoreOptions
 {
@@ -6,6 +8,6 @@ public class AbpDefaultTenantStoreOptions
 
     public AbpDefaultTenantStoreOptions()
     {
-        Tenants = new TenantConfiguration[0];
+        Tenants = Array.Empty<TenantConfiguration>();
     }
 }

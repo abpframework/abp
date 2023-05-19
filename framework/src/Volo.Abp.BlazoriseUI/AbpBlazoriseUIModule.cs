@@ -6,13 +6,15 @@ using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.BlazoriseUI;
 
 [DependsOn(
     typeof(AbpAspNetCoreComponentsWebModule),
     typeof(AbpDddApplicationContractsModule),
-    typeof(AbpAuthorizationModule)
+    typeof(AbpAuthorizationModule),
+    typeof(AbpMultiTenancyModule)
 )]
 public class AbpBlazoriseUIModule : AbpModule
 {

@@ -10,9 +10,6 @@ public class AbpTenantResolveOptions
 
     public AbpTenantResolveOptions()
     {
-        TenantResolvers = new List<ITenantResolveContributor>
-            {
-                new CurrentUserTenantResolveContributor()
-            };
+        TenantResolvers = new List<ITenantResolveContributor>();
     }
 }

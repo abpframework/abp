@@ -5,8 +5,8 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
-        <AssemblyName>Volo.Abp.Json.SystemTextJson</AssemblyName>
-        <PackageId>Volo.Abp.Json.SystemTextJson</PackageId>
+        <AssemblyName>Volo.Abp.MultiTenancy.Abstractions</AssemblyName>
+        <PackageId>Volo.Abp.MultiTenancy.Abstractions</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -15,10 +15,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.Json.Abstractions\Volo.Abp.Json.Abstractions.csproj" />
-        <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
+        <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
         <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
-        <PackageReference Include="System.Text.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Remove="Volo\Abp\MultiTenancy\Localization\*.json" />
+        <EmbeddedResource Include="Volo\Abp\MultiTenancy\Localization\*.json" />
     </ItemGroup>
 
 </Project>
