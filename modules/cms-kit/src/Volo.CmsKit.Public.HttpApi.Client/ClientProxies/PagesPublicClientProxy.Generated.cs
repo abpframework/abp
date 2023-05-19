@@ -7,20 +7,25 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.CmsKit.Public.Pages;
+using Volo.CmsKit.Contents;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Public.Pages.ClientProxies
+namespace Volo.CmsKit.Public.Pages.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IPagePublicAppService), typeof(PagesPublicClientProxy))]
+public partial class PagesPublicClientProxy : ClientProxyBase<IPagePublicAppService>, IPagePublicAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IPagePublicAppService), typeof(PagesPublicClientProxy))]
-    public partial class PagesPublicClientProxy : ClientProxyBase<IPagePublicAppService>, IPagePublicAppService
+    public virtual async Task<PageDto> FindBySlugAsync(string slug)
     {
-        public virtual async Task<PageDto> FindBySlugAsync(string slug)
+        return await RequestAsync<PageDto>(nameof(FindBySlugAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PageDto>(nameof(FindBySlugAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), slug }
-            });
-        }
+            { typeof(string), slug }
+        });
+    }
+
+    public virtual async Task<PageDto> FindDefaultHomePageAsync()
+    {
+        return await RequestAsync<PageDto>(nameof(FindDefaultHomePageAsync));
     }
 }

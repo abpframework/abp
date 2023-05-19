@@ -6,6 +6,11 @@
     "CarPlural": "Autot",
     "MaxLenghtErrorMessage": "Tämän kentän pituus voi olla enintään {0} merkkiä",
     "Universe": "Maailmankaikkeus",
-    "FortyTwo": "Neljäkymmentäkaksi"
+    "FortyTwo": "Neljäkymmentäkaksi",
+    "Enum:BookType.Undefined": "Määrittelemätön",
+    "Enum:BookType.0": "Määrittämätön arvolla 0",
+    "BookType.Adventure": "Seikkailu",
+    "BookType.1": "Seikkailu arvolla 1",
+    "Biography": "Elämäkerta"
   }
 }

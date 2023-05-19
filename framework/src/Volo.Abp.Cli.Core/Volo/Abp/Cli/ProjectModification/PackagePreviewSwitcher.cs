@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,30 +8,33 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.ProjectModification
+namespace Volo.Abp.Cli.ProjectModification;
+
+public class PackagePreviewSwitcher : ITransientDependency
 {
-    public class PackagePreviewSwitcher : ITransientDependency
+    private readonly PackageSourceManager _packageSourceManager;
+    private readonly NpmPackagesUpdater _npmPackagesUpdater;
+    private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
+
+    public ILogger<PackagePreviewSwitcher> Logger { get; set; }
+
+    public PackagePreviewSwitcher(PackageSourceManager packageSourceManager,
+        NpmPackagesUpdater npmPackagesUpdater,
+        VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater)
     {
-        private readonly PackageSourceManager _packageSourceManager;
-        private readonly NpmPackagesUpdater _npmPackagesUpdater;
-        private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
+        _packageSourceManager = packageSourceManager;
+        _npmPackagesUpdater = npmPackagesUpdater;
+        _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
+        Logger = NullLogger<PackagePreviewSwitcher>.Instance;
+    }
 
-        public ILogger<PackagePreviewSwitcher> Logger { get; set; }
+    public async Task SwitchToPreview(CommandLineArgs commandLineArgs)
+    {
+        var solutionPaths = GetSolutionPaths(commandLineArgs);
 
-        public PackagePreviewSwitcher(PackageSourceManager packageSourceManager,
-            NpmPackagesUpdater npmPackagesUpdater,
-            VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater)
+        foreach (var solutionPath in solutionPaths)
         {
-            _packageSourceManager = packageSourceManager;
-            _npmPackagesUpdater = npmPackagesUpdater;
-            _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
-            Logger = NullLogger<PackagePreviewSwitcher>.Instance;
-        }
-
-        public async Task SwitchToPreview(CommandLineArgs commandLineArgs)
-        {
-            var solutionPath = GetSolutionPath(commandLineArgs);
-            var solutionFolder = GetSolutionFolder(commandLineArgs);
+            var solutionFolder = Path.GetDirectoryName(solutionPath);
             var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
@@ -50,11 +54,15 @@ namespace Volo.Abp.Cli.ProjectModification
                     true);
             }
         }
+    }
 
-        public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
+    public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
+    {
+        var solutionPaths = GetSolutionPaths(commandLineArgs);
+
+        foreach (var solutionPath in solutionPaths)
         {
-            var solutionPath = GetSolutionPath(commandLineArgs);
-            var solutionFolder = GetSolutionFolder(commandLineArgs);
+            var solutionFolder = Path.GetDirectoryName(solutionPath);
             var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
             _packageSourceManager.Add(solutionFolder, "ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
@@ -77,11 +85,15 @@ namespace Volo.Abp.Cli.ProjectModification
                     true);
             }
         }
+    }
 
-        public async Task SwitchToStable(CommandLineArgs commandLineArgs)
+    public async Task SwitchToStable(CommandLineArgs commandLineArgs)
+    {
+        var solutionPaths = GetSolutionPaths(commandLineArgs);
+
+        foreach (var solutionPath in solutionPaths)
         {
-            var solutionPath = GetSolutionPath(commandLineArgs);
-            var solutionFolder = GetSolutionFolder(commandLineArgs);
+            var solutionFolder = Path.GetDirectoryName(solutionPath);
             var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
             _packageSourceManager.Remove(solutionFolder, "ABP Nightly");
@@ -110,65 +122,52 @@ namespace Volo.Abp.Cli.ProjectModification
                     true);
             }
         }
+    }
 
-        private string GetSolutionPath(CommandLineArgs commandLineArgs)
+    private List<string> GetSolutionPaths(CommandLineArgs commandLineArgs)
+    {
+        var directory = commandLineArgs.Options.GetOrNull(Options.SolutionDirectory.Short, Options.SolutionDirectory.Long)
+                        ?? Directory.GetCurrentDirectory();
+
+        var solutionPaths = Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories);
+
+        if (!solutionPaths.Any())
         {
-            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionDirectory.Short, Options.SolutionDirectory.Long)
-                            ?? Directory.GetCurrentDirectory();
-
-            var solutionPath = Directory.GetFiles(directory, "*.sln").FirstOrDefault();
-
-            if (solutionPath == null)
-            {
-                var subDirectories = Directory.GetDirectories(directory);
-
-                foreach (var subDirectory in subDirectories)
-                {
-                    var slnInSubDirectory = Directory.GetFiles(subDirectory, "*.sln").FirstOrDefault();
-
-                    if (slnInSubDirectory != null)
-                    {
-                        return Path.Combine(subDirectory, slnInSubDirectory);
-                    }
-                }
-
-                Logger.LogWarning("There is no solution or more that one solution in current directory.");
-                return null;
-            }
-
-            return solutionPath;
+            Logger.LogWarning("No solution (.sln) found to change version.");
         }
 
-        private string GetSolutionFolder(CommandLineArgs commandLineArgs)
+        return solutionPaths.ToList();
+    }
+
+    private string GetSolutionFolder(CommandLineArgs commandLineArgs)
+    {
+        return commandLineArgs.Options.GetOrNull(Options.SolutionDirectory.Short, Options.SolutionDirectory.Long)
+               ?? Directory.GetCurrentDirectory();
+    }
+
+    private string GetSolutionAngularFolder(string solutionFolder)
+    {
+        var upperAngularPath = Path.Combine(Directory.GetParent(solutionFolder)?.FullName ?? "", "angular");
+        if (Directory.Exists(upperAngularPath))
         {
-            return commandLineArgs.Options.GetOrNull(Options.SolutionDirectory.Short, Options.SolutionDirectory.Long)
-                   ?? Directory.GetCurrentDirectory();
+            return upperAngularPath;
         }
 
-        private string GetSolutionAngularFolder(string solutionFolder)
+        var innerAngularPath = Path.Combine(solutionFolder, "angular");
+        if (Directory.Exists(innerAngularPath))
         {
-            var upperAngularPath = Path.Combine(Directory.GetParent(solutionFolder)?.FullName ?? "", "angular");
-            if (Directory.Exists(upperAngularPath))
-            {
-                return upperAngularPath;
-            }
-
-            var innerAngularPath = Path.Combine(solutionFolder, "angular");
-            if (Directory.Exists(innerAngularPath))
-            {
-                return innerAngularPath;
-            }
-
-            return null;
+            return innerAngularPath;
         }
 
-        public static class Options
+        return null;
+    }
+
+    public static class Options
+    {
+        public static class SolutionDirectory
         {
-            public static class SolutionDirectory
-            {
-                public const string Short = "sd";
-                public const string Long = "solution-directory";
-            }
+            public const string Short = "sd";
+            public const string Long = "solution-directory";
         }
     }
 }

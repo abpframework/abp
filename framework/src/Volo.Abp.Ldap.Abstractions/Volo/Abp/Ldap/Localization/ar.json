@@ -1,0 +1,17 @@
+{
+  "culture": "ar",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "اسم الخادم",
+    "Description:Abp.Ldap.ServerHost": "اسم الخادم",
+    "DisplayName:Abp.Ldap.ServerPort": "منفذ الخادم",
+    "Description:Abp.Ldap.ServerPort": "منفذ الخادم",
+    "DisplayName:Abp.Ldap.BaseDc": "مكون المجال الأساسي",
+    "Description:Abp.Ldap.BaseDc": "مكون المجال الأساسي",
+    "DisplayName:Abp.Ldap.Domain": "اختصاص",
+    "Description:Abp.Ldap.Domain": "اختصاص",
+    "DisplayName:Abp.Ldap.UserName": "اسم المستخدم",
+    "Description:Abp.Ldap.UserName": "اسم المستخدم",
+    "DisplayName:Abp.Ldap.Password": "كلمة السر",
+    "Description:Abp.Ldap.Password": "كلمة السر"
+  }
+}

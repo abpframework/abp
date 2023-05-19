@@ -22,11 +22,11 @@ import { debounceTime, filter } from 'rxjs/operators';
   providers: [SubscriptionService],
 })
 export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnInit {
-  appRef: ApplicationRef;
+  appRef!: ApplicationRef;
 
-  cfRes: ComponentFactoryResolver;
+  cfRes!: ComponentFactoryResolver;
 
-  injector: Injector;
+  injector!: Injector;
 
   status = 0;
 
@@ -34,18 +34,18 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
 
   details: LocalizationParam = 'Sorry, an error has occured.';
 
-  customComponent: Type<any> = null;
+  customComponent: Type<any> | undefined = undefined;
 
-  destroy$: Subject<void>;
+  destroy$!: Subject<void>;
 
   hideCloseIcon = false;
 
-  backgroundColor: string;
+  backgroundColor!: string;
 
   isHomeShow = true;
 
   @ViewChild('container', { static: false })
-  containerRef: ElementRef<HTMLDivElement>;
+  containerRef?: ElementRef<HTMLDivElement>;
 
   get statusText(): string {
     return this.status ? `[${this.status}]` : '';
@@ -66,13 +66,15 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
       customComponentRef.instance.errorStatus = this.status;
       customComponentRef.instance.destroy$ = this.destroy$;
       this.appRef.attachView(customComponentRef.hostView);
-      this.containerRef.nativeElement.appendChild(
-        (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0],
-      );
+      if (this.containerRef) {
+        this.containerRef.nativeElement.appendChild(
+          (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0],
+        );
+      }
       customComponentRef.changeDetectorRef.detectChanges();
     }
 
-    const keyup$ = fromEvent(document, 'keyup').pipe(
+    const keyup$ = fromEvent<KeyboardEvent>(document, 'keyup').pipe(
       debounceTime(150),
       filter((key: KeyboardEvent) => key && key.key === 'Escape'),
     );

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\configureawait.props" />
+    <Import Project="..\..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="..\..\Volo.Abp.VirtualFileExplorer.abpmdl.json" />
+      <Content Include="..\..\Volo.Abp.VirtualFileExplorer.abpmdl.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
+      <None Remove="..\..\**\*.abppkg*.json" />
+      <Content Include="..\..\**\*.abppkg*.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
+    </ItemGroup>
+
+</Project>

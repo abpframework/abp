@@ -1,0 +1,155 @@
+{
+  "name": "Volo.Abp.Identity.Application.Contracts",
+  "hash": "1f066a51d7d0c078867838f11c7d65a0",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Identity",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain.Shared",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.Abstractions",
+          "namespace": "Volo.Abp.Users",
+          "name": "AbpUsersAbstractionModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Authorization",
+          "namespace": "Volo.Abp.Authorization",
+          "name": "AbpAuthorizationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Application.Contracts",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementApplicationContractsModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpIdentityApplicationContractsModule",
+      "summary": null
+    },
+    {
+      "displayName": "Role management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles",
+      "summary": null
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles.Create",
+      "summary": null
+    },
+    {
+      "displayName": "Edit",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Change permissions",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Roles.ManagePermissions",
+      "summary": null
+    },
+    {
+      "displayName": "User management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users",
+      "summary": null
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users.Create",
+      "summary": null
+    },
+    {
+      "displayName": "Edit",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Change permissions",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users.ManagePermissions",
+      "summary": null
+    },
+    {
+      "displayName": "User lookup",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.UserLookup",
+      "summary": null
+    }
+  ]
+}

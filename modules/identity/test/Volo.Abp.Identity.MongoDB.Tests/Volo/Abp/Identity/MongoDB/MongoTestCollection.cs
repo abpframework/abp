@@ -1,10 +1,9 @@
 using Xunit;
 
-namespace Volo.Abp.Identity.MongoDB
+namespace Volo.Abp.Identity.MongoDB;
+
+[CollectionDefinition(Name)]
+public class MongoTestCollection : ICollectionFixture<MongoDbFixture>
 {
-    [CollectionDefinition(Name)]
-    public class MongoTestCollection : ICollectionFixture<MongoDbFixture>
-    {
-        public const string Name = "MongoDB Collection";
-    }
+    public const string Name = "MongoDB Collection";
 }

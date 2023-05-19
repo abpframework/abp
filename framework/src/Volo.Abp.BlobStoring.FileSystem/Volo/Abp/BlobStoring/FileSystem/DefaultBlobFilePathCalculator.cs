@@ -2,39 +2,38 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.BlobStoring.FileSystem
+namespace Volo.Abp.BlobStoring.FileSystem;
+
+public class DefaultBlobFilePathCalculator : IBlobFilePathCalculator, ITransientDependency
 {
-    public class DefaultBlobFilePathCalculator : IBlobFilePathCalculator, ITransientDependency
+    protected ICurrentTenant CurrentTenant { get; }
+
+    public DefaultBlobFilePathCalculator(ICurrentTenant currentTenant)
     {
-        protected ICurrentTenant CurrentTenant { get; }
+        CurrentTenant = currentTenant;
+    }
 
-        public DefaultBlobFilePathCalculator(ICurrentTenant currentTenant)
+    public virtual string Calculate(BlobProviderArgs args)
+    {
+        var fileSystemConfiguration = args.Configuration.GetFileSystemConfiguration();
+        var blobPath = fileSystemConfiguration.BasePath;
+
+        if (CurrentTenant.Id == null)
         {
-            CurrentTenant = currentTenant;
+            blobPath = Path.Combine(blobPath, "host");
         }
-        
-        public virtual string Calculate(BlobProviderArgs args)
+        else
         {
-            var fileSystemConfiguration = args.Configuration.GetFileSystemConfiguration();
-            var blobPath = fileSystemConfiguration.BasePath;
-
-            if (CurrentTenant.Id == null)
-            {
-                blobPath = Path.Combine(blobPath, "host");
-            }
-            else
-            {
-                blobPath = Path.Combine(blobPath, "tenants", CurrentTenant.Id.Value.ToString("D"));
-            }
-
-            if (fileSystemConfiguration.AppendContainerNameToBasePath)
-            {
-                blobPath = Path.Combine(blobPath, args.ContainerName);
-            }
-            
-            blobPath = Path.Combine(blobPath, args.BlobName);
-
-            return blobPath;
+            blobPath = Path.Combine(blobPath, "tenants", CurrentTenant.Id.Value.ToString("D"));
         }
+
+        if (fileSystemConfiguration.AppendContainerNameToBasePath)
+        {
+            blobPath = Path.Combine(blobPath, args.ContainerName);
+        }
+
+        blobPath = Path.Combine(blobPath, args.BlobName);
+
+        return blobPath;
     }
 }

@@ -8,7 +8,7 @@ The Basic Theme is a theme implementation for the Angular UI. It is a minimalist
 
 ## Installation
 
-**This theme is already installed** when you create a new solution using the [startup templates](../../Startup-Templates/Index.md). If you need to manually install it, follow the steps below:
+If you need to manually this theme, follow the steps below:
 
 * Install the [@abp/ng.theme.basic](https://www.npmjs.com/package/@abp/ng.theme.basic) NPM package to your Angular project.
 * Open the `src/app/app.module.ts` file, import `ThemeBasicModule` (it can be imported from `@abp/ng.theme.basic` package), and add `ThemeBasicModule.forRoot()` to the `imports` array.
@@ -72,7 +72,7 @@ Or, you can download the [source code](https://github.com/abpframework/abp/blob/
             "prefix": "abp",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
                     "options": {
                         "tsConfig": "projects/theme-basic/tsconfig.lib.json",
                         "project": "projects/theme-basic/ng-package.json"

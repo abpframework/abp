@@ -21,13 +21,13 @@ getConfig() {
 
 Although clear and flexible, handling errors this way is repetitive work, even when error processing is delegated to the store or any other injectable.
 
-An `HttpInterceptor` is able to catch `HttpErrorResponse`  and can be used for a centralized error handling. Nevertheless, cases where default error handler, therefore the interceptor, must be disabled require additional work and comprehension of Angular internals. Check [this issue](https://github.com/angular/angular/issues/20203) for details.
+An `HttpInterceptor` is able to catch `HttpErrorResponse` and can be used for a centralized error handling. Nevertheless, cases where default error handler, therefore the interceptor, must be disabled require additional work and comprehension of Angular internals. Check [this issue](https://github.com/angular/angular/issues/20203) for details.
 
 
 
 ## RestService
 
-ABP core module has a utility service for HTTP requests: `RestService`. Unless explicitly configured otherwise, it catches HTTP errors and dispatches a `RestOccurError` action. This action is then captured by the `ErrorHandler` introduced by the `ThemeSharedModule`. Since you should already import this module in your app, when the `RestService` is used, all HTTP errors get automatically handled by default.
+ABP core module has a utility service for HTTP requests: `RestService`. Unless explicitly configured otherwise, it catches HTTP errors and dispatches a `RestOccurError` action. This action is then captured by the `ErrorHandler` introduced by the `ThemeSharedModule`. Since you should already import this module in your app, when the `RestService` is used, all HTTP errors get automatically handled by default.
 
 
 
@@ -67,7 +67,7 @@ getFoo(id: number) {
 
 
 
-The `request` method always returns an `Observable<T>`. Therefore you can do the following wherever you use `getFoo` method:
+The `request` method always returns an `Observable<T>`. Therefore you can do the following wherever you use `getFoo` method:
 
 ```js
 doSomethingWithFoo(id: number) {
@@ -205,7 +205,7 @@ You may find `Rest.Observe` enum [here](https://github.com/abpframework/abp/blob
 
 ## HTTP Error Handling
 
-When the `RestService` is used, all HTTP errors are automatically handled by `ErrorHandler` which is a service that exposed by the `@abp/ng.theme.shared` package.
+When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./HTTP-Error-Reporter-Service), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
 
 ### Custom HTTP Error Handler
 
@@ -298,3 +298,15 @@ export function handleHttpErrors(injector: Injector, httpError: HttpErrorRespons
   return throwError(httpError)
 }
 ```
+
+
+### How to Skip HTTP interceptors and ABP headers
+
+The ABP Framework adds several HTTP headers to the HttpClient, such as the "Auth token" or "tenant Id".
+The ABP Server must possess the information but the ABP user may not want to send this informations to an external server.
+ExternalHttpClient and IS EXTERNAL REQUEST HttpContext Token were added in V6.0.4.
+The ABP Http interceptors check the value of the `IS_EXTERNAL_REQUEST` token. If the token is True then ABP-specific headers won't be added to Http Request.
+The `ExternalHttpClient` extends from `HTTPClient` and sets the `IS_EXTERNAL_REQUEST` context token to true.
+When you are using `ExternalHttpClient` as HttpClient in your components, it does not add ABP-specific headers.
+
+Note: With `IS_EXTERNAL_REQUEST` or without it, ABP loading service works. 

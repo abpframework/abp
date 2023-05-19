@@ -4,4 +4,5 @@ export * from './login/login.component';
 export * from './manage-profile/manage-profile.component';
 export * from './register/register.component';
 export * from './personal-settings/personal-settings.component';
+export * from './personal-settings/personal-settings-half-row.component';
 export * from './reset-password/reset-password.component';

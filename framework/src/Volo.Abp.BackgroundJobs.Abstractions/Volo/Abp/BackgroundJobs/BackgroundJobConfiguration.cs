@@ -1,20 +1,19 @@
 ﻿using System;
 
-namespace Volo.Abp.BackgroundJobs
+namespace Volo.Abp.BackgroundJobs;
+
+public class BackgroundJobConfiguration
 {
-    public class BackgroundJobConfiguration
+    public Type ArgsType { get; }
+
+    public Type JobType { get; }
+
+    public string JobName { get; }
+
+    public BackgroundJobConfiguration(Type jobType)
     {
-        public Type ArgsType { get; }
-
-        public Type JobType { get; }
-
-        public string JobName { get; }
-
-        public BackgroundJobConfiguration(Type jobType)
-        {
-            JobType = jobType;
-            ArgsType = BackgroundJobArgsHelper.GetJobArgsType(jobType);
-            JobName = BackgroundJobNameAttribute.GetName(ArgsType);
-        }
+        JobType = jobType;
+        ArgsType = BackgroundJobArgsHelper.GetJobArgsType(jobType);
+        JobName = BackgroundJobNameAttribute.GetName(ArgsType);
     }
 }

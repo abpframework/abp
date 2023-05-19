@@ -1,6 +1,6 @@
 import { Observable, Observer } from 'rxjs';
-import { CrossOriginStrategy, CROSS_ORIGIN_STRATEGY } from '../strategies/cross-origin.strategy';
-import { DomStrategy, DOM_STRATEGY } from '../strategies/dom.strategy';
+import { CROSS_ORIGIN_STRATEGY, CrossOriginStrategy } from '../strategies/cross-origin.strategy';
+import { DOM_STRATEGY, DomStrategy } from '../strategies/dom.strategy';
 
 export function fromLazyLoad<T extends Event>(
   element: HTMLScriptElement | HTMLLinkElement,
@@ -11,9 +11,9 @@ export function fromLazyLoad<T extends Event>(
   domStrategy.insertElement(element);
 
   return new Observable((observer: Observer<T>) => {
-    element.onload = (event: T) => {
+    element.onload = (event: Event) => {
       clearCallbacks(element);
-      observer.next(event);
+      observer.next(event as T);
       observer.complete();
     };
 
@@ -32,10 +32,10 @@ export function fromLazyLoad<T extends Event>(
   });
 }
 
-function createErrorHandler(observer: Observer<Event>, element: HTMLElement) {
+function createErrorHandler<T extends Event = Event>(observer: Observer<T>, element: HTMLElement) {
   return function (event: Event | string) {
     clearCallbacks(element);
-    element.parentNode.removeChild(element);
+    element.parentNode?.removeChild(element);
     observer.error(event);
   };
 }

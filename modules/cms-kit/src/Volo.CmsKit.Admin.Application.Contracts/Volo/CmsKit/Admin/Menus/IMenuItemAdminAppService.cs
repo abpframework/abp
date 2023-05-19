@@ -4,22 +4,21 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.CmsKit.Menus;
 
-namespace Volo.CmsKit.Admin.Menus
+namespace Volo.CmsKit.Admin.Menus;
+
+public interface IMenuItemAdminAppService : IApplicationService
 {
-    public interface IMenuItemAdminAppService : IApplicationService
-    {
-        Task<ListResultDto<MenuItemDto>> GetListAsync();
+    Task<ListResultDto<MenuItemDto>> GetListAsync();
 
-        Task<MenuItemDto> GetAsync(Guid id);
-        
-        Task<MenuItemDto> CreateAsync(MenuItemCreateInput input);
+    Task<MenuItemDto> GetAsync(Guid id);
 
-        Task<MenuItemDto> UpdateAsync(Guid id, MenuItemUpdateInput input);
+    Task<MenuItemDto> CreateAsync(MenuItemCreateInput input);
 
-        Task DeleteAsync(Guid id);
+    Task<MenuItemDto> UpdateAsync(Guid id, MenuItemUpdateInput input);
 
-        Task MoveMenuItemAsync(Guid id, MenuItemMoveInput input);
-        
-        Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync(PageLookupInputDto input);
-    }
+    Task DeleteAsync(Guid id);
+
+    Task MoveMenuItemAsync(Guid id, MenuItemMoveInput input);
+
+    Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync(PageLookupInputDto input);
 }

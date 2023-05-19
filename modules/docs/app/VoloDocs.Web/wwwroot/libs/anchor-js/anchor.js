@@ -30,15 +30,15 @@
      * @param {Object} opts - Options object
      */
     function _applyRemainingDefaultOptions(opts) {
-      opts.icon = opts.hasOwnProperty('icon') ? opts.icon : '\ue9cb'; // Accepts characters (and also URLs?), like  '#', '¶', '❡', or '§'.
-      opts.visible = opts.hasOwnProperty('visible') ? opts.visible : 'hover'; // Also accepts 'always' & 'touch'
-      opts.placement = opts.hasOwnProperty('placement') ? opts.placement : 'right'; // Also accepts 'left'
-      opts.ariaLabel = opts.hasOwnProperty('ariaLabel') ? opts.ariaLabel : 'Anchor'; // Accepts any text.
-      opts.class = opts.hasOwnProperty('class') ? opts.class : ''; // Accepts any class name.
-      opts.base = opts.hasOwnProperty('base') ? opts.base : ''; // Accepts any base URI.
+      opts.icon = Object.prototype.hasOwnProperty.call(opts, 'icon') ? opts.icon : '\uE9CB'; // Accepts characters (and also URLs?), like  '#', '¶', '❡', or '§'.
+      opts.visible = Object.prototype.hasOwnProperty.call(opts, 'visible') ? opts.visible : 'hover'; // Also accepts 'always' & 'touch'
+      opts.placement = Object.prototype.hasOwnProperty.call(opts, 'placement') ? opts.placement : 'right'; // Also accepts 'left'
+      opts.ariaLabel = Object.prototype.hasOwnProperty.call(opts, 'ariaLabel') ? opts.ariaLabel : 'Anchor'; // Accepts any text.
+      opts.class = Object.prototype.hasOwnProperty.call(opts, 'class') ? opts.class : ''; // Accepts any class name.
+      opts.base = Object.prototype.hasOwnProperty.call(opts, 'base') ? opts.base : ''; // Accepts any base URI.
       // Using Math.floor here will ensure the value is Number-cast and an integer.
-      opts.truncate = opts.hasOwnProperty('truncate') ? Math.floor(opts.truncate) : 64; // Accepts any value that can be typecast to a number.
-      opts.titleText = opts.hasOwnProperty('titleText') ? opts.titleText : ''; // Accepts any text.
+      opts.truncate = Object.prototype.hasOwnProperty.call(opts, 'truncate') ? Math.floor(opts.truncate) : 64; // Accepts any value that can be typecast to a number.
+      opts.titleText = Object.prototype.hasOwnProperty.call(opts, 'titleText') ? opts.titleText : ''; // Accepts any text.
     }
 
     _applyRemainingDefaultOptions(this.options);
@@ -49,7 +49,7 @@
      * @return {Boolean} - true if the current device supports touch.
      */
     this.isTouchDevice = function() {
-      return !!(('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
+      return Boolean('ontouchstart' in window || window.TouchEvent || window.DocumentTouch && document instanceof DocumentTouch);
     };
 
     /**
@@ -99,7 +99,7 @@
 
       // We produce a list of existing IDs so we don't generate a duplicate.
       elsWithIds = document.querySelectorAll('[id]');
-      idList = [].map.call(elsWithIds, function assign(el) {
+      idList = [].map.call(elsWithIds, function(el) {
         return el.id;
       });
 
@@ -128,6 +128,7 @@
             index = idList.indexOf(newTidyText);
             count += 1;
           } while (index !== -1);
+
           index = undefined;
           idList.push(newTidyText);
 
@@ -149,6 +150,7 @@
         if (this.options.titleText) {
           anchor.title = this.options.titleText;
         }
+
         // Adjust the href if there's a <base> tag. See https://github.com/bryanbraun/anchorjs/issues/98
         hrefBase = document.querySelector('base') ? window.location.pathname + window.location.search : '';
         hrefBase = this.options.base || hrefBase;
@@ -158,7 +160,7 @@
           anchor.style.opacity = '1';
         }
 
-        if (this.options.icon === '\ue9cb') {
+        if (this.options.icon === '\uE9CB') {
           anchor.style.font = '1em/1 anchorjs-icons';
 
           // We set lineHeight = 1 here because the `anchorjs-icons` font family could otherwise affect the
@@ -173,10 +175,10 @@
         if (this.options.placement === 'left') {
           anchor.style.position = 'absolute';
           anchor.style.marginLeft = '-1em';
-          anchor.style.paddingRight = '0.5em';
+          anchor.style.paddingRight = '.5em';
           elements[i].insertBefore(anchor, elements[i].firstChild);
         } else { // if the option provided is `right` (or anything else).
-          anchor.style.paddingLeft = '0.375em';
+          anchor.style.paddingLeft = '.375em';
           elements[i].appendChild(anchor);
         }
       }
@@ -184,6 +186,7 @@
       for (i = 0; i < indexesToDrop.length; i++) {
         elements.splice(indexesToDrop[i] - i, 1);
       }
+
       this.elements = this.elements.concat(elements);
 
       return this;
@@ -208,10 +211,12 @@
           if (index !== -1) {
             this.elements.splice(index, 1);
           }
+
           // Remove the anchor from the DOM.
           elements[i].removeChild(domAnchor);
         }
       }
+
       return this;
     };
 
@@ -232,9 +237,14 @@
      * @return {String}      - hyphen-delimited text for use in IDs and URLs.
      */
     this.urlify = function(text) {
-      // Regex for finding the non-safe URL characters (many need escaping): & +$,:;=?@"#{}|^~[`%!'<>]./()*\ (newlines, tabs, backspace, & vertical tabs)
-      var nonsafeChars = /[& +$,:;=?@"#{}|^~[`%!'<>\]\.\/\(\)\*\\\n\t\b\v]/g,
-          urlText;
+      // Decode HTML characters such as '&nbsp;' first.
+      var textareaElement = document.createElement('textarea');
+      textareaElement.innerHTML = text;
+      text = textareaElement.value;
+
+      // Regex for finding the non-safe URL characters (many need escaping):
+      //   & +$,:;=?@"#{}|^~[`%!'<>]./()*\ (newlines, tabs, backspace, vertical tabs, and non-breaking space)
+      var nonsafeChars = /[& +$,:;=?@"#{}|^~[`%!'<>\]./()*\\\n\t\b\v\u00A0]/g;
 
       // The reason we include this _applyRemainingDefaultOptions is so urlify can be called independently,
       // even after setting options. This can be useful for tests or other applications.
@@ -244,26 +254,24 @@
 
       // Note: we trim hyphens after truncating because truncating can cause dangling hyphens.
       // Example string:                      // " ⚡⚡ Don't forget: URL fragments should be i18n-friendly, hyphenated, short, and clean."
-      urlText = text.trim()                   // "⚡⚡ Don't forget: URL fragments should be i18n-friendly, hyphenated, short, and clean."
-        .replace(/\'/gi, '')                  // "⚡⚡ Dont forget: URL fragments should be i18n-friendly, hyphenated, short, and clean."
+      return text.trim()                      // "⚡⚡ Don't forget: URL fragments should be i18n-friendly, hyphenated, short, and clean."
+        .replace(/'/gi, '')                   // "⚡⚡ Dont forget: URL fragments should be i18n-friendly, hyphenated, short, and clean."
         .replace(nonsafeChars, '-')           // "⚡⚡-Dont-forget--URL-fragments-should-be-i18n-friendly--hyphenated--short--and-clean-"
         .replace(/-{2,}/g, '-')               // "⚡⚡-Dont-forget-URL-fragments-should-be-i18n-friendly-hyphenated-short-and-clean-"
         .substring(0, this.options.truncate)  // "⚡⚡-Dont-forget-URL-fragments-should-be-i18n-friendly-hyphenated-"
         .replace(/^-+|-+$/gm, '')             // "⚡⚡-Dont-forget-URL-fragments-should-be-i18n-friendly-hyphenated"
         .toLowerCase();                       // "⚡⚡-dont-forget-url-fragments-should-be-i18n-friendly-hyphenated"
-
-      return urlText;
     };
 
     /**
      * Determines if this element already has an AnchorJS link on it.
-     * Uses this technique: http://stackoverflow.com/a/5898748/1154642
+     * Uses this technique: https://stackoverflow.com/a/5898748/1154642
      * @param    {HTMLElement}  el - a DOM node
      * @return   {Boolean}     true/false
      */
     this.hasAnchorJSLink = function(el) {
-      var hasLeftAnchor = el.firstChild && ((' ' + el.firstChild.className + ' ').indexOf(' anchorjs-link ') > -1),
-          hasRightAnchor = el.lastChild && ((' ' + el.lastChild.className + ' ').indexOf(' anchorjs-link ') > -1);
+      var hasLeftAnchor = el.firstChild && (' ' + el.firstChild.className + ' ').indexOf(' anchorjs-link ') > -1,
+          hasRightAnchor = el.lastChild && (' ' + el.lastChild.className + ' ').indexOf(' anchorjs-link ') > -1;
 
       return hasLeftAnchor || hasRightAnchor || false;
     };
@@ -284,8 +292,9 @@
       } else if (Array.isArray(input) || input instanceof NodeList) {
         elements = [].slice.call(input);
       } else {
-        throw new Error('The selector provided to AnchorJS was invalid.');
+        throw new TypeError('The selector provided to AnchorJS was invalid.');
       }
+
       return elements;
     }
 
@@ -301,26 +310,26 @@
 
       var style = document.createElement('style'),
           linkRule =
-          ' .anchorjs-link {'                       +
-          '   opacity: 0;'                          +
-          '   text-decoration: none;'               +
-          '   -webkit-font-smoothing: antialiased;' +
-          '   -moz-osx-font-smoothing: grayscale;'  +
-          ' }',
+          '.anchorjs-link{'                        +
+            'opacity:0;'                           +
+            'text-decoration:none;'                +
+            '-webkit-font-smoothing:antialiased;'  +
+            '-moz-osx-font-smoothing:grayscale'    +
+          '}',
           hoverRule =
-          ' *:hover > .anchorjs-link,'              +
-          ' .anchorjs-link:focus  {'                +
-          '   opacity: 1;'                          +
-          ' }',
+          ':hover>.anchorjs-link,'                 +
+          '.anchorjs-link:focus{'                  +
+            'opacity:1'                            +
+          '}',
           anchorjsLinkFontFace =
-          ' @font-face {'                           +
-          '   font-family: "anchorjs-icons";'       + // Icon from icomoon; 10px wide & 10px tall; 2 empty below & 4 above
-          '   src: url(data:n/a;base64,AAEAAAALAIAAAwAwT1MvMg8yG2cAAAE4AAAAYGNtYXDp3gC3AAABpAAAAExnYXNwAAAAEAAAA9wAAAAIZ2x5ZlQCcfwAAAH4AAABCGhlYWQHFvHyAAAAvAAAADZoaGVhBnACFwAAAPQAAAAkaG10eASAADEAAAGYAAAADGxvY2EACACEAAAB8AAAAAhtYXhwAAYAVwAAARgAAAAgbmFtZQGOH9cAAAMAAAAAunBvc3QAAwAAAAADvAAAACAAAQAAAAEAAHzE2p9fDzz1AAkEAAAAAADRecUWAAAAANQA6R8AAAAAAoACwAAAAAgAAgAAAAAAAAABAAADwP/AAAACgAAA/9MCrQABAAAAAAAAAAAAAAAAAAAAAwABAAAAAwBVAAIAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAMCQAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAg//0DwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAAIAAAACgAAxAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADAAAAAIAAgAAgAAACDpy//9//8AAAAg6cv//f///+EWNwADAAEAAAAAAAAAAAAAAAAACACEAAEAAAAAAAAAAAAAAAAxAAACAAQARAKAAsAAKwBUAAABIiYnJjQ3NzY2MzIWFxYUBwcGIicmNDc3NjQnJiYjIgYHBwYUFxYUBwYGIwciJicmNDc3NjIXFhQHBwYUFxYWMzI2Nzc2NCcmNDc2MhcWFAcHBgYjARQGDAUtLXoWOR8fORYtLTgKGwoKCjgaGg0gEhIgDXoaGgkJBQwHdR85Fi0tOAobCgoKOBoaDSASEiANehoaCQkKGwotLXoWOR8BMwUFLYEuehYXFxYugC44CQkKGwo4GkoaDQ0NDXoaShoKGwoFBe8XFi6ALjgJCQobCjgaShoNDQ0NehpKGgobCgoKLYEuehYXAAAADACWAAEAAAAAAAEACAAAAAEAAAAAAAIAAwAIAAEAAAAAAAMACAAAAAEAAAAAAAQACAAAAAEAAAAAAAUAAQALAAEAAAAAAAYACAAAAAMAAQQJAAEAEAAMAAMAAQQJAAIABgAcAAMAAQQJAAMAEAAMAAMAAQQJAAQAEAAMAAMAAQQJAAUAAgAiAAMAAQQJAAYAEAAMYW5jaG9yanM0MDBAAGEAbgBjAGgAbwByAGoAcwA0ADAAMABAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAH//wAP) format("truetype");' +
-          ' }',
+          '@font-face{'                            +
+            'font-family:anchorjs-icons;'          + // Icon from icomoon; 10px wide & 10px tall; 2 empty below & 4 above
+            'src:url(data:n/a;base64,AAEAAAALAIAAAwAwT1MvMg8yG2cAAAE4AAAAYGNtYXDp3gC3AAABpAAAAExnYXNwAAAAEAAAA9wAAAAIZ2x5ZlQCcfwAAAH4AAABCGhlYWQHFvHyAAAAvAAAADZoaGVhBnACFwAAAPQAAAAkaG10eASAADEAAAGYAAAADGxvY2EACACEAAAB8AAAAAhtYXhwAAYAVwAAARgAAAAgbmFtZQGOH9cAAAMAAAAAunBvc3QAAwAAAAADvAAAACAAAQAAAAEAAHzE2p9fDzz1AAkEAAAAAADRecUWAAAAANQA6R8AAAAAAoACwAAAAAgAAgAAAAAAAAABAAADwP/AAAACgAAA/9MCrQABAAAAAAAAAAAAAAAAAAAAAwABAAAAAwBVAAIAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAMCQAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAg//0DwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAAIAAAACgAAxAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADAAAAAIAAgAAgAAACDpy//9//8AAAAg6cv//f///+EWNwADAAEAAAAAAAAAAAAAAAAACACEAAEAAAAAAAAAAAAAAAAxAAACAAQARAKAAsAAKwBUAAABIiYnJjQ3NzY2MzIWFxYUBwcGIicmNDc3NjQnJiYjIgYHBwYUFxYUBwYGIwciJicmNDc3NjIXFhQHBwYUFxYWMzI2Nzc2NCcmNDc2MhcWFAcHBgYjARQGDAUtLXoWOR8fORYtLTgKGwoKCjgaGg0gEhIgDXoaGgkJBQwHdR85Fi0tOAobCgoKOBoaDSASEiANehoaCQkKGwotLXoWOR8BMwUFLYEuehYXFxYugC44CQkKGwo4GkoaDQ0NDXoaShoKGwoFBe8XFi6ALjgJCQobCjgaShoNDQ0NehpKGgobCgoKLYEuehYXAAAADACWAAEAAAAAAAEACAAAAAEAAAAAAAIAAwAIAAEAAAAAAAMACAAAAAEAAAAAAAQACAAAAAEAAAAAAAUAAQALAAEAAAAAAAYACAAAAAMAAQQJAAEAEAAMAAMAAQQJAAIABgAcAAMAAQQJAAMAEAAMAAMAAQQJAAQAEAAMAAMAAQQJAAUAAgAiAAMAAQQJAAYAEAAMYW5jaG9yanM0MDBAAGEAbgBjAGgAbwByAGoAcwA0ADAAMABAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAH//wAP) format("truetype")' +
+          '}',
           pseudoElContent =
-          ' [data-anchorjs-icon]::after {'          +
-          '   content: attr(data-anchorjs-icon);'   +
-          ' }',
+          '[data-anchorjs-icon]::after{'           +
+            'content:attr(data-anchorjs-icon)'     +
+          '}',
           firstStyleEl;
 
       style.className = 'anchorjs';
@@ -329,7 +338,7 @@
       // We place it in the head with the other style tags, if possible, so as to
       // not look out of place. We insert before the others so these styles can be
       // overridden if necessary.
-      firstStyleEl = document.head.querySelector('[rel="stylesheet"], style');
+      firstStyleEl = document.head.querySelector('[rel="stylesheet"],style');
       if (firstStyleEl === undefined) {
         document.head.appendChild(style);
       } else {

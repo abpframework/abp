@@ -2,55 +2,101 @@
 using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+
+public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
 {
-    public class CreateAppSettingsSecretsStep : ProjectBuildPipelineStep
+    private const string AppSettingsPlaceholder = "<!--APPSETTINGS-SECRETS-->";
+
+    public override void Execute(ProjectBuildContext context)
     {
-        private const string FileName = "appsettings.secrets.json";
-        private const string AppSettingsFileName = "appsettings.json";
-        private const string AppSettingsPlaceholder = "<!--APPSETTINGS-SECRETS-->";
+        var appSettingsFiles = context.Files
+            .Where(x => x.Name.EndsWith(CliConsts.AppSettingsJsonFileName) && NotBlazorWasmProject(x.Name) && NotInDockerFiles(x.Name))
+            .ToList();
 
-        public override void Execute(ProjectBuildContext context)
+        if (!appSettingsFiles.Any())
         {
-            var appSettingsFiles = context.Files
-                .Where(x =>
-                    x.Name.EndsWith(AppSettingsFileName) &&
-                    NotBlazorWasmProject(x.Name))
-                .ToList();
-
-            var content = context.Template.IsPro()
-                ? $"{{{Environment.NewLine}  \"AbpLicenseCode\": \"<LICENSE_CODE/>\" {Environment.NewLine}}}"
-                : $"{{{Environment.NewLine}}}";
-
-            foreach (var appSettingsFile in appSettingsFiles)
-            {
-                context.Files.Add(new FileEntry(
-                    appSettingsFile.Name.Replace(AppSettingsFileName, FileName),
-                    content.GetBytes(),
-                    false));
-            }
-
-            var projectFiles = context.Files.Where(x => x.Content.Contains(AppSettingsPlaceholder)).ToList();
-
-            foreach (var projectFile in projectFiles)
-            {
-                projectFile.SetContent(ReplaceAppSettingsSecretsPlaceholder(projectFile.Content));
-            }
+            return;
         }
 
-        private static bool NotBlazorWasmProject(string fileName)
+        var appsettingsSecretJsonContent = GetAppSettingsSecretJsonContent(context);
+       
+        foreach (var appSettingsFile in appSettingsFiles)
         {
-            return !fileName.Contains("Blazor/wwwroot") && !fileName.Contains("Blazor.Host/wwwroot");
+            context.Files.Add(new FileEntry(
+                appSettingsFile.Name.Replace(CliConsts.AppSettingsJsonFileName, CliConsts.AppSettingsSecretJsonFileName),
+                appsettingsSecretJsonContent,
+                false)
+            );
         }
 
-        private static string ReplaceAppSettingsSecretsPlaceholder(string content)
+        var projectFiles = context.Files.Where(x => 
+            x.Name.EndsWith(".csproj") &&
+            x.Content.Contains(AppSettingsPlaceholder)).ToList();
+
+        foreach (var projectFile in projectFiles)
         {
-            var replaceContent = $"<None Remove=\"{FileName}\" />{Environment.NewLine}" +
-                    $"    <Content Include=\"{FileName}\">{Environment.NewLine}" +
-                    $"      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>{Environment.NewLine}" +
-                    $"      <CopyToOutputDirectory>Always</CopyToOutputDirectory>{Environment.NewLine}" +
-                    "    </Content>";
-            return content.Replace(AppSettingsPlaceholder, replaceContent);
+            projectFile.SetContent(ReplaceAppSettingsSecretsPlaceholder(projectFile.Content));
         }
+    }
+
+    private static byte[] GetAppSettingsSecretJsonContent(ProjectBuildContext context)
+    {
+        bool condition;
+        if (context.Template != null)
+        {
+            condition = context.Template.IsPro();
+        }
+        else if (context.Module != null)
+        {
+            condition = context.Module.IsPro;
+        }
+        else
+        {
+            condition = false;
+        }
+        
+        return condition
+            ? $"{{{Environment.NewLine}  \"AbpLicenseCode\": \"{CliConsts.LicenseCodePlaceHolder}\" {Environment.NewLine}}}".GetBytes()
+            : $"{{{Environment.NewLine}}}".GetBytes();
+    }
+
+    private static bool NotBlazorWasmProject(string fileName)
+    {
+        return !fileName.Contains("Blazor/wwwroot") && !fileName.Contains("Blazor.Host/wwwroot");
+    }
+
+    private static bool NotInDockerFiles(string fileName)
+    {
+        return !fileName.Contains("etc/docker/");
+    }
+
+    private static string ReplaceAppSettingsSecretsPlaceholder(string content)
+    {
+        var path = string.Empty;
+        
+        var appSettingsRemoveLine = content.SplitToLines().FirstOrDefault(l=>
+            l.Contains("None") &&
+            l.Contains("Remove") &&
+            l.Contains(CliConsts.AppSettingsJsonFileName));
+
+        if (appSettingsRemoveLine != null)
+        {
+             var prefix = appSettingsRemoveLine.Split("\"")
+                .Select(s => s.Trim())
+                .First(s => s.Contains(CliConsts.AppSettingsJsonFileName))
+                .Replace(CliConsts.AppSettingsJsonFileName, "");
+
+             path = string.IsNullOrWhiteSpace(prefix) ? string.Empty : prefix;
+        }
+        
+        
+        var replaceContent = $"<None Remove=\"{ path + CliConsts.AppSettingsSecretJsonFileName}\" />{Environment.NewLine}" +
+                $"    <Content Include=\"{path + CliConsts.AppSettingsSecretJsonFileName}\">{Environment.NewLine}" +
+                $"      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>{Environment.NewLine}" +
+                $"      <CopyToOutputDirectory>Always</CopyToOutputDirectory>{Environment.NewLine}" +
+                "    </Content>";
+        
+        return content.Replace(AppSettingsPlaceholder, replaceContent);
     }
 }

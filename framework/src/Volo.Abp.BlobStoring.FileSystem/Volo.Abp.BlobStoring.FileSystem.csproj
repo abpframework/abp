@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
     <AssemblyName>Volo.Abp.BlobStoring.FileSystem</AssemblyName>
     <PackageId>Volo.Abp.BlobStoring.FileSystem</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
-    <PackageReference Include="Polly" Version="7.2.2" />
+    <PackageReference Include="Polly" Version="$(PollyPackageVersion)" />
   </ItemGroup>
 
 </Project>

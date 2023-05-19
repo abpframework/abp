@@ -1,12 +1,11 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.Features
+namespace Volo.Abp.Features;
+
+public class FeatureTestBase : AbpIntegratedTest<AbpFeaturesTestModule>
 {
-    public class FeatureTestBase : AbpIntegratedTest<AbpFeaturesTestModule>
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+        options.UseAutofac();
     }
 }

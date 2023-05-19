@@ -1,9 +1,6 @@
 (function () {
 
-	if (
-		typeof self !== 'undefined' && !self.Prism ||
-		typeof global !== 'undefined' && !global.Prism
-	) {
+	if (typeof Prism === 'undefined') {
 		return;
 	}
 
@@ -60,8 +57,7 @@
 						Prism.languages.insertBefore('inside', def.inside['url-link'] ? 'url-link' : 'punctuation', {
 							'data-uri': dataURI
 						}, def);
-					}
-					else {
+					} else {
 						if (def.inside['url-link']) {
 							Prism.languages.insertBefore('inside', 'url-link', {
 								'data-uri': dataURI

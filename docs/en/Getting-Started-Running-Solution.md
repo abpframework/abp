@@ -15,7 +15,7 @@
 
 ### Connection String
 
-Check the **connection string** in the `appsettings.json` file under the {{if Tiered == "Yes"}}`.IdentityServer` and `.HttpApi.Host` projects{{else}}{{if UI=="MVC"}}`.Web` project{{else if UI=="BlazorServer"}}`.Blazor` project{{else}}`.HttpApi.Host` project{{end}}{{end}}.
+Check the **connection string** in the `appsettings.json` file under the {{if Tiered == "Yes"}}`.AuthServer` and `.HttpApi.Host` projects{{else}}{{if UI=="MVC"}}`.Web` project{{else if UI=="BlazorServer"}}`.Blazor` project{{else}}`.HttpApi.Host` project{{end}}{{end}}.
 
 {{ if DB == "EF" }}
 
@@ -93,11 +93,13 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
 {{ if UI == "MVC" || UI == "BlazorServer" }}
 
+> Before starting the application, run `abp install-libs` command in your Web directory to restore the client-side libraries. This will populate the `libs` folder.
+
 {{ if Tiered == "Yes" }}
 
 > Tiered solutions use **Redis** as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
 
-1. Ensure that the `.IdentityServer` project is the startup project. Run this application that will open a **login** page in your browser.
+1. Ensure that the `.AuthServer` project is the startup project. Run this application that will open a **login** page in your browser.
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
 
@@ -111,11 +113,11 @@ This is the HTTP API that is used by the web application.
 
 3. Lastly, ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the startup project and run the application which will open a **welcome** page in your browser
 
-![mvc-tiered-app-home](images/bookstore-home.png)
+![mvc-tiered-app-home](images/bookstore-home-2.png)
 
 Click to the **login** button which will redirect you to the *authentication server* to login to the application:
 
-![bookstore-login](images/bookstore-login.png)
+![bookstore-login](images/bookstore-login-2.png)
 
 {{ else # Tiered != "Yes" }}
 
@@ -123,7 +125,7 @@ Ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the st
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
 
-![bookstore-login](images/bookstore-login.png)
+![bookstore-login](images/bookstore-login-2.png)
 
 {{ end # Tiered }}
 
@@ -135,11 +137,11 @@ Ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the st
 
 > Tiered solutions use Redis as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
 
-Ensure that the `.IdentityServer` project is the startup project. Run the application which will open a **login** page in your browser.
+Ensure that the `.AuthServer` project is the startup project. Run the application which will open a **login** page in your browser.
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
 
-You can login, but you cannot enter to the main application here. This is just the authentication server.
+You can login, but you cannot enter to the main application here. This is **just the authentication server**.
 
 Ensure that the `.HttpApi.Host` project is the startup project and run the application which will open a Swagger UI:
 
@@ -161,13 +163,15 @@ You can see the application APIs and test them here. Get [more info](https://swa
 
 ### Running the Blazor Application (Client Side)
 
+Go to the Blazor project folder, open a command line terminal, type the `abp bundle -f` command (If the project was created by ABP Cli tool, you don't need to do this).
+
 Ensure that the `.Blazor` project is the startup project and run the application.
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
 
 Once the application starts, click to the **Login** link on to header, which redirects you to the authentication server to enter a username and password:
 
-![bookstore-login](images/bookstore-login.png)
+![bookstore-login](images/bookstore-login-2.png)
 
 {{ else if UI == "NG" }}
 
@@ -187,7 +191,7 @@ yarn start
 
 It may take a longer time for the first build. Once it finishes, it opens the Angular UI in your default browser with the [localhost:4200](http://localhost:4200/) address.
 
-![bookstore-login](images/bookstore-login.png)
+![bookstore-login](images/bookstore-login-2.png)
 
 {{ end }}
 

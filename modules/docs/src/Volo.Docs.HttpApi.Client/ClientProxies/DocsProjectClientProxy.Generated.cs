@@ -10,49 +10,48 @@ using Volo.Docs.Projects;
 using Volo.Docs.Documents;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.Docs.Projects.ClientProxies
+namespace Volo.Docs.Projects.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IProjectAppService), typeof(DocsProjectClientProxy))]
+public partial class DocsProjectClientProxy : ClientProxyBase<IProjectAppService>, IProjectAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IProjectAppService), typeof(DocsProjectClientProxy))]
-    public partial class DocsProjectClientProxy : ClientProxyBase<IProjectAppService>, IProjectAppService
+    public virtual async Task<ListResultDto<ProjectDto>> GetListAsync()
     {
-        public virtual async Task<ListResultDto<ProjectDto>> GetListAsync()
-        {
-            return await RequestAsync<ListResultDto<ProjectDto>>(nameof(GetListAsync));
-        }
+        return await RequestAsync<ListResultDto<ProjectDto>>(nameof(GetListAsync));
+    }
 
-        public virtual async Task<ProjectDto> GetAsync(string shortName)
+    public virtual async Task<ProjectDto> GetAsync(string shortName)
+    {
+        return await RequestAsync<ProjectDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<ProjectDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), shortName }
-            });
-        }
+            { typeof(string), shortName }
+        });
+    }
 
-        public virtual async Task<string> GetDefaultLanguageCodeAsync(string shortName, string version)
+    public virtual async Task<string> GetDefaultLanguageCodeAsync(string shortName, string version)
+    {
+        return await RequestAsync<string>(nameof(GetDefaultLanguageCodeAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<string>(nameof(GetDefaultLanguageCodeAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), shortName },
-                { typeof(string), version }
-            });
-        }
+            { typeof(string), shortName },
+            { typeof(string), version }
+        });
+    }
 
-        public virtual async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
+    public virtual async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
+    {
+        return await RequestAsync<ListResultDto<VersionInfoDto>>(nameof(GetVersionsAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<ListResultDto<VersionInfoDto>>(nameof(GetVersionsAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), shortName }
-            });
-        }
+            { typeof(string), shortName }
+        });
+    }
 
-        public virtual async Task<LanguageConfig> GetLanguageListAsync(string shortName, string version)
+    public virtual async Task<LanguageConfig> GetLanguageListAsync(string shortName, string version)
+    {
+        return await RequestAsync<LanguageConfig>(nameof(GetLanguageListAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<LanguageConfig>(nameof(GetLanguageListAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), shortName },
-                { typeof(string), version }
-            });
-        }
+            { typeof(string), shortName },
+            { typeof(string), version }
+        });
     }
 }

@@ -3,19 +3,19 @@ using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Threading;
 
-namespace MyCompanyName.MyProjectName.EntityFrameworkCore
+namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
+
+public static class MyProjectNameEfCoreEntityExtensionMappings
 {
-    public static class MyProjectNameEfCoreEntityExtensionMappings
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
+    public static void Configure()
     {
-        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+        MyProjectNameGlobalFeatureConfigurator.Configure();
+        MyProjectNameModuleExtensionConfigurator.Configure();
 
-        public static void Configure()
+        OneTimeRunner.Run(() =>
         {
-            MyProjectNameGlobalFeatureConfigurator.Configure();
-            MyProjectNameModuleExtensionConfigurator.Configure();
-
-            OneTimeRunner.Run(() =>
-            {
                 /* You can configure extra properties for the
                  * entities defined in the modules used by your application.
                  *
@@ -39,7 +39,6 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                  * See the documentation for more:
                  * https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities
                  */
-            });
-        }
+        });
     }
 }

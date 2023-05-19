@@ -1,32 +1,29 @@
 ﻿using System;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.ObjectExtending.Modularity
+namespace Volo.Abp.ObjectExtending.Modularity;
+
+public static class ExtensionPropertyConfigurationExtensions
 {
-    public static class ExtensionPropertyConfigurationExtensions
+    public static string GetLocalizationResourceNameOrNull(
+        this ExtensionPropertyConfiguration property)
     {
-        public static string GetLocalizationResourceNameOrNull(
-            this ExtensionPropertyConfiguration property)
+        if (property.DisplayName is LocalizableString localizableString)
         {
-            var resourceType = property.GetLocalizationResourceTypeOrNull();
-            if (resourceType == null)
-            {
-                return null;
-            }
-
-            return LocalizationResourceNameAttribute.GetName(resourceType);
+            return localizableString.ResourceName;
         }
 
-        public static Type GetLocalizationResourceTypeOrNull(
-            this ExtensionPropertyConfiguration property)
-        {
-            if (property.DisplayName != null &&
-                property.DisplayName is LocalizableString localizableString)
-            {
-                return localizableString.ResourceType;
-            }
+        return null;
+    }
 
-            return null;
+    public static Type GetLocalizationResourceTypeOrNull(
+        this ExtensionPropertyConfiguration property)
+    {
+        if (property.DisplayName is LocalizableString localizableString)
+        {
+            return localizableString.ResourceType;
         }
+
+        return null;
     }
 }

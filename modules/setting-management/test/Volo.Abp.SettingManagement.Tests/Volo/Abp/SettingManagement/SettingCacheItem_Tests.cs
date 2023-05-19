@@ -1,16 +1,15 @@
 ﻿using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.SettingManagement
+namespace Volo.Abp.SettingManagement;
+
+public class SettingCacheItem_Tests
 {
-    public class SettingCacheItem_Tests
+    [Fact]
+    public void GetSettingNameFormCacheKeyOrNull()
     {
-        [Fact]
-        public void GetSettingNameFormCacheKeyOrNull()
-        {
-            var key = SettingCacheItem.CalculateCacheKey("aaa", "bbb", "ccc");
-            SettingCacheItem.GetSettingNameFormCacheKeyOrNull(key).ShouldBe("aaa");
-            SettingCacheItem.GetSettingNameFormCacheKeyOrNull("aaabbbccc").ShouldBeNull();
-        }
+        var key = SettingCacheItem.CalculateCacheKey("aaa", "bbb", "ccc");
+        SettingCacheItem.GetSettingNameFormCacheKeyOrNull(key).ShouldBe("aaa");
+        SettingCacheItem.GetSettingNameFormCacheKeyOrNull("aaabbbccc").ShouldBeNull();
     }
 }

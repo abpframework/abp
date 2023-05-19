@@ -1,14 +1,13 @@
 ﻿using Volo.Abp.Reflection;
 
-namespace MyCompanyName.MyProjectName.Permissions
-{
-    public class MyProjectNamePermissions
-    {
-        public const string GroupName = "MyProjectName";
+namespace MyCompanyName.MyProjectName.Permissions;
 
-        public static string[] GetAll()
-        {
-            return ReflectionHelper.GetPublicConstantsRecursively(typeof(MyProjectNamePermissions));
-        }
+public class MyProjectNamePermissions
+{
+    public const string GroupName = "MyProjectName";
+
+    public static string[] GetAll()
+    {
+        return ReflectionHelper.GetPublicConstantsRecursively(typeof(MyProjectNamePermissions));
     }
 }

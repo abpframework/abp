@@ -2,35 +2,34 @@
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.IdentityServer.Clients
+namespace Volo.Abp.IdentityServer.Clients;
+
+public class ClientRedirectUri : Entity
 {
-    public class ClientRedirectUri : Entity
+    public virtual Guid ClientId { get; protected set; }
+
+    public virtual string RedirectUri { get; protected set; }
+
+    protected ClientRedirectUri()
     {
-        public virtual Guid ClientId { get; protected set; }
 
-        public virtual string RedirectUri { get; protected set; }
+    }
 
-        protected ClientRedirectUri()
-        {
+    public virtual bool Equals(Guid clientId, [NotNull] string uri)
+    {
+        return ClientId == clientId && RedirectUri == uri;
+    }
 
-        }
+    protected internal ClientRedirectUri(Guid clientId, [NotNull] string redirectUri)
+    {
+        Check.NotNull(redirectUri, nameof(redirectUri));
 
-        public virtual bool Equals(Guid clientId, [NotNull] string uri)
-        {
-            return ClientId == clientId && RedirectUri == uri;
-        }
+        ClientId = clientId;
+        RedirectUri = redirectUri;
+    }
 
-        protected internal ClientRedirectUri(Guid clientId, [NotNull] string redirectUri)
-        {
-            Check.NotNull(redirectUri, nameof(redirectUri));
-
-            ClientId = clientId;
-            RedirectUri = redirectUri;
-        }
-
-        public override object[] GetKeys()
-        {
-            return new object[] { ClientId, RedirectUri };
-        }
+    public override object[] GetKeys()
+    {
+        return new object[] { ClientId, RedirectUri };
     }
 }

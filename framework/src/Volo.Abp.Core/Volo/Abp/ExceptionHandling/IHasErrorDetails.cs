@@ -1,7 +1,6 @@
-namespace Volo.Abp.ExceptionHandling
+namespace Volo.Abp.ExceptionHandling;
+
+public interface IHasErrorDetails
 {
-    public interface IHasErrorDetails
-    {
-        string Details { get; }
-    }
+    string Details { get; }
 }

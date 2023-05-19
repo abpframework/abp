@@ -1,11 +1,19 @@
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
 import i18n from 'i18n-js';
-import { Container, Content, Form, Input, InputGroup, Item, Icon, Label } from 'native-base';
+import {
+  Box,
+  FormControl,
+  Input,
+  KeyboardAvoidingView,
+  Stack,
+  Icon
+} from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useRef, useState } from 'react';
 import * as Yup from 'yup';
-import FormButtons from '../../components/FormButtons/FormButtons';
+import { FormButtons } from '../../components/FormButtons';
 import ValidationMessage from '../../components/ValidationMessage/ValidationMessage';
+import { Ionicons } from '@expo/vector-icons';
 
 const ValidationSchema = Yup.object().shape({
   currentPassword: Yup.string().required('AbpAccount::ThisFieldIsRequired.'),
@@ -19,75 +27,89 @@ function ChangePasswordForm({ submit, cancel }) {
   const currentPasswordRef = useRef();
   const newPasswordRef = useRef();
 
-  const onSubmit = values => {
+  const onSubmit = (values) => {
     submit({
       ...values,
       newPasswordConfirm: values.newPassword,
     });
   };
 
+  const formik = useFormik({
+    enableReinitialize: true,
+    validationSchema: ValidationSchema,
+    initialValues: {
+      currentPassword: '',
+      newPassword: '',
+    },
+    onSubmit,
+  });
+
   return (
-    <Formik
-      enableReinitialize
-      validationSchema={ValidationSchema}
-      initialValues={{
-        currentPassword: '',
-        newPassword: '',
-      }}
-      onSubmit={values => onSubmit(values)}>
-      {({ handleChange, handleBlur, handleSubmit, values, errors, isValid }) => (
-        <>
-          <Container>
-            <Content px20>
-              <Form>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::DisplayName:CurrentPassword')}</Label>
-                  <Item abpInput>
-                    <Input
-                      ref={currentPasswordRef}
-                      onSubmitEditing={() => newPasswordRef.current._root.focus()}
-                      returnKeyType="next"
-                      onChangeText={handleChange('currentPassword')}
-                      onBlur={handleBlur('currentPassword')}
-                      value={values.currentPassword}
-                      textContentType="password"
-                      secureTextEntry={!showCurrentPassword}
-                    />
-                    <Icon
-                      active
-                      name={showCurrentPassword ? 'eye-off' : 'eye'}
-                      onPress={() => setShowCurrentPassword(!showCurrentPassword)}
-                    />
-                  </Item>
-                </InputGroup>
-                <ValidationMessage>{errors.currentPassword}</ValidationMessage>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::DisplayName:NewPassword')}</Label>
-                  <Item abpInput>
-                    <Input
-                      ref={newPasswordRef}
-                      returnKeyType="done"
-                      onSubmitEditing={handleSubmit}
-                      onChangeText={handleChange('newPassword')}
-                      onBlur={handleBlur('newPassword')}
-                      value={values.newPassword}
-                      textContentType="newPassword"
-                      secureTextEntry={!showNewPassword}
-                    />
-                    <Icon
-                      name={showNewPassword ? 'eye-off' : 'eye'}
-                      onPress={() => setShowNewPassword(!showNewPassword)}
-                    />
-                  </Item>
-                </InputGroup>
-                <ValidationMessage>{errors.newPassword}</ValidationMessage>
-              </Form>
-            </Content>
-          </Container>
-          <FormButtons submit={handleSubmit} cancel={cancel} isSubmitDisabled={!isValid} />
-        </>
-      )}
-    </Formik>
+    <>
+      <Box px="3">
+        <FormControl isRequired my="2">
+          <Stack mx="4">
+            <FormControl.Label>
+              {i18n.t('AbpIdentity::DisplayName:CurrentPassword')}
+            </FormControl.Label>
+            <Input
+              ref={currentPasswordRef}
+              onSubmitEditing={() => newPasswordRef?.current?.focus()}
+              returnKeyType="next"
+              onChangeText={formik.handleChange('currentPassword')}
+              onBlur={formik.handleBlur('currentPassword')}
+              value={formik.values.currentPassword}
+              textContentType="password"
+              secureTextEntry={!showCurrentPassword}
+              InputRightElement={
+                <Icon
+                  as={Ionicons}
+                  size="5"
+                  mr="2"
+                  name={showCurrentPassword ? 'eye-off-outline' : 'eye-outline'}
+                  onPress={() => setShowCurrentPassword(!showCurrentPassword)}
+                />
+              }
+            />
+            <ValidationMessage>
+              {formik.errors.currentPassword}
+            </ValidationMessage>
+          </Stack>
+        </FormControl>
+
+        <FormControl isRequired my="2">
+          <Stack mx="4">
+            <FormControl.Label>
+              {i18n.t('AbpIdentity::DisplayName:NewPassword')}
+            </FormControl.Label>
+            <Input
+              ref={newPasswordRef}
+              returnKeyType="done"
+              onChangeText={formik.handleChange('newPassword')}
+              onBlur={formik.handleBlur('newPassword')}
+              value={formik.values.newPassword}
+              textContentType="newPassword"
+              secureTextEntry={!showNewPassword}
+              InputRightElement={
+                <Icon
+                  as={Ionicons}
+                  size="5"
+                  mr="2"
+                  name={showNewPassword ? 'eye-off-outline' : 'eye-outline'}
+                  onPress={() => setShowNewPassword(!showNewPassword)}
+                />
+              }
+            />
+            <ValidationMessage>{formik.errors.newPassword}</ValidationMessage>
+          </Stack>
+        </FormControl>
+      </Box>
+      <FormButtons
+        submit={formik.handleSubmit}
+        cancel={cancel}
+        isSubmitDisabled={!formik.isValid}
+      />
+    </>
   );
 }
 

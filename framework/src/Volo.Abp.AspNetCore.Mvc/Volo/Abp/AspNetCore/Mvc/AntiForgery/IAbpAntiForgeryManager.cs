@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
-{
-    public interface IAbpAntiForgeryManager
-    {
-        void SetCookie();
+﻿namespace Volo.Abp.AspNetCore.Mvc.AntiForgery;
 
-        string GenerateToken();
-    }
+public interface IAbpAntiForgeryManager
+{
+    void SetCookie();
+
+    string GenerateToken();
 }

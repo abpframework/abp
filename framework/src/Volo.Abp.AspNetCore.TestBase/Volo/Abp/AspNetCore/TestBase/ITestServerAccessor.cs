@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.TestHost;
 
-namespace Volo.Abp.AspNetCore.TestBase
+namespace Volo.Abp.AspNetCore.TestBase;
+
+public interface ITestServerAccessor
 {
-    public interface ITestServerAccessor 
-    {
-        TestServer Server { get; set; }
-    }
+    TestServer Server { get; set; }
 }

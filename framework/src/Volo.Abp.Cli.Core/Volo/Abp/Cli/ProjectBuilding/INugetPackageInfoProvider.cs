@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Cli.ProjectModification;
 
-namespace Volo.Abp.Cli.ProjectBuilding
+namespace Volo.Abp.Cli.ProjectBuilding;
+
+public interface INugetPackageInfoProvider
 {
-    public interface INugetPackageInfoProvider
-    {
-        Task<NugetPackageInfo> GetAsync(string name);
-    }
+    Task<NugetPackageInfo> GetAsync(string name);
 }

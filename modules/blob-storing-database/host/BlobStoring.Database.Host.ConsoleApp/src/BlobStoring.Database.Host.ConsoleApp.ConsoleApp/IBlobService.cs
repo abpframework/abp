@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp
+namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp;
+
+public interface IBlobService
 {
-    public interface IBlobService
-    {
-        Task SaveFile(string fileName = "File Name", string fileContent = "File Content");
-    }
+    Task SaveFile(string fileName = "File Name", string fileContent = "File Content");
 }

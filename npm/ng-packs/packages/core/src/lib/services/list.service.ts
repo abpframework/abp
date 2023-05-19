@@ -21,7 +21,7 @@ import { PagedResultDto } from '../models/dtos';
 import { LIST_QUERY_DEBOUNCE_TIME } from '../tokens/list.token';
 
 @Injectable()
-export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDestroy {
+export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements OnDestroy {
   private _filter = '';
   set filter(value: string) {
     this._filter = value;
@@ -80,7 +80,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
 
   private _isLoading$ = new BehaviorSubject(false);
 
-  private destroy$ = new Subject();
+  private destroy$ = new Subject<void>();
 
   private delay: MonoTypeOperatorFunction<QueryParamsType>;
 
@@ -103,16 +103,15 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
     this.get();
   }
 
-  hookToQuery<T extends any>(
+  hookToQuery<T>(
     streamCreatorCallback: QueryStreamCreatorCallback<T, QueryParamsType>,
   ): Observable<PagedResultDto<T>> {
-    this._isLoading$.next(true);
-
     return this.query$.pipe(
+      tap(() => this._isLoading$.next(true)),
       switchMap(query => streamCreatorCallback(query).pipe(catchError(() => of(null)))),
       filter(Boolean),
       tap(() => this._isLoading$.next(false)),
-      shareReplay({ bufferSize: 1, refCount: true }),
+      shareReplay<any>({ bufferSize: 1, refCount: true }),
       takeUntil(this.destroy$),
     );
   }

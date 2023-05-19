@@ -5,7 +5,7 @@ Prism.languages.wiki = Prism.languages.extend('markup', {
 		alias: 'comment'
 	},
 	'heading': {
-		pattern: /^(=+).+?\1/m,
+		pattern: /^(=+)[^=\r\n].*?\1/m,
 		inside: {
 			'punctuation': /^=+|=+$/,
 			'important': /.+/
@@ -36,7 +36,7 @@ Prism.languages.wiki = Prism.languages.extend('markup', {
 		alias: 'punctuation'
 	},
 	'url': [
-		/ISBN +(?:97[89][ -]?)?(?:\d[ -]?){9}[\dx]\b|(?:RFC|PMID) +\d+/i,
+		/ISBN +(?:97[89][ -]?)?(?:\d[ -]?){9}[\dx]\b|(?:PMID|RFC) +\d+/i,
 		/\[\[.+?\]\]|\[.+?\]/
 	],
 	'variable': [
@@ -71,10 +71,10 @@ Prism.languages.wiki = Prism.languages.extend('markup', {
 Prism.languages.insertBefore('wiki', 'tag', {
 	// Prevent highlighting inside <nowiki>, <source> and <pre> tags
 	'nowiki': {
-		pattern: /<(nowiki|pre|source)\b[\s\S]*?>[\s\S]*?<\/\1>/i,
+		pattern: /<(nowiki|pre|source)\b[^>]*>[\s\S]*?<\/\1>/i,
 		inside: {
 			'tag': {
-				pattern: /<(?:nowiki|pre|source)\b[\s\S]*?>|<\/(?:nowiki|pre|source)>/i,
+				pattern: /<(?:nowiki|pre|source)\b[^>]*>|<\/(?:nowiki|pre|source)>/i,
 				inside: Prism.languages.markup['tag'].inside
 			}
 		}

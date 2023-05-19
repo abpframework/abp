@@ -11,183 +11,182 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Encryption;
 
-namespace Volo.Abp.BlobStoring.Aws
+namespace Volo.Abp.BlobStoring.Aws;
+
+public class DefaultAmazonS3ClientFactory : IAmazonS3ClientFactory, ITransientDependency
 {
-    public class DefaultAmazonS3ClientFactory : IAmazonS3ClientFactory, ITransientDependency
+    protected IDistributedCache<AwsTemporaryCredentialsCacheItem> Cache { get; }
+
+    protected IStringEncryptionService StringEncryptionService { get; }
+
+    public DefaultAmazonS3ClientFactory(
+        IDistributedCache<AwsTemporaryCredentialsCacheItem> cache,
+        IStringEncryptionService stringEncryptionService)
     {
-        protected IDistributedCache<AwsTemporaryCredentialsCacheItem> Cache { get; }
+        Cache = cache;
+        StringEncryptionService = stringEncryptionService;
+    }
 
-        protected IStringEncryptionService StringEncryptionService { get; }
+    public virtual async Task<AmazonS3Client> GetAmazonS3Client(
+        AwsBlobProviderConfiguration configuration)
+    {
+        var region = RegionEndpoint.GetBySystemName(configuration.Region);
 
-        public DefaultAmazonS3ClientFactory(
-            IDistributedCache<AwsTemporaryCredentialsCacheItem> cache,
-            IStringEncryptionService stringEncryptionService)
+        if (configuration.UseCredentials)
         {
-            Cache = cache;
-            StringEncryptionService = stringEncryptionService;
+            var awsCredentials = GetAwsCredentials(configuration);
+            return awsCredentials == null
+                ? new AmazonS3Client(region)
+                : new AmazonS3Client(awsCredentials, region);
         }
 
-        public virtual async Task<AmazonS3Client> GetAmazonS3Client(
-            AwsBlobProviderConfiguration configuration)
+        if (configuration.UseTemporaryCredentials)
         {
-            var region = RegionEndpoint.GetBySystemName(configuration.Region);
+            return new AmazonS3Client(await GetTemporaryCredentialsAsync(configuration), region);
+        }
 
-            if (configuration.UseCredentials)
+        if (configuration.UseTemporaryFederatedCredentials)
+        {
+            return new AmazonS3Client(await GetTemporaryFederatedCredentialsAsync(configuration),
+                region);
+        }
+
+        Check.NotNullOrWhiteSpace(configuration.AccessKeyId, nameof(configuration.AccessKeyId));
+        Check.NotNullOrWhiteSpace(configuration.SecretAccessKey, nameof(configuration.SecretAccessKey));
+
+        return new AmazonS3Client(configuration.AccessKeyId, configuration.SecretAccessKey, region);
+    }
+
+    protected virtual AWSCredentials GetAwsCredentials(
+        AwsBlobProviderConfiguration configuration)
+    {
+        if (configuration.ProfileName.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        var chain = new CredentialProfileStoreChain(configuration.ProfilesLocation);
+
+        if (chain.TryGetAWSCredentials(configuration.ProfileName, out var awsCredentials))
+        {
+            return awsCredentials;
+        }
+
+        throw new AmazonS3Exception("Not found aws credentials");
+    }
+
+    protected virtual async Task<SessionAWSCredentials> GetTemporaryCredentialsAsync(
+        AwsBlobProviderConfiguration configuration)
+    {
+        var temporaryCredentialsCache = await Cache.GetAsync(configuration.TemporaryCredentialsCacheKey);
+
+        if (temporaryCredentialsCache == null)
+        {
+            AmazonSecurityTokenServiceClient stsClient;
+
+            if (!configuration.AccessKeyId.IsNullOrEmpty() && !configuration.SecretAccessKey.IsNullOrEmpty())
+            {
+                stsClient = new AmazonSecurityTokenServiceClient(configuration.AccessKeyId,
+                    configuration.SecretAccessKey);
+            }
+            else
             {
                 var awsCredentials = GetAwsCredentials(configuration);
-                return awsCredentials == null
-                    ? new AmazonS3Client(region)
-                    : new AmazonS3Client(awsCredentials, region);
+                stsClient = awsCredentials == null
+                    ? new AmazonSecurityTokenServiceClient()
+                    : new AmazonSecurityTokenServiceClient(awsCredentials);
             }
 
-            if (configuration.UseTemporaryCredentials)
+            using (stsClient)
             {
-                return new AmazonS3Client(await GetTemporaryCredentialsAsync(configuration), region);
+                var getSessionTokenRequest = new GetSessionTokenRequest
+                {
+                    DurationSeconds = configuration.DurationSeconds
+                };
+
+                var sessionTokenResponse =
+                    await stsClient.GetSessionTokenAsync(getSessionTokenRequest);
+
+                var credentials = sessionTokenResponse.Credentials;
+
+                temporaryCredentialsCache =
+                    await SetTemporaryCredentialsCache(configuration, credentials);
             }
-
-            if (configuration.UseTemporaryFederatedCredentials)
-            {
-                return new AmazonS3Client(await GetTemporaryFederatedCredentialsAsync(configuration),
-                    region);
-            }
-
-            Check.NotNullOrWhiteSpace(configuration.AccessKeyId, nameof(configuration.AccessKeyId));
-            Check.NotNullOrWhiteSpace(configuration.SecretAccessKey, nameof(configuration.SecretAccessKey));
-
-            return new AmazonS3Client(configuration.AccessKeyId, configuration.SecretAccessKey, region);
         }
 
-        protected virtual AWSCredentials GetAwsCredentials(
-            AwsBlobProviderConfiguration configuration)
+        var sessionCredentials = new SessionAWSCredentials(
+            StringEncryptionService.Decrypt(temporaryCredentialsCache.AccessKeyId),
+            StringEncryptionService.Decrypt(temporaryCredentialsCache.SecretAccessKey),
+            StringEncryptionService.Decrypt(temporaryCredentialsCache.SessionToken));
+        return sessionCredentials;
+    }
+
+    protected virtual async Task<SessionAWSCredentials> GetTemporaryFederatedCredentialsAsync(
+        AwsBlobProviderConfiguration configuration)
+    {
+        Check.NotNullOrWhiteSpace(configuration.Name, nameof(configuration.Name));
+        Check.NotNullOrWhiteSpace(configuration.Policy, nameof(configuration.Policy));
+
+        var temporaryCredentialsCache = await Cache.GetAsync(configuration.TemporaryCredentialsCacheKey);
+
+        if (temporaryCredentialsCache == null)
         {
-            if (configuration.ProfileName.IsNullOrWhiteSpace())
+            AmazonSecurityTokenServiceClient stsClient;
+
+            if (!configuration.AccessKeyId.IsNullOrEmpty() && !configuration.SecretAccessKey.IsNullOrEmpty())
             {
-                return null;
+                stsClient = new AmazonSecurityTokenServiceClient(configuration.AccessKeyId,
+                    configuration.SecretAccessKey);
+            }
+            else
+            {
+                var awsCredentials = GetAwsCredentials(configuration);
+                stsClient = awsCredentials == null
+                    ? new AmazonSecurityTokenServiceClient()
+                    : new AmazonSecurityTokenServiceClient(awsCredentials);
             }
 
-            var chain = new CredentialProfileStoreChain(configuration.ProfilesLocation);
-
-            if (chain.TryGetAWSCredentials(configuration.ProfileName, out var awsCredentials))
+            using (stsClient)
             {
-                return awsCredentials;
-            }
-
-            throw new AmazonS3Exception("Not found aws credentials");
-        }
-
-        protected virtual async Task<SessionAWSCredentials> GetTemporaryCredentialsAsync(
-            AwsBlobProviderConfiguration configuration)
-        {
-            var temporaryCredentialsCache = await Cache.GetAsync(configuration.TemporaryCredentialsCacheKey);
-
-            if (temporaryCredentialsCache == null)
-            {
-                AmazonSecurityTokenServiceClient stsClient;
-
-                if (!configuration.AccessKeyId.IsNullOrEmpty() && !configuration.SecretAccessKey.IsNullOrEmpty())
-                {
-                    stsClient = new AmazonSecurityTokenServiceClient(configuration.AccessKeyId,
-                        configuration.SecretAccessKey);
-                }
-                else
-                {
-                    var awsCredentials = GetAwsCredentials(configuration);
-                    stsClient = awsCredentials == null
-                        ? new AmazonSecurityTokenServiceClient()
-                        : new AmazonSecurityTokenServiceClient(awsCredentials);
-                }
-
-                using (stsClient)
-                {
-                    var getSessionTokenRequest = new GetSessionTokenRequest
+                var federationTokenRequest =
+                    new GetFederationTokenRequest
                     {
-                        DurationSeconds = configuration.DurationSeconds
+                        DurationSeconds = configuration.DurationSeconds,
+                        Name = configuration.Name,
+                        Policy = configuration.Policy
                     };
 
-                    var sessionTokenResponse =
-                        await stsClient.GetSessionTokenAsync(getSessionTokenRequest);
+                var federationTokenResponse =
+                    await stsClient.GetFederationTokenAsync(federationTokenRequest);
+                var credentials = federationTokenResponse.Credentials;
 
-                    var credentials = sessionTokenResponse.Credentials;
-
-                    temporaryCredentialsCache =
-                        await SetTemporaryCredentialsCache(configuration, credentials);
-                }
+                temporaryCredentialsCache =
+                    await SetTemporaryCredentialsCache(configuration, credentials);
             }
-
-            var sessionCredentials = new SessionAWSCredentials(
-                StringEncryptionService.Decrypt(temporaryCredentialsCache.AccessKeyId),
-                StringEncryptionService.Decrypt(temporaryCredentialsCache.SecretAccessKey),
-                StringEncryptionService.Decrypt(temporaryCredentialsCache.SessionToken));
-            return sessionCredentials;
         }
 
-        protected virtual async Task<SessionAWSCredentials> GetTemporaryFederatedCredentialsAsync(
-            AwsBlobProviderConfiguration configuration)
-        {
-            Check.NotNullOrWhiteSpace(configuration.Name, nameof(configuration.Name));
-            Check.NotNullOrWhiteSpace(configuration.Policy, nameof(configuration.Policy));
+        var sessionCredentials = new SessionAWSCredentials(
+            StringEncryptionService.Decrypt(temporaryCredentialsCache.AccessKeyId),
+            StringEncryptionService.Decrypt(temporaryCredentialsCache.SecretAccessKey),
+            StringEncryptionService.Decrypt(temporaryCredentialsCache.SessionToken));
+        return sessionCredentials;
+    }
 
-            var temporaryCredentialsCache = await Cache.GetAsync(configuration.TemporaryCredentialsCacheKey);
+    private async Task<AwsTemporaryCredentialsCacheItem> SetTemporaryCredentialsCache(
+        AwsBlobProviderConfiguration configuration,
+        Credentials credentials)
+    {
+        var temporaryCredentialsCache = new AwsTemporaryCredentialsCacheItem(
+            StringEncryptionService.Encrypt(credentials.AccessKeyId),
+            StringEncryptionService.Encrypt(credentials.SecretAccessKey),
+            StringEncryptionService.Encrypt(credentials.SessionToken));
 
-            if (temporaryCredentialsCache == null)
+        await Cache.SetAsync(configuration.TemporaryCredentialsCacheKey, temporaryCredentialsCache,
+            new DistributedCacheEntryOptions
             {
-                AmazonSecurityTokenServiceClient stsClient;
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(configuration.DurationSeconds - 10)
+            });
 
-                if (!configuration.AccessKeyId.IsNullOrEmpty() && !configuration.SecretAccessKey.IsNullOrEmpty())
-                {
-                    stsClient = new AmazonSecurityTokenServiceClient(configuration.AccessKeyId,
-                        configuration.SecretAccessKey);
-                }
-                else
-                {
-                    var awsCredentials = GetAwsCredentials(configuration);
-                    stsClient = awsCredentials == null
-                        ? new AmazonSecurityTokenServiceClient()
-                        : new AmazonSecurityTokenServiceClient(awsCredentials);
-                }
-
-                using (stsClient)
-                {
-                    var federationTokenRequest =
-                        new GetFederationTokenRequest
-                        {
-                            DurationSeconds = configuration.DurationSeconds,
-                            Name = configuration.Name,
-                            Policy = configuration.Policy
-                        };
-
-                    var federationTokenResponse =
-                        await stsClient.GetFederationTokenAsync(federationTokenRequest);
-                    var credentials = federationTokenResponse.Credentials;
-
-                    temporaryCredentialsCache =
-                        await SetTemporaryCredentialsCache(configuration, credentials);
-                }
-            }
-
-            var sessionCredentials = new SessionAWSCredentials(
-                StringEncryptionService.Decrypt(temporaryCredentialsCache.AccessKeyId),
-                StringEncryptionService.Decrypt(temporaryCredentialsCache.SecretAccessKey),
-                StringEncryptionService.Decrypt(temporaryCredentialsCache.SessionToken));
-            return sessionCredentials;
-        }
-
-        private async Task<AwsTemporaryCredentialsCacheItem> SetTemporaryCredentialsCache(
-            AwsBlobProviderConfiguration configuration,
-            Credentials credentials)
-        {
-            var temporaryCredentialsCache = new AwsTemporaryCredentialsCacheItem(
-                StringEncryptionService.Encrypt(credentials.AccessKeyId),
-                StringEncryptionService.Encrypt(credentials.SecretAccessKey),
-                StringEncryptionService.Encrypt(credentials.SessionToken));
-
-            await Cache.SetAsync(configuration.TemporaryCredentialsCacheKey, temporaryCredentialsCache,
-                new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(configuration.DurationSeconds - 10)
-                });
-
-            return temporaryCredentialsCache;
-        }
+        return temporaryCredentialsCache;
     }
 }

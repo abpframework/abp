@@ -158,52 +158,6 @@ namespace AbpDemo
 
 如果您执行**数据库操作**并在事件处理程序中使用[仓储](Repositories.md),那么您可能需要创建一个[工作单元](Unit-Of-Work.md),因为一些存储库方法需要在**活动的工作单元**中工作. 确保处理方法设置为 `virtual`,并为该方法添加一个 `[UnitOfWork]` attribute. 或者手动使用 `IUnitOfWorkManager` 创建一个工作单元范围.
 
-## 异常处理
-
-ABP提供了异常处理, 当异常发现时它会进行重试.
-
-启用异常处理:
-
-```csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
-{
-    PreConfigure<AbpEventBusOptions>(options =>
-    {
-        options.UseRetryStrategy();
-    });
-}
-```
-
-当一个异常抛出,它会每3秒重试一次直到最大重试次数(默认是3)并且移动抛出原始异常, 你可以更改重试次数和重试间隔和:
-
-```csharp
-PreConfigure<AbpEventBusOptions>(options =>
-{
-    options.UseRetryStrategy(retryStrategyOptions =>
-    {
-        retryStrategyOptions.IntervalMillisecond = 0;
-        retryStrategyOptions.MaxRetryAttempts = 1;
-    });
-});
-```
-
-### 错误处理选择器
-
-默认所有的事件类型都会被处理, 你可以使用 `AbpEventBusOptions` 的 `ErrorHandleSelector` 来更改它:
-
-```csharp
-PreConfigure<AbpEventBusOptions>(options =>
-{
-    options.ErrorHandleSelector = type => type == typeof(MyExceptionHandleEventData);
-});
-```
-
-`options.ErrorHandleSelector` 实际上是一个类型类型谓词列表. 你可以编写lambda来定义你的过滤.
-
-### 自定义异常处理
-
-ABP定义了 `IEventErrorHandler` 接口并且由 `LocalEventErrorHandler` 实现, 你可以通过[依赖注入](Dependency-Injection.md)替换它.
-
 ### 事务和异常行为
 
 当一个事件发布,订阅的事件处理程序将立即执行.所以;

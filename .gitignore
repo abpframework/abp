@@ -6,7 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.editorconfig
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -301,7 +301,7 @@ samples/MicroserviceDemo/microservices/TenantManagementService.Host/Logs/logs.tx
 /npm/packs/bootstrap/package-lock.json
 /templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package-lock.json
 /templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Web/package-lock.json
-/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/package-lock.json
+/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/package-lock.json
 
 modules/virtual-file-explorer/app/Volo.Abp.VirtualFileExplorer.DemoApp/Logs/
 /templates/app/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package-lock.json
@@ -314,7 +314,18 @@ abp-build-config.json
 tempkey.jwk
 
 # ABP Analyzing files
-*.abppkg.analyze.json
+# [Disabled for now] *.abppkg.analyze.json
 
 # appsettings.secrets.json
 appsettings.secrets.json
+deploy/nuget-api-key.txt
+deploy/npm-auth-token.txt
+deploy/ssh-password.txt
+deploy/github-api-key.txt
+deploy/_run_all_log.txt
+
+
+# No commit yarn.lock files in the subfolders of templates directory
+templates/**/yarn.lock
+templates/app-nolayers/aspnet-core/MyCompanyName.MyProjectName.Mvc/Logs/logs.txt
+templates/module/aspnet-core/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json

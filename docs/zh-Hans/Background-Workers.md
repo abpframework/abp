@@ -2,7 +2,6 @@
 
 ## 介绍
 
-背景工人在应用简单独立的线程在后台运行.一般来说,他们定期运行,以执行一些任务.例子;
 后台工作者在应用程序后台运行的简单的独立线程,一般来说它们定期运行执行一些任务.例如;
 
 * 后台工作者可以定期**删除过时的日志**.
@@ -79,26 +78,26 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 
 ## 注册后台工作者
 
-创建一个后台工作者后,你应该将其添加到 `IBackgroundWorkerManager`. 最常见的地方是模块类的 `OnApplicationInitialization` 方法:
+创建一个后台工作者后,你应该将其添加到 `IBackgroundWorkerManager`. 最常见的地方是模块类的 `OnApplicationInitializationAsync` 方法:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundWorkersModule))]
 public class MyModule : AbpModule
 {
-    public override void OnApplicationInitialization(
+    public override async Task OnApplicationInitialization(
         ApplicationInitializationContext context)
     {
-        context.AddBackgroundWorker<PassiveUserCheckerWorker>();
+        await context.AddBackgroundWorkerAsync<PassiveUserCheckerWorker>();
     }
 }
 ````
 
-`context.AddBackgroundWorker(...)` 是以下代码的简化扩展方法:
+`context.AddBackgroundWorkerAsync(...)` 是以下代码的简化扩展方法:
 
 ````csharp
 context.ServiceProvider
     .GetRequiredService<IBackgroundWorkerManager>()
-    .Add(
+    .AddAsync(
         context
             .ServiceProvider
             .GetRequiredService<PassiveUserCheckerWorker>()
@@ -107,7 +106,7 @@ context.ServiceProvider
 
 所以,它解析了给定的后台工作者并添加到 `IBackgroundWorkerManager`.
 
-如果我们通常在 `OnApplicationInitialization` 添加工作者,但并不是强制的. 你可以在应用程序的任何地方注入 `IBackgroundWorkerManager` 并在运行时添加工作者. 在你的应用程序关闭时Background worker manager会释放所有已注册的后台工作者.
+如果我们通常在 `OnApplicationInitializationAsync` 添加工作者,但并不是强制的. 你可以在应用程序的任何地方注入 `IBackgroundWorkerManager` 并在运行时添加工作者. 在你的应用程序关闭时Background worker manager会释放所有已注册的后台工作者.
 
 ## Options
 
@@ -128,11 +127,13 @@ context.ServiceProvider
 * 使用上面提到的 `AbpBackgroundWorkerOptions` 禁用其他的后台工作者系统,只保留一个实例.
 * 所有的应用程序都禁用后台工作者系统,创建一个特殊的应用程序在一个服务上运行执行工作者.
 
-## Quartz 集成
+## 集成
 
-ABP框架的后台工作者系统可以很好的执行周期任务. 但是你可能需要使用更高级的任务调度,像[Quartz](https://www.quartz-scheduler.net/). 参阅社区贡献的[Quartz集成](Background-Workers-Quartz.md)
+后台工作者系统是可扩展的,你可以更改默认的后台工作者管理器为你自己的实现,或者使用以下预构建的集成:
+
+* [Quartz 后台工作者管理器](Background-Workers-Quartz.md) 
+* [Hangfire 后台工作者管理器](Background-Workers-Hangfire.md) 
 
 ## 另请参阅
 
-* [后台工作者的Quartz集成](Background-Workers-Quartz.md)
 * [后台作业](Background-Jobs.md)

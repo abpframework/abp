@@ -8,7 +8,7 @@ This document explains how to customize the SignIn Manager for your own applicat
 
 ## Create a CustomSignInManager
 
-Create a new class inheriting the [SignInMager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs) of Microsoft Identity package.
+Create a new class inheriting the [SignInManager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs) of Microsoft Identity package.
 
 ````csharp
 public class CustomSignInManager : Microsoft.AspNetCore.Identity.SignInManager<Volo.Abp.Identity.IdentityUser>

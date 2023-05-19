@@ -1,42 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.MongoDB
+namespace Volo.Abp.MongoDB;
+
+public class AbpMongoDbContextOptions
 {
-    public class AbpMongoDbContextOptions
+    internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
+
+    public Action<MongoClientSettings> MongoClientSettingsConfigurer { get; set; }
+
+    public AbpMongoDbContextOptions()
     {
-        internal Dictionary<Type, Type> DbContextReplacements { get; }
+        DbContextReplacements = new Dictionary<MultiTenantDbContextType, Type>();
+    }
 
-        public Action<MongoClientSettings> MongoClientSettingsConfigurer { get; set; }
-
-        public AbpMongoDbContextOptions()
+    internal Type GetReplacedTypeOrSelf(Type dbContextType, MultiTenancySides multiTenancySides = MultiTenancySides.Both)
+    {
+        var replacementType = dbContextType;
+        while (true)
         {
-            DbContextReplacements = new Dictionary<Type, Type>();
-        }
-
-        internal Type GetReplacedTypeOrSelf(Type dbContextType)
-        {
-            var replacementType = dbContextType;
-            while (true)
+            var foundType = DbContextReplacements.LastOrDefault(x => x.Key.Type == replacementType && x.Key.MultiTenancySide.HasFlag(multiTenancySides));
+            if (!foundType.Equals(default(KeyValuePair<MultiTenantDbContextType, Type>)))
             {
-                if (DbContextReplacements.TryGetValue(replacementType, out var foundType))
+                if (foundType.Value == dbContextType)
                 {
-                    if (foundType == dbContextType)
-                    {
-                        throw new AbpException(
-                            "Circular DbContext replacement found for " +
-                            dbContextType.AssemblyQualifiedName
-                        );
-                    }
-
-                    replacementType = foundType;
+                    throw new AbpException(
+                        "Circular DbContext replacement found for " +
+                        dbContextType.AssemblyQualifiedName
+                    );
                 }
-                else
-                {
-                    return replacementType;
-                }
+                replacementType = foundType.Value;
+            }
+            else
+            {
+                return replacementType;
             }
         }
     }

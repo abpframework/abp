@@ -9,6 +9,8 @@
     "OfficialBlog": "Blog Oficial",
     "CommercialHomePage": "Página de inicio comercial",
     "CommercialSupportWebSite": "Sitio web de soporte comercial",
-    "CommunityWebSite": "Sitio web comunidad ABP"
+    "CommunityWebSite": "Sitio web comunidad ABP",
+    "ManageAccount": "Mi cuenta | ABP.IO",
+    "ManageYourAccount": "Administra tu cuenta"
   }
 }

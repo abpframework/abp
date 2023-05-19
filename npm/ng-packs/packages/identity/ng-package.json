@@ -6,6 +6,7 @@
   },
   "allowedNonPeerDependencies": [
     "@abp/ng.theme.shared",
-    "@abp/ng.permission-management"
+    "@abp/ng.permission-management",
+    "@abp/ng.components"
   ]
 }

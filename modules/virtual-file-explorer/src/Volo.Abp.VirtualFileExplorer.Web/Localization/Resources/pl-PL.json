@@ -1,6 +1,14 @@
 {
   "culture": "pl-PL",
   "texts": {
-
+    "VirtualFileExplorer": "Wirtualny eksplorator plików",
+    "VirtualFileType": "Wirtualny typ pliku",
+    "Menu:VirtualFileExplorer": "Wirtualny eksplorator plików",
+    "LastUpdateTime": "Czas ostatniej aktualizacji",
+    "VirtualFileName": "Nazwa wirtualnego pliku",
+    "FileContent": "Zawartość pliku",
+    "Size": "Rozmiar",
+    "BackToRoot": "Powrót do korzenia",
+    "EmptyFileInfoList": "Nie ma wirtualnych plików"
   }
 }

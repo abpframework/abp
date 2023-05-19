@@ -2,21 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.DynamicFormsDemo
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.DynamicFormsDemo;
+
+[Widget(
+    StyleTypes = new[] { typeof(PrismjsStyleBundleContributor) },
+    ScriptTypes = new[] { typeof(PrismjsScriptBundleContributor) }
+)]
+public class DynamicFormsDemoViewComponent : AbpViewComponent
 {
-    [Widget(
-        StyleTypes = new []{ typeof(PrismjsStyleBundleContributor) },
-        ScriptTypes = new[]{ typeof(PrismjsScriptBundleContributor) }
-    )]
-    public class DynamicFormsDemoViewComponent : AbpViewComponent
+    public const string ViewPath = "/Views/Components/Themes/Shared/Demos/DynamicFormsDemo/Default.cshtml";
+
+    public virtual IViewComponentResult Invoke()
     {
-        public const string ViewPath = "/Views/Components/Themes/Shared/Demos/DynamicFormsDemo/Default.cshtml";
+        var model = new DynamicFormsDemoModel();
 
-        public IViewComponentResult Invoke()
-        {
-            var model = new DynamicFormsDemoModel();
-
-            return View(ViewPath, model);
-        }
+        return View(ViewPath, model);
     }
 }

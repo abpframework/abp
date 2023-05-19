@@ -1,11 +1,10 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.CmsKit.Admin.Tags
+namespace Volo.CmsKit.Admin.Tags;
+
+[Serializable]
+public class TagGetListInput : PagedAndSortedResultRequestDto
 {
-    [Serializable]
-    public class TagGetListInput : PagedAndSortedResultRequestDto
-    {
-        public string Filter { get; set; }
-    }
+    public string Filter { get; set; }
 }

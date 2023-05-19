@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using AutoMapper.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
@@ -7,64 +8,54 @@ using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
 
-namespace Volo.Abp.AutoMapper
+namespace Volo.Abp.AutoMapper;
+
+[DependsOn(
+    typeof(AbpObjectMappingModule),
+    typeof(AbpObjectExtendingModule),
+    typeof(AbpAuditingModule)
+)]
+public class AbpAutoMapperModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpObjectMappingModule),
-        typeof(AbpObjectExtendingModule),
-        typeof(AbpAuditingModule)
-    )]
-    public class AbpAutoMapperModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddConventionalRegistrar(new AbpAutoMapperConventionalRegistrar());
-        }
+        context.Services.AddConventionalRegistrar(new AbpAutoMapperConventionalRegistrar());
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAutoMapperObjectMapper();
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddAutoMapperObjectMapper();
 
-            context.Services.AddSingleton<MapperAccessor>(CreateMappings);
-            context.Services.AddSingleton<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
-        }
-
-        private MapperAccessor CreateMappings(IServiceProvider serviceProvider)
+        context.Services.AddSingleton<IConfigurationProvider>(sp =>
         {
-            using (var scope = serviceProvider.CreateScope())
+            using (var scope = sp.CreateScope())
             {
                 var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
 
-                void ConfigureAll(IAbpAutoMapperConfigurationContext ctx)
+                var mapperConfigurationExpression = sp.GetRequiredService<IOptions<MapperConfigurationExpression>>().Value;
+                var autoMapperConfigurationContext = new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider);
+
+                foreach (var configurator in options.Configurators)
                 {
-                    foreach (var configurator in options.Configurators)
-                    {
-                        configurator(ctx);
-                    }
+                    configurator(autoMapperConfigurationContext);
+                }
+                var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression);
+
+                foreach (var profileType in options.ValidatingProfiles)
+                {
+                    mapperConfiguration.Internal().AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
                 }
 
-                options.Configurators.Insert(0, ctx => ctx.MapperConfiguration.ConstructServicesUsing(serviceProvider.GetService));
-
-                void ValidateAll(IConfigurationProvider config)
-                {
-                    foreach (var profileType in options.ValidatingProfiles)
-                    {
-                        config.AssertConfigurationIsValid(((Profile) Activator.CreateInstance(profileType)).ProfileName);
-                    }
-                }
-
-                var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression =>
-                {
-                    ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
-                });
-
-                ValidateAll(mapperConfiguration);
-
-                return new MapperAccessor
-                {
-                    Mapper = new Mapper(mapperConfiguration)
-                };
+                return mapperConfiguration;
             }
-        }
+        });
+
+        context.Services.AddTransient<IMapper>(sp => sp.GetRequiredService<IConfigurationProvider>().CreateMapper(sp.GetService));
+
+        context.Services.AddTransient<MapperAccessor>(sp => new MapperAccessor()
+        {
+            Mapper = sp.GetRequiredService<IMapper>()
+        });
+        context.Services.AddTransient<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
     }
 }

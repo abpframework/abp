@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.Localization;
 
-namespace Volo.Abp.Identity.Localization
+namespace Volo.Abp.Identity.Localization;
+
+[LocalizationResourceName("AbpIdentity")]
+public class IdentityResource
 {
-    [LocalizationResourceName("AbpIdentity")]
-    public class IdentityResource
-    {
-        
-    }
+
 }

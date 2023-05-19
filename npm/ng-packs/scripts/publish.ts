@@ -11,7 +11,8 @@ program
   )
   .option('-r, --registry <registry>', 'target npm server registry')
   .option('-p, --preview', 'publishes with preview tag')
-  .option('-g, --skipGit', 'skips git push');
+  .option('-sg, --skipGit', 'skips git push')
+  .option('-sv, --skipVersionValidation', 'skips version validation');
 
 program.parse(process.argv);
 
@@ -33,6 +34,20 @@ program.parse(process.argv);
     await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
 
     await updateVersion(program.nextVersion);
+
+    if (!program.skipVersionValidation) {
+      await execa(
+        'yarn',
+        [
+          'validate-versions',
+          '--compareVersion',
+          program.nextVersion,
+          '--path',
+          '../ng-packs/packages',
+        ],
+        { stdout: 'inherit', cwd: '../../scripts' },
+      );
+    }
 
     if (program.preview) await replaceWithPreview(program.nextVersion);
 

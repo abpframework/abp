@@ -1,10 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav;
+
+public enum NavStyle
 {
-    public enum NavStyle
-    {
-        Default,
-        Vertical,
-        Pill,
-        PillVertical
-    }
+    Default,
+    Vertical,
+    Pill,
+    PillVertical
 }

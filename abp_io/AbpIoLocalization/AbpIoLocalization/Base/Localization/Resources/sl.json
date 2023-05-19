@@ -26,6 +26,19 @@
     "ContributionGuide": "Vodič za prispevke",
     "Blog": "Blog",
     "Commercial": "Commercial",
-    "SeeDocuments": "Poglej dokumente"
+    "MyAccount": "Moj račun",
+    "Permission:License": "Licenca",
+    "Permission:UserInfo": "Podatki o uporabniku",
+    "SeeDocuments": "Poglej dokumente",
+    "Samples": "Vzorci",
+    "Framework": "Okvir",
+    "Support": "Podpora",
+    "FreeDDDBook": "Brezplačna e-knjiga DDD",
+    "New": "Novo",
+    "Volo.AbpIo.Domain:020005": "Leto podaljšanja licence ne sme biti nižje od {MinExtendLicenseYear} let in več od {MaxExtendLicenseYear} let",
+    "TrialLicensePeriodHasExpired": "Vaša preizkusna licenca je potekla pred {0} dnevi.",
+    "TrialLicensePeriodWillExpire": "Vaša preizkusna licenca bo potekla čez {0} dni.",
+    "TrialLicensePeriodExpireToday": "Vaša preizkusna licenca bo danes potekla.",
+    "PurchaseNow": "Kupi zdaj!"
   }
 }

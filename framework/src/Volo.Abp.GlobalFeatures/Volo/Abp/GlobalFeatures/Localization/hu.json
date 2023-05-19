@@ -1,0 +1,6 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Volo.GlobalFeature:010001": "A „{ServiceName}” szolgáltatásnak engedélyeznie kell a „{GlobalFeatureName}” funkciót."
+  }
+}

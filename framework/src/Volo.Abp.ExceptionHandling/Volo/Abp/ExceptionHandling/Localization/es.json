@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Recurso no encontrado!",
     "DefaultErrorMessage404Detail": "El recurso solitiado podría no encontrarse en el servidor!",
     "EntityNotFoundErrorMessage": "No hay una entidad {0} con id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Los datos que ha enviado ya han sido modificados por otro usuario/cliente. Descarte los cambios que ha realizado e inténtelo desde el principio.",
     "Error": "Error",
     "UnhandledException": "Excepción no manejada!",
     "401Message": "No autorizado",

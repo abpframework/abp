@@ -1,43 +1,54 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Extensions;
 using Volo.Abp.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Web.ProfileManagement;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.Account.Web.Pages.Account
+namespace Volo.Abp.Account.Web.Pages.Account;
+
+public class ManageModel : AccountPageModel
 {
-    public class ManageModel : AccountPageModel
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public string ReturnUrl { get; set; }
+
+    public ProfileManagementPageCreationContext ProfileManagementPageCreationContext { get; private set; }
+
+    protected ProfileManagementPageOptions Options { get; }
+
+    public ManageModel(IOptions<ProfileManagementPageOptions> options)
     {
-        [HiddenInput]
-        [BindProperty(SupportsGet = true)]
-        public string ReturnUrl { get; set; }
-        
-        public ProfileManagementPageCreationContext ProfileManagementPageCreationContext { get; private set; }
+        Options = options.Value;
+    }
 
-        protected ProfileManagementPageOptions Options { get; }
+    public virtual async Task<IActionResult> OnGetAsync()
+    {
+        ProfileManagementPageCreationContext = new ProfileManagementPageCreationContext(ServiceProvider);
 
-        public ManageModel(IOptions<ProfileManagementPageOptions> options)
+        foreach (var contributor in Options.Contributors)
         {
-            Options = options.Value;
+            await contributor.ConfigureAsync(ProfileManagementPageCreationContext);
         }
 
-        public virtual async Task<IActionResult> OnGetAsync()
+        if (ReturnUrl != null)
         {
-            ProfileManagementPageCreationContext = new ProfileManagementPageCreationContext(ServiceProvider);
-
-            foreach (var contributor in Options.Contributors)
+            if (!Url.IsLocalUrl(ReturnUrl) &&
+                !ReturnUrl.StartsWith(UriHelper.BuildAbsolute(Request.Scheme, Request.Host, Request.PathBase).RemovePostFix("/")) &&
+                !AppUrlProvider.IsRedirectAllowedUrl(ReturnUrl))
             {
-                await contributor.ConfigureAsync(ProfileManagementPageCreationContext);
+                ReturnUrl = null;
             }
-
-            return Page();
         }
 
-        public virtual Task<IActionResult> OnPostAsync()
-        {
-            return Task.FromResult<IActionResult>(Page());
-        }
+        return Page();
+    }
+
+    public virtual Task<IActionResult> OnPostAsync()
+    {
+        return Task.FromResult<IActionResult>(Page());
     }
 }

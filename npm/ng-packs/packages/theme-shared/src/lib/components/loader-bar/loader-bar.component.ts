@@ -22,7 +22,7 @@ import { combineLatest, Subscription, timer } from 'rxjs';
   providers: [SubscriptionService],
 })
 export class LoaderBarComponent implements OnDestroy, OnInit {
-  protected _isLoading: boolean;
+  protected _isLoading!: boolean;
 
   @Input()
   set isLoading(value: boolean) {

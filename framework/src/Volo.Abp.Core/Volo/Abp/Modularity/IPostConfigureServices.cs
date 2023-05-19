@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Modularity
+namespace Volo.Abp.Modularity;
+
+public interface IPostConfigureServices
 {
-    public interface IPostConfigureServices
-    {
-        void PostConfigureServices(ServiceConfigurationContext context);
-    }
+    Task PostConfigureServicesAsync(ServiceConfigurationContext context);
+
+    void PostConfigureServices(ServiceConfigurationContext context);
 }

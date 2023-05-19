@@ -15,6 +15,8 @@
     "Permission:Edit": "Sửa",
     "Permission:Delete": "Xóa",
     "Permission:ManageConnectionStrings": "Quản lý chuỗi kết nối",
-    "Permission:ManageFeatures": "Quản lý các tính năng"
+    "Permission:ManageFeatures": "Quản lý các tính năng",
+    "DisplayName:AdminEmailAddress": "Địa chỉ Email Quản trị viên",
+    "DisplayName:AdminPassword": "Mật khẩu quản trị"
   }
 }

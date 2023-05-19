@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
-using Volo.Abp.Uow;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
@@ -216,6 +215,13 @@ namespace Volo.Docs.Admin.Documents
             var document = await _documentRepository.GetAsync(documentId);
             await _elasticSearchService.AddOrUpdateAsync(document);
         }
+
+        public async Task<List<DocumentInfoDto>> GetFilterItemsAsync()
+        {
+            var documents = await _documentRepository.GetUniqueListDocumentInfoAsync();
+            return ObjectMapper.Map<List<DocumentInfo>, List<DocumentInfoDto>>(documents);
+        }
+
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)
         {

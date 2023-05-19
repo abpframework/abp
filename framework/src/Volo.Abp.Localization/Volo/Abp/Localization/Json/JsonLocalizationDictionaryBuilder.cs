@@ -2,83 +2,85 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.Localization.Json
+namespace Volo.Abp.Localization.Json;
+
+public static class JsonLocalizationDictionaryBuilder
 {
-    public static class JsonLocalizationDictionaryBuilder
+    /// <summary>
+    ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given file.
+    /// </summary>
+    /// <param name="filePath">Path of the file</param>
+    [CanBeNull]
+    public static ILocalizationDictionary BuildFromFile(string filePath)
     {
-        /// <summary>
-        ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given file.
-        /// </summary>
-        /// <param name="filePath">Path of the file</param>
-        public static ILocalizationDictionary BuildFromFile(string filePath)
+        try
         {
-            try
-            {
-                return BuildFromJsonString(File.ReadAllText(filePath));
-            }
-            catch (Exception ex)
-            {
-                throw new AbpException("Invalid localization file format: " + filePath, ex);
-            }
+            return BuildFromJsonString(File.ReadAllText(filePath));
+        }
+        catch (Exception ex)
+        {
+            throw new AbpException("Invalid localization file format: " + filePath, ex);
+        }
+    }
+
+    private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+        ReadCommentHandling = JsonCommentHandling.Skip,
+        AllowTrailingCommas = true
+    };
+
+    /// <summary>
+    ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given json string.
+    /// </summary>
+    /// <param name="jsonString">Json string</param>
+    [CanBeNull]
+    public static ILocalizationDictionary BuildFromJsonString(string jsonString)
+    {
+        JsonLocalizationFile jsonFile;
+        try
+        {
+            jsonFile = JsonSerializer.Deserialize<JsonLocalizationFile>(jsonString, DeserializeOptions);
+        }
+        catch (JsonException ex)
+        {
+            throw new AbpException("Can not parse json string. " + ex.Message);
+        }
+        
+        var cultureCode = jsonFile.Culture;
+        if (string.IsNullOrEmpty(cultureCode))
+        {
+            return null;
         }
 
-        /// <summary>
-        ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given json string.
-        /// </summary>
-        /// <param name="jsonString">Json string</param>
-        public static ILocalizationDictionary BuildFromJsonString(string jsonString)
+        var dictionary = new Dictionary<string, LocalizedString>();
+        var dublicateNames = new List<string>();
+        foreach (var item in jsonFile.Texts)
         {
-            JsonLocalizationFile jsonFile;
-            try
+            if (string.IsNullOrEmpty(item.Key))
             {
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-                    ReadCommentHandling = JsonCommentHandling.Skip,
-                    AllowTrailingCommas = true
-                };
-
-                jsonFile = JsonSerializer.Deserialize<JsonLocalizationFile>(jsonString, options);
-            }
-            catch (JsonException ex)
-            {
-                throw new AbpException("Can not parse json string. " + ex.Message);
+                throw new AbpException("The key is empty in given json string.");
             }
 
-            var cultureCode = jsonFile.Culture;
-            if (string.IsNullOrEmpty(cultureCode))
+            if (dictionary.GetOrDefault(item.Key) != null)
             {
-                throw new AbpException("Culture is empty in language json file.");
+                dublicateNames.Add(item.Key);
             }
 
-            var dictionary = new Dictionary<string, LocalizedString>();
-            var dublicateNames = new List<string>();
-            foreach (var item in jsonFile.Texts)
-            {
-                if (string.IsNullOrEmpty(item.Key))
-                {
-                    throw new AbpException("The key is empty in given json string.");
-                }
-
-                if (dictionary.GetOrDefault(item.Key) != null)
-                {
-                    dublicateNames.Add(item.Key);
-                }
-
-                dictionary[item.Key] = new LocalizedString(item.Key, item.Value.NormalizeLineEndings());
-            }
-
-            if (dublicateNames.Count > 0)
-            {
-                throw new AbpException(
-                    "A dictionary can not contain same key twice. There are some duplicated names: " +
-                    dublicateNames.JoinAsString(", "));
-            }
-
-            return new StaticLocalizationDictionary(cultureCode, dictionary);
+            dictionary[item.Key] = new LocalizedString(item.Key, item.Value.NormalizeLineEndings());
         }
+
+        if (dublicateNames.Count > 0)
+        {
+            throw new AbpException(
+                "A dictionary can not contain same key twice. There are some duplicated names: " +
+                dublicateNames.JoinAsString(", "));
+        }
+
+        return new StaticLocalizationDictionary(cultureCode, dictionary);
     }
 }

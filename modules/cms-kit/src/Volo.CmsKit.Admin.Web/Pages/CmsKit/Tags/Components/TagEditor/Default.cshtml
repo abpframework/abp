@@ -8,15 +8,15 @@
 
     <form class="tag-editor-form" data-entity-id="@Model.EntityId" data-entity-type="@Model.EntityType">
 
-        <div class="form-group">
-            <label>@L["Tags"]</label>
+        <div class="mb-3">
+            <label class="form-label">@L["Tags"]</label>
             <input name="tags" value="@string.Join(',', Model.Tags.Select(s => s.Name))" class="form-control"/>
         </div>
 
         @if (Model.DisplaySubmitButton)
         {
-            <abp-form-row>
+            <abp-row>
                 <abp-button type="submit" text="@L["Submit"]" />
-            </abp-form-row>
+            </abp-row>
         }
     </form>

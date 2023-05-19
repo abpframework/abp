@@ -1,77 +1,83 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Testing;
 using Xunit;
 using IObjectMapper = Volo.Abp.ObjectMapping.IObjectMapper;
 
-namespace Volo.Abp.AutoMapper
+namespace Volo.Abp.AutoMapper;
+
+public class AutoMapper_Dependency_Injection_Tests : AbpIntegratedTest<AutoMapperTestModule>
 {
-    public class AutoMapper_Dependency_Injection_Tests : AbpIntegratedTest<AutoMapperTestModule>
+    [Fact]
+    public void Should_Registered_AutoMapper_Service()
     {
-        private readonly IObjectMapper _objectMapper;
+        GetService<CustomMappingAction>().ShouldNotBeNull();
+    }
 
-        public AutoMapper_Dependency_Injection_Tests()
+    [Fact]
+    public void Custom_MappingAction_Test()
+    {
+        var sourceModel = new SourceModel
         {
-            _objectMapper = GetRequiredService<IObjectMapper>();
+            Name = "Source"
+        };
+
+        using (var scope = ServiceProvider.CreateScope())
+        {
+            scope.ServiceProvider.GetRequiredService<IObjectMapper>().Map<SourceModel, DestModel>(sourceModel).Name.ShouldBe(nameof(CustomMappingActionService));
         }
 
-        [Fact]
-        public void Should_Registered_AutoMapper_Service()
+        CustomMappingAction.IsDisposed.ShouldBeTrue();
+    }
+
+    public class SourceModel
+    {
+        public string Name { get; set; }
+    }
+
+    public class DestModel
+    {
+        public string Name { get; set; }
+    }
+
+    public class MapperActionProfile : Profile
+    {
+        public MapperActionProfile()
         {
-            GetService<CustomMappingAction>().ShouldNotBeNull();
+            CreateMap<SourceModel, DestModel>().AfterMap<CustomMappingAction>();
+        }
+    }
+
+    public class CustomMappingAction : IMappingAction<SourceModel, DestModel>, IDisposable
+    {
+        public static bool IsDisposed = false;
+
+        private readonly CustomMappingActionService _customMappingActionService;
+
+        public CustomMappingAction(CustomMappingActionService customMappingActionService)
+        {
+            _customMappingActionService = customMappingActionService;
         }
 
-        [Fact]
-        public void Custom_MappingAction_Test()
+        public void Process(SourceModel source, DestModel destination, ResolutionContext context)
         {
-            var sourceModel = new SourceModel
-            {
-                Name = "Source"
-            };
-
-            _objectMapper.Map<SourceModel, DestModel>(sourceModel).Name.ShouldBe(nameof(CustomMappingActionService));
+            destination.Name = _customMappingActionService.GetName();
         }
 
-        public class SourceModel
+        public void Dispose()
         {
-            public string Name { get; set; }
+            IsDisposed = true;
         }
+    }
 
-        public class DestModel
+    public class CustomMappingActionService : ITransientDependency
+    {
+        public string GetName()
         {
-            public string Name { get; set; }
-        }
-
-        public class MapperActionProfile : Profile
-        {
-            public MapperActionProfile()
-            {
-                CreateMap<SourceModel, DestModel>().AfterMap<CustomMappingAction>();
-            }
-        }
-
-        public class CustomMappingAction : IMappingAction<SourceModel, DestModel>
-        {
-            private readonly CustomMappingActionService _customMappingActionService;
-
-            public CustomMappingAction(CustomMappingActionService customMappingActionService)
-            {
-                _customMappingActionService = customMappingActionService;
-            }
-
-            public void Process(SourceModel source, DestModel destination, ResolutionContext context)
-            {
-                destination.Name = _customMappingActionService.GetName();
-            }
-        }
-
-        public class CustomMappingActionService : ITransientDependency
-        {
-            public string GetName()
-            {
-                return nameof(CustomMappingActionService);
-            }
+            return nameof(CustomMappingActionService);
         }
     }
 }

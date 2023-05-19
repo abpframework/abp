@@ -2,10 +2,9 @@
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.StarRatingSvg;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.CmsKit
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.CmsKit;
+
+[DependsOn(typeof(StarRatingSvgStyleContributor))]
+public class CmsKitStyleContributor : BundleContributor
 {
-    [DependsOn(typeof(StarRatingSvgStyleContributor))]
-    public class CmsKitStyleContributor : BundleContributor
-    {
-    }
 }

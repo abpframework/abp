@@ -4,49 +4,48 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
+namespace Volo.Abp.Identity.Web.Pages.Identity.Roles;
+
+public class CreateModalModel : IdentityPageModel
 {
-    public class CreateModalModel : IdentityPageModel
+    [BindProperty]
+    public RoleInfoModel Role { get; set; }
+
+    protected IIdentityRoleAppService IdentityRoleAppService { get; }
+
+    public CreateModalModel(IIdentityRoleAppService identityRoleAppService)
     {
-        [BindProperty]
-        public RoleInfoModel Role { get; set; }
+        IdentityRoleAppService = identityRoleAppService;
+    }
 
-        protected IIdentityRoleAppService IdentityRoleAppService { get; }
+    public virtual Task<IActionResult> OnGetAsync()
+    {
+        Role = new RoleInfoModel();
 
-        public CreateModalModel(IIdentityRoleAppService identityRoleAppService)
-        {
-            IdentityRoleAppService = identityRoleAppService;
-        }
+        return Task.FromResult<IActionResult>(Page());
+    }
 
-        public virtual Task<IActionResult> OnGetAsync()
-        {
-            Role = new RoleInfoModel();
-            
-            return Task.FromResult<IActionResult>(Page());
-        }
+    public virtual async Task<IActionResult> OnPostAsync()
+    {
+        ValidateModel();
 
-        public virtual async Task<IActionResult> OnPostAsync()
-        {
-            ValidateModel();
+        var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleCreateDto>(Role);
+        await IdentityRoleAppService.CreateAsync(input);
 
-            var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleCreateDto>(Role);
-            await IdentityRoleAppService.CreateAsync(input);
+        return NoContent();
+    }
 
-            return NoContent();
-        }
+    public class RoleInfoModel : ExtensibleObject
+    {
+        [Required]
+        [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxNameLength))]
+        [Display(Name = "DisplayName:RoleName")]
+        public string Name { get; set; }
 
-        public class RoleInfoModel : ExtensibleObject
-        {
-            [Required]
-            [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxNameLength))]
-            [Display(Name = "DisplayName:RoleName")]
-            public string Name { get; set; }
+        [Display(Name = "DisplayName:IsDefault")]
+        public bool IsDefault { get; set; }
 
-            [Display(Name = "DisplayName:IsDefault")]
-            public bool IsDefault { get; set; }
-
-            [Display(Name = "DisplayName:IsPublic")]
-            public bool IsPublic { get; set; }
-        }
+        [Display(Name = "DisplayName:IsPublic")]
+        public bool IsPublic { get; set; }
     }
 }

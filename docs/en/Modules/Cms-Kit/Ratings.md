@@ -4,6 +4,12 @@ CMS kit provides a **rating** system to to add ratings feature to any kind of re
 
 ![ratings](../../images/cmskit-module-ratings.png)
 
+## Enabling the Rating Feature
+
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+
+> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+
 ## Options
 
 The rating system provides a mechanism to group ratings by entity types. For example, if you want to use the rating system for products, you need to define an entity type named `Product` and then add ratings under the defined entity type.
@@ -17,7 +23,7 @@ Configure<CmsKitRatingOptions>(options =>
 });
 ```
 
-> If you're using the blog feature, the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
+> If you're using the [Blogging Feature](Blogging.md), the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
 
 `CmsKitRatingOptions` properties:
 

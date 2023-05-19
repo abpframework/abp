@@ -66,6 +66,7 @@ $(function () {
         initialEditType: 'markdown',
         previewStyle: 'tab',
         height: 'auto',
+        plugins: [toastui.Editor.plugin.codeSyntaxHighlight],
         hooks: {
             addImageBlobHook: function (blob, callback, source) {
                 var imageAltText = blob.name;

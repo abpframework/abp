@@ -1,0 +1,10 @@
+{
+  "culture": "ru",
+  "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Дата рождения1",
+    "DisplayName:BirthDate2": "Дата рождения2",
+    "PersonModel:BirthDate3": "Дата рождения3",
+    "BirthDate": "День рождения",
+    "Value1": "Значение один"
+  }
+}

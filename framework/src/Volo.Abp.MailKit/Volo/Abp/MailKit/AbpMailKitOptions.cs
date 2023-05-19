@@ -1,9 +1,8 @@
 ﻿using MailKit.Security;
 
-namespace Volo.Abp.MailKit
+namespace Volo.Abp.MailKit;
+
+public class AbpMailKitOptions
 {
-    public class AbpMailKitOptions
-    {
-        public SecureSocketOptions? SecureSocketOption { get; set; }
-    }
+    public SecureSocketOptions? SecureSocketOption { get; set; }
 }

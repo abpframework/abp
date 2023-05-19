@@ -6,134 +6,138 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp.Http;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Timing;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
+namespace Volo.Abp.AspNetCore.Mvc.ModelBinding;
+
+public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
 {
-    public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
+    protected DateTimeKind Kind { get; set; }
+
+    [Fact]
+    public async Task DateTimeKind_Test()
     {
-        protected DateTimeKind Kind { get; set; }
+        var response = await Client.GetAsync("/api/model-Binding-test/DateTimeKind?input=2010-01-01T00:00:00Z");
 
-        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-        {
-            services.Configure<AbpSystemTextJsonSerializerOptions>(options =>
-            {
-                options.UnsupportedTypes.Add<GetDateTimeKindModel>();
-                options.UnsupportedTypes.Add<GetDateTimeKindModel.GetDateTimeKindInnerModel>();
-            });
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+        resultAsString.ShouldBe(Kind.ToString().ToLower());
+    }
 
-        [Fact]
-        public async Task DateTimeKind_Test()
-        {
-            var response = await Client.GetAsync("/api/model-Binding-test/DateTimeKind?input=2010-01-01T00:00:00Z");
+    [Fact]
+    public async Task NullableDateTimeKind_Test()
+    {
+        var response =
+            await Client.GetAsync("/api/model-Binding-test/NullableDateTimeKind?input=2010-01-01T00:00:00Z");
 
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.ShouldBe(Kind.ToString().ToLower());
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+        resultAsString.ShouldBe(Kind.ToString().ToLower());
+    }
 
-        [Fact]
-        public async Task NullableDateTimeKind_Test()
-        {
-            var response =
-                await Client.GetAsync("/api/model-Binding-test/NullableDateTimeKind?input=2010-01-01T00:00:00Z");
+    [Fact]
+    public async Task DisableDateTimeNormalizationDateTimeKind_Test()
+    {
+        var response =
+            await Client.GetAsync(
+                "/api/model-Binding-test/DisableDateTimeNormalizationDateTimeKind?input=2010-01-01T00:00:00Z");
 
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.ShouldBe(Kind.ToString().ToLower());
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+        //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
+        //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
+        resultAsString.ShouldBe(DateTimeKind.Utc.ToString().ToLower());
+    }
 
-        [Fact]
-        public async Task DisableDateTimeNormalizationDateTimeKind_Test()
-        {
-            var response =
-                await Client.GetAsync(
-                    "/api/model-Binding-test/DisableDateTimeNormalizationDateTimeKind?input=2010-01-01T00:00:00Z");
+    [Fact]
+    public async Task DisableDateTimeNormalizationNullableDateTimeKind_Test()
+    {
+        var response =
+            await Client.GetAsync(
+                "/api/model-Binding-test/DisableDateTimeNormalizationNullableDateTimeKind?input=2010-01-01T00:00:00Z");
 
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
-            //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
-            //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
-            resultAsString.ShouldBe(DateTimeKind.Utc.ToString().ToLower());
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+        //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
+        //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
+        resultAsString.ShouldBe(DateTimeKind.Utc.ToString().ToLower());
+    }
 
-        [Fact]
-        public async Task DisableDateTimeNormalizationNullableDateTimeKind_Test()
-        {
-            var response =
-                await Client.GetAsync(
-                    "/api/model-Binding-test/DisableDateTimeNormalizationNullableDateTimeKind?input=2010-01-01T00:00:00Z");
+    [Fact]
+    public async Task ComplexTypeDateTimeKind_Test()
+    {
+        var response = await Client.GetAsync("/api/model-Binding-test/ComplexTypeDateTimeKind?" +
+                                             "Time1=2010-01-01T00:00:00Z&" +
+                                             "Time2=2010-01-01T00:00:00Z&" +
+                                             "Time3=2010-01-01T00:00:00Z&" +
+                                             "InnerModel.Time4=2010-01-01T00:00:00Z");
 
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
-            //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
-            //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
-            resultAsString.ShouldBe(DateTimeKind.Utc.ToString().ToLower());
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+        //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
+        //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
+        resultAsString.ShouldBe($"utc_{Kind.ToString().ToLower()}_{Kind.ToString().ToLower()}_utc");
+    }
 
-        [Fact]
-        public async Task ComplexTypeDateTimeKind_Test()
-        {
-            var response = await Client.GetAsync("/api/model-Binding-test/ComplexTypeDateTimeKind?" +
-                                                 "Time1=2010-01-01T00:00:00Z&" +
-                                                 "Time2=2010-01-01T00:00:00Z&" +
-                                                 "Time3=2010-01-01T00:00:00Z&" +
-                                                 "InnerModel.Time4=2010-01-01T00:00:00Z");
-
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
-            //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
-            //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
-            resultAsString.ShouldBe($"utc_{Kind.ToString().ToLower()}_{Kind.ToString().ToLower()}_utc");
-        }
-
-        [Fact]
-        public async Task ComplexTypeDateTimeKind_JSON_Test()
-        {
-            var time = DateTime.Parse("2010-01-01T00:00:00Z");
-            var response = await Client.PostAsync("/api/model-Binding-test/ComplexTypeDateTimeKind_JSON",
-                new StringContent(JsonSerializer.Serialize(
-                    new GetDateTimeKindModel {
-                        Time1 = time,
-                        Time2 = time,
-                        Time3 = time,
-                        InnerModel = new GetDateTimeKindModel.GetDateTimeKindInnerModel
-                        {
-                            Time4 = time
-                        }
+    [Fact]
+    public async Task ComplexTypeDateTimeKind_JSON_Test()
+    {
+        var time = DateTime.Parse("2010-01-01T00:00:00Z");
+        var response = await Client.PostAsync("/api/model-Binding-test/ComplexTypeDateTimeKind_JSON",
+            new StringContent(JsonSerializer.Serialize(
+                new GetDateTimeKindModel
+                {
+                    Time1 = time,
+                    Time2 = time,
+                    Time3 = time,
+                    InnerModel = new GetDateTimeKindModel.GetDateTimeKindInnerModel
+                    {
+                        Time4 = time
                     }
-                ), Encoding.UTF8, MimeTypes.Application.Json));
+                }
+            ), Encoding.UTF8, MimeTypes.Application.Json));
 
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.ShouldBe($"local_{Kind.ToString().ToLower()}_{Kind.ToString().ToLower()}_local");
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+        resultAsString.ShouldBe($"local_{Kind.ToString().ToLower()}_{Kind.ToString().ToLower()}_local");
     }
 
-    public class ModelBindingController_Utc_Tests : ModelBindingController_Tests
+    [Fact]
+    public async Task Guid_Json_Test()
     {
-        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-        {
-            Kind = DateTimeKind.Utc;
-            services.Configure<AbpClockOptions>(x => x.Kind = Kind);
+        var guid = Guid.NewGuid();
+        var json = $"{{\"UserId\":\"{guid:B}\",\"UserId2\":\"{guid:N}\",\"UserId3\":\"{guid:D}\",\"UserId4\":\"{guid:P}\",\"UserId5\":\"{guid:x}\",\"TenantId\":null,\"TenantId2\":\"\"}}";
+        var response = await Client.PostAsync("/api/model-Binding-test/Guid_Json_Test", new StringContent(json, Encoding.UTF8, MimeTypes.Application.Json));
 
-            base.ConfigureServices(context, services);
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+        resultAsString.ShouldBe($"{{\"userId\":\"{guid:D}\",\"userId2\":\"{guid:D}\",\"userId3\":\"{guid:D}\",\"userId4\":\"{guid:D}\",\"userId5\":\"{guid:D}\",\"tenantId\":null,\"tenantId2\":null}}");
     }
+}
 
-    public class ModelBindingController_Local_Tests : ModelBindingController_Tests
+public class ModelBindingController_Utc_Tests : ModelBindingController_Tests
+{
+    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
     {
-        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-        {
-            Kind = DateTimeKind.Local;
-            services.Configure<AbpClockOptions>(x => x.Kind = Kind);
+        Kind = DateTimeKind.Utc;
+        services.Configure<AbpClockOptions>(x => x.Kind = Kind);
 
-            base.ConfigureServices(context, services);
-        }
+        base.ConfigureServices(context, services);
+    }
+}
+
+public class ModelBindingController_Local_Tests : ModelBindingController_Tests
+{
+    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    {
+        Kind = DateTimeKind.Local;
+        services.Configure<AbpClockOptions>(x => x.Kind = Kind);
+
+        base.ConfigureServices(context, services);
     }
 }

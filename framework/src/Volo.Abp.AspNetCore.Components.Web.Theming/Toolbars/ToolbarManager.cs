@@ -4,36 +4,35 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
+
+public class ToolbarManager : IToolbarManager, ITransientDependency
 {
-    public class ToolbarManager : IToolbarManager, ITransientDependency
+    protected AbpToolbarOptions Options { get; }
+    protected IServiceProvider ServiceProvider { get; }
+
+    public ToolbarManager(
+        IOptions<AbpToolbarOptions> options,
+        IServiceProvider serviceProvider)
     {
-        protected AbpToolbarOptions Options { get; }
-        protected IServiceProvider ServiceProvider { get; }
+        ServiceProvider = serviceProvider;
+        Options = options.Value;
+    }
 
-        public ToolbarManager(
-            IOptions<AbpToolbarOptions> options,
-            IServiceProvider serviceProvider)
+    public async Task<Toolbar> GetAsync(string name)
+    {
+        var toolbar = new Toolbar(name);
+
+        using (var scope = ServiceProvider.CreateScope())
         {
-            ServiceProvider = serviceProvider;
-            Options = options.Value;
-        }
+            var context = new ToolbarConfigurationContext(toolbar, scope.ServiceProvider);
 
-        public async Task<Toolbar> GetAsync(string name)
-        {
-            var toolbar = new Toolbar(name);
-
-            using (var scope = ServiceProvider.CreateScope())
+            foreach (var contributor in Options.Contributors)
             {
-                var context = new ToolbarConfigurationContext(toolbar, scope.ServiceProvider);
-
-                foreach (var contributor in Options.Contributors)
-                {
-                    await contributor.ConfigureToolbarAsync(context);
-                }
+                await contributor.ConfigureToolbarAsync(context);
             }
-
-            return toolbar;
         }
+
+        return toolbar;
     }
 }

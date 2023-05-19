@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace Volo.Abp.AspNetCore.Mvc.Conventions
+namespace Volo.Abp.AspNetCore.Mvc.Conventions;
+
+public interface IAbpServiceConvention : IApplicationModelConvention
 {
-    public interface IAbpServiceConvention : IApplicationModelConvention
-    {
-    }
 }

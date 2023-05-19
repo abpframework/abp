@@ -1,5 +1,6 @@
 (function () {
-	if (typeof self === 'undefined' || !self.Prism || !self.document || !document.querySelector) {
+
+	if (typeof Prism === 'undefined' || typeof document === 'undefined' || !document.querySelector) {
 		return;
 	}
 
@@ -16,4 +17,4 @@
 		return a;
 	});
 
-})();
+}());

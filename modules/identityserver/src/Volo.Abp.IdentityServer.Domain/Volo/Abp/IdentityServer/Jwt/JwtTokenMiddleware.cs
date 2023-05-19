@@ -1,27 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 
-namespace Volo.Abp.IdentityServer.Jwt
+namespace Volo.Abp.IdentityServer.Jwt;
+
+//TODO: Should we move this to another package..?
+
+public static class JwtTokenMiddleware
 {
-    //TODO: Should we move this to another package..?
-
-    public static class JwtTokenMiddleware
+    public static IApplicationBuilder UseJwtTokenMiddleware(this IApplicationBuilder app, string schema)
     {
-        public static IApplicationBuilder UseJwtTokenMiddleware(this IApplicationBuilder app, string schema)
+        return app.Use(async (ctx, next) =>
         {
-            return app.Use(async (ctx, next) =>
+            if (ctx.User.Identity?.IsAuthenticated != true)
             {
-                if (ctx.User.Identity?.IsAuthenticated != true)
+                var result = await ctx.AuthenticateAsync(schema);
+                if (result.Succeeded && result.Principal != null)
                 {
-                    var result = await ctx.AuthenticateAsync(schema);
-                    if (result.Succeeded && result.Principal != null)
-                    {
-                        ctx.User = result.Principal;
-                    }
+                    ctx.User = result.Principal;
                 }
+            }
 
-                await next();
-            });
-        }
+            await next();
+        });
     }
 }

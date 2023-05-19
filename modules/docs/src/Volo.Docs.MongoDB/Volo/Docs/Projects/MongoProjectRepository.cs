@@ -29,6 +29,17 @@ namespace Volo.Docs.Projects
             return projects;
         }
 
+        public async Task<List<ProjectWithoutDetails>> GetListWithoutDetailsAsync(CancellationToken cancellationToken = default)
+        {
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Select(x=> new ProjectWithoutDetails {
+                    Id = x.Id,
+                    Name = x.Name,
+                })
+                .OrderBy(x=>x.Name)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public async Task<Project> GetByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
         {
             var normalizeShortName = NormalizeShortName(shortName);

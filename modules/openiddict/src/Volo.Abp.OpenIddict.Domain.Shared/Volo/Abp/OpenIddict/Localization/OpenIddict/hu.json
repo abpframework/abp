@@ -1,0 +1,15 @@
+{
+  "culture": "hu",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Az OpenID Connect kérés nem kérhető le.",
+    "TheUserDetailsCannotBbeRetrieved": "A felhasználói adatok nem kérhetők le.",
+    "TheApplicationDetailsCannotBeFound": "Az alkalmazás részletei nem találhatók.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "A hívó kliens alkalmazással kapcsolatos részletek nem találhatók.",
+    "TheSpecifiedGrantTypeIsNotImplemented.": "A megadott támogatási típus ({0}) nincs megvalósítva.",
+    "Authorization": "Engedélyezés",
+    "DoYouWantToGrantAccessToYourData": "Hozzáférést szeretne adni a(z) {0} számára az adataihoz?",
+    "ScopesRequested": "Kért hatókörök",
+    "Accept": "Elfogad",
+    "Deny": "Tiltás"
+  }
+}

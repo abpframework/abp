@@ -2,29 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
+
+[Area("abp")]
+[RemoteService(Name = "abp")]
+[Route("api/abp/application-configuration")]
+public class AbpApplicationConfigurationController : AbpControllerBase, IAbpApplicationConfigurationAppService
 {
-    [Area("abp")]
-    [RemoteService(Name = "abp")]
-    [Route("api/abp/application-configuration")]
-    public class AbpApplicationConfigurationController : AbpControllerBase, IAbpApplicationConfigurationAppService
+    protected readonly IAbpApplicationConfigurationAppService ApplicationConfigurationAppService;
+    protected readonly IAbpAntiForgeryManager AntiForgeryManager;
+
+    public AbpApplicationConfigurationController(
+        IAbpApplicationConfigurationAppService applicationConfigurationAppService,
+        IAbpAntiForgeryManager antiForgeryManager)
     {
-        private readonly IAbpApplicationConfigurationAppService _applicationConfigurationAppService;
-        private readonly IAbpAntiForgeryManager _antiForgeryManager;
+        ApplicationConfigurationAppService = applicationConfigurationAppService;
+        AntiForgeryManager = antiForgeryManager;
+    }
 
-        public AbpApplicationConfigurationController(
-            IAbpApplicationConfigurationAppService applicationConfigurationAppService,
-            IAbpAntiForgeryManager antiForgeryManager)
-        {
-            _applicationConfigurationAppService = applicationConfigurationAppService;
-            _antiForgeryManager = antiForgeryManager;
-        }
-
-        [HttpGet]
-        public async Task<ApplicationConfigurationDto> GetAsync()
-        {
-            _antiForgeryManager.SetCookie();
-            return await _applicationConfigurationAppService.GetAsync();
-        }
+    [HttpGet]
+    public virtual async Task<ApplicationConfigurationDto> GetAsync(
+        ApplicationConfigurationRequestOptions options)
+    {
+        AntiForgeryManager.SetCookie();
+        return await ApplicationConfigurationAppService.GetAsync(options);
     }
 }

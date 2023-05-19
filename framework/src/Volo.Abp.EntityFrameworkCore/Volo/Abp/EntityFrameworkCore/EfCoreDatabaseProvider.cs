@@ -1,14 +1,13 @@
-﻿namespace Volo.Abp.EntityFrameworkCore
+﻿namespace Volo.Abp.EntityFrameworkCore;
+
+public enum EfCoreDatabaseProvider
 {
-    public enum EfCoreDatabaseProvider
-    {
-        SqlServer,
-        MySql,
-        Oracle,
-        PostgreSql,
-        Sqlite,
-        InMemory,
-        Cosmos,
-        Firebird
-    }
+    SqlServer,
+    MySql,
+    Oracle,
+    PostgreSql,
+    Sqlite,
+    InMemory,
+    Cosmos,
+    Firebird
 }

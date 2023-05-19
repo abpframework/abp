@@ -18,7 +18,7 @@ You can configure using the standard [configuration system](Configuration.md), l
 
 ### The Options Classes
 
-`AbpRebusEventBusOptions` classe can be used to configure the event bus options for the Rebus.
+`AbpRebusEventBusOptions` class can be used to configure the event bus options for the Rebus.
 
 You can configure this options inside the `PreConfigureServices` of your [module](Module-Development-Basics.md).
 

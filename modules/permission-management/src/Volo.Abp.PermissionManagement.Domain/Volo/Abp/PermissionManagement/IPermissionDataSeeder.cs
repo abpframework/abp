@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.PermissionManagement
+namespace Volo.Abp.PermissionManagement;
+
+public interface IPermissionDataSeeder
 {
-    public interface IPermissionDataSeeder
-    {
-        Task SeedAsync(
-            string providerName,
-            string providerKey,
-            IEnumerable<string> grantedPermissions,
-            Guid? tenantId = null
-        );
-    }
+    Task SeedAsync(
+        string providerName,
+        string providerKey,
+        IEnumerable<string> grantedPermissions,
+        Guid? tenantId = null
+    );
 }

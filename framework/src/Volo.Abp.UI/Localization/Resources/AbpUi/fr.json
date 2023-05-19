@@ -13,6 +13,7 @@
     "SavingWithThreeDot": "Enregistrement...",
     "Actions": "Actions",
     "Delete": "Supprimer",
+    "SuccessfullyDeleted": "Supprimé avec succès",
     "Edit": "Modifier",
     "Refresh": "Actualiser",
     "Language": "Langue",
@@ -26,7 +27,7 @@
     "Submit": "Envoyer",
     "Back": "Précédent",
     "PagerSearch": "Recherche",
-    "PagerNext": "prochain",
+    "PagerNext": "Suivant",
     "PagerPrevious": "Précédent",
     "PagerFirst": "Première",
     "PagerLast": "Dernier",
@@ -47,6 +48,7 @@
     "Search": "Recherche",
     "ItemWillBeDeletedMessageWithFormat": "{0} sera supprimé!",
     "ItemWillBeDeletedMessage": "Cet objet va être supprimé!",
-    "ManageYourAccount": "Gérer votre compte"
+    "ManageYourAccount": "Gérer votre compte",
+    "OthersGroup": "Autre"
   }
 }

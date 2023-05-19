@@ -2,18 +2,17 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.AuditLogging.MongoDB
+namespace Volo.Abp.AuditLogging.MongoDB;
+
+[DependsOn(typeof(AbpAuditLoggingDomainModule))]
+[DependsOn(typeof(AbpMongoDbModule))]
+public class AbpAuditLoggingMongoDbModule : AbpModule
 {
-    [DependsOn(typeof(AbpAuditLoggingDomainModule))]
-    [DependsOn(typeof(AbpMongoDbModule))]
-    public class AbpAuditLoggingMongoDbModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddMongoDbContext<AuditLoggingMongoDbContext>(options =>
         {
-            context.Services.AddMongoDbContext<AuditLoggingMongoDbContext>(options =>
-            {
-                options.AddRepository<AuditLog, MongoAuditLogRepository>();
-            });
-        }
+            options.AddRepository<AuditLog, MongoAuditLogRepository>();
+        });
     }
 }

@@ -1,31 +1,75 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.Localization
+namespace Volo.Abp.Localization;
+
+public class LocalizationResourceContributorList : List<ILocalizationResourceContributor>
 {
-    public class LocalizationResourceContributorList : List<ILocalizationResourceContributor>
+    public LocalizedString GetOrNull(
+        string cultureName,
+        string name,
+        bool includeDynamicContributors = true)
     {
-        public LocalizedString GetOrNull(string cultureName, string name)
+        foreach (var contributor in this.Select(x => x).Reverse())
         {
-            foreach (var contributor in this.AsQueryable().Reverse())
+            if (!includeDynamicContributors && contributor.IsDynamic)
             {
-                var localString = contributor.GetOrNull(cultureName, name);
-                if (localString != null)
-                {
-                    return localString;
-                }
+                continue;
             }
-
-            return null;
-        }
-
-        public void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
-        {
-            foreach (var contributor in this)
+            
+            var localString = contributor.GetOrNull(cultureName, name);
+            if (localString != null)
             {
-                contributor.Fill(cultureName, dictionary);
+                return localString;
             }
         }
+
+        return null;
+    }
+
+    public void Fill(
+        string cultureName, 
+        Dictionary<string, LocalizedString> dictionary,
+        bool includeDynamicContributors = true)
+    {
+        foreach (var contributor in this)
+        {
+            if (!includeDynamicContributors && contributor.IsDynamic)
+            {
+                continue;
+            }
+            
+            contributor.Fill(cultureName, dictionary);
+        }
+    }
+    
+    public async Task FillAsync(
+        string cultureName, 
+        Dictionary<string, LocalizedString> dictionary,
+        bool includeDynamicContributors = true)
+    {
+        foreach (var contributor in this)
+        {
+            if (!includeDynamicContributors && contributor.IsDynamic)
+            {
+                continue;
+            }
+            
+            await contributor.FillAsync(cultureName, dictionary);
+        }
+    }
+
+    internal async Task<IEnumerable<string>> GetSupportedCulturesAsync()
+    {
+        var cultures = new List<string>();
+
+        foreach (var contributor in this)
+        {
+            cultures.AddRange(await contributor.GetSupportedCulturesAsync());
+        }
+
+        return cultures;
     }
 }

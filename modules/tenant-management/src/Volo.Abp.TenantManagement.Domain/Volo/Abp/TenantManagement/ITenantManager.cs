@@ -2,13 +2,12 @@
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Services;
 
-namespace Volo.Abp.TenantManagement
-{
-    public interface ITenantManager : IDomainService
-    {
-        [NotNull]
-        Task<Tenant> CreateAsync([NotNull] string name);
+namespace Volo.Abp.TenantManagement;
 
-        Task ChangeNameAsync([NotNull] Tenant tenant, [NotNull] string name);
-    }
+public interface ITenantManager : IDomainService
+{
+    [NotNull]
+    Task<Tenant> CreateAsync([NotNull] string name);
+
+    Task ChangeNameAsync([NotNull] Tenant tenant, [NotNull] string name);
 }

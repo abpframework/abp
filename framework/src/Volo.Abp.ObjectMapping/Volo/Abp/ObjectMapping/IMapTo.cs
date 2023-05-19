@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.ObjectMapping
-{
-    public interface IMapTo<TDestination>
-    {
-        TDestination MapTo();
+﻿namespace Volo.Abp.ObjectMapping;
 
-        void MapTo(TDestination destination);
-    }
+public interface IMapTo<TDestination>
+{
+    TDestination MapTo();
+
+    void MapTo(TDestination destination);
 }

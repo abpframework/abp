@@ -2,26 +2,25 @@
 using Volo.Abp.Kafka;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.EventBus.Kafka
+namespace Volo.Abp.EventBus.Kafka;
+
+[DependsOn(
+    typeof(AbpEventBusModule),
+    typeof(AbpKafkaModule))]
+public class AbpEventBusKafkaModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpEventBusModule),
-        typeof(AbpKafkaModule))]
-    public class AbpEventBusKafkaModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var configuration = context.Services.GetConfiguration();
+        var configuration = context.Services.GetConfiguration();
 
-            Configure<AbpKafkaEventBusOptions>(configuration.GetSection("Kafka:EventBus"));
-        }
+        Configure<AbpKafkaEventBusOptions>(configuration.GetSection("Kafka:EventBus"));
+    }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context
-                .ServiceProvider
-                .GetRequiredService<KafkaDistributedEventBus>()
-                .Initialize();
-        }
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        context
+            .ServiceProvider
+            .GetRequiredService<KafkaDistributedEventBus>()
+            .Initialize();
     }
 }

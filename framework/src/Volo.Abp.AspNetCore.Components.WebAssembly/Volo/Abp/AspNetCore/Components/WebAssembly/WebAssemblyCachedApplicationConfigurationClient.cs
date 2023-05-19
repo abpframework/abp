@@ -1,67 +1,90 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Authorization;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly
+namespace Volo.Abp.AspNetCore.Components.WebAssembly;
+
+public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
 {
-    [ExposeServices(
-        typeof(WebAssemblyCachedApplicationConfigurationClient),
-        typeof(ICachedApplicationConfigurationClient),
-        typeof(IAsyncInitialize)
-        )]
-    public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
+    protected AbpApplicationConfigurationClientProxy ApplicationConfigurationClientProxy { get; }
+
+    protected AbpApplicationLocalizationClientProxy ApplicationLocalizationClientProxy { get; }
+
+    protected ApplicationConfigurationCache Cache { get; }
+
+    protected ICurrentTenantAccessor CurrentTenantAccessor { get; }
+
+    protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; }
+
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; }
+
+    public WebAssemblyCachedApplicationConfigurationClient(
+        AbpApplicationConfigurationClientProxy applicationConfigurationClientProxy,
+        ApplicationConfigurationCache cache,
+        ICurrentTenantAccessor currentTenantAccessor,
+        AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
+        ApplicationConfigurationChangedService applicationConfigurationChangedService,
+        AuthenticationStateProvider authenticationStateProvider)
     {
-        protected IHttpClientProxy<IAbpApplicationConfigurationAppService> Proxy { get; }
+        ApplicationConfigurationClientProxy = applicationConfigurationClientProxy;
+        Cache = cache;
+        CurrentTenantAccessor = currentTenantAccessor;
+        ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
+        ApplicationConfigurationChangedService = applicationConfigurationChangedService;
+        AuthenticationStateProvider = authenticationStateProvider;
+    }
 
-        protected ApplicationConfigurationCache Cache { get; }
-
-        protected ICurrentTenantAccessor CurrentTenantAccessor { get; }
-
-        public WebAssemblyCachedApplicationConfigurationClient(
-            IHttpClientProxy<IAbpApplicationConfigurationAppService> proxy,
-            ApplicationConfigurationCache cache,
-            ICurrentTenantAccessor currentTenantAccessor)
-        {
-            Proxy = proxy;
-            Cache = cache;
-            CurrentTenantAccessor = currentTenantAccessor;
-        }
-
-        public virtual async Task InitializeAsync()
-        {
-            var configurationDto = await Proxy.Service.GetAsync();
-
-            Cache.Set(configurationDto);
-
-            CurrentTenantAccessor.Current = new BasicTenantInfo(
-                configurationDto.CurrentTenant.Id,
-                configurationDto.CurrentTenant.Name
-            );
-        }
-
-        public virtual Task<ApplicationConfigurationDto> GetAsync()
-        {
-            return Task.FromResult(GetConfigurationByChecking());
-        }
-
-        public virtual ApplicationConfigurationDto Get()
-        {
-            return GetConfigurationByChecking();
-        }
-
-        private ApplicationConfigurationDto GetConfigurationByChecking()
-        {
-            var configuration = Cache.Get();
-            if (configuration == null)
-            {
-                throw new AbpException(
-                    $"{nameof(WebAssemblyCachedApplicationConfigurationClient)} should be initialized before using it.");
+    public virtual async Task InitializeAsync()
+    {
+        var configurationDto = await ApplicationConfigurationClientProxy.GetAsync(
+            new ApplicationConfigurationRequestOptions {
+                IncludeLocalizationResources = false
             }
+        );
 
-            return configuration;
+        var localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
+            new ApplicationLocalizationRequestDto {
+                CultureName = configurationDto.Localization.CurrentCulture.Name,
+                OnlyDynamics = true
+            }
+        );
+
+        configurationDto.Localization.Resources = localizationDto.Resources;
+
+        Cache.Set(configurationDto);
+
+        ApplicationConfigurationChangedService.NotifyChanged();
+
+        CurrentTenantAccessor.Current = new BasicTenantInfo(
+            configurationDto.CurrentTenant.Id,
+            configurationDto.CurrentTenant.Name
+        );
+    }
+
+    public virtual Task<ApplicationConfigurationDto> GetAsync()
+    {
+        return Task.FromResult(GetConfigurationByChecking());
+    }
+
+    public virtual ApplicationConfigurationDto Get()
+    {
+        return GetConfigurationByChecking();
+    }
+
+    private ApplicationConfigurationDto GetConfigurationByChecking()
+    {
+        var configuration = Cache.Get();
+        if (configuration == null)
+        {
+            throw new AbpException(
+                $"{nameof(WebAssemblyCachedApplicationConfigurationClient)} should be initialized before using it.");
         }
+
+        return configuration;
     }
 }

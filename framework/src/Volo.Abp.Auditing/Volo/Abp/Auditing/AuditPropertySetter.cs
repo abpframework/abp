@@ -3,179 +3,186 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Auditing
+namespace Volo.Abp.Auditing;
+
+public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
 {
-    public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
+    protected ICurrentUser CurrentUser { get; }
+    protected ICurrentTenant CurrentTenant { get; }
+    protected IClock Clock { get; }
+
+    public AuditPropertySetter(
+        ICurrentUser currentUser,
+        ICurrentTenant currentTenant,
+        IClock clock)
     {
-        protected ICurrentUser CurrentUser { get; }
-        protected ICurrentTenant CurrentTenant { get; }
-        protected IClock Clock { get; }
+        CurrentUser = currentUser;
+        CurrentTenant = currentTenant;
+        Clock = clock;
+    }
 
-        public AuditPropertySetter(
-            ICurrentUser currentUser,
-            ICurrentTenant currentTenant,
-            IClock clock)
+    public virtual void SetCreationProperties(object targetObject)
+    {
+        SetCreationTime(targetObject);
+        SetCreatorId(targetObject);
+    }
+
+    public virtual void SetModificationProperties(object targetObject)
+    {
+        SetLastModificationTime(targetObject);
+        SetLastModifierId(targetObject);
+    }
+
+    public virtual void SetDeletionProperties(object targetObject)
+    {
+        SetDeletionTime(targetObject);
+        SetDeleterId(targetObject);
+    }
+
+    public virtual void IncrementEntityVersionProperty(object targetObject)
+    {
+        if (targetObject is IHasEntityVersion objectWithEntityVersion)
         {
-            CurrentUser = currentUser;
-            CurrentTenant = currentTenant;
-            Clock = clock;
+            ObjectHelper.TrySetProperty(objectWithEntityVersion, x => x.EntityVersion, x => x.EntityVersion + 1);
+        }
+    }
+
+    protected virtual void SetCreationTime(object targetObject)
+    {
+        if (!(targetObject is IHasCreationTime objectWithCreationTime))
+        {
+            return;
         }
 
-        public void SetCreationProperties(object targetObject)
+        if (objectWithCreationTime.CreationTime == default)
         {
-            SetCreationTime(targetObject);
-            SetCreatorId(targetObject);
+            ObjectHelper.TrySetProperty(objectWithCreationTime, x => x.CreationTime, () => Clock.Now);
+        }
+    }
+
+    protected virtual void SetCreatorId(object targetObject)
+    {
+        if (!CurrentUser.Id.HasValue)
+        {
+            return;
         }
 
-        public void SetModificationProperties(object targetObject)
+        if (targetObject is IMultiTenant multiTenantEntity)
         {
-            SetLastModificationTime(targetObject);
-            SetLastModifierId(targetObject);
-        }
-
-        public void SetDeletionProperties(object targetObject)
-        {
-            SetDeletionTime(targetObject);
-            SetDeleterId(targetObject);
-        }
-
-        private void SetCreationTime(object targetObject)
-        {
-            if (!(targetObject is IHasCreationTime objectWithCreationTime))
+            if (multiTenantEntity.TenantId != CurrentUser.TenantId)
             {
                 return;
             }
-
-            if (objectWithCreationTime.CreationTime == default)
-            {
-                ObjectHelper.TrySetProperty(objectWithCreationTime, x => x.CreationTime, () => Clock.Now);
-            }
         }
 
-        private void SetCreatorId(object targetObject)
-        {
-            if (!CurrentUser.Id.HasValue)
-            {
-                return;
-            }
-
-            if (targetObject is IMultiTenant multiTenantEntity)
-            {
-                if (multiTenantEntity.TenantId != CurrentUser.TenantId)
-                {
-                    return;
-                }
-            }
-
-            /* TODO: The code below is from old ABP, not implemented yet
-                if (tenantId.HasValue && MultiTenancyHelper.IsHostEntity(entity))
-                {
-                    //Tenant user created a host entity
-                    return;
-                }
-                 */
-
-            if (targetObject is IMayHaveCreator mayHaveCreatorObject)
-            {
-                if (mayHaveCreatorObject.CreatorId.HasValue && mayHaveCreatorObject.CreatorId.Value != default)
-                {
-                    return;
-                }
-
-                ObjectHelper.TrySetProperty(mayHaveCreatorObject, x => x.CreatorId, () => CurrentUser.Id);
-            }
-            else if (targetObject is IMustHaveCreator mustHaveCreatorObject)
-            {
-                if (mustHaveCreatorObject.CreatorId != default)
-                {
-                    return;
-                }
-
-                ObjectHelper.TrySetProperty(mustHaveCreatorObject, x => x.CreatorId, () => CurrentUser.Id.Value);
-            }
-        }
-
-        private void SetLastModificationTime(object targetObject)
-        {
-            if (targetObject is IHasModificationTime objectWithModificationTime)
-            {
-                objectWithModificationTime.LastModificationTime = Clock.Now;
-            }
-        }
-
-        private void SetLastModifierId(object targetObject)
-        {
-            if (!(targetObject is IModificationAuditedObject modificationAuditedObject))
-            {
-                return;
-            }
-
-            if (!CurrentUser.Id.HasValue)
-            {
-                modificationAuditedObject.LastModifierId = null;
-                return;
-            }
-
-            if (modificationAuditedObject is IMultiTenant multiTenantEntity)
-            {
-                if (multiTenantEntity.TenantId != CurrentUser.TenantId)
-                {
-                    modificationAuditedObject.LastModifierId = null;
-                    return;
-                }
-            }
-
-            /* TODO: The code below is from old ABP, not implemented yet
+        /* TODO: The code below is from old ABP, not implemented yet
             if (tenantId.HasValue && MultiTenancyHelper.IsHostEntity(entity))
             {
-                //Tenant user modified a host entity
-                modificationAuditedObject.LastModifierId = null;
+                //Tenant user created a host entity
                 return;
             }
              */
 
-            modificationAuditedObject.LastModifierId = CurrentUser.Id;
-        }
-
-        private void SetDeletionTime(object targetObject)
+        if (targetObject is IMayHaveCreator mayHaveCreatorObject)
         {
-            if (targetObject is IHasDeletionTime objectWithDeletionTime)
+            if (mayHaveCreatorObject.CreatorId.HasValue && mayHaveCreatorObject.CreatorId.Value != default)
             {
-                if (objectWithDeletionTime.DeletionTime == null)
-                {
-                    objectWithDeletionTime.DeletionTime = Clock.Now;
-                }
+                return;
             }
-        }
 
-        private void SetDeleterId(object targetObject)
+            ObjectHelper.TrySetProperty(mayHaveCreatorObject, x => x.CreatorId, () => CurrentUser.Id);
+        }
+        else if (targetObject is IMustHaveCreator mustHaveCreatorObject)
         {
-            if (!(targetObject is IDeletionAuditedObject deletionAuditedObject))
+            if (mustHaveCreatorObject.CreatorId != default)
             {
                 return;
             }
 
-            if (deletionAuditedObject.DeleterId != null)
-            {
-                return;
-            }
-
-            if (!CurrentUser.Id.HasValue)
-            {
-                deletionAuditedObject.DeleterId = null;
-                return;
-            }
-
-            if (deletionAuditedObject is IMultiTenant multiTenantEntity)
-            {
-                if (multiTenantEntity.TenantId != CurrentUser.TenantId)
-                {
-                    deletionAuditedObject.DeleterId = null;
-                    return;
-                }
-            }
-
-            deletionAuditedObject.DeleterId = CurrentUser.Id;
+            ObjectHelper.TrySetProperty(mustHaveCreatorObject, x => x.CreatorId, () => CurrentUser.Id.Value);
         }
+    }
+
+    protected virtual void SetLastModificationTime(object targetObject)
+    {
+        if (targetObject is IHasModificationTime objectWithModificationTime)
+        {
+            ObjectHelper.TrySetProperty(objectWithModificationTime, x => x.LastModificationTime, () => Clock.Now);
+        }
+    }
+
+    protected virtual void SetLastModifierId(object targetObject)
+    {
+        if (!(targetObject is IModificationAuditedObject modificationAuditedObject))
+        {
+            return;
+        }
+
+        if (!CurrentUser.Id.HasValue)
+        {
+            ObjectHelper.TrySetProperty(modificationAuditedObject, x => x.LastModifierId, () => null);
+            return;
+        }
+
+        if (modificationAuditedObject is IMultiTenant multiTenantEntity)
+        {
+            if (multiTenantEntity.TenantId != CurrentUser.TenantId)
+            {
+                ObjectHelper.TrySetProperty(modificationAuditedObject, x => x.LastModifierId, () => null);
+                return;
+            }
+        }
+
+        /* TODO: The code below is from old ABP, not implemented yet
+        if (tenantId.HasValue && MultiTenancyHelper.IsHostEntity(entity))
+        {
+            //Tenant user modified a host entity
+            modificationAuditedObject.LastModifierId = null;
+            return;
+        }
+         */
+
+        ObjectHelper.TrySetProperty(modificationAuditedObject, x => x.LastModifierId, () => CurrentUser.Id);
+    }
+
+    protected virtual void SetDeletionTime(object targetObject)
+    {
+        if (targetObject is IHasDeletionTime objectWithDeletionTime)
+        {
+            if (objectWithDeletionTime.DeletionTime == null)
+            {
+                ObjectHelper.TrySetProperty(objectWithDeletionTime, x => x.DeletionTime, () => Clock.Now);
+            }
+        }
+    }
+
+    protected virtual void SetDeleterId(object targetObject)
+    {
+        if (!(targetObject is IDeletionAuditedObject deletionAuditedObject))
+        {
+            return;
+        }
+
+        if (deletionAuditedObject.DeleterId != null)
+        {
+            return;
+        }
+
+        if (!CurrentUser.Id.HasValue)
+        {
+            ObjectHelper.TrySetProperty(deletionAuditedObject, x => x.DeleterId, () => null);
+            return;
+        }
+
+        if (deletionAuditedObject is IMultiTenant multiTenantEntity)
+        {
+            if (multiTenantEntity.TenantId != CurrentUser.TenantId)
+            {
+                ObjectHelper.TrySetProperty(deletionAuditedObject, x => x.DeleterId, () => null);
+                return;
+            }
+        }
+
+        ObjectHelper.TrySetProperty(deletionAuditedObject, x => x.DeleterId, () => CurrentUser.Id);
     }
 }

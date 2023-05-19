@@ -61,7 +61,7 @@ Script initializer (`abp.dom.initializers.initializeScript`) can execute a JavaS
 Assume that you've a container to load the element inside:
 
 ````html
-<div id="LazyComponent"></div>	
+<div id="LazyComponent"></div> 
 ````
 
 And this is the component that will be loaded via AJAX from the server and inserted into the container:
@@ -113,5 +113,4 @@ The following Bootstrap components and libraries are automatically initialized w
 
 * Tooltip
 * Popover
-* Timeage
-
+* Timeago

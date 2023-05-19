@@ -1,0 +1,7 @@
+{
+  "culture": "is",
+  "texts": {
+    "ThisFieldIsRequired": "Þessi reitur er nauðsynlegur",
+    "MaxLenghtErrorMessage": "Þessi reitur getur að hámarki verið '{0}' stafir"
+  }
+}

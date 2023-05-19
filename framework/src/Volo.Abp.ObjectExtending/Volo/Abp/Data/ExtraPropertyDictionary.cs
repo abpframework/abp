@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Data
+namespace Volo.Abp.Data;
+
+[Serializable]
+public class ExtraPropertyDictionary : Dictionary<string, object>
 {
-    [Serializable]
-    public class ExtraPropertyDictionary : Dictionary<string, object>
+    public ExtraPropertyDictionary()
     {
-        public ExtraPropertyDictionary()
-        {
 
-        }
+    }
 
-        public ExtraPropertyDictionary(IDictionary<string, object> dictionary)
-            : base(dictionary)
-        {
-        }
+    public ExtraPropertyDictionary(IDictionary<string, object> dictionary)
+        : base(dictionary)
+    {
     }
 }

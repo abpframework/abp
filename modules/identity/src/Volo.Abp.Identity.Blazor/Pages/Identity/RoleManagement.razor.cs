@@ -12,39 +12,46 @@ using Volo.Abp.PermissionManagement.Blazor.Components;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Data;
 
-namespace Volo.Abp.Identity.Blazor.Pages.Identity
+namespace Volo.Abp.Identity.Blazor.Pages.Identity;
+
+public partial class RoleManagement
 {
-    public partial class RoleManagement
+    protected const string PermissionProviderName = "R";
+
+    protected PermissionManagementModal PermissionManagementModal;
+
+    protected string ManagePermissionsPolicyName;
+
+    protected bool HasManagePermissionsPermission { get; set; }
+
+    protected PageToolbar Toolbar { get; } = new();
+
+    protected List<TableColumn> RoleManagementTableColumns => TableColumns.Get<RoleManagement>();
+
+    public RoleManagement()
     {
-        protected const string PermissionProviderName = "R";
+        ObjectMapperContext = typeof(AbpIdentityBlazorModule);
+        LocalizationResource = typeof(IdentityResource);
 
-        protected PermissionManagementModal PermissionManagementModal;
+        CreatePolicyName = IdentityPermissions.Roles.Create;
+        UpdatePolicyName = IdentityPermissions.Roles.Update;
+        DeletePolicyName = IdentityPermissions.Roles.Delete;
+        ManagePermissionsPolicyName = IdentityPermissions.Roles.ManagePermissions;
+    }
 
-        protected string ManagePermissionsPolicyName;
+    protected override ValueTask SetBreadcrumbItemsAsync()
+    {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Roles"].Value));
+        return base.SetBreadcrumbItemsAsync();
+    }
 
-        protected bool HasManagePermissionsPermission { get; set; }
-
-        protected PageToolbar Toolbar { get; } = new();
-
-        protected List<TableColumn> RoleManagementTableColumns => TableColumns.Get<RoleManagement>();
-
-        public RoleManagement()
-        {
-            ObjectMapperContext = typeof(AbpIdentityBlazorModule);
-            LocalizationResource = typeof(IdentityResource);
-
-            CreatePolicyName = IdentityPermissions.Roles.Create;
-            UpdatePolicyName = IdentityPermissions.Roles.Update;
-            DeletePolicyName = IdentityPermissions.Roles.Delete;
-            ManagePermissionsPolicyName = IdentityPermissions.Roles.ManagePermissions;
-        }
-
-        protected override ValueTask SetEntityActionsAsync()
-        {
-            EntityActions
-                .Get<RoleManagement>()
-                .AddRange(new EntityAction[]
-                {
+    protected override ValueTask SetEntityActionsAsync()
+    {
+        EntityActions
+            .Get<RoleManagement>()
+            .AddRange(new EntityAction[]
+            {
                     new EntityAction
                     {
                         Text = L["Edit"],
@@ -64,60 +71,60 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     new EntityAction
                     {
                         Text = L["Delete"],
-                        Visible = (data) => HasDeletePermission,
+                        Visible = (data) => HasDeletePermission && !data.As<IdentityRoleDto>().IsStatic,
                         Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityRoleDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityRoleDto>())
                     }
-                });
+            });
 
-            return base.SetEntityActionsAsync();
-        }
+        return base.SetEntityActionsAsync();
+    }
 
-        protected override ValueTask SetTableColumnsAsync()
-        {
-            RoleManagementTableColumns
-                .AddRange(new TableColumn[]
-                {
+    protected override ValueTask SetTableColumnsAsync()
+    {
+        RoleManagementTableColumns
+            .AddRange(new TableColumn[]
+            {
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<RoleManagement>()
+                        Actions = EntityActions.Get<RoleManagement>(),
                     },
                     new TableColumn
                     {
                         Title = L["RoleName"],
+                        Sortable = true,
                         Data = nameof(IdentityRoleDto.Name),
                         Component = typeof(RoleNameComponent)
                     },
-                });
+            });
 
-            RoleManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.Role));
-            
-            return base.SetTableColumnsAsync();
-        }
+        RoleManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
+            IdentityModuleExtensionConsts.EntityNames.Role));
 
-        protected override async Task SetPermissionsAsync()
-        {
-            await base.SetPermissionsAsync();
+        return base.SetTableColumnsAsync();
+    }
 
-            HasManagePermissionsPermission =
-                await AuthorizationService.IsGrantedAsync(IdentityPermissions.Roles.ManagePermissions);
-        }
+    protected override async Task SetPermissionsAsync()
+    {
+        await base.SetPermissionsAsync();
 
-        protected override string GetDeleteConfirmationMessage(IdentityRoleDto entity)
-        {
-            return string.Format(L["RoleDeletionConfirmationMessage"], entity.Name);
-        }
+        HasManagePermissionsPermission =
+            await AuthorizationService.IsGrantedAsync(IdentityPermissions.Roles.ManagePermissions);
+    }
 
-        protected override ValueTask SetToolbarItemsAsync()
-        {
-            Toolbar.AddButton(L["NewRole"],
-                OpenCreateModalAsync,
-                IconName.Add,
-                requiredPolicyName: CreatePolicyName);
+    protected override string GetDeleteConfirmationMessage(IdentityRoleDto entity)
+    {
+        return string.Format(L["RoleDeletionConfirmationMessage"], entity.Name);
+    }
 
-            return base.SetToolbarItemsAsync();
-        }
+    protected override ValueTask SetToolbarItemsAsync()
+    {
+        Toolbar.AddButton(L["NewRole"],
+            OpenCreateModalAsync,
+            IconName.Add,
+            requiredPolicyName: CreatePolicyName);
+
+        return base.SetToolbarItemsAsync();
     }
 }

@@ -4,47 +4,46 @@ using Shouldly;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.Security.Claims
+namespace Volo.Abp.Security.Claims;
+
+public class CurrentPrincipalAccessor_Test : AbpIntegratedTest<AbpSecurityTestModule>
 {
-    public class CurrentPrincipalAccessor_Test : AbpIntegratedTest<AbpSecurityTestModule>
+    private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
+
+    public CurrentPrincipalAccessor_Test()
     {
-        private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
+        _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
+    }
 
-        public CurrentPrincipalAccessor_Test()
-        {
-            _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
-        }
-
-        [Fact]
-        public void Should_Get_Changed_Principal_If()
-        {
-            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
+    [Fact]
+    public void Should_Get_Changed_Principal_If()
+    {
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
             {
                 new Claim(ClaimTypes.Name,"bob"),
                 new Claim(ClaimTypes.NameIdentifier,"123456")
             }));
 
-            var claimsPrincipal2 = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
+        var claimsPrincipal2 = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
             {
                 new Claim(ClaimTypes.Name,"lee"),
                 new Claim(ClaimTypes.NameIdentifier,"654321")
             }));
 
 
-            _currentPrincipalAccessor.Principal.ShouldBe(null);
+        _currentPrincipalAccessor.Principal.ShouldBe(null);
 
-            using (_currentPrincipalAccessor.Change(claimsPrincipal))
+        using (_currentPrincipalAccessor.Change(claimsPrincipal))
+        {
+            _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal);
+
+            using (_currentPrincipalAccessor.Change(claimsPrincipal2))
             {
-                _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal);
-
-                using (_currentPrincipalAccessor.Change(claimsPrincipal2))
-                {
-                    _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal2);
-                }
-
-                _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal);
+                _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal2);
             }
-            _currentPrincipalAccessor.Principal.ShouldBeNull();
+
+            _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal);
         }
+        _currentPrincipalAccessor.Principal.ShouldBeNull();
     }
 }

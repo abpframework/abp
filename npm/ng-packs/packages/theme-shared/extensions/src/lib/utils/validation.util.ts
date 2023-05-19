@@ -8,8 +8,9 @@ export function getValidatorsFromProperty(
   const validators: ValidatorFn[] = [];
 
   property.attributes.forEach(attr => {
-    if (attr.typeSimple in AbpValidators)
-      validators.push(AbpValidators[attr.typeSimple](attr.config));
+    if (attr.typeSimple && attr.typeSimple in AbpValidators) {
+      validators.push((AbpValidators as any)[attr.typeSimple](attr.config));
+    }
   });
 
   return validators;

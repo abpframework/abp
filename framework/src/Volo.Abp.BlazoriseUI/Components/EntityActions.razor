@@ -2,12 +2,13 @@
 <CascadingValue Value="this" IsFixed="true">
     @if ( Type == ActionType.Dropdown )
     {
-        <Dropdown>
+        <Dropdown Disabled=@Disabled>
             @if ( HasPrimaryAction )
             {
                 <Button Block="true"
                         Color="@PrimaryAction.Color"
-                        Clicked="async ()=> await PrimaryAction.ActionClickedAsync()">
+                        Clicked="async ()=> await PrimaryAction.ActionClickedAsync()"
+                        Disabled=@PrimaryAction.Disabled>
                     @PrimaryAction.Text
                 </Button>
                 <DropdownToggle Color="@ToggleColor" Split="true" />

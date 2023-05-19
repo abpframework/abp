@@ -7,7 +7,7 @@ $full = $args[0]
 foreach ($solutionPath in $solutionPaths) {    
     $solutionAbsPath = (Join-Path $rootFolder $solutionPath)
     Set-Location $solutionAbsPath
-    dotnet test --no-build --no-restore
+    dotnet test --no-build --no-restore --collect:"XPlat Code Coverage"
     if (-Not $?) {
         Write-Host ("Test failed for the solution: " + $solutionPath)
         Set-Location $rootFolder

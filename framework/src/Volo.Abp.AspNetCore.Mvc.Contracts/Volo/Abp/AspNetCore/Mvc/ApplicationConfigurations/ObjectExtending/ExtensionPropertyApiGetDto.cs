@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
+
+[Serializable]
+public class ExtensionPropertyApiGetDto
 {
-    [Serializable]
-    public class ExtensionPropertyApiGetDto
-    {
-        /// <summary>
-        /// Default: true.
-        /// </summary>
-        public bool IsAvailable { get; set; } = true;
-    }
+    /// <summary>
+    /// Default: true.
+    /// </summary>
+    public bool IsAvailable { get; set; } = true;
 }

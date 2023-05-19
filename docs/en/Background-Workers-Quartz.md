@@ -37,7 +37,6 @@ public class YourModule : AbpModule
 ````
 
 > Quartz background worker integration provided `QuartzPeriodicBackgroundWorkerAdapter` to adapt `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived class. So, you can still fllow the [background workers document](Background-Workers.md) to define the background worker.
-> `BackgroundJobWorker` checks jobs every 5 seconds, but quartz will not block when long time jobs are executing. So,after Added Quartz background worker integration, you also need to add [Quartz Background Jobs](Background-Jobs-Quartz.md) or [Hangfire Background Jobs](Background-Jobs-Hangfire.md) to avoid duplicate execution jobs.
 
 ## Configuration
 

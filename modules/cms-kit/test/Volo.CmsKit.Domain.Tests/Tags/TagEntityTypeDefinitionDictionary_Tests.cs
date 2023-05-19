@@ -10,55 +10,54 @@ using Volo.Abp.Localization;
 using Volo.CmsKit.Localization;
 using Xunit;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+public class TagEntityTypeDefinitionDictionary_Tests : CmsKitDomainTestBase
 {
-    public class TagEntityTypeDefinitionDictionary_Tests : CmsKitDomainTestBase
+    private readonly CmsKitTagOptions cmsKitTagOptions;
+
+    public TagEntityTypeDefinitionDictionary_Tests()
     {
-        private readonly CmsKitTagOptions cmsKitTagOptions;
+        var options = GetRequiredService<IOptions<CmsKitTagOptions>>();
+        cmsKitTagOptions = options.Value;
+    }
 
-        public TagEntityTypeDefinitionDictionary_Tests()
-        {
-            var options = GetRequiredService<IOptions<CmsKitTagOptions>>();
-            cmsKitTagOptions = options.Value;
-        }
+    [Fact]
+    public void ShouldAddEntityTypeProperly_WithOnlyEntityType()
+    {
+        cmsKitTagOptions.EntityTypes.Add(new TagEntityTypeDefiniton("My.Entity.Type"));
+    }
 
-        [Fact]
-        public void ShouldAddEntityTypeProperly_WithOnlyEntityType()
-        {
-            cmsKitTagOptions.EntityTypes.Add(new TagEntityTypeDefiniton("My.Entity.Type"));
-        }
+    [Fact]
+    public void ShouldAddEntityTypeProperly_WithEntityTypeAndDisplayName()
+    {
+        cmsKitTagOptions.EntityTypes.Add(
+            new TagEntityTypeDefiniton(
+                "My.Entity.Type",
+                LocalizableString.Create<CmsKitResource>("MyEntity")));
+    }
 
-        [Fact]
-        public void ShouldAddEntityTypeProperly_WithEntityTypeAndDisplayName()
-        {
-            cmsKitTagOptions.EntityTypes.Add(
-                new TagEntityTypeDefiniton(
-                    "My.Entity.Type",
-                    LocalizableString.Create<CmsKitResource>("MyEntity")));
-        }
+    [Fact]
+    public void ShouldAddEntityType_WithAllParameters()
+    {
+        cmsKitTagOptions.EntityTypes.Add(
+            new TagEntityTypeDefiniton(
+                "My.Entity.Type",
+                LocalizableString.Create<CmsKitResource>("MyEntity"),
+                new[] { "SomeCreatePolicy" },
+                new[] { "SomeUpdatePolicy" },
+                new[] { "SomeDeletePolicy" }
+                ));
+    }
 
-        [Fact]
-        public void ShouldAddEntityType_WithAllParameters()
-        {
-            cmsKitTagOptions.EntityTypes.Add(
-                new TagEntityTypeDefiniton(
-                    "My.Entity.Type",
-                    LocalizableString.Create<CmsKitResource>("MyEntity"),
-                    new[] { "SomeCreatePolicy" },
-                    new[] { "SomeUpdatePolicy" },
-                    new[] { "SomeDeletePolicy" }
-                    ));
-        }
+    [Fact]
+    public void ShouldThrowException_WhileAddingExistingType()
+    {
+        var expectedCount = cmsKitTagOptions.EntityTypes.Count + 1;
 
-        [Fact]
-        public void ShouldThrowException_WhileAddingExistingType()
-        {
-            var expectedCount = cmsKitTagOptions.EntityTypes.Count + 1;
+        cmsKitTagOptions.EntityTypes.Add(new TagEntityTypeDefiniton("My.Entity.Type"));
+        cmsKitTagOptions.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton("My.Entity.Type"));
 
-            cmsKitTagOptions.EntityTypes.Add(new TagEntityTypeDefiniton("My.Entity.Type"));
-            cmsKitTagOptions.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton("My.Entity.Type"));
-
-            cmsKitTagOptions.EntityTypes.Count.ShouldBe(expectedCount);
-        }
+        cmsKitTagOptions.EntityTypes.Count.ShouldBe(expectedCount);
     }
 }

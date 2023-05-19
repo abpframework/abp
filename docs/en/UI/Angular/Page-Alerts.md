@@ -61,4 +61,21 @@ this.service.show({
 
 ![angular-page-alert-with-params-example](./images/page-alert-with-params-example.png)
 
+## Render HTML content
 
+We can pass html content to the `title` and `message` parameters
+
+
+* It allows static message or localization key
+* [abpSafeHtml](https://github.com/abpframework/abp/blob/37b59a7f05202264505d002397dbb27d275740e1/npm/ng-packs/packages/core/src/lib/pipes/safe-html.pipe.ts#L6) pipe will sanitize html values
+
+```typescript
+this.service.show({
+  type: 'success',
+  title: `New <i><u>blog</u></i> published`,
+  message: 'AbpApp::HtmlMessageWithParams{0}',
+  messageLocalizationParams: ['admin'],
+});
+```
+
+![angular-page-alert-with-html-example](./images/page-alert-with-html-example.png)

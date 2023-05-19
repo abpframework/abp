@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BackgroundJobs
+namespace Volo.Abp.BackgroundJobs;
+
+public class AbpBackgroundJobsDomainSharedModule : AbpModule
 {
-    public class AbpBackgroundJobsDomainSharedModule : AbpModule
-    {
-        
-    }
+
 }

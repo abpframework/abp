@@ -88,14 +88,65 @@ function configureRoutes(routes: RoutesService) {
 }
 ```
 
+We can also define a group for navigation elements. It's an optional property
+ - **Note:** It'll also include groups that were defined at the modules
+
+```js
+// route.provider.ts
+import { RoutesService } from '@abp/ng.core';
+
+function configureRoutes(routes: RoutesService) {  
+  return () => {
+    routes.add([
+      {
+        //etc..
+        group: 'ModuleName::GroupName'
+      },
+      {
+        path: '/your-path/child',
+        name: 'Your child navigation',
+        parentName: 'Your navigation',
+        requiredPolicy: 'permission key here',
+        order: 1,
+      },
+    ]);
+  };
+}
+```
+
+To get the route items as grouped we can use the `groupedVisible` (or Observable one `groupedVisible$`)  getter methods
+ - It returns `RouteGroup<T>[]` if there is any group in the route tree, otherwise it returns `undefined`
+
+```js
+import { ABP, RoutesService, RouteGroup } from "@abp/ng.core";
+import { Component } from "@angular/core";
+
+@Component(/* component metadata */)
+export class AppComponent {
+  visible: RouteGroup<ABP.Route>[] | undefined = this.routes.groupedVisible;
+  //Or
+  visible$:Observable<RouteGroup<ABP.Route>[] | undefined> = this.routes.groupedVisible$;
+  
+  constructor(private routes: RoutesService) {}
+}
+```
+
 ...and then in app.module.ts...
+ - The `groupedVisible` method will return the `Others` group for ungrouped items, the default key is `AbpUi::OthersGroup`, we can change this `key` via the `OTHERS_GROUP` injection token
 
 ```js
 import { NgModule } from '@angular/core';
+import { OTHERS_GROUP } from '@abp/ng.core';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 
 @NgModule({
-  providers: [APP_ROUTE_PROVIDER],
+  providers: [
+    APP_ROUTE_PROVIDER,
+    {
+      provide: OTHERS_GROUP,
+      useValue: 'ModuleName::MyOthersGroupKey',
+    },
+  ],
   // imports, declarations, and bootstrap
 })
 export class AppModule {}
@@ -109,8 +160,9 @@ Here is what every property works as:
 - `requiredPolicy` is the permission key to access the page. See the [Permission Management document](./Permission-Management.md)
 - `order` is the order of the navigation element. "Administration" has an order of `100`, so keep that in mind when ordering top level menu items.
 - `iconClass` is the class of the `i` tag, which is placed to the left of the navigation label.
-- `layout` defines in which layout the route will be loaded. (default: `eLayoutType.empty`)
+- `layout` defines in which layout the route is loaded. (default: `eLayoutType.empty`)
 - `invisible` makes the item invisible in the menu. (default: `false`)
+- `group` is an optional property that is used to group together related routes in an application. (type: `string`, default: `AbpUi::OthersGroup`)
 
 ### Via `routes` Property in `AppRoutingModule`
 

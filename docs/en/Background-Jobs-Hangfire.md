@@ -66,6 +66,8 @@ After you have installed these NuGet packages, you need to configure your projec
   }
 ````
 
+> You have to configure a storage for Hangfire.
+
 2. If you want to use hangfire's dashboard, you can add `UseHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class
 
 ````csharp
@@ -75,9 +77,44 @@ After you have installed these NuGet packages, you need to configure your projec
             
     // ... others
     
-    app.UseHangfireDashboard();
- 
+    app.UseHangfireDashboard(); //should add to the request pipeline before the app.UseConfiguredEndpoints()
+    app.UseConfiguredEndpoints();
  }
+````
+
+### Specifying Queue
+
+You can use the [`QueueAttribute`](https://docs.hangfire.io/en/latest/background-processing/configuring-queues.html) to specify the queue.
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.BackgroundJobs;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Emailing;
+
+namespace MyProject
+{
+    [Queue("alpha")]
+    public class EmailSendingJob
+        : AsyncBackgroundJob<EmailSendingArgs>, ITransientDependency
+    {
+        private readonly IEmailSender _emailSender;
+
+        public EmailSendingJob(IEmailSender emailSender)
+        {
+            _emailSender = emailSender;
+        }
+
+        public override async Task ExecuteAsync(EmailSendingArgs args)
+        {
+            await _emailSender.SendAsync(
+                args.EmailAddress,
+                args.Subject,
+                args.Body
+            );
+        }
+    }
+}
 ````
 
 ### Dashboard Authorization
@@ -95,12 +132,21 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 });
 ```
 
+* `AbpHangfireAuthorizationFilter` is an implementation of an authorization filter.
+
+#### AbpHangfireAuthorizationFilter
+
+`AbpHangfireAuthorizationFilter` class has the following fields:
+
+* **`enableTenant`  (`bool`, default: `false`):** Enables/disables accessing the Hangfire dashboard on tenant users.
+* **`requiredPermissionName`  (`string`, default: `null`):** Hangfire dashboard is accessible only if the current user has the specified permission. In this case, if we specify a permission name, we don't need to set `enableTenant` `true` because the permission system already does it.
+
 If you want to require an additional permission, you can pass it into the constructor as below:
 
 ```csharp
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter("MyHangFireDashboardPermissionName") }
+    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") }
 });
 ```
 

@@ -1,0 +1,7 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "Długość hasła musi być większa niż {0} znaków.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Hasło musi zawierać co najmniej jeden znak niealfanumeryczny."
+  }
+}

@@ -1,7 +1,12 @@
-import { ProfileService } from '@abp/ng.identity/proxy';
+import { ProfileService } from '@abp/ng.account.core/proxy';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
 import { Account } from '../../models/account';
@@ -19,20 +24,20 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 export class ChangePasswordComponent
   implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs
 {
-  form: FormGroup;
+  form!: UntypedFormGroup;
 
-  inProgress: boolean;
+  inProgress?: boolean;
 
-  hideCurrentPassword: boolean;
+  hideCurrentPassword?: boolean;
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
-    if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
+    if (PASSWORD_FIELDS.indexOf(String(control?.name)) < 0) return errors;
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private injector: Injector,
     private toasterService: ToasterService,
     private profileService: ProfileService,
@@ -73,8 +78,8 @@ export class ChangePasswordComponent
     this.inProgress = true;
     this.profileService
       .changePassword({
-        ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password').value }),
-        newPassword: this.form.get('newPassword').value,
+        ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password')?.value }),
+        newPassword: this.form.get('newPassword')?.value,
       })
       .pipe(finalize(() => (this.inProgress = false)))
       .subscribe({
@@ -86,7 +91,7 @@ export class ChangePasswordComponent
 
           if (this.hideCurrentPassword) {
             this.hideCurrentPassword = false;
-            this.form.addControl('password', new FormControl('', [required]));
+            this.form.addControl('password', new UntypedFormControl('', [required]));
           }
         },
         error: err => {

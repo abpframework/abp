@@ -1,14 +1,13 @@
 ﻿using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BlobStoring.Aws
+namespace Volo.Abp.BlobStoring.Aws;
+
+[DependsOn(typeof(AbpBlobStoringModule),
+    typeof(AbpCachingModule))]
+public class AbpBlobStoringAwsModule : AbpModule
 {
-    [DependsOn(typeof(AbpBlobStoringModule),
-        typeof(AbpCachingModule))]
-    public class AbpBlobStoringAwsModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-        }
     }
 }

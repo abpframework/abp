@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.Abp.AspNetCore.VirtualFileSystem
+namespace Volo.Abp.AspNetCore.VirtualFileSystem;
+
+public class AbpAspNetCoreContentOptions
 {
-    public class AbpAspNetCoreContentOptions
+    public Dictionary<string, string> ContentTypeMaps { get; }
+
+    public List<string> AllowedExtraWebContentFolders { get; }
+
+    public List<string> AllowedExtraWebContentFileExtensions { get; }
+
+    public AbpAspNetCoreContentOptions()
     {
-        public Dictionary<string, string> ContentTypeMaps { get; }
-
-        public List<string> AllowedExtraWebContentFolders { get; }
-
-        public List<string> AllowedExtraWebContentFileExtensions { get; }
-
-        public AbpAspNetCoreContentOptions()
-        {
-            ContentTypeMaps = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        ContentTypeMaps = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { ".323", "text/h323" },
                 { ".3g2", "video/3gpp2" },
@@ -398,7 +398,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 { ".zip", "application/x-zip-compressed" }
             };
 
-            AllowedExtraWebContentFolders = new List<string>
+        AllowedExtraWebContentFolders = new List<string>
             {
                 "/Pages",
                 "/Views",
@@ -406,7 +406,6 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 "/Components"
             };
 
-            AllowedExtraWebContentFileExtensions = ContentTypeMaps.Select(x => x.Key).ToList();
-        }
+        AllowedExtraWebContentFileExtensions = ContentTypeMaps.Select(x => x.Key).ToList();
     }
 }

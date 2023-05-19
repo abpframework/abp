@@ -1,11 +1,10 @@
-﻿namespace Volo.Abp.Uow
+﻿namespace Volo.Abp.Uow;
+
+public enum UnitOfWorkTransactionBehavior
 {
-    public enum UnitOfWorkTransactionBehavior
-    {
-        Auto,
+    Auto,
 
-        Enabled,
+    Enabled,
 
-        Disabled
-    }
+    Disabled
 }

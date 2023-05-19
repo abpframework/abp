@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Validation
+namespace Volo.Abp.Validation;
+
+public interface IObjectValidationContributor
 {
-    public interface IObjectValidationContributor
-    {
-        Task AddErrorsAsync(ObjectValidationContext context);
-    }
+    Task AddErrorsAsync(ObjectValidationContext context);
 }

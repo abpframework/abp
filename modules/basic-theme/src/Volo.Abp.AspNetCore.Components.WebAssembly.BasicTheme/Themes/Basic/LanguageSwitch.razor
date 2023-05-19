@@ -5,11 +5,11 @@
 @inject IJSRuntime JsRuntime
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
-    <BarDropdown>
+    <BarDropdown RightAligned="true">
         <BarDropdownToggle>
             @_currentLanguage.DisplayName
         </BarDropdownToggle>
-        <BarDropdownMenu RightAligned="true">
+        <BarDropdownMenu>
             @foreach (var language in _otherLanguages)
             {
                 <BarDropdownItem Clicked="() => ChangeLanguageAsync(language)">@language.DisplayName</BarDropdownItem>
@@ -58,6 +58,11 @@
         await JsRuntime.InvokeVoidAsync(
             "localStorage.setItem",
             "Abp.SelectedLanguage", language.UiCultureName
+            );
+
+        await JsRuntime.InvokeVoidAsync(
+            "localStorage.setItem",
+            "Abp.IsRtl", CultureInfo.GetCultureInfo(language.UiCultureName).TextInfo.IsRightToLeft
             );
 
         await JsRuntime.InvokeVoidAsync("location.reload");

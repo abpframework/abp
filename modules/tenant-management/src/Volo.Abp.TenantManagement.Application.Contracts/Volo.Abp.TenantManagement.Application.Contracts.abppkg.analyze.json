@@ -1,0 +1,115 @@
+{
+  "name": "Volo.Abp.TenantManagement.Application.Contracts",
+  "hash": "e1f3dac6048d2ca6284ea045f63842a6",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.TenantManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Domain.Shared",
+          "namespace": "Volo.Abp.TenantManagement",
+          "name": "AbpTenantManagementDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Authorization.Abstractions",
+          "namespace": "Volo.Abp.Authorization",
+          "name": "AbpAuthorizationAbstractionsModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpTenantManagementApplicationContractsModule",
+      "summary": null
+    },
+    {
+      "displayName": "Tenant management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants",
+      "summary": null
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.Create",
+      "summary": null
+    },
+    {
+      "displayName": "Edit",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Manage features",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.ManageFeatures",
+      "summary": null
+    },
+    {
+      "displayName": "Manage connection strings",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpTenantManagement.Tenants.ManageConnectionStrings",
+      "summary": null
+    }
+  ]
+}

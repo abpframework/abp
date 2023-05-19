@@ -61,7 +61,7 @@ public class Book : AggregateRoot<Guid>
 * `Book` entity has a `MaxNameLength` that defines the maximum length of the `Name` property. 
 * `Book` constructor and `ChangeName` method to ensure that the `Name` is always a valid value. Notice that `Name`'s  setter is not `public`.
 
-> ABP does not force you to design your entities like that. It just can have public get/set for all properties. It's your decision to full implement DDD practices.
+> ABP does not force you to design your entities like that. It just can have public get/set for all properties. It's your decision to fully implement DDD practices.
 
 ### IBookAppService Interface
 
@@ -124,13 +124,13 @@ public class BookAppService : ApplicationService, IBookAppService
 
 ## Data Transfer Objects
 
-Application services gets and returns DTOs instead of entities. ABP does not force this rule. However, exposing entities to presentation layer (or to remote clients) have significant problems and not suggested. 
+Application services get and return DTOs instead of entities. ABP does not force this rule. However, exposing entities to the presentation layer (or to remote clients) has significant problems and is not suggested. 
 
 See the [DTO documentation](Data-Transfer-Objects.md) for more.
 
 ## Object to Object Mapping
 
-The `CreateAsync` method above manually creates a `Book` entity from given `CreateBookDto` object. Because the `Book` entity enforces it (we designed it like that).
+The `CreateAsync` method above manually creates a `Book` entity from given `CreateBookDto` object, because the `Book` entity enforces it (we designed it like that).
 
 However, in many cases, it's very practical to use **auto object mapping** to set properties of an object from a similar object. ABP provides an [object to object mapping](Object-To-Object-Mapping.md) infrastructure to make this even easier.
 
@@ -239,7 +239,7 @@ public interface IBookAppService :
 
 `ICrudAppService` has generic arguments to get the primary key type of the entity and the DTO types for the CRUD operations (it does not get the entity type since the entity type is not exposed to the clients use this interface).
 
-> Creating interface for an application service is a good practice, but not required by the ABP Framework. You can skip the interface part.
+> Creating an interface for an application service is good practice, but not required by the ABP Framework. You can skip the interface part.
 
 `ICrudAppService` declares the following methods:
 
@@ -359,7 +359,7 @@ public class DistrictAppService
 }
 ````
 
-This implementation requires you to create a class represents your composite key:
+This implementation requires you to create a class that represents your composite key:
 
 ````csharp
 public class DistrictKey
@@ -430,17 +430,17 @@ Task DeleteAsync(TKey id);
 
 #### Querying
 
-These methods are low level methods those can be control how to query entities from the database.
+These methods are low level methods that can control how to query entities from the database.
 
 * `CreateFilteredQuery` can be overridden to create an `IQueryable<TEntity>` that is filtered by the given input. If your `TGetListInput` class contains any filter, it is proper to override this method and filter the query. It returns the (unfiltered) repository (which is already `IQueryable<TEntity>`) by default.
 * `ApplyPaging` is used to make paging on the query. If your `TGetListInput` already implements `IPagedResultRequest`, you don't need to override this since the ABP Framework automatically understands it and performs the paging.
-* `ApplySorting` is used to sort (order by...) the query. If your `TGetListInput` already implements the `ISortedResultRequest`, ABP Framework automatically sorts the query. If not, it fallbacks to the `ApplyDefaultSorting` which tries to sort by creating time, if your entity implements the standard `IHasCreationTime` interface.
+* `ApplySorting` is used to sort (order by...) the query. If your `TGetListInput` already implements the `ISortedResultRequest`, ABP Framework automatically sorts the query. If not, it fallbacks to the `ApplyDefaultSorting` which tries to sort by creation time, if your entity implements the standard `IHasCreationTime` interface.
 * `GetEntityByIdAsync` is used to get an entity by id, which calls `Repository.GetAsync(id)` by default.
 * `DeleteByIdAsync` is used to delete an entity by id, which calls `Repository.DeleteAsync(id)` by default.
 
 #### Object to Object Mapping
 
-These methods are used to convert Entities to DTOs and vice verse. They uses the [IObjectMapper](Object-To-Object-Mapping.md) by default.
+These methods are used to convert Entities to DTOs and vice verse. They use the [IObjectMapper](Object-To-Object-Mapping.md) by default.
 
 * `MapToGetOutputDtoAsync` is used to map the entity to the DTO returned from the `GetAsync`, `CreateAsync` and `UpdateAsync` methods. Alternatively, you can override the `MapToGetOutputDto` if you don't need to perform any async operation.
 * `MapToGetListOutputDtosAsync` is used to map a list of entities to a list of DTOs returned from the `GetListAsync` method. It uses the `MapToGetListOutputDtoAsync` to map each entity in the list. You can override one of them based on your case. Alternatively, you can override the `MapToGetListOutputDto` if you don't need to perform any async operation.

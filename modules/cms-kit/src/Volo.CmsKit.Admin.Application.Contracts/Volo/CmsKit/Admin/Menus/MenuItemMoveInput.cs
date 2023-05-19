@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Admin.Menus
-{
-    [Serializable]
-    public class MenuItemMoveInput
-    {
-        public Guid? NewParentId { get; set; }
+namespace Volo.CmsKit.Admin.Menus;
 
-        public int Position { get; set; }
-    }
+[Serializable]
+public class MenuItemMoveInput
+{
+    public Guid? NewParentId { get; set; }
+
+    public int Position { get; set; }
 }

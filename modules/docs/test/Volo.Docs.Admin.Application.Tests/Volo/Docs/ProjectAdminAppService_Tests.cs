@@ -34,9 +34,9 @@ namespace Volo.Docs
         [Fact]
         public async Task GetAsync()
         {
-            var project = await _projectAdminAppService.GetAsync(_testData.PorjectId);
+            var project = await _projectAdminAppService.GetAsync(_testData.ProjectId);
             project.ShouldNotBeNull();
-            project.Id.ShouldBe(_testData.PorjectId);
+            project.Id.ShouldBe(_testData.ProjectId);
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace Volo.Docs
             };
             updateProjectDto.ExtraProperties.Add("test", "test");
 
-            var projectDto = await _projectAdminAppService.UpdateAsync(_testData.PorjectId, updateProjectDto);
+            var projectDto = await _projectAdminAppService.UpdateAsync(_testData.ProjectId, updateProjectDto);
 
 
             projectDto.ShouldNotBeNull();
@@ -114,9 +114,9 @@ namespace Volo.Docs
         [Fact]
         public async Task DeleteAsync()
         {
-            (await _projectRepository.GetAsync(_testData.PorjectId)).ShouldNotBeNull();
+            (await _projectRepository.GetAsync(_testData.ProjectId)).ShouldNotBeNull();
 
-            await _projectAdminAppService.DeleteAsync(_testData.PorjectId);
+            await _projectAdminAppService.DeleteAsync(_testData.ProjectId);
 
             (await _projectRepository.GetListAsync()).ShouldBeEmpty();
         }

@@ -11,3 +11,8 @@
     flex-direction: column-reverse;
   }
 }
+@media only screen and (max-width: 768px) {
+  .abp-toast-container {
+    min-width: 100%;
+  }
+}

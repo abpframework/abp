@@ -3,25 +3,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Menus
-{
-    public class BasicThemeDemoMenuContributor : IMenuContributor
-    {
-        public Task ConfigureMenuAsync(MenuConfigurationContext context)
-        {
-            if(context.Menu.Name == StandardMenus.Main)
-            {
-                AddMainMenuItems(context);
-            }
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Menus;
 
-            return Task.CompletedTask;
+public class BasicThemeDemoMenuContributor : IMenuContributor
+{
+    public Task ConfigureMenuAsync(MenuConfigurationContext context)
+    {
+        if (context.Menu.Name == StandardMenus.Main)
+        {
+            AddMainMenuItems(context);
         }
 
-        private void AddMainMenuItems(MenuConfigurationContext context)
-        {
-            var menuItem = new ApplicationMenuItem(BasicThemeDemoMenus.Components.Root, "Components");
+        return Task.CompletedTask;
+    }
 
-            var items = new List<ApplicationMenuItem>()
+    private void AddMainMenuItems(MenuConfigurationContext context)
+    {
+        var menuItem = new ApplicationMenuItem(BasicThemeDemoMenus.Components.Root, "Components");
+
+        var items = new List<ApplicationMenuItem>()
             {
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Alerts, "Alerts", url: "/Components/Alerts"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Badges, "Badges", url: "/Components/Badges"),
@@ -47,12 +47,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Menus
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Tabs, "Tabs", url: "/Components/Tabs"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Tooltips, "Tooltips", url: "/Components/Tooltips")
             };
-            
-            items.OrderBy(x => x.Name)
-                 .ToList()
-                 .ForEach(x => menuItem.AddItem(x));
 
-            context.Menu.AddItem(menuItem);
-        }
+        items.OrderBy(x => x.Name)
+             .ToList()
+             .ForEach(x => menuItem.AddItem(x));
+
+        context.Menu.AddItem(menuItem);
     }
 }

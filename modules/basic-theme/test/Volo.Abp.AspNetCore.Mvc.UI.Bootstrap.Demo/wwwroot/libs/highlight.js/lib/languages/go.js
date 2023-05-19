@@ -21,14 +21,14 @@ module.exports = function(hljs) {
         className: 'string',
         variants: [
           hljs.QUOTE_STRING_MODE,
-          {begin: '\'', end: '[^\\\\]\''},
+          hljs.APOS_STRING_MODE,
           {begin: '`', end: '`'},
         ]
       },
       {
         className: 'number',
         variants: [
-          {begin: hljs.C_NUMBER_RE + '[dflsi]', relevance: 1},
+          {begin: hljs.C_NUMBER_RE + '[i]', relevance: 1},
           hljs.C_NUMBER_MODE
         ]
       },
@@ -37,7 +37,7 @@ module.exports = function(hljs) {
       },
       {
         className: 'function',
-        beginKeywords: 'func', end: /\s*\{/, excludeEnd: true,
+        beginKeywords: 'func', end: '\\s*(\\{|$)', excludeEnd: true,
         contains: [
           hljs.TITLE_MODE,
           {

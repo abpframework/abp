@@ -21,7 +21,7 @@ export const DEFAULT_TENANTS_CREATE_FORM_PROPS = FormProp.createMany<
     validators: () => [Validators.required, Validators.maxLength(256), Validators.email],
   },
   {
-    type: ePropType.Password,
+    type: ePropType.PasswordInputGroup,
     name: 'adminPassword',
     displayName: 'AbpTenantManagement::DisplayName:AdminPassword',
     id: 'admin-password',

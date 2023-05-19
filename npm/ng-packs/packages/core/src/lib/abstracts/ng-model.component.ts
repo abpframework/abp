@@ -4,16 +4,16 @@ import { ControlValueAccessor } from '@angular/forms';
 // Not an abstract class on purpose. Do not change!
 @Component({ template: '' })
 export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAccessor {
-  protected _value: T;
+  protected _value!: T;
   protected cdRef: ChangeDetectorRef;
-  onChange: (value: T) => void;
-  onTouched: () => void;
+  onChange?: (value: T) => void;
+  onTouched?: () => void;
 
   @Input()
-  disabled: boolean;
+  disabled?: boolean;
 
   @Input()
-  readonly: boolean;
+  readonly?: boolean;
 
   @Input()
   valueFn: (value: U, previousValue?: T) => T = value => value as any as T;

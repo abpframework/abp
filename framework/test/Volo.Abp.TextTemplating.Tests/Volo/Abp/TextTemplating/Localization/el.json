@@ -1,0 +1,7 @@
+{
+  "culture": "el",
+  "texts": {
+    "HelloText": "Καλησπέρα {0}",
+    "HowAreYou": "Πώς είσαι;"
+  }
+}

@@ -1,19 +1,18 @@
 ﻿using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo;
+
+[DependsOn(
+    typeof(AbpAspNetCoreMvcUiThemeSharedModule)
+    )]
+public class AbpAspNetCoreMvcUiThemeSharedDemoModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule)
-        )]
-    public class AbpAspNetCoreMvcUiThemeSharedDemoModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedDemoModule>();
-            });
-        }
+            options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedDemoModule>();
+        });
     }
 }

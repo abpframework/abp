@@ -1,12 +1,11 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify;
+
+public class SlugifyScriptContributor : BundleContributor
 {
-    public class SlugifyScriptContributor : BundleContributor
+    public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        public override void ConfigureBundle(BundleConfigurationContext context)
-        {
-            context.Files.Add("/libs/slugify/slugify.js");
-        }
+        context.Files.Add("/libs/slugify/slugify.js");
     }
 }

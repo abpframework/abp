@@ -1,0 +1,10 @@
+{
+  "culture": "is",
+  "texts": {
+    "Permissions": "Heimildir",
+    "OnlyProviderPermissons": "Aðeins þessi veitandi",
+    "All": "Allt",
+    "SelectAllInAllTabs": "Veita allar heimildir",
+    "SelectAllInThisTab": "Velja allt"
+  }
+}

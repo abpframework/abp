@@ -12,7 +12,7 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
     validators: () => [Validators.required, Validators.maxLength(256)],
   },
   {
-    type: ePropType.Password,
+    type: ePropType.PasswordInputGroup,
     name: 'password',
     displayName: 'AbpIdentity::Password',
     id: 'password',
@@ -49,6 +49,13 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
   },
   {
     type: ePropType.Boolean,
+    name: 'isActive',
+    displayName: 'AbpIdentity::DisplayName:IsActive',
+    id: 'active-checkbox',
+    defaultValue: true,
+  },
+  {
+    type: ePropType.Boolean,
     name: 'lockoutEnabled',
     displayName: 'AbpIdentity::DisplayName:LockoutEnabled',
     id: 'lockout-checkbox',
@@ -56,6 +63,12 @@ export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserD
   },
 ]);
 
-export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.filter(
-  prop => prop.name !== 'password',
-);
+export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.map(prop => {
+  if (prop.name === 'password') {
+    return {
+      ...prop,
+      validators: (data: any) => [...getPasswordValidators({ get: data.getInjected })],
+    };
+  }
+  return prop;
+});

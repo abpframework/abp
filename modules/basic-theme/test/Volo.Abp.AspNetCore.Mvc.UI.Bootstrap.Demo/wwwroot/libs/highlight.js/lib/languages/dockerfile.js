@@ -11,7 +11,7 @@ module.exports = function(hljs) {
       {
         beginKeywords: 'run cmd entrypoint volume add copy workdir label healthcheck shell',
         starts: {
-          end: /[^\\]\n/,
+          end: /[^\\]$/,
           subLanguage: 'bash'
         }
       }

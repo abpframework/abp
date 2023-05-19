@@ -1,8 +1,7 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
+
+public enum FontIconType
 {
-    public enum FontIconType
-    {
-        FontAwesome,
-        Other
-    }
+    FontAwesome,
+    Other
 }

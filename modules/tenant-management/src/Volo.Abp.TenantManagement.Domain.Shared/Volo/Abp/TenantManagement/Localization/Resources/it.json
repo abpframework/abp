@@ -1,6 +1,7 @@
 {
   "culture": "it",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Il nome del tenant esiste già: {Name}",
     "Menu:TenantManagement": "Gestione tenants",
     "Tenants": "Tenants",
     "NewTenant": "Nuovo Tenant",
@@ -10,7 +11,6 @@
     "ConnectionStrings": "Stringhe di connessione",
     "DisplayName:DefaultConnectionString": "Stringa di connessione predefinita",
     "DisplayName:UseSharedDatabase": "Usa il database condiviso",
-    "ManageHostFeatures": "Gestisci le funzionalità dell'host",
     "Permission:TenantManagement": "Gestione Tenant",
     "Permission:Create": "Crea",
     "Permission:Edit": "Modifica",

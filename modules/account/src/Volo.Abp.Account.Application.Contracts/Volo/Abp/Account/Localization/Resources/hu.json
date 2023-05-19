@@ -1,6 +1,7 @@
 {
   "culture": "hu",
   "texts": {
+    "Menu:Account": "Fiók",
     "UserName": "Felhasználónév",
     "EmailAddress": "Email cím",
     "UserNameOrEmailAddress": "Felhasználónév és email cím",
@@ -35,6 +36,7 @@
     "PersonalSettingsSaved": "Személyes beállítások mentve",
     "PasswordChanged": "Jelszó megváltoztatva",
     "NewPasswordConfirmFailed": "Kérjük, erősítse meg az új jelszót.",
+    "NewPasswordSameAsOld": "Az új jelszó nem lehet azonos a régi jelszóval.",
     "Manage": "Kezelés",
     "MyAccount": "A fiókom",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Engedélyezve van az önregisztráció",
@@ -49,13 +51,19 @@
     "SendPasswordResetLink_Information": "Jelszó-visszaállítási linket küldünk az e-mailre a jelszó visszaállításához. Ha néhány percen belül nem kap e-mailt, próbálkozzon újra.",
     "PasswordResetMailSentMessage": "A fiók-helyreállítási e-mailt az Ön e-mail címére küldtük. Ha 15 percen belül nem látja ezt az e-mailt a beérkező levelek között, keresse meg a levélszemét mappájában. Ha ott találja, kérjük, jelölje meg: -Nem szemét-.",
     "ResetPassword": "Jelszó visszaállítása",
-    "ConfirmPassword": "Erősítse meg (ismételje meg) a jelszót",
+    "ConfirmPassword": "Erősítse meg a jelszót",
     "ResetPassword_Information": "Kérjük, írja be új jelszavát.",
     "YourPasswordIsSuccessfullyReset": "Jelszavát sikeresen visszaállította.",
     "GoToTheApplication": "Lépjen az alkalmazáshoz",
     "BackToLogin": "Vissza a bejelentkezéshez",
     "ProfileTab:Password": "Jelszó módosítása",
     "ProfileTab:PersonalInfo": "Személyes adatok",
-    "ReturnToApplication": "Vissza az alkalmazáshoz"
+    "ReturnToApplication": "Vissza az alkalmazáshoz",
+    "Volo.Account:InvalidEmailAddress": "Nem található a megadott e-mail cím: {0}",
+    "PasswordReset": "Jelszó visszaállítása",
+    "PasswordResetInfoInEmail": "Fiók-helyreállítási kérelmet kaptunk! Ha Ön kezdeményezte ezt a kérést, kattintson a következő hivatkozásra jelszava visszaállításához.",
+    "ResetMyPassword": "Jelszavam visszaállítása",
+    "AccessDenied": "Hozzáférés megtagadva!",
+    "AccessDeniedMessage": "Nincs hozzáférése ehhez az erőforráshoz."
   }
 }

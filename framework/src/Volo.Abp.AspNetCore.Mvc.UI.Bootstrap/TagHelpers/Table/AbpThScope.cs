@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table;
+
+public enum AbpThScope
 {
-    public enum AbpThScope
-    {
-        Default,
-        Row,
-        Column
-    }
+    Default,
+    Row,
+    Column
 }

@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.BackgroundJobs
-{
-    public abstract class BackgroundJobsDomainTestBase : BackgroundJobsTestBase<AbpBackgroundJobsDomainTestModule>
-    {
+﻿namespace Volo.Abp.BackgroundJobs;
 
-    }
+public abstract class BackgroundJobsDomainTestBase : BackgroundJobsTestBase<AbpBackgroundJobsDomainTestModule>
+{
+
 }

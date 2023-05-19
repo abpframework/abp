@@ -4,26 +4,25 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
+namespace Volo.Abp.AspNetCore.Mvc.ModelBinding;
+
+public class AbpDateTimeModelBinder : IModelBinder
 {
-    public class AbpDateTimeModelBinder : IModelBinder
+    private readonly DateTimeModelBinder _dateTimeModelBinder;
+    private readonly IClock _clock;
+
+    public AbpDateTimeModelBinder(IClock clock, DateTimeModelBinder dateTimeModelBinder)
     {
-        private readonly DateTimeModelBinder _dateTimeModelBinder;
-        private readonly IClock _clock;
+        _clock = clock;
+        _dateTimeModelBinder = dateTimeModelBinder;
+    }
 
-        public AbpDateTimeModelBinder(IClock clock, DateTimeModelBinder dateTimeModelBinder)
+    public async Task BindModelAsync(ModelBindingContext bindingContext)
+    {
+        await _dateTimeModelBinder.BindModelAsync(bindingContext);
+        if (bindingContext.Result.IsModelSet && bindingContext.Result.Model is DateTime dateTime)
         {
-            _clock = clock;
-            _dateTimeModelBinder = dateTimeModelBinder;
-        }
-
-        public async Task BindModelAsync(ModelBindingContext bindingContext)
-        {
-            await _dateTimeModelBinder.BindModelAsync(bindingContext);
-            if (bindingContext.Result.IsModelSet && bindingContext.Result.Model is DateTime dateTime)
-            {
-                bindingContext.Result = ModelBindingResult.Success(_clock.Normalize(dateTime));
-            }
+            bindingContext.Result = ModelBindingResult.Success(_clock.Normalize(dateTime));
         }
     }
 }

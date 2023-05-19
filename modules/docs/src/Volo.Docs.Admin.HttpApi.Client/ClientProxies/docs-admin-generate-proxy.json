@@ -7,6 +7,8 @@
         "Volo.Docs.Admin.DocumentsAdminController": {
           "controllerName": "DocumentsAdmin",
           "controllerGroupName": "DocumentsAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.Docs.Admin.DocumentsAdminController",
           "interfaces": [
             {
@@ -427,12 +429,29 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+            },
+            "GetFilterItemsAsync": {
+              "uniqueName": "GetFilterItemsAsync",
+              "name": "GetFilterItemsAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/GetFilterItems",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Docs.Admin.Documents.DocumentInfoDto>",
+                "typeSimple": "[Volo.Docs.Admin.Documents.DocumentInfoDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
             }
           }
         },
         "Volo.Docs.Admin.ProjectsAdminController": {
           "controllerName": "ProjectsAdmin",
           "controllerGroupName": "ProjectsAdmin",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.Docs.Admin.ProjectsAdminController",
           "interfaces": [
             {
@@ -680,6 +699,21 @@
               "returnValue": {
                 "type": "System.Void",
                 "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+            },
+            "GetListWithoutDetailsAsync": {
+              "uniqueName": "GetListWithoutDetailsAsync",
+              "name": "GetListWithoutDetailsAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/projects/GetListProjectWithoutDetailsAsync",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto>",
+                "typeSimple": "[Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto]"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"

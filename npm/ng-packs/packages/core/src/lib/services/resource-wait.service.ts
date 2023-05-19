@@ -20,7 +20,7 @@ export class ResourceWaitService {
   }
 
   updateLoading$() {
-    return this.store.sliceUpdate(({ resources }) => !!resources.size);
+    return this.store.sliceUpdate(({ resources }) => !!resources?.size);
   }
 
   clearLoading() {

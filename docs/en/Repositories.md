@@ -164,6 +164,18 @@ If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method
 
 > See the [Data Filtering](Data-Filtering.md) documentation for more about soft-delete.
 
+### Delete Direct
+
+`DeleteDirectAsync` method of the repository deletes all entities those fit to the given predicate. It directly deletes entities from database, without fetching them. 
+
+Some features (like soft-delete, multi-tenancy and audit logging) won't work, so use this method carefully when you need it. Use the `DeleteAsync` method if you need to these features.
+
+> Currently only [EF Core supports it](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#basic-executedelete-examples), For the ORMs doesn't support direct delete, we will fallback to the existing `DeleteAsync` method.
+
+### Ensure Entities Exists
+
+The `EnsureExistsAsync` extension method accepts entity id or entities query expression to ensure entities exist, otherwise, it will throw `EntityNotFoundException`.
+
 ## Other Generic Repository Types
 
 Standard `IRepository<TEntity, TKey>` interface exposes the standard `IQueryable<TEntity>` and you can freely query using the standard LINQ methods. This is fine for most of the applications. However, some ORM providers or database systems may not support standard `IQueryable` interface. If you want to use such providers, you can't rely on the `IQueryable`.

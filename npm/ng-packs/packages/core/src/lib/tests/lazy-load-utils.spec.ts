@@ -1,6 +1,6 @@
-import { DomStrategy, DOM_STRATEGY } from '../strategies';
-import { CrossOriginStrategy, CROSS_ORIGIN_STRATEGY } from '../strategies/cross-origin.strategy';
-import { uuid } from '../utils';
+import { DOM_STRATEGY, DomStrategy } from '../strategies';
+import { CROSS_ORIGIN_STRATEGY, CrossOriginStrategy } from '../strategies/cross-origin.strategy';
+import { uuid } from '../utils/generator-utils';
 import { fromLazyLoad } from '../utils/lazy-load-utils';
 
 describe('Lazy Load Utils', () => {

@@ -1,0 +1,7 @@
+{
+  "culture": "ar",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "يجب أن يكون طول كلمة المرور أكبر من {0} حرف.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "يجب أن تحتوي كلمة المرور على حرف واحد على الأقل ليس أبجديًا رقميًا."
+  }
+}

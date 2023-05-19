@@ -1,0 +1,22 @@
+{
+  "culture": "fa",
+  "texts": {
+    "Settings": "تنظیمات",
+    "SuccessfullySaved": "با موفقیت ذخیره شد",
+    "Permission:SettingManagement": "مدیریت تنظیمات",
+    "Permission:Emailing": "تنظیمات ایمیل",
+    "Menu:Emailing": "تنظیمات ایمیل",
+    "SmtpHost": "هاست",
+    "SmtpPort": "پورت",
+    "SmtpUserName": "نام کاربری",
+    "SmtpPassword": "رمز عبور",
+    "SmtpDomain": "دامنه",
+    "SmtpEnableSsl": "فعال کردن ssl",
+    "SmtpUseDefaultCredentials": "از اعتبارنامه های پیش فرض استفاده کنید",
+    "DefaultFromAddress": "آدرس ارسال کننده پیش فرض",
+    "DefaultFromDisplayName": "نام نمایشی ارسال کننده پیش فرض",
+    "Feature:SettingManagementGroup": "تنظیمات مدیریت",
+    "Feature:SettingManagementEnable": "فعال کردن مدیریت تنظیمات",
+    "Feature:SettingManagementEnableDescription": "سیستم مدیریت تنظیمات را در برنامه فعال کنید."
+  }
+}

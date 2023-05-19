@@ -1,0 +1,85 @@
+{
+  "name": "Volo.Abp.FeatureManagement.Application.Contracts",
+  "hash": "a098bfbfeedbc75302632b819fbdd62c",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Domain.Shared",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "namespace": "Volo.Abp.Application",
+          "name": "AbpDddApplicationContractsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Authorization.Abstractions",
+          "namespace": "Volo.Abp.Authorization",
+          "name": "AbpAuthorizationAbstractionsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Json",
+          "namespace": "Volo.Abp.Json",
+          "name": "AbpJsonModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementApplicationContractsModule",
+      "summary": null
+    },
+    {
+      "displayName": "Manage Host features",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "FeatureManagement.ManageHostFeatures",
+      "summary": null
+    }
+  ]
+}

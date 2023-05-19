@@ -27,6 +27,14 @@
       }, ajaxParams));
     };
 
+    volo.abp.featureManagement.features['delete'] = function(providerName, providerKey, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/feature-management/features' + abp.utils.buildQueryString([{ name: 'providerName', value: providerName }, { name: 'providerKey', value: providerKey }]) + '',
+        type: 'DELETE',
+        dataType: null
+      }, ajaxParams));
+    };
+
   })();
 
 })();

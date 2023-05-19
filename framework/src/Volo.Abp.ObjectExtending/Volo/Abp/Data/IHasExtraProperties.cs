@@ -1,9 +1,6 @@
-﻿namespace Volo.Abp.Data
-{
-    //TODO: Move to Volo.Abp.Data.ObjectExtending namespace at 4.0?
+﻿namespace Volo.Abp.Data;
 
-    public interface IHasExtraProperties
-    {
-        ExtraPropertyDictionary ExtraProperties { get; }
-    }
+public interface IHasExtraProperties
+{
+    ExtraPropertyDictionary ExtraProperties { get; }
 }

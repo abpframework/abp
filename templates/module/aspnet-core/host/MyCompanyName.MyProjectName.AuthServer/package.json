@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "name": "my-app-authserver",
+  "private": true,
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui.theme.basic": "~7.2.1"
+  }
+}

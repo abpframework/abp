@@ -1,36 +1,55 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Data
+namespace Volo.Abp.Data;
+
+//TODO: Create a Volo.Abp.Data.Seeding namespace?
+public class DataSeeder : IDataSeeder, ITransientDependency
 {
-    //TODO: Create a Volo.Abp.Data.Seeding namespace?
-    public class DataSeeder : IDataSeeder, ITransientDependency
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected AbpDataSeedOptions Options { get; }
+
+    public DataSeeder(
+        IOptions<AbpDataSeedOptions> options,
+        IServiceScopeFactory serviceScopeFactory)
     {
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
-        protected AbpDataSeedOptions Options { get; }
+        ServiceScopeFactory = serviceScopeFactory;
+        Options = options.Value;
+    }
 
-        public DataSeeder(
-            IOptions<AbpDataSeedOptions> options,
-            IServiceScopeFactory serviceScopeFactory)
+    [UnitOfWork]
+    public virtual async Task SeedAsync(DataSeedContext context)
+    {
+        using (var scope = ServiceScopeFactory.CreateScope())
         {
-            ServiceScopeFactory = serviceScopeFactory;
-            Options = options.Value;
-        }
+            if (context.Properties.ContainsKey(DataSeederExtensions.SeedInSeparateUow))
+            {
+                var manager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+                foreach (var contributorType in Options.Contributors)
+                {
+                    var options = context.Properties.TryGetValue(DataSeederExtensions.SeedInSeparateUowOptions, out var uowOptions)
+                        ? (AbpUnitOfWorkOptions) uowOptions
+                        : new AbpUnitOfWorkOptions();
+                    var requiresNew = context.Properties.TryGetValue(DataSeederExtensions.SeedInSeparateUowRequiresNew, out var obj) && (bool) obj;
 
-        [UnitOfWork]
-        public virtual async Task SeedAsync(DataSeedContext context)
-        {
-            using (var scope = ServiceScopeFactory.CreateScope())
+                    using (var uow = manager.Begin(options, requiresNew))
+                    {
+                        var contributor = (IDataSeedContributor)scope.ServiceProvider.GetRequiredService(contributorType);
+                        await contributor.SeedAsync(context);
+                        await uow.CompleteAsync();
+                    }
+                }
+            }
+            else
             {
                 foreach (var contributorType in Options.Contributors)
                 {
-                    var contributor = (IDataSeedContributor) scope
-                        .ServiceProvider
-                        .GetRequiredService(contributorType);
-
+                    var contributor = (IDataSeedContributor)scope.ServiceProvider.GetRequiredService(contributorType);
                     await contributor.SeedAsync(context);
                 }
             }

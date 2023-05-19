@@ -6,74 +6,86 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore.Domain;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
+using Volo.Abp.EntityFrameworkCore.TestApp.FifthContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.EntityFrameworkCore;
 
-namespace Volo.Abp.EntityFrameworkCore
+namespace Volo.Abp.EntityFrameworkCore;
+
+[DependsOn(typeof(AbpEntityFrameworkCoreSqliteModule))]
+[DependsOn(typeof(TestAppModule))]
+[DependsOn(typeof(AbpAutofacModule))]
+[DependsOn(typeof(AbpEfCoreTestSecondContextModule))]
+public class AbpEntityFrameworkCoreTestModule : AbpModule
 {
-    [DependsOn(typeof(AbpEntityFrameworkCoreSqliteModule))]
-    [DependsOn(typeof(TestAppModule))]
-    [DependsOn(typeof(AbpAutofacModule))]
-    [DependsOn(typeof(AbpEfCoreTestSecondContextModule))]
-    public class AbpEntityFrameworkCoreTestModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            TestEntityExtensionConfigurator.Configure();
-        }
+        TestEntityExtensionConfigurator.Configure();
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddAbpDbContext<TestAppDbContext>(options =>
         {
-            context.Services.AddAbpDbContext<TestAppDbContext>(options =>
+            options.AddDefaultRepositories(true);
+            options.ReplaceDbContext<IThirdDbContext>();
+
+            options.Entity<Person>(opt =>
             {
-                options.AddDefaultRepositories(true);
-                options.ReplaceDbContext<IThirdDbContext>();
-
-                options.Entity<Person>(opt =>
-                {
-                    opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
-                });
-
-                options.Entity<Author>(opt =>
-                {
-                    opt.DefaultWithDetailsFunc = q => q.Include(p => p.Books);
-                });
+                opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
             });
 
-            var sqliteConnection = CreateDatabaseAndGetConnection();
-
-            Configure<AbpDbContextOptions>(options =>
+            options.Entity<Author>(opt =>
             {
-                options.Configure(abpDbContextConfigurationContext =>
-                {
-                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
-                });
+                opt.DefaultWithDetailsFunc = q => q.Include(p => p.Books);
             });
-        }
+        });
 
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+        context.Services.AddAbpDbContext<HostTestAppDbContext>(options =>
         {
-            context.ServiceProvider.GetRequiredService<SecondDbContext>().Database.Migrate();
-        }
+            options.AddDefaultRepositories(true);
+            options.ReplaceDbContext<IFifthDbContext>(MultiTenancySides.Host);
+        });
 
-        private static SqliteConnection CreateDatabaseAndGetConnection()
+        context.Services.AddAbpDbContext<TenantTestAppDbContext>(options =>
         {
-            var connection = new SqliteConnection("Data Source=:memory:");
-            connection.Open();
+            options.AddDefaultRepositories(true);
+        });
 
-            using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).Options))
+        var sqliteConnection = CreateDatabaseAndGetConnection();
+
+        Configure<AbpDbContextOptions>(options =>
+        {
+            options.Configure(abpDbContextConfigurationContext =>
             {
-                context.GetService<IRelationalDatabaseCreator>().CreateTables();
-                context.Database.ExecuteSqlRaw(
-                    @"CREATE VIEW View_PersonView AS 
+                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+            });
+        });
+    }
+
+    public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+    {
+        context.ServiceProvider.GetRequiredService<SecondDbContext>().Database.Migrate();
+    }
+
+    private static SqliteConnection CreateDatabaseAndGetConnection()
+    {
+        var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+
+        using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).Options))
+        {
+            context.GetService<IRelationalDatabaseCreator>().CreateTables();
+            context.Database.ExecuteSqlRaw(
+                @"CREATE VIEW View_PersonView AS 
                       SELECT Name, CreationTime, Birthday, LastActive FROM People");
-            }
-
-            return connection;
         }
+
+        return connection;
     }
 }

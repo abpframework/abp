@@ -1,11 +1,10 @@
 ﻿using JetBrains.Annotations;
 using System.Collections.Generic;
 
-namespace Volo.CmsKit.Reactions
+namespace Volo.CmsKit.Reactions;
+
+public class CmsKitReactionOptions
 {
-    public class CmsKitReactionOptions
-    {
-        [NotNull]
-        public List<ReactionEntityTypeDefinition> EntityTypes { get; } = new ();
-    }
+    [NotNull]
+    public List<ReactionEntityTypeDefinition> EntityTypes { get; } = new();
 }

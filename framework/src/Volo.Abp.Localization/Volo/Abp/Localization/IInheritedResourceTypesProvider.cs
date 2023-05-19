@@ -1,11 +1,10 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Localization
+namespace Volo.Abp.Localization;
+
+public interface IInheritedResourceTypesProvider
 {
-    public interface IInheritedResourceTypesProvider
-    {
-        [NotNull]
-        Type[] GetInheritedResourceTypes();
-    }
+    [NotNull]
+    Type[] GetInheritedResourceTypes();
 }

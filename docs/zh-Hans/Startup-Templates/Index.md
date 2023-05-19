@@ -8,3 +8,4 @@
 * [**module**](Module.md): 模块/服务模板.
 * [**console**](Console.md): 控制台模板.
 * [**WPF**](WPF.md): WPF模板.
+* [**MAUI**](MAUI.md): MAUI模板.

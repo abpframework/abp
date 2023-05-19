@@ -192,7 +192,7 @@ describe('ErrorHandler', () => {
         key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
       },
-      null,
+      '',
       CONFIRMATION_BUTTONS,
     );
   });

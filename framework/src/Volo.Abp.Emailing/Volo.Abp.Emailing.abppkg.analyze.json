@@ -1,0 +1,182 @@
+{
+  "name": "Volo.Abp.Emailing",
+  "hash": "",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Emailing",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Settings",
+          "namespace": "Volo.Abp.Settings",
+          "name": "AbpSettingsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.VirtualFileSystem",
+          "namespace": "Volo.Abp.VirtualFileSystem",
+          "name": "AbpVirtualFileSystemModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.Abstractions",
+          "namespace": "Volo.Abp.BackgroundJobs",
+          "name": "AbpBackgroundJobsAbstractionsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Localization",
+          "namespace": "Volo.Abp.Localization",
+          "name": "AbpLocalizationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.TextTemplating",
+          "namespace": "Volo.Abp.TextTemplating",
+          "name": "AbpTextTemplatingModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpEmailingModule",
+      "summary": null
+    },
+    {
+      "defaultValue": "127.0.0.1",
+      "displayName": "Sunucu",
+      "description": "SMTP üzerinden e-posta göndermek için kullanılacak sunucunun IP adresi ya da adı.",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Mailing.Smtp.Host",
+      "summary": null
+    },
+    {
+      "defaultValue": "25",
+      "displayName": "Port",
+      "description": "Sunucunun SMTP portu.",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Mailing.Smtp.Port",
+      "summary": null
+    },
+    {
+      "defaultValue": null,
+      "displayName": "Kullanıcı adı",
+      "description": "Varsayılan kimlik kullanılmaması durumunda kullanılacak kullanıcı adı.",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Mailing.Smtp.UserName",
+      "summary": null
+    },
+    {
+      "defaultValue": null,
+      "displayName": "Şifre",
+      "description": "Varsayılan kimlik kullanılmaması durumunda kullanılacak şifre.",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": true,
+      "contentType": "setting",
+      "name": "Abp.Mailing.Smtp.Password",
+      "summary": null
+    },
+    {
+      "defaultValue": null,
+      "displayName": "Domain",
+      "description": "Kimlik bilgilerinin doğrulanacağı sunucu/domain.",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Mailing.Smtp.Domain",
+      "summary": null
+    },
+    {
+      "defaultValue": "false",
+      "displayName": "SSL aktif",
+      "description": "Email gönderiminde SSL kullanılıp kullanılmayacağı.",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Mailing.Smtp.EnableSsl",
+      "summary": null
+    },
+    {
+      "defaultValue": "true",
+      "displayName": "Varsayılan kimlik kullan",
+      "description": "Varsayılan kimlik bilgilerinin kullanılıp kullanılmayacağı.",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Mailing.Smtp.UseDefaultCredentials",
+      "summary": null
+    },
+    {
+      "defaultValue": "noreply@abp.io",
+      "displayName": "Varsayılan gönderici adresi",
+      "description": "Varsayılan gönderici adresi",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Mailing.DefaultFromAddress",
+      "summary": null
+    },
+    {
+      "defaultValue": "ABP application",
+      "displayName": "Varsayılan gönderici adı",
+      "description": "Varsayılan gönderici adı",
+      "isVisibleToClient": false,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Mailing.DefaultFromDisplayName",
+      "summary": null
+    }
+  ]
+}

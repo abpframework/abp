@@ -1,0 +1,17 @@
+{
+  "culture": "sk",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Server host",
+    "Description:Abp.Ldap.ServerHost": "Server host",
+    "DisplayName:Abp.Ldap.ServerPort": "Server port",
+    "Description:Abp.Ldap.ServerPort": "Server post",
+    "DisplayName:Abp.Ldap.BaseDc": "Základný komponent domény",
+    "Description:Abp.Ldap.BaseDc": "Základný komponent domény",
+    "DisplayName:Abp.Ldap.Domain": "doména",
+    "Description:Abp.Ldap.Domain": "doména",
+    "DisplayName:Abp.Ldap.UserName": "Používateľské meno",
+    "Description:Abp.Ldap.UserName": "Používateľské meno",
+    "DisplayName:Abp.Ldap.Password": "Heslo",
+    "Description:Abp.Ldap.Password": "Heslo"
+  }
+}

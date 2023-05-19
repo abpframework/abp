@@ -1,16 +1,16 @@
 /*
-    Paraíso (light)
+    ParaÃ­so (light)
     Created by Jan T. Sott (http://github.com/idleberg)
     Inspired by the art of Rubens LP (http://www.rubenslp.com.br)
 */
 
-/* Paraíso Comment */
+/* ParaÃ­so Comment */
 .hljs-comment,
 .hljs-quote {
   color: #776e71;
 }
 
-/* Paraíso Red */
+/* ParaÃ­so Red */
 .hljs-variable,
 .hljs-template-variable,
 .hljs-tag,
@@ -23,7 +23,7 @@
   color: #ef6155;
 }
 
-/* Paraíso Orange */
+/* ParaÃ­so Orange */
 .hljs-number,
 .hljs-built_in,
 .hljs-builtin-name,
@@ -34,14 +34,14 @@
   color: #f99b15;
 }
 
-/* Paraíso Yellow */
+/* ParaÃ­so Yellow */
 .hljs-title,
 .hljs-section,
 .hljs-attribute {
   color: #fec418;
 }
 
-/* Paraíso Green */
+/* ParaÃ­so Green */
 .hljs-string,
 .hljs-symbol,
 .hljs-bullet,
@@ -49,7 +49,7 @@
   color: #48b685;
 }
 
-/* Paraíso Purple */
+/* ParaÃ­so Purple */
 .hljs-keyword,
 .hljs-selector-tag {
   color: #815ba4;

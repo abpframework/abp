@@ -80,7 +80,7 @@ The given `SendAsync` method in the example is an extension method to send an SM
 
 ## NullSmsSender
 
-`NullSmsSender` is a the default implementation of the `ISmsSender`. It writes SMS content to the [standard logler](Logging.md), rather than actually sending the SMS.
+`NullSmsSender` is a the default implementation of the `ISmsSender`. It writes SMS content to the [standard logger](Logging.md), rather than actually sending the SMS.
 
 This class can be useful especially in development time where you generally don't want to send real SMS. **However, if you want to actually send SMS, you should implement the `ISmsSender` in your application code.**
 

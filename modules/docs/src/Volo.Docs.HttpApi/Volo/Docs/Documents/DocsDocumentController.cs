@@ -7,7 +7,7 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace Volo.Docs.Documents
 {
     [RemoteService(Name = DocsRemoteServiceConsts.RemoteServiceName)]
-    [Area("docs")]
+    [Area(DocsRemoteServiceConsts.ModuleName)]
     [ControllerName("Document")]
     [Route("api/docs/documents")]
     public class DocsDocumentController :  AbpController, IDocumentAppService

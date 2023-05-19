@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -20,5 +21,6 @@ namespace Volo.Docs.Admin.Projects
         Task ReindexAsync(ReindexInput input);
 
         Task ReindexAllAsync();
+        Task<List<ProjectWithoutDetailsDto>> GetListWithoutDetailsAsync();
     }
 }

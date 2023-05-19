@@ -1,12 +1,11 @@
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
-{
-    public class BundleResult
-    {
-        public string Content { get; }
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-        public BundleResult(string content)
-        {
-            Content = content;
-        }
+public class BundleResult
+{
+    public string Content { get; }
+
+    public BundleResult(string content)
+    {
+        Content = content;
     }
 }

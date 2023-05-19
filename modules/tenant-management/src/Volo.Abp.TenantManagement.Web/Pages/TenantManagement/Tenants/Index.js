@@ -57,6 +57,7 @@
                                 .delete(data.record.id)
                                 .then(function () {
                                     _dataTable.ajax.reload();
+                                    abp.notify.success(l('SuccessfullyDeleted'));
                                 });
                         },
                     }
@@ -108,16 +109,9 @@
             _dataTable.ajax.reload();
         });
 
-        _$wrapper.find('button[name=CreateTenant]').click(function (e) {
+        $('#AbpContentToolbar button[name=CreateTenant]').click(function (e) {
             e.preventDefault();
             _createModal.open();
-        });
-
-        _$wrapper.find('button[name=ManageHostFeatures]').click(function (e) {
-            e.preventDefault();
-            _featuresModal.open({
-                providerName: 'T'
-            });
         });
     });
 })();

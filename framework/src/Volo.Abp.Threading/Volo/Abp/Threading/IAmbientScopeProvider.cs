@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace Volo.Abp.Threading
-{
-    public interface IAmbientScopeProvider<T>
-    {
-        T GetValue(string contextKey);
+namespace Volo.Abp.Threading;
 
-        IDisposable BeginScope(string contextKey, T value);
-    }
+public interface IAmbientScopeProvider<T>
+{
+    T GetValue(string contextKey);
+
+    IDisposable BeginScope(string contextKey, T value);
 }

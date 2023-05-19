@@ -11,6 +11,7 @@ import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Inject,
   InjectFlags,
   InjectionToken,
@@ -18,6 +19,7 @@ import {
   Input,
   LOCALE_ID,
   OnChanges,
+  Output,
   SimpleChanges,
   TemplateRef,
   TrackByFunction,
@@ -30,7 +32,12 @@ import { EntityActionList } from '../../models/entity-actions';
 import { EntityProp, EntityPropList } from '../../models/entity-props';
 import { PropData } from '../../models/props';
 import { ExtensionsService } from '../../services/extensions.service';
-import { EXTENSIONS_IDENTIFIER, PROP_DATA_STREAM } from '../../tokens/extensions.token';
+import {
+  ENTITY_PROP_TYPE_CLASSES,
+  EntityPropTypeClass,
+  EXTENSIONS_IDENTIFIER,
+  PROP_DATA_STREAM,
+} from '../../tokens/extensions.token';
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
@@ -41,7 +48,7 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExtensibleTableComponent<R = any> implements OnChanges {
-  protected _actionsText: string;
+  protected _actionsText!: string;
   @Input()
   set actionsText(value: string) {
     this._actionsText = value;
@@ -50,19 +57,23 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     return this._actionsText ?? (this.actionList.length > 1 ? 'AbpUi::Actions' : '');
   }
 
-  @Input() data: R[];
-  @Input() list: ListService;
-  @Input() recordsTotal: number;
+  @Input() data!: R[];
+  @Input() list!: ListService;
+  @Input() recordsTotal!: number;
   @Input() set actionsColumnWidth(width: number) {
     this.setColumnWidths(width ? Number(width) : undefined);
   }
-  @Input() actionsTemplate: TemplateRef<any>;
+  @Input() actionsTemplate?: TemplateRef<any>;
+
+  @Output() tableActivate = new EventEmitter();
 
   getInjected: <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => T;
 
   hasAtLeastOnePermittedAction: boolean;
 
-  readonly columnWidths: number[];
+  entityPropTypeClasses: EntityPropTypeClass;
+
+  readonly columnWidths!: number[];
 
   readonly propList: EntityPropList<R>;
 
@@ -75,6 +86,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     private config: ConfigStateService,
     private injector: Injector,
   ) {
+    this.entityPropTypeClasses = injector.get(ENTITY_PROP_TYPE_CLASSES);
     this.getInjected = injector.get.bind(injector);
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
@@ -90,7 +102,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     this.setColumnWidths(DEFAULT_ACTIONS_COLUMN_WIDTH);
   }
 
-  private setColumnWidths(actionsColumn: number) {
+  private setColumnWidths(actionsColumn: number | undefined) {
     const widths = [actionsColumn];
     this.propList.forEach(({ value: prop }) => {
       widths.push(prop.columnWidth);
@@ -98,19 +110,19 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     (this.columnWidths as any) = widths;
   }
 
-  private getDate(value: Date, format: string) {
-    return value ? formatDate(value, format, this.locale) : '';
+  private getDate(value: Date | undefined, format: string | undefined) {
+    return value && format ? formatDate(value, format, this.locale) : '';
   }
 
   private getIcon(value: boolean) {
     return value
-      ? '<div class="text-center text-success"><i class="fa fa-check"></i></div>'
-      : '<div class="text-center text-danger"><i class="fa fa-times"></i></div>';
+      ? '<div class="text-success"><i class="fa fa-check" aria-hidden="true"></i></div>'
+      : '<div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i></div>';
   }
 
   private getEnum(rowValue: any, list: Array<ABP.Option<any>>) {
     if (!list) return rowValue;
-    const { key } = list.find(({ value }) => value === rowValue);
+    const { key } = list.find(({ value }) => value === rowValue) || {};
     return key;
   }
 
@@ -127,7 +139,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
           case ePropType.DateTime:
             return this.getDate(value, getShortDateShortTimeFormat(this.config));
           case ePropType.Enum:
-            return this.getEnum(value, prop.enumList);
+            return this.getEnum(value, prop.enumList || []);
           default:
             return value;
           // More types can be handled in the future
@@ -139,7 +151,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   ngOnChanges({ data }: SimpleChanges) {
     if (!data?.currentValue) return;
 
-    this.data = data.currentValue.map((record, index) => {
+    this.data = data.currentValue.map((record: any, index: number) => {
       this.propList.forEach(prop => {
         const propData = { getInjected: this.getInjected, record, index } as any;
         const value = this.getContent(prop.value, propData);
@@ -150,15 +162,15 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
           value,
         };
         if (prop.value.component) {
-          const injector = Injector.create(
-            [
+          const injector = Injector.create({
+            providers: [
               {
                 provide: PROP_DATA_STREAM,
                 useValue: value,
               },
             ],
-            this.injector,
-          );
+            parent: this.injector,
+          });
           record[propKey].injector = injector;
           record[propKey].component = prop.value.component;
         }

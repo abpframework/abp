@@ -1,11 +1,12 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import UsersScreen from '../screens/Users/UsersScreen';
-import CreateUpdateUserScreen from '../screens/CreateUpdateUser/CreateUpdateUserScreen';
-import MenuIcon from '../components/MenuIcon/MenuIcon';
+import AddIcon from '../components/AddIcon/AddIcon';
+import HamburgerIcon from '../components/HamburgerIcon/HamburgerIcon';
 import { LocalizationContext } from '../contexts/LocalizationContext';
+import CreateUpdateUserScreen from '../screens/CreateUpdateUser/CreateUpdateUserScreen';
+import UsersScreen from '../screens/Users/UsersScreen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function UsersStackNavigator() {
   const { t } = React.useContext(LocalizationContext);
@@ -16,8 +17,9 @@ export default function UsersStackNavigator() {
         name="Users"
         component={UsersScreen}
         options={({ navigation }) => ({
-          headerLeft: () => <MenuIcon onPress={() => navigation.openDrawer()} />,
           title: t('AbpIdentity::Users'),
+          headerLeft: () => <HamburgerIcon navigation={navigation} marginLeft={-3} />,
+          headerRight: () => <AddIcon onPress={() => navigation.navigate('CreateUpdateUser')}/>,
         })}
       />
       <Stack.Screen

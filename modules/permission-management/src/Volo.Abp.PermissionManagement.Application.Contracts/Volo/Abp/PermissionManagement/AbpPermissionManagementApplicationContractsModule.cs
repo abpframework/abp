@@ -2,13 +2,12 @@
 using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.PermissionManagement
+namespace Volo.Abp.PermissionManagement;
+
+[DependsOn(typeof(AbpDddApplicationContractsModule))]
+[DependsOn(typeof(AbpPermissionManagementDomainSharedModule))]
+[DependsOn(typeof(AbpAuthorizationAbstractionsModule))]
+public class AbpPermissionManagementApplicationContractsModule : AbpModule
 {
-    [DependsOn(typeof(AbpDddApplicationContractsModule))]
-    [DependsOn(typeof(AbpPermissionManagementDomainSharedModule))]
-    [DependsOn(typeof(AbpAuthorizationAbstractionsModule))]
-    public class AbpPermissionManagementApplicationContractsModule : AbpModule
-    {
-        
-    }
+
 }

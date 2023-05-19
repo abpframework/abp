@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
 
+#nullable disable
+
 namespace Volo.CmsKit.Migrations
 {
     [DbContext(typeof(CmsKitHttpApiHostMigrationsDbContext))]
@@ -17,9 +19,10 @@ namespace Volo.CmsKit.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.7")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Volo.Abp.BlobStoring.Database.DatabaseBlob", b =>
                 {
@@ -59,7 +62,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("TenantId", "ContainerId", "Name");
 
-                    b.ToTable("AbpBlobs");
+                    b.ToTable("AbpBlobs", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.BlobStoring.Database.DatabaseBlobContainer", b =>
@@ -91,7 +94,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("TenantId", "Name");
 
-                    b.ToTable("AbpBlobContainers");
+                    b.ToTable("AbpBlobContainers", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Blogs.Blog", b =>
@@ -156,7 +159,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CmsBlogs");
+                    b.ToTable("CmsBlogs", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Blogs.BlogFeature", b =>
@@ -218,7 +221,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CmsBlogFeatures");
+                    b.ToTable("CmsBlogFeatures", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Blogs.BlogPost", b =>
@@ -289,6 +292,9 @@ namespace Volo.CmsKit.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("TenantId");
@@ -304,7 +310,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("Slug", "BlogId");
 
-                    b.ToTable("CmsBlogPosts");
+                    b.ToTable("CmsBlogPosts", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Comments.Comment", b =>
@@ -312,6 +318,12 @@ namespace Volo.CmsKit.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -331,6 +343,10 @@ namespace Volo.CmsKit.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
                     b.Property<Guid?>("RepliedCommentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -349,7 +365,58 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("TenantId", "EntityType", "EntityId");
 
-                    b.ToTable("CmsComments");
+                    b.ToTable("CmsComments", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.CmsKit.GlobalResources.GlobalResource", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CmsGlobalResources", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.MediaDescriptors.MediaDescriptor", b =>
@@ -423,10 +490,10 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CmsMediaDescriptors");
+                    b.ToTable("CmsMediaDescriptors", (string)null);
                 });
 
-            modelBuilder.Entity("Volo.CmsKit.Menus.Menu", b =>
+            modelBuilder.Entity("Volo.CmsKit.Menus.MenuItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -437,58 +504,6 @@ namespace Volo.CmsKit.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CmsMenus");
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Menus.MenuItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -509,6 +524,10 @@ namespace Volo.CmsKit.Migrations
                     b.Property<string>("ElementId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(max)");
 
@@ -523,9 +542,6 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<Guid>("MenuId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
@@ -535,11 +551,12 @@ namespace Volo.CmsKit.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RequiredPermissionName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Target")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -548,9 +565,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MenuId");
-
-                    b.ToTable("CmsMenuItems");
+                    b.ToTable("CmsMenuItems", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Pages.Page", b =>
@@ -627,7 +642,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("TenantId", "Slug");
 
-                    b.ToTable("CmsPages");
+                    b.ToTable("CmsPages", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Ratings.Rating", b =>
@@ -664,7 +679,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("TenantId", "EntityType", "EntityId", "CreatorId");
 
-                    b.ToTable("CmsRatings");
+                    b.ToTable("CmsRatings", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Reactions.UserReaction", b =>
@@ -706,7 +721,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("TenantId", "CreatorId", "EntityType", "EntityId", "ReactionName");
 
-                    b.ToTable("CmsUserReactions");
+                    b.ToTable("CmsUserReactions", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Tags.EntityTag", b =>
@@ -725,7 +740,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("TenantId", "EntityId", "TagId");
 
-                    b.ToTable("CmsEntityTags");
+                    b.ToTable("CmsEntityTags", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Tags.Tag", b =>
@@ -792,7 +807,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("TenantId", "Name");
 
-                    b.ToTable("CmsTags");
+                    b.ToTable("CmsTags", (string)null);
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Users.CmsUser", b =>
@@ -822,6 +837,10 @@ namespace Volo.CmsKit.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<string>("Name")
                         .HasMaxLength(64)
@@ -860,7 +879,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasIndex("TenantId", "UserName");
 
-                    b.ToTable("CmsUsers");
+                    b.ToTable("CmsUsers", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.BlobStoring.Database.DatabaseBlob", b =>
@@ -881,20 +900,6 @@ namespace Volo.CmsKit.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Menus.MenuItem", b =>
-                {
-                    b.HasOne("Volo.CmsKit.Menus.Menu", null)
-                        .WithMany("Items")
-                        .HasForeignKey("MenuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.CmsKit.Menus.Menu", b =>
-                {
-                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,6 +3,8 @@ var abp = abp || {};
     abp.modals = abp.modals || {};
 
     abp.modals.PermissionManagement = function () {
+        var l = abp.localization.getResource("AbpPermissionManagement");
+        
         function checkParents($tab, $checkBox) {
             var parentName = $checkBox
                 .closest('.custom-checkbox')
@@ -232,6 +234,14 @@ var abp = abp || {};
                     $('.tab-pane input[type="checkbox"]')
                         .not(':disabled')
                         .prop('checked', true);
+
+                    $('input[name="SelectAllInThisTab"]').each(function () {
+                        var $this = $(this);
+                        if($this.is(':indeterminate') === true) {
+                            $this.prop('indeterminate', false);
+                            $this.prop('checked', true);
+                        }
+                    });
                 } else {
                     $('.tab-pane input[type="checkbox"]')
                         .not(':disabled')
@@ -255,6 +265,27 @@ var abp = abp || {};
 
             initSelectAllInThisTab();
             setSelectAllInAllTabs();
+
+            var $form = $("#PermissionManagementForm");
+            var $submitButton = $form.find("button[type='submit']");
+            if($submitButton) {
+                $submitButton.click(function (e) {
+                    e.preventDefault();
+                    
+                    if(!$form.find("input:checked").length > 0) {
+                        abp.message.confirm(l("SaveWithoutAnyPermissionsWarningMessage"))
+                            .then(function (confirmed) {
+                                if(confirmed) {
+                                    $form.submit();
+                                }
+                            });
+                    }
+                    else {
+                        $form.submit();
+                    }
+                });
+            }
+            
         };
     };
 })(jQuery);

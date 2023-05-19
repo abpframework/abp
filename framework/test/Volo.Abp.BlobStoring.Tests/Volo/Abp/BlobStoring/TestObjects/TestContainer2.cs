@@ -1,8 +1,7 @@
-﻿namespace Volo.Abp.BlobStoring.TestObjects
+﻿namespace Volo.Abp.BlobStoring.TestObjects;
+
+[BlobContainerName("Test2")]
+public class TestContainer2
 {
-    [BlobContainerName("Test2")]
-    public class TestContainer2
-    {
-        
-    }
+
 }

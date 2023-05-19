@@ -2,32 +2,31 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Caching
+namespace Volo.Abp.Caching;
+
+public class DistributedCacheKeyNormalizer : IDistributedCacheKeyNormalizer, ITransientDependency
 {
-    public class DistributedCacheKeyNormalizer : IDistributedCacheKeyNormalizer, ITransientDependency
+    protected ICurrentTenant CurrentTenant { get; }
+
+    protected AbpDistributedCacheOptions DistributedCacheOptions { get; }
+
+    public DistributedCacheKeyNormalizer(
+        ICurrentTenant currentTenant,
+        IOptions<AbpDistributedCacheOptions> distributedCacheOptions)
     {
-        protected ICurrentTenant CurrentTenant { get; }
+        CurrentTenant = currentTenant;
+        DistributedCacheOptions = distributedCacheOptions.Value;
+    }
 
-        protected AbpDistributedCacheOptions DistributedCacheOptions { get; }
+    public virtual string NormalizeKey(DistributedCacheKeyNormalizeArgs args)
+    {
+        var normalizedKey = $"c:{args.CacheName},k:{DistributedCacheOptions.KeyPrefix}{args.Key}";
 
-        public DistributedCacheKeyNormalizer(
-            ICurrentTenant currentTenant, 
-            IOptions<AbpDistributedCacheOptions> distributedCacheOptions)
+        if (!args.IgnoreMultiTenancy && CurrentTenant.Id.HasValue)
         {
-            CurrentTenant = currentTenant;
-            DistributedCacheOptions = distributedCacheOptions.Value;
+            normalizedKey = $"t:{CurrentTenant.Id.Value},{normalizedKey}";
         }
 
-        public virtual string NormalizeKey(DistributedCacheKeyNormalizeArgs args)
-        {
-            var normalizedKey = $"c:{args.CacheName},k:{DistributedCacheOptions.KeyPrefix}{args.Key}";
-
-            if (!args.IgnoreMultiTenancy && CurrentTenant.Id.HasValue)
-            {
-                normalizedKey = $"t:{CurrentTenant.Id.Value},{normalizedKey}";
-            }
-
-            return normalizedKey;
-        }
+        return normalizedKey;
     }
 }

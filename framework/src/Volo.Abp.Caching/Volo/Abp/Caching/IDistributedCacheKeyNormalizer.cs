@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.Caching
+﻿namespace Volo.Abp.Caching;
+
+public interface IDistributedCacheKeyNormalizer
 {
-    public interface IDistributedCacheKeyNormalizer
-    {
-        string NormalizeKey(DistributedCacheKeyNormalizeArgs args);
-    }
+    string NormalizeKey(DistributedCacheKeyNormalizeArgs args);
 }

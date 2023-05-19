@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
+
+public static class AbpTagHelperConsts
 {
-    public static class AbpTagHelperConsts
-    {
-        public const string ContextBundleItemListKey = "AbpBundleFileTagHelperService.BundleFiles";
-    }
+    public const string ContextBundleItemListKey = "AbpBundleFileTagHelperService.BundleFiles";
 }

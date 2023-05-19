@@ -49,13 +49,14 @@ $(function () {
                                         .delete(data.record.id)
                                         .then(function () {
                                             _dataTable.ajax.reload();
+                                            abp.notify.success(l('SuccessfullyDeleted'));
                                         });
                                 },
                             },
                             {
                                 text: l("ClearCache"),
                                 visible: abp.auth.isGranted(
-                                  'Blogging.Blog.ClearCache'  
+                                  'Blogging.Blog.ClearCache'
                                 ),
                                 confirmMessage: function (data) {
                                     return l("ClearCacheConfirmationMessage");

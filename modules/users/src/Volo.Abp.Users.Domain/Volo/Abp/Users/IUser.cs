@@ -1,28 +1,30 @@
 using System;
 using JetBrains.Annotations;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Users
+namespace Volo.Abp.Users;
+
+public interface IUser : IAggregateRoot<Guid>, IMultiTenant, IHasExtraProperties
 {
-    public interface IUser : IAggregateRoot<Guid>, IMultiTenant
-    {
-        string UserName { get; }
+    string UserName { get; }
 
-        [CanBeNull]
-        string Email { get; }
+    [CanBeNull]
+    string Email { get; }
 
-        [CanBeNull]
-        string Name  { get; }
+    [CanBeNull]
+    string Name { get; }
 
-        [CanBeNull]
-        string Surname { get; }
+    [CanBeNull]
+    string Surname { get; }
 
-        bool EmailConfirmed { get; }
+    bool IsActive { get; }
 
-        [CanBeNull]
-        string PhoneNumber { get; }
+    bool EmailConfirmed { get; }
 
-        bool PhoneNumberConfirmed { get; }
-    }
+    [CanBeNull]
+    string PhoneNumber { get; }
+
+    bool PhoneNumberConfirmed { get; }
 }

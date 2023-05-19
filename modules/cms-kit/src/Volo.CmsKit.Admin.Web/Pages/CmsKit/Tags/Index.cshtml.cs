@@ -1,8 +1,7 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags;
+
+public class IndexModel : CmsKitAdminPageModel
 {
-    public class IndexModel : CmsKitAdminPageModel
-    {
-    }
 }

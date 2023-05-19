@@ -5,65 +5,66 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.MultiTenancy;
 
-namespace Pages.Abp.MultiTenancy
+namespace Pages.Abp.MultiTenancy;
+
+public class TenantSwitchModalModel : AbpPageModel
 {
-    public class TenantSwitchModalModel : AbpPageModel
+    [BindProperty]
+    public TenantInfoModel Input { get; set; }
+
+    protected ITenantStore TenantStore { get; }
+    protected AbpAspNetCoreMultiTenancyOptions Options { get; }
+
+    public TenantSwitchModalModel(
+        ITenantStore tenantStore,
+        IOptions<AbpAspNetCoreMultiTenancyOptions> options)
     {
-        [BindProperty]
-        public TenantInfoModel Input { get; set; }
+        TenantStore = tenantStore;
+        Options = options.Value;
+        LocalizationResourceType = typeof(AbpUiMultiTenancyResource);
+    }
 
-        protected ITenantStore TenantStore { get; }
-        protected AbpAspNetCoreMultiTenancyOptions Options { get; }
+    public virtual async Task OnGetAsync()
+    {
+        Input = new TenantInfoModel();
 
-        public TenantSwitchModalModel(
-            ITenantStore tenantStore,
-            IOptions<AbpAspNetCoreMultiTenancyOptions> options)
+        if (CurrentTenant.IsAvailable)
         {
-            TenantStore = tenantStore;
-            Options = options.Value;
-            LocalizationResourceType = typeof(AbpUiMultiTenancyResource);
+            var tenant = await TenantStore.FindAsync(CurrentTenant.GetId());
+            Input.Name = tenant?.Name;
         }
+    }
 
-        public virtual async Task OnGetAsync()
+    public virtual async Task OnPostAsync()
+    {
+        Guid? tenantId = null;
+        if (!Input.Name.IsNullOrEmpty())
         {
-            Input = new TenantInfoModel();
-
-            if (CurrentTenant.IsAvailable)
+            var tenant = await TenantStore.FindAsync(Input.Name);
+            if (tenant == null)
             {
-                var tenant = await TenantStore.FindAsync(CurrentTenant.GetId());
-                Input.Name = tenant?.Name;
-            }
-        }
-
-        public virtual async Task OnPostAsync()
-        {
-            Guid? tenantId = null;
-            if (!Input.Name.IsNullOrEmpty())
-            {
-                var tenant = await TenantStore.FindAsync(Input.Name);
-                if (tenant == null)
-                {
-                    throw new UserFriendlyException(L["GivenTenantIsNotExist", Input.Name]);
-                }
-
-                if (!tenant.IsActive)
-                {
-                    throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name]);
-                }
-
-                tenantId = tenant.Id;
+                throw new UserFriendlyException(L["GivenTenantIsNotExist", Input.Name]);
             }
 
-            AbpMultiTenancyCookieHelper.SetTenantCookie(HttpContext, tenantId, Options.TenantKey);
+            if (!tenant.IsActive)
+            {
+                throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name]);
+            }
+
+            tenantId = tenant.Id;
         }
 
-        public class TenantInfoModel
-        {
-            public string Name { get; set; }
-        }
+        AbpMultiTenancyCookieHelper.SetTenantCookie(HttpContext, tenantId, Options.TenantKey);
+    }
+
+    public class TenantInfoModel
+    {
+        [InputInfoText("SwitchTenantHint")]
+        public string Name { get; set; }
     }
 }

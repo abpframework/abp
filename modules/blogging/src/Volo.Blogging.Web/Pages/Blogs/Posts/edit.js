@@ -82,6 +82,7 @@ $(function () {
         initialEditType: 'markdown',
         previewStyle: 'tab',
         height: 'auto',
+        plugins: [toastui.Editor.plugin.codeSyntaxHighlight],
         initialValue: $form.find("input[name='Post.Content']").val(),
         hooks: {
             addImageBlobHook: function (blob, callback, source) {

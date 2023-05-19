@@ -1,89 +1,118 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Admin.Menus;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Permissions;
 
-namespace Volo.CmsKit.Admin.Pages
+namespace Volo.CmsKit.Admin.Pages;
+
+[RequiresFeature(CmsKitFeatures.PageEnable)]
+[RequiresGlobalFeature(typeof(PagesFeature))]
+[Authorize(CmsKitAdminPermissions.Pages.Default)]
+public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
 {
-    [RequiresGlobalFeature(typeof(PagesFeature))]
-    [Authorize(CmsKitAdminPermissions.Pages.Default)]
-    public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
+    protected IPageRepository PageRepository { get; }
+
+    protected PageManager PageManager { get; }
+    
+    protected IDistributedCache<PageCacheItem> PageCache { get; }
+
+    public PageAdminAppService(
+        IPageRepository pageRepository,
+        PageManager pageManager, 
+        IDistributedCache<PageCacheItem> pageCache)
     {
-        protected IPageRepository PageRepository { get; }
+        PageRepository = pageRepository;
+        PageManager = pageManager;
+        PageCache = pageCache;
+    }
 
-        protected PageManager PageManager { get; }
+    public virtual async Task<PageDto> GetAsync(Guid id)
+    {
+        var page = await PageRepository.GetAsync(id);
+        return ObjectMapper.Map<Page, PageDto>(page);
+    }
 
-        public PageAdminAppService(
-            IPageRepository pageRepository,
-            PageManager pageManager)
+    public virtual async Task<PagedResultDto<PageDto>> GetListAsync(GetPagesInputDto input)
+    {
+        var count = await PageRepository.GetCountAsync(input.Filter);
+
+        var pages = await PageRepository.GetListAsync(
+            input.Filter,
+            input.MaxResultCount,
+            input.SkipCount,
+            input.Sorting
+        );
+
+        return new PagedResultDto<PageDto>(
+            count,
+            ObjectMapper.Map<List<Page>, List<PageDto>>(pages)
+        );
+    }
+
+    [Authorize(CmsKitAdminPermissions.Pages.Create)]
+    public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
+    {
+        var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style);
+
+        await PageRepository.InsertAsync(page);
+
+        return ObjectMapper.Map<Page, PageDto>(page);
+    }
+
+    [Authorize(CmsKitAdminPermissions.Pages.Update)]
+    public virtual async Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
+    {
+        var page = await PageRepository.GetAsync(id);
+        if (page.IsHomePage)
         {
-            PageRepository = pageRepository;
-            PageManager = pageManager;
+            await InvalidateDefaultHomePageCacheAsync(considerUow: true);
         }
 
-        public virtual async Task<PageDto> GetAsync(Guid id)
+        await PageManager.SetSlugAsync(page, input.Slug);
+
+        page.SetTitle(input.Title);
+        page.SetContent(input.Content);
+        page.SetScript(input.Script);
+        page.SetStyle(input.Style);
+        page.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+
+        await PageRepository.UpdateAsync(page);
+
+        return ObjectMapper.Map<Page, PageDto>(page);
+    }
+
+    [Authorize(CmsKitAdminPermissions.Pages.Delete)]
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        var page = await PageRepository.GetAsync(id);
+        if (page.IsHomePage)
         {
-            var page = await PageRepository.GetAsync(id);
-            return ObjectMapper.Map<Page, PageDto>(page);
+            await InvalidateDefaultHomePageCacheAsync(considerUow: true);
         }
+        
+        await PageRepository.DeleteAsync(page);
+    }
 
-        public virtual async Task<PagedResultDto<PageDto>> GetListAsync(GetPagesInputDto input)
-        {
-            var count = await PageRepository.GetCountAsync(input.Filter);
-            
-            var pages = await PageRepository.GetListAsync(
-                input.Filter,
-                input.MaxResultCount,
-                input.SkipCount,
-                input.Sorting
-            );
+    [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
+    public virtual async Task SetAsHomePageAsync(Guid id)
+    {
+        var page = await PageRepository.GetAsync(id);
 
-            return new PagedResultDto<PageDto>(
-                count,
-                ObjectMapper.Map<List<Page>, List<PageDto>>(pages)
-            );
-        }
+		await PageManager.SetHomePageAsync(page);
+        await InvalidateDefaultHomePageCacheAsync();
+    }
 
-        [Authorize(CmsKitAdminPermissions.Pages.Create)]
-        public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
-        {
-            var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style);
-
-            await PageRepository.InsertAsync(page);
-            
-            return ObjectMapper.Map<Page, PageDto>(page);
-        }
-
-        [Authorize(CmsKitAdminPermissions.Pages.Update)]
-        public virtual async Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
-        {
-            var page = await PageRepository.GetAsync(id);
-
-            await PageManager.SetSlugAsync(page, input.Slug);
-
-            page.SetTitle(input.Title);
-            page.SetContent(input.Content);
-            page.SetScript(input.Script);
-            page.SetStyle(input.Style);
-            page.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
-
-            await PageRepository.UpdateAsync(page);
-            
-            return ObjectMapper.Map<Page, PageDto>(page);
-        }
-
-        [Authorize(CmsKitAdminPermissions.Pages.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
-        {
-            await PageRepository.DeleteAsync(id);
-        }
+    protected virtual async Task InvalidateDefaultHomePageCacheAsync(bool considerUow = false)
+    {
+        await PageCache.RemoveAsync(PageConsts.DefaultHomePageCacheKey, considerUow: considerUow);
     }
 }

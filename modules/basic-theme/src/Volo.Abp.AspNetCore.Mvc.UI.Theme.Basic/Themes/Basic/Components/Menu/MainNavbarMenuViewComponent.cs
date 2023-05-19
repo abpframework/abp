@@ -2,21 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Menu
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Menu;
+
+public class MainNavbarMenuViewComponent : AbpViewComponent
 {
-    public class MainNavbarMenuViewComponent : AbpViewComponent
+    protected IMenuManager MenuManager { get; }
+
+    public MainNavbarMenuViewComponent(IMenuManager menuManager)
     {
-        private readonly IMenuManager _menuManager;
+        MenuManager = menuManager;
+    }
 
-        public MainNavbarMenuViewComponent(IMenuManager menuManager)
-        {
-            _menuManager = menuManager;
-        }
-
-        public async Task<IViewComponentResult> InvokeAsync()
-        {
-            var menu = await _menuManager.GetMainMenuAsync();
-            return View("~/Themes/Basic/Components/Menu/Default.cshtml", menu);
-        }
+    public virtual async Task<IViewComponentResult> InvokeAsync()
+    {
+        var menu = await MenuManager.GetMainMenuAsync();
+        return View("~/Themes/Basic/Components/Menu/Default.cshtml", menu);
     }
 }

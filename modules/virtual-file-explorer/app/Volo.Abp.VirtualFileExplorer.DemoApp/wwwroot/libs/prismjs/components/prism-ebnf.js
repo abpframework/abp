@@ -11,7 +11,7 @@ Prism.languages.ebnf = {
 	},
 
 	'definition': {
-		pattern: /^(\s*)[a-z]\w*(?:[ \t]+[a-z]\w*)*(?=\s*=)/im,
+		pattern: /^([\t ]*)[a-z]\w*(?:[ \t]+[a-z]\w*)*(?=\s*=)/im,
 		lookbehind: true,
 		alias: ['rule', 'keyword']
 	},

@@ -1,0 +1,8 @@
+{
+  "culture": "is",
+  "texts": {
+    "Volo.Feature:010001": "Aðgerð er ekki virk: {FeatureName}",
+    "Volo.Feature:010002": "Nauðsynlegir eiginleikar eru ekki virkjaðir. Allir þessir eiginleikar verða að vera virkir: {FeatureNames}",
+    "Volo.Feature:010003": "Nauðsynlegir eiginleikar eru ekki virkjaðir. Að minnsta kosti einn af þessum eiginleikum verður að vera virkur: {FeatureNames}"
+  }
+}

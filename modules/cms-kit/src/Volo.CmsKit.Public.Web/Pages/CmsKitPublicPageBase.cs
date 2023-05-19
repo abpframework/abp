@@ -8,19 +8,18 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Layout;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit.Public.Web.Pages
+namespace Volo.CmsKit.Public.Web.Pages;
+
+public class CmsKitPublicPageBase : Microsoft.AspNetCore.Mvc.RazorPages.Page
 {
-    public class CmsKitPublicPageBase : Microsoft.AspNetCore.Mvc.RazorPages.Page
+    [RazorInject]
+    public IStringLocalizer<CmsKitResource> L { get; set; }
+
+    [RazorInject]
+    public IPageLayout PageLayout { get; set; }
+
+    public override Task ExecuteAsync()
     {
-        [RazorInject]
-        public IStringLocalizer<CmsKitResource> L { get; set; }
-
-        [RazorInject]
-        public IPageLayout PageLayout { get; set; }
-
-        public override Task ExecuteAsync()
-        {
-            return Task.CompletedTask; // Will be overriden by razor pages. (.cshtml)
-        }
+        return Task.CompletedTask; // Will be overriden by razor pages. (.cshtml)
     }
 }

@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Volo.Abp.Http;
+namespace Microsoft.AspNetCore.Cors;
 
-namespace Microsoft.AspNetCore.Cors
+public static class AbpCorsPolicyBuilderExtensions
 {
-    public static class AbpCorsPolicyBuilderExtensions
+    public static CorsPolicyBuilder WithAbpExposedHeaders(this CorsPolicyBuilder corsPolicyBuilder)
     {
-        public static CorsPolicyBuilder WithAbpExposedHeaders(this CorsPolicyBuilder corsPolicyBuilder)
-        {
-            return corsPolicyBuilder.WithExposedHeaders("_AbpErrorFormat");
-        }
+        return corsPolicyBuilder.WithExposedHeaders(AbpHttpConsts.AbpErrorFormat).WithExposedHeaders(AbpHttpConsts.AbpTenantResolveError);
     }
 }

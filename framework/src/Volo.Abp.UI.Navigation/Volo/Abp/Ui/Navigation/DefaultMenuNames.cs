@@ -1,13 +1,12 @@
-﻿namespace Volo.Abp.UI.Navigation
+﻿namespace Volo.Abp.UI.Navigation;
+
+public static class DefaultMenuNames
 {
-    public static class DefaultMenuNames
+    public static class Application
     {
-        public static class Application
+        public static class Main
         {
-            public static class Main
-            {
-                public const string Administration = "Abp.Application.Main.Administration";
-            }
+            public const string Administration = "Abp.Application.Main.Administration";
         }
     }
 }

@@ -20,7 +20,7 @@
         );
 
         var scrollTopBtn = $('.scroll-top-btn');
-        var enoughHeight = $('.docs-sidebar-wrapper > .docs-top').height() + 60;
+        var enoughHeight = $('.docs-sidebar-wrapper > .docs-top').height();
         var enoughHeightPlus = 500;
 
         $(window).scroll(function () {
@@ -124,18 +124,21 @@
     });
 
     function handleCustomScrolls() {
-        var wWidth = $(window).width();
-        if (wWidth > 766) {
-            $('#sidebar-scroll').mCustomScrollbar({
-                theme: 'minimal',
-                alwaysShowScrollbar: 0,
-            });
+        $('#sidebar-scroll').mCustomScrollbar({
+            theme: 'minimal',
+            alwaysShowScrollbar: 0,
+        });
 
-            $('#scroll-index').mCustomScrollbar({
-                theme: 'minimal-dark',
-                alwaysShowScrollbar: 0,
-            });
-        }
+        $('#scroll-index').mCustomScrollbar({
+            theme: 'minimal-dark',
+            alwaysShowScrollbar: 0,
+        });
+
+        $('.mCustomScrollbar-1').mCustomScrollbar({
+            theme: 'minimal-dark',
+            alwaysShowScrollbar: 0,
+            horizontalScroll: true,
+        });
     }
 
     window.Toc.helpers.createNavList = function () {
@@ -158,7 +161,7 @@
     };
 
     function docsCriteria() {
-        var docsContentWidth = $('.docs-content').width() - 20;
+        var docsContentWidth = $('.docs-content').width() - 74;
         $('.alert-criteria').width(docsContentWidth);
     }
     $(document).ready(function () {

@@ -1,6 +1,6 @@
 import { AccountService } from '@abp/ng.account.core/proxy';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -8,13 +8,13 @@ import { finalize } from 'rxjs/operators';
   templateUrl: 'forgot-password.component.html',
 })
 export class ForgotPasswordComponent {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
-  inProgress: boolean;
+  inProgress?: boolean;
 
   isEmailSent = false;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService) {
+  constructor(private fb: UntypedFormBuilder, private accountService: AccountService) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
@@ -27,7 +27,7 @@ export class ForgotPasswordComponent {
 
     this.accountService
       .sendPasswordResetCode({
-        email: this.form.get('email').value,
+        email: this.form.get('email')?.value,
         appName: 'Angular',
       })
       .pipe(finalize(() => (this.inProgress = false)))

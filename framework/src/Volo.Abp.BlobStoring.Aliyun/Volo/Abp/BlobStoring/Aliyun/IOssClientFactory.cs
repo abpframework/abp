@@ -1,9 +1,8 @@
 ﻿using Aliyun.OSS;
 
-namespace Volo.Abp.BlobStoring.Aliyun
+namespace Volo.Abp.BlobStoring.Aliyun;
+
+public interface IOssClientFactory
 {
-    public interface IOssClientFactory
-    {
-        IOss Create(AliyunBlobProviderConfiguration args);
-    }
+    IOss Create(AliyunBlobProviderConfiguration args);
 }

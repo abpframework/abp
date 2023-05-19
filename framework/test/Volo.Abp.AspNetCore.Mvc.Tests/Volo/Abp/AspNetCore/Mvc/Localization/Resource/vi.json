@@ -1,7 +1,10 @@
 {
   "culture": "vi",
   "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Ngày sinh1",
+    "DisplayName:BirthDate2": "Ngày sinh2",
+    "PersonModel:BirthDate3": "Ngày sinh3",
     "BirthDate": "Ngày sinh",
-    "Value1": "Giá trị thứ nhất" 
+    "Value1": "Giá trị thứ nhất"
   }
 }

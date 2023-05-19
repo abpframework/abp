@@ -5,59 +5,58 @@ using Shouldly;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.Threading
+namespace Volo.Abp.Threading;
+
+public class NullCancellationTokenProvider_Tests : AbpIntegratedTest<AbpThreadingTestModule>
 {
-    public class NullCancellationTokenProvider_Tests : AbpIntegratedTest<AbpThreadingTestModule>
+    private readonly ICancellationTokenProvider _cancellationTokenProvider;
+
+    public NullCancellationTokenProvider_Tests()
     {
-        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        _cancellationTokenProvider = NullCancellationTokenProvider.Instance;
+    }
 
-        public NullCancellationTokenProvider_Tests()
+    [Fact]
+    public void Should_Return_None_Token()
+    {
+        _cancellationTokenProvider.Token.ShouldBe(CancellationToken.None);
+    }
+
+    [Fact]
+    public void Should_Return_Specific_Token()
+    {
+        var cts = new CancellationTokenSource();
+
+        using (_cancellationTokenProvider.Use(cts.Token))
         {
-            _cancellationTokenProvider = NullCancellationTokenProvider.Instance;
+            var newCancellationTokenProvider = NullCancellationTokenProvider.Instance;
+
+            newCancellationTokenProvider.Token.ShouldBe(cts.Token);
         }
 
-        [Fact]
-        public void Should_Return_None_Token()
+        _cancellationTokenProvider.Token.ShouldBe(CancellationToken.None);
+    }
+
+    [Fact]
+    public void Should_Cancel_After_100_Milliseconds()
+    {
+        var cts = new CancellationTokenSource();
+        cts.CancelAfter(TimeSpan.FromMilliseconds(100));
+
+        using (_cancellationTokenProvider.Use(cts.Token))
         {
-            _cancellationTokenProvider.Token.ShouldBe(CancellationToken.None);
+            var newCancellationTokenProvider = NullCancellationTokenProvider.Instance;
+            Should.Throw<OperationCanceledException>(() => LongTask(1000, newCancellationTokenProvider.Token));
         }
+    }
 
-        [Fact]
-        public void Should_Return_Specific_Token()
+    private void LongTask(int loopCounter, CancellationToken cancellationToken = default)
+    {
+        for (var i = 0; i < loopCounter; i++)
         {
-            var cts = new CancellationTokenSource();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            using (_cancellationTokenProvider.Use(cts.Token))
-            {
-                var newCancellationTokenProvider = NullCancellationTokenProvider.Instance;
-
-                newCancellationTokenProvider.Token.ShouldBe(cts.Token);
-            }
-
-            _cancellationTokenProvider.Token.ShouldBe(CancellationToken.None);
-        }
-
-        [Fact]
-        public void Should_Cancel_After_100_Milliseconds()
-        {
-            var cts = new CancellationTokenSource();
-            cts.CancelAfter(TimeSpan.FromMilliseconds(100));
-
-            using (_cancellationTokenProvider.Use(cts.Token))
-            {
-                var newCancellationTokenProvider = NullCancellationTokenProvider.Instance;
-                Should.Throw<OperationCanceledException>(() => LongTask(1000, newCancellationTokenProvider.Token));
-            }
-        }
-
-        private void LongTask(int loopCounter, CancellationToken cancellationToken = default)
-        {
-            for (var i = 0; i < loopCounter; i++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                Thread.Sleep(10);
-            }
+            Thread.Sleep(10);
         }
     }
 }

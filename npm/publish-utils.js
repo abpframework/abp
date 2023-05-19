@@ -4,14 +4,14 @@ const semverParse = require('semver/functions/parse');
 
 program.version('0.0.1');
 program.option('-n, --nextVersion', 'version in common.props');
-program.option('-pr, --prerelase', 'whether version is prerelase');
+program.option('-pr, --prerelease', 'whether version is prerelease');
 program.option('-cv, --customVersion <customVersion>', 'set exact version');
 
 program.parse(process.argv);
 
 if (program.nextVersion) console.log(getVersion());
 
-if (program.prerelase)
+if (program.prerelease)
   console.log(!!semverParse(getVersion()).prerelease?.length);
 
 function getVersion() {

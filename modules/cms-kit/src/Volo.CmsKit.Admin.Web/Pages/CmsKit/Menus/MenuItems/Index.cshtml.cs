@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.Menus;
 
-namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems;
+
+public class IndexModel : CmsKitAdminPageModel
 {
-    public class IndexModel : CmsKitAdminPageModel
-    {
-    }
 }

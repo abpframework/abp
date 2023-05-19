@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.MultiTenancy
+﻿namespace Volo.Abp.MultiTenancy;
+
+public class TenantResolverConsts
 {
-    public class TenantResolverConsts
-    {
-        public const string DefaultTenantKey = "__tenant";
-    }
+    public const string DefaultTenantKey = "__tenant";
 }

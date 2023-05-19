@@ -44,6 +44,11 @@ export default `
     top: 0;
     left: 100%;
 }
+/* work around for rtl. Track https://github.com/ng-bootstrap/ng-bootstrap/issues/4100 issue */
+[dir=rtl] .navbar .dropdown-submenu .dropdown-menu {
+    top: 0;
+    right: 100%;
+}
 .card-header .btn {
     padding: 2px 6px;
 }

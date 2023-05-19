@@ -16,6 +16,7 @@ import {
   TENANT_MANAGEMENT_ENTITY_PROP_CONTRIBUTORS,
   TENANT_MANAGEMENT_TOOLBAR_ACTION_CONTRIBUTORS,
 } from './tokens/extensions.token';
+import { PageModule } from '@abp/ng.components/page';
 
 @NgModule({
   declarations: [TenantsComponent],
@@ -28,6 +29,7 @@ import {
     NgbDropdownModule,
     FeatureManagementModule,
     UiExtensionsModule,
+    PageModule,
   ],
 })
 export class TenantManagementModule {

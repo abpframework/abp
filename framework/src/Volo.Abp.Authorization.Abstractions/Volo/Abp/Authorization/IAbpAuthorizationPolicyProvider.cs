@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Volo.Abp.Authorization
+namespace Volo.Abp.Authorization;
+
+public interface IAbpAuthorizationPolicyProvider : IAuthorizationPolicyProvider
 {
-    public interface IAbpAuthorizationPolicyProvider : IAuthorizationPolicyProvider
-    {
-        Task<List<string>> GetPoliciesNamesAsync();
-    }
+    Task<List<string>> GetPoliciesNamesAsync();
 }

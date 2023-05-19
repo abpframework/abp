@@ -1,0 +1,8 @@
+{
+  "culture": "es",
+  "texts": {
+    "Welcome_Title": "Bienvenido",
+    "Welcome_Text": "Esta es una plantilla de inicio de aplicación minimalista de una sola capa para ABP Framework.",
+    "Menu:Home": "Inicio"
+  }
+}

@@ -2,34 +2,33 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Cli.Args
+namespace Volo.Abp.Cli.Args;
+
+public class AbpCommandLineOptions : Dictionary<string, string>
 {
-    public class AbpCommandLineOptions : Dictionary<string, string>
+    [CanBeNull]
+    public string GetOrNull([NotNull] string name, params string[] alternativeNames)
     {
-        [CanBeNull]
-        public string GetOrNull([NotNull] string name, params string[] alternativeNames)
+        Check.NotNullOrWhiteSpace(name, nameof(name));
+
+        var value = this.GetOrDefault(name);
+        if (!value.IsNullOrWhiteSpace())
         {
-            Check.NotNullOrWhiteSpace(name, nameof(name));
+            return value;
+        }
 
-            var value = this.GetOrDefault(name);
-            if (!value.IsNullOrWhiteSpace())
+        if (!alternativeNames.IsNullOrEmpty())
+        {
+            foreach (var alternativeName in alternativeNames)
             {
-                return value;
-            }
-
-            if (!alternativeNames.IsNullOrEmpty())
-            {
-                foreach (var alternativeName in alternativeNames)
+                value = this.GetOrDefault(alternativeName);
+                if (!value.IsNullOrWhiteSpace())
                 {
-                    value = this.GetOrDefault(alternativeName);
-                    if (!value.IsNullOrWhiteSpace())
-                    {
-                        return value;
-                    }
+                    return value;
                 }
             }
-
-            return null;
         }
+
+        return null;
     }
 }

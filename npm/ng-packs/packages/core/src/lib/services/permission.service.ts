@@ -14,7 +14,7 @@ export class PermissionService {
     );
   }
 
-  getGrantedPolicy(key: string) {
+  getGrantedPolicy(key: string | undefined) {
     const policies = this.getSnapshot();
     return this.isPolicyGranted(key, policies);
   }
@@ -36,7 +36,7 @@ export class PermissionService {
     );
   }
 
-  protected isPolicyGranted(key: string, grantedPolicies: Record<string, boolean>) {
+  protected isPolicyGranted(key: string | undefined, grantedPolicies: Record<string, boolean>) {
     if (!key) return true;
 
     const orRegexp = /\|\|/g;

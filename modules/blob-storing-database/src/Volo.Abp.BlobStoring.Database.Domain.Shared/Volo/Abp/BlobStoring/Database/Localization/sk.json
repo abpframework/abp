@@ -1,4 +1,6 @@
 {
   "culture": "sk",
-  "texts": {}
+  "texts": {
+    "MyAccount": "Môj účet"
+  }
 }

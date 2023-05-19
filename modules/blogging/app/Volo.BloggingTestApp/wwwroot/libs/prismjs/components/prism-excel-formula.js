@@ -38,12 +38,12 @@ Prism.languages['excel-formula'] = {
 		}
 	},
 	'function-name': {
-		pattern: /[A-Z]\w*(?=\()/i,
-		alias: 'keyword'
+		pattern: /\b[A-Z]\w*(?=\()/i,
+		alias: 'builtin'
 	},
 	'range': {
-		pattern: /\$?(?:[A-Z]+\$?\d+:\$?[A-Z]+\$?\d+|[A-Z]+:\$?[A-Z]+|\d+:\$?\d+)/i,
-		alias: 'property',
+		pattern: /\$?\b(?:[A-Z]+\$?\d+:\$?[A-Z]+\$?\d+|[A-Z]+:\$?[A-Z]+|\d+:\$?\d+)\b/i,
+		alias: 'selector',
 		inside: {
 			'operator': /:/,
 			'cell': /\$?[A-Z]+\$?\d+/i,
@@ -54,11 +54,11 @@ Prism.languages['excel-formula'] = {
 	'cell': {
 		// Excel is case insensitive, so the string "foo1" could be either a variable or a cell.
 		// To combat this, we match cells case insensitive, if the contain at least one "$", and case sensitive otherwise.
-		pattern: /[A-Z]+\d+|\$[A-Za-z]+\$?\d+|[A-Za-z]+\$\d+/,
-		alias: 'property'
+		pattern: /\b[A-Z]+\d+\b|\$[A-Za-z]+\$?\d+\b|\b[A-Za-z]+\$\d+\b/,
+		alias: 'selector'
 	},
 	'number': /(?:\b\d+(?:\.\d+)?|\B\.\d+)(?:e[+-]?\d+)?\b/i,
-	'boolean': /\b(?:TRUE|FALSE)\b/i,
+	'boolean': /\b(?:FALSE|TRUE)\b/i,
 	'operator': /[-+*/^%=&,]|<[=>]?|>=?/,
 	'punctuation': /[[\]();{}|]/
 };

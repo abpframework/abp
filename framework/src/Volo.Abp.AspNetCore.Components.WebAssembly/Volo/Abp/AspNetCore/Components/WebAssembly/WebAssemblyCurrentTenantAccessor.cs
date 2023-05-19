@@ -1,11 +1,10 @@
 ﻿using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly
+namespace Volo.Abp.AspNetCore.Components.WebAssembly;
+
+[Dependency(ReplaceServices = true)]
+public class WebAssemblyCurrentTenantAccessor : ICurrentTenantAccessor, ISingletonDependency
 {
-    [Dependency(ReplaceServices = true)]
-    public class WebAssemblyCurrentTenantAccessor : ICurrentTenantAccessor, ISingletonDependency
-    {
-        public BasicTenantInfo Current { get; set; }
-    }
+    public BasicTenantInfo Current { get; set; }
 }

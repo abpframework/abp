@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Volo.Abp.Features
-{
-    [AttributeUsage(AttributeTargets.Method)]
-    public class DisableFeatureCheckAttribute : Attribute
-    {
+namespace Volo.Abp.Features;
 
-    }
+[AttributeUsage(AttributeTargets.Method)]
+public class DisableFeatureCheckAttribute : Attribute
+{
+
 }

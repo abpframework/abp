@@ -2,6 +2,11 @@
   "culture": "zh-Hans",
   "texts": {
     "ThisFieldIsRequired": "此字段是必填字段",
-    "MaxLenghtErrorMessage": "该字段最多可包含'{0}'个字符"
+    "MaxLenghtErrorMessage": "该字段最多可包含'{0}'个字符",
+    "Enum:BookType.Undefined": "",
+    "Enum:BookType.0": "",
+    "BookType.Adventure": "",
+    "BookType.1": "",
+    "Biography": ""
   }
 }

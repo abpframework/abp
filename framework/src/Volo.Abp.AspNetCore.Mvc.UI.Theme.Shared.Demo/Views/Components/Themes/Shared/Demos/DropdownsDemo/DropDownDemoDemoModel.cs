@@ -1,17 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.DropdownsDemo
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.DropdownsDemo;
+
+public class DropDownDemoDemoModel
 {
-    public class DropDownDemoDemoModel
-    {
-        [Required]
-        [EmailAddress]
-        public string EmailAddress { get; set; }
+    [Required]
+    [EmailAddress]
+    public string EmailAddress { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+    [Required]
+    [DataType(DataType.Password)]
+    public string Password { get; set; }
 
-        public bool RememberMe { get; set; }
-    }
+    public bool RememberMe { get; set; }
 }

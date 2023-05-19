@@ -1,0 +1,17 @@
+{
+  "culture": "tr",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Sunucu Ana Bilgisayarı",
+    "Description:Abp.Ldap.ServerHost": "Sunucu Ana Bilgisayarı",
+    "DisplayName:Abp.Ldap.ServerPort": "Sunucu portu",
+    "Description:Abp.Ldap.ServerPort": "Sunucu portu",
+    "DisplayName:Abp.Ldap.BaseDc": "Temel alan bileşeni",
+    "Description:Abp.Ldap.BaseDc": "Temel alan bileşeni",
+    "DisplayName:Abp.Ldap.Domain": "Alan adı",
+    "Description:Abp.Ldap.Domain": "Alan adı",
+    "DisplayName:Abp.Ldap.UserName": "Kullanıcı adı",
+    "Description:Abp.Ldap.UserName": "Kullanıcı adı",
+    "DisplayName:Abp.Ldap.Password": "Parola",
+    "Description:Abp.Ldap.Password": "Parola"
+  }
+}

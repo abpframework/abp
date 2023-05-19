@@ -2,12 +2,11 @@
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Dapper
+namespace Volo.Abp.Dapper;
+
+[DependsOn(
+    typeof(AbpDddDomainModule),
+    typeof(AbpEntityFrameworkCoreModule))]
+public class AbpDapperModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpDddDomainModule),
-        typeof(AbpEntityFrameworkCoreModule))]
-    public class AbpDapperModule : AbpModule
-    {
-    }
 }

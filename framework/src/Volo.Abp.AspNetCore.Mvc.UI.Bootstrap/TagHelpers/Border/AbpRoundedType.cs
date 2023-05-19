@@ -1,12 +1,11 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Border
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Border;
+
+public enum AbpRoundedType
 {
-    public enum AbpRoundedType
-    {
-        Default,
-        _0,
-        Top,
-        Right,
-        Left,
-        Bottom
-    }
+    Default,
+    _0,
+    Top,
+    Right,
+    Left,
+    Bottom
 }

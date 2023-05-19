@@ -2,17 +2,16 @@
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp
+namespace Volo.Abp;
+
+public class ApplicationInitializationContext : IServiceProviderAccessor
 {
-    public class ApplicationInitializationContext : IServiceProviderAccessor
+    public IServiceProvider ServiceProvider { get; set; }
+
+    public ApplicationInitializationContext([NotNull] IServiceProvider serviceProvider)
     {
-        public IServiceProvider ServiceProvider { get; set; }
+        Check.NotNull(serviceProvider, nameof(serviceProvider));
 
-        public ApplicationInitializationContext([NotNull] IServiceProvider serviceProvider)
-        {
-            Check.NotNull(serviceProvider, nameof(serviceProvider));
-
-            ServiceProvider = serviceProvider;
-        }
+        ServiceProvider = serviceProvider;
     }
 }

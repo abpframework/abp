@@ -88,7 +88,7 @@ Setting Management module is extensible, just like the [setting system](../Setti
 If you want to create your own provider, implement the `ISettingManagementProvider` interface or inherit from the `SettingManagementProvider` base class:
 
 ````csharp
-public class CustomSettingProvider : SettingManagementProvider
+public class CustomSettingProvider : SettingManagementProvider, ITransientDependency
 {
     public override string Name => "Custom";
 
@@ -118,7 +118,13 @@ The order of the providers are important. Providers are executed in the reverse 
 
 ## Setting Management UI
 
-Setting Mangement module provided the email setting UI by default, and it is extensible; You can add your tabs to this page for your application settings.
+Setting Mangement module provided the email setting UI by default.
+
+![EmailSettingUi](../images/setting-management-email-ui.png)
+
+> You can click the Send test email button to send a test email to check your email settings.
+
+Setting it is extensible; You can add your tabs to this page for your application settings.
 
 ### MVC UI
 
@@ -303,4 +309,3 @@ export class AppComponent {
 Navigate to `/setting-management` route to see the changes:
 
 ![Custom Settings Tab](../images/custom-settings.png)
-

@@ -61,16 +61,23 @@ npm install @volo/abp.ng.account
 
 Open the `app.module.ts` and add `AccountPublicConfigModule.forRoot()` to the imports array as shown below:
 
+> Ensure that the `Account Layout Module` has been added if you are using the Lepton X theme. If you miss the step, you will get an error message that says `Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "AccountLayoutModule.forRoot()" to your app.module configuration.` when you try to access the account pages. Otherwise, you can skip adding the `AccountLayoutModule` step.
+ 
+
 ```js
 // app.module.ts
 
 import { AccountPublicConfigModule } from '@volo/abp.ng.account/public/config';
+// if you are using or want to use Lepton X, you should add AccountLayoutModule
+// import { AccountLayoutModule } from '@volosoft/abp.ng.theme.lepton-x/account' 
+
 //...
 
 @NgModule({
   imports: [
     //...
-    AccountPublicConfigModule.forRoot()
+    AccountPublicConfigModule.forRoot(),
+    // AccountLayoutModule.forRoot() // Only for Lepton X
   ],
   //...
 })
@@ -95,6 +102,24 @@ export class AppRoutingModule {}
 
 Before v4.3, the "My account" link in the current user dropdown on the top bar redirected the user to MVC's profile management page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account module instead.
 
+### Personal Info Page Confirm Message
+
+When the user changes their own data on the personal settings tab in My Account, The data can not update the CurrentUser key of Application-Configuration. The information of the user is stored in claims. The only way to apply this information to the CurrentUser of Application-Configuration is user should log out and log in. When the Refresh-Token feature is implemented, it will be fixed. So We've added a confirmation alert. 
+
+If you want to disable these warning, You should set  `isPersonalSettingsChangedConfirmationActive` false 
+
+```js
+// app-routing.module.ts
+const routes: Routes = [
+  //...
+  {
+    path: 'account',
+    loadChildren: () => import('@volo/abp.ng.account/public').then(m => m.AccountPublicModule.forLazy({ isPersonalSettingsChangedConfirmationActive:false })),
+  },
+  //...
+export class AppRoutingModule {}
+```
+
 ### Security Logs Page [COMMERCIAL]
 
 Before v4.3, the "Security Logs" link in the current user dropdown on the top bar redirected the user to MVC's security logs page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account public module instead.
@@ -110,7 +135,7 @@ export const environment = {
   // other options removed for sake of brevity
 
   oAuthConfig: {
-    issuer: 'https://localhost:44305', // IdentityServer url
+    issuer: 'https://localhost:44305', // AuthServer url
     clientId: 'MyProjectName_App',
     dummyClientSecret: '1q2w3e*',
     scope: 'offline_access MyProjectName',

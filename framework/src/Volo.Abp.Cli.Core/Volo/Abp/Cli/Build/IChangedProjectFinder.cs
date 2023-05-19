@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Cli.Build
+namespace Volo.Abp.Cli.Build;
+
+public interface IChangedProjectFinder
 {
-    public interface IChangedProjectFinder
-    {
-        List<DotNetProjectInfo> FindByRepository(DotNetProjectBuildConfig buildConfig);
-    }
+    List<DotNetProjectInfo> FindByRepository(DotNetProjectBuildConfig buildConfig);
 }

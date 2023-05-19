@@ -1,0 +1,7 @@
+{
+  "culture": "fa",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "منطقه زمانی",
+    "Description:Abp.Timing.Timezone": "منطقه زمانی برنامه"
+  }
+}

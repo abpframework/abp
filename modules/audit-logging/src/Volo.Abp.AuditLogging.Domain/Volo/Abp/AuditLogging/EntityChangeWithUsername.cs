@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.AuditLogging
+﻿namespace Volo.Abp.AuditLogging;
+
+public class EntityChangeWithUsername
 {
-    public class EntityChangeWithUsername
-    {
-        public EntityChange EntityChange { get; set; }
-        
-        public string UserName { get; set; }
-    }
+    public EntityChange EntityChange { get; set; }
+
+    public string UserName { get; set; }
 }

@@ -15,7 +15,7 @@ export interface RouterWaitState {
 })
 export class RouterWaitService {
   private store = new InternalStore<RouterWaitState>({ loading: false });
-  private destroy$ = new Subject();
+  private destroy$ = new Subject<void>();
   private delay: number;
   constructor(private routerEvents: RouterEvents, injector: Injector) {
     this.delay = injector.get(LOADER_DELAY, 500);

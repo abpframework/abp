@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.Mvc.Security.Headers
+namespace Volo.Abp.AspNetCore.Mvc.Security.Headers;
+
+public class SecurityHeadersTestController : AbpController
 {
-    public class SecurityHeadersTestController : AbpController
+    public ActionResult Get()
     {
-        public ActionResult Get()
-        {
-            return Content("OK");
-        }
+        return Content("OK");
     }
 }

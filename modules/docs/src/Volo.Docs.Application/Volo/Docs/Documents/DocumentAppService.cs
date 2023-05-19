@@ -404,8 +404,7 @@ namespace Volo.Docs.Documents
             var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version,
                 oldDocument?.LastSignificantUpdateTime);
 
-            await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode,
-                sourceDocument.Version);
+            await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode, sourceDocument.Version, autoSave: true);
             await _documentRepository.InsertAsync(sourceDocument, true);
 
             Logger.LogInformation($"Document retrieved: {documentName}");

@@ -9,7 +9,7 @@ These changes are required to manually applied in your own solution. It would be
 * Add `<BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>` to the `PropertyGroup` section of your project (`.csproj`) file.
 * Update the `Blazorise.*` packages to the latest version (to the latest RC for the ABP 4.0 preview).
 
-### wwwroot/index.html
+### `wwwroot/index.html`
 
 There are some changes made in the index.html file;
 

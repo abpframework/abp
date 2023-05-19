@@ -7,7 +7,7 @@ Basic usage:
 ````html
 <abp-figure>
   <abp-image src="..." class="img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
-  <abp-figcaption class="text-right">A caption for the above image.</abp-figcaption>
+  <abp-figcaption class="text-end">A caption for the above image.</abp-figcaption>
 </abp-figure>
 ````
 

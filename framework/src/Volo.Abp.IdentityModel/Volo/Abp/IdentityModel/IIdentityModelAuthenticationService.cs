@@ -2,16 +2,15 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.IdentityModel
-{
-    //TODO: Re-consider this interface!
-    public interface IIdentityModelAuthenticationService
-    {
-        Task<bool> TryAuthenticateAsync(
-            [NotNull] HttpClient client,
-            string identityClientName = null);
+namespace Volo.Abp.IdentityModel;
 
-        Task<string> GetAccessTokenAsync(
-            IdentityClientConfiguration configuration);
-    }
+//TODO: Re-consider this interface!
+public interface IIdentityModelAuthenticationService
+{
+    Task<bool> TryAuthenticateAsync(
+        [NotNull] HttpClient client,
+        string identityClientName = null);
+
+    Task<string> GetAccessTokenAsync(
+        IdentityClientConfiguration configuration);
 }

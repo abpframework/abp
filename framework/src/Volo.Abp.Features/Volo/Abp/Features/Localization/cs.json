@@ -1,0 +1,8 @@
+{
+  "culture": "cs",
+  "texts": {
+    "Volo.Feature:010001": "Funkce není povolena: {FeatureName}",
+    "Volo.Feature:010002": "Požadované funkce nejsou povoleny. Všechny tyto funkce musí být povoleny: {FeatureNames}",
+    "Volo.Feature:010003": "Požadované funkce nejsou povoleny. Musí být povolena alespoň jedna z těchto funkcí: {FeatureNames}"
+  }
+}

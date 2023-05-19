@@ -1,11 +1,10 @@
 ﻿
-namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages;
+
+public class IndexModel : CmsKitAdminPageModel
 {
-    public class IndexModel : CmsKitAdminPageModel
+    public void OnGet()
     {
-        public void OnGet()
-        {
-            
-        }
+
     }
 }

@@ -5,7 +5,7 @@
         var re = new RegExp(/^.*\//);
         var rootUrl = re.exec(window.location.href);
 
-        var pageHeader = $('#PostTitle').text();
+        var pageHeader = $('#PostTitle').text().trim();
         var blogName = $('#BlogFullName').attr('name');
 
         $('#TwitterShareLink').attr(
@@ -14,6 +14,12 @@
                 encodeURI(
                     pageHeader + ' | ' + blogName + ' | ' + window.location.href
                 )
+        );
+        
+        $('#FacebookShareLink').attr(
+            'href',
+            'https://www.facebook.com/sharer/sharer.php?u=' +
+                encodeURI(window.location.href)
         );
 
         $('#LinkedinShareLink').attr(
@@ -44,7 +50,16 @@
                 '&'
         );
     };
-
+    
+    $('#CopyLink').click(function (event) {
+        event.preventDefault();
+        var $temp = $('<input>');
+        $('body').append($temp);
+        $temp.val(window.location.href).select();
+        document.execCommand('copy');
+        $temp.remove();
+    });
+    
     $('div .replyForm').hide();
 
     $('div .editForm').hide();

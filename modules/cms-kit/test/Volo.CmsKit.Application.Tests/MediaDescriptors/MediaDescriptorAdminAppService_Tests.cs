@@ -7,46 +7,45 @@ using Volo.Abp.Content;
 using Volo.CmsKit.Admin.MediaDescriptors;
 using Xunit;
 
-namespace Volo.CmsKit.MediaDescriptors
+namespace Volo.CmsKit.MediaDescriptors;
+
+public class MediaDescriptorAdminAppService_Tests : CmsKitApplicationTestBase
 {
-    public class MediaDescriptorAdminAppService_Tests : CmsKitApplicationTestBase
+    private readonly CmsKitTestData _cmsKitTestData;
+    private readonly IMediaDescriptorAdminAppService _mediaDescriptorAdminAppService;
+    private readonly IMediaDescriptorRepository _mediaDescriptorRepository;
+
+    public MediaDescriptorAdminAppService_Tests()
     {
-        private readonly CmsKitTestData _cmsKitTestData;
-        private readonly IMediaDescriptorAdminAppService _mediaDescriptorAdminAppService;
-        private readonly IMediaDescriptorRepository _mediaDescriptorRepository;
+        _cmsKitTestData = GetRequiredService<CmsKitTestData>();
+        _mediaDescriptorAdminAppService = GetRequiredService<IMediaDescriptorAdminAppService>();
+        _mediaDescriptorRepository = GetRequiredService<IMediaDescriptorRepository>();
+    }
 
-        public MediaDescriptorAdminAppService_Tests()
+    [Fact]
+    public async Task Should_Create_Media()
+    {
+        var mediaName = "README.md";
+        var mediaType = "text/markdown";
+        var mediaContent =
+            "# ABP Framework\nABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**.";
+
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(mediaContent));
+
+        var media = await _mediaDescriptorAdminAppService.CreateAsync(_cmsKitTestData.Media_1_EntityType, new CreateMediaInputWithStream
         {
-            _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-            _mediaDescriptorAdminAppService = GetRequiredService<IMediaDescriptorAdminAppService>();
-            _mediaDescriptorRepository = GetRequiredService<IMediaDescriptorRepository>();
-        }
+            Name = mediaName,
+            File = new RemoteStreamContent(stream, mediaName, mediaType)
+        });
 
-        [Fact]
-        public async Task Should_Create_Media()
-        {
-            var mediaName = "README.md";
-            var mediaType = "text/markdown";
-            var mediaContent =
-                "# ABP Framework\nABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**.";
+        media.ShouldNotBeNull();
+    }
 
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(mediaContent));
+    [Fact]
+    public async Task Should_Delete_Media()
+    {
+        await _mediaDescriptorAdminAppService.DeleteAsync(_cmsKitTestData.Media_1_Id);
 
-            var media = await _mediaDescriptorAdminAppService.CreateAsync(_cmsKitTestData.Media_1_EntityType, new CreateMediaInputWithStream
-            {
-                Name = mediaName,
-                File = new RemoteStreamContent(stream, mediaName, mediaType)
-            });
-
-            media.ShouldNotBeNull();
-        }
-
-        [Fact]
-        public async Task Should_Delete_Media()
-        {
-            await _mediaDescriptorAdminAppService.DeleteAsync(_cmsKitTestData.Media_1_Id);
-
-            (await _mediaDescriptorRepository.FindAsync(_cmsKitTestData.Media_1_Id)).ShouldBeNull();
-        }
+        (await _mediaDescriptorRepository.FindAsync(_cmsKitTestData.Media_1_Id)).ShouldBeNull();
     }
 }

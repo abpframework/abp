@@ -5,16 +5,19 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.Ui.LayoutHooks;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs.Bundling;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Localization;
 using Volo.Docs.Markdown;
+using Volo.Docs.Pages.Shared.Components.Head;
 
 namespace Volo.Docs
 {
@@ -84,6 +87,16 @@ namespace Volo.Docs
                 options
                     .Extensions<PrismjsScriptBundleContributor>()
                     .Add<PrismjsScriptBundleContributorDocsExtension>();
+            });
+
+            Configure<DynamicJavaScriptProxyOptions>(options =>
+            {
+                options.DisableModule(DocsRemoteServiceConsts.ModuleName);
+            });
+
+            Configure<AbpLayoutHookOptions>(options =>
+            {
+                options.Add(LayoutHooks.Head.Last, typeof(HeadViewComponent));
             });
         }
     }

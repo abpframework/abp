@@ -1,10 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Uow
+namespace Volo.Abp.Uow;
+
+public interface ISupportsSavingChanges
 {
-    public interface ISupportsSavingChanges
-    {
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);
-    }
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }

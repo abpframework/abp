@@ -1,4 +1,4 @@
-export function getRandomBackgroundColor(count) {
+export function getRandomBackgroundColor(count: number) {
   const colors = [];
 
   for (let i = 0; i < count; i++) {

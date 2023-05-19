@@ -2,40 +2,39 @@
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.BlobStoring
+namespace Volo.Abp.BlobStoring;
+
+public class BlobContainerNameAttribute : Attribute
 {
-    public class BlobContainerNameAttribute : Attribute
+    [NotNull]
+    public string Name { get; }
+
+    public BlobContainerNameAttribute([NotNull] string name)
     {
-        [NotNull]
-        public string Name { get; }
+        Check.NotNullOrWhiteSpace(name, nameof(name));
 
-        public BlobContainerNameAttribute([NotNull] string name)
+        Name = name;
+    }
+
+    public virtual string GetName(Type type)
+    {
+        return Name;
+    }
+
+    public static string GetContainerName<T>()
+    {
+        return GetContainerName(typeof(T));
+    }
+
+    public static string GetContainerName(Type type)
+    {
+        var nameAttribute = type.GetCustomAttribute<BlobContainerNameAttribute>();
+
+        if (nameAttribute == null)
         {
-            Check.NotNullOrWhiteSpace(name, nameof(name));
-
-            Name = name;
+            return type.FullName;
         }
 
-        public virtual string GetName(Type type)
-        {
-            return Name;
-        }
-
-        public static string GetContainerName<T>()
-        {
-            return GetContainerName(typeof(T));
-        }
-
-        public static string GetContainerName(Type type)
-        {
-            var nameAttribute = type.GetCustomAttribute<BlobContainerNameAttribute>();
-
-            if (nameAttribute == null)
-            {
-                return type.FullName;
-            }
-
-            return nameAttribute.GetName(type);
-        }
+        return nameAttribute.GetName(type);
     }
 }

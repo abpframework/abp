@@ -1,20 +1,19 @@
 ﻿using Volo.Abp.Testing;
 
-namespace Volo.Abp.BlobStoring.Aws
-{
-    public class AbpBlobStoringAwsTestCommonBase : AbpIntegratedTest<AbpBlobStoringAwsTestCommonModule>
-    {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
-    }
+namespace Volo.Abp.BlobStoring.Aws;
 
-    public class AbpBlobStoringAwsTestBase : AbpIntegratedTest<AbpBlobStoringAwsTestModule>
+public class AbpBlobStoringAwsTestCommonBase : AbpIntegratedTest<AbpBlobStoringAwsTestCommonModule>
+{
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+        options.UseAutofac();
+    }
+}
+
+public class AbpBlobStoringAwsTestBase : AbpIntegratedTest<AbpBlobStoringAwsTestModule>
+{
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    {
+        options.UseAutofac();
     }
 }

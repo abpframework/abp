@@ -1,3 +1,4 @@
+import { ABP } from '@abp/ng.core';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -5,5 +6,5 @@ import { Component, Input } from '@angular/core';
   templateUrl: './breadcrumb-items.component.html',
 })
 export class BreadcrumbItemsComponent {
-  @Input() items = [];
+  @Input() items: Partial<ABP.Route>[] = [];
 }

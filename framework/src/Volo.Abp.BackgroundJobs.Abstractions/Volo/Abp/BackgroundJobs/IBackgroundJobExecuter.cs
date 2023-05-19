@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.BackgroundJobs
+namespace Volo.Abp.BackgroundJobs;
+
+public interface IBackgroundJobExecuter
 {
-    public interface IBackgroundJobExecuter
-    {
-        Task ExecuteAsync(JobExecutionContext context);
-    }
+    Task ExecuteAsync(JobExecutionContext context);
 }

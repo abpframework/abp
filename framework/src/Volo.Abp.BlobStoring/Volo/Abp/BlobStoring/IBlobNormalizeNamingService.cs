@@ -1,11 +1,10 @@
-﻿namespace Volo.Abp.BlobStoring
+﻿namespace Volo.Abp.BlobStoring;
+
+public interface IBlobNormalizeNamingService
 {
-    public interface IBlobNormalizeNamingService
-    {
-        BlobNormalizeNaming NormalizeNaming(BlobContainerConfiguration configuration, string containerName, string blobName);
+    BlobNormalizeNaming NormalizeNaming(BlobContainerConfiguration configuration, string containerName, string blobName);
 
-        string NormalizeContainerName(BlobContainerConfiguration configuration, string containerName);
+    string NormalizeContainerName(BlobContainerConfiguration configuration, string containerName);
 
-        string NormalizeBlobName(BlobContainerConfiguration configuration, string blobName);
-    }
+    string NormalizeBlobName(BlobContainerConfiguration configuration, string blobName);
 }

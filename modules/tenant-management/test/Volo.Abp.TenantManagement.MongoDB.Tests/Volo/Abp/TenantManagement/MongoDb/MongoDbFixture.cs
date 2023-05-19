@@ -1,24 +1,36 @@
 using System;
-using Mongo2Go;
+using EphemeralMongo;
 using MongoDB.Driver;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.TenantManagement.MongoDB
+namespace Volo.Abp.TenantManagement.MongoDB;
+
+public class MongoDbFixture : IDisposable
 {
-    public class MongoDbFixture : IDisposable
+    public readonly static IMongoRunner MongoDbRunner;
+
+    static MongoDbFixture()
     {
-        private static readonly MongoDbRunner MongoDbRunner;
-        public static readonly string ConnectionString;
-
-        static MongoDbFixture()
+        MongoDbRunner = MongoRunner.Run(new MongoRunnerOptions
         {
-            MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 20);
-            ConnectionString = MongoDbRunner.ConnectionString;
-        }
+            UseSingleNodeReplicaSet = true
+        });
+    }
 
-        public void Dispose()
-        {
-            MongoDbRunner?.Dispose();
-        }
+    public static string GetRandomConnectionString()
+    {
+        return GetConnectionString("Db_" + Guid.NewGuid().ToString("N"));
+    }
+
+    public static string GetConnectionString(string databaseName)
+    {
+        var stringArray = MongoDbRunner.ConnectionString.Split('?');
+        var connectionString = stringArray[0].EnsureEndsWith('/') + databaseName + "/?" + stringArray[1];
+        return connectionString;
+    }
+
+    public void Dispose()
+    {
+        MongoDbRunner?.Dispose();
     }
 }

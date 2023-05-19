@@ -1,0 +1,14 @@
+{
+  "culture": "is",
+  "texts": {
+    "VirtualFileExplorer": "Sýndar skráarkönnuður",
+    "VirtualFileType": "Sýnar skáar tegund",
+    "Menu:VirtualFileExplorer": "Sýndar skráarkönnuður",
+    "LastUpdateTime": "Síðasti uppfærslutími",
+    "VirtualFileName": "Sýndar skáarnafn",
+    "FileContent": "Innihald skráar",
+    "Size": "Stærð",
+    "BackToRoot": "Aftur í rót",
+    "EmptyFileInfoList": "Það eru engar sýndar skrár"
+  }
+}

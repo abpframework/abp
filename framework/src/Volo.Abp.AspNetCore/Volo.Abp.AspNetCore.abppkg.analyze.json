@@ -1,0 +1,98 @@
+{
+  "name": "Volo.Abp.AspNetCore",
+  "hash": "",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AspNetCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Auditing",
+          "namespace": "Volo.Abp.Auditing",
+          "name": "AbpAuditingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Security",
+          "namespace": "Volo.Abp.Security",
+          "name": "AbpSecurityModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.VirtualFileSystem",
+          "namespace": "Volo.Abp.VirtualFileSystem",
+          "name": "AbpVirtualFileSystemModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "namespace": "Volo.Abp.Uow",
+          "name": "AbpUnitOfWorkModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Http",
+          "namespace": "Volo.Abp.Http",
+          "name": "AbpHttpModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Authorization",
+          "namespace": "Volo.Abp.Authorization",
+          "name": "AbpAuthorizationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "namespace": "Volo.Abp.Validation",
+          "name": "AbpValidationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.ExceptionHandling",
+          "namespace": "Volo.Abp.ExceptionHandling",
+          "name": "AbpExceptionHandlingModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAspNetCoreModule",
+      "summary": null
+    }
+  ]
+}

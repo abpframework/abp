@@ -12,7 +12,7 @@ import { SessionStateService } from './session-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class MultiTenancyService {
-  domainTenant: CurrentTenantDto = null;
+  domainTenant: CurrentTenantDto | null = null;
 
   isTenantBoxVisible = true;
 
@@ -29,17 +29,17 @@ export class MultiTenancyService {
     private tenantService: AbpTenantService,
     private configStateService: ConfigStateService,
     @Inject(TENANT_KEY) public tenantKey: string,
-  ) {}
+  ) { }
 
   setTenantByName(tenantName: string) {
     return this.tenantService
-      .findTenantByName(tenantName, { [this.tenantKey]: '' })
+      .findTenantByName(tenantName)
       .pipe(switchMap(this.setTenantToState));
   }
 
   setTenantById(tenantId: string) {
     return this.tenantService
-      .findTenantById(tenantId, { [this.tenantKey]: '' })
+      .findTenantById(tenantId)
       .pipe(switchMap(this.setTenantToState));
   }
 }

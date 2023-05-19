@@ -15,7 +15,7 @@ Prism.languages.pcaxis = {
 				}
 			},
 			'sub-key': {
-				pattern: /^(\s*)[\s\S]+/,
+				pattern: /^(\s*)\S[\s\S]*/,
 				lookbehind: true,
 				inside: {
 					'parameter': {
@@ -47,7 +47,7 @@ Prism.languages.pcaxis = {
 		pattern: /(^|\s)\d+(?:\.\d+)?(?!\S)/,
 		lookbehind: true
 	},
-	'boolean': /YES|NO/,
+	'boolean': /NO|YES/,
 };
 
 Prism.languages.px = Prism.languages.pcaxis;

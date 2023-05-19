@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
+
+public interface IBundleItemTagHelper : IBundleTagHelper
 {
-    public interface IBundleItemTagHelper : IBundleTagHelper
-    {
-        BundleTagHelperItem CreateBundleTagHelperItem();
-    }
+    BundleTagHelperItem CreateBundleTagHelperItem();
 }

@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Data
+namespace Volo.Abp.Data;
+
+public interface IDataSeeder
 {
-    public interface IDataSeeder
-    {
-        Task SeedAsync(DataSeedContext context);
-    }
+    Task SeedAsync(DataSeedContext context);
 }

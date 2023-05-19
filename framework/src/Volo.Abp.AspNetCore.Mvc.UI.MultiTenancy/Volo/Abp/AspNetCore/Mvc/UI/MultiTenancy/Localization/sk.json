@@ -1,6 +1,7 @@
 {
   "culture": "sk",
   "texts": {
+    "GivenTenantIsNotExist": "Daný nájomca neexistuje: {0}",
     "GivenTenantIsNotAvailable": "Daný tenant nie je k dispozícii: {0}",
     "Tenant": "Tenant",
     "Switch": "prepnúť",

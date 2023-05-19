@@ -11,6 +11,7 @@ export * from './lib/constants/extra-properties';
 export * from './lib/directives/disabled.directive';
 export * from './lib/directives/prop-data.directive';
 export * from './lib/enums/props.enum';
+export * from './lib/enums/components';
 export {
   ActionCallback,
   ActionList,
@@ -61,8 +62,10 @@ export {
   ToolbarComponent,
   ToolbarComponentOptions,
 } from './lib/models/toolbar-actions';
+export * from './lib/pipes/create-injector.pipe';
 export * from './lib/services/extensions.service';
 export * from './lib/tokens/extensions.token';
+export * from './lib/tokens/extensible-form-view-provider.token';
 export * from './lib/ui-extensions.module';
 export * from './lib/utils/actions.util';
 export * from './lib/utils/form-props.util';

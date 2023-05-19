@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab;
+
+public enum TabStyle
 {
-    public enum TabStyle
-    {
-        Tab,
-        Pill,
-        PillVertical
-    }
+    Tab,
+    Pill,
+    PillVertical
 }

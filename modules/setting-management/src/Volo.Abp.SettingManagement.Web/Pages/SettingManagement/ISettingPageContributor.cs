@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
-namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
+namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
+
+public interface ISettingPageContributor
 {
-    public interface ISettingPageContributor
-    {
-        Task ConfigureAsync(SettingPageCreationContext context);
+    Task ConfigureAsync(SettingPageCreationContext context);
 
-        Task<bool> CheckPermissionsAsync(SettingPageCreationContext context);
-    }
+    [Obsolete("Use SettingPageContributorBase as base class and call `RequiredPermissions` or `RequiredFeatures` for better performance.")]
+    Task<bool> CheckPermissionsAsync(SettingPageCreationContext context);
 }

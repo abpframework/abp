@@ -2,16 +2,15 @@
 using System;
 using Volo.Abp;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags;
+
+[Serializable]
+public class TagAlreadyExistException : BusinessException
 {
-    [Serializable]
-    public class TagAlreadyExistException : BusinessException
+    public TagAlreadyExistException([NotNull] string entityType, [NotNull] string name)
     {
-        public TagAlreadyExistException([NotNull] string entityType, [NotNull] string name)
-        {
-            Code = CmsKitErrorCodes.Tags.TagAlreadyExist;
-            WithData(nameof(Tag.EntityType), entityType);
-            WithData(nameof(Tag.Name), name);
-        }
+        Code = CmsKitErrorCodes.Tags.TagAlreadyExist;
+        WithData(nameof(Tag.EntityType), entityType);
+        WithData(nameof(Tag.Name), name);
     }
 }

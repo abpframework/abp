@@ -15,19 +15,23 @@ export function createDisplayNameLocalizationPipeKeyGenerator(
   ) => {
     if (displayName && displayName.name)
       return generateLocalizationPipeKey(
-        [displayName.resource],
+        [displayName.resource || ''],
         [displayName.name],
         displayName.name,
       );
 
     const key = generateLocalizationPipeKey(
-      [fallback.resource],
+      [fallback.resource || ''],
       ['DisplayName:' + fallback.name],
       undefined,
     );
 
     if (key) return key;
 
-    return generateLocalizationPipeKey([fallback.resource], [fallback.name], fallback.name);
+    return generateLocalizationPipeKey(
+      [fallback.resource || ''],
+      [fallback.name || ''],
+      fallback.name,
+    );
   };
 }

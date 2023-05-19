@@ -1,16 +1,16 @@
 ﻿using System;
+using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+[Serializable]
+public class IdentityRoleNameChangedEto : IMultiTenant 
 {
-    [Serializable]
-    public class IdentityRoleNameChangedEto
-    {
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public Guid? TenantId { get; set; }
+    public Guid? TenantId { get; set; }
 
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public string OldName { get; set; }
-    }
+    public string OldName { get; set; }
 }

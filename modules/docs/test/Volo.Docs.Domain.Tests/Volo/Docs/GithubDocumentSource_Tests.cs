@@ -25,7 +25,7 @@ namespace Volo.Docs
         {
             var source = _documentSourceFactory.Create(GithubDocumentSource.Type);
 
-            var project = await _projectRepository.FindAsync(_testData.PorjectId);
+            var project = await _projectRepository.FindAsync(_testData.ProjectId);
             project.ShouldNotBeNull();
 
             var document = await source.GetDocumentAsync(project, "index2", "en", "0.123.0");
@@ -42,7 +42,7 @@ namespace Volo.Docs
         {
             var source = _documentSourceFactory.Create(GithubDocumentSource.Type);
 
-            var project = await _projectRepository.FindAsync(_testData.PorjectId);
+            var project = await _projectRepository.FindAsync(_testData.ProjectId);
             project.ShouldNotBeNull();
 
             var document = await source.GetVersionsAsync(project);
@@ -57,7 +57,7 @@ namespace Volo.Docs
         {
             var source = _documentSourceFactory.Create(GithubDocumentSource.Type);
 
-            var project = await _projectRepository.FindAsync(_testData.PorjectId);
+            var project = await _projectRepository.FindAsync(_testData.ProjectId);
             project.ShouldNotBeNull();
 
             var documentResource = await source.GetResource(project, "index.md", "en", "0.123.0");

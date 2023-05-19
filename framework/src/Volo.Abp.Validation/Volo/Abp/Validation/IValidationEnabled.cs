@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.Validation
+﻿namespace Volo.Abp.Validation;
+
+public interface IValidationEnabled
 {
-    public interface IValidationEnabled
-    {
-        
-    }
+
 }

@@ -1,0 +1,8 @@
+{
+  "culture": "is",
+  "texts": {
+    "Menu:Home": "Heim",
+    "Welcome": "Velkomin",
+    "LongWelcomeMessage": "Verið velkomin í forritið. Þetta er startup verkefni sem byggir á ABP. Nánari upplýsingar er að finna á abp.io."
+  }
+}

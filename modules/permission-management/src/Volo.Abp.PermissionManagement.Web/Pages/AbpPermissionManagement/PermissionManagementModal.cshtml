@@ -1,6 +1,8 @@
 @page
+@using System.Web;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Localization
 @using Volo.Abp.PermissionManagement.Localization
 @using Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 @model PermissionManagementModal
@@ -9,11 +11,11 @@
     Layout = null;
 }
 
-<form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement">
+<form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement" id="PermissionManagementForm">
     <abp-modal size="Large">
-        <abp-modal-header title="@(L["Permissions"].Value) - @Model.EntityDisplayName"></abp-modal-header>
+        <abp-modal-header title="@(L["Permissions"].Value) - @(HttpUtility.HtmlEncode(Model.EntityDisplayName))"></abp-modal-header>
         <abp-modal-body class="custom-scroll-container">
-            <abp-input asp-for="SelectAllInAllTabs" check-box-hidden-input-render-mode="None" label="@L["SelectAllInAllTabs"].Value"/>
+            <abp-input asp-for="SelectAllInAllTabs" check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None" label="@L["SelectAllInAllTabs"].Value" disabled="@Model.Groups.All(group => group.IsDisabled(Model.ProviderName))"/>
             <hr class="mt-2 mb-2"/>
             <input asp-for="@Model.ProviderKey"/>
             <input asp-for="@Model.ProviderName"/>
@@ -25,25 +27,26 @@
                         <h4>@group.DisplayName</h4>
                         <hr class="mt-2 mb-3"/>
                         <div class="w-100" style="max-height: 640px;overflow-y: auto">
-                            <div class="pl-1 pt-1">
+                            <div class="ps-1 pt-1">
                                 <abp-input asp-for="@group.IsAllPermissionsGranted"
-                                           check-box-hidden-input-render-mode="None"
+                                           check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None"
                                            name="SelectAllInThisTab"
                                            id="SelectAllInThisTab-@group.GetNormalizedGroupName()"
                                            data-tab-id="v-pills-tab-@group.GetNormalizedGroupName()"
-                                           label="@L["SelectAllInThisTab"].Value"/>
+                                           label="@L["SelectAllInThisTab"].Value"
+                                           disabled="@group.IsDisabled(Model.ProviderName)" />
                                 <hr class="mb-3"/>
                                 @for (var j = 0; j < group.Permissions.Count; j++)
                                 {
                                     var permission = group.Permissions[j];
                                     <abp-input asp-for="@permission.IsGranted"
-                                               check-box-hidden-input-render-mode="None"
+                                               check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None"
                                                abp-id-name="@Model.Groups[i].Permissions[j].IsGranted"
                                                label="@permission.GetShownName(Model.ProviderName)"
                                                disabled="@permission.IsDisabled(Model.ProviderName)"
                                                group-data-permission-name="@permission.Name"
                                                group-data-parent-name="@(permission.ParentName ?? "")"
-                                               group-style="margin-left: @(permission.Depth * 20)px"/>
+                                               group-style="margin-inline-start: @(permission.Depth * 20)px"/>
                                     <input asp-for="@permission.Name" abp-id-name="@Model.Groups[i].Permissions[j].Name"/>
                                 }
                             </div>

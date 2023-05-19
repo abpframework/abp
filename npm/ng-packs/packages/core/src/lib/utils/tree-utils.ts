@@ -1,3 +1,5 @@
+import { isArray } from './common-utils';
+
 /* eslint-disable @typescript-eslint/ban-types */
 export class BaseTreeNode<T extends object> {
   children: TreeNode<T>[] = [];
@@ -13,7 +15,7 @@ export class BaseTreeNode<T extends object> {
   }
 }
 
-export function createTreeFromList<T extends object, R extends unknown>(
+export function createTreeFromList<T extends object, R>(
   list: T[],
   keySelector: (item: T) => NodeKey,
   parentKeySelector: typeof keySelector,
@@ -43,7 +45,7 @@ export function createTreeFromList<T extends object, R extends unknown>(
   return tree;
 }
 
-export function createMapFromList<T extends object, R extends unknown>(
+export function createMapFromList<T extends object, R>(
   list: T[],
   keySelector: (item: T) => NodeKey,
   valueMapper: (item: T) => R,
@@ -62,7 +64,7 @@ export function createTreeNodeFilterCreator<T extends object>(
   return (search: string) => {
     const regex = new RegExp('.*' + search + '.*', 'i');
 
-    return function collectNodes(nodes: TreeNode<T>[], matches = []) {
+    return function collectNodes(nodes: TreeNode<T>[], matches: TreeNode<T>[] = []) {
       for (const node of nodes) {
         if (regex.test(mapperFn(node[key]))) matches.push(node);
 
@@ -74,6 +76,28 @@ export function createTreeNodeFilterCreator<T extends object>(
   };
 }
 
+export function createGroupMap<T extends { group?: string }>(
+  list: TreeNode<T>[],
+  othersGroupKey: string,
+) {
+  if (!isArray(list) || !list.some(node => Boolean(node.group))) return undefined;
+
+  const mapGroup = new Map<string, TreeNode<T>[]>();
+
+  for (const node of list) {
+    const group = node?.group || othersGroupKey;
+    if (typeof group !== 'string') {
+      throw new Error(`Invalid group: ${group}`);
+    }
+
+    const items = mapGroup.get(group) || [];
+    items.push(node);
+    mapGroup.set(group, items);
+  }
+
+  return mapGroup;
+}
+
 export type TreeNode<T extends object> = {
   [K in keyof T]: T[K];
 } & {
@@ -82,8 +106,13 @@ export type TreeNode<T extends object> = {
   parent?: TreeNode<T>;
 };
 
-type NodeKey = number | string | symbol | undefined | null;
+export type RouteGroup<T extends object> = {
+  readonly group: string;
+  readonly items: TreeNode<T>[];
+};
 
-type NodeValue<T extends object, F extends (...args: any) => any> = F extends undefined
+export type NodeKey = number | string | symbol | undefined | null;
+
+export type NodeValue<T extends object, F extends (...args: any) => any> = F extends undefined
   ? TreeNode<T>
   : ReturnType<F>;

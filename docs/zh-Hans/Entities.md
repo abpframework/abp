@@ -26,9 +26,9 @@ public class Book : Entity<Guid>
 如果你的实体Id类型为 `Guid`,有一些好的实践可以实现:
 
 * 创建一个构造函数,获取ID作为参数传递给基类.
-  * 如果没有为GUID Id斌值,**ABP框架会在保存时设置它**,但是在将实体保存到数据库之前最好在实体上有一个有效的Id.
+  * 如果没有为GUID Id赋值,**ABP框架会在保存时设置它**,但是在将实体保存到数据库之前最好在实体上有一个有效的Id.
 * 如果使用带参数的构造函数创建实体,那么还要创建一个 `private` 或 `protected`  构造函数. 当数据库提供程序从数据库读取你的实体时(反序列化时)将使用它.
-* 不要使用 `Guid.NewGuid()` 来设置Id! 在创建实体的代码中**使用[`IGuidGenerator`服务](Guid-Generation.md)**传递Id参数. `IGuidGenerator`经过优化可以产生连续的GUID.这对于关系数据库中的聚集索引非常重要.
+* 不要使用 `Guid.NewGuid()` 来设置Id! 在创建实体的代码中**使用[`IGuidGenerator`服务](Guid-Generation.md)** 传递Id参数. `IGuidGenerator`经过优化可以产生连续的GUID.这对于关系数据库中的聚集索引非常重要.
 
 示例实体:
 
@@ -70,7 +70,7 @@ public class BookAppService : ApplicationService, IBookAppService
 }
 ````
 
-* `BookAppService` 注入图书实体的默认[仓库](Repositories.md),使用`InsertAsync`方法插入 `Book` 到数据库中.
+* `BookAppService` 注入图书实体的默认[仓储](Repositories.md),使用`InsertAsync`方法插入 `Book` 到数据库中.
 * `GuidGenerator`类型是 `IGuidGenerator`,它是在`ApplicationService`基类中定义的属性. ABP将这样常用属性预注入,所以不需要手动[注入](Dependency-Injection.md).
 * 如果你想遵循DDD最佳实践,请参阅下面的*聚合示例*部分.
 
@@ -104,6 +104,22 @@ public class UserRole : Entity
 > 你还需要在**对象关系映射**(ORM)中配置实体的键. 参阅[Entity Framework Core](Entity-Framework-Core.md)集成文档查看示例.
 
 > 需要注意,复合主键实体不可以使用 `IRepository<TEntity, TKey>` 接口,因为它需要一个唯一的Id属性. 但你可以使用 `IRepository<TEntity>`.更多信息请参见[仓储](Repositories.md)的文档.
+
+### EntityEquals
+
+`Entity.EntityEquals(...)` 方法用于检查两个实体对象是否相等.
+
+示例:
+
+```csharp
+Book book1 = ...
+Book book2 = ...
+
+if (book1.EntityEquals(book2)) //Check equality
+{
+    ...
+}
+```
 
 ## 聚合根
 
@@ -373,7 +389,7 @@ public static class IdentityUserExtensions
 
 * 对于 [Entity Framework Core](Entity-Framework-Core.md),这是两种类型的配置;
     * 默认它以 `JSON` 字符串形式存储在 `ExtraProperties` 字段中. 序列化到 `JSON` 和反序列化到 `JSON` 由ABP使用EF Core的[值转换](https://docs.microsoft.com/zh-cn/ef/core/modeling/value-conversions)系统自动完成.
-    * 如果需要,你可以使用 `ObjectExtensionManager` 为所需的额外属性定义一个单独的数据库字段. 那些使用 `ObjectExtensionManager` 配置的属性继续使用单个 `JSON` 字段. 当你使用预构建的[应用模块](Modules/Index.md)并且想要[扩展模块的实体](Customizing-Application-Modules-Extending-Entities.md). 参阅[EF Core迁移文档](Entity-Framework-Core.md)了解如何使用 `ObjectExtensionManager`.
+    * 如果需要,你可以使用 `ObjectExtensionManager` 为所需的额外属性定义一个单独的数据库字段. 未使用 `ObjectExtensionManager` 配置的属性继续使用单个 `JSON` 字段. 当你使用预构建的[应用模块](Modules/Index.md)并且想要[扩展模块的实体](Customizing-Application-Modules-Extending-Entities.md). 参阅[EF Core迁移文档](Entity-Framework-Core.md)了解如何使用 `ObjectExtensionManager`.
 * 对于 [MongoDB](MongoDB.md), 它以 **常规字段** 存储, 因为 MongoDB 天生支持这种 [额外](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) 系统.
 
 ### 讨论额外的属性

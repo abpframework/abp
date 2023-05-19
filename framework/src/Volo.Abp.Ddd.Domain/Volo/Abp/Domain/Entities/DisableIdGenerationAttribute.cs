@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Volo.Abp.Domain.Entities
-{
-    public class DisableIdGenerationAttribute : Attribute
-    {
+namespace Volo.Abp.Domain.Entities;
 
-    }
+public class DisableIdGenerationAttribute : Attribute
+{
+
 }

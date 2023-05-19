@@ -27,7 +27,7 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   private subscription = new Subscription();
   private querySubscription = new Subscription();
 
-  @Input() list: ListService;
+  @Input() list!: ListService;
 
   constructor(
     private table: DatatableComponent,

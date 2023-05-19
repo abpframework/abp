@@ -1,6 +1,12 @@
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
 import i18n from 'i18n-js';
-import { Container, Content, Form, Input, InputGroup, Label } from 'native-base';
+import {
+  Box,
+  FormControl,
+  Input,
+  KeyboardAvoidingView,
+  Stack,
+} from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useRef } from 'react';
 import * as Yup from 'yup';
@@ -21,95 +27,120 @@ function ManageProfileForm({ editingUser = {}, submit, cancel }) {
   const emailRef = useRef();
   const phoneNumberRef = useRef();
 
-  const onSubmit = values => {
+  const onSubmit = (values) => {
     submit({
       ...editingUser,
       ...values,
     });
   };
 
+  const formik = useFormik({
+    enableReinitialize: true,
+    validationSchema: ValidationSchema,
+    initialValues: {
+      ...editingUser,
+    },
+    onSubmit,
+  });
+
   return (
-    <Formik
-      enableReinitialize
-      validationSchema={ValidationSchema}
-      initialValues={{
-        ...editingUser,
-      }}
-      onSubmit={values => onSubmit(values)}>
-      {({ handleChange, handleBlur, handleSubmit, values, errors, isValid }) => (
-        <>
-          <Container>
-            <Content px20>
-              <Form>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::UserName')}*</Label>
-                  <Input
-                    ref={usernameRef}
-                    onSubmitEditing={() => nameRef.current._root.focus()}
-                    returnKeyType="next"
-                    onChangeText={handleChange('userName')}
-                    onBlur={handleBlur('userName')}
-                    value={values.userName}
-                    abpInput
-                  />
-                </InputGroup>
-                <ValidationMessage>{errors.userName}</ValidationMessage>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::DisplayName:Name')}</Label>
-                  <Input
-                    abpInput
-                    ref={nameRef}
-                    onSubmitEditing={() => surnameRef.current._root.focus()}
-                    returnKeyType="next"
-                    onChangeText={handleChange('name')}
-                    onBlur={handleBlur('name')}
-                    value={values.name}
-                  />
-                </InputGroup>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::DisplayName:Surname')}</Label>
-                  <Input
-                    abpInput
-                    ref={surnameRef}
-                    onSubmitEditing={() => phoneNumberRef.current._root.focus()}
-                    returnKeyType="next"
-                    onChangeText={handleChange('surname')}
-                    onBlur={handleBlur('surname')}
-                    value={values.surname}
-                  />
-                </InputGroup>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::PhoneNumber')}</Label>
-                  <Input
-                    abpInput
-                    ref={phoneNumberRef}
-                    onSubmitEditing={() => emailRef.current._root.focus()}
-                    returnKeyType="next"
-                    onChangeText={handleChange('phoneNumber')}
-                    onBlur={handleBlur('phoneNumber')}
-                    value={values.phoneNumber}
-                  />
-                </InputGroup>
-                <InputGroup abpInputGroup>
-                  <Label abpLabel>{i18n.t('AbpIdentity::EmailAddress')}*</Label>
-                  <Input
-                    abpInput
-                    ref={emailRef}
-                    returnKeyType="done"
-                    onSubmitEditing={handleSubmit}
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                  />
-                </InputGroup>
-                <ValidationMessage>{errors.email}</ValidationMessage>
-              </Form>
-            </Content>
-          </Container>
-          <FormButtons submit={handleSubmit} cancel={cancel} isSubmitDisabled={!isValid} />
-        </>
-      )}
-    </Formik>
+    <>
+      <Box px="3">
+        <KeyboardAvoidingView
+          h={{
+            base: '400px',
+            lg: 'auto',
+          }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          <FormControl isRequired my="2">
+            <Stack mx="4">
+              <FormControl.Label>
+                {i18n.t('AbpIdentity::UserName')}
+              </FormControl.Label>
+              <Input
+                ref={usernameRef}
+                onSubmitEditing={() => nameRef?.current?.focus()}
+                returnKeyType="next"
+                onChangeText={formik.handleChange('userName')}
+                onBlur={formik.handleBlur('userName')}
+                value={formik.values.userName}
+              />
+              <ValidationMessage>{formik.errors.userName}</ValidationMessage>
+            </Stack>
+          </FormControl>
+
+          <FormControl my="2">
+            <Stack mx="4">
+              <FormControl.Label>
+                {i18n.t('AbpIdentity::DisplayName:Name')}
+              </FormControl.Label>
+              <Input
+                ref={nameRef}
+                onSubmitEditing={() => surnameRef?.current?.focus()}
+                returnKeyType="next"
+                onChangeText={formik.handleChange('name')}
+                onBlur={formik.handleBlur('name')}
+                value={formik.values.name}
+              />
+            </Stack>
+          </FormControl>
+
+          <FormControl my="2">
+            <Stack mx="4">
+              <FormControl.Label>
+                {i18n.t('AbpIdentity::DisplayName:Surname')}
+              </FormControl.Label>
+              <Input
+                ref={surnameRef}
+                onSubmitEditing={() => phoneNumberRef?.current?.focus()}
+                returnKeyType="next"
+                onChangeText={formik.handleChange('surname')}
+                onBlur={formik.handleBlur('surname')}
+                value={formik.values.surname}
+              />
+            </Stack>
+          </FormControl>
+
+          <FormControl my="2">
+            <Stack mx="4">
+              <FormControl.Label>
+                {i18n.t('AbpIdentity::PhoneNumber')}
+              </FormControl.Label>
+              <Input
+                ref={phoneNumberRef}
+                onSubmitEditing={() => emailRef?.current?.focus()}
+                returnKeyType="next"
+                onChangeText={formik.handleChange('phoneNumber')}
+                onBlur={formik.handleBlur('phoneNumber')}
+                value={formik.values.phoneNumber}
+              />
+            </Stack>
+          </FormControl>
+
+          <FormControl isRequired my="2">
+            <Stack mx="4">
+              <FormControl.Label>
+                {i18n.t('AbpIdentity::EmailAddress')}
+              </FormControl.Label>
+              <Input
+                ref={emailRef}
+                returnKeyType="done"
+                onChangeText={formik.handleChange('email')}
+                onBlur={formik.handleBlur('email')}
+                value={formik.values.email}
+              />
+              <ValidationMessage>{formik.errors.email}</ValidationMessage>
+            </Stack>
+          </FormControl>
+        </KeyboardAvoidingView>
+      </Box>
+      <FormButtons
+        submit={formik.handleSubmit}
+        cancel={cancel}
+        isSubmitDisabled={!formik.isValid}
+      />
+    </>
   );
 }
 

@@ -19,7 +19,7 @@ module.exports = function(hljs) {
           {begin: /^\-{3}/, end: /$/},
           {begin: /^\*{3} /, end: /$/},
           {begin: /^\+{3}/, end: /$/},
-          {begin: /\*{5}/, end: /\*{5}$/}
+          {begin: /^\*{15}$/ }
         ]
       },
       {

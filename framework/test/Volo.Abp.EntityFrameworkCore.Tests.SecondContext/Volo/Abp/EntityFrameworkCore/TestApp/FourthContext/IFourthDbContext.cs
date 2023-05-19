@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Volo.Abp.EntityFrameworkCore.TestApp.FourthContext
+namespace Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
+
+public interface IFourthDbContext : IEfCoreDbContext
 {
-    public interface IFourthDbContext : IEfCoreDbContext
-    {
-        DbSet<FourthDbContextDummyEntity> FourthDummyEntities { get; set; }
-    }
+    DbSet<FourthDbContextDummyEntity> FourthDummyEntities { get; set; }
 }

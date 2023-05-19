@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.PermissionManagement
-{
-    public class GetPermissionListResultDto
-    {
-        public string EntityDisplayName { get; set; }
+namespace Volo.Abp.PermissionManagement;
 
-        public List<PermissionGroupDto> Groups { get; set; }
-    }
+public class GetPermissionListResultDto
+{
+    public string EntityDisplayName { get; set; }
+
+    public List<PermissionGroupDto> Groups { get; set; }
 }

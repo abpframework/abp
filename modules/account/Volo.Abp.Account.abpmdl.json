@@ -6,12 +6,24 @@
     }
   },
   "packages": {
-    "Volo.Abp.Account.Web": {
-      "path": "src/Volo.Abp.Account.Web/Volo.Abp.Account.Web.abppkg.json",
+    "Volo.Abp.Account.Web.OpenIddict": {
+      "path": "src/Volo.Abp.Account.Web.OpenIddict/Volo.Abp.Account.Web.OpenIddict.abppkg.json",
       "folder": "src"
     },
     "Volo.Abp.Account.Web.IdentityServer": {
       "path": "src/Volo.Abp.Account.Web.IdentityServer/Volo.Abp.Account.Web.IdentityServer.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Account.Web": {
+      "path": "src/Volo.Abp.Account.Web/Volo.Abp.Account.Web.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Account.HttpApi.Client": {
+      "path": "src/Volo.Abp.Account.HttpApi.Client/Volo.Abp.Account.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Account.HttpApi": {
+      "path": "src/Volo.Abp.Account.HttpApi/Volo.Abp.Account.HttpApi.abppkg.json",
       "folder": "src"
     },
     "Volo.Abp.Account.Application": {
@@ -20,14 +32,6 @@
     },
     "Volo.Abp.Account.Application.Contracts": {
       "path": "src/Volo.Abp.Account.Application.Contracts/Volo.Abp.Account.Application.Contracts.abppkg.json",
-      "folder": "src"
-    },
-    "Volo.Abp.Account.HttpApi": {
-      "path": "src/Volo.Abp.Account.HttpApi/Volo.Abp.Account.HttpApi.abppkg.json",
-      "folder": "src"
-    },
-    "Volo.Abp.Account.HttpApi.Client": {
-      "path": "src/Volo.Abp.Account.HttpApi.Client/Volo.Abp.Account.HttpApi.Client.abppkg.json",
       "folder": "src"
     },
     "Volo.Abp.Account.Application.Tests": {

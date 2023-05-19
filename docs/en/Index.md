@@ -1,10 +1,10 @@
 # ABP Documentation
 
-ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**.
+ABP Framework offers an **opinionated architecture** to build enterprise software solutions with **best practices** on top of the **.NET** and the **ASP.NET Core** platforms. It provides the fundamental infrastructure, production-ready startup templates, modules, themes, tooling, guides and documentation to implement that architecture properly and **automate the details** and repetitive works as much as possible.
 
 ## Getting Started
 
-* [Quick Start](Tutorials/Todo/Index.md) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to quickly understand how ABP works.
+* [Quick Start](Tutorials/Todo/Overall.md) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to quickly understand how ABP works.
 * [Getting Started](Getting-Started.md) guide can be used to create and run ABP based solutions with different options and details.
 * [Web Application Development Tutorial](Tutorials/Part-1.md) is a complete tutorial to develop a full stack web application with all aspects of a real-life solution.
 
@@ -12,13 +12,13 @@ ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to 
 
 ABP Framework can work with any UI framework, while the following frameworks are supported out of the box:
 
-<img width="500" src="images/ui-options.png">
+<img width="500" height="56" src="images/ui-options.png" alt="ui options">
 
 ### Database Provider Options
 
 ABP Framework can work with any database provider, while the following providers are supported out of the box:
 
-<img width="500" src="images/db-options.png">
+<img width="500" height="56" src="images/db-options.png" alt="ABP Database Providers" />
 
 ## Exploring the Documentation
 
@@ -47,7 +47,7 @@ Application Modules provides pre-built application functionalities;
 
 * [**Account**](Modules/Account.md): Provides UI for the account management and allows user to login/register to the application.
 * **[Identity](Modules/Identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
-* [**IdentityServer**](Modules/IdentityServer.md): Integrates to IdentityServer4.
+* [**OpenIddict**](Modules/OpenIddict.md): Integrates to OpenIddict.
 * [**Tenant Management**](Modules/Tenant-Management.md): Manages tenants for a [multi-tenant](Multi-Tenancy.md) (SaaS) application.
 
 See the [Application Modules](Modules/Index.md) document for all pre-built modules.
@@ -56,13 +56,23 @@ See the [Application Modules](Modules/Index.md) document for all pre-built modul
 
 The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
 
-## Free E-Book: Implementing Domain Driven Design
+## Books
 
-![Implementing Domain Driven Design](images/implementing-domain-driven-design-book.png)
+### Mastering ABP Framework
+
+<img width="302" height="372" src="images/abp-book.png" alt="Mastering ABP Framework - Halil İbrahim Kalkan" />
+
+*Mastering ABP Framework* is an ultimate guide to get started and expertise with the ABP Framework. It is authored by Halil İbrahim Kalkan, the creator and the lead developer of the ABP Framework.
+
+**[You can order it from Amazon now](https://www.amazon.com/Mastering-ABP-Framework-maintainable-implementing-dp-1801079242/dp/1801079242)!**
+
+### Free E-Book: Implementing Domain Driven Design
+
+<img width="441" height="331" src="images/implementing-domain-driven-design-book.png" alt="Implementing Domain Driven Design">
 
 A **practical guide** for implementing Domain Driven Design (DDD). While the implementation details are **based on the ABP Framework** infrastructure, the basic concepts, principles and models can be applied to any solution, even if it is not a .NET solution.
 
-[Click here to get your free copy](https://abp.io/books/implementing-domain-driven-design?ref=doc).
+**[Click here to get your free copy](https://abp.io/books/implementing-domain-driven-design?ref=doc).**
 
 ## ABP Community
 

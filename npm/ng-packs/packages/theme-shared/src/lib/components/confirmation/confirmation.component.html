@@ -4,8 +4,11 @@
     (click)="data.options?.dismissible ? close(dismiss) : null"
   ></div>
   <div class="confirmation-dialog">
-    <div class="icon-container" [ngClass]="data.severity" *ngIf="data.severity">
-      <i class="fa icon" [ngClass]="getIconClass(data)"></i>
+    <div class="icon-container" [ngClass]="data.severity" *ngIf="data.severity || isCustomIconExists(data)">
+      <div  [outerHTML]="data.options.iconTemplate" *ngIf="isIconTemplateExits(data); else iconHolder" ></div>
+       <ng-template #iconHolder>
+         <i class="icon" [ngClass]="getIconClass(data)"></i>
+       </ng-template>
     </div>
     <div class="content">
       <h1

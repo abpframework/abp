@@ -1,0 +1,133 @@
+{
+  "name": "Volo.Abp.Identity.MongoDB",
+  "hash": "a42f1167e4a0f3aa2f9ca919442cadd2",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Identity.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.MongoDB",
+          "namespace": "Volo.Abp.Users.MongoDB",
+          "name": "AbpUsersMongoDbModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpIdentityMongoDbModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity.MongoDB",
+      "connectionStringName": "AbpIdentity",
+      "databaseCollections": [
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
+          "contentType": "databaseCollection",
+          "name": "AbpSecurityLogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityRole",
+          "contentType": "databaseCollection",
+          "name": "AbpRoles",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
+          "contentType": "databaseCollection",
+          "name": "AbpOrganizationUnits",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
+          "contentType": "databaseCollection",
+          "name": "AbpClaimTypes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUser",
+          "contentType": "databaseCollection",
+          "name": "AbpUsers",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
+          "contentType": "databaseCollection",
+          "name": "AbpLinkUsers",
+          "summary": null
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpMongoDbContext",
+          "namespace": "Volo.Abp.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "fullName": "Volo.Abp.MongoDB.IAbpMongoDbContext"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "IAbpIdentityMongoDbContext",
+          "namespace": "Volo.Abp.Identity.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.Identity.MongoDB",
+          "fullName": "Volo.Abp.Identity.MongoDB.IAbpIdentityMongoDbContext"
+        }
+      ],
+      "contentType": "mongoDbContext",
+      "name": "AbpIdentityMongoDbContext",
+      "summary": null
+    }
+  ]
+}

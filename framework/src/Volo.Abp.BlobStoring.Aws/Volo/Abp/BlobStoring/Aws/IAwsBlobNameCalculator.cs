@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.BlobStoring.Aws
+﻿namespace Volo.Abp.BlobStoring.Aws;
+
+public interface IAwsBlobNameCalculator
 {
-    public interface IAwsBlobNameCalculator
-    {
-        string Calculate(BlobProviderArgs args);
-    }
+    string Calculate(BlobProviderArgs args);
 }

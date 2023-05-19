@@ -1,0 +1,80 @@
+trigger:
+  tags:
+    include:
+      - "*.*.*"
+
+resources:
+  repositories:
+    - repository: devops
+      type: github
+      endpoint: github.com_skoc10
+      name: volosoft/devops
+      ref: master
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'volosoft-reg'
+  workDir: '$(Build.SourcesDirectory)'
+  bootstrapTaghelpersDir: '$(workDir)/abp/modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo'
+  # tag: $[replace(variables['Build.SourceBranch'], 'refs/tags/', '')]
+  tag: $(Build.BuildNumber)
+  DOCKER_BUILDKIT: 1
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+
+stages:
+- stage: Package
+  displayName: Package
+  jobs:
+  - job: Build
+    displayName: Package Helm Charts and Values
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - checkout: self
+    - checkout: devops
+
+    - script: |
+        cd $(bootstrapTaghelpersDir) && dotnet publish -c Release -o bin/Release/publish
+
+    - task: Docker@2
+      displayName: Build Image
+      inputs:
+        command: build
+        repository: demo/bootstrap-taghelpers
+        dockerfile: $(bootstrapTaghelpersDir)/Dockerfile
+        buildContext: $(bootstrapTaghelpersDir)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Push Image
+      inputs:
+        command: push
+        repository: demo/bootstrap-taghelpers
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - bash: |
+        mkdir -p $(Build.SourcesDirectory)/devops/aks/versions
+
+
+        cat <<EOF > $(Build.SourcesDirectory)/devops/aks/versions/bootstrap-taghelpers-version.yaml
+        image:
+          repository: volosoft.azurecr.io/demo/bootstrap-taghelpers
+          tag: "$(tag)"
+        EOF
+
+        cat $(Build.SourcesDirectory)/devops/aks/versions/bootstrap-taghelpers-version.yaml >> $(Build.SourcesDirectory)/devops/aks/helm/values/app/demo/bootstrap-taghelpers.abp.io.yaml
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: bootstrap-taghelpers'
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)/devops/aks/helm'
+        ArtifactName: 'bootstrap-taghelpers'
+
+

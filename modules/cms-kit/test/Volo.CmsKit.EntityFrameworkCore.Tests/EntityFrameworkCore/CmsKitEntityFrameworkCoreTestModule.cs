@@ -6,38 +6,37 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 
-namespace Volo.CmsKit.EntityFrameworkCore
+namespace Volo.CmsKit.EntityFrameworkCore;
+
+[DependsOn(
+    typeof(CmsKitTestBaseModule),
+    typeof(CmsKitEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreSqliteModule)
+    )]
+public class CmsKitEntityFrameworkCoreTestModule : AbpModule
 {
-    [DependsOn(
-        typeof(CmsKitTestBaseModule),
-        typeof(CmsKitEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqliteModule)
-        )]
-    public class CmsKitEntityFrameworkCoreTestModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var sqliteConnection = CreateDatabaseAndGetConnection();
+        var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            Configure<AbpDbContextOptions>(options =>
+        Configure<AbpDbContextOptions>(options =>
+        {
+            options.Configure(abpDbContextConfigurationContext =>
             {
-                options.Configure(abpDbContextConfigurationContext =>
-                {
-                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
-                });
+                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
             });
-        }
-        
-        private static SqliteConnection CreateDatabaseAndGetConnection()
-        {
-            var connection = new SqliteConnection("Data Source=:memory:");
-            connection.Open();
+        });
+    }
 
-            new CmsKitDbContext(
-                new DbContextOptionsBuilder<CmsKitDbContext>().UseSqlite(connection).Options
-            ).GetService<IRelationalDatabaseCreator>().CreateTables();
-            
-            return connection;
-        }
+    private static SqliteConnection CreateDatabaseAndGetConnection()
+    {
+        var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+
+        new CmsKitDbContext(
+            new DbContextOptionsBuilder<CmsKitDbContext>().UseSqlite(connection).Options
+        ).GetService<IRelationalDatabaseCreator>().CreateTables();
+
+        return connection;
     }
 }

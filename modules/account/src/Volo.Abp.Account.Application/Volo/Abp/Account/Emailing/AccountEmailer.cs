@@ -13,95 +13,94 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.UI.Navigation.Urls;
 
-namespace Volo.Abp.Account.Emailing
+namespace Volo.Abp.Account.Emailing;
+
+public class AccountEmailer : IAccountEmailer, ITransientDependency
 {
-    public class AccountEmailer : IAccountEmailer, ITransientDependency
+    protected ITemplateRenderer TemplateRenderer { get; }
+    protected IEmailSender EmailSender { get; }
+    protected IStringLocalizer<AccountResource> StringLocalizer { get; }
+    protected IAppUrlProvider AppUrlProvider { get; }
+    protected ICurrentTenant CurrentTenant { get; }
+
+    public AccountEmailer(
+        IEmailSender emailSender,
+        ITemplateRenderer templateRenderer,
+        IStringLocalizer<AccountResource> stringLocalizer,
+        IAppUrlProvider appUrlProvider,
+        ICurrentTenant currentTenant)
     {
-        protected ITemplateRenderer TemplateRenderer { get; }
-        protected IEmailSender EmailSender { get; }
-        protected IStringLocalizer<AccountResource> StringLocalizer { get; }
-        protected IAppUrlProvider AppUrlProvider { get; }
-        protected ICurrentTenant CurrentTenant { get; }
+        EmailSender = emailSender;
+        StringLocalizer = stringLocalizer;
+        AppUrlProvider = appUrlProvider;
+        CurrentTenant = currentTenant;
+        TemplateRenderer = templateRenderer;
+    }
 
-        public AccountEmailer(
-            IEmailSender emailSender,
-            ITemplateRenderer templateRenderer,
-            IStringLocalizer<AccountResource> stringLocalizer,
-            IAppUrlProvider appUrlProvider,
-            ICurrentTenant currentTenant)
+    public virtual async Task SendPasswordResetLinkAsync(
+        IdentityUser user,
+        string resetToken,
+        string appName,
+        string returnUrl = null,
+        string returnUrlHash = null)
+    {
+        Debug.Assert(CurrentTenant.Id == user.TenantId, "This method can only work for current tenant!");
+
+        var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
+
+        //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
+        var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
+
+        if (!returnUrl.IsNullOrEmpty())
         {
-            EmailSender = emailSender;
-            StringLocalizer = stringLocalizer;
-            AppUrlProvider = appUrlProvider;
-            CurrentTenant = currentTenant;
-            TemplateRenderer = templateRenderer;
+            link += "&returnUrl=" + NormalizeReturnUrl(returnUrl);
         }
 
-        public virtual async Task SendPasswordResetLinkAsync(
-            IdentityUser user,
-            string resetToken,
-            string appName,
-            string returnUrl = null,
-            string returnUrlHash = null)
+        if (!returnUrlHash.IsNullOrEmpty())
         {
-            Debug.Assert(CurrentTenant.Id == user.TenantId, "This method can only work for current tenant!");
-
-            var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
-
-            //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
-            var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
-
-            if (!returnUrl.IsNullOrEmpty())
-            {
-                link += "&returnUrl=" + NormalizeReturnUrl(returnUrl);
-            }
-
-            if (!returnUrlHash.IsNullOrEmpty())
-            {
-                link += "&returnUrlHash=" + returnUrlHash;
-            }
-
-            var emailContent = await TemplateRenderer.RenderAsync(
-                AccountEmailTemplates.PasswordResetLink,
-                new { link = link }
-            );
-
-            await EmailSender.SendAsync(
-                user.Email,
-                StringLocalizer["PasswordReset"],
-                emailContent
-            );
+            link += "&returnUrlHash=" + returnUrlHash;
         }
 
-        protected virtual string NormalizeReturnUrl(string returnUrl)
-        {
-            if (returnUrl.IsNullOrEmpty())
-            {
-                return returnUrl;
-            }
+        var emailContent = await TemplateRenderer.RenderAsync(
+            AccountEmailTemplates.PasswordResetLink,
+            new { link = link }
+        );
 
-            //Handling openid connect login
-            if (returnUrl.StartsWith("/connect/authorize/callback", StringComparison.OrdinalIgnoreCase))
+        await EmailSender.SendAsync(
+            user.Email,
+            StringLocalizer["PasswordReset"],
+            emailContent
+        );
+    }
+
+    protected virtual string NormalizeReturnUrl(string returnUrl)
+    {
+        if (returnUrl.IsNullOrEmpty())
+        {
+            return returnUrl;
+        }
+
+        //Handling openid connect login
+        if (returnUrl.StartsWith("/connect/authorize/callback", StringComparison.OrdinalIgnoreCase))
+        {
+            if (returnUrl.Contains("?"))
             {
-                if (returnUrl.Contains("?"))
+                var queryPart = returnUrl.Split('?')[1];
+                var queryParameters = queryPart.Split('&');
+                foreach (var queryParameter in queryParameters)
                 {
-                    var queryPart = returnUrl.Split('?')[1];
-                    var queryParameters = queryPart.Split('&');
-                    foreach (var queryParameter in queryParameters)
+                    if (queryParameter.Contains("="))
                     {
-                        if (queryParameter.Contains("="))
+                        var queryParam = queryParameter.Split('=');
+                        if (queryParam[0] == "redirect_uri")
                         {
-                            var queryParam = queryParameter.Split('=');
-                            if (queryParam[0] == "redirect_uri")
-                            {
-                                return HttpUtility.UrlDecode(queryParam[1]);
-                            }
+                            return HttpUtility.UrlDecode(queryParam[1]);
                         }
                     }
                 }
             }
-
-            return returnUrl;
         }
+
+        return returnUrl;
     }
 }

@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Volo.Abp.BasicTheme": {
+      "path": "Volo.Abp.BasicTheme.abpmdl.json"
+    }
+  }
+}

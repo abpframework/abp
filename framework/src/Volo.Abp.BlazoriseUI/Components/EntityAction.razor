@@ -6,19 +6,22 @@
     {
         if (Primary == false)
         {
-            <DropdownItem Clicked="@ActionClickedAsync">@Text</DropdownItem>
+            <DropdownItem Clicked="@ActionClickedAsync" Disabled=@Disabled>@Text</DropdownItem>
         }
     }
     else
     {
         <Button Block="true"
                 Color="@Color"
-                Clicked="@ActionClickedAsync">
+                Clicked="@ActionClickedAsync"
+                Disabled=@Disabled>
             @if(!string.IsNullOrEmpty(Icon))
             {
-                <Icon Name="@Icon"/>
+                <Icon Name="@Icon" Class="me-1"/>
             }
-            @Text
+            <Span>
+                @Text
+            </Span>
         </Button>
     }
 }

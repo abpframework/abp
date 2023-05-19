@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.TenantManagement.Blazor.Navigation
-{
-    public class TenantManagementMenuNames
-    {
-        public const string GroupName = "TenantManagement";
+﻿namespace Volo.Abp.TenantManagement.Blazor.Navigation;
 
-        public const string Tenants = GroupName + ".Tenants";
-    }
+public class TenantManagementMenuNames
+{
+    public const string GroupName = "TenantManagement";
+
+    public const string Tenants = GroupName + ".Tenants";
 }

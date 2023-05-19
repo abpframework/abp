@@ -18,7 +18,7 @@ import { LoadingComponent } from '../components/loading/loading.component';
 
 @Directive({ selector: '[abpLoading]' })
 export class LoadingDirective implements OnInit, OnDestroy {
-  private _loading: boolean;
+  private _loading!: boolean;
 
   @HostBinding('style.position')
   position = 'relative';
@@ -53,7 +53,7 @@ export class LoadingDirective implements OnInit, OnDestroy {
 
           if (newValue && !this.rootNode) {
             this.rootNode = (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0];
-            this.targetElement.appendChild(this.rootNode);
+            this.targetElement?.appendChild(this.rootNode as HTMLDivElement);
           } else if (this.rootNode) {
             this.renderer.removeChild(this.rootNode.parentElement, this.rootNode);
             this.rootNode = null;
@@ -66,14 +66,14 @@ export class LoadingDirective implements OnInit, OnDestroy {
   }
 
   @Input('abpLoadingTargetElement')
-  targetElement: HTMLElement;
+  targetElement: HTMLElement | undefined;
 
   @Input('abpLoadingDelay')
   delay = 0;
 
-  componentRef: ComponentRef<LoadingComponent>;
-  rootNode: HTMLDivElement;
-  timerSubscription: Subscription;
+  componentRef!: ComponentRef<LoadingComponent>;
+  rootNode: HTMLDivElement | null = null;
+  timerSubscription: Subscription | null = null;
 
   constructor(
     private elRef: ElementRef<HTMLElement>,

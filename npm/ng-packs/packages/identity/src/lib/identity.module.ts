@@ -17,6 +17,7 @@ import {
   IDENTITY_ENTITY_PROP_CONTRIBUTORS,
   IDENTITY_TOOLBAR_ACTION_CONTRIBUTORS,
 } from './tokens/extensions.token';
+import { PageModule } from '@abp/ng.components/page';
 
 @NgModule({
   declarations: [RolesComponent, UsersComponent],
@@ -30,6 +31,7 @@ import {
     NgbDropdownModule,
     PermissionManagementModule,
     NgxValidateCoreModule,
+    PageModule,
   ],
 })
 export class IdentityModule {

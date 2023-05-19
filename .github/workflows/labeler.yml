@@ -2,8 +2,12 @@ name: Pull request labeler
 on:
   schedule:
     - cron: '0 12 */1 * *'
+permissions:
+  contents: read
 jobs:
   labeler:
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: paulfantom/periodic-labeler@master

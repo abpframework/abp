@@ -3,98 +3,149 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
+using Volo.Abp;
 using Volo.Abp.Users;
 using Volo.CmsKit.Public.Comments;
 using Xunit;
 
-namespace Volo.CmsKit.Comments
+namespace Volo.CmsKit.Comments;
+
+public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
 {
-    public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
+    private readonly ICommentPublicAppService _commentAppService;
+    private ICurrentUser _currentUser;
+    private readonly CmsKitTestData _cmsKitTestData;
+
+    public CommentPublicAppService_Tests()
     {
-        private readonly ICommentPublicAppService _commentAppService;
-        private ICurrentUser _currentUser;
-        private readonly CmsKitTestData _cmsKitTestData;
+        _commentAppService = GetRequiredService<ICommentPublicAppService>();
+        _cmsKitTestData = GetRequiredService<CmsKitTestData>();
+    }
 
-        public CommentPublicAppService_Tests()
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        _currentUser = Substitute.For<ICurrentUser>();
+        services.AddSingleton(_currentUser);
+    }
+
+    [Fact]
+    public async Task GetAllForEntityAsync()
+    {
+        var list = await _commentAppService.GetListAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
+
+        list.Items.Count.ShouldBe(2);
+        list.Items.First().Replies.Count.ShouldBe(2);
+    }
+
+    [Fact]
+    public async Task CreateAsync()
+    {
+        _currentUser.Id.Returns(_cmsKitTestData.User2Id);
+
+        var newComment = await _commentAppService.CreateAsync(
+            _cmsKitTestData.EntityType1,
+            _cmsKitTestData.EntityId1,
+            new CreateCommentInput
+            {
+                RepliedCommentId = null,
+                Text = "newComment"
+            }
+        );
+
+        UsingDbContext(context =>
         {
-            _commentAppService = GetRequiredService<ICommentPublicAppService>();
-            _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-        }
+            var comments = context.Set<Comment>().Where(x =>
+                x.EntityId == _cmsKitTestData.EntityId1 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
 
-        protected override void AfterAddApplication(IServiceCollection services)
-        {
-            _currentUser = Substitute.For<ICurrentUser>();
-            services.AddSingleton(_currentUser);
-        }
+            comments
+                .Any(c => c.Id == newComment.Id && c.CreatorId == newComment.CreatorId && c.Text == "newComment")
+                .ShouldBeTrue();
+        });
+    }
+    
+    [Theory]
+    [InlineData("https://abp.io/features")]
+    public async Task CreateAsync_ShouldCreateComment_If_Url_Allowed(string text)
+    {
+        _currentUser.Id.Returns(_cmsKitTestData.User2Id);
 
-        [Fact]
-        public async Task GetAllForEntityAsync()
-        {
-            var list = await _commentAppService.GetListAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
+        await _commentAppService.CreateAsync(
+            _cmsKitTestData.EntityType1,
+            _cmsKitTestData.EntityId1,
+            new CreateCommentInput
+            {
+                RepliedCommentId = null,
+                Text = text
+            }
+        );
+    }
 
-            list.Items.Count.ShouldBe(2);
-            list.Items.First().Replies.Count.ShouldBe(2);
-        }
+    [Theory]
+    [InlineData("[ABP Community](https://community.abp.io/)")]
+    [InlineData("<a href='https://docs.abp.io/en/abp/latest'>docs.abp.io</a>")]
+    public async Task CreateAsync_ShouldThrowUserFriendlyException_If_Url_UnAllowed(string text)
+    {
+        _currentUser.Id.Returns(_cmsKitTestData.User2Id);
 
-        [Fact]
-        public async Task CreateAsync()
-        {
-            _currentUser.Id.Returns(_cmsKitTestData.User2Id);
-
-            var newComment = await _commentAppService.CreateAsync(
+        await Should.ThrowAsync<UserFriendlyException>(async () =>
+            await _commentAppService.CreateAsync(
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
-                new CreateCommentInput
+                new CreateCommentInput 
                 {
                     RepliedCommentId = null,
-                    Text = "newComment"
+                    Text = text, //not allowed URL
                 }
-            );
+            ));
+    }
 
-            UsingDbContext(context =>
-            {
-                var comments = context.Set<Comment>().Where(x =>
-                    x.EntityId == _cmsKitTestData.EntityId1 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
+    [Fact]
+    public async Task UpdateAsync()
+    {
+        _currentUser.Id.Returns(_cmsKitTestData.User1Id);
 
-                comments
-                    .Any(c=>c.Id == newComment.Id && c.CreatorId == newComment.CreatorId && c.Text == "newComment")
-                    .ShouldBeTrue();
-            });
-        }
-
-        [Fact]
-        public async Task UpdateAsync()
+        await _commentAppService.UpdateAsync(_cmsKitTestData.CommentWithChildId, new UpdateCommentInput
         {
-            _currentUser.Id.Returns(_cmsKitTestData.User1Id);
+            Text = "I'm Updated"
+        });
 
-            await _commentAppService.UpdateAsync(_cmsKitTestData.CommentWithChildId, new UpdateCommentInput
-            {
-                Text = "I'm Updated"
-            });
-
-            UsingDbContext(context =>
-            {
-                var comment = context.Set<Comment>().Single(x =>
-                    x.Id == _cmsKitTestData.CommentWithChildId);
-
-                comment.Text.ShouldBe("I'm Updated");
-            });
-        }
-
-        [Fact]
-        public async Task DeleteAsync()
+        UsingDbContext(context =>
         {
-            _currentUser.Id.Returns(_cmsKitTestData.User1Id);
+            var comment = context.Set<Comment>().Single(x =>
+                x.Id == _cmsKitTestData.CommentWithChildId);
 
-            await _commentAppService.DeleteAsync(_cmsKitTestData.CommentWithChildId);
+            comment.Text.ShouldBe("I'm Updated");
+        });
+    }
+    
+    [Fact]
+    public async Task UpdateAsync_ShouldThrowUserFriendlyException_If_Url_UnAllowed()
+    {
+        _currentUser.Id.Returns(_cmsKitTestData.User1Id);
 
-            UsingDbContext(context =>
-            {
-                var comment = context.Set<Comment>().FirstOrDefault(x =>
-                    x.Id == _cmsKitTestData.CommentWithChildId);
+        await Should.ThrowAsync<UserFriendlyException>(async () =>
+            await _commentAppService.UpdateAsync(
+                _cmsKitTestData.CommentWithChildId,
+                new UpdateCommentInput 
+                {
+                    Text = "[ABP Community - Update](https://community.abp.io/)", //not allowed URL
+                }
+            ));
+    }
 
-                comment.ShouldBeNull();
-            });
-        }
+    [Fact]
+    public async Task DeleteAsync()
+    {
+        _currentUser.Id.Returns(_cmsKitTestData.User1Id);
+
+        await _commentAppService.DeleteAsync(_cmsKitTestData.CommentWithChildId);
+
+        UsingDbContext(context =>
+        {
+            var comment = context.Set<Comment>().FirstOrDefault(x =>
+                x.Id == _cmsKitTestData.CommentWithChildId);
+
+            comment.ShouldBeNull();
+        });
     }
 }

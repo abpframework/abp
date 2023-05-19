@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Zdroj nebol nájdený!",
     "DefaultErrorMessage404Detail": "Požadovaný zdroj sa na serveri nenašiel!",
     "EntityNotFoundErrorMessage": "Entita {0} s id = {1} neexistuje!",
+    "AbpDbConcurrencyErrorMessage": "Údaje, ktoré ste odoslali, už zmenil iný používateľ/klient. Zahoďte zmeny, ktoré ste vykonali, a skúste to od začiatku.",
     "Error": "Error",
     "UnhandledException": "Neošetrená výnimka!",
     "401Message": "Neoprávnený",

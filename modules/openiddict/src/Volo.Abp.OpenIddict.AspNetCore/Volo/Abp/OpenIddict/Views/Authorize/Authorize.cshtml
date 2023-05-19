@@ -1,0 +1,23 @@
+﻿@using Microsoft.Extensions.Primitives
+@using Volo.Abp.OpenIddict.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@model AuthorizeViewModel
+@inject IHtmlLocalizer<AbpOpenIddictResource> L
+
+<div class="jumbotron">
+    <h1>@L["Authorization"]</h1>
+    <p class="lead text-left"><strong>@string.Format(L["DoYouWantToGrantAccessToYourData"].Value, Model.ApplicationName)</strong></p>
+    <p class="fw-light">@L["ScopesRequested"]: @Model.Scope</p>
+
+    <form method="post" action="~/connect/authorize/callback" >
+        @Html.AntiForgeryToken()
+        @* Flow the request parameters so they can be received by the Accept/Reject actions: *@
+        @foreach (var parameter in Context.Request.HasFormContentType ? (IEnumerable<KeyValuePair<string, StringValues>>) Context.Request.Form : Context.Request.Query)
+        {
+            <input type="hidden" name="@parameter.Key" value="@parameter.Value"/>
+        }
+
+        <input class="btn btn-primary" name="accept" type="submit" value="@L["Accept"]"/>
+        <input class="btn btn-danger ms-1" name="deny" type="submit" value="@L["Deny"]"/>
+    </form>
+</div>

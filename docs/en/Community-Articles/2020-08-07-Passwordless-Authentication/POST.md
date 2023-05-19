@@ -241,3 +241,24 @@ That's all! We created a passwordless login with 7 steps.
 ## Source Code
 
 The completed sample is available on [GitHub repository](https://github.com/abpframework/abp-samples/tree/master/PasswordlessAuthentication).
+
+〰️〰️〰️
+
+Happy Coding 🤗
+
+---
+
+I'm Alper Ebicoglu 🧑🏽‍💻 ABP Framework Core Team Member
+
+Follow me for the latest news about .NET and software development:
+
+📌 [twitter.com/alperebicoglu](https://twitter.com/alperebicoglu)
+
+📌 [github.com/ebicoglu](https://github.com/ebicoglu)
+
+📌 [linkedin.com/in/ebicoglu](https://www.linkedin.com/in/ebicoglu)
+
+📌 [medium.com/@alperonline](https://medium.com/@alperonline)
+
+
+---

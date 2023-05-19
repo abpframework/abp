@@ -12,86 +12,85 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Serilog
+namespace Volo.Abp.AspNetCore.Serilog;
+
+public class Serilog_Enrichers_Tests : AbpSerilogTestBase
 {
-    public class Serilog_Enrichers_Tests : AbpSerilogTestBase
+    private const string ExecutedEndpointLogEventText = "Executed endpoint '{EndpointName}'";
+
+    private readonly Guid _testTenantId = Guid.NewGuid();
+    private readonly string _testTenantName = "acme";
+
+    private readonly AbpAspNetCoreMultiTenancyOptions _tenancyOptions;
+    private readonly AbpAspNetCoreSerilogOptions _serilogOptions;
+    private readonly ILogger<Serilog_Enrichers_Tests> _logger;
+
+    public Serilog_Enrichers_Tests()
     {
-        private const string ExecutedEndpointLogEventText = "Executed endpoint '{EndpointName}'";
+        _tenancyOptions = ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
+        _serilogOptions =
+            ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreSerilogOptions>>().Value;
+        _logger = ServiceProvider.GetRequiredService<ILogger<Serilog_Enrichers_Tests>>();
+    }
 
-        private readonly Guid _testTenantId = Guid.NewGuid();
-        private readonly string _testTenantName = "acme";
-
-        private readonly AbpAspNetCoreMultiTenancyOptions _tenancyOptions;
-        private readonly AbpAspNetCoreSerilogOptions _serilogOptions;
-        private readonly ILogger<Serilog_Enrichers_Tests> _logger;
-
-        public Serilog_Enrichers_Tests()
+    protected override IHostBuilder CreateHostBuilder()
+    {
+        return base.CreateHostBuilder().ConfigureServices(services =>
         {
-            _tenancyOptions = ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
-            _serilogOptions =
-                ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreSerilogOptions>>().Value;
-            _logger = ServiceProvider.GetRequiredService<ILogger<Serilog_Enrichers_Tests>>();
-        }
-
-        protected override IHostBuilder CreateHostBuilder()
-        {
-            return base.CreateHostBuilder().ConfigureServices(services =>
+            services.Configure<AbpDefaultTenantStoreOptions>(options =>
             {
-                services.Configure<AbpDefaultTenantStoreOptions>(options =>
+                options.Tenants = new[]
                 {
-                    options.Tenants = new[]
-                    {
                         new TenantConfiguration(_testTenantId, _testTenantName)
-                    };
-                });
+                };
             });
-        }
+        });
+    }
 
-        [Fact]
-        public async Task TenantId_Not_Set_Test()
-        {
-            var url = GetUrl<SerilogTestController>(nameof(SerilogTestController.Index));
-            var result = await GetResponseAsStringAsync(url);
+    [Fact]
+    public async Task TenantId_Not_Set_Test()
+    {
+        var url = GetUrl<SerilogTestController>(nameof(SerilogTestController.Index));
+        var result = await GetResponseAsStringAsync(url);
 
-            var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
+        var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
 
-            executedLogEvent.ShouldNotBeNull();
-            executedLogEvent.Properties.ContainsKey(_serilogOptions.EnricherPropertyNames.TenantId)
-                .ShouldBe(false);
-        }
+        executedLogEvent.ShouldNotBeNull();
+        executedLogEvent.Properties.ContainsKey(_serilogOptions.EnricherPropertyNames.TenantId)
+            .ShouldBe(false);
+    }
 
-        [Fact]
-        public async Task TenantId_Set_Test()
-        {
-            var url =
-                GetUrl<SerilogTestController>(nameof(SerilogTestController.Index)) +
-                $"?{_tenancyOptions.TenantKey}={_testTenantName}";
-            var result = await GetResponseAsStringAsync(url);
+    [Fact]
+    public async Task TenantId_Set_Test()
+    {
+        var url =
+            GetUrl<SerilogTestController>(nameof(SerilogTestController.Index)) +
+            $"?{_tenancyOptions.TenantKey}={_testTenantName}";
+        var result = await GetResponseAsStringAsync(url);
 
-            var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
+        var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
 
-            executedLogEvent.ShouldNotBeNull();
-            executedLogEvent.Properties.ContainsKey(_serilogOptions.EnricherPropertyNames.TenantId)
-                .ShouldBe(true);
-            ((ScalarValue) executedLogEvent.Properties[_serilogOptions.EnricherPropertyNames.TenantId]).Value
-                .ShouldBe(_testTenantId);
-        }
+        executedLogEvent.ShouldNotBeNull();
+        executedLogEvent.Properties.ContainsKey(_serilogOptions.EnricherPropertyNames.TenantId)
+            .ShouldBe(true);
+        ((ScalarValue)executedLogEvent.Properties[_serilogOptions.EnricherPropertyNames.TenantId]).Value
+            .ShouldBe(_testTenantId);
+    }
 
-        [Fact]
-        public async Task CorrelationId_Enrichers_Test()
-        {
-            var url = GetUrl<SerilogTestController>(nameof(SerilogTestController.CorrelationId));
-            var result = await GetResponseAsStringAsync(url);
+    [Fact]
+    public async Task CorrelationId_Enrichers_Test()
+    {
+        var url = GetUrl<SerilogTestController>(nameof(SerilogTestController.CorrelationId));
+        var result = await GetResponseAsStringAsync(url);
 
-            var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
+        var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
 
-            executedLogEvent.ShouldNotBeNull();
+        executedLogEvent.ShouldNotBeNull();
 
-            executedLogEvent.Properties.ContainsKey(_serilogOptions.EnricherPropertyNames.CorrelationId)
-                .ShouldBeTrue();
+        executedLogEvent.Properties.ContainsKey(_serilogOptions.EnricherPropertyNames.CorrelationId)
+            .ShouldBeTrue();
 
-            ((ScalarValue) executedLogEvent.Properties[_serilogOptions.EnricherPropertyNames.CorrelationId]).Value
-                .ShouldBe(result);
-        }
+        ((ScalarValue)executedLogEvent.Properties[_serilogOptions.EnricherPropertyNames.CorrelationId]).Value
+            .ShouldBe(result);
     }
 }

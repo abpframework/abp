@@ -1,0 +1,6 @@
+{
+  "culture": "fa",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} نمیتواند بیشتر از {1}! باشد. مقدار {2} را افزایش دهید.{3} در سمت سرور."
+  }
+}

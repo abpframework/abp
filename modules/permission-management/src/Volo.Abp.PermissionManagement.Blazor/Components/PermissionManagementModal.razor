@@ -10,14 +10,16 @@
         <ModalBody MaxHeight="50">
             
             <Field>
-                <Check Cursor="Cursor.Pointer" @bind-Checked="@GrantAll" TValue="bool">@L["SelectAllInAllTabs"]</Check>
+                <Check Disabled="_selectAllDisabled" Cursor="Cursor.Pointer" @bind-Checked="@GrantAll" TValue="bool">
+                    @L["SelectAllInAllTabs"]
+                </Check>
             </Field>
             
             <Divider />
             
             @if (_groups != null)
             {
-                <Tabs TabPosition="TabPosition.Left" Pills="true" @bind-SelectedTab="@_selectedTabName">
+                <Tabs TabPosition="TabPosition.Start" Pills="true" @bind-SelectedTab="@_selectedTabName">
                     <Items>
                         @foreach (var group in _groups)
                         {
@@ -47,6 +49,7 @@
                                 
                                 <Field>
                                     <Check
+                                        Disabled="@(IsPermissionGroupDisabled(group))"
                                         Checked="@(group.Permissions.All(x => x.IsGranted))"
                                         Cursor="Cursor.Pointer"
                                         CheckedChanged="@(b => GroupGrantAllChanged(b, group))"

@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card;
+
+public class AbpCardBackgroundTagHelperService : AbpTagHelperService<AbpCardBackgroundTagHelper>
 {
-    public class AbpCardBackgroundTagHelperService : AbpTagHelperService<AbpCardBackgroundTagHelper>
+    public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        SetBackground(context, output);
+    }
+
+    protected virtual void SetBackground(TagHelperContext context, TagHelperOutput output)
+    {
+        if (TagHelper.Background == AbpCardBackgroundType.Default)
         {
-            SetBackground(context, output);
+            return;
         }
 
-        protected virtual void SetBackground(TagHelperContext context, TagHelperOutput output)
-        {
-            if (TagHelper.Background == AbpCardBackgroundType.Default)
-            {
-                return;
-            }
-
-            output.Attributes.AddClass("bg-" + TagHelper.Background.ToString().ToLowerInvariant());
-        }
+        output.Attributes.AddClass("bg-" + TagHelper.Background.ToString().ToLowerInvariant());
     }
 }

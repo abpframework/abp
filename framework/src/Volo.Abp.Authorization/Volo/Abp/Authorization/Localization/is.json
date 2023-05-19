@@ -1,0 +1,10 @@
+{
+  "culture": "is",
+  "texts": {
+    "Volo.Authorization:010001": "Heimild mistókst! Pólisía hefur ekki verið sett.",
+    "Volo.Authorization:010002": "Heimild mistókst! Eftirfarandi pólisía hefur ekki verið sett: {PolicyName}",
+    "Volo.Authorization:010003": "Heimild mistókst! Eftirfarandi pólisía hefur ekki verið sett fyrir: {ResourceName}",
+    "Volo.Authorization:010004": "Heimild mistókst! Eftirfarandi pólisía hefur ekki verið sett fyrir auðlind: {ResourceName}",
+    "Volo.Authorization:010005": "Heimild mistókst! Gefin krafa hefur ekki veitt fyrir tiltekna auðlind: {ResourceName}"
+  }
+}

@@ -9,6 +9,7 @@
     "InvalidUserNameOrPassword": "Väärä käyttäjänimi tai salasana!",
     "LoginIsNotAllowed": "Et saa kirjautua sisään! Tilisi on passiivinen tai sinun on vahvistettava sähköpostiosoitteesi/puhelinnumerosi.",
     "InvalidUsername": "Väärä käyttäjänimi tai salasana!",
+    "InvalidAuthenticatorCode": "Virheellinen todennuskoodi!",
     "TheTargetUserIsNotLinkedToYou": "Kohdekäyttäjä ei ole linkitetty sinuun!"
   }
 }

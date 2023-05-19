@@ -12,6 +12,7 @@
 @using Volo.Abp.MultiTenancy
 @using Volo.Abp.Localization
 @using Volo.Abp.Ui.Branding
+@using Volo.Abp.Ui.LayoutHooks
 @inject IBrandingProvider BrandingProvider
 @inject IOptions<AbpMultiTenancyOptions> MultiTenancyOptions
 @inject ICurrentTenant CurrentTenant
@@ -48,7 +49,7 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
-<body class="abp-account-layout bg-light @rtl">
+<body class="abp-account-layout @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
@@ -95,6 +96,7 @@
 
     <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
 
+    <script src="~/Abp/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
     <script src="~/Abp/ApplicationConfigurationScript"></script>
     <script src="~/Abp/ServiceProxyScript"></script>
 

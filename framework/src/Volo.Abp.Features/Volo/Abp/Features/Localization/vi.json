@@ -1,0 +1,8 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Volo.Feature:010001": "Tính năng chưa được bật: {FeatureName}",
+    "Volo.Feature:010002": "Các tính năng bắt buộc không được kích hoạt. Tất cả các tính năng này phải được bật: {FeatureNames}",
+    "Volo.Feature:010003": "Các tính năng bắt buộc không được kích hoạt. Ít nhất một trong các tính năng này phải được bật: {FeatureNames}"
+  }
+}

@@ -1,8 +1,8 @@
 import {
   AuthGuard,
-  DynamicLayoutComponent,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
+  RouterOutletComponent,
 } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -13,12 +13,14 @@ import { RegisterComponent } from './components/register/register.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { eAccountComponents } from './enums/components';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
+import { AccountExtensionsGuard } from './guards';
+
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   {
     path: '',
-    component: DynamicLayoutComponent,
+    component: RouterOutletComponent,
     children: [
       {
         path: 'login',
@@ -68,7 +70,7 @@ const routes: Routes = [
       {
         path: 'manage',
         component: ReplaceableRouteContainerComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, AccountExtensionsGuard],
         data: {
           replaceableComponent: {
             key: eAccountComponents.ManageProfile,

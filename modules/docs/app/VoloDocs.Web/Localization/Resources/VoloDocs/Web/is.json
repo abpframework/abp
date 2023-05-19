@@ -1,0 +1,10 @@
+{
+  "culture": "is",
+  "texts": {
+    "DocsTitle": "VoloDocs",
+    "WelcomeVoloDocs": "Velkomin í VoloDocs!",
+    "NoProjectWarning": "Það er ekkert skilgreint verkefni ennþá!",
+    "CreateYourFirstProject": "Smelltu hér til að hefja fyrsta verkefnið þitt",
+    "NoProject": "Ekkert verkefni!"
+  }
+}

@@ -5,40 +5,39 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+
+public class FileEntryListReadStep : ProjectBuildPipelineStep
 {
-    public class FileEntryListReadStep : ProjectBuildPipelineStep
+    public override void Execute(ProjectBuildContext context)
     {
-        public override void Execute(ProjectBuildContext context)
-        {
-            context.Files = GetEntriesFromZipFile(context.TemplateFile.FileBytes);
-        }
+        context.Files = GetEntriesFromZipFile(context.TemplateFile.FileBytes);
+    }
 
-        private static FileEntryList GetEntriesFromZipFile(byte[] fileBytes)
-        {
-            var fileEntries = new List<FileEntry>();
+    private static FileEntryList GetEntriesFromZipFile(byte[] fileBytes)
+    {
+        var fileEntries = new List<FileEntry>();
 
-            using (var memoryStream = new MemoryStream(fileBytes))
+        using (var memoryStream = new MemoryStream(fileBytes))
+        {
+            using (var zipInputStream = new ZipInputStream(memoryStream))
             {
-                using (var zipInputStream = new ZipInputStream(memoryStream))
+                var zipEntry = zipInputStream.GetNextEntry();
+                while (zipEntry != null)
                 {
-                    var zipEntry = zipInputStream.GetNextEntry();
-                    while (zipEntry != null)
+                    var buffer = new byte[4096]; // 4K is optimum
+
+                    using (var fileEntryMemoryStream = new MemoryStream())
                     {
-                        var buffer = new byte[4096]; // 4K is optimum
-
-                        using (var fileEntryMemoryStream = new MemoryStream())
-                        {
-                            StreamUtils.Copy(zipInputStream, fileEntryMemoryStream, buffer);
-                            fileEntries.Add(new FileEntry(zipEntry.Name.EnsureStartsWith('/'), fileEntryMemoryStream.ToArray(), zipEntry.IsDirectory));
-                        }
-
-                        zipEntry = zipInputStream.GetNextEntry();
+                        StreamUtils.Copy(zipInputStream, fileEntryMemoryStream, buffer);
+                        fileEntries.Add(new FileEntry(zipEntry.Name.EnsureStartsWith('/'), fileEntryMemoryStream.ToArray(), zipEntry.IsDirectory));
                     }
-                }
 
-                return new FileEntryList(fileEntries);
+                    zipEntry = zipInputStream.GetNextEntry();
+                }
             }
+
+            return new FileEntryList(fileEntries);
         }
     }
 }

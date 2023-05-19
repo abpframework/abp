@@ -3,7 +3,7 @@ import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { BehaviorSubject } from 'rxjs';
 import { Environment, RemoteEnv } from '../models/environment';
-import { EnvironmentService } from '../services';
+import { EnvironmentService } from '../services/environment.service';
 import { getRemoteEnv } from '../utils/environment-utils';
 import { deepMerge } from '../utils/object-utils';
 

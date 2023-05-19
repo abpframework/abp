@@ -1,6 +1,5 @@
-﻿namespace Volo.Abp
+﻿namespace Volo.Abp;
+
+public interface IRemoteService
 {
-    public interface IRemoteService //TODO: Can we move this to another package?
-    {
-    }
 }

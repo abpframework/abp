@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.IdentityServer.IdentityResources
+namespace Volo.Abp.IdentityServer.IdentityResources;
+
+public interface IIdentityResourceDataSeeder
 {
-    public interface IIdentityResourceDataSeeder
-    {
-        Task CreateStandardResourcesAsync();
-    }
+    Task CreateStandardResourcesAsync();
 }

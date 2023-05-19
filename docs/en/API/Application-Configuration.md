@@ -2,12 +2,13 @@
 
 ABP Framework provides a pre-built and standard endpoint that contains some useful information about the application/service. Here, the list of some fundamental information at this endpoint:
 
-* [Localization](../Localization.md) values, supported and the current language of the application.
-* Available and granted [policies](../Authorization.md) (permissions) for the current user.
+* Granted [policies](../Authorization.md) (permissions) for the current user.
 * [Setting](../Settings.md) values for the current user.
 * Info about the [current user](../CurrentUser.md) (like id and user name).
 * Info about the current [tenant](../Multi-Tenancy.md) (like id and name).
 * [Time zone](../Timing.md) information for the current user and the [clock](../Timing.md) type of the application.
+
+> If you have started with ABP's startup solution templates and using one of the official UI options, then all these are set up for you and you don't need to know these details. However, if you are building a UI application from scratch, you may want to know this endpoint.
 
 ## HTTP API
 
@@ -19,5 +20,5 @@ For ASP.NET Core MVC (Razor Pages) applications, the same configuration values a
 
 See the [JavaScript API document](../UI/AspNetCore/JavaScript-API/Index.md) for the ASP.NET Core UI.
 
-Other UI types provide services native to the related platform. For example, see the [Angular UI localization documentation](../UI/Angular/Localization.md) to learn how to use the localization values exposes by this endpoint.
+Other UI types provide services native to the related platform. For example, see the [Angular UI settings documentation](../UI/Angular/Settings.md) to learn how to use the setting values exposes by this endpoint.
 

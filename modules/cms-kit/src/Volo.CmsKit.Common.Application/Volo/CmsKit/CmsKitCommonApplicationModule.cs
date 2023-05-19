@@ -7,22 +7,21 @@ using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Permissions;
 
-namespace Volo.CmsKit
+namespace Volo.CmsKit;
+
+[DependsOn(
+    typeof(CmsKitCommonApplicationContractsModule),
+    typeof(CmsKitDomainModule),
+    typeof(AbpDddApplicationModule),
+    typeof(AbpAutoMapperModule)
+)]
+public class CmsKitCommonApplicationModule : AbpModule
 {
-    [DependsOn(
-        typeof(CmsKitCommonApplicationContractsModule),
-        typeof(CmsKitDomainModule),
-        typeof(AbpDddApplicationModule),
-        typeof(AbpAutoMapperModule)
-    )]
-    public class CmsKitCommonApplicationModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpAutoMapperOptions>(options =>
         {
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddMaps<CmsKitCommonApplicationModule>(validate: true);
-            });
-        }
+            options.AddMaps<CmsKitCommonApplicationModule>(validate: true);
+        });
     }
 }

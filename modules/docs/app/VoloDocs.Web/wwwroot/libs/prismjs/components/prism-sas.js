@@ -8,8 +8,18 @@
 		alias: 'number'
 	};
 
+	var macroVariable = {
+		pattern: /&[a-z_]\w*/i
+	};
+
+	var macroKeyword = {
+		pattern: /((?:^|\s|=|\())%(?:ABORT|BY|CMS|COPY|DISPLAY|DO|ELSE|END|EVAL|GLOBAL|GO|GOTO|IF|INC|INCLUDE|INDEX|INPUT|KTRIM|LENGTH|LET|LIST|LOCAL|PUT|QKTRIM|QSCAN|QSUBSTR|QSYSFUNC|QUPCASE|RETURN|RUN|SCAN|SUBSTR|SUPERQ|SYMDEL|SYMEXIST|SYMGLOBL|SYMLOCAL|SYSCALL|SYSEVALF|SYSEXEC|SYSFUNC|SYSGET|SYSRPUT|THEN|TO|TSO|UNQUOTE|UNTIL|UPCASE|WHILE|WINDOW)\b/i,
+		lookbehind: true,
+		alias: 'keyword'
+	};
+
 	var step = {
-		pattern: /(^|\s+)(?:proc\s+\w+|quit|run|data(?!\=))\b/i,
+		pattern: /(^|\s)(?:proc\s+\w+|data(?!=)|quit|run)\b/i,
 		alias: 'keyword',
 		lookbehind: true
 	};
@@ -17,7 +27,7 @@
 	var comment = [
 		/\/\*[\s\S]*?\*\//,
 		{
-			pattern: /(^\s*|;\s*)\*[^;]*;/m,
+			pattern: /(^[ \t]*|;\s*)\*[^;]*;/m,
 			lookbehind: true
 		}
 	];
@@ -30,21 +40,18 @@
 	var punctuation = /[$%@.(){}\[\];,\\]/;
 
 	var func = {
-		pattern: /%?\w+(?=\()/,
+		pattern: /%?\b\w+(?=\()/,
 		alias: 'keyword'
 	};
 
 	var args = {
 		'function': func,
 		'arg-value': {
-			pattern: /(\s*=\s*)[A-Z\.]+/i,
+			pattern: /(=\s*)[A-Z\.]+/i,
 			lookbehind: true
 		},
 		'operator': /=/,
-		'macro-variable': {
-			pattern: /&[^\.]*\./i,
-			alias: 'string'
-		},
+		'macro-variable': macroVariable,
 		'arg': {
 			pattern: /[A-Z]+/i,
 			alias: 'keyword'
@@ -56,12 +63,12 @@
 	};
 
 	var format = {
-		pattern: /\b(?:format|put)\b=?[\w'$.]+/im,
+		pattern: /\b(?:format|put)\b=?[\w'$.]+/i,
 		inside: {
-			'keyword': /^(?:format|put)(?=\=)/i,
+			'keyword': /^(?:format|put)(?==)/i,
 			'equals': /=/,
 			'format': {
-				pattern: /(?:\w|\$\d)+\.\d?/i,
+				pattern: /(?:\w|\$\d)+\.\d?/,
 				alias: 'number'
 			}
 		}
@@ -79,18 +86,18 @@
 	};
 
 	var globalStatements = {
-		pattern: /((?:^|[\s])=?)(?:catname|checkpoint execute_always|dm|endsas|filename|footnote|%include|libname|%list|lock|missing|options|page|resetline|%run|sasfile|skip|sysecho|title\d?)\b/i,
+		pattern: /((?:^|\s)=?)(?:catname|checkpoint execute_always|dm|endsas|filename|footnote|%include|libname|%list|lock|missing|options|page|resetline|%run|sasfile|skip|sysecho|title\d?)\b/i,
 		lookbehind: true,
 		alias: 'keyword'
 	};
 
 	var submitStatement = {
-		pattern: /(^|\s)(?:submit(?:\s+(?:load|parseonly|norun))?|endsubmit)\b/i,
+		pattern: /(^|\s)(?:submit(?:\s+(?:load|norun|parseonly))?|endsubmit)\b/i,
 		lookbehind: true,
 		alias: 'keyword'
 	};
 
-	var actionSets = /accessControl|cdm|aggregation|aStore|ruleMining|audio|autotune|bayesianNetClassifier|bioMedImage|boolRule|builtins|cardinality|sccasl|clustering|copula|countreg|dataDiscovery|dataPreprocess|dataSciencePilot|dataStep|decisionTree|deepLearn|deepNeural|varReduce|simSystem|ds2|deduplication|ecm|entityRes|espCluster|explainModel|factmac|fastKnn|fcmpact|fedSql|freqTab|gam|gleam|graphSemiSupLearn|gVarCluster|hiddenMarkovModel|hyperGroup|image|iml|ica|kernalPca|langModel|ldaTopic|sparseML|mlTools|mixed|modelPublishing|mbc|network|optNetwork|neuralNet|nonlinear|nmf|nonParametricBayes|optimization|panel|pls|percentile|pca|phreg|qkb|qlim|quantreg|recommend|tsReconcile|deepRnn|regression|reinforcementLearn|robustPca|sampling|sparkEmbeddedProcess|search(?:Analytics)?|sentimentAnalysis|sequence|configuration|session(?:Prop)?|severity|simple|smartData|sandwich|spatialreg|stabilityMonitoring|spc|loadStreams|svDataDescription|svm|table|conditionalRandomFields|text(?:Rule(?:Develop|Score)|Mining|Parse|Topic|Util|Filters|Frequency)|tsInfo|timeData|transpose|uniTimeSeries/.source;
+	var actionSets = /aStore|accessControl|aggregation|audio|autotune|bayesianNetClassifier|bioMedImage|boolRule|builtins|cardinality|cdm|clustering|conditionalRandomFields|configuration|copula|countreg|dataDiscovery|dataPreprocess|dataSciencePilot|dataStep|decisionTree|deduplication|deepLearn|deepNeural|deepRnn|ds2|ecm|entityRes|espCluster|explainModel|factmac|fastKnn|fcmpact|fedSql|freqTab|gVarCluster|gam|gleam|graphSemiSupLearn|hiddenMarkovModel|hyperGroup|ica|image|iml|kernalPca|langModel|ldaTopic|loadStreams|mbc|mixed|mlTools|modelPublishing|network|neuralNet|nmf|nonParametricBayes|nonlinear|optNetwork|optimization|panel|pca|percentile|phreg|pls|qkb|qlim|quantreg|recommend|regression|reinforcementLearn|robustPca|ruleMining|sampling|sandwich|sccasl|search(?:Analytics)?|sentimentAnalysis|sequence|session(?:Prop)?|severity|simSystem|simple|smartData|sparkEmbeddedProcess|sparseML|spatialreg|spc|stabilityMonitoring|svDataDescription|svm|table|text(?:Filters|Frequency|Mining|Parse|Rule(?:Develop|Score)|Topic|Util)|timeData|transpose|tsInfo|tsReconcile|uniTimeSeries|varReduce/.source;
 
 	var casActions = {
 		pattern: RegExp(/(^|\s)(?:action\s+)?(?:<act>)\.[a-z]+\b[^;]+/.source.replace(/<act>/g, function () { return actionSets; }), 'i'),
@@ -101,10 +108,10 @@
 				pattern: /(?:action)/i,
 				alias: 'keyword'
 			},
+			'comment': comment,
 			'function': func,
 			'arg-value': args['arg-value'],
 			'operator': args.operator,
-			'comment': comment,
 			'argument': args.arg,
 			'number': number,
 			'numeric-constant': numericConstant,
@@ -114,25 +121,25 @@
 	};
 
 	var keywords = {
-		pattern: /((?:^|\s)=?)(?:after|analysis|and|array|barchart|barwidth|begingraph|by|call|cas|cbarline|cfill|class(?:lev)?|close|column|computed?|contains|continue|data(?=\=)|define|delete|describe|document|do\s+over|do|dol|drop|dul|end(?:source|comp)?|entryTitle|else|eval(?:uate)?|exec(?:ute)?|exit|fill(?:attrs)?|file(?:name)?|flist|fnc|function(?:list)?|goto|global|group(?:by)?|headline|headskip|histogram|if|infile|keep|keylabel|keyword|label|layout|leave|legendlabel|length|libname|loadactionset|merge|midpoints|name|noobs|nowd|_?null_|ods|options|or|otherwise|out(?:put)?|over(?:lay)?|plot|put|print|raise|ranexp|rannor|rbreak|retain|return|select|set|session|sessref|source|statgraph|sum|summarize|table|temp|terminate|then\s+do|then|title\d?|to|var|when|where|xaxisopts|yaxisopts|y2axisopts)\b/i,
+		pattern: /((?:^|\s)=?)(?:after|analysis|and|array|barchart|barwidth|begingraph|by|call|cas|cbarline|cfill|class(?:lev)?|close|column|computed?|contains|continue|data(?==)|define|delete|describe|document|do\s+over|do|dol|drop|dul|else|end(?:comp|source)?|entryTitle|eval(?:uate)?|exec(?:ute)?|exit|file(?:name)?|fill(?:attrs)?|flist|fnc|function(?:list)?|global|goto|group(?:by)?|headline|headskip|histogram|if|infile|keep|keylabel|keyword|label|layout|leave|legendlabel|length|libname|loadactionset|merge|midpoints|_?null_|name|noobs|nowd|ods|options|or|otherwise|out(?:put)?|over(?:lay)?|plot|print|put|raise|ranexp|rannor|rbreak|retain|return|select|session|sessref|set|source|statgraph|sum|summarize|table|temp|terminate|then\s+do|then|title\d?|to|var|when|where|xaxisopts|y2axisopts|yaxisopts)\b/i,
 		lookbehind: true,
 	};
 
 	Prism.languages.sas = {
 		'datalines': {
-			pattern: /^(\s*)(?:(?:data)?lines|cards);[\s\S]+?^\s*;/im,
+			pattern: /^([ \t]*)(?:cards|(?:data)?lines);[\s\S]+?^[ \t]*;/im,
 			lookbehind: true,
 			alias: 'string',
 			inside: {
 				'keyword': {
-					pattern: /^(?:(?:data)?lines|cards)/i
+					pattern: /^(?:cards|(?:data)?lines)/i
 				},
 				'punctuation': /;/
 			}
 		},
 
 		'proc-sql': {
-			pattern: /(^proc\s+(?:fed)?sql(?:\s+[\w|=]+)?;)[\s\S]+?(?=^(?:proc\s+\w+|quit|run|data);|(?![\s\S]))/im,
+			pattern: /(^proc\s+(?:fed)?sql(?:\s+[\w|=]+)?;)[\s\S]+?(?=^(?:proc\s+\w+|data|quit|run);|(?![\s\S]))/im,
 			lookbehind: true,
 			inside: {
 				'sql': {
@@ -142,7 +149,7 @@
 				},
 				'global-statements': globalStatements,
 				'sql-statements': {
-					pattern: /(^|\s)(?:disconnect\s+from|exec(?:ute)?|begin|commit|rollback|reset|validate)\b/i,
+					pattern: /(^|\s)(?:disconnect\s+from|begin|commit|exec(?:ute)?|reset|rollback|validate)\b/i,
 					lookbehind: true,
 					alias: 'keyword'
 				},
@@ -154,15 +161,17 @@
 		},
 
 		'proc-groovy': {
-			pattern: /(^proc\s+groovy(?:\s+[\w|=]+)?;)(?:\s*submit)[\s\S]+?(?=^(?:proc\s+\w+|quit|run|data);|(?![\s\S]))/im,
+			pattern: /(^proc\s+groovy(?:\s+[\w|=]+)?;)[\s\S]+?(?=^(?:proc\s+\w+|data|quit|run);|(?![\s\S]))/im,
 			lookbehind: true,
 			inside: {
+				'comment': comment,
 				'groovy': {
-					pattern: RegExp(/(^[ \t]*submit(?:\s+(?:load|parseonly|norun))?)(?:<str>|[^"'])+?(?=endsubmit;)/.source.replace(/<str>/g, function () { return stringPattern; }), 'im'),
+					pattern: RegExp(/(^[ \t]*submit(?:\s+(?:load|norun|parseonly))?)(?:<str>|[^"'])+?(?=endsubmit;)/.source.replace(/<str>/g, function () { return stringPattern; }), 'im'),
 					lookbehind: true,
 					alias: 'language-groovy',
 					inside: Prism.languages.groovy
 				},
+				'keyword': keywords,
 				'submit-statement': submitStatement,
 				'global-statements': globalStatements,
 				'number': number,
@@ -173,15 +182,17 @@
 		},
 
 		'proc-lua': {
-			pattern: /(^proc\s+lua(?:\s+[\w|=]+)?;)(?:\s*submit)[\s\S]+?(?=^(?:proc\s+\w+|quit|run|data);|(?![\s\S]))/im,
+			pattern: /(^proc\s+lua(?:\s+[\w|=]+)?;)[\s\S]+?(?=^(?:proc\s+\w+|data|quit|run);|(?![\s\S]))/im,
 			lookbehind: true,
 			inside: {
+				'comment': comment,
 				'lua': {
-					pattern: RegExp(/(^[ \t]*submit(?:\s+(?:load|parseonly|norun))?)(?:<str>|[^"'])+?(?=endsubmit;)/.source.replace(/<str>/g, function () { return stringPattern; }), 'im'),
+					pattern: RegExp(/(^[ \t]*submit(?:\s+(?:load|norun|parseonly))?)(?:<str>|[^"'])+?(?=endsubmit;)/.source.replace(/<str>/g, function () { return stringPattern; }), 'im'),
 					lookbehind: true,
 					alias: 'language-lua',
 					inside: Prism.languages.lua
 				},
+				'keyword': keywords,
 				'submit-statement': submitStatement,
 				'global-statements': globalStatements,
 				'number': number,
@@ -195,10 +206,12 @@
 			pattern: /(^proc\s+cas(?:\s+[\w|=]+)?;)[\s\S]+?(?=^(?:proc\s+\w+|quit|data);|(?![\s\S]))/im,
 			lookbehind: true,
 			inside: {
+				'comment': comment,
 				'statement-var': {
-					pattern: /((?:^|\s)=?)saveresult\s+[^;]+/im,
+					pattern: /((?:^|\s)=?)saveresult\s[^;]+/im,
 					lookbehind: true,
 					inside: {
+
 						'statement': {
 							pattern: /^saveresult\s+\S+/i,
 							inside: {
@@ -217,7 +230,6 @@
 				'step': step,
 				'keyword': keywords,
 				'function': func,
-				'comment': comment,
 				'format': format,
 				'altformat': altformat,
 				'global-statements': globalStatements,
@@ -233,12 +245,24 @@
 			lookbehind: true,
 			inside: args
 		},
-
 		/*Special keywords within macros*/
-		'macro-keyword': {
-			pattern: /((?:^|\s)=?)%(?:ABORT|BQUOTE|BY|CMS|COPY|DISPLAY|DO|ELSE|END|EVAL|GLOBAL|GO|GOTO|IF|INC|INCLUDE|INDEX|INPUT|KTRIM|LENGTH|LET|LIST|LOCAL|NRBQUOTE|NRQUOTE|NRSTR|PUT|QKTRIM|QSCAN|QSUBSTR|QSYSFUNC|QUOTE|QUPCASE|RETURN|RUN|SCAN|STR|SUBSTR|SUPERQ|SYMDEL|SYMGLOBL|SYMLOCAL|SYMEXIST|SYSCALL|SYSEVALF|SYSEXEC|SYSFUNC|SYSGET|SYSRPUT|THEN|TO|TSO|UNQUOTE|UNTIL|UPCASE|WHILE|WINDOW)\b/i,
+		'macro-keyword': macroKeyword,
+		'macro-variable': macroVariable,
+		'macro-string-functions': {
+			pattern: /((?:^|\s|=))%(?:BQUOTE|NRBQUOTE|NRQUOTE|NRSTR|QUOTE|STR)\(.*?(?:[^%]\))/i,
 			lookbehind: true,
-			alias: 'keyword'
+			inside: {
+				'function': {
+					pattern: /%(?:BQUOTE|NRBQUOTE|NRQUOTE|NRSTR|QUOTE|STR)/i,
+					alias: 'keyword'
+				},
+				'macro-keyword': macroKeyword,
+				'macro-variable': macroVariable,
+				'escaped-char': {
+					pattern: /%['"()<>=¬^~;,#]/,
+				},
+				'punctuation': punctuation
+			}
 		},
 		'macro-declaration': {
 			pattern: /^%macro[^;]+(?=;)/im,
@@ -258,7 +282,7 @@
 			alias: 'keyword'
 		},
 		'input': {
-			pattern: /\binput\s+[-\w\s/*.$&]+;/i,
+			pattern: /\binput\s[-\w\s/*.$&]+;/i,
 			inside: {
 				'input': {
 					alias: 'keyword',
@@ -290,12 +314,12 @@
 		'keyword': keywords,
 		// In SAS Studio syntax highlighting, these operators are styled like keywords
 		'operator-keyword': {
-			pattern: /\b(?:eq|ne|gt|lt|ge|le|in|not)\b/i,
+			pattern: /\b(?:eq|ge|gt|in|le|lt|ne|not)\b/i,
 			alias: 'operator'
 		},
 		// Decimal (1.2e23), hexadecimal (0c1x)
 		'number': number,
-		'operator': /\*\*?|\|\|?|!!?|¦¦?|<[>=]?|>[<=]?|[-+\/=&]|[~¬^]=?/i,
+		'operator': /\*\*?|\|\|?|!!?|¦¦?|<[>=]?|>[<=]?|[-+\/=&]|[~¬^]=?/,
 		'punctuation': punctuation
 	};
 

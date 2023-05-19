@@ -13,6 +13,14 @@
     "DefaultErrorMessage404": "Tài nguyên không tìm thấy!",
     "DefaultErrorMessage404Detail": "Tài nguyên được yêu cầu không được tìm thấy trên máy chủ!",
     "EntityNotFoundErrorMessage": "Không có thực thể nào {0} với id = {1}!",
-    "Error": "Lỗi"
+    "AbpDbConcurrencyErrorMessage": "Dữ liệu bạn gửi đã bị người dùng/khách hàng khác thay đổi. Vui lòng hủy các thay đổi bạn đã thực hiện và thử lại từ đầu.",
+    "Error": "Lỗi",
+    "UnhandledException": "Tình huống ngoại lệ không thể xử lí được!",
+    "401Message": "Không được phép",
+    "403Message": "Cấm",
+    "404Message": "Không tìm thấy trang",
+    "500Message": "Lỗi máy chủ nội bộ",
+    "403MessageDetail": "Bạn không được phép thực hiện thao tác này!",
+    "404MessageDetail": "Xin lỗi, không có gì ở địa chỉ này."
   }
 }

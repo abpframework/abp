@@ -1,21 +1,20 @@
 ﻿using System;
 
-namespace Volo.Abp.Validation.StringValues
+namespace Volo.Abp.Validation.StringValues;
+
+[Serializable]
+[StringValueType("TOGGLE")]
+public class ToggleStringValueType : StringValueTypeBase
 {
-    [Serializable]
-    [StringValueType("TOGGLE")]
-    public class ToggleStringValueType : StringValueTypeBase
+    public ToggleStringValueType()
+        : this(new BooleanValueValidator())
     {
-        public ToggleStringValueType()
-            : this(new BooleanValueValidator())
-        {
 
-        }
+    }
 
-        public ToggleStringValueType(IValueValidator validator)
-            : base(validator)
-        {
+    public ToggleStringValueType(IValueValidator validator)
+        : base(validator)
+    {
 
-        }
     }
 }

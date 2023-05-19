@@ -1,0 +1,7 @@
+{
+  "culture": "ru",
+  "texts": {
+    "ThisFieldIsRequired": "Это поле обязательно к заполнению",
+    "MaxLenghtErrorMessage": "В этом поле может быть не более \"{0}\" символов."
+  }
+}

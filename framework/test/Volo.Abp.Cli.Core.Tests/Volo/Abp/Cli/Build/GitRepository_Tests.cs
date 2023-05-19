@@ -2,16 +2,16 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.Cli.Build
+namespace Volo.Abp.Cli.Build;
+
+public class GitRepository_Tests : AbpCliTestBase
 {
-    public class GitRepository_Tests : AbpCliTestBase
+    [Fact]
+    public void GetUniqueName_Test()
     {
-        [Fact]
-        public void GetUniqueName_Test()
+        var gitRepository = new GitRepository("repo-1", "dev", "")
         {
-            var gitRepository = new GitRepository("repo-1", "dev", "")
-            {
-                DependingRepositories = new List<GitRepository>
+            DependingRepositories = new List<GitRepository>
                 {
                     new GitRepository("repo-2", "dev", ""),
                     new GitRepository("repo-3", "dev", "")
@@ -22,18 +22,18 @@ namespace Volo.Abp.Cli.Build
                         }
                     }
                 }
-            };
-            
-            gitRepository.GetUniqueName("").ShouldBe("B25C935F97D7B3375530A96B392B7644");
-            gitRepository.GetUniqueName("production").ShouldBe("production_B25C935F97D7B3375530A96B392B7644");
-        }
+        };
 
-        [Fact]
-        public void FindRepositoryOf_Test()
+        gitRepository.GetUniqueName("").ShouldBe("B25C935F97D7B3375530A96B392B7644");
+        gitRepository.GetUniqueName("production").ShouldBe("production_B25C935F97D7B3375530A96B392B7644");
+    }
+
+    [Fact]
+    public void FindRepositoryOf_Test()
+    {
+        var gitRepository = new GitRepository("repo-1", "dev", "/repo-1/dev/")
         {
-            var gitRepository = new GitRepository("repo-1", "dev", "/repo-1/dev/")
-            {
-                DependingRepositories = new List<GitRepository>
+            DependingRepositories = new List<GitRepository>
                 {
                     new GitRepository("repo-2", "dev", "/repo-2/dev/"),
                     new GitRepository("repo-3", "dev", "/repo-3/dev/")
@@ -44,9 +44,8 @@ namespace Volo.Abp.Cli.Build
                         }
                     }
                 }
-            };
+        };
 
-            gitRepository.FindRepositoryOf("/repo-4/dev/A.csproj").ShouldBe("repo-4");
-        }
+        gitRepository.FindRepositoryOf("/repo-4/dev/A.csproj").ShouldBe("repo-4");
     }
 }

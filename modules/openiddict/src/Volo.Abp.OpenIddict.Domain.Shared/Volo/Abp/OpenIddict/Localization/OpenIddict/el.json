@@ -1,0 +1,15 @@
+{
+  "culture": "el",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Δεν είναι δυνατή η ανάκτηση του αιτήματος OpenID Connect.",
+    "TheUserDetailsCannotBbeRetrieved" : "Δεν είναι δυνατή η ανάκτηση των στοιχείων του χρήστη.",
+    "TheApplicationDetailsCannotBeFound": "Δεν είναι δυνατή η εύρεση των στοιχείων της αίτησης.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Δεν μπορούν να βρεθούν οι λεπτομέρειες σχετικά με την εφαρμογή του πελάτη που καλεί.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Ο καθορισμένος τύπος επιχορήγησης {0} δεν εφαρμόζεται.",
+    "Authorization": "Εξουσιοδότηση",
+    "DoYouWantToGrantAccessToYourData": "Θέλετε να παραχωρήσετε στον χρήστη {0} πρόσβαση στα δεδομένα σας;",
+    "ScopesRequested": "Ζητούνται πεδία εφαρμογής",
+    "Accept": "Αποδοχή",
+    "Deny": "Άρνηση"
+  }
+}

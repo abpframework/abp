@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Aspects;
+using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain;
 using Volo.Abp.Features;
@@ -13,31 +15,32 @@ using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.Application
+namespace Volo.Abp.Application;
+
+[DependsOn(
+    typeof(AbpDddDomainModule),
+    typeof(AbpDddApplicationContractsModule),
+    typeof(AbpSecurityModule),
+    typeof(AbpObjectMappingModule),
+    typeof(AbpValidationModule),
+    typeof(AbpAuthorizationModule),
+    typeof(AbpHttpAbstractionsModule),
+    typeof(AbpSettingsModule),
+    typeof(AbpFeaturesModule),
+    typeof(AbpGlobalFeaturesModule)
+    )]
+public class AbpDddApplicationModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpDddDomainModule),
-        typeof(AbpDddApplicationContractsModule),
-        typeof(AbpSecurityModule),
-        typeof(AbpObjectMappingModule),
-        typeof(AbpValidationModule),
-        typeof(AbpAuthorizationModule),
-        typeof(AbpHttpAbstractionsModule),
-        typeof(AbpSettingsModule),
-        typeof(AbpFeaturesModule),
-        typeof(AbpGlobalFeaturesModule)
-        )]
-    public class AbpDddApplicationModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpApiDescriptionModelOptions>(options =>
         {
-            Configure<AbpApiDescriptionModelOptions>(options =>
-            {
-                //TODO: Should we move related items to their own projects?
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled));
-            });
-        }
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IAuditingEnabled));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IValidationEnabled));
+            options.IgnoredInterfaces.AddIfNotContains(typeof(IGlobalFeatureCheckingEnabled));
+        });
     }
 }

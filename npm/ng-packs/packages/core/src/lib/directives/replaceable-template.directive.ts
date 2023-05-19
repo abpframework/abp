@@ -1,5 +1,4 @@
 import {
-  ComponentFactoryResolver,
   Directive,
   Injector,
   Input,
@@ -24,7 +23,7 @@ import { SubscriptionService } from '../services/subscription.service';
 })
 export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   @Input('abpReplaceableTemplate')
-  data: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
+  data!: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
 
   providedData = {
     inputs: {},
@@ -33,7 +32,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
 
   context = {} as any;
 
-  externalComponent: Type<any>;
+  externalComponent!: Type<any>;
 
   defaultComponentRef: any;
 
@@ -44,13 +43,12 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   constructor(
     private injector: Injector,
     private templateRef: TemplateRef<any>,
-    private cfRes: ComponentFactoryResolver,
     private vcRef: ViewContainerRef,
     private replaceableComponents: ReplaceableComponentsService,
     private subscription: SubscriptionService,
   ) {
     this.context = {
-      initTemplate: ref => {
+      initTemplate: (ref: any) => {
         this.resetDefaultComponent();
         this.defaultComponentRef = ref;
         this.setDefaultComponentInputs();
@@ -83,11 +81,10 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
             providers: [{ provide: 'REPLACEABLE_DATA', useValue: this.providedData }],
             parent: this.injector,
           });
-          this.vcRef.createComponent(
-            this.cfRes.resolveComponentFactory(res.component),
-            0,
-            customInjector,
-          );
+          const ref = this.vcRef.createComponent(res.component, {
+            index: 0,
+            injector: customInjector,
+          });
         } else {
           this.vcRef.createEmbeddedView(this.templateRef, this.context);
         }
@@ -121,8 +118,8 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
         if (Object.prototype.hasOwnProperty.call(this.data.outputs, key)) {
           if (!this.defaultComponentSubscriptions[key]) {
             this.defaultComponentSubscriptions[key] = this.defaultComponentRef[key].subscribe(
-              value => {
-                this.data.outputs[key](value);
+              (value: any) => {
+                this.data.outputs?.[key](value);
               },
             );
           }
@@ -132,7 +129,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   }
 
   setProvidedData() {
-    this.providedData = { ...this.data, inputs: {} };
+    this.providedData = { outputs: {}, ...this.data, inputs: {} };
 
     if (!this.data.inputs) return;
     Object.defineProperties(this.providedData.inputs, {
@@ -142,11 +139,15 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
           [key]: {
             enumerable: true,
             configurable: true,
-            get: () => this.data.inputs[key].value,
-            ...(this.data.inputs[key].twoWay && {
-              set: newValue => {
-                this.data.inputs[key].value = newValue;
-                this.data.outputs[`${key}Change`](newValue);
+            get: () => this.data.inputs?.[key]?.value,
+            ...(this.data.inputs?.[key]?.twoWay && {
+              set: (newValue: any) => {
+                if (this.data.inputs?.[key]) {
+                  this.data.inputs[key].value = newValue;
+                }
+                if (this.data.outputs?.[`${key}Change`]) {
+                  this.data.outputs[`${key}Change`](newValue);
+                }
               },
             }),
           },

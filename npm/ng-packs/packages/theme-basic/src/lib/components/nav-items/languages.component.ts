@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   selector: 'abp-languages',
   template: `
     <div
-      *ngIf="(dropdownLanguages$ | async)?.length > 0"
+      *ngIf="((dropdownLanguages$ | async)?.length || 0) > 0"
       class="dropdown"
       ngbDropdown
       #languageDropdown="ngbDropdown"
@@ -26,7 +26,7 @@ import { map } from 'rxjs/operators';
         {{ defaultLanguage$ | async }}
       </a>
       <div
-        class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
+        class="dropdown-menu dropdown-menu-end border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
         [class.d-block]="smallScreen && languageDropdown.isOpen()"
       >
@@ -34,7 +34,7 @@ import { map } from 'rxjs/operators';
           *ngFor="let lang of dropdownLanguages$ | async"
           href="javascript:void(0)"
           class="dropdown-item"
-          (click)="onChangeLang(lang.cultureName)"
+          (click)="onChangeLang(lang.cultureName || '')"
           >{{ lang?.displayName }}</a
         >
       </div>
@@ -52,7 +52,7 @@ export class LanguagesComponent {
     return this.languages$.pipe(
       map(
         languages =>
-          languages?.find(lang => lang.cultureName === this.selectedLangCulture).displayName || '',
+          languages?.find(lang => lang.cultureName === this.selectedLangCulture)?.displayName || '',
       ),
     );
   }

@@ -9,61 +9,64 @@ using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 
-namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
+namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
+
+[Dependency(ReplaceServices = true)]
+public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
 {
-    [Dependency(ReplaceServices = true)]
-    public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
+    public ILogger<UserExceptionInformer> Logger { get; set; }
+    protected IUiMessageService MessageService { get; }
+    protected IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; }
+
+    protected AbpExceptionHandlingOptions Options { get; }
+
+    public UserExceptionInformer(
+        IUiMessageService messageService,
+        IExceptionToErrorInfoConverter exceptionToErrorInfoConverter,
+        IOptions<AbpExceptionHandlingOptions> options)
     {
-        public ILogger<UserExceptionInformer> Logger { get; set; }
-        protected IUiMessageService MessageService { get; }
-        protected IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; }
+        MessageService = messageService;
+        ExceptionToErrorInfoConverter = exceptionToErrorInfoConverter;
+        Options = options.Value;
+        Logger = NullLogger<UserExceptionInformer>.Instance;
+    }
 
-        protected AbpExceptionHandlingOptions Options { get; }
+    public void Inform(UserExceptionInformerContext context)
+    {
+        //TODO: Create sync versions of the MessageService APIs.
 
-        public UserExceptionInformer(
-            IUiMessageService messageService,
-            IExceptionToErrorInfoConverter exceptionToErrorInfoConverter,
-            IOptions<AbpExceptionHandlingOptions> options)
+        var errorInfo = GetErrorInfo(context);
+
+        if (errorInfo.Details.IsNullOrEmpty())
         {
-            MessageService = messageService;
-            ExceptionToErrorInfoConverter = exceptionToErrorInfoConverter;
-            Options = options.Value;
-            Logger = NullLogger<UserExceptionInformer>.Instance;
+            MessageService.Error(errorInfo.Message);
         }
-
-        public void Inform(UserExceptionInformerContext context)
+        else
         {
-            //TODO: Create sync versions of the MessageService APIs.
-
-            var errorInfo = GetErrorInfo(context);
-
-            if (errorInfo.Details.IsNullOrEmpty())
-            {
-                MessageService.Error(errorInfo.Message);
-            }
-            else
-            {
-                MessageService.Error(errorInfo.Details, errorInfo.Message);
-            }
+            MessageService.Error(errorInfo.Details, errorInfo.Message);
         }
+    }
 
-        public async Task InformAsync(UserExceptionInformerContext context)
+    public async Task InformAsync(UserExceptionInformerContext context)
+    {
+        var errorInfo = GetErrorInfo(context);
+
+        if (errorInfo.Details.IsNullOrEmpty())
         {
-            var errorInfo = GetErrorInfo(context);
-
-            if (errorInfo.Details.IsNullOrEmpty())
-            {
-                await MessageService.Error(errorInfo.Message);
-            }
-            else
-            {
-                await MessageService.Error(errorInfo.Details, errorInfo.Message);
-            }
+            await MessageService.Error(errorInfo.Message);
         }
-
-        protected virtual RemoteServiceErrorInfo GetErrorInfo(UserExceptionInformerContext context)
+        else
         {
-            return ExceptionToErrorInfoConverter.Convert(context.Exception, Options.SendExceptionsDetailsToClients);
+            await MessageService.Error(errorInfo.Details, errorInfo.Message);
         }
+    }
+
+    protected virtual RemoteServiceErrorInfo GetErrorInfo(UserExceptionInformerContext context)
+    {
+        return ExceptionToErrorInfoConverter.Convert(context.Exception, options =>
+        {
+            options.SendExceptionsDetailsToClients = Options.SendExceptionsDetailsToClients;
+            options.SendStackTraceToClients = Options.SendStackTraceToClients;
+        });
     }
 }

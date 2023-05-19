@@ -131,6 +131,16 @@ Then the data seed contributors can access to these properties via the `DataSeed
 
 If a module needs to a parameter, it should be declared on the [module documentation](Modules/Index.md). For example, the [Identity Module](Modules/Identity.md) can use `AdminEmail` and `AdminPassword` parameters if you provide (otherwise uses the default values).
 
+### Separate Unit Of Works
+
+The default seed will be in a unit of work and may use transactions. If there are multiple `IDataSeedContributor` or too much data written, it may cause a database timeout error.
+
+We provide an extension method of `SeedInSeparateUowAsync` for the `IDataSeeder` service to create a separate unit of work for each `IDataSeedContributor`.
+
+````csharp
+public static Task SeedInSeparateUowAsync(this IDataSeeder seeder, Guid? tenantId = null, AbpUnitOfWorkOptions options = null, bool requiresNew = false)
+````
+
 ### Where & How to Seed Data?
 
 It is important to understand where & how to execute the `IDataSeeder.SeedAsync()`?

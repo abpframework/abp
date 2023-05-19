@@ -1,10 +1,9 @@
-import type { LanguageInfo } from '../../../localization/models';
-import type { NameValue } from '../../../models';
 import type { CurrentTenantDto, MultiTenancyInfoDto } from '../multi-tenancy/models';
 import type { ObjectExtensionsDto } from './object-extending/models';
+import type { LanguageInfo } from '../../../localization/models';
+import type { NameValue } from '../../../models';
 
 export interface ApplicationAuthConfigurationDto {
-  policies: Record<string, boolean>;
   grantedPolicies: Record<string, boolean>;
 }
 
@@ -14,24 +13,49 @@ export interface ApplicationConfigurationDto {
   setting: ApplicationSettingConfigurationDto;
   currentUser: CurrentUserDto;
   features: ApplicationFeatureConfigurationDto;
+  globalFeatures: ApplicationGlobalFeatureConfigurationDto;
   multiTenancy: MultiTenancyInfoDto;
   currentTenant: CurrentTenantDto;
   timing: TimingDto;
   clock: ClockDto;
   objectExtensions: ObjectExtensionsDto;
+  extraProperties: Record<string, object>;
+}
+
+export interface ApplicationConfigurationRequestOptions {
+  includeLocalizationResources: boolean;
 }
 
 export interface ApplicationFeatureConfigurationDto {
   values: Record<string, string>;
 }
 
+export interface ApplicationGlobalFeatureConfigurationDto {
+  enabledFeatures: string[];
+}
+
 export interface ApplicationLocalizationConfigurationDto {
   values: Record<string, Record<string, string>>;
+  resources: Record<string, ApplicationLocalizationResourceDto>;
   languages: LanguageInfo[];
   currentCulture: CurrentCultureDto;
   defaultResourceName?: string;
   languagesMap: Record<string, NameValue[]>;
   languageFilesMap: Record<string, NameValue[]>;
+}
+
+export interface ApplicationLocalizationDto {
+  resources: Record<string, ApplicationLocalizationResourceDto>;
+}
+
+export interface ApplicationLocalizationRequestDto {
+  cultureName: string;
+  onlyDynamics: boolean;
+}
+
+export interface ApplicationLocalizationResourceDto {
+  texts: Record<string, string>;
+  baseResources: string[];
 }
 
 export interface ApplicationSettingConfigurationDto {
@@ -58,6 +82,10 @@ export interface CurrentUserDto {
   isAuthenticated: boolean;
   id?: string;
   tenantId?: string;
+  impersonatorUserId?: string;
+  impersonatorTenantId?: string;
+  impersonatorUserName?: string;
+  impersonatorTenantName?: string;
   userName?: string;
   name?: string;
   surName?: string;
@@ -66,8 +94,6 @@ export interface CurrentUserDto {
   phoneNumber?: string;
   phoneNumberVerified: boolean;
   roles: string[];
-  impersonatorUserId?: string;
-  impersonatorTenantId?: string;
 }
 
 export interface DateTimeFormatDto {

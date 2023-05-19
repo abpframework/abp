@@ -1,24 +1,23 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.PermissionManagement
+namespace Volo.Abp.PermissionManagement;
+
+public class PermissionWithGrantedProviders
 {
-    public class PermissionWithGrantedProviders
+    public string Name { get; }
+
+    public bool IsGranted { get; set; }
+
+    public List<PermissionValueProviderInfo> Providers { get; set; }
+
+    public PermissionWithGrantedProviders([NotNull] string name, bool isGranted)
     {
-        public string Name { get; }
+        Check.NotNull(name, nameof(name));
 
-        public bool IsGranted { get; set; }
+        Name = name;
+        IsGranted = isGranted;
 
-        public List<PermissionValueProviderInfo> Providers { get; set; }
-
-        public PermissionWithGrantedProviders([NotNull] string name, bool isGranted)
-        {
-            Check.NotNull(name, nameof(name));
-
-            Name = name;
-            IsGranted = isGranted;
-
-            Providers = new List<PermissionValueProviderInfo>();
-        }
+        Providers = new List<PermissionValueProviderInfo>();
     }
 }

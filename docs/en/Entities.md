@@ -112,6 +112,21 @@ For the example above, the composite key is composed of `UserId` and `RoleId`. F
 
 > Also note that Entities with Composite Primary Keys cannot utilize the `IRepository<TEntity, TKey>` interface since it requires a single Id property.  However, you can always use `IRepository<TEntity>`. See [repositories documentation](Repositories.md) for more.
 
+### EntityEquals
+
+`Entity.EntityEquals(...)` method is used to check if two Entity Objects are equals.
+
+Example:
+
+```csharp
+Book book1 = ...
+Book book2 = ...
+
+if (book1.EntityEquals(book2)) //Check equality
+{
+    ...
+}
+```
 
 ## AggregateRoot Class
 
@@ -300,6 +315,29 @@ While you can manually implement any of the interfaces defined above, it is sugg
 All these base classes also have non-generic versions to take `AuditedEntity` and `FullAuditedAggregateRoot` to support the composite primary keys.
 
 All these base classes also have `...WithUser` pairs, like `FullAuditedAggregateRootWithUser<TUser>`  and `FullAuditedAggregateRootWithUser<TKey, TUser>`. This makes possible to add a navigation property to your user entity. However, it is not a good practice to add navigation properties between aggregate roots, so this usage is not suggested (unless you are using an ORM, like EF Core, that well supports this scenario and you really need it - otherwise remember that this approach doesn't work for NoSQL databases like MongoDB where you must truly implement the aggregate pattern). Also, if you add navigation properties to the AppUser class that comes with the startup template, consider to handle (ignore/map) it on the migration dbcontext (see [the EF Core migration document](Entity-Framework-Core-Migrations.md)). 
+
+## Caching Entities
+
+ABP Framework provides a [Distributed Entity Cache System](Entity-Cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
+
+It's designed as read-only and automatically invalidates a cached entity if the entity is updated or deleted.
+
+> See the [Entity Cache](Entity-Cache.md) documentation for more information.
+
+## Versioning Entities
+
+ABP defines the `IHasEntityVersion` interface for automatic versioning of your entities. It only provides a single `EntityVersion` property, as shown in the following code block:
+
+````csharp
+public interface IHasEntityVersion
+{
+    int EntityVersion { get; }
+}
+````
+
+If you implement the `IHasEntityVersion` interface, ABP automatically increases the `EntityVersion` value whenever you update your entity. The initial `EntityVersion` value will be `0`, when you first create an entity and save to the database.
+
+> ABP can not increase the version if you directly execute SQL `UPDATE` commands in the database. It is your responsibility to increase the `EntityVersion` value in that case. Also, if you are using the aggregate pattern and change sub-collections of an aggregate root, it is your responsibility if you want to increase the version of the aggregate root object.
 
 ## Extra Properties
 

@@ -10,11 +10,11 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://localhost:44301',
+    issuer: 'https://localhost:44301/',
     redirectUri: baseUrl,
     clientId: 'MyProjectName_App',
     responseType: 'code',
-    scope: 'offline_access MyProjectName role email openid profile',
+    scope: 'offline_access MyProjectName',
     requireHttps: true
   },
   apis: {

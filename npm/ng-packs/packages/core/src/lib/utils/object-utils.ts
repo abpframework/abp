@@ -6,18 +6,25 @@ import {
   isObject,
   isObjectAndNotArrayNotNode,
 } from './common-utils';
+import { DeepPartial } from '../models';
 
-export function deepMerge(target, source) {
+export function deepMerge<T>(
+  target: DeepPartial<T> | T,
+  source: DeepPartial<T> | T,
+): DeepPartial<T> | T {
   if (isObjectAndNotArrayNotNode(target) && isObjectAndNotArrayNotNode(source)) {
     return deepMergeRecursively(target, source);
   } else if (isNullOrUndefined(target) && isNullOrUndefined(source)) {
-    return {};
+    return {} as T;
   } else {
-    return exists(source) ? source : target;
+    return exists(source) ? (source as T) : target;
   }
 }
 
-function deepMergeRecursively(target, source) {
+function deepMergeRecursively<T>(
+  target: DeepPartial<T> | T,
+  source: DeepPartial<T> | T,
+): DeepPartial<T> | T {
   const shouldNotRecurse =
     isNullOrUndefined(target) ||
     isNullOrUndefined(source) || // at least one not defined
@@ -33,14 +40,17 @@ function deepMergeRecursively(target, source) {
    * we will prioritize source if it is a defined value.
    */
   if (shouldNotRecurse) {
-    return exists(source) ? source : target;
+    return exists(source) ? (source as T) : target;
   }
 
-  const keysOfTarget = Object.keys(target);
-  const keysOfSource = Object.keys(source);
+  const keysOfTarget = Object.keys(target as { [key: string]: any });
+  const keysOfSource = Object.keys(source as { [key: string]: any });
   const uniqueKeys = new Set(keysOfTarget.concat(keysOfSource));
   return [...uniqueKeys].reduce((retVal, key) => {
-    retVal[key] = deepMergeRecursively(target[key], source[key]);
+    (retVal as any)[key] = deepMergeRecursively(
+      (target as { [key: string]: any })[key],
+      (source as { [key: string]: any })[key],
+    );
     return retVal;
-  }, {});
+  }, {} as T);
 }

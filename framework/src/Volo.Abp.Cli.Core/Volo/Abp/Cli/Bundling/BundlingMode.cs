@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.Cli.Bundling
+﻿namespace Volo.Abp.Cli.Bundling;
+
+public enum BundlingMode
 {
-    public enum BundlingMode
-    {
-        None,
-        Bundle,
-        BundleAndMinify,
-    }
+    None,
+    Bundle,
+    BundleAndMinify,
 }

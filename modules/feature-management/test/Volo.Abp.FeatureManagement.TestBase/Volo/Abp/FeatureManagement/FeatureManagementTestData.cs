@@ -1,10 +1,9 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement;
+
+public class FeatureManagementTestData : ISingletonDependency
 {
-    public class FeatureManagementTestData : ISingletonDependency
-    {
-        public Guid User1Id { get; } = Guid.NewGuid();
-    }
+    public Guid User1Id { get; } = Guid.NewGuid();
 }

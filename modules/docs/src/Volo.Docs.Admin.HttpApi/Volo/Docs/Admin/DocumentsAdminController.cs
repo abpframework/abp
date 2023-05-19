@@ -10,7 +10,7 @@ using Volo.Docs.Admin.Documents;
 namespace Volo.Docs.Admin
 {
     [RemoteService(Name = DocsAdminRemoteServiceConsts.RemoteServiceName)]
-    [Area("docs-admin")]
+    [Area(DocsAdminRemoteServiceConsts.ModuleName)]
     [ControllerName("DocumentsAdmin")]
     [Route("api/docs/admin/documents")]
     public class DocumentsAdminController : AbpControllerBase, IDocumentAdminAppService
@@ -62,6 +62,13 @@ namespace Volo.Docs.Admin
         public async Task ReindexAsync(Guid documentId)
         {
             await _documentAdminAppService.ReindexAsync(documentId);
+        }
+
+        [HttpGet]
+        [Route("GetFilterItems")]
+        public async Task<List<DocumentInfoDto>> GetFilterItemsAsync()
+        {
+            return await _documentAdminAppService.GetFilterItemsAsync();
         }
     }
 }

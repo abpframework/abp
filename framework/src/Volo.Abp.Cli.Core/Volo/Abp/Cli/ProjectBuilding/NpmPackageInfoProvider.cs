@@ -8,55 +8,54 @@ using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Cli.ProjectBuilding
+namespace Volo.Abp.Cli.ProjectBuilding;
+
+public class NpmPackageInfoProvider : INpmPackageInfoProvider, ITransientDependency
 {
-    public class NpmPackageInfoProvider : INpmPackageInfoProvider, ITransientDependency
+    public IJsonSerializer JsonSerializer { get; }
+    public ICancellationTokenProvider CancellationTokenProvider { get; }
+    public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+
+    private readonly CliHttpClientFactory _cliHttpClientFactory;
+
+    public NpmPackageInfoProvider(
+        IJsonSerializer jsonSerializer,
+        ICancellationTokenProvider cancellationTokenProvider,
+        IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+        CliHttpClientFactory cliHttpClientFactory)
     {
-        public IJsonSerializer JsonSerializer { get; }
-        public ICancellationTokenProvider CancellationTokenProvider { get; }
-        public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+        JsonSerializer = jsonSerializer;
+        CancellationTokenProvider = cancellationTokenProvider;
+        RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+        _cliHttpClientFactory = cliHttpClientFactory;
+    }
 
-        private readonly CliHttpClientFactory _cliHttpClientFactory;
+    public async Task<NpmPackageInfo> GetAsync(string name)
+    {
+        var packageList = await GetPackageListInternalAsync();
 
-        public NpmPackageInfoProvider(
-            IJsonSerializer jsonSerializer,
-            ICancellationTokenProvider cancellationTokenProvider,
-            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            CliHttpClientFactory cliHttpClientFactory)
+        var package = packageList.FirstOrDefault(m => m.Name == name);
+
+        if (package == null)
         {
-            JsonSerializer = jsonSerializer;
-            CancellationTokenProvider = cancellationTokenProvider;
-            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
-            _cliHttpClientFactory = cliHttpClientFactory;
+            throw new Exception("Package is not found or downloadable!");
         }
 
-        public async Task<NpmPackageInfo> GetAsync(string name)
+        return package;
+    }
+
+    private async Task<List<NpmPackageInfo>> GetPackageListInternalAsync()
+    {
+        var client = _cliHttpClientFactory.CreateClient();
+
+        using (var responseMessage = await client.GetAsync(
+            $"{CliUrls.WwwAbpIo}api/download/npmPackages/",
+            CancellationTokenProvider.Token
+        ))
         {
-            var packageList = await GetPackageListInternalAsync();
-
-            var package = packageList.FirstOrDefault(m => m.Name == name);
-
-            if (package == null)
-            {
-                throw new Exception("Package is not found or downloadable!");
-            }
-
-            return package;
-        }
-
-        private async Task<List<NpmPackageInfo>> GetPackageListInternalAsync()
-        {
-            var client = _cliHttpClientFactory.CreateClient();
-
-            using (var responseMessage = await client.GetAsync(
-                $"{CliUrls.WwwAbpIo}api/download/npmPackages/",
-                CancellationTokenProvider.Token
-            ))
-            {
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-                var result = await responseMessage.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<NpmPackageInfo>>(result);
-            }
+            await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+            var result = await responseMessage.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<NpmPackageInfo>>(result);
         }
     }
 }

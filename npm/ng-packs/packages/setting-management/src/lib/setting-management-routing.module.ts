@@ -1,8 +1,8 @@
 import {
-  DynamicLayoutComponent,
+  AuthGuard,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
-  AuthGuard,
+  RouterOutletComponent,
 } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -12,7 +12,7 @@ import { eSettingManagementComponents } from './enums/components';
 const routes: Routes = [
   {
     path: '',
-    component: DynamicLayoutComponent,
+    component: RouterOutletComponent,
     canActivate: [AuthGuard],
     children: [
       {

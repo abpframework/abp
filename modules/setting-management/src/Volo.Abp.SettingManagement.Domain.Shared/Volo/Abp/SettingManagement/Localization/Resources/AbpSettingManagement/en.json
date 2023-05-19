@@ -5,6 +5,16 @@
     "SuccessfullySaved": "Successfully saved",
     "Permission:SettingManagement": "Setting Management",
     "Permission:Emailing": "Emailing",
+    "Permission:EmailingTest": "Emailing test",
+    "SendTestEmail": "Send test email",
+    "SenderEmailAddress": "Sender email address",
+    "TargetEmailAddress": "Target email address",
+    "Subject": "Subject",
+    "Body": "Body",
+    "TestEmailSubject": "Test email {0}",
+    "TestEmailBody": "Test email body message here",
+    "SuccessfullySent": "Successfully sent",
+    "Send": "Send",
     "Menu:Emailing": "Emailing",
     "SmtpHost": "Host",
     "SmtpPort": "Port",
@@ -18,7 +28,7 @@
     "Feature:SettingManagementGroup": "Setting Management",
     "Feature:SettingManagementEnable": "Enable setting management",
     "Feature:SettingManagementEnableDescription": "Enable setting management system in the application.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Allow tenants to change email settings.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Allow tenants to change email settings."
+    "Feature:AllowChangingEmailSettings": "Allow changing email settings.",
+    "Feature:AllowChangingEmailSettingsDescription": "Allow changing email settings."
   }
 }

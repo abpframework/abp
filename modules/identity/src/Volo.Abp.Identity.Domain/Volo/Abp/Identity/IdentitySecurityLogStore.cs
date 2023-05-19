@@ -6,44 +6,43 @@ using Volo.Abp.Guids;
 using Volo.Abp.SecurityLog;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity;
+
+[Dependency(ReplaceServices = true)]
+public class IdentitySecurityLogStore : ISecurityLogStore, ITransientDependency
 {
-    [Dependency(ReplaceServices = true)]
-    public class IdentitySecurityLogStore : ISecurityLogStore, ITransientDependency
+    public ILogger<IdentitySecurityLogStore> Logger { get; set; }
+
+    protected AbpSecurityLogOptions SecurityLogOptions { get; }
+    protected IIdentitySecurityLogRepository IdentitySecurityLogRepository { get; }
+    protected IGuidGenerator GuidGenerator { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
+    public IdentitySecurityLogStore(
+        ILogger<IdentitySecurityLogStore> logger,
+        IOptions<AbpSecurityLogOptions> securityLogOptions,
+        IIdentitySecurityLogRepository identitySecurityLogRepository,
+        IGuidGenerator guidGenerator,
+        IUnitOfWorkManager unitOfWorkManager)
     {
-        public ILogger<IdentitySecurityLogStore> Logger { get; set; }
+        Logger = logger;
+        SecurityLogOptions = securityLogOptions.Value;
+        IdentitySecurityLogRepository = identitySecurityLogRepository;
+        GuidGenerator = guidGenerator;
+        UnitOfWorkManager = unitOfWorkManager;
+    }
 
-        protected AbpSecurityLogOptions SecurityLogOptions { get; }
-        protected IIdentitySecurityLogRepository IdentitySecurityLogRepository { get; }
-        protected IGuidGenerator GuidGenerator { get; }
-        protected IUnitOfWorkManager UnitOfWorkManager { get; }
-
-        public IdentitySecurityLogStore(
-            ILogger<IdentitySecurityLogStore> logger,
-            IOptions<AbpSecurityLogOptions> securityLogOptions,
-            IIdentitySecurityLogRepository identitySecurityLogRepository,
-            IGuidGenerator guidGenerator,
-            IUnitOfWorkManager unitOfWorkManager)
+    public async Task SaveAsync(SecurityLogInfo securityLogInfo)
+    {
+        if (!SecurityLogOptions.IsEnabled)
         {
-            Logger = logger;
-            SecurityLogOptions = securityLogOptions.Value;
-            IdentitySecurityLogRepository = identitySecurityLogRepository;
-            GuidGenerator = guidGenerator;
-            UnitOfWorkManager = unitOfWorkManager;
+            return;
         }
 
-        public async Task SaveAsync(SecurityLogInfo securityLogInfo)
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
         {
-            if (!SecurityLogOptions.IsEnabled)
-            {
-                return;
-            }
-
-            using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
-            {
-                await IdentitySecurityLogRepository.InsertAsync(new IdentitySecurityLog(GuidGenerator, securityLogInfo));
-                await uow.CompleteAsync();
-            }
+            await IdentitySecurityLogRepository.InsertAsync(new IdentitySecurityLog(GuidGenerator, securityLogInfo));
+            await uow.CompleteAsync();
         }
     }
 }

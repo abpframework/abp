@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Components.Web.Configuration
+namespace Volo.Abp.AspNetCore.Components.Web.Configuration;
+
+public interface ICurrentApplicationConfigurationCacheResetService
 {
-    public interface ICurrentApplicationConfigurationCacheResetService
-    {
-        Task ResetAsync();
-    }
+    Task ResetAsync();
 }

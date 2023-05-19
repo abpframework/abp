@@ -1,14 +1,15 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authorization
+@using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.OwlCarousel
 @using Volo.Blogging
 @inject IAuthorizationService Authorization
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
-@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
 @using Volo.Blogging.Localization
 @using Volo.Blogging.Pages.Blog
 @using IndexModel = Volo.Blogging.Pages.Blog.Posts.IndexModel
-@inject IHtmlLocalizer<BloggingResource> L
+@inject IStringLocalizer<BloggingResource> L
 @inject BloggingPageHelper BloggingPageHelper
 @{
     ViewBag.Title = "Read All Blog Posts";
@@ -39,7 +40,7 @@
                             <div class="hero-articles">
                                 <div class="img-container">
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                        <img src="@post.CoverImage" class="hero-article-img">
+                                        <img src="@post.CoverImage" class="hero-article-img" alt="@post.Title cover image">
                                     </a>
                                 </div>
                                 <div class="hero-content pt-3">
@@ -49,7 +50,7 @@
                                     <p class="article-sum">
                                         @Html.Raw(BloggingPageHelper.GetShortContent(post.Content))
                                     </p>
-                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">Continue Reading &#8594;</a>
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">@L["ContinueReading"] &#8594;</a>
 
                                 </div>
                                 @if (post.Writer != null)
@@ -58,12 +59,19 @@
                                         <div class="article-infos">
                                             <div class="user-card">
                                                 <div class="row">
-                                                    <div class="col-auto pr-1">
-                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                    <div class="col-auto pe-1">
+                                                        <a href="/Members/@post.Writer.UserName">
+                                                            <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
+                                                        </a>
                                                     </div>
-                                                    <div class="col pl-1">
-                                                        <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
-                                                        <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
+                                                    <div class="col ps-1">
+                                                        <h5 class="mt-2 mb-1">
+                                                            <a href="/Members/@post.Writer.UserName">
+                                                                @post.Writer.UserName
+                                                            </a>
+                                                            <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                        </h5>
+                                                        <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                         @*<span class="vs-seperator">|</span>
                                                         <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]*@
                                                     </div>
@@ -102,11 +110,11 @@
                                         <div class="col-4">
                                             <div class="img-container">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                    <img src="@post.CoverImage" class="box-article-img">
+                                                    <img src="@post.CoverImage" class="box-article-img" alt="@post.Title cover image">
                                                 </a>
                                             </div>
                                         </div>
-                                        <div class="col-8 pl-0">
+                                        <div class="col-8 ps-0">
                                             <h3 class="font-125">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                             </h3>
@@ -118,7 +126,12 @@
                                                         <div class="user-card">
                                                             @if (post.Writer != null)
                                                             {
-                                                                <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
+                                                                <h5 class="mt-2 mb-1">
+                                                                    <a href="/Members/@post.Writer.UserName">
+                                                                        @post.Writer.UserName
+                                                                    </a>    
+                                                                    <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                                </h5>
                                                             }
                                                             <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
                                                             @*<span class="vs-seperator">|</span>
@@ -157,7 +170,7 @@
                                         <div class="col-md-4">
                                             <div class="img-container">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                    <img src="@post.CoverImage" class="box-article-img">
+                                                    <img src="@post.CoverImage" class="box-article-img" alt="@post.Title cover image">
                                                 </a>
                                             </div>
                                         </div>
@@ -168,7 +181,7 @@
                                             <p>
                                                 @Html.Raw(BloggingPageHelper.GetShortContent(post.Content))
                                             </p>
-                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">Continue Reading &#8594;</a>
+                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">@L["ContinueReading"] &#8594;</a>
 
                                             @if (post.Writer != null)
                                             {
@@ -176,11 +189,18 @@
                                                     <div class="article-infos">
                                                         <div class="user-card">
                                                             <div class="row">
-                                                                <div class="col-auto pr-1">
-                                                                    <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                                <div class="col-auto pe-1">
+                                                                    <a href="/Members/@post.Writer.UserName">
+                                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
+                                                                    </a>
                                                                 </div>
-                                                                <div class="col pl-1">
-                                                                    <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
+                                                                <div class="col ps-1">
+                                                                    <h5 class="mt-2 mb-1">
+                                                                        <a href="/Members/@post.Writer.UserName">
+                                                                            @post.Writer.UserName
+                                                                        </a>
+                                                                        <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                                    </h5>
                                                                     <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                                     @*<span class="vs-seperator">|</span>
                                                                     <i class="fa fa-comment"></i> @L["CommentWithCount", post.CommentCount]*@

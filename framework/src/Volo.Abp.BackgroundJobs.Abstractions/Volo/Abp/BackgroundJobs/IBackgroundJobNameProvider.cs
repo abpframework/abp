@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.BackgroundJobs
+﻿namespace Volo.Abp.BackgroundJobs;
+
+public interface IBackgroundJobNameProvider
 {
-    public interface IBackgroundJobNameProvider
-    {
-        string Name { get; }
-    }
+    string Name { get; }
 }

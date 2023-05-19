@@ -1,0 +1,15 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Tên tài nguyên nhận dạng đã tồn tại: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Tên tài nguyên Api đã tồn tại: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Tên phạm vi Api đã tồn tại: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId đã tồn tại: {ClientId}",
+    "UserLockedOut": "Tài khoản người dùng đã bị khóa do đăng nhập không hợp lệ. Vui lòng đợi một lúc và thử lại.",
+    "InvalidUserNameOrPassword": "Sai username hoặc password!",
+    "LoginIsNotAllowed": "Bạn không được phép đăng nhập! Tài khoản của bạn không hoạt động hoặc cần xác nhận email/số điện thoại của bạn.",
+    "InvalidUsername": "Sai username hoặc password!",
+    "InvalidAuthenticatorCode": "Mã xác thực không hợp lệ!",
+    "TheTargetUserIsNotLinkedToYou": "Người dùng mục tiêu không được liên kết với bạn!"
+  }
+}

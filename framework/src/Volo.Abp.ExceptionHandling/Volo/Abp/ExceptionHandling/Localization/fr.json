@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Ressource introuvable!",
     "DefaultErrorMessage404Detail": "La ressource demandée est introuvable sur le serveur!",
     "EntityNotFoundErrorMessage": "Il n'y a pas d'entité {0} avec id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Les données que vous avez soumises ont déjà été modifiées par un autre utilisateur/client. Veuillez ignorer les modifications que vous avez apportées et réessayer depuis le début.",
     "Error": "Erreur",
     "UnhandledException": "Exception non-gérée!",
     "401Message": "Non autorisé",

@@ -1,0 +1,7 @@
+{
+  "culture": "sl",
+  "texts": {
+    "HelloText": "Pozdravljeni {0}",
+    "HowAreYou": "kako si"
+  }
+}

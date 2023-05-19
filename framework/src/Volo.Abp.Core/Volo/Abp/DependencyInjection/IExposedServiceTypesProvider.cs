@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Volo.Abp.DependencyInjection
+namespace Volo.Abp.DependencyInjection;
+
+public interface IExposedServiceTypesProvider
 {
-    public interface IExposedServiceTypesProvider
-    {
-        Type[] GetExposedServiceTypes(Type targetType);
-    }
+    Type[] GetExposedServiceTypes(Type targetType);
 }

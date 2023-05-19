@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "Menu:Account": "账户",
     "UserName": "用户名称",
     "EmailAddress": "邮箱地址",
     "UserNameOrEmailAddress": "用户名称或邮箱地址",
@@ -33,8 +34,11 @@
     "DisplayName:PhoneNumber": "手机号码",
     "PersonalSettings": "个人设置",
     "PersonalSettingsSaved": "个人设置已保存",
+    "PersonalSettingsChangedConfirmationModalTitle": "个人信息已更改",
+    "PersonalSettingsChangedConfirmationModalDescription": "重新登录以应用这些更改，您要退出登录吗？",
     "PasswordChanged": "修改密码",
     "NewPasswordConfirmFailed": "请确认新密码",
+    "NewPasswordSameAsOld": "新密码不能与旧密码相同",
     "Manage": "管理",
     "MyAccount": "我的账户",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "启用自行注册",
@@ -49,7 +53,7 @@
     "SendPasswordResetLink_Information": "密码重置链接将发送到您的电子邮件以重置密码. 如果您在几分钟内没有收到电子邮件,请重试.",
     "PasswordResetMailSentMessage": "帐户恢复电子邮件已发送到您的电子邮件地址. 如果您在15分钟内未在收件箱中看到此电子邮件,请检查垃圾邮件,并标记为非垃圾邮件.",
     "ResetPassword": "重设密码",
-    "ConfirmPassword": "确认(重复)密码",
+    "ConfirmPassword": "确认密码",
     "ResetPassword_Information": "请输入您的新密码.",
     "YourPasswordIsSuccessfullyReset": "您的密码已经被重置成功.",
     "GoToTheApplication": "转到应用程序",

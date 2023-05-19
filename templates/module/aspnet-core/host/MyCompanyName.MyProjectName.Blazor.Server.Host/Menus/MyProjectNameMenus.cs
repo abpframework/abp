@@ -1,10 +1,9 @@
-﻿namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Menus
+﻿namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Menus;
+
+public class MyProjectNameMenus
 {
-    public class MyProjectNameMenus
-    {
-        private const string Prefix = "MyProjectName";
+    private const string Prefix = "MyProjectName";
 
-        //Add your menu items here...
+    //Add your menu items here...
 
-    }
 }

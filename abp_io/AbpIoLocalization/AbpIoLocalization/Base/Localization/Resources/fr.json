@@ -32,6 +32,13 @@
     "SeeDocuments": "Voir les documents",
     "Samples": "Échantillons",
     "Framework": "Cadre",
-    "Support": "Support"
+    "Support": "Support",
+    "FreeDDDBook": "E-book DDD gratuit",
+    "New": "Nouveau",
+    "Volo.AbpIo.Domain:020005": "L'année de prolongation de la licence ne peut pas être inférieure à {MinExtendLicenseYear} an(s) et supérieure à {MaxExtendLicenseYear} an(s)",
+    "TrialLicensePeriodHasExpired": "Votre période de licence d'essai a expiré il y a {0} jours.",
+    "TrialLicensePeriodWillExpire": "Votre période de licence d'essai expirera dans {0} jours.",
+    "TrialLicensePeriodExpireToday": "Votre période de licence d'essai expire aujourd'hui.",
+    "PurchaseNow": "Achetez maintenant !"
   }
 }

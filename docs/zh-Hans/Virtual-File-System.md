@@ -118,23 +118,9 @@ public class MyService : ITransientDependency
 * Js, css, 图像文件和所有其他Web内容可以嵌入到程序集中并像物理文件一样使用.
 * 应用程序(或其他模块)可以**覆盖模块的虚拟文件**, 就像将具有相同名称和扩展名的文件放入虚拟文件的同一文件夹中一样.
 
-#### 虚拟文件中间件
-
-虚拟文件中间件用于向客户端/浏览器提供嵌入式(js, css, image ...)文件, 就像 **wwwroot** 文件夹中的物理(静态)文件一样. 它同时涵盖了物理文件.
-
-在你ASP.NET Core中间件配置中替换 `app.UseStaticFiles()` 为 `app.UseVirtualFiles()`:
-
-````C#
-app.UseVirtualFiles();
-````
-
-在静态文件中间件之后添加虚拟文件中间件, 使得通过在虚拟文件相同的位置放置物理文件, 从而用物理文件覆盖虚拟文件成为可能.
-
-> [应用程序启动模板](Startup-Templates/Application.md)已经配置了 `UseVirtualFiles()`.
-
 #### 静态虚拟文件夹
 
-默认情况下,ASP.NET Core仅允许 `wwwroot` 文件夹包含客户端使用的静态文件. 当你使用 `UseVirtualFiles` 中间件时以下文件夹也可以包含静态文件:
+默认情况下,ASP.NET Core仅允许 `wwwroot` 文件夹包含客户端使用的静态文件. 当你使用虚拟文件系统时以下文件夹也可以包含静态文件:
 
 * Pages
 * Views

@@ -1,0 +1,4523 @@
+{
+  "name": "Volo.Abp.Identity.Domain",
+  "hash": "3a0497c62459a4c0ad393a295e33af27",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Identity",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "namespace": "Volo.Abp.Domain",
+          "name": "AbpDddDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain.Shared",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityDomainSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.Domain",
+          "namespace": "Volo.Abp.Users",
+          "name": "AbpUsersDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpIdentityDomainModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "RoleId",
+          "summary": "Gets or sets the of the primary key of the role associated with this claim."
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityRoleClaim",
+      "summary": "Represents a claim that is granted to all users within a role."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "UserId",
+          "summary": "Gets or sets the primary key of the user associated with this claim."
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityUserClaim",
+      "summary": "Represents a claim that a user possesses."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "UserId",
+          "summary": "Gets or sets the of the primary key of the user associated with this login."
+        },
+        {
+          "type": "System.String",
+          "name": "LoginProvider",
+          "summary": "Gets or sets the login provider for the login (e.g. facebook, google)"
+        },
+        {
+          "type": "System.String",
+          "name": "ProviderKey",
+          "summary": "Gets or sets the unique provider identifier for this login."
+        },
+        {
+          "type": "System.String",
+          "name": "ProviderDisplayName",
+          "summary": "Gets or sets the friendly name used in a UI for this login."
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityUserLogin",
+      "summary": "Represents a login and its associated provider for a user."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": "TenantId of this entity."
+        },
+        {
+          "type": "System.Guid",
+          "name": "UserId",
+          "summary": "Id of the User."
+        },
+        {
+          "type": "System.Guid",
+          "name": "OrganizationUnitId",
+          "summary": "Id of the related ."
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityUserOrganizationUnit",
+      "summary": "Represents membership of a User to an OU."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "UserId",
+          "summary": "Gets or sets the primary key of the user that is linked to a role."
+        },
+        {
+          "type": "System.Guid",
+          "name": "RoleId",
+          "summary": "Gets or sets the primary key of the role that is linked to the user."
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityUserRole",
+      "summary": "Represents the link between a user and a role."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "UserId",
+          "summary": "Gets or sets the primary key of the user that the token belongs to."
+        },
+        {
+          "type": "System.String",
+          "name": "LoginProvider",
+          "summary": "Gets or sets the LoginProvider this token is from."
+        },
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": "Gets or sets the name of the token."
+        },
+        {
+          "type": "System.String",
+          "name": "Value",
+          "summary": "Gets or sets the token value."
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityUserToken",
+      "summary": "Represents an authentication token for a user."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": "TenantId of this entity."
+        },
+        {
+          "type": "System.Guid",
+          "name": "RoleId",
+          "summary": "Id of the Role."
+        },
+        {
+          "type": "System.Guid",
+          "name": "OrganizationUnitId",
+          "summary": "Id of the ."
+        }
+      ],
+      "contentType": "entity",
+      "name": "OrganizationUnitRole",
+      "summary": "Represents membership of a User to an OU."
+    },
+    {
+      "baseClass": {
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "name": "SetName",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "Required",
+          "summary": null
+        },
+        {
+          "type": "System.Boolean",
+          "name": "IsStatic",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Regex",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "RegexDescription",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Description",
+          "summary": null
+        },
+        {
+          "type": "Volo.Abp.Identity.IdentityClaimValueType",
+          "name": "ValueType",
+          "summary": null
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "IdentityClaimType",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "BasicAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.BasicAggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        }
+      ],
+      "methods": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "SourceUserId",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "SourceTenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "TargetUserId",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TargetTenantId",
+          "summary": null
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "IdentityLinkUser",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "name": "AddClaim",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IGuidGenerator",
+              "name": "guidGenerator",
+              "isOptional": false
+            },
+            {
+              "type": "Claim",
+              "name": "claim",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddClaims",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IGuidGenerator",
+              "name": "guidGenerator",
+              "isOptional": false
+            },
+            {
+              "type": "IEnumerable<Claim>",
+              "name": "claims",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityRoleClaim",
+          "name": "FindClaim",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Claim",
+              "name": "claim",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveClaim",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Claim",
+              "name": "claim",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "ChangeName",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "ToString",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        }
+      ],
+      "collectionProperties": {
+        "claims": {
+          "name": "IdentityRoleClaim",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "fullName": "Volo.Abp.Identity.IdentityRoleClaim"
+        }
+      },
+      "navigationProperties": {},
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": "Gets or sets the name for this role."
+        },
+        {
+          "type": "System.String",
+          "name": "NormalizedName",
+          "summary": "Gets or sets the normalized name for this role."
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityRoleClaim]",
+          "name": "Claims",
+          "summary": "Navigation property for claims in this role."
+        },
+        {
+          "type": "System.Boolean",
+          "name": "IsDefault",
+          "summary": "A default role is automatically assigned to a new user"
+        },
+        {
+          "type": "System.Boolean",
+          "name": "IsStatic",
+          "summary": "A static role can not be deleted/renamed"
+        },
+        {
+          "type": "System.Boolean",
+          "name": "IsPublic",
+          "summary": "A user can see other user's public roles"
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "IdentityRole",
+      "summary": "Represents a role in the identity system"
+    },
+    {
+      "baseClass": {
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        }
+      ],
+      "methods": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ApplicationName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Identity",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Action",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "UserId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "UserName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "TenantName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "CorrelationId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientIpAddress",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "BrowserInfo",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "CreationTime",
+          "summary": null
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "IdentitySecurityLog",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditedObject"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.ISoftDelete"
+        },
+        {
+          "name": "IUser",
+          "namespace": "Volo.Abp.Users",
+          "declaringAssemblyName": "Volo.Abp.Users.Domain",
+          "fullName": "Volo.Abp.Users.IUser"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "name": "AddRole",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveRole",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "IsInRole",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddClaim",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IGuidGenerator",
+              "name": "guidGenerator",
+              "isOptional": false
+            },
+            {
+              "type": "Claim",
+              "name": "claim",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddClaims",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IGuidGenerator",
+              "name": "guidGenerator",
+              "isOptional": false
+            },
+            {
+              "type": "IEnumerable<Claim>",
+              "name": "claims",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUserClaim",
+          "name": "FindClaim",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Claim",
+              "name": "claim",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "ReplaceClaim",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Claim",
+              "name": "claim",
+              "isOptional": false
+            },
+            {
+              "type": "Claim",
+              "name": "newClaim",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveClaims",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IEnumerable<Claim>",
+              "name": "claims",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveClaim",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Claim",
+              "name": "claim",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddLogin",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "UserLoginInfo",
+              "name": "login",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveLogin",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "loginProvider",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUserToken",
+          "name": "FindToken",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "loginProvider",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "SetToken",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "loginProvider",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "value",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveToken",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "loginProvider",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddOrganizationUnit",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "organizationUnitId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveOrganizationUnit",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "organizationUnitId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "IsInOrganizationUnit",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "organizationUnitId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "SetEmailConfirmed",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Boolean",
+              "name": "confirmed",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "SetPhoneNumberConfirmed",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Boolean",
+              "name": "confirmed",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "SetPhoneNumber",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "phoneNumber",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "confirmed",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "SetIsActive",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Boolean",
+              "name": "isActive",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "ToString",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        }
+      ],
+      "collectionProperties": {
+        "roles": {
+          "name": "IdentityUserRole",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "fullName": "Volo.Abp.Identity.IdentityUserRole"
+        },
+        "claims": {
+          "name": "IdentityUserClaim",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "fullName": "Volo.Abp.Identity.IdentityUserClaim"
+        },
+        "logins": {
+          "name": "IdentityUserLogin",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "fullName": "Volo.Abp.Identity.IdentityUserLogin"
+        },
+        "tokens": {
+          "name": "IdentityUserToken",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "fullName": "Volo.Abp.Identity.IdentityUserToken"
+        },
+        "organizationUnits": {
+          "name": "IdentityUserOrganizationUnit",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "fullName": "Volo.Abp.Identity.IdentityUserOrganizationUnit"
+        }
+      },
+      "navigationProperties": {},
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "UserName",
+          "summary": "Gets or sets the user name for this user."
+        },
+        {
+          "type": "System.String",
+          "name": "NormalizedUserName",
+          "summary": "Gets or sets the normalized user name for this user."
+        },
+        {
+          "type": "System.String",
+          "name": "Name",
+          "summary": "Gets or sets the Name for the user."
+        },
+        {
+          "type": "System.String",
+          "name": "Surname",
+          "summary": "Gets or sets the Surname for the user."
+        },
+        {
+          "type": "System.String",
+          "name": "Email",
+          "summary": "Gets or sets the email address for this user."
+        },
+        {
+          "type": "System.String",
+          "name": "NormalizedEmail",
+          "summary": "Gets or sets the normalized email address for this user."
+        },
+        {
+          "type": "System.Boolean",
+          "name": "EmailConfirmed",
+          "summary": "Gets or sets a flag indicating if a user has confirmed their email address."
+        },
+        {
+          "type": "System.String",
+          "name": "PasswordHash",
+          "summary": "Gets or sets a salted and hashed representation of the password for this user."
+        },
+        {
+          "type": "System.String",
+          "name": "SecurityStamp",
+          "summary": "A random value that must change whenever a users credentials change (password changed, login removed)"
+        },
+        {
+          "type": "System.Boolean",
+          "name": "IsExternal",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "PhoneNumber",
+          "summary": "Gets or sets a telephone number for the user."
+        },
+        {
+          "type": "System.Boolean",
+          "name": "PhoneNumberConfirmed",
+          "summary": "Gets or sets a flag indicating if a user has confirmed their telephone address."
+        },
+        {
+          "type": "System.Boolean",
+          "name": "IsActive",
+          "summary": "Gets or sets a flag indicating if the user is active."
+        },
+        {
+          "type": "System.Boolean",
+          "name": "TwoFactorEnabled",
+          "summary": "Gets or sets a flag indicating if two factor authentication is enabled for this user."
+        },
+        {
+          "type": "System.Nullable`1[System.DateTimeOffset]",
+          "name": "LockoutEnd",
+          "summary": "Gets or sets the date and time, in UTC, when any user lockout ends."
+        },
+        {
+          "type": "System.Boolean",
+          "name": "LockoutEnabled",
+          "summary": "Gets or sets a flag indicating if the user could be locked out."
+        },
+        {
+          "type": "System.Int32",
+          "name": "AccessFailedCount",
+          "summary": "Gets or sets the number of failed login attempts for the current user."
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserRole]",
+          "name": "Roles",
+          "summary": "Navigation property for the roles this user belongs to."
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserClaim]",
+          "name": "Claims",
+          "summary": "Navigation property for the claims this user possesses."
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserLogin]",
+          "name": "Logins",
+          "summary": "Navigation property for this users login accounts."
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserToken]",
+          "name": "Tokens",
+          "summary": "Navigation property for this users tokens."
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserOrganizationUnit]",
+          "name": "OrganizationUnits",
+          "summary": "Navigation property for this organization units."
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "IdentityUser",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "FullAuditedAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        },
+        {
+          "name": "IHasExtraProperties",
+          "namespace": "Volo.Abp.Data",
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "fullName": "Volo.Abp.Data.IHasExtraProperties"
+        },
+        {
+          "name": "IHasConcurrencyStamp",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
+        },
+        {
+          "name": "ICreationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
+        },
+        {
+          "name": "IMayHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
+        },
+        {
+          "name": "IAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditedObject"
+        },
+        {
+          "name": "IModificationAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
+        },
+        {
+          "name": "IHasModificationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
+        },
+        {
+          "name": "IFullAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
+        },
+        {
+          "name": "IDeletionAuditedObject",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
+        },
+        {
+          "name": "IHasDeletionTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
+        },
+        {
+          "name": "ISoftDelete",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.ISoftDelete"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "String",
+          "name": "CreateCode",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "Int32[]",
+              "name": "numbers",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "AppendCode",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "parentCode",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "childCode",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "GetRelativeCode",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "code",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "parentCode",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "CalculateNextCode",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "code",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "GetLastUnitCode",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "code",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "GetParentCode",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "code",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddRole",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveRole",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "IsInRole",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "collectionProperties": {
+        "roles": {
+          "name": "OrganizationUnitRole",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "fullName": "Volo.Abp.Identity.OrganizationUnitRole"
+        }
+      },
+      "navigationProperties": {},
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "ParentId",
+          "summary": "Parent  Id.\r\n            Null, if this OU is a root."
+        },
+        {
+          "type": "System.String",
+          "name": "Code",
+          "summary": "Hierarchical Code of this organization unit.\r\n            Example: \"00001.00042.00005\".\r\n            This is a unique code for an OrganizationUnit.\r\n            It's changeable if OU hierarchy is changed."
+        },
+        {
+          "type": "System.String",
+          "name": "DisplayName",
+          "summary": "Display name of this OrganizationUnit."
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.OrganizationUnitRole]",
+          "name": "Roles",
+          "summary": "Roles of this OU."
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "OrganizationUnit",
+      "summary": "Represents an organization unit (OU)."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "baseClass": {
+        "name": "DomainService",
+        "namespace": "Volo.Abp.Domain.Services",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Services.DomainService"
+      },
+      "methods": [
+        {
+          "returnType": "IdentityClaimType",
+          "name": "CreateAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityClaimType",
+              "name": "claimType",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityClaimType",
+          "name": "UpdateAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityClaimType",
+              "name": "claimType",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDomainService",
+          "namespace": "Volo.Abp.Domain.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Services.IDomainService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "domainService",
+      "name": "IdentityClaimTypeManager",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "baseClass": {
+        "name": "DomainService",
+        "namespace": "Volo.Abp.Domain.Services",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Services.DomainService"
+      },
+      "methods": [
+        {
+          "returnType": "List<IdentityLinkUser>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "linkUserInfo",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeIndirect",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "LinkAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "sourceLinkUser",
+              "isOptional": false
+            },
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "targetLinkUser",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "IsLinkedAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "sourceLinkUser",
+              "isOptional": false
+            },
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "targetLinkUser",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeIndirect",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "UnlinkAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "sourceLinkUser",
+              "isOptional": false
+            },
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "targetLinkUser",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "GenerateLinkTokenAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "targetLinkUser",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "tokenPurpose",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "VerifyLinkTokenAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "targetLinkUser",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "token",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "tokenPurpose",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDomainService",
+          "namespace": "Volo.Abp.Domain.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Services.IDomainService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "domainService",
+      "name": "IdentityLinkUserManager",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "baseClass": {
+        "name": "RoleManager<IdentityRole>",
+        "namespace": "Microsoft.AspNetCore.Identity",
+        "declaringAssemblyName": "Microsoft.Extensions.Identity.Core",
+        "fullName": "Microsoft.AspNetCore.Identity.RoleManager<IdentityRole>"
+      },
+      "methods": [
+        {
+          "returnType": "IdentityRole",
+          "name": "GetByIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityResult",
+          "name": "SetRoleNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityRole",
+              "name": "role",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityResult",
+          "name": "DeleteAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityRole",
+              "name": "role",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDisposable",
+          "namespace": "System",
+          "declaringAssemblyName": "System.Private.CoreLib",
+          "fullName": "System.IDisposable"
+        },
+        {
+          "name": "IDomainService",
+          "namespace": "Volo.Abp.Domain.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Services.IDomainService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "domainService",
+      "name": "IdentityRoleManager",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "baseClass": {
+        "name": "UserManager<IdentityUser>",
+        "namespace": "Microsoft.AspNetCore.Identity",
+        "declaringAssemblyName": "Microsoft.Extensions.Identity.Core",
+        "fullName": "Microsoft.AspNetCore.Identity.UserManager<IdentityUser>"
+      },
+      "methods": [
+        {
+          "returnType": "IdentityResult",
+          "name": "CreateAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "password",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "validatePassword",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUser",
+          "name": "GetByIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityResult",
+          "name": "SetRolesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "IEnumerable<String>",
+              "name": "roleNames",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "IsInOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "Guid",
+              "name": "ouId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "IsInOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "OrganizationUnit",
+              "name": "ou",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddToOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "Guid",
+              "name": "ouId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddToOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "OrganizationUnit",
+              "name": "ou",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveFromOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "Guid",
+              "name": "ouId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveFromOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "OrganizationUnit",
+              "name": "ou",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "SetOrganizationUnitsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "Guid[]",
+              "name": "organizationUnitIds",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "SetOrganizationUnitsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "Guid[]",
+              "name": "organizationUnitIds",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "List<OrganizationUnit>",
+          "name": "GetOrganizationUnitsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetUsersInOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeChildren",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityResult",
+          "name": "AddDefaultRolesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDisposable",
+          "namespace": "System",
+          "declaringAssemblyName": "System.Private.CoreLib",
+          "fullName": "System.IDisposable"
+        },
+        {
+          "name": "IDomainService",
+          "namespace": "Volo.Abp.Domain.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Services.IDomainService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "domainService",
+      "name": "IdentityUserManager",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "baseClass": {
+        "name": "DomainService",
+        "namespace": "Volo.Abp.Domain.Services",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Services.DomainService"
+      },
+      "methods": [
+        {
+          "returnType": "Void",
+          "name": "CreateAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "UpdateAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "GetNextChildCodeAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "parentId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "OrganizationUnit",
+          "name": "GetLastChildOrNullAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "parentId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "DeleteAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "MoveAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "parentId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "name": "GetCodeOrDefaultAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "List<OrganizationUnit>",
+          "name": "FindChildrenAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "parentId",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "recursive",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "IsInOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "OrganizationUnit",
+              "name": "ou",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddRoleToOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            },
+            {
+              "type": "Guid",
+              "name": "ouId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "AddRoleToOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityRole",
+              "name": "role",
+              "isOptional": false
+            },
+            {
+              "type": "OrganizationUnit",
+              "name": "ou",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveRoleFromOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            },
+            {
+              "type": "Guid",
+              "name": "ouId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveRoleFromOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityRole",
+              "name": "role",
+              "isOptional": false
+            },
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDomainService",
+          "namespace": "Volo.Abp.Domain.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Services.IDomainService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "domainService",
+      "name": "OrganizationUnitManager",
+      "summary": "Performs domain logic for Organization Units."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.Identity",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "IdentityClaimType",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<IdentityClaimType, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityClaimType, Guid>"
+        },
+        {
+          "name": "IBasicRepository<IdentityClaimType>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityClaimType>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityClaimType>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityClaimType>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityClaimType, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityClaimType, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Boolean",
+          "name": "AnyAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "name",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "ignoredId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityClaimType>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IIdentityClaimTypeRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.Identity",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "IdentityLinkUser",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<IdentityLinkUser, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityLinkUser, Guid>"
+        },
+        {
+          "name": "IBasicRepository<IdentityLinkUser>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityLinkUser>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityLinkUser>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityLinkUser>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityLinkUser, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityLinkUser, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "IdentityLinkUser",
+          "name": "FindAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "sourceLinkUserInfo",
+              "isOptional": false
+            },
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "targetLinkUserInfo",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityLinkUser>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "linkUserInfo",
+              "isOptional": false
+            },
+            {
+              "type": "List<IdentityLinkUserInfo>",
+              "name": "excludes",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "DeleteAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityLinkUserInfo",
+              "name": "linkUserInfo",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IIdentityLinkUserRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.Identity",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "IdentityRole",
+        "summary": "Represents a role in the identity system"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<IdentityRole, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityRole, Guid>"
+        },
+        {
+          "name": "IBasicRepository<IdentityRole>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityRole>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityRole>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityRole>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityRole, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityRole, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "IdentityRole",
+          "name": "FindByNormalizedNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "normalizedRoleName",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityRole>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityRole>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IEnumerable<Guid>",
+              "name": "ids",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityRole>",
+          "name": "GetDefaultOnesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IIdentityRoleRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.Identity",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "IdentitySecurityLog",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<IdentitySecurityLog, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentitySecurityLog, Guid>"
+        },
+        {
+          "name": "IBasicRepository<IdentitySecurityLog>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentitySecurityLog>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentitySecurityLog>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentitySecurityLog>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentitySecurityLog, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentitySecurityLog, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<IdentitySecurityLog>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "startTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "endTime",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "applicationName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "identity",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "action",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "userId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "correlationId",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<DateTime>",
+              "name": "startTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "endTime",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "applicationName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "identity",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "action",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "userId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "correlationId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "IdentitySecurityLog",
+          "name": "GetByUserIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IIdentitySecurityLogRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.Identity",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "IdentityUser",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<IdentityUser, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityUser, Guid>"
+        },
+        {
+          "name": "IBasicRepository<IdentityUser>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityUser>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityUser>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityUser>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityUser, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityUser, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "IdentityUser",
+          "name": "FindByNormalizedUserNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "normalizedUserName",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<String>",
+          "name": "GetRoleNamesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<String>",
+          "name": "GetRoleNamesInOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUser",
+          "name": "FindByLoginAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "loginProvider",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUser",
+          "name": "FindByNormalizedEmailAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "normalizedEmail",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetListByClaimAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Claim",
+              "name": "claim",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetListByNormalizedRoleNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "normalizedRoleName",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "roleId",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "organizationUnitId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "phoneNumber",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "emailAddress",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "isLockedOut",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "notActive",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityRole>",
+          "name": "GetRolesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<OrganizationUnit>",
+          "name": "GetOrganizationUnitsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetUsersInOrganizationUnitAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "organizationUnitId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetUsersInOrganizationsListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "List<Guid>",
+              "name": "organizationUnitIds",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetUsersInOrganizationUnitWithChildrenAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "code",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "roleId",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "organizationUnitId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "phoneNumber",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "emailAddress",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "isLockedOut",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "notActive",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUser",
+          "name": "FindByTenantIdAndUserNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "tenantId",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IIdentityUserRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.Identity",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "OrganizationUnit",
+        "summary": "Represents an organization unit (OU)."
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<OrganizationUnit, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<OrganizationUnit, Guid>"
+        },
+        {
+          "name": "IBasicRepository<OrganizationUnit>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<OrganizationUnit>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<OrganizationUnit>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<OrganizationUnit>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<OrganizationUnit, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<OrganizationUnit, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<OrganizationUnit>",
+          "name": "GetChildrenAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "parentId",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<OrganizationUnit>",
+          "name": "GetAllChildrenWithParentCodeAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "code",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "parentId",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "OrganizationUnit",
+          "name": "GetAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "displayName",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<OrganizationUnit>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<OrganizationUnit>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IEnumerable<Guid>",
+              "name": "ids",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityRole>",
+          "name": "GetRolesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int32",
+          "name": "GetRolesCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityRole>",
+          "name": "GetUnaddedRolesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int32",
+          "name": "GetUnaddedRolesCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetMembersAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int32",
+          "name": "GetMembersCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetUnaddedUsersAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int32",
+          "name": "GetUnaddedUsersCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveAllRolesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "RemoveAllMembersAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IOrganizationUnitRepository",
+      "summary": null
+    },
+    {
+      "defaultValue": "6",
+      "displayName": "Required length",
+      "description": "The minimum length a password must be.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequiredLength",
+      "summary": null
+    },
+    {
+      "defaultValue": "1",
+      "displayName": "Required unique characters number",
+      "description": "The minimum number of unique characters which a password must contain.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequiredUniqueChars",
+      "summary": null
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Required non-alphanumeric character",
+      "description": "If passwords must contain a non-alphanumeric character.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequireNonAlphanumeric",
+      "summary": null
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Required lower case character",
+      "description": "If passwords must contain a lower case ASCII character.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequireLowercase",
+      "summary": null
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Required upper case character",
+      "description": "If passwords must contain a upper case ASCII character.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequireUppercase",
+      "summary": null
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Required digit",
+      "description": "If passwords must contain a digit.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.RequireDigit",
+      "summary": null
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Enabled for new users",
+      "description": "Whether a new user can be locked out.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Lockout.AllowedForNewUsers",
+      "summary": null
+    },
+    {
+      "defaultValue": "300",
+      "displayName": "Lockout duration(seconds)",
+      "description": "The duration a user is locked out for when a lockout occurs.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Lockout.LockoutDuration",
+      "summary": null
+    },
+    {
+      "defaultValue": "5",
+      "displayName": "Max failed access attempts",
+      "description": "The number of failed access attempts allowed before a user is locked out, assuming lock out is enabled.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Lockout.MaxFailedAccessAttempts",
+      "summary": null
+    },
+    {
+      "defaultValue": "False",
+      "displayName": "Require confirmed email",
+      "description": "Whether a confirmed email address is required to sign in.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.SignIn.RequireConfirmedEmail",
+      "summary": null
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Allow users to confirm their phone number",
+      "description": "Whether the phoneNumber can be confirmed by the user.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.SignIn.EnablePhoneNumberConfirmation",
+      "summary": null
+    },
+    {
+      "defaultValue": "False",
+      "displayName": "Require confirmed phone number",
+      "description": "Whether a confirmed telephone number is required to sign in.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.SignIn.RequireConfirmedPhoneNumber",
+      "summary": null
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Allow users to change their usernames",
+      "description": "Whether the username can be updated by the user.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.User.IsUserNameUpdateEnabled",
+      "summary": null
+    },
+    {
+      "defaultValue": "True",
+      "displayName": "Allow users to change their email addresses",
+      "description": "Whether the email can be updated by the user.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.User.IsEmailUpdateEnabled",
+      "summary": null
+    },
+    {
+      "defaultValue": "2147483647",
+      "displayName": "Maximum allowed organization unit membership count for a user",
+      "description": "Maximum allowed organization unit membership count for a user",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.OrganizationUnit.MaxUserMembershipCount",
+      "summary": null
+    }
+  ]
+}

@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageSearchBox
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageSearchBox;
+
+public class AbpPageSearchBoxViewComponent : AbpViewComponent
 {
-    public class AbpPageSearchBoxViewComponent : AbpViewComponent
+    public virtual IViewComponentResult Invoke()
     {
-        public IViewComponentResult Invoke()
-        {
-            return View("~/Pages/Shared/Components/AbpPageSearchBox/Default.cshtml");
-        }
+        return View("~/Pages/Shared/Components/AbpPageSearchBox/Default.cshtml");
     }
 }

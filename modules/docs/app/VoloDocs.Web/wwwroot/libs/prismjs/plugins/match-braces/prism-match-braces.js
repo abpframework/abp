@@ -1,16 +1,17 @@
 (function () {
 
-	if (typeof self === 'undefined' || !self.Prism || !self.document) {
+	if (typeof Prism === 'undefined' || typeof document === 'undefined') {
 		return;
 	}
 
-	var MATCH_ALL_CLASS = /(?:^|\s)match-braces(?:\s|$)/;
-
-	var BRACE_HOVER_CLASS = /(?:^|\s)brace-hover(?:\s|$)/;
-	var BRACE_SELECTED_CLASS = /(?:^|\s)brace-selected(?:\s|$)/;
-
-	var NO_BRACE_HOVER_CLASS = /(?:^|\s)no-brace-hover(?:\s|$)/;
-	var NO_BRACE_SELECT_CLASS = /(?:^|\s)no-brace-select(?:\s|$)/;
+	function mapClassName(name) {
+		var customClass = Prism.plugins.customClass;
+		if (customClass) {
+			return customClass.apply(name, 'none');
+		} else {
+			return name;
+		}
+	}
 
 	var PARTNER = {
 		'(': ')',
@@ -18,17 +19,26 @@
 		'{': '}',
 	};
 
+	// The names for brace types.
+	// These names have two purposes: 1) they can be used for styling and 2) they are used to pair braces. Only braces
+	// of the same type are paired.
 	var NAMES = {
 		'(': 'brace-round',
 		'[': 'brace-square',
 		'{': 'brace-curly',
 	};
 
+	// A map for brace aliases.
+	// This is useful for when some braces have a prefix/suffix as part of the punctuation token.
+	var BRACE_ALIAS_MAP = {
+		'${': '{', // JS template punctuation (e.g. `foo ${bar + 1}`)
+	};
+
 	var LEVEL_WARP = 12;
 
 	var pairIdCounter = 0;
 
-	var BRACE_ID_PATTERN = /^(pair-\d+-)(open|close)$/;
+	var BRACE_ID_PATTERN = /^(pair-\d+-)(close|open)$/;
 
 	/**
 	 * Returns the brace partner given one brace of a brace pair.
@@ -45,36 +55,32 @@
 	 * @this {HTMLElement}
 	 */
 	function hoverBrace() {
-		for (var parent = this.parentElement; parent; parent = parent.parentElement) {
-			if (NO_BRACE_HOVER_CLASS.test(parent.className)) {
-				return;
-			}
+		if (!Prism.util.isActive(this, 'brace-hover', true)) {
+			return;
 		}
 
-		[this, getPartnerBrace(this)].forEach(function (ele) {
-			ele.className = (ele.className.replace(BRACE_HOVER_CLASS, ' ') + ' brace-hover').replace(/\s+/g, ' ');
+		[this, getPartnerBrace(this)].forEach(function (e) {
+			e.classList.add(mapClassName('brace-hover'));
 		});
 	}
 	/**
 	 * @this {HTMLElement}
 	 */
 	function leaveBrace() {
-		[this, getPartnerBrace(this)].forEach(function (ele) {
-			ele.className = ele.className.replace(BRACE_HOVER_CLASS, ' ');
+		[this, getPartnerBrace(this)].forEach(function (e) {
+			e.classList.remove(mapClassName('brace-hover'));
 		});
 	}
 	/**
 	 * @this {HTMLElement}
 	 */
 	function clickBrace() {
-		for (var parent = this.parentElement; parent; parent = parent.parentElement) {
-			if (NO_BRACE_SELECT_CLASS.test(parent.className)) {
-				return;
-			}
+		if (!Prism.util.isActive(this, 'brace-select', true)) {
+			return;
 		}
 
-		[this, getPartnerBrace(this)].forEach(function (ele) {
-			ele.className = (ele.className.replace(BRACE_SELECTED_CLASS, ' ') + ' brace-selected').replace(/\s+/g, ' ');
+		[this, getPartnerBrace(this)].forEach(function (e) {
+			e.classList.add(mapClassName('brace-selected'));
 		});
 	}
 
@@ -91,11 +97,8 @@
 		// find the braces to match
 		/** @type {string[]} */
 		var toMatch = [];
-		for (var ele = code; ele; ele = ele.parentElement) {
-			if (MATCH_ALL_CLASS.test(ele.className)) {
-				toMatch.push('(', '[', '{');
-				break;
-			}
+		if (Prism.util.isActive(code, 'match-braces')) {
+			toMatch.push('(', '[', '{');
 		}
 
 		if (toMatch.length == 0) {
@@ -108,22 +111,25 @@
 			pre.addEventListener('mousedown', function removeBraceSelected() {
 				// the code element might have been replaced
 				var code = pre.querySelector('code');
-				Array.prototype.slice.call(code.querySelectorAll('.brace-selected')).forEach(function (element) {
-					element.className = element.className.replace(BRACE_SELECTED_CLASS, ' ');
+				var className = mapClassName('brace-selected');
+				Array.prototype.slice.call(code.querySelectorAll('.' + className)).forEach(function (e) {
+					e.classList.remove(className);
 				});
 			});
 			Object.defineProperty(pre, '__listenerAdded', { value: true });
 		}
 
 		/** @type {HTMLSpanElement[]} */
-		var punctuation = Array.prototype.slice.call(code.querySelectorAll('span.token.punctuation'));
+		var punctuation = Array.prototype.slice.call(
+			code.querySelectorAll('span.' + mapClassName('token') + '.' + mapClassName('punctuation'))
+		);
 
 		/** @type {{ index: number, open: boolean, element: HTMLElement }[]} */
 		var allBraces = [];
 
 		toMatch.forEach(function (open) {
 			var close = PARTNER[open];
-			var name = NAMES[open];
+			var name = mapClassName(NAMES[open]);
 
 			/** @type {[number, number][]} */
 			var pairs = [];
@@ -134,15 +140,16 @@
 				var element = punctuation[i];
 				if (element.childElementCount == 0) {
 					var text = element.textContent;
+					text = BRACE_ALIAS_MAP[text] || text;
 					if (text === open) {
 						allBraces.push({ index: i, open: true, element: element });
-						element.className += ' ' + name;
-						element.className += ' brace-open';
+						element.classList.add(name);
+						element.classList.add(mapClassName('brace-open'));
 						openStack.push(i);
 					} else if (text === close) {
 						allBraces.push({ index: i, open: false, element: element });
-						element.className += ' ' + name;
-						element.className += ' brace-close';
+						element.classList.add(name);
+						element.classList.add(mapClassName('brace-close'));
 						if (openStack.length) {
 							pairs.push([i, openStack.pop()]);
 						}
@@ -153,16 +160,16 @@
 			pairs.forEach(function (pair) {
 				var pairId = 'pair-' + (pairIdCounter++) + '-';
 
-				var openEle = punctuation[pair[0]];
-				var closeEle = punctuation[pair[1]];
+				var opening = punctuation[pair[0]];
+				var closing = punctuation[pair[1]];
 
-				openEle.id = pairId + 'open';
-				closeEle.id = pairId + 'close';
+				opening.id = pairId + 'open';
+				closing.id = pairId + 'close';
 
-				[openEle, closeEle].forEach(function (ele) {
-					ele.addEventListener('mouseenter', hoverBrace);
-					ele.addEventListener('mouseleave', leaveBrace);
-					ele.addEventListener('click', clickBrace);
+				[opening, closing].forEach(function (e) {
+					e.addEventListener('mouseenter', hoverBrace);
+					e.addEventListener('mouseleave', leaveBrace);
+					e.addEventListener('click', clickBrace);
 				});
 			});
 		});
@@ -171,14 +178,13 @@
 		allBraces.sort(function (a, b) { return a.index - b.index; });
 		allBraces.forEach(function (brace) {
 			if (brace.open) {
-				brace.element.className += ' brace-level-' + (level % LEVEL_WARP + 1);
+				brace.element.classList.add(mapClassName('brace-level-' + (level % LEVEL_WARP + 1)));
 				level++;
 			} else {
 				level = Math.max(0, level - 1);
-				brace.element.className += ' brace-level-' + (level % LEVEL_WARP + 1);
+				brace.element.classList.add(mapClassName('brace-level-' + (level % LEVEL_WARP + 1)));
 			}
 		});
-
 	});
 
 }());

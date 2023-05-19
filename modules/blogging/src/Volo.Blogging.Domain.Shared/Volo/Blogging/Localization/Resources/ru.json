@@ -3,6 +3,16 @@
   "texts": {
     "Menu:Blogs": "Блоги",
     "Menu:BlogManagement": "Управление блогом",
+    "Permission:Management": "Управление",
+    "Permission:Edit": "Редактировать",
+    "Permission:Create": "Создавать",
+    "Permission:Delete": "Удалить",
+    "Permission:Blogging": "Блог",
+    "Permission:Blogs": "Блоги",
+    "Permission:Posts": "Сообщения",
+    "Permission:Tags": "Теги",
+    "Permission:Comments": "Комментарии",
+    "Permission:ClearCache": "Очистить кэш",
     "Title": "Заголовок",
     "Delete": "Удалить",
     "Reply": "Ответить",
@@ -42,6 +52,10 @@
     "CreationTime": "Время создания",
     "Description": "Описание",
     "Blogs": "Блоги",
-    "Tags": "Теги"
+    "Tags": "Теги",
+    "ShareOn": "Поделись",
+    "TitleLengthWarning": "Держите размер заголовка не более 60 символов, чтобы быть оптимизированным для SEO!",
+    "ClearCache": "Очистить кэш",
+    "ClearCacheConfirmationMessage": "Вы уверены, что хотите очистить кеш?"
   }
 }

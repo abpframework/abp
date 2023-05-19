@@ -87,6 +87,8 @@ A JSON localization file content is shown below:
 * Every localization file should define the `culture` code for the file (like "en" or "en-US").
 * `texts` section just contains key-value collection of the localization strings (keys may have spaces too).
 
+> ABP will ignore (skip) the JSON file if the `culture` section is missing.
+
 ### Default Resource
 
 `AbpLocalizationOptions.DefaultResourceType` can be set to a resource type, so it is used when the localization resource was not specified:

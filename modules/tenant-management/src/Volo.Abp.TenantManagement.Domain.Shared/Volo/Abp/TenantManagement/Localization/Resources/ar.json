@@ -1,6 +1,7 @@
 {
   "culture": "ar",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "اسم المستأجر موجود بالفعل: {Name}",
     "Menu:TenantManagement": "إدارة الجهات",
     "Tenants": "الجهات",
     "NewTenant": "جهة جديدة",

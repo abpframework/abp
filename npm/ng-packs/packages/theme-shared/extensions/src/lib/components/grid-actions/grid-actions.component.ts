@@ -24,7 +24,7 @@ import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.c
 export class GridActionsComponent<R = any> extends AbstractActionsComponent<EntityActionList<R>> {
   @Input() icon = 'fa fa-cog';
 
-  @Input() readonly index: number;
+  @Input() readonly index?: number;
 
   @Input() text = '';
 

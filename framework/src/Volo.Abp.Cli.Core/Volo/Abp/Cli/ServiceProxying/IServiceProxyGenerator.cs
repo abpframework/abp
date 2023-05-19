@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Cli.ServiceProxying
+namespace Volo.Abp.Cli.ServiceProxying;
+
+public interface IServiceProxyGenerator
 {
-    public interface IServiceProxyGenerator
-    {
-        Task GenerateProxyAsync(GenerateProxyArgs args);
-    }
+    Task GenerateProxyAsync(GenerateProxyArgs args);
 }

@@ -42,6 +42,7 @@ Configure<AbpAuditingOptions>(options =>
 * `AlwaysLogOnException`(默认值: `true`): 如果设置为 `true`,将始终在异常/错误情况下保存审计日志,不检查其他选项(`IsEnabled` 除外,它完全禁用了审计日志).
 * `IsEnabledForGetRequests` (默认值: `false`): HTTP GET请求通常不应该在数据库进行任何更改,审计日志系统不会为GET请求保存审计日志对象. 将此值设置为 `true` 可为GET请求启用审计日志系统.
 * `ApplicationName`: 如果有多个应用程序保存审计日志到单一的数据库,使用此属性设置为你的应用程序名称区分不同的应用程序日志.
+* `DisableLogActionInfo` (默认值: `false`): 如果设置为 `true`, 将不再记录 `AuditLogActionInfo`.
 * `IgnoredTypes`: 审计日志系统忽略的 `Type` 列表. 如果它是实体类型,则不会保存此类型实体的更改. 在序列化操作参数时也使用此列表.
 * `EntityHistorySelectors`:选择器列表,用于确定是否选择了用于保存实体更改的实体类型. 有关详细信息请参阅下面的部分.
 * `Contributors`: `AuditLogContributor` 实现的列表. 贡献者是扩展审计日志系统的一种方式. 有关详细信息请参阅下面的"审计日志贡献者"部分.

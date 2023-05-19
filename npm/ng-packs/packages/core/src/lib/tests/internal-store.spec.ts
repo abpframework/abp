@@ -1,7 +1,7 @@
 import clone from 'just-clone';
 import { take } from 'rxjs/operators';
-import { DeepPartial } from '../models';
-import { InternalStore } from '../utils';
+import { DeepPartial } from '../models/utility';
+import { InternalStore } from '../utils/internal-store-utils';
 
 const mockInitialState = {
   foo: {

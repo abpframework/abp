@@ -1,0 +1,7 @@
+{
+  "culture": "is",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Sjálfgefið tungumál",
+    "Description:Abp.Localization.DefaultLanguage": "Sjálfgefið tungumál forritsins."
+  }
+}

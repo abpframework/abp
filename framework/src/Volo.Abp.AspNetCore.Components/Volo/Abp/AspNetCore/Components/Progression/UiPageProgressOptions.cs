@@ -1,13 +1,12 @@
-﻿namespace Volo.Abp.AspNetCore.Components.Progression
+﻿namespace Volo.Abp.AspNetCore.Components.Progression;
+
+/// <summary>
+/// Options to override page progress appearance.
+/// </summary>
+public class UiPageProgressOptions
 {
     /// <summary>
-    /// Options to override page progress appearance.
+    /// Type or color, of the page progress.
     /// </summary>
-    public class UiPageProgressOptions
-    {
-        /// <summary>
-        /// Type or color, of the page progress.
-        /// </summary>
-        public UiPageProgressType Type { get; set; }
-    }
+    public UiPageProgressType Type { get; set; }
 }

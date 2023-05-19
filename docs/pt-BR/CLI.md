@@ -45,7 +45,7 @@ abp new Acme.BookStore
       * `mvc`: ASP.NET Core MVC. Existem algumas opções adicionais para este modelo:
         * `--tiered`: Cria uma solução em camadas em que as camadas da Web e da API HTTP são fisicamente separadas. Se não especificado, ele cria uma solução em camadas que é menos complexa e adequada para a maioria dos cenários.
       * `angular`: Angular. Existem algumas opções adicionais para este modelo:
-        * `--separate-identity-server`: Separa o aplicativo do servidor de identidade do aplicativo host da API. Se não especificado, você terá um único ponto de extremidade no lado do servidor.
+        * `--separate-auth-server`: Separa o aplicativo do servidor de identidade do aplicativo host da API. Se não especificado, você terá um único ponto de extremidade no lado do servidor.
     * `--database-provider` Ou `-d`: especifica o provedor de banco de dados. O provedor padrão é `ef`. Fornecedores disponíveis:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.

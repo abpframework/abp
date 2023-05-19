@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Cli.ProjectModification
+namespace Volo.Abp.Cli.ProjectModification;
+
+public class ModuleWithMastersInfo : ModuleInfo
 {
-    public class ModuleWithMastersInfo : ModuleInfo
-    {
-        public List<ModuleWithMastersInfo> MasterModuleInfos { get; set; }
-    }
+    public List<ModuleWithMastersInfo> MasterModuleInfos { get; set; }
 }

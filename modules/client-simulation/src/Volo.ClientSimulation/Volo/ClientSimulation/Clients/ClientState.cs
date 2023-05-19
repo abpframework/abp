@@ -1,9 +1,8 @@
-﻿namespace Volo.ClientSimulation.Clients
+﻿namespace Volo.ClientSimulation.Clients;
+
+public enum ClientState
 {
-    public enum ClientState
-    {
-        Stopped,
-        Running,
-        Stopping
-    }
+    Stopped,
+    Running,
+    Stopping
 }

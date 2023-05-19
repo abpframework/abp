@@ -12,8 +12,10 @@
   validateOnSubmit
   class="mt-4"
 >
-  <div class="form-group">
-    <label for="input-user-name">{{ 'AbpAccount::UserName' | abpLocalization }}</label
+  <div class="mb-3 form-group">
+    <label for="input-user-name" class="form-label">{{
+      'AbpAccount::UserName' | abpLocalization
+    }}</label
     ><span> * </span
     ><input
       autofocus
@@ -24,13 +26,17 @@
       autocomplete="username"
     />
   </div>
-  <div class="form-group">
-    <label for="input-email-address">{{ 'AbpAccount::EmailAddress' | abpLocalization }}</label
+  <div class="mb-3 form-group">
+    <label for="input-email-address" class="form-label">{{
+      'AbpAccount::EmailAddress' | abpLocalization
+    }}</label
     ><span> * </span
     ><input type="email" id="input-email-address" class="form-control" formControlName="email" />
   </div>
-  <div class="form-group">
-    <label for="input-password">{{ 'AbpAccount::Password' | abpLocalization }}</label
+  <div class="mb-3 form-group">
+    <label for="input-password" class="form-label">{{
+      'AbpAccount::Password' | abpLocalization
+    }}</label
     ><span> * </span
     ><input
       type="password"

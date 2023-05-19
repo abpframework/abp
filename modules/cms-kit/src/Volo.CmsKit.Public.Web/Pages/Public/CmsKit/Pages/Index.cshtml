@@ -1,31 +1,43 @@
 ﻿@page
-@using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.CmsKit.Localization
-@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
-
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
+@using Volo.CmsKit.Contents
+@using System.Dynamic
+@using Volo.Abp.Data
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+@using Volo.CmsKit.Web.Renderers
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages.IndexModel
 
-@inject IHtmlLocalizer<CmsKitResource> L
+@inject IMarkdownToHtmlRenderer MarkdownRenderer
 
 @section styles{
     
     <abp-style src="/Pages/Public/CmsKit/Pages/index.css" />
 
     <style>
-        @Html.Raw(Model.Page.Style)
+        @Html.Raw(Model.ViewModel.Style)
     </style>
 }
 
 @section scripts{
     <script>
-        @Html.Raw(Model.Page.Script)
+        @Html.Raw(Model.ViewModel.Script)
     </script>
 }
 
-@await Component.InvokeAsync(typeof(DefaultPageViewComponent),
-    new
-    {
-        pageId = Model.Page.Id,
-        title = Model.Page.Title,
-        content = Model.Page.Content
-    })
+<abp-card>
+    <abp-card-body>
+        @foreach (ContentFragment contentFragment in Model.ViewModel.ContentFragments)
+        {
+            if (contentFragment.Type == ContentConsts.Markdown)
+            {
+                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content"), allowHtmlTags: true, preventXSS: true))
+            }
+            else if (contentFragment.Type == ContentConsts.Widget)
+            {
+                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
+            }
+        }
+    </abp-card-body>
+</abp-card>
+

@@ -4,42 +4,41 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Commands.Services
+namespace Volo.Abp.Cli.Commands.Services;
+
+public class AbpNuGetIndexUrlService : ITransientDependency
 {
-    public class AbpNuGetIndexUrlService : ITransientDependency
+    private readonly IApiKeyService _apiKeyService;
+    public ILogger<AbpNuGetIndexUrlService> Logger { get; set; }
+
+    public AbpNuGetIndexUrlService(IApiKeyService apiKeyService)
     {
-        private readonly IApiKeyService _apiKeyService;
-        public ILogger<AbpNuGetIndexUrlService> Logger { get; set; }
+        _apiKeyService = apiKeyService;
+        Logger = NullLogger<AbpNuGetIndexUrlService>.Instance;
+    }
 
-        public AbpNuGetIndexUrlService(IApiKeyService apiKeyService)
+    public async Task<string> GetAsync()
+    {
+        var apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
+
+        if (apiKeyResult == null)
         {
-            _apiKeyService = apiKeyService;
-            Logger = NullLogger<AbpNuGetIndexUrlService>.Instance;
+            Logger.LogWarning("You are not signed in! Use the CLI command \"abp login <username>\" to sign in, then try again.");
+            return null;
         }
 
-        public async Task<string> GetAsync()
+        if (!string.IsNullOrWhiteSpace(apiKeyResult.ErrorMessage))
         {
-            var apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
-
-            if (apiKeyResult == null)
-            {
-                Logger.LogWarning("You are not signed in! Use the CLI command \"abp login <username>\" to sign in, then try again.");
-                return null;
-            }
-
-            if (!string.IsNullOrWhiteSpace(apiKeyResult.ErrorMessage))
-            {
-                Logger.LogWarning(apiKeyResult.ErrorMessage);
-                return null;
-            }
-
-            if (string.IsNullOrEmpty(apiKeyResult.ApiKey))
-            {
-                Logger.LogError("Couldn't retrieve your NuGet API key! You can re-sign in with the CLI command \"abp login <username>\".");
-                return null;
-            }
-
-            return CliUrls.GetNuGetServiceIndexUrl(apiKeyResult.ApiKey);
+            Logger.LogWarning(apiKeyResult.ErrorMessage);
+            return null;
         }
+
+        if (string.IsNullOrEmpty(apiKeyResult.ApiKey))
+        {
+            Logger.LogError("Couldn't retrieve your NuGet API key! You can re-sign in with the CLI command \"abp login <username>\".");
+            return null;
+        }
+
+        return CliUrls.GetNuGetServiceIndexUrl(apiKeyResult.ApiKey);
     }
 }

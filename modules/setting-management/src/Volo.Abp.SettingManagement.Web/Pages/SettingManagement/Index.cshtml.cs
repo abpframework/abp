@@ -1,53 +1,62 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Features;
 
-namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
+namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
+
+[Authorize]
+[RequiresFeature(SettingManagementFeatures.Enable)]
+public class IndexModel : AbpPageModel
 {
-    [RequiresFeature(SettingManagementFeatures.Enable)]
-    public class IndexModel : AbpPageModel
+    public SettingPageCreationContext SettingPageCreationContext { get; private set; }
+
+    protected SettingPageContributorManager SettingPageContributorManager { get; }
+
+    protected ILocalEventBus LocalEventBus { get; }
+
+    public IndexModel(ILocalEventBus localEventBus, SettingPageContributorManager settingPageContributorManager)
     {
-        public SettingPageCreationContext SettingPageCreationContext { get; private set; }
+        LocalEventBus = localEventBus;
+        SettingPageContributorManager = settingPageContributorManager;
+    }
 
-        protected ILocalEventBus LocalEventBus { get; }
-        protected SettingManagementPageOptions Options { get; }
+    public virtual async Task<IActionResult> OnGetAsync()
+    {
+        SettingPageCreationContext = await SettingPageContributorManager.ConfigureAsync();
 
-        public IndexModel(
-            IOptions<SettingManagementPageOptions> options,
-            ILocalEventBus localEventBus)
+        return Page();
+    }
+
+    public virtual Task<IActionResult> OnPostAsync()
+    {
+        return Task.FromResult<IActionResult>(Page());
+    }
+
+    public virtual async Task<IActionResult> OnPostRenderViewAsync(string id)
+    {
+        var context = await SettingPageContributorManager.ConfigureAsync();
+
+        var view = context.Groups.FirstOrDefault(x => x.Id == id);
+        if (view != null)
         {
-            LocalEventBus = localEventBus;
-            Options = options.Value;
+            return ViewComponent(view.ComponentType, view.Parameter);
         }
 
-        public virtual async Task<IActionResult> OnGetAsync()
-        {
-            SettingPageCreationContext = new SettingPageCreationContext(ServiceProvider);
+        return NoContent();
+    }
 
-            foreach (var contributor in Options.Contributors)
-            {
-                await contributor.ConfigureAsync(SettingPageCreationContext);
-            }
+    public virtual async Task<NoContentResult> OnPostRefreshConfigurationAsync()
+    {
+        await LocalEventBus.PublishAsync(
+            new CurrentApplicationConfigurationCacheResetEventData()
+        );
 
-            return Page();
-        }
-
-        public virtual Task<IActionResult> OnPostAsync()
-        {
-            return Task.FromResult<IActionResult>(Page());
-        }
-
-        public virtual async Task<NoContentResult> OnPostRefreshConfigurationAsync()
-        {
-            await LocalEventBus.PublishAsync(
-                new CurrentApplicationConfigurationCacheResetEventData()
-            );
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }

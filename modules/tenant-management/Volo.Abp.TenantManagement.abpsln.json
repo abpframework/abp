@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Volo.Abp.TenantManagement": {
+      "path": "Volo.Abp.TenantManagement.abpmdl.json"
+    }
+  }
+}

@@ -161,6 +161,73 @@ This example class inherits from the `IdentityUserManager` [domain service](Doma
 
 Check the [localization system](Localization.md) to learn how to localize the error messages.
 
+### Example: Overriding a Repository
+
+````csharp
+public class MyEfCoreIdentityUserRepository : EfCoreIdentityUserRepository
+{
+    public MyEfCoreIdentityUserRepository(
+        IDbContextProvider<IIdentityDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+
+    /* You can override any base method here */
+}
+````
+
+In this example, we are overriding the `EfCoreIdentityUserRepository` class that is defined by the [Identity module](Modules/Identity.md). This is the [Entity Framework Core](Entity-Framework-Core.md) implementation of the user repository. 
+
+Thanks to the naming convention (`MyEfCoreIdentityUserRepository` ends with `EfCoreIdentityUserRepository`), no additional setup is required. You can override any base method to customize it for your needs.
+
+However, if you inject `IRepository<IdentityUser>` or `IRepository<IdentityUser, Guid>`, it will still use the default repository implementation. To replace the default repository implementation, write the following code in the `ConfigureServices` method of your module class:
+
+````csharp
+context.Services.AddDefaultRepository(
+    typeof(Volo.Abp.Identity.IdentityUser),
+    typeof(MyEfCoreIdentityUserRepository),
+    replaceExisting: true
+);
+````
+
+In this way, your implementation will be used if you inject `IRepository<IdentityUser>`, `IRepository<IdentityUser, Guid>` or `IIdentityUserRepository`.
+
+If you want to add extra methods to your repository and use it in your own code, you can define an interface and expose it from your repository implementation. You can also extend the pre-built repository interface. Example:
+
+````csharp
+public interface IMyIdentityUserRepository : IIdentityUserRepository
+{
+    public Task DeleteByEmailAddress(string email);
+}
+````
+
+The `IMyIdentityUserRepository` interface extends the Identity module's `IIdentityUserRepository` interface. Then you can implement it as shown in the following example:
+
+````csharp
+[ExposeServices(typeof(IMyIdentityUserRepository), IncludeDefaults = true)]
+public class MyEfCoreIdentityUserRepository
+    : EfCoreIdentityUserRepository, IMyIdentityUserRepository
+{
+    public MyEfCoreIdentityUserRepository(
+        IDbContextProvider<IIdentityDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+
+    public async Task DeleteByEmailAddress(string email)
+    {
+        var dbContext = await GetDbContextAsync();
+        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (user != null)
+        {
+            dbContext.Users.Remove(user);
+        }
+    }
+}
+````
+
+The `MyEfCoreIdentityUserRepository` class implements the `IMyIdentityUserRepository` interface. `ExposeServices` attribute is needed since ABP can not expose `IMyIdentityUserRepository` by naming conventions (`MyEfCoreIdentityUserRepository` doesn't end with `MyIdentityUserRepository`). Now, you can inject the `IMyIdentityUserRepository` interface into your services and call its `DeleteByEmailAddress` method.
+
 ### Example: Overriding a Controller
 
 ````csharp
@@ -205,7 +272,8 @@ If you don't want to remove either controller, you can configure `AbpAspNetCoreM
 ```csharp
 Configure<AbpAspNetCoreMvcOptions>(options =>
 {
-    options.IgnoredControllersOnModelExclusion.AddIfNotContains(typeof(MyAccountController));
+    options.IgnoredControllersOnModelExclusion
+           .AddIfNotContains(typeof(MyAccountController));
 });
 ```
 

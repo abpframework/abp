@@ -1,13 +1,12 @@
 ﻿using Volo.Abp.EntityFrameworkCore;
 
-namespace Microsoft.EntityFrameworkCore
+namespace Microsoft.EntityFrameworkCore;
+
+public static class AbpSqlServerModelBuilderExtensions
 {
-    public static class AbpSqlServerModelBuilderExtensions
+    public static void UseSqlServer(
+        this ModelBuilder modelBuilder)
     {
-        public static void UseSqlServer(
-            this ModelBuilder modelBuilder)
-        {
-            modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.SqlServer);
-        }
+        modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.SqlServer);
     }
 }

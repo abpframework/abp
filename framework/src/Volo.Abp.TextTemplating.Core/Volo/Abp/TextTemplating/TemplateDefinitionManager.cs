@@ -6,81 +6,80 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.TextTemplating
+namespace Volo.Abp.TextTemplating;
+
+public class TemplateDefinitionManager : ITemplateDefinitionManager, ISingletonDependency
 {
-    public class TemplateDefinitionManager : ITemplateDefinitionManager, ISingletonDependency
+    protected Lazy<IDictionary<string, TemplateDefinition>> TemplateDefinitions { get; }
+
+    protected AbpTextTemplatingOptions Options { get; }
+
+    protected IServiceProvider ServiceProvider { get; }
+
+    public TemplateDefinitionManager(
+        IOptions<AbpTextTemplatingOptions> options,
+        IServiceProvider serviceProvider)
     {
-        protected Lazy<IDictionary<string, TemplateDefinition>> TemplateDefinitions { get; }
+        ServiceProvider = serviceProvider;
+        Options = options.Value;
 
-        protected AbpTextTemplatingOptions Options { get; }
+        TemplateDefinitions =
+            new Lazy<IDictionary<string, TemplateDefinition>>(CreateTextTemplateDefinitions, true);
+    }
 
-        protected IServiceProvider ServiceProvider { get; }
+    public virtual TemplateDefinition Get(string name)
+    {
+        Check.NotNull(name, nameof(name));
 
-        public TemplateDefinitionManager(
-            IOptions<AbpTextTemplatingOptions> options,
-            IServiceProvider serviceProvider)
+        var template = GetOrNull(name);
+
+        if (template == null)
         {
-            ServiceProvider = serviceProvider;
-            Options = options.Value;
-
-            TemplateDefinitions =
-                new Lazy<IDictionary<string, TemplateDefinition>>(CreateTextTemplateDefinitions, true);
+            throw new AbpException("Undefined template: " + name);
         }
 
-        public virtual TemplateDefinition Get(string name)
+        return template;
+    }
+
+    public virtual IReadOnlyList<TemplateDefinition> GetAll()
+    {
+        return TemplateDefinitions.Value.Values.ToImmutableList();
+    }
+
+    public virtual TemplateDefinition GetOrNull(string name)
+    {
+        return TemplateDefinitions.Value.GetOrDefault(name);
+    }
+
+    protected virtual IDictionary<string, TemplateDefinition> CreateTextTemplateDefinitions()
+    {
+        var templates = new Dictionary<string, TemplateDefinition>();
+
+        using (var scope = ServiceProvider.CreateScope())
         {
-            Check.NotNull(name, nameof(name));
+            var providers = Options
+                .DefinitionProviders
+                .Select(p => scope.ServiceProvider.GetRequiredService(p) as ITemplateDefinitionProvider)
+                .ToList();
 
-            var template = GetOrNull(name);
+            var context = new TemplateDefinitionContext(templates);
 
-            if (template == null)
+            foreach (var provider in providers)
             {
-                throw new AbpException("Undefined template: " + name);
+                provider.PreDefine(context);
             }
 
-            return template;
-        }
-
-        public virtual IReadOnlyList<TemplateDefinition> GetAll()
-        {
-            return TemplateDefinitions.Value.Values.ToImmutableList();
-        }
-
-        public virtual TemplateDefinition GetOrNull(string name)
-        {
-            return TemplateDefinitions.Value.GetOrDefault(name);
-        }
-
-        protected virtual IDictionary<string, TemplateDefinition> CreateTextTemplateDefinitions()
-        {
-            var templates = new Dictionary<string, TemplateDefinition>();
-
-            using (var scope = ServiceProvider.CreateScope())
+            foreach (var provider in providers)
             {
-                var providers = Options
-                    .DefinitionProviders
-                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as ITemplateDefinitionProvider)
-                    .ToList();
-
-                var context = new TemplateDefinitionContext(templates);
-
-                foreach (var provider in providers)
-                {
-                    provider.PreDefine(context);
-                }
-
-                foreach (var provider in providers)
-                {
-                    provider.Define(context);
-                }
-
-                foreach (var provider in providers)
-                {
-                    provider.PostDefine(context);
-                }
+                provider.Define(context);
             }
 
-            return templates;
+            foreach (var provider in providers)
+            {
+                provider.PostDefine(context);
+            }
         }
+
+        return templates;
     }
 }

@@ -2,7 +2,7 @@ import { AccountService, RegisterDto } from '@abp/ng.account.core/proxy';
 import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { throwError } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { eAccountComponents } from '../../enums/components';
@@ -15,16 +15,16 @@ const { maxLength, required, email } = Validators;
   templateUrl: './register.component.html',
 })
 export class RegisterComponent implements OnInit {
-  form: FormGroup;
+  form!: UntypedFormGroup;
 
-  inProgress: boolean;
+  inProgress?: boolean;
 
   isSelfRegistrationEnabled = true;
 
   authWrapperKey = eAccountComponents.AuthWrapper;
 
   constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected accountService: AccountService,
     protected configState: ConfigStateService,
     protected toasterService: ToasterService,
@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit {
           key: 'AbpAccount::SelfRegistrationDisabledMessage',
           defaultValue: 'Self registration is disabled.',
         },
-        null,
+        '',
         { life: 10000 },
       );
       return;
@@ -69,9 +69,9 @@ export class RegisterComponent implements OnInit {
     this.inProgress = true;
 
     const newUser = {
-      userName: this.form.get('username').value,
-      password: this.form.get('password').value,
-      emailAddress: this.form.get('email').value,
+      userName: this.form.get('username')?.value,
+      password: this.form.get('password')?.value,
+      emailAddress: this.form.get('email')?.value,
       appName: 'Angular',
     } as RegisterDto;
 
@@ -90,7 +90,7 @@ export class RegisterComponent implements OnInit {
             err.error?.error_description ||
               err.error?.error.message ||
               'AbpAccount::DefaultErrorMessage',
-            null,
+            '',
             { life: 7000 },
           );
 

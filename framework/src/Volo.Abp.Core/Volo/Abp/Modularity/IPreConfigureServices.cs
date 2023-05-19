@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Modularity
+namespace Volo.Abp.Modularity;
+
+public interface IPreConfigureServices
 {
-    public interface IPreConfigureServices
-    {
-        void PreConfigureServices(ServiceConfigurationContext context);
-    }
+    Task PreConfigureServicesAsync(ServiceConfigurationContext context);
+
+    void PreConfigureServices(ServiceConfigurationContext context);
 }

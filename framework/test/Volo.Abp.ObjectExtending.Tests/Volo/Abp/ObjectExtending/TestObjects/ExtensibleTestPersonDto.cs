@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.ObjectExtending.TestObjects
-{
-    public class ExtensibleTestPersonDto : ExtensibleObject
-    {
+﻿namespace Volo.Abp.ObjectExtending.TestObjects;
 
-    }
+public class ExtensibleTestPersonDto : ExtensibleObject
+{
+
 }

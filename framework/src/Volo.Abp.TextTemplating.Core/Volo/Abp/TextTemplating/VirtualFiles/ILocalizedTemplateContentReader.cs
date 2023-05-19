@@ -1,9 +1,8 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.TextTemplating.VirtualFiles
+namespace Volo.Abp.TextTemplating.VirtualFiles;
+
+public interface ILocalizedTemplateContentReader
 {
-    public interface ILocalizedTemplateContentReader
-    {
-        public string GetContentOrNull([CanBeNull] string culture);
-    }
+    public string GetContentOrNull([CanBeNull] string culture);
 }

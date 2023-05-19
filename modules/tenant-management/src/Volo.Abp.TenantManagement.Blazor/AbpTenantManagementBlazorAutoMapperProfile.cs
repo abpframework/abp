@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 
-namespace Volo.Abp.TenantManagement.Blazor
+namespace Volo.Abp.TenantManagement.Blazor;
+
+public class AbpTenantManagementBlazorAutoMapperProfile : Profile
 {
-    public class AbpTenantManagementBlazorAutoMapperProfile : Profile
+    public AbpTenantManagementBlazorAutoMapperProfile()
     {
-        public AbpTenantManagementBlazorAutoMapperProfile()
-        {
-            CreateMap<TenantDto, TenantUpdateDto>()
-                .MapExtraProperties();
-        }
+        CreateMap<TenantDto, TenantUpdateDto>()
+            .MapExtraProperties();
     }
 }

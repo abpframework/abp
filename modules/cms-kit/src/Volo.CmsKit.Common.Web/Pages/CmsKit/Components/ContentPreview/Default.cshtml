@@ -1,0 +1,10 @@
+﻿@using Volo.CmsKit.Contents
+@using Volo.CmsKit.Web.Pages.CmsKit.Components.Contents
+
+@model DefaultContentDto
+
+<div class="content">
+
+    @await Component.InvokeAsync(typeof(ContentFragmentViewComponent), Model)
+
+</div>

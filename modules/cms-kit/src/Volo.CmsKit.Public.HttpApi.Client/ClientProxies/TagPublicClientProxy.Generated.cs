@@ -10,19 +10,18 @@ using Volo.CmsKit.Tags;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Public.Tags.ClientProxies
+namespace Volo.CmsKit.Public.Tags.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(ITagAppService), typeof(TagPublicClientProxy))]
+public partial class TagPublicClientProxy : ClientProxyBase<ITagAppService>, ITagAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(ITagAppService), typeof(TagPublicClientProxy))]
-    public partial class TagPublicClientProxy : ClientProxyBase<ITagAppService>, ITagAppService
+    public virtual async Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
     {
-        public virtual async Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
+        return await RequestAsync<List<TagDto>>(nameof(GetAllRelatedTagsAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<List<TagDto>>(nameof(GetAllRelatedTagsAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(string), entityType },
-                { typeof(string), entityId }
-            });
-        }
+            { typeof(string), entityType },
+            { typeof(string), entityId }
+        });
     }
 }

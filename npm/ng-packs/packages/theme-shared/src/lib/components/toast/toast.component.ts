@@ -7,7 +7,7 @@ import { Toaster } from '../../models/toaster';
 })
 export class ToastComponent implements OnInit {
   @Input()
-  toast: Toaster.Toast;
+  toast!: Toaster.Toast;
 
   @Output() remove = new EventEmitter<number>();
 
@@ -42,7 +42,7 @@ export class ToastComponent implements OnInit {
   }
 
   close() {
-    this.remove.emit(this.toast.options.id);
+    this.remove.emit(this.toast.options?.id);
   }
 
   tap() {

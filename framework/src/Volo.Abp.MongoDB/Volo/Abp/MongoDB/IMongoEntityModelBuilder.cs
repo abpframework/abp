@@ -1,23 +1,22 @@
 using System;
 using MongoDB.Bson.Serialization;
 
-namespace Volo.Abp.MongoDB
+namespace Volo.Abp.MongoDB;
+
+public interface IMongoEntityModelBuilder<TEntity>
 {
-    public interface IMongoEntityModelBuilder<TEntity>
-    {
-        Type EntityType { get; }
+    Type EntityType { get; }
 
-        string CollectionName { get; set; }
+    string CollectionName { get; set; }
 
-        BsonClassMap<TEntity> BsonMap { get; }
-    }
+    BsonClassMap<TEntity> BsonMap { get; }
+}
 
-    public interface IMongoEntityModelBuilder
-    {
-        Type EntityType { get; }
+public interface IMongoEntityModelBuilder
+{
+    Type EntityType { get; }
 
-        string CollectionName { get; set; }
+    string CollectionName { get; set; }
 
-        BsonClassMap BsonMap { get; }
-    }
+    BsonClassMap BsonMap { get; }
 }

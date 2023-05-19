@@ -1,10 +1,9 @@
-﻿namespace Volo.Abp.BlobStoring.Database
+﻿namespace Volo.Abp.BlobStoring.Database;
+
+public static class DatabaseContainerConsts
 {
-    public static class DatabaseContainerConsts
-    {
-        /// <summary>
-        /// Default value: 128.
-        /// </summary>
-        public static int MaxNameLength { get; set; } = 128;
-    }
+    /// <summary>
+    /// Default value: 128.
+    /// </summary>
+    public static int MaxNameLength { get; set; } = 128;
 }

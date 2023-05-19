@@ -4,17 +4,18 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <RootNamespace />
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftPackageVersion)" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftAspNetCorePackageVersion)" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj" />
       <ProjectReference Include="..\Volo.Abp.AspNetCore.Authentication.OAuth\Volo.Abp.AspNetCore.Authentication.OAuth.csproj" />
+      <ProjectReference Include="..\Volo.Abp.RemoteServices\Volo.Abp.RemoteServices.csproj" />
     </ItemGroup>
 
 </Project>

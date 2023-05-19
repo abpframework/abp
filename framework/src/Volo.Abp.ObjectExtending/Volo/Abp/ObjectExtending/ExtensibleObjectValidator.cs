@@ -6,304 +6,303 @@ using Volo.Abp.Data;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.ObjectExtending
+namespace Volo.Abp.ObjectExtending;
+
+public static class ExtensibleObjectValidator
 {
-    public static class ExtensibleObjectValidator
+    public static void CheckValue(
+        [NotNull] IHasExtraProperties extensibleObject,
+        [NotNull] string propertyName,
+        [CanBeNull] object value)
     {
-        public static void CheckValue(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] string propertyName,
-            [CanBeNull] object value)
+        var validationErrors = GetValidationErrors(
+            extensibleObject,
+            propertyName,
+            value
+        );
+
+        if (validationErrors.Any())
         {
-            var validationErrors = GetValidationErrors(
+            throw new AbpValidationException(validationErrors);
+        }
+    }
+
+    public static bool IsValid(
+        [NotNull] IHasExtraProperties extensibleObject,
+        [CanBeNull] ValidationContext objectValidationContext = null)
+    {
+        return GetValidationErrors(
+            extensibleObject,
+            objectValidationContext
+        ).Any();
+    }
+
+    public static bool IsValid(
+        [NotNull] IHasExtraProperties extensibleObject,
+        [NotNull] string propertyName,
+        [CanBeNull] object value,
+        [CanBeNull] ValidationContext objectValidationContext = null)
+    {
+        return GetValidationErrors(
+            extensibleObject,
+            propertyName,
+            value,
+            objectValidationContext
+        ).Any();
+    }
+
+    [NotNull]
+    public static List<ValidationResult> GetValidationErrors(
+        [NotNull] IHasExtraProperties extensibleObject,
+        [CanBeNull] ValidationContext objectValidationContext = null)
+    {
+        var validationErrors = new List<ValidationResult>();
+
+        AddValidationErrors(
+            extensibleObject,
+            validationErrors,
+            objectValidationContext
+        );
+
+        return validationErrors;
+    }
+
+    [NotNull]
+    public static List<ValidationResult> GetValidationErrors(
+        [NotNull] IHasExtraProperties extensibleObject,
+        [NotNull] string propertyName,
+        [CanBeNull] object value,
+        [CanBeNull] ValidationContext objectValidationContext = null)
+    {
+        var validationErrors = new List<ValidationResult>();
+
+        AddValidationErrors(
+            extensibleObject,
+            validationErrors,
+            propertyName,
+            value,
+            objectValidationContext
+        );
+
+        return validationErrors;
+    }
+
+    public static void AddValidationErrors(
+        [NotNull] IHasExtraProperties extensibleObject,
+        [NotNull] List<ValidationResult> validationErrors,
+        [CanBeNull] ValidationContext objectValidationContext = null)
+    {
+        Check.NotNull(extensibleObject, nameof(extensibleObject));
+        Check.NotNull(validationErrors, nameof(validationErrors));
+
+        if (objectValidationContext == null)
+        {
+            objectValidationContext = new ValidationContext(
                 extensibleObject,
-                propertyName,
-                value
+                null,
+                new Dictionary<object, object>()
             );
-
-            if (validationErrors.Any())
-            {
-                throw new AbpValidationException(validationErrors);
-            }
         }
 
-        public static bool IsValid(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [CanBeNull] ValidationContext objectValidationContext = null)
+        var objectType = ProxyHelper.UnProxy(extensibleObject).GetType();
+
+        var objectExtensionInfo = ObjectExtensionManager.Instance
+            .GetOrNull(objectType);
+
+        if (objectExtensionInfo == null)
         {
-            return GetValidationErrors(
-                extensibleObject,
-                objectValidationContext
-            ).Any();
+            return;
         }
 
-        public static bool IsValid(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] string propertyName,
-            [CanBeNull] object value,
-            [CanBeNull] ValidationContext objectValidationContext = null)
-        {
-            return GetValidationErrors(
-                extensibleObject,
-                propertyName,
-                value,
-                objectValidationContext
-            ).Any();
-        }
+        AddPropertyValidationErrors(
+            extensibleObject,
+            validationErrors,
+            objectValidationContext,
+            objectExtensionInfo
+        );
 
-        [NotNull]
-        public static List<ValidationResult> GetValidationErrors(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [CanBeNull] ValidationContext objectValidationContext = null)
-        {
-            var validationErrors = new List<ValidationResult>();
+        ExecuteCustomObjectValidationActions(
+            extensibleObject,
+            validationErrors,
+            objectValidationContext,
+            objectExtensionInfo
+        );
+    }
 
-            AddValidationErrors(
+    public static void AddValidationErrors(
+        [NotNull] IHasExtraProperties extensibleObject,
+        [NotNull] List<ValidationResult> validationErrors,
+        [NotNull] string propertyName,
+        [CanBeNull] object value,
+        [CanBeNull] ValidationContext objectValidationContext = null)
+    {
+        Check.NotNull(extensibleObject, nameof(extensibleObject));
+        Check.NotNull(validationErrors, nameof(validationErrors));
+        Check.NotNullOrWhiteSpace(propertyName, nameof(propertyName));
+
+        if (objectValidationContext == null)
+        {
+            objectValidationContext = new ValidationContext(
                 extensibleObject,
-                validationErrors,
-                objectValidationContext
+                null,
+                new Dictionary<object, object>()
             );
-
-            return validationErrors;
         }
 
-        [NotNull]
-        public static List<ValidationResult> GetValidationErrors(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] string propertyName,
-            [CanBeNull] object value,
-            [CanBeNull] ValidationContext objectValidationContext = null)
+        var objectType = ProxyHelper.UnProxy(extensibleObject).GetType();
+
+        var objectExtensionInfo = ObjectExtensionManager.Instance
+            .GetOrNull(objectType);
+
+        if (objectExtensionInfo == null)
         {
-            var validationErrors = new List<ValidationResult>();
-
-            AddValidationErrors(
-                extensibleObject,
-                validationErrors,
-                propertyName,
-                value,
-                objectValidationContext
-            );
-
-            return validationErrors;
+            return;
         }
 
-        public static void AddValidationErrors(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] List<ValidationResult> validationErrors,
-            [CanBeNull] ValidationContext objectValidationContext = null)
+        var property = objectExtensionInfo.GetPropertyOrNull(propertyName);
+        if (property == null)
         {
-            Check.NotNull(extensibleObject, nameof(extensibleObject));
-            Check.NotNull(validationErrors, nameof(validationErrors));
+            return;
+        }
 
-            if (objectValidationContext == null)
-            {
-                objectValidationContext = new ValidationContext(
-                    extensibleObject,
-                    null,
-                    new Dictionary<object, object>()
-                );
-            }
+        AddPropertyValidationErrors(
+            extensibleObject,
+            validationErrors,
+            objectValidationContext,
+            property,
+            value
+        );
+    }
 
-            var objectType = ProxyHelper.UnProxy(extensibleObject).GetType();
+    private static void AddPropertyValidationErrors(
+        IHasExtraProperties extensibleObject,
+        List<ValidationResult> validationErrors,
+        ValidationContext objectValidationContext,
+        ObjectExtensionInfo objectExtensionInfo)
+    {
+        var properties = objectExtensionInfo.GetProperties();
+        if (!properties.Any())
+        {
+            return;
+        }
 
-            var objectExtensionInfo = ObjectExtensionManager.Instance
-                .GetOrNull(objectType);
-
-            if (objectExtensionInfo == null)
-            {
-                return;
-            }
-
+        foreach (var property in properties)
+        {
             AddPropertyValidationErrors(
                 extensibleObject,
                 validationErrors,
                 objectValidationContext,
-                objectExtensionInfo
-            );
-
-            ExecuteCustomObjectValidationActions(
-                extensibleObject,
-                validationErrors,
-                objectValidationContext,
-                objectExtensionInfo
-            );
-        }
-
-        public static void AddValidationErrors(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] List<ValidationResult> validationErrors,
-            [NotNull] string propertyName,
-            [CanBeNull] object value,
-            [CanBeNull] ValidationContext objectValidationContext = null)
-        {
-            Check.NotNull(extensibleObject, nameof(extensibleObject));
-            Check.NotNull(validationErrors, nameof(validationErrors));
-            Check.NotNullOrWhiteSpace(propertyName, nameof(propertyName));
-
-            if (objectValidationContext == null)
-            {
-                objectValidationContext = new ValidationContext(
-                    extensibleObject,
-                    null,
-                    new Dictionary<object, object>()
-                );
-            }
-
-            var objectType = ProxyHelper.UnProxy(extensibleObject).GetType();
-
-            var objectExtensionInfo = ObjectExtensionManager.Instance
-                .GetOrNull(objectType);
-
-            if (objectExtensionInfo == null)
-            {
-                return;
-            }
-
-            var property = objectExtensionInfo.GetPropertyOrNull(propertyName);
-            if (property == null)
-            {
-                return;
-            }
-
-            AddPropertyValidationErrors(
-                extensibleObject,
-                validationErrors,
-                objectValidationContext,
                 property,
-                value
+                extensibleObject.GetProperty(property.Name)
             );
         }
+    }
 
-        private static void AddPropertyValidationErrors(
-            IHasExtraProperties extensibleObject,
-            List<ValidationResult> validationErrors,
-            ValidationContext objectValidationContext,
-            ObjectExtensionInfo objectExtensionInfo)
+    private static void AddPropertyValidationErrors(
+        IHasExtraProperties extensibleObject,
+        List<ValidationResult> validationErrors,
+        ValidationContext objectValidationContext,
+        ObjectExtensionPropertyInfo property,
+        object value)
+    {
+        AddPropertyValidationAttributeErrors(
+            extensibleObject,
+            validationErrors,
+            objectValidationContext,
+            property,
+            value
+        );
+
+        ExecuteCustomPropertyValidationActions(
+            extensibleObject,
+            validationErrors,
+            objectValidationContext,
+            property,
+            value
+        );
+    }
+
+    private static void AddPropertyValidationAttributeErrors(
+        IHasExtraProperties extensibleObject,
+        List<ValidationResult> validationErrors,
+        ValidationContext objectValidationContext,
+        ObjectExtensionPropertyInfo property,
+        object value)
+    {
+        var validationAttributes = property.GetValidationAttributes();
+
+        if (!validationAttributes.Any())
         {
-            var properties = objectExtensionInfo.GetProperties();
-            if (!properties.Any())
-            {
-                return;
-            }
-
-            foreach (var property in properties)
-            {
-                AddPropertyValidationErrors(
-                    extensibleObject,
-                    validationErrors,
-                    objectValidationContext,
-                    property,
-                    extensibleObject.GetProperty(property.Name)
-                );
-            }
+            return;
         }
 
-        private static void AddPropertyValidationErrors(
-            IHasExtraProperties extensibleObject,
-            List<ValidationResult> validationErrors,
-            ValidationContext objectValidationContext,
-            ObjectExtensionPropertyInfo property,
-            object value)
+        var propertyValidationContext = new ValidationContext(extensibleObject, objectValidationContext, null)
         {
-            AddPropertyValidationAttributeErrors(
-                extensibleObject,
-                validationErrors,
-                objectValidationContext,
-                property,
-                value
+            DisplayName = property.Name,
+            MemberName = property.Name
+        };
+
+        foreach (var attribute in validationAttributes)
+        {
+            var result = attribute.GetValidationResult(
+                value,
+                propertyValidationContext
             );
 
-            ExecuteCustomPropertyValidationActions(
-                extensibleObject,
-                validationErrors,
-                objectValidationContext,
-                property,
-                value
-            );
-        }
-
-        private static void AddPropertyValidationAttributeErrors(
-            IHasExtraProperties extensibleObject,
-            List<ValidationResult> validationErrors,
-            ValidationContext objectValidationContext,
-            ObjectExtensionPropertyInfo property,
-            object value)
-        {
-            var validationAttributes = property.GetValidationAttributes();
-
-            if (!validationAttributes.Any())
+            if (result != null)
             {
-                return;
-            }
-
-            var propertyValidationContext = new ValidationContext(extensibleObject, objectValidationContext, null)
-            {
-                DisplayName = property.Name,
-                MemberName = property.Name
-            };
-
-            foreach (var attribute in validationAttributes)
-            {
-                var result = attribute.GetValidationResult(
-                    value,
-                    propertyValidationContext
-                );
-
-                if (result != null)
-                {
-                    validationErrors.Add(result);
-                }
+                validationErrors.Add(result);
             }
         }
+    }
 
-        private static void ExecuteCustomPropertyValidationActions(
-            IHasExtraProperties extensibleObject,
-            List<ValidationResult> validationErrors,
-            ValidationContext objectValidationContext,
-            ObjectExtensionPropertyInfo property,
-            object value)
+    private static void ExecuteCustomPropertyValidationActions(
+        IHasExtraProperties extensibleObject,
+        List<ValidationResult> validationErrors,
+        ValidationContext objectValidationContext,
+        ObjectExtensionPropertyInfo property,
+        object value)
+    {
+        if (!property.Validators.Any())
         {
-            if (!property.Validators.Any())
-            {
-                return;
-            }
-
-            var context = new ObjectExtensionPropertyValidationContext(
-                property,
-                extensibleObject,
-                validationErrors,
-                objectValidationContext,
-                value
-            );
-
-            foreach (var validator in property.Validators)
-            {
-                validator(context);
-            }
+            return;
         }
 
-        private static void ExecuteCustomObjectValidationActions(
-            IHasExtraProperties extensibleObject,
-            List<ValidationResult> validationErrors,
-            ValidationContext objectValidationContext,
-            ObjectExtensionInfo objectExtensionInfo)
+        var context = new ObjectExtensionPropertyValidationContext(
+            property,
+            extensibleObject,
+            validationErrors,
+            objectValidationContext,
+            value
+        );
+
+        foreach (var validator in property.Validators)
         {
-            if (!objectExtensionInfo.Validators.Any())
-            {
-                return;
-            }
+            validator(context);
+        }
+    }
 
-            var context = new ObjectExtensionValidationContext(
-                objectExtensionInfo,
-                extensibleObject,
-                validationErrors,
-                objectValidationContext
-            );
+    private static void ExecuteCustomObjectValidationActions(
+        IHasExtraProperties extensibleObject,
+        List<ValidationResult> validationErrors,
+        ValidationContext objectValidationContext,
+        ObjectExtensionInfo objectExtensionInfo)
+    {
+        if (!objectExtensionInfo.Validators.Any())
+        {
+            return;
+        }
 
-            foreach (var validator in objectExtensionInfo.Validators)
-            {
-                validator(context);
-            }
+        var context = new ObjectExtensionValidationContext(
+            objectExtensionInfo,
+            extensibleObject,
+            validationErrors,
+            objectValidationContext
+        );
+
+        foreach (var validator in objectExtensionInfo.Validators)
+        {
+            validator(context);
         }
     }
 }

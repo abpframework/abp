@@ -1,0 +1,26 @@
+{
+  "culture": "el",
+  "texts": {
+    "InternalServerErrorMessage": "Παρουσιάστηκε εσωτερικό σφάλμα κατά το αίτημά σας!",
+    "ValidationErrorMessage": "Το αίτημά σας δεν είναι έγκυρο!",
+    "ValidationNarrativeErrorMessageTitle": "Τα ακόλουθα σφάλματα εντοπίστηκαν κατά την επικύρωση.",
+    "DefaultErrorMessage": "Παρουσιάστηκε σφάλμα!",
+    "DefaultErrorMessageDetail": "Λεπτομέρειες σφάλματος δεν αποστάλθηκαν από τον διακομιστή.",
+    "DefaultErrorMessage401": "Δεν έχετε ταυτοποιηθεί!",
+    "DefaultErrorMessage401Detail": "Θα πρέπει να συνδεθείτε για να εκτελέσετε αυτήν τη λειτουργία.",
+    "DefaultErrorMessage403": "Δεν έχετε εξουσιοδότηση!",
+    "DefaultErrorMessage403Detail": "Η εκτέλεση αυτής της ενέργειας δεν επιτρέπεται!",
+    "DefaultErrorMessage404": "Ο πόρος δεν βρέθηκε!",
+    "DefaultErrorMessage404Detail": "Ο πόρος που ζητήθηκε δεν βρέθηκε στον διακομιστή!",
+    "EntityNotFoundErrorMessage": "Δεν υπάρχει οντότητα {0} με id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Τα δεδομένα που έχετε υποβάλλει έχουν ήδη τροποποιηθεί από άλλον χρήστη/πελάτη. Απορρίψτε τις αλλαγές που κάνατε και δοκιμάστε από την αρχή.",
+    "Error": "Σφάλμα",
+    "UnhandledException": "Απρόσμενη Εξαίρεση!",
+    "401Message": "Μη εξουσιοδοτημένο",
+    "403Message": "Απαγορευμένο",
+    "404Message": "Η σελίδα δεν βρέθηκε",
+    "500Message": "Εσωτερικό Σφάλμα Διακομιστή",
+    "403MessageDetail": "Δεν είστε εξουσιοδοτημένοι να εκτελέσετε αυτήν τη λειτουργία!",
+    "404MessageDetail": "Λυπούμαστε, δεν υπάρχει τίποτα σε αυτή τη διεύθυνση."
+  }
+}

@@ -2,12 +2,11 @@ using System;
 using Volo.Abp.Collections;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.DependencyInjection
-{
-    public interface IOnServiceRegistredContext
-    {
-        ITypeList<IAbpInterceptor> Interceptors { get; }
+namespace Volo.Abp.DependencyInjection;
 
-        Type ImplementationType { get; }
-    }
+public interface IOnServiceRegistredContext
+{
+    ITypeList<IAbpInterceptor> Interceptors { get; }
+
+    Type ImplementationType { get; }
 }

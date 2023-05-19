@@ -19,6 +19,7 @@ There are some **free and open source** application modules developed and mainta
 * [**Feature Management**](Feature-Management.md): Used to persist and manage the [features](../Features.md).
 * **[Identity](Identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
 * [**IdentityServer**](IdentityServer.md): Integrates to IdentityServer4.
+* [**OpenIddict**](OpenIddict.md): Integrates to OpenIddict.
 * [**Permission Management**](Permission-Management.md): Used to persist permissions.
 * **[Setting Management](Setting-Management.md)**: Used to persist and manage the [settings](../Settings.md).
 * [**Tenant Management**](Tenant-Management.md): Manages tenants for a [multi-tenant](../Multi-Tenancy.md) application.

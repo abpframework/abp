@@ -6,7 +6,7 @@ import { PropContributorCallbacks } from '../props';
 export type DisplayNameGeneratorFn = (
   displayName: LocalizableStringDto,
   fallback: LocalizableStringDto,
-) => string;
+) => string | undefined;
 
 export type EntityExtensions = Record<string, EntityExtensionDto>;
 

@@ -3,6 +3,10 @@
   "texts": {
     "Features": "Функциональные возможности",
     "NoFeatureFoundMessage": "Нет доступных функциональных возможностей.",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Недопустимое значение функции {0}!"
+    "ManageHostFeatures": "Управление функциями хоста",
+    "Permission:FeatureManagement": "Управление функциями",
+    "Permission:FeatureManagement.ManageHostFeatures": "Управление функциями хоста",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Недопустимое значение функции {0}!",
+		"Menu:FeatureManagement": "Управление функциями"
   }
 }

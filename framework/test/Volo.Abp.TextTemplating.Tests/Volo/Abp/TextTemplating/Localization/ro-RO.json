@@ -1,0 +1,7 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "HelloText": "Bună ziua {0}",
+    "HowAreYou": "ce mai faci?"
+  }
+}

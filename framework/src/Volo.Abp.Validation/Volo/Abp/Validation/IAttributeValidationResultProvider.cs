@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Volo.Abp.Validation
+namespace Volo.Abp.Validation;
+
+public interface IAttributeValidationResultProvider
 {
-    public interface IAttributeValidationResultProvider
-    {
-        ValidationResult GetOrDefault(ValidationAttribute validationAttribute, object validatingObject, ValidationContext validationContext);
-    }
+    ValidationResult GetOrDefault(ValidationAttribute validationAttribute, object validatingObject, ValidationContext validationContext);
 }

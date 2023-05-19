@@ -1,12 +1,11 @@
 using Volo.Abp.Testing;
 
-namespace Volo.Abp.MongoDB
+namespace Volo.Abp.MongoDB;
+
+public abstract class MongoDbTestBase : AbpIntegratedTest<AbpMongoDbTestModule>
 {
-    public abstract class MongoDbTestBase : AbpIntegratedTest<AbpMongoDbTestModule>
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+        options.UseAutofac();
     }
 }

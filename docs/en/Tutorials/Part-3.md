@@ -13,7 +13,7 @@ In this tutorial series, you will build an ABP based web application named `Acme
 * **{{DB_Value}}** as the ORM provider. 
 * **{{UI_Value}}** as the UI Framework.
 
-This tutorial is organized as the following parts;
+This tutorial is organized as the following parts:
 
 - [Part 1: Creating the server side](Part-1.md)
 - [Part 2: The book list page](Part-2.md)
@@ -34,10 +34,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
-
-> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
-> `git config --system core.longpaths true`
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -51,19 +48,19 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 ## Creating a New Book
 
-In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like in the image below:
+In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like the image below:
 
-![bookstore-create-dialog](images/bookstore-create-dialog-2.png)
+![bookstore-create-dialog](./images/bookstore-create-dialog-3.png)
 
 ### Create the Modal Form
 
-Create a new razor page, named `CreateModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project.
+Create a new razor page named `CreateModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project.
 
-![bookstore-add-create-dialog](images/bookstore-add-create-dialog-v2.png)
+![bookstore-add-create-dialog](./images/bookstore-add-create-dialog-v2.png)
 
 #### CreateModal.cshtml.cs
 
-Open the `CreateModal.cshtml.cs` file (`CreateModalModel` class) and replace with the following code:
+Open the `CreateModal.cshtml.cs` file (`CreateModalModel` class) and replace it with the following code:
 
 ````C#
 using System.Threading.Tasks;
@@ -98,7 +95,7 @@ namespace Acme.BookStore.Web.Pages.Books
 }
 ````
 
-* This class is derived from the `BookStorePageModel` instead of standard `PageModel`. `BookStorePageModel` indirectly inherits the `PageModel` and adds some common properties & methods that can be shared in your page model classes.
+* This class is derived from the `BookStorePageModel` instead of the standard `PageModel`. `BookStorePageModel` indirectly inherits the `PageModel` and adds some common properties & methods that can be shared in your page model classes.
 * `[BindProperty]` attribute on the `Book` property binds post request data to this property.
 * This class simply injects the `IBookAppService` in the constructor and calls the `CreateAsync` method in the `OnPostAsync` handler.
 * It creates a new `CreateUpdateBookDto` object in the `OnGet` method. ASP.NET Core can work without creating a new instance like that. However, it doesn't create an instance for you and if your class has some default value assignments or code execution in the class constructor, they won't work. For this case, we set default values for some of the `CreateUpdateBookDto` properties.
@@ -129,7 +126,7 @@ Open the `CreateModal.cshtml` file and paste the code below:
 </abp-dynamic-form>
 ````
 
-* This modal uses `abp-dynamic-form` [tag helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) to automatically create the form from the  `CreateBookViewModel` model class.
+* This modal uses `abp-dynamic-form` [tag helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) to automatically create the form from the `CreateUpdateBookDto` model class.
 * `abp-model` attribute indicates the model object where it's the `Book` property in this case.
 * `abp-form-content` tag helper is a placeholder to render the form controls (it is optional and needed only if you have added some other content in the `abp-dynamic-form` tag, just like in this page).
 
@@ -145,7 +142,7 @@ Open the `Pages/Books/Index.cshtml` and set the content of `abp-card-header` tag
         <abp-column size-md="_6">
             <abp-card-title>@L["Books"]</abp-card-title>
         </abp-column>
-        <abp-column size-md="_6" class="text-right">
+        <abp-column size-md="_6" class="text-end">
             <abp-button id="NewBookButton"
                         text="@L["NewBook"].Value"
                         icon="plus"
@@ -155,7 +152,7 @@ Open the `Pages/Books/Index.cshtml` and set the content of `abp-card-header` tag
 </abp-card-header>
 ````
 
-The final content of the `Index.cshtml` is shown below:
+The final content of `Index.cshtml` is shown below:
 
 ````html
 @page
@@ -175,7 +172,7 @@ The final content of the `Index.cshtml` is shown below:
             <abp-column size-md="_6">
                 <abp-card-title>@L["Books"]</abp-card-title>
             </abp-column>
-            <abp-column size-md="_6" class="text-right">
+            <abp-column size-md="_6" class="text-end">
                 <abp-button id="NewBookButton"
                             text="@L["NewBook"].Value"
                             icon="plus"
@@ -191,9 +188,9 @@ The final content of the `Index.cshtml` is shown below:
 
 This adds a new button called **New book** to the **top-right** of the table:
 
-![bookstore-new-book-button](images/bookstore-new-book-button-2.png)
+![bookstore-new-book-button](./images/bookstore-new-book-button-3.png)
 
-Open the `Pages/Books/Index.js` and add the following code just after the `Datatable` configuration:
+Open the `Pages/Books/Index.js` file and add the following code right after the `Datatable` configuration:
 
 ````js
 var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
@@ -208,11 +205,11 @@ $('#NewBookButton').click(function (e) {
 });
 ````
 
-* `abp.ModalManager` is a helper class to manage modals in the client side. It internally uses Twitter Bootstrap's standard modal, but abstracts many details by providing a simple API.
+* `abp.ModalManager` is a helper class to manage modals on the client side. It internally uses Twitter Bootstrap's standard modal, but abstracts many details by providing a simple API.
 * `createModal.onResult(...)` used to refresh the data table after creating a new book.
 * `createModal.open();` is used to open the model to create a new book.
 
-The final content of the `Index.js` should be like that:
+The final content of the `Index.js` file should be like this:
 
 ````js
 $(function () {
@@ -235,19 +232,13 @@ $(function () {
                     title: l('Type'),
                     data: "type",
                     render: function (data) {
-                        return l('Enum:BookType:' + data);
+                        return l('Enum:BookType.' + data);
                     }
                 },
                 {
                     title: l('PublishDate'),
                     data: "publishDate",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString();
-                    }
+                    dataFormat: "datetime"
                 },
                 {
                     title: l('Price'),
@@ -255,13 +246,7 @@ $(function () {
                 },
                 {
                     title: l('CreationTime'), data: "creationTime",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
-                    }
+                    dataFormat: "datetime"
                 }
             ]
         })
@@ -286,11 +271,11 @@ Now, you can **run the application** and add some new books using the new modal 
 
 Create a new razor page, named `EditModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project:
 
-![bookstore-add-edit-dialog](images/bookstore-add-edit-dialog.png)
+![bookstore-add-edit-dialog](./images/bookstore-add-edit-dialog.png)
 
 ### EditModal.cshtml.cs
 
-Open the `EditModal.cshtml.cs` file (`EditModalModel` class) and replace with the following code:
+Open the `EditModal.cshtml.cs` file (`EditModalModel` class) and replace it with the following code:
 
 ````csharp
 using System;
@@ -298,58 +283,56 @@ using System.Threading.Tasks;
 using Acme.BookStore.Books;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Acme.BookStore.Web.Pages.Books
+namespace Acme.BookStore.Web.Pages.Books;
+
+public class EditModalModel : BookStorePageModel
 {
-    public class EditModalModel : BookStorePageModel
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public Guid Id { get; set; }
+
+    [BindProperty]
+    public CreateUpdateBookDto Book { get; set; }
+
+    private readonly IBookAppService _bookAppService;
+
+    public EditModalModel(IBookAppService bookAppService)
     {
-        [HiddenInput]
-        [BindProperty(SupportsGet = true)]
-        public Guid Id { get; set; }
+        _bookAppService = bookAppService;
+    }
 
-        [BindProperty]
-        public CreateUpdateBookDto Book { get; set; }
+    public async Task OnGetAsync()
+    {
+        var bookDto = await _bookAppService.GetAsync(Id);
+        Book = ObjectMapper.Map<BookDto, CreateUpdateBookDto>(bookDto);
+    }
 
-        private readonly IBookAppService _bookAppService;
-
-        public EditModalModel(IBookAppService bookAppService)
-        {
-            _bookAppService = bookAppService;
-        }
-
-        public async Task OnGetAsync()
-        {
-            var bookDto = await _bookAppService.GetAsync(Id);
-            Book = ObjectMapper.Map<BookDto, CreateUpdateBookDto>(bookDto);
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            await _bookAppService.UpdateAsync(Id, Book);
-            return NoContent();
-        }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        await _bookAppService.UpdateAsync(Id, Book);
+        return NoContent();
     }
 }
 ````
 
-* `[HiddenInput]` and `[BindProperty]` are standard ASP.NET Core MVC attributes. `SupportsGet` is used to be able to get `Id` value from query string parameter of the request.
-* In the `OnGetAsync` method, we get `BookDto ` from the `BookAppService` and this is being mapped to the DTO object `CreateUpdateBookDto`.
+* `[HiddenInput]` and `[BindProperty]` are standard ASP.NET Core MVC attributes. `SupportsGet` is used to be able to get the `Id` value from the query string parameter of the request.
+* In the `OnGetAsync` method, we get the `BookDto` from the `BookAppService` and this is being mapped to the DTO object `CreateUpdateBookDto`.
 * The `OnPostAsync` uses `BookAppService.UpdateAsync(...)` to update the entity.
 
 ### Mapping from BookDto to CreateUpdateBookDto
 
-To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mapping. To do this, open the `BookStoreWebAutoMapperProfile.cs` in the `Acme.BookStore.Web` project and change it as shown below:
+To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mapping. To do this, open the `BookStoreWebAutoMapperProfile.cs` file in the `Acme.BookStore.Web` project and change it as shown below:
 
 ````csharp
 using AutoMapper;
 
-namespace Acme.BookStore.Web
+namespace Acme.BookStore.Web;
+
+public class BookStoreWebAutoMapperProfile : Profile
 {
-    public class BookStoreWebAutoMapperProfile : Profile
+    public BookStoreWebAutoMapperProfile()
     {
-        public BookStoreWebAutoMapperProfile()
-        {
-            CreateMap<BookDto, CreateUpdateBookDto>();
-        }
+        CreateMap<BookDto, CreateUpdateBookDto>();
     }
 }
 ````
@@ -385,16 +368,16 @@ Replace `EditModal.cshtml` content with the following content:
 </abp-dynamic-form>
 ````
 
-This page is very similar to the `CreateModal.cshtml`, except:
+This page is very similar to `CreateModal.cshtml`, except:
 
-* It includes an `abp-input` for the `Id` property to store `Id` of the editing book (which is a hidden input).
+* It includes an `abp-input` for the `Id` property to store the `Id` of the editing book (which is a hidden input).
 * It uses `Books/EditModal` as the post URL.
 
 ### Add "Actions" Dropdown to the Table
 
 We will add a dropdown button to the table named *Actions*.
 
-Open the `Pages/Books/Index.js` and replace the content as below:
+Open the `Pages/Books/Index.js` file and replace the content as below:
 
 ````js
 $(function () {
@@ -433,19 +416,13 @@ $(function () {
                     title: l('Type'),
                     data: "type",
                     render: function (data) {
-                        return l('Enum:BookType:' + data);
+                        return l('Enum:BookType.' + data);
                     }
                 },
                 {
                     title: l('PublishDate'),
                     data: "publishDate",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString();
-                    }
+                    dataFormat: "datetime"
                 },
                 {
                     title: l('Price'),
@@ -453,13 +430,7 @@ $(function () {
                 },
                 {
                     title: l('CreationTime'), data: "creationTime",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
-                    }
+                    dataFormat: "datetime"
                 }
             ]
         })
@@ -482,18 +453,20 @@ $(function () {
 
 * Added a new `ModalManager` named `editModal` to open the edit modal dialog.
 * Added a new column at the beginning of the `columnDefs` section. This column is used for the "*Actions*" dropdown button.
-* "*Edit*" action simply calls `editModal.open()` to open the edit dialog.
-* `editModal.onResult(...)`  callback refreshes the data table when you close the edit modal.
+* The "*Edit*" action simply calls `editModal.open()` to open the edit dialog.
+* The `editModal.onResult(...)` callback refreshes the data table when you close the edit modal.
 
 You can run the application and edit any book by selecting the edit action on a book.
 
 The final UI looks as below:
 
-![bookstore-books-table-actions](images/bookstore-edit-button-2.png)
+![bookstore-books-table-actions](./images/bookstore-edit-button-3.png)
+
+> Notice that you don't see the "Actions" button in the figure below. Instead, you see an "Edit" button. ABP is smart enough to show a single simple button instead of a actions dropdown button when the dropdown has only a single item. After the next section, it will turn to a drop down button.
 
 ## Deleting a Book
 
-Open the `Pages/Books/Index.js` and add a new item to the `rowAction` `items`:
+Open the `Pages/Books/Index.js` file and add a new item to the `rowAction` `items`:
 
 ````js
 {
@@ -512,8 +485,8 @@ Open the `Pages/Books/Index.js` and add a new item to the `rowAction` `items`:
 }
 ````
 
-* `confirmMessage` option is used to ask a confirmation question before executing the `action`.
-* `acme.bookStore.books.book.delete(...)` method makes an AJAX request to the server to delete a book.
+* The `confirmMessage` option is used to ask a confirmation question before executing the `action`.
+* The `acme.bookStore.books.book.delete(...)` method makes an AJAX request to the server to delete a book.
 * `abp.notify.info()` shows a notification after the delete operation.
 
 Since we've used two new localization texts (`BookDeletionConfirmationMessage` and `SuccessfullyDeleted`) you need to add these to the localization file (`en.json` under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project):
@@ -581,19 +554,13 @@ $(function () {
                     title: l('Type'),
                     data: "type",
                     render: function (data) {
-                        return l('Enum:BookType:' + data);
+                        return l('Enum:BookType.' + data);
                     }
                 },
                 {
                     title: l('PublishDate'),
                     data: "publishDate",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString();
-                    }
+                    dataFormat: "datetime"
                 },
                 {
                     title: l('Price'),
@@ -601,13 +568,7 @@ $(function () {
                 },
                 {
                     title: l('CreationTime'), data: "creationTime",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
-                    }
+                    dataFormat: "datetime"
                 }
             ]
         })
@@ -687,12 +648,12 @@ Open `/src/app/book/book.component.html` and make the following changes:
       <div class="col col-md-6">
         <h5 class="card-title">{%{{{ '::Menu:Books' | abpLocalization }}}%}</h5>
       </div>        
-      <div class="text-right col col-md-6">
+      <div class="text-end col col-md-6">
           
         <!-- Add the "new book" button here -->
-        <div class="text-lg-right pt-2">
+        <div class="text-lg-end pt-2">
           <button id="create" class="btn btn-primary" type="button" (click)="createBook()">
-            <i class="fa fa-plus mr-1"></i>
+            <i class="fa fa-plus me-1"></i>
             <span>{%{{{ "::NewBook" | abpLocalization }}}%}</span>
           </button>
         </div>
@@ -721,12 +682,12 @@ Open `/src/app/book/book.component.html` and make the following changes:
 </abp-modal>
 ```
 
-* Added `New book` button to the card header..
+* Added a `New book` button to the card header..
 * Added the `abp-modal` which renders a modal to allow user to create a new book. `abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
 
-You can open your browser and click **New book** button to see the new modal.
+You can open your browser and click the **New book** button to see the new modal.
 
-![Empty modal for new book](images/bookstore-empty-new-book-modal.png)
+![Empty modal for new book](./images/bookstore-empty-new-book-modal-2.png)
 
 ### Create a Reactive Form
 
@@ -801,36 +762,36 @@ export class BookComponent implements OnInit {
 ```
 
 * Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
-* Added `form: FormGroup` property.
-* Added `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
+* Added a `form: FormGroup` property.
+* Added a `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
 * Injected `FormBuilder` into the constructor. [FormBuilder](https://angular.io/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate needed to build complex forms.
-* Added `buildForm` method to the end of the file and executed  the `buildForm()` in the `createBook` method.
-* Added `save` method.
+* Added a `buildForm` method to the end of the file and executed  the `buildForm()` in the `createBook` method.
+* Added a `save` method.
 
 Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </ng-template>`  with the following code part:
 
 ```html
 <ng-template #abpBody>
   <form [formGroup]="form" (ngSubmit)="save()">
-    <div class="form-group">
+    <div class="mt-2">
       <label for="book-name">Name</label><span> * </span>
       <input type="text" id="book-name" class="form-control" formControlName="name" autofocus />
     </div>
 
-    <div class="form-group">
+    <div class="mt-2">
       <label for="book-price">Price</label><span> * </span>
       <input type="number" id="book-price" class="form-control" formControlName="price" />
     </div>
 
-    <div class="form-group">
+    <div class="mt-2">
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="type.value" *ngFor="let type of bookTypes"> {%{{{ type.key }}}%}</option>
+        <option [ngValue]="type.value" *ngFor="let type of bookTypes"> {%{{{ '::Enum:BookType.' + type.value | abpLocalization }}}%}</option>
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="mt-2">
       <label>Publish date</label><span> * </span>
       <input
         #datepicker="ngbDatepicker"
@@ -863,7 +824,7 @@ Also replace `<ng-template #abpFooter> </ng-template>` with the following code p
 
 ### Datepicker
 
-We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component. So, need to arrange dependencies related to this component.
+We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component. So, we need to arrange the dependencies related to this component.
 
 Open `/src/app/book/book.module.ts` and replace the content as below:
 
@@ -959,11 +920,11 @@ export class BookComponent implements OnInit {
 ```
 
 * Imported ` NgbDateNativeAdapter` and `NgbDateAdapter`.
-* We added a new provider `NgbDateAdapter` that converts Datepicker value to `Date` type. See the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
+* We added a new provider `NgbDateAdapter` that converts the Datepicker value to `Date` type. Check out the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
 
 Now, you can open your browser to see the changes:
 
-![Save button to the modal](images/bookstore-new-book-form-v2.png)
+![Save button to the modal](./images/bookstore-new-book-form-v3.png)
 
 ## Updating a Book
 
@@ -1054,14 +1015,14 @@ export class BookComponent implements OnInit {
 ```
 
 * We declared a variable named `selectedBook` as `BookDto`.
-* We added `editBook`  method. This method fetches the book with the given `id` and sets it to `selectedBook` object.
+* We added an `editBook`  method. This method fetches the book with the given `id` and sets it to `selectedBook` object.
 * We replaced the `buildForm` method so that it creates the form with the `selectedBook` data.
 * We replaced the `createBook` method so it sets `selectedBook` to an empty object.
 * We changed the `save` method to handle both of create and update operations.
 
 ### Add "Actions" Dropdown to the Table
 
-Open the `/src/app/book/book.component.html`  and add the following `ngx-datatable-column` definition as the first column in the `ngx-datatable`:
+Open `/src/app/book/book.component.html`  and add the following `ngx-datatable-column` definition as the first column in the `ngx-datatable`:
 
 ```html
 <ngx-datatable-column
@@ -1077,7 +1038,7 @@ Open the `/src/app/book/book.component.html`  and add the following `ngx-datata
         aria-haspopup="true"
         ngbDropdownToggle
       >
-        <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
+        <i class="fa fa-cog me-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
       </button>
       <div ngbDropdownMenu>
         <button ngbDropdownItem (click)="editBook(row.id)">
@@ -1091,7 +1052,7 @@ Open the `/src/app/book/book.component.html`  and add the following `ngx-datata
 
 Added an "Actions" dropdown as the first column of the table that is shown below:
 
-![Action buttons](images/bookstore-actions-buttons.png)
+![Action buttons](./images/bookstore-actions-buttons-2.png)
 
 Also, change the `ng-template #abpHeader` section as shown below:
 
@@ -1101,11 +1062,11 @@ Also, change the `ng-template #abpHeader` section as shown below:
 </ng-template>
 ```
 
-This template will show **Edit** text for edit record operation, **New Book** for new record operation in the title.
+This template will show the **Edit** text for edit record operation, **New Book** for new record operation in the title.
 
 ## Deleting a Book
 
-Open the `/src/app/book/book.component.ts` and inject the `ConfirmationService`.
+Open the `/src/app/book/book.component.ts` file and inject the `ConfirmationService`.
 
 Replace the constructor as below:
 
@@ -1137,7 +1098,7 @@ delete(id: string) {
 * We injected `ConfirmationService` to the constructor.
 * Added a `delete` method.
 
-> See the [Confirmation Popup documentation](../UI/Angular/Confirmation-Service) for more about this service.
+> Check out the [Confirmation Popup documentation](../UI/Angular/Confirmation-Service) for more about this service.
 
 ### Add a Delete Button
 
@@ -1155,11 +1116,11 @@ Open `/src/app/book/book.component.html` and modify the `ngbDropdownMenu` to add
 
 The final actions dropdown UI looks like below:
 
-![bookstore-final-actions-dropdown](images/bookstore-final-actions-dropdown.png)
+![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown-2.png)
 
 Clicking the "Delete" action calls the `delete` method which then shows a confirmation popup as shown below:
 
-![bookstore-confirmation-popup](images/bookstore-confirmation-popup.png)
+![bookstore-confirmation-popup](./images/bookstore-confirmation-popup-2.png)
 
 {{end}}
 
@@ -1169,7 +1130,7 @@ Clicking the "Delete" action calls the `delete` method which then shows a confir
 
 In this section, you will learn how to create a new modal dialog form to create a new book. Since we've inherited from the `AbpCrudPageBase`, we only need to develop the view part.
 
-### Add "New Button" Button
+### Add a "New Button" Button
 
 Open the `Books.razor` and replace the `<CardHeader>` section with the following code:
 
@@ -1189,9 +1150,9 @@ Open the `Books.razor` and replace the `<CardHeader>` section with the following
 
 This will change the card header by adding a "New book" button to the right side:
 
-![blazor-add-book-button](images/blazor-add-book-button.png)
+![blazor-add-book-button](./images/blazor-add-book-button-2.png)
 
-Now, we can add a modal that will be opened when we click to the button.
+Now, we can add a modal that will be opened when we click the button.
 
 ### Book Creation Modal
 
@@ -1224,7 +1185,7 @@ Open the `Books.razor` and add the following code to the end of the page:
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{bookTypeValue}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1259,15 +1220,15 @@ This code requires a service; Inject the `AbpBlazorMessageLocalizerHelper<T>` at
 ````
 
 * The form implements validation and the `AbpBlazorMessageLocalizerHelper` is used to simply localize the validation messages.
-* `CreateModal` object, `CloseCreateModalAsync` and `CreateEntityAsync` method are defined by the base class. See the [Blazorise documentation](https://blazorise.com/docs/) if you want to understand the `Modal` and the other components.
+* The `CreateModal` object, `CloseCreateModalAsync` and `CreateEntityAsync` methods are defined by the base class. Check out the [Blazorise documentation](https://blazorise.com/docs/) if you want to understand the `Modal` and the other components.
 
 That's all. Run the application and try to add a new book:
 
-![blazor-new-book-modal](images/blazor-new-book-modal.png)
+![blazor-new-book-modal](./images/blazor-new-book-modal-2.png)
 
 ## Updating a Book
 
-Editing a books is similar to the creating a new book.
+Editing a book is similar to creating a new book.
 
 ### Actions Dropdown
 
@@ -1287,9 +1248,9 @@ Open the `Books.razor` and add the following `DataGridEntityActionsColumn` secti
 
 * `OpenEditModalAsync` is defined in the base class which takes the entity (book) to edit.
 
-`DataGridEntityActionsColumn` component is used to show an "Actions" dropdown for each row in the `DataGrid`.  `DataGridEntityActionsColumn` shows a **single button** instead of a dropdown if there is only one available action inside it:
+The `DataGridEntityActionsColumn` component is used to show an "Actions" dropdown for each row in the `DataGrid`.  The `DataGridEntityActionsColumn` shows a **single button** instead of a dropdown if there is only one available action inside it:
 
-![blazor-edit-book-action](images/blazor-edit-book-action-2.png)
+![blazor-edit-book-action](./images/blazor-edit-book-action-3.png)
 
 ### Edit Modal
 
@@ -1322,7 +1283,7 @@ We can now define a modal to edit the book. Add the following code to the end of
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{bookTypeValue}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1360,14 +1321,13 @@ Open the `BookStoreBlazorAutoMapperProfile` inside the `Acme.BookStore.Blazor` p
 using Acme.BookStore.Books;
 using AutoMapper;
 
-namespace Acme.BookStore.Blazor
+namespace Acme.BookStore.Blazor;
+
+public class BookStoreBlazorAutoMapperProfile : Profile
 {
-    public class BookStoreBlazorAutoMapperProfile : Profile
+    public BookStoreBlazorAutoMapperProfile()
     {
-        public BookStoreBlazorAutoMapperProfile()
-        {
-            CreateMap<BookDto, CreateUpdateBookDto>();
-        }
+        CreateMap<BookDto, CreateUpdateBookDto>();
     }
 }
 ````
@@ -1378,13 +1338,13 @@ namespace Acme.BookStore.Blazor
 
 You can now run the application and try to edit a book.
 
-![blazor-edit-book-modal](images/blazor-edit-book-modal.png)
+![blazor-edit-book-modal](./images/blazor-edit-book-modal-2.png)
 
 > Tip: Try to leave the *Name* field empty and submit the form to show the validation error message.
 
 ## Deleting a Book
 
-Open the `Books.razor` page and add the following `EntityAction` under the "Edit" action inside the `EntityActions`:
+Open the `Books.razor` page and add the following `EntityAction` code under the "Edit" action inside `EntityActions`:
 
 ````xml
 <EntityAction TItem="BookDto"
@@ -1399,13 +1359,13 @@ Open the `Books.razor` page and add the following `EntityAction` under the "Edit
 
 The "Actions" button becomes a dropdown since it has two actions now:
 
-![blazor-edit-book-action](images/blazor-delete-book-action.png)
+![blazor-delete-book-action](./images/blazor-delete-book-action-2.png)
 
 Run the application and try to delete a book.
 
 ## Full CRUD UI Code
 
-Here the complete code to create the book management CRUD page, that has been developed in the last two parts:
+Here's the complete code to create the book management CRUD page, that has been developed in the last two parts:
 
 ````xml
 @page "/books"
@@ -1459,7 +1419,7 @@ Here the complete code to create the book management CRUD page, that has been de
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType:{(int) context.Type}"]
+                        @L[$"Enum:BookType.{context.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -1511,7 +1471,7 @@ Here the complete code to create the book management CRUD page, that has been de
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{bookTypeValue}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1564,7 +1524,7 @@ Here the complete code to create the book management CRUD page, that has been de
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
-                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                    @L[$"Enum:BookType.{bookTypeValue}"]
                                 </SelectItem>
                             }
                         </Select>
@@ -1596,4 +1556,4 @@ Here the complete code to create the book management CRUD page, that has been de
 
 ## The Next Part
 
-See the [next part](Part-4.md) of this tutorial.
+Check out the [next part](Part-4.md) of this tutorial.

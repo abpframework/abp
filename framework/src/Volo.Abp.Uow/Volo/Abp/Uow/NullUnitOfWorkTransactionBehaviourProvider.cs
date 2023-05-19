@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Uow
+namespace Volo.Abp.Uow;
+
+public class NullUnitOfWorkTransactionBehaviourProvider : IUnitOfWorkTransactionBehaviourProvider, ISingletonDependency
 {
-    public class NullUnitOfWorkTransactionBehaviourProvider : IUnitOfWorkTransactionBehaviourProvider, ISingletonDependency
-    {
-        public bool? IsTransactional => null;
-    }
+    public bool? IsTransactional => null;
 }

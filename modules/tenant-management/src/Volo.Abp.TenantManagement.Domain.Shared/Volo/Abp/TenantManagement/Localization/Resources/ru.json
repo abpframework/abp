@@ -1,6 +1,7 @@
 {
   "culture": "ru",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Имя арендатора уже существует: {Name}",
     "Menu:TenantManagement": "Управление арендаторами",
     "Tenants": "Арендаторы",
     "NewTenant": "Новый арендатор",
@@ -15,6 +16,8 @@
     "Permission:Edit": "Редактировать",
     "Permission:Delete": "Удалить",
     "Permission:ManageConnectionStrings": "Управление строками подключения",
-    "Permission:ManageFeatures": "Управление функциями"
+    "Permission:ManageFeatures": "Управление функциями",
+    "DisplayName:AdminEmailAddress": "Адрес электронной почты администратора",
+    "DisplayName:AdminPassword": "Пароль администратора"
   }
 }

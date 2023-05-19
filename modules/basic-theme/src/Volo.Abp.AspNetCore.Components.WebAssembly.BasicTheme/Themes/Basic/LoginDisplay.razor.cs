@@ -6,71 +6,61 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.JSInterop;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
+namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic;
+
+public partial class LoginDisplay : IDisposable
 {
-    public partial class LoginDisplay : IDisposable
+    [Inject]
+    protected IMenuManager MenuManager { get; set; }
+
+    [Inject]
+    protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; set; }
+
+    protected ApplicationMenu Menu { get; set; }
+
+    protected async override Task OnInitializedAsync()
     {
-        [Inject]
-        protected IMenuManager MenuManager { get; set; }
+        Menu = await MenuManager.GetAsync(StandardMenus.User);
 
-        [CanBeNull]
-        protected AuthenticationStateProvider AuthenticationStateProvider;
+        Navigation.LocationChanged += OnLocationChanged;
 
-        [CanBeNull]
-        protected SignOutSessionStateManager SignOutManager;
+        ApplicationConfigurationChangedService.Changed += ApplicationConfigurationChanged;
+    }
 
-        protected ApplicationMenu Menu { get; set; }
-        
-        protected override async Task OnInitializedAsync()
+    protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async void ApplicationConfigurationChanged()
+    {
+        Menu = await MenuManager.GetAsync(StandardMenus.User);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+        ApplicationConfigurationChangedService.Changed -= ApplicationConfigurationChanged;
+    }
+
+    private async Task NavigateToAsync(string uri, string target = null)
+    {
+        if (target == "_blank")
         {
-            Menu = await MenuManager.GetAsync(StandardMenus.User);
-
-            Navigation.LocationChanged += OnLocationChanged;
-
-            LazyGetService(ref AuthenticationStateProvider);
-            LazyGetService(ref SignOutManager);
-
-            if (AuthenticationStateProvider != null)
-            {
-                AuthenticationStateProvider.AuthenticationStateChanged += async (task) =>
-                {
-                    Menu = await MenuManager.GetAsync(StandardMenus.User);
-                    await InvokeAsync(StateHasChanged);
-                };
-            }
+            await JsRuntime.InvokeVoidAsync("open", uri, target);
         }
-
-        protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
+        else
         {
-            InvokeAsync(StateHasChanged);
+            Navigation.NavigateTo(uri);
         }
+    }
 
-        public void Dispose()
-        {
-            Navigation.LocationChanged -= OnLocationChanged;
-        }
-        
-        private async Task NavigateToAsync(string uri, string target = null)
-        {
-            if (target == "_blank")
-            {
-                await JsRuntime.InvokeVoidAsync("open", uri, target);
-            }
-            else
-            {
-                Navigation.NavigateTo(uri);
-            }
-        }
-
-        private async Task BeginSignOut()
-        {
-            if (SignOutManager != null)
-            {
-                await SignOutManager.SetSignOutState();
-                await NavigateToAsync("authentication/logout");
-            }
-        }
+    private void BeginSignOut()
+    {
+        Navigation.NavigateToLogout("authentication/logout");
     }
 }

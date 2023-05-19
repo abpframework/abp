@@ -1,6 +1,12 @@
-# CMS Kit: Pages
+# CMS Kit: Menus
 
 CMS Kit Menu system allows to manage public menus dynamically.
+
+## Enabling the Menu Feature
+
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+
+> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
 ## The User Interface
 
@@ -20,21 +26,17 @@ Menus page is used to manage dynamic public menus in the system.
 
 ![cms-kit-menus-page](../../images/cmskit-module-menus-page.png)
 
-
-
-Created menus will be visible on public site.
+The created menu items will be visible on the public-web side, as shown below:
 
 ![cms-kit-public-menus](../../images//cmskit-module-menus-public.png)
 
-# Internals
+## Internals
 
-## Domain Layer
+### Domain Layer
 
 #### Aggregates
 
 This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
-
-##### Menus
 
 - `MenuItem` (aggregate root): A Menu Item presents a single node at menu tree.
 

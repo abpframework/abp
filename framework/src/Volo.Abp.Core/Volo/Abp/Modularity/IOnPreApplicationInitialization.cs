@@ -1,9 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 
-namespace Volo.Abp.Modularity
+namespace Volo.Abp.Modularity;
+
+public interface IOnPreApplicationInitialization
 {
-    public interface IOnPreApplicationInitialization
-    {
-        void OnPreApplicationInitialization([NotNull] ApplicationInitializationContext context);
-    }
+    Task OnPreApplicationInitializationAsync([NotNull] ApplicationInitializationContext context);
+
+    void OnPreApplicationInitialization([NotNull] ApplicationInitializationContext context);
 }

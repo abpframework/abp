@@ -4,7 +4,7 @@ ABP Framework defines a set of **tag helper components** to simply the user inte
 
 ## Bootstrap Component Wrappers
 
-Most of the tag helpers are [Bootstrap](https://getbootstrap.com/) (v4+) wrappers. Coding bootstrap is not so easy, not so type-safe and contains too much repetitive HTML tags. ABP Tag Helpers makes it **easier** and **type safe**.
+Most of the tag helpers are [Bootstrap](https://getbootstrap.com/) (v5+) wrappers. Coding bootstrap is not so easy, not so type-safe and contains too much repetitive HTML tags. ABP Tag Helpers makes it **easier** and **type safe**.
 
 We don't aim to wrap bootstrap components 100%. Writing **native bootstrap style code** is still possible (actually, tag helpers generates native bootstrap code in the end), but we suggest to use the tag helpers wherever possible.
 

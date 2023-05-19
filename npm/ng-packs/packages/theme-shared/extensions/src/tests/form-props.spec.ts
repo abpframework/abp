@@ -106,13 +106,13 @@ describe('FormProp', () => {
     expect(prop.displayName).toBe(options.displayName);
     expect(prop.permission).toBe(options.permission);
     expect(prop.visible()).toBe(options.visible());
-    expect(prop.asyncValidators()).toEqual(options.asyncValidators());
-    expect(prop.validators()).toEqual(options.validators());
+    expect(prop.asyncValidators(null)).toEqual(options.asyncValidators());
+    expect(prop.validators(null)).toEqual(options.validators());
     expect(prop.disabled()).toBe(options.disabled());
     expect(prop.readonly()).toBe(options.readonly());
     expect(prop.autocomplete).toBe(options.autocomplete);
     expect(prop.defaultValue).toBe(options.defaultValue);
-    expect(prop.options()).toBe(options.options());
+    expect(prop.options(null)).toBe(options.options());
     expect(prop.id).toBe(options.id);
   });
 
@@ -129,8 +129,8 @@ describe('FormProp', () => {
     expect(prop.displayName).toBe(options.name);
     expect(prop.permission).toBeUndefined();
     expect(prop.visible()).toBe(true);
-    expect(prop.asyncValidators()).toEqual([]);
-    expect(prop.validators()).toEqual([]);
+    expect(prop.asyncValidators(null)).toEqual([]);
+    expect(prop.validators(null)).toEqual([]);
     expect(prop.disabled()).toBe(false);
     expect(prop.readonly()).toBe(false);
     expect(prop.autocomplete).toBe('off');

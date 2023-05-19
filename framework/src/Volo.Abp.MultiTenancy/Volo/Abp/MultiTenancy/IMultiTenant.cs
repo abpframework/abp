@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Volo.Abp.MultiTenancy
+namespace Volo.Abp.MultiTenancy;
+
+public interface IMultiTenant
 {
-    public interface IMultiTenant
-    {
-        /// <summary>
-        /// Id of the related tenant.
-        /// </summary>
-        Guid? TenantId { get; }
-    }
+    /// <summary>
+    /// Id of the related tenant.
+    /// </summary>
+    Guid? TenantId { get; }
 }

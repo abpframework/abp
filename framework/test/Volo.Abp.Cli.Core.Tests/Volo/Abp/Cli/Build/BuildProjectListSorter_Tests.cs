@@ -2,29 +2,29 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.Cli.Build
+namespace Volo.Abp.Cli.Build;
+
+public class BuildProjectListSorter_Tests : AbpCliTestBase
 {
-    public class BuildProjectListSorter_Tests : AbpCliTestBase
+    private IBuildProjectListSorter _buildProjectListSorter;
+
+    public BuildProjectListSorter_Tests()
     {
-        private IBuildProjectListSorter _buildProjectListSorter;
+        _buildProjectListSorter = GetRequiredService<IBuildProjectListSorter>();
+    }
 
-        public BuildProjectListSorter_Tests()
-        {
-            _buildProjectListSorter = GetRequiredService<IBuildProjectListSorter>();
-        }
+    [Fact]
+    public void SortByDependencies_Test()
+    {
+        // A -> B, C
+        // B -> D
+        // D -> F
+        // F -> C
+        // C -> G
+        // Final build order must be: G, 
 
-        [Fact]
-        public void SortByDependencies_Test()
-        {
-            // A -> B, C
-            // B -> D
-            // D -> F
-            // F -> C
-            // C -> G
-            // Final build order must be: G, 
-
-            var repositoryName = "volo";
-            var source = new List<DotNetProjectInfo>
+        var repositoryName = "volo";
+        var source = new List<DotNetProjectInfo>
             {
                 new DotNetProjectInfo(repositoryName, "A", true)
                 {
@@ -65,15 +65,14 @@ namespace Volo.Abp.Cli.Build
                 new DotNetProjectInfo(repositoryName, "G", true)
             };
 
-            var sortedDependencies =
-                _buildProjectListSorter.SortByDependencies(source, new DotNetProjectInfoEqualityComparer());
-            sortedDependencies.Count.ShouldBe(6);
-            sortedDependencies[0].CsProjPath.ShouldBe("G");
-            sortedDependencies[1].CsProjPath.ShouldBe("C");
-            sortedDependencies[2].CsProjPath.ShouldBe("F");
-            sortedDependencies[3].CsProjPath.ShouldBe("D");
-            sortedDependencies[4].CsProjPath.ShouldBe("B");
-            sortedDependencies[5].CsProjPath.ShouldBe("A");
-        }
+        var sortedDependencies =
+            _buildProjectListSorter.SortByDependencies(source, new DotNetProjectInfoEqualityComparer());
+        sortedDependencies.Count.ShouldBe(6);
+        sortedDependencies[0].CsProjPath.ShouldBe("G");
+        sortedDependencies[1].CsProjPath.ShouldBe("C");
+        sortedDependencies[2].CsProjPath.ShouldBe("F");
+        sortedDependencies[3].CsProjPath.ShouldBe("D");
+        sortedDependencies[4].CsProjPath.ShouldBe("B");
+        sortedDependencies[5].CsProjPath.ShouldBe("A");
     }
 }

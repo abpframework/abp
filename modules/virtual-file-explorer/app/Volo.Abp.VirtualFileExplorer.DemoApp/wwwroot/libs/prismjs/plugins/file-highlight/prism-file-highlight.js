@@ -1,9 +1,13 @@
 (function () {
-	if (typeof self === 'undefined' || !self.Prism || !self.document) {
+
+	if (typeof Prism === 'undefined' || typeof document === 'undefined') {
 		return;
 	}
 
-	var Prism = window.Prism;
+	// https://developer.mozilla.org/en-US/docs/Web/API/Element/matches#Polyfill
+	if (!Element.prototype.matches) {
+		Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+	}
 
 	var LOADING_MESSAGE = 'Loading…';
 	var FAILURE_MESSAGE = function (status, message) {
@@ -31,21 +35,57 @@
 	var SELECTOR = 'pre[data-src]:not([' + STATUS_ATTR + '="' + STATUS_LOADED + '"])'
 		+ ':not([' + STATUS_ATTR + '="' + STATUS_LOADING + '"])';
 
-	var lang = /\blang(?:uage)?-([\w-]+)\b/i;
-
 	/**
-	 * Sets the Prism `language-xxxx` or `lang-xxxx` class to the given language.
+	 * Loads the given file.
 	 *
-	 * @param {HTMLElement} element
-	 * @param {string} language
-	 * @returns {void}
+	 * @param {string} src The URL or path of the source file to load.
+	 * @param {(result: string) => void} success
+	 * @param {(reason: string) => void} error
 	 */
-	function setLanguageClass(element, language) {
-		var className = element.className;
-		className = className.replace(lang, ' ') + ' language-' + language;
-		element.className = className.replace(/\s+/g, ' ').trim();
+	function loadFile(src, success, error) {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', src, true);
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4) {
+				if (xhr.status < 400 && xhr.responseText) {
+					success(xhr.responseText);
+				} else {
+					if (xhr.status >= 400) {
+						error(FAILURE_MESSAGE(xhr.status, xhr.statusText));
+					} else {
+						error(FAILURE_EMPTY_MESSAGE);
+					}
+				}
+			}
+		};
+		xhr.send(null);
 	}
 
+	/**
+	 * Parses the given range.
+	 *
+	 * This returns a range with inclusive ends.
+	 *
+	 * @param {string | null | undefined} range
+	 * @returns {[number, number | undefined] | undefined}
+	 */
+	function parseRange(range) {
+		var m = /^\s*(\d+)\s*(?:(,)\s*(?:(\d+)\s*)?)?$/.exec(range || '');
+		if (m) {
+			var start = Number(m[1]);
+			var comma = m[2];
+			var end = m[3];
+
+			if (!comma) {
+				return [start, start];
+			}
+			if (!end) {
+				return [start, undefined];
+			}
+			return [start, Number(end)];
+		}
+		return undefined;
+	}
 
 	Prism.hooks.add('before-highlightall', function (env) {
 		env.selector += ', ' + SELECTOR;
@@ -73,8 +113,8 @@
 			}
 
 			// set language classes
-			setLanguageClass(code, language);
-			setLanguageClass(pre, language);
+			Prism.util.setLanguage(code, language);
+			Prism.util.setLanguage(pre, language);
 
 			// preload the language
 			var autoloader = Prism.plugins.autoloader;
@@ -83,31 +123,45 @@
 			}
 
 			// load file
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', src, true);
-			xhr.onreadystatechange = function () {
-				if (xhr.readyState == 4) {
-					if (xhr.status < 400 && xhr.responseText) {
-						// mark as loaded
-						pre.setAttribute(STATUS_ATTR, STATUS_LOADED);
+			loadFile(
+				src,
+				function (text) {
+					// mark as loaded
+					pre.setAttribute(STATUS_ATTR, STATUS_LOADED);
 
-						// highlight code
-						code.textContent = xhr.responseText;
-						Prism.highlightElement(code);
+					// handle data-range
+					var range = parseRange(pre.getAttribute('data-range'));
+					if (range) {
+						var lines = text.split(/\r\n?|\n/g);
 
-					} else {
-						// mark as failed
-						pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
+						// the range is one-based and inclusive on both ends
+						var start = range[0];
+						var end = range[1] == null ? lines.length : range[1];
 
-						if (xhr.status >= 400) {
-							code.textContent = FAILURE_MESSAGE(xhr.status, xhr.statusText);
-						} else {
-							code.textContent = FAILURE_EMPTY_MESSAGE;
+						if (start < 0) { start += lines.length; }
+						start = Math.max(0, Math.min(start - 1, lines.length));
+						if (end < 0) { end += lines.length; }
+						end = Math.max(0, Math.min(end, lines.length));
+
+						text = lines.slice(start, end).join('\n');
+
+						// add data-start for line numbers
+						if (!pre.hasAttribute('data-start')) {
+							pre.setAttribute('data-start', String(start + 1));
 						}
 					}
+
+					// highlight code
+					code.textContent = text;
+					Prism.highlightElement(code);
+				},
+				function (error) {
+					// mark as failed
+					pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
+
+					code.textContent = error;
 				}
-			};
-			xhr.send(null);
+			);
 		}
 	});
 
@@ -122,7 +176,7 @@
 		highlight: function highlight(container) {
 			var elements = (container || document).querySelectorAll(SELECTOR);
 
-			for (var i = 0, element; element = elements[i++];) {
+			for (var i = 0, element; (element = elements[i++]);) {
 				Prism.highlightElement(element);
 			}
 		}
@@ -136,6 +190,6 @@
 			logged = true;
 		}
 		Prism.plugins.fileHighlight.highlight.apply(this, arguments);
-	}
+	};
 
-})();
+}());

@@ -1,9 +1,8 @@
 using Volo.Abp.Http.Modeling;
 
-namespace Volo.Abp.Http.ProxyScripting.Generators
+namespace Volo.Abp.Http.ProxyScripting.Generators;
+
+public interface IProxyScriptGenerator
 {
-    public interface IProxyScriptGenerator
-    {
-        string CreateScript(ApplicationApiDescriptionModel model);
-    }
+    string CreateScript(ApplicationApiDescriptionModel model);
 }

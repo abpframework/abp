@@ -16,6 +16,9 @@
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "{0} alanı en az {2}, en fazla {1} uzunluğunda bir metin olmalıdır.",
     "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "{0} alanı geçerli bir http, https, ya da ftp adresi olmalıdır.",
     "The field {0} is invalid.": "{0} alanı geçerli değil.",
+    "The value '{0}' is invalid.": "{0} değeri geçerli değil.",
+    "The field {0} must be a number.": "{0} alanı bir sayı olmalıdır.",
+    "The field must be a number.": "Bu alan bir sayı olmalıdır.",
     "ThisFieldIsNotAValidCreditCardNumber.": "Bu alan geçerli bir kredi kartı numarası olmalıdır.",
     "ThisFieldIsNotValid.": "Bu alan geçerli değil.",
     "ThisFieldIsNotAValidEmailAddress.": "Bu alan geçerli bir e-posta adresi olmalıdır.",
@@ -29,6 +32,8 @@
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Bu alan en fazla {0} uzunluğunda bir metin olmalıdır.",
     "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "Bu alan en az {1}, en fazla {0} uzunluğunda bir metin olmalıdır.",
     "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "Bu alan geçerli bir http, https, ya da ftp adresi olmalıdır.",
-    "ThisFieldIsInvalid.": "Bu alan geçerli değil."
+    "ThisFieldIsInvalid.": "Bu alan geçerli değil.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Bu alan {0}'dan büyük veya eşit olmalıdır.",
+    "ThisFieldMustBeLessOrEqual{0}": "Bu alan {0}'dan küçük veya eşit olmalıdır."
   }
 }

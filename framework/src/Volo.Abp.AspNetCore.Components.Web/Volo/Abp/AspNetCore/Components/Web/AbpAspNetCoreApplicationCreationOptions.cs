@@ -1,13 +1,12 @@
-namespace Volo.Abp.AspNetCore.Components.Web
-{
-    public class AbpAspNetCoreApplicationCreationOptions
-    {
-        public AbpApplicationCreationOptions ApplicationCreationOptions { get; }
+namespace Volo.Abp.AspNetCore.Components.Web;
 
-        public AbpAspNetCoreApplicationCreationOptions(
-            AbpApplicationCreationOptions applicationCreationOptions)
-        {
-            ApplicationCreationOptions = applicationCreationOptions;
-        }
+public class AbpAspNetCoreApplicationCreationOptions
+{
+    public AbpApplicationCreationOptions ApplicationCreationOptions { get; }
+
+    public AbpAspNetCoreApplicationCreationOptions(
+        AbpApplicationCreationOptions applicationCreationOptions)
+    {
+        ApplicationCreationOptions = applicationCreationOptions;
     }
 }

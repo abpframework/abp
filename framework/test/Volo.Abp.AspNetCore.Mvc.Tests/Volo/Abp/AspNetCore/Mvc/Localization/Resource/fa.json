@@ -1,0 +1,10 @@
+{
+  "culture": "fa",
+  "texts": {
+    "DisplayName:PersonModel:BirthDate1": "تاریخ تولد1",
+    "DisplayName:BirthDate2": "تاریخ تولد2",
+    "PersonModel:BirthDate3": "تاریخ تولد3",
+    "BirthDate": "تاریخ تولد",
+    "Value1": "مقدار یک"
+  }
+}

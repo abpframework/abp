@@ -1,0 +1,8 @@
+{
+  "template": "empty",
+  "modules": {
+    "Volo.Abp.OpenIddict": {
+      "path": "Volo.Abp.OpenIddict.abpmdl.json"
+    }
+  }
+}

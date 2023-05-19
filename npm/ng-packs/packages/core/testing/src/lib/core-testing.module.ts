@@ -7,6 +7,7 @@ import {
   LOADER_DELAY,
   PermissionService,
   RestService,
+  INCUDE_LOCALIZATION_RESOURCES_TOKEN,
 } from '@abp/ng.core';
 import { APP_BASE_HREF } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -59,6 +60,10 @@ export class CoreTestingModule {
         {
           provide: LOADER_DELAY,
           useValue: 0,
+        },
+        {
+          provide: INCUDE_LOCALIZATION_RESOURCES_TOKEN,
+          useValue: false,
         },
         provideRoutes(routes),
       ],

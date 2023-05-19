@@ -1,14 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Volo.CmsKit.Admin.Blogs
+namespace Volo.CmsKit.Admin.Blogs;
+
+[Serializable]
+public class BlogFeatureInputDto
 {
-    [Serializable]
-    public class BlogFeatureInputDto
-    {
-        [Required]
-        public string FeatureName { get; set; }
-        
-        public bool IsEnabled { get; set; }
-    }
+    [Required]
+    public string FeatureName { get; set; }
+
+    public bool IsEnabled { get; set; }
 }

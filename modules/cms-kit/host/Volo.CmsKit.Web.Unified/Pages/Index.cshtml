@@ -60,7 +60,7 @@
     <abp-column size-md="_12">
         @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
         {
-            @await Component.InvokeAsync(typeof(CommentingViewComponent), new {entityType = "quote", entityId = "1"})
+            @await Component.InvokeAsync(typeof(CommentingViewComponent), new {entityType = "quote", entityId = "1", referralLinks  = new [] {"nofollow"}})
         }
     </abp-column>
 </abp-row>

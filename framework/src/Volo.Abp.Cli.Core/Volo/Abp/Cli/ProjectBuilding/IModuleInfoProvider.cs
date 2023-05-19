@@ -2,12 +2,11 @@
 using System.Threading.Tasks;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
-namespace Volo.Abp.Cli.ProjectBuilding
-{
-    public interface IModuleInfoProvider
-    {
-        Task<ModuleInfo> GetAsync(string name);
+namespace Volo.Abp.Cli.ProjectBuilding;
 
-        Task<List<ModuleInfo>> GetModuleListAsync();
-    }
+public interface IModuleInfoProvider
+{
+    Task<ModuleInfo> GetAsync(string name);
+
+    Task<List<ModuleInfo>> GetModuleListAsync();
 }

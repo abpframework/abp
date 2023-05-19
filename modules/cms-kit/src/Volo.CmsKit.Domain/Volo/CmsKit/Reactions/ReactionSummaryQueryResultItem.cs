@@ -1,9 +1,8 @@
-﻿namespace Volo.CmsKit.Reactions
-{
-    public class ReactionSummaryQueryResultItem
-    {
-        public string ReactionName { get; set; }
+﻿namespace Volo.CmsKit.Reactions;
 
-        public int Count { get; set; }
-    }
+public class ReactionSummaryQueryResultItem
+{
+    public string ReactionName { get; set; }
+
+    public int Count { get; set; }
 }

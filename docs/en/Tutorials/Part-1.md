@@ -13,7 +13,7 @@ In this tutorial series, you will build an ABP based web application named `Acme
 * **{{DB_Value}}** as the database provider.
 * **{{UI_Value}}** as the UI Framework.
 
-This tutorial is organized as the following parts;
+This tutorial is organized as the following parts:
 
 - **Part 1: Creating the server side (this part)**
 - [Part 2: The book list page](Part-2.md)
@@ -34,10 +34,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip error" on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters. To solve this, [enable the long path option in Windows 10](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd#enable-long-paths-in-windows-10-version-1607-and-later).
-
-> If you face long path errors related to Git, try the following command to enable long paths in Windows. See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-directory-with-a-long-path
-> `git config --system core.longpaths true`
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -49,14 +46,14 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 ## Creating the Solution
 
-Before starting to the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../Getting-Started.md).
+Before starting the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../Getting-Started.md).
 
 ## Create the Book Entity
 
 **Domain layer** in the startup template is separated into two projects:
 
 - `Acme.BookStore.Domain` contains your [entities](../Entities.md), [domain services](../Domain-Services.md) and other core domain objects.
-- `Acme.BookStore.Domain.Shared` contains `constants`, `enums` or other domain related objects those can be shared with clients.
+- `Acme.BookStore.Domain.Shared` contains `constants`, `enums` or other domain related objects that can be shared with clients.
 
 So, define your entities in the domain layer (`Acme.BookStore.Domain` project) of the solution. 
 
@@ -66,46 +63,44 @@ The main entity of the application is the `Book`. Create a `Books` folder (names
 using System;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.Books;
+
+public class Book : AuditedAggregateRoot<Guid>
 {
-    public class Book : AuditedAggregateRoot<Guid>
-    {
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public BookType Type { get; set; }
+    public BookType Type { get; set; }
 
-        public DateTime PublishDate { get; set; }
+    public DateTime PublishDate { get; set; }
 
-        public float Price { get; set; }
-    }
+    public float Price { get; set; }
 }
 ````
 
 * ABP Framework has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is a [Domain Driven Design](../Domain-Driven-Design.md) concept which can be thought as a root entity that is directly queried and worked on (see the [entities document](../Entities.md) for more).
-* `Book` entity inherits from the `AuditedAggregateRoot` which adds some base [auditing](../Audit-Logging.md) properties (like `CreationTime`, `CreatorId`, `LastModificationTime`...) on top of the `AggregateRoot` class. ABP automatically manages these properties for you.
+* The `Book` entity inherits from the `AuditedAggregateRoot` which adds some base [auditing](../Audit-Logging.md) properties (like `CreationTime`, `CreatorId`, `LastModificationTime`...) on top of the `AggregateRoot` class. ABP automatically manages these properties for you.
 * `Guid` is the **primary key type** of the `Book` entity.
 
-> This tutorials leaves the entity properties with **public get/set** for the sake of simplicity. See the [entities document](../Entities.md) if you learn more about DDD best practices.
+> This tutorial leaves the entity properties with **public get/set** for the sake of simplicity. See the [entities document](../Entities.md) if you want to learn more about DDD best practices.
 
 ### BookType Enum
 
 The `Book` entity uses the `BookType` enum. Create a `Books` folder (namespace) in the `Acme.BookStore.Domain.Shared` project and add a `BookType` inside it:
 
 ````csharp
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.Books;
+
+public enum BookType
 {
-    public enum BookType
-    {
-        Undefined,
-        Adventure,
-        Biography,
-        Dystopia,
-        Fantastic,
-        Horror,
-        Science,
-        ScienceFiction,
-        Poetry
-    }
+    Undefined,
+    Adventure,
+    Biography,
+    Dystopia,
+    Fantastic,
+    Horror,
+    Science,
+    ScienceFiction,
+    Poetry
 }
 ````
 
@@ -113,11 +108,11 @@ The final folder/file structure should be as shown below:
 
 ![bookstore-book-and-booktype](images/bookstore-book-and-booktype.png)
 
-### Add Book Entity to the DbContext
+### Add the Book Entity to the DbContext
 
 {{if DB == "EF"}}
 
-EF Core requires to relate entities with your `DbContext`. The easiest way to do this is to add a `DbSet` property to the `BookStoreDbContext` class in the `Acme.BookStore.EntityFrameworkCore` project, as shown below:
+EF Core requires that you relate the entities with your `DbContext`. The easiest way to do so is adding a `DbSet` property to the `BookStoreDbContext` class in the `Acme.BookStore.EntityFrameworkCore` project, as shown below:
 
 ````csharp
 public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
@@ -147,46 +142,45 @@ public class BookStoreMongoDbContext : AbpMongoDbContext
 
 ### Map the Book Entity to a Database Table
 
-Locate to `OnModelCreating` method in the `BookStoreDbContext` class and add the mapping code for the `Book` entity:
+Navigate to the `OnModelCreating` method in the `BookStoreDbContext` class and add the mapping code for the `Book` entity:
 
 ````csharp
 using Acme.BookStore.Books;
 ...
 
-namespace Acme.BookStore.EntityFrameworkCore
+namespace Acme.BookStore.EntityFrameworkCore;
+
+public class BookStoreDbContext : 
+    AbpDbContext<BookStoreDbContext>,
+    IIdentityDbContext,
+    ITenantManagementDbContext
 {
-    public class BookStoreDbContext : 
-        AbpDbContext<BookStoreDbContext>,
-        IIdentityDbContext,
-        ITenantManagementDbContext
+    ...
+
+    protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
+
+        /* Include modules to your migration db context */
+
+        builder.ConfigurePermissionManagement();
         ...
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        /* Configure your own tables/entities inside here */
+
+        builder.Entity<Book>(b =>
         {
-            base.OnModelCreating(builder);
-
-            /* Include modules to your migration db context */
-
-            builder.ConfigurePermissionManagement();
-            ...
-
-            /* Configure your own tables/entities inside here */
-
-            builder.Entity<Book>(b =>
-            {
-                b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
-                    BookStoreConsts.DbSchema);
-                b.ConfigureByConvention(); //auto configure for the base class props
-                b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-            });
-        }
+            b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
+                BookStoreConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+        });
     }
 }
 ````
 
-* `BookStoreConsts` has constant values for schema and table prefixes for your tables. You don't have to use it, but suggested to control the table prefixes in a single point.
-* `ConfigureByConvention()` method gracefully configures/maps the inherited properties. Always use it for all your entities.
+* `BookStoreConsts` has constant values for the schema and table prefixes for your tables. You don't have to use it, but it's suggested to control the table prefixes in a single point.
+* The `ConfigureByConvention()` method gracefully configures/maps the inherited properties. Always use it for all your entities.
 
 ### Add Database Migration
 
@@ -202,13 +196,13 @@ This will add a new migration class to the project:
 
 ![bookstore-efcore-migration](./images/bookstore-efcore-migration.png)
 
-> If you are using Visual Studio, you may want to use `Add-Migration Created_Book_Entity -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use the `Add-Migration Created_Book_Entity` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that `Acme.BookStore.EntityFrameworkCore` is the startup project in Visual Studio and `Acme.BookStore.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{end}}
 
 ### Add Sample Seed Data
 
-> It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../Data-Seeding.md) system of the ABP framework. You can skip this section if you don't want to create seed data, but it is suggested to follow it to learn this useful ABP Framework feature.
+> It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../Data-Seeding.md) system of the ABP framework. You can skip this section if you don't want to create the data seeding, but it is suggested to follow along and learn this useful ABP Framework feature.
 
 Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project by copying the following code:
 
@@ -220,57 +214,55 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 
-namespace Acme.BookStore
+namespace Acme.BookStore;
+
+public class BookStoreDataSeederContributor
+    : IDataSeedContributor, ITransientDependency
 {
-    public class BookStoreDataSeederContributor
-        : IDataSeedContributor, ITransientDependency
+    private readonly IRepository<Book, Guid> _bookRepository;
+
+    public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository)
     {
-        private readonly IRepository<Book, Guid> _bookRepository;
+        _bookRepository = bookRepository;
+    }
 
-        public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository)
+    public async Task SeedAsync(DataSeedContext context)
+    {
+        if (await _bookRepository.GetCountAsync() <= 0)
         {
-            _bookRepository = bookRepository;
-        }
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "1984",
+                    Type = BookType.Dystopia,
+                    PublishDate = new DateTime(1949, 6, 8),
+                    Price = 19.84f
+                },
+                autoSave: true
+            );
 
-        public async Task SeedAsync(DataSeedContext context)
-        {
-            if (await _bookRepository.GetCountAsync() <= 0)
-            {
-                await _bookRepository.InsertAsync(
-                    new Book
-                    {
-                        Name = "1984",
-                        Type = BookType.Dystopia,
-                        PublishDate = new DateTime(1949, 6, 8),
-                        Price = 19.84f
-                    },
-                    autoSave: true
-                );
-
-                await _bookRepository.InsertAsync(
-                    new Book
-                    {
-                        Name = "The Hitchhiker's Guide to the Galaxy",
-                        Type = BookType.ScienceFiction,
-                        PublishDate = new DateTime(1995, 9, 27),
-                        Price = 42.0f
-                    },
-                    autoSave: true
-                );
-            }
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "The Hitchhiker's Guide to the Galaxy",
+                    Type = BookType.ScienceFiction,
+                    PublishDate = new DateTime(1995, 9, 27),
+                    Price = 42.0f
+                },
+                autoSave: true
+            );
         }
     }
 }
 ```
 
-* This code simply uses the `IRepository<Book, Guid>` (the default [repository](../Repositories.md)) to insert two books to the database, if there is no book currently in the database.
+* This code simply uses the `IRepository<Book, Guid>` (the default [repository](../Repositories.md)) to insert two books to the database in case there weren't any books in it.
 
 ### Update the Database
 
 Run the `Acme.BookStore.DbMigrator` application to update the database:
 
 ![bookstore-dbmigrator-on-solution](images/bookstore-dbmigrator-on-solution.png)
-
 
 `.DbMigrator` is a console application that can be run to **migrate the database schema** and **seed the data** on **development** and **production** environments.
 
@@ -291,39 +283,37 @@ In this section, you will create an application service to get, create, update a
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.Books;
+
+public class BookDto : AuditedEntityDto<Guid>
 {
-    public class BookDto : AuditedEntityDto<Guid>
-    {
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public BookType Type { get; set; }
+    public BookType Type { get; set; }
 
-        public DateTime PublishDate { get; set; }
+    public DateTime PublishDate { get; set; }
 
-        public float Price { get; set; }
-    }
+    public float Price { get; set; }
 }
 ````
 
 * **DTO** classes are used to **transfer data** between the *presentation layer* and the *application layer*. See the [Data Transfer Objects document](https://docs.abp.io/en/abp/latest/Data-Transfer-Objects) for more details.
-* `BookDto` is used to transfer book data to the presentation layer in order to show the book information on the UI.
-* `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` entity defined above.
+* The `BookDto` is used to transfer the book data to the presentation layer in order to show the book information on the UI.
+* The `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` entity defined above.
 
-It will be needed to map `Book` entities to `BookDto` objects while returning books to the presentation layer. [AutoMapper](https://automapper.org) library can automate this conversion when you define the proper mapping. The startup template comes with AutoMapper pre-configured. So, you can just define the mapping in the `BookStoreApplicationAutoMapperProfile` class in the `Acme.BookStore.Application` project:
+It will be needed to map the `Book` entities to the `BookDto` objects while returning books to the presentation layer. [AutoMapper](https://automapper.org) library can automate this conversion when you define the proper mapping. The startup template comes with AutoMapper pre-configured. So, you can just define the mapping in the `BookStoreApplicationAutoMapperProfile` class in the `Acme.BookStore.Application` project:
 
 ````csharp
 using Acme.BookStore.Books;
 using AutoMapper;
 
-namespace Acme.BookStore
+namespace Acme.BookStore;
+
+public class BookStoreApplicationAutoMapperProfile : Profile
 {
-    public class BookStoreApplicationAutoMapperProfile : Profile
+    public BookStoreApplicationAutoMapperProfile()
     {
-        public BookStoreApplicationAutoMapperProfile()
-        {
-            CreateMap<Book, BookDto>();
-        }
+        CreateMap<Book, BookDto>();
     }
 }
 ````
@@ -338,45 +328,43 @@ Create a `CreateUpdateBookDto` class in the `Books` folder (namespace) of the `A
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Acme.BookStore.Books
+namespace Acme.BookStore.Books;
+
+public class CreateUpdateBookDto
 {
-    public class CreateUpdateBookDto
-    {
-        [Required]
-        [StringLength(128)]
-        public string Name { get; set; }
+    [Required]
+    [StringLength(128)]
+    public string Name { get; set; }
 
-        [Required]
-        public BookType Type { get; set; } = BookType.Undefined;
+    [Required]
+    public BookType Type { get; set; } = BookType.Undefined;
 
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime PublishDate { get; set; } = DateTime.Now;
+    [Required]
+    [DataType(DataType.Date)]
+    public DateTime PublishDate { get; set; } = DateTime.Now;
 
-        [Required]
-        public float Price { get; set; }
-    }
+    [Required]
+    public float Price { get; set; }
 }
 ````
 
-* This `DTO` class is used to get book information from the user interface while creating or updating a book.
+* This `DTO` class is used to get a book information from the user interface while creating or updating the book.
 * It defines data annotation attributes (like `[Required]`) to define validations for the properties. `DTO`s are [automatically validated](https://docs.abp.io/en/abp/latest/Validation) by the ABP framework.
 
-Just like done for the `BookDto` above, we should define the mapping from the `CreateUpdateBookDto` object to the `Book` entity. The final class will be like shown below:
+As done to the `BookDto` above, we should define the mapping from the `CreateUpdateBookDto` object to the `Book` entity. The final class will be as shown below:
 
 ````csharp
 using Acme.BookStore.Books;
 using AutoMapper;
 
-namespace Acme.BookStore
+namespace Acme.BookStore;
+
+public class BookStoreApplicationAutoMapperProfile : Profile
 {
-    public class BookStoreApplicationAutoMapperProfile : Profile
+    public BookStoreApplicationAutoMapperProfile()
     {
-        public BookStoreApplicationAutoMapperProfile()
-        {
-            CreateMap<Book, BookDto>();
-            CreateMap<CreateUpdateBookDto, Book>();
-        }
+        CreateMap<Book, BookDto>();
+        CreateMap<CreateUpdateBookDto, Book>();
     }
 }
 ````
@@ -390,17 +378,16 @@ using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace Acme.BookStore.Books
-{
-    public interface IBookAppService :
-        ICrudAppService< //Defines CRUD methods
-            BookDto, //Used to show books
-            Guid, //Primary key of the book entity
-            PagedAndSortedResultRequestDto, //Used for paging/sorting
-            CreateUpdateBookDto> //Used to create/update a book
-    {
+namespace Acme.BookStore.Books;
 
-    }
+public interface IBookAppService :
+    ICrudAppService< //Defines CRUD methods
+        BookDto, //Used to show books
+        Guid, //Primary key of the book entity
+        PagedAndSortedResultRequestDto, //Used for paging/sorting
+        CreateUpdateBookDto> //Used to create/update a book
+{
+
 }
 ````
 
@@ -418,35 +405,34 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
-namespace Acme.BookStore.Books
-{
-    public class BookAppService :
-        CrudAppService<
-            Book, //The Book entity
-            BookDto, //Used to show books
-            Guid, //Primary key of the book entity
-            PagedAndSortedResultRequestDto, //Used for paging/sorting
-            CreateUpdateBookDto>, //Used to create/update a book
-        IBookAppService //implement the IBookAppService
-    {
-        public BookAppService(IRepository<Book, Guid> repository)
-            : base(repository)
-        {
+namespace Acme.BookStore.Books;
 
-        }
+public class BookAppService :
+    CrudAppService<
+        Book, //The Book entity
+        BookDto, //Used to show books
+        Guid, //Primary key of the book entity
+        PagedAndSortedResultRequestDto, //Used for paging/sorting
+        CreateUpdateBookDto>, //Used to create/update a book
+    IBookAppService //implement the IBookAppService
+{
+    public BookAppService(IRepository<Book, Guid> repository)
+        : base(repository)
+    {
+
     }
 }
 ````
 
 * `BookAppService` is derived from `CrudAppService<...>` which implements all the CRUD (create, read, update, delete) methods defined by the `ICrudAppService`.
 * `BookAppService` injects `IRepository<Book, Guid>` which is the default repository for the `Book` entity. ABP automatically creates default repositories for each aggregate root (or entity). See the [repository document](https://docs.abp.io/en/abp/latest/Repositories).
-* `BookAppService` uses `IObjectMapper` service ([see](../Object-To-Object-Mapping.md)) to map `Book` objects to `BookDto` objects and `CreateUpdateBookDto` objects to `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
+* `BookAppService` uses `IObjectMapper` service ([see](../Object-To-Object-Mapping.md)) to map the `Book` objects to the `BookDto` objects and `CreateUpdateBookDto` objects to the `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
 
 ## Auto API Controllers
 
-In a typical ASP.NET Core application, you create **API Controllers** to expose application services as **HTTP API** endpoints. This allows browsers or 3rd-party clients to call them over HTTP.
+In a typical ASP.NET Core application, you create **API Controllers** to expose the application services as **HTTP API** endpoints. This allows browsers or 3rd-party clients to call them over HTTP.
 
-ABP can [**automagically**](../API/Auto-API-Controllers.md) configures your application services as MVC API Controllers by convention.
+ABP can [**automagically**](../API/Auto-API-Controllers.md) configure your application services as MVC API Controllers by convention.
 
 ### Swagger UI
 

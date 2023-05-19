@@ -75,7 +75,7 @@
     "PageDeletionConfirmationMessage": "Sunteţi sigur(ă) că vreţi să ştergeţi această pagină?",
     "PageId": "Pagina",
     "Pages": "Pagini",
-    "PageSlugInformation": "Slug este folosit pe url. Url-ul dumneavoastră va fi '/pages/{{slug}}'.",
+    "PageSlugInformation": "Slug este folosit pe url. Url-ul dumneavoastră va fi '/{{slug}}'.",
     "Permission:BlogManagement": "Administrare Blog",
     "Permission:BlogManagement.Create": "Creează",
     "Permission:BlogManagement.Delete": "Şterge",

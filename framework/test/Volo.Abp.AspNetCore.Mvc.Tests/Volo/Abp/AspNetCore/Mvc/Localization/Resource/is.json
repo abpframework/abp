@@ -1,0 +1,10 @@
+{
+  "culture": "is",
+  "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Fæðingardagur 1",
+    "DisplayName:BirthDate2": "Fæðingardagur 2",
+    "PersonModel:BirthDate3": "Fæðingardagur 3",
+    "BirthDate": "Fæðingardagur",
+    "Value1": "Fyrsta gildi"
+  }
+}

@@ -37,7 +37,8 @@ export class InternalStore<State> {
   }
 
   deepPatch(state: DeepPartial<State>) {
-    this.state$.next(deepMerge(this.state, state));
+    // TODO: Strict improve deepMerge
+    this.state$.next(deepMerge(this.state, state) as State);
     this.update$.next(state);
   }
 

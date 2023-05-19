@@ -1,7 +1,34 @@
 {
-    "culture": "hu",
-    "texts": {
-      "Settings": "Beállítások",
-      "SuccessfullySaved": "Sikeresen mentve"
-    }
+  "culture": "hu",
+  "texts": {
+    "Settings": "Beállítások",
+    "SuccessfullySaved": "Sikeresen mentve",
+    "Permission:SettingManagement": "Beállításkezelés",
+    "Permission:Emailing": "E-mailezés",
+    "Permission:EmailingTest": "E-mail teszt",
+    "SendTestEmail": "Küldj teszt e-mailt",
+    "SenderEmailAddress": "Feladó e-mail címe",
+    "TargetEmailAddress": "Cél e-mail cím",
+    "Subject": "Tantárgy",
+    "Body": "Test",
+    "TestEmailSubject": "Teszt e-mail {0}",
+    "TestEmailBody": "Itt tesztelheti az e-mail törzsüzenetét",
+    "SuccessfullySent": "Sikeresen elküldve",
+    "Send": "Küld",
+    "Menu:Emailing": "E-mailezés",
+    "SmtpHost": "Házigazda",
+    "SmtpPort": "Kikötő",
+    "SmtpUserName": "Felhasználónév",
+    "SmtpPassword": "Jelszó",
+    "SmtpDomain": "Tartomány",
+    "SmtpEnableSsl": "ssl engedélyezése",
+    "SmtpUseDefaultCredentials": "Használja az alapértelmezett hitelesítő adatokat",
+    "DefaultFromAddress": "Alapértelmezett a címtől",
+    "DefaultFromDisplayName": "Alapértelmezett a megjelenített névből",
+    "Feature:SettingManagementGroup": "Beállításkezelés",
+    "Feature:SettingManagementEnable": "Beállításkezelés engedélyezése",
+    "Feature:SettingManagementEnableDescription": "A beállításkezelő rendszer engedélyezése az alkalmazásban.",
+    "Feature:AllowChangingEmailSettings": "Az e-mail beállítások módosításának engedélyezése.",
+    "Feature:AllowChangingEmailSettingsDescription": "Az e-mail beállítások módosításának engedélyezése."
   }
+}

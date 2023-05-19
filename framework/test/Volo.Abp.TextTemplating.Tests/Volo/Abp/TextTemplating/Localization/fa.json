@@ -1,0 +1,7 @@
+{
+  "culture": "fa",
+  "texts": {
+    "HelloText": "سلام {0}",
+    "HowAreYou": "حال شما چطور است؟"
+  }
+}

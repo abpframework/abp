@@ -8,64 +8,69 @@ using Volo.Abp.Http;
 using Volo.Abp.Json;
 using Volo.Abp.Minify.Scripts;
 
-namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
+namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
+
+[Area("Abp")]
+[Route("Abp/ApplicationConfigurationScript")]
+[DisableAuditing]
+[RemoteService(false)]
+[ApiExplorerSettings(IgnoreApi = true)]
+public class AbpApplicationConfigurationScriptController : AbpController
 {
-    [Area("Abp")]
-    [Route("Abp/ApplicationConfigurationScript")]
-    [DisableAuditing]
-    [RemoteService(false)]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public class AbpApplicationConfigurationScriptController : AbpController
+    protected readonly AbpApplicationConfigurationAppService ConfigurationAppService;
+    protected readonly IJsonSerializer JsonSerializer;
+    protected readonly AbpAspNetCoreMvcOptions Options;
+    protected readonly IJavascriptMinifier JavascriptMinifier;
+    protected readonly IAbpAntiForgeryManager AntiForgeryManager;
+
+    public AbpApplicationConfigurationScriptController(
+        AbpApplicationConfigurationAppService configurationAppService,
+        IJsonSerializer jsonSerializer,
+        IOptions<AbpAspNetCoreMvcOptions> options,
+        IJavascriptMinifier javascriptMinifier,
+        IAbpAntiForgeryManager antiForgeryManager)
     {
-        private readonly IAbpApplicationConfigurationAppService _configurationAppService;
-        private readonly IJsonSerializer _jsonSerializer;
-        private readonly AbpAspNetCoreMvcOptions _options;
-        private readonly IJavascriptMinifier _javascriptMinifier;
-        private readonly IAbpAntiForgeryManager _antiForgeryManager;
+        ConfigurationAppService = configurationAppService;
+        JsonSerializer = jsonSerializer;
+        Options = options.Value;
+        JavascriptMinifier = javascriptMinifier;
+        AntiForgeryManager = antiForgeryManager;
+    }
 
-        public AbpApplicationConfigurationScriptController(
-            IAbpApplicationConfigurationAppService configurationAppService,
-            IJsonSerializer jsonSerializer,
-            IOptions<AbpAspNetCoreMvcOptions> options,
-            IJavascriptMinifier javascriptMinifier,
-            IAbpAntiForgeryManager antiForgeryManager)
-        {
-            _configurationAppService = configurationAppService;
-            _jsonSerializer = jsonSerializer;
-            _options = options.Value;
-            _javascriptMinifier = javascriptMinifier;
-            _antiForgeryManager = antiForgeryManager;
-        }
+    [HttpGet]
+    [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
+    public virtual async Task<ActionResult> Get()
+    {
+        var script = CreateAbpExtendScript(
+            await ConfigurationAppService.GetAsync(
+                new ApplicationConfigurationRequestOptions {
+                    IncludeLocalizationResources = false
+                }
+            )
+        );
 
-        [HttpGet]
-        [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
-        public async Task<ActionResult> Get()
-        {
-            var script = CreateAbpExtendScript(await _configurationAppService.GetAsync());
+        AntiForgeryManager.SetCookie();
 
-            _antiForgeryManager.SetCookie();
+        return Content(
+            Options.MinifyGeneratedScript == true
+                ? JavascriptMinifier.Minify(script)
+                : script,
+            MimeTypes.Application.Javascript
+        );
+    }
 
-            return Content(
-                _options.MinifyGeneratedScript == true
-                    ? _javascriptMinifier.Minify(script)
-                    : script,
-                MimeTypes.Application.Javascript
-            );
-        }
+    protected virtual string CreateAbpExtendScript(ApplicationConfigurationDto config)
+    {
+        var script = new StringBuilder();
 
-        private string CreateAbpExtendScript(ApplicationConfigurationDto config)
-        {
-            var script = new StringBuilder();
+        script.AppendLine("(function(){");
+        script.AppendLine();
+        script.AppendLine($"$.extend(true, abp, {JsonSerializer.Serialize(config, indented: true)})");
+        script.AppendLine();
+        script.AppendLine("abp.event.trigger('abp.configurationInitialized');");
+        script.AppendLine();
+        script.Append("})();");
 
-            script.AppendLine("(function(){");
-            script.AppendLine();
-            script.AppendLine($"$.extend(true, abp, {_jsonSerializer.Serialize(config, indented: true)})");
-            script.AppendLine();
-            script.AppendLine("abp.event.trigger('abp.configurationInitialized');");
-            script.AppendLine();
-            script.Append("})();");
-
-            return script.ToString();
-        }
+        return script.ToString();
     }
 }

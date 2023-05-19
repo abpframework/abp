@@ -1,7 +1,7 @@
 import { AccountService } from '@abp/ng.account.core/proxy';
 import { getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
@@ -13,20 +13,20 @@ const PASSWORD_FIELDS = ['password', 'confirmPassword'];
   templateUrl: './reset-password.component.html',
 })
 export class ResetPasswordComponent implements OnInit {
-  form: FormGroup;
+  form!: UntypedFormGroup;
 
   inProgress = false;
 
   isPasswordReset = false;
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
-    if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
+    if (PASSWORD_FIELDS.indexOf(String(control?.name)) < 0) return errors;
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private accountService: AccountService,
     private route: ActivatedRoute,
     private router: Router,
@@ -58,9 +58,9 @@ export class ResetPasswordComponent implements OnInit {
 
     this.accountService
       .resetPassword({
-        userId: this.form.get('userId').value,
-        resetToken: this.form.get('resetToken').value,
-        password: this.form.get('password').value,
+        userId: this.form.get('userId')?.value,
+        resetToken: this.form.get('resetToken')?.value,
+        password: this.form.get('password')?.value,
       })
       .pipe(finalize(() => (this.inProgress = false)))
       .subscribe(() => {

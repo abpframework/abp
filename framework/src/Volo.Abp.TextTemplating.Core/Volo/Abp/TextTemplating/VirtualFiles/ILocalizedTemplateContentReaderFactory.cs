@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.TextTemplating.VirtualFiles
+namespace Volo.Abp.TextTemplating.VirtualFiles;
+
+public interface ILocalizedTemplateContentReaderFactory
 {
-    public interface ILocalizedTemplateContentReaderFactory
-    {
-        Task<ILocalizedTemplateContentReader> CreateAsync(TemplateDefinition templateDefinition);
-    }
+    Task<ILocalizedTemplateContentReader> CreateAsync(TemplateDefinition templateDefinition);
 }

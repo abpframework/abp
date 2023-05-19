@@ -1,15 +1,14 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar;
+
+public enum AbpProgressBarType
 {
-    public enum AbpProgressBarType
-    {
-        Default,
-        Primary,
-        Secondary,
-        Success,
-        Danger,
-        Warning,
-        Info,
-        Light,
-        Dark
-    }
+    Default,
+    Primary,
+    Secondary,
+    Success,
+    Danger,
+    Warning,
+    Info,
+    Light,
+    Dark
 }

@@ -106,7 +106,7 @@ var abp = abp || {};
                     $dfd.resolve(data);
                     userOptions.success && userOptions.success(data);
                 }).fail(function (jqXHR) {
-                    if(jqXHR.status === 0 || jqXHR.statusText === 'abort') {
+                    if(jqXHR.statusText === 'abort') {
                         //ajax request is abort, ignore error handle.
                         return;
                     }
@@ -205,14 +205,16 @@ var abp = abp || {};
         handleAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
             var messagePromise = null;
 
+            var responseJSON = jqXHR.responseJSON ? jqXHR.responseJSON : JSON.parse(jqXHR.responseText);
+
             if (userOptions.abpHandleError !== false) {
-                messagePromise = abp.ajax.showError(jqXHR.responseJSON.error);
+                messagePromise = abp.ajax.showError(responseJSON.error);
             }
 
-            abp.ajax.logError(jqXHR.responseJSON.error);
+            abp.ajax.logError(responseJSON.error);
 
-            $dfd && $dfd.reject(jqXHR.responseJSON.error, jqXHR);
-            userOptions.error && userOptions.error(jqXHR.responseJSON.error, jqXHR);
+            $dfd && $dfd.reject(responseJSON.error, jqXHR);
+            userOptions.error && userOptions.error(responseJSON.error, jqXHR);
 
             if (jqXHR.status === 401 && userOptions.abpHandleError !== false) {
                 abp.ajax.handleUnAuthorizedRequest(messagePromise);

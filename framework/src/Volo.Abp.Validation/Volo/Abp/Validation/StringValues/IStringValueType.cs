@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Validation.StringValues
+namespace Volo.Abp.Validation.StringValues;
+
+public interface IStringValueType
 {
-    public interface IStringValueType
-    {
-        string Name { get; }
+    string Name { get; }
 
-        [CanBeNull]
-        object this[string key] { get; set; }
+    [CanBeNull]
+    object this[string key] { get; set; }
 
-        [NotNull]
-        Dictionary<string, object> Properties { get; }
+    [NotNull]
+    Dictionary<string, object> Properties { get; }
 
-        IValueValidator Validator { get; set; }
-    }
+    IValueValidator Validator { get; set; }
 }

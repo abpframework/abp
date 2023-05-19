@@ -1,0 +1,15 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Nazwa zasobu tożsamości już istnieje: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Nazwa zasobu API już istnieje: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Nazwa zakresu API już istnieje: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId już istnieje: {ClientId}",
+    "UserLockedOut": "Konto użytkownika zostało zablokowane z powodu nieprawidłowych prób logowania. Poczekaj chwilę i spróbuj ponownie.",
+    "InvalidUserNameOrPassword": "Nieprawidłowa nazwa użytkownika lub hasło!",
+    "LoginIsNotAllowed": "Nie możesz się zalogować! Twoje konto jest nieaktywne lub wymaga potwierdzenia adresu e-mail/numeru telefonu.",
+    "InvalidUsername": "Nieprawidłowa nazwa użytkownika lub hasło!",
+    "InvalidAuthenticatorCode": "Nieprawidłowy kod uwierzytelniający!",
+    "TheTargetUserIsNotLinkedToYou": "Docelowy użytkownik nie jest z Tobą powiązany!"
+  }
+}

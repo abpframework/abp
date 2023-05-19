@@ -1,12 +1,14 @@
 ﻿using System;
+using Volo.Abp.Auditing;
 
-namespace Volo.Abp.TenantManagement
+namespace Volo.Abp.TenantManagement;
+
+[Serializable]
+public class TenantEto : IHasEntityVersion
 {
-    [Serializable]
-    public class TenantEto
-    {
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
+
+    public int EntityVersion { get; set; }
 }

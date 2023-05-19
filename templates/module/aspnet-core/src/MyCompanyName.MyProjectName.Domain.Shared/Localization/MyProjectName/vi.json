@@ -1,6 +1,7 @@
 {
   "culture": "vi",
   "texts": {
-
+    "MyAccount": "Tài khoản của tôi",
+    "SamplePageMessage": "Trang mẫu cho mô-đun MyProjectName"
   }
 }

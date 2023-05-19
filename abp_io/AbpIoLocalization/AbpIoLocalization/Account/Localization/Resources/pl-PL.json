@@ -1,0 +1,16 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Account": "Konto ABP — logowanie i rejestracja | ABP.IO",
+    "Welcome": "Witamy",
+    "UseOneOfTheFollowingLinksToContinue": "Użyj jednego z poniższych linków, aby kontynuować",
+    "FrameworkHomePage": "Strona główna Frameworka",
+    "FrameworkDocumentation": "Dokumentacja ramowa",
+    "OfficialBlog": "Oficjalny blog",
+    "CommercialHomePage": "Komercyjna strona główna",
+    "CommercialSupportWebSite": "Witryna wsparcia komercyjnego",
+    "CommunityWebSite": "Strona społeczności ABP",
+    "ManageAccount": "Moje konto | ABP.IO",
+    "ManageYourAccount": "Zarządzaj swoim kontem"
+  }
+}

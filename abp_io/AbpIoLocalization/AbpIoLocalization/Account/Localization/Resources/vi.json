@@ -1,0 +1,16 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Account": "Tài khoản ABP - Đăng nhập & Đăng ký | ABP.IO",
+    "Welcome": "Chào mừng",
+    "UseOneOfTheFollowingLinksToContinue": "Sử dụng một trong các liên kết sau để tiếp tục",
+    "FrameworkHomePage": "Trang chủ khung",
+    "FrameworkDocumentation": "Tài liệu khung",
+    "OfficialBlog": "Blog chính thức",
+    "CommercialHomePage": "Trang chủ thương mại",
+    "CommercialSupportWebSite": "Trang web hỗ trợ thương mại",
+    "CommunityWebSite": "Trang web cộng đồng ABP",
+    "ManageAccount": "Tài khoản của tôi | ABP.IO",
+    "ManageYourAccount": "Quản lý tài khoản của bạn"
+  }
+}

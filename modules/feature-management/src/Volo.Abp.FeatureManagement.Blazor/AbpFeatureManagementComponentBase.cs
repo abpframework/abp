@@ -1,13 +1,12 @@
 ﻿using Volo.Abp.AspNetCore.Components;
 using Volo.Abp.FeatureManagement.Localization;
 
-namespace Volo.Abp.FeatureManagement.Blazor
+namespace Volo.Abp.FeatureManagement.Blazor;
+
+public abstract class AbpFeatureManagementComponentBase : AbpComponentBase
 {
-    public abstract class AbpFeatureManagementComponentBase : AbpComponentBase
+    protected AbpFeatureManagementComponentBase()
     {
-        protected AbpFeatureManagementComponentBase()
-        {
-            LocalizationResource = typeof(AbpFeatureManagementResource);
-        }
+        LocalizationResource = typeof(AbpFeatureManagementResource);
     }
 }

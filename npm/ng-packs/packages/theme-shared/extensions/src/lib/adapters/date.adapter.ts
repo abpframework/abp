@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { NgbDateAdapter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable()
-export class DateAdapter extends NgbDateAdapter<string> {
+export class DateAdapter extends NgbDateAdapter<string | Date> {
   fromModel(value: string | Date): NgbDateStruct | null {
     if (!value) return null;
 

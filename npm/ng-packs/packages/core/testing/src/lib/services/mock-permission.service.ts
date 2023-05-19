@@ -27,7 +27,7 @@ export class MockPermissionService extends PermissionService {
     const grantedPolicies = keys.reduce((policies, key) => {
       policies[key] = true;
       return policies;
-    }, {});
+    }, {} as { [key: string]: boolean });
 
     this.configState['store'].deepPatch({ auth: { grantedPolicies } });
   }

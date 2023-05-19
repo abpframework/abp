@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.AspNetCore.Security.Claims
-{
-    public class AbpClaimsMapOptions
-    {
-        public Dictionary<string, Func<string>> Maps { get; }
+namespace Volo.Abp.AspNetCore.Security.Claims;
 
-        public AbpClaimsMapOptions()
-        {
-            Maps = new Dictionary<string, Func<string>>()
+public class AbpClaimsMapOptions
+{
+    public Dictionary<string, Func<string>> Maps { get; }
+
+    public AbpClaimsMapOptions()
+    {
+        Maps = new Dictionary<string, Func<string>>()
             {
                 { "sub", () => AbpClaimTypes.UserId },
                 { "role", () => AbpClaimTypes.Role },
@@ -19,6 +19,5 @@ namespace Volo.Abp.AspNetCore.Security.Claims
                 { "family_name", () => AbpClaimTypes.SurName },
                 { "given_name", () => AbpClaimTypes.Name }
             };
-        }
     }
 }

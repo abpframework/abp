@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.Authorization.Permissions;
+
+public interface IPermissionValueProvider
 {
-    public interface IPermissionValueProvider
-    {
-        string Name { get; }
+    string Name { get; }
 
-        //TODO: Rename to GetResult? (CheckAsync throws exception by naming convention)
-        Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context);
+    //TODO: Rename to GetResult? (CheckAsync throws exception by naming convention)
+    Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context);
 
-        Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context);
-    }
+    Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context);
 }

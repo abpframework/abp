@@ -1,0 +1,17 @@
+{
+  "culture": "fa",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "میزبان سرور",
+    "Description:Abp.Ldap.ServerHost": "میزبان سرور",
+    "DisplayName:Abp.Ldap.ServerPort": "پورت سرور",
+    "Description:Abp.Ldap.ServerPort": "پورت سرور",
+    "DisplayName:Abp.Ldap.BaseDc": "کامپوننت پایه دامنه",
+    "Description:Abp.Ldap.BaseDc": "کامپوننت پایه دامنه",
+    "DisplayName:Abp.Ldap.Domain": "دامنه",
+    "Description:Abp.Ldap.Domain": "دامنه",
+    "DisplayName:Abp.Ldap.UserName": "نام کاربری",
+    "Description:Abp.Ldap.UserName": "نام کاربری",
+    "DisplayName:Abp.Ldap.Password": "رمز عبور",
+    "Description:Abp.Ldap.Password": "رمز عبور"
+  }
+}

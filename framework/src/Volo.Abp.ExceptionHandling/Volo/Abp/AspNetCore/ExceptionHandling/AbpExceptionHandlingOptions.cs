@@ -1,7 +1,8 @@
-﻿namespace Volo.Abp.AspNetCore.ExceptionHandling
+﻿namespace Volo.Abp.AspNetCore.ExceptionHandling;
+
+public class AbpExceptionHandlingOptions
 {
-    public class AbpExceptionHandlingOptions
-    {
-        public bool SendExceptionsDetailsToClients { get; set; } = false;
-    }
+    public bool SendExceptionsDetailsToClients { get; set; } = false;
+
+    public bool SendStackTraceToClients { get; set; } = true;
 }

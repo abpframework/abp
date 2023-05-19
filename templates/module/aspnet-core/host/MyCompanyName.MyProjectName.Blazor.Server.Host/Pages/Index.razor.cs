@@ -1,6 +1,5 @@
-﻿namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Pages
+﻿namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Pages;
+
+public partial class Index
 {
-    public partial class Index
-    {
-    }
 }

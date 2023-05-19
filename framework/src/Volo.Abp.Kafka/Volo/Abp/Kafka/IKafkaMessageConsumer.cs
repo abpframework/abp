@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 using Confluent.Kafka;
 
-namespace Volo.Abp.Kafka
+namespace Volo.Abp.Kafka;
+
+public interface IKafkaMessageConsumer
 {
-    public interface IKafkaMessageConsumer
-    {
-        void OnMessageReceived(Func<Message<string, byte[]>, Task> callback);
-    }
+    void OnMessageReceived(Func<Message<string, byte[]>, Task> callback);
 }

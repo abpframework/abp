@@ -1,0 +1,115 @@
+{
+  "name": "Volo.Abp.FeatureManagement.MongoDB",
+  "hash": "1287dca2b75f3753abc23921cc0263b4",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.FeatureManagement.MongoDB",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Domain",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "namespace": "Volo.Abp.MongoDB",
+          "name": "AbpMongoDbModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpFeatureManagementMongoDbModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.FeatureManagement.MongoDB",
+      "connectionStringName": "AbpFeatureManagement",
+      "databaseCollections": [
+        {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureValue",
+          "contentType": "databaseCollection",
+          "name": "AbpFeatureValues",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureDefinitionRecord",
+          "contentType": "databaseCollection",
+          "name": "AbpFeatures",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureGroupDefinitionRecord",
+          "contentType": "databaseCollection",
+          "name": "AbpFeatureGroups",
+          "summary": null
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpMongoDbContext",
+          "namespace": "Volo.Abp.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.MongoDB",
+          "fullName": "Volo.Abp.MongoDB.IAbpMongoDbContext"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "IFeatureManagementMongoDbContext",
+          "namespace": "Volo.Abp.FeatureManagement.MongoDB",
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.MongoDB",
+          "fullName": "Volo.Abp.FeatureManagement.MongoDB.IFeatureManagementMongoDbContext"
+        }
+      ],
+      "contentType": "mongoDbContext",
+      "name": "FeatureManagementMongoDbContext",
+      "summary": null
+    }
+  ]
+}

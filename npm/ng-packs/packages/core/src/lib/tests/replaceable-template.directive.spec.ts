@@ -2,8 +2,8 @@ import { Component, EventEmitter, Inject, Input, Optional, Output } from '@angul
 import { Router } from '@angular/router';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
 import { BehaviorSubject } from 'rxjs';
-import { ReplaceableTemplateDirective } from '../directives';
-import { ReplaceableComponents } from '../models';
+import { ReplaceableTemplateDirective } from '../directives/replaceable-template.directive';
+import { ReplaceableComponents } from '../models/replaceable-components';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 
 @Component({
@@ -65,7 +65,14 @@ describe('ReplaceableTemplateDirective', () => {
           <abp-default-component #defaultComponent="abpDefaultComponent"></abp-default-component>
         </div>
         `,
-        { hostProps: { oneWay: { label: 'Test' }, twoWay: false, twoWayChange, someOutput } },
+        {
+          hostProps: {
+            oneWay: { label: 'Test' },
+            twoWay: false,
+            twoWayChange,
+            someOutput,
+          },
+        },
       );
 
       const component = spectator.query(DefaultComponent);

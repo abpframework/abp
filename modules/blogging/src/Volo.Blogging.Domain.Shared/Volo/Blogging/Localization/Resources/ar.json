@@ -12,6 +12,7 @@
     "Permission:Posts": "المنشورات",
     "Permission:Tags": "العلامات",
     "Permission:Comments": "التعليقات",
+    "Permission:ClearCache": "مسح ذاكرة التخزين المؤقت",
     "Title": "العنوان",
     "Delete": "حذف",
     "Reply": "رد",
@@ -53,6 +54,8 @@
     "Blogs": "المدونات",
     "Tags": "العلامات",
     "ShareOn": "شارك على",
-    "TitleLengthWarning": "احتفظ بحجم عنوانك أقل من 60 حرفًا ليكون صديقًا لمحركات البحث!"
+    "TitleLengthWarning": "احتفظ بحجم عنوانك أقل من 60 حرفًا ليكون صديقًا لمحركات البحث!",
+    "ClearCache": "مسح ذاكرة التخزين المؤقت",
+    "ClearCacheConfirmationMessage": "هل أنت متأكد أنك تريد مسح ذاكرة التخزين المؤقت؟"
   }
 }

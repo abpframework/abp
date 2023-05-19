@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.ApiVersioning
+﻿namespace Volo.Abp.ApiVersioning;
+
+public interface IRequestedApiVersion
 {
-    public interface IRequestedApiVersion
-    {
-        string Current { get; }
-    }
+    string Current { get; }
 }

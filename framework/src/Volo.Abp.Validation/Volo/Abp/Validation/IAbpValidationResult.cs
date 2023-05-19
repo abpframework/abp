@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Volo.Abp.Validation
+namespace Volo.Abp.Validation;
+
+public interface IAbpValidationResult
 {
-    public interface IAbpValidationResult
-    {
-        List<ValidationResult> Errors { get; }
-    }
+    List<ValidationResult> Errors { get; }
 }

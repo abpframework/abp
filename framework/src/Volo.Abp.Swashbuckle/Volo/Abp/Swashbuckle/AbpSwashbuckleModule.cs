@@ -2,19 +2,18 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Swashbuckle
+namespace Volo.Abp.Swashbuckle;
+
+[DependsOn(
+    typeof(AbpVirtualFileSystemModule),
+    typeof(AbpAspNetCoreMvcModule))]
+public class AbpSwashbuckleModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpVirtualFileSystemModule),
-        typeof(AbpAspNetCoreMvcModule))]
-    public class AbpSwashbuckleModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpSwashbuckleModule>();
-            });
-        }
+            options.FileSets.AddEmbedded<AbpSwashbuckleModule>();
+        });
     }
 }

@@ -1,10 +1,9 @@
-﻿namespace Volo.Abp.ObjectExtending.Modularity
+﻿namespace Volo.Abp.ObjectExtending.Modularity;
+
+public class ExtensionPropertyApiUpdateConfiguration
 {
-    public class ExtensionPropertyApiUpdateConfiguration
-    {
-        /// <summary>
-        /// Default: true.
-        /// </summary>
-        public bool IsAvailable { get; set; } = true;
-    }
+    /// <summary>
+    /// Default: true.
+    /// </summary>
+    public bool IsAvailable { get; set; } = true;
 }

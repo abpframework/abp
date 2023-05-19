@@ -1,6 +1,7 @@
 {
   "culture": "es",
   "texts": {
+    "Menu:Account": "Cuenta",
     "UserName": "Nombre de usuario",
     "EmailAddress": "Dirección de correo electrónico",
     "UserNameOrEmailAddress": "Nombre de usuario o dirección de correo electrónico",
@@ -9,7 +10,7 @@
     "UseAnotherServiceToLogin": "Usar otro servicio para iniciar sesión",
     "UserLockedOutMessage": "La cuenta de usuario ha sido bloqueada debido a los intentos de inicio de sesión no válidos. Por favor, espere unos minutos y vuelve a intentarlo.",
     "InvalidUserNameOrPassword": "El nombre de usuario o la contraseña no son válidos",
-    "LoginIsNotAllowed": "¡No está permitido iniciar sesión! Su cuenta está inactiva o necesita confirmar su correo electrónico / número de teléfono.",
+    "LoginIsNotAllowed": "¡No está permitido iniciar sesión! Su cuenta está inactiva o necesita confirmar su correo electrónico/número de teléfono.",
     "SelfRegistrationDisabledMessage": "El autoregistro de usuario está deshabilitado para esta aplicación. Póngase en contacto con el administrador de la aplicación para registrar un nuevo usuario.",
     "LocalLoginDisabledMessage": "Inicio de sesión local ha sido deshabilitado para esta aplicación",
     "Login": "Iniciar sesión",
@@ -35,6 +36,7 @@
     "PersonalSettingsSaved": "Ajustes personales guardados",
     "PasswordChanged": "Cambiar la contraseña",
     "NewPasswordConfirmFailed": "Por favor, confirme la nueva contraseña.",
+    "NewPasswordSameAsOld": "La nueva contraseña debe ser diferente de la contraseña actual.",
     "Manage": "Administrar",
     "MyAccount": "Mi cuenta",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "¿El auto-registro está habilitado?",
@@ -60,6 +62,8 @@
     "Volo.Account:InvalidEmailAddress": "No se puede encontrar la dirección de e-mail solicitada: {0}",
     "PasswordReset": "Restablecer contraseña",
     "PasswordResetInfoInEmail": "Recibimos una solicitud de recuperación de cuenta. Si inició esta solicitud, haga clic en el siguiente enlace para restablecer su contraseña.",
-    "ResetMyPassword": "Restablecer mi contraseña"
+    "ResetMyPassword": "Restablecer mi contraseña",
+    "AccessDenied": "¡Acceso denegado!",
+    "AccessDeniedMessage": "No tienes acceso a este recurso."
   }
 }

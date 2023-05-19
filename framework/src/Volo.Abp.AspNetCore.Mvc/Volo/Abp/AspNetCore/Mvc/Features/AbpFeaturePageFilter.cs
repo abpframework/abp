@@ -5,32 +5,31 @@ using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 
-namespace Volo.Abp.AspNetCore.Mvc.Features
+namespace Volo.Abp.AspNetCore.Mvc.Features;
+
+public class AbpFeaturePageFilter : IAsyncPageFilter, ITransientDependency
 {
-    public class AbpFeaturePageFilter : IAsyncPageFilter, ITransientDependency
+    public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
     {
-        public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
+        return Task.CompletedTask;
+    }
+
+    public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
+    {
+        if (context.HandlerMethod == null || !context.ActionDescriptor.IsPageAction())
         {
-            return Task.CompletedTask;
+            await next();
+            return;
         }
 
-        public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
+        var methodInfo = context.HandlerMethod.MethodInfo;
+
+        using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.FeatureChecking))
         {
-            if (context.HandlerMethod == null || !context.ActionDescriptor.IsPageAction())
-            {
-                await next();
-                return;
-            }
+            var methodInvocationFeatureCheckerService = context.GetRequiredService<IMethodInvocationFeatureCheckerService>();
+            await methodInvocationFeatureCheckerService.CheckAsync(new MethodInvocationFeatureCheckerContext(methodInfo));
 
-            var methodInfo = context.HandlerMethod.MethodInfo;
-
-            using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.FeatureChecking))
-            {
-                var methodInvocationFeatureCheckerService = context.GetRequiredService<IMethodInvocationFeatureCheckerService>();
-                await methodInvocationFeatureCheckerService.CheckAsync(new MethodInvocationFeatureCheckerContext(methodInfo));
-
-                await next();
-            }
+            await next();
         }
     }
 }

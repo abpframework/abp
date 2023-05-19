@@ -1,0 +1,7 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "Độ dài mật khẩu phải lớn hơn {0} ký tự.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Mật khẩu phải chứa ít nhất một ký tự không phải chữ và số."
+  }
+}

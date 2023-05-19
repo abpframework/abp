@@ -75,6 +75,42 @@ This job simply uses `IEmailSender` to send emails (see [email sending document]
 
 A background job should not hide exceptions. If it throws an exception, the background job is automatically re-tried after a calculated waiting time. Hide exceptions only if you don't want to re-run the background job for the current argument.
 
+#### Cancelling Background Jobs
+
+If your background task is cancellable, then you can use the standard [Cancellation Token](Cancellation-Token-Provider.md) system to obtain a `CancellationToken` to cancel your job when requested. See the following example that uses the `ICancellationTokenProvider` to obtain the cancellation token:
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
+
+namespace MyProject
+{
+    public class LongRunningJob : AsyncBackgroundJob<LongRunningJobArgs>, ITransientDependency
+    {
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+
+        public LongRunningJob(ICancellationTokenProvider cancellationTokenProvider)
+        {
+            _cancellationTokenProvider = cancellationTokenProvider;
+        }
+
+        public override async Task ExecuteAsync(LongRunningJobArgs args)
+        {
+            foreach (var id in args.Ids)
+            {
+                _cancellationTokenProvider.Token.ThrowIfCancellationRequested();
+                await ProcessAsync(id); // code omitted for brevity
+            }
+        }
+    }
+}
+```
+
+> A cancellation operation might be needed if the application is shutting down and we don't want to block the application in the background job. This example throws an exception if the cancellation is requested. So, the job will be retried the next time the application starts. If you don't want that, just return from the `ExecuteAsync` method without throwing any exception (you can simply check the `_cancellationTokenProvider.Token.IsCancellationRequested` property).
+
 #### Job Name
 
 Each background job has a name. Job names are used in several places. For example, RabbitMQ provider uses job names to determine the RabbitMQ Queue names.
@@ -155,8 +191,6 @@ public class MyModule : AbpModule
 }
 ````
 
-> Default background manager (see below) does not support multiple processes execute the same job queue. So, if you have multiple running instance of your application and you are using the default background job manager, you should only enable one application instance process the job queue.
-
 ## Default Background Job Manager
 
 ABP framework includes a simple `IBackgroundJobManager` implementation that;
@@ -189,11 +223,22 @@ public class MyModule : AbpModule
 
 ### Data Store
 
-The default background job manager needs a data store to save and read jobs. It defines `IBackgroundJobStore` as an abstraction. So, you can replace the implementation if you want.
+The default background job manager needs a data store to save and read jobs. It defines `IBackgroundJobStore` as an abstraction to store the jobs.
 
-Background Jobs module implements `IBackgroundJobStore` using various data access providers. See its own [documentation](Modules/Background-Jobs.md).
+Background Jobs module implements `IBackgroundJobStore` using various data access providers. See its own [documentation](Modules/Background-Jobs.md). If you don't want to use this module, you should implement the `IBackgroundJobStore` interface yourself.
 
 > Background Jobs module is already installed to the startup templates by default and it works based on your ORM/data access choice.
+
+### Clustered Deployment
+
+The default background job manager is compatible with [clustered environments](Deployment/Clustered-Environment.md) (where multiple instances of your application run concurrently). It uses a [distributed lock](Distributed-Locking.md) to ensure that the jobs are executed only in a single application instance at a time.
+
+However, the distributed lock system works in-process by default. That means it is not distributed actually, unless you configure a distributed lock provider. So, **please follow the [distributed lock](Distributed-Locking.md) document to configure a provider for your application**, if it is not already configured.
+
+If you don't want to use a distributed lock provider, you may go with the following options:
+
+* Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section) in all application instances except one of them, so only the single instance executes the jobs (while other application instances can still queue jobs).
+* Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section)  in all application instances and create a dedicated application (maybe a console application running in its own container or a Windows Service running in the background) to execute all the background jobs. This can be a good option if your background jobs consume high system resources (CPU, RAM or Disk), so you can deploy that background application to a dedicated server and your background jobs don't affect your application's performance.
 
 ## Integrations
 

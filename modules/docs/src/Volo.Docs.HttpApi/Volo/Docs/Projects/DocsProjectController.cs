@@ -8,7 +8,7 @@ using Volo.Docs.Documents;
 namespace Volo.Docs.Projects
 {
     [RemoteService(Name = DocsRemoteServiceConsts.RemoteServiceName)]
-    [Area("docs")]
+    [Area(DocsRemoteServiceConsts.ModuleName)]
     [ControllerName("Project")]
     [Route("api/docs/projects")]
     public class DocsProjectController : AbpControllerBase, IProjectAppService

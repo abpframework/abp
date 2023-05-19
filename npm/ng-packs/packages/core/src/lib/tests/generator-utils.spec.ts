@@ -1,4 +1,4 @@
-import { generateHash, generatePassword } from '../utils';
+import { generateHash, generatePassword } from '../utils/generator-utils';
 
 describe('GeneratorUtils', () => {
   describe('#generateHash', () => {

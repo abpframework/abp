@@ -1,21 +1,20 @@
-﻿namespace Volo.Abp.Caching
+﻿namespace Volo.Abp.Caching;
+
+public class DistributedCacheKeyNormalizeArgs
 {
-    public class DistributedCacheKeyNormalizeArgs
+    public string Key { get; }
+
+    public string CacheName { get; }
+
+    public bool IgnoreMultiTenancy { get; }
+
+    public DistributedCacheKeyNormalizeArgs(
+        string key,
+        string cacheName,
+        bool ignoreMultiTenancy)
     {
-        public string Key { get; }
-
-        public string CacheName { get; }
-
-        public bool IgnoreMultiTenancy { get; }
-        
-        public DistributedCacheKeyNormalizeArgs(
-            string key, 
-            string cacheName, 
-            bool ignoreMultiTenancy)
-        {
-            Key = key;
-            CacheName = cacheName;
-            IgnoreMultiTenancy = ignoreMultiTenancy;
-        }
+        Key = key;
+        CacheName = cacheName;
+        IgnoreMultiTenancy = ignoreMultiTenancy;
     }
 }

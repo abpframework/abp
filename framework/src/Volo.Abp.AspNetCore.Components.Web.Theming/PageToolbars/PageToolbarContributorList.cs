@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
+
+public class PageToolbarContributorList : List<IPageToolbarContributor>
 {
-    public class PageToolbarContributorList : List<IPageToolbarContributor>
-    {
-    }
 }

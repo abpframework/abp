@@ -1,13 +1,12 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Building
+﻿namespace Volo.Abp.Cli.ProjectBuilding.Building;
+
+public enum DatabaseManagementSystem
 {
-    public enum DatabaseManagementSystem
-    {
-        NotSpecified,
-        SQLServer,
-        MySQL,
-        PostgreSQL,
-        Oracle,
-        OracleDevart,
-        SQLite
-    }
+    NotSpecified,
+    SQLServer,
+    MySQL,
+    PostgreSQL,
+    Oracle,
+    OracleDevart,
+    SQLite
 }

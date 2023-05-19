@@ -1,0 +1,14 @@
+{
+  "culture": "el",
+  "texts": {
+    "VirtualFileExplorer": "Εικονικός Εξερευνητής Αρχείων",
+    "VirtualFileType": "Εικονικός τύπος αρχείου",
+    "Menu:VirtualFileExplorer": "Εικονικός εξερευνητής αρχείων",
+    "LastUpdateTime": "Ώρα τελευταίας ενημέρωσης",
+    "VirtualFileName": "Όνομα εικονικού αρχείου",
+    "FileContent": "Περιεχόμενο αρχείου",
+    "Size": "Μέγεθος",
+    "BackToRoot": "Επιστροφή στη ρίζα",
+    "EmptyFileInfoList": "Δεν υπάρχουν εικονικά αρχεία"
+  }
+}

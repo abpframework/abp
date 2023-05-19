@@ -1,0 +1,8 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Volo.Feature:010001": "Funkcija ni omogočena: {FeatureName}",
+    "Volo.Feature:010002": "Zahtevane funkcije niso omogočene. Vse te funkcije morajo biti omogočene: {FeatureNames}",
+    "Volo.Feature:010003": "Zahtevane funkcije niso omogočene. Vsaj ena od teh funkcij mora biti omogočena: {FeatureNames}"
+  }
+}

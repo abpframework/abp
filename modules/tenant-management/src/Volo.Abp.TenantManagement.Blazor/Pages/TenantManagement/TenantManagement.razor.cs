@@ -1,72 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
-using Volo.Abp.BlazoriseUI;
 using Volo.Abp.FeatureManagement.Blazor.Components;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.TenantManagement.Localization;
 
-namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
+namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement;
+
+public partial class TenantManagement
 {
-    public partial class TenantManagement
+    protected const string FeatureProviderName = "T";
+
+    protected bool HasManageFeaturesPermission;
+    protected string ManageFeaturesPolicyName;
+
+    protected FeatureManagementModal FeatureManagementModal;
+
+    protected bool ShowPassword { get; set; }
+
+    protected PageToolbar Toolbar { get; } = new();
+
+    protected List<TableColumn> TenantManagementTableColumns => TableColumns.Get<TenantManagement>();
+
+    public TenantManagement()
     {
-        protected const string FeatureProviderName = "T";
+        LocalizationResource = typeof(AbpTenantManagementResource);
+        ObjectMapperContext = typeof(AbpTenantManagementBlazorModule);
 
-        protected bool HasManageFeaturesPermission;
-        protected string ManageFeaturesPolicyName;
+        CreatePolicyName = TenantManagementPermissions.Tenants.Create;
+        UpdatePolicyName = TenantManagementPermissions.Tenants.Update;
+        DeletePolicyName = TenantManagementPermissions.Tenants.Delete;
 
-        protected FeatureManagementModal FeatureManagementModal;
+        ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
+    }
 
-        protected PageToolbar Toolbar { get; } = new();
+    protected override ValueTask SetBreadcrumbItemsAsync()
+    {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:TenantManagement"]));
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Tenants"]));
+        return base.SetBreadcrumbItemsAsync();
+    }
 
-        protected List<TableColumn> TenantManagementTableColumns => TableColumns.Get<TenantManagement>();
+    protected override async Task SetPermissionsAsync()
+    {
+        await base.SetPermissionsAsync();
 
-        public TenantManagement()
-        {
-            LocalizationResource = typeof(AbpTenantManagementResource);
-            ObjectMapperContext = typeof(AbpTenantManagementBlazorModule);
+        HasManageFeaturesPermission = await AuthorizationService.IsGrantedAsync(ManageFeaturesPolicyName);
+    }
 
-            CreatePolicyName = TenantManagementPermissions.Tenants.Create;
-            UpdatePolicyName = TenantManagementPermissions.Tenants.Update;
-            DeletePolicyName = TenantManagementPermissions.Tenants.Delete;
+    protected override string GetDeleteConfirmationMessage(TenantDto entity)
+    {
+        return string.Format(L["TenantDeletionConfirmationMessage"], entity.Name);
+    }
 
-            ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
-        }
+    protected override ValueTask SetToolbarItemsAsync()
+    {
+        Toolbar.AddButton(L["NewTenant"],
+            OpenCreateModalAsync,
+            IconName.Add,
+            requiredPolicyName: CreatePolicyName);
 
-        protected override async Task SetPermissionsAsync()
-        {
-            await base.SetPermissionsAsync();
+        return base.SetToolbarItemsAsync();
+    }
 
-            HasManageFeaturesPermission = await AuthorizationService.IsGrantedAsync(ManageFeaturesPolicyName);
-        }
-
-        protected override string GetDeleteConfirmationMessage(TenantDto entity)
-        {
-            return string.Format(L["TenantDeletionConfirmationMessage"], entity.Name);
-        }
-
-        protected override ValueTask SetToolbarItemsAsync()
-        {
-            Toolbar.AddButton(L["NewTenant"],
-                OpenCreateModalAsync,
-                IconName.Add,
-                requiredPolicyName: CreatePolicyName);
-
-            return base.SetToolbarItemsAsync();
-        }
-
-        protected override ValueTask SetEntityActionsAsync()
-        {
-            EntityActions
-                .Get<TenantManagement>()
-                .AddRange(new EntityAction[]
-                {
+    protected override ValueTask SetEntityActionsAsync()
+    {
+        EntityActions
+            .Get<TenantManagement>()
+            .AddRange(new EntityAction[]
+            {
                     new EntityAction
                     {
                         Text = L["Edit"],
@@ -90,33 +97,38 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
                         Clicked = async (data) => await DeleteEntityAsync(data.As<TenantDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<TenantDto>())
                     }
-                });
+            });
 
-            return base.SetEntityActionsAsync();
-        }
+        return base.SetEntityActionsAsync();
+    }
 
-        protected override ValueTask SetTableColumnsAsync()
-        {
-            TenantManagementTableColumns
-                .AddRange(new TableColumn[]
-                {
+    protected override ValueTask SetTableColumnsAsync()
+    {
+        TenantManagementTableColumns
+            .AddRange(new TableColumn[]
+            {
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<TenantManagement>()
+                        Actions = EntityActions.Get<TenantManagement>(),
                     },
                     new TableColumn
                     {
                         Title = L["TenantName"],
+                        Sortable = true,
                         Data = nameof(TenantDto.Name),
                     },
-                });
+            });
 
-            TenantManagementTableColumns.AddRange(GetExtensionTableColumns(
-                TenantManagementModuleExtensionConsts.ModuleName,
-                TenantManagementModuleExtensionConsts.EntityNames.Tenant));
+        TenantManagementTableColumns.AddRange(GetExtensionTableColumns(
+            TenantManagementModuleExtensionConsts.ModuleName,
+            TenantManagementModuleExtensionConsts.EntityNames.Tenant));
 
-            return base.SetTableColumnsAsync();
-        }
+        return base.SetTableColumnsAsync();
+    }
+
+    protected virtual void TogglePasswordVisibility()
+    {
+        ShowPassword = !ShowPassword;
     }
 }

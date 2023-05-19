@@ -1,0 +1,103 @@
+{
+  "name": "Volo.Abp.Ddd.Domain",
+  "hash": "",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Domain",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Auditing",
+          "namespace": "Volo.Abp.Auditing",
+          "name": "AbpAuditingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Data",
+          "namespace": "Volo.Abp.Data",
+          "name": "AbpDataModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EventBus",
+          "namespace": "Volo.Abp.EventBus",
+          "name": "AbpEventBusModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Guids",
+          "namespace": "Volo.Abp.Guids",
+          "name": "AbpGuidsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Timing",
+          "namespace": "Volo.Abp.Timing",
+          "name": "AbpTimingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.ObjectMapping",
+          "namespace": "Volo.Abp.ObjectMapping",
+          "name": "AbpObjectMappingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.ExceptionHandling",
+          "namespace": "Volo.Abp.ExceptionHandling",
+          "name": "AbpExceptionHandlingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Specifications",
+          "namespace": "Volo.Abp.Specifications",
+          "name": "AbpSpecificationsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpDddDomainModule",
+      "summary": null
+    }
+  ]
+}

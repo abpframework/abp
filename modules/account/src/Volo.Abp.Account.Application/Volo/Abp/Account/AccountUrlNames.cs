@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.Account
+﻿namespace Volo.Abp.Account;
+
+public static class AccountUrlNames
 {
-    public static class AccountUrlNames
-    {
-        public const string PasswordReset = "Abp.Account.PasswordReset";
-    }
+    public const string PasswordReset = "Abp.Account.PasswordReset";
 }

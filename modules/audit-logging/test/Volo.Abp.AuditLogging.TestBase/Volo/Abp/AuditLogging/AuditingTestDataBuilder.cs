@@ -1,19 +1,18 @@
 ﻿using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AuditLogging
+namespace Volo.Abp.AuditLogging;
+
+public class AuditingTestDataBuilder : ITransientDependency
 {
-    public class AuditingTestDataBuilder : ITransientDependency
+    private readonly IAuditLogRepository _auditLogRepository;
+
+    public AuditingTestDataBuilder(IAuditLogRepository auditLogRepository)
     {
-        private readonly IAuditLogRepository _auditLogRepository;
+        _auditLogRepository = auditLogRepository;
+    }
 
-        public AuditingTestDataBuilder(IAuditLogRepository auditLogRepository )
-        {
-            _auditLogRepository = auditLogRepository;
-        }
+    public void Build()
+    {
 
-        public void Build()
-        {
-            
-        }
     }
 }

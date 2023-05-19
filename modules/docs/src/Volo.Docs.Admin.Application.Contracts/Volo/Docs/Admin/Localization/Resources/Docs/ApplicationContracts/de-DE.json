@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Sprachcode",
     "DisplayName:Version": "Version",
     "Documents": "Dokumente",
-    "RemoveFromCache": "Aus dem Cache entfernen",
+    "RemoveFromCache": "Aus dem Cache entfernen und neu indizieren",
     "Reindex": "Neuindizierung",
     "ReindexCompleted": "Neuindizierung abgeschlossen",
-    "RemovedFromCache": "Aus dem Cache entfernt",
+    "RemovedFromCache": "Aus dem Cache entfernt und neu indiziert",
     "RemoveFromCacheConfirmation": "Möchten Sie dieses Element wirklich aus dem Cache entfernen?",
-    "ReIndexDocumentConfirmation": "Möchten Sie diesen Beitrag wirklich neu indizieren?",
+    "ReIndexDocumentConfirmation": "Sind Sie sicher, dass Sie \"{0}\" neu indizieren wollen?",
     "DeleteFromDatabase": "Aus Datenbank löschen",
     "Deleted": "Gelöscht",
     "Search": "Suchen",
@@ -54,6 +54,8 @@
     "Version": "Version",
     "LanguageCode": "Sprachcode",
     "FileName": "Dateiname",
-    "LastCachedTime": "Cache-Zeit"
+    "LastCachedTime": "Cache-Zeit",
+    "Project": "Projekt",
+    "RemoveCacheAndReIndexConfirmation": "Das Dokument \"{0}\" wird aus dem Cache entfernt und neu indiziert. Können Sie das bestätigen?"
   }
 }

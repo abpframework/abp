@@ -1,8 +1,7 @@
-﻿namespace Volo.Abp.Localization.Resources.AbpLocalization
+﻿namespace Volo.Abp.Localization.Resources.AbpLocalization;
+
+[LocalizationResourceName("AbpLocalization")]
+public class AbpLocalizationResource
 {
-    [LocalizationResourceName("AbpLocalization")]
-    public class AbpLocalizationResource
-    {
-        
-    }
+
 }

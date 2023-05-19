@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.Dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.DemoApp.Quartz", "app\Volo.Abp.BackgroundJobs.DemoApp.Quartz\Volo.Abp.BackgroundJobs.DemoApp.Quartz.csproj", "{0146891D-3FF8-4516-94D6-B9EFC37383CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.Installer", "src\Volo.Abp.BackgroundJobs.Installer\Volo.Abp.BackgroundJobs.Installer.csproj", "{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{0146891D-3FF8-4516-94D6-B9EFC37383CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0146891D-3FF8-4516-94D6-B9EFC37383CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0146891D-3FF8-4516-94D6-B9EFC37383CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +117,7 @@ Global
 		{2060AC85-2598-4342-A87C-A684A2C71A37} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{7C8D03F7-165E-478C-A6D6-DC8229EEABB9} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{0146891D-3FF8-4516-94D6-B9EFC37383CD} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{FCD1EFC7-28D6-40F5-8C9A-7DE0328D6758} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}

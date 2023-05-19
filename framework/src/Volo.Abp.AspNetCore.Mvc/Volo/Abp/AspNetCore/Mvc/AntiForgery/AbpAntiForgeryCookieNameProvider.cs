@@ -2,34 +2,33 @@
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
+namespace Volo.Abp.AspNetCore.Mvc.AntiForgery;
+
+public class AbpAntiForgeryCookieNameProvider : ITransientDependency
 {
-    public class AbpAntiForgeryCookieNameProvider : ITransientDependency
+    private readonly IOptionsMonitor<CookieAuthenticationOptions> _namedOptionsAccessor;
+    private readonly AbpAntiForgeryOptions _abpAntiForgeryOptions;
+
+    public AbpAntiForgeryCookieNameProvider(
+        IOptionsMonitor<CookieAuthenticationOptions> namedOptionsAccessor,
+        IOptions<AbpAntiForgeryOptions> abpAntiForgeryOptions)
     {
-        private readonly IOptionsSnapshot<CookieAuthenticationOptions> _namedOptionsAccessor;
-        private readonly AbpAntiForgeryOptions _abpAntiForgeryOptions;
+        _namedOptionsAccessor = namedOptionsAccessor;
+        _abpAntiForgeryOptions = abpAntiForgeryOptions.Value;
+    }
 
-        public AbpAntiForgeryCookieNameProvider(
-            IOptionsSnapshot<CookieAuthenticationOptions> namedOptionsAccessor,
-            IOptions<AbpAntiForgeryOptions> abpAntiForgeryOptions)
+    public virtual string GetAuthCookieNameOrNull()
+    {
+        if (_abpAntiForgeryOptions.AuthCookieSchemaName == null)
         {
-            _namedOptionsAccessor = namedOptionsAccessor;
-            _abpAntiForgeryOptions = abpAntiForgeryOptions.Value;
+            return null;
         }
 
-        public virtual string GetAuthCookieNameOrNull()
-        {
-            if (_abpAntiForgeryOptions.AuthCookieSchemaName == null)
-            {
-                return null;
-            }
+        return _namedOptionsAccessor.Get(_abpAntiForgeryOptions.AuthCookieSchemaName)?.Cookie?.Name;
+    }
 
-            return _namedOptionsAccessor.Get(_abpAntiForgeryOptions.AuthCookieSchemaName)?.Cookie?.Name;
-        }
-
-        public virtual string GetAntiForgeryCookieNameOrNull()
-        {
-            return _abpAntiForgeryOptions.TokenCookie.Name;
-        }
+    public virtual string GetAntiForgeryCookieNameOrNull()
+    {
+        return _abpAntiForgeryOptions.TokenCookie.Name;
     }
 }

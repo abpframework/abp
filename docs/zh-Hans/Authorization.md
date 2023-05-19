@@ -392,6 +392,45 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 启动模板的集成测试已经禁用了授权服务.
 
+### Claims Principal Factory
+
+声明是认证和授权的重要组成部分. ABP 使用 `IAbpClaimsPrincipalFactory` 来服务创建身份认证声明. 该服务被设计为可扩展的. 如果你需要将自定义声明添加到身份认证票证中, 可以在你的应用程序中实现 `IAbpClaimsPrincipalContributor`.
+
+**示例:添加一个 `SocialSecurityNumber ` 声明并获取它:**
+
+```csharp
+public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
+{
+    public async Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+    {
+        var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        var userId = identity?.FindUserId();
+        if (userId.HasValue)
+        {
+            var userService = context.ServiceProvider.GetRequiredService<IUserService>(); //Your custom service
+            var socialSecurityNumber = await userService.GetSocialSecurityNumberAsync(userId.Value);
+            if (socialSecurityNumber != null)
+            {
+                identity.AddClaim(new Claim("SocialSecurityNumber", socialSecurityNumber));
+            }
+        }
+    }
+}
+
+Configure<AbpClaimsServiceOptions>(options=>
+{
+    options.RequestedClaims.Add("SocialSecurityNumber")
+})
+
+public static class CurrentUserExtensions
+{
+    public static string GetSocialSecurityNumber(this ICurrentUser currentUser)
+    {
+        return currentUser.FindClaimValue("SocialSecurityNumber");
+    }
+}
+```
+
 ## 接下来
 
 * [权限管理模块](Modules/Permission-Management.md)

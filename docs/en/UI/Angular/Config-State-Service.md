@@ -81,7 +81,7 @@ You can use the `getFeature` or `getFeature$` method of `ConfigStateService` to 
 ```js
 // this.config is instance of ConfigStateService
 
-const enableLdapLogin = this.configStateService.getFeature("Account.EnableLdapLogin");
+const enableLdapLogin = this.config.getFeature("Account.EnableLdapLogin");
 
 // or
 this.config.getFeature$("Account.EnableLdapLogin").subscribe(enableLdapLogin => {
@@ -98,7 +98,7 @@ You can use the `getSetting` or `getSetting$` method of `ConfigStateService` to 
 ```js
 // this.config is instance of ConfigStateService
 
-const twoFactorBehaviour = this.configStateService.getSetting("Abp.Identity.TwoFactor.Behaviour");
+const twoFactorBehaviour = this.config.getSetting("Abp.Identity.TwoFactor.Behaviour");
 
 // or
 this.config.getSetting$("Abp.Identity.TwoFactor.Behaviour").subscribe(twoFactorBehaviour => {
@@ -110,7 +110,7 @@ this.config.getSetting$("Abp.Identity.TwoFactor.Behaviour").subscribe(twoFactorB
 
 #### State Properties
 
-Please refer to `ApplicationConfiguration.Response` type for all the properties you can get with `getOne` and `getDeep`. It can be found in the [application-configuration.ts file](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/application-configuration.ts#L4).
+Please refer to `ApplicationConfigurationDto` type for all the properties you can get with `getOne` and `getDeep`. It can be found in the [models.ts file](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/proxy/volo/abp/asp-net-core/mvc/application-configurations/models.ts#L11).
 
 
 ## Set State
@@ -120,10 +120,10 @@ Please refer to `ApplicationConfiguration.Response` type for all the properties 
 You can get the application configuration response and set the `ConfigStateService` state value as shown below:
 
 ```js
-import {ApplicationConfigurationService, ConfigStateService} from '@abp/ng.core';
+import {AbpApplicationConfigurationService, ConfigStateService} from '@abp/ng.core';
 
-constructor(private applicationConfigurationService: ApplicationConfigurationService, private config: ConfigStateService) {
-  this.applicationConfigurationService.getConfiguration().subscribe(config => {
+constructor(private abpApplicationConfigurationService: AbpApplicationConfigurationService, private config: ConfigStateService) {
+  this.abpApplicationConfigurationService.get().subscribe(config => {
     this.config.setState(config);
   })
 }

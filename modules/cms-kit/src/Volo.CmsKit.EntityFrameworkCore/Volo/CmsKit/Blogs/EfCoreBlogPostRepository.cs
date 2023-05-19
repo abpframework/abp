@@ -7,93 +7,157 @@ using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
+using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.Blogs
+namespace Volo.CmsKit.Blogs;
+
+public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogPost, Guid>, IBlogPostRepository
 {
-    public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPost, Guid>, IBlogPostRepository
+    private EntityTagManager _entityTagManager;
+
+    public EfCoreBlogPostRepository(
+        IDbContextProvider<ICmsKitDbContext> dbContextProvider,
+        EntityTagManager entityTagManager) : base(dbContextProvider)
     {
-        public EfCoreBlogPostRepository(IDbContextProvider<CmsKitDbContext> dbContextProvider) : base(dbContextProvider)
+        _entityTagManager = entityTagManager;
+    }
+
+    public async Task<BlogPost> GetBySlugAsync(
+        Guid blogId,
+        [NotNull] string slug,
+        CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrEmpty(slug, nameof(slug));
+
+        var blogPost = await GetAsync(
+                                x => x.BlogId == blogId && x.Slug.ToLower() == slug,
+                                cancellationToken: GetCancellationToken(cancellationToken));
+
+        blogPost.Author = await (await GetDbContextAsync())
+                            .Set<CmsUser>()
+                            .FirstOrDefaultAsync(x => x.Id == blogPost.AuthorId, GetCancellationToken(cancellationToken));
+
+        return blogPost;
+    }
+
+    public virtual async Task<int> GetCountAsync(
+        string filter = null,
+        Guid? blogId = null,
+        Guid? authorId = null,
+        Guid? tagId = null,
+        BlogPostStatus? statusFilter = null,
+        CancellationToken cancellationToken = default)
+    {
+        List<string> entityIdFilters = null;
+        if (tagId.HasValue)
         {
+            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
         }
 
-        public async Task<BlogPost> GetBySlugAsync(
-            Guid blogId, 
-            [NotNull] string slug,
-            CancellationToken cancellationToken = default)
+        var queryable = (await GetDbSetAsync())
+            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
+            .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
+            .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
+            .WhereIf(statusFilter.HasValue, x => x.Status == statusFilter)
+            .WhereIf(!string.IsNullOrEmpty(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
+
+        var count = await queryable.CountAsync(GetCancellationToken(cancellationToken));
+        return count;
+    }
+
+    public virtual async Task<List<BlogPost>> GetListAsync(
+        string filter = null,
+        Guid? blogId = null,
+        Guid? authorId = null,
+        Guid? tagId = null,
+        BlogPostStatus? statusFilter = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        string sorting = null,
+        CancellationToken cancellationToken = default)
+
+    {
+        var dbContext = await GetDbContextAsync();
+        var blogPostsDbSet = dbContext.Set<BlogPost>();
+        var usersDbSet = dbContext.Set<CmsUser>();
+
+        List<string> entityIdFilters = null;
+        if (tagId.HasValue)
         {
-            Check.NotNullOrEmpty(slug, nameof(slug));
-
-            var blogPost = await GetAsync(
-                                    x => x.BlogId == blogId && x.Slug.ToLower() == slug, 
-                                    cancellationToken: GetCancellationToken(cancellationToken));
-
-            blogPost.Author = await (await GetDbContextAsync())
-                                .Set<CmsUser>()
-                                .FirstOrDefaultAsync(x =>x.Id == blogPost.AuthorId, GetCancellationToken(cancellationToken));
-
-            return blogPost;
+            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
         }
 
-        public virtual async Task<int> GetCountAsync(
-            string filter = null, 
-            Guid? blogId = null, 
-            CancellationToken cancellationToken = default)
+        var queryable = (await GetDbSetAsync())
+            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
+            .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
+            .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
+            .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
+            .WhereIf(statusFilter.HasValue, x => x.Status == statusFilter);
+
+        queryable = queryable.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(BlogPost.CreationTime)} desc" : sorting);
+
+        var combinedResult = await queryable
+            .Join(
+                usersDbSet,
+                o => o.AuthorId,
+                i => i.Id,
+                (blogPost, user) => new { blogPost, user })
+            .Skip(skipCount)
+            .Take(maxResultCount)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        return combinedResult.Select(s =>
         {
-             var queryable = (await GetDbSetAsync())
-                .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
-                .WhereIf(!string.IsNullOrEmpty(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
-            
-             var count = await queryable.CountAsync(GetCancellationToken(cancellationToken));
-             return count;
-        }
+            s.blogPost.Author = s.user;
+            return s.blogPost;
+        }).ToList();
+    }
 
-        public virtual async Task<List<BlogPost>> GetListAsync(
-            string filter = null,
-            Guid? blogId = null,
-            int maxResultCount = int.MaxValue,
-            int skipCount = 0,
-            string sorting = null,
-            CancellationToken cancellationToken = default)
-        
-        {
-            var dbContext = await GetDbContextAsync();
-            var blogPostsDbSet = dbContext.Set<BlogPost>();
-            var usersDbSet = dbContext.Set<CmsUser>();
+    public async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
+        CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrEmpty(slug, nameof(slug));
 
-            var queryable = blogPostsDbSet
-                .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
-                .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
+        return await (await GetDbSetAsync()).AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug,
+            GetCancellationToken(cancellationToken));
+    }
 
-            queryable = queryable.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(BlogPost.CreationTime)} desc" : sorting);
-            
-            var combinedResult = await queryable
-                .Join(
-                    usersDbSet,
-                    o => o.AuthorId,  
-                    i => i.Id, 
-                    (blogPost,user) => new { blogPost, user })
-                .Skip(skipCount)
-                .Take(maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+    public async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
+    {
+        return await (await CreateAuthorsQueryableAsync())
+            .Skip(skipCount)
+            .Take(maxResultCount)
+            .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()))
+            .OrderBy(sorting.IsNullOrEmpty() ? nameof(CmsUser.UserName) : sorting)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
 
-            return combinedResult.Select(s =>
-            {
-                s.blogPost.Author = s.user;
-                return s.blogPost;
-            }).ToList();
-        }
+    public async Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default)
+    {
+        return await (await CreateAuthorsQueryableAsync())
+            .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()))
+            .CountAsync(GetCancellationToken(cancellationToken));
+    }
 
-        public async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
-            CancellationToken cancellationToken = default)
-        {
-            Check.NotNullOrEmpty(slug, nameof(slug));
+    public async Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await (await CreateAuthorsQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken))
+            ?? throw new EntityNotFoundException(typeof(CmsUser), id);
+    }
 
-            return await (await GetDbSetAsync()).AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug,
-                GetCancellationToken(cancellationToken));
-        }
+    private async Task<IQueryable<CmsUser>> CreateAuthorsQueryableAsync()
+    {
+        return (await GetDbContextAsync()).BlogPosts.Select(x => x.Author).Distinct();
+    }
+    
+    public virtual async Task<bool> HasBlogPostWaitingForReviewAsync(CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .AnyAsync(x => x.Status == BlogPostStatus.WaitingForReview, GetCancellationToken(cancellationToken));
     }
 }

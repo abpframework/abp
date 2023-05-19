@@ -1,9 +1,9 @@
 import {
   AuthGuard,
-  DynamicLayoutComponent,
   PermissionGuard,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
+  RouterOutletComponent,
 } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'tenants', pathMatch: 'full' },
   {
     path: '',
-    component: DynamicLayoutComponent,
+    component: RouterOutletComponent,
     canActivate: [AuthGuard, PermissionGuard, TenantManagementExtensionsGuard],
     children: [
       {

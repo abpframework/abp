@@ -9,6 +9,7 @@
     "InvalidUserNameOrPassword": "ongeldige gebruikersnaam of wachtwoord!",
     "LoginIsNotAllowed": "U mag niet inloggen! Uw account is inactief of moet uw e-mailadres/telefoonnummer bevestigen.",
     "InvalidUsername": "Ongeldige gebruikersnaam of wachtwoord!",
+    "InvalidAuthenticatorCode": "Ongeldige authenticatiecode!",
     "TheTargetUserIsNotLinkedToYou": "De beoogde gebruiker is niet aan jou gekoppeld!"
   }
 }

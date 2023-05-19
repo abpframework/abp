@@ -45,7 +45,7 @@ namespace AbpDemo
         public virtual async Task ChangeStockCountAsync(Guid productId, int newCount)
         {
             await _distributedEventBus.PublishAsync(
-                new StockCountChangedEvent
+                new StockCountChangedEto
                 {
                     ProductId = productId,
                     NewCount = newCount
@@ -84,7 +84,7 @@ namespace AbpDemo
 
 #### 关于序列化的事件对象
 
-事件传输对象**必须是可序列化**的,因为将其传输到流程外时，它们将被序列化/反序列化为JSON或其他格式.
+事件传输对象**必须是可序列化**的,因为将其传输到进程外时，它们将被序列化/反序列化为JSON或其他格式.
 
 避免循环引用,多态,私有setter,并提供默认(空)构造函数,如果你有其他的构造函数.(虽然某些序列化器可能会正常工作),就像DTO一样.
 
@@ -264,7 +264,7 @@ Configure<AbpDistributedEntityEventOptions>(options =>
 
 因此可以实现 `IDistributedEventHandler<EntityUpdatedEto<EntityEto>>` 订阅事件. 但是订阅这样的通用事件不是一个好方法,你可以为实体类型定义对应的ETO.
 
-**示例: 为 `Product` 声明使用 `ProductDto`**
+**示例: 为 `Product` 声明使用 `ProductEto`**
 
 ````csharp
 Configure<AbpDistributedEntityEventOptions>(options =>
@@ -300,54 +300,3 @@ namespace AbpDemo
 ````
 
 此示例使用AutoMapper的 `AutoMap` 属性配置的映射. 你可以创建一个配置文件类代替. 请参阅AutoMapper文档了解更多选项.
-
-## 异常处理
-
-ABP提供了异常处理, 它会进行重试并且重试失败后移动到死信队列.
-
-启用异常处理:
-
-```csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
-{
-    PreConfigure<AbpEventBusOptions>(options =>
-    {
-        options.EnabledErrorHandle = true;
-        options.UseRetryStrategy();
-    });
-}
-```
-
-* `EnabledErrorHandle` 用于启用异常处理.
-* `UseRetryStrategy` 用于启用重试.
-
-当一个异常抛出,它会每3秒重试一次直到最大重试次数(默认是3)并且移动到错误队列, 你可以更改重试次数,重试间隔和死信队列名称:
-
-```csharp
-PreConfigure<AbpEventBusOptions>(options =>
-{
-    options.DeadLetterName = "dead_queue";
-    options.UseRetryStrategy(retryStrategyOptions =>
-    {
-        retryStrategyOptions.IntervalMillisecond = 0;
-        retryStrategyOptions.MaxRetryAttempts = 1;
-    });
-});
-```
-
-### 错误处理选择器
-
-默认所有的事件类型都会被处理, 你可以使用 `AbpEventBusOptions` 的 `ErrorHandleSelector` 来更改它:
-
-```csharp
-PreConfigure<AbpEventBusOptions>(options =>
-{
-    options.ErrorHandleSelector = type => type == typeof(MyExceptionHandleEventData);
-});
-```
-
-`options.ErrorHandleSelector` 实际上是一个类型类型谓词列表. 你可以编写lambda来定义你的过滤.
-
-### 自定义异常处理
-
-ABP定义了 `IEventErrorHandler` 接口并且由提供程序实现, 你可以通过[依赖注入](Dependency-Injection.md)替换它.

@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.CmsKit.Blogs;
 
-namespace Volo.CmsKit.EntityFrameworkCore.Blogs
+namespace Volo.CmsKit.EntityFrameworkCore.Blogs;
+
+public class BlogRepository_Test : BlogRepository_Test<CmsKitEntityFrameworkCoreTestModule>
 {
-    public class BlogRepository_Test : BlogRepository_Test<CmsKitEntityFrameworkCoreTestModule>
-    {
-        
-    }
+
 }

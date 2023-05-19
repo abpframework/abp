@@ -86,7 +86,7 @@ Defining multiple connections is allowed. In this case, you can specify the conn
 
 This allows you to use multiple RabbitMQ server in your application, but select one of them for the event bus.
 
-You can use any of the [ConnectionFactry](http://rabbitmq.github.io/rabbitmq-dotnet-client/api/RabbitMQ.Client.ConnectionFactory.html#properties) properties as the connection properties.
+You can use any of the [ConnectionFactory](http://rabbitmq.github.io/rabbitmq-dotnet-client/api/RabbitMQ.Client.ConnectionFactory.html#properties) properties as the connection properties.
 
 **Example: Specify the connection port**
 
@@ -141,13 +141,14 @@ Configure<AbpRabbitMqOptions>(options =>
 });
 ````
 
-**Example: Configure the client and exchange names**
+**Example: Configure the client, exchange names and prefetchCount**
 
 ````csharp
 Configure<AbpRabbitMqEventBusOptions>(options =>
 {
     options.ClientName = "TestApp1";
     options.ExchangeName = "TestMessages";
+    options.PrefetchCount = 1;
 });
 ````
 

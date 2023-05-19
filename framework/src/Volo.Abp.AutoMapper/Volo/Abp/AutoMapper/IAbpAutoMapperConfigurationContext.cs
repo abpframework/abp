@@ -1,12 +1,11 @@
 ﻿using System;
 using AutoMapper;
 
-namespace Volo.Abp.AutoMapper
-{
-    public interface IAbpAutoMapperConfigurationContext
-    {
-        IMapperConfigurationExpression MapperConfiguration { get; }
+namespace Volo.Abp.AutoMapper;
 
-        IServiceProvider ServiceProvider { get; }
-    }
+public interface IAbpAutoMapperConfigurationContext
+{
+    IMapperConfigurationExpression MapperConfiguration { get; }
+
+    IServiceProvider ServiceProvider { get; }
 }

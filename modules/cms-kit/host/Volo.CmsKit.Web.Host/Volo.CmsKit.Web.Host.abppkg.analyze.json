@@ -1,0 +1,133 @@
+{
+  "name": "Volo.CmsKit.Web.Host",
+  "hash": "4e765df6a6f987aba4c051f2106178ac",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Web",
+          "namespace": "Volo.CmsKit.Web",
+          "name": "CmsKitWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.CmsKit.HttpApi.Client",
+          "namespace": "Volo.CmsKit",
+          "name": "CmsKitHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Authentication.OAuth",
+          "namespace": "Volo.Abp.AspNetCore.Authentication.OAuth",
+          "name": "AbpAspNetCoreAuthenticationOAuthModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.Client",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.Client",
+          "name": "AbpAspNetCoreMvcClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+          "name": "AbpAspNetCoreMvcUiBasicThemeModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching.StackExchangeRedis",
+          "namespace": "Volo.Abp.Caching.StackExchangeRedis",
+          "name": "AbpCachingStackExchangeRedisModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Http.Client.IdentityModel.Web",
+          "namespace": "Volo.Abp.Http.Client.IdentityModel.Web",
+          "name": "AbpHttpClientIdentityModelWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Web",
+          "namespace": "Volo.Abp.Identity.Web",
+          "name": "AbpIdentityWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.HttpApi.Client",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Web",
+          "namespace": "Volo.Abp.TenantManagement.Web",
+          "name": "AbpTenantManagementWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.HttpApi.Client",
+          "namespace": "Volo.Abp.TenantManagement",
+          "name": "AbpTenantManagementHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.HttpApi.Client",
+          "namespace": "Volo.Abp.FeatureManagement",
+          "name": "AbpFeatureManagementHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.HttpApi.Client",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "AbpPermissionManagementHttpApiClientModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Serilog",
+          "namespace": "Volo.Abp.AspNetCore.Serilog",
+          "name": "AbpAspNetCoreSerilogModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "CmsKitWebHostModule",
+      "summary": null
+    }
+  ]
+}

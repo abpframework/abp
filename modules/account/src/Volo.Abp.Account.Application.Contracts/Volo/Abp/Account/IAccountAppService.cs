@@ -2,14 +2,15 @@
 using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
 
-namespace Volo.Abp.Account
+namespace Volo.Abp.Account;
+
+public interface IAccountAppService : IApplicationService
 {
-    public interface IAccountAppService : IApplicationService
-    {
-        Task<IdentityUserDto> RegisterAsync(RegisterDto input);
+    Task<IdentityUserDto> RegisterAsync(RegisterDto input);
 
-        Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input);
+    Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input);
 
-        Task ResetPasswordAsync(ResetPasswordDto input);
-    }
+    Task<bool> VerifyPasswordResetTokenAsync(VerifyPasswordResetTokenInput input);
+
+    Task ResetPasswordAsync(ResetPasswordDto input);
 }

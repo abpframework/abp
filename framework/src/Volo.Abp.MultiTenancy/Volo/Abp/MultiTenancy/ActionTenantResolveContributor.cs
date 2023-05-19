@@ -2,27 +2,26 @@ using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.MultiTenancy
+namespace Volo.Abp.MultiTenancy;
+
+public class ActionTenantResolveContributor : TenantResolveContributorBase
 {
-    public class ActionTenantResolveContributor : TenantResolveContributorBase
+    public const string ContributorName = "Action";
+
+    public override string Name => ContributorName;
+
+    private readonly Action<ITenantResolveContext> _resolveAction;
+
+    public ActionTenantResolveContributor([NotNull] Action<ITenantResolveContext> resolveAction)
     {
-        public const string ContributorName = "Action";
+        Check.NotNull(resolveAction, nameof(resolveAction));
 
-        public override string Name => ContributorName;
+        _resolveAction = resolveAction;
+    }
 
-        private readonly Action<ITenantResolveContext> _resolveAction;
-
-        public ActionTenantResolveContributor([NotNull] Action<ITenantResolveContext> resolveAction)
-        {
-            Check.NotNull(resolveAction, nameof(resolveAction));
-
-            _resolveAction = resolveAction;
-        }
-
-        public override Task ResolveAsync(ITenantResolveContext context)
-        {
-            _resolveAction(context);
-            return Task.CompletedTask;
-        }
+    public override Task ResolveAsync(ITenantResolveContext context)
+    {
+        _resolveAction(context);
+        return Task.CompletedTask;
     }
 }

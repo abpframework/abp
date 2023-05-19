@@ -12,6 +12,7 @@
     "Permission:Posts": "帖子",
     "Permission:Tags": "标签",
     "Permission:Comments": "评论",
+    "Permission:ClearCache": "清除缓存",
     "Title": "标题",
     "Delete": "删除",
     "Reply": "回复",
@@ -53,6 +54,11 @@
     "Blogs": "博客",
     "Tags": "标签",
     "ShareOn": "分享",
-    "TitleLengthWarning": "保持标题大小不超过60个字符,实现SEO友好!"
+    "TitleLengthWarning": "保持标题大小不超过60个字符,实现SEO友好!",
+    "ClearCache": "清除缓存",
+    "ClearCacheConfirmationMessage": "您确定要清除缓存吗？",
+    "MarkdownSupported": "支持 Markdown",
+    "FileUploadInfo": "拖放，拖放，或粘贴一个复制的图像。",
+    "PostDescriptionHint": "*将在文章链接预览中呈现，支持HTML"
   }
 }

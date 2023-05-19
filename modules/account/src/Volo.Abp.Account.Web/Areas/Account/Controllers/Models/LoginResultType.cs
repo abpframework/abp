@@ -1,15 +1,14 @@
-﻿namespace Volo.Abp.Account.Web.Areas.Account.Controllers.Models
+﻿namespace Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
+
+public enum LoginResultType : byte
 {
-    public enum LoginResultType : byte
-    {
-        Success = 1,
+    Success = 1,
 
-        InvalidUserNameOrPassword = 2,
+    InvalidUserNameOrPassword = 2,
 
-        NotAllowed = 3,
+    NotAllowed = 3,
 
-        LockedOut = 4,
+    LockedOut = 4,
 
-        RequiresTwoFactor = 5
-    }
+    RequiresTwoFactor = 5
 }

@@ -3,9 +3,9 @@ import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable()
 export class DateTimeAdapter {
-  value: NgbDateTimeStruct;
+  value!: Partial<NgbDateTimeStruct>;
 
-  fromModel(value: string | Date): NgbDateTimeStruct | null {
+  fromModel(value: string | Date): Partial<NgbDateTimeStruct> | null {
     if (!value) return null;
 
     const date = new Date(value);
@@ -24,12 +24,13 @@ export class DateTimeAdapter {
     return this.value;
   }
 
-  toModel(value: NgbDateTimeStruct | null): string {
+  toModel(value: Partial<NgbDateTimeStruct> | null): string {
     if (!value) return '';
 
     const now = new Date();
 
-    value = {
+    const newValue = {
+      // TODO look for strict mode errors
       year: now.getUTCFullYear(),
       month: now.getMonth() + 1,
       day: now.getDate(),
@@ -38,15 +39,15 @@ export class DateTimeAdapter {
       second: 0,
       ...this.value,
       ...value,
-    };
+    } as NgbDateTimeStruct;
 
     const date = new Date(
-      value.year,
-      value.month - 1,
-      value.day,
-      value.hour,
-      value.minute,
-      value.second,
+      newValue.year,
+      newValue.month - 1,
+      newValue.day,
+      newValue.hour,
+      newValue.minute,
+      newValue.second,
     );
 
     return new Date(date).toISOString();

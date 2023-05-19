@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Resurssia ei löydy!",
     "DefaultErrorMessage404Detail": "Pyydettyä resurssia ei löytynyt palvelimelta!",
     "EntityNotFoundErrorMessage": "Ei ole olemassa kohdetta {0}, jonka tunnus = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Toinen käyttäjä/asiakas on jo muuttanut lähettämiäsi tietoja. Hylkää tekemäsi muutokset ja yritä alusta.",
     "Error": "Virhe",
     "UnhandledException": "Käsittelemätön poikkeus!",
     "401Message": "Luvaton",

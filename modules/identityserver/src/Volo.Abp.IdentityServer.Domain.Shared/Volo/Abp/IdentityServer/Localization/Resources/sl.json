@@ -3,10 +3,13 @@
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Naziv vira identitete že obstaja: {Name}",
     "Volo.IdentityServer:DuplicateApiResourceName": "Naziv vira Api že obstaja: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Ime obsega API že obstaja: {Name}",
     "Volo.IdentityServer:DuplicateClientId": "ClientId že obstaja: {ClientId}",
-	"UserLockedOut": "Uporabniški račun je bil blokiran zaradi neveljavnih poskusov prijave. Počakajte nekaj časa in poskusite znova.",
+    "UserLockedOut": "Uporabniški račun je bil blokiran zaradi neveljavnih poskusov prijave. Počakajte nekaj časa in poskusite znova.",
     "InvalidUserNameOrPassword": "Napačno uporabniško ime ali geslo!",
     "LoginIsNotAllowed": "Ne smete se prijaviti! Vaš račun je neaktiven ali mora potrditi vaš e -poštni naslov/telefonsko številko.",
-    "InvalidUsername": "Napačno uporabniško ime ali geslo!"
+    "InvalidUsername": "Napačno uporabniško ime ali geslo!",
+    "InvalidAuthenticatorCode": "Neveljavna koda za preverjanje pristnosti!",
+    "TheTargetUserIsNotLinkedToYou": "Ciljni uporabnik ni povezan z vami!"
   }
 }

@@ -1,14 +1,13 @@
-﻿namespace Volo.Abp.Account.Web.Areas.Account.Controllers.Models
+﻿namespace Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
+
+public class AbpLoginResult
 {
-    public class AbpLoginResult
+    public AbpLoginResult(LoginResultType result)
     {
-        public AbpLoginResult(LoginResultType result)
-        {
-            Result = result;
-        }
-
-        public LoginResultType Result { get; }
-
-        public string Description => Result.ToString();
+        Result = result;
     }
+
+    public LoginResultType Result { get; }
+
+    public string Description => Result.ToString();
 }

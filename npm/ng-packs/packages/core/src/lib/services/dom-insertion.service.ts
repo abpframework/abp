@@ -8,7 +8,7 @@ export class DomInsertionService {
 
   insertContent<T extends HTMLScriptElement | HTMLStyleElement>(
     contentStrategy: ContentStrategy<T>,
-  ): T {
+  ): T | undefined {
     const hash = generateHash(contentStrategy.content);
 
     if (this.inserted.has(hash)) return;
@@ -20,10 +20,11 @@ export class DomInsertionService {
   }
 
   removeContent(element: HTMLScriptElement | HTMLStyleElement) {
-    const hash = generateHash(element.textContent);
-    this.inserted.delete(hash);
-
-    element.parentNode.removeChild(element);
+    if (element.textContent) {
+      const hash = generateHash(element.textContent);
+      this.inserted.delete(hash);
+      element.parentNode?.removeChild(element);
+    }
   }
 
   has(content: string): boolean {

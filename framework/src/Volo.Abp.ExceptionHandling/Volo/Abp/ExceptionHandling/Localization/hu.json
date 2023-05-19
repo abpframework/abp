@@ -13,11 +13,14 @@
     "DefaultErrorMessage404": "Az erőforrás nem található!",
     "DefaultErrorMessage404Detail": "A kért erőforrás nem található a szerveren",
     "EntityNotFoundErrorMessage": "Nincs {0} elem, amelynek id értéke {1}!",
+    "AbpDbConcurrencyErrorMessage": "Az Ön által elküldött adatokat egy másik felhasználó/ügyfél már megváltoztatta. Kérjük, dobja el az elvégzett módosításokat, és próbálja elölről.",
     "Error": "Nincs {0} elem, amelynek id értéke {1}!",
     "UnhandledException": "Nem kezelt kivétel!",
     "401Message": "Jogosulatlan",
     "403Message": "Tiltott",
     "404Message": "Az oldal nem található",
-    "500Message": "Belső Szerverhiba"
+    "500Message": "Belső Szerverhiba",
+    "403MessageDetail": "Ön nem jogosult ennek a műveletnek a végrehajtására!",
+    "404MessageDetail": "Sajnos ezen a címen nincs semmi."
   }
 }

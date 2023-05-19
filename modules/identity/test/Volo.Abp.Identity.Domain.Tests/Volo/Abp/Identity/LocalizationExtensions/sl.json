@@ -1,0 +1,7 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "Dolžina gesla mora biti večja od {0} znakov.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Geslo mora vsebovati vsaj en znak, ki ni alfanumeričen."
+  }
+}

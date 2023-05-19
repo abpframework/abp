@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Application.Dtos;
 
-namespace Volo.Abp.TenantManagement
+namespace Volo.Abp.TenantManagement;
+
+public class GetTenantsInput : PagedAndSortedResultRequestDto
 {
-    public class GetTenantsInput : PagedAndSortedResultRequestDto
-    {
-        public string Filter { get; set; }
-    }
+    public string Filter { get; set; }
 }

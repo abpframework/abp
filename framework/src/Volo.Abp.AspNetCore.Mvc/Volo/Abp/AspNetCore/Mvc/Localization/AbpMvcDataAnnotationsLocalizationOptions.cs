@@ -3,30 +3,29 @@ using System.Collections.Generic;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.Localization
-{
-    public class AbpMvcDataAnnotationsLocalizationOptions
-    {
-        public IDictionary<Assembly, Type> AssemblyResources { get; }
+namespace Volo.Abp.AspNetCore.Mvc.Localization;
 
-        public AbpMvcDataAnnotationsLocalizationOptions()
+public class AbpMvcDataAnnotationsLocalizationOptions
+{
+    public IDictionary<Assembly, Type> AssemblyResources { get; }
+
+    public AbpMvcDataAnnotationsLocalizationOptions()
+    {
+        AssemblyResources = new Dictionary<Assembly, Type>();
+    }
+
+    public void AddAssemblyResource(
+        [NotNull] Type resourceType,
+        params Assembly[] assemblies)
+    {
+        if (assemblies.IsNullOrEmpty())
         {
-            AssemblyResources = new Dictionary<Assembly, Type>();
+            assemblies = new[] { resourceType.Assembly };
         }
 
-        public void AddAssemblyResource(
-            [NotNull] Type resourceType,
-            params Assembly[] assemblies)
+        foreach (var assembly in assemblies)
         {
-            if (assemblies.IsNullOrEmpty())
-            {
-                assemblies = new[] { resourceType.Assembly };
-            }
-
-            foreach (var assembly in assemblies)
-            {
-                AssemblyResources[assembly] = resourceType;
-            }
+            AssemblyResources[assembly] = resourceType;
         }
     }
 }

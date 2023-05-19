@@ -8,53 +8,52 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.IdentityModel;
 
-namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly
+namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly;
+
+[Dependency(ReplaceServices = true)]
+public class AccessTokenProviderIdentityModelRemoteServiceHttpClientAuthenticator
+    : IdentityModelRemoteServiceHttpClientAuthenticator
 {
-    [Dependency(ReplaceServices = true)]
-    public class AccessTokenProviderIdentityModelRemoteServiceHttpClientAuthenticator
-        : IdentityModelRemoteServiceHttpClientAuthenticator
+    [CanBeNull]
+    protected IAccessTokenProvider AccessTokenProvider { get; }
+
+    public AccessTokenProviderIdentityModelRemoteServiceHttpClientAuthenticator(
+        IIdentityModelAuthenticationService identityModelAuthenticationService,
+        IServiceProvider serviceProvider)
+        : base(identityModelAuthenticationService)
     {
-        [CanBeNull]
-        protected IAccessTokenProvider AccessTokenProvider { get; }
+        AccessTokenProvider = serviceProvider.GetService<IAccessTokenProvider>();
+    }
 
-        public AccessTokenProviderIdentityModelRemoteServiceHttpClientAuthenticator(
-            IIdentityModelAuthenticationService identityModelAuthenticationService,
-            IServiceProvider serviceProvider)
-            : base(identityModelAuthenticationService)
+    public override async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
+    {
+        if (context.RemoteService.GetUseCurrentAccessToken() != false)
         {
-            AccessTokenProvider = serviceProvider.GetService<IAccessTokenProvider>();
+            var accessToken = await GetAccessTokenFromAccessTokenProviderOrNullAsync();
+            if (accessToken != null)
+            {
+                context.Request.SetBearerToken(accessToken);
+                return;
+            }
         }
 
-        public override async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
-        {
-            if (context.RemoteService.GetUseCurrentAccessToken() != false)
-            {
-                var accessToken = await GetAccessTokenFromAccessTokenProviderOrNullAsync();
-                if (accessToken != null)
-                {
-                    context.Request.SetBearerToken(accessToken);
-                    return;
-                }
-            }
+        await base.Authenticate(context);
+    }
 
-            await base.Authenticate(context);
+    protected virtual async Task<string> GetAccessTokenFromAccessTokenProviderOrNullAsync()
+    {
+        if (AccessTokenProvider == null)
+        {
+            return null;
         }
 
-        protected virtual async Task<string> GetAccessTokenFromAccessTokenProviderOrNullAsync()
+        var result = await AccessTokenProvider.RequestAccessToken();
+        if (result.Status != AccessTokenResultStatus.Success)
         {
-            if (AccessTokenProvider == null)
-            {
-                return null;
-            }
-            
-            var result = await AccessTokenProvider.RequestAccessToken();
-            if (result.Status != AccessTokenResultStatus.Success)
-            {
-                return null;
-            }
-
-            result.TryGetToken(out var token);
-            return token.Value;
+            return null;
         }
+
+        result.TryGetToken(out var token);
+        return token.Value;
     }
 }

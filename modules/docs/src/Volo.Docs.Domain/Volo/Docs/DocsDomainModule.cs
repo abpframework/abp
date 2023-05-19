@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
@@ -12,6 +14,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.FileSystem.Documents;
+using Volo.Docs.GitHub;
 using Volo.Docs.GitHub.Documents;
 using Volo.Docs.Localization;
 using Volo.Docs.Projects;
@@ -39,7 +42,7 @@ namespace Volo.Docs
                 options.EtoMappings.Add<Document, DocumentEto>(typeof(DocsDomainModule));
                 options.EtoMappings.Add<Project, ProjectEto>(typeof(DocsDomainModule));
             });
-            
+
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets
@@ -58,6 +61,16 @@ namespace Volo.Docs
                 options.Sources[GithubDocumentSource.Type] = typeof(GithubDocumentSource);
                 options.Sources[FileSystemDocumentSource.Type] = typeof(FileSystemDocumentSource);
             });
+            
+            Configure<DocsGithubLanguageOptions>(options =>
+            {
+                options.DefaultLanguage = new LanguageConfigElement 
+                {
+                    Code = "en", 
+                    DisplayName = "English", 
+                    IsDefault = true
+                };
+            });
 
             context.Services.AddHttpClient(GithubRepositoryManager.HttpClientName, client =>
             {
@@ -65,16 +78,21 @@ namespace Volo.Docs
             });
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
                 if (scope.ServiceProvider.GetRequiredService<IOptions<DocsElasticSearchOptions>>().Value.Enable)
                 {
                     var documentFullSearch = scope.ServiceProvider.GetRequiredService<IDocumentFullSearch>();
-                    AsyncHelper.RunSync(() => documentFullSearch.CreateIndexIfNeededAsync());
+                    await documentFullSearch.CreateIndexIfNeededAsync();
                 }
             }
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
         }
     }
 }

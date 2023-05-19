@@ -3,39 +3,38 @@ using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.BackgroundJobs.MongoDB;
 using Volo.Abp.FeatureManagement.MongoDB;
 using Volo.Abp.Identity.MongoDB;
-using Volo.Abp.IdentityServer.MongoDB;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict.MongoDB;
 using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.TenantManagement.MongoDB;
 using Volo.Abp.Uow;
 
-namespace MyCompanyName.MyProjectName.MongoDB
-{
-    [DependsOn(
-        typeof(MyProjectNameDomainModule),
-        typeof(AbpPermissionManagementMongoDbModule),
-        typeof(AbpSettingManagementMongoDbModule),
-        typeof(AbpIdentityMongoDbModule),
-        typeof(AbpIdentityServerMongoDbModule),
-        typeof(AbpBackgroundJobsMongoDbModule),
-        typeof(AbpAuditLoggingMongoDbModule),
-        typeof(AbpTenantManagementMongoDbModule),
-        typeof(AbpFeatureManagementMongoDbModule)
-        )]
-    public class MyProjectNameMongoDbModule : AbpModule
-    {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddMongoDbContext<MyProjectNameMongoDbContext>(options =>
-            {
-                options.AddDefaultRepositories();
-            });
+namespace MyCompanyName.MyProjectName.MongoDB;
 
-            Configure<AbpUnitOfWorkDefaultOptions>(options =>
-            {
-                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
-            });
-        }
+[DependsOn(
+    typeof(MyProjectNameDomainModule),
+    typeof(AbpPermissionManagementMongoDbModule),
+    typeof(AbpSettingManagementMongoDbModule),
+    typeof(AbpIdentityMongoDbModule),
+    typeof(AbpOpenIddictMongoDbModule),
+    typeof(AbpBackgroundJobsMongoDbModule),
+    typeof(AbpAuditLoggingMongoDbModule),
+    typeof(AbpTenantManagementMongoDbModule),
+    typeof(AbpFeatureManagementMongoDbModule)
+    )]
+public class MyProjectNameMongoDbModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddMongoDbContext<MyProjectNameMongoDbContext>(options =>
+        {
+            options.AddDefaultRepositories();
+        });
+
+        Configure<AbpUnitOfWorkDefaultOptions>(options =>
+        {
+            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+        });
     }
 }

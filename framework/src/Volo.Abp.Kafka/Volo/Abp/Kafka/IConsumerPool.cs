@@ -1,10 +1,9 @@
 ﻿using System;
 using Confluent.Kafka;
 
-namespace Volo.Abp.Kafka
+namespace Volo.Abp.Kafka;
+
+public interface IConsumerPool : IDisposable
 {
-    public interface IConsumerPool : IDisposable
-    {
-        IConsumer<string, byte[]> Get(string groupId, string connectionName = null);
-    }
+    IConsumer<string, byte[]> Get(string groupId, string connectionName = null);
 }

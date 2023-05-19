@@ -32,6 +32,13 @@
     "SeeDocuments": "दस्तावेज़ देखें",
     "Samples": "नमूने",
     "Framework": "ढांचा",
-    "Support": "सहयोग"
+    "Support": "सहयोग",
+    "FreeDDDBook": "मुफ्त डीडीडी ई-बुक",
+    "New": "नया",
+    "Volo.AbpIo.Domain:020005": "लाइसेंस विस्तार वर्ष {MinExtendLicenseYear} वर्ष (वर्षों) से कम और {MaxExtendLicenseYear} वर्ष (वर्षों) से अधिक नहीं हो सकता",
+    "TrialLicensePeriodHasExpired": "आपके परीक्षण लाइसेंस की अवधि {0} दिन पहले समाप्त हो गई है।",
+    "TrialLicensePeriodWillExpire": "आपके परीक्षण लाइसेंस की अवधि {0} दिनों में समाप्त हो जाएगी।",
+    "TrialLicensePeriodExpireToday": "आपके परीक्षण लाइसेंस की अवधि आज समाप्त हो जाएगी।",
+    "PurchaseNow": "अभी खरीदो!"
   }
 }

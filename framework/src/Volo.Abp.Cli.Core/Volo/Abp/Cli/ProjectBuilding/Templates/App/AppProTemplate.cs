@@ -1,16 +1,19 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
-{
-    public class AppProTemplate : AppTemplateBase
-    {
-        /// <summary>
-        /// "app-pro".
-        /// </summary>
-        public const string TemplateName = "app-pro";
+﻿using Volo.Abp.Cli.ProjectBuilding.Building;
 
-        public AppProTemplate()
-            : base(TemplateName)
-        {
-            DocumentUrl = CliConsts.DocsLink + "/en/commercial/latest";
-        }
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
+
+public class AppProTemplate : AppTemplateBase
+{
+    /// <summary>
+    /// "app-pro".
+    /// </summary>
+    public const string TemplateName = "app-pro";
+    
+    public const Theme DefaultTheme = Theme.LeptonX;
+
+    public AppProTemplate()
+        : base(TemplateName)
+    {
+        DocumentUrl = CliConsts.DocsLink + "/en/commercial/latest";
     }
 }

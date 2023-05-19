@@ -8,134 +8,135 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Build;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Commands
+namespace Volo.Abp.Cli.Commands;
+
+public class BuildCommand : IConsoleCommand, ITransientDependency
 {
-    public class BuildCommand : IConsoleCommand, ITransientDependency
+    public const string Name = "build";
+    
+    public IDotNetProjectDependencyFiller DotNetProjectDependencyFiller { get; set; }
+
+    public IChangedProjectFinder ChangedProjectFinder { get; set; }
+
+    public IDotNetProjectBuilder DotNetProjectBuilder { get; set; }
+
+    public IRepositoryBuildStatusStore RepositoryBuildStatusStore { get; set; }
+
+    public IDotNetProjectBuildConfigReader DotNetProjectBuildConfigReader { get; set; }
+
+    public IBuildStatusGenerator BuildStatusGenerator { get; set; }
+
+    public IBuildProjectListSorter BuildProjectListSorter { get; set; }
+
+    public Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
-        public IDotNetProjectDependencyFiller DotNetProjectDependencyFiller { get; set; }
+        var sw = new Stopwatch();
+        sw.Start();
 
-        public IChangedProjectFinder ChangedProjectFinder { get; set; }
+        var workingDirectory = commandLineArgs.Options.GetOrNull(
+            Options.WorkingDirectory.Short,
+            Options.WorkingDirectory.Long
+        );
 
-        public IDotNetProjectBuilder DotNetProjectBuilder { get; set; }
+        var dotnetBuildArguments = commandLineArgs.Options.GetOrNull(
+            Options.DotnetBuildArguments.Short,
+            Options.DotnetBuildArguments.Long
+        );
 
-        public IRepositoryBuildStatusStore RepositoryBuildStatusStore { get; set; }
+        var buildName = commandLineArgs.Options.GetOrNull(
+            Options.BuildName.Short,
+            Options.BuildName.Long
+        );
 
-        public IDotNetProjectBuildConfigReader DotNetProjectBuildConfigReader { get; set; }
+        var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Short) ||
+                         commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
 
-        public IBuildStatusGenerator BuildStatusGenerator { get; set; }
+        var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());
+        buildConfig.BuildName = buildName;
+        buildConfig.ForceBuild = forceBuild;
 
-        public IBuildProjectListSorter BuildProjectListSorter { get; set; }
-
-        public Task ExecuteAsync(CommandLineArgs commandLineArgs)
+        if (string.IsNullOrEmpty(buildConfig.SlFilePath))
         {
-            var sw = new Stopwatch();
-            sw.Start();
+            var changedProjectFiles = ChangedProjectFinder.FindByRepository(buildConfig);
 
-            var workingDirectory = commandLineArgs.Options.GetOrNull(
-                Options.WorkingDirectory.Short,
-                Options.WorkingDirectory.Long
+            var buildSucceededProjects = DotNetProjectBuilder.BuildProjects(
+                changedProjectFiles,
+                dotnetBuildArguments ?? ""
             );
 
-            var dotnetBuildArguments = commandLineArgs.Options.GetOrNull(
-                Options.DotnetBuildArguments.Short,
-                Options.DotnetBuildArguments.Long
+            var buildStatus = BuildStatusGenerator.Generate(
+                buildConfig,
+                changedProjectFiles,
+                buildSucceededProjects
             );
 
-            var buildName = commandLineArgs.Options.GetOrNull(
-                Options.BuildName.Short,
-                Options.BuildName.Long
+            RepositoryBuildStatusStore.Set(buildName, buildConfig.GitRepository, buildStatus);
+        }
+        else
+        {
+            DotNetProjectBuilder.BuildSolution(
+                buildConfig.SlFilePath,
+                dotnetBuildArguments ?? ""
             );
-
-            var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Short) ||
-                             commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
-
-            var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());
-            buildConfig.BuildName = buildName;
-            buildConfig.ForceBuild = forceBuild;
-            
-            if (string.IsNullOrEmpty(buildConfig.SlFilePath))
-            {
-                var changedProjectFiles = ChangedProjectFinder.FindByRepository(buildConfig);
-                
-                var buildSucceededProjects = DotNetProjectBuilder.BuildProjects(
-                    changedProjectFiles,
-                    dotnetBuildArguments ?? ""
-                );
-
-                var buildStatus = BuildStatusGenerator.Generate(
-                    buildConfig,
-                    changedProjectFiles,
-                    buildSucceededProjects
-                );
-
-                RepositoryBuildStatusStore.Set(buildName, buildConfig.GitRepository, buildStatus);
-            }
-            else
-            {
-                DotNetProjectBuilder.BuildSolution(
-                    buildConfig.SlFilePath,
-                    dotnetBuildArguments ?? ""
-                );
-            }
-            
-            sw.Stop();
-            Console.WriteLine("Build operation is completed in " + sw.ElapsedMilliseconds + " (ms)");
-
-            return Task.CompletedTask;
         }
 
-        public string GetUsageInfo()
+        sw.Stop();
+        Console.WriteLine("Build operation is completed in " + sw.ElapsedMilliseconds + " (ms)");
+
+        return Task.CompletedTask;
+    }
+
+    public string GetUsageInfo()
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine("");
+        sb.AppendLine("Usage:");
+        sb.AppendLine("");
+        sb.AppendLine("  abp build [options]");
+        sb.AppendLine("");
+        sb.AppendLine("Options:");
+        sb.AppendLine("");
+        sb.AppendLine("-wd|--working-directory <directory-path>                (default: empty)");
+        sb.AppendLine("-m |--max-parallel-builds <parallel-build-count>        (default: 1)");
+        sb.AppendLine("-a |--dotnet-build-arguments <arguments>                (default: empty)");
+        sb.AppendLine("-n |--build-name <name>                                 (default: empty)");
+        sb.AppendLine("-f | --force                                            (default: false)");
+        sb.AppendLine("");
+        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+
+        return sb.ToString();
+    }
+
+    public string GetShortDescription()
+    {
+        return "Builds a dotnet repository and dependent repositories or a solution.";
+    }
+
+    public static class Options
+    {
+        public static class WorkingDirectory
         {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("");
-            sb.AppendLine("Usage:");
-            sb.AppendLine("");
-            sb.AppendLine("  abp build [options]");
-            sb.AppendLine("");
-            sb.AppendLine("Options:");
-            sb.AppendLine("");
-            sb.AppendLine("-wd|--working-directory <directory-path>                (default: empty)");
-            sb.AppendLine("-m |--max-parallel-builds <parallel-build-count>        (default: 1)");
-            sb.AppendLine("-a |--dotnet-build-arguments <arguments>                (default: empty)");
-            sb.AppendLine("-n |--build-name <name>                                 (default: empty)");
-            sb.AppendLine("-f | --force                                            (default: false)");
-            sb.AppendLine("");
-            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
-
-            return sb.ToString();
+            public const string Short = "wd";
+            public const string Long = "working-directory";
         }
 
-        public string GetShortDescription()
+        public static class DotnetBuildArguments
         {
-            return "Builds a dotnet repository and dependent repositories or a solution.";
+            public const string Short = "a";
+            public const string Long = "dotnet-build-arguments";
         }
 
-        public static class Options
+        public static class BuildName
         {
-            public static class WorkingDirectory
-            {
-                public const string Short = "wd";
-                public const string Long = "working-directory";
-            }
+            public const string Short = "n";
+            public const string Long = "build-name";
+        }
 
-            public static class DotnetBuildArguments
-            {
-                public const string Short = "a";
-                public const string Long = "dotnet-build-arguments";
-            }
-
-            public static class BuildName
-            {
-                public const string Short = "n";
-                public const string Long = "build-name";
-            }
-
-            public static class ForceBuild
-            {
-                public const string Short = "f";
-                public const string Long = "force";
-            }
+        public static class ForceBuild
+        {
+            public const string Short = "f";
+            public const string Long = "force";
         }
     }
 }

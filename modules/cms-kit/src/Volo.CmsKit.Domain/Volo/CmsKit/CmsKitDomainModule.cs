@@ -11,29 +11,29 @@ using Volo.CmsKit.Localization;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 
-namespace Volo.CmsKit
+namespace Volo.CmsKit;
+
+[DependsOn(
+    typeof(CmsKitDomainSharedModule),
+    typeof(AbpUsersDomainModule),
+    typeof(AbpDddDomainModule),
+    typeof(AbpBlobStoringModule)
+)]
+public class CmsKitDomainModule : AbpModule
 {
-    [DependsOn(
-        typeof(CmsKitDomainSharedModule),
-        typeof(AbpUsersDomainModule),
-        typeof(AbpDddDomainModule),
-        typeof(AbpBlobStoringModule)
-    )]
-    public class CmsKitDomainModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
         {
-            if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+            Configure<CmsKitReactionOptions>(options =>
             {
-                Configure<CmsKitReactionOptions>(options =>
+                if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
                 {
-                    if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
-                    {
-                        options.EntityTypes.Add(
-                            new ReactionEntityTypeDefinition(
-                                BlogPostConsts.EntityType,
-                                reactions: new[]
-                                {
+                    options.EntityTypes.Add(
+                        new ReactionEntityTypeDefinition(
+                            BlogPostConsts.EntityType,
+                            reactions: new[]
+                            {
                                     new ReactionDefinition(StandardReactions.Smile),
                                     new ReactionDefinition(StandardReactions.ThumbsUp),
                                     new ReactionDefinition(StandardReactions.ThumbsDown),
@@ -46,45 +46,44 @@ namespace Volo.CmsKit
                                     new ReactionDefinition(StandardReactions.Rocket),
                                     new ReactionDefinition(StandardReactions.Victory),
                                     new ReactionDefinition(StandardReactions.Rock),
-                                }));
-                    }
+                            }));
+                }
 
-                    if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
-                    {
-                        options.EntityTypes.Add(
-                            new ReactionEntityTypeDefinition(
-                                CommentConsts.EntityType,
-                                reactions: new[]
-                                {
+                if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+                {
+                    options.EntityTypes.Add(
+                        new ReactionEntityTypeDefinition(
+                            CommentConsts.EntityType,
+                            reactions: new[]
+                            {
                                     new ReactionDefinition(StandardReactions.ThumbsUp),
                                     new ReactionDefinition(StandardReactions.ThumbsDown),
-                                }));
-                    }
-                });
-            }
+                            }));
+                }
+            });
+        }
 
-            if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+        if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+        {
+            Configure<CmsKitRatingOptions>(options =>
             {
-                Configure<CmsKitRatingOptions>(options =>
+                if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
                 {
-                    if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
-                    {
-                        options.EntityTypes.Add(new RatingEntityTypeDefinition(BlogPostConsts.EntityType));
-                    }
+                    options.EntityTypes.Add(new RatingEntityTypeDefinition(BlogPostConsts.EntityType));
+                }
 
                     // TODO: Define entity types here which can be rated.
                 });
-            }
-
-            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
-            {
-                // TODO: Configure TagEntityTypes here...
-            }
         }
 
-        private static LocalizableString L(string name)
+        if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
         {
-            return LocalizableString.Create<CmsKitResource>(name);
+            // TODO: Configure TagEntityTypes here...
         }
+    }
+
+    private static LocalizableString L(string name)
+    {
+        return LocalizableString.Create<CmsKitResource>(name);
     }
 }

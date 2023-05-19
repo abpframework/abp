@@ -390,6 +390,27 @@ Configure<AbpBundlingOptions>(options =>
 
 Given file is still added to the bundle, but not minified in this case.
 
+### Load JavaScript and CSS asynchronously
+
+You can configure `AbpBundlingOptions` to load all or a single js/css file asynchronously.
+
+**Example:**
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.PreloadStyles.Add("/__bundles/Basic.Global");
+    options.DeferScriptsByDefault = true;
+});
+````
+
+**Output HTML:**
+````html
+<link rel="preload" href="/__bundles/Basic.Global.F4FA61F368098407A4C972D0A6914137.css?_v=637697363694828051" as="style" onload="this.rel='stylesheet'"/>
+
+<script defer src="/libs/timeago/locales/jquery.timeago.en.js?_v=637674729040000000"></script>
+````
+
 ## Themes
 
 Themes uses the standard package contributors to add library resources to page layouts. Themes may also define some standard/global bundles, so any module can contribute to these standard/global bundles. See the [theming documentation](Theming.md) for more.

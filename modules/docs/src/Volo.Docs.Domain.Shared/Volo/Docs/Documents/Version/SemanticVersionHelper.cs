@@ -9,6 +9,12 @@ namespace Volo.Docs.GitHub.Documents.Version
 {
     public static class SemanticVersionHelper
     {
+        public static List<string> IgnoredVersions = new()
+        {
+            "master",
+            "dev"
+        };
+
         public static List<string> OrderByDescending(List<string> versions)
         {
             return versions.OrderByDescending(v=> SemanticVersion.Parse(NormalizeVersion(v)), new VersionComparer()).ToList();
@@ -21,11 +27,21 @@ namespace Volo.Docs.GitHub.Documents.Version
 
         public static bool IsPreRelease(string version)
         {
+            if (IgnoredVersions.Contains(version))
+            {
+                return false;
+            }
+            
             return SemanticVersion.Parse(NormalizeVersion(version)).IsPrerelease;
         }
 
         private static string NormalizeVersion(string version)
         {
+            if (IgnoredVersions.Contains(version))
+            {
+                return version;
+            }
+            
             version = version.RemovePreFix("v");
 
             var normalizedVersion = "";

@@ -1,6 +1,9 @@
 {
   "culture": "pt-BR",
   "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Data de nascimento 1",
+    "DisplayName:BirthDate2": "Data de nascimento 2",
+    "PersonModel:BirthDate3": "Data de nascimento 3",
     "BirthDate": "Aniversário",
     "Value1": "Valor Um"
   }

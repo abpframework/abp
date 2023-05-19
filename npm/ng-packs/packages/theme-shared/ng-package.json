@@ -1,7 +1,6 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/packages/theme-shared",
-  "assets": ["./styles/**/*"],
   "lib": {
     "entryFile": "src/public-api.ts"
   },
@@ -11,6 +10,7 @@
     "@ng-bootstrap/ng-bootstrap",
     "@ngx-validate/core",
     "@swimlane/ngx-datatable",
-    "bootstrap"
+    "bootstrap",
+    "@popperjs/core"
   ]
 }

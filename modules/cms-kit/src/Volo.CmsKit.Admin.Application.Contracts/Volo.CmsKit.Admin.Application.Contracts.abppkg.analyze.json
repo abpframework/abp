@@ -1,0 +1,245 @@
+{
+  "name": "Volo.CmsKit.Admin.Application.Contracts",
+  "hash": "ff0f4d058f512abcca9b3b61a7bb300e",
+  "contents": [
+    {
+      "namespace": "Volo.CmsKit.Admin",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.CmsKit.Common.Application.Contracts",
+          "namespace": "Volo.CmsKit",
+          "name": "CmsKitCommonApplicationContractsModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "CmsKitAdminApplicationContractsModule",
+      "summary": null
+    },
+    {
+      "displayName": "Comment Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Comments",
+      "summary": null
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Comments.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Tag Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Tags",
+      "summary": null
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Tags.Create",
+      "summary": null
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Tags.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Tags.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Page Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages",
+      "summary": null
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages.Create",
+      "summary": null
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Set As Home Page",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Pages.SetAsHomePage",
+      "summary": null
+    },
+    {
+      "displayName": "Blog Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs",
+      "summary": null
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs.Create",
+      "summary": null
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Features",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Blogs.Features",
+      "summary": null
+    },
+    {
+      "displayName": "Blog Post Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.BlogPosts",
+      "summary": null
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.BlogPosts.Create",
+      "summary": null
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.BlogPosts.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.BlogPosts.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Publish",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.BlogPosts.Publish",
+      "summary": null
+    },
+    {
+      "displayName": "Menu Management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Menus",
+      "summary": null
+    },
+    {
+      "displayName": "Create",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Menus.Create",
+      "summary": null
+    },
+    {
+      "displayName": "Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Menus.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Delete",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Menus.Delete",
+      "summary": null
+    },
+    {
+      "displayName": "Global Resources",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.GlobalResources",
+      "summary": null
+    }
+  ]
+}

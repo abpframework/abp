@@ -9,14 +9,13 @@ import {
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import {
   ComponentProjectionStrategy,
-  ContainerStrategy,
-  CONTAINER_STRATEGY,
-  CONTEXT_STRATEGY,
-  DOM_STRATEGY,
   PROJECTION_STRATEGY,
   RootComponentProjectionStrategy,
   TemplateProjectionStrategy,
-} from '../strategies';
+} from '../strategies/projection.strategy';
+import { CONTAINER_STRATEGY, ContainerStrategy } from '../strategies/container.strategy';
+import { DOM_STRATEGY } from '../strategies/dom.strategy';
+import { CONTEXT_STRATEGY } from '../strategies/context.strategy';
 
 describe('ComponentProjectionStrategy', () => {
   @Component({
@@ -57,7 +56,7 @@ describe('ComponentProjectionStrategy', () => {
   describe('#injectContent', () => {
     it('should should insert content into container and return a ComponentRef', () => {
       const strategy = new ComponentProjectionStrategy(TestComponent, containerStrategy);
-      componentRef = strategy.injectContent({ get: spectator.inject });
+      componentRef = strategy.injectContent({ get: val => spectator.inject(val) });
       spectator.detectChanges();
 
       const div = spectator.query('div.foo');
@@ -72,7 +71,7 @@ describe('ComponentProjectionStrategy', () => {
         containerStrategy,
         contextStrategy,
       );
-      componentRef = strategy.injectContent({ get: spectator.inject });
+      componentRef = strategy.injectContent({ get: val => spectator.inject(val) });
       spectator.detectChanges();
 
       const div = spectator.query('div.foo');
@@ -114,7 +113,7 @@ describe('RootComponentProjectionStrategy', () => {
   describe('#injectContent', () => {
     it('should should insert content into body and return a ComponentRef', () => {
       const strategy = new RootComponentProjectionStrategy(TestComponent);
-      componentRef = strategy.injectContent({ get: spectator.inject });
+      componentRef = strategy.injectContent({ get: val => spectator.inject(val) });
       spectator.detectChanges();
 
       const div = document.querySelector('body > ng-component > div.foo');
@@ -127,7 +126,7 @@ describe('RootComponentProjectionStrategy', () => {
     it('should be able to map context to projected component', () => {
       const contextStrategy = CONTEXT_STRATEGY.Component({ bar: 'bar' });
       const strategy = new RootComponentProjectionStrategy(TestComponent, contextStrategy);
-      componentRef = strategy.injectContent({ get: spectator.inject });
+      componentRef = strategy.injectContent({ get: val => spectator.inject(val) });
       spectator.detectChanges();
 
       const div = document.querySelector('body > ng-component > div.foo');

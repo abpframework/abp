@@ -15,6 +15,11 @@ import { accountConfigOptionsFactory } from './utils/factory-utils';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { RE_LOGIN_CONFIRMATION_TOKEN } from './tokens';
+import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
+import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS } from './tokens/extensions.token';
+import { AccountExtensionsGuard } from './guards/extensions.guard';
+import { PersonalSettingsHalfRowComponent } from './components/personal-settings/personal-settings-half-row.component';
 
 const declarations = [
   LoginComponent,
@@ -24,6 +29,7 @@ const declarations = [
   PersonalSettingsComponent,
   ForgotPasswordComponent,
   ResetPasswordComponent,
+  PersonalSettingsHalfRowComponent,
 ];
 
 @NgModule({
@@ -34,6 +40,7 @@ const declarations = [
     ThemeSharedModule,
     NgbDropdownModule,
     NgxValidateCoreModule,
+    UiExtensionsModule,
   ],
   exports: [...declarations],
 })
@@ -49,6 +56,15 @@ export class AccountModule {
           useFactory: accountConfigOptionsFactory,
           deps: [ACCOUNT_CONFIG_OPTIONS],
         },
+        {
+          provide: RE_LOGIN_CONFIRMATION_TOKEN,
+          useValue: options.isPersonalSettingsChangedConfirmationActive ?? true,
+        },
+        {
+          provide: ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS,
+          useValue: options.editFormPropContributors,
+        },
+        AccountExtensionsGuard,
       ],
     };
   }

@@ -5,13 +5,31 @@
 @inject ICurrentUser CurrentUser
 @model Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password.AccountProfilePasswordManagementGroupViewComponent.ChangePasswordInfoModel
 
-<h4>@L["ChangePassword"]</h4><hr/>
+<h4>@L["ChangePassword"]</h4><hr />
 <form id="ChangePasswordForm">
-    @if (!Model.HideOldPasswordInput)
-    {
-        <abp-input asp-for="CurrentPassword"/>
-    }
-    <abp-input asp-for="NewPassword"/>
-    <abp-input asp-for="NewPasswordConfirm"/>
-    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value"/>
+    <div class="mb-3">
+        @if (!Model.HideOldPasswordInput)
+        {
+            <label asp-for="CurrentPassword" class="form-label"></label>
+            <div class="input-group">
+                <input type="password" class="form-control" autocomplete="new-password" asp-for="CurrentPassword"/>
+                <button class="btn btn-secondary password-visibility-button" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+            </div>
+            <span asp-validation-for="CurrentPassword"></span><br/>
+        }
+        <label asp-for="NewPassword" class="form-label"></label>
+        <div class="input-group">
+            <input type="password" class="form-control" autocomplete="new-password" asp-for="NewPassword"/>
+            <button class="btn btn-secondary password-visibility-button" type="button" ><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+        </div>
+        <span asp-validation-for="NewPassword"></span><br/>
+    
+        <label asp-for="NewPasswordConfirm" class="form-label"></label>
+        <div class="input-group">
+            <input type="password" class="form-control" autocomplete="new-password" asp-for="NewPasswordConfirm"/>
+            <button class="btn btn-secondary password-visibility-button" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+        </div>
+        <span asp-validation-for="NewPasswordConfirm"></span>
+    </div>
+    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
 </form>

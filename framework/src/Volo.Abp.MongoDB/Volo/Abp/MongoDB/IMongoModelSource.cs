@@ -1,7 +1,6 @@
-namespace Volo.Abp.MongoDB
+namespace Volo.Abp.MongoDB;
+
+public interface IMongoModelSource
 {
-    public interface IMongoModelSource
-    {
-        MongoDbContextModel GetModel(AbpMongoDbContext dbContext);
-    }
+    MongoDbContextModel GetModel(AbpMongoDbContext dbContext);
 }

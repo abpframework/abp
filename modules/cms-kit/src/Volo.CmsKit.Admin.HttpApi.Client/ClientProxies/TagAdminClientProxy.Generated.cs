@@ -11,56 +11,55 @@ using Volo.CmsKit.Tags;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Admin.Tags.ClientProxies
+namespace Volo.CmsKit.Admin.Tags.ClientProxies;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(ITagAdminAppService), typeof(TagAdminClientProxy))]
+public partial class TagAdminClientProxy : ClientProxyBase<ITagAdminAppService>, ITagAdminAppService
 {
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(ITagAdminAppService), typeof(TagAdminClientProxy))]
-    public partial class TagAdminClientProxy : ClientProxyBase<ITagAdminAppService>, ITagAdminAppService
+    public virtual async Task<TagDto> CreateAsync(TagCreateDto input)
     {
-        public virtual async Task<TagDto> CreateAsync(TagCreateDto input)
+        return await RequestAsync<TagDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<TagDto>(nameof(CreateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(TagCreateDto), input }
-            });
-        }
+            { typeof(TagCreateDto), input }
+        });
+    }
 
-        public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {
-            await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<TagDto> GetAsync(Guid id)
+    public virtual async Task<TagDto> GetAsync(Guid id)
+    {
+        return await RequestAsync<TagDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<TagDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id }
-            });
-        }
+            { typeof(Guid), id }
+        });
+    }
 
-        public virtual async Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
+    public virtual async Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
+    {
+        return await RequestAsync<PagedResultDto<TagDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<PagedResultDto<TagDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(TagGetListInput), input }
-            });
-        }
+            { typeof(TagGetListInput), input }
+        });
+    }
 
-        public virtual async Task<TagDto> UpdateAsync(Guid id, TagUpdateDto input)
+    public virtual async Task<TagDto> UpdateAsync(Guid id, TagUpdateDto input)
+    {
+        return await RequestAsync<TagDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
-            return await RequestAsync<TagDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
-            {
-                { typeof(Guid), id },
-                { typeof(TagUpdateDto), input }
-            });
-        }
+            { typeof(Guid), id },
+            { typeof(TagUpdateDto), input }
+        });
+    }
 
-        public virtual async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
-        {
-            return await RequestAsync<List<TagDefinitionDto>>(nameof(GetTagDefinitionsAsync));
-        }
+    public virtual async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
+    {
+        return await RequestAsync<List<TagDefinitionDto>>(nameof(GetTagDefinitionsAsync));
     }
 }

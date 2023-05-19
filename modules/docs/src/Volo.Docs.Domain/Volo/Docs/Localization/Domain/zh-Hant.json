@@ -9,7 +9,14 @@
     "Edit": "編輯",
     "LastEditTime": "上次編輯",
     "Delete": "刪除",
+    "ClearCache": "清除緩存",
     "ClearCacheConfirmationMessage": "你確定刪除此專案全部的快取 \"{0}\"",
+    "ReIndexAllProjects": "重新索引所有項目",
+    "ReIndexProject": "重新索引項目",
+    "ReIndexProjectConfirmationMessage": "您確定要為項目“{0}”重新編制索引嗎",
+    "SuccessfullyReIndexProject": "已成功重新索引：“{0}”",
+    "ReIndexAllProjectConfirmationMessage": "您確定要重新索引所有項目嗎？",
+    "SuccessfullyReIndexAllProject": "成功重新索引所有項目",
     "InThisDocument": "在此文件中",
     "GoToTop": "到最上方",
     "Projects": "專案",
@@ -26,6 +33,9 @@
     "Upd": "更新",
     "NewExplanation": "在最近兩周內創建.",
     "UpdatedExplanation": "在最近兩周內更新.",
-    "Volo.Docs.Domain:010002": "簡稱 {ShortName} 已經存在."
+    "Volo.Docs.Domain:010002": "簡稱 {ShortName} 已經存在.",
+    "Preview": "預覽",
+    "Search": "搜索",
+    "SearchResults": "搜索結果"
   }
 }

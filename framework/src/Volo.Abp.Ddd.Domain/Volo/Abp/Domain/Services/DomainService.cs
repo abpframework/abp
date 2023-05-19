@@ -7,25 +7,24 @@ using Volo.Abp.Linq;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.Domain.Services
+namespace Volo.Abp.Domain.Services;
+
+public abstract class DomainService : IDomainService
 {
-    public abstract class DomainService : IDomainService
-    {
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
-        [Obsolete("Use LazyServiceProvider instead.")]
-        public IServiceProvider ServiceProvider { get; set; }
+    [Obsolete("Use LazyServiceProvider instead.")]
+    public IServiceProvider ServiceProvider { get; set; }
 
-        protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
+    protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
 
-        protected IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
+    protected IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
-        protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
+    protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
-        protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
+    protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
 
-        protected IAsyncQueryableExecuter AsyncExecuter => LazyServiceProvider.LazyGetRequiredService<IAsyncQueryableExecuter>();
+    protected IAsyncQueryableExecuter AsyncExecuter => LazyServiceProvider.LazyGetRequiredService<IAsyncQueryableExecuter>();
 
-        protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
-    }
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
 }

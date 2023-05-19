@@ -1,28 +1,30 @@
 using System;
 using JetBrains.Annotations;
+using Volo.Abp.Data;
 
-namespace Volo.Abp.Users
+namespace Volo.Abp.Users;
+
+public interface IUserData : IHasExtraProperties
 {
-    public interface IUserData
-    {
-        Guid Id { get; }
+    Guid Id { get; }
 
-        Guid? TenantId { get; }
+    Guid? TenantId { get; }
 
-        string UserName { get; }
+    string UserName { get; }
 
-        string Name { get; }
+    string Name { get; }
 
-        string Surname { get; }
+    string Surname { get; }
 
-        [CanBeNull]
-        string Email { get; }
+    bool IsActive { get; }
 
-        bool EmailConfirmed { get; }
+    [CanBeNull]
+    string Email { get; }
 
-        [CanBeNull]
-        string PhoneNumber { get; }
+    bool EmailConfirmed { get; }
 
-        bool PhoneNumberConfirmed { get; }
-    }
+    [CanBeNull]
+    string PhoneNumber { get; }
+
+    bool PhoneNumberConfirmed { get; }
 }

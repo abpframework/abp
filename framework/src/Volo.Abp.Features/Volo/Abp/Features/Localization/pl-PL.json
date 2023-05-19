@@ -1,0 +1,8 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Volo.Feature:010001": "Funkcja nie jest włączona: {FeatureName}",
+    "Volo.Feature:010002": "Wymagane funkcje nie są włączone. Wszystkie te funkcje muszą być włączone: {FeatureNames}",
+    "Volo.Feature:010003": "Wymagane funkcje nie są włączone. Co najmniej jedna z tych funkcji musi być włączona: {FeatureNames}"
+  }
+}

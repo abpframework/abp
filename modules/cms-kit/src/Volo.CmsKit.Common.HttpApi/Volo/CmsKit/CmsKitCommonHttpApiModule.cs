@@ -5,31 +5,30 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit
+namespace Volo.CmsKit;
+
+[DependsOn(
+    typeof(AbpAspNetCoreMvcModule),
+    typeof(CmsKitCommonApplicationContractsModule)
+    )]
+public class CmsKitCommonHttpApiModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(CmsKitCommonApplicationContractsModule)
-        )]
-    public class CmsKitCommonHttpApiModule : AbpModule
+
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitCommonHttpApiModule).Assembly);
-            });
-        }
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitCommonHttpApiModule).Assembly);
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpLocalizationOptions>(options =>
         {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<CmsKitResource>()
-                    .AddBaseTypes(typeof(AbpUiResource));
-            });
-        }
+            options.Resources
+                .Get<CmsKitResource>()
+                .AddBaseTypes(typeof(AbpUiResource));
+        });
     }
 }

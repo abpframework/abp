@@ -47,7 +47,6 @@ module.exports = function(hljs) {
         className: 'string',
         contains: [hljs.BACKSLASH_ESCAPE],
         variants: [
-          hljs.inherit(hljs.APOS_STRING_MODE, {illegal: null}),
           hljs.inherit(hljs.QUOTE_STRING_MODE, {illegal: null})
         ]
       },

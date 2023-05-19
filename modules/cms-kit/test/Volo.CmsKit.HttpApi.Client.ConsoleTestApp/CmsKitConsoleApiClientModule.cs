@@ -1,14 +1,13 @@
 ﻿using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Modularity;
 
-namespace Volo.CmsKit
+namespace Volo.CmsKit;
+
+[DependsOn(
+    typeof(CmsKitHttpApiClientModule),
+    typeof(AbpHttpClientIdentityModelModule)
+    )]
+public class CmsKitConsoleApiClientModule : AbpModule
 {
-    [DependsOn(
-        typeof(CmsKitHttpApiClientModule),
-        typeof(AbpHttpClientIdentityModelModule)
-        )]
-    public class CmsKitConsoleApiClientModule : AbpModule
-    {
-        
-    }
+
 }

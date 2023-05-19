@@ -24,7 +24,7 @@ export class EntityAction<R = any> extends Action<R> {
   readonly icon: string;
 
   constructor(options: EntityActionOptions<R>) {
-    super(options.permission, options.visible, options.action);
+    super(options.permission || '', options.visible, options.action);
     this.text = options.text;
     this.icon = options.icon || '';
   }

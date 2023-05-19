@@ -1,0 +1,10 @@
+{
+  "culture": "el",
+  "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Ημερομηνία γέννησης1",
+    "DisplayName:BirthDate2": "Ημερομηνία γέννησης2",
+    "PersonModel:BirthDate3": "Ημερομηνία γέννησης3",
+    "BirthDate": "Ημερομηνία γέννησης",
+    "Value1": "Αξία Ένα"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "culture": "ru",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "Длина пароля должна быть больше {0} символов.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Пароль должен содержать хотя бы один не буквенно-цифровой символ."
+  }
+}

@@ -3,10 +3,13 @@
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "اسم مورد الهوية موجود بالفعل: {Name}",
     "Volo.IdentityServer:DuplicateApiResourceName": "اسم مورد Api موجود بالفعل: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "اسم نطاق Api موجود بالفعل: {Name}",
     "Volo.IdentityServer:DuplicateClientId": "موجود بالفعل: {ClientId}",
     "UserLockedOut": "تم قفل حساب المستخدم بسبب محاولات تسجيل الدخول غير الصالحة. يرجى الانتظار بعض الوقت والمحاولة مرة أخرى.",
     "InvalidUserNameOrPassword": "اسم مستخدم أو كلمة مرور غير صالحة!",
-    "LoginIsNotAllowed": "لا يسمح لك بتسجيل الدخول! حسابك غير نشط أو يحتاج إلى تأكيد بريدك الإلكتروني / رقم هاتفك.",
-    "InvalidUsername": "اسم المستخدم أو كلمة المرور غير صالحة!"
+    "LoginIsNotAllowed": "لا يسمح لك بتسجيل الدخول! حسابك غير نشط أو يحتاج إلى تأكيد بريدك الإلكتروني/رقم هاتفك.",
+    "InvalidUsername": "اسم المستخدم أو كلمة المرور غير صالحة!",
+    "InvalidAuthenticatorCode": "كود المصدق غير صالح!",
+    "TheTargetUserIsNotLinkedToYou": "المستخدم المستهدف غير مرتبط بك!"
   }
 }

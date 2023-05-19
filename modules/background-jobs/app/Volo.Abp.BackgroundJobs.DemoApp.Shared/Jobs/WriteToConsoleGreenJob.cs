@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs

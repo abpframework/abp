@@ -1,0 +1,7 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "密碼長度必須大於 {0} 個字符。",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "密碼必須至少包含一個非字母數字字符。"
+  }
+}

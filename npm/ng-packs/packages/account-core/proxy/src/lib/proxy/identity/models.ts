@@ -9,6 +9,7 @@ export interface IdentityUserDto extends ExtensibleFullAuditedEntityDto<string> 
   emailConfirmed: boolean;
   phoneNumber?: string;
   phoneNumberConfirmed: boolean;
+  isActive: boolean;
   lockoutEnabled: boolean;
   lockoutEnd?: string;
   concurrencyStamp?: string;

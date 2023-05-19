@@ -14,6 +14,7 @@ $solutionPaths = @(
 		"../modules/feature-management",
 		"../modules/identity",
 		"../modules/identityserver",
+		"../modules/openiddict",
 		"../modules/tenant-management",
 		"../modules/audit-logging",
 		"../modules/background-jobs",
@@ -34,7 +35,9 @@ if ($full -eq "-f")
 		"../templates/app/aspnet-core",
 		"../templates/console",
 		"../templates/wpf",
-		"../abp_io/AbpIoLocalization"
+		"../templates/app-nolayers/aspnet-core",
+		"../abp_io/AbpIoLocalization",
+		"../source-code"
 	) 
 }else{ 
 	Write-host ""

@@ -1,0 +1,29 @@
+{
+  "name": "BlobStoring.Database.Host.ConsoleApp.ConsoleApp",
+  "hash": "586af594c8eddeb485df1d06e051e2c3",
+  "contents": [
+    {
+      "namespace": "BlobStoring.Database.Host.ConsoleApp.ConsoleApp",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Autofac",
+          "namespace": "Volo.Abp.Autofac",
+          "name": "AbpAutofacModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "namespace": "Volo.Abp.EntityFrameworkCore.SqlServer",
+          "name": "AbpEntityFrameworkCoreSqlServerModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+          "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+          "name": "BlobStoringDatabaseEntityFrameworkCoreModule"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "ConsoleAppConsoleAppModule",
+      "summary": null
+    }
+  ]
+}

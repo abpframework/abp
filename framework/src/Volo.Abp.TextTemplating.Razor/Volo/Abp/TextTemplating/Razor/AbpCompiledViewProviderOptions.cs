@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
-namespace Volo.Abp.TextTemplating.Razor
-{
-    public class AbpCompiledViewProviderOptions
-    {
-        public Dictionary<string, List<PortableExecutableReference>> TemplateReferences { get; }
+namespace Volo.Abp.TextTemplating.Razor;
 
-        public AbpCompiledViewProviderOptions()
-        {
-            TemplateReferences = new Dictionary<string, List<PortableExecutableReference>>();
-        }
+public class AbpCompiledViewProviderOptions
+{
+    public Dictionary<string, List<PortableExecutableReference>> TemplateReferences { get; }
+
+    public AbpCompiledViewProviderOptions()
+    {
+        TemplateReferences = new Dictionary<string, List<PortableExecutableReference>>();
     }
 }

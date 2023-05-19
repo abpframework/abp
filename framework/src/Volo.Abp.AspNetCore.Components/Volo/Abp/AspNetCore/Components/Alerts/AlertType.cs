@@ -4,18 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Components.Alerts
+namespace Volo.Abp.AspNetCore.Components.Alerts;
+
+public enum AlertType
 {
-    public enum AlertType
-    {
-        Default,
-        Primary,
-        Secondary,
-        Success,
-        Danger,
-        Warning,
-        Info,
-        Light,
-        Dark
-    }
+    Default,
+    Primary,
+    Secondary,
+    Success,
+    Danger,
+    Warning,
+    Info,
+    Light,
+    Dark
 }

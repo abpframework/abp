@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { Box, Checkbox, List } from 'native-base';
 import PropTypes from 'prop-types';
-import { List, ListItem, CheckBox, Body, Text } from 'native-base';
-import { TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { getAllRoles, getUserRoles } from '../../api/IdentityAPI';
 
 function UserRoles({ editingUser = {}, onChangeRoles }) {
@@ -37,18 +36,17 @@ function UserRoles({ editingUser = {}, onChangeRoles }) {
   }, [roles]);
 
   return (
-    <List>
+    <Box w={{base: '100%'}} px="4">
+      <List borderWidth={0}>
       {roles.map((role, index) => (
-        <ListItem key={role.id}>
-          <CheckBox checked={role.isSelected} onPress={() => onPress(index)} />
-          <Body>
-            <TouchableOpacity onPress={() => onPress(index)}>
-              <Text>{role.name}</Text>
-            </TouchableOpacity>
-          </Body>
-        </ListItem>
+        <List.Item key={role.id} borderBottomWidth={1} >
+          <Checkbox isChecked={role.isSelected} onPress={() => onPress(index)} >
+          {role.name}
+        </Checkbox>
+        </List.Item>
       ))}
     </List>
+    </Box>
   );
 }
 

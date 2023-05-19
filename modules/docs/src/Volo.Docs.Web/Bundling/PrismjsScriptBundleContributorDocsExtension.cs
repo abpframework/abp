@@ -22,7 +22,8 @@ namespace Volo.Docs.Bundling
             "sass",
             "scss",
             "sql",
-            "typescript"
+            "typescript",
+            "diff"
         };
 
         public override void ConfigureBundle(BundleConfigurationContext context)
@@ -46,6 +47,7 @@ namespace Volo.Docs.Bundling
             context.Files.AddIfNotContains("/libs/prismjs/plugins/show-language/prism-show-language.js");
             context.Files.AddIfNotContains("/libs/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js");
             context.Files.AddIfNotContains("/libs/prismjs/plugins/line-highlight/prism-line-highlight.js");
+            context.Files.AddIfNotContains("/libs/prismjs/plugins/diff-highlight/prism-diff-highlight.js");
         }
     }
 }

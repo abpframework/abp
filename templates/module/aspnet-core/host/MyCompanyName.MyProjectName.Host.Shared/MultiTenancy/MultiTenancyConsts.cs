@@ -1,10 +1,9 @@
-﻿namespace MyCompanyName.MyProjectName.MultiTenancy
+﻿namespace MyCompanyName.MyProjectName.MultiTenancy;
+
+public static class MultiTenancyConsts
 {
-    public static class MultiTenancyConsts
-    {
-        /* Enable/disable multi-tenancy in a single point
-         * to test your module with multi-tenancy.
-         */
-        public const bool IsEnabled = false;
-    }
+    /* Enable/disable multi-tenancy in a single point
+     * to test your module with multi-tenancy.
+     */
+    public const bool IsEnabled = false;
 }

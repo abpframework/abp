@@ -1,25 +1,24 @@
 ﻿using System.Net.Http;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Http.Client.Proxying
+namespace Volo.Abp.Http.Client.Proxying;
+
+public class DefaultProxyHttpClientFactory : IProxyHttpClientFactory, ITransientDependency
 {
-    public class DefaultProxyHttpClientFactory : IProxyHttpClientFactory, ITransientDependency
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public DefaultProxyHttpClientFactory(IHttpClientFactory httpClientFactory)
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        _httpClientFactory = httpClientFactory;
+    }
 
-        public DefaultProxyHttpClientFactory(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
+    public HttpClient Create()
+    {
+        return _httpClientFactory.CreateClient();
+    }
 
-        public HttpClient Create()
-        {
-            return _httpClientFactory.CreateClient();
-        }
-
-        public HttpClient Create(string name)
-        {
-            return _httpClientFactory.CreateClient(name);
-        }
+    public HttpClient Create(string name)
+    {
+        return _httpClientFactory.CreateClient(name);
     }
 }

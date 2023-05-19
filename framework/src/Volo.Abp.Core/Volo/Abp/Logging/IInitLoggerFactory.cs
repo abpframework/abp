@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.Logging
+﻿namespace Volo.Abp.Logging;
+
+public interface IInitLoggerFactory
 {
-    public interface IInitLoggerFactory
-    {
-        IInitLogger<T> Create<T>();
-    }
+    IInitLogger<T> Create<T>();
 }

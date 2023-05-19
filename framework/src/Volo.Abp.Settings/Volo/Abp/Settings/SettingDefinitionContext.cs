@@ -1,38 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Volo.Abp.Settings
+namespace Volo.Abp.Settings;
+
+public class SettingDefinitionContext : ISettingDefinitionContext
 {
-    public class SettingDefinitionContext : ISettingDefinitionContext
+    protected Dictionary<string, SettingDefinition> Settings { get; }
+
+    public SettingDefinitionContext(Dictionary<string, SettingDefinition> settings)
     {
-        protected Dictionary<string, SettingDefinition> Settings { get; }
+        Settings = settings;
+    }
 
-        public SettingDefinitionContext(Dictionary<string, SettingDefinition> settings)
+    public virtual SettingDefinition GetOrNull(string name)
+    {
+        return Settings.GetOrDefault(name);
+    }
+
+    public virtual IReadOnlyList<SettingDefinition> GetAll()
+    {
+        return Settings.Values.ToImmutableList();
+    }
+
+    public virtual void Add(params SettingDefinition[] definitions)
+    {
+        if (definitions.IsNullOrEmpty())
         {
-            Settings = settings;
+            return;
         }
 
-        public virtual SettingDefinition GetOrNull(string name)
+        foreach (var definition in definitions)
         {
-            return Settings.GetOrDefault(name);
-        }
-
-        public virtual IReadOnlyList<SettingDefinition> GetAll()
-        {
-            return Settings.Values.ToImmutableList();
-        }
-
-        public virtual void Add(params SettingDefinition[] definitions)
-        {
-            if (definitions.IsNullOrEmpty())
-            {
-                return;
-            }
-
-            foreach (var definition in definitions)
-            {
-                Settings[definition.Name] = definition;
-            }
+            Settings[definition.Name] = definition;
         }
     }
 }

@@ -1,24 +1,23 @@
 ﻿using System;
+using System.Threading.Tasks;
+namespace Volo.Abp.BackgroundJobs.DemoApp;
 
-namespace Volo.Abp.BackgroundJobs.DemoApp
+class Program
 {
-    class Program
+    async static Task Main(string[] args)
     {
-        static void Main(string[] args)
+        using (var application = await AbpApplicationFactory.CreateAsync<DemoAppModule>(options =>
         {
-            using (var application = AbpApplicationFactory.Create<DemoAppModule>(options =>
-            {
-                options.UseAutofac();
-            }))
-            {
-                application.Initialize();
+            options.UseAutofac();
+        }))
+        {
+            await application.InitializeAsync();
 
-                Console.WriteLine("Started: " + typeof(Program).Namespace);
-                Console.WriteLine("Press ENTER to stop the application..!");
-                Console.ReadLine();
+            Console.WriteLine("Started: " + typeof(Program).Namespace);
+            Console.WriteLine("Press ENTER to stop the application..!");
+            Console.ReadLine();
 
-                application.Shutdown();
-            }
+            await application.ShutdownAsync();
         }
     }
 }

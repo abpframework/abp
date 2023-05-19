@@ -3,6 +3,7 @@
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity Resource adı zaten mevcut: {Name}",
     "Volo.IdentityServer:DuplicateApiResourceName": "Api Resource adı zaten mevcut: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "API Kapsam adı zaten var: {Name}",
     "Volo.IdentityServer:DuplicateClientId": "ClientId already zaten mevcut: {ClientId}",
     "UserLockedOut": "Kullanıcı hesabı hatalı giriş denemeleri nedeniyle kilitlenmiştir. Lütfen bir süre bekleyip tekrar deneyin.",
     "InvalidUserNameOrPassword": "Kullanıcı adı ya da şifre geçersiz!",

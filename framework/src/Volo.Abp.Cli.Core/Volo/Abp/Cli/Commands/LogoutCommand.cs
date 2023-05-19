@@ -5,33 +5,34 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.Commands
+namespace Volo.Abp.Cli.Commands;
+
+public class LogoutCommand : IConsoleCommand, ITransientDependency
 {
-    public class LogoutCommand : IConsoleCommand, ITransientDependency
+    public const string Name = "logout";
+    
+    public ILogger<LogoutCommand> Logger { get; set; }
+
+    protected AuthService AuthService { get; }
+
+    public LogoutCommand(AuthService authService)
     {
-        public ILogger<LogoutCommand> Logger { get; set; }
+        AuthService = authService;
+        Logger = NullLogger<LogoutCommand>.Instance;
+    }
 
-        protected AuthService AuthService { get; }
+    public Task ExecuteAsync(CommandLineArgs commandLineArgs)
+    {
+        return AuthService.LogoutAsync();
+    }
 
-        public LogoutCommand(AuthService authService)
-        {
-            AuthService = authService;
-            Logger = NullLogger<LogoutCommand>.Instance;
-        }
+    public string GetUsageInfo()
+    {
+        return string.Empty;
+    }
 
-        public Task ExecuteAsync(CommandLineArgs commandLineArgs)
-        {
-            return AuthService.LogoutAsync();
-        }
-
-        public string GetUsageInfo()
-        {
-            return string.Empty;
-        }
-
-        public string GetShortDescription()
-        {
-            return "Sign out from " + CliUrls.AccountAbpIo + ".";
-        }
+    public string GetShortDescription()
+    {
+        return "Sign out from " + CliUrls.AccountAbpIo + ".";
     }
 }

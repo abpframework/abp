@@ -18,6 +18,8 @@
     "Description:Abp.Mailing.Smtp.Password": "The password for the user name associated with the credentials.",
     "Description:Abp.Mailing.Smtp.Domain": "Geslo za uporabniško ime, povezano s poverilnicami.",
     "Description:Abp.Mailing.Smtp.EnableSsl": "Ali SmtpClient uporablja sloj varnih vtičnic (SSL) za šifriranje povezave.",
-    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Ali so privzete poverilnice poslane skupaj z zahtevki."
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Ali so privzete poverilnice poslane skupaj z zahtevki.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Privzeta predloga postavitve e-pošte",
+    "TextTemplate:StandardEmailTemplates.Message": "Preprosta predloga sporočil za e-pošto"
   }
 }

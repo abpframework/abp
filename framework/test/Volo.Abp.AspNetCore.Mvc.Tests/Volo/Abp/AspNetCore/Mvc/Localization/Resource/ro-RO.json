@@ -1,0 +1,10 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Data nasterii 1",
+    "DisplayName:BirthDate2": "Data nasterii 2",
+    "PersonModel:BirthDate3": "Data nasterii 3",
+    "BirthDate": "Data de naștere",
+    "Value1": "Valoarea Unu"
+  }
+}

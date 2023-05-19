@@ -8,37 +8,36 @@ using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.IdentityServer.EntityFrameworkCore
+namespace Volo.Abp.IdentityServer.EntityFrameworkCore;
+
+[DependsOn(
+    typeof(AbpIdentityServerDomainModule),
+    typeof(AbpEntityFrameworkCoreModule)
+    )]
+public class AbpIdentityServerEntityFrameworkCoreModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpIdentityServerDomainModule),
-        typeof(AbpEntityFrameworkCoreModule)
-        )]
-    public class AbpIdentityServerEntityFrameworkCoreModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.PreConfigure<IIdentityServerBuilder>(
-                builder =>
-                {
-                    builder.AddAbpStores();
-                }
-            );
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAbpDbContext<IdentityServerDbContext>(options =>
+        context.Services.PreConfigure<IIdentityServerBuilder>(
+            builder =>
             {
-                options.AddDefaultRepositories<IIdentityServerDbContext>();
+                builder.AddAbpStores();
+            }
+        );
+    }
 
-                options.AddRepository<Client, ClientRepository>();
-                options.AddRepository<ApiResource, ApiResourceRepository>();
-                options.AddRepository<ApiScope, ApiScopeRepository>();
-                options.AddRepository<IdentityResource, IdentityResourceRepository>();
-                options.AddRepository<PersistedGrant, PersistentGrantRepository>();
-                options.AddRepository<DeviceFlowCodes, DeviceFlowCodesRepository>();
-            });
-        }
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddAbpDbContext<IdentityServerDbContext>(options =>
+        {
+            options.AddDefaultRepositories<IIdentityServerDbContext>();
+
+            options.AddRepository<Client, ClientRepository>();
+            options.AddRepository<ApiResource, ApiResourceRepository>();
+            options.AddRepository<ApiScope, ApiScopeRepository>();
+            options.AddRepository<IdentityResource, IdentityResourceRepository>();
+            options.AddRepository<PersistedGrant, PersistentGrantRepository>();
+            options.AddRepository<DeviceFlowCodes, DeviceFlowCodesRepository>();
+        });
     }
 }

@@ -1,26 +1,25 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.PermissionManagement
+namespace Volo.Abp.PermissionManagement;
+
+public class MultiplePermissionWithGrantedProviders
 {
-    public class MultiplePermissionWithGrantedProviders
+    public List<PermissionWithGrantedProviders> Result { get; }
+
+    public MultiplePermissionWithGrantedProviders()
     {
-        public List<PermissionWithGrantedProviders> Result { get; }
+        Result = new List<PermissionWithGrantedProviders>();
+    }
 
-        public MultiplePermissionWithGrantedProviders()
+    public MultiplePermissionWithGrantedProviders(string[] names)
+    {
+        Check.NotNull(names, nameof(names));
+
+        Result = new List<PermissionWithGrantedProviders>();
+
+        foreach (var name in names)
         {
-            Result = new List<PermissionWithGrantedProviders>();
-        }
-
-        public MultiplePermissionWithGrantedProviders(string[] names)
-        {
-            Check.NotNull(names, nameof(names));
-
-            Result = new List<PermissionWithGrantedProviders>();
-
-            foreach (var name in names)
-            {
-                Result.Add(new PermissionWithGrantedProviders(name, false));
-            }
+            Result.Add(new PermissionWithGrantedProviders(name, false));
         }
     }
 }

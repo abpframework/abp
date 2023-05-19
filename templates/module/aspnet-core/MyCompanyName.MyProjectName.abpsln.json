@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "MyCompanyName.MyProjectName": {
+      "path": "MyCompanyName.MyProjectName.abpmdl.json"
+    }
+  }
+}

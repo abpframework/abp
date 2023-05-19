@@ -1,0 +1,7 @@
+{
+  "culture": "vi",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Ngôn ngữ mặc định",
+    "Description:Abp.Localization.DefaultLanguage": "Ngôn ngữ mặc định của ứng dụng."
+  }
+}

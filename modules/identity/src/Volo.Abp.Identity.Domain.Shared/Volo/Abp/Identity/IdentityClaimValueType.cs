@@ -1,10 +1,9 @@
-﻿namespace Volo.Abp.Identity
+﻿namespace Volo.Abp.Identity;
+
+public enum IdentityClaimValueType
 {
-    public enum IdentityClaimValueType
-    {
-        String,
-        Int,
-        Boolean,
-        DateTime
-    }
+    String,
+    Int,
+    Boolean,
+    DateTime
 }

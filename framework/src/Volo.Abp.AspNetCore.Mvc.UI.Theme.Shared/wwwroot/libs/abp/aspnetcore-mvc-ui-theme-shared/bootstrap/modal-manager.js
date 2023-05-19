@@ -96,21 +96,28 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 });
 
                 _$modal.on('shown.bs.modal', function () {
-                    //focuses first element if it's a typeable input.
-                    var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
+                    if (!options.focusElement) {
+                        //focuses first element if it's a typeable input.
+                        var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
 
-                    _onOpenCallbacks.triggerAll(_publicApi);
+                        _onOpenCallbacks.triggerAll(_publicApi);
 
-                    if ($firstVisibleInput.hasClass("datepicker")) {
-                        return; //don't pop-up date pickers...
+                        if ($firstVisibleInput.hasClass("datepicker")) {
+                            return; //don't pop-up date pickers...
+                        }
+
+                        var focusableInputs = ["text", "password", "email", "number", "search", "tel", "url"];
+                        if (!focusableInputs.includes($firstVisibleInput.prop("type"))) {
+                            return;
+                        }
+
+                        $firstVisibleInput.focus();
+                    } else if (typeof options.focusElement === 'function') {
+                        var focusElement = options.focusElement();
+                        focusElement.focus();
+                    } else if (typeof options.focusElement === 'string') {
+                        $(options.focusElement).focus();
                     }
-
-                    var focusableInputs = ["text", "password", "email", "number", "search", "tel", "url"];
-                    if (!focusableInputs.includes($firstVisibleInput.prop("type"))) {
-                        return;
-                    }
-
-                    $firstVisibleInput.focus();
                 });
 
                 var modalClass = abp.modals[options.modalClass];

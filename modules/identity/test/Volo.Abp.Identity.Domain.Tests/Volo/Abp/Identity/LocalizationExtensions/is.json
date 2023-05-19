@@ -1,0 +1,7 @@
+{
+  "culture": "is",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "Lengd aðgangsorðs verður að vera meiri en {0} stafir.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Lykilorð verður að innihalda að minnsta kosti einn staflausan staf."
+  }
+}

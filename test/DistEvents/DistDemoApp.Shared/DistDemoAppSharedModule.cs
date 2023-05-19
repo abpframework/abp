@@ -5,7 +5,7 @@ using StackExchange.Redis;
 using Volo.Abp.Autofac;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
-using Volo.Abp.EventBus.Boxes;
+using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 
 namespace DistDemoApp
@@ -13,8 +13,8 @@ namespace DistDemoApp
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpDddDomainModule),
-        typeof(AbpEventBusBoxesModule)
-        )] 
+        typeof(AbpEventBusModule)
+        )]
     public class DistDemoAppSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -28,7 +28,7 @@ namespace DistDemoApp
                 options.EtoMappings.Add<TodoItem, TodoItemEto>();
                 options.AutoEventSelectors.Add<TodoItem>();
             });
-            
+
             context.Services.AddSingleton<IDistributedLockProvider>(sp =>
             {
                 var connection = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);

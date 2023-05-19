@@ -38,32 +38,32 @@ class RecordView {
 export class ForDirective implements OnChanges {
   // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('abpForOf')
-  items: any[];
+  items!: any[];
 
   @Input('abpForOrderBy')
-  orderBy: string;
+  orderBy?: string;
 
   @Input('abpForOrderDir')
-  orderDir: 'ASC' | 'DESC';
+  orderDir?: 'ASC' | 'DESC';
 
   @Input('abpForFilterBy')
-  filterBy: string;
+  filterBy?: string;
 
   @Input('abpForFilterVal')
   filterVal: any;
 
   @Input('abpForTrackBy')
-  trackBy;
+  trackBy?: TrackByFunction<any>;
 
   @Input('abpForCompareBy')
-  compareBy: CompareFn;
+  compareBy?: CompareFn;
 
   @Input('abpForEmptyRef')
-  emptyRef: TemplateRef<any>;
+  emptyRef?: TemplateRef<any>;
 
-  private differ: IterableDiffer<any>;
+  private differ!: IterableDiffer<any> | null;
 
-  private isShowEmptyRef: boolean;
+  private isShowEmptyRef!: boolean;
 
   get compareFn(): CompareFn {
     return this.compareBy || compare;
@@ -83,22 +83,29 @@ export class ForDirective implements OnChanges {
     const rw: RecordView[] = [];
 
     changes.forEachOperation(
-      (record: IterableChangeRecord<any>, previousIndex: number, currentIndex: number) => {
+      (
+        record: IterableChangeRecord<any>,
+        previousIndex: number | null,
+        currentIndex: number | null,
+      ) => {
         if (record.previousIndex == null) {
           const view = this.vcRef.createEmbeddedView(
             this.tempRef,
             new AbpForContext(null, -1, -1, this.items),
-            currentIndex,
+            currentIndex || 0,
           );
 
           rw.push(new RecordView(record, view));
-        } else if (currentIndex == null) {
+        } else if (currentIndex == null && previousIndex !== null) {
           this.vcRef.remove(previousIndex);
         } else {
-          const view = this.vcRef.get(previousIndex);
-          this.vcRef.move(view, currentIndex);
-
-          rw.push(new RecordView(record, view as EmbeddedViewRef<AbpForContext>));
+          if (previousIndex !== null) {
+            const view = this.vcRef.get(previousIndex);
+            if (view && currentIndex !== null) {
+              this.vcRef.move(view, currentIndex);
+              rw.push(new RecordView(record, view as EmbeddedViewRef<AbpForContext>));
+            }
+          }
         }
       },
     );
@@ -117,8 +124,10 @@ export class ForDirective implements OnChanges {
     }
 
     changes.forEachIdentityChange((record: IterableChangeRecord<any>) => {
-      const viewRef = this.vcRef.get(record.currentIndex) as EmbeddedViewRef<AbpForContext>;
-      viewRef.context.$implicit = record.item;
+      if (record.currentIndex !== null) {
+        const viewRef = this.vcRef.get(record.currentIndex) as EmbeddedViewRef<AbpForContext>;
+        viewRef.context.$implicit = record.item;
+      }
     });
   }
 
@@ -152,10 +161,9 @@ export class ForDirective implements OnChanges {
   }
 
   private sortItems(items: any[]) {
-    if (this.orderBy) {
-      items.sort((a, b) =>
-        a[this.orderBy] > b[this.orderBy] ? 1 : a[this.orderBy] < b[this.orderBy] ? -1 : 0,
-      );
+    const orderBy = this.orderBy;
+    if (orderBy) {
+      items.sort((a, b) => (a[orderBy] > b[orderBy] ? 1 : a[orderBy] < b[orderBy] ? -1 : 0));
     } else {
       items.sort();
     }
@@ -166,13 +174,13 @@ export class ForDirective implements OnChanges {
     if (!Array.isArray(items)) return;
 
     const compareFn = this.compareFn;
-
+    const filterBy = this.filterBy;
     if (
-      typeof this.filterBy !== 'undefined' &&
+      typeof filterBy !== 'undefined' &&
       typeof this.filterVal !== 'undefined' &&
       this.filterVal !== ''
     ) {
-      items = items.filter(item => compareFn(item[this.filterBy], this.filterVal));
+      items = items.filter(item => compareFn(item[filterBy], this.filterVal));
     }
 
     switch (this.orderDir) {

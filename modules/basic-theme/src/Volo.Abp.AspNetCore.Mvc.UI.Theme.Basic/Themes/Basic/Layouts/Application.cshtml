@@ -1,6 +1,7 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.ContentTitle
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
@@ -8,6 +9,7 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles
 @using Volo.Abp.Localization
 @using Volo.Abp.Ui.Branding
+@using Volo.Abp.Ui.LayoutHooks
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
 @{
@@ -49,7 +51,7 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
 </head>
-<body class="abp-application-layout bg-light @rtl">
+<body class="abp-application-layout @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
@@ -57,8 +59,13 @@
     <div class="@containerClass">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
         <div id="AbpContentToolbar">
-            <div class="text-right mb-2">
-                @RenderSection("content_toolbar", false)
+            <div class="row mb-2">
+                @(await Component.InvokeAsync<ContentTitleViewComponent>())
+                <div class="col">
+                    <div class="text-end">
+                        @await RenderSectionAsync("content_toolbar", false)
+                    </div>
+                </div>
             </div>
         </div>
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
@@ -68,6 +75,7 @@
 
     <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
 
+    <script src="~/Abp/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
     <script src="~/Abp/ApplicationConfigurationScript"></script>
     <script src="~/Abp/ServiceProxyScript"></script>
 

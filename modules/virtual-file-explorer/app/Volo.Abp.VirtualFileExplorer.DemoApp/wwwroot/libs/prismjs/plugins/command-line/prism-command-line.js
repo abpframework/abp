@@ -1,6 +1,6 @@
 (function () {
 
-	if (typeof self === 'undefined' || !self.Prism || !self.document) {
+	if (typeof Prism === 'undefined' || typeof document === 'undefined') {
 		return;
 	}
 
@@ -8,27 +8,31 @@
 	var PROMPT_CLASS = 'command-line-prompt';
 
 	/** @type {(str: string, prefix: string) => boolean} */
-	var startsWith = "".startsWith
+	var startsWith = ''.startsWith
 		? function (s, p) { return s.startsWith(p); }
 		: function (s, p) { return s.indexOf(p) === 0; };
 
-	/**
-	 * Repeats the given string some number of times.
-	 *
-	 * This is just a polyfill for `String.prototype.repeat`.
-	 *
-	 * @param {string} str
-	 * @param {number} times
-	 * @returns {string}
-	 */
-	function repeat(str, times) {
-		var s = "";
-		for (var i = 0; i < times; i++) {
-			s += str;
+	// Support for IE11 that has no endsWith()
+	/** @type {(str: string, suffix: string) => boolean} */
+	var endsWith = ''.endsWith
+		? function (str, suffix) {
+			return str.endsWith(suffix);
 		}
-		return s;
-	}
+		: function (str, suffix) {
+			var len = str.length;
+			return str.substring(len - suffix.length, len) === suffix;
+		};
 
+	/**
+	 * Returns whether the given hook environment has a command line info object.
+	 *
+	 * @param {any} env
+	 * @returns {boolean}
+	 */
+	function hasCommandLineInfo(env) {
+		var vars = env.vars = env.vars || {};
+		return 'command-line' in vars;
+	}
 	/**
 	 * Returns the command line info object from the given hook environment.
 	 *
@@ -69,6 +73,7 @@
 		}
 
 		var codeLines = env.code.split('\n');
+
 		commandLine.numberOfLines = codeLines.length;
 		/** @type {string[]} */
 		var outputLines = commandLine.outputLines = [];
@@ -107,6 +112,32 @@
 			}
 		}
 
+		var continuationLineIndicies = commandLine.continuationLineIndicies = new Set();
+		var lineContinuationStr = pre.getAttribute('data-continuation-str');
+		var continuationFilter = pre.getAttribute('data-filter-continuation');
+
+		// Identify code lines where the command has continued onto subsequent
+		// lines and thus need a different prompt. Need to do this after the output
+		// lines have been removed to ensure we don't pick up a continuation string
+		// in an output line.
+		for (var j = 0; j < codeLines.length; j++) {
+			var line = codeLines[j];
+			if (!line) {
+				continue;
+			}
+
+			// Record the next line as a continuation if this one ends in a continuation str.
+			if (lineContinuationStr && endsWith(line, lineContinuationStr)) {
+				continuationLineIndicies.add(j + 1);
+			}
+			// Record this line as a continuation if marked with a continuation prefix
+			// (that we will remove).
+			if (j > 0 && continuationFilter && startsWith(line, continuationFilter)) {
+				codeLines[j] = line.slice(continuationFilter.length);
+				continuationLineIndicies.add(j);
+			}
+		}
+
 		env.code = codeLines.join('\n');
 	});
 
@@ -120,15 +151,27 @@
 		// Reinsert the output lines into the highlighted code. -- cwells
 		var codeLines = env.highlightedCode.split('\n');
 		var outputLines = commandLine.outputLines || [];
-		for (var i = 0, l = outputLines.length; i < l; i++) {
+		for (var i = 0, l = codeLines.length; i < l; i++) {
+			// Add spans to allow distinction of input/output text for styling
 			if (outputLines.hasOwnProperty(i)) {
-				codeLines[i] = outputLines[i];
+				// outputLines were removed from codeLines so missed out on escaping
+				// of markup so do it here.
+				codeLines[i] = '<span class="token output">'
+					+ Prism.util.encode(outputLines[i]) + '</span>';
+			} else {
+				codeLines[i] = '<span class="token command">'
+					+ codeLines[i] + '</span>';
 			}
 		}
 		env.highlightedCode = codeLines.join('\n');
 	});
 
 	Prism.hooks.add('complete', function (env) {
+		if (!hasCommandLineInfo(env)) {
+			// the previous hooks never ran
+			return;
+		}
+
 		var commandLine = getCommandLineInfo(env);
 
 		if (commandLine.complete) {
@@ -148,15 +191,29 @@
 		}
 
 		// Create the "rows" that will become the command-line prompts. -- cwells
-		var promptLines;
+		var promptLines = '';
 		var rowCount = commandLine.numberOfLines || 0;
 		var promptText = getAttribute('data-prompt', '');
+		var promptLine;
 		if (promptText !== '') {
-			promptLines = repeat('<span data-prompt="' + promptText + '"></span>', rowCount);
+			promptLine = '<span data-prompt="' + promptText + '"></span>';
 		} else {
 			var user = getAttribute('data-user', 'user');
 			var host = getAttribute('data-host', 'localhost');
-			promptLines = repeat('<span data-user="' + user + '" data-host="' + host + '"></span>', rowCount);
+			promptLine = '<span data-user="' + user + '" data-host="' + host + '"></span>';
+		}
+
+		var continuationLineIndicies = commandLine.continuationLineIndicies || new Set();
+		var continuationPromptText = getAttribute('data-continuation-prompt', '>');
+		var continuationPromptLine = '<span data-continuation-prompt="' + continuationPromptText + '"></span>';
+
+		// Assemble all the appropriate prompt/continuation lines
+		for (var j = 0; j < rowCount; j++) {
+			if (continuationLineIndicies.has(j)) {
+				promptLines += continuationPromptLine;
+			} else {
+				promptLines += promptLine;
+			}
 		}
 
 		// Create the wrapper element. -- cwells

@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.TenantManagement
+namespace Volo.Abp.TenantManagement;
+
+public class TenantUpdateDto : TenantCreateOrUpdateDtoBase, IHasConcurrencyStamp
 {
-    public class TenantUpdateDto : TenantCreateOrUpdateDtoBase, IHasConcurrencyStamp
-    {
-        public string ConcurrencyStamp { get; set; }
-    }
+    public string ConcurrencyStamp { get; set; }
 }

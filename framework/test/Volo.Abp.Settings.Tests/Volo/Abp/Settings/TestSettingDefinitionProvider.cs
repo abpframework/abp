@@ -1,14 +1,13 @@
-﻿namespace Volo.Abp.Settings
+﻿namespace Volo.Abp.Settings;
+
+public class TestSettingDefinitionProvider : SettingDefinitionProvider
 {
-    public class TestSettingDefinitionProvider : SettingDefinitionProvider
+    public override void Define(ISettingDefinitionContext context)
     {
-        public override void Define(ISettingDefinitionContext context)
-        {
-            context.Add(
-                new SettingDefinition(TestSettingNames.TestSettingWithoutDefaultValue),
-                new SettingDefinition(TestSettingNames.TestSettingWithDefaultValue, "default-value"),
-                new SettingDefinition(TestSettingNames.TestSettingEncrypted, isEncrypted: true)
-            );
-        }
+        context.Add(
+            new SettingDefinition(TestSettingNames.TestSettingWithoutDefaultValue),
+            new SettingDefinition(TestSettingNames.TestSettingWithDefaultValue, "default-value"),
+            new SettingDefinition(TestSettingNames.TestSettingEncrypted, isEncrypted: true)
+        );
     }
 }

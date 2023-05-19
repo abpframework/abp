@@ -1,34 +1,41 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Directive,
-  ElementRef,
+  Inject,
   Input,
   OnChanges,
   OnDestroy,
   Optional,
-  Renderer2,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { ReplaySubject, Subscription } from 'rxjs';
+import { distinctUntilChanged, take } from 'rxjs/operators';
 import { PermissionService } from '../services/permission.service';
+import { QUEUE_MANAGER } from '../tokens/queue.token';
+import { QueueManager } from '../utils/queue';
 
 @Directive({
   selector: '[abpPermission]',
 })
-export class PermissionDirective implements OnDestroy, OnChanges {
-  @Input('abpPermission') condition: string;
+export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit {
+  @Input('abpPermission') condition: string | undefined;
 
-  subscription: Subscription;
+  @Input('abpPermissionRunChangeDetection') runChangeDetection = true;
+
+  subscription!: Subscription;
+
+  cdrSubject = new ReplaySubject<void>();
+
+  rendered = false;
 
   constructor(
-    private elRef: ElementRef<HTMLElement>,
-    private renderer: Renderer2,
     @Optional() private templateRef: TemplateRef<any>,
     private vcRef: ViewContainerRef,
     private permissionService: PermissionService,
     private cdRef: ChangeDetectorRef,
+    @Inject(QUEUE_MANAGER) public queue: QueueManager,
   ) {}
 
   private check() {
@@ -37,12 +44,20 @@ export class PermissionDirective implements OnDestroy, OnChanges {
     }
 
     this.subscription = this.permissionService
-      .getGrantedPolicy$(this.condition)
+      .getGrantedPolicy$(this.condition || '')
       .pipe(distinctUntilChanged())
       .subscribe(isGranted => {
         this.vcRef.clear();
         if (isGranted) this.vcRef.createEmbeddedView(this.templateRef);
-        this.cdRef.detectChanges();
+        if (this.runChangeDetection) {
+          if (!this.rendered) {
+            this.cdrSubject.next();
+          } else {
+            this.cdRef.detectChanges();
+          }
+        } else {
+          this.cdRef.markForCheck();
+        }
       });
   }
 
@@ -52,5 +67,10 @@ export class PermissionDirective implements OnDestroy, OnChanges {
 
   ngOnChanges() {
     this.check();
+  }
+
+  ngAfterViewInit() {
+    this.cdrSubject.pipe(take(1)).subscribe(() => this.queue.add(() => this.cdRef.detectChanges()));
+    this.rendered = true;
   }
 }

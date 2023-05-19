@@ -3,43 +3,42 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Text.Encodings.Web;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
+
+public static class TagHelperExtensions
 {
-    public static class TagHelperExtensions
+    public static async Task<TagHelperOutput> ProcessAndGetOutputAsync(
+        this TagHelper tagHelper,
+        TagHelperAttributeList attributeList,
+        TagHelperContext context,
+        string tagName = "div",
+        TagMode tagMode = TagMode.SelfClosing)
     {
-        public static async Task<TagHelperOutput> ProcessAndGetOutputAsync(
-            this TagHelper tagHelper, 
-            TagHelperAttributeList attributeList, 
-            TagHelperContext context, 
-            string tagName = "div", 
-            TagMode tagMode = TagMode.SelfClosing)
+        var innerOutput = new TagHelperOutput(
+            tagName,
+            attributeList,
+            (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
         {
-            var innerOutput = new TagHelperOutput(
-                tagName,
-                attributeList,
-                (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
-            {
-                TagMode = tagMode
-            };
-            
-            var innerContext = new TagHelperContext(
-                attributeList,
-                context.Items,
-                Guid.NewGuid().ToString()
-            );
+            TagMode = tagMode
+        };
 
-            tagHelper.Init(context);
+        var innerContext = new TagHelperContext(
+            attributeList,
+            context.Items,
+            Guid.NewGuid().ToString()
+        );
 
-            await tagHelper.ProcessAsync(innerContext, innerOutput);
+        tagHelper.Init(context);
 
-            return innerOutput;
-        }
+        await tagHelper.ProcessAsync(innerContext, innerOutput);
 
-        public static async Task<string> RenderAsync(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
-        {
-            var innerOutput = await tagHelper.ProcessAndGetOutputAsync(attributeList, context, tagName, tagMode);
+        return innerOutput;
+    }
 
-            return innerOutput.Render(htmlEncoder);
-        }
+    public static async Task<string> RenderAsync(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
+    {
+        var innerOutput = await tagHelper.ProcessAndGetOutputAsync(attributeList, context, tagName, tagMode);
+
+        return innerOutput.Render(htmlEncoder);
     }
 }

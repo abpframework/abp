@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Alerts
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Alerts;
+
+public interface IAlertManager
 {
-    public interface IAlertManager
-    {
-        AlertList Alerts { get; }
-    }
+    AlertList Alerts { get; }
 }

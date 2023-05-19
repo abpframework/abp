@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Localization.ExceptionHandling
+namespace Volo.Abp.Localization.ExceptionHandling;
+
+public class AbpExceptionLocalizationOptions
 {
-    public class AbpExceptionLocalizationOptions
+    public Dictionary<string, Type> ErrorCodeNamespaceMappings { get; }
+
+    public AbpExceptionLocalizationOptions()
     {
-        public Dictionary<string, Type> ErrorCodeNamespaceMappings { get; }
+        ErrorCodeNamespaceMappings = new Dictionary<string, Type>();
+    }
 
-        public AbpExceptionLocalizationOptions()
-        {
-            ErrorCodeNamespaceMappings = new Dictionary<string, Type>();
-        }
-
-        public void MapCodeNamespace(string errorCodeNamespace, Type type)
-        {
-            ErrorCodeNamespaceMappings[errorCodeNamespace] = type;
-        }
+    public void MapCodeNamespace(string errorCodeNamespace, Type type)
+    {
+        ErrorCodeNamespaceMappings[errorCodeNamespace] = type;
     }
 }

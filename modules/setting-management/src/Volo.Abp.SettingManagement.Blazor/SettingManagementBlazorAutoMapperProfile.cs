@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.EmailSettingGroup;
 
-namespace Volo.Abp.SettingManagement.Blazor
+namespace Volo.Abp.SettingManagement.Blazor;
+
+public class SettingManagementBlazorAutoMapperProfile : Profile
 {
-    public class SettingManagementBlazorAutoMapperProfile : Profile
+    public SettingManagementBlazorAutoMapperProfile()
     {
-        public SettingManagementBlazorAutoMapperProfile()
-        {
-            CreateMap<EmailSettingsDto, UpdateEmailSettingsDto>();
-        }
+        CreateMap<EmailSettingGroupViewComponent.UpdateEmailSettingsViewModel, UpdateEmailSettingsDto>();
+        CreateMap<EmailSettingsDto, EmailSettingGroupViewComponent.UpdateEmailSettingsViewModel>();
+
+        CreateMap<EmailSettingGroupViewComponent.SendTestEmailViewModel, SendTestEmailInput>();
     }
 }

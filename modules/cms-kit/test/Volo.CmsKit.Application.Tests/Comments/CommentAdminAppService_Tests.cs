@@ -5,47 +5,46 @@ using Volo.Abp.Domain.Entities;
 using Volo.CmsKit.Admin.Comments;
 using Xunit;
 
-namespace Volo.CmsKit.Comments
+namespace Volo.CmsKit.Comments;
+
+public class CommentAdminAppService_Tests : CmsKitApplicationTestBase
 {
-    public class CommentAdminAppService_Tests : CmsKitApplicationTestBase
+    private readonly ICommentAdminAppService _commentAdminAppService;
+    private readonly CmsKitTestData _cmsKitTestData;
+
+    public CommentAdminAppService_Tests()
     {
-        private readonly ICommentAdminAppService _commentAdminAppService;
-        private readonly CmsKitTestData _cmsKitTestData;
+        _commentAdminAppService = GetRequiredService<ICommentAdminAppService>();
+        _cmsKitTestData = GetRequiredService<CmsKitTestData>();
+    }
 
-        public CommentAdminAppService_Tests()
+    [Fact]
+    public async Task ShouldGet_PagedListAsync()
+    {
+        var comments = await _commentAdminAppService.GetListAsync(new CommentGetListInput
         {
-            _commentAdminAppService = GetRequiredService<ICommentAdminAppService>();
-            _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-        }
+            MaxResultCount = 3
+        });
 
-        [Fact]
-        public async Task ShouldGet_PagedListAsync()
-        {
-            var comments = await _commentAdminAppService.GetListAsync(new CommentGetListInput
-            {
-                MaxResultCount = 3
-            });
-            
-            comments.TotalCount.ShouldBe(6);
-            comments.Items.Count.ShouldBe(3);
-            comments.Items.Any(x => x.Author != null).ShouldBeTrue();
-        }
-        
-        [Fact]
-        public async Task ShouldGet_CommentWithAuthorAsync()
-        {
-            var comment = await _commentAdminAppService.GetAsync(_cmsKitTestData.CommentWithChildId);
+        comments.TotalCount.ShouldBe(6);
+        comments.Items.Count.ShouldBe(3);
+        comments.Items.Any(x => x.Author != null).ShouldBeTrue();
+    }
 
-            comment.ShouldNotBeNull();
-            comment.Author.ShouldNotBeNull();
-        }
-        
-        [Fact]
-        public async Task ShouldDelete_WithRepliesAsync()
-        {
-            await _commentAdminAppService.DeleteAsync(_cmsKitTestData.CommentWithChildId);
+    [Fact]
+    public async Task ShouldGet_CommentWithAuthorAsync()
+    {
+        var comment = await _commentAdminAppService.GetAsync(_cmsKitTestData.CommentWithChildId);
 
-            await Should.ThrowAsync<EntityNotFoundException>(async () => await _commentAdminAppService.GetAsync(_cmsKitTestData.CommentWithChildId));
-        }
+        comment.ShouldNotBeNull();
+        comment.Author.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task ShouldDelete_WithRepliesAsync()
+    {
+        await _commentAdminAppService.DeleteAsync(_cmsKitTestData.CommentWithChildId);
+
+        await Should.ThrowAsync<EntityNotFoundException>(async () => await _commentAdminAppService.GetAsync(_cmsKitTestData.CommentWithChildId));
     }
 }

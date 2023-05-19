@@ -6,141 +6,140 @@ using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
 
-namespace Volo.Abp.VirtualFileSystem.Embedded
+namespace Volo.Abp.VirtualFileSystem.Embedded;
+
+public class AbpEmbeddedFileProvider : DictionaryBasedFileProvider
 {
-    public class AbpEmbeddedFileProvider : DictionaryBasedFileProvider
+    [NotNull]
+    public Assembly Assembly { get; }
+
+    [CanBeNull]
+    public string BaseNamespace { get; }
+
+    protected override IDictionary<string, IFileInfo> Files => _files.Value;
+    private readonly Lazy<Dictionary<string, IFileInfo>> _files;
+
+    public AbpEmbeddedFileProvider(
+        [NotNull] Assembly assembly,
+        [CanBeNull] string baseNamespace = null)
     {
-        [NotNull]
-        public Assembly Assembly { get; }
+        Check.NotNull(assembly, nameof(assembly));
 
-        [CanBeNull]
-        public string BaseNamespace { get; }
+        Assembly = assembly;
+        BaseNamespace = baseNamespace;
 
-        protected override IDictionary<string, IFileInfo> Files => _files.Value;
-        private readonly Lazy<Dictionary<string, IFileInfo>> _files;
+        _files = new Lazy<Dictionary<string, IFileInfo>>(
+            CreateFiles,
+            true
+        );
+    }
 
-        public AbpEmbeddedFileProvider(
-            [NotNull] Assembly assembly, 
-            [CanBeNull] string baseNamespace = null)
+    public void AddFiles(Dictionary<string, IFileInfo> files)
+    {
+        var lastModificationTime = GetLastModificationTime();
+
+        foreach (var resourcePath in Assembly.GetManifestResourceNames())
         {
-            Check.NotNull(assembly, nameof(assembly));
-
-            Assembly = assembly;
-            BaseNamespace = baseNamespace;
-            
-            _files = new Lazy<Dictionary<string, IFileInfo>>(
-                CreateFiles,
-                true
-            );
-        }
-
-        public void AddFiles(Dictionary<string, IFileInfo> files)
-        {
-            var lastModificationTime = GetLastModificationTime();
-
-            foreach (var resourcePath in Assembly.GetManifestResourceNames())
+            if (!BaseNamespace.IsNullOrEmpty() && !resourcePath.StartsWith(BaseNamespace))
             {
-                if (!BaseNamespace.IsNullOrEmpty() && !resourcePath.StartsWith(BaseNamespace))
-                {
-                    continue;
-                }
-
-                var fullPath = ConvertToRelativePath(resourcePath).EnsureStartsWith('/');
-
-                if (fullPath.Contains("/"))
-                {
-                    AddDirectoriesRecursively(files, fullPath.Substring(0, fullPath.LastIndexOf('/')), lastModificationTime);
-                }
-
-                files[fullPath] = new EmbeddedResourceFileInfo(
-                    Assembly,
-                    resourcePath,
-                    fullPath,
-                    CalculateFileName(fullPath),
-                    lastModificationTime
-                );
-            }
-        }
-
-        private static void AddDirectoriesRecursively(Dictionary<string, IFileInfo> files, string directoryPath, DateTimeOffset lastModificationTime)
-        {
-            if (files.ContainsKey(directoryPath))
-            {
-                return;
+                continue;
             }
 
-            files[directoryPath] = new VirtualDirectoryFileInfo(
-                directoryPath,
-                CalculateFileName(directoryPath),
+            var fullPath = ConvertToRelativePath(resourcePath).EnsureStartsWith('/');
+
+            if (fullPath.Contains("/"))
+            {
+                AddDirectoriesRecursively(files, fullPath.Substring(0, fullPath.LastIndexOf('/')), lastModificationTime);
+            }
+
+            files[fullPath] = new EmbeddedResourceFileInfo(
+                Assembly,
+                resourcePath,
+                fullPath,
+                CalculateFileName(fullPath),
                 lastModificationTime
             );
+        }
+    }
 
-            if (directoryPath.Contains("/"))
+    private static void AddDirectoriesRecursively(Dictionary<string, IFileInfo> files, string directoryPath, DateTimeOffset lastModificationTime)
+    {
+        if (files.ContainsKey(directoryPath))
+        {
+            return;
+        }
+
+        files[directoryPath] = new VirtualDirectoryFileInfo(
+            directoryPath,
+            CalculateFileName(directoryPath),
+            lastModificationTime
+        );
+
+        if (directoryPath.Contains("/"))
+        {
+            AddDirectoriesRecursively(files, directoryPath.Substring(0, directoryPath.LastIndexOf('/')), lastModificationTime);
+        }
+    }
+
+    private DateTimeOffset GetLastModificationTime()
+    {
+        var lastModified = DateTimeOffset.UtcNow;
+
+        if (!string.IsNullOrEmpty(Assembly.Location))
+        {
+            try
             {
-                AddDirectoriesRecursively(files, directoryPath.Substring(0, directoryPath.LastIndexOf('/')), lastModificationTime);
+                lastModified = File.GetLastWriteTimeUtc(Assembly.Location);
+            }
+            catch (PathTooLongException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
             }
         }
 
-        private DateTimeOffset GetLastModificationTime()
+        return lastModified;
+    }
+
+    private string ConvertToRelativePath(string resourceName)
+    {
+        if (!BaseNamespace.IsNullOrEmpty())
         {
-            var lastModified = DateTimeOffset.UtcNow;
-
-            if (!string.IsNullOrEmpty(Assembly.Location))
-            {
-                try
-                {
-                    lastModified = File.GetLastWriteTimeUtc(Assembly.Location);
-                }
-                catch (PathTooLongException)
-                {
-                }
-                catch (UnauthorizedAccessException)
-                {
-                }
-            }
-
-            return lastModified;
+            resourceName = resourceName.Substring(BaseNamespace.Length + 1);
         }
 
-        private string ConvertToRelativePath(string resourceName)
+        var pathParts = resourceName.Split('.');
+        if (pathParts.Length <= 2)
         {
-            if (!BaseNamespace.IsNullOrEmpty())
-            {
-                resourceName = resourceName.Substring(BaseNamespace.Length + 1);
-            }
-
-            var pathParts = resourceName.Split('.');
-            if (pathParts.Length <= 2)
-            {
-                return resourceName;
-            }
-
-            var folder = pathParts.Take(pathParts.Length - 2).JoinAsString("/");
-            var fileName = pathParts[pathParts.Length - 2] + "." + pathParts[pathParts.Length - 1];
-
-            return folder + "/" + fileName;
+            return resourceName;
         }
 
-        private static string CalculateFileName(string filePath)
-        {
-            if (!filePath.Contains("/"))
-            {
-                return filePath;
-            }
+        var folder = pathParts.Take(pathParts.Length - 2).JoinAsString("/");
+        var fileName = pathParts[pathParts.Length - 2] + "." + pathParts[pathParts.Length - 1];
 
-            return filePath.Substring(filePath.LastIndexOf("/", StringComparison.Ordinal) + 1);
-        }
-        
-        protected override string NormalizePath(string subpath)
+        return folder + "/" + fileName;
+    }
+
+    private static string CalculateFileName(string filePath)
+    {
+        if (!filePath.Contains("/"))
         {
-            return VirtualFilePathHelper.NormalizePath(subpath);
+            return filePath;
         }
 
-        private Dictionary<string, IFileInfo> CreateFiles()
-        {
-            var files = new Dictionary<string, IFileInfo>(StringComparer.OrdinalIgnoreCase);
-            AddFiles(files);
-            return files;
-        }
+        return filePath.Substring(filePath.LastIndexOf("/", StringComparison.Ordinal) + 1);
+    }
+
+    protected override string NormalizePath(string subpath)
+    {
+        return VirtualFilePathHelper.NormalizePath(subpath);
+    }
+
+    private Dictionary<string, IFileInfo> CreateFiles()
+    {
+        var files = new Dictionary<string, IFileInfo>(StringComparer.OrdinalIgnoreCase);
+        AddFiles(files);
+        return files;
     }
 }

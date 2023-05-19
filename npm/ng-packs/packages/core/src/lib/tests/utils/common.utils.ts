@@ -14,6 +14,6 @@ export class DummyInjector extends Injector {
   ): T;
   get(token: any, notFoundValue?: any): any;
   get(token, notFoundValue?, flags?: InjectFlags): any {
-    return this.payload[token.name || token];
+    return this.payload[token.name || token._desc || token];
   }
 }

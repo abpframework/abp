@@ -1,0 +1,6 @@
+{
+  "culture": "is",
+  "texts": {
+    "Volo.GlobalFeature:010001": "'{ServiceName}' þjónustan þarf að virkja '{GlobalFeatureName}' eiginleika."
+  }
+}

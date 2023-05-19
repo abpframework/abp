@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Sms
+namespace Volo.Abp.Sms;
+
+public interface ISmsSender
 {
-    public interface ISmsSender
-    {
-        Task SendAsync(SmsMessage smsMessage);
-    }
+    Task SendAsync(SmsMessage smsMessage);
 }

@@ -1,6 +1,9 @@
 {
   "culture": "fi",
   "texts": {
+    "DisplayName:PersonModel:BirthDate1": "Syntymäaika 1",
+    "DisplayName:BirthDate2": "Syntymäaika 2",
+    "PersonModel:BirthDate3": "Syntymäaika 3",
     "BirthDate": "Syntymäpäivä",
     "Value1": "Arvo Yksi"
   }

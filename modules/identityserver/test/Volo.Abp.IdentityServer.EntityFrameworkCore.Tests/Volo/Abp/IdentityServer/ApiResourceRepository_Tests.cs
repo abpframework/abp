@@ -1,7 +1,6 @@
 ﻿
-namespace Volo.Abp.IdentityServer
+namespace Volo.Abp.IdentityServer;
+
+public class ApiResourceRepository_Tests //: ApiResourceRepository_Tests<AbpIdentityServerTestEntityFrameworkCoreModule>
 {
-    public class ApiResourceRepository_Tests //: ApiResourceRepository_Tests<AbpIdentityServerTestEntityFrameworkCoreModule>
-    {
-    }
 }

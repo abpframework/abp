@@ -52,8 +52,4 @@ describe('ButtonComponent', () => {
     spectator.detectComponentChanges();
     expect(spectator.query('[disabled]')).toBeTruthy();
   });
-
-  it('should disabled when the loading input is true', () => {
-    expect(spectator.query('[autofocus][name="abp-button"]')).toBeTruthy();
-  });
 });

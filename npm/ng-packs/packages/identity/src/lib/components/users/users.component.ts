@@ -6,7 +6,7 @@ import {
   IdentityUserService,
 } from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
+import {Confirmation, ConfirmationService, eFormComponets, ToasterService} from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
@@ -20,7 +20,7 @@ import {
   TrackByFunction,
   ViewChild,
 } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
 
@@ -39,41 +39,46 @@ export class UsersComponent implements OnInit {
   data: PagedResultDto<IdentityUserDto> = { items: [], totalCount: 0 };
 
   @ViewChild('modalContent', { static: false })
-  modalContent: TemplateRef<any>;
+  modalContent!: TemplateRef<any>;
 
-  form: FormGroup;
+  form!: UntypedFormGroup;
 
-  selected: IdentityUserDto;
+  selected?: IdentityUserDto;
 
-  selectedUserRoles: IdentityRoleDto[];
+  selectedUserRoles?: IdentityRoleDto[];
 
-  roles: IdentityRoleDto[];
+  roles?: IdentityRoleDto[];
 
   visiblePermissions = false;
 
-  providerKey: string;
+  providerKey?: string;
 
-  isModalVisible: boolean;
+  isModalVisible?: boolean;
 
   modalBusy = false;
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
+  entityDisplayName: string;
+  
+  inputKey=eFormComponets.FormCheckboxComponent
+
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
-  onVisiblePermissionChange = event => {
+  onVisiblePermissionChange = (event: boolean) => {
     this.visiblePermissions = event;
   };
 
-  get roleGroups(): FormGroup[] {
-    return ((this.form.get('roleNames') as FormArray)?.controls as FormGroup[]) || [];
+  get roleGroups(): UntypedFormGroup[] {
+    return ((this.form.get('roleNames') as UntypedFormArray)?.controls as UntypedFormGroup[]) || [];
   }
 
   constructor(
     public readonly list: ListService<GetIdentityUsersInput>,
     protected confirmationService: ConfirmationService,
     protected service: IdentityUserService,
-    protected fb: FormBuilder,
+    private toasterService: ToasterService,
+    protected fb: UntypedFormBuilder,
     protected injector: Injector,
   ) {}
 
@@ -87,20 +92,22 @@ export class UsersComponent implements OnInit {
 
     this.service.getAssignableRoles().subscribe(({ items }) => {
       this.roles = items;
-      this.form.addControl(
-        'roleNames',
-        this.fb.array(
-          this.roles.map(role =>
-            this.fb.group({
-              [role.name]: [
-                this.selected.id
-                  ? !!this.selectedUserRoles?.find(userRole => userRole.id === role.id)
-                  : role.isDefault,
-              ],
-            }),
+      if (this.roles) {
+        this.form.addControl(
+          'roleNames',
+          this.fb.array(
+            this.roles.map(role =>
+              this.fb.group({
+                [role.name as string]: [
+                  this.selected?.id
+                    ? !!this.selectedUserRoles?.find(userRole => userRole.id === role.id)
+                    : role.isDefault,
+                ],
+              }),
+            ),
           ),
-        ),
-      );
+        );
+      }
     });
   }
 
@@ -134,10 +141,11 @@ export class UsersComponent implements OnInit {
 
     const { roleNames = [] } = this.form.value;
     const mappedRoleNames =
-      roleNames.filter(role => !!role[Object.keys(role)[0]]).map(role => Object.keys(role)[0]) ||
-      [];
+      roleNames
+        .filter((role: { [key: string]: any }) => !!role[Object.keys(role)[0]])
+        .map((role: { [key: string]: any }) => Object.keys(role)[0]) || [];
 
-    const { id } = this.selected;
+    const { id } = this.selected || {};
 
     (id
       ? this.service.update(id, {
@@ -161,12 +169,15 @@ export class UsersComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.service.delete(id).subscribe(() => this.list.get());
+          this.service.delete(id).subscribe(() => {
+            this.toasterService.success('AbpUi::SuccessfullyDeleted');
+            this.list.get();
+          });
         }
       });
   }
 
-  sort(data) {
+  sort(data: any) {
     const { prop, dir } = data.sorts[0];
     this.list.sortKey = prop;
     this.list.sortOrder = dir;
@@ -176,8 +187,9 @@ export class UsersComponent implements OnInit {
     this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => (this.data = res));
   }
 
-  openPermissionsModal(providerKey: string) {
+  openPermissionsModal(providerKey: string, entityDisplayName?: string) {
     this.providerKey = providerKey;
+    this.entityDisplayName = entityDisplayName;
     setTimeout(() => {
       this.visiblePermissions = true;
     }, 0);

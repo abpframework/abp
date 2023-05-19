@@ -7,84 +7,83 @@ using Microsoft.Extensions.FileProviders.Physical;
 using Volo.Abp.VirtualFileSystem.Embedded;
 using Volo.Abp.VirtualFileSystem.Physical;
 
-namespace Volo.Abp.VirtualFileSystem
+namespace Volo.Abp.VirtualFileSystem;
+
+public static class VirtualFileSetListExtensions
 {
-    public static class VirtualFileSetListExtensions
+    public static void AddEmbedded<T>(
+        [NotNull] this VirtualFileSetList list,
+        [CanBeNull] string baseNamespace = null,
+        [CanBeNull] string baseFolder = null)
     {
-        public static void AddEmbedded<T>(
-            [NotNull] this VirtualFileSetList list,
-            [CanBeNull] string baseNamespace = null,
-            [CanBeNull] string baseFolder = null)
+        Check.NotNull(list, nameof(list));
+
+        var assembly = typeof(T).Assembly;
+        var fileProvider = CreateFileProvider(
+            assembly,
+            baseNamespace,
+            baseFolder
+        );
+
+        list.Add(new EmbeddedVirtualFileSetInfo(fileProvider, assembly, baseFolder));
+    }
+
+    public static void AddPhysical(
+        [NotNull] this VirtualFileSetList list,
+        [NotNull] string root,
+        ExclusionFilters exclusionFilters = ExclusionFilters.Sensitive)
+    {
+        Check.NotNull(list, nameof(list));
+        Check.NotNullOrWhiteSpace(root, nameof(root));
+
+        var fileProvider = new PhysicalFileProvider(root, exclusionFilters);
+        list.Add(new PhysicalVirtualFileSetInfo(fileProvider, root));
+    }
+
+    private static IFileProvider CreateFileProvider(
+        [NotNull] Assembly assembly,
+        [CanBeNull] string baseNamespace = null,
+        [CanBeNull] string baseFolder = null)
+    {
+        Check.NotNull(assembly, nameof(assembly));
+
+        var info = assembly.GetManifestResourceInfo("Microsoft.Extensions.FileProviders.Embedded.Manifest.xml");
+
+        if (info == null)
         {
-            Check.NotNull(list, nameof(list));
-
-            var assembly = typeof(T).Assembly;
-            var fileProvider = CreateFileProvider(
-                assembly,
-                baseNamespace,
-                baseFolder
-            );
-
-            list.Add(new EmbeddedVirtualFileSetInfo(fileProvider, assembly, baseFolder));
+            return new AbpEmbeddedFileProvider(assembly, baseNamespace);
         }
 
-        public static void AddPhysical(
-            [NotNull] this VirtualFileSetList list,
-            [NotNull] string root,
-            ExclusionFilters exclusionFilters = ExclusionFilters.Sensitive)
+        if (baseFolder == null)
         {
-            Check.NotNull(list, nameof(list));
-            Check.NotNullOrWhiteSpace(root, nameof(root));
-
-            var fileProvider = new PhysicalFileProvider(root, exclusionFilters);
-            list.Add(new PhysicalVirtualFileSetInfo(fileProvider, root));
+            return new ManifestEmbeddedFileProvider(assembly);
         }
 
-        private static IFileProvider CreateFileProvider(
-            [NotNull] Assembly assembly,
-            [CanBeNull] string baseNamespace = null,
-            [CanBeNull] string baseFolder = null)
+        return new ManifestEmbeddedFileProvider(assembly, baseFolder);
+    }
+
+    public static void ReplaceEmbeddedByPhysical<T>(
+        [NotNull] this VirtualFileSetList fileSets,
+        [NotNull] string physicalPath)
+    {
+        Check.NotNull(fileSets, nameof(fileSets));
+        Check.NotNullOrWhiteSpace(physicalPath, nameof(physicalPath));
+
+        var assembly = typeof(T).Assembly;
+
+        for (var i = 0; i < fileSets.Count; i++)
         {
-            Check.NotNull(assembly, nameof(assembly));
-
-            var info = assembly.GetManifestResourceInfo("Microsoft.Extensions.FileProviders.Embedded.Manifest.xml");
-
-            if (info == null)
+            if (fileSets[i] is EmbeddedVirtualFileSetInfo embeddedVirtualFileSet &&
+                embeddedVirtualFileSet.Assembly == assembly)
             {
-                return new AbpEmbeddedFileProvider(assembly, baseNamespace);
-            }
+                var thisPath = physicalPath;
 
-            if (baseFolder == null)
-            {
-                return new ManifestEmbeddedFileProvider(assembly);
-            }
-
-            return new ManifestEmbeddedFileProvider(assembly, baseFolder);
-        }
-
-        public static void ReplaceEmbeddedByPhysical<T>(
-            [NotNull] this VirtualFileSetList fileSets,
-            [NotNull] string physicalPath)
-        {
-            Check.NotNull(fileSets, nameof(fileSets));
-            Check.NotNullOrWhiteSpace(physicalPath, nameof(physicalPath));
-
-            var assembly = typeof(T).Assembly;
-
-            for (var i = 0; i < fileSets.Count; i++)
-            {
-                if (fileSets[i] is EmbeddedVirtualFileSetInfo embeddedVirtualFileSet &&
-                    embeddedVirtualFileSet.Assembly == assembly)
+                if (!embeddedVirtualFileSet.BaseFolder.IsNullOrEmpty())
                 {
-                    var thisPath = physicalPath;
-
-                    if (!embeddedVirtualFileSet.BaseFolder.IsNullOrEmpty())
-                    {
-                        thisPath = Path.Combine(thisPath, embeddedVirtualFileSet.BaseFolder);
-                    }
-
-                    fileSets[i] = new PhysicalVirtualFileSetInfo(new PhysicalFileProvider(thisPath), thisPath);
+                    thisPath = Path.Combine(thisPath, embeddedVirtualFileSet.BaseFolder);
                 }
+
+                fileSets[i] = new PhysicalVirtualFileSetInfo(new PhysicalFileProvider(thisPath), thisPath);
             }
         }
     }

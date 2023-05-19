@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { EXTRA_PROPERTIES_KEY } from '../constants/extra-properties';
 import {
   EntityPropContributorCallbacks,
@@ -15,10 +15,18 @@ import {
   EditFormPropsFactory,
   FormProps,
 } from '../models/form-props';
-import { PropContributorCallback, PropData, PropList, PropsFactory } from '../models/props';
+import {
+  InferredProp,
+  PropCallback,
+  PropContributorCallback,
+  PropList,
+  PropsFactory,
+} from '../models/props';
 
-export function createExtraPropertyValueResolver<T>(name: string) {
-  return (data?: PropData<T>) => of(data.record[EXTRA_PROPERTIES_KEY][name]);
+export function createExtraPropertyValueResolver<T>(
+  name: string,
+): PropCallback<T, Observable<any>> {
+  return (data?) => of((data.record as { [key: string]: any })[EXTRA_PROPERTIES_KEY][name]);
 }
 
 export function mergeWithDefaultProps<F extends PropsFactory<any>>(
@@ -29,7 +37,9 @@ export function mergeWithDefaultProps<F extends PropsFactory<any>>(
   Object.keys(defaultProps).forEach((name: string) => {
     const props: InferredProps<F> = extension.get(name);
     props.clearContributors();
-    props.addContributor((propList: PropList) => propList.addManyTail(defaultProps[name]));
+    props.addContributor((propList: PropList<any, InferredProp<any>>) =>
+      propList.addManyTail(defaultProps[name]),
+    );
     contributors.forEach(contributor =>
       (contributor[name] || []).forEach((callback: PropContributorCallback<any>) =>
         props.addContributor(callback),

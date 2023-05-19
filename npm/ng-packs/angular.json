@@ -2,6 +2,7 @@
   "version": 1,
   "projects": {
     "account": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/account",
       "sourceRoot": "packages/account/src",
@@ -9,7 +10,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/account"],
+          "outputs": ["{workspaceRoot}/dist/packages/account"],
           "options": {
             "project": "packages/account/ng-package.json"
           },
@@ -25,9 +26,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/account"],
+          "outputs": ["{workspaceRoot}/coverage/packages/account"],
           "options": {
-            "jestConfig": "packages/account/jest.config.js",
+            "jestConfig": "packages/account/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -35,11 +36,15 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/account/src/**/*.ts", "packages/account/src/**/*.html"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "account-core"]
     },
     "account-core": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/account-core",
       "sourceRoot": "packages/account-core/src",
@@ -47,7 +52,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/account-core"],
+          "outputs": ["{workspaceRoot}/dist/packages/account-core"],
           "options": {
             "project": "packages/account-core/ng-package.json"
           },
@@ -63,9 +68,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/account-core"],
+          "outputs": ["{workspaceRoot}/coverage/packages/account-core"],
           "options": {
-            "jestConfig": "packages/account-core/jest.config.js",
+            "jestConfig": "packages/account-core/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -76,11 +81,15 @@
               "packages/account-core/src/**/*.ts",
               "packages/account-core/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
     },
     "components": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/components",
       "sourceRoot": "packages/components/src",
@@ -88,7 +97,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/components"],
+          "outputs": ["{workspaceRoot}/dist/packages/components"],
           "options": {
             "project": "packages/components/ng-package.json"
           },
@@ -104,9 +113,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/components"],
+          "outputs": ["{workspaceRoot}/coverage/packages/components"],
           "options": {
-            "jestConfig": "packages/components/jest.config.js",
+            "jestConfig": "packages/components/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -117,11 +126,15 @@
               "packages/components/src/**/*.ts",
               "packages/components/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
     },
     "core": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/core",
       "sourceRoot": "packages/core/src",
@@ -129,7 +142,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/core"],
+          "outputs": ["{workspaceRoot}/dist/packages/core"],
           "options": {
             "project": "packages/core/ng-package.json"
           },
@@ -145,9 +158,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/core"],
+          "outputs": ["{workspaceRoot}/coverage/packages/core"],
           "options": {
-            "jestConfig": "packages/core/jest.config.js",
+            "jestConfig": "packages/core/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -155,11 +168,14 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/core/src/**/*.ts", "packages/core/src/**/*.html"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": []
     },
     "dev-app": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "application",
       "root": "apps/dev-app",
       "sourceRoot": "apps/dev-app/src",
@@ -179,14 +195,54 @@
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "styles": [
               {
-                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.css",
                 "inject": false,
-                "bundleName": "bootstrap-rtl.min"
+                "bundleName": "bootstrap-dim"
               },
               {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "inject": true,
-                "bundleName": "bootstrap-ltr.min"
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.css",
+                "inject": false,
+                "bundleName": "ng-bundle"
+              },
+              {
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/side-menu/layout-bundle.css",
+                "inject": false,
+                "bundleName": "layout-bundle"
+              },
+              {
+                "input": "node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.css",
+                "inject": false,
+                "bundleName": "abp-bundle"
+              },
+              {
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.rtl.css",
+                "inject": false,
+                "bundleName": "bootstrap-dim.rtl"
+              },
+              {
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.rtl.css",
+                "inject": false,
+                "bundleName": "ng-bundle.rtl"
+              },
+              {
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/side-menu/layout-bundle.rtl.css",
+                "inject": false,
+                "bundleName": "layout-bundle.rtl"
+              },
+              {
+                "input": "node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.rtl.css",
+                "inject": false,
+                "bundleName": "abp-bundle.rtl"
+              },
+              {
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.rtl.css",
+                "inject": false,
+                "bundleName": "font-bundle.rtl"
+              },
+              {
+                "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.css",
+                "inject": false,
+                "bundleName": "font-bundle"
               },
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -213,13 +269,19 @@
                 "inject": true,
                 "bundleName": "ngx-datatable-material"
               },
+              {
+                "input": "node_modules/ng-zorro-antd/tree/style/index.min.css",
+                "inject": false,
+                "bundleName": "ng-zorro-antd-tree"
+              },
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "apps/dev-app/src/styles.scss"
             ],
             "scripts": []
           },
           "configurations": {
             "production": {
-              "tsConfig": "apps/dev-app/tsconfig.prod.json",
+              "tsConfig": "apps/dev-app/tsconfig.app.json",
               "budgets": [
                 {
                   "type": "initial",
@@ -277,15 +339,16 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/dev-app"],
+          "outputs": ["{workspaceRoot}/coverage/apps/dev-app"],
           "options": {
-            "jestConfig": "apps/dev-app/jest.config.js",
+            "jestConfig": "apps/dev-app/jest.config.ts",
             "passWithNoTests": true
           }
         }
       }
     },
     "dev-app-e2e": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/dev-app-e2e",
       "sourceRoot": "apps/dev-app-e2e/src",
       "projectType": "application",
@@ -307,11 +370,15 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/dev-app-e2e/**/*.{js,ts}"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["dev-app"]
     },
     "feature-management": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/feature-management",
       "sourceRoot": "packages/feature-management/src",
@@ -319,7 +386,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/feature-management"],
+          "outputs": ["{workspaceRoot}/dist/packages/feature-management"],
           "options": {
             "project": "packages/feature-management/ng-package.json"
           },
@@ -335,9 +402,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/feature-management"],
+          "outputs": ["{workspaceRoot}/coverage/packages/feature-management"],
           "options": {
-            "jestConfig": "packages/feature-management/jest.config.js",
+            "jestConfig": "packages/feature-management/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -348,11 +415,15 @@
               "packages/feature-management/src/**/*.ts",
               "packages/feature-management/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
     },
     "identity": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/identity",
       "sourceRoot": "packages/identity/src",
@@ -360,7 +431,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/identity"],
+          "outputs": ["{workspaceRoot}/dist/packages/identity"],
           "options": {
             "project": "packages/identity/ng-package.json"
           },
@@ -376,9 +447,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/identity"],
+          "outputs": ["{workspaceRoot}/coverage/packages/identity"],
           "options": {
-            "jestConfig": "packages/identity/jest.config.js",
+            "jestConfig": "packages/identity/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -386,11 +457,56 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["packages/identity/src/**/*.ts", "packages/identity/src/**/*.html"]
+          },
+          "outputs": ["{options.outputFile}"]
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "permission-management"]
+    },
+    "oauth": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
+      "projectType": "library",
+      "root": "packages/oauth",
+      "sourceRoot": "packages/oauth/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["{workspaceRoot}/dist/packages/oauth"],
+          "options": {
+            "project": "packages/oauth/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/oauth/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "packages/oauth/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+          "options": {
+            "jestConfig": "packages/oauth/jest.config.ts",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/oauth/**/*.ts", "packages/oauth/**/*.html"]
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core"]
     },
     "permission-management": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/permission-management",
       "sourceRoot": "packages/permission-management/src",
@@ -398,7 +514,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/permission-management"],
+          "outputs": ["{workspaceRoot}/dist/packages/permission-management"],
           "options": {
             "project": "packages/permission-management/ng-package.json"
           },
@@ -414,9 +530,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/permission-management"],
+          "outputs": ["{workspaceRoot}/coverage/packages/permission-management"],
           "options": {
-            "jestConfig": "packages/permission-management/jest.config.js",
+            "jestConfig": "packages/permission-management/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -427,11 +543,15 @@
               "packages/permission-management/src/**/*.ts",
               "packages/permission-management/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared"]
     },
     "schematics": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/schematics",
       "sourceRoot": "packages/schematics/src",
@@ -439,9 +559,9 @@
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/schematics"],
+          "outputs": ["{workspaceRoot}/coverage/packages/schematics"],
           "options": {
-            "jestConfig": "packages/schematics/jest.config.js",
+            "jestConfig": "packages/schematics/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -452,11 +572,14 @@
               "packages/schematics/src/**/*.ts",
               "packages/schematics/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": []
     },
     "setting-management": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/setting-management",
       "sourceRoot": "packages/setting-management/src",
@@ -464,7 +587,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/setting-management"],
+          "outputs": ["{workspaceRoot}/dist/packages/setting-management"],
           "options": {
             "project": "packages/setting-management/ng-package.json"
           },
@@ -480,9 +603,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/setting-management"],
+          "outputs": ["{workspaceRoot}/coverage/packages/setting-management"],
           "options": {
-            "jestConfig": "packages/setting-management/jest.config.js",
+            "jestConfig": "packages/setting-management/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -493,11 +616,15 @@
               "packages/setting-management/src/**/*.ts",
               "packages/setting-management/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "components"]
     },
     "tenant-management": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/tenant-management",
       "sourceRoot": "packages/tenant-management/src",
@@ -505,7 +632,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/tenant-management"],
+          "outputs": ["{workspaceRoot}/dist/packages/tenant-management"],
           "options": {
             "project": "packages/tenant-management/ng-package.json"
           },
@@ -521,9 +648,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/tenant-management"],
+          "outputs": ["{workspaceRoot}/coverage/packages/tenant-management"],
           "options": {
-            "jestConfig": "packages/tenant-management/jest.config.js",
+            "jestConfig": "packages/tenant-management/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -534,11 +661,15 @@
               "packages/tenant-management/src/**/*.ts",
               "packages/tenant-management/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "feature-management"]
     },
     "theme-basic": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/theme-basic",
       "sourceRoot": "packages/theme-basic/src",
@@ -546,7 +677,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/theme-basic"],
+          "outputs": ["{workspaceRoot}/dist/packages/theme-basic"],
           "options": {
             "project": "packages/theme-basic/ng-package.json"
           },
@@ -562,9 +693,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/theme-basic"],
+          "outputs": ["{workspaceRoot}/coverage/packages/theme-basic"],
           "options": {
-            "jestConfig": "packages/theme-basic/jest.config.js",
+            "jestConfig": "packages/theme-basic/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -575,11 +706,15 @@
               "packages/theme-basic/src/**/*.ts",
               "packages/theme-basic/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["core", "theme-shared", "account-core"]
     },
     "theme-shared": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "library",
       "root": "packages/theme-shared",
       "sourceRoot": "packages/theme-shared/src",
@@ -587,7 +722,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/packages/theme-shared"],
+          "outputs": ["{workspaceRoot}/dist/packages/theme-shared"],
           "options": {
             "project": "packages/theme-shared/ng-package.json"
           },
@@ -603,9 +738,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/theme-shared"],
+          "outputs": ["{workspaceRoot}/coverage/packages/theme-shared"],
           "options": {
-            "jestConfig": "packages/theme-shared/jest.config.js",
+            "jestConfig": "packages/theme-shared/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -616,42 +751,12 @@
               "packages/theme-shared/src/**/*.ts",
               "packages/theme-shared/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
-    }
-  },
-  "cli": {
-    "analytics": false,
-    "defaultCollection": "@nrwl/angular"
-  },
-  "schematics": {
-    "@nrwl/angular": {
-      "application": {
-        "linter": "eslint"
       },
-      "library": {
-        "linter": "eslint"
-      },
-      "storybook-configuration": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "strict": false
-    },
-    "@nrwl/angular:component": {
-      "style": "scss"
+      "tags": [],
+      "implicitDependencies": ["core", "oauth"]
     }
-  },
-  "defaultProject": "dev-app"
+  }
 }

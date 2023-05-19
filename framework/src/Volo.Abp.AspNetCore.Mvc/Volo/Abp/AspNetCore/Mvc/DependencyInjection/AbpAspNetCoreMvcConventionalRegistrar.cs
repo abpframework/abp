@@ -5,65 +5,39 @@ using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
+namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection;
+
+public class AbpAspNetCoreMvcConventionalRegistrar : DefaultConventionalRegistrar
 {
-    public class AbpAspNetCoreMvcConventionalRegistrar : ConventionalRegistrarBase
+    protected override bool IsConventionalRegistrationDisabled(Type type)
     {
-        public override void AddType(IServiceCollection services, Type type)
-        {
-            if (IsConventionalRegistrationDisabled(type))
-            {
-                return;
-            }
+        return !IsMvcService(type) || base.IsConventionalRegistrationDisabled(type);
+    }
 
-            if (!IsMvcService(type))
-            {
-                return;
-            }
+    protected virtual bool IsMvcService(Type type)
+    {
+        return IsController(type) ||
+               IsPageModel(type) ||
+               IsViewComponent(type);
+    }
 
-            var lifeTime = GetMvcServiceLifetime(type);
+    private static bool IsPageModel(Type type)
+    {
+        return typeof(PageModel).IsAssignableFrom(type) || type.IsDefined(typeof(PageModelAttribute), true);
+    }
 
-            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
+    private static bool IsController(Type type)
+    {
+        return typeof(Controller).IsAssignableFrom(type) || type.IsDefined(typeof(ControllerAttribute), true);
+    }
 
-            TriggerServiceExposing(services, type, serviceTypes);
+    private static bool IsViewComponent(Type type)
+    {
+        return typeof(ViewComponent).IsAssignableFrom(type) || type.IsDefined(typeof(ViewComponentAttribute), true);
+    }
 
-            foreach (var serviceType in serviceTypes)
-            {
-                services.Add(
-                    ServiceDescriptor.Describe(
-                        serviceType,
-                        type,
-                        lifeTime
-                    )
-                );
-            }
-        }
-
-        protected virtual bool IsMvcService(Type type)
-        {
-            return IsController(type) ||
-                   IsPageModel(type) ||
-                   IsViewComponent(type);
-        }
-
-        protected virtual ServiceLifetime GetMvcServiceLifetime(Type type)
-        {
-            return ServiceLifetime.Transient;
-        }
-
-        private static bool IsPageModel(Type type)
-        {
-            return typeof(PageModel).IsAssignableFrom(type) || type.IsDefined(typeof(PageModelAttribute), true);
-        }
-
-        private static bool IsController(Type type)
-        {
-            return typeof(Controller).IsAssignableFrom(type) || type.IsDefined(typeof(ControllerAttribute), true);
-        }
-
-        private static bool IsViewComponent(Type type)
-        {
-            return typeof(ViewComponent).IsAssignableFrom(type) || type.IsDefined(typeof(ViewComponentAttribute), true);
-        }
+    protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+    {
+        return ServiceLifetime.Transient;
     }
 }

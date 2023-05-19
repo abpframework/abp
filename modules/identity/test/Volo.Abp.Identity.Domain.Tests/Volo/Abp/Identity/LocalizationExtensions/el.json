@@ -1,0 +1,7 @@
+{
+  "culture": "el",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "Το μήκος του κωδικού πρόσβασης πρέπει να είναι μεγαλύτερο από {0} χαρακτήρες.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Ο κωδικός πρόσβασης πρέπει να περιέχει τουλάχιστον έναν μη αλφαριθμητικό χαρακτήρα."
+  }
+}

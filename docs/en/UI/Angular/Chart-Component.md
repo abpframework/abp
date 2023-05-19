@@ -231,8 +231,8 @@ See the [`chart.js` samples](https://www.chartjs.org/docs/latest/samples) for mo
 | `[type]`        | Type of the chart.                                               | `string`                | null    |
 | `[data]`        | Chart data to display                                            | `any`                   | null    |
 | `[options]`     | Chart options to customize                                       | `any`                   | null    |
-| `[plugins]`     | Chart plugins to customize behaviour                             | `any`                   | null    |
-| `[width]`       | Witdh of the chart                                               | `string`                | null    |
+| `[plugins]`     | Chart plugins to customize behavior                              | `any`                   | null    |
+| `[width]`       | Width of the chart                                               | `string`                | null    |
 | `[height]`      | Height of the chart                                              | `string`                | null    |
 | `[responsive]`  | Whether the chart is responsive                                  | `boolean`               | true    |
 | `(dataSelect)`  | A callback that executes when an element on the chart is clicked | `EventEmitter<any>`     | -       |

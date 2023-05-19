@@ -14,12 +14,12 @@
     "ReIndexAllProjects": "ReIndex all projects",
     "ReIndexProject": "ReIndex project",
     "ReIndexProjectConfirmationMessage": "Are you sure to reindex for project \"{0}\"",
-    "SuccessfullyReIndexProject": "Successfully reindex for project \"{0}\"",
+    "SuccessfullyReIndexProject": "Successfully reindexed: \"{0}\"",
     "ReIndexAllProjectConfirmationMessage": "Are you sure to reindex all project?",
-    "SuccessfullyReIndexAllProject": "Successfully reindex for all projects",
+    "SuccessfullyReIndexAllProject": "Successfully reindexed all projects",
     "InThisDocument": "In this document",
     "GoToTop": "Go to top",
-    "Projects": "Project(s)",
+    "Projects": "Projects",
     "NoProjectWarning": "There are no projects yet!",
     "DocumentNotFound": "Oops, the requested document was not found!",
     "ProjectNotFound": "Oops, the requested project was not found!",
@@ -28,7 +28,7 @@
     "FilterTopics": "Filter topics",
     "FullSearch": "Search in documents",
     "Volo.Docs.Domain:010001": "Elastic search is not enabled.",
-    "MultipleVersionDocumentInfo": "This document has multiple versions. Select the options best fit for you.",
+    "MultipleVersionDocumentInfo": "There are multiple versions of this document. Pick the options that suit you best.",
     "New": "New",
     "Upd": "Upd",
     "NewExplanation": "Created in the last two weeks.",
@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "ShortName {ShortName} already exists.",
     "Preview": "preview",
     "Search": "Search",
-    "SearchResults": "Search Results"
+    "SearchResults": "Search Results",
+    "SearchInTheAllDocuments": "Search in the all documents"
   }
 }

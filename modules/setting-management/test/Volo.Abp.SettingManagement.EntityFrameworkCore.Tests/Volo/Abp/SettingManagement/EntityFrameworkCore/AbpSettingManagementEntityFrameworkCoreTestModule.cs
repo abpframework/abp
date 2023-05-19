@@ -7,38 +7,37 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.SettingManagement.EntityFrameworkCore
+namespace Volo.Abp.SettingManagement.EntityFrameworkCore;
+
+[DependsOn(
+    typeof(AbpSettingManagementTestBaseModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreSqliteModule)
+    )]
+public class AbpSettingManagementEntityFrameworkCoreTestModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpSettingManagementTestBaseModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqliteModule)
-        )]
-    public class AbpSettingManagementEntityFrameworkCoreTestModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var sqliteConnection = CreateDatabaseAndGetConnection();
+        var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            Configure<AbpDbContextOptions>(options =>
+        Configure<AbpDbContextOptions>(options =>
+        {
+            options.Configure(abpDbContextConfigurationContext =>
             {
-                options.Configure(abpDbContextConfigurationContext =>
-                {
-                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
-                });
+                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
             });
-        }
+        });
+    }
 
-        private static SqliteConnection CreateDatabaseAndGetConnection()
-        {
-            var connection = new SqliteConnection("Data Source=:memory:");
-            connection.Open();
+    private static SqliteConnection CreateDatabaseAndGetConnection()
+    {
+        var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
 
-            new SettingManagementDbContext(
-                new DbContextOptionsBuilder<SettingManagementDbContext>().UseSqlite(connection).Options
-            ).GetService<IRelationalDatabaseCreator>().CreateTables();
+        new SettingManagementDbContext(
+            new DbContextOptionsBuilder<SettingManagementDbContext>().UseSqlite(connection).Options
+        ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
-            return connection;
-        }
+        return connection;
     }
 }

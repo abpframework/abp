@@ -4,7 +4,7 @@ Identity module is used to manage roles, users and their permissions, based on t
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages) when you [create a new solution](https://abp.io/get-started) with the ABP Framework. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
 
 ### The Source Code
 
@@ -105,8 +105,8 @@ You can inject and use `IdentitySecurityLogManager` or `ISecurityLogManager` to 
 ```cs
 await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
 {
-	Identity = "IdentityServer";
-	Action = "ChangePassword";
+	Identity = "IdentityServer",
+	Action = "ChangePassword"
 });
 ```
 

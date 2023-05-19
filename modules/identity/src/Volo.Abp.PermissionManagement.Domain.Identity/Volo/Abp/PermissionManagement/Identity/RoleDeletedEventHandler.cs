@@ -6,22 +6,21 @@ using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity;
 
-namespace Volo.Abp.PermissionManagement.Identity
+namespace Volo.Abp.PermissionManagement.Identity;
+
+public class RoleDeletedEventHandler :
+    IDistributedEventHandler<EntityDeletedEto<IdentityRoleEto>>,
+    ITransientDependency
 {
-    public class RoleDeletedEventHandler :
-        IDistributedEventHandler<EntityDeletedEto<IdentityRoleEto>>,
-        ITransientDependency
+    protected IPermissionManager PermissionManager { get; }
+
+    public RoleDeletedEventHandler(IPermissionManager permissionManager)
     {
-        protected IPermissionManager PermissionManager { get; }
+        PermissionManager = permissionManager;
+    }
 
-        public RoleDeletedEventHandler(IPermissionManager permissionManager)
-        {
-            PermissionManager = permissionManager;
-        }
-
-        public async Task HandleEventAsync(EntityDeletedEto<IdentityRoleEto> eventData)
-        {
-            await PermissionManager.DeleteAsync(RolePermissionValueProvider.ProviderName, eventData.Entity.Name);
-        }
+    public async Task HandleEventAsync(EntityDeletedEto<IdentityRoleEto> eventData)
+    {
+        await PermissionManager.DeleteAsync(RolePermissionValueProvider.ProviderName, eventData.Entity.Name);
     }
 }

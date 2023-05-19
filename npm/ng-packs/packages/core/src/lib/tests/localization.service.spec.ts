@@ -3,12 +3,17 @@ import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { BehaviorSubject } from 'rxjs';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
-import { ConfigStateService, SessionStateService } from '../services';
+import { ConfigStateService } from '../services/config-state.service';
+import { SessionStateService } from '../services/session-state.service';
 import { LocalizationService } from '../services/localization.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { CONFIG_STATE_DATA } from './config-state.service.spec';
+import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
+import { APPLICATION_LOCALIZATION_DATA } from './application-localization.service.spec';
+import { IncludeLocalizationResourcesProvider } from '../providers';
 
 const appConfigData$ = new BehaviorSubject(CONFIG_STATE_DATA);
+const appLocalizationData$ = new BehaviorSubject(APPLICATION_LOCALIZATION_DATA);
 
 describe('LocalizationService', () => {
   let spectator: SpectatorService<LocalizationService>;
@@ -21,6 +26,7 @@ describe('LocalizationService', () => {
     entryComponents: [],
     mocks: [Router],
     providers: [
+      IncludeLocalizationResourcesProvider,
       {
         provide: CORE_OPTIONS,
         useValue: { registerLocaleFn: () => Promise.resolve(), cultureNameLocaleFileMap: {} },
@@ -28,6 +34,10 @@ describe('LocalizationService', () => {
       {
         provide: AbpApplicationConfigurationService,
         useValue: { get: () => appConfigData$ },
+      },
+      {
+        provide: AbpApplicationLocalizationService,
+        useValue: { get: () => appLocalizationData$ },
       },
     ],
   });
@@ -76,7 +86,7 @@ describe('LocalizationService', () => {
           sessionState,
           spectator.inject(Injector),
           null,
-          null,
+          configState,
         );
       } catch (error) {
         expect((error as Error).message).toBe('LocalizationService should have only one instance.');

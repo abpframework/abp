@@ -1,0 +1,7 @@
+{
+  "culture": "vi",
+  "texts": {
+    "HelloText": "Xin chào {0}",
+    "HowAreYou": "bạn khỏe không?"
+  }
+}

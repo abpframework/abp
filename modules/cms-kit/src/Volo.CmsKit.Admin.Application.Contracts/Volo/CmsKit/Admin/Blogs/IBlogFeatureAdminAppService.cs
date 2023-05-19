@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.CmsKit.Blogs;
 
-namespace Volo.CmsKit.Admin.Blogs
-{
-    public interface IBlogFeatureAdminAppService : IApplicationService
-    {
-        Task SetAsync(Guid blogId, BlogFeatureInputDto dto);
+namespace Volo.CmsKit.Admin.Blogs;
 
-        Task<List<BlogFeatureDto>> GetListAsync(Guid blogId);
-    }
+public interface IBlogFeatureAdminAppService : IApplicationService
+{
+    Task SetAsync(Guid blogId, BlogFeatureInputDto dto);
+
+    Task<List<BlogFeatureDto>> GetListAsync(Guid blogId);
 }

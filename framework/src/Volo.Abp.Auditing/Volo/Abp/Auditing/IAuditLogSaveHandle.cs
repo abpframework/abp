@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.Auditing
+namespace Volo.Abp.Auditing;
+
+public interface IAuditLogSaveHandle : IDisposable
 {
-    public interface IAuditLogSaveHandle : IDisposable
-    {
-        Task SaveAsync();
-    }
+    Task SaveAsync();
 }

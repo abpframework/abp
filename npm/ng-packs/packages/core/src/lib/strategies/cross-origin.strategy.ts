@@ -1,9 +1,14 @@
 export class CrossOriginStrategy {
-  constructor(public crossorigin: 'anonymous' | 'use-credentials', public integrity?: string) {}
+  constructor(
+    public crossorigin: 'anonymous' | 'use-credentials' | null,
+    public integrity?: string,
+  ) {}
 
   setCrossOrigin<T extends HTMLElement>(element: T) {
     if (this.integrity) element.setAttribute('integrity', this.integrity);
-    element.setAttribute('crossorigin', this.crossorigin);
+    if (this.crossorigin) {
+      element.setAttribute('crossorigin', this.crossorigin);
+    }
   }
 }
 

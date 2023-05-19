@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
         <RootNamespace />
     </PropertyGroup>
 
@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Scriban" Version="4.0.2" />
+        <PackageReference Include="Scriban" Version="5.4.4" />
     </ItemGroup>
 
 </Project>

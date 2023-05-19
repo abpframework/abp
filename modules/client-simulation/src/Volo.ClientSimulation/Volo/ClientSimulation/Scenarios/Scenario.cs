@@ -6,97 +6,94 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.ClientSimulation.Snapshot;
 
-namespace Volo.ClientSimulation.Scenarios
+namespace Volo.ClientSimulation.Scenarios;
+
+public abstract class Scenario : ITransientDependency
 {
-    public abstract class Scenario : ITransientDependency
-    {
-        protected List<ScenarioStep> Steps { get; }
+    protected List<ScenarioStep> Steps { get; }
 
-        protected ScenarioStep CurrentStep
-        {
-            get
-            {
-                CheckStepCount();
-                return Steps[CurrentStepIndex];
-            }
-        }
-
-        protected int CurrentStepIndex { get; set; }
-
-        protected ScenarioExecutionContext ExecutionContext { get; }
-
-        protected Scenario(IServiceProvider serviceProvider)
-        {
-            ExecutionContext = new ScenarioExecutionContext(serviceProvider);
-            Steps = new List<ScenarioStep>();
-        }
-
-        public virtual string GetDisplayText()
-        {
-            var displayNameAttr = GetType()
-                .GetCustomAttributes(true)
-                .OfType<DisplayNameAttribute>()
-                .FirstOrDefault();
-
-            if (displayNameAttr != null)
-            {
-                return displayNameAttr.DisplayName;
-            }
-
-            return GetType()
-                .Name
-                .RemovePostFix(nameof(Scenario));
-        }
-
-        public virtual async Task ProceedAsync()
-        {
+    protected ScenarioStep CurrentStep {
+        get {
             CheckStepCount();
+            return Steps[CurrentStepIndex];
+        }
+    }
 
-            await Steps[CurrentStepIndex].RunAsync(ExecutionContext);
+    protected int CurrentStepIndex { get; set; }
 
-            CurrentStepIndex++;
+    protected ScenarioExecutionContext ExecutionContext { get; }
 
-            if (CurrentStepIndex >= Steps.Count)
-            {
-                CurrentStepIndex = 0;
-            }
+    protected Scenario(IServiceProvider serviceProvider)
+    {
+        ExecutionContext = new ScenarioExecutionContext(serviceProvider);
+        Steps = new List<ScenarioStep>();
+    }
+
+    public virtual string GetDisplayText()
+    {
+        var displayNameAttr = GetType()
+            .GetCustomAttributes(true)
+            .OfType<DisplayNameAttribute>()
+            .FirstOrDefault();
+
+        if (displayNameAttr != null)
+        {
+            return displayNameAttr.DisplayName;
         }
 
-        public void Reset()
+        return GetType()
+            .Name
+            .RemovePostFix(nameof(Scenario));
+    }
+
+    public virtual async Task ProceedAsync()
+    {
+        CheckStepCount();
+
+        await Steps[CurrentStepIndex].RunAsync(ExecutionContext);
+
+        CurrentStepIndex++;
+
+        if (CurrentStepIndex >= Steps.Count)
         {
             CurrentStepIndex = 0;
+        }
+    }
 
-            foreach (var step in Steps)
-            {
-                step.Reset();
-            }
+    public void Reset()
+    {
+        CurrentStepIndex = 0;
 
-            ExecutionContext.Reset();
+        foreach (var step in Steps)
+        {
+            step.Reset();
         }
 
-        public ScenarioSnapshot CreateSnapshot()
-        {
-            return new ScenarioSnapshot
-            {
-                DisplayText = GetDisplayText(),
-                Steps = Steps.Select(s => s.CreateSnapshot()).ToList(),
-                CurrentStep = CurrentStep.CreateSnapshot()
-            };
-        }
+        ExecutionContext.Reset();
+    }
 
-        protected void AddStep(ScenarioStep step)
+    public ScenarioSnapshot CreateSnapshot()
+    {
+        return new ScenarioSnapshot
         {
-            Steps.Add(step);
-        }
+            DisplayText = GetDisplayText(),
+            Steps = Steps.Select(s => s.CreateSnapshot()).ToList(),
+            CurrentStep = CurrentStep.CreateSnapshot()
+        };
+    }
 
-        private void CheckStepCount()
+    protected void AddStep(ScenarioStep step)
+    {
+        Steps.Add(step);
+    }
+
+    private void CheckStepCount()
+    {
+        if (Steps.Count <= 0)
         {
-            if (Steps.Count <= 0)
-            {
-                throw new ApplicationException(
-                    $"No Steps added to the scenario '{GetDisplayText()}'"
-                );
-            }
+            throw new ApplicationException(
+                $"No Steps added to the scenario '{GetDisplayText()}'"
+            );
         }
     }
 }

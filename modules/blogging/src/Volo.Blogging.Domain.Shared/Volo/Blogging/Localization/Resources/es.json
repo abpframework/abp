@@ -12,6 +12,7 @@
     "Permission:Posts": "Entradas",
     "Permission:Tags": "Etiquetas",
     "Permission:Comments": "Comentarios",
+    "Permission:ClearCache": "Limpiar cache",
     "Title": "Título",
     "Delete": "Borrar",
     "Reply": "Responder",
@@ -53,6 +54,8 @@
     "Blogs": "Blogs",
     "Tags": "Etiquetas",
     "ShareOn": "Compartir en",
-    "TitleLengthWarning": "Manten el tamaño del título por debajo de 60 caracteres para ser amigable al SEO"
+    "TitleLengthWarning": "Manten el tamaño del título por debajo de 60 caracteres para ser amigable al SEO",
+    "ClearCache": "Limpiar cache",
+    "ClearCacheConfirmationMessage": "¿Estás seguro de que deseas borrar la caché?"
   }
 }

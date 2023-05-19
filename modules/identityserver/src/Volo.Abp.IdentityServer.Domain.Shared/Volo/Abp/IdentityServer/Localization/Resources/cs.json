@@ -3,10 +3,13 @@
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Název Identity Resource již existuje: {Name}",
     "Volo.IdentityServer:DuplicateApiResourceName": "Název Api Resource již existuje: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Api Scope name already exist: {Name}",
     "Volo.IdentityServer:DuplicateClientId": "ClientId již existuje: {ClientId}",
     "UserLockedOut": "Tento uživatelský účet byl zablokován kvůli neplatným pokusům o přihlášení. Chvilku počkejte a zkuste to znovu.",
     "InvalidUserNameOrPassword": "Neplatné uživatelské jméno či heslo!",
     "LoginIsNotAllowed": "Nemáte oprávnění se přihlásit! Váš účet je neaktivní nebo potřebuje potvrdit váš e -mail/telefonní číslo.",
-    "InvalidUsername": "Neplatné uživatelské jméno či heslo!"
+    "InvalidUsername": "Neplatné uživatelské jméno či heslo!",
+    "InvalidAuthenticatorCode": "Neplatný ověřovací kód!",
+    "TheTargetUserIsNotLinkedToYou": "Cílový uživatel s vámi není spojen!"
   }
 }

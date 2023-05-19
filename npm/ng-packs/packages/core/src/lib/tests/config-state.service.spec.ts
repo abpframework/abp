@@ -8,6 +8,9 @@ import {
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from '../services';
 import { CORE_OPTIONS } from '../tokens';
+import { IncludeLocalizationResourcesProvider } from '../providers';
+import { APPLICATION_LOCALIZATION_DATA } from './application-localization.service.spec';
+import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -34,14 +37,7 @@ export const CONFIG_STATE_DATA = {
     layouts: [null, null, null],
   },
   localization: {
-    values: {
-      MyProjectName: {
-        "'{0}' and '{1}' do not match.": "'{0}' and '{1}' do not match.",
-      },
-      AbpIdentity: {
-        Identity: 'identity',
-      },
-    },
+    values: {},
     languages: [
       {
         cultureName: 'cs',
@@ -115,6 +111,11 @@ describe('ConfigStateService', () => {
         provide: AbpApplicationConfigurationService,
         useValue: { get: () => of(CONFIG_STATE_DATA) },
       },
+      {
+        provide: AbpApplicationLocalizationService,
+        useValue: { get: () => APPLICATION_LOCALIZATION_DATA },
+      },
+      IncludeLocalizationResourcesProvider,
     ],
   });
 

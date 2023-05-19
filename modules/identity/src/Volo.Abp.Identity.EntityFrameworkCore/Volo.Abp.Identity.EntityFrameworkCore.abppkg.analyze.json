@@ -1,0 +1,224 @@
+{
+  "name": "Volo.Abp.Identity.EntityFrameworkCore",
+  "hash": "ed3635e7fd238a79369834f410ffbb2d",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AbpIdentityDomainModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.EntityFrameworkCore",
+          "namespace": "Volo.Abp.Users.EntityFrameworkCore",
+          "name": "AbpUsersEntityFrameworkCoreModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpIdentityEntityFrameworkCoreModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+      "connectionStringName": "AbpIdentity",
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
+          "contentType": "databaseTable",
+          "name": "AbpClaimTypes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
+          "contentType": "databaseTable",
+          "name": "AbpLinkUsers",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityRole",
+          "contentType": "databaseTable",
+          "name": "AbpRoles",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityRoleClaim",
+          "contentType": "databaseTable",
+          "name": "AbpRoleClaims",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
+          "contentType": "databaseTable",
+          "name": "AbpSecurityLogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUser",
+          "contentType": "databaseTable",
+          "name": "AbpUsers",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserClaim",
+          "contentType": "databaseTable",
+          "name": "AbpUserClaims",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserLogin",
+          "contentType": "databaseTable",
+          "name": "AbpUserLogins",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserOrganizationUnit",
+          "contentType": "databaseTable",
+          "name": "AbpUserOrganizationUnits",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserRole",
+          "contentType": "databaseTable",
+          "name": "AbpUserRoles",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserToken",
+          "contentType": "databaseTable",
+          "name": "AbpUserTokens",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
+          "contentType": "databaseTable",
+          "name": "AbpOrganizationUnits",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnitRole",
+          "contentType": "databaseTable",
+          "name": "AbpOrganizationUnitRoles",
+          "summary": null
+        }
+      ],
+      "replacedDbContexts": [],
+      "implementingInterfaces": [
+        {
+          "name": "IInfrastructure<IServiceProvider>",
+          "namespace": "Microsoft.EntityFrameworkCore.Infrastructure",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Infrastructure.IInfrastructure<IServiceProvider>"
+        },
+        {
+          "name": "IDbContextDependencies",
+          "namespace": "Microsoft.EntityFrameworkCore.Internal",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies"
+        },
+        {
+          "name": "IDbSetCache",
+          "namespace": "Microsoft.EntityFrameworkCore.Internal",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Internal.IDbSetCache"
+        },
+        {
+          "name": "IDbContextPoolable",
+          "namespace": "Microsoft.EntityFrameworkCore.Internal",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Internal.IDbContextPoolable"
+        },
+        {
+          "name": "IResettableService",
+          "namespace": "Microsoft.EntityFrameworkCore.Infrastructure",
+          "declaringAssemblyName": "Microsoft.EntityFrameworkCore",
+          "fullName": "Microsoft.EntityFrameworkCore.Infrastructure.IResettableService"
+        },
+        {
+          "name": "IDisposable",
+          "namespace": "System",
+          "declaringAssemblyName": "System.Private.CoreLib",
+          "fullName": "System.IDisposable"
+        },
+        {
+          "name": "IAsyncDisposable",
+          "namespace": "System",
+          "declaringAssemblyName": "System.Private.CoreLib",
+          "fullName": "System.IAsyncDisposable"
+        },
+        {
+          "name": "IAbpEfCoreDbContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.IAbpEfCoreDbContext"
+        },
+        {
+          "name": "IEfCoreDbContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "IIdentityDbContext",
+          "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+          "declaringAssemblyName": "Volo.Abp.Identity.EntityFrameworkCore",
+          "fullName": "Volo.Abp.Identity.EntityFrameworkCore.IIdentityDbContext"
+        }
+      ],
+      "contentType": "efCoreDbContext",
+      "name": "IdentityDbContext",
+      "summary": "Base class for the Entity Framework database context used for identity."
+    }
+  ]
+}

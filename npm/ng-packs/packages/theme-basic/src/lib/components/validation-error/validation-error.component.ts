@@ -12,7 +12,7 @@ import { Validation, ValidationErrorComponent as ErrorComponent } from '@ngx-val
   encapsulation: ViewEncapsulation.None,
 })
 export class ValidationErrorComponent extends ErrorComponent {
-  get abpErrors(): Validation.Error[] & { interpoliteParams?: string[] } {
+  get abpErrors(): (Validation.Error & { interpoliteParams?: string[] })[] {
     if (!this.errors || !this.errors.length) return [];
 
     return this.errors.map(error => {

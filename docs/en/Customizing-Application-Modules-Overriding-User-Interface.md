@@ -4,3 +4,4 @@ You may want to override a page, a component, a JavaScript, CSS or an image file
 
 * [ASP.NET Core (MVC / Razor Pages)](UI/AspNetCore/Customization-User-Interface.md)
 * [Angular](UI/Angular/Customization-User-Interface.md)
+* [Blazor](UI/Blazor/Customization-Overriding-Components.md)

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsAbpGenerateProxy",
+  "$id": "SchematicsAbpGenerateProxy",
   "title": "ABP Generate Proxy Schema",
   "type": "object",
   "properties": {
@@ -13,7 +13,7 @@
       },
       "x-prompt": "Please enter backend module name. (default: \"app\")"
     },
-    "api-name": {
+    "apiName": {
       "description": "Backend api name, a.k.a. remoteServiceName",
       "type": "string",
       "$default": {
@@ -39,7 +39,26 @@
         "index": 3
       },
       "x-prompt": "Please enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
+    },
+    "url": {
+      "description": "API definition URL from",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 4
+      },
+      "x-prompt": "Please enter URL for api definition (default: API Name's url in environment file)"
+    },
+    "entryPoint": {
+      "description": "Target Angular project to place the generated code",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 5
+      },
+      "x-prompt": "Please enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
     }
   },
+
   "required": []
 }

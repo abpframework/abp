@@ -1,9 +1,6 @@
-(function() {
+(function () {
 
-	if (
-		typeof self !== 'undefined' && !self.Prism ||
-		!self.document || !Function.prototype.bind
-	) {
+	if (typeof Prism === 'undefined' || typeof document === 'undefined' || !Function.prototype.bind) {
 		return;
 	}
 
@@ -18,15 +15,16 @@
 
 				/**
 				 * Returns a W3C-valid linear gradient
+				 *
 				 * @param {string} prefix Vendor prefix if any ("-moz-", "-webkit-", etc.)
 				 * @param {string} func Gradient function name ("linear-gradient")
 				 * @param {string[]} values Array of the gradient function parameters (["0deg", "red 0%", "blue 100%"])
 				 */
-				var convertToW3CLinearGradient = function(prefix, func, values) {
+				var convertToW3CLinearGradient = function (prefix, func, values) {
 					// Default value for angle
 					var angle = '180deg';
 
-					if (/^(?:-?\d*\.?\d+(?:deg|rad)|to\b|top|right|bottom|left)/.test(values[0])) {
+					if (/^(?:-?(?:\d+(?:\.\d+)?|\.\d+)(?:deg|rad)|to\b|top|right|bottom|left)/.test(values[0])) {
 						angle = values.shift();
 						if (angle.indexOf('to ') < 0) {
 							// Angle uses old keywords
@@ -67,11 +65,12 @@
 
 				/**
 				 * Returns a W3C-valid radial gradient
+				 *
 				 * @param {string} prefix Vendor prefix if any ("-moz-", "-webkit-", etc.)
 				 * @param {string} func Gradient function name ("linear-gradient")
 				 * @param {string[]} values Array of the gradient function parameters (["0deg", "red 0%", "blue 100%"])
 				 */
-				var convertToW3CRadialGradient = function(prefix, func, values) {
+				var convertToW3CRadialGradient = function (prefix, func, values) {
 					if (values[0].indexOf('at') < 0) {
 						// Looks like old syntax
 
@@ -80,12 +79,12 @@
 						var shape = 'ellipse';
 						var size = 'farthest-corner';
 
-						if (/\bcenter|top|right|bottom|left\b|^\d+/.test(values[0])) {
+						if (/\b(?:bottom|center|left|right|top)\b|^\d+/.test(values[0])) {
 							// Found a position
 							// Remove angle value, if any
-							position = values.shift().replace(/\s*-?\d+(?:rad|deg)\s*/, '');
+							position = values.shift().replace(/\s*-?\d+(?:deg|rad)\s*/, '');
 						}
-						if (/\bcircle|ellipse|closest|farthest|contain|cover\b/.test(values[0])) {
+						if (/\b(?:circle|closest|contain|cover|ellipse|farthest)\b/.test(values[0])) {
 							// Found a shape and/or size
 							var shapeSizeParts = values.shift().split(/\s+/);
 							if (shapeSizeParts[0] && (shapeSizeParts[0] === 'circle' || shapeSizeParts[0] === 'ellipse')) {
@@ -111,9 +110,10 @@
 				/**
 				 * Converts a gradient to a W3C-valid one
 				 * Does not support old webkit syntax (-webkit-gradient(linear...) and -webkit-gradient(radial...))
+				 *
 				 * @param {string} gradient The CSS gradient
 				 */
-				var convertToW3CGradient = function(gradient) {
+				var convertToW3CGradient = function (gradient) {
 					if (cache[gradient]) {
 						return cache[gradient];
 					}
@@ -134,7 +134,7 @@
 				};
 
 				return function () {
-					new Prism.plugins.Previewer('gradient', function(value) {
+					new Prism.plugins.Previewer('gradient', function (value) {
 						this.firstChild.style.backgroundImage = '';
 						this.firstChild.style.backgroundImage = convertToW3CGradient(value);
 						return !!this.firstChild.style.backgroundImage;
@@ -145,7 +145,7 @@
 			}()),
 			tokens: {
 				'gradient': {
-					pattern: /(?:\b|\B-[a-z]{1,10}-)(?:repeating-)?(?:linear|radial)-gradient\((?:(?:rgb|hsl)a?\(.+?\)|[^\)])+\)/gi,
+					pattern: /(?:\b|\B-[a-z]{1,10}-)(?:repeating-)?(?:linear|radial)-gradient\((?:(?:hsl|rgb)a?\(.+?\)|[^\)])+\)/gi,
 					inside: {
 						'function': /[\w-]+(?=\()/,
 						'punctuation': /[(),]/
@@ -188,16 +188,16 @@
 		},
 		'angle': {
 			create: function () {
-				new Prism.plugins.Previewer('angle', function(value) {
+				new Prism.plugins.Previewer('angle', function (value) {
 					var num = parseFloat(value);
 					var unit = value.match(/[a-z]+$/i);
-					var max, percentage;
+					var max; var percentage;
 					if (!num || !unit) {
 						return false;
 					}
 					unit = unit[0];
 
-					switch(unit) {
+					switch (unit) {
 						case 'deg':
 							max = 360;
 							break;
@@ -211,10 +211,10 @@
 							max = 1;
 					}
 
-					percentage = 100 * num/max;
+					percentage = 100 * num / max;
 					percentage %= 100;
 
-					this[(num < 0? 'set' : 'remove') + 'Attribute']('data-negative', '');
+					this[(num < 0 ? 'set' : 'remove') + 'Attribute']('data-negative', '');
 					this.querySelector('circle').style.strokeDasharray = Math.abs(percentage) + ',500';
 					return true;
 				}, '*', function () {
@@ -224,7 +224,7 @@
 				});
 			},
 			tokens: {
-				'angle': /(?:\b|\B-|(?=\B\.))\d*\.?\d+(?:deg|g?rad|turn)\b/i
+				'angle': /(?:\b|\B-|(?=\B\.))(?:\d+(?:\.\d+)?|\.\d+)(?:deg|g?rad|turn)\b/i
 			},
 			languages: {
 				'css': true,
@@ -267,7 +267,7 @@
 		},
 		'color': {
 			create: function () {
-				new Prism.plugins.Previewer('color', function(value) {
+				new Prism.plugins.Previewer('color', function (value) {
 					this.style.backgroundColor = '';
 					this.style.backgroundColor = value;
 					return !!this.style.backgroundColor;
@@ -325,13 +325,13 @@
 						'ease': '.25,.1,.25,1',
 						'ease-in': '.42,0,1,1',
 						'ease-out': '0,0,.58,1',
-						'ease-in-out':'.42,0,.58,1'
+						'ease-in-out': '.42,0,.58,1'
 					}[value] || value;
 
-					var p = value.match(/-?\d*\.?\d+/g);
+					var p = value.match(/-?(?:\d+(?:\.\d+)?|\.\d+)/g);
 
-					if(p.length === 4) {
-						p = p.map(function(p, i) { return (i % 2? 1 - p : p) * 100; });
+					if (p.length === 4) {
+						p = p.map(function (p, i) { return (i % 2 ? 1 - p : p) * 100; });
 
 						this.querySelector('path').setAttribute('d', 'M0,100 C' + p[0] + ',' + p[1] + ', ' + p[2] + ',' + p[3] + ', 100,0');
 
@@ -360,7 +360,7 @@
 			},
 			tokens: {
 				'easing': {
-					pattern: /\bcubic-bezier\((?:-?\d*\.?\d+,\s*){3}-?\d*\.?\d+\)\B|\b(?:linear|ease(?:-in)?(?:-out)?)(?=\s|[;}]|$)/i,
+					pattern: /\bcubic-bezier\((?:-?(?:\d+(?:\.\d+)?|\.\d+),\s*){3}-?(?:\d+(?:\.\d+)?|\.\d+)\)\B|\b(?:ease(?:-in)?(?:-out)?|linear)(?=\s|[;}]|$)/i,
 					inside: {
 						'function': /[\w-]+(?=\()/,
 						'punctuation': /[(),]/
@@ -403,7 +403,7 @@
 
 		'time': {
 			create: function () {
-				new Prism.plugins.Previewer('time', function(value) {
+				new Prism.plugins.Previewer('time', function (value) {
 					var num = parseFloat(value);
 					var unit = value.match(/[a-z]+$/i);
 					if (!num || !unit) {
@@ -419,7 +419,7 @@
 				});
 			},
 			tokens: {
-				'time': /(?:\b|\B-|(?=\B\.))\d*\.?\d+m?s\b/i
+				'time': /(?:\b|\B-|(?=\B\.))(?:\d+(?:\.\d+)?|\.\d+)m?s\b/i
 			},
 			languages: {
 				'css': true,
@@ -464,6 +464,7 @@
 
 	/**
 	 * Returns the absolute X, Y offsets for an element
+	 *
 	 * @param {HTMLElement} element
 	 * @returns {{top: number, right: number, bottom: number, left: number, width: number, height: number}}
 	 */
@@ -485,22 +486,22 @@
 		};
 	};
 
-	var tokenRegexp = /(?:^|\s)token(?=$|\s)/;
-	var activeRegexp = /(?:^|\s)active(?=$|\s)/g;
-	var flippedRegexp = /(?:^|\s)flipped(?=$|\s)/g;
+	var TOKEN_CLASS = 'token';
+	var ACTIVE_CLASS = 'active';
+	var FLIPPED_CLASS = 'flipped';
 
 	/**
 	 * Previewer constructor
+	 *
 	 * @param {string} type Unique previewer type
-	 * @param {function} updater Function that will be called on mouseover.
-	 * @param {string[]|string=} supportedLanguages Aliases of the languages this previewer must be enabled for. Defaults to "*", all languages.
-	 * @param {function=} initializer Function that will be called on initialization.
-	 * @constructor
+	 * @param {Function} updater Function that will be called on mouseover.
+	 * @param {string[]|string} [supportedLanguages] Aliases of the languages this previewer must be enabled for. Defaults to "*", all languages.
+	 * @param {Function} [initializer] Function that will be called on initialization.
+	 * @class
 	 */
 	var Previewer = function (type, updater, supportedLanguages, initializer) {
 		this._elt = null;
 		this._type = type;
-		this._clsRegexp = RegExp('(?:^|\\s)' + type + '(?=$|\\s)');
 		this._token = null;
 		this.updater = updater;
 		this._mouseout = this.mouseout.bind(this);
@@ -538,34 +539,39 @@
 		this._elt = document.createElement('div');
 		this._elt.className = 'prism-previewer prism-previewer-' + this._type;
 		document.body.appendChild(this._elt);
-		if(this.initializer) {
+		if (this.initializer) {
 			this.initializer();
 		}
 	};
 
+	/**
+	 * @param {Element} token
+	 * @returns {boolean}
+	 */
 	Previewer.prototype.isDisabled = function (token) {
 		do {
 			if (token.hasAttribute && token.hasAttribute('data-previewers')) {
 				var previewers = token.getAttribute('data-previewers');
 				return (previewers || '').split(/\s+/).indexOf(this._type) === -1;
 			}
-		} while(token = token.parentNode);
+		} while ((token = token.parentNode));
 		return false;
 	};
 
 	/**
 	 * Checks the class name of each hovered element
-	 * @param token
+	 *
+	 * @param {Element} token
 	 */
 	Previewer.prototype.check = function (token) {
-		if (tokenRegexp.test(token.className) && this.isDisabled(token)) {
+		if (token.classList.contains(TOKEN_CLASS) && this.isDisabled(token)) {
 			return;
 		}
 		do {
-			if (tokenRegexp.test(token.className) && this._clsRegexp.test(token.className)) {
+			if (token.classList && token.classList.contains(TOKEN_CLASS) && token.classList.contains(this._type)) {
 				break;
 			}
-		} while(token = token.parentNode);
+		} while ((token = token.parentNode));
 
 		if (token && token !== this._token) {
 			this._token = token;
@@ -576,7 +582,7 @@
 	/**
 	 * Called on mouseout
 	 */
-	Previewer.prototype.mouseout = function() {
+	Previewer.prototype.mouseout = function () {
 		this._token.removeEventListener('mouseout', this._mouseout, false);
 		this._token = null;
 		this.hide();
@@ -597,14 +603,14 @@
 			this._token.addEventListener('mouseout', this._mouseout, false);
 
 			var offset = getOffset(this._token);
-			this._elt.className += ' active';
+			this._elt.classList.add(ACTIVE_CLASS);
 
 			if (offset.top - this._elt.offsetHeight > 0) {
-				this._elt.className = this._elt.className.replace(flippedRegexp, '');
+				this._elt.classList.remove(FLIPPED_CLASS);
 				this._elt.style.top = offset.top + 'px';
 				this._elt.style.bottom = '';
 			} else {
-				this._elt.className +=  ' flipped';
+				this._elt.classList.add(FLIPPED_CLASS);
 				this._elt.style.bottom = offset.bottom + 'px';
 				this._elt.style.top = '';
 			}
@@ -619,23 +625,26 @@
 	 * Hides the previewer.
 	 */
 	Previewer.prototype.hide = function () {
-		this._elt.className = this._elt.className.replace(activeRegexp, '');
+		this._elt.classList.remove(ACTIVE_CLASS);
 	};
 
 	/**
 	 * Map of all registered previewers by language
+	 *
 	 * @type {{}}
 	 */
 	Previewer.byLanguages = {};
 
 	/**
 	 * Map of all registered previewers by type
+	 *
 	 * @type {{}}
 	 */
 	Previewer.byType = {};
 
 	/**
 	 * Initializes the mouseover event on the code block.
+	 *
 	 * @param {HTMLElement} elt The code block (env.element)
 	 * @param {string} lang The language (env.language)
 	 */
@@ -665,7 +674,7 @@
 					lang = [lang];
 				}
 				lang.forEach(function (lang) {
-					var before, inside, root, skip;
+					var before; var inside; var root; var skip;
 					if (lang === true) {
 						before = 'important';
 						inside = env.language;
@@ -682,7 +691,7 @@
 						Prism.languages.insertBefore(inside, before, previewers[previewer].tokens, root);
 						env.grammar = Prism.languages[lang];
 
-						languages[env.language] = {initialized: true};
+						languages[env.language] = { initialized: true };
 					}
 				});
 			}
@@ -691,7 +700,7 @@
 
 	// Initialize the previewers only when needed
 	Prism.hooks.add('after-highlight', function (env) {
-		if(Previewer.byLanguages['*'] || Previewer.byLanguages[env.language]) {
+		if (Previewer.byLanguages['*'] || Previewer.byLanguages[env.language]) {
 			Previewer.initEvents(env.element, env.language);
 		}
 	});

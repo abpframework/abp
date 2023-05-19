@@ -1,17 +1,24 @@
-﻿using Volo.Abp.Collections;
+﻿using System.Collections.Generic;
+using Volo.Abp.Collections;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.Authorization.Permissions;
+
+public class AbpPermissionOptions
 {
-    public class AbpPermissionOptions
+    public ITypeList<IPermissionDefinitionProvider> DefinitionProviders { get; }
+
+    public ITypeList<IPermissionValueProvider> ValueProviders { get; }
+
+    public HashSet<string> DeletedPermissions { get; }
+
+    public HashSet<string> DeletedPermissionGroups { get; }
+
+    public AbpPermissionOptions()
     {
-        public ITypeList<IPermissionDefinitionProvider> DefinitionProviders { get; }
+        DefinitionProviders = new TypeList<IPermissionDefinitionProvider>();
+        ValueProviders = new TypeList<IPermissionValueProvider>();
 
-        public ITypeList<IPermissionValueProvider> ValueProviders { get; }
-
-        public AbpPermissionOptions()
-        {
-            DefinitionProviders = new TypeList<IPermissionDefinitionProvider>();
-            ValueProviders = new TypeList<IPermissionValueProvider>();
-        }
+        DeletedPermissions = new HashSet<string>();
+        DeletedPermissionGroups = new HashSet<string>();
     }
 }

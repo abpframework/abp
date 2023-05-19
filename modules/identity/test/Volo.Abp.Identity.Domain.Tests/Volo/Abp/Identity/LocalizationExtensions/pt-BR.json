@@ -1,0 +1,7 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "O comprimento da senha deve ser maior que {0} caracteres.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "A senha deve conter pelo menos um caractere não alfanumérico."
+  }
+}

@@ -1,0 +1,10 @@
+.navbar-brand{
+    padding-right: 1em;
+    padding-top: 0.50em;
+}
+.navbar-brand img{
+    padding-right: 2em;
+}
+.nav-item{
+  padding-left: 2.2em;
+}

@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.Localization;
 
-namespace Volo.Abp.PermissionManagement.Localization
+namespace Volo.Abp.PermissionManagement.Localization;
+
+[LocalizationResourceName("AbpPermissionManagement")]
+public class AbpPermissionManagementResource
 {
-    [LocalizationResourceName("AbpPermissionManagement")]
-    public class AbpPermissionManagementResource
-    {
-        
-    }
+
 }

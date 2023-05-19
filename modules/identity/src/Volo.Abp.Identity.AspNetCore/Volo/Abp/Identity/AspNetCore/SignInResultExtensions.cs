@@ -1,37 +1,36 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Volo.Abp.Identity.AspNetCore
+namespace Volo.Abp.Identity.AspNetCore;
+
+public static class SignInResultExtensions
 {
-    public static class SignInResultExtensions
+    public static string ToIdentitySecurityLogAction(this SignInResult result)
     {
-        public static string ToIdentitySecurityLogAction(this SignInResult result)
+        if (result.Succeeded)
         {
-            if (result.Succeeded)
-            {
-                return IdentitySecurityLogActionConsts.LoginSucceeded;
-            }
+            return IdentitySecurityLogActionConsts.LoginSucceeded;
+        }
 
-            if (result.IsLockedOut)
-            {
-                return IdentitySecurityLogActionConsts.LoginLockedout;
-            }
+        if (result.IsLockedOut)
+        {
+            return IdentitySecurityLogActionConsts.LoginLockedout;
+        }
 
-            if (result.RequiresTwoFactor)
-            {
-                return IdentitySecurityLogActionConsts.LoginRequiresTwoFactor;
-            }
+        if (result.RequiresTwoFactor)
+        {
+            return IdentitySecurityLogActionConsts.LoginRequiresTwoFactor;
+        }
 
-            if (result.IsNotAllowed)
-            {
-                return IdentitySecurityLogActionConsts.LoginNotAllowed;
-            }
+        if (result.IsNotAllowed)
+        {
+            return IdentitySecurityLogActionConsts.LoginNotAllowed;
+        }
 
-            if (!result.Succeeded)
-            {
-                return IdentitySecurityLogActionConsts.LoginFailed;
-            }
-
+        if (!result.Succeeded)
+        {
             return IdentitySecurityLogActionConsts.LoginFailed;
         }
+
+        return IdentitySecurityLogActionConsts.LoginFailed;
     }
 }

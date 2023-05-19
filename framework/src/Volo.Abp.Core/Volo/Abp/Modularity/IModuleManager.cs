@@ -1,11 +1,15 @@
-﻿using JetBrains.Annotations;
+﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 
-namespace Volo.Abp.Modularity
+namespace Volo.Abp.Modularity;
+
+public interface IModuleManager
 {
-    public interface IModuleManager
-    {
-        void InitializeModules([NotNull] ApplicationInitializationContext context);
+    Task InitializeModulesAsync([NotNull] ApplicationInitializationContext context);
 
-        void ShutdownModules([NotNull] ApplicationShutdownContext context);
-    }
+    void InitializeModules([NotNull] ApplicationInitializationContext context);
+
+    Task ShutdownModulesAsync([NotNull] ApplicationShutdownContext context);
+
+    void ShutdownModules([NotNull] ApplicationShutdownContext context);
 }

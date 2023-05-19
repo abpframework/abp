@@ -27,6 +27,15 @@
       }, ajaxParams));
     };
 
+    volo.abp.settingManagement.emailSettings.sendTestEmail = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/setting-management/emailing/send-test-email',
+        type: 'POST',
+        dataType: null,
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
   })();
 
 })();

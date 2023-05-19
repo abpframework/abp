@@ -8,74 +8,79 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli.ProjectModification
+namespace Volo.Abp.Cli.ProjectModification;
+
+public class DerivedClassFinder : ITransientDependency
 {
-    public class DerivedClassFinder : ITransientDependency
+    public ILogger<DerivedClassFinder> Logger { get; set; }
+
+    public DerivedClassFinder()
     {
-        public ILogger<DerivedClassFinder> Logger { get; set; }
+        Logger = NullLogger<DerivedClassFinder>.Instance;
+    }
 
-        public DerivedClassFinder()
+    public virtual List<string> Find(string csprojFilePath, string baseClass)
+    {
+        var moduleFilePaths = new List<string>();
+        var csprojFileDirectory = Path.GetDirectoryName(csprojFilePath);
+        var binFile = Path.Combine(csprojFileDirectory, "bin");
+        var objFile = Path.Combine(csprojFileDirectory, "obj");
+
+
+        var csFiles = new DirectoryInfo(csprojFileDirectory)
+            .GetFiles("*.cs", SearchOption.AllDirectories)
+            .Where(f => f.DirectoryName != null && (!f.DirectoryName.StartsWith(binFile) || !f.DirectoryName.StartsWith(objFile)))
+            .Select(f => f.FullName)
+            .ToList();
+
+        foreach (var csFile in csFiles)
         {
-            Logger = NullLogger<DerivedClassFinder>.Instance;
+            try
+            {
+                if (IsDerived(csFile, baseClass))
+                {
+                    moduleFilePaths.Add(csFile);
+                }
+            }
+            catch (Exception)
+            {
+                Logger.LogDebug($"Couldn't parse {csFile}.");
+            }
         }
 
-        public virtual List<string> Find(string csprojFilePath, string baseClass)
+        return moduleFilePaths;
+    }
+
+    protected bool IsDerived(string csFile, string baseClass)
+    {
+        var root = CSharpSyntaxTree.ParseText(File.ReadAllText(csFile)).GetRoot();
+        var namespaceSyntax = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
+        var classDeclaration = (namespaceSyntax?.DescendantNodes().OfType<ClassDeclarationSyntax>())?.FirstOrDefault();
+
+        if (classDeclaration == null)
         {
-            var moduleFilePaths = new List<string>();
-            var csprojFileDirectory = Path.GetDirectoryName(csprojFilePath);
-            var binFile = Path.Combine(csprojFileDirectory, "bin");
-            var objFile = Path.Combine(csprojFileDirectory, "obj");
-
-
-            var csFiles = new DirectoryInfo(csprojFileDirectory)
-                .GetFiles("*.cs", SearchOption.AllDirectories)
-                .Where(f => f.DirectoryName != null && (!f.DirectoryName.StartsWith(binFile) || !f.DirectoryName.StartsWith(objFile)))
-                .Select(f => f.FullName)
-                .ToList();
-
-            foreach (var csFile in csFiles)
-            {
-                try
-                {
-                    if (IsDerived(csFile, baseClass))
-                    {
-                        moduleFilePaths.Add(csFile);
-                    }
-                }
-                catch (Exception)
-                {
-                    Logger.LogDebug($"Couldn't parse {csFile}.");
-                }
-            }
-
-            return moduleFilePaths;
+            classDeclaration = root.DescendantNodes().OfType<ClassDeclarationSyntax>().First();
         }
 
-        protected bool IsDerived(string csFile, string baseClass)
+        var baseTypeList = classDeclaration.BaseList?.Types.Select(t => t.ToString()).ToList();
+
+        if (baseTypeList == null)
         {
-            var root = CSharpSyntaxTree.ParseText(File.ReadAllText(csFile)).GetRoot();
-            var namespaceSyntax = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().First();
-            var classDeclaration = (namespaceSyntax.DescendantNodes().OfType<ClassDeclarationSyntax>()).First();
-            var baseTypeList = classDeclaration.BaseList?.Types.Select(t => t.ToString()).ToList();
-
-            if (baseTypeList == null)
-            {
-                return false;
-            }
-
-            foreach (var baseType in baseTypeList)
-            {
-                if (baseType.Contains('<') && baseType.Substring(0, baseType.IndexOf('<')) == baseClass)
-                {
-                    return true;
-                }
-                if (baseType == baseClass)
-                {
-                    return true;
-                }
-            }
-
             return false;
         }
+
+        foreach (var baseType in baseTypeList)
+        {
+            if (baseType.Contains('<') && baseType.Substring(0, baseType.IndexOf('<')) == baseClass)
+            {
+                return true;
+            }
+            if (baseType == baseClass)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

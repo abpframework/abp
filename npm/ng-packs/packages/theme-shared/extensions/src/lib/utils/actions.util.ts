@@ -1,4 +1,4 @@
-import { ActionContributorCallback, ActionList, ActionsFactory } from '../models/actions';
+import { ActionContributorCallback, ActionList, ActionsFactory, InferredAction } from "../models/actions";
 import {
   EntityActionContributorCallbacks,
   EntityActionDefaults,
@@ -20,7 +20,7 @@ export function mergeWithDefaultActions<F extends ActionsFactory<any>>(
   Object.keys(defaultActions).forEach((name: string) => {
     const actions: InferredActions<F> = extension.get(name);
     actions.clearContributors();
-    actions.addContributor((actionList: ActionList) =>
+    actions.addContributor((actionList: ActionList<any, InferredAction<any>>) =>
       actionList.addManyTail(defaultActions[name]),
     );
     contributors.forEach(contributor =>

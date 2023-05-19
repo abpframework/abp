@@ -1,4 +1,3 @@
-import execa from 'execa';
 import fse from 'fs-extra';
 import glob from 'glob';
 
@@ -10,7 +9,7 @@ async function replace(filePath: string) {
   if (!dependencies) return;
 
   Object.keys(dependencies).forEach(key => {
-    if (key.includes('@abp/') && key !== '@abp/utils') {
+    if (key.includes('@abp/')) {
       dependencies[key] = dependencies[key].replace('^', '~');
     }
   });

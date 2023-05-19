@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.Identity
+﻿namespace Volo.Abp.Identity;
+
+public abstract class AbpIdentityDomainTestBase : AbpIdentityExtendedTestBase<AbpIdentityDomainTestModule>
 {
-    public abstract class AbpIdentityDomainTestBase : AbpIdentityExtendedTestBase<AbpIdentityDomainTestModule>
-    {
-        
-    }
+
 }

@@ -5,55 +5,54 @@ using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.VirtualFileSystem
+namespace Volo.Abp.AspNetCore.VirtualFileSystem;
+
+public class RazorViewEngineVirtualFileProvider : IFileProvider
 {
-    public class RazorViewEngineVirtualFileProvider : IFileProvider
+    private readonly Lazy<IFileProvider> _fileProvider;
+    private readonly IObjectAccessor<IServiceProvider> _serviceProviderAccessor;
+
+    public RazorViewEngineVirtualFileProvider(IObjectAccessor<IServiceProvider> serviceProviderAccessor)
     {
-        private readonly Lazy<IFileProvider> _fileProvider;
-        private readonly IObjectAccessor<IServiceProvider> _serviceProviderAccessor;
+        _serviceProviderAccessor = serviceProviderAccessor;
+        _fileProvider = new Lazy<IFileProvider>(
+            () => serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>(),
+            true
+        );
+    }
 
-        public RazorViewEngineVirtualFileProvider(IObjectAccessor<IServiceProvider> serviceProviderAccessor)
+    public IFileInfo GetFileInfo(string subpath)
+    {
+        if (!IsInitialized())
         {
-            _serviceProviderAccessor = serviceProviderAccessor;
-            _fileProvider = new Lazy<IFileProvider>(
-                () => serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>(),
-                true
-            );
+            return new NotFoundFileInfo(subpath);
         }
 
-        public IFileInfo GetFileInfo(string subpath)
-        {
-            if (!IsInitialized())
-            {
-                return new NotFoundFileInfo(subpath);
-            }
+        return _fileProvider.Value.GetFileInfo(subpath);
+    }
 
-            return _fileProvider.Value.GetFileInfo(subpath);
+    public IDirectoryContents GetDirectoryContents(string subpath)
+    {
+        if (!IsInitialized())
+        {
+            return new NotFoundDirectoryContents();
         }
 
-        public IDirectoryContents GetDirectoryContents(string subpath)
-        {
-            if (!IsInitialized())
-            {
-                return new NotFoundDirectoryContents();
-            }
+        return _fileProvider.Value.GetDirectoryContents(subpath);
+    }
 
-            return _fileProvider.Value.GetDirectoryContents(subpath);
+    public IChangeToken Watch(string filter)
+    {
+        if (!IsInitialized())
+        {
+            return NullChangeToken.Singleton;
         }
 
-        public IChangeToken Watch(string filter)
-        {
-            if (!IsInitialized())
-            {
-                return NullChangeToken.Singleton;
-            }
+        return _fileProvider.Value.Watch(filter);
+    }
 
-            return _fileProvider.Value.Watch(filter);
-        }
-
-        private bool IsInitialized()
-        {
-            return _serviceProviderAccessor.Value != null;
-        }
+    private bool IsInitialized()
+    {
+        return _serviceProviderAccessor.Value != null;
     }
 }

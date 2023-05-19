@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
+﻿namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
+
+public interface ICachedObjectExtensionsDtoService
 {
-    public interface ICachedObjectExtensionsDtoService
-    {
-        ObjectExtensionsDto Get();
-    }
+    ObjectExtensionsDto Get();
 }

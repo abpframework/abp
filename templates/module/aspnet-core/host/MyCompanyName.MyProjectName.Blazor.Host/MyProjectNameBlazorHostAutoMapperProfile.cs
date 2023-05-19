@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 
-namespace MyCompanyName.MyProjectName.Blazor.Host
+namespace MyCompanyName.MyProjectName.Blazor.Host;
+
+public class MyProjectNameBlazorHostAutoMapperProfile : Profile
 {
-    public class MyProjectNameBlazorHostAutoMapperProfile : Profile
+    public MyProjectNameBlazorHostAutoMapperProfile()
     {
-        public MyProjectNameBlazorHostAutoMapperProfile()
-        {
-            //Define your AutoMapper configuration here for the Blazor project.
-        }
+        //Define your AutoMapper configuration here for the Blazor project.
     }
 }

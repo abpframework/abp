@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Bundling
+namespace Volo.Abp.Bundling;
+
+public class BundleParameterDictionary : Dictionary<string, string>
 {
-    public class BundleParameterDictionary : Dictionary<string, string>
-    {
-    }
 }

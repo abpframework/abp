@@ -119,7 +119,7 @@ After the configuration above, if your app runs on the `mytenant1.mydomain.com`,
 
 After this replacement, the app will use the following URLs:
 
-- `https://mytenant1.ids.mydomain.com` as IdentityServer URL.
+- `https://mytenant1.ids.mydomain.com` as AuthServer URL.
 - `https://mytenant1.api.mydomain.com` as default URL.
 - `https://mytenant1.identity.mydomain.com` as `AbpIdentity` remote endpoint URL.
 

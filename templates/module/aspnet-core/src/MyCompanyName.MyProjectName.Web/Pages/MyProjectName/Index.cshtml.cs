@@ -1,9 +1,8 @@
-namespace MyCompanyName.MyProjectName.Web.Pages.MyProjectName
+namespace MyCompanyName.MyProjectName.Web.Pages.MyProjectName;
+
+public class IndexModel : MyProjectNamePageModel
 {
-    public class IndexModel : MyProjectNamePageModel
+    public void OnGet()
     {
-        public void OnGet()
-        {
-        }
     }
 }

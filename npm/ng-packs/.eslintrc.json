@@ -10,7 +10,7 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": ["@abp/**/proxy"],
+            "allow": ["@abp/**/proxy", "@abp/**/config"],
             "depConstraints": [
               {
                 "sourceTag": "*",

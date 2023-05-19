@@ -1,0 +1,25 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Domyślnie z adresu",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Domyślnie z wyświetlanej nazwy",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Gospodarz",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Nazwa użytkownika",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Hasło",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Domena",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Włącz SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Użyj domyślnych danych logowania",
+    "Description:Abp.Mailing.DefaultFromAddress": "Domyślny z adresu",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Wartość domyślna z wyświetlanej nazwy",
+    "Description:Abp.Mailing.Smtp.Host": "Nazwa lub adres IP hosta używanego do transakcji SMTP.",
+    "Description:Abp.Mailing.Smtp.Port": "Port używany do transakcji SMTP.",
+    "Description:Abp.Mailing.Smtp.UserName": "Nazwa użytkownika powiązana z poświadczeniami.",
+    "Description:Abp.Mailing.Smtp.Password": "Hasło dla nazwy użytkownika powiązanej z poświadczeniami.",
+    "Description:Abp.Mailing.Smtp.Domain": "Nazwa domeny lub komputera, który weryfikuje poświadczenia.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Czy SmtpClient używa protokołu Secure Sockets Layer (SSL) do szyfrowania połączenia.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Czy DefaultCredentials są wysyłane z żądaniami.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Domyślny szablon układu wiadomości e-mail",
+    "TextTemplate:StandardEmailTemplates.Message": "Prosty szablon wiadomości na e-maile"
+  }
+}

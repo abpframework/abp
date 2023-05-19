@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { mockRoutesService } from '../../../../core/src/lib/tests/routes.service.spec';
-import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.component';
+import { BreadcrumbComponent, BreadcrumbItemsComponent } from '../components';
 
 const mockRoutes: ABP.Route[] = [
   { name: 'Identity', path: '/identity' },
@@ -33,7 +33,7 @@ describe('BreadcrumbComponent', () => {
         useFactory: () => mockRoutesService(),
       },
     ],
-    declarations: [LocalizationPipe, BreadcrumbComponent],
+    declarations: [LocalizationPipe, BreadcrumbComponent, BreadcrumbItemsComponent],
     imports: [RouterModule],
     routes: [
       {

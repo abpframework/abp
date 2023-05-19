@@ -1,0 +1,10 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Volo.Authorization:010001": "Ủy quyển thất bại! Đã đưa ra chính sách đã không được cấp.",
+    "Volo.Authorization:010002": "Ủy quyển thất bại! Đã đưa ra chính sách chưa được cấp: {PolicyName}",
+    "Volo.Authorization:010003": "Ủy quyển thất bại! Chính sách nhất định đã không được cấp cho tài nguyên cụ thể: {ResourceName}",
+    "Volo.Authorization:010004": "Ủy quyển thất bại! Yêu cầu nhất định chưa được cấp cho tài nguyên cụ thể: {ResourceName}",
+    "Volo.Authorization:010005": "Ủy quyển thất bại! Các yêu cầu nhất định chưa được cấp cho tài nguyên cụ thể: {ResourceName}"
+  }
+}

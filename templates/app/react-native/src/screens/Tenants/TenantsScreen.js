@@ -1,38 +1,44 @@
+import { Box, HStack, Pressable, Text } from 'native-base';
 import React from 'react';
-import i18n from 'i18n-js';
-import { ListItem, Text, Icon, Left, Body, Fab } from 'native-base';
-import { StyleSheet } from 'react-native';
 import { getTenants } from '../../api/TenantManagementAPI';
-import { activeTheme } from '../../theme/variables';
 import DataList from '../../components/DataList/DataList';
-import { withPermission } from '../../hocs/PermissionHOC';
-
-const CreateTenantButtonWithPermission = withPermission(Fab, 'AbpTenantManagement.Tenants.Create');
+import { LocalizationContext } from '../../contexts/LocalizationContext';
 
 function TenantsScreen({ navigation }) {
+  const { t } = React.useContext(LocalizationContext);
+
   return (
-    <>
+    <Box
+      w={{
+        base: '100%',
+        md: '25%',
+      }}
+    >
       <DataList
         navigation={navigation}
         fetchFn={getTenants}
-        render={tenant => (
-          <ListItem avatar onPress={() => navigateToCreateUpdateTenantScreen(navigation, tenant)}>
-            <Left style={styles.listItem}>
-              <Body>
-                <Text>{tenant.name}</Text>
-              </Body>
-            </Left>
-          </ListItem>
+        render={({ item }) => (
+          <Pressable
+            onPress={() => navigateToCreateUpdateTenantScreen(navigation, item)}
+          >
+            <Box
+              borderBottomWidth="1"
+              borderColor="coolGray.200"
+              pl="2"
+              pr="5"
+              py="2"
+            >
+              <HStack space={1}>
+                <Text color="coolGray.500">{t('AbpTenantManagement::TenantName')}:</Text>
+                <Text color="coolGray.800" bold>
+                  {item.name}
+                </Text>
+              </HStack>
+            </Box>
+          </Pressable>
         )}
       />
-
-      <CreateTenantButtonWithPermission
-        style={{ backgroundColor: activeTheme.brandPrimary }}
-        position="bottomRight"
-        onPress={() => navigation.navigate('CreateUpdateTenant')}>
-        <Icon name="add" />
-      </CreateTenantButtonWithPermission>
-    </>
+    </Box>
   );
 }
 
@@ -41,19 +47,5 @@ const navigateToCreateUpdateTenantScreen = (navigation, tenant = {}) => {
     tenantId: tenant.id,
   });
 };
-
-const styles = StyleSheet.create({
-  listItem: {
-    alignItems: 'center',
-    marginVertical: 3,
-    marginLeft: -15,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 15,
-    backgroundColor: '#f9f9f9',
-    width: '110%',
-    minHeight: 50,
-  },
-});
 
 export default TenantsScreen;

@@ -13,6 +13,7 @@
     "SavingWithThreeDot": "Saving",
     "Actions": "Actions",
     "Delete": "Delete",
+    "SuccessfullyDeleted": "Successfully deleted",
     "Edit": "Edit",
     "Refresh": "Refresh",
     "Language": "Language",
@@ -47,6 +48,7 @@
     "Search": "Search",
     "ItemWillBeDeletedMessageWithFormat": "{0} will be deleted!",
     "ItemWillBeDeletedMessage": "This item will be deleted!",
-    "ManageYourAccount": "Manage your account"
+    "ManageYourAccount": "Manage your account",
+    "OthersGroup": "Other"
   }
 }

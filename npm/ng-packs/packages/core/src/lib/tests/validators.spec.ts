@@ -1,9 +1,13 @@
 import { FormControl, Validators } from '@angular/forms';
-import { AbpValidators, validateMinAge, validateRange } from '../validators';
+import { validateMinAge } from '../validators/age.validator';
+import { validateRange } from '../validators/range.validator';
 import { validateCreditCard } from '../validators/credit-card.validator';
 import { validateRequired } from '../validators/required.validator';
 import { validateStringLength } from '../validators/string-length.validator';
 import { validateUrl } from '../validators/url.validator';
+import { validateUniqueCharacter } from '../validators';
+
+const emailAddress = () => Validators.email;
 
 describe('Validators', () => {
   describe('Credit Card Validator', () => {
@@ -41,7 +45,7 @@ describe('Validators', () => {
 
   describe('Email Validator', () => {
     it('should return email validator of Angular', () => {
-      expect(AbpValidators.emailAddress()).toBe(Validators.email);
+      expect(emailAddress()).toBe(Validators.email);
     });
   });
 
@@ -172,6 +176,27 @@ describe('Validators', () => {
       ${'sub.x.gov.tr'}         | ${error}
     `('should return $expected when input is $input', ({ input, expected }) => {
       const control = new FormControl(input, [validateUrl()]);
+      control.markAsDirty({ onlySelf: true });
+      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+      expect(control.errors).toEqual(expected);
+    });
+  });
+
+  describe('Unique Character Validator', () => {
+    const error = { uniqueCharacter: true };
+
+    test.each`
+      input            | expected
+      ${undefined}     | ${null}
+      ${null}          | ${null}
+      ${''}            | ${null}
+      ${'password'}    | ${error}
+      ${'123456789'}   | ${null}
+      ${'1q2w3E*'}     | ${null}
+      ${'password123'} | ${error}
+    `('should return $expected when input is $input', ({ input, expected }) => {
+      const control = new FormControl(input, [validateUniqueCharacter()]);
       control.markAsDirty({ onlySelf: true });
       control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
 

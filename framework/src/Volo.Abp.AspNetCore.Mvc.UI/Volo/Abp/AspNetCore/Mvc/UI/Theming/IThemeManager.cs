@@ -1,7 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Theming;
+
+public interface IThemeManager
 {
-    public interface IThemeManager
-    {
-        ITheme CurrentTheme { get; }
-    }
+    ITheme CurrentTheme { get; }
 }

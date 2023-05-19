@@ -1,3 +1,0 @@
-# Client Simulation Module
-
-TODO

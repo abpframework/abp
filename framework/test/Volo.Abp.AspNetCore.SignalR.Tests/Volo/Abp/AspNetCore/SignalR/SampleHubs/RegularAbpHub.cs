@@ -1,6 +1,5 @@
-﻿namespace Volo.Abp.AspNetCore.SignalR.SampleHubs
+﻿namespace Volo.Abp.AspNetCore.SignalR.SampleHubs;
+
+public class RegularAbpHub : AbpHub
 {
-    public class RegularAbpHub : AbpHub
-    {
-    }
 }

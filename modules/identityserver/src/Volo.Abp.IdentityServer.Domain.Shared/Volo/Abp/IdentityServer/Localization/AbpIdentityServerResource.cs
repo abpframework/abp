@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.Localization;
 
 
-namespace Volo.Abp.IdentityServer.Localization
+namespace Volo.Abp.IdentityServer.Localization;
+
+[LocalizationResourceName("AbpIdentityServer")]
+public class AbpIdentityServerResource
 {
-    [LocalizationResourceName("AbpIdentityServer")]
-    public class AbpIdentityServerResource
-    {
-    }
 }

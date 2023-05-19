@@ -1,0 +1,7 @@
+{
+  "culture": "sl",
+  "texts": {
+    "ThisFieldIsRequired": "to polje je obvezno",
+    "MaxLenghtErrorMessage": "To polje lahko vsebuje največ znakov »{0}«."
+  }
+}
