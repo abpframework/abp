@@ -7,6 +7,7 @@ var abp = abp || {};
         var excludeUrl = ["swagger.json", "connect/token"]
         var firstRequest = true;
         var oidcSupportedFlows = configObject.oidcSupportedFlows || [];
+        var oidcSupportedScopes = configObject.oidcSupportedScopes || [];
         abp.appPath = configObject.baseUrl || abp.appPath;
 
         var requestInterceptor = configObject.requestInterceptor;
@@ -41,9 +42,17 @@ var abp = abp || {};
         };
 
         configObject.responseInterceptor = async function(response) {
-            if(response.url.endsWith(".well-known/openid-configuration") && response.status === 200 && oidcSupportedFlows.length > 0) {
+            if(response.url.endsWith(".well-known/openid-configuration") && response.status === 200) {
                 var openIdConnectData = JSON.parse(response.text);
-                openIdConnectData.grant_types_supported = oidcSupportedFlows;
+                
+                if(oidcSupportedFlows.length > 0){
+                    openIdConnectData.grant_types_supported = oidcSupportedFlows;
+                }
+                
+                if(oidcSupportedScopes.length > 0) {
+                    openIdConnectData.scopes_supported = oidcSupportedScopes;
+                }
+                
                 response.text = JSON.stringify(openIdConnectData);
             }
 

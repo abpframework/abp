@@ -82,16 +82,21 @@ public static class AbpSwaggerGenServiceCollectionExtensions
     public static IServiceCollection AddAbpSwaggerGenWithOidc(
         this IServiceCollection services,
         [NotNull] string authority,
-        Action<SwaggerGenOptions> setupAction = null,
-        List<string> flows = null,
-        string openIdConnectDiscoveryEndpoint = "/.well-known/openid-configuration")
+        string[] scopes = null,
+        string[] flows = null,
+        string discoveryEndpoint = null,
+        Action<SwaggerGenOptions> setupAction = null)
     {
-        var openIdConnectDiscoveryUrl = new Uri($"{authority.TrimEnd('/')}{openIdConnectDiscoveryEndpoint.EnsureStartsWith('/')}");
-        flows ??= new List<string> { "authorization_code"};
+        var discoveryUrl = discoveryEndpoint != null ?
+            new Uri(discoveryEndpoint) :
+            new Uri($"{authority.TrimEnd('/')}/.well-known/openid-configuration");
+        
+        flows ??= new [] { "authorization_code" };
 
         services.Configure<SwaggerUIOptions>(swaggerUiOptions =>
         {
             swaggerUiOptions.ConfigObject.AdditionalItems["oidcSupportedFlows"] = flows;
+            swaggerUiOptions.ConfigObject.AdditionalItems["oidcSupportedScopes"] = scopes;
         });
         
         return services
@@ -102,8 +107,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
                     options.AddSecurityDefinition("oidc", new OpenApiSecurityScheme
                     {
                         Type = SecuritySchemeType.OpenIdConnect,
-                        OpenIdConnectUrl = openIdConnectDiscoveryUrl,
-                        
+                        OpenIdConnectUrl = discoveryUrl
                     });
 
                     options.AddSecurityRequirement(new OpenApiSecurityRequirement
