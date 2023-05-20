@@ -9,7 +9,5 @@ public enum ImageResizeMode
     Max,
     Crop,
     Pad,
-    Fill,
-    Distort,
-    Default = Stretch
+    Default
 }

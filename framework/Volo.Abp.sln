@@ -441,7 +441,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Ddd.Domain.Shared"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Image.Abstractions", "src\Volo.Abp.Image.Abstractions\Volo.Abp.Image.Abstractions.csproj", "{32F3E84B-D02E-42BD-BC5C-0D211564EF30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Image.Web", "src\Volo.Abp.Image.Web\Volo.Abp.Image.Web.csproj", "{78340A37-219E-4F2D-9AC6-40A7B467EEEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Image.AspNetCore", "src\Volo.Abp.Image.AspNetCore\Volo.Abp.Image.AspNetCore.csproj", "{78340A37-219E-4F2D-9AC6-40A7B467EEEC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Image.ImageSharp", "src\Volo.Abp.Image.ImageSharp\Volo.Abp.Image.ImageSharp.csproj", "{44467427-E0BE-492C-B9B4-82B362C183C3}"
 EndProject

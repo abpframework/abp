@@ -1,15 +1,21 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Image;
 
-public interface IImageCompressor // TODO: RENAME: IImageCompressorContributor
+public interface IImageCompressor
 {
-    //TODO: new extension method that works with byte arrays
-    Task<Stream> CompressAsync(Stream stream, CancellationToken cancellationToken = default); // TODO: TryCompressAsync & remove CanCompress
-
-    Stream Compress(Stream stream);
-
-    bool CanCompress(IImageFormat imageFormat);
+    Task<ImageProcessResult<Stream>> CompressAsync(
+        Stream stream,
+        [CanBeNull] string mimeType = null,
+        bool ignoreExceptions = false,
+        CancellationToken cancellationToken = default);
+    
+    Task<ImageProcessResult<byte[]>> CompressAsync(
+        byte[] bytes,
+        [CanBeNull] string mimeType = null,
+        bool ignoreExceptions = false,
+        CancellationToken cancellationToken = default);
 }

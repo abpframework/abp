@@ -5,7 +5,7 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <PackageId>Volo.Abp.Image.Web</PackageId>
+        <PackageId>Volo.Abp.Image.AspNetCore</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -17,15 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.csproj" />
-        <ProjectReference Include="..\Volo.Abp.Image\Volo.Abp.Image.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Update="Volo.Abp.Json.abppkg.json">
-        <Pack>true</Pack>
-        <PackagePath>content\</PackagePath>
-      </Content>
+        <ProjectReference Include="..\Volo.Abp.Image.Abstractions\Volo.Abp.Image.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

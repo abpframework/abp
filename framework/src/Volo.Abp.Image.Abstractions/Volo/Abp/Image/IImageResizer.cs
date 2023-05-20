@@ -1,15 +1,13 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Image;
 
 public interface IImageResizer
 {
-    Task<Stream> ResizeAsync(Stream stream, IImageResizeParameter resizeParameter,
-        CancellationToken cancellationToken = default); //TODO: TryResizeAsync...
+    Task<ImageProcessResult<Stream>> ResizeAsync(Stream stream, ImageResizeArgs resizeArgs, [CanBeNull]string mimeType = null, CancellationToken cancellationToken = default);
     
-    Stream Resize(Stream stream, IImageResizeParameter resizeParameter); //TODO: Remove
-
-    bool CanResize(IImageFormat imageFormat); //TODO: Discard (merge with TryResizeAsync)
+    Task<ImageProcessResult<byte[]>> ResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, [CanBeNull] string mimeType = null, CancellationToken cancellationToken = default);
 }
