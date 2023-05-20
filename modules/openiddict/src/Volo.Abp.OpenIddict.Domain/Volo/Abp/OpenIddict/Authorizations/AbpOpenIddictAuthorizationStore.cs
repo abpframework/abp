@@ -7,7 +7,9 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using OpenIddict.Abstractions;
+using Volo.Abp.Data;
 using Volo.Abp.Guids;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Tokens;
@@ -56,13 +58,21 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
     {
         Check.NotNull(authorization, nameof(authorization));
 
-        using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
+        try
         {
-            await TokenRepository.DeleteManyByAuthorizationIdAsync(authorization.Id, cancellationToken: cancellationToken);
+            using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
+            {
+                await TokenRepository.DeleteManyByAuthorizationIdAsync(authorization.Id, cancellationToken: cancellationToken);
 
-            await Repository.DeleteAsync(authorization.Id, cancellationToken: cancellationToken);
+                await Repository.DeleteAsync(authorization.Id, cancellationToken: cancellationToken);
 
-            await uow.CompleteAsync(cancellationToken);
+                await uow.CompleteAsync(cancellationToken);
+            }
+        }
+        catch (AbpDbConcurrencyException e)
+        {
+            Logger.LogException(e);
+            throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
         }
     }
 
@@ -387,7 +397,15 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
 
         var entity = await Repository.GetAsync(authorization.Id, cancellationToken: cancellationToken);
 
-        await Repository.UpdateAsync(authorization.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
+        try
+        {
+            await Repository.UpdateAsync(authorization.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
+        }
+        catch (AbpDbConcurrencyException e)
+        {
+            Logger.LogException(e);
+            throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
+        }
 
         authorization = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
     }

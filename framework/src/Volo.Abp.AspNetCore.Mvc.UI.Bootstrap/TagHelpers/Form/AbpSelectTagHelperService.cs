@@ -56,6 +56,10 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         {
             output.TagName = "div";
             LeaveOnlyGroupAttributes(context, output);
+            if (TagHelper.FloatingLabel)
+            {
+                output.Attributes.AddClass("form-floating");
+            }
             output.Attributes.AddClass("mb-3");
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Content.SetHtmlContent(innerHtml);

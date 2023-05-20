@@ -41,6 +41,7 @@ Here, is the list of all available commands before explaining their details:
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
 * **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
+* **`switch-to-local`**: Changes NuGet package references on a solution to local project references.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`login-info`**: Shows the current user's login information.
@@ -452,6 +453,27 @@ abp switch-to-stable [options]
 #### Options
 
 * `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+
+### switch-to-local
+
+Changes all NuGet package references to local project references for all the .csproj files in the specified folder (and all its subfolders with any deep). It is not limited to ABP Framework or Module packages.
+
+Usage:
+
+````bash
+abp switch-to-local [options]
+````
+#### Options
+
+* `--solution` or `-s`: Specifies the solution directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+
+* `--paths` or `-p`: Specifies the local paths that the projects are inside. You can use `|` character to separate the paths.
+
+Example:
+
+````bash
+abp switch-to-local --paths "D:\Github\abp|D:\Github\my-repo"
+````
 
 ### translate
 
