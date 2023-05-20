@@ -70,8 +70,8 @@ Basic usage:
 
 A value indicates which direction `abp-dropdown-menu` items will be aligned to. Should be one of the following values:
 
-* `Left` (default value)
-* `Right`
+* `Start` (default value)
+* `End`
 
 ### Additional content
 
