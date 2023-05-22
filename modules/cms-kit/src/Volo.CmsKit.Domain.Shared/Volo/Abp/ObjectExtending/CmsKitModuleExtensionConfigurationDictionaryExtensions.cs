@@ -5,7 +5,7 @@ namespace Volo.Abp.ObjectExtending;
 
 public static class CmsKitModuleExtensionConfigurationDictionaryExtensions
 {
-    public static ModuleExtensionConfigurationDictionary ConfigureIdentity(
+    public static ModuleExtensionConfigurationDictionary ConfigureCmsKit(
         this ModuleExtensionConfigurationDictionary modules,
         Action<CmsKitModuleExtensionConfiguration> configureAction)
     {

@@ -7,10 +7,14 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.MediaDescriptors;
 using Volo.CmsKit.Admin.Web.Menus;
+using Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Web;
@@ -23,6 +27,8 @@ namespace Volo.CmsKit.Admin.Web;
     )]
 public class CmsKitAdminWebModule : AbpModule
 {
+    private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
+    
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
@@ -167,6 +173,22 @@ public class CmsKitAdminWebModule : AbpModule
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMediaInputWithStream));
+        });
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        OneTimeRunner.Run(() =>
+        {
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.Blog,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs.CreateModalModel.CreateBlogViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs.UpdateModalModel.UpdateBlogViewModel) }
+                );
+
+
         });
     }
 }
