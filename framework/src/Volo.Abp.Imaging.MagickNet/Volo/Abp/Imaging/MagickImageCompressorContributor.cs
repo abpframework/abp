@@ -29,8 +29,6 @@ public class MagickImageCompressorContributor : IImageCompressorContributor, ITr
             MimeTypes.Image.Jpeg => true,
             MimeTypes.Image.Png => true,
             MimeTypes.Image.Gif => true,
-            MimeTypes.Image.Bmp => true,
-            MimeTypes.Image.Tiff => true,
             _ => false
         };
     }
