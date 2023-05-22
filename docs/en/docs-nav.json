@@ -458,6 +458,10 @@
         {
           "text": "Virtual File System",
           "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "Imaging",
+          "path": "Imaging.md"
         }
       ]
     },
