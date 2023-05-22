@@ -15,7 +15,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
         ImageCompressorContributors = imageCompressorContributors;
     }
 
-    public virtual async Task<ImageProcessResult<Stream>> CompressAsync(Stream stream, string mimeType = null, bool ignoreExceptions = false, CancellationToken cancellationToken = default)
+    public virtual async Task<ImageProcessResult<Stream>> CompressAsync(Stream stream, string mimeType = null, CancellationToken cancellationToken = default)
     {
         foreach (var imageCompressorContributor in ImageCompressorContributors)
         {
@@ -25,7 +25,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
                 continue;
             }
             
-            if (!ignoreExceptions && result.Exception != null)
+            if (result.Exception != null)
             {
                 throw result.Exception;
             }
@@ -41,7 +41,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
         return new ImageProcessResult<Stream>(stream, false);
     }
 
-    public virtual async Task<ImageProcessResult<byte[]>> CompressAsync(byte[] bytes, string mimeType = null, bool ignoreExceptions = false, CancellationToken cancellationToken = default)
+    public virtual async Task<ImageProcessResult<byte[]>> CompressAsync(byte[] bytes, string mimeType = null, CancellationToken cancellationToken = default)
     {
         foreach (var imageCompressorContributor in ImageCompressorContributors)
         {
@@ -51,7 +51,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
                 continue;
             }
             
-            if (!ignoreExceptions && result.Exception != null)
+            if (result.Exception != null)
             {
                 throw result.Exception;
             }
