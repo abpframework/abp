@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Controllers;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http;
@@ -80,6 +81,36 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
     {
         var controllerModelsToRemove = new List<ControllerModel>();
 
+        if (Options.ControllersToRemove.Any())
+        {
+            var removeControllerModels = GetControllers(application)
+                .Where(cm => Options.ControllersToRemove.Contains(cm.ControllerType))
+                .ToArray();
+
+            if (removeControllerModels.Any())
+            {
+                controllerModelsToRemove.AddRange(removeControllerModels);
+                Logger.LogInformation($"Removing the controller{(removeControllerModels.Length > 1 ? "s" : "")} {removeControllerModels.Select(c => c.ControllerType.AssemblyQualifiedName).JoinAsString(", ")} from the application model");
+            }
+        }
+
+        foreach (var controllerModel in GetControllers(application))
+        {
+            var replaceControllersAttr = ReflectionHelper.GetSingleAttributeOrDefault<ReplaceControllersAttribute>(controllerModel.ControllerType);
+            if (replaceControllersAttr != default)
+            {
+                var replaceControllerModels = GetControllers(application)
+                    .Where(cm => replaceControllersAttr.ControllerTypes.Contains(cm.ControllerType))
+                    .ToArray();
+
+                if (replaceControllerModels.Any())
+                {
+                    controllerModelsToRemove.AddRange(replaceControllerModels);
+                    Logger.LogInformation($"Removing the controller{(replaceControllerModels.Length > 1 ? "s" : "")} {replaceControllersAttr.ControllerTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")} from the application model since {(replaceControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
+                }
+            }
+        }
+
         foreach (var controllerModel in GetControllers(application))
         {
             if (!controllerModel.ControllerType.IsDefined(typeof(ExposeServicesAttribute), false))
@@ -99,9 +130,12 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
                     .Where(cm => exposeServicesAttr.ServiceTypes.Contains(cm.ControllerType))
                     .ToArray();
 
-                controllerModelsToRemove.AddRange(exposedControllerModels);
-                Logger.LogInformation($"Removing the controller{(exposedControllerModels.Length > 1 ? "s" : "")} {exposeServicesAttr.ServiceTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")} from the application model since {(exposedControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
-                continue;
+                if (exposedControllerModels.Any())
+                {
+                    controllerModelsToRemove.AddRange(exposedControllerModels);
+                    Logger.LogInformation($"Removing the controller{(exposedControllerModels.Length > 1 ? "s" : "")} {exposeServicesAttr.ServiceTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")} from the application model since {(exposedControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
+                    continue;
+                }
             }
 
             var baseControllerTypes = controllerModel.ControllerType
