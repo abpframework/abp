@@ -73,6 +73,9 @@
     "FullURL": "Full URL",
     "JobTitle": "Job Title",
     "PersonalWebsite": "PERSONAL WEBSITE",
-    "EditProfile": "Edit Profile"
+    "EditProfile": "Edit Profile",
+    "MoreFromBlog": "More From Blog",
+    "MoreFromUser": "More From {0}",
+    "BlogPosts": "Posts"
   }
 }
