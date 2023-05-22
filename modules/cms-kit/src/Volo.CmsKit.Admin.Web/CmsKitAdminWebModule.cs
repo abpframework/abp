@@ -14,7 +14,6 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.MediaDescriptors;
 using Volo.CmsKit.Admin.Web.Menus;
-using Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Web;
@@ -187,7 +186,38 @@ public class CmsKitAdminWebModule : AbpModule
                     createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs.CreateModalModel.CreateBlogViewModel) },
                     editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs.UpdateModalModel.UpdateBlogViewModel) }
                 );
-
+            
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.BlogPost,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts.CreateModel.CreateBlogPostViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts.UpdateModel.UpdateBlogPostViewModel) }
+                );
+            
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.MenuItem,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.CreateModalModel.MenuItemCreateViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.UpdateModalModel.MenuItemUpdateViewModel) }
+                );
+            
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.Page,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.CreateModel.CreatePageViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.UpdateModel.UpdatePageViewModel) }
+                );
+            
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.Tag,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.CreateModalModel.TagCreateViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.EditModalModel.TagEditViewModel) }
+                );
 
         });
     }

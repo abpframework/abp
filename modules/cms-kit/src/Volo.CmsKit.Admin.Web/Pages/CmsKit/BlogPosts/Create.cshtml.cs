@@ -26,6 +26,7 @@ public class CreateModel : CmsKitAdminPageModel
         IBlogPostAdminAppService blogPostAdminAppService)
     {
         BlogPostAdminAppService = blogPostAdminAppService;
+        ViewModel = new CreateBlogPostViewModel();
     }
 
     public async Task<IActionResult> OnPostAsync()

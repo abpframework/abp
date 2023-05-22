@@ -61,8 +61,8 @@ public class CmsKitAdminApplicationContractsModule : AbpModule
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToApi(
                 CmsKitModuleExtensionConsts.ModuleName,
                 CmsKitModuleExtensionConsts.EntityNames.MenuItem,
-                createApiTypes: new[] { typeof(MenuCreateInput) },
-                updateApiTypes: new[] { typeof(MenuUpdateInput) }
+                createApiTypes: new[] { typeof(MenuCreateInput) , typeof(MenuItemCreateInput)},
+                updateApiTypes: new[] { typeof(MenuUpdateInput) , typeof(MenuItemUpdateInput)}
             );
             
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToApi(

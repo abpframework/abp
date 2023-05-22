@@ -6,6 +6,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Users;
 using Volo.CmsKit.Admin.MediaDescriptors;
 using Volo.CmsKit.Blogs;
@@ -59,7 +60,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
             input.Content,
             input.CoverImageMediaId
         );
-
+        input.MapExtraPropertiesTo(blogPost);
         await BlogPostRepository.InsertAsync(blogPost);
 
         return ObjectMapper.Map<BlogPost, BlogPostDto>(blogPost);
@@ -85,7 +86,8 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         {
             await BlogPostManager.SetSlugUrlAsync(blogPost, input.Slug);
         }
-
+        input.MapExtraPropertiesTo(blogPost);
+        
         await BlogPostRepository.UpdateAsync(blogPost);
 
         return ObjectMapper.Map<BlogPost, BlogPostDto>(blogPost);
