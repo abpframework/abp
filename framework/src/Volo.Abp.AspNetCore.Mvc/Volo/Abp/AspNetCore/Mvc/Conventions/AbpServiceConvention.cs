@@ -134,8 +134,8 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
                 {
                     controllerModelsToRemove.AddRange(exposedControllerModels);
                     Logger.LogInformation($"Removing the controller{(exposedControllerModels.Length > 1 ? "s" : "")} {exposeServicesAttr.ServiceTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")} from the application model since {(exposedControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
-                    continue;
                 }
+                continue;
             }
 
             var baseControllerTypes = controllerModel.ControllerType
