@@ -439,13 +439,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Ldap.Abstractions"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Ddd.Domain.Shared", "src\Volo.Abp.Ddd.Domain.Shared\Volo.Abp.Ddd.Domain.Shared.csproj", "{0858571B-CE73-4AD6-BD06-EC9F0714D8E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Image.Abstractions", "src\Volo.Abp.Image.Abstractions\Volo.Abp.Image.Abstractions.csproj", "{32F3E84B-D02E-42BD-BC5C-0D211564EF30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.Abstractions", "src\Volo.Abp.Imaging.Abstractions\Volo.Abp.Imaging.Abstractions.csproj", "{32F3E84B-D02E-42BD-BC5C-0D211564EF30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Image.AspNetCore", "src\Volo.Abp.Image.AspNetCore\Volo.Abp.Image.AspNetCore.csproj", "{78340A37-219E-4F2D-9AC6-40A7B467EEEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.AspNetCore", "src\Volo.Abp.Imaging.AspNetCore\Volo.Abp.Imaging.AspNetCore.csproj", "{78340A37-219E-4F2D-9AC6-40A7B467EEEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Image.ImageSharp", "src\Volo.Abp.Image.ImageSharp\Volo.Abp.Image.ImageSharp.csproj", "{44467427-E0BE-492C-B9B4-82B362C183C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.ImageSharp", "src\Volo.Abp.Imaging.ImageSharp\Volo.Abp.Imaging.ImageSharp.csproj", "{44467427-E0BE-492C-B9B4-82B362C183C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Image.MagickNet", "src\Volo.Abp.Image.MagickNet\Volo.Abp.Image.MagickNet.csproj", "{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.MagickNet", "src\Volo.Abp.Imaging.MagickNet\Volo.Abp.Imaging.MagickNet.csproj", "{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
