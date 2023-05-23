@@ -10,82 +10,63 @@ namespace Volo.Abp.Imaging;
 
 public class MagickImageResizerContributor : IImageResizerContributor, ITransientDependency
 {
-    public async Task<ImageContributorResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs,
+    public virtual async Task<ImageResizeResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs,
         string mimeType = null,
         CancellationToken cancellationToken = default)
     {
-        if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
+        if (!mimeType.IsNullOrWhiteSpace() && !CanResize(mimeType))
         {
-            return new ImageContributorResult<Stream>(stream, false, false);
+            return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
         }
 
-        MemoryStream ms = null;
+        var memoryStream = await stream.CreateMemoryStreamAsync(cancellationToken: cancellationToken);
+
         try
         {
-            ms = await stream.CreateMemoryStreamAsync(cancellationToken: cancellationToken);
+            using var image = new MagickImage(memoryStream);
 
-            using var image = new MagickImage(ms);
-
-            if (string.IsNullOrWhiteSpace(mimeType))
+            if (mimeType.IsNullOrWhiteSpace() && !CanResize(image.FormatInfo?.MimeType))
             {
-                var format = image.FormatInfo;
-                mimeType = format?.MimeType;
-
-                if (!CanResize(mimeType))
-                {
-                    return new ImageContributorResult<Stream>(stream, false, false);
-                }
+                return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
             }
 
             Resize(image, resizeArgs);
 
-            ms.Position = 0;
-            await image.WriteAsync(ms, cancellationToken);
-            ms.SetLength(ms.Position);
-            ms.Position = 0;
-            return new ImageContributorResult<Stream>(ms, true);
+            memoryStream.Position = 0;
+            await image.WriteAsync(memoryStream, cancellationToken);
+            memoryStream.SetLength(memoryStream.Position);
+            memoryStream.Position = 0;
+
+            return new ImageResizeResult<Stream>(memoryStream, ProcessState.Done);
         }
-        catch (Exception e)
+        catch
         {
-            ms?.Dispose();
-            return new ImageContributorResult<Stream>(stream, false, true, e);
+            memoryStream.Dispose();
+            throw;
         }
     }
 
-    public Task<ImageContributorResult<byte[]>> TryResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs,
+    public virtual Task<ImageResizeResult<byte[]>> TryResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs,
         string mimeType = null,
         CancellationToken cancellationToken = default)
     {
-        if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
+        if (!mimeType.IsNullOrWhiteSpace() && !CanResize(mimeType))
         {
-            return Task.FromResult(new ImageContributorResult<byte[]>(bytes, false, false));
+            return Task.FromResult(new ImageResizeResult<byte[]>(bytes, ProcessState.Unsupported));
+        }
+        
+        using var image = new MagickImage(bytes);
+
+        if (mimeType.IsNullOrWhiteSpace() && !CanResize(image.FormatInfo?.MimeType))
+        {
+            return Task.FromResult(new ImageResizeResult<byte[]>(bytes, ProcessState.Unsupported));
         }
 
-        try
-        {
-            using var image = new MagickImage(bytes);
+        Resize(image, resizeArgs);
 
-            if (string.IsNullOrWhiteSpace(mimeType))
-            {
-                var format = image.FormatInfo;
-                mimeType = format?.MimeType;
-
-                if (!CanResize(mimeType))
-                {
-                    return Task.FromResult(new ImageContributorResult<byte[]>(bytes, false, false));
-                }
-            }
-
-            Resize(image, resizeArgs);
-
-            return Task.FromResult(new ImageContributorResult<byte[]>(image.ToByteArray(), true));
-        }
-        catch (Exception e)
-        {
-            return Task.FromResult(new ImageContributorResult<byte[]>(bytes, false, true, e));
-        }
+        return Task.FromResult(new ImageResizeResult<byte[]>(image.ToByteArray(), ProcessState.Done));
     }
-    
+
     protected virtual bool CanResize(string mimeType)
     {
         return mimeType switch {
@@ -101,21 +82,19 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     protected virtual void Resize(MagickImage image, ImageResizeArgs resizeParameter)
     {
         const int min = 1;
-        int targetWidth = resizeParameter.Width, targetHeight = resizeParameter.Height;
-        
+
         var sourceWidth = image.Width;
         var sourceHeight = image.Height;
 
-        if (targetWidth == 0 && targetHeight > 0)
-        {
-            targetWidth = Math.Max(min, (int)Math.Round(sourceWidth * targetHeight / (float)sourceHeight));
-        }
+        var targetWidth = GetTargetWidth(resizeParameter.Width, resizeParameter.Height, min, sourceWidth, sourceHeight);
+        var targetHeight = GetTargetHeight(resizeParameter.Height, targetWidth, min, sourceHeight, sourceWidth);
 
-        if (targetHeight == 0 && targetWidth > 0)
-        {
-            targetHeight = Math.Max(min, (int)Math.Round(sourceHeight * targetWidth / (float)sourceWidth));
-        }
+        ApplyResizeMode(image, resizeParameter, targetWidth, targetHeight);
+    }
 
+    protected virtual void ApplyResizeMode(MagickImage image, ImageResizeArgs resizeParameter, int targetWidth,
+        int targetHeight)
+    {
         switch (resizeParameter.Mode)
         {
             case ImageResizeMode.None:
@@ -143,7 +122,28 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
                 throw new NotSupportedException("Resize mode " + resizeParameter.Mode + "is not supported!");
         }
     }
-    
+
+
+    protected virtual int GetTargetHeight(int targetHeight, int targetWidth, int min, int sourceHeight, int sourceWidth)
+    {
+        if (targetHeight == 0 && targetWidth > 0)
+        {
+            targetHeight = Math.Max(min, (int)Math.Round(sourceHeight * targetWidth / (float)sourceWidth));
+        }
+
+        return targetHeight;
+    }
+
+    protected virtual int GetTargetWidth(int targetWidth, int targetHeight, int min, int sourceWidth, int sourceHeight)
+    {
+        if (targetWidth == 0 && targetHeight > 0)
+        {
+            targetWidth = Math.Max(min, (int)Math.Round(sourceWidth * targetHeight / (float)sourceHeight));
+        }
+
+        return targetWidth;
+    }
+
     protected virtual void ResizeCrop(MagickImage image, int targetWidth, int targetHeight)
     {
         var defaultMagickGeometry = new MagickGeometry(targetWidth, targetHeight) { IgnoreAspectRatio = true };
@@ -154,9 +154,9 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     {
         var sourceWidth = image.Width;
         var sourceHeight = image.Height;
-        
+
         var imageRatio = CalculateRatio(sourceWidth, sourceHeight);
-        
+
         var percentWidth = CalculatePercent(sourceWidth, targetWidth);
 
         if (targetWidth > sourceWidth || targetHeight > sourceHeight)
@@ -197,7 +197,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     {
         var sourceWidth = image.Width;
         var sourceHeight = image.Height;
-        
+
         var imageRatio = CalculateRatio(sourceWidth, sourceHeight);
         var ratio = CalculateRatio(targetWidth, targetHeight);
 
@@ -220,7 +220,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     {
         var sourceWidth = image.Width;
         var sourceHeight = image.Height;
-        
+
         var percentHeight = CalculatePercent(sourceHeight, targetHeight);
         var percentWidth = CalculatePercent(sourceWidth, targetWidth);
 
@@ -235,7 +235,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
             newWidth = boxPadWidth;
             newHeight = boxPadHeight;
         }
-        
+
         image.Resize(newWidth, newHeight);
         image.Extent(targetWidth, targetHeight, Gravity.Center, MagickColors.Transparent);
     }
@@ -244,10 +244,10 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     {
         var sourceWidth = image.Width;
         var sourceHeight = image.Height;
-        
+
         var percentHeight = CalculatePercent(sourceHeight, targetHeight);
         var percentWidth = CalculatePercent(sourceWidth, targetWidth);
-        
+
         var newWidth = targetWidth;
         var newHeight = targetHeight;
 
@@ -263,7 +263,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
         image.Resize(newWidth, newHeight);
         image.Extent(targetWidth, targetHeight, Gravity.Center, MagickColors.Transparent);
     }
-    
+
     protected virtual float CalculatePercent(int imageHeightOrWidth, int heightOrWidth)
     {
         return heightOrWidth / (float)imageHeightOrWidth;

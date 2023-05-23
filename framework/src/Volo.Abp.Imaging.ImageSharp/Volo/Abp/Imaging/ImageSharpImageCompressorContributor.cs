@@ -23,88 +23,54 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         Options = options.Value;
     }
 
-    public async Task<ImageContributorResult<Stream>> TryCompressAsync(Stream stream, string mimeType = null,
+    public virtual async Task<ImageCompressResult<Stream>> TryCompressAsync(Stream stream, string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
         {
-            return new ImageContributorResult<Stream>(stream, false, false);
+            return new ImageCompressResult<Stream>(stream, ProcessState.Unsupported);
         }
 
-        MemoryStream ms = null;
+        var (image, format) = await Image.LoadWithFormatAsync(stream, cancellationToken);
 
-        try
+        if (!CanCompress(format.DefaultMimeType))
         {
-            var (image, format) = await SixLabors.ImageSharp.Image.LoadWithFormatAsync(stream, cancellationToken);
-            var beforeSize = stream.Length;
-            mimeType = format.DefaultMimeType;
-
-            if (!CanCompress(mimeType))
-            {
-                return new ImageContributorResult<Stream>(stream, false, false);
-            }
-            
-            IImageEncoder encoder = null;
-
-            switch (format.DefaultMimeType)
-            {
-                case MimeTypes.Image.Jpeg:
-                    encoder = Options.JpegEncoder ?? new JpegEncoder();
-                    break;
-                case MimeTypes.Image.Png:
-                    encoder = Options.PngEncoder ?? new PngEncoder();
-                    break;
-                case MimeTypes.Image.Webp:
-                    encoder = Options.WebpEncoder ?? new WebpEncoder();
-                    break;
-                case null:
-                    throw new NotSupportedException($"No encoder available for the given format: {format.Name}");
-            }
-
-            ms = new MemoryStream();
-            await image.SaveAsync(ms, encoder, cancellationToken: cancellationToken);
-            
-            var afterSize = ms.Length;
-            
-            if (afterSize >= beforeSize)
-            {
-                ms.Dispose();
-                return new ImageContributorResult<Stream>(stream, false);
-            }
-            ms.Position = 0;
-
-            return new ImageContributorResult<Stream>(ms, true);
+            return new ImageCompressResult<Stream>(stream, ProcessState.Unsupported);
         }
-        catch (Exception e)
+
+        var memoryStream = await GetStreamFromImageAsync(image, format, cancellationToken);
+
+        if (memoryStream.Length < stream.Length)
         {
-            ms?.Dispose();
-
-            return new ImageContributorResult<Stream>(stream, false, true, e);
+            return new ImageCompressResult<Stream>(memoryStream, ProcessState.Done);
         }
+
+        memoryStream.Dispose();
+        return new ImageCompressResult<Stream>(stream, ProcessState.Canceled);
     }
 
-    public async Task<ImageContributorResult<byte[]>> TryCompressAsync(byte[] bytes, string mimeType = null,
+    public virtual async Task<ImageCompressResult<byte[]>> TryCompressAsync(byte[] bytes, string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
         {
-            return new ImageContributorResult<byte[]>(bytes, false, false);
+            return new ImageCompressResult<byte[]>(bytes, ProcessState.Unsupported);
         }
 
         using var ms = new MemoryStream(bytes);
         var result = await TryCompressAsync(ms, mimeType, cancellationToken);
 
-        if (!result.IsSuccess)
+        if (result.State != ProcessState.Done)
         {
-            return new ImageContributorResult<byte[]>(bytes, result.IsSuccess, result.IsSupported, result.Exception);
+            return new ImageCompressResult<byte[]>(bytes, result.State);
         }
 
         var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
         result.Result.Dispose();
-        return new ImageContributorResult<byte[]>(newBytes, true);
+        return new ImageCompressResult<byte[]>(newBytes, result.State);
     }
 
-    private static bool CanCompress(string mimeType)
+    protected virtual bool CanCompress(string mimeType)
     {
         return mimeType switch {
             MimeTypes.Image.Jpeg => true,
@@ -112,5 +78,40 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
             MimeTypes.Image.Webp => true,
             _ => false
         };
+    }
+
+    protected virtual async Task<Stream> GetStreamFromImageAsync(Image image, IImageFormat format,
+        CancellationToken cancellationToken = default)
+    {
+        var memoryStream = new MemoryStream();
+
+        try
+        {
+            await image.SaveAsync(memoryStream, GetEncoder(format), cancellationToken: cancellationToken);
+
+            memoryStream.Position = 0;
+
+            return memoryStream;
+        }
+        catch
+        {
+            memoryStream.Dispose();
+            throw;
+        }
+    }
+
+    protected virtual IImageEncoder GetEncoder(IImageFormat format)
+    {
+        switch (format.DefaultMimeType)
+        {
+            case MimeTypes.Image.Jpeg:
+                return Options.JpegEncoder ?? new JpegEncoder();
+            case MimeTypes.Image.Png:
+                return Options.PngEncoder ?? new PngEncoder();
+            case MimeTypes.Image.Webp:
+                return Options.WebpEncoder ?? new WebpEncoder();
+            default:
+                throw new NotSupportedException($"No encoder available for the given format: {format.Name}");
+        }
     }
 }

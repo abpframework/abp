@@ -13,17 +13,75 @@ public class MagickImageCompressorContributor : IImageCompressorContributor, ITr
 {
     protected MagickNetCompressOptions Options { get; }
 
-    private readonly ImageOptimizer _optimizer;
+    protected readonly ImageOptimizer Optimizer;
 
     public MagickImageCompressorContributor(IOptions<MagickNetCompressOptions> options)
     {
         Options = options.Value;
-        _optimizer = new ImageOptimizer {
-            OptimalCompression = Options.OptimalCompression, IgnoreUnsupportedFormats = Options.IgnoreUnsupportedFormats
+        Optimizer = new ImageOptimizer
+        {
+            OptimalCompression = Options.OptimalCompression,
+            IgnoreUnsupportedFormats = Options.IgnoreUnsupportedFormats
         };
     }
 
-    private static bool CanCompress(string mimeType)
+    public virtual async Task<ImageCompressResult<Stream>> TryCompressAsync(Stream stream, string mimeType = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
+        {
+            return new ImageCompressResult<Stream>(stream, ProcessState.Unsupported);
+        }
+
+        var memoryStream = await stream.CreateMemoryStreamAsync(cancellationToken: cancellationToken);
+
+        try
+        {
+            if (!Optimizer.IsSupported(memoryStream))
+            {
+                return new ImageCompressResult<Stream>(stream, ProcessState.Unsupported);
+            }
+
+            if (Compress(memoryStream))
+            {
+                return new ImageCompressResult<Stream>(memoryStream, ProcessState.Done);
+            }
+
+            memoryStream.Dispose();
+
+            return new ImageCompressResult<Stream>(stream, ProcessState.Canceled);
+        }
+        catch
+        {
+            memoryStream.Dispose();
+            throw;
+        }
+    }
+
+    public virtual async Task<ImageCompressResult<byte[]>> TryCompressAsync(byte[] bytes, string mimeType = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
+        {
+            return new ImageCompressResult<byte[]>(bytes, ProcessState.Unsupported);
+        }
+
+        using var memoryStream = new MemoryStream(bytes);
+        var result = await TryCompressAsync(memoryStream, mimeType, cancellationToken);
+
+        if (result.State != ProcessState.Done)
+        {
+            return new ImageCompressResult<byte[]>(bytes, result.State);
+        }
+
+        var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
+
+        result.Result.Dispose();
+
+        return new ImageCompressResult<byte[]>(newBytes, result.State);
+    }
+    
+    protected virtual bool CanCompress(string mimeType)
     {
         return mimeType switch {
             MimeTypes.Image.Jpeg => true,
@@ -32,70 +90,9 @@ public class MagickImageCompressorContributor : IImageCompressorContributor, ITr
             _ => false
         };
     }
-
-    public async Task<ImageContributorResult<Stream>> TryCompressAsync(Stream stream, string mimeType = null,
-        CancellationToken cancellationToken = default)
+    
+    protected virtual bool Compress(Stream stream)
     {
-        if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
-        {
-            return new ImageContributorResult<Stream>(stream, false, false);
-        }
-
-        MemoryStream ms = null;
-        try
-        {
-            ms = await stream.CreateMemoryStreamAsync(cancellationToken: cancellationToken);
-            
-            if (!_optimizer.IsSupported(ms))
-            {
-                return new ImageContributorResult<Stream>(stream, false, false);
-            }
-            
-            Func<Stream, bool> compressFunc;
-
-            if (Options.Lossless)
-            {
-                compressFunc = _optimizer.LosslessCompress;
-            }
-            else
-            {
-                compressFunc = _optimizer.Compress;
-            }
-
-            if (compressFunc(ms))
-            {
-                return new ImageContributorResult<Stream>(ms, true);
-            }
-
-            ms.Dispose();
-            return new ImageContributorResult<Stream>(stream, false);
-        }
-        catch (Exception e)
-        {
-            ms?.Dispose();
-            return new ImageContributorResult<Stream>(stream, false, false, e);
-        }
-    }
-
-    public async Task<ImageContributorResult<byte[]>> TryCompressAsync(byte[] bytes, string mimeType = null,
-        CancellationToken cancellationToken = default)
-    {
-        if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
-        {
-            return new ImageContributorResult<byte[]>(bytes, false, false);
-        }
-
-        using var ms = new MemoryStream(bytes);
-        var result = await TryCompressAsync(ms, mimeType, cancellationToken);
-
-        if (!result.IsSuccess)
-        {
-            result.Result.Dispose();
-            return new ImageContributorResult<byte[]>(bytes, result.IsSuccess, result.IsSupported, result.Exception);
-        }
-
-        var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
-        result.Result.Dispose();
-        return new ImageContributorResult<byte[]>(newBytes, true);
+        return Options.Lossless ? Optimizer.LosslessCompress(stream) : Optimizer.Compress(stream);
     }
 }

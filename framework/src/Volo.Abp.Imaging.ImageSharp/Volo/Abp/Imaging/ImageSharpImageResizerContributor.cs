@@ -12,88 +12,72 @@ namespace Volo.Abp.Imaging;
 
 public class ImageSharpImageResizerContributor : IImageResizerContributor, ITransientDependency
 {
-    public async Task<ImageContributorResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs,
+    public virtual async Task<ImageResizeResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs,
         string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
         {
-            return new ImageContributorResult<Stream>(stream, false, false);
+            return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
         }
 
-        var (image, format) = await SixLabors.ImageSharp.Image.LoadWithFormatAsync(stream, cancellationToken);
+        var (image, format) = await Image.LoadWithFormatAsync(stream, cancellationToken);
 
-        mimeType = format.DefaultMimeType;
-
-        if (!CanResize(mimeType))
+        if (!CanResize(format.DefaultMimeType))
         {
-            return new ImageContributorResult<Stream>(stream, false, false);
+            return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
         }
 
-        var size = new Size();
-        if (resizeArgs.Width > 0)
+        if (ResizeModeMap.TryGetValue(resizeArgs.Mode, out var resizeMode))
         {
-            size.Width = resizeArgs.Width;
+            image.Mutate(x => x.Resize(new ResizeOptions { Size = GetSize(resizeArgs), Mode = resizeMode }));
         }
-
-        if (resizeArgs.Height > 0)
+        else
         {
-            size.Height = resizeArgs.Height;
+            throw new NotSupportedException("Resize mode " + resizeArgs.Mode + "is not supported!");
         }
 
-        var defaultResizeOptions = new ResizeOptions { Size = size };
+        var memoryStream = new MemoryStream();
 
-        MemoryStream ms = null;
         try
         {
-            if (ResizeModeMap.TryGetValue(resizeArgs.Mode, out var resizeMode))
-            {
-                defaultResizeOptions.Mode = resizeMode;
-                image.Mutate(x => x.Resize(defaultResizeOptions));
-            }
-            else
-            {
-                throw new NotSupportedException("Resize mode " + resizeArgs.Mode + "is not supported!");
-            }
-            
-            ms = new MemoryStream();
-            await image.SaveAsync(ms, format, cancellationToken: cancellationToken);
-            ms.SetLength(ms.Position);
-            ms.Position = 0;
-
-            return new ImageContributorResult<Stream>(ms, true);
+            await image.SaveAsync(memoryStream, format, cancellationToken: cancellationToken);
+            memoryStream.Position = 0;
+            return new ImageResizeResult<Stream>(memoryStream, ProcessState.Done);
         }
-        catch (Exception e)
+        catch
         {
-            ms?.Dispose();
-            return new ImageContributorResult<Stream>(stream, false, true, e);
+            memoryStream.Dispose();
+            throw;
         }
     }
 
-    public async Task<ImageContributorResult<byte[]>> TryResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs,
+    public virtual async Task<ImageResizeResult<byte[]>> TryResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs,
         string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
         {
-            return new ImageContributorResult<byte[]>(bytes, false, false);
+            return new ImageResizeResult<byte[]>(bytes, ProcessState.Unsupported);
         }
 
         using var ms = new MemoryStream(bytes);
+
         var result = await TryResizeAsync(ms, resizeArgs, mimeType, cancellationToken);
 
-        if (!result.IsSuccess)
+        if (result.State != ProcessState.Done)
         {
-            return new ImageContributorResult<byte[]>(bytes, result.IsSuccess, result.IsSupported, result.Exception);
+            return new ImageResizeResult<byte[]>(bytes, result.State);
         }
 
         var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
+
         result.Result.Dispose();
 
-        return new ImageContributorResult<byte[]>(newBytes, true);
+        return new ImageResizeResult<byte[]>(newBytes, result.State);
     }
 
-    private static bool CanResize(string mimeType)
+    protected virtual bool CanResize(string mimeType)
     {
         return mimeType switch {
             MimeTypes.Image.Jpeg => true,
@@ -105,7 +89,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
         };
     }
 
-    private readonly static Dictionary<ImageResizeMode, ResizeMode> ResizeModeMap = new() {
+    protected Dictionary<ImageResizeMode, ResizeMode> ResizeModeMap = new() {
         { ImageResizeMode.None, ResizeMode.Crop },
         { ImageResizeMode.Stretch, ResizeMode.Stretch },
         { ImageResizeMode.BoxPad, ResizeMode.BoxPad },
@@ -114,4 +98,20 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
         { ImageResizeMode.Crop, ResizeMode.Crop },
         { ImageResizeMode.Pad, ResizeMode.Pad }
     };
+    
+    private Size GetSize(ImageResizeArgs resizeArgs)
+    {
+        var size = new Size();
+        if (resizeArgs.Width > 0)
+        {
+            size.Width = resizeArgs.Width;
+        }
+
+        if (resizeArgs.Height > 0)
+        {
+            size.Height = resizeArgs.Height;
+        }
+
+        return size;
+    }
 }

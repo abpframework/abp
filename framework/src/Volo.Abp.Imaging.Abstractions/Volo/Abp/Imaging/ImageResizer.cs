@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Imaging;
 
@@ -13,66 +14,52 @@ public class ImageResizer : IImageResizer, ITransientDependency
     
     protected ImageResizeOptions ImageResizeOptions { get; }
     
-    public ImageResizer(IEnumerable<IImageResizerContributor> imageResizerContributors, IOptions<ImageResizeOptions> imageResizeOptions)
+    protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    
+    public ImageResizer(
+        IEnumerable<IImageResizerContributor> imageResizerContributors, 
+        IOptions<ImageResizeOptions> imageResizeOptions, 
+        ICancellationTokenProvider cancellationTokenProvider)
     {
         ImageResizerContributors = imageResizerContributors;
+        CancellationTokenProvider = cancellationTokenProvider;
         ImageResizeOptions = imageResizeOptions.Value;
     }
     
-    public async Task<ImageProcessResult<Stream>> ResizeAsync(Stream stream, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default)
+    public virtual async Task<ImageResizeResult<Stream>> ResizeAsync(Stream stream, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default)
     {
         ChangeDefaultResizeMode(resizeArgs);
         
         foreach (var imageResizerContributor in ImageResizerContributors)
         {
-            var result = await imageResizerContributor.TryResizeAsync(stream, resizeArgs, mimeType, cancellationToken);
-            if (!result.IsSupported)
+            var result = await imageResizerContributor.TryResizeAsync(stream, resizeArgs, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            if (result.State == ProcessState.Unsupported)
             {
                 continue;
             }
 
-            if (result.Exception != null)
-            {
-                throw result.Exception;
-            }
-            
-            if (result.IsSuccess)
-            {
-                return new ImageProcessResult<Stream>(result.Result, result.IsSuccess);
-            }
-            
-            return new ImageProcessResult<Stream>(stream, false);
+            return result;
         }
         
-        return new ImageProcessResult<Stream>(stream, false);
+        return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
     }
 
-    public async Task<ImageProcessResult<byte[]>> ResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default)
+    public virtual async Task<ImageResizeResult<byte[]>> ResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default)
     {
         ChangeDefaultResizeMode(resizeArgs);
         
         foreach (var imageResizerContributor in ImageResizerContributors)
         {
-            var result = await imageResizerContributor.TryResizeAsync(bytes, resizeArgs, mimeType, cancellationToken);
-            if (!result.IsSupported)
+            var result = await imageResizerContributor.TryResizeAsync(bytes, resizeArgs, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            if (result.State == ProcessState.Unsupported)
             {
                 continue;
             }
 
-            if (result.Exception != null)
-            {
-                throw result.Exception;
-            }
-            
-            if (result.IsSuccess)
-            {
-                return new ImageProcessResult<byte[]>(result.Result, result.IsSuccess);
-            }
-            
-            return new ImageProcessResult<byte[]>(bytes, false);
+            return result;
         }
         
-        return new ImageProcessResult<byte[]>(bytes, false);
+        return new ImageResizeResult<byte[]>(bytes, ProcessState.Unsupported);
     }
     
     protected virtual void ChangeDefaultResizeMode(ImageResizeArgs resizeArgs)

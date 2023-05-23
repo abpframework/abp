@@ -12,8 +12,6 @@ namespace Volo.Abp.Imaging;
 public class CompressImageAttribute : ActionFilterAttribute
 {
     public string[] Parameters { get; }
-    
-    protected IImageCompressor ImageCompressor { get; set; }
 
     public CompressImageAttribute(params string[] parameters)
     {
@@ -26,15 +24,15 @@ public class CompressImageAttribute : ActionFilterAttribute
             ? context.ActionArguments.Where(x => Parameters.Contains(x.Key)).ToArray()
             : context.ActionArguments.ToArray();
         
-        ImageCompressor = context.HttpContext.RequestServices.GetRequiredService<IImageCompressor>();
+        var imageCompressor = context.HttpContext.RequestServices.GetRequiredService<IImageCompressor>();
 
         foreach (var (key, value) in parameters)
         {
             object compressedValue = value switch {
-                IFormFile file => await CompressImageAsync(file),
-                IRemoteStreamContent remoteStreamContent => await CompressImageAsync(remoteStreamContent),
-                Stream stream => await CompressImageAsync(stream),
-                IEnumerable<byte> bytes => await CompressImageAsync(bytes.ToArray()),
+                IFormFile file => await CompressImageAsync(file, imageCompressor),
+                IRemoteStreamContent remoteStreamContent => await CompressImageAsync(remoteStreamContent, imageCompressor),
+                Stream stream => await CompressImageAsync(stream, imageCompressor),
+                IEnumerable<byte> bytes => await CompressImageAsync(bytes.ToArray(), imageCompressor),
                 _ => null
             };
 
@@ -47,16 +45,16 @@ public class CompressImageAttribute : ActionFilterAttribute
         await next();
     }
     
-    protected async Task<IFormFile> CompressImageAsync(IFormFile file)
+    protected virtual async Task<IFormFile> CompressImageAsync(IFormFile file, IImageCompressor imageCompressor)
     {
         if(file.ContentType == null || !file.ContentType.StartsWith("image/"))
         {
             return file;
         }
 
-        var result = await ImageCompressor.CompressAsync(file.OpenReadStream(), file.ContentType);
+        var result = await imageCompressor.CompressAsync(file.OpenReadStream(), file.ContentType);
         
-        if (result.IsSuccess)
+        if (result.State == ProcessState.Done)
         {
             return new FormFile(result.Result, 0, result.Result.Length, file.Name, file.FileName);
         }
@@ -64,16 +62,16 @@ public class CompressImageAttribute : ActionFilterAttribute
         return file;
     }
     
-    protected async Task<IRemoteStreamContent> CompressImageAsync(IRemoteStreamContent remoteStreamContent)
+    protected virtual async Task<IRemoteStreamContent> CompressImageAsync(IRemoteStreamContent remoteStreamContent, IImageCompressor imageCompressor)
     {
         if(remoteStreamContent.ContentType == null || !remoteStreamContent.ContentType.StartsWith("image/"))
         {
             return remoteStreamContent;
         }
         
-        var result = await ImageCompressor.CompressAsync(remoteStreamContent.GetStream(), remoteStreamContent.ContentType);
+        var result = await imageCompressor.CompressAsync(remoteStreamContent.GetStream(), remoteStreamContent.ContentType);
         
-        if (result.IsSuccess)
+        if (result.State == ProcessState.Done)
         {
             var fileName = remoteStreamContent.FileName;
             var contentType = remoteStreamContent.ContentType;
@@ -84,11 +82,11 @@ public class CompressImageAttribute : ActionFilterAttribute
         return remoteStreamContent;
     }
     
-    protected async Task<Stream> CompressImageAsync(Stream stream)
+    protected virtual async Task<Stream> CompressImageAsync(Stream stream, IImageCompressor imageCompressor)
     {
-        var result = await ImageCompressor.CompressAsync(stream);
+        var result = await imageCompressor.CompressAsync(stream);
         
-        if (result.IsSuccess)
+        if (result.State == ProcessState.Done)
         {
             await stream.DisposeAsync();
             return result.Result;
@@ -97,8 +95,8 @@ public class CompressImageAttribute : ActionFilterAttribute
         return stream;
     }
     
-    protected async Task<byte[]> CompressImageAsync(byte[] bytes)
+    protected virtual async Task<byte[]> CompressImageAsync(byte[] bytes, IImageCompressor imageCompressor)
     {
-        return (await ImageCompressor.CompressAsync(bytes)).Result;
+        return (await imageCompressor.CompressAsync(bytes)).Result;
     }
 }

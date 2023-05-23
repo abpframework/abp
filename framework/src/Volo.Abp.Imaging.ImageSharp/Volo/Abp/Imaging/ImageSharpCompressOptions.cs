@@ -16,14 +16,14 @@ public class ImageSharpCompressOptions
     public int DefaultQuality { get; set; } = 75;
     public ImageSharpCompressOptions()
     {
-        JpegEncoder = new JpegEncoder() {
+        JpegEncoder = new JpegEncoder {
             Quality = DefaultQuality
         };
-        PngEncoder = new PngEncoder() {
+        PngEncoder = new PngEncoder {
             CompressionLevel = PngCompressionLevel.BestCompression,
             IgnoreMetadata = true
         };
-        WebpEncoder = new WebpEncoder() {
+        WebpEncoder = new WebpEncoder {
             Quality = DefaultQuality
         };
     }

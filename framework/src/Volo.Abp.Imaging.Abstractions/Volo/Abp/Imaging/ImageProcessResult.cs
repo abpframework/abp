@@ -1,13 +1,13 @@
 ﻿namespace Volo.Abp.Imaging;
 
-public class ImageProcessResult<T>
+public abstract class ImageProcessResult<T>
 {
     public T Result { get; }
-    public bool IsSuccess { get; }
-    
-    public ImageProcessResult(T result, bool isSuccess)
+    public ProcessState State { get; }
+
+    protected ImageProcessResult(T result, ProcessState state)
     {
         Result = result;
-        IsSuccess = isSuccess;
+        State = state;
     }
 }

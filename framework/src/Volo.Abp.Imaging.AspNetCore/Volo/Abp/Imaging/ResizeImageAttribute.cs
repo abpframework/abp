@@ -17,8 +17,6 @@ public class ResizeImageAttribute : ActionFilterAttribute
     public ImageResizeMode Mode { get; set; }
     public string[] Parameters { get; }
     
-    protected IImageResizer ImageResizer { get; set; }
-    
     public ResizeImageAttribute(int width, int height, params string[] parameters)
     {
         Width = width;
@@ -39,15 +37,15 @@ public class ResizeImageAttribute : ActionFilterAttribute
             ? context.ActionArguments.Where(x => Parameters.Contains(x.Key)).ToArray()
             : context.ActionArguments.ToArray();
         
-        ImageResizer = context.HttpContext.RequestServices.GetRequiredService<IImageResizer>();
+        var imageResizer = context.HttpContext.RequestServices.GetRequiredService<IImageResizer>();
         
         foreach (var (key, value) in parameters)
         {
             object resizedValue = value switch {
-                IFormFile file => await ResizeImageAsync(file),
-                IRemoteStreamContent remoteStreamContent => await ResizeImageAsync(remoteStreamContent),
-                Stream stream => await ResizeImageAsync(stream),
-                IEnumerable<byte> bytes => await ResizeImageAsync(bytes.ToArray()),
+                IFormFile file => await ResizeImageAsync(file, imageResizer),
+                IRemoteStreamContent remoteStreamContent => await ResizeImageAsync(remoteStreamContent, imageResizer),
+                Stream stream => await ResizeImageAsync(stream, imageResizer),
+                IEnumerable<byte> bytes => await ResizeImageAsync(bytes.ToArray(), imageResizer),
                 _ => null
             };
 
@@ -60,16 +58,16 @@ public class ResizeImageAttribute : ActionFilterAttribute
         await next();
     }
     
-    protected async Task<IFormFile> ResizeImageAsync(IFormFile file)
+    protected virtual async Task<IFormFile> ResizeImageAsync(IFormFile file, IImageResizer imageResizer)
     {
         if(file.ContentType == null || !file.ContentType.StartsWith("image/"))
         {
             return file;
         }
         
-        var result = await ImageResizer.ResizeAsync(file.OpenReadStream(), new ImageResizeArgs(Width, Height, Mode), file.ContentType);
+        var result = await imageResizer.ResizeAsync(file.OpenReadStream(), new ImageResizeArgs(Width, Height, Mode), file.ContentType);
         
-        if (result.IsSuccess)
+        if (result.State == ProcessState.Done)
         {
             return new FormFile(result.Result, 0, result.Result.Length, file.Name, file.FileName);
         }
@@ -77,16 +75,16 @@ public class ResizeImageAttribute : ActionFilterAttribute
         return file;
     }
     
-    protected async Task<IRemoteStreamContent> ResizeImageAsync(IRemoteStreamContent remoteStreamContent)
+    protected virtual async Task<IRemoteStreamContent> ResizeImageAsync(IRemoteStreamContent remoteStreamContent, IImageResizer imageResizer)
     {
         if(remoteStreamContent.ContentType == null || !remoteStreamContent.ContentType.StartsWith("image/"))
         {
             return remoteStreamContent;
         }
         
-        var result = await ImageResizer.ResizeAsync(remoteStreamContent.GetStream(), new ImageResizeArgs(Width, Height, Mode), remoteStreamContent.ContentType);
+        var result = await imageResizer.ResizeAsync(remoteStreamContent.GetStream(), new ImageResizeArgs(Width, Height, Mode), remoteStreamContent.ContentType);
         
-        if (result.IsSuccess)
+        if (result.State == ProcessState.Done)
         {
             var fileName = remoteStreamContent.FileName;
             var contentType = remoteStreamContent.ContentType;
@@ -97,11 +95,11 @@ public class ResizeImageAttribute : ActionFilterAttribute
         return remoteStreamContent;
     }
     
-    protected async Task<Stream> ResizeImageAsync(Stream stream)
+    protected virtual async Task<Stream> ResizeImageAsync(Stream stream, IImageResizer imageResizer)
     {
-        var result = await ImageResizer.ResizeAsync(stream, new ImageResizeArgs(Width, Height, Mode));
+        var result = await imageResizer.ResizeAsync(stream, new ImageResizeArgs(Width, Height, Mode));
         
-        if (result.IsSuccess)
+        if (result.State == ProcessState.Done)
         {
             await stream.DisposeAsync();
             return result.Result;
@@ -110,8 +108,8 @@ public class ResizeImageAttribute : ActionFilterAttribute
         return stream;
     }
     
-    protected async Task<byte[]> ResizeImageAsync(byte[] bytes)
+    protected virtual async Task<byte[]> ResizeImageAsync(byte[] bytes, IImageResizer imageResizer)
     {
-        return (await ImageResizer.ResizeAsync(bytes, new ImageResizeArgs(Width, Height, Mode))).Result;
+        return (await imageResizer.ResizeAsync(bytes, new ImageResizeArgs(Width, Height, Mode))).Result;
     }
 }

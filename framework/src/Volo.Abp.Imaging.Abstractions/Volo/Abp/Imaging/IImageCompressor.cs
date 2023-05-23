@@ -7,12 +7,12 @@ namespace Volo.Abp.Imaging;
 
 public interface IImageCompressor
 {
-    Task<ImageProcessResult<Stream>> CompressAsync(
+    Task<ImageCompressResult<Stream>> CompressAsync(
         Stream stream,
         [CanBeNull] string mimeType = null,
         CancellationToken cancellationToken = default);
     
-    Task<ImageProcessResult<byte[]>> CompressAsync(
+    Task<ImageCompressResult<byte[]>> CompressAsync(
         byte[] bytes,
         [CanBeNull] string mimeType = null,
         CancellationToken cancellationToken = default);
