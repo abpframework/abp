@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.ObjectExtending;
 using Volo.CmsKit.Admin.Menus;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems;
@@ -41,7 +42,7 @@ public class CreateModalModel : CmsKitAdminPageModel
     }
 
     [AutoMap(typeof(MenuItemCreateInput), ReverseMap = true)]
-    public class MenuItemCreateViewModel
+    public class MenuItemCreateViewModel : ExtensibleObject
     {
         [HiddenInput]
         public Guid? ParentId { get; set; }

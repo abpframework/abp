@@ -20,29 +20,31 @@ public class CmsKitAdminApplicationAutoMapperProfile : Profile
 {
     public CmsKitAdminApplicationAutoMapperProfile()
     {
-        CreateMap<CmsUser, Comments.CmsUserDto>();
+        CreateMap<CmsUser, Comments.CmsUserDto>().MapExtraProperties();
 
-        CreateMap<Comment, CommentDto>();
+        CreateMap<Comment, CommentDto>().MapExtraProperties();
         CreateMap<Comment, CommentWithAuthorDto>()
-            .Ignore(x => x.Author);
+            .Ignore(x => x.Author)
+            .MapExtraProperties();
 
-        CreateMap<Page, PageDto>();
+        CreateMap<Page, PageDto>().MapExtraProperties();
         CreateMap<Page, PageLookupDto>();
 
-        CreateMap<BlogPost, BlogPostDto>(MemberList.Destination);
+        CreateMap<BlogPost, BlogPostDto>(MemberList.Destination).MapExtraProperties();
         CreateMap<BlogPost, BlogPostListDto>()
-            .Ignore(d => d.BlogName);
-        CreateMap<CreateBlogPostDto, BlogPost>(MemberList.Source);
-        CreateMap<UpdateBlogPostDto, BlogPost>(MemberList.Source);
+            .Ignore(d => d.BlogName)
+            .MapExtraProperties();
+        CreateMap<CreateBlogPostDto, BlogPost>(MemberList.Source).MapExtraProperties();
+        CreateMap<UpdateBlogPostDto, BlogPost>(MemberList.Source).MapExtraProperties();
 
-        CreateMap<Blog, BlogDto>();
+        CreateMap<Blog, BlogDto>().MapExtraProperties();
 
         CreateMap<TagEntityTypeDefiniton, TagDefinitionDto>(MemberList.Destination);
 
-        CreateMap<Tag, TagDto>();
+        CreateMap<Tag, TagDto>().MapExtraProperties();
 
-        CreateMap<MediaDescriptor, MediaDescriptorDto>();
+        CreateMap<MediaDescriptor, MediaDescriptorDto>().MapExtraProperties();
 
-        CreateMap<MenuItem, MenuItemDto>();
+        CreateMap<MenuItem, MenuItemDto>().MapExtraProperties();
     }
 }
