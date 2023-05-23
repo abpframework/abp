@@ -13,7 +13,7 @@ public class CompressImageAttribute : ActionFilterAttribute
 {
     public string[] Parameters { get; }
     
-    protected IImageCompressor ImageCompressor { get; set; }
+    protected IImageCompressor ImageCompressor { get; set; } // TODO: Pass parameter instead of storing on a property
 
     public CompressImageAttribute(params string[] parameters)
     {

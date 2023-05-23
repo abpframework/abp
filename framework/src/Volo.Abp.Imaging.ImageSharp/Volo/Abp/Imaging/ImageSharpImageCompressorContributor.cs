@@ -23,63 +23,66 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         Options = options.Value;
     }
 
-    public async Task<ImageContributorResult<Stream>> TryCompressAsync(Stream stream, string mimeType = null,
+    public async Task<ImageContributorResult<Stream>> TryCompressAsync(
+        Stream stream, 
+        string mimeType = null,
         CancellationToken cancellationToken = default)
     {
-        if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
+        if (!mimeType.IsNullOrWhiteSpace() && !CanCompress(mimeType))
         {
-            return new ImageContributorResult<Stream>(stream, false, false);
+            return new ImageContributorResult<Stream>(stream, false);
         }
 
-        MemoryStream ms = null;
+        var (image, format) = await Image.LoadWithFormatAsync(stream, cancellationToken);
+        
+        if (!CanCompress(format.DefaultMimeType))
+        {
+            return new ImageContributorResult<Stream>(stream, false);
+        }
 
+        return new ImageContributorResult<Stream>(await GetStreamFromImage(stream, cancellationToken, image, format));
+    }
+
+    private async Task<Stream> GetStreamFromImage(
+        Stream stream, 
+        CancellationToken cancellationToken,
+        Image image,
+        IImageFormat format)
+    {
+        var memoryStream = new MemoryStream();
+        
         try
         {
-            var (image, format) = await SixLabors.ImageSharp.Image.LoadWithFormatAsync(stream, cancellationToken);
-            var beforeSize = stream.Length;
-            mimeType = format.DefaultMimeType;
+            await image.SaveAsync(memoryStream, GetEncoder(format), cancellationToken: cancellationToken);
 
-            if (!CanCompress(mimeType))
+            if (memoryStream.Length >= stream.Length)
             {
-                return new ImageContributorResult<Stream>(stream, false, false);
-            }
-            
-            IImageEncoder encoder = null;
-
-            switch (format.DefaultMimeType)
-            {
-                case MimeTypes.Image.Jpeg:
-                    encoder = Options.JpegEncoder ?? new JpegEncoder();
-                    break;
-                case MimeTypes.Image.Png:
-                    encoder = Options.PngEncoder ?? new PngEncoder();
-                    break;
-                case MimeTypes.Image.Webp:
-                    encoder = Options.WebpEncoder ?? new WebpEncoder();
-                    break;
-                case null:
-                    throw new NotSupportedException($"No encoder available for the given format: {format.Name}");
+                memoryStream.Dispose();
+                return stream;
             }
 
-            ms = new MemoryStream();
-            await image.SaveAsync(ms, encoder, cancellationToken: cancellationToken);
-            
-            var afterSize = ms.Length;
-            
-            if (afterSize >= beforeSize)
-            {
-                ms.Dispose();
-                return new ImageContributorResult<Stream>(stream, false);
-            }
-            ms.Position = 0;
-
-            return new ImageContributorResult<Stream>(ms, true);
+            memoryStream.Position = 0;
+            return memoryStream;
         }
-        catch (Exception e)
+        catch
         {
-            ms?.Dispose();
+            memoryStream.Dispose();
+            throw;
+        }
+    }
 
-            return new ImageContributorResult<Stream>(stream, false, true, e);
+    private IImageEncoder GetEncoder(IImageFormat format)
+    {
+        switch (format.DefaultMimeType)
+        {
+            case MimeTypes.Image.Jpeg:
+                return Options.JpegEncoder ?? new JpegEncoder();
+            case MimeTypes.Image.Png:
+                return  Options.PngEncoder ?? new PngEncoder();
+            case MimeTypes.Image.Webp:
+                return  Options.WebpEncoder ?? new WebpEncoder();
+            default:
+                throw new NotSupportedException($"No encoder available for the given format: {format.Name}");
         }
     }
 
