@@ -26,9 +26,4 @@ public static class CmsKitModuleExtensionConsts
         
         public const string GlobalResource = "GlobalResource";
     }
-
-    public static class ConfigurationNames
-    {
-        public const string AllowUserToEdit = "AllowUserToEdit";
-    }
 }
