@@ -177,10 +177,10 @@ public class MyModule : AbpModule
 
 `ImageSharpCompressOptions` is used to configure the ImageSharp image compression system. It has the following properties:
 
-* `JpegQuality`: The JPEG quality. (Default: `60`)
-* `PngCompressionLevel`: The PNG compression level. (Default: `PngCompressionLevel.Level9`)
-* `PngIgnoreMetadata`: Indicates whether the PNG metadata is ignored or not. (Default: `true`)
-* `WebpQuality`: The WebP quality. (Default: `60`)
+* `DefaultQuality`: The default quality of the JPEG and WebP encoders. (Default: `75`)
+* `JpegEncoder`: The JPEG encoder. (Default: `JpegEncoder` with `Quality` set to `DefaultQuality`)
+* `PngEncoder`: The PNG encoder. (Default: `PngEncoder` with `IgnoreMetadata` set to `true` and `CompressionLevel` set to `PngCompressionLevel.BestCompression`)	
+* `WebPEncoder`: The WebP encoder. (Default: `WebPEncoder` with `Quality` set to `DefaultQuality`)
 
 ## AspNetCore
 
