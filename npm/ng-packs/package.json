@@ -129,7 +129,7 @@
     "tslib": "^2.3.0",
     "tslint": "~6.1.0",
     "typescript": "5.0.4",
-    "zone.js": "0.11.4",
+    "zone.js": "~0.13.0",
     "@nx/angular": "16.1.4"
   },
   "lint-staged": {
