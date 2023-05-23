@@ -3,7 +3,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Formats.Webp;
@@ -34,28 +36,26 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         try
         {
             var (image, format) = await SixLabors.ImageSharp.Image.LoadWithFormatAsync(stream, cancellationToken);
-
+            var beforeSize = stream.Length;
             mimeType = format.DefaultMimeType;
 
             if (!CanCompress(mimeType))
             {
                 return new ImageContributorResult<Stream>(stream, false, false);
             }
+            
+            IImageEncoder encoder = null;
 
-            var encoder = image.GetConfiguration().ImageFormatsManager.FindEncoder(format);
-
-            switch (encoder)
+            switch (format.DefaultMimeType)
             {
-                case JpegEncoder jpegEncoder:
-                    jpegEncoder.Quality = Options.JpegQuality;
+                case MimeTypes.Image.Jpeg:
+                    encoder = Options.JpegEncoder ?? new JpegEncoder();
                     break;
-                case PngEncoder pngEncoder:
-                    pngEncoder.CompressionLevel = Options.PngCompressionLevel;
-                    pngEncoder.IgnoreMetadata = Options.PngIgnoreMetadata;
+                case MimeTypes.Image.Png:
+                    encoder = Options.PngEncoder ?? new PngEncoder();
                     break;
-                case WebpEncoder webPEncoder:
-                    webPEncoder.Quality = Options.WebpQuality;
-                    webPEncoder.UseAlphaCompression = true;
+                case MimeTypes.Image.Webp:
+                    encoder = Options.WebpEncoder ?? new WebpEncoder();
                     break;
                 case null:
                     throw new NotSupportedException($"No encoder available for the given format: {format.Name}");
@@ -63,6 +63,14 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
 
             ms = new MemoryStream();
             await image.SaveAsync(ms, encoder, cancellationToken: cancellationToken);
+            
+            var afterSize = ms.Length;
+            
+            if (afterSize >= beforeSize)
+            {
+                ms.Dispose();
+                return new ImageContributorResult<Stream>(stream, false);
+            }
             ms.Position = 0;
 
             return new ImageContributorResult<Stream>(ms, true);
