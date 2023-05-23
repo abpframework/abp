@@ -418,6 +418,10 @@
           "path": "Guid-Generation.md"
         },
         {
+          "text": "Imaging",
+          "path": "Imaging.md"
+        },
+        {
           "text": "JSON",
           "path": "JSON.md"
         },
@@ -458,10 +462,6 @@
         {
           "text": "Virtual File System",
           "path": "Virtual-File-System.md"
-        },
-        {
-          "text": "Imaging",
-          "path": "Imaging.md"
         }
       ]
     },
