@@ -70,6 +70,15 @@ namespace Volo.Blogging.Posts
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<List<Post>> GetLatestBlogPostsAsync(Guid blogId, int count, CancellationToken cancellationToken = default)
+        {
+            var query = (await GetDbSetAsync()).Where(p => p.BlogId == blogId)
+                .OrderByDescending(p => p.CreationTime)
+                .Take(count);
+
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public override async Task<IQueryable<Post>> WithDetailsAsync()
         {
             return (await GetQueryableAsync()).IncludeDetails();

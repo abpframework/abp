@@ -84,6 +84,11 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         AddReadOnlyAttribute(TagHelperOutput);
         AddPlaceholderAttribute(TagHelperOutput);
         AddInfoTextId(TagHelperOutput);
+        var optionsAttribute = GetAttributeAndModelExpression<DatePickerOptionsAttribute>(out var modelExpression);
+        if (optionsAttribute != null)
+        {
+            TagHelper.SetDatePickerOptions(optionsAttribute.GetDatePickerOptions(modelExpression.ModelExplorer));
+        }
 
         // Open and close button
         var openButtonContent = TagHelper.OpenButton
@@ -426,15 +431,6 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             attrList.Add(attr);
         }
 
-        var optionsAttribute = GetAttributeAndModelExpression<DatePickerOptionsAttribute>(out var modelExpression);
-        if (optionsAttribute != null)
-        {
-            foreach (var attr in ConvertDatePickerOptionsToAttributeList(optionsAttribute.GetDatePickerOptions(modelExpression.ModelExplorer)))
-            {
-                attrList.Add(attr);
-            }
-        }
-
         AddBaseTagAttributes(attrList);
 
         return attrList;
@@ -591,7 +587,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         abpButtonTagHelper.ButtonType = AbpButtonType.Outline_Secondary;
         abpButtonTagHelper.Icon = icon;
 
-        abpButtonTagHelper.Disabled = TagHelper.IsDisabled;
+        abpButtonTagHelper.Disabled = TagHelper.IsDisabled || GetAttribute<DisabledInput>() != null;
 
         if (!visible)
         {
