@@ -97,7 +97,7 @@ export abstract class AuthFlowStrategy {
           }),
           switchMap(redirectUri =>
             this.configState.getOne$('currentUser').pipe(
-              filter(user => Boolean(user?.isAuthenticated)),
+              filter(user => !!user?.isAuthenticated),
               tap(() => this.router.navigate([redirectUri])),
             ),
           ),
