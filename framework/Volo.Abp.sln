@@ -447,6 +447,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.ImageSharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.MagickNet", "src\Volo.Abp.Imaging.MagickNet\Volo.Abp.Imaging.MagickNet.csproj", "{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.Tests", "test\Volo.Abp.Imaging.Tests\Volo.Abp.Imaging.Tests.csproj", "{2BE6BDC7-A9A3-4E30-9099-A9EF4813F6FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1333,6 +1335,10 @@ Global
 		{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BE6BDC7-A9A3-4E30-9099-A9EF4813F6FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE6BDC7-A9A3-4E30-9099-A9EF4813F6FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE6BDC7-A9A3-4E30-9099-A9EF4813F6FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE6BDC7-A9A3-4E30-9099-A9EF4813F6FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1558,6 +1564,7 @@ Global
 		{44467427-E0BE-492C-B9B4-82B362C183C3} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{78340A37-219E-4F2D-9AC6-40A7B467EEEC} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{2BE6BDC7-A9A3-4E30-9099-A9EF4813F6FF} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
