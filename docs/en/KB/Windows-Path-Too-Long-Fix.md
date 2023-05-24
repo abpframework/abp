@@ -15,22 +15,25 @@ See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-director
 
 ## Solution 2
 
-If you encounter a "DirectoryNotFoundException - Could not find a part of the path" exception while using certain .NET MAUI build tools, it may be necessary to run them in 32-bit mode. To resolve this issue, you can try placing the solution in the root directory of your drive, such as `C:\Samples\`. However, please note that this solution is specific to this particular exception and may not be applicable to all cases of the Windows long path issue.
+You may encounter a "DirectoryNotFoundException - Could not find a part of the path" exception in Windows while using certain .NET MAUI build tools. This is related to some 32 bit .NET MAUI build tools. To resolve this issue, you can try placing the solution in the root directory of your drive, such as `C:\Projects\`. However, please note that this solution is specific to this particular exception and may not be applicable to all cases of the Windows long path issue.
+
 
 ## Solution 3
-You can define an alias for a path in Windows by creating a symbolic link using the mklink command in the Command Prompt. Here's an example:
+
+You can define an alias for a path in Windows by creating a symbolic link using the `mklink` command in the command prompt. Here's an example:
 
 ```
-mklink /D C:\myprojectname D:\my\long\path\to\solution\
+mklink /D C:\MyProject C:\my\long\path\to\solution\
 ```
-> Your **solution (.sln)** file should be in `D:\my\long\path\to\solution\`. If you link to an appliction, relative paths won't work.
 
-This command creates a symbolic link named `myprojectname` in the root of the `C:` drive that points to the `D:\my\long\path\to\solution\` directory. You can then use `C:\myprojectname` to access the contents of the `D:\my\long\path\to\solution\` directory.
+> Your **solution (.sln)** file should be in `C:\my\long\path\to\solution\`. Keep in mind that, if you have relative paths in your .csproj file, it will not work!
 
-> Note that you need to run the Command Prompt as an administrator to create symbolic links.
+This command creates a symbolic link named `MyProject` in the root of the `C:` drive that points to the `C:\my\long\path\to\solution\` directory. You can then use `C:\MyProject` to access the contents of the `C:\my\long\path\to\solution\` directory.
 
-Then you can try building your app.
+> Note that you need to run the command prompt as an administrator to the create symbolic links.
+
+Then you can try building your project with `dotnet build` command.
 
 ```
-dotnet build C:\myprojectname\MyProjectName.sln
+dotnet build C:\MyProject\MyProjectName.sln
 ```
