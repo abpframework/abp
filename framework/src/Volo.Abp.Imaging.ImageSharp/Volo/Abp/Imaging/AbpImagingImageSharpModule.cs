@@ -3,6 +3,6 @@
 namespace Volo.Abp.Imaging;
 
 [DependsOn(typeof(AbpImagingAbstractionsModule))]
-public class AbpImagingSharpModule : AbpModule
+public class AbpImagingImageSharpModule : AbpModule
 {
 }
