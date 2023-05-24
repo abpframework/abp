@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 # How to Fix "Filename too long" Error on Windows
 
 If you encounter the "filename too long" or "unzip" error on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 250 characters.
