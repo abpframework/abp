@@ -7,7 +7,7 @@ using Volo.CmsKit.Blogs;
 namespace Volo.CmsKit.Admin.Blogs;
 
 [Serializable]
-public class BlogPostDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTime, IHasConcurrencyStamp
+public class BlogPostDto : ExtensibleEntityDto<Guid>, IHasCreationTime, IHasModificationTime, IHasConcurrencyStamp
 {
     public Guid BlogId { get; set; }
 

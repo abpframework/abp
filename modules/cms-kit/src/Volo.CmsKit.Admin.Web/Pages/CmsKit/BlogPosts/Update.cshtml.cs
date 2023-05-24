@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
@@ -57,7 +58,7 @@ public class UpdateModel : CmsKitAdminPageModel
 
     [AutoMap(typeof(BlogPostDto))]
     [AutoMap(typeof(UpdateBlogPostDto), ReverseMap = true)]
-    public class UpdateBlogPostViewModel : IHasConcurrencyStamp
+    public class UpdateBlogPostViewModel : ExtensibleObject, IHasConcurrencyStamp
     {
         [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxTitleLength))]
         [Required]

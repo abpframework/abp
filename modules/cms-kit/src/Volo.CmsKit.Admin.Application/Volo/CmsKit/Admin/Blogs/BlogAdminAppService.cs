@@ -6,6 +6,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.ObjectExtending;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
@@ -56,7 +57,8 @@ public class BlogAdminAppService : CmsKitAdminAppServiceBase, IBlogAdminAppServi
     public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
     {
         var blog = await BlogManager.CreateAsync(input.Name, input.Slug);
-
+        input.MapExtraPropertiesTo(blog);
+        
         await BlogRepository.InsertAsync(blog, autoSave: true);
 
         await BlogFeatureManager.SetDefaultsAsync(blog.Id);
@@ -70,7 +72,7 @@ public class BlogAdminAppService : CmsKitAdminAppServiceBase, IBlogAdminAppServi
         var blog = await BlogRepository.GetAsync(id);
 
         blog = await BlogManager.UpdateAsync(blog, input.Name, input.Slug);
-
+        input.MapExtraPropertiesTo(blog);
         blog.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
         await BlogRepository.UpdateAsync(blog);
