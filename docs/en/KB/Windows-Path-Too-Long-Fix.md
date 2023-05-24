@@ -15,8 +15,7 @@ See https://github.com/msysgit/msysgit/wiki/Git-cannot-create-a-file-or-director
 
 ## Solution 2
 
-Some of the .NET MAUI build tools need to run in 32-bit. This is not an ABP issue but .NET MAUI problem.
-If you get "DirectoryNotFoundException - Could not find a part of the path" exception, put the solution in the root directory of your drive. For example `C:\Samples\`
+If you encounter a "DirectoryNotFoundException - Could not find a part of the path" exception while using certain .NET MAUI build tools, it may be necessary to run them in 32-bit mode. To resolve this issue, you can try placing the solution in the root directory of your drive, such as `C:\Samples\`. However, please note that this solution is specific to this particular exception and may not be applicable to all cases of the Windows long path issue.
 
 ## Solution 3
 You can define an alias for a path in Windows by creating a symbolic link using the mklink command in the Command Prompt. Here's an example:
