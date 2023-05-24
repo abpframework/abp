@@ -7,7 +7,7 @@ import {
   OAuthStorage,
 } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import {
   ConfigStateService,
   EnvironmentService,
@@ -87,6 +87,7 @@ export abstract class AuthFlowStrategy {
       this.oAuthService.events
         .pipe(
           filter(event => event.type === 'token_received' && !!this.oAuthService.state),
+          take(1),
           map(() => {
             const redirect_uri = decodeURIComponent(this.oAuthService.state);
 
