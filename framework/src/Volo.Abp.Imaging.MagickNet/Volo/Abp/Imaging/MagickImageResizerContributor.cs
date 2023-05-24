@@ -75,6 +75,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
             MimeTypes.Image.Gif => true,
             MimeTypes.Image.Bmp => true,
             MimeTypes.Image.Tiff => true,
+            MimeTypes.Image.Webp => true,
             _ => false
         };
     }
