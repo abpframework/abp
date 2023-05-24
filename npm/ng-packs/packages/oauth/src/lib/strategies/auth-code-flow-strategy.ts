@@ -14,7 +14,10 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   navigateToLogin(queryParams?: Params) {
-    this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
+    const additionalState = queryParams.returnUrl;
+    const cultureParams = this.getCultureParams(queryParams);
+
+    this.oAuthService.initCodeFlow(additionalState, cultureParams);
   }
 
   checkIfInternalAuth(queryParams?: Params) {
