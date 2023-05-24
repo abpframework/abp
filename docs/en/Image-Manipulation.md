@@ -1,10 +1,53 @@
-# Imaging
+# Image Manipulation
 The ABP Framework provides an abstraction to work with image compress/resize. Having such an abstraction has some benefits;
 
 * You can write library independent code. Therefore, you can change the underlying library with the minimum effort and code change.
 * You can use the predefined image resizer/compressor defined in the ABP without worrying about the underlying library's internal details.
 
 > The image resizer/compressor system is designed to be extensible. You can implement your own image resizer/compressor contributor and use it in your application.
+
+## Installation
+
+It is suggested to use the [ABP CLI](CLI.md) to install this package.
+
+### Using the ABP CLI
+
+Open a command line window in the folder of the project (.csproj file) and type the following command:
+
+```bash
+abp add-package Volo.Abp.Imaging.Abstractions
+```
+
+### Manual Installation
+
+If you want to manually install;
+
+1. Add the [Volo.Abp.Imaging.Abstractions](https://www.nuget.org/packages/Volo.Abp.Imaging.Abstractions) NuGet package to your project:
+
+```
+Install-Package Volo.Abp.Imaging.Abstractions
+```
+
+2. Add the `AbpImagingAbstractionsModule` to the dependency list of your module:
+
+```csharp
+[DependsOn(
+    //...other dependencies
+    typeof(AbpImagingAbstractionsModule) //Add the new module dependency
+    )]
+public class YourModule : AbpModule
+{
+}
+```
+
+## Providers
+
+The ABP Framework provides two image resizer/compressor providers:
+
+* [Magick.NET](#magicknet)
+* [ImageSharp](#imagesharp)
+
+> It needs a provider to work. You can use the [Magick.NET](#magicknet), [ImageSharp](#imagesharp) provider or implement your own provider. Provider does not exist, the input stream will be returned as it is.
 
 ## IImageResizer
 
@@ -13,9 +56,9 @@ You can inject `IImageResizer` and use it for image resize operations. Here is t
 ```csharp
 public interface IImageResizer
 {
-    Task<ImageProcessResult<Stream>> ResizeAsync(Stream stream, ImageResizeArgs resizeArgs, [CanBeNull]string mimeType = null, CancellationToken cancellationToken = default);
+    Task<ImageResizeResult<Stream>> ResizeAsync(Stream stream, ImageResizeArgs resizeArgs, [CanBeNull]string mimeType = null, CancellationToken cancellationToken = default);
     
-    Task<ImageProcessResult<byte[]>> ResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, [CanBeNull] string mimeType = null, CancellationToken cancellationToken = default);
+    Task<ImageResizeResult<byte[]>> ResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, [CanBeNull] string mimeType = null, CancellationToken cancellationToken = default);
 }
 ```
 
@@ -33,41 +76,6 @@ var result = await _imageResizer.ResizeAsync(
     mimeType: "image/jpeg"
 );
 ```
-
-## IImageCompressor
-
-You can inject `IImageCompressor` and use it for image compression operations. Here is the available operations in the `IImageCompressor` interface.
-
-```csharp
-public interface IImageCompressor
-{
-    Task<ImageProcessResult<Stream>> CompressAsync(
-        Stream stream,
-        [CanBeNull] string mimeType = null,
-        CancellationToken cancellationToken = default);
-    
-    Task<ImageProcessResult<byte[]>> CompressAsync(
-        byte[] bytes,
-        [CanBeNull] string mimeType = null,
-        CancellationToken cancellationToken = default);
-}
-```
-
-Usage example:
-
-```csharp
-var result = await _imageCompressor.CompressAsync(
-    stream,
-    mimeType: "image/jpeg"
-);
-```
-
-## ImageProcessResult
-
-The `ImageProcessResult` is a generic class that is used to return the result of the image processing operations. It has the following properties:
-
-* `Result`: The processed image stream or byte array.
-* `IsSuccess`: Indicates whether the operation is successful or not. (If the operation is not successful, the `Result` property will be your input stream or byte array.)
 
 ## ImageResizeArgs
 
@@ -102,11 +110,53 @@ The `IImageResizerContributor` is an interface that is used to implement a custo
 ```csharp
 public interface IImageResizerContributor
 {
-    Task<ImageContributorResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default);
+    Task<ImageResizeResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default);
     
-    Task<ImageContributorResult<byte[]>> TryResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default);
+    Task<ImageResizeResult<byte[]>> TryResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default);
 }
 ```
+
+## ImageResizeResult
+
+The `ImageResizeResult` is a generic class that is used to return the result of the image resize operations. It has the following properties:
+
+* `Result`: The resized image stream or byte array.
+* `State`: The state of the resize operation. (See the [ProcessState](#processstate) section for more information.)
+
+## IImageCompressor
+
+You can inject `IImageCompressor` and use it for image compression operations. Here is the available operations in the `IImageCompressor` interface.
+
+```csharp
+public interface IImageCompressor
+{
+    Task<ImageCompressResult<Stream>> CompressAsync(
+        Stream stream,
+        [CanBeNull] string mimeType = null,
+        CancellationToken cancellationToken = default);
+    
+    Task<ImageCompressResult<byte[]>> CompressAsync(
+        byte[] bytes,
+        [CanBeNull] string mimeType = null,
+        CancellationToken cancellationToken = default);
+}
+```
+
+Usage example:
+
+```csharp
+var result = await _imageCompressor.CompressAsync(
+    stream,
+    mimeType: "image/jpeg"
+);
+```
+
+## ImageCompressResult
+
+The `ImageCompressResult` is a generic class that is used to return the result of the image compression operations. It has the following properties:
+
+* `Result`: The compressed image stream or byte array.
+* `State`: The state of the compression operation. (See the [ProcessState](#processstate) section for more information.)
 
 ## IImageCompressorContributor
 
@@ -115,19 +165,23 @@ The `IImageCompressorContributor` is an interface that is used to implement a cu
 ```csharp
 public interface IImageCompressorContributor
 {
-    Task<ImageContributorResult<Stream>> TryCompressAsync(Stream stream, string mimeType = null, CancellationToken cancellationToken = default);
-    Task<ImageContributorResult<byte[]>> TryCompressAsync(byte[] bytes, string mimeType = null, CancellationToken cancellationToken = default);
+    Task<ImageCompressResult<Stream>> TryCompressAsync(Stream stream, string mimeType = null, CancellationToken cancellationToken = default);
+    Task<ImageCompressResult<byte[]>> TryCompressAsync(byte[] bytes, string mimeType = null, CancellationToken cancellationToken = default);
 }
 ```
 
-## ImageContributorResult
+## ProcessState
 
-The `ImageContributorResult` is a generic class that is used to return the result of the image processing operations. It has the following properties:
+The `ProcessState` is an enum that is used to define the state of the image resize/compression operations. It has the following values:
 
-* `Result`: The processed image stream or byte array.
-* `IsSuccess`: Indicates whether the operation is successful or not. (If the operation is not successful, the `Result` property will be your input stream or byte array.)
-* `IsSupported`: Indicates whether the contributor supports the given image or not. (If the contributor does not support the given image, the `Result` property will be your input stream or byte array.)
-* `Exception`: The exception that is thrown during the image processing operation. (If the operation is successful, this property will be null.)
+```csharp
+public enum ProcessState : byte
+{
+    Done = 1,
+    Canceled = 2,
+    Unsupported = 3,
+}
+```
 
 ## Configuration
 
@@ -137,7 +191,7 @@ The `ImageContributorResult` is a generic class that is used to return the resul
 
 * `DefaultResizeMode`: The default resize mode. (Default: `ImageResizeMode.None`)
 
-## Magick.NET
+## [Magick.NET](https://github.com/dlemstra/Magick.NET)
 
 Add the `Volo.Abp.Imaging.MagickNet` NuGet package to your project and use the `AbpImagingMagickNetModule` module.
 
@@ -159,7 +213,7 @@ public class MyModule : AbpModule
 * `IgnoreUnsupportedFormats`: Indicates whether the unsupported formats are ignored or not. (Default: `false`)
 * `Lossless`: Indicates whether the lossless compression is enabled or not. (Default: `false`)
 
-## ImageSharp
+## [ImageSharp](https://github.com/SixLabors/ImageSharp)
 
 Add the `Volo.Abp.Imaging.ImageSharp` NuGet package to your project and use the `AbpImagingImageSharpModule` module.
 
@@ -182,9 +236,11 @@ public class MyModule : AbpModule
 * `PngEncoder`: The PNG encoder. (Default: `PngEncoder` with `IgnoreMetadata` set to `true` and `CompressionLevel` set to `PngCompressionLevel.BestCompression`)	
 * `WebPEncoder`: The WebP encoder. (Default: `WebPEncoder` with `Quality` set to `DefaultQuality`)
 
-## AspNetCore
+## ASP.NET Core Integration
 
 Add the `Volo.Abp.Imaging.AspNetCore` NuGet package to your project and use the `AbpImagingAspNetCoreModule` module.
+
+> It needs a provider to work. You can use the [Magick.NET](#magicknet), [ImageSharp](#imagesharp) provider or implement your own provider. Provider does not exist, the input stream will be returned as it is.
 
 ```csharp
 [DependsOn(typeof(AbpImagingAspNetCoreModule))]
