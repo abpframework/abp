@@ -22,11 +22,11 @@ If you get "DirectoryNotFoundException - Could not find a part of the path" exce
 You can define an alias for a path in Windows by creating a symbolic link using the mklink command in the Command Prompt. Here's an example:
 
 ```
-mklink /D C:\myalias D:\my\long\path\to\solution\
+mklink /D C:\myprojectname D:\my\long\path\to\solution\
 ```
 > Your **solution (.sln)** file should be in `D:\my\long\path\to\solution\`. If you link to an appliction, relative paths won't work.
 
-This command creates a symbolic link named `myalias` in the root of the `C:` drive that points to the `D:\my\long\path\to\solution\` directory. You can then use `C:\myprojectname` to access the contents of the `D:\my\long\path\to\solution\` directory.
+This command creates a symbolic link named `myprojectname` in the root of the `C:` drive that points to the `D:\my\long\path\to\solution\` directory. You can then use `C:\myprojectname` to access the contents of the `D:\my\long\path\to\solution\` directory.
 
 > Note that you need to run the Command Prompt as an administrator to create symbolic links.
 
