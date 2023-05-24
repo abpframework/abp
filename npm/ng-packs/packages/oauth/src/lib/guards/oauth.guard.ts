@@ -7,7 +7,7 @@ import { AuthService, IAuthGuard } from '@abp/ng.core';
 @Injectable({
   providedIn: 'root',
 })
-export class AbpOAuthGuard implements CanActivate, IAuthGuard {
+export class AbpOAuthGuard  implements IAuthGuard {
   constructor(private oauthService: OAuthService, private authService: AuthService) {}
 
   canActivate(

@@ -13,7 +13,7 @@ if (-Not $Version) {
 }
 
 if (-Not $Registry) {
-  $Registry = "https://registry.npmjs.org";
+  $Registry = "http://0.0.0.0:4873/";
 }
 
 $PacksPublishCommand = "npm run lerna -- exec 'npm publish --registry $Registry'"

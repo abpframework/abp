@@ -1,0 +1,45 @@
+{
+  "name": "feature-management",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/feature-management/src",
+  "prefix": "abp",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/feature-management"],
+      "options": {
+        "project": "packages/feature-management/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/feature-management/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/feature-management/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/packages/feature-management"],
+      "options": {
+        "jestConfig": "packages/feature-management/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/feature-management/src/**/*.ts",
+          "packages/feature-management/src/**/*.html"
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared"]
+}
