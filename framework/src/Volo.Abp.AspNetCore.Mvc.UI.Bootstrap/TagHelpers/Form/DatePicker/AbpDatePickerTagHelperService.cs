@@ -64,10 +64,14 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
     protected override void AddBaseTagAttributes(TagHelperAttributeList attributes)
     {
         if (TagHelper.AspFor != null && 
-            TagHelper.AspFor.Model != null && 
+            TagHelper.AspFor.Model != null &&
             SupportedInputTypes.TryGetValue(TagHelper.AspFor.Metadata.ModelType, out var convertFunc))
         {
-            attributes.Add("data-date", convertFunc(TagHelper.AspFor.Model));
+            var convert = convertFunc(TagHelper.AspFor.Model);
+            if(!convert.IsNullOrWhiteSpace())
+            {
+                attributes.Add("data-date", convert);
+            }
         }
     }
 
