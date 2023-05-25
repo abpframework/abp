@@ -5,6 +5,7 @@ import { Session } from '../models/session';
 import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
 import { InternalStore } from '../utils/internal-store-utils';
 import { ConfigStateService } from './config-state.service';
+import { AbpLocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,16 +14,19 @@ export class SessionStateService {
   private readonly store = new InternalStore({} as Session.State);
 
   private updateLocalStorage = () => {
-    localStorage.setItem('abpSession', JSON.stringify(this.store.state));
+    this.localStorageService.setItem('abpSession', JSON.stringify(this.store.state));
   };
 
-  constructor(private configState: ConfigStateService) {
+  constructor(
+    private configState: ConfigStateService,
+    private localStorageService: AbpLocalStorageService,
+  ) {
     this.init();
     this.setInitialLanguage();
   }
 
   private init() {
-    const session = localStorage.getItem('abpSession');
+    const session = this.localStorageService.getItem('abpSession');
     if (session) {
       this.store.set(JSON.parse(session));
     }

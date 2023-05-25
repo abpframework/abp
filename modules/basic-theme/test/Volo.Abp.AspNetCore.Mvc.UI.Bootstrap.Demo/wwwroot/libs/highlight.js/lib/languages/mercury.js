@@ -42,6 +42,7 @@ module.exports = function(hljs) {
     begin: '\\\\[abfnrtv]\\|\\\\x[0-9a-fA-F]*\\\\\\|%[-+# *.0-9]*[dioxXucsfeEgGp]',
     relevance: 0
   };
+  STRING.contains = STRING.contains.slice() // we need our own copy of contains
   STRING.contains.push(STRING_FMT);
 
   var IMPLICATION = {
@@ -75,7 +76,8 @@ module.exports = function(hljs) {
       hljs.NUMBER_MODE,
       ATOM,
       STRING,
-      {begin: /:-/} // relevance booster
+      {begin: /:-/}, // relevance booster
+      {begin: /\.$/} // relevance booster
     ]
   };
 };

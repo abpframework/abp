@@ -36,7 +36,7 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, ITransientDependency
         var pageHandlerExecutedContext = await next();
         if (pageHandlerExecutedContext.Exception == null)
         {
-            return; ;
+            return;
         }
 
         await HandleAndWrapException(pageHandlerExecutedContext);

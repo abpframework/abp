@@ -393,7 +393,7 @@ One advantage of using interface for a MongoDbContext is then it becomes replace
 
 Once you properly define and use an interface for a MongoDbContext , then any other implementation can use the following ways to replace it:
 
-**ReplaceDbContextAttribute**
+#### ReplaceDbContext Attribute
 
 ```csharp
 [ReplaceDbContext(typeof(IBookStoreMongoDbContext))]
@@ -403,7 +403,7 @@ public class OtherMongoDbContext : AbpMongoDbContext, IBookStoreMongoDbContext
 }
 ```
 
-**ReplaceDbContext option**
+#### ReplaceDbContext Option
 
 ```csharp
 context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
@@ -414,6 +414,22 @@ context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
 ```
 
 In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. This feature allows you to have multiple MongoDbContext (one per module) on development, but single MongoDbContext (implements all interfaces of all MongoDbContexts) on runtime.
+
+#### Replacing with Multi-Tenancy
+
+It is also possible to replace a DbContext based on the [multi-tenancy](Multi-Tenancy.md) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
+
+**Example:** Replace DbContext only for tenants, using the `ReplaceDbContext` attribute
+
+````csharp
+[ReplaceDbContext(typeof(IBookStoreDbContext), MultiTenancySides.Tenant)]
+````
+
+**Example:** Replace DbContext only for the host side, using the `ReplaceDbContext` method
+
+````csharp
+options.ReplaceDbContext<IBookStoreDbContext>(MultiTenancySides.Host);
+````
 
 ### Customize Bulk Operations
 

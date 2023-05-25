@@ -142,6 +142,7 @@
     "MinimumSearchContent": "U moet minimaal 3 tekens invoeren!",
     "Volo.AbpIo.Domain:060001": "Bron-URL (\"{PostUrl}\") is geen Github-URL",
     "Volo.AbpIo.Domain:060002": "Artikelinhoud is niet beschikbaar via Github(\"{PostUrl}\") bron.",
-    "Volo.AbpIo.Domain:060003": "Geen artikelinhoud gevonden!"
+    "Volo.AbpIo.Domain:060003": "Geen artikelinhoud gevonden!",
+    "IConsentToMedium": "Ik stem in met de publicatie van dit bericht op https://medium.com/volosoft."
   }
 }

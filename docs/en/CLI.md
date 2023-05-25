@@ -138,6 +138,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC.
       * `angular`: Angular UI.
+      * `blazor`: Blazor UI.
       * `blazor-server`: Blazor Server UI.
       * `none`: Without UI.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:

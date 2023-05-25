@@ -21,6 +21,26 @@ export class PagedResultDto<T> extends ListResultDto<T> {
   }
 }
 
+export class ExtensibleObject {
+  extraProperties?: ABP.Dictionary<any>;
+
+  constructor(initialValues: Partial<ExtensibleObject> = {}) {
+    for (const key in initialValues) {
+      if (checkHasProp(initialValues, key) && initialValues[key] !== undefined) {
+        this[key] = initialValues[key];
+      }
+    }
+  }
+}
+
+export class ExtensibleEntityDto<TKey = string> extends ExtensibleObject {
+  id?: TKey;
+
+  constructor(initialValues: Partial<ExtensibleEntityDto<TKey>> = {}) {
+    super(initialValues);
+  }
+}
+
 export class LimitedResultRequestDto {
   maxResultCount = 10;
 
@@ -33,6 +53,14 @@ export class LimitedResultRequestDto {
   }
 }
 
+export class ExtensibleLimitedResultRequestDto extends ExtensibleEntityDto {
+  maxResultCount = 10;
+
+  constructor(initialValues: Partial<ExtensibleLimitedResultRequestDto> = {}) {
+    super(initialValues);
+  }
+}
+
 export class PagedResultRequestDto extends LimitedResultRequestDto {
   skipCount?: number;
 
@@ -41,10 +69,26 @@ export class PagedResultRequestDto extends LimitedResultRequestDto {
   }
 }
 
+export class ExtensiblePagedResultRequestDto extends ExtensibleLimitedResultRequestDto {
+  skipCount?: number;
+
+  constructor(initialValues: Partial<ExtensiblePagedResultRequestDto> = {}) {
+    super(initialValues);
+  }
+}
+
 export class PagedAndSortedResultRequestDto extends PagedResultRequestDto {
   sorting?: string;
 
   constructor(initialValues: Partial<PagedAndSortedResultRequestDto> = {}) {
+    super(initialValues);
+  }
+}
+
+export class ExtensiblePagedAndSortedResultRequestDto extends ExtensiblePagedResultRequestDto {
+  sorting?: string;
+
+  constructor(initialValues: Partial<ExtensiblePagedAndSortedResultRequestDto> = {}) {
     super(initialValues);
   }
 }
@@ -123,26 +167,6 @@ export class FullAuditedEntityWithUserDto<
   deleter?: TUserDto;
 
   constructor(initialValues: Partial<FullAuditedEntityWithUserDto<TUserDto, TPrimaryKey>> = {}) {
-    super(initialValues);
-  }
-}
-
-export class ExtensibleObject {
-  extraProperties?: ABP.Dictionary<any>;
-
-  constructor(initialValues: Partial<ExtensibleObject> = {}) {
-    for (const key in initialValues) {
-      if (checkHasProp(initialValues, key)) {
-        this[key] = initialValues[key];
-      }
-    }
-  }
-}
-
-export class ExtensibleEntityDto<TKey = string> extends ExtensibleObject {
-  id?: TKey;
-
-  constructor(initialValues: Partial<ExtensibleEntityDto<TKey>> = {}) {
     super(initialValues);
   }
 }

@@ -184,6 +184,7 @@
     "Layout_Title": "{0} | ABP-közösség",
     "Layout_MetaDescription": "Az ABP Community egy olyan környezet, ahol az emberek megoszthatnak bejegyzéseket az ABP keretrendszerről, és követhetik a projekteket.",
     "Index_Page_CommunityIntroduction": "Ez az ABP Framework, a .NET és a szoftverfejlesztés központja. Elolvashatja a cikkeket, megnézheti az oktatóvideókat, tájékozódhat az ABP fejlesztési előrehaladásáról és az ABP-vel kapcsolatos eseményekről, segíthet más fejlesztőknek, és megoszthatja szakértelmét az ABP közösséggel.",
-    "TagsInArticle": "Címkék a cikkben"
+    "TagsInArticle": "Címkék a cikkben",
+    "IConsentToMedium": "Hozzájárulok a bejegyzés közzétételéhez a https://medium.com/volosoft oldalon."
   }
 }

@@ -18,7 +18,7 @@ public class MyProjectNameMenuContributor : IMenuContributor
         }
     }
 
-    private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+    private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
         var administration = context.Menu.GetAdministration();
         var l = context.GetLocalizer<MyProjectNameResource>();
@@ -45,5 +45,7 @@ public class MyProjectNameMenuContributor : IMenuContributor
 
         administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
+
+        return Task.CompletedTask;
     }
 }

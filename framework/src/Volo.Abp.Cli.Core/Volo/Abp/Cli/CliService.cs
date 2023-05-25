@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Memory;
-using Volo.Abp.Cli.NuGet;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
@@ -27,14 +27,14 @@ public class CliService : ITransientDependency
     protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
     protected ICommandSelector CommandSelector { get; }
     protected IServiceScopeFactory ServiceScopeFactory { get; }
-    protected NuGetService NuGetService { get; }
+    protected PackageVersionCheckerService PackageVersionCheckerService { get; }
     public ICmdHelper CmdHelper { get; }
 
     public CliService(
         ICommandLineArgumentParser commandLineArgumentParser,
         ICommandSelector commandSelector,
         IServiceScopeFactory serviceScopeFactory,
-        NuGetService nugetService,
+        PackageVersionCheckerService nugetService,
         ICmdHelper cmdHelper,
         MemoryService memoryService)
     {
@@ -42,7 +42,7 @@ public class CliService : ITransientDependency
         CommandLineArgumentParser = commandLineArgumentParser;
         CommandSelector = commandSelector;
         ServiceScopeFactory = serviceScopeFactory;
-        NuGetService = nugetService;
+        PackageVersionCheckerService = nugetService;
         CmdHelper = cmdHelper;
 
         Logger = NullLogger<CliService>.Instance;
@@ -61,6 +61,7 @@ public class CliService : ITransientDependency
             await CheckCliVersionAsync(currentCliVersion);
         }
 #endif
+
         try
         {
             if (commandLineArgs.IsCommand("prompt"))
@@ -175,24 +176,22 @@ public class CliService : ITransientDependency
         {
             return;
         }
-        
-        var assembly = typeof(CliService).Assembly;
-        var toolPath = GetToolPath(assembly);
-        var updateChannel = GetUpdateChannel(currentCliVersion);
 
         try
         {
-            var latestVersion = await GetLatestVersion(updateChannel);
+            var assembly = typeof(CliService).Assembly;
+            var toolPath = GetToolPath(assembly);
+            var updateChannel = GetUpdateChannel(currentCliVersion);
 
-            if (latestVersion != null && latestVersion > currentCliVersion)
+            var latestVersionInfo = await GetLatestVersion(updateChannel);
+            if (latestVersionInfo != null && latestVersionInfo.Version > currentCliVersion)
             {
-                LogNewVersionInfo(updateChannel, latestVersion, toolPath);
+                LogNewVersionInfo(updateChannel, latestVersionInfo.Version, toolPath, latestVersionInfo.Message);
             }
         }
         catch (Exception e)
         {
-            Logger.LogWarning("Unable to retrieve the latest version");
-            Logger.LogWarning(e.Message);
+            Logger.LogWarning("Unable to retrieve the latest version: " + e.Message);
         }
     }
 
@@ -200,13 +199,17 @@ public class CliService : ITransientDependency
     {
         try
         {
-            var latestTime = await _memoryService.GetAsync(CliConsts.MemoryKeys.LatestCliVersionCheckDate);
-
-            if (latestTime != null && DateTime.Now - DateTime.Parse(latestTime, CultureInfo.InvariantCulture) < TimeSpan.FromDays(1))
+            var latestTimeAsString = await _memoryService.GetAsync(CliConsts.MemoryKeys.LatestCliVersionCheckDate);
+            if (DateTime.TryParse(latestTimeAsString,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None, out var latestTimeParsed))
             {
-                return false;
+                if (DateTime.Now.Subtract(latestTimeParsed).TotalDays < 1)
+                {
+                    return false;
+                }
             }
-        
+
             await _memoryService.SetAsync(CliConsts.MemoryKeys.LatestCliVersionCheckDate, DateTime.Now.ToString(CultureInfo.InvariantCulture));
 
             return true;
@@ -282,18 +285,18 @@ public class CliService : ITransientDependency
         return UpdateChannel.Prerelease;
     }
 
-    private async Task<SemanticVersion> GetLatestVersion(UpdateChannel updateChannel)
+    private async Task<LatestVersionInfo> GetLatestVersion(UpdateChannel updateChannel)
     {
         switch (updateChannel)
         {
             case UpdateChannel.Stable:
-                return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli");
+                return await PackageVersionCheckerService.GetLatestVersionOrNullAsync("Volo.Abp.Cli");
 
             case UpdateChannel.Prerelease:
-                return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeReleaseCandidates: true);
+                return await PackageVersionCheckerService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeReleaseCandidates: true);
 
             case UpdateChannel.Nightly:
-                return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true);
+                return await PackageVersionCheckerService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true);
 
             default:
                 return default;
@@ -306,11 +309,17 @@ public class CliService : ITransientDependency
         return globalPaths.Select(Environment.ExpandEnvironmentVariables).Contains(toolPath);
     }
 
-    private void LogNewVersionInfo(UpdateChannel updateChannel, SemanticVersion latestVersion, string toolPath)
+    private void LogNewVersionInfo(UpdateChannel updateChannel, SemanticVersion latestVersion, string toolPath, string message = null)
     {
         var toolPathArg = IsGlobalTool(toolPath) ? "-g" : $"--tool-path {toolPath}";
 
         Logger.LogWarning($"ABP CLI has a newer {updateChannel.ToString().ToLowerInvariant()} version {latestVersion}, please update to get the latest features and fixes.");
+        
+        if (!string.IsNullOrWhiteSpace(message))
+        {
+            Logger.LogWarning(message);
+        }
+        
         Logger.LogWarning(string.Empty);
         Logger.LogWarning("Update Command: ");
 
