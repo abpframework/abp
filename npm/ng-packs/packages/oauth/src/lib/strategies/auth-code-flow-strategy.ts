@@ -15,7 +15,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 
   navigateToLogin(queryParams?: Params) {
     let additionalState = '';
-    if (!!queryParams?.returnUrl) {
+    if (queryParams?.returnUrl) {
       additionalState = queryParams.returnUrl;
     }
 
