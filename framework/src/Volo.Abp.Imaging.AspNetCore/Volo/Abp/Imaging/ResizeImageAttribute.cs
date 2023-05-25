@@ -60,7 +60,7 @@ public class ResizeImageAttribute : ActionFilterAttribute
     
     protected virtual async Task<IFormFile> ResizeImageAsync(IFormFile file, IImageResizer imageResizer)
     {
-        if(file.ContentType == null || !file.ContentType.StartsWith("image/"))
+        if(file.Headers == null ||  file.ContentType == null || !file.ContentType.StartsWith("image/"))
         {
             return file;
         }

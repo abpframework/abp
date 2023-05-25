@@ -47,7 +47,7 @@ public class CompressImageAttribute : ActionFilterAttribute
     
     protected virtual async Task<IFormFile> CompressImageAsync(IFormFile file, IImageCompressor imageCompressor)
     {
-        if(file.ContentType == null || !file.ContentType.StartsWith("image/"))
+        if(file.Headers == null || file.ContentType == null || !file.ContentType.StartsWith("image/"))
         {
             return file;
         }
