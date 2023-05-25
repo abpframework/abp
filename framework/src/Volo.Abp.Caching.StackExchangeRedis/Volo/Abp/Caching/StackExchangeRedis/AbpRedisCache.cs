@@ -18,9 +18,9 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
     protected static readonly string AbsoluteExpirationKey;
     protected static readonly string SlidingExpirationKey;
     protected static readonly string DataKey;
-    protected static readonly string SetScript;
     protected static readonly long NotPresent;
 
+    private readonly static FieldInfo SetScriptField;
     private readonly static FieldInfo RedisDatabaseField;
     private readonly static MethodInfo ConnectMethod;
     private readonly static MethodInfo ConnectAsyncMethod;
@@ -39,6 +39,8 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
 
         RedisDatabaseField = Check.NotNull(type.GetField("_cache", BindingFlags.Instance | BindingFlags.NonPublic), nameof(RedisDatabaseField))!;
 
+        SetScriptField = Check.NotNull(type.GetField("_setScript", BindingFlags.Instance | BindingFlags.NonPublic), nameof(SetScriptField))!;
+        
         ConnectMethod = Check.NotNull(type.GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic), nameof(ConnectMethod))!;
 
         ConnectAsyncMethod = Check.NotNull(type.GetMethod("ConnectAsync", BindingFlags.Instance | BindingFlags.NonPublic), nameof(ConnectAsyncMethod))!;
@@ -56,8 +58,6 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         DataKey = type.GetField("DataKey", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!.ToString()!;
 
         NotPresent = type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null).To<int>();
-        
-        SetScript = type.GetField("_setScript", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(null)!.ToString()!;
     }
 
     public AbpRedisCache(IOptions<RedisCacheOptions> optionsAccessor)
@@ -276,7 +276,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
 
         for (var i = 0; i < itemArray.Length; i++)
         {
-            tasks[i] = RedisDatabase.ScriptEvaluateAsync(SetScript, new RedisKey[] { Instance + itemArray[i].Key },
+            tasks[i] = RedisDatabase.ScriptEvaluateAsync(GetSetScript(), new RedisKey[] { Instance + itemArray[i].Key },
                 new RedisValue[]
                 {
                         absoluteExpiration?.Ticks ?? NotPresent,
@@ -320,5 +320,10 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
     private IDatabase? GetRedisDatabase()
     {
         return _redisDatabase ??= RedisDatabaseField.GetValue(this) as IDatabase;
+    }
+    
+    private string GetSetScript()
+    {
+        return SetScriptField.GetValue(this)!.ToString()!;
     }
 }
