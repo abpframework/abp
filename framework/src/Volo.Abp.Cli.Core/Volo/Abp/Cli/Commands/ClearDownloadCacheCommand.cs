@@ -15,7 +15,6 @@ public class ClearDownloadCacheCommand : IConsoleCommand, ITransientDependency
 
     public ILogger<ClearDownloadCacheCommand> Logger { get; set; }
 
-
     public ClearDownloadCacheCommand()
     {
         Logger = NullLogger<ClearDownloadCacheCommand>.Instance;
