@@ -22,7 +22,9 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
         var body = (await JsonDocument.ParseAsync(HttpContext.Request.Body));
 
         if (body.RootElement.TryGetProperty("data_base64", out var base64EncodedData))
+        {
             body = JsonDocument.Parse(base64EncodedData.GetBytesFromBase64());
+        }
 
         var id = body.RootElement.GetProperty("id").GetString();
         var pubSubName = body.RootElement.GetProperty("pubsubname").GetString();
