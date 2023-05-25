@@ -619,9 +619,7 @@
                     options.separator = separator;
                 }
 
-                if(options.autoUpdateInput){
-                    fillInput($input, startDate, endDate, options);
-                }
+                fillInput($input, startDate, endDate, options);
                 
                 $input.on('apply.daterangepicker', function (ev, picker) {
                     if (singleDatePicker) {
