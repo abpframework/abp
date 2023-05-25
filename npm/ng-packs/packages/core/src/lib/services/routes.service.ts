@@ -1,13 +1,20 @@
 import { Injectable, Injector, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, map } from 'rxjs';
 import { ABP } from '../models/common';
+import { OTHERS_GROUP } from '../tokens';
 import { pushValueTo } from '../utils/array-utils';
-import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils';
+import {
+  BaseTreeNode,
+  createTreeFromList,
+  TreeNode,
+  RouteGroup,
+  createGroupMap,
+} from '../utils/tree-utils';
 import { ConfigStateService } from './config-state.service';
 import { PermissionService } from './permission.service';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export abstract class AbstractTreeService<T extends {[key: string | number | symbol]: any}> {
+export abstract class AbstractTreeService<T extends { [key: string | number | symbol]: any }> {
   abstract id: string;
   abstract parentId: string;
   abstract hide: (item: T) => boolean;
@@ -16,6 +23,8 @@ export abstract class AbstractTreeService<T extends {[key: string | number | sym
   private _flat$ = new BehaviorSubject<T[]>([]);
   private _tree$ = new BehaviorSubject<TreeNode<T>[]>([]);
   private _visible$ = new BehaviorSubject<TreeNode<T>[]>([]);
+
+  protected othersGroup: string;
 
   get flat(): T[] {
     return this._flat$.value;
@@ -48,6 +57,15 @@ export abstract class AbstractTreeService<T extends {[key: string | number | sym
       item => item[this.parentId],
       item => BaseTreeNode.create(item),
     );
+  }
+
+  protected createGroupedTree(list: TreeNode<T>[]): RouteGroup<T>[] | undefined {
+    const map = createGroupMap<T>(list, this.othersGroup);
+    if (!map) {
+      return undefined;
+    }
+
+    return Array.from(map, ([key, items]) => ({ group: key, items }));
   }
 
   private filterWith(setOrMap: Set<string> | Map<string, T>): T[] {
@@ -157,6 +175,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
       .createOnUpdateStream(state => state)
       .subscribe(() => this.refresh());
     this.permissionService = injector.get(PermissionService);
+    this.othersGroup = injector.get(OTHERS_GROUP);
   }
 
   protected isGranted({ requiredPolicy }: T): boolean {
@@ -180,4 +199,19 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 }
 
 @Injectable({ providedIn: 'root' })
-export class RoutesService extends AbstractNavTreeService<ABP.Route> {}
+export class RoutesService extends AbstractNavTreeService<ABP.Route> {
+  private hasPathOrChild(item: TreeNode<ABP.Route>): boolean {
+    return Boolean(item.path) || this.hasChildren(item.name);
+  }
+
+  get groupedVisible(): RouteGroup<ABP.Route>[] | undefined {
+    return this.createGroupedTree(this.visible.filter(item => this.hasPathOrChild(item)));
+  }
+
+  get groupedVisible$(): Observable<RouteGroup<ABP.Route>[] | undefined> {
+    return this.visible$.pipe(
+      map(items => items.filter(item => this.hasPathOrChild(item))),
+      map(visible => this.createGroupedTree(visible)),
+    );
+  }
+}

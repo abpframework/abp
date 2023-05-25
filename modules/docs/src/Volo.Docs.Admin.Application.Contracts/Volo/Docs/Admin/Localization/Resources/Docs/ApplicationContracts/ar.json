@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "رمز اللغة",
     "DisplayName:Version": "إصدار",
     "Documents": "وثائق",
-    "RemoveFromCache": "حذف من الذاكرة",
+    "RemoveFromCache": "إزالة من ذاكرة التخزين المؤقت وإعادة الفهرس",
     "Reindex": "إعادة الفهرسة",
     "ReindexCompleted": "تمت إعادة الفهرسة",
-    "RemovedFromCache": "تم الحذف من ذاكرة التخزين",
-    "RemoveFromCacheConfirmation": "هل أنت متأكد من حذف هذا العنصر من ذاكرة التخزين؟",
-    "ReIndexDocumentConfirmation": "هل أنت متأكد من إعادة فهرسة هذا العنصر؟",
+    "RemovedFromCache": "تمت إزالته من ذاكرة التخزين المؤقت وإعادة فهرسته",
+    "RemoveFromCacheConfirmation": "هل تريد بالتأكيد إعادة فهرسة  \"{0} \"؟",
+    "ReIndexDocumentConfirmation": "هل تريد بالتأكيد إعادة فهرسة \"{0}\"؟",
     "DeleteFromDatabase": "حذف من قاعدة البيانات",
     "Deleted": "محذوف",
     "Search": "بحث",
@@ -55,6 +55,7 @@
     "LanguageCode": "رمز اللغة",
     "FileName": "اسم الملف",
     "LastCachedTime": "وقت ذاكرة التخزين",
-    "Project": "مشروع "
+    "Project": "مشروع ",
+    "RemoveCacheAndReIndexConfirmation": "ستتم إزالة المستند \"{0}\" من ذاكرة التخزين المؤقت وإعادة فهرسته. هل تؤكد؟"
   }
 }

@@ -24,7 +24,7 @@ public class AbpAuditingModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(AuditingInterceptorRegistrar.RegisterIfNeeded);
+        context.Services.OnRegistered(AuditingInterceptorRegistrar.RegisterIfNeeded);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

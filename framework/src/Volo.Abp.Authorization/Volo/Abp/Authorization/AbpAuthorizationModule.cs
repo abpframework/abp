@@ -22,7 +22,7 @@ public class AbpAuthorizationModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
+        context.Services.OnRegistered(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
         AutoAddDefinitionProviders(context.Services);
     }
 
@@ -64,7 +64,7 @@ public class AbpAuthorizationModule : AbpModule
     {
         var definitionProviders = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IPermissionDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {

@@ -14,12 +14,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers;
 
 public class ErrorController : AbpController
 {
-    private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
-    private readonly IHttpExceptionStatusCodeFinder _statusCodeFinder;
-    private readonly IStringLocalizer<AbpUiResource> _localizer;
-    private readonly AbpErrorPageOptions _abpErrorPageOptions;
-    private readonly IExceptionNotifier _exceptionNotifier;
-    private readonly AbpExceptionHandlingOptions _exceptionHandlingOptions;
+    protected readonly IExceptionToErrorInfoConverter ErrorInfoConverter;
+    protected readonly IHttpExceptionStatusCodeFinder StatusCodeFinder;
+    protected readonly IStringLocalizer<AbpUiResource> Localizer;
+    protected readonly AbpErrorPageOptions AbpErrorPageOptions;
+    protected readonly IExceptionNotifier ExceptionNotifier;
+    protected readonly AbpExceptionHandlingOptions ExceptionHandlingOptions;
 
     public ErrorController(
         IExceptionToErrorInfoConverter exceptionToErrorInfoConverter,
@@ -29,33 +29,33 @@ public class ErrorController : AbpController
         IExceptionNotifier exceptionNotifier,
         IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
     {
-        _errorInfoConverter = exceptionToErrorInfoConverter;
-        _statusCodeFinder = httpExceptionStatusCodeFinder;
-        _localizer = localizer;
-        _exceptionNotifier = exceptionNotifier;
-        _exceptionHandlingOptions = exceptionHandlingOptions.Value;
-        _abpErrorPageOptions = abpErrorPageOptions.Value;
+        ErrorInfoConverter = exceptionToErrorInfoConverter;
+        StatusCodeFinder = httpExceptionStatusCodeFinder;
+        Localizer = localizer;
+        ExceptionNotifier = exceptionNotifier;
+        ExceptionHandlingOptions = exceptionHandlingOptions.Value;
+        AbpErrorPageOptions = abpErrorPageOptions.Value;
     }
 
-    public async Task<IActionResult> Index(int httpStatusCode)
+    public virtual async Task<IActionResult> Index(int httpStatusCode)
     {
         var exHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
         var exception = exHandlerFeature != null
             ? exHandlerFeature.Error
-            : new Exception(_localizer["UnhandledException"]);
+            : new Exception(Localizer["UnhandledException"]);
 
-        await _exceptionNotifier.NotifyAsync(new ExceptionNotificationContext(exception));
+        await ExceptionNotifier.NotifyAsync(new ExceptionNotificationContext(exception));
 
-        var errorInfo = _errorInfoConverter.Convert(exception, options =>
+        var errorInfo = ErrorInfoConverter.Convert(exception, options =>
         {
-            options.SendExceptionsDetailsToClients = _exceptionHandlingOptions.SendExceptionsDetailsToClients;
-            options.SendStackTraceToClients = _exceptionHandlingOptions.SendStackTraceToClients;
+            options.SendExceptionsDetailsToClients = ExceptionHandlingOptions.SendExceptionsDetailsToClients;
+            options.SendStackTraceToClients = ExceptionHandlingOptions.SendStackTraceToClients;
         });
 
         if (httpStatusCode == 0)
         {
-            httpStatusCode = (int)_statusCodeFinder.GetStatusCode(HttpContext, exception);
+            httpStatusCode = (int)StatusCodeFinder.GetStatusCode(HttpContext, exception);
         }
 
         HttpContext.Response.StatusCode = httpStatusCode;
@@ -69,9 +69,9 @@ public class ErrorController : AbpController
         });
     }
 
-    private string GetErrorPageUrl(int statusCode)
+    protected virtual string GetErrorPageUrl(int statusCode)
     {
-        var page = _abpErrorPageOptions.ErrorViewUrls.GetOrDefault(statusCode.ToString());
+        var page = AbpErrorPageOptions.ErrorViewUrls.GetOrDefault(statusCode.ToString());
 
         if (string.IsNullOrWhiteSpace(page))
         {

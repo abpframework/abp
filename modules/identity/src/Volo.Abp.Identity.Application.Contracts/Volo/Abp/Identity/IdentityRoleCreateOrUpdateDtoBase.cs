@@ -8,6 +8,7 @@ public class IdentityRoleCreateOrUpdateDtoBase : ExtensibleObject
 {
     [Required]
     [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxNameLength))]
+    [Display(Name = "RoleName")]
     public string Name { get; set; }
 
     public bool IsDefault { get; set; }

@@ -24,6 +24,7 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
     {
         if (!ShouldHandleException(context))
         {
+            LogException(context, out _);
             return;
         }
 
@@ -57,25 +58,7 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
     {
         //TODO: Trigger an AbpExceptionHandled event or something like that.
 
-        var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
-        var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
-        var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception, options =>
-       {
-           options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
-           options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
-       });
-
-        var logLevel = context.Exception.GetLogLevel();
-
-        var remoteServiceErrorInfoBuilder = new StringBuilder();
-        remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
-        remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
-
-        var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance);
-
-        logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
-
-        logger.LogException(context.Exception, logLevel);
+        LogException(context, out var remoteServiceErrorInfo);
 
         await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception));
 
@@ -95,5 +78,25 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
         }
 
         context.Exception = null; //Handled!
+    }
+
+    protected virtual void LogException(ExceptionContext context, out RemoteServiceErrorInfo remoteServiceErrorInfo)
+    {
+        var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+        var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
+        remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception, options =>
+        {
+            options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
+            options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+        });
+
+        var remoteServiceErrorInfoBuilder = new StringBuilder();
+        remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
+        remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
+
+        var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance);
+        var logLevel = context.Exception.GetLogLevel();
+        logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+        logger.LogException(context.Exception, logLevel);
     }
 }

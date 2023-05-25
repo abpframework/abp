@@ -2,13 +2,11 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
-using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -26,17 +24,13 @@ public class LoginCommand : IConsoleCommand, ITransientDependency
     public ICancellationTokenProvider CancellationTokenProvider { get; }
     public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
 
-    private readonly CliHttpClientFactory _cliHttpClientFactory;
-
     public LoginCommand(AuthService authService,
         ICancellationTokenProvider cancellationTokenProvider,
-        IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-        CliHttpClientFactory cliHttpClientFactory)
+        IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
     {
         AuthService = authService;
         CancellationTokenProvider = cancellationTokenProvider;
         RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
-        _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<LoginCommand>.Instance;
     }
 
@@ -111,7 +105,7 @@ public class LoginCommand : IConsoleCommand, ITransientDependency
     private async Task<bool> HasMultipleOrganizationAndThisNotSpecified(CommandLineArgs commandLineArgs, string organization)
     {
         if (string.IsNullOrWhiteSpace(organization) &&
-            await CheckMultipleOrganizationsAsync(commandLineArgs.Target))
+            await AuthService.CheckMultipleOrganizationsAsync(commandLineArgs.Target))
         {
             Logger.LogError($"You have multiple organizations, please specify your organization with `--organization` parameter.");
             return true;
@@ -166,26 +160,6 @@ public class LoginCommand : IConsoleCommand, ITransientDependency
 
         errorMessage = null;
         return false;
-    }
-
-    private async Task<bool> CheckMultipleOrganizationsAsync(string username)
-    {
-        var url = $"{CliUrls.WwwAbpIo}api/license/check-multiple-organizations?username={username}";
-
-        var client = _cliHttpClientFactory.CreateClient();
-
-        using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
-        {
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
-            }
-
-            await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<bool>(responseContent);
-        }
     }
 
     public string GetUsageInfo()

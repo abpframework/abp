@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Codice della lingua",
     "DisplayName:Version": "Versione",
     "Documents": "Documenti",
-    "RemoveFromCache": "Rimuovi dalla cache",
+    "RemoveFromCache": "Rimuovere dalla cache e reindicizzare",
     "Reindex": "Reindicizza",
     "ReindexCompleted": "Reindicizzazione completata",
-    "RemovedFromCache": "Rimosso dalla cache",
+    "RemovedFromCache": "Rimosso dalla cache e reindicizzato",
     "RemoveFromCacheConfirmation": "Sei sicuro di voler rimuovere questo elemento dalla cache?",
-    "ReIndexDocumentConfirmation": "Sei sicuro di voler reindicizzare questo articolo?",
+    "ReIndexDocumentConfirmation": "Siete sicuri di voler reindicizzare \"{0}\"?",
     "DeleteFromDatabase": "Elimina dal database",
     "Deleted": "Eliminato",
     "Search": "Ricerca",
@@ -55,6 +55,7 @@
     "LanguageCode": "Codice della lingua",
     "FileName": "Nome del file",
     "LastCachedTime": "Tempo di cache",
-    "Project": "Progetto"
+    "Project": "Progetto",
+    "RemoveCacheAndReIndexConfirmation": "Il documento \"{0}\" verrà rimosso dalla cache e reindicizzato. Confermate?"
   }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Data;
@@ -23,24 +25,28 @@ namespace Volo.CmsKit.Public.Comments;
 [RequiresGlobalFeature(typeof(CommentsFeature))]
 public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPublicAppService
 {
+    protected string RegexUrlPattern =
+        @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)";
+    
     protected ICommentRepository CommentRepository { get; }
     protected ICmsUserLookupService CmsUserLookupService { get; }
     public IDistributedEventBus DistributedEventBus { get; }
     protected CommentManager CommentManager { get; }
-    protected IAuthorizationService AuthorizationService { get; }
+    
+    protected CmsKitCommentOptions CmsCommentOptions { get; }
 
     public CommentPublicAppService(
         ICommentRepository commentRepository,
         ICmsUserLookupService cmsUserLookupService,
         IDistributedEventBus distributedEventBus,
         CommentManager commentManager,
-        IAuthorizationService authorizationService)
+        IOptionsSnapshot<CmsKitCommentOptions> cmsCommentOptions)
     {
         CommentRepository = commentRepository;
         CmsUserLookupService = cmsUserLookupService;
         DistributedEventBus = distributedEventBus;
         CommentManager = commentManager;
-        AuthorizationService = authorizationService;
+        CmsCommentOptions = cmsCommentOptions.Value;
     }
 
     public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
@@ -56,6 +62,8 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     [Authorize]
     public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
     {
+        CheckExternalUrls(entityType, input.Text);
+        
         var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
         if (input.RepliedCommentId.HasValue)
@@ -87,11 +95,12 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     public virtual async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
     {
         var comment = await CommentRepository.GetAsync(id);
-
         if (comment.CreatorId != CurrentUser.GetId())
         {
             throw new AbpAuthorizationException();
         }
+        
+        CheckExternalUrls(comment.EntityType, input.Text);
 
         comment.SetText(input.Text);
         comment.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -116,7 +125,41 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
             throw new AbpAuthorizationException();
         }
     }
+    
+    protected virtual void CheckExternalUrls(string entityType, string text)
+    {
+        if (!CmsCommentOptions.AllowedExternalUrls.TryGetValue(entityType, out var allowedExternalUrls))
+        {
+            return;
+        }
 
+        text = text.Replace("www.", "https://www.").Replace("://https", "");
+
+        var matches = Regex.Matches(text, RegexUrlPattern,
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        foreach (Match match in matches)
+        {
+            if (!match.Success || match.Groups.Count <= 0)
+            {
+                continue;
+            }
+
+            var normalizedFullUrl = NormalizeUrl(match.Groups[0].Value);
+            
+            if (!allowedExternalUrls.Any(allowedExternalUrl =>
+                    normalizedFullUrl.Contains(NormalizeUrl(allowedExternalUrl), StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new UserFriendlyException(L["UnAllowedExternalUrlMessage"]);
+            }
+        }
+    }
+    
+    private static string NormalizeUrl(string url)
+    {
+        return url.Replace("www.", "").RemovePostFix("/");
+    }
+    
     private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthorQueryResultItem> comments)
     {
         //TODO: I think this method can be optimized if you use dictionaries instead of straight search

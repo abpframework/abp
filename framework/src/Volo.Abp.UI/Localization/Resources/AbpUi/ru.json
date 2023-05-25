@@ -48,6 +48,7 @@
     "Search": "поиск",
     "ItemWillBeDeletedMessageWithFormat": "{0} будет удален!",
     "ItemWillBeDeletedMessage": "Этот предмет будет удален!",
-    "ManageYourAccount": "Настройте свой аккаунт"
+    "ManageYourAccount": "Настройте свой аккаунт",
+    "OthersGroup": "Другой"
   }
 }

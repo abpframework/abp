@@ -173,6 +173,10 @@ $(function () {
                                 visible: abp.auth.isGranted(
                                     'Docs.Admin.Documents'
                                 ),
+                                confirmMessage: function (data) {
+                                    return l('RemoveCacheAndReIndexConfirmation',
+                                        data.record.name);
+                                },
                                 action: function (data) {
                                     service
                                         .removeFromCache(data.record.id)
@@ -188,7 +192,8 @@ $(function () {
                                     'Docs.Admin.Documents'
                                 ),
                                 confirmMessage: function (data) {
-                                    return l('ReIndexDocumentConfirmation');
+                                    return l('ReIndexDocumentConfirmation',
+                                        data.record.name);
                                 },
                                 action: function (data) {
                                     service

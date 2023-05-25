@@ -24,8 +24,7 @@ foreach($project in $projects) {
 	Set-Location $projectFolder
 
     #dotnet clean
-    dotnet pack -c Release --no-build
-
+   dotnet pack -c Release --no-build -- /maxcpucount
 
     if (-Not $?) {
         Write-Error "Packaging failed for the project: $projectName" 

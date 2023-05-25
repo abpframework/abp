@@ -12,16 +12,16 @@ namespace Volo.Abp.Swashbuckle;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpSwashbuckleController : AbpController
 {
-    private readonly IAbpAntiForgeryManager _antiForgeryManager;
+    protected readonly IAbpAntiForgeryManager AntiForgeryManager;
 
     public AbpSwashbuckleController(IAbpAntiForgeryManager antiForgeryManager)
     {
-        _antiForgeryManager = antiForgeryManager;
+        AntiForgeryManager = antiForgeryManager;
     }
 
     [HttpGet]
-    public void SetCsrfCookie()
+    public virtual void SetCsrfCookie()
     {
-        _antiForgeryManager.SetCookie();
+        AntiForgeryManager.SetCookie();
     }
 }

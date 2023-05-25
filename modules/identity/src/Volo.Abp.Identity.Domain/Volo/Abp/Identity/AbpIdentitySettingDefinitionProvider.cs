@@ -53,6 +53,20 @@ public class AbpIdentitySettingDefinitionProvider : SettingDefinitionProvider
                 true),
 
             new SettingDefinition(
+                IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword,
+                false.ToString(),
+                L("DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword"),
+                L("Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword"),
+                true),
+
+            new SettingDefinition(
+                IdentitySettingNames.Password.PasswordChangePeriodDays,
+                0.ToString(),
+                L("DisplayName:Abp.Identity.Password.PasswordChangePeriodDays"),
+                L("Description:Abp.Identity.Password.PasswordChangePeriodDays"),
+                true),
+
+            new SettingDefinition(
                 IdentitySettingNames.Lockout.AllowedForNewUsers,
                 true.ToString(),
                 L("DisplayName:Abp.Identity.Lockout.AllowedForNewUsers"),

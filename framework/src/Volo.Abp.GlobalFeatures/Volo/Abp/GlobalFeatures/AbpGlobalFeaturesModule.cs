@@ -17,7 +17,7 @@ public class AbpGlobalFeaturesModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(GlobalFeatureInterceptorRegistrar.RegisterIfNeeded);
+        context.Services.OnRegistered(GlobalFeatureInterceptorRegistrar.RegisterIfNeeded);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

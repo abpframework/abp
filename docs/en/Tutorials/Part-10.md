@@ -361,7 +361,7 @@ public class BookAppService :
         GetListPolicyName = BookStorePermissions.Books.Default;
         CreatePolicyName = BookStorePermissions.Books.Create;
         UpdatePolicyName = BookStorePermissions.Books.Edit;
-        DeletePolicyName = BookStorePermissions.Books.Create;
+        DeletePolicyName = BookStorePermissions.Books.Delete;
     }
 
     public override async Task<BookDto> GetAsync(Guid id)

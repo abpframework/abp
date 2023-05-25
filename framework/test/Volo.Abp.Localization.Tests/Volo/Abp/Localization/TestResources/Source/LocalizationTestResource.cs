@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Localization.TestResources.Base.Validation;
+using Volo.Abp.Localization.TestResources.Base.Validation;
 
 namespace Volo.Abp.Localization.TestResources.Source;
 
