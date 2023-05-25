@@ -24,40 +24,40 @@ namespace Volo.Abp.Cli.Commands;
 public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransientDependency
 {
     public const string Name = "new";
-    
+
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
-    
+
     public NewCommand(
-        ConnectionStringProvider connectionStringProvider, 
+        ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
-        IInstallLibsService installLibsService, 
+        IInstallLibsService installLibsService,
         CliService cliService,
-        AngularPwaSupportAdder angularPwaSupportAdder, 
+        AngularPwaSupportAdder angularPwaSupportAdder,
         InitialMigrationCreator initialMigrationCreator,
-        ThemePackageAdder themePackageAdder, 
-        ILocalEventBus eventBus, 
+        ThemePackageAdder themePackageAdder,
+        ILocalEventBus eventBus,
         IBundlingService bundlingService,
-        ITemplateInfoProvider templateInfoProvider, 
+        ITemplateInfoProvider templateInfoProvider,
         TemplateProjectBuilder templateProjectBuilder,
         AngularThemeConfigurer angularThemeConfigurer) :
         base(connectionStringProvider,
-            solutionPackageVersionFinder, 
-            cmdHelper, 
-            installLibsService, 
-            cliService, 
+            solutionPackageVersionFinder,
+            cmdHelper,
+            installLibsService,
+            cliService,
             angularPwaSupportAdder,
             initialMigrationCreator,
-            themePackageAdder, 
-            eventBus, 
+            themePackageAdder,
+            eventBus,
             bundlingService,
             angularThemeConfigurer)
     {
         TemplateInfoProvider = templateInfoProvider;
         TemplateProjectBuilder = templateProjectBuilder;
     }
-    
+
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
         var projectName = NamespaceHelper.NormalizeNamespace(commandLineArgs.Target);
@@ -100,20 +100,20 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         ConfigureNpmPackagesForTheme(projectArgs);
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
-        
+
         var skipInstallLibs = commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Long) || commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Short);
         if (!skipInstallLibs)
         {
             await RunInstallLibsForWebTemplateAsync(projectArgs);
             ConfigureAngularJsonForThemeSelection(projectArgs);
         }
-        
+
         var skipBundling = commandLineArgs.Options.ContainsKey(Options.SkipBundling.Long) || commandLineArgs.Options.ContainsKey(Options.SkipBundling.Short);
         if (!skipBundling)
         {
             await RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(projectArgs);
         }
-            
+
         await ConfigurePwaSupportForAngular(projectArgs);
 
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
@@ -149,6 +149,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
         sb.AppendLine("-sib|--skip-installing-libs                      (Doesn't run `abp install-libs` command after project creation)");
         sb.AppendLine("-sb|--skip-bundling                             (Doesn't run `abp bundle` command after Blazor Wasm project creation)");
+        sb.AppendLine("-sc|--skip-cache                                (Always download the latest from our server and refresh their templates folder cache)");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
         sb.AppendLine("");
