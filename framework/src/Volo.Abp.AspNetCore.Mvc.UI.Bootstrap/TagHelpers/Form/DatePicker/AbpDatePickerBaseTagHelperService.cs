@@ -22,8 +22,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelperService<TTagHelper>
     where TTagHelper : AbpDatePickerBaseTagHelper<TTagHelper>
 {
-    protected readonly Dictionary<Type,Func<object,string>> SupportedInputTypes = new() {
-        {typeof(string), o =>
+    protected readonly Dictionary<Type, Func<object, string>> SupportedInputTypes = new() 
+    {
+        {
+            typeof(string), o =>
             {
                 if(o is string s && DateTime.TryParse(s, out var dt))
                 {
@@ -33,17 +35,20 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
                 return string.Empty;
             }
         },
-        {typeof(DateTime), o =>
+        {
+            typeof(DateTime), o =>
             {
                 if(o is DateTime dt && dt != default)
                 {
                     return dt.ToString("O");
                 }
+                
                 return string.Empty;
             }
         },
         {typeof(DateTime?), o => ((DateTime?) o)?.ToString("O")},
-        {typeof(DateTimeOffset), o =>
+        {
+            typeof(DateTimeOffset), o =>
             {
                 if(o is DateTimeOffset dto && dto != default)
                 {
