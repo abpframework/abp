@@ -360,8 +360,11 @@ abp generate-proxy -t csharp -url https://localhost:44302/
     * `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
     * `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
     * `--target`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+    * `--module`:  Backend module name. Default value: `app`.
+    * `--entry-point`: Target Angular project to place the generated code.
     * `--url`: Specifies api definition url. Default value is API Name's url in environment file.
     * `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+
   * `js`: JavaScript. work in the `*.Web` project directory. There are some additional options for this client:
     * `--output` or `-o`: JavaScript file path or folder to place generated code in.
 * `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
