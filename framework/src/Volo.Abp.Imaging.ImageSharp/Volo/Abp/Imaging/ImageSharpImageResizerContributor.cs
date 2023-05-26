@@ -96,7 +96,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
     }
 
     protected Dictionary<ImageResizeMode, ResizeMode> ResizeModeMap = new() {
-        { ImageResizeMode.None, ResizeMode.Crop },
+        { ImageResizeMode.None, default },
         { ImageResizeMode.Stretch, ResizeMode.Stretch },
         { ImageResizeMode.BoxPad, ResizeMode.BoxPad },
         { ImageResizeMode.Min, ResizeMode.Min },
