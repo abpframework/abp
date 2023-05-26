@@ -1,17 +1,15 @@
-import { addProjectConfiguration, formatFiles, generateFiles, Tree } from '@nx/devkit';
-import * as path from 'path';
 import { GenerateProxyGeneratorSchema } from './schema';
+import { Tree } from '@nrwl/devkit';
+import { wrapAngularDevkitSchematic } from '@nx/devkit/ngcli-adapter';
 
-export async function generateProxyGenerator(tree: Tree, options: GenerateProxyGeneratorSchema) {
-  const projectRoot = `libs/${options.name}`;
-  addProjectConfiguration(tree, options.name, {
-    root: projectRoot,
-    projectType: 'library',
-    sourceRoot: `${projectRoot}/src`,
-    targets: {},
+export default async function (host: Tree, schema: GenerateProxyGeneratorSchema) {
+  const runAngularLibrarySchematic = wrapAngularDevkitSchematic('@abp/ng.schematics', 'proxy-add');
+
+  await runAngularLibrarySchematic(host, {
+    ...schema,
   });
-  generateFiles(tree, path.join(__dirname, 'files'), projectRoot, options);
-  await formatFiles(tree);
-}
 
-export default generateProxyGenerator;
+  return () => {
+    console.log(`proxy added '${schema.target}`);
+  };
+}
