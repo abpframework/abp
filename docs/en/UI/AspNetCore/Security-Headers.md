@@ -19,12 +19,30 @@ ABP Framework allows you to add frequently used security headers into your appli
 Configure<AbpSecurityHeadersOptions>(options => 
 {
     options.UseContentSecurityPolicyHeader = true; //false by default
-    options.ContentSecurityPolicyValue = "object-src 'none'; form-action 'self'; frame-ancestors 'none'";
+    options.ContentSecurityPolicyValues["object-src"] = new string[] { "'none'" };
+    options.ContentSecurityPolicyValues["form-action"] = new string[] { "'self'" };
+    options.ContentSecurityPolicyValues["frame-ancestors"] = new string[] { "'self'" };
+    options.ContentSecurityPolicyValues["script-src"] = new string[] { "'self'", "'unsafe-inline'", "'unsafe-eval'" };
+
+    //adding script-src nonce
+    options.UseContentSecurityPolicyScriptNonce = true; //false by default
+
+    //ignore script nonce source for these paths
+    options.IgnoredScriptNoncePaths.Add("/my-page");
+
+    //ignore script nonce by Elsa Workflows and other selectors
+    options.IgnoredScriptNonceSelectors.Add(context =>
+    {
+        var endpoint = context.GetEndpoint();
+        return Task.FromResult(endpoint?.Metadata.GetMetadata<PageRouteMetadata>()?.RouteTemplate == "/{YOURHOSTPAGE}");
+    });
 
     //adding additional security headers
     options.Headers["Referrer-Policy"] = "no-referrer";
 });
 ```
+
+> Using the script nonce feature will automatically add the nonce value to your script tags. There is no need to add it manually. However, if you still need to add it manually, you can use 'Html.GetScriptNonce()' to add the nonce value or 'Html.GetScriptNonceAttribute()' to add the nonce attribute value.
 
 > If the header is the same, the additional security headers you defined take precedence over the default security headers. In other words, it overrides the default security headers' values.
 
