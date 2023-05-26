@@ -52,7 +52,7 @@ public class AbpTagHelperStyleService : AbpTagHelperResourceService
 
         if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
         {
-            output.Content.AppendHtml(SecurityHeadersOptions.UseContentSecurityPolicyNonce
+            output.Content.AppendHtml(SecurityHeadersOptions.UseContentSecurityPolicyScriptNonce
                 ? $"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" abp-csp-style />{Environment.NewLine}"
                 : $"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" onload=\"this.rel='stylesheet'\" />{Environment.NewLine}");
         }

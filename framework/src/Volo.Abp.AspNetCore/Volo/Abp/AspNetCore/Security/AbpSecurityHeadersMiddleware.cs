@@ -38,14 +38,14 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
             || !Options.Value.UseContentSecurityPolicyHeader 
             || await AlwaysIgnoreContentTypes(context) 
             || context.GetEndpoint() == null
-            || Options.Value.IgnoredNonceScriptPaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'))))
+            || Options.Value.IgnoredScriptNoncePaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'))))
         {
             AddOtherHeaders(context);
             await next.Invoke(context);
             return;
         }
 
-        if (Options.Value.UseContentSecurityPolicyNonce)
+        if (Options.Value.UseContentSecurityPolicyScriptNonce)
         {
             var randomValue = Guid.NewGuid().ToString("N");
             context.Items.Add(AbpAspNetCoreConsts.ScriptNonceKey, randomValue);
@@ -80,7 +80,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
     
     private async Task<bool> AlwaysIgnoreContentTypes(HttpContext context)
     {
-        foreach (var selector in Options.Value.IgnoredNonceScriptSelectors)
+        foreach (var selector in Options.Value.IgnoredScriptNonceSelectors)
         {
             if(await selector(context))
             {
@@ -101,7 +101,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 
     protected virtual string BuildContentSecurityPolicyValue(HttpContext context)
     {
-        if (!(Options.Value.UseContentSecurityPolicyNonce &&
+        if (!(Options.Value.UseContentSecurityPolicyScriptNonce &&
               context.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) &&
               nonce is string nonceValue && !string.IsNullOrEmpty(nonceValue)))
         {

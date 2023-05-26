@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
 
 [HtmlTargetElement("script")]
 [HtmlTargetElement("body")]
-public class NonceScriptTagHelper : AbpTagHelper
+public class ScriptNonceTagHelper : AbpTagHelper
 {
     [HtmlAttributeNotBound]
     [ViewContext]
