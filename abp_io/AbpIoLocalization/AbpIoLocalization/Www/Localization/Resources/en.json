@@ -429,7 +429,7 @@
     "PackageDetailPage_ManualInstallationDescription1": "Add <code>{0}</code> NuGet package reference to your project using your IDE or executing the following command",
     "PackageDetailPage_ManualInstallationDescription2": "Then add the <code>{0}</code> dependency to your <a href=\"https://docs.abp.io/en/abp/latest/Module-Development-Basics\">module class</a> as shown in the following example",
     "PackageDetailPage_SeeDocumentation": "<a href=\"{0}\">See the documentation</a> to learn how to use this package in your applications.",
-    "PackageDetailPage_InstallingUsingPMC": "3: Installing via Package Manager Console",
+    "PackageDetailPage_InstallingUsingPMC": "3: Installing with the Package Manager Console",
     "PackageDetailPage_InstallingUsingPMCDescription1": "Open the <strong>Package Manager Console</strong> in Visual Studio (Tools -> Nuget Package Manager -> Package Manager Console) and execute the following command"
   }
 }
