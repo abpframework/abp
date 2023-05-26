@@ -41,6 +41,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
         foreach (var imageCompressorContributor in ImageCompressorContributors)
         {
             var result = await imageCompressorContributor.TryCompressAsync(bytes, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            
             if (result.State == ProcessState.Unsupported)
             {
                 continue;

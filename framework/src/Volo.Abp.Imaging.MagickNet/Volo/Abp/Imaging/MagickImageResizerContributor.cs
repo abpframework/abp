@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ImageMagick;
+using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 
@@ -10,8 +11,12 @@ namespace Volo.Abp.Imaging;
 
 public class MagickImageResizerContributor : IImageResizerContributor, ITransientDependency
 {
-    public virtual async Task<ImageResizeResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs,
-        string mimeType = null,
+    private const int Min = 1;
+
+    public virtual async Task<ImageResizeResult<Stream>> TryResizeAsync(
+        Stream stream,
+        ImageResizeArgs resizeArgs,
+        [CanBeNull] string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!mimeType.IsNullOrWhiteSpace() && !CanResize(mimeType))
@@ -46,15 +51,17 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
         }
     }
 
-    public virtual Task<ImageResizeResult<byte[]>> TryResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs,
-        string mimeType = null,
+    public virtual Task<ImageResizeResult<byte[]>> TryResizeAsync(
+        byte[] bytes,
+        ImageResizeArgs resizeArgs,
+        [CanBeNull] string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!mimeType.IsNullOrWhiteSpace() && !CanResize(mimeType))
         {
             return Task.FromResult(new ImageResizeResult<byte[]>(bytes, ProcessState.Unsupported));
         }
-        
+
         using var image = new MagickImage(bytes);
 
         if (mimeType.IsNullOrWhiteSpace() && !CanResize(image.FormatInfo?.MimeType))
@@ -80,83 +87,174 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
         };
     }
 
-    protected virtual void Resize(MagickImage image, ImageResizeArgs resizeParameter)
+    protected virtual void Resize(MagickImage image, ImageResizeArgs resizeArgs)
     {
-        const int min = 1;
+        ApplyResizeMode(image, resizeArgs);
+    }
 
+    protected virtual void ApplyResizeMode(MagickImage image, ImageResizeArgs resizeArgs)
+    {
+        switch (resizeArgs.Mode)
+        {
+            case ImageResizeMode.None:
+                ResizeModeNone(image, resizeArgs);
+                break;
+            case ImageResizeMode.Stretch:
+                ResizeStretch(image, resizeArgs);
+                break;
+            case ImageResizeMode.Pad:
+                ResizePad(image, resizeArgs);
+                break;
+            case ImageResizeMode.BoxPad:
+                ResizeBoxPad(image, resizeArgs);
+                break;
+            case ImageResizeMode.Max:
+                ResizeMax(image, resizeArgs);
+                break;
+            case ImageResizeMode.Min:
+                ResizeMin(image, resizeArgs);
+                break;
+            case ImageResizeMode.Crop:
+                ResizeCrop(image, resizeArgs);
+                break;
+            default:
+                throw new NotSupportedException("Resize mode " + resizeArgs.Mode + "is not supported!");
+        }
+    }
+
+
+    protected virtual int GetTargetHeight(ImageResizeArgs resizeArgs, int min, int sourceWidth, int sourceHeight)
+    {
+        if (resizeArgs.Height == 0 && resizeArgs.Width > 0)
+        {
+            return Math.Max(min, (int)Math.Round(sourceHeight * resizeArgs.Width / (float)sourceWidth));
+        }
+
+        return resizeArgs.Height;
+    }
+
+    protected virtual int GetTargetWidth(ImageResizeArgs resizeArgs, int min, int sourceWidth, int sourceHeight)
+    {
+        if (resizeArgs.Width == 0 && resizeArgs.Height > 0)
+        {
+            return Math.Max(min, (int)Math.Round(sourceWidth * resizeArgs.Height / (float)sourceHeight));
+        }
+
+        return resizeArgs.Width;
+    }
+
+    protected virtual void ResizeModeNone(IMagickImage image, ImageResizeArgs resizeArgs)
+    {
         var sourceWidth = image.Width;
         var sourceHeight = image.Height;
 
-        var targetWidth = GetTargetWidth(resizeParameter.Width, resizeParameter.Height, min, sourceWidth, sourceHeight);
-        var targetHeight = GetTargetHeight(resizeParameter.Height, targetWidth, min, sourceHeight, sourceWidth);
-
-        ApplyResizeMode(image, resizeParameter, targetWidth, targetHeight);
+        image.Resize(
+            GetTargetWidth(resizeArgs, Min, sourceWidth, sourceHeight),
+            GetTargetHeight(resizeArgs, Min, sourceWidth, sourceHeight)
+        );
     }
 
-    protected virtual void ApplyResizeMode(MagickImage image, ImageResizeArgs resizeParameter, int targetWidth,
-        int targetHeight)
+    protected virtual void ResizeStretch(IMagickImage image, ImageResizeArgs resizeArgs)
     {
-        switch (resizeParameter.Mode)
+        var sourceWidth = image.Width;
+        var sourceHeight = image.Height;
+
+        image.Resize(
+            new MagickGeometry(
+                GetTargetWidth(resizeArgs, Min, sourceWidth, sourceHeight),
+                GetTargetHeight(resizeArgs, Min, sourceWidth, sourceHeight)) { IgnoreAspectRatio = true });
+    }
+
+    protected virtual void ResizePad(MagickImage image, ImageResizeArgs resizeArgs)
+    {
+        var sourceWidth = image.Width;
+        var sourceHeight = image.Height;
+
+        var targetWidth = GetTargetWidth(resizeArgs, Min, sourceWidth, sourceHeight);
+        var targetHeight = GetTargetHeight(resizeArgs, Min, sourceWidth, sourceHeight);
+
+        var percentHeight = CalculatePercent(sourceHeight, targetHeight);
+        var percentWidth = CalculatePercent(sourceWidth, targetWidth);
+
+        var newWidth = targetWidth;
+        var newHeight = targetHeight;
+
+        if (percentHeight < percentWidth)
         {
-            case ImageResizeMode.None:
-                ResizeModeNone(image, targetWidth, targetHeight);
-                break;
-            case ImageResizeMode.Stretch:
-                ResizeStretch(image, targetWidth, targetHeight);
-                break;
-            case ImageResizeMode.Pad:
-                ResizePad(image, targetWidth, targetHeight);
-                break;
-            case ImageResizeMode.BoxPad:
-                ResizeBoxPad(image, targetWidth, targetHeight);
-                break;
-            case ImageResizeMode.Max:
-                ResizeMax(image, targetWidth, targetHeight);
-                break;
-            case ImageResizeMode.Min:
-                ResizeMin(image, targetWidth, targetHeight);
-                break;
-            case ImageResizeMode.Crop:
-                ResizeCrop(image, targetWidth, targetHeight);
-                break;
-            default:
-                throw new NotSupportedException("Resize mode " + resizeParameter.Mode + "is not supported!");
+            newWidth = (int)Math.Round(sourceWidth * percentHeight);
         }
-    }
-
-
-    protected virtual int GetTargetHeight(int targetHeight, int targetWidth, int min, int sourceHeight, int sourceWidth)
-    {
-        if (targetHeight == 0 && targetWidth > 0)
+        else
         {
-            targetHeight = Math.Max(min, (int)Math.Round(sourceHeight * targetWidth / (float)sourceWidth));
+            newHeight = (int)Math.Round(sourceHeight * percentWidth);
         }
 
-        return targetHeight;
+        image.Resize(newWidth, newHeight);
+        image.Extent(targetWidth, targetHeight, Gravity.Center, MagickColors.Transparent);
     }
 
-    protected virtual int GetTargetWidth(int targetWidth, int targetHeight, int min, int sourceWidth, int sourceHeight)
+    protected virtual void ResizeBoxPad(MagickImage image, ImageResizeArgs resizeArgs)
     {
-        if (targetWidth == 0 && targetHeight > 0)
+        var sourceWidth = image.Width;
+        var sourceHeight = image.Height;
+
+        var targetWidth = GetTargetWidth(resizeArgs, Min, sourceWidth, sourceHeight);
+        var targetHeight = GetTargetHeight(resizeArgs, Min, sourceWidth, sourceHeight);
+
+        var percentHeight = CalculatePercent(sourceHeight, targetHeight);
+        var percentWidth = CalculatePercent(sourceWidth, targetWidth);
+
+        var newWidth = targetWidth;
+        var newHeight = targetHeight;
+
+        var boxPadWidth = targetWidth > 0 ? targetWidth : (int)Math.Round(sourceWidth * percentHeight);
+        var boxPadHeight = targetHeight > 0 ? targetHeight : (int)Math.Round(sourceHeight * percentWidth);
+
+        if (sourceWidth < boxPadWidth && sourceHeight < boxPadHeight)
         {
-            targetWidth = Math.Max(min, (int)Math.Round(sourceWidth * targetHeight / (float)sourceHeight));
+            newWidth = boxPadWidth;
+            newHeight = boxPadHeight;
         }
 
-        return targetWidth;
+        image.Resize(newWidth, newHeight);
+        image.Extent(targetWidth, targetHeight, Gravity.Center, MagickColors.Transparent);
     }
 
-    protected virtual void ResizeCrop(MagickImage image, int targetWidth, int targetHeight)
-    {
-        var defaultMagickGeometry = new MagickGeometry(targetWidth, targetHeight) { IgnoreAspectRatio = true };
-        image.Crop(defaultMagickGeometry, Gravity.Center);
-    }
-
-    protected virtual void ResizeMin(MagickImage image, int targetWidth, int targetHeight)
+    protected virtual void ResizeMax(IMagickImage image, ImageResizeArgs resizeArgs)
     {
         var sourceWidth = image.Width;
         var sourceHeight = image.Height;
 
         var imageRatio = CalculateRatio(sourceWidth, sourceHeight);
+
+        var targetWidth = GetTargetWidth(resizeArgs, Min, sourceWidth, sourceHeight);
+        var targetHeight = GetTargetHeight(resizeArgs, Min, sourceWidth, sourceHeight);
+
+        var ratio = CalculateRatio(targetWidth, targetHeight);
+
+        var percentHeight = CalculatePercent(sourceHeight, targetHeight);
+        var percentWidth = CalculatePercent(sourceWidth, targetWidth);
+
+        if (imageRatio < ratio)
+        {
+            targetHeight = (int)(sourceHeight * percentWidth);
+        }
+        else
+        {
+            targetWidth = (int)(sourceWidth * percentHeight);
+        }
+
+        image.Resize(targetWidth, targetHeight);
+    }
+
+    protected virtual void ResizeMin(MagickImage image, ImageResizeArgs resizeArgs)
+    {
+        var sourceWidth = image.Width;
+        var sourceHeight = image.Height;
+
+        var imageRatio = CalculateRatio(sourceWidth, sourceHeight);
+
+        var targetWidth = GetTargetWidth(resizeArgs, Min, sourceWidth, sourceHeight);
+        var targetHeight = GetTargetHeight(resizeArgs, Min, sourceWidth, sourceHeight);
 
         var percentWidth = CalculatePercent(sourceWidth, targetWidth);
 
@@ -194,75 +292,25 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
         image.Resize(targetWidth, targetHeight);
     }
 
-    protected virtual void ResizeMax(IMagickImage image, int targetWidth, int targetHeight)
+    protected virtual void ResizeCrop(MagickImage image, ImageResizeArgs resizeArgs)
     {
         var sourceWidth = image.Width;
         var sourceHeight = image.Height;
 
-        var imageRatio = CalculateRatio(sourceWidth, sourceHeight);
-        var ratio = CalculateRatio(targetWidth, targetHeight);
+        var targetWidth = GetTargetWidth(resizeArgs, Min, sourceWidth, sourceHeight);
+        var targetHeight = GetTargetHeight(resizeArgs, Min, sourceWidth, sourceHeight);
 
-        var percentHeight = CalculatePercent(sourceHeight, targetHeight);
-        var percentWidth = CalculatePercent(sourceWidth, targetWidth);
+        image.Extent(
+            targetWidth,
+            targetHeight,
+            Gravity.Center,
+            MagickColors.Transparent);
 
-        if (imageRatio < ratio)
-        {
-            targetHeight = (int)(sourceHeight * percentWidth);
-        }
-        else
-        {
-            targetWidth = (int)(sourceWidth * percentHeight);
-        }
-
-        image.Resize(targetWidth, targetHeight);
-    }
-
-    protected virtual void ResizeBoxPad(MagickImage image, int targetWidth, int targetHeight)
-    {
-        var sourceWidth = image.Width;
-        var sourceHeight = image.Height;
-
-        var percentHeight = CalculatePercent(sourceHeight, targetHeight);
-        var percentWidth = CalculatePercent(sourceWidth, targetWidth);
-
-        var newWidth = targetWidth;
-        var newHeight = targetHeight;
-
-        var boxPadWidth = targetWidth > 0 ? targetWidth : (int)Math.Round(sourceWidth * percentHeight);
-        var boxPadHeight = targetHeight > 0 ? targetHeight : (int)Math.Round(sourceHeight * percentWidth);
-
-        if (sourceWidth < boxPadWidth && sourceHeight < boxPadHeight)
-        {
-            newWidth = boxPadWidth;
-            newHeight = boxPadHeight;
-        }
-
-        image.Resize(newWidth, newHeight);
-        image.Extent(targetWidth, targetHeight, Gravity.Center, MagickColors.Transparent);
-    }
-
-    protected virtual void ResizePad(MagickImage image, int targetWidth, int targetHeight)
-    {
-        var sourceWidth = image.Width;
-        var sourceHeight = image.Height;
-
-        var percentHeight = CalculatePercent(sourceHeight, targetHeight);
-        var percentWidth = CalculatePercent(sourceWidth, targetWidth);
-
-        var newWidth = targetWidth;
-        var newHeight = targetHeight;
-
-        if (percentHeight < percentWidth)
-        {
-            newWidth = (int)Math.Round(sourceWidth * percentHeight);
-        }
-        else
-        {
-            newHeight = (int)Math.Round(sourceHeight * percentWidth);
-        }
-
-        image.Resize(newWidth, newHeight);
-        image.Extent(targetWidth, targetHeight, Gravity.Center, MagickColors.Transparent);
+        image.Crop(
+            new MagickGeometry(
+                targetWidth,
+                targetHeight) { IgnoreAspectRatio = true },
+            Gravity.Center);
     }
 
     protected virtual float CalculatePercent(int imageHeightOrWidth, int heightOrWidth)
@@ -273,15 +321,5 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     protected virtual float CalculateRatio(int width, int height)
     {
         return height / (float)width;
-    }
-
-    protected virtual void ResizeStretch(IMagickImage image, int targetWidth, int targetHeight)
-    {
-        image.Resize(new MagickGeometry(targetWidth, targetHeight) { IgnoreAspectRatio = true });
-    }
-
-    protected virtual void ResizeModeNone(IMagickImage image, int targetWidth, int targetHeight)
-    {
-        image.Resize(targetWidth, targetHeight);
     }
 }

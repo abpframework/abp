@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
@@ -26,13 +27,18 @@ public class ImageResizer : IImageResizer, ITransientDependency
         ImageResizeOptions = imageResizeOptions.Value;
     }
     
-    public virtual async Task<ImageResizeResult<Stream>> ResizeAsync(Stream stream, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default)
+    public virtual async Task<ImageResizeResult<Stream>> ResizeAsync(
+        Stream stream, 
+        ImageResizeArgs resizeArgs, 
+        [CanBeNull] string mimeType = null, 
+        CancellationToken cancellationToken = default)
     {
         ChangeDefaultResizeMode(resizeArgs);
         
         foreach (var imageResizerContributor in ImageResizerContributors)
         {
             var result = await imageResizerContributor.TryResizeAsync(stream, resizeArgs, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            
             if (result.State == ProcessState.Unsupported)
             {
                 continue;
@@ -44,13 +50,18 @@ public class ImageResizer : IImageResizer, ITransientDependency
         return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
     }
 
-    public virtual async Task<ImageResizeResult<byte[]>> ResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default)
+    public virtual async Task<ImageResizeResult<byte[]>> ResizeAsync(
+        byte[] bytes, 
+        ImageResizeArgs resizeArgs, 
+        [CanBeNull] string mimeType = null, 
+        CancellationToken cancellationToken = default)
     {
         ChangeDefaultResizeMode(resizeArgs);
         
         foreach (var imageResizerContributor in ImageResizerContributors)
         {
             var result = await imageResizerContributor.TryResizeAsync(bytes, resizeArgs, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            
             if (result.State == ProcessState.Unsupported)
             {
                 continue;

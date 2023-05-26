@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
@@ -23,7 +24,9 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         Options = options.Value;
     }
 
-    public virtual async Task<ImageCompressResult<Stream>> TryCompressAsync(Stream stream, string mimeType = null,
+    public virtual async Task<ImageCompressResult<Stream>> TryCompressAsync(
+        Stream stream, 
+        [CanBeNull] string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
@@ -49,7 +52,9 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         return new ImageCompressResult<Stream>(stream, ProcessState.Canceled);
     }
 
-    public virtual async Task<ImageCompressResult<byte[]>> TryCompressAsync(byte[] bytes, string mimeType = null,
+    public virtual async Task<ImageCompressResult<byte[]>> TryCompressAsync(
+        byte[] bytes, 
+        [CanBeNull] string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
@@ -80,7 +85,9 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         };
     }
 
-    protected virtual async Task<Stream> GetStreamFromImageAsync(Image image, IImageFormat format,
+    protected virtual async Task<Stream> GetStreamFromImageAsync(
+        Image image, 
+        IImageFormat format,
         CancellationToken cancellationToken = default)
     {
         var memoryStream = new MemoryStream();

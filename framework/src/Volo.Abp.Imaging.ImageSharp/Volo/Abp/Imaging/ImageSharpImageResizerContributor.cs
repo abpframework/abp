@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Volo.Abp.DependencyInjection;
@@ -12,8 +13,10 @@ namespace Volo.Abp.Imaging;
 
 public class ImageSharpImageResizerContributor : IImageResizerContributor, ITransientDependency
 {
-    public virtual async Task<ImageResizeResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs,
-        string mimeType = null,
+    public virtual async Task<ImageResizeResult<Stream>> TryResizeAsync(
+        Stream stream,
+        ImageResizeArgs resizeArgs,
+        [CanBeNull] string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
@@ -52,8 +55,10 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
         }
     }
 
-    public virtual async Task<ImageResizeResult<byte[]>> TryResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs,
-        string mimeType = null,
+    public virtual async Task<ImageResizeResult<byte[]>> TryResizeAsync(
+        byte[] bytes, 
+        ImageResizeArgs resizeArgs,
+        [CanBeNull] string mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
@@ -99,10 +104,11 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
         { ImageResizeMode.Crop, ResizeMode.Crop },
         { ImageResizeMode.Pad, ResizeMode.Pad }
     };
-    
-    private Size GetSize(ImageResizeArgs resizeArgs)
+
+    private static Size GetSize(ImageResizeArgs resizeArgs)
     {
         var size = new Size();
+        
         if (resizeArgs.Width > 0)
         {
             size.Width = resizeArgs.Width;

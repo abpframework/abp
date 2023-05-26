@@ -53,13 +53,14 @@ public class CompressImageAttribute : ActionFilterAttribute
         }
 
         var result = await imageCompressor.CompressAsync(file.OpenReadStream(), file.ContentType);
-        
-        if (result.State == ProcessState.Done)
+
+        if (result.State != ProcessState.Done)
         {
-            return new FormFile(result.Result, 0, result.Result.Length, file.Name, file.FileName);
+            return file;
         }
 
-        return file;
+        return new FormFile(result.Result, 0, result.Result.Length, file.Name, file.FileName);
+
     }
     
     protected virtual async Task<IRemoteStreamContent> CompressImageAsync(IRemoteStreamContent remoteStreamContent, IImageCompressor imageCompressor)
@@ -70,29 +71,31 @@ public class CompressImageAttribute : ActionFilterAttribute
         }
         
         var result = await imageCompressor.CompressAsync(remoteStreamContent.GetStream(), remoteStreamContent.ContentType);
-        
-        if (result.State == ProcessState.Done)
+
+        if (result.State != ProcessState.Done)
         {
-            var fileName = remoteStreamContent.FileName;
-            var contentType = remoteStreamContent.ContentType;
-            remoteStreamContent.Dispose();
-            return new RemoteStreamContent(result.Result, fileName, contentType);
+            return remoteStreamContent;
         }
 
-        return remoteStreamContent;
+        var fileName = remoteStreamContent.FileName;
+        var contentType = remoteStreamContent.ContentType;
+        remoteStreamContent.Dispose();
+        return new RemoteStreamContent(result.Result, fileName, contentType);
+
     }
     
     protected virtual async Task<Stream> CompressImageAsync(Stream stream, IImageCompressor imageCompressor)
     {
         var result = await imageCompressor.CompressAsync(stream);
-        
-        if (result.State == ProcessState.Done)
+
+        if (result.State != ProcessState.Done)
         {
-            await stream.DisposeAsync();
-            return result.Result;
+            return stream;
         }
 
-        return stream;
+        await stream.DisposeAsync();
+        return result.Result;
+
     }
     
     protected virtual async Task<byte[]> CompressImageAsync(byte[] bytes, IImageCompressor imageCompressor)

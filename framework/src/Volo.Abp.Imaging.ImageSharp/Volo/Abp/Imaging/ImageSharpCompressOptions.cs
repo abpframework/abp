@@ -19,10 +19,12 @@ public class ImageSharpCompressOptions
         JpegEncoder = new JpegEncoder {
             Quality = DefaultQuality
         };
+        
         PngEncoder = new PngEncoder {
             CompressionLevel = PngCompressionLevel.BestCompression,
             IgnoreMetadata = true
         };
+        
         WebpEncoder = new WebpEncoder {
             Quality = DefaultQuality
         };

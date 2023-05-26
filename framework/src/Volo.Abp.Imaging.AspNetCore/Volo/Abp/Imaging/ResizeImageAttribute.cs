@@ -66,13 +66,14 @@ public class ResizeImageAttribute : ActionFilterAttribute
         }
         
         var result = await imageResizer.ResizeAsync(file.OpenReadStream(), new ImageResizeArgs(Width, Height, Mode), file.ContentType);
-        
-        if (result.State == ProcessState.Done)
+
+        if (result.State != ProcessState.Done)
         {
-            return new FormFile(result.Result, 0, result.Result.Length, file.Name, file.FileName);
+            return file;
         }
 
-        return file;
+        return new FormFile(result.Result, 0, result.Result.Length, file.Name, file.FileName);
+
     }
     
     protected virtual async Task<IRemoteStreamContent> ResizeImageAsync(IRemoteStreamContent remoteStreamContent, IImageResizer imageResizer)
@@ -83,29 +84,31 @@ public class ResizeImageAttribute : ActionFilterAttribute
         }
         
         var result = await imageResizer.ResizeAsync(remoteStreamContent.GetStream(), new ImageResizeArgs(Width, Height, Mode), remoteStreamContent.ContentType);
-        
-        if (result.State == ProcessState.Done)
+
+        if (result.State != ProcessState.Done)
         {
-            var fileName = remoteStreamContent.FileName;
-            var contentType = remoteStreamContent.ContentType;
-            remoteStreamContent.Dispose();
-            return new RemoteStreamContent(result.Result, fileName, contentType);
+            return remoteStreamContent;
         }
 
-        return remoteStreamContent;
+        var fileName = remoteStreamContent.FileName;
+        var contentType = remoteStreamContent.ContentType;
+        remoteStreamContent.Dispose();
+        return new RemoteStreamContent(result.Result, fileName, contentType);
+
     }
     
     protected virtual async Task<Stream> ResizeImageAsync(Stream stream, IImageResizer imageResizer)
     {
         var result = await imageResizer.ResizeAsync(stream, new ImageResizeArgs(Width, Height, Mode));
-        
-        if (result.State == ProcessState.Done)
+
+        if (result.State != ProcessState.Done)
         {
-            await stream.DisposeAsync();
-            return result.Result;
+            return stream;
         }
 
-        return stream;
+        await stream.DisposeAsync();
+        return result.Result;
+
     }
     
     protected virtual async Task<byte[]> ResizeImageAsync(byte[] bytes, IImageResizer imageResizer)
