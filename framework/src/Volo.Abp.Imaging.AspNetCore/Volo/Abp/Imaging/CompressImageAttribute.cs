@@ -59,8 +59,9 @@ public class CompressImageAttribute : ActionFilterAttribute
             return file;
         }
 
-        return new FormFile(result.Result, 0, result.Result.Length, file.Name, file.FileName);
-
+        return new FormFile(result.Result, 0, result.Result.Length, file.Name, file.FileName) {
+            Headers = file.Headers,
+        };
     }
     
     protected virtual async Task<IRemoteStreamContent> CompressImageAsync(IRemoteStreamContent remoteStreamContent, IImageCompressor imageCompressor)
@@ -81,7 +82,6 @@ public class CompressImageAttribute : ActionFilterAttribute
         var contentType = remoteStreamContent.ContentType;
         remoteStreamContent.Dispose();
         return new RemoteStreamContent(result.Result, fileName, contentType);
-
     }
     
     protected virtual async Task<Stream> CompressImageAsync(Stream stream, IImageCompressor imageCompressor)
@@ -95,7 +95,6 @@ public class CompressImageAttribute : ActionFilterAttribute
 
         await stream.DisposeAsync();
         return result.Result;
-
     }
     
     protected virtual async Task<byte[]> CompressImageAsync(byte[] bytes, IImageCompressor imageCompressor)
