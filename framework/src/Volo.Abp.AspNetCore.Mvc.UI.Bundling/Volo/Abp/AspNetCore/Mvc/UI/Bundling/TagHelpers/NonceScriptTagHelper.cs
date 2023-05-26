@@ -6,6 +6,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
 
 [HtmlTargetElement("script")]
+[HtmlTargetElement("body")]
 public class NonceScriptTagHelper : AbpTagHelper
 {
     [HtmlAttributeNotBound]
