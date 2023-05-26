@@ -3,13 +3,21 @@ using Volo.Abp.Domain;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
+using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Menus;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit;
 
@@ -21,6 +29,7 @@ namespace Volo.CmsKit;
 )]
 public class CmsKitDomainModule : AbpModule
 {
+    private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
@@ -80,6 +89,66 @@ public class CmsKitDomainModule : AbpModule
         {
             // TODO: Configure TagEntityTypes here...
         }
+    }
+    
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        OneTimeRunner.Run(() =>
+        {
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                CmsKitModuleExtensionConsts.ModuleName,
+                CmsKitModuleExtensionConsts.EntityNames.Blog,
+                typeof(Blog)
+            );
+            
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                CmsKitModuleExtensionConsts.ModuleName,
+                CmsKitModuleExtensionConsts.EntityNames.BlogPost,
+                typeof(BlogPost)
+            );
+            
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                CmsKitModuleExtensionConsts.ModuleName,
+                CmsKitModuleExtensionConsts.EntityNames.BlogFeature,
+                typeof(BlogFeature)
+            );
+            
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                CmsKitModuleExtensionConsts.ModuleName,
+                CmsKitModuleExtensionConsts.EntityNames.MediaDescriptor,
+                typeof(MediaDescriptor)
+            );
+            
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                CmsKitModuleExtensionConsts.ModuleName,
+                CmsKitModuleExtensionConsts.EntityNames.Page,
+                typeof(Page)
+            );
+            
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                CmsKitModuleExtensionConsts.ModuleName,
+                CmsKitModuleExtensionConsts.EntityNames.Tag,
+                typeof(Tag)
+            );
+            
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                CmsKitModuleExtensionConsts.ModuleName,
+                CmsKitModuleExtensionConsts.EntityNames.Comment,
+                typeof(Comment)
+            );
+            
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                CmsKitModuleExtensionConsts.ModuleName,
+                CmsKitModuleExtensionConsts.EntityNames.MenuItem,
+                typeof(MenuItem)
+            );
+            
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                CmsKitModuleExtensionConsts.ModuleName,
+                CmsKitModuleExtensionConsts.EntityNames.CmsUser,
+                typeof(CmsUser)
+            );
+        });
     }
 
     private static LocalizableString L(string name)

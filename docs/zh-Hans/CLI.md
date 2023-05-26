@@ -44,6 +44,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`logout`**: 在你的计算机注销认证.
 * **`bundle`**: 为 ABP Blazor 和 MAUI Blazor 项目生成引用的脚本和样式. 
 * **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
+* **`clear-download-cache`** 删除下载的模版缓存.
 
 ### help
 
@@ -142,6 +143,7 @@ abp new Acme.BookStore
 * `--create-solution-folder` 或者 `-csf`: 指定项目是在输出文件夹中的新文件夹中还是直接在输出文件夹中.
 * `--connection-string` 或者 `-cs`:  重写所有 `appsettings.json` 文件的默认连接字符串. 默认连接字符串是 `Server=localhost;Database=MyProjectName;Trusted_Connection=True`. 默认的数据库提供程序是 `SQL Server`. 如果你使用EF Core但需要更改DBMS,可以按[这里所述](Entity-Framework-Core-Other-DBMS.md)进行更改(创建解决方案之后).
 * `--local-framework-ref --abp-path`: 使用对项目的本地引用,而不是替换为NuGet包引用.
+* `--skip-cache` or `-sc`: 从服务器下载最新的模版并更新本地模版缓存.
 
 ### update
 

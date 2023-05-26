@@ -1352,6 +1352,10 @@
       "path": "Deployment/Index.md",
       "items": [
         {
+          "text": "Configuring OpenIddict",
+          "path": "Deployment/Configuring-OpenIddict.md"
+        },
+        {
           "text": "Configuring for Production",
           "path": "Deployment/Configuring-Production.md"
         },
