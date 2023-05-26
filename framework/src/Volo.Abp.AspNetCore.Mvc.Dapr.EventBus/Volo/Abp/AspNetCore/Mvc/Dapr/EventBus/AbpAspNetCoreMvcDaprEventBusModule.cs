@@ -52,7 +52,7 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
                                 Metadata = new AbpMetadata
                                 {
                                     {
-                                        AbpMetadata.RawPayload, "true"
+                                        AbpMetadata.RawPayload, subscribeOptions.EnableRawPayload.ToString().ToLower()
                                     }
                                 }
                             };
