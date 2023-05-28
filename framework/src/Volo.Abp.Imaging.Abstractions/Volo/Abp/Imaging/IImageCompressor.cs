@@ -10,10 +10,12 @@ public interface IImageCompressor
     Task<ImageCompressResult<Stream>> CompressAsync(
         Stream stream,
         [CanBeNull] string mimeType = null,
-        CancellationToken cancellationToken = default);
-    
+        CancellationToken cancellationToken = default
+    );
+
     Task<ImageCompressResult<byte[]>> CompressAsync(
         byte[] bytes,
         [CanBeNull] string mimeType = null,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 }
