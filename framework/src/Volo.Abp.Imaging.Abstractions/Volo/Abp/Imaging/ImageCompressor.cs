@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
@@ -19,8 +20,13 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
-    public virtual async Task<ImageCompressResult<Stream>> CompressAsync(Stream stream, string mimeType = null, CancellationToken cancellationToken = default)
+    public virtual async Task<ImageCompressResult<Stream>> CompressAsync(
+        [NotNull] Stream stream,
+        [CanBeNull] string mimeType = null,
+        CancellationToken cancellationToken = default)
     {
+        Check.NotNull(stream, nameof(stream));
+        
         foreach (var imageCompressorContributor in ImageCompressorContributors)
         {
             var result = await imageCompressorContributor.TryCompressAsync(stream, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
@@ -36,8 +42,13 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
         return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
     }
 
-    public virtual async Task<ImageCompressResult<byte[]>> CompressAsync(byte[] bytes, string mimeType = null, CancellationToken cancellationToken = default)
+    public virtual async Task<ImageCompressResult<byte[]>> CompressAsync(
+        [NotNull] byte[] bytes,
+        [CanBeNull] string mimeType = null,
+        CancellationToken cancellationToken = default)
     {
+        Check.NotNull(bytes, nameof(bytes));
+        
         foreach (var imageCompressorContributor in ImageCompressorContributors)
         {
             var result = await imageCompressorContributor.TryCompressAsync(bytes, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));

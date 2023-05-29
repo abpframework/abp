@@ -28,11 +28,13 @@ public class ImageResizer : IImageResizer, ITransientDependency
     }
     
     public virtual async Task<ImageResizeResult<Stream>> ResizeAsync(
-        Stream stream, 
+        [NotNull] Stream stream, 
         ImageResizeArgs resizeArgs, 
         [CanBeNull] string mimeType = null, 
         CancellationToken cancellationToken = default)
     {
+        Check.NotNull(stream, nameof(stream));
+        
         ChangeDefaultResizeMode(resizeArgs);
         
         foreach (var imageResizerContributor in ImageResizerContributors)
@@ -51,11 +53,13 @@ public class ImageResizer : IImageResizer, ITransientDependency
     }
 
     public virtual async Task<ImageResizeResult<byte[]>> ResizeAsync(
-        byte[] bytes, 
+        [NotNull] byte[] bytes, 
         ImageResizeArgs resizeArgs, 
         [CanBeNull] string mimeType = null, 
         CancellationToken cancellationToken = default)
     {
+        Check.NotNull(bytes, nameof(bytes));
+        
         ChangeDefaultResizeMode(resizeArgs);
         
         foreach (var imageResizerContributor in ImageResizerContributors)
