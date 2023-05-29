@@ -1,8 +1,5 @@
 # Image Manipulation
-The ABP Framework provides an abstraction to work with image compress/resize. Having such an abstraction has some benefits;
-
-* You can write library independent code. Therefore, you can change the underlying library with the minimum effort and code change.
-* You can use the predefined image resizer/compressor defined in the ABP without worrying about the underlying library's internal details.
+ABP Framework provides services to compress and resize images and implements these services with popular [ImageSharp](https://sixlabors.com/products/imagesharp/) and [Magick.NET](https://github.com/dlemstra/Magick.NET) libraries. You can use these services in your reusable modules, libraries and applications, so you don't depend on a specific imaging library.
 
 > The image resizer/compressor system is designed to be extensible. You can implement your own image resizer/compressor contributor and use it in your application.
 
@@ -12,7 +9,7 @@ It is suggested to use the [ABP CLI](CLI.md) to install this package.
 
 ### Using the ABP CLI
 
-Open a command line window in the folder of the project (.csproj file) and type the following command:
+Open a command line terminal in the folder of your project (.csproj file) and type the following command:
 
 ```bash
 abp add-package Volo.Abp.Imaging.Abstractions
@@ -42,31 +39,45 @@ public class YourModule : AbpModule
 
 ## Providers
 
-The ABP Framework provides two image resizer/compressor providers:
+ABP Framework provides two image resizer/compressor implementations out of the box:
 
 * [Magick.NET](#magicknet)
 * [ImageSharp](#imagesharp)
 
-> It needs a provider to work. You can use the [Magick.NET](#magicknet), [ImageSharp](#imagesharp) provider or implement your own provider. Provider does not exist, the input stream will be returned as it is.
+You should install one of these provides to make it actually working.
+
+> If none of the provider packages installed into your application, compress/resize operations return the untouched input image.
 
 ## IImageResizer
 
-You can inject `IImageResizer` and use it for image resize operations. Here is the available operations in the `IImageResizer` interface.
+You can [inject](Dependency-Injection.md) the `IImageResizer` service and use it for image resize operations. Here is the available methods of the `IImageResizer` service:
 
 ```csharp
 public interface IImageResizer
 {
-    Task<ImageResizeResult<Stream>> ResizeAsync(Stream stream, ImageResizeArgs resizeArgs, [CanBeNull]string mimeType = null, CancellationToken cancellationToken = default);
-    
-    Task<ImageResizeResult<byte[]>> ResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, [CanBeNull] string mimeType = null, CancellationToken cancellationToken = default);
+    /* Works with a Stream object that represents an image */
+    Task<ImageResizeResult<Stream>> ResizeAsync(
+        Stream stream,
+        ImageResizeArgs resizeArgs,
+        string mimeType = null,
+        CancellationToken cancellationToken = default
+    );
+
+    /* Works with a byte array that contains an image file */
+    Task<ImageResizeResult<byte[]>> ResizeAsync(
+        byte[] bytes,
+        ImageResizeArgs resizeArgs,
+        string mimeType = null,
+        CancellationToken cancellationToken = default
+    );
 }
 ```
 
-Usage example:
+**Example usage:**
 
 ```csharp
 var result = await _imageResizer.ResizeAsync(
-    stream,
+    stream, /* A stream object that represents an image */
     new ImageResizeArgs
     {
         Width = 100,
@@ -77,15 +88,17 @@ var result = await _imageResizer.ResizeAsync(
 );
 ```
 
-## ImageResizeArgs
+> You can use `MimeTypes.Image.Jpeg` constant instead of the `image/jpeg` magic string used in that example.
+
+### ImageResizeArgs
 
 The `ImageResizeArgs` is a class that is used to define the resize operation parameters. It has the following properties:
 
 * `Width`: The width of the resized image.
 * `Height`: The height of the resized image.
-* `Mode`: The resize mode. (See the [ImageResizeMode](#imageresizemode) section for more information.)
+* `Mode`: The resize mode (see the [ImageResizeMode](#imageresizemode) section for more information).
 
-## ImageResizeMode
+### ImageResizeMode
 
 The `ImageResizeMode` is an enum that is used to define the resize mode. It has the following values:
 
@@ -103,76 +116,74 @@ public enum ImageResizeMode
 }
 ```
 
-## IImageResizerContributor
-
-The `IImageResizerContributor` is an interface that is used to implement a custom image resizer. It has the following method:
-
-```csharp
-public interface IImageResizerContributor
-{
-    Task<ImageResizeResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default);
-    
-    Task<ImageResizeResult<byte[]>> TryResizeAsync(byte[] bytes, ImageResizeArgs resizeArgs, string mimeType = null, CancellationToken cancellationToken = default);
-}
-```
-
-## ImageResizeResult
+### ImageResizeResult
 
 The `ImageResizeResult` is a generic class that is used to return the result of the image resize operations. It has the following properties:
 
-* `Result`: The resized image stream or byte array.
-* `State`: The state of the resize operation. (See the [ProcessState](#processstate) section for more information.)
+* `Result`: The resized image (stream or byte array).
+* `State`: The result of the resize operation (type: `ProcessState`).
+
+### ProcessState
+
+The `ProcessState` is an enum that is used to return the the result of the image resize operations. It has the following values:
+
+```csharp
+public enum ProcessState : byte
+{
+    Done = 1,
+    Canceled = 2,
+    Unsupported = 3,
+}
+```
+
+### ImageResizeOptions
+
+`ImageResizeOptions` is an [options object](Options.md) that is used to configure the image resize system. It has the following properties:
+
+* `DefaultResizeMode`: The default resize mode. (Default: `ImageResizeMode.None`)
 
 ## IImageCompressor
 
-You can inject `IImageCompressor` and use it for image compression operations. Here is the available operations in the `IImageCompressor` interface.
+You can [inject](Dependency-Injection.md) the `IImageCompressor` service and use it for image compression operations. Here is the available methods of the `IImageCompressor` service:
 
 ```csharp
 public interface IImageCompressor
 {
+    /* Works with a Stream object that represents an image */
     Task<ImageCompressResult<Stream>> CompressAsync(
         Stream stream,
-        [CanBeNull] string mimeType = null,
-        CancellationToken cancellationToken = default);
+        string mimeType = null,
+        CancellationToken cancellationToken = default
+    );
     
+    /* Works with a byte array that contains an image file */
     Task<ImageCompressResult<byte[]>> CompressAsync(
         byte[] bytes,
-        [CanBeNull] string mimeType = null,
-        CancellationToken cancellationToken = default);
+        string mimeType = null,
+        CancellationToken cancellationToken = default
+    );
 }
 ```
 
-Usage example:
+**Example usage:**
 
 ```csharp
 var result = await _imageCompressor.CompressAsync(
-    stream,
+    stream, /* A stream object that represents an image */
     mimeType: "image/jpeg"
 );
 ```
 
-## ImageCompressResult
+### ImageCompressResult
 
 The `ImageCompressResult` is a generic class that is used to return the result of the image compression operations. It has the following properties:
 
-* `Result`: The compressed image stream or byte array.
-* `State`: The state of the compression operation. (See the [ProcessState](#processstate) section for more information.)
+* `Result`: The compressed image (stream or byte array).
+* `State`: The result of the compress operation (type: `ProcessState`).
 
-## IImageCompressorContributor
+### ProcessState
 
-The `IImageCompressorContributor` is an interface that is used to implement a custom image compressor. It has the following method:
-
-```csharp
-public interface IImageCompressorContributor
-{
-    Task<ImageCompressResult<Stream>> TryCompressAsync(Stream stream, string mimeType = null, CancellationToken cancellationToken = default);
-    Task<ImageCompressResult<byte[]>> TryCompressAsync(byte[] bytes, string mimeType = null, CancellationToken cancellationToken = default);
-}
-```
-
-## ProcessState
-
-The `ProcessState` is an enum that is used to define the state of the image resize/compression operations. It has the following values:
+The `ProcessState` is an enum that is used to return the the result of the image compress operations. It has the following values:
 
 ```csharp
 public enum ProcessState : byte
@@ -191,9 +202,9 @@ public enum ProcessState : byte
 
 * `DefaultResizeMode`: The default resize mode. (Default: `ImageResizeMode.None`)
 
-## [Magick.NET](https://github.com/dlemstra/Magick.NET)
+## Magick.NET Provider
 
-Add the `Volo.Abp.Imaging.MagickNet` NuGet package to your project and use the `AbpImagingMagickNetModule` module.
+`Volo.Abp.Imaging.MagickNet` NuGet package implements the image operations using the [Magick.NET](https://github.com/dlemstra/Magick.NET) library. If you want to use that library as image process provider, add the `Volo.Abp.Imaging.MagickNet` NuGet package to your project, then add  `AbpImagingMagickNetModule` to your [module](Module-Development-Basics.md)'s dependency list:
 
 ```csharp
 [DependsOn(typeof(AbpImagingMagickNetModule))]
@@ -205,17 +216,15 @@ public class MyModule : AbpModule
 
 ### Configuration
 
-#### MagickNetCompressOptions
-
 `MagickNetCompressOptions` is used to configure the Magick.NET image compression system. It has the following properties:
 
 * `OptimalCompression`: Indicates whether the optimal compression is enabled or not. (Default: `false`)
 * `IgnoreUnsupportedFormats`: Indicates whether the unsupported formats are ignored or not. (Default: `false`)
 * `Lossless`: Indicates whether the lossless compression is enabled or not. (Default: `false`)
 
-## [ImageSharp](https://github.com/SixLabors/ImageSharp)
+## ImageSharp Provider
 
-Add the `Volo.Abp.Imaging.ImageSharp` NuGet package to your project and use the `AbpImagingImageSharpModule` module.
+`Volo.Abp.Imaging.ImageSharp` NuGet package implements the image operations using the [ImageSharp](https://github.com/SixLabors/ImageSharp) library. If you want to use that library as image process provider, add the `Volo.Abp.Imaging.ImageSharp` NuGet package to your project, then add  `AbpImagingImageSharpModule` to your [module](Module-Development-Basics.md)'s dependency list:
 
 ```csharp
 [DependsOn(typeof(AbpImagingImageSharpModule))]
@@ -227,8 +236,6 @@ public class MyModule : AbpModule
 
 ### Configuration
 
-#### ImageSharpCompressOptions
-
 `ImageSharpCompressOptions` is used to configure the ImageSharp image compression system. It has the following properties:
 
 * `DefaultQuality`: The default quality of the JPEG and WebP encoders. (Default: `75`)
@@ -238,9 +245,9 @@ public class MyModule : AbpModule
 
 ## ASP.NET Core Integration
 
-Add the `Volo.Abp.Imaging.AspNetCore` NuGet package to your project and use the `AbpImagingAspNetCoreModule` module.
+`Volo.Abp.Imaging.AspNetCore` NuGet package defines attributes for controller actions that can automatically compress and/or resize uploaded files.
 
-> It needs a provider to work. You can use the [Magick.NET](#magicknet), [ImageSharp](#imagesharp) provider or implement your own provider. Provider does not exist, the input stream will be returned as it is.
+To use the ASP.NET Core integration, add the `Volo.Abp.Imaging.AspNetCore` NuGet package to your project and add the `AbpImagingAspNetCoreModule` module to your module's dependency list:
 
 ```csharp
 [DependsOn(typeof(AbpImagingAspNetCoreModule))]
@@ -252,16 +259,15 @@ public class MyModule : AbpModule
 
 ### CompressImageAttribute
 
-The `CompressImageAttribute` is used to compress the image before requesting the action. IFormFile, IRemoteStreamContent, Stream and IEnumrable<byte> types are supported. It has the following properties:
+The `CompressImageAttribute` is used to compress the image before. `IFormFile`, `IRemoteStreamContent`, `Stream` and `IEnumrable<byte>` types are supported. It has the following properties:
 
-* `Parameters`: The parameters that are used to configure the image compression system. (Optional. This applies to all parameters if left blank.)
+* `Parameters`: Names of the the parameters that are used to configure the image compression system. This is useful if your action has some non-image parameters. If you don't specify the parameters names, all of the method parameters are considered as image.
 
-Usage example:
+**Example usage:**
 
 ```csharp
-
-[CompressImage]
 [HttpPost]
+[CompressImage] /* Compresses the given file (automatically determines the file mime type) */
 public async Task<IActionResult> Upload(IFormFile file)
 {
     //...
@@ -270,19 +276,18 @@ public async Task<IActionResult> Upload(IFormFile file)
 
 ### ResizeImageAttribute
 
-The `ResizeImageAttribute` is used to resize the image before requesting the action. IFormFile, IRemoteStreamContent, Stream and IEnumrable<byte> types are supported. It has the following properties:
+The `ResizeImageAttribute` is used to resize the image before requesting the action. `IFormFile`, `IRemoteStreamContent`, `Stream` and `IEnumrable<byte>` types are supported. It has the following properties:
 
-* `Parameters`: The parameters that are used to configure the image resize system. (Optional. This applies to all parameters if left blank.)
-* `Width`: The width of the resized image.
-* `Height`: The height of the resized image.
-* `Mode`: The resize mode. (See the [ImageResizeMode](#imageresizemode) section for more information.)
+* `Parameters`: Names of the the parameters that are used to configure the image resize system. This is useful if your action has some non-image parameters. If you don't specify the parameters names, all of the method parameters are considered as image.
+* `Width`: Target width of the resized image.
+* `Height`: Target height of the resized image.
+* `Mode`: The resize mode (see the [ImageResizeMode](#imageresizemode) section for more information).
 
-Usage example:
+**Example usage:**
 
 ```csharp
-
-[ResizeImage(Width = 100, Height = 100, Mode = ImageResizeMode.Crop)]
 [HttpPost]
+[ResizeImage(Width = 100, Height = 100, Mode = ImageResizeMode.Crop)] 
 public async Task<IActionResult> Upload(IFormFile file)
 {
     //...
