@@ -35,6 +35,7 @@ export abstract class Prop<R = any> {
     public readonly isExtra = false,
     public readonly template?: Type<any>,
     public readonly className?: string,
+    public readonly formText?: string,
     public readonly displayTextResolver?: PropDisplayTextResolver<R>,
   ) {
     this.displayName = this.displayName || this.name;
