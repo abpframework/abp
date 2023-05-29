@@ -103,16 +103,16 @@ The `ImageResizeArgs` is a class that is used to define the resize operation par
 The `ImageResizeMode` is an enum that is used to define the resize mode. It has the following values:
 
 ```csharp
-public enum ImageResizeMode
+public enum ImageResizeMode : byte
 {
-    None,
-    Stretch,
-    BoxPad,
-    Min,
-    Max,
-    Crop,
-    Pad,
-    Default
+    None = 0,
+    Stretch = 1,
+    BoxPad = 2,
+    Min = 3,
+    Max = 4,
+    Crop = 5,
+    Pad = 6,
+    Default = 7
 }
 ```
 
