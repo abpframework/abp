@@ -41,8 +41,8 @@ public class YourModule : AbpModule
 
 ABP Framework provides two image resizer/compressor implementations out of the box:
 
-* [Magick.NET](#magicknet)
-* [ImageSharp](#imagesharp)
+* [Magick.NET](#magicknet-provider)
+* [ImageSharp](#imagesharp-provider)
 
 You should install one of these provides to make it actually working.
 
@@ -194,14 +194,6 @@ public enum ImageProcessState : byte
 }
 ```
 
-## Configuration
-
-### ImageResizeOptions
-
-`ImageResizeOptions` is used to configure the image resize system. It has the following properties:
-
-* `DefaultResizeMode`: The default resize mode. (Default: `ImageResizeMode.None`)
-
 ## Magick.NET Provider
 
 `Volo.Abp.Imaging.MagickNet` NuGet package implements the image operations using the [Magick.NET](https://github.com/dlemstra/Magick.NET) library. If you want to use that library as image process provider, add the `Volo.Abp.Imaging.MagickNet` NuGet package to your project, then add  `AbpImagingMagickNetModule` to your [module](Module-Development-Basics.md)'s dependency list:
@@ -216,7 +208,7 @@ public class MyModule : AbpModule
 
 ### Configuration
 
-`MagickNetCompressOptions` is used to configure the Magick.NET image compression system. It has the following properties:
+`MagickNetCompressOptions` is an [options object](Options.md) that is used to configure the Magick.NET image compression system. It has the following properties:
 
 * `OptimalCompression`: Indicates whether the optimal compression is enabled or not. (Default: `false`)
 * `IgnoreUnsupportedFormats`: Indicates whether the unsupported formats are ignored or not. (Default: `false`)
@@ -236,12 +228,32 @@ public class MyModule : AbpModule
 
 ### Configuration
 
-`ImageSharpCompressOptions` is used to configure the ImageSharp image compression system. It has the following properties:
+`ImageSharpCompressOptions` is an [options object](Options.md) that is used to configure the ImageSharp image compression system. It has the following properties:
 
 * `DefaultQuality`: The default quality of the JPEG and WebP encoders. (Default: `75`)
-* `JpegEncoder`: The JPEG encoder. (Default: `JpegEncoder` with `Quality` set to `DefaultQuality`)
-* `PngEncoder`: The PNG encoder. (Default: `PngEncoder` with `IgnoreMetadata` set to `true` and `CompressionLevel` set to `PngCompressionLevel.BestCompression`)	
-* `WebPEncoder`: The WebP encoder. (Default: `WebPEncoder` with `Quality` set to `DefaultQuality`)
+* [`JpegEncoder`](https://docs.sixlabors.com/api/ImageSharp/SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder.html): The JPEG encoder. (Default: `JpegEncoder` with `Quality` set to `DefaultQuality`)
+* [`PngEncoder`](https://docs.sixlabors.com/api/ImageSharp/SixLabors.ImageSharp.Formats.Png.PngEncoder.html): The PNG encoder. (Default: `PngEncoder` with `IgnoreMetadata` set to `true` and `CompressionLevel` set to `PngCompressionLevel.BestCompression`)
+* [`WebPEncoder`](https://docs.sixlabors.com/api/ImageSharp/SixLabors.ImageSharp.Formats.Webp.WebpEncoder.html): The WebP encoder. (Default: `WebPEncoder` with `Quality` set to `DefaultQuality`)
+
+**Example usage:**
+    
+```csharp
+Configure<ImageSharpCompressOptions>(options =>
+{
+    options.JpegEncoder = new JpegEncoder
+    {
+        Quality = 60
+    };
+    options.PngEncoder = new PngEncoder
+    {
+        CompressionLevel = PngCompressionLevel.BestCompression
+    };
+    options.WebPEncoder = new WebPEncoder
+    {
+        Quality = 65
+    };
+});
+```
 
 ## ASP.NET Core Integration
 
