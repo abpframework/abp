@@ -116,6 +116,8 @@ public enum ImageResizeMode : byte
 }
 ```
 
+> See the [ImageSharp documentation](https://docs.sixlabors.com/api/ImageSharp/SixLabors.ImageSharp.Processing.ResizeMode.html) for more information about the resize modes.
+
 ### ImageResizeResult
 
 The `ImageResizeResult` is a generic class that is used to return the result of the image resize operations. It has the following properties:
