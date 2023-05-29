@@ -47,6 +47,7 @@ After that, you have registered the `UseAbpSecurityHeaders` middleware into the 
 ## Content Security Policy Script Nonce
 
 Abp Framework provides a property to add a dynamic script-src nonce value to the Content-Security-Policy header. With this feature, it automatically adds a dynamic nonce value to the header side. And with the help of the script tag helper, it adds this [`script nonce`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) value to the script tags on your pages(The `ScriptNonceTagHelper` in the `Volo.Abp.AspNetCore.Mvc.UI.Bundling` namespace must be attached as a taghelper.).
+> If you need to add the nonce script manually, you can use 'Html.GetScriptNonce()' to add the nonce value or 'Html.GetScriptNonceAttribute()' to add the nonce attribute value.
 
 This feature is disabled by default. You can enable it by setting the `UseContentSecurityPolicyScriptNonce` property of the `AbpSecurityHeadersOptions` class to `true`.
 
@@ -69,5 +70,3 @@ Configure<AbpSecurityHeadersOptions>(options =>
     });
 });
 ```
-
-> If you need to add the nonce script manually, you can use 'Html.GetScriptNonce()' to add the nonce value or 'Html.GetScriptNonceAttribute()' to add the nonce attribute value.
