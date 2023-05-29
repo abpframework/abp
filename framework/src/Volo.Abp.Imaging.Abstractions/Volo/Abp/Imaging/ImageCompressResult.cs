@@ -2,7 +2,7 @@
 
 public class ImageCompressResult<T> : ImageProcessResult<T>
 {
-    public ImageCompressResult(T result, ProcessState state) : base(result, state)
+    public ImageCompressResult(T result, ImageProcessState state) : base(result, state)
     {
     }
 }

@@ -54,7 +54,7 @@ public class CompressImageAttribute : ActionFilterAttribute
 
         var result = await imageCompressor.CompressAsync(file.OpenReadStream(), file.ContentType);
 
-        if (result.State != ProcessState.Done)
+        if (result.State != ImageProcessState.Done)
         {
             return file;
         }
@@ -73,7 +73,7 @@ public class CompressImageAttribute : ActionFilterAttribute
         
         var result = await imageCompressor.CompressAsync(remoteStreamContent.GetStream(), remoteStreamContent.ContentType);
 
-        if (result.State != ProcessState.Done)
+        if (result.State != ImageProcessState.Done)
         {
             return remoteStreamContent;
         }
@@ -88,7 +88,7 @@ public class CompressImageAttribute : ActionFilterAttribute
     {
         var result = await imageCompressor.CompressAsync(stream);
 
-        if (result.State != ProcessState.Done)
+        if (result.State != ImageProcessState.Done)
         {
             return stream;
         }

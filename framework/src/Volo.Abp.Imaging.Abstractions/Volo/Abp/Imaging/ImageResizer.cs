@@ -39,7 +39,7 @@ public class ImageResizer : IImageResizer, ITransientDependency
         {
             var result = await imageResizerContributor.TryResizeAsync(stream, resizeArgs, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
             
-            if (result.State == ProcessState.Unsupported)
+            if (result.State == ImageProcessState.Unsupported)
             {
                 continue;
             }
@@ -47,7 +47,7 @@ public class ImageResizer : IImageResizer, ITransientDependency
             return result;
         }
         
-        return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
+        return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
     }
 
     public virtual async Task<ImageResizeResult<byte[]>> ResizeAsync(
@@ -62,7 +62,7 @@ public class ImageResizer : IImageResizer, ITransientDependency
         {
             var result = await imageResizerContributor.TryResizeAsync(bytes, resizeArgs, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
             
-            if (result.State == ProcessState.Unsupported)
+            if (result.State == ImageProcessState.Unsupported)
             {
                 continue;
             }
@@ -70,7 +70,7 @@ public class ImageResizer : IImageResizer, ITransientDependency
             return result;
         }
         
-        return new ImageResizeResult<byte[]>(bytes, ProcessState.Unsupported);
+        return new ImageResizeResult<byte[]>(bytes, ImageProcessState.Unsupported);
     }
     
     protected virtual void ChangeDefaultResizeMode(ImageResizeArgs resizeArgs)

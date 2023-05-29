@@ -67,7 +67,7 @@ public class ResizeImageAttribute : ActionFilterAttribute
         
         var result = await imageResizer.ResizeAsync(file.OpenReadStream(), new ImageResizeArgs(Width, Height, Mode), file.ContentType);
 
-        if (result.State != ProcessState.Done)
+        if (result.State != ImageProcessState.Done)
         {
             return file;
         }
@@ -86,7 +86,7 @@ public class ResizeImageAttribute : ActionFilterAttribute
         
         var result = await imageResizer.ResizeAsync(remoteStreamContent.GetStream(), new ImageResizeArgs(Width, Height, Mode), remoteStreamContent.ContentType);
 
-        if (result.State != ProcessState.Done)
+        if (result.State != ImageProcessState.Done)
         {
             return remoteStreamContent;
         }
@@ -101,7 +101,7 @@ public class ResizeImageAttribute : ActionFilterAttribute
     {
         var result = await imageResizer.ResizeAsync(stream, new ImageResizeArgs(Width, Height, Mode));
 
-        if (result.State != ProcessState.Done)
+        if (result.State != ImageProcessState.Done)
         {
             return stream;
         }

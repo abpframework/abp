@@ -19,7 +19,7 @@ public class IImageResizer_Tests : AbpImagingAbstractionsTestBase
         var resizedImage = await ImageResizer.ResizeAsync(jpegImage, new ImageResizeArgs(100, 100));
         
         resizedImage.ShouldNotBeNull();
-        resizedImage.State.ShouldBe(ProcessState.Unsupported);
+        resizedImage.State.ShouldBe(ImageProcessState.Unsupported);
         
         resizedImage.Result.ShouldBe(jpegImage);
     }
@@ -31,7 +31,7 @@ public class IImageResizer_Tests : AbpImagingAbstractionsTestBase
         var resizedImage = await ImageResizer.ResizeAsync(pngImage, new ImageResizeArgs(100, 100));
         
         resizedImage.ShouldNotBeNull();
-        resizedImage.State.ShouldBe(ProcessState.Unsupported);
+        resizedImage.State.ShouldBe(ImageProcessState.Unsupported);
         
         resizedImage.Result.ShouldBe(pngImage);
     }
@@ -43,7 +43,7 @@ public class IImageResizer_Tests : AbpImagingAbstractionsTestBase
         var resizedImage = await ImageResizer.ResizeAsync(webpImage, new ImageResizeArgs(100, 100));
         
         resizedImage.ShouldNotBeNull();
-        resizedImage.State.ShouldBe(ProcessState.Unsupported);
+        resizedImage.State.ShouldBe(ImageProcessState.Unsupported);
         
         resizedImage.Result.ShouldBe(webpImage);
     }

@@ -21,7 +21,7 @@ public class MagickNetImageResizer_Tests : AbpImagingMagickNetTestBase
         var resizedImage = await ImageResizer.ResizeAsync(jpegImage, new ImageResizeArgs(100, 100));
 
         resizedImage.ShouldNotBeNull();
-        resizedImage.State.ShouldBe(ProcessState.Done);
+        resizedImage.State.ShouldBe(ImageProcessState.Done);
         resizedImage.Result.Length.ShouldBeLessThan(jpegImage.Length);
         
         resizedImage.Result.Dispose();
@@ -34,7 +34,7 @@ public class MagickNetImageResizer_Tests : AbpImagingMagickNetTestBase
         var resizedImage = await ImageResizer.ResizeAsync(pngImage, new ImageResizeArgs(100, 100));
 
         resizedImage.ShouldNotBeNull();
-        resizedImage.State.ShouldBe(ProcessState.Done);
+        resizedImage.State.ShouldBe(ImageProcessState.Done);
         resizedImage.Result.Length.ShouldBeLessThan(pngImage.Length);
         
         resizedImage.Result.Dispose();
@@ -47,7 +47,7 @@ public class MagickNetImageResizer_Tests : AbpImagingMagickNetTestBase
         var resizedImage = await ImageResizer.ResizeAsync(webpImage, new ImageResizeArgs(100, 100));
 
         resizedImage.ShouldNotBeNull();
-        resizedImage.State.ShouldBe(ProcessState.Done);
+        resizedImage.State.ShouldBe(ImageProcessState.Done);
         resizedImage.Result.Length.ShouldBeLessThan(webpImage.Length);
         
         resizedImage.Result.Dispose();
@@ -61,11 +61,11 @@ public class MagickNetImageResizer_Tests : AbpImagingMagickNetTestBase
         var resizedImage2 = await ImageResizer.ResizeAsync(await jpegImage.GetAllBytesAsync(), new ImageResizeArgs(100, 100));
 
         resizedImage1.ShouldNotBeNull();
-        resizedImage1.State.ShouldBe(ProcessState.Done);
+        resizedImage1.State.ShouldBe(ImageProcessState.Done);
         resizedImage1.Result.Length.ShouldBeLessThan(jpegImage.Length);
         
         resizedImage2.ShouldNotBeNull();
-        resizedImage2.State.ShouldBe(ProcessState.Done);
+        resizedImage2.State.ShouldBe(ImageProcessState.Done);
         resizedImage2.Result.LongLength.ShouldBeLessThan(jpegImage.Length);
         
         resizedImage1.Result.Length.ShouldBe(resizedImage2.Result.LongLength);

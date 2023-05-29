@@ -3,9 +3,9 @@
 public abstract class ImageProcessResult<T>
 {
     public T Result { get; }
-    public ProcessState State { get; }
+    public ImageProcessState State { get; }
 
-    protected ImageProcessResult(T result, ProcessState state)
+    protected ImageProcessResult(T result, ImageProcessState state)
     {
         Result = result;
         State = state;

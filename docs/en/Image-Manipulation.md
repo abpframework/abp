@@ -121,14 +121,14 @@ public enum ImageResizeMode
 The `ImageResizeResult` is a generic class that is used to return the result of the image resize operations. It has the following properties:
 
 * `Result`: The resized image (stream or byte array).
-* `State`: The result of the resize operation (type: `ProcessState`).
+* `State`: The result of the resize operation (type: `ImageProcessState`).
 
-### ProcessState
+### ImageProcessState
 
-The `ProcessState` is an enum that is used to return the the result of the image resize operations. It has the following values:
+The `ImageProcessState` is an enum that is used to return the the result of the image resize operations. It has the following values:
 
 ```csharp
-public enum ProcessState : byte
+public enum ImageProcessState : byte
 {
     Done = 1,
     Canceled = 2,
@@ -179,14 +179,14 @@ var result = await _imageCompressor.CompressAsync(
 The `ImageCompressResult` is a generic class that is used to return the result of the image compression operations. It has the following properties:
 
 * `Result`: The compressed image (stream or byte array).
-* `State`: The result of the compress operation (type: `ProcessState`).
+* `State`: The result of the compress operation (type: `ImageProcessState`).
 
-### ProcessState
+### ImageProcessState
 
-The `ProcessState` is an enum that is used to return the the result of the image compress operations. It has the following values:
+The `ImageProcessState` is an enum that is used to return the the result of the image compress operations. It has the following values:
 
 ```csharp
-public enum ProcessState : byte
+public enum ImageProcessState : byte
 {
     Done = 1,
     Canceled = 2,

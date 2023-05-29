@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Imaging;
 
-public enum ProcessState : byte
+public enum ImageProcessState : byte
 {
     Done = 1,
     Canceled = 2,

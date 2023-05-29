@@ -2,7 +2,7 @@
 
 public class ImageResizeResult<T> : ImageProcessResult<T>
 {
-    public ImageResizeResult(T result, ProcessState state) : base(result, state)
+    public ImageResizeResult(T result, ImageProcessState state) : base(result, state)
     {
     }
 }

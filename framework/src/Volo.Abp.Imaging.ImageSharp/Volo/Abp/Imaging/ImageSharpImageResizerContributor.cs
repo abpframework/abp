@@ -21,14 +21,14 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
         {
-            return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
+            return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
         var (image, format) = await Image.LoadWithFormatAsync(stream, cancellationToken);
 
         if (!CanResize(format.DefaultMimeType))
         {
-            return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
+            return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
         if (ResizeModeMap.TryGetValue(resizeArgs.Mode, out var resizeMode))
@@ -46,7 +46,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
         {
             await image.SaveAsync(memoryStream, format, cancellationToken: cancellationToken);
             memoryStream.Position = 0;
-            return new ImageResizeResult<Stream>(memoryStream, ProcessState.Done);
+            return new ImageResizeResult<Stream>(memoryStream, ImageProcessState.Done);
         }
         catch
         {
@@ -63,14 +63,14 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
         {
-            return new ImageResizeResult<byte[]>(bytes, ProcessState.Unsupported);
+            return new ImageResizeResult<byte[]>(bytes, ImageProcessState.Unsupported);
         }
 
         using var ms = new MemoryStream(bytes);
 
         var result = await TryResizeAsync(ms, resizeArgs, mimeType, cancellationToken);
 
-        if (result.State != ProcessState.Done)
+        if (result.State != ImageProcessState.Done)
         {
             return new ImageResizeResult<byte[]>(bytes, result.State);
         }

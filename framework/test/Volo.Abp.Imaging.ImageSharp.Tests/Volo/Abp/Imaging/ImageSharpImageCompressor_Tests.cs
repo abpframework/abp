@@ -19,7 +19,7 @@ public class ImageSharpImageCompressor_Tests : AbpImagingImageSharpTestBase
         var compressedImage = await ImageCompressor.CompressAsync(jpegImage);
 
         compressedImage.ShouldNotBeNull();
-        compressedImage.State.ShouldBe(ProcessState.Done);
+        compressedImage.State.ShouldBe(ImageProcessState.Done);
         compressedImage.Result.Length.ShouldBeLessThan(jpegImage.Length);
         compressedImage.Result.Dispose();
     }
@@ -32,7 +32,7 @@ public class ImageSharpImageCompressor_Tests : AbpImagingImageSharpTestBase
 
         compressedImage.ShouldNotBeNull();
 
-        if (compressedImage.State == ProcessState.Done)
+        if (compressedImage.State == ImageProcessState.Done)
         {
             compressedImage.Result.Length.ShouldBeLessThan(pngImage.Length);
         }else
@@ -49,7 +49,7 @@ public class ImageSharpImageCompressor_Tests : AbpImagingImageSharpTestBase
         var compressedImage = await ImageCompressor.CompressAsync(webpImage);
 
         compressedImage.ShouldNotBeNull();
-        compressedImage.State.ShouldBe(ProcessState.Done);
+        compressedImage.State.ShouldBe(ImageProcessState.Done);
         compressedImage.Result.Length.ShouldBeLessThan(webpImage.Length);
         compressedImage.Result.Dispose();
     }
@@ -64,10 +64,10 @@ public class ImageSharpImageCompressor_Tests : AbpImagingImageSharpTestBase
         var compressedImage2 = await ImageCompressor.CompressAsync(byteArr);
         
         compressedImage1.ShouldNotBeNull();
-        compressedImage1.State.ShouldBe(ProcessState.Done);
+        compressedImage1.State.ShouldBe(ImageProcessState.Done);
         
         compressedImage2.ShouldNotBeNull();
-        compressedImage2.State.ShouldBe(ProcessState.Done);
+        compressedImage2.State.ShouldBe(ImageProcessState.Done);
         
         compressedImage1.Result.Length.ShouldBeLessThan(jpegImage.Length);
         compressedImage2.Result.LongLength.ShouldBeLessThan(jpegImage.Length);

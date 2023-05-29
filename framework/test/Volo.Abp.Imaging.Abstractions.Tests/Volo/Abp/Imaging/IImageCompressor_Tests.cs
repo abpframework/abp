@@ -20,7 +20,7 @@ public class IImageCompressor_Tests : AbpImagingAbstractionsTestBase
         var compressedImage = await ImageCompressor.CompressAsync(jpegImage);
         
         compressedImage.ShouldNotBeNull();
-        compressedImage.State.ShouldBe(ProcessState.Unsupported);
+        compressedImage.State.ShouldBe(ImageProcessState.Unsupported);
         
         compressedImage.Result.ShouldBe(jpegImage);
     }
@@ -32,7 +32,7 @@ public class IImageCompressor_Tests : AbpImagingAbstractionsTestBase
         var compressedImage = await ImageCompressor.CompressAsync(pngImage);
         
         compressedImage.ShouldNotBeNull();
-        compressedImage.State.ShouldBe(ProcessState.Unsupported);
+        compressedImage.State.ShouldBe(ImageProcessState.Unsupported);
         
         compressedImage.Result.ShouldBe(pngImage);
     }
@@ -44,7 +44,7 @@ public class IImageCompressor_Tests : AbpImagingAbstractionsTestBase
         var compressedImage = await ImageCompressor.CompressAsync(webpImage);
         
         compressedImage.ShouldNotBeNull();
-        compressedImage.State.ShouldBe(ProcessState.Unsupported);
+        compressedImage.State.ShouldBe(ImageProcessState.Unsupported);
         
         compressedImage.Result.ShouldBe(webpImage);
     }

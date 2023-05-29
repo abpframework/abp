@@ -21,7 +21,7 @@ public class MagickNetImageCompressor_Tests : AbpImagingMagickNetTestBase
         var compressedImage = await ImageCompressor.CompressAsync(jpegImage);
 
         compressedImage.ShouldNotBeNull();
-        compressedImage.State.ShouldBe(ProcessState.Done);
+        compressedImage.State.ShouldBe(ImageProcessState.Done);
         compressedImage.Result.Length.ShouldBeLessThan(jpegImage.Length);
         
         compressedImage.Result.Dispose();
@@ -34,7 +34,7 @@ public class MagickNetImageCompressor_Tests : AbpImagingMagickNetTestBase
         var compressedImage = await ImageCompressor.CompressAsync(pngImage);
 
         compressedImage.ShouldNotBeNull();
-        compressedImage.State.ShouldBe(ProcessState.Done);
+        compressedImage.State.ShouldBe(ImageProcessState.Done);
         compressedImage.Result.Length.ShouldBeLessThan(pngImage.Length);
         
         compressedImage.Result.Dispose();
@@ -47,7 +47,7 @@ public class MagickNetImageCompressor_Tests : AbpImagingMagickNetTestBase
         var compressedImage = await ImageCompressor.CompressAsync(webpImage);
 
         compressedImage.ShouldNotBeNull();
-        compressedImage.State.ShouldBe(ProcessState.Unsupported);
+        compressedImage.State.ShouldBe(ImageProcessState.Unsupported);
         compressedImage.Result.ShouldBe(webpImage);
     }
     
@@ -59,11 +59,11 @@ public class MagickNetImageCompressor_Tests : AbpImagingMagickNetTestBase
         var compressedImage2 = await ImageCompressor.CompressAsync(await jpegImage.GetAllBytesAsync());
 
         compressedImage1.ShouldNotBeNull();
-        compressedImage1.State.ShouldBe(ProcessState.Done);
+        compressedImage1.State.ShouldBe(ImageProcessState.Done);
         compressedImage1.Result.Length.ShouldBeLessThan(jpegImage.Length);
         
         compressedImage2.ShouldNotBeNull();
-        compressedImage2.State.ShouldBe(ProcessState.Done);
+        compressedImage2.State.ShouldBe(ImageProcessState.Done);
         compressedImage2.Result.LongLength.ShouldBeLessThan(jpegImage.Length);
         
         compressedImage1.Result.Length.ShouldBe(compressedImage2.Result.LongLength);

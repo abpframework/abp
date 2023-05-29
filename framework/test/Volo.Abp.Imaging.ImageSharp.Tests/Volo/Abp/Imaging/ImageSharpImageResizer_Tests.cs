@@ -21,7 +21,7 @@ public class ImageSharpImageResizer_Tests : AbpImagingImageSharpTestBase
         var resizedImage = await ImageResizer.ResizeAsync(jpegImage, new ImageResizeArgs(100, 100));
 
         resizedImage.ShouldNotBeNull();
-        resizedImage.State.ShouldBe(ProcessState.Done);
+        resizedImage.State.ShouldBe(ImageProcessState.Done);
         resizedImage.Result.Length.ShouldBeLessThan(jpegImage.Length);
     }
 
@@ -32,7 +32,7 @@ public class ImageSharpImageResizer_Tests : AbpImagingImageSharpTestBase
         var resizedImage = await ImageResizer.ResizeAsync(pngImage, new ImageResizeArgs(100, 100));
 
         resizedImage.ShouldNotBeNull();
-        resizedImage.State.ShouldBe(ProcessState.Done);
+        resizedImage.State.ShouldBe(ImageProcessState.Done);
         resizedImage.Result.Length.ShouldBeLessThan(pngImage.Length);
     }
 
@@ -43,7 +43,7 @@ public class ImageSharpImageResizer_Tests : AbpImagingImageSharpTestBase
         var resizedImage = await ImageResizer.ResizeAsync(webpImage, new ImageResizeArgs(100, 100));
 
         resizedImage.ShouldNotBeNull();
-        resizedImage.State.ShouldBe(ProcessState.Done);
+        resizedImage.State.ShouldBe(ImageProcessState.Done);
         resizedImage.Result.Length.ShouldBeLessThan(webpImage.Length);
     }
     
@@ -57,10 +57,10 @@ public class ImageSharpImageResizer_Tests : AbpImagingImageSharpTestBase
         var resizedImage2 = await ImageResizer.ResizeAsync(byteArr, new ImageResizeArgs(100, 100));
         
         resizedImage1.ShouldNotBeNull();
-        resizedImage1.State.ShouldBe(ProcessState.Done);
+        resizedImage1.State.ShouldBe(ImageProcessState.Done);
         
         resizedImage2.ShouldNotBeNull();
-        resizedImage2.State.ShouldBe(ProcessState.Done);
+        resizedImage2.State.ShouldBe(ImageProcessState.Done);
         
         resizedImage1.Result.Length.ShouldBeLessThan(jpegImage.Length);
         resizedImage2.Result.LongLength.ShouldBeLessThan(jpegImage.Length);

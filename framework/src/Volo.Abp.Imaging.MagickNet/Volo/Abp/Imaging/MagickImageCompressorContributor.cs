@@ -33,7 +33,7 @@ public class MagickImageCompressorContributor : IImageCompressorContributor, ITr
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
         {
-            return new ImageCompressResult<Stream>(stream, ProcessState.Unsupported);
+            return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
         var memoryStream = await stream.CreateMemoryStreamAsync(cancellationToken: cancellationToken);
@@ -42,17 +42,17 @@ public class MagickImageCompressorContributor : IImageCompressorContributor, ITr
         {
             if (!Optimizer.IsSupported(memoryStream))
             {
-                return new ImageCompressResult<Stream>(stream, ProcessState.Unsupported);
+                return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
             }
 
             if (Compress(memoryStream))
             {
-                return new ImageCompressResult<Stream>(memoryStream, ProcessState.Done);
+                return new ImageCompressResult<Stream>(memoryStream, ImageProcessState.Done);
             }
 
             memoryStream.Dispose();
 
-            return new ImageCompressResult<Stream>(stream, ProcessState.Canceled);
+            return new ImageCompressResult<Stream>(stream, ImageProcessState.Canceled);
         }
         catch
         {
@@ -68,13 +68,13 @@ public class MagickImageCompressorContributor : IImageCompressorContributor, ITr
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
         {
-            return new ImageCompressResult<byte[]>(bytes, ProcessState.Unsupported);
+            return new ImageCompressResult<byte[]>(bytes, ImageProcessState.Unsupported);
         }
 
         using var memoryStream = new MemoryStream(bytes);
         var result = await TryCompressAsync(memoryStream, mimeType, cancellationToken);
 
-        if (result.State != ProcessState.Done)
+        if (result.State != ImageProcessState.Done)
         {
             return new ImageCompressResult<byte[]>(bytes, result.State);
         }

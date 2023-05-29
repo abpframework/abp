@@ -31,25 +31,25 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
         {
-            return new ImageCompressResult<Stream>(stream, ProcessState.Unsupported);
+            return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
         var (image, format) = await Image.LoadWithFormatAsync(stream, cancellationToken);
 
         if (!CanCompress(format.DefaultMimeType))
         {
-            return new ImageCompressResult<Stream>(stream, ProcessState.Unsupported);
+            return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
         var memoryStream = await GetStreamFromImageAsync(image, format, cancellationToken);
 
         if (memoryStream.Length < stream.Length)
         {
-            return new ImageCompressResult<Stream>(memoryStream, ProcessState.Done);
+            return new ImageCompressResult<Stream>(memoryStream, ImageProcessState.Done);
         }
 
         memoryStream.Dispose();
-        return new ImageCompressResult<Stream>(stream, ProcessState.Canceled);
+        return new ImageCompressResult<Stream>(stream, ImageProcessState.Canceled);
     }
 
     public virtual async Task<ImageCompressResult<byte[]>> TryCompressAsync(
@@ -59,13 +59,13 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
         {
-            return new ImageCompressResult<byte[]>(bytes, ProcessState.Unsupported);
+            return new ImageCompressResult<byte[]>(bytes, ImageProcessState.Unsupported);
         }
 
         using var ms = new MemoryStream(bytes);
         var result = await TryCompressAsync(ms, mimeType, cancellationToken);
 
-        if (result.State != ProcessState.Done)
+        if (result.State != ImageProcessState.Done)
         {
             return new ImageCompressResult<byte[]>(bytes, result.State);
         }

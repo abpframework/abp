@@ -25,7 +25,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
         {
             var result = await imageCompressorContributor.TryCompressAsync(stream, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
             
-            if (result.State == ProcessState.Unsupported)
+            if (result.State == ImageProcessState.Unsupported)
             {
                 continue;
             }
@@ -33,7 +33,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
             return result;
         }
         
-        return new ImageCompressResult<Stream>(stream, ProcessState.Unsupported);
+        return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
     }
 
     public virtual async Task<ImageCompressResult<byte[]>> CompressAsync(byte[] bytes, string mimeType = null, CancellationToken cancellationToken = default)
@@ -42,7 +42,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
         {
             var result = await imageCompressorContributor.TryCompressAsync(bytes, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
             
-            if (result.State == ProcessState.Unsupported)
+            if (result.State == ImageProcessState.Unsupported)
             {
                 continue;
             }
@@ -50,6 +50,6 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
             return result;
         }
         
-        return new ImageCompressResult<byte[]>(bytes, ProcessState.Unsupported);
+        return new ImageCompressResult<byte[]>(bytes, ImageProcessState.Unsupported);
     }
 }

@@ -21,7 +21,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     {
         if (!mimeType.IsNullOrWhiteSpace() && !CanResize(mimeType))
         {
-            return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
+            return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
         var memoryStream = await stream.CreateMemoryStreamAsync(cancellationToken: cancellationToken);
@@ -32,7 +32,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
 
             if (mimeType.IsNullOrWhiteSpace() && !CanResize(image.FormatInfo?.MimeType))
             {
-                return new ImageResizeResult<Stream>(stream, ProcessState.Unsupported);
+                return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
             }
 
             Resize(image, resizeArgs);
@@ -42,7 +42,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
             memoryStream.SetLength(memoryStream.Position);
             memoryStream.Position = 0;
 
-            return new ImageResizeResult<Stream>(memoryStream, ProcessState.Done);
+            return new ImageResizeResult<Stream>(memoryStream, ImageProcessState.Done);
         }
         catch
         {
@@ -59,19 +59,19 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     {
         if (!mimeType.IsNullOrWhiteSpace() && !CanResize(mimeType))
         {
-            return Task.FromResult(new ImageResizeResult<byte[]>(bytes, ProcessState.Unsupported));
+            return Task.FromResult(new ImageResizeResult<byte[]>(bytes, ImageProcessState.Unsupported));
         }
 
         using var image = new MagickImage(bytes);
 
         if (mimeType.IsNullOrWhiteSpace() && !CanResize(image.FormatInfo?.MimeType))
         {
-            return Task.FromResult(new ImageResizeResult<byte[]>(bytes, ProcessState.Unsupported));
+            return Task.FromResult(new ImageResizeResult<byte[]>(bytes, ImageProcessState.Unsupported));
         }
 
         Resize(image, resizeArgs);
 
-        return Task.FromResult(new ImageResizeResult<byte[]>(image.ToByteArray(), ProcessState.Done));
+        return Task.FromResult(new ImageResizeResult<byte[]>(image.ToByteArray(), ImageProcessState.Done));
     }
 
     protected virtual bool CanResize(string mimeType)
