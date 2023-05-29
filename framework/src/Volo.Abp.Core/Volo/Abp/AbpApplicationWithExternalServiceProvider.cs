@@ -10,7 +10,7 @@ internal class AbpApplicationWithExternalServiceProvider : AbpApplicationBase, I
     public AbpApplicationWithExternalServiceProvider(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
-        [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction
+        Action<AbpApplicationCreationOptions>? optionsAction
         ) : base(
             startupModuleType,
             services,
@@ -23,6 +23,7 @@ internal class AbpApplicationWithExternalServiceProvider : AbpApplicationBase, I
     {
         Check.NotNull(serviceProvider, nameof(serviceProvider));
 
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (ServiceProvider != null)
         {
             if (ServiceProvider != serviceProvider)
