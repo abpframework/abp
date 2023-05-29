@@ -10,8 +10,8 @@ public class AbpSecurityHeadersOptions
     public bool UseContentSecurityPolicyHeader { get; set; }
     
     public bool UseContentSecurityPolicyScriptNonce { get; set; }
-
-    public Dictionary<string, IEnumerable<string>> ContentSecurityPolicyValues { get; }
+    
+    public string ContentSecurityPolicyValue { get; set; }
 
     public Dictionary<string, string> Headers { get; }
     
@@ -22,7 +22,6 @@ public class AbpSecurityHeadersOptions
     public AbpSecurityHeadersOptions()
     {
         Headers = new Dictionary<string, string>();
-        ContentSecurityPolicyValues = new Dictionary<string, IEnumerable<string>>();
         IgnoredScriptNonceSelectors = new List<Func<HttpContext, Task<bool>>>();
         IgnoredScriptNoncePaths = new List<string>();
     }

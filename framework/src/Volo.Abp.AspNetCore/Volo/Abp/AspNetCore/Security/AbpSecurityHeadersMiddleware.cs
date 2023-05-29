@@ -101,35 +101,28 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 
     protected virtual string BuildContentSecurityPolicyValue(HttpContext context)
     {
+        var cspValue = Options.Value.ContentSecurityPolicyValue.IsNullOrWhiteSpace() ? DefaultValue : Options.Value.ContentSecurityPolicyValue;
         if (!(Options.Value.UseContentSecurityPolicyScriptNonce &&
               context.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) &&
               nonce is string nonceValue && !string.IsNullOrEmpty(nonceValue)))
         {
-            return ContentSecurityPolicyValuesToCSPString();
+            return cspValue;
         }
 
-        var scriptSrcValue = "";
-        if (Options.Value.ContentSecurityPolicyValues.TryGetValue(ScriptSrcKey, out var scriptSrc))
+        var nonceStr = $" 'nonce-{nonceValue}'";
+
+        var scriptSrcValue = Options.Value.ContentSecurityPolicyValue.Split(';')
+            .FirstOrDefault(x => x.Trim().StartsWith(ScriptSrcKey))?.Trim();
+
+        if (scriptSrcValue.IsNullOrWhiteSpace())
         {
-            scriptSrcValue = string.Join(" ", scriptSrc);
+            return cspValue.EnsureEndsWith(';') + $" {ScriptSrcKey}{nonceStr};";
         }
 
-        scriptSrcValue += $" 'nonce-{nonceValue}'";
-
-        return ContentSecurityPolicyValuesToCSPString(true) + $"; {ScriptSrcKey} {scriptSrcValue}";
+        var newScriptSrcValue = scriptSrcValue + nonceStr;
+        return Options.Value.ContentSecurityPolicyValue.Replace(scriptSrcValue, newScriptSrcValue);
     }
-
-    protected virtual string ContentSecurityPolicyValuesToCSPString(bool ignoreScriptSrc = false)
-    {
-        if (Options.Value.ContentSecurityPolicyValues.Any())
-        {
-            return string.Join("; ",
-                Options.Value.ContentSecurityPolicyValues.WhereIf(ignoreScriptSrc, x => x.Key != ScriptSrcKey)
-                    .Select(x => $"{x.Key} {string.Join(" ", x.Value)}"));
-        }
-
-        return DefaultValue;
-    }
+    
 
     protected virtual void AddHeader(HttpContext context, string key, string value, bool overrideIfExists = false)
     {
