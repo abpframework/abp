@@ -196,7 +196,31 @@ public enum ImageProcessState : byte
 
 ## Magick.NET Provider
 
-`Volo.Abp.Imaging.MagickNet` NuGet package implements the image operations using the [Magick.NET](https://github.com/dlemstra/Magick.NET) library. If you want to use that library as image process provider, add the `Volo.Abp.Imaging.MagickNet` NuGet package to your project, then add  `AbpImagingMagickNetModule` to your [module](Module-Development-Basics.md)'s dependency list:
+`Volo.Abp.Imaging.MagickNet` NuGet package implements the image operations using the [Magick.NET](https://github.com/dlemstra/Magick.NET) library.
+
+## Installation
+
+It is suggested to use the [ABP CLI](CLI.md) to install this package.
+
+### Using the ABP CLI
+
+Open a command line terminal in the folder of your project (.csproj file) and type the following command:
+
+```bash
+abp add-package Volo.Abp.Imaging.MagickNet
+```
+
+### Manual Installation
+
+If you want to manually install;
+
+1. Add the [Volo.Abp.Imaging.MagickNet](https://www.nuget.org/packages/Volo.Abp.Imaging.MagickNet) NuGet package to your project:
+
+```
+Install-Package Volo.Abp.Imaging.MagickNet
+```
+
+2. Add `AbpImagingMagickNetModule` to your [module](Module-Development-Basics.md)'s dependency list:
 
 ```csharp
 [DependsOn(typeof(AbpImagingMagickNetModule))]
@@ -216,7 +240,32 @@ public class MyModule : AbpModule
 
 ## ImageSharp Provider
 
-`Volo.Abp.Imaging.ImageSharp` NuGet package implements the image operations using the [ImageSharp](https://github.com/SixLabors/ImageSharp) library. If you want to use that library as image process provider, add the `Volo.Abp.Imaging.ImageSharp` NuGet package to your project, then add  `AbpImagingImageSharpModule` to your [module](Module-Development-Basics.md)'s dependency list:
+`Volo.Abp.Imaging.ImageSharp` NuGet package implements the image operations using the [ImageSharp](https://github.com/SixLabors/ImageSharp) library. 
+
+## Installation
+
+It is suggested to use the [ABP CLI](CLI.md) to install this package.
+
+### Using the ABP CLI
+
+Open a command line terminal in the folder of your project (.csproj file) and type the following command:
+
+```bash
+abp add-package Volo.Abp.Imaging.ImageSharp
+```
+
+### Manual Installation
+
+If you want to manually install;
+
+1. Add the [Volo.Abp.Imaging.ImageSharp](https://www.nuget.org/packages/Volo.Abp.Imaging.ImageSharp) NuGet package to your project:
+
+```
+Install-Package Volo.Abp.Imaging.ImageSharp
+```
+
+2. Add `AbpImagingImageSharpModule` to your [module](Module-Development-Basics.md)'s dependency list:
+
 
 ```csharp
 [DependsOn(typeof(AbpImagingImageSharpModule))]
@@ -259,7 +308,29 @@ Configure<ImageSharpCompressOptions>(options =>
 
 `Volo.Abp.Imaging.AspNetCore` NuGet package defines attributes for controller actions that can automatically compress and/or resize uploaded files.
 
-To use the ASP.NET Core integration, add the `Volo.Abp.Imaging.AspNetCore` NuGet package to your project and add the `AbpImagingAspNetCoreModule` module to your module's dependency list:
+## Installation
+
+It is suggested to use the [ABP CLI](CLI.md) to install this package.
+
+### Using the ABP CLI
+
+Open a command line terminal in the folder of your project (.csproj file) and type the following command:
+
+```bash
+abp add-package Volo.Abp.Imaging.AspNetCore
+```
+
+### Manual Installation
+
+If you want to manually install;
+
+1. Add the [Volo.Abp.Imaging.AspNetCore](https://www.nuget.org/packages/Volo.Abp.Imaging.AspNetCore) NuGet package to your project:
+
+```
+Install-Package Volo.Abp.Imaging.AspNetCore
+```
+
+2. Add `AbpImagingAspNetCoreModule` to your [module](Module-Development-Basics.md)'s dependency list:
 
 ```csharp
 [DependsOn(typeof(AbpImagingAspNetCoreModule))]
