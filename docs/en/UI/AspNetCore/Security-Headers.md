@@ -51,6 +51,10 @@ Abp Framework provides a property to add a dynamic script-src nonce value to the
 
 This feature is disabled by default. You can enable it by setting the `UseContentSecurityPolicyScriptNonce` property of the `AbpSecurityHeadersOptions` class to `true`.
 
+### Ignore Script Nonce
+
+You can ignore the script nonce for some pages or some selectors. You can use the `IgnoredScriptNoncePaths` and `IgnoredScriptNonceSelectors` properties of the `AbpSecurityHeadersOptions` class.
+
 **Example:**
 
 ```csharp
