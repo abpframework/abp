@@ -1,25 +1,20 @@
 {
   "migrations": [
     {
-      "version": "16.0.0",
-      "factory": "./update-16/remove-default-project-option",
-      "description": "Remove 'defaultProject' option from workspace configuration. The project to use will be determined from the current working directory.",
-      "package": "@angular/cli",
-      "name": "remove-default-project-option"
+      "cli": "nx",
+      "version": "16.2.0-beta.0",
+      "description": "Remove outputPath from run commands",
+      "implementation": "./src/migrations/update-16-2-0/remove-run-commands-output-path",
+      "package": "nx",
+      "name": "16.2.0-remove-output-path-from-run-commands"
     },
     {
-      "version": "16.0.0",
-      "factory": "./update-16/replace-default-collection-option",
-      "description": "Replace removed 'defaultCollection' option in workspace configuration with 'schematicCollections'.",
-      "package": "@angular/cli",
-      "name": "replace-default-collection-option"
-    },
-    {
-      "version": "16.0.0",
-      "factory": "./update-16/update-server-builder-config",
-      "description": "Update the '@angular-devkit/build-angular:server' builder configuration to disable 'buildOptimizer' for non optimized builds.",
-      "package": "@angular/cli",
-      "name": "update-server-builder-config"
+      "cli": "nx",
+      "version": "16.2.0-beta.0",
+      "description": "Normalize tsconfig.cy.json files to be located at '<projectRoot>/cypress/tsconfig.json'",
+      "implementation": "./src/migrations/update-16-2-0/update-cy-tsconfig",
+      "package": "@nx/cypress",
+      "name": "update-16-2-0-normalize-tsconfigs"
     }
   ]
 }
