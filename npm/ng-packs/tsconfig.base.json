@@ -14,7 +14,6 @@
     "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@abp/generators": ["packages/generators/src/index.ts"],
       "@abp/ng.account": ["packages/account/src/public-api.ts"],
       "@abp/ng.account.core": ["packages/account-core/src/public-api.ts"],
       "@abp/ng.account.core/proxy": ["packages/account-core/proxy/src/public-api.ts"],

@@ -43,20 +43,20 @@
   },
   "private": true,
   "devDependencies": {
-    "@abp/ng.account": "~7.2.1",
-    "@abp/ng.account.core": "~7.2.1",
-    "@abp/ng.core": "~7.2.1",
-    "@abp/ng.feature-management": "~7.2.1",
-    "@abp/ng.identity": "~7.2.1",
-    "@abp/ng.oauth": "~7.2.1",
-    "@abp/ng.permission-management": "~7.2.1",
-    "@abp/ng.schematics": "~7.2.1",
-    "@abp/ng.setting-management": "~7.2.1",
-    "@abp/ng.tenant-management": "~7.2.1",
-    "@abp/ng.theme.basic": "~7.2.1",
+    "@abp/ng.account": "~7.3.0-preview20230530",
+    "@abp/ng.account.core": "7.3.0-preview20230530",
+    "@abp/ng.core": "7.3.0-preview20230530",
+    "@abp/ng.feature-management": "7.3.0-preview20230530",
+    "@abp/ng.identity": "7.3.0-preview20230530",
+    "@abp/ng.oauth": "7.3.0-preview20230530",
+    "@abp/ng.permission-management": "7.3.0-preview20230530",
+    "@abp/ng.schematics": "7.3.0-preview20230530",
+    "@abp/ng.setting-management": "7.3.0-preview20230530",
+    "@abp/ng.tenant-management": "7.3.0-preview20230530",
+    "@abp/ng.theme.basic": "7.3.0-preview20230530",
     "@abp/ng.theme.lepton-x": "^2.2.0",
-    "@abp/ng.theme.shared": "~7.2.1",
-    "@abp/utils": "~7.2.1",
+    "@abp/ng.theme.shared": "7.3.0-preview20230530",
+    "@abp/utils": "7.3.0-preview20230530",
     "@angular-devkit/build-angular": "16.0.1",
     "@angular-devkit/core": "16.0.1",
     "@angular-devkit/schematics": "16.0.1",
@@ -83,8 +83,8 @@
     "@nx/angular": "16.1.4",
     "@nx/cypress": "16.1.4",
     "@nx/eslint-plugin": "16.1.4",
-    "@nx/jest": "16.2.2",
-    "@nx/js": "16.2.2",
+    "@nx/jest": "16.1.4",
+    "@nx/js": "16.1.4",
     "@nx/linter": "16.1.4",
     "@nx/workspace": "16.1.4",
     "@popperjs/core": "~2.11.2",
@@ -142,9 +142,5 @@
       "npx prettier --write --config .prettierrc "
     ]
   },
-  "dependencies": {
-    "@nx/devkit": "16.2.2",
-    "@nx/plugin": "^16.2.2",
-    "@swc/helpers": "~0.5.0"
-  }
+  "dependencies": {}
 }
