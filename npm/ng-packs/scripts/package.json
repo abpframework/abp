@@ -7,8 +7,10 @@
     "build": "ts-node -r tsconfig-paths/register build.ts",
     "build:prod": "ts-node -r tsconfig-paths/register prod-build.ts",
     "build:schematics": "ts-node -r tsconfig-paths/register build-schematics.ts",
+    "update-version": "ts-node -r tsconfig-paths/register update-version.ts",
     "publish-packages": "ts-node -r tsconfig-paths/register publish.ts",
     "replace-with-tilde": "ts-node -r tsconfig-paths/register replace-with-tilde.ts",
+    "remove-tilde-or-caret": "ts-node -r tsconfig-paths/register remove-tilde-or-caret.ts",
     "copy-to-templates": "ts-node -r tsconfig-paths/register copy-packages-to-templates.ts"
   },
   "author": "",

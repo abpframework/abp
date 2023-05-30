@@ -7,7 +7,7 @@ import {
   mergeWithDefaultProps,
 } from '@abp/ng.theme.shared/extensions';
 import { Injectable, Injector } from '@angular/core';
-import { CanActivate } from '@angular/router';
+
 import { Observable } from 'rxjs';
 import { map, mapTo, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../enums/components';
@@ -32,7 +32,7 @@ import {
 } from '../tokens/extensions.token';
 
 @Injectable()
-export class IdentityExtensionsGuard implements CanActivate {
+export class IdentityExtensionsGuard  {
   constructor(private injector: Injector) {}
 
   canActivate(): Observable<boolean> {

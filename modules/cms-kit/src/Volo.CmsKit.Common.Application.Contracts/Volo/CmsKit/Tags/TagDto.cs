@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.CmsKit.Tags;
 
 [Serializable]
-public class TagDto : EntityDto<Guid>, IHasConcurrencyStamp
+public class TagDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string EntityType { get; set; }
 

@@ -59,7 +59,8 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         string type,
         string version = null,
         string templateSource = null,
-        bool includePreReleases = false)
+        bool includePreReleases = false,
+        bool skipCache = false)
     {
         DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
         var latestVersion = version ?? await GetLatestSourceCodeVersionAsync(name, type, null, includePreReleases);
@@ -111,7 +112,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
 #endif
 
-        if (Options.CacheTemplates && File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
+        if (Options.CacheTemplates && !skipCache && File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
         {
             Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
             return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
@@ -132,6 +133,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
 
         if (Options.CacheTemplates && templateSource.IsNullOrWhiteSpace())
         {
+            File.Delete(localCacheFile);
             File.WriteAllBytes(localCacheFile, fileContent);
         }
 
@@ -218,7 +220,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                 var result = await response.Content.ReadAsStringAsync();
                 var versions = JsonSerializer.Deserialize<GithubReleaseVersions>(result);
 
-                return templateName.Contains("LeptonX") ? 
+                return templateName.Contains("LeptonX") ?
                     versions.LeptonXVersions.Any(v => v.Name == version) :
                     versions.FrameworkAndCommercialVersions.Any(v => v.Name == version);
             }
@@ -335,7 +337,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
     public class GithubReleaseVersions
     {
         public List<GithubRelease> FrameworkAndCommercialVersions { get; set; }
-        
+
         public List<GithubRelease> LeptonXVersions { get; set; }
     }
 }

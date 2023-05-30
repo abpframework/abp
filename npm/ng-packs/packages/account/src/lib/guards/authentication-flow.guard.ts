@@ -1,9 +1,9 @@
 import { AuthService } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+
 
 @Injectable()
-export class AuthenticationFlowGuard implements CanActivate {
+export class AuthenticationFlowGuard  {
   constructor(private authService: AuthService) {}
 
   canActivate() {
