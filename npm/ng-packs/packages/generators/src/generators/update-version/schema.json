@@ -15,13 +15,8 @@
     },
     "leptonXVersion": {
       "type": "string",
-      "description": "",
-      "$default": {
-        "$source": "argv",
-        "index": 1
-      },
-      "x-prompt": "What Lepton X version would you like to use?"
-    }
+      "description": ""
+     }
   },
   "required": ["abpVersion"]
 }

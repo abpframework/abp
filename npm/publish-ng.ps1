@@ -16,7 +16,6 @@ if (-Not $Registry) {
   $Registry = "https://registry.npmjs.org";
 }
 $UpdateNgPacksCommand = "yarn update ./ng-packs abp --registry $Registry"
-$UpdateNgPacksUpdateVersionCommand = "yarn update-version -v $Version"
 $NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry --skipVersionValidation"
 $UpdateGulpCommand = "yarn update-gulp --registry $Registry"
 
@@ -29,17 +28,16 @@ if ($IsPrerelease) {
 }
 
 $commands = (
-  $UpdateNgPacksCommand,
   "cd ng-packs\scripts",
   "yarn install",
  # $UpdateNgPacksUpdateVersionCommand,
-  "yarn remove-tilde-or-caret",
+#"yarn remove-tilde-or-caret",
   $NgPacksPublishCommand,
   "cd ../../",
   "cd scripts",
   "yarn remove-lock-files",
-  "cd ..",
-  $UpdateGulpCommand
+  "cd .."
+  #$UpdateGulpCommand
 )
 
 foreach ($command in $commands) { 
