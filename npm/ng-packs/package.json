@@ -39,7 +39,9 @@
     "ci": "yarn affected:lint && yarn affected:build && yarn affected:test",
     "lerna": "lerna",
     "migrate-nx": "yarn nx migrate --run-migrations",
-    "copy-to:app": "cd scripts && yarn && yarn copy-to-templates -t app"
+    "copy-to:app": "cd scripts && yarn && yarn copy-to-templates -t app",
+    "update-version": "nx generate @abp/nx.generators:update-version"
+
   },
   "private": true,
   "devDependencies": {
