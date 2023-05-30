@@ -16,6 +16,8 @@
     "SuccessfullySent": "Başarıyla gönderildi",
     "Send": "Gönder",
     "Menu:Emailing": "Email",
+    "Menu:TimeZone": "Zaman dilimi",
+    "DisplayName:Timezone": "Zaman dilimi",
     "SmtpHost": "Sunucu",
     "SmtpPort": "Port",
     "SmtpUserName": "Kullanıcı adı",
@@ -29,6 +31,7 @@
     "Feature:SettingManagementEnable": "Ayar yönetimini etkinleştir",
     "Feature:SettingManagementEnableDescription": "Uygulamada ayar yönetim sistemini etkinleştirin.",
     "Feature:AllowChangingEmailSettings": "E-posta ayarlarını değiştirmeye izin verin.",
-    "Feature:AllowChangingEmailSettingsDescription": "E-posta ayarlarını değiştirmeye izin verin."
+    "Feature:AllowChangingEmailSettingsDescription": "E-posta ayarlarını değiştirmeye izin verin.",
+    "Feature:EnableTimeZone": "Zaman dilimini etkinleştir"
   }
 }

@@ -27,6 +27,14 @@ public class SettingManagementFeatureDefinitionProvider : FeatureDefinitionProvi
             null,
             new ToggleStringValueType(),
             isAvailableToHost: false);
+
+        settingEnableFeature.CreateChild(
+            SettingManagementFeatures.EnableTimeZone,
+            "false",
+            L("Feature:EnableTimeZone"),
+            null,
+            new ToggleStringValueType(),
+            isAvailableToHost: true);
     }
 
     private static LocalizableString L(string name)
