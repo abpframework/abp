@@ -48,6 +48,12 @@ public partial class AccountManage
             return;
         }
 
+        if (ChangePasswordModel.CurrentPassword == ChangePasswordModel.NewPassword) 
+        {
+            await UiMessageService.Warn(L["NewPasswordSameAsOld"]);
+            return;
+        }
+
         await ProfileAppService.ChangePasswordAsync(new ChangePasswordInput
         {
             CurrentPassword = ChangePasswordModel.CurrentPassword,

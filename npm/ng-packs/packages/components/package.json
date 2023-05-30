@@ -7,9 +7,8 @@
     "url": "https://github.com/abpframework/abp.git"
   },
   "peerDependencies": {
-    "@abp/ng.core": ">=7.2.2",
-    "@abp/ng.theme.shared": ">=7.2.2",
-    "@ng-bootstrap/ng-bootstrap": ">=10.0.0"
+    "@abp/ng.core": ">=7.0.3",
+    "@abp/ng.theme.shared": ">=7.0.3"
   },
   "dependencies": {
     "chart.js": "^3.5.1",
