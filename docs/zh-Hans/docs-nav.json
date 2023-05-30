@@ -715,7 +715,7 @@
       "path": "Deployment/Index.md",
       "items": [
         {
-          "text": "部署到群集环境",
+          "text": "部署到集群环境",
           "path": "Deployment/Clustered-Environment.md"
         }
       ]

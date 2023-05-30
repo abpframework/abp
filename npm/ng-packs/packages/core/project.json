@@ -1,0 +1,41 @@
+{
+  "name": "core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/core/src",
+  "prefix": "abp",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/core"],
+      "options": {
+        "project": "packages/core/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/core/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/packages/core"],
+      "options": {
+        "jestConfig": "packages/core/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["packages/core/src/**/*.ts", "packages/core/src/**/*.html"]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}
