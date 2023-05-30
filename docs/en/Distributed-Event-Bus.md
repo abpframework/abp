@@ -193,17 +193,17 @@ It is possible to be informed when the ABP Framework **receives** or **sends** a
 
 The `DistributedEventReceived` local event is published when your application receives a event from the distributed event bus. `DistributedEventReceived` class has the following fields:
 
-- **`Source` (`DistributedEventSource`):** It represents the source of the distributed event. Source can be `Direct`, `Inbox`, `Outbox`.
-- **`EventName` (`string`):** It represents the [name](#event-name) of the event received.
-- **`EventData` (`object`):** It represents the actual data associated with the event received. Since it is of type `object`, it can hold any type of data.
+- **`Source`:** It represents the source of the distributed event. Source can be `Direct`, `Inbox`, `Outbox`.
+- **`EventName`:** It represents the [name](#event-name) of the event received.
+- **`EventData`:** It represents the actual data associated with the event received. Since it is of type `object`, it can hold any type of data.
 
-### DistributedEventSent
+###  Sent events
 
 The `DistributedEventSent` local event is published when your application sends a event to the distributed event bus. `DistributedEventSent` class has the following fields:
 
-- **`Source` (`DistributedEventSource`):** It represents the source of the distributed event. Source can be `Direct`, `Inbox`, `Outbox`.
-- **`EventName` (`string`):** It represents the name of the event sent.
-- **`EventData` (`object`):** It represents the actual data associated with the event sent. Since it is of type `object`, it can hold any type of data.
+- **`Source`:** It represents the source of the distributed event. Source can be `Direct`, `Inbox`, `Outbox`.
+- **`EventName`:** It represents the [name](#event-name) of the event sent.
+- **`EventData`:** It represents the actual data associated with the event sent. Since it is of type `object`, it can hold any type of data.
 
 You can seamlessly integrate event-tracking capabilities into your application by subscribing the `DistributedEventReceived` and `DistributedEventSent` local events. This empowers you to effectively monitor the messaging flow, diagnose any potential issues, and gain valuable insights into the behavior of your distributed messaging system.
 
