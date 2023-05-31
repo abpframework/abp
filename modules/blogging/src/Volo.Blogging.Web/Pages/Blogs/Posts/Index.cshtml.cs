@@ -44,6 +44,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
             }
 
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
+            
+            if (Blog == null)
+            {
+               return RedirectToPage("/Blogs/Index");
+            }
+            
             Posts = (await _postAppService.GetListByBlogIdAndTagNameAsync(Blog.Id, TagName)).Items;
             PopularTags = (await _tagAppService.GetPopularTagsAsync(Blog.Id, new GetPopularTagsInput {ResultCount = 10, MinimumPostCount = 2}));
 

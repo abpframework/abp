@@ -33,11 +33,6 @@ namespace Volo.Blogging.Blogs
 
             var blog = await BlogRepository.FindByShortNameAsync(shortName);
 
-            if (blog == null)
-            {
-                throw new EntityNotFoundException(typeof(Blog), shortName);
-            }
-
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
 
