@@ -18,57 +18,62 @@ public static class CookieAuthenticationOptionsExtensions
     /// <returns></returns>
     public static CookieAuthenticationOptions IntrospectAccessToken(this CookieAuthenticationOptions options, string oidcAuthenticationScheme = "oidc")
     {
-        var originalHandler = options.Events.OnValidatePrincipal;
         options.Events.OnValidatePrincipal = async principalContext =>
         {
-            originalHandler?.Invoke(principalContext);
-
-            if (principalContext.Principal != null && principalContext.Principal.Identity != null && principalContext.Principal.Identity.IsAuthenticated)
+            if (principalContext.Principal == null || principalContext.Principal.Identity == null || !principalContext.Principal.Identity.IsAuthenticated)
             {
-                var logger = principalContext.HttpContext.RequestServices.GetRequiredService<ILogger<CookieAuthenticationOptions>>();
+                return;
+            }
 
-                var accessToken = principalContext.Properties.GetTokenValue("access_token");
-                if (!accessToken.IsNullOrWhiteSpace())
+            var logger = principalContext.HttpContext.RequestServices.GetRequiredService<ILogger<CookieAuthenticationOptions>>();
+
+            var accessToken = principalContext.Properties.GetTokenValue("access_token");
+            if (!accessToken.IsNullOrWhiteSpace())
+            {
+                var openIdConnectOptions = await GetOpenIdConnectOptions(principalContext, oidcAuthenticationScheme);
+                var response = await openIdConnectOptions.Backchannel.IntrospectTokenAsync(new TokenIntrospectionRequest
                 {
-                    var openIdConnectOptions = principalContext.HttpContext.RequestServices.GetRequiredService<IOptionsMonitor<OpenIdConnectOptions>>().Get(oidcAuthenticationScheme);
-                    if (openIdConnectOptions.Configuration == null && openIdConnectOptions.ConfigurationManager != null)
-                    {
-                        openIdConnectOptions.Configuration = await openIdConnectOptions.ConfigurationManager.GetConfigurationAsync(principalContext.HttpContext.RequestAborted);
-                    }
+                    Address = openIdConnectOptions.Configuration?.IntrospectionEndpoint ?? openIdConnectOptions.Authority.EnsureEndsWith('/') + "connect/introspect",
+                    ClientId = openIdConnectOptions.ClientId,
+                    ClientSecret = openIdConnectOptions.ClientSecret,
+                    Token = accessToken
+                });
 
-                    var response = await openIdConnectOptions.Backchannel.IntrospectTokenAsync(new TokenIntrospectionRequest
-                    {
-                        Address = openIdConnectOptions.Configuration?.IntrospectionEndpoint ?? openIdConnectOptions.Authority.EnsureEndsWith('/') + "connect/introspect",
-                        ClientId = openIdConnectOptions.ClientId,
-                        ClientSecret = openIdConnectOptions.ClientSecret,
-                        Token = accessToken
-                    });
-
-                    if (response.IsError)
-                    {
-                        logger.LogError(response.Error);
-                        await SignOutAsync(principalContext);
-                        return;
-                    }
-
-                    if (!response.IsActive)
-                    {
-                        logger.LogError("The access_token is not active.");
-                        await SignOutAsync(principalContext);
-                        return;
-                    }
-
-                    logger.LogInformation("The access_token is active.");
-                }
-                else
+                if (response.IsError)
                 {
-                    logger.LogError("The access_token is not found in the cookie properties, Please make sure SaveTokens of OpenIdConnectOptions is set as true.");
+                    logger.LogError(response.Error);
                     await SignOutAsync(principalContext);
+                    return;
                 }
+
+                if (!response.IsActive)
+                {
+                    logger.LogError("The access_token is not active.");
+                    await SignOutAsync(principalContext);
+                    return;
+                }
+
+                logger.LogInformation("The access_token is active.");
+            }
+            else
+            {
+                logger.LogError("The access_token is not found in the cookie properties, Please make sure SaveTokens of OpenIdConnectOptions is set as true.");
+                await SignOutAsync(principalContext);
             }
         };
 
         return options;
+    }
+
+    private async static Task<OpenIdConnectOptions> GetOpenIdConnectOptions(CookieValidatePrincipalContext principalContext, string oidcAuthenticationScheme)
+    {
+        var openIdConnectOptions = principalContext.HttpContext.RequestServices.GetRequiredService<IOptionsMonitor<OpenIdConnectOptions>>().Get(oidcAuthenticationScheme);
+        if (openIdConnectOptions.Configuration == null && openIdConnectOptions.ConfigurationManager != null)
+        {
+            openIdConnectOptions.Configuration = await openIdConnectOptions.ConfigurationManager.GetConfigurationAsync(principalContext.HttpContext.RequestAborted);
+        }
+
+        return openIdConnectOptions;
     }
 
     private async static Task SignOutAsync(CookieValidatePrincipalContext principalContext)
