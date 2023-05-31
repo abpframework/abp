@@ -176,7 +176,7 @@ In addition to [Overriding a Controller](../Customizing-Application-Modules-Over
 
 They have the same [route](https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/routing?view=aspnetcore-7.0), but can have **different** input and output parameters.
 
-### Replace built-in AbpApplicationLocalizationController
+### Replace built-in AbpApplicationConfigurationController
 
 The `ReplaceControllersAttribute` indicate the replaced controller type.
 
