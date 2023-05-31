@@ -4,25 +4,25 @@ import {
   ConfigStateService,
   ExtensionEnumDto,
   ExtensionPropertyUiLookupDto,
-  ObjectExtensionsDto
-} from "@abp/ng.core";
-import { Observable, pipe, zip } from "rxjs";
-import { filter, map, switchMap, take } from "rxjs/operators";
-import { ePropType } from "../enums/props.enum";
-import { EntityProp, EntityPropList } from "../models/entity-props";
-import { FormProp, FormPropList } from "../models/form-props";
-import { ObjectExtensions } from "../models/object-extensions";
-import { PropCallback } from "../models/props";
-import { createEnum, createEnumOptions, createEnumValueResolver } from "./enum.util";
-import { createDisplayNameLocalizationPipeKeyGenerator } from "./localization.util";
-import { createExtraPropertyValueResolver } from "./props.util";
+  ObjectExtensionsDto,
+} from '@abp/ng.core';
+import { Observable, pipe, zip } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
+import { ePropType } from '../enums/props.enum';
+import { EntityProp, EntityPropList } from '../models/entity-props';
+import { FormProp, FormPropList } from '../models/form-props';
+import { ObjectExtensions } from '../models/object-extensions';
+import { PropCallback } from '../models/props';
+import { createEnum, createEnumOptions, createEnumValueResolver } from './enum.util';
+import { createDisplayNameLocalizationPipeKeyGenerator } from './localization.util';
+import { createExtraPropertyValueResolver } from './props.util';
 import {
   createTypeaheadDisplayNameGenerator,
   createTypeaheadOptions,
   getTypeaheadType,
-  hasTypeaheadTextSuffix
-} from "./typeahead.util";
-import { getValidatorsFromProperty } from "./validation.util";
+  hasTypeaheadTextSuffix,
+} from './typeahead.util';
+import { getValidatorsFromProperty } from './validation.util';
 
 function selectObjectExtensions(configState: ConfigStateService): Observable<ObjectExtensionsDto> {
   return configState.getOne$('objectExtensions');
@@ -141,10 +141,10 @@ function createPropertiesToContributorsMapper<T = any>(
       if (property.ui.onTable.isVisible) {
         const sortable = Boolean(property.ui.onTable.isSortable);
         const columnWidth = type === ePropType.Boolean ? 150 : 250;
-        const valueResolver: PropCallback<T, Observable<any>> =
-          type === ePropType.Enum && property.type
-            ? createEnumValueResolver(property.type, enums[property.type], propName)
-            : createExtraPropertyValueResolver<T>(propName);
+        const valueResolver: PropCallback<T, Observable<any>> = type === ePropType.Enum &&
+        property.type
+          ? createEnumValueResolver(property.type, enums[property.type], propName)
+          : createExtraPropertyValueResolver<T>(propName);
 
         const entityProp = new EntityProp<T>({
           type,
@@ -165,6 +165,7 @@ function createPropertiesToContributorsMapper<T = any>(
 
       if (isOnCreateForm || isOnEditForm) {
         const defaultValue = property.defaultValue;
+        const formText = property.formText;
         const validators = () => getValidatorsFromProperty(property);
         let options: PropCallback<any, Observable<ABP.Option<any>[]>> | undefined;
         if (type === ePropType.Enum)
@@ -179,6 +180,7 @@ function createPropertiesToContributorsMapper<T = any>(
           defaultValue,
           validators,
           isExtra,
+          formText,
         });
 
         const formContributor = (propList: FormPropList<T>) => propList.addTail(formProp);
