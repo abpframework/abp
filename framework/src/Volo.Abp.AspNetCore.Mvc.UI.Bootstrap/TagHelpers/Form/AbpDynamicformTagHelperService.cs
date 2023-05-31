@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -316,6 +317,13 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         {
             return list;
         }
+        
+        if (IsFile(model.ModelType))
+        {
+            list.Add(ModelExplorerToModelExpressionConverter(model));
+
+            return list;
+        }
 
         return model.Properties.Aggregate(list, ExploreModelsRecursively);
     }
@@ -367,6 +375,12 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
     protected virtual bool IsListOfSelectItem(Type type)
     {
         return type == typeof(List<SelectListItem>) || type == typeof(IEnumerable<SelectListItem>);
+    }
+    
+    protected virtual bool IsFile(Type type)
+    {
+        return typeof(IFormFile).IsAssignableFrom(type) || 
+               typeof(IEnumerable<IFormFile>).IsAssignableFrom(type);
     }
 
     protected virtual bool IsSelectGroup(TagHelperContext context, ModelExpression model)

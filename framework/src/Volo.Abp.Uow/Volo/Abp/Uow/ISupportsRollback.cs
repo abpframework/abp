@@ -5,5 +5,5 @@ namespace Volo.Abp.Uow;
 
 public interface ISupportsRollback
 {
-    Task RollbackAsync(CancellationToken cancellationToken);
+    Task RollbackAsync(CancellationToken cancellationToken = default);
 }

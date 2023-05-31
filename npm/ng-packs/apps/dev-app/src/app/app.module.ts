@@ -1,3 +1,4 @@
+import { ThemeBasicModule } from '@abp/ng.theme.basic';
 import { AccountConfigModule } from '@abp/ng.account/config';
 import { CoreModule } from '@abp/ng.core';
 import { registerLocale } from '@abp/ng.core/locale';
@@ -35,8 +36,7 @@ import { AbpOAuthModule } from '@abp/ng.oauth';
     TenantManagementConfigModule.forRoot(),
     FeatureManagementModule.forRoot(),
     SettingManagementConfigModule.forRoot(),
-    ThemeLeptonXModule.forRoot(),
-    SideMenuLayoutModule.forRoot(),
+    ThemeBasicModule.forRoot(),
   ],
   providers: [APP_ROUTE_PROVIDER],
   declarations: [AppComponent],
