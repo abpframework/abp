@@ -31,11 +31,6 @@ program.parse(process.argv);
   try {
     await fse.remove('../dist/packages');
 
-    await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
-
-    await updateVersion(program.nextVersion);
-    return;
-
     if (!program.skipVersionValidation) {
       await execa(
         'yarn',
@@ -106,7 +101,7 @@ async function updateVersion(version: string) {
 
   await execa(
     'yarn',
-    ['update-version', 'abpVersion', version],
+    ['update-version', version],
     { stdout: 'inherit', cwd: '../' },
   );
 
