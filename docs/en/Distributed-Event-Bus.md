@@ -217,7 +217,7 @@ The `DistributedEventSent` local event is published when your application sends 
 - **`EventName`:** It represents the [name](#event-name) of the event sent.
 - **`EventData`:** It represents the actual data associated with the event sent. Since it is of type `object`, it can hold any type of data.
 
-**Example: Get informed when your application sends an event to the distributed event bus **
+**Example: Get informed when your application sends an event to the distributed event bus**
 
 ```csharp
 public class DistributedEventSentHandler : ILocalEventHandler<DistributedEventSent>, ITransientDependency
