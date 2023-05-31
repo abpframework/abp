@@ -36,6 +36,10 @@
         ]
       }
     },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs generators {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
