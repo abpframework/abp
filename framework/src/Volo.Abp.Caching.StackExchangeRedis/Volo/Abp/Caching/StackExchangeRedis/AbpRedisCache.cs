@@ -57,7 +57,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
 
         DataKey = type.GetField("DataKey", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!.ToString()!;
 
-        NotPresent = type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null).To<int>();
+        NotPresent = type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!.To<int>();
     }
 
     public AbpRedisCache(IOptions<RedisCacheOptions> optionsAccessor)
