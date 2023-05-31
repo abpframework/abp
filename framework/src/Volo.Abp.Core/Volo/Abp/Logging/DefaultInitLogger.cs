@@ -13,13 +13,13 @@ public class DefaultInitLogger<T> : IInitLogger<T>
         Entries = new List<AbpInitLogEntry>();
     }
 
-    public virtual void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+    public virtual void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
         Entries.Add(new AbpInitLogEntry
         {
             LogLevel = logLevel,
             EventId = eventId,
-            State = state,
+            State = state!,
             Exception = exception,
             Formatter = (s, e) => formatter((TState)s, e),
         });
@@ -30,7 +30,7 @@ public class DefaultInitLogger<T> : IInitLogger<T>
         return logLevel != LogLevel.None;
     }
 
-    public virtual IDisposable BeginScope<TState>(TState state)
+    public virtual IDisposable BeginScope<TState>(TState state) where TState : notnull
     {
         return NullDisposable.Instance;
     }

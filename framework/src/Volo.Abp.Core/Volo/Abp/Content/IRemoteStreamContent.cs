@@ -5,7 +5,7 @@ namespace Volo.Abp.Content;
 
 public interface IRemoteStreamContent : IDisposable
 {
-    string FileName { get; }
+    string? FileName { get; }
 
     string ContentType { get; }
 
