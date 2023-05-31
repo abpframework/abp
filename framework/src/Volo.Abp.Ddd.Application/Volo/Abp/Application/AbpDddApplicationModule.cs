@@ -9,7 +9,6 @@ using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Security;
 using Volo.Abp.Settings;
@@ -27,7 +26,6 @@ namespace Volo.Abp.Application;
     typeof(AbpAuthorizationModule),
     typeof(AbpHttpAbstractionsModule),
     typeof(AbpSettingsModule),
-    typeof(AbpMultiTenancyModule),
     typeof(AbpFeaturesModule),
     typeof(AbpGlobalFeaturesModule)
     )]

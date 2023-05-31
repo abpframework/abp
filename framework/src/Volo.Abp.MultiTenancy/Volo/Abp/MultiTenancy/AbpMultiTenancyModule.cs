@@ -12,6 +12,7 @@ namespace Volo.Abp.MultiTenancy;
 [DependsOn(
     typeof(AbpDataModule),
     typeof(AbpSecurityModule),
+    typeof(AbpSettingsModule),
     typeof(AbpEventBusAbstractionsModule),
     typeof(AbpMultiTenancyAbstractionsModule)
     )]

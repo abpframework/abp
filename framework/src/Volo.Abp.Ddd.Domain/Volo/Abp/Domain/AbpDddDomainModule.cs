@@ -7,7 +7,6 @@ using Volo.Abp.EventBus;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Specifications;
 using Volo.Abp.Timing;
@@ -18,7 +17,6 @@ namespace Volo.Abp.Domain;
     typeof(AbpAuditingModule),
     typeof(AbpDataModule),
     typeof(AbpEventBusModule),
-    typeof(AbpMultiTenancyModule),
     typeof(AbpGuidsModule),
     typeof(AbpTimingModule),
     typeof(AbpObjectMappingModule),

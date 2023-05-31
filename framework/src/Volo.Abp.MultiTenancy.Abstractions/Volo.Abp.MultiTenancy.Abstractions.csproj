@@ -17,7 +17,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
         <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
-        <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
     </ItemGroup>
 
     <ItemGroup>
