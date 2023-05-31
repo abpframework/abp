@@ -8,8 +8,8 @@ namespace Volo.Abp.Validation;
 
 public class DynamicRangeAttribute : RangeAttribute
 {
-    private static readonly FieldInfo MaximumField;
-    private static readonly FieldInfo MinimumField;
+    private static readonly FieldInfo? MaximumField;
+    private static readonly FieldInfo? MinimumField;
 
     static DynamicRangeAttribute()
     {
@@ -33,8 +33,8 @@ public class DynamicRangeAttribute : RangeAttribute
     public DynamicRangeAttribute(
         [NotNull] Type sourceType,
         [NotNull] Type operandType,
-        [CanBeNull] string minimumPropertyName,
-        [CanBeNull] string maximumPropertyName
+        string? minimumPropertyName,
+        string? maximumPropertyName
     )
         : base(operandType, string.Empty, string.Empty)
     {
@@ -47,7 +47,7 @@ public class DynamicRangeAttribute : RangeAttribute
                 BindingFlags.Static | BindingFlags.Public
             );
             Debug.Assert(minimumProperty != null, nameof(minimumProperty) + " != null");
-            MinimumField.SetValue(this, minimumProperty.GetValue(null));
+            MinimumField?.SetValue(this, minimumProperty?.GetValue(null));
         }
 
         if (maximumPropertyName != null)
@@ -57,7 +57,7 @@ public class DynamicRangeAttribute : RangeAttribute
                 BindingFlags.Static | BindingFlags.Public
             );
             Debug.Assert(maximumProperty != null, nameof(maximumProperty) + " != null");
-            MaximumField.SetValue(this, maximumProperty.GetValue(null));
+            MaximumField?.SetValue(this, maximumProperty?.GetValue(null));
         }
     }
 }

@@ -83,7 +83,7 @@ public static class AbpLoggerExtensions
 
     private static void LogData(ILogger logger, Exception exception, LogLevel logLevel)
     {
-        if (exception.Data == null || exception.Data.Count <= 0)
+        if (exception.Data.Count <= 0)
         {
             return;
         }
@@ -102,23 +102,22 @@ public static class AbpLoggerExtensions
     {
         var loggingExceptions = new List<IExceptionWithSelfLogging>();
 
-        if (exception is IExceptionWithSelfLogging)
+        if (exception is IExceptionWithSelfLogging logging)
         {
-            loggingExceptions.Add(exception as IExceptionWithSelfLogging);
+            loggingExceptions.Add(logging);
         }
-        else if (exception is AggregateException && exception.InnerException != null)
+        else if (exception is AggregateException aggException && aggException.InnerException != null)
         {
-            var aggException = exception as AggregateException;
-            if (aggException.InnerException is IExceptionWithSelfLogging)
+            if (aggException.InnerException is IExceptionWithSelfLogging selfLogging)
             {
-                loggingExceptions.Add(aggException.InnerException as IExceptionWithSelfLogging);
+                loggingExceptions.Add(selfLogging);
             }
 
             foreach (var innerException in aggException.InnerExceptions)
             {
-                if (innerException is IExceptionWithSelfLogging)
+                if (innerException is IExceptionWithSelfLogging withSelfLogging)
                 {
-                    loggingExceptions.AddIfNotContains(innerException as IExceptionWithSelfLogging);
+                    loggingExceptions.AddIfNotContains(withSelfLogging);
                 }
             }
         }
