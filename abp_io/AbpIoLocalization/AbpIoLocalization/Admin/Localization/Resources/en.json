@@ -460,6 +460,7 @@
     "ReloadFromSourceConfirmationMessage": "This post will be refreshed from \"{0}\". Do you want to continue?",
     "UnitPrice": "Unit Price",
     "OverallDiscountAmount": "Overall Discount Amount",
-    "DiscountAmount": "Discount Amount"
+    "DiscountAmount": "Discount Amount",
+    "FullChangeHistory": "Full Change History"
   }
 }

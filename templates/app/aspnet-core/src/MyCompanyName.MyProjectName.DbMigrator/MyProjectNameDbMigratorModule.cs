@@ -1,7 +1,7 @@
 ﻿using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Volo.Abp.Autofac;
-using Volo.Abp.Caching;
 //<TEMPLATE-REMOVE IF-NOT='TIERED'>
+using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 //</TEMPLATE-REMOVE>
 using Volo.Abp.Modularity;
