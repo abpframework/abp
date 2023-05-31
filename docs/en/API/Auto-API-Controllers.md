@@ -172,7 +172,7 @@ Disabled `IsMetadataEnabled` which hides this service from API explorer and it w
 
 ## Replace or Remove Controllers.
 
-In addition to [Overriding a Controller](Customizing-Application-Modules-Overriding-Services.md#example-overriding-a-controller), you can also use a completely independent **Controller** to replace the controller in the framework or module. 
+In addition to [Overriding a Controller](../Customizing-Application-Modules-Overriding-Services.md#example-overriding-a-controller), you can also use a completely independent **Controller** to replace the controller in the framework or module. 
 
 They have the same [route](https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/routing?view=aspnetcore-7.0), but can have **different** input and output parameters.
 
