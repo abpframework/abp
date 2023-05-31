@@ -187,7 +187,7 @@ If you perform **database operations** and use the [repositories](Repositories.m
 
 ## Monitoring Distributed Events
 
-The ABP Framework provides a powerful feature that allows you to stay informed when your application **receives** or **sends** a distributed event. This capability enables you to track the event flow within your application and take appropriate actions based on the received or sent distributed events.
+The ABP Framework allows you to stay informed when your application **receives** or **sends** a distributed event. This capability enables you to track the event flow within your application and take appropriate actions based on the received or sent distributed events.
 
 ### Received Events
 
