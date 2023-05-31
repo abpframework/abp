@@ -191,7 +191,7 @@ It is possible to be informed when the ABP Framework **receives** or **sends** a
 
 ### Received events
 
-The `DistributedEventReceived` local event is published when your application receives a event from the distributed event bus. `DistributedEventReceived` class has the following fields:
+The `DistributedEventReceived` local event is published when your application receives an event from the distributed event bus. `DistributedEventReceived` class has the following fields:
 
 - **`Source`:** It represents the source of the distributed event. Source can be `Direct`, `Inbox`, `Outbox`.
 - **`EventName`:** It represents the [name](#event-name) of the event received.
@@ -199,7 +199,7 @@ The `DistributedEventReceived` local event is published when your application re
 
 ###  Sent events
 
-The `DistributedEventSent` local event is published when your application sends a event to the distributed event bus. `DistributedEventSent` class has the following fields:
+The `DistributedEventSent` local event is published when your application sends an event to the distributed event bus. `DistributedEventSent` class has the following fields:
 
 - **`Source`:** It represents the source of the distributed event. Source can be `Direct`, `Inbox`, `Outbox`.
 - **`EventName`:** It represents the [name](#event-name) of the event sent.
