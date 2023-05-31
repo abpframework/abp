@@ -178,7 +178,7 @@ They have the same [route](https://learn.microsoft.com/en-us/aspnet/core/mvc/con
 
 ### Replace built-in AbpApplicationConfigurationController
 
-The `ReplaceControllersAttribute` indicate the replaced controller type.
+The `ReplaceControllersAttribute` indicates the replaced controller type.
 
 ````csharp
 [ReplaceControllers(typeof(AbpApplicationConfigurationController))]
