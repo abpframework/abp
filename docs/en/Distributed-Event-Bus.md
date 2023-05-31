@@ -185,11 +185,11 @@ If you perform **database operations** and use the [repositories](Repositories.m
 
 > The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
 
-## Event Tracking and Logging
+## Monitoring Distributed Events
 
-It is possible to be informed when the ABP Framework **receives** or **sends** a distributed event. The framework automatically **logs** all distributed events to the standard [logger](https://docs.abp.io/en/abp/latest/Logging), but you may require additional functionality.
+The ABP Framework provides a powerful feature that allows you to stay informed when your application **receives** or **sends** a distributed event. This capability enables you to track the event flow within your application and take appropriate actions based on the received or sent distributed events.
 
-### Received events
+### Received Events
 
 The `DistributedEventReceived` local event is published when your application receives an event from the distributed event bus. `DistributedEventReceived` class has the following fields:
 
@@ -197,7 +197,19 @@ The `DistributedEventReceived` local event is published when your application re
 - **`EventName`:** It represents the [name](#event-name) of the event received.
 - **`EventData`:** It represents the actual data associated with the event received. Since it is of type `object`, it can hold any type of data.
 
-###  Sent events
+**Example: Get informed when your application receives an event from the distributed event bus**
+
+```csharp
+public class DistributedEventReceivedHandler : ILocalEventHandler<DistributedEventReceived>, ITransientDependency
+{
+    public async Task HandleEventAsync(DistributedEventReceived eventData)
+    {
+        // TODO: IMPLEMENT YOUR LOGIC...
+    }
+}
+```
+
+###  Sent Events
 
 The `DistributedEventSent` local event is published when your application sends an event to the distributed event bus. `DistributedEventSent` class has the following fields:
 
@@ -205,8 +217,19 @@ The `DistributedEventSent` local event is published when your application sends 
 - **`EventName`:** It represents the [name](#event-name) of the event sent.
 - **`EventData`:** It represents the actual data associated with the event sent. Since it is of type `object`, it can hold any type of data.
 
-You can seamlessly integrate event-tracking capabilities into your application by subscribing the `DistributedEventReceived` and `DistributedEventSent` local events. This empowers you to effectively monitor the messaging flow, diagnose any potential issues, and gain valuable insights into the behavior of your distributed messaging system.
+**Example: Get informed when your application sends an event to the distributed event bus **
 
+```csharp
+public class DistributedEventSentHandler : ILocalEventHandler<DistributedEventSent>, ITransientDependency
+{
+    public async Task HandleEventAsync(DistributedEventSent eventData)
+    {
+        // TODO: IMPLEMENT YOUR LOGIC...
+    }
+}
+```
+
+You can seamlessly integrate event-tracking capabilities into your application by subscribing to the `DistributedEventReceived` and `DistributedEventSent` local events as above examples. This empowers you to effectively monitor the messaging flow, diagnose any potential issues, and gain valuable insights into the behavior of your distributed messaging system.
 
 ## Pre-Defined Events
 
