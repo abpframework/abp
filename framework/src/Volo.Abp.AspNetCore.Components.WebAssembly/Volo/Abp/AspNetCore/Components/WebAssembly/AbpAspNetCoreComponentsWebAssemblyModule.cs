@@ -8,7 +8,6 @@ using Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -19,9 +18,8 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 [DependsOn(
     typeof(AbpAspNetCoreMvcClientCommonModule),
     typeof(AbpUiModule),
-    typeof(AbpAspNetCoreComponentsWebModule),
-    typeof(AbpEventBusModule)
-    )]
+    typeof(AbpAspNetCoreComponentsWebModule)
+)]
 public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
