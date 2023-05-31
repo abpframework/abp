@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.Domain;
 
 [DependsOn(
-    typeof(AbpMultiTenancyModule),
+    typeof(AbpMultiTenancyAbstractionsModule),
     typeof(AbpEventBusAbstractionsModule)
 )]
 public class AbpDddDomainSharedModule : AbpModule
