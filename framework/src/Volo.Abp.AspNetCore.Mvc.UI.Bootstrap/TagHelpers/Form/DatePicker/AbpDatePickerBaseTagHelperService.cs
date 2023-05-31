@@ -22,11 +22,42 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelperService<TTagHelper>
     where TTagHelper : AbpDatePickerBaseTagHelper<TTagHelper>
 {
-    protected readonly Dictionary<Type,Func<object,string>> SupportedInputTypes = new() {
-        {typeof(string), o => DateTime.Parse((string)o).ToString("O")},
-        {typeof(DateTime), o => ((DateTime) o).ToString("O")},
+    protected readonly Dictionary<Type, Func<object, string>> SupportedInputTypes = new() 
+    {
+        {
+            typeof(string), o =>
+            {
+                if(o is string s && DateTime.TryParse(s, out var dt))
+                {
+                    return dt.ToString("O");
+                }
+
+                return string.Empty;
+            }
+        },
+        {
+            typeof(DateTime), o =>
+            {
+                if(o is DateTime dt && dt != default)
+                {
+                    return dt.ToString("O");
+                }
+                
+                return string.Empty;
+            }
+        },
         {typeof(DateTime?), o => ((DateTime?) o)?.ToString("O")},
-        {typeof(DateTimeOffset), o => ((DateTimeOffset) o).ToString("O")},
+        {
+            typeof(DateTimeOffset), o =>
+            {
+                if(o is DateTimeOffset dto && dto != default)
+                {
+                    return dto.ToString("O");
+                }
+                
+                return string.Empty;
+            }
+        },
         {typeof(DateTimeOffset?), o => ((DateTimeOffset?) o)?.ToString("O")}
     };
 
@@ -84,6 +115,11 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         AddReadOnlyAttribute(TagHelperOutput);
         AddPlaceholderAttribute(TagHelperOutput);
         AddInfoTextId(TagHelperOutput);
+        var optionsAttribute = GetAttributeAndModelExpression<DatePickerOptionsAttribute>(out var modelExpression);
+        if (optionsAttribute != null)
+        {
+            TagHelper.SetDatePickerOptions(optionsAttribute.GetDatePickerOptions(modelExpression.ModelExplorer));
+        }
 
         // Open and close button
         var openButtonContent = TagHelper.OpenButton
@@ -426,15 +462,6 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             attrList.Add(attr);
         }
 
-        var optionsAttribute = GetAttributeAndModelExpression<DatePickerOptionsAttribute>(out var modelExpression);
-        if (optionsAttribute != null)
-        {
-            foreach (var attr in ConvertDatePickerOptionsToAttributeList(optionsAttribute.GetDatePickerOptions(modelExpression.ModelExplorer)))
-            {
-                attrList.Add(attr);
-            }
-        }
-
         AddBaseTagAttributes(attrList);
 
         return attrList;
@@ -591,7 +618,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         abpButtonTagHelper.ButtonType = AbpButtonType.Outline_Secondary;
         abpButtonTagHelper.Icon = icon;
 
-        abpButtonTagHelper.Disabled = TagHelper.IsDisabled;
+        abpButtonTagHelper.Disabled = TagHelper.IsDisabled || GetAttribute<DisabledInput>() != null;
 
         if (!visible)
         {

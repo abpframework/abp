@@ -55,9 +55,12 @@ export function createControllerToServiceMapper({
 
 function getTypesWithoutIRemoteStreamContent(types: Record<string, Type>) {
   const newType = { ...types };
-  delete newType[VOLO_REMOTE_STREAM_CONTENT];
+  VOLO_REMOTE_STREAM_CONTENT.forEach(fileType => {
+    delete newType[fileType];
+  });
   return newType;
 }
+
 function sortMethods(methods: Method[]) {
   methods.sort((a, b) => (a.signature.name > b.signature.name ? 1 : -1));
 }
@@ -99,7 +102,13 @@ export function createActionToSignatureMapper() {
       ...action.parametersOnMethod,
       ...(versionParameter ? [versionParameter] : []),
     ];
+
     signature.parameters = parameters.map(p => {
+      const isFormData = isRemoteStreamContent(p.type);
+      const isFormArray = isRemoteStreamContentArray(p.type);
+      if (isFormData || isFormArray) {
+        return new Property({ name: p.name, type: 'FormData' });
+      }
       const type = adaptType(p.typeSimple);
       const parameter = new Property({ name: p.name, type });
       parameter.setDefault(p.defaultValue);
@@ -110,6 +119,14 @@ export function createActionToSignatureMapper() {
 
     return signature;
   };
+}
+
+export function isRemoteStreamContent(type: string) {
+  return VOLO_REMOTE_STREAM_CONTENT.some(x => x === type);
+}
+
+export function isRemoteStreamContentArray(type: string) {
+  return VOLO_REMOTE_STREAM_CONTENT.map(x => `${x}[]`).some(x => x === type);
 }
 
 function getMethodNameFromAction(action: Action): string {

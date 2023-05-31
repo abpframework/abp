@@ -22,9 +22,8 @@ export class RouterEvents {
   constructor(private router: Router) {}
 
   getEvents<T extends RouterEventConstructors>(...eventTypes: T) {
-    type FilteredRouterEvent = T extends Type<infer Ctor>[] ? Ctor : never;
 
-    const filterRouterEvents = (event: Event): event is FilteredRouterEvent =>
+    const filterRouterEvents = (event: Event) =>
       eventTypes.some(type => event instanceof type);
 
     return this.router.events.pipe(filter(filterRouterEvents));

@@ -158,7 +158,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
                 await SaveChangesAsync(cancellationToken);
             }
 
-            await CommitTransactionsAsync();
+            await CommitTransactionsAsync(cancellationToken);
             IsCompleted = true;
             await OnCompletedAsync();
         }
@@ -363,11 +363,11 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
         }
     }
 
-    protected virtual async Task CommitTransactionsAsync()
+    protected virtual async Task CommitTransactionsAsync(CancellationToken cancellationToken)
     {
         foreach (var transaction in GetAllActiveTransactionApis())
         {
-            await transaction.CommitAsync();
+            await transaction.CommitAsync(cancellationToken);
         }
     }
 

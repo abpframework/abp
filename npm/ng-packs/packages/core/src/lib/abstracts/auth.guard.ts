@@ -1,4 +1,4 @@
-import { CanActivate, UrlTree } from '@angular/router';
+import { UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 @Injectable({
@@ -10,4 +10,4 @@ export class AuthGuard implements IAuthGuard {
     return false;
   }
 }
-export interface IAuthGuard extends CanActivate {}
+export interface IAuthGuard  {}

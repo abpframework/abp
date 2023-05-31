@@ -619,9 +619,7 @@
                     options.separator = separator;
                 }
 
-                if(options.autoUpdateInput){
-                    fillInput($input, startDate, endDate, options);
-                }
+                fillInput($input, startDate, endDate, options);
                 
                 $input.on('apply.daterangepicker', function (ev, picker) {
                     if (singleDatePicker) {
@@ -643,8 +641,9 @@
                     var momentEndDate = getMoment(endDate, options);
                     if (momentStartDate.isValid()) {
                         picker.setStartDate(momentStartDate);
+                        picker.setEndDate(momentEndDate);
                     }
-                    if (momentEndDate.isValid()) {
+                    if (momentEndDate.isValid() && !singleDatePicker) {
                         picker.setEndDate(momentEndDate);
                     }
                 });
@@ -754,6 +753,10 @@
             });
     }
 
+    abp.dom.initializers.initializeAbpCspStyles =  function ($abpCspStyles){
+        $abpCspStyles.attr("rel", "stylesheet");
+    }
+
     abp.dom.onNodeAdded(function (args) {
         abp.dom.initializers.initializeToolTips(args.$el.findWithSelf('[data-toggle="tooltip"]'));
         abp.dom.initializers.initializePopovers(args.$el.findWithSelf('[data-toggle="popover"]'));
@@ -761,6 +764,8 @@
         abp.dom.initializers.initializeForms(args.$el.findWithSelf('form'), true);
         abp.dom.initializers.initializeScript(args.$el);
         abp.dom.initializers.initializeAutocompleteSelects(args.$el.findWithSelf('.auto-complete-select'));
+        abp.dom.initializers.initializeAbpCspStyles($("link[abp-csp-style]"));
+        abp.dom.initializers.initializeDateRangePickers(args.$el);
     });
 
     abp.dom.onNodeRemoved(function (args) {
@@ -772,6 +777,7 @@
     abp.event.on('abp.configurationInitialized', function () {
         abp.libs.bootstrapDatepicker.normalizeLanguageConfig();
     });
+    
 
     $(function () {
         abp.dom.initializers.initializeToolTips($('[data-toggle="tooltip"]'));
@@ -782,7 +788,7 @@
         abp.dom.initializers.initializeForms($('form'));
         abp.dom.initializers.initializeAutocompleteSelects($('.auto-complete-select'));
         $('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
-
+        abp.dom.initializers.initializeAbpCspStyles($("link[abp-csp-style]"));
     });
 
 })(jQuery);

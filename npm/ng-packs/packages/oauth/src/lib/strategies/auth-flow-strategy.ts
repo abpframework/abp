@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { Params } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import {
   AuthConfig,
   OAuthErrorEvent,
@@ -7,7 +7,7 @@ import {
   OAuthStorage,
 } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import {
   AbpLocalStorageService,
   ConfigStateService,
@@ -32,13 +32,11 @@ export abstract class AuthFlowStrategy {
   protected sessionState: SessionStateService;
   protected localStorageService: AbpLocalStorageService;
   protected tenantKey: string;
+  protected router: Router;
 
   abstract checkIfInternalAuth(queryParams?: Params): boolean;
-
   abstract navigateToLogin(queryParams?: Params): void;
-
   abstract logout(queryParams?: Params): Observable<any>;
-
   abstract login(params?: LoginParams | Params): Observable<any>;
 
   private catchError = (err: HttpErrorResponse) => {
@@ -55,6 +53,7 @@ export abstract class AuthFlowStrategy {
     this.localStorageService = injector.get(AbpLocalStorageService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig || {};
     this.tenantKey = injector.get(TENANT_KEY);
+    this.router = injector.get(Router);
 
     this.listenToOauthErrors();
   }
@@ -71,6 +70,8 @@ export abstract class AuthFlowStrategy {
       .pipe(filter(event => event.type === 'token_refresh_error'))
       .subscribe(() => this.navigateToLogin());
 
+    this.navigateToPreviousUrl();
+
     return this.oAuthService
       .loadDiscoveryDocument()
       .then(() => {
@@ -81,6 +82,32 @@ export abstract class AuthFlowStrategy {
         return this.refreshToken();
       })
       .catch(this.catchError);
+  }
+
+  protected navigateToPreviousUrl(): void {
+    const { responseType } = this.oAuthConfig;
+    if (responseType === 'code') {
+      this.oAuthService.events
+        .pipe(
+          filter(event => event.type === 'token_received' && !!this.oAuthService.state),
+          take(1),
+          map(() => {
+            const redirect_uri = decodeURIComponent(this.oAuthService.state);
+
+            if (redirect_uri && redirect_uri !== '/') {
+              return redirect_uri;
+            }
+            return '/';
+          }),
+          switchMap(redirectUri =>
+            this.configState.getOne$('currentUser').pipe(
+              filter(user => !!user?.isAuthenticated),
+              tap(() => this.router.navigate([redirectUri])),
+            ),
+          ),
+        )
+        .subscribe();
+    }
   }
 
   protected refreshToken() {

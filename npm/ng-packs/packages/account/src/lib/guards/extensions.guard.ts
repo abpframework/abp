@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { CanActivate } from '@angular/router';
+
 import { Observable } from 'rxjs';
 import {
   ExtensionsService,
@@ -17,7 +17,7 @@ import { AccountEditFormPropContributors } from '../models/config-options';
 import { eAccountComponents } from '../enums/components';
 
 @Injectable()
-export class AccountExtensionsGuard implements CanActivate {
+export class AccountExtensionsGuard  {
   constructor(private injector: Injector) {}
 
   canActivate(): Observable<boolean> {

@@ -74,6 +74,15 @@ public partial class PostsClientProxy : ClientProxyBase<IPostAppService>, IPostA
         });
     }
 
+    public Task<List<PostWithDetailsDto>> GetLatestBlogPostsAsync(Guid blogId, int count)
+    {
+        return RequestAsync<List<PostWithDetailsDto>>(nameof(GetLatestBlogPostsAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), blogId },
+            { typeof(int), count }
+        });
+    }
+
     public virtual async Task DeleteAsync(Guid id)
     {
         await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue

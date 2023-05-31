@@ -275,4 +275,14 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < DateTime.UtcNow;
     }
+
+    public virtual async Task ResetRecoveryCodesAsync(IdentityUser user)
+    {
+        if (!(Store is IdentityUserStore identityUserStore))
+        {
+            throw new AbpException($"Store is not an instance of {typeof(IdentityUserStore).AssemblyQualifiedName}");
+        }
+
+        await identityUserStore.SetTokenAsync(user, await identityUserStore.GetInternalLoginProviderAsync(), await identityUserStore.GetRecoveryCodeTokenNameAsync(), string.Empty, CancellationToken);
+    }
 }
