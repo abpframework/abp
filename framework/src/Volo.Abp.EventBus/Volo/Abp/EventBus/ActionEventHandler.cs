@@ -18,12 +18,18 @@ public class ActionEventHandler<TEvent> :
     public Func<TEvent, Task> Action { get; }
 
     /// <summary>
+    /// Execute serial number
+    /// </summary>
+    public int Order { get; set; }
+
+    /// <summary>
     /// Creates a new instance of <see cref="ActionEventHandler{TEvent}"/>.
     /// </summary>
     /// <param name="handler">Action to handle the event</param>
-    public ActionEventHandler(Func<TEvent, Task> handler)
+    public ActionEventHandler(Func<TEvent, Task> handler, int order = 1)
     {
         Action = handler;
+        Order = order;
     }
 
     /// <summary>

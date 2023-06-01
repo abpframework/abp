@@ -11,6 +11,8 @@ public class MySimpleDistributedSingleInstanceEventHandler : IDistributedEventHa
 {
     private readonly ICurrentTenant _currentTenant;
 
+    public int Order { get; set; }
+
     public MySimpleDistributedSingleInstanceEventHandler(ICurrentTenant currentTenant)
     {
         _currentTenant = currentTenant;

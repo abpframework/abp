@@ -12,7 +12,7 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed;
 public abstract class EntitySynchronizer<TEntity, TKey, TSourceEntityEto> :
     EntitySynchronizer<TEntity, TSourceEntityEto>
     where TEntity : class, IEntity<TKey>
-    where TSourceEntityEto : IEntityEto<TKey> 
+    where TSourceEntityEto : IEntityEto<TKey>
 {
     protected new IRepository<TEntity, TKey> Repository { get; }
 
@@ -41,6 +41,7 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
     protected bool IgnoreEntityCreatedEvent { get; set; }
     protected bool IgnoreEntityUpdatedEvent { get; set; }
     protected bool IgnoreEntityDeletedEvent { get; set; }
+    public virtual int Order { get; set; } = 1;
 
     public EntitySynchronizer(
         IObjectMapper objectMapper,

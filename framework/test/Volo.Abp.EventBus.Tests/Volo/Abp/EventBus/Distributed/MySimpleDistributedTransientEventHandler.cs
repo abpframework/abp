@@ -9,6 +9,8 @@ public class MySimpleDistributedTransientEventHandler : IDistributedEventHandler
 
     public static int DisposeCount { get; set; }
 
+    public int Order { get; set; }
+
     public Task HandleEventAsync(MySimpleEventData eventData)
     {
         ++HandleCount;

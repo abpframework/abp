@@ -12,7 +12,7 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
 
     }
 
-    public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+    public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action, int order = 1) where TEvent : class
     {
         return NullDisposable.Instance;
     }

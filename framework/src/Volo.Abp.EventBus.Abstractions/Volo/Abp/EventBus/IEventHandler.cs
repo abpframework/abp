@@ -8,5 +8,5 @@ namespace Volo.Abp.EventBus;
 /// </summary>
 public interface IEventHandler
 {
-
+    public int Order { get; set; }
 }

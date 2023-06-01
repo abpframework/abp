@@ -95,6 +95,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
 
     class MyEventHandle : IDistributedEventHandler<MyEventDate>
     {
+        public int Order { get; set; }
         public Task HandleEventAsync(MyEventDate eventData)
         {
             return Task.CompletedTask;

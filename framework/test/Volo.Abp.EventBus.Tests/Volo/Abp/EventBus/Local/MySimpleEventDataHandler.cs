@@ -7,6 +7,8 @@ public class MySimpleEventDataHandler : ILocalEventHandler<MySimpleEventData>, I
 {
     public int TotalData { get; private set; }
 
+    public int Order { get; set; }
+
     public Task HandleEventAsync(MySimpleEventData eventData)
     {
         TotalData += eventData.Value;

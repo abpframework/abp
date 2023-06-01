@@ -16,6 +16,7 @@ public abstract class EntityCacheBase<TEntity, TEntityCacheItem, TKey> :
     protected IReadOnlyRepository<TEntity, TKey> Repository { get; }
     protected IDistributedCache<TEntityCacheItem, TKey> Cache { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
+    public virtual int Order { get; set; } = 1;
 
     protected EntityCacheBase(
         IReadOnlyRepository<TEntity, TKey> repository,
@@ -26,7 +27,7 @@ public abstract class EntityCacheBase<TEntity, TEntityCacheItem, TKey> :
         Cache = cache;
         UnitOfWorkManager = unitOfWorkManager;
     }
-    
+
     public virtual async Task<TEntityCacheItem> FindAsync(TKey id)
     {
         return await Cache.GetOrAddAsync(
@@ -44,14 +45,14 @@ public abstract class EntityCacheBase<TEntity, TEntityCacheItem, TKey> :
     }
 
     protected abstract TEntityCacheItem MapToCacheItem(TEntity entity);
-    
+
     public async Task HandleEventAsync(EntityChangedEventData<TEntity> eventData)
     {
         if (eventData is EntityCreatedEventData<TEntity>)
         {
             return;
         }
-        
+
         /* Why we are using double remove:
          * First Cache.RemoveAsync drops the cache item in a unit of work.
          * Some other application / thread may read the value from database and put it to the cache again
@@ -59,10 +60,10 @@ public abstract class EntityCacheBase<TEntity, TEntityCacheItem, TKey> :
          * The second Cache.RemoveAsync drops the cache item after the database transaction is complete.
          * Only the second Cache.RemoveAsync may not be enough if the application crashes just after the UOW completes.
          */
-        
+
         await Cache.RemoveAsync(eventData.Entity.Id);
-        
-        if(UnitOfWorkManager.Current != null)
+
+        if (UnitOfWorkManager.Current != null)
         {
             await Cache.RemoveAsync(eventData.Entity.Id, considerUow: true);
         }

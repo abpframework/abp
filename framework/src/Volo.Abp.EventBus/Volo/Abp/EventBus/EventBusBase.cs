@@ -36,9 +36,9 @@ public abstract class EventBusBase : IEventBus
     }
 
     /// <inheritdoc/>
-    public virtual IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+    public virtual IDisposable Subscribe<TEvent>(Func<TEvent, Task> action, int order = 1) where TEvent : class
     {
-        return Subscribe(typeof(TEvent), new ActionEventHandler<TEvent>(action));
+        return Subscribe(typeof(TEvent), new ActionEventHandler<TEvent>(action, order));
     }
 
     /// <inheritdoc/>
@@ -137,9 +137,13 @@ public abstract class EventBusBase : IEventBus
 
         foreach (var handlerFactories in GetHandlerFactories(eventType))
         {
-            foreach (var handlerFactory in handlerFactories.EventHandlerFactories)
+            var eventHandlerDisposeWrappers = handlerFactories.EventHandlerFactories.Select(e => e.GetHandler()).OrderBy(e => e.EventHandler.Order).ToList();
+            foreach (var eventHandlerDisposeWrapper in eventHandlerDisposeWrappers)
             {
-                await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions, inboxConfig);
+                using (eventHandlerDisposeWrapper)
+                {
+                    await TriggerHandlerAsync(eventHandlerDisposeWrapper.EventHandler, handlerFactories.EventType, eventData, exceptions, inboxConfig);
+                }
             }
         }
 
@@ -196,34 +200,31 @@ public abstract class EventBusBase : IEventBus
 
     protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType);
 
-    protected virtual async Task TriggerHandlerAsync(IEventHandlerFactory asyncHandlerFactory, Type eventType,
+    protected virtual async Task TriggerHandlerAsync(IEventHandler eventHandler, Type eventType,
         object eventData, List<Exception> exceptions, InboxConfig inboxConfig = null)
     {
-        using (var eventHandlerWrapper = asyncHandlerFactory.GetHandler())
+        try
         {
-            try
-            {
-                var handlerType = eventHandlerWrapper.EventHandler.GetType();
+            var handlerType = eventHandler.GetType();
 
-                if (inboxConfig?.HandlerSelector != null &&
-                    !inboxConfig.HandlerSelector(handlerType))
-                {
-                    return;
-                }
+            if (inboxConfig?.HandlerSelector != null &&
+                !inboxConfig.HandlerSelector(handlerType))
+            {
+                return;
+            }
 
-                using (CurrentTenant.Change(GetEventDataTenantId(eventData)))
-                {
-                    await InvokeEventHandlerAsync(eventHandlerWrapper.EventHandler, eventData, eventType);
-                }
-            }
-            catch (TargetInvocationException ex)
+            using (CurrentTenant.Change(GetEventDataTenantId(eventData)))
             {
-                exceptions.Add(ex.InnerException);
+                await InvokeEventHandlerAsync(eventHandler, eventData, eventType);
             }
-            catch (Exception ex)
-            {
-                exceptions.Add(ex);
-            }
+        }
+        catch (TargetInvocationException ex)
+        {
+            exceptions.Add(ex.InnerException);
+        }
+        catch (Exception ex)
+        {
+            exceptions.Add(ex);
         }
     }
 

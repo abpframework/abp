@@ -26,6 +26,8 @@ public class EventBus_Order_Test : EventBusTestBase
 
     public class MyOrderEventHandler : ILocalEventHandler<MyOrderEventHandlerEventData>, ITransientDependency
     {
+        public int Order { get; set; }
+
         public Task HandleEventAsync(MyOrderEventHandlerEventData eventData)
         {
             HandlerExecuteOrder += "1";
@@ -36,6 +38,8 @@ public class EventBus_Order_Test : EventBusTestBase
     [LocalEventHandlerOrder(-2)]
     public class MyOrderEventHandler2 : ILocalEventHandler<MyOrderEventHandlerEventData>, ITransientDependency
     {
+        public int Order { get; set; }
+
         public Task HandleEventAsync(MyOrderEventHandlerEventData eventData)
         {
             HandlerExecuteOrder += "2";
@@ -46,6 +50,8 @@ public class EventBus_Order_Test : EventBusTestBase
     [LocalEventHandlerOrder(-3)]
     public class MyOrderEventHandler3 : ILocalEventHandler<MyOrderEventHandlerEventData>, ITransientDependency
     {
+        public int Order { get; set; }
+
         public Task HandleEventAsync(MyOrderEventHandlerEventData eventData)
         {
             HandlerExecuteOrder += "3";

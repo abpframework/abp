@@ -7,6 +7,7 @@ public class DistributedEventHandles : ILocalEventHandler<DistributedEventSent>,
     public static int SentCount { get; set; }
 
     public static int ReceivedCount { get; set; }
+    public int Order { get; set; }
 
     public Task HandleEventAsync(DistributedEventSent eventData)
     {

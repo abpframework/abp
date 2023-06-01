@@ -29,8 +29,9 @@ public interface IEventBus
     /// Given action is called for all event occurrences.
     /// </summary>
     /// <param name="action">Action to handle events</param>
+    /// <param name="order">Execute serial number</param>
     /// <typeparam name="TEvent">Event type</typeparam>
-    IDisposable Subscribe<TEvent>(Func<TEvent, Task> action)
+    IDisposable Subscribe<TEvent>(Func<TEvent, Task> action, int order = 1)
         where TEvent : class;
 
     /// <summary>

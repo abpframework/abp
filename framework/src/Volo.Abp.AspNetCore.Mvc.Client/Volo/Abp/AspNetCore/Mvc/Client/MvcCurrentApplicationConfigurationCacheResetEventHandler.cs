@@ -14,6 +14,8 @@ public class MvcCurrentApplicationConfigurationCacheResetEventHandler :
     protected ICurrentUser CurrentUser { get; }
     protected IDistributedCache<ApplicationConfigurationDto> Cache { get; }
 
+    public int Order { get; set; }
+
     public MvcCurrentApplicationConfigurationCacheResetEventHandler(ICurrentUser currentUser,
         IDistributedCache<ApplicationConfigurationDto> cache)
     {

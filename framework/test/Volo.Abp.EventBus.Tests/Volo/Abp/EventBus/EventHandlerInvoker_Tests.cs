@@ -85,6 +85,8 @@ public class EventHandlerInvoker_Tests : EventBusTestBase
         public int MyEventDataCount { get; set; }
         public int EntityCreatedCount { get; set; }
 
+        public int Order { get; set; }
+
         public Task HandleEventAsync(MyEventData eventData)
         {
             MyEventDataCount++;
@@ -106,6 +108,8 @@ public class EventHandlerInvoker_Tests : EventBusTestBase
         public int MyEventDataCount { get; set; }
         public int EntityCreatedEventDataCount { get; set; }
         public int EntityChangedEventDataCount { get; set; }
+
+        public int Order { get; set; }
 
         public Task HandleEventAsync(MyEventData eventData)
         {

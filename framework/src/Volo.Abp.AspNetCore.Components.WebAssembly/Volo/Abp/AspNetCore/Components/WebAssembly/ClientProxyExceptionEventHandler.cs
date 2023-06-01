@@ -13,6 +13,8 @@ public class ClientProxyExceptionEventHandler : ILocalEventHandler<ClientProxyEx
     protected NavigationManager NavigationManager { get; }
     protected IAccessTokenProvider AccessTokenProvider { get; }
 
+    public int Order { get; set; }
+
     public ClientProxyExceptionEventHandler(NavigationManager navigationManager, IAccessTokenProvider accessTokenProvider)
     {
         NavigationManager = navigationManager;

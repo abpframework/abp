@@ -37,6 +37,8 @@ public class EventBus_EntityEvents_Test : EventBusTestBase
         public int EntityChangedEventCount { get; set; }
         public int EntityCreatedEventCount { get; set; }
 
+        public int Order { get; set; }
+
         public Task HandleEventAsync(EntityChangedEventData<MyEntity> eventData)
         {
             EntityChangedEventCount++;

@@ -81,9 +81,9 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
         return Subscribe(typeof(TEvent), handler);
     }
 
-    public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+    public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action, int order = 1) where TEvent : class
     {
-        return _localEventBus.Subscribe(action);
+        return _localEventBus.Subscribe(action, order);
     }
 
     public IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class

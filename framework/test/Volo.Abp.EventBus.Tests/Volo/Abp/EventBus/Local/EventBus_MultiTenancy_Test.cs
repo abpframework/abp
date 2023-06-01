@@ -47,6 +47,8 @@ public class EventBus_MultiTenancy_Test : EventBusTestBase
     {
         private readonly ICurrentTenant _currentTenant;
 
+        public int Order { get; set; }
+
         public MyEventHandler(ICurrentTenant currentTenant)
         {
             _currentTenant = currentTenant;
