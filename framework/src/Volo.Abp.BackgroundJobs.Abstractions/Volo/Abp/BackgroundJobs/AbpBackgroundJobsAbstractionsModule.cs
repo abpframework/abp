@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.BackgroundJobs;
 
 [DependsOn(
-    typeof(AbpJsonModule)
+    typeof(AbpJsonModule),
+    typeof(AbpMultiTenancyAbstractionsModule)
     )]
 public class AbpBackgroundJobsAbstractionsModule : AbpModule
 {

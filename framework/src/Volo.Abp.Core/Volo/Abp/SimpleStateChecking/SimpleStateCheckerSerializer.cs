@@ -16,8 +16,7 @@ public class SimpleStateCheckerSerializer :
         _contributors = contributors;
     }
     
-    [CanBeNull]
-    public string Serialize<TState>(ISimpleStateChecker<TState> checker) 
+    public string? Serialize<TState>(ISimpleStateChecker<TState> checker) 
         where TState : IHasSimpleStateCheckers<TState>
     {
         foreach (var contributor in _contributors)
@@ -32,8 +31,7 @@ public class SimpleStateCheckerSerializer :
         return null;
     }
 
-    [CanBeNull]
-    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject, TState state)
+    public ISimpleStateChecker<TState>? Deserialize<TState>(JsonObject jsonObject, TState state)
         where TState : IHasSimpleStateCheckers<TState>
     {
         foreach (var contributor in _contributors)

@@ -14,7 +14,6 @@
     "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@abp/generators": ["packages/generators/src/index.ts"],
       "@abp/ng.account": ["packages/account/src/public-api.ts"],
       "@abp/ng.account.core": ["packages/account-core/src/public-api.ts"],
       "@abp/ng.account.core/proxy": ["packages/account-core/proxy/src/public-api.ts"],
@@ -45,7 +44,8 @@
       "@abp/ng.theme.basic/testing": ["packages/theme-basic/testing/src/public-api.ts"],
       "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
       "@abp/ng.theme.shared/extensions": ["packages/theme-shared/extensions/src/public-api.ts"],
-      "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"]
+      "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"],
+      "@abp/nx.generators": ["packages/generators/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
