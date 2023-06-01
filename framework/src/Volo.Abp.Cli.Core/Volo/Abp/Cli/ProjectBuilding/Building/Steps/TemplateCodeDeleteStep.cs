@@ -20,7 +20,7 @@ public class TemplateCodeDeleteStep : ProjectBuildPipelineStep
                 file.Name.EndsWith(".html") || 
                 file.Name.EndsWith(".ts") ||
                 file.Name.EndsWith(".css") ||
-                file.Name.StartsWith("Dockerfile"))
+                file.Name.Contains("Dockerfile"))
             {
                 file.RemoveTemplateCode(context.Symbols);
                 file.RemoveTemplateCodeMarkers();
