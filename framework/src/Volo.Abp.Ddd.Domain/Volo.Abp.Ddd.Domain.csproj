@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.Ddd.Domain.Shared\Volo.Abp.Ddd.Domain.Shared.csproj" />
     <ProjectReference Include="..\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
     <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
     <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />

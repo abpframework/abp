@@ -7,7 +7,7 @@ namespace Volo.Abp.SimpleStateChecking;
 
 public static class SimpleStateCheckerSerializerExtensions
 {
-    public static string Serialize<TState>(
+    public static string? Serialize<TState>(
         this ISimpleStateCheckerSerializer serializer, 
         IList<ISimpleStateChecker<TState>> stateCheckers)
         where TState : IHasSimpleStateCheckers<TState>
@@ -73,7 +73,7 @@ public static class SimpleStateCheckerSerializerExtensions
             return new[] { checker };
         }
 
-        var checkers = new List<ISimpleStateChecker<TState>>();
+        var checkers = new List<ISimpleStateChecker<TState>?>();
 
         for (var i = 0; i < array.Count; i++)
         {
@@ -85,6 +85,6 @@ public static class SimpleStateCheckerSerializerExtensions
             checkers.Add(serializer.Deserialize(jsonObject, state));
         }
 
-        return checkers.Where(x => x != null).ToArray();
+        return checkers.Where(x => x != null).ToArray()!;
     }
 }

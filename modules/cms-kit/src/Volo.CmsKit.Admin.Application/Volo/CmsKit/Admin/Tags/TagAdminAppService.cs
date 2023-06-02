@@ -8,6 +8,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.ObjectExtending;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
@@ -44,7 +45,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
             GuidGenerator.Create(),
             input.EntityType,
             input.Name);
-
+        input.MapExtraPropertiesTo(tag);
         await Repository.InsertAsync(tag);
 
         return ObjectMapper.Map<Tag, TagDto>(tag);
@@ -56,6 +57,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
         var tag = await TagManager.UpdateAsync(
             id,
             input.Name);
+        input.MapExtraPropertiesTo(tag);
 
         tag.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 

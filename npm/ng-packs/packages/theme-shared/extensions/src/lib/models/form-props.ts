@@ -71,6 +71,7 @@ export class FormProp<R = any> extends Prop<R> {
   readonly className?: string;
   readonly group?: FormPropGroup | undefined;
   readonly displayTextResolver?: PropDisplayTextResolver<R>;
+  readonly formText?: string;
 
   constructor(options: FormPropOptions<R>) {
     super(
@@ -82,10 +83,11 @@ export class FormProp<R = any> extends Prop<R> {
       options.isExtra,
       options.template,
       options.className,
+      options.formText,
     );
     this.group = options.group;
     this.className = options.className;
-
+    this.formText = options.formText;
     this.asyncValidators = options.asyncValidators || (_ => []);
     this.validators = options.validators || (_ => []);
     this.disabled = options.disabled || (_ => false);
@@ -132,6 +134,7 @@ export type FormPropOptions<R = any> = O.Optional<
   | 'options'
   | 'id'
   | 'displayTextResolver'
+  | 'formText'
 >;
 
 export type CreateFormPropDefaults<R = any> = Record<string, FormProp<R>[]>;

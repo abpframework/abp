@@ -21,7 +21,7 @@ public static class ServiceCollectionConfigurationExtensions
     }
     
     [CanBeNull]
-    public static IConfiguration GetConfigurationOrNull(this IServiceCollection services)
+    public static IConfiguration? GetConfigurationOrNull(this IServiceCollection services)
     {
         var hostBuilderContext = services.GetSingletonInstanceOrNull<HostBuilderContext>();
         if (hostBuilderContext?.Configuration != null)

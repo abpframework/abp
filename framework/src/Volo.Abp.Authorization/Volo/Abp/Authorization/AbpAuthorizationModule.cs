@@ -8,6 +8,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security;
 using Volo.Abp.VirtualFileSystem;
 
@@ -16,7 +17,8 @@ namespace Volo.Abp.Authorization;
 [DependsOn(
     typeof(AbpAuthorizationAbstractionsModule),
     typeof(AbpSecurityModule),
-    typeof(AbpLocalizationModule)
+    typeof(AbpLocalizationModule),
+    typeof(AbpMultiTenancyModule)
 )]
 public class AbpAuthorizationModule : AbpModule
 {

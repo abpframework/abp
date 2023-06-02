@@ -25,6 +25,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
         RandomizeStringEncryption(context, steps);
         RandomizeAuthServerPassPhrase(context, steps);
         UpdateNuGetConfig(context, steps);
+        UpdateDockerImages(context, steps);
         ConfigureTheme(context, steps);
 
         return steps;
@@ -220,5 +221,10 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
     private static void RandomizeAuthServerPassPhrase(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RandomizeAuthServerPassPhraseStep());
+    }
+
+    private static void UpdateDockerImages(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new UpdateDockerImagesStep("/etc/docker/docker-compose.infrastructure.yml"));
     }
 }

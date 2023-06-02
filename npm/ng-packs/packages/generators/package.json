@@ -1,0 +1,6 @@
+{
+  "name": "@abp/nx.generators",
+  "version": "7.3.0-preview20230530",
+  "type": "commonjs",
+  "generators": "./generators.json"
+}

@@ -25,9 +25,7 @@ export class AbpOAuthGuard implements IAbpGuard {
     }
 
     return of(false).pipe(
-      tap(() => {
-        this.httpErrorReporter.reportError({ status: 401 } as HttpErrorResponse);
-      }),
+      tap(() => this.httpErrorReporter.reportError({ status: 401 } as HttpErrorResponse)),
       delay(1500),
       tap(() => {
         const params = { returnUrl: state.url };

@@ -166,7 +166,7 @@ public class PermissionManagementModal : AbpPageModel
             }
 
             return string.Format(
-                "{0} <span class=\"text-muted\">({1})</span>",
+                "{0} ({1})",
                 DisplayName,
                 GrantedProviders
                     .Where(p => p.ProviderName != currentProviderName)

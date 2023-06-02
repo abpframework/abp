@@ -323,7 +323,7 @@ public partial class TokenController
         principal.SetScopes(request.GetScopes());
         principal.SetResources(await GetResourcesAsync(request.GetScopes()));
 
-        await SetClaimsDestinationsAsync(principal);
+        await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
         await IdentitySecurityLogManager.SaveAsync(
             new IdentitySecurityLogContext

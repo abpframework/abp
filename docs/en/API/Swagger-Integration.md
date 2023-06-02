@@ -43,7 +43,7 @@ If you want to manually install;
 
 ## Configuration
 
-First, we need to use `AddAbpSwaggerGen` extension to configure Swagger in `ConfigureServices` method of our module.
+First, we need to use `AddAbpSwaggerGen` extension to configure Swagger in `ConfigureServices` method of our module:
 
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -63,21 +63,21 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-Then we can use Swagger UI by calling `UseAbpSwaggerUI` method in the `OnApplicationInitialization` method of our module.
+Then we can use Swagger UI by calling `UseAbpSwaggerUI` method in the `OnApplicationInitialization` method of our module:
 
 ```csharp
 public override void OnApplicationInitialization(ApplicationInitializationContext context)
 {
     var app = context.GetApplicationBuilder();
 
-    //... other configarations.
+    //... other configurations.
 
     app.UseAbpSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API");
     });
     
-    //... other configarations.
+    //... other configurations.
 }
 ```
 
@@ -103,9 +103,7 @@ For non MVC/Tiered applications, we need to configure Swagger with OAUTH to hand
 
 > ABP Framework uses OpenIddict by default. To get more information about OpenIddict, check this [documentation](../Modules/OpenIddict.md). 
 
-
-
-To do that, we need to use `AddAbpSwaggerGenWithOAuth` extension to configure Swagger with OAuth issuer and scopes in `ConfigureServices` method of our module.
+To do that, we need to use `AddAbpSwaggerGenWithOAuth` extension to configure Swagger with OAuth issuer and scopes in `ConfigureServices` method of our module:
 
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -130,17 +128,14 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-Then we can use Swagger UI by calling `UseAbpSwaggerUI` method in the `OnApplicationInitialization` method of our module.
-
-> Do not forget to set `OAuthClientId` and `OAuthClientSecret`.
-
+Then we can use Swagger UI by calling `UseAbpSwaggerUI` method in the `OnApplicationInitialization` method of our module:
 
 ```csharp
 public override void OnApplicationInitialization(ApplicationInitializationContext context)
 {
     var app = context.GetApplicationBuilder();
 
-    //... other configarations.
+    //... other configurations.
 
     app.UseAbpSwaggerUI(options =>
     {
@@ -151,6 +146,8 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
         options.OAuthClientSecret("1q2w3e*");  // clientSecret
     });
     
-    //... other configarations.
+    //... other configurations.
 }
 ```
+
+> Do not forget to set `OAuthClientId` and `OAuthClientSecret`.

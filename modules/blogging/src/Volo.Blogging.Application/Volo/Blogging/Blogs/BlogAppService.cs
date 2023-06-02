@@ -32,7 +32,7 @@ namespace Volo.Blogging.Blogs
             Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
 
             var blog = await BlogRepository.FindByShortNameAsync(shortName);
-
+            
             if (blog == null)
             {
                 throw new EntityNotFoundException(typeof(Blog), shortName);

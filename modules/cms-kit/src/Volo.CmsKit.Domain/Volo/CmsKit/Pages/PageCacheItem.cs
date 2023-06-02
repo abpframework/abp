@@ -1,8 +1,9 @@
 ﻿using System;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Pages;
 
-public class PageCacheItem
+public class PageCacheItem : ExtensibleObject
 {
     public Guid Id { get; set; }
     
