@@ -57,7 +57,22 @@ public class AbpDynamicFormTagHelper : AbpTagHelper<AbpDynamicFormTagHelper, Abp
     public string Method { get; set; }
 
     [HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
-    public IDictionary<string, string> RouteValues { get; set; }
+    public IDictionary<string, string> RouteValues
+    {
+        get
+        {
+            if (_routeValues == null)
+            {
+                _routeValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            }
+
+            return _routeValues;
+        }
+        set
+        {
+            _routeValues = value;
+        }
+    }
 
     #endregion
 
