@@ -86,7 +86,15 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
-            PostsList = await _postAppService.GetListByUserIdAsync(Post.Writer.Id);
+            
+            if (Post.Writer != null)
+            {
+                PostsList = await _postAppService.GetListByUserIdAsync(Post.Writer.Id);
+            }else
+            {
+                PostsList = new List<PostWithDetailsDto>();
+            }
+
             LatestPosts = await _postAppService.GetLatestBlogPostsAsync(Blog.Id, 5);
             CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(Post.Id);
             CountComments();
