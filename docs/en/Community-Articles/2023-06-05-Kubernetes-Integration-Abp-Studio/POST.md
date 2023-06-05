@@ -101,6 +101,8 @@ You can watch my 6-minutes demo to see the Project Tye in action:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/S0-z29lMokA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
+**YouTube Link: https://www.youtube.com/watch?v=S0-z29lMokA**
+
 ### Tye: Shortcomings
 
 The demo shows how the Tye project is useful. However, there are many missing points and problems with the current project state. Let’s talk about them;
@@ -147,6 +149,8 @@ You can watch my 9-minutes demo to see ABP Studio Solution Runner in action:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/sSCxyccoHqE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
+**YouTube Link: https://www.youtube.com/watch?v=sSCxyccoHqE**
+
 ## ABP Studio Kubernetes Tunnel
 
 Finally, we came to the essential topic I want to talk about. Until that point, we had a good understanding of the problem and possible solutions. In this part, we will make a final touch to the solution to have **a great development environment for a microservice solution**.
@@ -192,6 +196,8 @@ Don’t worry, ABP Studio **doesn’t change your local environment variables**.
 So, now we have a fully Kubernetes integrated development environment. Let’s see how it is used in ABP Studio in the following 9-minutes demo:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CeUq2ysz-mQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+**YouTube Link: https://www.youtube.com/watch?v=CeUq2ysz-mQ**
 
 ## ABP Studio Roadmap
 
