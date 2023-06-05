@@ -111,7 +111,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 
         var nonceStr = $" 'nonce-{nonceValue}'";
 
-        var scriptSrcValue = Options.Value.ContentSecurityPolicyValue.Split(';')
+        var scriptSrcValue = Options.Value.ContentSecurityPolicyValue?.Split(';')
             .FirstOrDefault(x => x.Trim().StartsWith(ScriptSrcKey))?.Trim();
 
         if (scriptSrcValue.IsNullOrWhiteSpace())
