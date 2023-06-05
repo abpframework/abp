@@ -43,7 +43,84 @@ Please see the following migration documents, if you are upgrading from v7.2:
 
 In this section, I will introduce some major features released in this version. Here is a brief list of the titles that will be explained in the next sections:
 
-//TODO: ...
+* Introducing the Volo.Abp.Imaging packages
+* ABP CLI: switch-to-local command
+* Monitoring Distributed Events
+* Ordering of the Local Event Handlers
+* Other News
+
+### Introducing the Volo.Abp.Imaging packages
+
+ABP Framework provides some packages to compress and resize images. Currently, there are four official packages:
+
+* `Volo.Abp.Imaging.Abstractions`: Provides common services for compression and resizing purposes. 
+* `Volo.Abp.Imaging.AspNetCore`: Provides some attributes for controller actions that can automatically compress and/or resize uploaded files.
+* `Volo.Abp.Imaging.ImageSharp`: Implements the image compression & resize operations using the [ImageSharp](https://github.com/SixLabors/ImageSharp) library. 
+* `Volo.Abp.Imaging.MagickNet`: Implements the image compression & resize operations using the [Magick.NET](https://github.com/dlemstra/Magick.NET) library.
+
+You can use one of these official providers (`ImageSharp` or `Magick.NET`) or implement your own image resizer/compressor contributor and use it in your application.
+
+> See the [Image Manipulation](https://docs.abp.io/en/abp/7.3/Image-Manipulation) documentation to learn more and see the required configurations.
+
+### ABP CLI: switch-to-local command
+
+In this version, ABP CLI introduces a new CLI command: **"switch-to-local"**. `switch-to-local` command changes all NuGet package references on a solution to local project references for all the `.csproj` files in the specified folder (and all its subfolders with any deep).
+
+**Usage:**
+
+```bash
+abp switch-to-local --paths "C:\Github\abp"
+```
+
+### Monitoring Distributed Events
+
+ABP Framework allows you to stay informed when your application **receives** or **sends** a distributed event. This enables you to track the event flow within your application and take appropriate actions based on the received or sent distributed events.
+
+You just need to subscribe to one of the `DistributedEventReceived` or `DistributedEventSent` events and take additional actions according to your cases.
+
+**Example: Get informed when your application sends an event to the distributed event bus**
+
+```csharp
+public class DistributedEventSentHandler : ILocalEventHandler<DistributedEventSent>, ITransientDependency
+{
+    public async Task HandleEventAsync(DistributedEventSent eventData)
+    {
+        // TODO: IMPLEMENT YOUR LOGIC...
+    }
+}
+```
+
+> See the documentation to learn more: [https://docs.abp.io/en/abp/7.3/Distributed-Event-Bus](https://docs.abp.io/en/abp/7.3/Distributed-Event-Bus)
+
+### Ordering of the Local Event Handlers
+
+In this version, ABP Framework introduces `LocalEventHandlerOrder` attribute, which can be used to set the execution order for the event handlers. This can be helpful if you want to handle your local event handlers in a specific order.
+
+**Example:**
+
+```csharp
+[LocalEventHandlerOrder(-1)]
+public class MyHandler
+    : ILocalEventHandler<StockCountChangedEvent>,
+      ITransientDependency
+{
+    public async Task HandleEventAsync(StockCountChangedEvent eventData)
+    {
+        //TODO: your implementation
+    }
+}
+```
+
+By default, all event handlers have an order value of 0. Thus, if you want to take certain event handlers to be executed before other event handlers, you can set the order value as a negative value.
+
+> See the documentation to learn more: [https://docs.abp.io/en/abp/7.3/Local-Event-Bus](https://docs.abp.io/en/abp/7.3/Local-Event-Bus)
+
+### Other News
+
+* Upgraded the [Blazorise](https://blazorise.com/) library to v1.2.3 for Blazor UI. After the upgrade, ensure that all Blazorise-related packages are using v1.2.3 in your application.
+* Module Entity Extension support has been added for CMS Kit module. See [#16572](https://github.com/abpframework/abp/issues/16572) for more information.
+
+If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), that contains a list of all issues and pull requests closed with this version.
 
 ## What's New with ABP Commercial 7.3?
 
