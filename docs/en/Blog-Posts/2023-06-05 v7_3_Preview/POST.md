@@ -126,7 +126,39 @@ If you want to see more details, you can check [the release on GitHub](https://g
 
 We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 7.3.
 
-//TODO: ...
+### Account Module - Using Authenticator App for Two Factor Authentication
+
+In this version, ABP Commercial provides a new **Two Factor Authentication (2FA) provider** that allows you to login to an application by scanning a QR Code with an Authenticator App, such as Microsoft Authenticator or Google Authenticator. 
+
+You need apply the following actions to configure the Authenticator and then you are free to login by using the Authenticator App:
+
+**Step 1 - Enable Two Factor Authentication and Scan the QR Code:**
+
+![](./two-factor-auth-1.png)
+
+**Step 2 - Verify the QR Code with an authenticator app:**
+
+![](./two-factor-auth-2.png)
+
+**Step 3 - Save the recovery codes in case of unable to login by veriyfing the QR code:**
+
+![](./two-factor-auth-3.png)
+
+You can disable the two factor authentication and reset the Authenticator App anytime you want, by just disabling the 2FA or resetting the authenticator:
+
+![](./reset-authenticator.png)
+
+### Upgrade Blazorise to v1.2.3
+
+Upgraded the [Blazorise](https://blazorise.com/) library to v1.2.3 for Blazor UI. If you are are upgrading your project to v7.3.0, please ensure that all Blazorise-related packages are using v1.2.3 in your application. Otherwise, you might get errors due to incompatible versions (or version mismatches).
+
+### CMS Kit: Module Entity Extensions
+
+Module entity extension system is a high level extension system that allows you to define new properties for existing entities of the depended modules. ABP Framework and ABP Commercial provide this system to allow the developers to extend entities in different modules.
+
+With this version, Module Entity Extension support has been added for CMS Kit Pro module. Therefore, you can take the power of this extansibility system and extend the related entities by your needs.
+
+> **Note:** If you are using the CMS Kit Pro module, do not forget to create a new migration and apply it to your database.
 
 ## Community News
 
