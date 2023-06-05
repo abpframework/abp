@@ -1,0 +1,105 @@
+# ABP.IO Platform 7.3 RC Has Been Released
+
+Today, we are happy to release the [ABP Framework](https://abp.io/) and [ABP Commercial](https://commercial.abp.io/) version **7.3 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
+
+Try this version and provide feedback for a more stable version of ABP v7.3! Thanks to all of you.
+
+## Get Started with the 7.3 RC
+
+Follow the steps below to try version 7.3.0 RC today:
+
+1) **Upgrade** the ABP CLI to version `7.3.0-rc.1` using a command line terminal:
+
+````bash
+dotnet tool update Volo.Abp.Cli -g --version 7.3.0-rc.1
+````
+
+**or install** it if you haven't before:
+
+````bash
+dotnet tool install Volo.Abp.Cli -g --version 7.3.0-rc.1
+````
+
+2) Create a **new application** with the `--preview` option:
+
+````bash
+abp new BookStore --preview
+````
+
+See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all the available options.
+
+> You can also use the [Get Started](https://abp.io/get-started) page to generate a CLI command to create a new application.
+
+You can use any IDE that supports .NET 7.x, like [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
+
+## Migration Guides
+
+There are few breaking changes in this version that may affect your application.
+Please see the following migration documents, if you are upgrading from v7.2:
+
+* [ABP Framework 7.2 to 7.3 Migration Guide](https://docs.abp.io/en/abp/7.3/Migration-Guides/Abp-7_3)
+
+## What's New with ABP Framework 7.3?
+
+In this section, I will introduce some major features released in this version. Here is a brief list of the titles that will be explained in the next sections:
+
+//TODO: ...
+
+## What's New with ABP Commercial 7.3?
+
+We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 7.3.
+
+//TODO: ...
+
+## Community News
+
+### ABP Community Talks 2023.4: Angular 16 and ABP v7.3
+
+![](./community-talks-2023-4.png)
+
+In this episode, core ABP team will talk about what's new with ABP v7.3 and Angular 16. The event will be live on **Tuesday, June 06, 2023 (17:00 UTC)**.
+
+> Register to listen and ask your questions now 👉 [https://kommunity.com/volosoft/events/abp-community-talks-20234-angular-16-and-abp-v-73-b0644a11](https://kommunity.com/volosoft/events/abp-community-talks-20234-angular-16-and-abp-v-73-b0644a11)
+
+### ABP .NET Conference 2023
+
+![](./abp-conf.png)
+
+We have organized ABP .NET Conference 2023 on May 2023 and we are happy to share the success of the conference, which captivated overwhelmingly interested live viewers from all over the world. 13 great line up of speakers which include .NET experts and Microsoft MVPs delivered captivating talks that resonated with the audiences. Each of the talk attracted great amount interest and a lot of questions, sparking curiosity in the attendees.
+
+> We shared our takeaways in a blog post, which you can read at [https://blog.abp.io/abp/ABP-.NET-Conference-2023-Wrap-Up](https://blog.abp.io/abp/ABP-.NET-Conference-2023-Wrap-Up).
+
+### Volosoft Attendeed & Sponsored to Devnot .NET Conference 2023
+
+![](volosoft-gold-sponsor.png)
+
+We are thrilled to announce that Volosoft Company proudly attended as one of the Gold Sponsors at the Devnot .NET Conference 2023! We are happy to join and be a sponsor to events and contribute to the software society, empowering developers and driving innovation with the .NET community.
+
+![](devnot-talk.png)
+
+Co-Founder of [Volosoft](https://volosoft.com/) and Lead Developer of the ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) gave a talk about "Dealing with Concurrency and Multi Threading in .NET" in this event.
+
+> You can check [this blog post](https://volosoft.com/blog/Meet-Volosoft-at-the-Devnot-.NET-Conference-2023) if you want to learn more about the Devnot .NET Conference 2023.
+
+### New ABP Community Posts
+
+There are exciting articles contributed by the ABP community as always. I will highlight some of them here:
+
+* [Authority Delegation in ABP Commercial](https://community.abp.io/posts/authority-delegation-in-abp-commercial-3wtljpp0) by [Liang Shiwei](https://github.com/realLiangshiwei)
+* [What's new in Angular 16? New Features and Updates](https://community.abp.io/posts/whats-new-in-angular-16-new-features-and-updates-s1izi9br) by [Masum Ulu](https://twitter.com/masumulu)
+* [Kubernetes Integrated Microservice Development with ABP Studio](https://community.abp.io/videos/kubernetes-integrated-microservice-development-with-abp-studio-oix9zkp8) by [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan)
+
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://community.abp.io/articles/submit) to the ABP Community.  
+
+### New ABP Blog Posts
+
+There are also some exciting blog posts written by the ABP team. You can see the following list for some of those articles:
+
+* [ABP .NET Conference 2023 Wrap Up](https://blog.abp.io/abp/ABP-.NET-Conference-2023-Wrap-Up) by [Bige Beşikçi](https://twitter.com/bigedediki)
+* [Meet Volosoft at the Devnot .NET Conference 2023!](https://volosoft.com/blog/Meet-Volosoft-at-the-Devnot-.NET-Conference-2023) by [Roo Xu](https://github.com/Roo1227)
+
+## Conclusion
+
+This version comes with some new features and a lot of enhancements to the existing features. You can see the [Road Map](https://docs.abp.io/en/abp/7.3/Road-Map) documentation to learn about the release schedule and planned features for the next releases. Please try ABP v7.3 RC and provide feedback to help us release a more stable version.
+
+Thanks for being a part of this community!
