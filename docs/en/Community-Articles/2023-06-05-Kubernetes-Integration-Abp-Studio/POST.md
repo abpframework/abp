@@ -8,6 +8,8 @@ In this article, I will introduce an **efficient** way of creating a **developme
 
 I will demonstrate the solution by introducing and using a brand new tool for ABP Developers: **ABP Studio**!
 
+>**This article is based on my *[Kubernetes Integrated Microservice Development with ABP Studio](https://www.youtube.com/watch?v=XiPRcIHJ3NE)* talk performed in [ABP Dotnet Conf'23](https://abp.io/conference). You can watch that talk if you would like watching rather than reading.**
+
 ## Topics
 
 Let’s start by introducing the main topics I will cover in this article:
@@ -167,55 +169,54 @@ Let's explain how it works:
 * As you know, when a **user requests a web page** from your web application, the request is accepted by an **Ingress Controller** inside your Kubernetes cluster.
 * The Ingress controller forwards the request to your **web application**, which then uses an **API gateway** to consume your microservices.
 * Assume that we have the **Product**, **Ordering** and **Identity** microservices.
-* These microservices have their own SQL Server database and they are also using RabbitMQ, Redis and some other infrastructure services.
-  On the other hand, we want to develop, run or test our Product microservice in our own laptop using our favorite IDE, let’s say using Visual Studio.
-  If we don’t make anything special, the product microservice in the Kubernetes cluster will be used by the users, as you can expect. Even if you can somehow run the product microservice in your local computer, the Kubernetes system won’t have any knowledge about it. They are in different systems.
-  At this point, ABP Studio comes into play. When you Connect to the Kubernetes cluster with ABP Studio, like we will see how to do soon,
-  It first installs a VPN server into your cluster
-  And a VPN client into your local machine.
-  Then it establishes a secure VPN tunnel between your computer and the target Kubernetes cluster.
-  In this way, you can access all services in Kubernetes with their internal cluster IP addresses.
-  ABP Studio also installs a client proxy server pod into the Kubernetes cluster, and a proxy client into the developer machine.
-  It is used to collect data from the services and show them in the ABP Studio UI, like HTTP Requests, exceptions, or logs as we’ve seen in the solution runner before.
-  Finally, ABP Studio also adds DNS records to your hosts file, so you can access to internal Kubernetes services directly with their service names, in addition to their IP addresses.
-  All of these happen when you click the Connect button on the ABP Studio. Now, your computer can use the internals of the Kubernetes cluster. But, how the HTTP Requests coming to the Product service in the Kubernetes cluster are redirected to your local machine? I haven’t explained that yet.
-  When you want to run and test a service locally, you intercept the matched service in the Kubernetes cluster. When you Intercept a service, ABP Studio makes some more changes in your local computer and in your Kubernetes cluster.
-  As first, it installs a pod and a service into the Kubernetes cluster to intercept the requests coming to the Product microservice
-  And proxies the requests to a client application in your local computer.
-  The local client application then forwards requests to the Product microservice instance you are running in your local machine.
-  In this way, whenever the Product service is used in Kubernetes, your local product service is executed. You can easily run, test or debug your service as you normally do with your standard IDE, for example with Visual Studio.
-  What happens when your local product service needs to access the SQL Server database or RabbitMQ, or another microservice in the Kubernetes cluster?
-  It can directly use them just like local services, through the VPN tunnel we have already created.
-  ABP Studio makes a final change in your local product microservice project: It overrides all the environment variables with the ones obtained from the product service in the Kubernetes pod. In this way, your local product service instance feels itself in the Kubernetes cluster. Database connection strings and all other settings will be the same with the Kubernetes environment.
-  Don’t worry, ABP Studio doesn’t change your local environment variables. The change only affects the live product service instance, and it is reverted when you disable the interception in ABP Studio.
-  Also, when you click the Disconnect button in ABP Studio, all the changes made to your cluster and your local computer will be cleared. It won’t leave any sign in your systems.
-  So, now we have a fully Kubernetes integrated development environment. Let’s see how it is used in ABP Studio.
+* These microservices have their own SQL Server **database** and they are also using **RabbitMQ**, **Redis** and some other **infrastructure services**.
+* On the other hand, we want to develop, run or test our **Product microservice** in our **own laptop** using our favorite IDE, let’s say using Visual Studio.
+* If we don’t make anything special, the **product microservice in the Kubernetes cluster** will be used by the users, as you can expect. Even if you can somehow run the product microservice in your local computer, the Kubernetes system won’t have any knowledge about it. They are in different systems.
+* At this point, ABP Studio comes into play. When you **connect** to the Kubernetes cluster with ABP Studio, it first installs a **VPN server** into your cluster and a **VPN client** into your local machine.
+* Then it establishes a secure **VPN tunnel** between your computer and the target Kubernetes cluster. In this way, you can access all services in Kubernetes with their internal cluster IP addresses.
+* ABP Studio also installs the **ABP Studio Client Proxy Server** pod into the Kubernetes cluster, and the **ABP Studio Proxy Client** into the developer machine. It is used to collect data from the services and show them in the ABP Studio UI, like HTTP Requests, exceptions, or logs as we’ve seen in the solution runner before.
+* Finally, ABP Studio also adds **DNS records to your hosts file**, so you can access to internal Kubernetes services directly with their service names, in addition to their IP addresses.
 
-***** KUBERNETES TUNNEL: DEMO DEMO DEMO DEMO DEMO DEMO 
+All of these happen when you click the Connect button on the ABP Studio. Now, your computer can use the **internals of the Kubernetes cluster**. But, how the HTTP Requests coming to the Product service in the Kubernetes cluster are **redirected to your local machine**?
 
-// ABP Studio: FAQ / Roadmap //////////////////////////////////////////////
-Okay, that was the last demo of today. Lastly, I want to talk about ABP Studio's roadmap and project status.
-I had already mentioned the initial features. In the next months, the team will be working on the following items.
-Our first goal is to finalize and stabilize the current features. We will also document how to use them. Only after that, we will open it to customers as a beta version.
-We’ve focused on the development part until now. We also want to add some deployment capabilities to ABP Studio in the future.
-Another goal is to make module customizations much easier than current by the help of ABP Studio.
-With ABP Studio, we have completely re-though how to discover and install modules. Based on that, we will also work on a common place to publish and consume application modules for the ABP Framework.
-We have other great plans for that product. However, I can not declare them yet as they are commercial secrets for now :)
-We’ve planned to release the first beta version in a few months, as I said before.
-I want to notice that ABP Studio is not a new version or replacement of ABP Suite. We built the ABP Studio from scratch. Both products will be developed and shipped in parallel. Suite will continue to focus on code generation. ABP Studio doesn’t have any code generation capabilities yet. So, you will use both of them together.
+* When you want to run and test a service locally, you **intercept the matched service** in the Kubernetes cluster. When you Intercept a service, ABP Studio makes some more changes in your local computer and in your Kubernetes cluster.
+* As first, it installs a **pod** and a **service** into the Kubernetes cluster to intercept the requests coming to the Product microservice and **proxies the requests to** a client application in **your local computer**.
+* The local client application then **forwards requests** to the Product microservice instance you are running in your local machine. In this way, whenever the Product service is used in Kubernetes, your local product service is executed. You can easily run, test or debug your service as you normally do with your standard IDE, for example with Visual Studio.
+* What happens when your local product service needs to **access** the SQL Server database or RabbitMQ, or another microservice in the Kubernetes cluster? It can **directly use** them just like local services, through the **VPN tunnel** we have already created.
+* ABP Studio makes a final change in your local product microservice project: It overrides all the **environment variables** with the ones obtained from the product service in the Kubernetes pod. In this way, your local product service instance feels itself in the Kubernetes cluster. Database connection strings and all other settings will be the same with the Kubernetes environment. 
 
-// Summary //////////////////////////////////////////////
-Okay let’s summarize what we’ve talked about today.
-First, I explained why it is hard to set up a microservice development environment. We’ve talked about the hardness of developing, running and testing a single microservice that depends on infrastructure services and other microservices.
-I’ve introduced Project Tye, a project developed by Microsoft to allow you to easily run multi-application solutions. We made a demo, then discussed its missing points.
-Then I introduced ABP Studio, a new product by Volosoft for ABP developers.
-As the first important feature, I explained the ABP Studio Solution Runner and demonstrated how it works and how you can develop and debug your services.
-Finally, I introduced ABP Studio’s Kubernetes Tunneling feature. First, I explained how it works with a complicated diagram. Then I made a short demo to see it in action. 
-With that final part, we had a great and easy to use microservice development environment. It is great, because we can focus on only a single service, while we don’t care about all other parts of the solution.
-Also, we can save our local development machine system resources by delegating running the dependencies to a remote Kubernetes server.
+Don’t worry, ABP Studio **doesn’t change your local environment variables**. The change only affects the live product service instance, and it is **reverted** when you disable the interception in ABP Studio. Also, when you click the **Disconnect** button in ABP Studio, all the changes made to your cluster and your local computer will be cleared. It won’t leave any sign in your systems.
 
-// ABP Community Talks //////////////////////////////////////////////
-You probably know that we organize online events for the ABP Community every month, and talk about ABP, .NET and some other software development topics. In the next few months, we are planning to make an ABP Community Talk event specific to ABP Studio. While I focused on the solution runner and kubernetes integration in this talk, ABP Studio has much more functionalities to talk about.
+### ABP Studio Kubernetes Tunnel Demo
 
-// Thanks for listening  //////////////////////////////////////////////
-Thanks for listening to me. If you have questions about this product, ABP or whatever you wonder, I will be in the Volosoft room. You can come there to ask me anything.
+So, now we have a fully Kubernetes integrated development environment. Let’s see how it is used in ABP Studio in the following 9-minutes demo:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/CeUq2ysz-mQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+## ABP Studio Roadmap
+
+In the next months, the team will be working on the following items:
+
+* Our first goal is to **finalize and stabilize** the current features. We will also **document** how to use them. Only after that, we will open it to customers as a beta version.
+* We’ve focused on the development part until now. We also want to add some **deployment** capabilities to ABP Studio in the future.
+* Another goal is to make **module customizations** much easier than current by the help of ABP Studio. With ABP Studio, we have completely re-though how to discover and install modules. Based on that, we will also work on a common place to publish and consume application modules for the ABP Framework.
+
+We have other great plans for that product. However, I can not declare them yet as they are secrets for now :) We’ve planned to release the first beta version in **Q3 of 2023**.
+
+I want to notice that ABP Studio is not a new version or replacement of **ABP Suite**. We built the ABP Studio from scratch. Both products will be developed and shipped in parallel. ABP Suite will continue to focus on code generation. ABP Studio doesn’t have any code generation capabilities yet. So, you will use both of them together.
+
+## Summary
+
+Okay let’s summarize what I’ve explained in this article:
+
+* First, I explained **why it is hard to set up a microservice development environment**. We’ve talked about the hardness of developing, running and testing a single microservice that depends on infrastructure services and other microservices.
+* I’ve introduced **Project Tye**, a project developed by Microsoft to allow you to easily run multi-application solutions. We made a demo, then discussed its missing points.
+* Then I **introduced ABP Studio**, a new product by Volosoft for ABP developers.
+  As the first important feature, I explained the ABP Studio **Solution Runner** and demonstrated how it works and how you can develop and debug your services.
+* Finally, I introduced ABP Studio’s **Kubernetes Tunneling** feature. First, I explained how it works with a complicated diagram. Then I made a short demo to see it in action. 
+
+With that final part, we had a **great and easy to use microservice development environment**. It is great, because we can focus on only a single service, while we don’t care about all other parts of the solution. Also, we can save our local development machine system resources by delegating running the dependencies to a remote Kubernetes server.
+
+## See Also
+
+* ABP Dotnet Conf'23 Talk on YouTube: [Kubernetes Integrated Microservice Development with ABP Studio](https://www.youtube.com/watch?v=XiPRcIHJ3NE)
