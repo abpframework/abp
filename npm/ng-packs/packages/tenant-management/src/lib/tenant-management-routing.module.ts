@@ -1,3 +1,6 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
+
 import {
   AuthGuard,
   PermissionGuard,
@@ -5,8 +8,7 @@ import {
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
 } from '@abp/ng.core';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { eTenantManagementComponents } from './enums/components';
 import { TenantManagementExtensionsGuard } from './guards';
@@ -16,7 +18,7 @@ const routes: Routes = [
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: [AuthGuard, PermissionGuard, TenantManagementExtensionsGuard],
+    canActivate: mapToCanActivate([AuthGuard, PermissionGuard, TenantManagementExtensionsGuard]),
     children: [
       {
         path: 'tenants',

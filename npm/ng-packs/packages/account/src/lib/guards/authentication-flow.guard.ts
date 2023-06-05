@@ -1,10 +1,9 @@
-import { AuthService } from '@abp/ng.core';
-import { Injectable } from '@angular/core';
-
+import { AuthService, IAbpGuard } from '@abp/ng.core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable()
-export class AuthenticationFlowGuard  {
-  constructor(private authService: AuthService) {}
+export class AuthenticationFlowGuard implements IAbpGuard {
+  protected readonly authService = inject(AuthService);
 
   canActivate() {
     if (this.authService.isInternalAuth) return true;
