@@ -1,4 +1,4 @@
-# Kubernetes Integrated Microservice Development with ABP Studio
+# Kubernetes Integrated Microservice Development with .NET and ABP Studio
 
 ## Abstract
 
