@@ -169,7 +169,8 @@
                         }
                     </div>
                 }
-                @if (CurrentUser.UserName == Model.Post.Writer?.UserName)
+                
+                @if (CurrentUser.Id.HasValue && CurrentUser.Id.Value == Model.Post.Writer?.Id)
                 {
                     <a class="fw-lighter" href="/Members/@Model.Post.Writer?.UserName#edit-profile">@L["EditProfile"] <i class="fas fa-edit"></i></a>
                 }
@@ -197,10 +198,11 @@
                                                             <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="last-post-image" alt="User Avatar"/>
                                                         </a>
                                                     </div>
+                                                    
                                                     <div class="col">
                                                         <h5 class="last-post-name">
-                                                            <a href="/Members/@post.Writer?.UserName">
-                                                                @(post.Writer?.UserName)
+                                                            <a href="/Members/@post.Writer!.UserName">
+                                                                @(post.Writer!.UserName)
                                                             </a>
                                                         </h5>
                                                     </div>
