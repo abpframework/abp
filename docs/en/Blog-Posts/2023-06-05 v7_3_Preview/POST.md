@@ -34,10 +34,12 @@ You can use any IDE that supports .NET 7.x, like [Visual Studio 2022](https://vi
 
 ## Migration Guides
 
-There are few breaking changes in this version that may affect your application.
+There are a few breaking changes in this version that may affect your application.
 Please see the following migration documents, if you are upgrading from v7.2:
 
 * [ABP Framework 7.2 to 7.3 Migration Guide](https://docs.abp.io/en/abp/7.3/Migration-Guides/Abp-7_3)
+
+> If you are using the CMS Kit or CMS Kit Pro module, please don't forget to  create a new migration and apply it to your database.
 
 ## What's New with ABP Framework 7.3?
 
@@ -94,7 +96,7 @@ public class DistributedEventSentHandler : ILocalEventHandler<DistributedEventSe
 
 ### Ordering of the Local Event Handlers
 
-In this version, ABP Framework introduces `LocalEventHandlerOrder` attribute, which can be used to set the execution order for the event handlers. This can be helpful if you want to handle your local event handlers in a specific order.
+In this version, ABP Framework introduces the `LocalEventHandlerOrder` attribute, which can be used to set the execution order for the event handlers. This can be helpful if you want to handle your local event handlers in a specific order.
 
 **Example:**
 
@@ -118,19 +120,19 @@ By default, all event handlers have an order value of 0. Thus, if you want to ta
 ### Other News
 
 * Upgraded the [Blazorise](https://blazorise.com/) library to v1.2.3 for Blazor UI. After the upgrade, ensure that all Blazorise-related packages are using v1.2.3 in your application.
-* Module Entity Extension support has been added for CMS Kit module. See [#16572](https://github.com/abpframework/abp/issues/16572) for more information.
+* Module Entity Extension support has been added for the CMS Kit module. See [#16572](https://github.com/abpframework/abp/issues/16572) for more information.
 
-If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), that contains a list of all issues and pull requests closed with this version.
+If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), which contains a list of all issues and pull requests closed with this version.
 
 ## What's New with ABP Commercial 7.3?
 
 We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 7.3.
 
-### Account Module - Using Authenticator App for Two Factor Authentication
+### Account Module - Using Authenticator App for Two-Factor Authentication
 
-In this version, ABP Commercial provides a new **Two Factor Authentication (2FA) provider** that allows you to login to an application by scanning a QR Code with an Authenticator App, such as Microsoft Authenticator or Google Authenticator. 
+In this version, ABP Commercial provides a new **Two-Factor Authentication (2FA) provider** that allows you to log in to an application by scanning a QR Code with an Authenticator App, such as Microsoft Authenticator or Google Authenticator. 
 
-You need apply the following actions to configure the Authenticator and then you are free to login by using the Authenticator App:
+You need to apply the following actions to configure an Authenticator and then you are free to log in by using the Authenticator App:
 
 **Step 1 - Enable Two Factor Authentication and Scan the QR Code:**
 
@@ -140,25 +142,51 @@ You need apply the following actions to configure the Authenticator and then you
 
 ![](./two-factor-auth-2.png)
 
-**Step 3 - Save the recovery codes in case of unable to login by veriyfing the QR code:**
+**Step 3 - Save the recovery codes for later use in case of unable to log in by verifying the QR code:**
 
 ![](./two-factor-auth-3.png)
 
-You can disable the two factor authentication and reset the Authenticator App anytime you want, by just disabling the 2FA or resetting the authenticator:
+You can disable the two-factor authentication and reset the Authenticator App anytime you want, by just disabling the two-factor authentication or resetting the authenticator:
 
 ![](./reset-authenticator.png)
 
 ### Upgrade Blazorise to v1.2.3
 
-Upgraded the [Blazorise](https://blazorise.com/) library to v1.2.3 for Blazor UI. If you are are upgrading your project to v7.3.0, please ensure that all Blazorise-related packages are using v1.2.3 in your application. Otherwise, you might get errors due to incompatible versions (or version mismatches).
+Upgraded the [Blazorise](https://blazorise.com/) library to v1.2.3 for Blazor UI. If you are are upgrading your project to v7.3.0, please ensure that all Blazorise-related packages are using v1.2.3 in your application. Otherwise, you might get errors due to incompatible versions.
 
 ### CMS Kit: Module Entity Extensions
 
-Module entity extension system is a high level extension system that allows you to define new properties for existing entities of the depended modules. ABP Framework and ABP Commercial provide this system to allow the developers to extend entities in different modules.
+Module entity extension system is a high-level extension system that allows you to define new properties for existing entities of the dependent modules. ABP Framework and ABP Commercial use this system to allow the developers to extend entities in different modules.
 
-With this version, Module Entity Extension support has been added for CMS Kit Pro module. Therefore, you can take the power of this extansibility system and extend the related entities by your needs.
+In this version, Module Entity Extension support has been added for the CMS Kit Pro module. 
 
-> **Note:** If you are using the CMS Kit Pro module, do not forget to create a new migration and apply it to your database.
+You can open the `YourProjectNameModuleExtensionConfigurator` class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties` method as shown below to add a new property to the `Poll` entity of the [CMS Kit Pro module](https://docs.abp.io/en/commercial/latest/modules/cms-kit/index):
+
+```csharp
+public static void ConfigureExtraProperties()
+{
+    OneTimeRunner.Run(() =>
+    {
+        ObjectExtensionManager.Instance.Modules()
+            .ConfigureCmsKitPro(cmsKitPro =>
+            {
+                cmsKitPro.ConfigurePoll(poll => 
+                {
+                    poll.AddOrUpdateProperty<string>(
+                        "<property-name>",
+                        property => 
+                        {
+                            //configuration for this property
+                        }
+                    )
+                });
+            });
+    });
+}
+
+```
+
+> See the [Module Entity Extensions documentation](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) to learn more.
 
 ## Community News
 
@@ -166,7 +194,7 @@ With this version, Module Entity Extension support has been added for CMS Kit Pr
 
 ![](./community-talks-2023-4.png)
 
-In this episode, core ABP team will talk about what's new with ABP v7.3 and Angular 16. The event will be live on **Tuesday, June 06, 2023 (17:00 UTC)**.
+In this episode, the core ABP team will talk about what's new with ABP v7.3 and Angular 16. The event will be live on **Tuesday, June 06, 2023 (17:00 UTC)**.
 
 > Register to listen and ask your questions now 👉 [https://kommunity.com/volosoft/events/abp-community-talks-20234-angular-16-and-abp-v-73-b0644a11](https://kommunity.com/volosoft/events/abp-community-talks-20234-angular-16-and-abp-v-73-b0644a11)
 
@@ -174,7 +202,9 @@ In this episode, core ABP team will talk about what's new with ABP v7.3 and Angu
 
 ![](./abp-conf.png)
 
-We have organized ABP .NET Conference 2023 on May 2023 and we are happy to share the success of the conference, which captivated overwhelmingly interested live viewers from all over the world. 13 great line up of speakers which include .NET experts and Microsoft MVPs delivered captivating talks that resonated with the audiences. Each of the talk attracted great amount interest and a lot of questions, sparking curiosity in the attendees.
+We organized ABP .NET Conference 2023 on May 2023 and we are happy to share the success of the conference, which captivated overwhelmingly interested live viewers from all over the world. 13 great line up of speakers which include .NET experts and Microsoft MVPs delivered captivating talks that resonated with the audiences. Each of the talks attracted a great amount of interest and a lot of questions, sparking curiosity in the attendees.
+
+Thanks to all speakers and attendees to join our event.
 
 > We shared our takeaways in a blog post, which you can read at [https://blog.abp.io/abp/ABP-.NET-Conference-2023-Wrap-Up](https://blog.abp.io/abp/ABP-.NET-Conference-2023-Wrap-Up).
 
@@ -182,11 +212,11 @@ We have organized ABP .NET Conference 2023 on May 2023 and we are happy to share
 
 ![](volosoft-gold-sponsor.png)
 
-We are thrilled to announce that Volosoft Company proudly attended as one of the Gold Sponsors at the Devnot .NET Conference 2023! We are happy to join and be a sponsor to events and contribute to the software society, empowering developers and driving innovation with the .NET community.
+We are thrilled to announce that Volosoft Company proudly attended as one of the Gold Sponsors at the Devnot .NET Conference 2023! We are happy to join and be a sponsor of events and contribute to the software society, empowering developers and driving innovation with the .NET community.
 
 ![](devnot-talk.png)
 
-Co-Founder of [Volosoft](https://volosoft.com/) and Lead Developer of the ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) gave a talk about "Dealing with Concurrency and Multi Threading in .NET" in this event.
+Co-Founder of [Volosoft](https://volosoft.com/) and Lead Developer of the ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) gave a talk about "Dealing with Concurrency and Multi Threading in .NET" at this event.
 
 > You can check [this blog post](https://volosoft.com/blog/Meet-Volosoft-at-the-Devnot-.NET-Conference-2023) if you want to learn more about the Devnot .NET Conference 2023.
 
