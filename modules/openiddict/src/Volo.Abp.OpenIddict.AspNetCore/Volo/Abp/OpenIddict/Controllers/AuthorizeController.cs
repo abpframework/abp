@@ -21,6 +21,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
 {
     [HttpGet, HttpPost]
     [IgnoreAntiforgeryToken]
+    [IgnoreAbpSecurityHeader]
     public virtual async Task<IActionResult> HandleAsync()
     {
         var request = await GetOpenIddictServerRequestAsync(HttpContext);
