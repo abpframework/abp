@@ -42,10 +42,10 @@ public class DataFilter : IDataFilter, ISingletonDependency
     private IDataFilter<TFilter> GetFilter<TFilter>()
         where TFilter : class
     {
-        return _filters.GetOrAdd(
+        return (_filters.GetOrAdd(
             typeof(TFilter),
-             factory: () => _serviceProvider.GetRequiredService<IDataFilter<TFilter>>()
-        ) as IDataFilter<TFilter>;
+            factory: () => _serviceProvider.GetRequiredService<IDataFilter<TFilter>>()
+        ) as IDataFilter<TFilter>)!;
     }
 }
 
@@ -55,7 +55,7 @@ public class DataFilter<TFilter> : IDataFilter<TFilter>
     public bool IsEnabled {
         get {
             EnsureInitialized();
-            return _filter.Value.IsEnabled;
+            return _filter.Value!.IsEnabled;
         }
     }
 
@@ -76,7 +76,7 @@ public class DataFilter<TFilter> : IDataFilter<TFilter>
             return NullDisposable.Instance;
         }
 
-        _filter.Value.IsEnabled = true;
+        _filter.Value!.IsEnabled = true;
 
         return new DisposeAction(() => Disable());
     }
@@ -88,7 +88,7 @@ public class DataFilter<TFilter> : IDataFilter<TFilter>
             return NullDisposable.Instance;
         }
 
-        _filter.Value.IsEnabled = false;
+        _filter.Value!.IsEnabled = false;
 
         return new DisposeAction(() => Enable());
     }
