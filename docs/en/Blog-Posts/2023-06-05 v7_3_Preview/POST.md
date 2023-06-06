@@ -205,6 +205,14 @@ public static void ConfigureExtraProperties()
 
 > See the [Module Entity Extensions documentation](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) to learn more.
 
+### LeptonX Account Layout
+
+In this version, Account Layout has been re-designed for LeptonX Theme. You can see the new account layout in the following figure:
+
+![](leptonx-account-layout.png)
+
+> To use this new account layout, ensure that your LeptonX Theme package versions are v2.3+.
+
 ## Community News
 
 ### ABP Community Talks 2023.4: Angular 16 and ABP v7.3
