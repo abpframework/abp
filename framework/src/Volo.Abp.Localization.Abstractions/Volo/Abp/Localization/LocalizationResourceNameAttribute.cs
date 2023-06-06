@@ -20,8 +20,8 @@ public class LocalizationResourceNameAttribute : Attribute
             .FirstOrDefault();
     }
 
-    public static string? GetName(Type resourceType)
+    public static string GetName(Type resourceType)
     {
-        return GetOrNull(resourceType)?.Name ?? resourceType.FullName;
+        return (GetOrNull(resourceType)?.Name ?? resourceType.FullName)!;
     }
 }

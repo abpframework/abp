@@ -84,7 +84,7 @@ public static class AbpClaimsIdentityExtensions
         return null;
     }
 
-    public static string FindClientId([NotNull] this ClaimsPrincipal principal)
+    public static string? FindClientId([NotNull] this ClaimsPrincipal principal)
     {
         Check.NotNull(principal, nameof(principal));
 
@@ -97,7 +97,7 @@ public static class AbpClaimsIdentityExtensions
         return clientIdOrNull.Value;
     }
 
-    public static string FindClientId([NotNull] this IIdentity identity)
+    public static string? FindClientId([NotNull] this IIdentity identity)
     {
         Check.NotNull(identity, nameof(identity));
 
