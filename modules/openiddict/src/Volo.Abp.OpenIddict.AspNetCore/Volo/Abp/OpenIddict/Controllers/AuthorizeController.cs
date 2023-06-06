@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
+using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.OpenIddict.ViewModels.Authorization;
 
 namespace Volo.Abp.OpenIddict.Controllers;
@@ -19,7 +20,7 @@ namespace Volo.Abp.OpenIddict.Controllers;
 public class AuthorizeController : AbpOpenIdDictControllerBase
 {
     [HttpGet, HttpPost]
-    [IgnoreAntiforgeryToken]
+    [IgnoreAntiforgeryToken, IgnoreAbpSecurityHeader]
     public virtual async Task<IActionResult> HandleAsync()
     {
         var request = await GetOpenIddictServerRequestAsync(HttpContext);
