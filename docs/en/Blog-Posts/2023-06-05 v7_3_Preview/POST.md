@@ -66,7 +66,7 @@ You can use one of these official providers (`ImageSharp` or `Magick.NET`) or im
 
 ### ABP CLI: switch-to-local command
 
-In this version, ABP CLI introduces a new CLI command: **"switch-to-local"**. `switch-to-local` command changes all NuGet package references on a solution to local project references for all the `.csproj` files in the specified folder (and all its subfolders with any deep).
+In this version, ABP CLI introduces a new CLI command: **"switch-to-local"**. The `switch-to-local` command changes all NuGet package references on a solution to local project references for all the `.csproj` files in the specified folder (and all its subfolders with any depth).
 
 **Usage:**
 
@@ -122,7 +122,7 @@ By default, all event handlers have an order value of 0. Thus, if you want to ta
 * Upgraded the [Blazorise](https://blazorise.com/) library to v1.2.3 for Blazor UI. After the upgrade, ensure that all Blazorise-related packages are using v1.2.3 in your application.
 * Module Entity Extension support has been added for the CMS Kit module. See [#16572](https://github.com/abpframework/abp/issues/16572) for more information.
 
-If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), which contains a list of all issues and pull requests closed with this version.
+If you want to see more details, you can check [the release on GitHub](https://github.com/abpframework/abp/releases/tag/5.3.0-rc.1), which contains a list of all the issues and pull requests were closed with this version.
 
 ## What's New with ABP Commercial 7.3?
 
@@ -142,21 +142,21 @@ You need to apply the following actions to configure an Authenticator and then y
 
 ![](./two-factor-auth-2.png)
 
-**Step 3 - Save the recovery codes for later use in case of unable to log in by verifying the QR code:**
+**Step 3 - Save the recovery codes for later use in case of not being able to login by verifying the QR code:**
 
 ![](./two-factor-auth-3.png)
 
-You can disable the two-factor authentication and reset the Authenticator App anytime you want, by just disabling the two-factor authentication or resetting the authenticator:
+You can disable the two-factor authentication and reset the Authenticator App anytime you want, just by disabling the two-factor authentication or resetting the authenticator:
 
 ![](./reset-authenticator.png)
 
 ### Upgrade Blazorise to v1.2.3
 
-Upgraded the [Blazorise](https://blazorise.com/) library to v1.2.3 for Blazor UI. If you are are upgrading your project to v7.3.0, please ensure that all Blazorise-related packages are using v1.2.3 in your application. Otherwise, you might get errors due to incompatible versions.
+Upgraded the [Blazorise](https://blazorise.com/) library to v1.2.3 for Blazor UI. If you are upgrading your project to v7.3.0, please ensure that all the Blazorise-related packages are using v1.2.3 in your application. Otherwise, you might get errors due to incompatible versions.
 
 ### CMS Kit: Module Entity Extensions
 
-Module entity extension system is a high-level extension system that allows you to define new properties for existing entities of the dependent modules. ABP Framework and ABP Commercial use this system to allow the developers to extend entities in different modules.
+Module entity extension system is a high-level extension system that allows you to define new properties for existing entities of the dependent modules. ABP Framework and ABP Commercial use this system to allow developers to extend entities in different modules.
 
 In this version, Module Entity Extension support has been added for the CMS Kit Pro module. 
 
@@ -202,21 +202,21 @@ In this episode, the core ABP team will talk about what's new with ABP v7.3 and 
 
 ![](./abp-conf.png)
 
-We organized ABP .NET Conference 2023 on May 2023 and we are happy to share the success of the conference, which captivated overwhelmingly interested live viewers from all over the world. 13 great line up of speakers which include .NET experts and Microsoft MVPs delivered captivating talks that resonated with the audiences. Each of the talks attracted a great amount of interest and a lot of questions, sparking curiosity in the attendees.
+We organized ABP .NET Conference 2023 on May 2023 and we are happy to share the success of the conference, which captivated overwhelmingly interested live viewers from all over the world. 13 great line up of speakers which includes .NET experts and Microsoft MVPs delivered captivating talks that resonated with the audiences. Each of the talks attracted a great amount of interest and a lot of questions, sparking curiosity in the attendees.
 
-Thanks to all speakers and attendees to join our event.
+Thanks to all speakers and attendees for joining our event.
 
 > We shared our takeaways in a blog post, which you can read at [https://blog.abp.io/abp/ABP-.NET-Conference-2023-Wrap-Up](https://blog.abp.io/abp/ABP-.NET-Conference-2023-Wrap-Up).
 
-### Volosoft Attendeed & Sponsored to Devnot .NET Conference 2023
+### Volosoft Attendeed & Sponsored Devnot .NET Conference 2023
 
 ![](volosoft-gold-sponsor.png)
 
-We are thrilled to announce that Volosoft Company proudly attended as one of the Gold Sponsors at the Devnot .NET Conference 2023! We are happy to join and be a sponsor of events and contribute to the software society, empowering developers and driving innovation with the .NET community.
+We are thrilled to announce that the Volosoft Company proudly attended as one of the Gold Sponsors at the Devnot .NET Conference 2023! We are happy to join and be a sponsor of events and contribute to the software society, empowering developers and driving innovation with the .NET community.
 
 ![](devnot-talk.png)
 
-Co-Founder of [Volosoft](https://volosoft.com/) and Lead Developer of the ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) gave a talk about "Dealing with Concurrency and Multi Threading in .NET" at this event.
+Co-Founder of [Volosoft](https://volosoft.com/) and Lead Developer of the ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) gave a word about "Dealing with Concurrency and Multi Threading in .NET" at this event.
 
 > You can check [this blog post](https://volosoft.com/blog/Meet-Volosoft-at-the-Devnot-.NET-Conference-2023) if you want to learn more about the Devnot .NET Conference 2023.
 
