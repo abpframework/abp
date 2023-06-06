@@ -49,6 +49,7 @@ In this section, I will introduce some major features released in this version. 
 * ABP CLI: switch-to-local command
 * Monitoring Distributed Events
 * Ordering of the Local Event Handlers
+* Nonce attribute support for Content Security Policy (CSP)
 * Other News
 
 ### Introducing the Volo.Abp.Imaging packages
@@ -116,6 +117,22 @@ public class MyHandler
 By default, all event handlers have an order value of 0. Thus, if you want to take certain event handlers to be executed before other event handlers, you can set the order value as a negative value.
 
 > See the documentation to learn more: [https://docs.abp.io/en/abp/7.3/Local-Event-Bus](https://docs.abp.io/en/abp/7.3/Local-Event-Bus)
+
+### Nonce attribute support for Content Security Policy (CSP)
+
+ABP Framework supports adding unique value to nonce attribute for script tags which can be used by Content Security Policy to determine whether or not a given fetch will be allowed to proceed for a given element. In other words, it provides a mechanism to execute only correct script tags with the correct nonce value.
+
+This feature is disabled by default. You can enable it by setting the *UseContentSecurityPolicyScriptNonce* property of the `AbpSecurityHeadersOptions` class to **true**:
+
+```csharp
+Configure<AbpSecurityHeadersOptions>(options => 
+{
+    //adding script-src nonce
+    options.UseContentSecurityPolicyScriptNonce = true; //false by default
+});
+```
+
+> See the [Security Headers](https://docs.abp.io/en/abp/7.3/UI/AspNetCore/Security-Headers) documentation for more information.
 
 ### Other News
 
