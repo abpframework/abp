@@ -35,15 +35,11 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
             x.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
             
         var endpoint = context.GetEndpoint();
-        
-        if (endpoint != null)
+
+        if (endpoint?.Metadata.GetMetadata<IgnoreAbpSecurityHeaderAttribute>() != null)
         {
-            var ignore = endpoint.Metadata.GetMetadata<IgnoreAbpSecurityHeaderAttribute>() != null;
-            if (ignore)
-            {
-                await next.Invoke(context);
-                return;
-            }
+            await next.Invoke(context);
+            return;
         }
 
         if (!requestAcceptTypeHtml 
