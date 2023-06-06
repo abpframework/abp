@@ -75,12 +75,12 @@ public interface IAsyncQueryableExecuter
         CancellationToken cancellationToken = default);
 
 
-    Task<T> FirstOrDefaultAsync<T>(
+    Task<T?> FirstOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
 
-    Task<T> FirstOrDefaultAsync<T>(
+    Task<T?> FirstOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default);
@@ -100,12 +100,12 @@ public interface IAsyncQueryableExecuter
         CancellationToken cancellationToken = default);
 
 
-    Task<T> LastOrDefaultAsync<T>(
+    Task<T?> LastOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
 
-    Task<T> LastOrDefaultAsync<T>(
+    Task<T?> LastOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default);
@@ -124,11 +124,11 @@ public interface IAsyncQueryableExecuter
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default);
 
-    Task<T> SingleOrDefaultAsync<T>(
+    Task<T?> SingleOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
-    Task<T> SingleOrDefaultAsync<T>(
+    Task<T?> SingleOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default);
@@ -137,12 +137,12 @@ public interface IAsyncQueryableExecuter
 
     #region Min
 
-    Task<T> MinAsync<T>(
+    Task<T?> MinAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
 
-    Task<TResult> MinAsync<T, TResult>(
+    Task<TResult?> MinAsync<T, TResult>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, TResult>> selector,
         CancellationToken cancellationToken = default);
@@ -151,12 +151,12 @@ public interface IAsyncQueryableExecuter
 
     #region Max
 
-    Task<T> MaxAsync<T>(
+    Task<T?> MaxAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
 
-    Task<TResult> MaxAsync<T, TResult>(
+    Task<TResult?> MaxAsync<T, TResult>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, TResult>> selector,
         CancellationToken cancellationToken = default);
