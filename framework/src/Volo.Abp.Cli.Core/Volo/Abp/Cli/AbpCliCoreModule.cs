@@ -64,7 +64,8 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
             options.Commands[CliCommand.Name] = typeof(CliCommand);
-            
+            options.Commands[ClearDownloadCacheCommand.Name] = typeof(ClearDownloadCacheCommand);
+
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Pro");
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Lite");
         });

@@ -26,6 +26,8 @@
     <ProjectReference Include="..\Volo.Abp.Uow\Volo.Abp.Uow.csproj" />
     <ProjectReference Include="..\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
     <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageReference Include="IdentityModel" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

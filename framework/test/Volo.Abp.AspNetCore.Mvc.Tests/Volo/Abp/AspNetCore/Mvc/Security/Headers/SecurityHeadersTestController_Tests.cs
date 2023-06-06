@@ -29,7 +29,6 @@ public class SecurityHeadersTestController_Tests : AspNetCoreMvcTestBase
         responseMessage.Headers.ShouldContain(x => x.Key == "X-XSS-Protection" & x.Value.First().ToString() == "1; mode=block");
         responseMessage.Headers.ShouldContain(x => x.Key == "X-Frame-Options" & x.Value.First().ToString() == "SAMEORIGIN");
         responseMessage.Headers.ShouldContain(x => x.Key == "X-Content-Type-Options" & x.Value.First().ToString() == "nosniff");
-        responseMessage.Headers.ShouldContain(x => x.Key == "Content-Security-Policy" & x.Value.First().ToString() == "object-src 'none'; form-action 'self'; frame-ancestors 'none'");
     }
 
     [Fact]

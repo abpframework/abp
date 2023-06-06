@@ -1,22 +1,36 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, UrlTree } from '@angular/router';
+import { Injectable, inject } from '@angular/core';
+import { UrlTree, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Observable, delay, of, tap } from 'rxjs';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { Observable } from 'rxjs';
-import { AuthService, IAuthGuard } from '@abp/ng.core';
+
+import { AuthService, HttpErrorReporterService, IAbpGuard } from '@abp/ng.core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AbpOAuthGuard implements CanActivate, IAuthGuard {
-  constructor(private oauthService: OAuthService, private authService: AuthService) {}
+export class AbpOAuthGuard implements IAbpGuard {
+  protected readonly oAuthService = inject(OAuthService);
+  protected readonly authService = inject(AuthService);
+  protected readonly httpErrorReporter = inject(HttpErrorReporterService);
 
-  canActivate(): Observable<boolean> | boolean | UrlTree {
-    const hasValidAccessToken = this.oauthService.hasValidAccessToken();
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Observable<boolean> | boolean | UrlTree {
+    const hasValidAccessToken = this.oAuthService.hasValidAccessToken();
     if (hasValidAccessToken) {
       return true;
     }
 
-    this.authService.navigateToLogin();
-    return false;
+    return of(false).pipe(
+      tap(() => this.httpErrorReporter.reportError({ status: 401 } as HttpErrorResponse)),
+      delay(1500),
+      tap(() => {
+        const params = { returnUrl: state.url };
+        this.authService.navigateToLogin(params);
+      }),
+    );
   }
 }

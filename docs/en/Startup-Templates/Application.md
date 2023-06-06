@@ -261,6 +261,19 @@ You should run the application with the given order:
 * Then run the `.HttpApi.Host` since it is used by the `.Web` application.
 * Finally, you can run the `.Web` project and login to the application (using `admin` as the username and `1q2w3E*` as the password).
 
+### Blazor UI
+If you choose `Blazor` as the UI Framework (using the `-u blazor` or `-u blazor-server` option), the solution will have a project named `.Blazor`. This project contains the Blazor UI application. According to your choice, it will be a Blazor WebAssembly or Blazor Server application. If Blazor WebAssembly is selected, the solution will also have a `.HttpApi.Host`. This project is an ASP.NET Core application that hosts the backend application for the Blazor single page application.
+
+#### .Blazor Project (Server)
+The Blazor Server project is similar to the ASP.NET Core MVC project. It replaces `.Web` project with `.Blazor` in the solution structure above. It has the same folder structure and the same application flow. Since it's an ASP.NET Core application, it can contain **.cshtml** files and **.razor** components at the same time. If routing matches a razor component, the Blazor UI will be used. Otherwise, the request will be handled by the MVC framework.
+
+![abp solution structure blazor server](../images/layered-project-dependencies-blazor-server.png)
+
+#### .Blazor Project (WebAssembly)
+The Blazor WebAssembly project is a single page application that runs on the browser. You'll see it as `.Blazor` project in the solution. It uses the `.HttpApi.Host` project to communicate with the backend. It can't be used without the backend application. It contains only **.razor** components. It's a pure client-side application. It doesn't have any server-side code. Everything in this layer will be for the client side.
+
+![abp solution structure blazor wasm](../images/layered-project-dependencies-blazor-wasm.png)
+
 ### Angular UI
 
 If you choose `Angular` as the UI framework (using the `-u angular` option), the solution is being separated into two folders:

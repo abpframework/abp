@@ -10,6 +10,7 @@ public interface ISourceCodeStore
         string type,
         [CanBeNull] string version = null,
         [CanBeNull] string templateSource = null,
-        bool includePreReleases = false
+        bool includePreReleases = false,
+        bool skipCache = false
     );
 }
