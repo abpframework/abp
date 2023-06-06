@@ -33,11 +33,19 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 
         var requestAcceptTypeHtml = context.Request.Headers["Accept"].Any(x =>
             x.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
+            
+        var endpoint = context.GetEndpoint();
+
+        if (endpoint?.Metadata.GetMetadata<IgnoreAbpSecurityHeaderAttribute>() != null)
+        {
+            await next.Invoke(context);
+            return;
+        }
 
         if (!requestAcceptTypeHtml 
             || !Options.Value.UseContentSecurityPolicyHeader 
             || await AlwaysIgnoreContentTypes(context) 
-            || context.GetEndpoint() == null
+            || endpoint == null
             || Options.Value.IgnoredScriptNoncePaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'))))
         {
             AddOtherHeaders(context);
