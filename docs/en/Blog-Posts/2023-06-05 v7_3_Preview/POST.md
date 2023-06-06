@@ -235,7 +235,7 @@ Thanks to all speakers and attendees for joining our event.
 
 ### Volosoft Attendeed & Sponsored Devnot .NET Conference 2023
 
-![](volosoft-gold-sponsor.png)
+![](devnot-conference.png)
 
 We are thrilled to announce that the Volosoft Company proudly attended as one of the Gold Sponsors at the Devnot .NET Conference 2023! We are happy to join and be a sponsor of events and contribute to the software society, empowering developers and driving innovation with the .NET community.
 
