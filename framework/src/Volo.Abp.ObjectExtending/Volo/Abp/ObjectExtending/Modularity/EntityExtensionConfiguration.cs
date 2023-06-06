@@ -26,7 +26,7 @@ public class EntityExtensionConfiguration
     [NotNull]
     public virtual EntityExtensionConfiguration AddOrUpdateProperty<TProperty>(
         [NotNull] string propertyName,
-        [CanBeNull] Action<ExtensionPropertyConfiguration> configureAction = null)
+        Action<ExtensionPropertyConfiguration>? configureAction = null)
     {
         return AddOrUpdateProperty(
             typeof(TProperty),
@@ -39,7 +39,7 @@ public class EntityExtensionConfiguration
     public virtual EntityExtensionConfiguration AddOrUpdateProperty(
         [NotNull] Type propertyType,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ExtensionPropertyConfiguration> configureAction = null)
+        Action<ExtensionPropertyConfiguration>? configureAction = null)
     {
         Check.NotNull(propertyType, nameof(propertyType));
         Check.NotNull(propertyName, nameof(propertyName));
