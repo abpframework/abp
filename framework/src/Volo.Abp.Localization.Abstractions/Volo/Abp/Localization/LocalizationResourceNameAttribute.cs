@@ -12,7 +12,7 @@ public class LocalizationResourceNameAttribute : Attribute
         Name = name;
     }
 
-    public static LocalizationResourceNameAttribute GetOrNull(Type resourceType)
+    public static LocalizationResourceNameAttribute? GetOrNull(Type resourceType)
     {
         return resourceType
             .GetCustomAttributes(true)
@@ -20,7 +20,7 @@ public class LocalizationResourceNameAttribute : Attribute
             .FirstOrDefault();
     }
 
-    public static string GetName(Type resourceType)
+    public static string? GetName(Type resourceType)
     {
         return GetOrNull(resourceType)?.Name ?? resourceType.FullName;
     }
