@@ -11,12 +11,12 @@ public class RemoteServiceValidationErrorInfo
     /// <summary>
     /// Validation error message.
     /// </summary>
-    public string Message { get; set; }
+    public string Message { get; set; } = default!;
 
     /// <summary>
     /// Relate invalid members (fields/properties).
     /// </summary>
-    public string[] Members { get; set; }
+    public string[] Members { get; set; } = default!;
 
     /// <summary>
     /// Creates a new instance of <see cref="RemoteServiceValidationErrorInfo"/>.
