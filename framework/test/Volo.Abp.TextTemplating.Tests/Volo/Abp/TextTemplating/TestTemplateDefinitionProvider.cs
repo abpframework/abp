@@ -1,4 +1,6 @@
-﻿using Volo.Abp.TextTemplating.Localization;
+﻿using JetBrains.Annotations;
+using Volo.Abp.Localization;
+using Volo.Abp.TextTemplating.Localization;
 using Volo.Abp.TextTemplating.Razor;
 using Volo.Abp.TextTemplating.Scriban;
 
@@ -18,7 +20,7 @@ public class TestTemplateDefinitionProvider : TemplateDefinitionProvider
         context.Add(
             new TemplateDefinition(
                 TestTemplates.ForgotPasswordEmail,
-                localizationResource: typeof(TestLocalizationSource),
+                localizationResourceName: LocalizationResourceNameAttribute.GetName(typeof(TestLocalizationSource)),
                 layout: TestTemplates.TestTemplateLayout1
             )
         );
@@ -33,7 +35,7 @@ public class TestTemplateDefinitionProvider : TemplateDefinitionProvider
         context.Add(
             new TemplateDefinition(
                 TestTemplates.ShowDecimalNumber,
-                localizationResource: typeof(TestLocalizationSource),
+                localizationResourceName: LocalizationResourceNameAttribute.GetName(typeof(TestLocalizationSource)),
                 layout: TestTemplates.TestTemplateLayout1
             )
         );
@@ -41,7 +43,7 @@ public class TestTemplateDefinitionProvider : TemplateDefinitionProvider
         context.Add(
             new TemplateDefinition(
                 TestTemplates.HybridTemplateScriban,
-                localizationResource: typeof(TestLocalizationSource),
+                localizationResourceName: LocalizationResourceNameAttribute.GetName(typeof(TestLocalizationSource)),
                 layout: null
             )
             .WithVirtualFilePath("/SampleTemplates/TestScribanTemplate.tpl", true)
@@ -51,7 +53,7 @@ public class TestTemplateDefinitionProvider : TemplateDefinitionProvider
         context.Add(
             new TemplateDefinition(
                 TestTemplates.HybridTemplateRazor,
-                localizationResource: typeof(TestLocalizationSource),
+                localizationResourceName: LocalizationResourceNameAttribute.GetName(typeof(TestLocalizationSource)),
                 layout: null
             )
             .WithVirtualFilePath("/SampleTemplates/TestRazorTemplate.cshtml", true)
