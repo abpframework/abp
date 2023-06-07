@@ -60,6 +60,18 @@ public class TemplateDefinition : IHasNameWithLocalizableDisplayName
 
     public TemplateDefinition(
         [NotNull] string name,
+        [CanBeNull] Type localizationResource,
+        [CanBeNull] ILocalizableString displayName = null,
+        bool isLayout = false,
+        string layout = null,
+        string defaultCultureName = null)
+    : this(name, LocalizationResourceNameAttribute.GetName(localizationResource), displayName, isLayout, layout, defaultCultureName)
+    {
+
+    }
+
+    public TemplateDefinition(
+        [NotNull] string name,
         [CanBeNull] string localizationResourceName = null,
         [CanBeNull] ILocalizableString displayName = null,
         bool isLayout = false,
