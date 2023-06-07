@@ -119,7 +119,7 @@
     "lerna": "^4.0.0",
     "lint-staged": "^13.0.3",
     "ng-packagr": "16.0.1",
-    "ng-zorro-antd": "^15.0.0",
+    "ng-zorro-antd": "^16.0.0",
     "nx": "16.2.2",
     "perfect-scrollbar": "^1.5.5",
     "postcss": "^8.3.9",
