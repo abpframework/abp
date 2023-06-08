@@ -28,7 +28,7 @@ Here, a list of major items in the backlog we are considering to work on in the 
 * [#16342](https://github.com/abpframework/abp/issues/16342) / CmsKit: Meta information for SEO
 * [#16260](https://github.com/abpframework/abp/issues/16260) / GCP Blob Storage Provider
 * [#15932](https://github.com/abpframework/abp/issues/15932) / Introduce ABP Diagnostics Module
-* [#16756](https://github.com/abpframework/abp/issues/16756) / Blog Storing - Provider configuration UI
+* [#16756](https://github.com/abpframework/abp/issues/16756) / Blob Storing - Provider configuration UI
 * [#16744](https://github.com/abpframework/abp/issues/16744) / State Management API
 
 You can always check the milestone planning and the prioritized backlog issues on [the GitHub repository](https://github.com/abpframework/abp/milestones) for a detailed road map. The backlog items are subject to change. We are adding new items and changing priorities based on the community feedbacks and goals of the project.
