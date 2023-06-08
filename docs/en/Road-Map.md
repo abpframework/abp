@@ -4,11 +4,11 @@ This document provides a road map, release schedule and planned features for the
 
 ## Next Versions
 
-### v7.3
+### v7.4
 
-The next version will be 7.3 and planned to release the stable 7.3 version in July, 2023. In the version 7.3, we will mostly focus on stabilizing and enhancing existing features, improving the developer experience, as well as adding relatively minor new features.
+The next version will be 7.4 and planned to release the stable 7.4 version in September, 2023. In the version 7.4, we will mostly focus on stabilizing and enhancing existing features, improving the developer experience, as well as adding relatively minor new features.
 
-See the [7.3 milestone](https://github.com/abpframework/abp/milestone/82) for all the issues we've planned to work on.
+See the [7.4 milestone](https://github.com/abpframework/abp/milestone/85) for all the issues we've planned to work on.
 
 ## Backlog Items
 
@@ -28,6 +28,8 @@ Here, a list of major items in the backlog we are considering to work on in the 
 * [#16342](https://github.com/abpframework/abp/issues/16342) / CmsKit: Meta information for SEO
 * [#16260](https://github.com/abpframework/abp/issues/16260) / GCP Blob Storage Provider
 * [#15932](https://github.com/abpframework/abp/issues/15932) / Introduce ABP Diagnostics Module
+* [#16756](https://github.com/abpframework/abp/issues/16756) / Blog Storing - Provider configuration UI
+* [#16744](https://github.com/abpframework/abp/issues/16744) / State Management API
 
 You can always check the milestone planning and the prioritized backlog issues on [the GitHub repository](https://github.com/abpframework/abp/milestones) for a detailed road map. The backlog items are subject to change. We are adding new items and changing priorities based on the community feedbacks and goals of the project.
 
