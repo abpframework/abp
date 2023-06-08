@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Taalcode",
     "DisplayName:Version": "Versie",
     "Documents": "Documenten",
-    "RemoveFromCache": "Verwijderen uit cache",
+    "RemoveFromCache": "Verwijderen uit cache en opnieuw indexeren",
     "Reindex": "Opnieuw indexeren",
     "ReindexCompleted": "Opnieuw indexeren voltooid",
-    "RemovedFromCache": "Verwijderen uit cache",
+    "RemovedFromCache": "Verwijderd uit cache en opnieuw geïndexeerd",
     "RemoveFromCacheConfirmation": "Weet u zeker dat u dit item uit de cache wilt verwijderen?",
-    "ReIndexDocumentConfirmation": "Weet u zeker dat u dit item opnieuw wilt indexeren?",
+    "ReIndexDocumentConfirmation": "Weet u zeker dat u \"{0}\" opnieuw wilt indexeren?",
     "DeleteFromDatabase": "Verwijder uit database",
     "Deleted": "Verwijderd",
     "Search": "Zoeken",
@@ -55,6 +55,7 @@
     "LanguageCode": "Taalcode",
     "FileName": "Bestandsnaam",
     "LastCachedTime": "Cache tijd",
-    "Project": "Project"
+    "Project": "Project",
+    "RemoveCacheAndReIndexConfirmation": "Het document \"{0}\" wordt uit de cache verwijderd en opnieuw geïndexeerd. Bevestigt u?"
   }
 }

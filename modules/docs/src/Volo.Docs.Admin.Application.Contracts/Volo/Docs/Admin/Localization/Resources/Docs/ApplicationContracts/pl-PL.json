@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Kod języka",
     "DisplayName:Version": "Wersja",
     "Documents": "Dokumenty",
-    "RemoveFromCache": "Usuń z pamięci podręcznej",
+    "RemoveFromCache": "Usunięcie z pamięci podręcznej i ponowne indeksowanie",
     "Reindex": "Ponowna indeksacja",
     "ReindexCompleted": "Ponowna indeksacja zakończona",
-    "RemovedFromCache": "Usunięto z pamięci podręcznej",
+    "RemovedFromCache": "Usunięte z pamięci podręcznej i ponownie zindeksowane",
     "RemoveFromCacheConfirmation": "Czy na pewno chcesz usunąć ten element z pamięci podręcznej?",
-    "ReIndexDocumentConfirmation": "Czy na pewno chcesz ponownie zindeksować ten element?",
+    "ReIndexDocumentConfirmation": "Czy na pewno chcesz przeindeksować \"{0}\"?",
     "DeleteFromDatabase": "Usuń z bazy danych",
     "Deleted": "Usunięto",
     "Search": "Szukaj",
@@ -55,6 +55,7 @@
     "LanguageCode": "Kod języka",
     "FileName": "Nazwa pliku",
     "LastCachedTime": "Czas w pamięci podręcznej",
-    "Project": "Projekt"
+    "Project": "Projekt",
+    "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" zostanie usunięty z pamięci podręcznej i ponownie zaindeksowany. Czy potwierdzasz?"
   }
 }

@@ -177,14 +177,14 @@ body {
                     }
 
                     .input-group-text {
-                        padding: 0 0;
+                        padding: 0 0 !important;
                         font-size: 0.75rem;
                         width: 15px;
                         height: 24px;
                         line-height: 1;
                         border-radius: 0px;
                         border: 0;
-                        background: transparent;
+                        background: transparent !important;
                         top: 1px;
 
                         i {
@@ -247,6 +247,25 @@ body {
                 }
             }
 
+            .search-all-document-container{
+
+                border-bottom: 1px solid rgb(170 170 170 / 20%);
+                padding-bottom: 5px;
+
+                button{
+                    color: #aaa;
+                    font-size: 14px;
+                    width: 100%;
+                    text-align: start;
+
+                    i{
+                        transform: rotate(90deg);
+                        margin-right: 9px;
+                        font-size: 13px;
+                    }
+                }
+            }
+            
             > ul {
                 display: block;
                 height: calc(100vh - 310px);
@@ -464,7 +483,7 @@ body {
                 }
 
                 .input-group-text {
-                    background: transparent;
+                    background: transparent !important;
                     border: 0;
                     color: rgb(41 45 51 / 50%);
                     font-size: 1em;
@@ -659,6 +678,8 @@ body {
                 p.alert-p {
                     font-size: 0.96em;
                 }
+
+                
             }
 
             .anchorjs-link {
@@ -741,7 +762,7 @@ body {
         }
 
         #scroll-index {
-            max-height: 90vh;
+            max-height: 38vh;
         }
 
         .scroll-top-btn {

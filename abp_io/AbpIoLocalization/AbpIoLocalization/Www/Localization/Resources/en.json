@@ -416,6 +416,9 @@
     "CompanyInfo": "Company Info",
     "Date": "Date",
     "WhoWeAre_Partner": "Who We Are",
-    "WhoWeAre_Expert": "About Me"
+    "WhoWeAre_Expert": "About Me",
+    "CreateSolutionFolder": "Create Solution Folder",
+    "CreateSolutionFolderOption": "Specifies if the project will be in a new folder in the output folder or directly the output folder.",
+    "BooksPageTitle": "ABP Books"
   }
 }

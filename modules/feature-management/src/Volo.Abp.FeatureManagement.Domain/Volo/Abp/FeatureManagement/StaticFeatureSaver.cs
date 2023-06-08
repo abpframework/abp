@@ -29,6 +29,8 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
     protected AbpFeatureOptions FeatureOptions { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
+    
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public StaticFeatureSaver(
         IStaticFeatureDefinitionStore staticStore,
@@ -40,7 +42,8 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
         IApplicationInfoAccessor applicationInfoAccessor,
         IAbpDistributedLock distributedLock,
         IOptions<AbpFeatureOptions> featureManagementOptions,
-        ICancellationTokenProvider cancellationTokenProvider)
+        ICancellationTokenProvider cancellationTokenProvider,
+        IUnitOfWorkManager unitOfWorkManager)
     {
         StaticStore = staticStore;
         FeatureGroupRepository = featureGroupRepository;
@@ -50,12 +53,12 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
         ApplicationInfoAccessor = applicationInfoAccessor;
         DistributedLock = distributedLock;
         CancellationTokenProvider = cancellationTokenProvider;
+        UnitOfWorkManager = unitOfWorkManager;
         FeatureOptions = featureManagementOptions.Value;
         CacheOptions = cacheOptions.Value;
     }
 
-    [UnitOfWork]
-    public virtual async Task SaveAsync()
+    public async Task SaveAsync()
     {
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
             GetApplicationDistributedLockKey()
@@ -101,19 +104,40 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
                 throw new AbpException("Could not acquire distributed lock for saving static features!");
             }
 
-            var hasChangesInGroups = await UpdateChangedFeatureGroupsAsync(featureGroupRecords);
-            var hasChangesInFeatures = await UpdateChangedFeaturesAsync(featureRecords);
-
-            if (hasChangesInGroups ||hasChangesInFeatures)
+            using (var unitOfWork = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true))
             {
-                await Cache.SetStringAsync(
-                    GetCommonStampCacheKey(),
-                    Guid.NewGuid().ToString(),
-                    new DistributedCacheEntryOptions {
-                        SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-                    },
-                    CancellationTokenProvider.Token
-                );
+                try
+                {
+                    var hasChangesInGroups = await UpdateChangedFeatureGroupsAsync(featureGroupRecords);
+                    var hasChangesInFeatures = await UpdateChangedFeaturesAsync(featureRecords);
+
+                    if (hasChangesInGroups ||hasChangesInFeatures)
+                    {
+                        await Cache.SetStringAsync(
+                            GetCommonStampCacheKey(),
+                            Guid.NewGuid().ToString(),
+                            new DistributedCacheEntryOptions {
+                                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
+                            },
+                            CancellationTokenProvider.Token
+                        );
+                    }
+                }
+                catch
+                {
+                    try
+                    {
+                        await unitOfWork.RollbackAsync();
+                    }
+                    catch
+                    {
+                        /* ignored */
+                    }
+                    
+                    throw;
+                }
+
+                await unitOfWork.CompleteAsync();
             }
         }
 

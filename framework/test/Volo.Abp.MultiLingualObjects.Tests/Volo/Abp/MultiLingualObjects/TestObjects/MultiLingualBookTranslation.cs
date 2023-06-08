@@ -2,7 +2,7 @@
 
 public class MultiLingualBookTranslation : IObjectTranslation
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
-    public string Language { get; set; }
+    public required string Language { get; set; }
 }

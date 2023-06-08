@@ -48,7 +48,7 @@ All the themes must depend on the [Volo.Abp.AspNetCore.Components.Server.Theming
 * [Twitter Bootstrap](https://getbootstrap.com/) as the fundamental HTML/CSS framework.
 * [Blazorise](https://github.com/stsrki/Blazorise) as a component library that supports the Bootstrap and adds extra components like Data Grid and Tree.
 * [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
-* [Flag Icon](https://github.com/lipis/flag-icon-css) as a library to show flags of countries.
+* [Flag Icon](https://github.com/lipis/flag-icons) as a library to show flags of countries.
 
 These libraries are selected as the base libraries and available to the applications and modules.
 

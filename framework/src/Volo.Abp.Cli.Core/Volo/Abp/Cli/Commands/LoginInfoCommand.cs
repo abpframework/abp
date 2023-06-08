@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,7 +40,7 @@ public class LoginInfoCommand : IConsoleCommand, ITransientDependency
 
         var sb = new StringBuilder();
         sb.AppendLine("");
-        sb.AppendLine($"Login info:");
+        sb.AppendLine("Login info:");
         sb.AppendLine($"Name: {loginInfo.Name}");
         sb.AppendLine($"Surname: {loginInfo.Surname}");
         sb.AppendLine($"Username: {loginInfo.Username}");

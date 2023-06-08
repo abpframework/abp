@@ -348,4 +348,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
                 GetCancellationToken(cancellationToken)
             );
     }
+
+    public virtual async Task<List<IdentityUser>> GetListByIdsAsync(IEnumerable<Guid> ids, bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
 }

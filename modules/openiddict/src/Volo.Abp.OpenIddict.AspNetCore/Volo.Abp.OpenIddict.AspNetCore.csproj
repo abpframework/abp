@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenIddict.Server.AspNetCore" Version="4.0.0" />
-    <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="4.0.0" />
-    <PackageReference Include="OpenIddict.Validation.ServerIntegration" Version="4.0.0" />
+    <PackageReference Include="OpenIddict.Server.AspNetCore" Version="4.2.0" />
+    <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="4.2.0" />
+    <PackageReference Include="OpenIddict.Validation.ServerIntegration" Version="4.2.0" />
   </ItemGroup>
 </Project>
