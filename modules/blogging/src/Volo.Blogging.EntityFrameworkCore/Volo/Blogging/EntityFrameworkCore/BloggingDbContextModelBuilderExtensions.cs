@@ -26,8 +26,16 @@ namespace Volo.Blogging.EntityFrameworkCore
             builder.Entity<BlogUser>(b =>
             {
                 b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Users", AbpBloggingDbProperties.DbSchema);
-
                 b.ConfigureByConvention();
+                
+                b.Property<string>(nameof(BlogUser.Biography)).HasMaxLength(UserConsts.MaxBiographyLength).HasColumnName(nameof(BlogUser.Biography));
+                b.Property<string>(nameof(BlogUser.WebSite)).HasMaxLength(UserConsts.MaxWebSiteLength).HasColumnName(nameof(BlogUser.WebSite));
+                b.Property<string>(nameof(BlogUser.Twitter)).HasMaxLength(UserConsts.MaxTwitterLength).HasColumnName(nameof(BlogUser.Twitter));
+                b.Property<string>(nameof(BlogUser.Github)).HasMaxLength(UserConsts.MaxGithubLength).HasColumnName(nameof(BlogUser.Github));
+                b.Property<string>(nameof(BlogUser.Linkedin)).HasMaxLength(UserConsts.MaxLinkedinLength).HasColumnName(nameof(BlogUser.Linkedin));
+                b.Property<string>(nameof(BlogUser.Company)).HasMaxLength(UserConsts.MaxCompanyLength).HasColumnName(nameof(BlogUser.Company));
+                b.Property<string>(nameof(BlogUser.JobTitle)).HasMaxLength(UserConsts.MaxJobTitleLength).HasColumnName(nameof(BlogUser.JobTitle));
+                
                 b.ConfigureAbpUser();
 
                 b.ApplyObjectExtensionMappings();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Castle;
+using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -17,7 +18,8 @@ namespace Volo.Abp.Http.Client;
     typeof(AbpMultiTenancyModule),
     typeof(AbpValidationModule),
     typeof(AbpExceptionHandlingModule),
-    typeof(AbpRemoteServicesModule)
+    typeof(AbpRemoteServicesModule),
+    typeof(AbpEventBusModule)
     )]
 public class AbpHttpClientModule : AbpModule
 {

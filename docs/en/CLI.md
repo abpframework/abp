@@ -41,12 +41,14 @@ Here, is the list of all available commands before explaining their details:
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
 * **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
+* **`switch-to-local`**: Changes NuGet package references on a solution to local project references.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`login-info`**: Shows the current user's login information.
 * **`logout`**: Logouts from your computer if you've authenticated before.
 * **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
+* **`clear-download-cache`** Clears the templates download cache.
 
 ### help
 
@@ -164,6 +166,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
 * `--local-framework-ref --abp-path`: Uses local projects references to the ABP framework instead of using the NuGet packages. This can be useful if you download the ABP Framework source code and have a local reference to the framework from your application.
 * `--no-random-port`: Uses template's default ports.
 * `--skip-installing-libs` or `-sib`: Skip installing client side packages.
+* `--skip-cache` or `-sc`:  Always download the latest from our server and refresh their templates folder cache.
 * `--with-public-website`: **Public Website** is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website.
 
 See some [examples for the new command](CLI-New-Command-Samples.md) here.
@@ -455,6 +458,27 @@ abp switch-to-stable [options]
 #### Options
 
 * `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+
+### switch-to-local
+
+Changes all NuGet package references to local project references for all the .csproj files in the specified folder (and all its subfolders with any deep). It is not limited to ABP Framework or Module packages.
+
+Usage:
+
+````bash
+abp switch-to-local [options]
+````
+#### Options
+
+* `--solution` or `-s`: Specifies the solution directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+
+* `--paths` or `-p`: Specifies the local paths that the projects are inside. You can use `|` character to separate the paths.
+
+Example:
+
+````bash
+abp switch-to-local --paths "D:\Github\abp|D:\Github\my-repo"
+````
 
 ### translate
 

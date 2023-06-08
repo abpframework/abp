@@ -3,7 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Contents;
 
-public class PageDto : EntityDto<Guid>
+public class PageDto : ExtensibleEntityDto<Guid>
 {
     public string Title { get; set; }
 
