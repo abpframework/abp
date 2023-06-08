@@ -74,3 +74,26 @@ Configure<AbpSecurityHeadersOptions>(options =>
     });
 });
 ```
+
+### Ignore Abp Security Headers
+
+You can ignore the Abp Security Headers for some actions or pages. You can use the `IgnoreAbpSecurityHeaderAttribute` attribute for this.
+
+**Example:**
+
+```csharp
+@using Volo.Abp.AspNetCore.Security
+@attribute [IgnoreAbpSecurityHeaderAttribute]
+```
+
+**Example:**
+
+```csharp
+[IgnoreAbpSecurityHeaderAttribute]
+public class IndexModel : AbpPageModel
+{
+    public void OnGet()
+    {
+    }
+}
+```
