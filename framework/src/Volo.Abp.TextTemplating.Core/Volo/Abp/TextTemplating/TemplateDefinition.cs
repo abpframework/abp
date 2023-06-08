@@ -60,7 +60,7 @@ public class TemplateDefinition : IHasNameWithLocalizableDisplayName
 
     public TemplateDefinition(
         [NotNull] string name,
-        [CanBeNull] Type localizationResource,
+        [NotNull] Type localizationResource,
         [CanBeNull] ILocalizableString displayName = null,
         bool isLayout = false,
         string layout = null,
