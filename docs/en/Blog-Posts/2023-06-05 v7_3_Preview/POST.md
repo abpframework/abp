@@ -219,9 +219,7 @@ In this version, Account Layout has been re-designed for LeptonX Theme. You can 
 
 ![](./community-talks-2023-4.png)
 
-In this episode, the core ABP team will talk about what's new with ABP v7.3 and Angular 16. The event will be live on **Tuesday, June 06, 2023 (17:00 UTC)**.
-
-> Register to listen and ask your questions now 👉 [https://kommunity.com/volosoft/events/abp-community-talks-20234-angular-16-and-abp-v-73-b0644a11](https://kommunity.com/volosoft/events/abp-community-talks-20234-angular-16-and-abp-v-73-b0644a11)
+In this episode, the core ABP team talked about what's new with ABP v7.3 and Angular 16. You can watch the event from [here](https://www.youtube.com/watch?v=lq6u4vQURcI).
 
 ### ABP .NET Conference 2023
 
@@ -243,7 +241,7 @@ We are thrilled to announce that the Volosoft Company proudly attended as one of
 
 Co-Founder of [Volosoft](https://volosoft.com/) and Lead Developer of the ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan) gave a word about "Dealing with Concurrency and Multi Threading in .NET" at this event.
 
-> You can check [this blog post](https://volosoft.com/blog/Meet-Volosoft-at-the-Devnot-.NET-Conference-2023) if you want to learn more about the Devnot .NET Conference 2023.
+> You can check [this blog post](https://volosoft.com/blog/Reflecting-on-Devnot-Dotnet-Conference-2023) if you want to learn more about the Devnot .NET Conference 2023.
 
 ### New ABP Community Posts
 
