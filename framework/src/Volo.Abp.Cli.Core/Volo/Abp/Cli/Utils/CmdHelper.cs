@@ -88,7 +88,9 @@ public class CmdHelper : ICmdHelper, ITransientDependency
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                return new ProcessStartInfo("osascript", $"-e \"do shell script \\\"{fileName} {arguments}\\\" with administrator privileges\"");
+                var parameters = $"-e \"do shell script \\\"{fileName} {arguments}\\\" with administrator privileges\"";
+
+                return new ProcessStartInfo("osascript", parameters);
             }
             else
             {
@@ -190,9 +192,11 @@ public class CmdHelper : ICmdHelper, ITransientDependency
 
     public string GetArguments(string command, int? delaySeconds = null)
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        var isNotWindows = !RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+        if (isNotWindows)
         {
-            return delaySeconds == null ? "-c \"" + command + "\"" : "-c \"" + $"sleep {delaySeconds} > /dev/null && " + command + "\"";
+            return delaySeconds == null ? "-c '" + command + "'" : "-c '" + $"sleep {delaySeconds} > /dev/null && " + command + "'";
         }
 
         //Windows default.
