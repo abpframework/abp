@@ -7,7 +7,7 @@ using Volo.Abp.Tracing;
 namespace Volo.Abp.AspNetCore.Tracing;
 
 [Dependency(ReplaceServices = true)]
-public class AspNetCoreCorrelationIdProvider : ICorrelationIdProvider, ITransientDependency
+public class AspNetCoreCorrelationIdProvider : DefaultCorrelationIdProvider, ITransientDependency
 {
     protected IHttpContextAccessor HttpContextAccessor { get; }
     protected AbpCorrelationIdOptions Options { get; }
@@ -20,11 +20,11 @@ public class AspNetCoreCorrelationIdProvider : ICorrelationIdProvider, ITransien
         Options = options.Value;
     }
 
-    public virtual string Get()
+    protected override string GetDefaultCorrelationId()
     {
         if (HttpContextAccessor.HttpContext?.Request?.Headers == null)
         {
-            return CreateNewCorrelationId();
+            return base.GetDefaultCorrelationId();
         }
 
         string correlationId = HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName];
@@ -35,17 +35,12 @@ public class AspNetCoreCorrelationIdProvider : ICorrelationIdProvider, ITransien
             {
                 if (correlationId.IsNullOrEmpty())
                 {
-                    correlationId = CreateNewCorrelationId();
+                    correlationId = base.GetDefaultCorrelationId();;
                     HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName] = correlationId;
                 }
             }
         }
 
         return correlationId;
-    }
-
-    protected virtual string CreateNewCorrelationId()
-    {
-        return Guid.NewGuid().ToString("N");
     }
 }
