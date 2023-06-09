@@ -137,7 +137,7 @@ public static void ConfigureExtraProperties()
 
 * `cmsKit.ConfigureBlogPost(...)` is used to configure the **BlogPost** entity of the CMS Kit module. You can add or update your extra properties of the **BlogPost** entity.
 
-* You can also set some validation rules for the property that you defined. In the above sample, `RequiredAttribute` and `StringLengthAttribute` were added for the property named **"NewsletterRecord"**. 
+* You can also set some validation rules for the property that you defined. In the above sample, `RequiredAttribute` and `StringLengthAttribute` were added for the property named **"BlogPostDescription"**. 
 
 * When you define the new property, it will automatically add to **Entity**, **HTTP API** and **UI** for you. 
   * Once you define a property, it appears in the create and update forms of the related entity. 
