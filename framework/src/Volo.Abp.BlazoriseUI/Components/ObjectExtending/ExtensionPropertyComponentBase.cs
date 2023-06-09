@@ -33,6 +33,9 @@ public abstract class ExtensionPropertyComponentBase<TEntity, TResourceType> : O
     [Parameter]
     public AbpBlazorMessageLocalizerHelper<TResourceType> LH { get; set; }
 
+    [Parameter]
+    public bool? EditForm { get; set; }
+
     protected virtual void Validate(ValidatorEventArgs e)
     {
         e.Status = ValidationStatus.Success;
@@ -71,6 +74,8 @@ public abstract class ExtensionPropertyComponentBase<TEntity, TResourceType> : O
         }
     }
 
+    protected bool IsReadonlyField => EditForm.HasValue && EditForm.Value && PropertyInfo.UI.EditModal.IsReadOnly;
+    
     private static string GetDefaultErrorMessage(ValidationAttribute validationAttribute)
     {
         if (validationAttribute is StringLengthAttribute stringLengthAttribute && stringLengthAttribute.MinimumLength != 0)
