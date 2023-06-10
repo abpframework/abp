@@ -728,7 +728,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
       <div class="text-end col col-md-6">
         <div class="text-lg-end pt-2">
           <button *abpPermission="'BookStore.Authors.Create'" id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
-            <i class="fa fa-plus mr-1"></i>
+            <i class="fa fa-plus me-1"></i>
             <span>{%{{{ '::NewAuthor' | abpLocalization }}}%}</span>
           </button>
         </div>
@@ -750,7 +750,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
               aria-haspopup="true"
               ngbDropdownToggle
             >
-              <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
+              <i class="fa fa-cog me-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
             </button>
             <div ngbDropdownMenu>
               <button *abpPermission="'BookStore.Authors.Edit'" ngbDropdownItem (click)="editAuthor(row.id)">
@@ -785,7 +785,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
         <input type="text" id="author-name" class="form-control" formControlName="name" autofocus />
       </div>
 
-      <div class="form-group">
+      <div class="mt-2">
         <label>Birth date</label><span> * </span>
         <input
           #datepicker="ngbDatepicker"

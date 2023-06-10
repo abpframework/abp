@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BlobStoring.Minio;
 
@@ -59,20 +61,26 @@ public class AbpBlobStoringMinioTestModule : AbpModule
         });
     }
 
-    public override async void OnApplicationShutdown(ApplicationShutdownContext context)
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        var minioClient = new MinioClient(_endPoint, _accessKey, _secretKey);
-        if (await minioClient.BucketExistsAsync(_randomContainerName))
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
+    }
+
+    public async override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    {
+        var minioClient = new MinioClient().WithEndpoint(_endPoint).WithCredentials(_accessKey, _secretKey).Build();
+        if (await minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(_randomContainerName)))
         {
-            var objects = await minioClient.ListObjectsAsync(_randomContainerName, null, true).ToList();
+            var objects = await minioClient.ListObjectsAsync(new ListObjectsArgs().WithBucket(_randomContainerName)
+                .WithPrefix(null).WithRecursive(true)).ToList();
 
             foreach (var item in objects)
             {
-                await minioClient.RemoveObjectAsync(_randomContainerName, item.Key);
+                await minioClient.RemoveObjectAsync(new RemoveObjectArgs().WithBucket(_randomContainerName)
+                    .WithObject(item.Key));
             }
 
-            await minioClient.RemoveBucketAsync(_randomContainerName);
+            await minioClient.RemoveBucketAsync(new RemoveBucketArgs().WithBucket(_randomContainerName));
         }
-
     }
 }

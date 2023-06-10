@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Volo.Abp.AspNetCore.Mvc.Authentication;
 
@@ -9,15 +12,17 @@ public abstract class ChallengeAccountController : AbpController
 {
     protected string[] ChallengeAuthenticationSchemas { get; }
     protected string AuthenticationType { get; }
+    protected string[] ForbidSchemes { get; }
 
     protected ChallengeAccountController(string[] challengeAuthenticationSchemas = null)
     {
         ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[] { "oidc" };
         AuthenticationType = "Identity.Application";
+        ForbidSchemes = Array.Empty<string>();
     }
 
     [HttpGet]
-    public ActionResult Login(string returnUrl = "", string returnUrlHash = "")
+    public virtual ActionResult Login(string returnUrl = "", string returnUrlHash = "")
     {
         if (CurrentUser.IsAuthenticated)
         {
@@ -28,7 +33,7 @@ public abstract class ChallengeAccountController : AbpController
     }
 
     [HttpGet]
-    public async Task<ActionResult> Logout(string returnUrl = "", string returnUrlHash = "")
+    public virtual async Task<ActionResult> Logout(string returnUrl = "", string returnUrlHash = "")
     {
         await HttpContext.SignOutAsync();
 
@@ -41,7 +46,7 @@ public abstract class ChallengeAccountController : AbpController
     }
 
     [HttpGet]
-    public async Task<IActionResult> FrontChannelLogout(string sid)
+    public virtual async Task<IActionResult> FrontChannelLogout(string sid)
     {
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
@@ -53,5 +58,22 @@ public abstract class ChallengeAccountController : AbpController
         }
 
         return NoContent();
+    }
+
+    [HttpGet]
+    public virtual Task<IActionResult> AccessDenied(string returnUrl = "", string returnUrlHash = "")
+    {
+        return Task.FromResult<IActionResult>(Challenge(
+            new AuthenticationProperties
+            {
+                RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)
+            },
+            ForbidSchemes.IsNullOrEmpty()
+                ? new[]
+                {
+                    HttpContext.RequestServices.GetRequiredService<IOptions<AuthenticationOptions>>().Value.DefaultForbidScheme
+                }
+                : ForbidSchemes
+        ));
     }
 }

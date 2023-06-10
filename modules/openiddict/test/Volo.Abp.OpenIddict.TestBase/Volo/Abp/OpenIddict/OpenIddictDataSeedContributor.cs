@@ -219,7 +219,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         await _tokenManager.CreateAsync(await GetOpenIddictTokenModelAsync(_testData.Token2Id, new OpenIddictTokenDescriptor
         {
             ApplicationId = _testData.App2Id.ToString(),
-            AuthorizationId = _testData.Authorization2Id.ToString(),
+            AuthorizationId = _testData.Authorization1Id.ToString(),
             Subject = "TestSubject2",
             Type = "TestType2",
             Status = OpenIddictConstants.Statuses.Valid,
@@ -240,20 +240,19 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         await _authorizationManager.CreateAsync(await GetOpenIddictAuthorizationModelAsync(_testData.Authorization1Id, new OpenIddictAuthorizationDescriptor
         {
             ApplicationId = _testData.App1Id.ToString(),
-            Status = "TestStatus1",
+            Status = OpenIddictConstants.Statuses.Valid,
             Subject = "TestSubject1",
             Type = OpenIddictConstants.AuthorizationTypes.Permanent,
-            CreationDate = _clock.Now.AddDays(-30)
-
+            CreationDate = _clock.Now
         }));
 
         await _authorizationManager.CreateAsync(await GetOpenIddictAuthorizationModelAsync(_testData.Authorization2Id, new OpenIddictAuthorizationDescriptor
         {
             ApplicationId = _testData.App2Id.ToString(),
-            Status = "TestStatus2",
+            Status = OpenIddictConstants.Statuses.Inactive,
             Subject = "TestSubject2",
             Type = OpenIddictConstants.AuthorizationTypes.AdHoc,
-            CreationDate = _clock.Now
+            CreationDate = _clock.Now.AddDays(-30)
         }));
     }
 

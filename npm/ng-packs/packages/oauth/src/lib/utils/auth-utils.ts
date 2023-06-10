@@ -7,7 +7,7 @@ import {
   ConfigStateService,
   LoginParams,
   PipeToLoginFn,
-  SetTokenResponseToStorageFn,
+  AbpLocalStorageService,
 } from '@abp/ng.core';
 
 const cookieKey = 'rememberMe';
@@ -19,25 +19,28 @@ export const pipeToLogin: PipeToLoginFn = function (
 ) {
   const configState = injector.get(ConfigStateService);
   const router = injector.get(Router);
-
+  const localStorage = injector.get(AbpLocalStorageService);
   return pipe(
     switchMap(() => configState.refreshAppState()),
     tap(() => {
-      setRememberMe(params.rememberMe);
+      setRememberMe(params.rememberMe, localStorage);
       if (params.redirectUrl) router.navigate([params.redirectUrl]);
     }),
   );
 };
 
-export function setRememberMe(remember: boolean | undefined) {
-  removeRememberMe();
-  localStorage.setItem(storageKey, 'true');
+export function setRememberMe(
+  remember: boolean | undefined,
+  localStorageService: AbpLocalStorageService,
+) {
+  removeRememberMe(localStorageService);
+  localStorageService.setItem(storageKey, 'true');
   document.cookie = `${cookieKey}=true; path=/${
     remember ? ' ;expires=Fri, 31 Dec 9999 23:59:59 GMT' : ''
   }`;
 }
 
-export function removeRememberMe() {
-  localStorage.removeItem(storageKey);
+export function removeRememberMe(localStorageService: AbpLocalStorageService) {
+  localStorageService.removeItem(storageKey);
   document.cookie = cookieKey + '= ; path=/; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 }

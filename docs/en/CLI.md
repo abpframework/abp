@@ -138,6 +138,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC.
       * `angular`: Angular UI.
+      * `blazor`: Blazor UI.
       * `blazor-server`: Blazor Server UI.
       * `none`: Without UI.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
@@ -359,8 +360,11 @@ abp generate-proxy -t csharp -url https://localhost:44302/
     * `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
     * `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
     * `--target`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+    * `--module`:  Backend module name. Default value: `app`.
+    * `--entry-point`: Targets the Angular project to place the generated code.
     * `--url`: Specifies api definition url. Default value is API Name's url in environment file.
     * `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+
   * `js`: JavaScript. work in the `*.Web` project directory. There are some additional options for this client:
     * `--output` or `-o`: JavaScript file path or folder to place generated code in.
 * `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.

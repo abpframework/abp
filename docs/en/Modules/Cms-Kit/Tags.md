@@ -2,6 +2,12 @@
 
 CMS kit provides a **tag** system to tag any kind of resources, like a blog post.
 
+## Enabling the Tag Management Feature
+
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+
+> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+
 ## Options
 
 The tag system provides a mechanism to group tags by entity types. For example, if you want to use the tag system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product` and add tags under these entity types.
@@ -17,7 +23,7 @@ Configure<CmsKitTagOptions>(options =>
 });
 ```
 
-> If you're using the blog feature, the ABP framework defines an entity type for the blog feature automatically.
+> If you're using the [Blogging Feature](Blogging.md), the ABP framework defines an entity type for the blog feature automatically.
 
 `CmsKitTagOptions` properties:
 

@@ -1,68 +1,69 @@
 # Dapper Integration
 
-Dapper is a light-weight and simple database provider. The major benefit of using Dapper is writing T-SQL queries. It provides  some extension methods for `IDbConnection` interface.
+[Dapper](https://github.com/DapperLib/Dapper) is a simple and lightweight object mapper for .NET. A key feature of Dapper is its [high performance](https://github.com/DapperLib/Dapper#performance) compared to other ORMs.
 
-ABP does not encapsulate many functions for Dapper. ABP Dapper library provides a `DapperRepository<TDbContext>` base class based on  ABP EntityFrameworkCore module, which provides the `IDbConnection` and `IDbTransaction` properties required by Dapper.
+While you can use Dapper as is in your ABP applications, there is also an integration package that simplifies creating repository classes using Dapper.
 
-`IDbConnection` and `IDbTransaction` works well with the [ABP Unit-Of-Work](Unit-Of-Work.md).
+> ABP's Dapper integration package is based on Entity Framework Core (EF Core). That means it assumes you will use Dapper mixed with EF Core where EF Core is the primary database provider and you use Dapper when you need to fine-tune your quires and get the maximum performance. See [this article](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l) if you want to know why it is like that.
 
 ## Installation
 
-Install and configure EF Core according to [EF Core's integrated documentation](Entity-Framework-Core.md).
+You can use the [ABP CLI](CLI.md) to install the [Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper) package to your project. Execute the following command in the folder of the `.csproj` file that you want to install the package on:
 
-`Volo.Abp.Dapper` is the main nuget package for the Dapper integration. 
-
-You can find it on NuGet Gallery: https://www.nuget.org/packages/Volo.Abp.Dapper
-
-Install it to your project (for a layered application, to your data/infrastructure layer):
-
-```shell
-Install-Package Volo.Abp.Dapper
-```
-
-Then add `AbpDapperModule` module dependency (with `DependsOn` attribute) to your [module](Module-Development-Basics.md):
-
-````C#
-using Volo.Abp.Dapper;
-using Volo.Abp.Modularity;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpDapperModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
+````bash
+abp add-package Volo.Abp.Dapper
 ````
 
-## Implement Dapper Repository
+> If you haven't done it yet, you first need to install the ABP CLI. For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Dapper).
+>
+> If you have a layered solution, it is suggested to install that package to your database layer of the solution.
 
-The following code creates the `PersonRepository`, which requires EF Core's `DbContext` (MyAppDbContext).
-You can inject `PersonDapperRepository` to your services for your database operations.
+## Implement a Dapper Repository
 
-`DbConnection` and `DbTransaction` comes from the `DapperRepository` base class.
+The best way to interact with Dapper is to create a [repository](Repositories.md) class that abstracts your Dapper database operations. The following example creates a new repository class that works with the `People` table:
 
 ```C#
-public class PersonDapperRepository : DapperRepository<MyAppDbContext>, ITransientDependency
+public class PersonDapperRepository :
+    DapperRepository<MyAppDbContext>, ITransientDependency
 {
     public PersonDapperRepository(IDbContextProvider<MyAppDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
     }
 
-    public virtual async Task<List<string>> GetAllPersonNames()
+    public virtual async Task<List<string>> GetAllPersonNamesAsync()
     {
         var dbConnection = await GetDbConnectionAsync();
-        return (await dbConnection.QueryAsync<string>("select Name from People", transaction:  await GetDbTransactionAsync()))
-            .ToList();
+        return (await dbConnection.QueryAsync<string>(
+            "select Name from People",
+            transaction:  await GetDbTransactionAsync())
+        ).ToList();
     }
 
-    public virtual async Task<int> UpdatePersonNames(string name)
+    public virtual async Task<int> UpdatePersonNamesAsync(string name)
     {
         var dbConnection = await GetDbConnectionAsync();
-        return await dbConnection.ExecuteAsync("update People set Name = @NewName", new { NewName = name },
-             await GetDbTransactionAsync());
+        return await dbConnection.ExecuteAsync(
+            "update People set Name = @NewName",
+            new { NewName = name },
+            await GetDbTransactionAsync()
+        );
     }
 }
 ```
+
+Let's examine this class:
+
+- It inherits from the `DapperRepository` class, which provides useful methods and properties for database operations. It also implements the `IUnitOfWorkEnabled` interface, so ABP makes the database connection (and transaction if requested) available in the method body by implementing dynamic proxies (a.k.a. interception).
+- It gets an `IDbContextProvider<MyAppDbContext>` object where `MyAppDbContext` is type of your Entity Framework Core `DbContext` class. It should be configured as explained in the [EF Core document](Entity-Framework-Core.md). If you've created by ABP's startup template, then it should already be configured.
+- The `GetAllPersonNamesAsync` and `UpdatePersonNamesAsync` method's been made `virtual`. That's needed to make the interception process working.
+- We've used the `GetDbConnectionAsync` and `GetDbTransactionAsync` methods to obtain the current database connection and transaction (that is managed by ABP's [Unit of Work](Unit-Of-Work.md) system).
+
+Then you can [inject](Dependency-Injection.md) `PersonDapperRepository` to any service to perform these database operations. If you want to implement a layered solution, we suggest to introduce an `IPersonDapperRepository` interface in your domain layer, implement it in your database later, then inject the interface to use the repository service.
+
+> If you want to learn more details and examples of using Dapper with the ABP Framework, [check this community article](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l).
+
+## See Also
+
+* [Community Article: Using Dapper with the ABP Framework](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l)
+* [Entity Framework Core integration document](Entity-Framework-Core.md)

@@ -15,7 +15,7 @@
 $.extend( $.validator.messages, {
 	required: "Polje je obavezno.",
 	remote: "Sredite ovo polje.",
-	email: "Unesite ispravnu e-mail adresu",
+	email: "Unesite ispravnu e-mail adresu.",
 	url: "Unesite ispravan URL.",
 	date: "Unesite ispravan datum.",
 	dateISO: "Unesite ispravan datum (ISO).",
@@ -29,7 +29,8 @@ $.extend( $.validator.messages, {
 	rangelength: $.validator.format( "Unesite vrednost dugačku između {0} i {1} karaktera." ),
 	range: $.validator.format( "Unesite vrednost između {0} i {1}." ),
 	max: $.validator.format( "Unesite vrednost manju ili jednaku {0}." ),
-	min: $.validator.format( "Unesite vrednost veću ili jednaku {0}." )
+	min: $.validator.format( "Unesite vrednost veću ili jednaku {0}." ),
+	step: $.validator.format( "Unesite vrednost koja je umnožak broja {0}." )
 } );
 return $;
 }));

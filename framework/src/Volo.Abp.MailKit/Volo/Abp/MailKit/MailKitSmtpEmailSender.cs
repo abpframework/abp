@@ -35,7 +35,6 @@ public class MailKitSmtpEmailSender : EmailSenderBase, IMailKitSmtpEmailSender
         {
             var message = MimeMessage.CreateFromMailMessage(mail);
             message.MessageId = MimeUtils.GenerateMessageId();
-            message.Headers.Add(HeaderId.MessageId, message.MessageId);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
         }

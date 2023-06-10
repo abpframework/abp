@@ -9,6 +9,7 @@ import {
 import { Observable, of } from 'rxjs';
 import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import {
+  AbpLocalStorageService,
   ConfigStateService,
   EnvironmentService,
   HttpErrorReporterService,
@@ -29,6 +30,7 @@ export abstract class AuthFlowStrategy {
   protected oAuthService: OAuthService2;
   protected oAuthConfig!: AuthConfig;
   protected sessionState: SessionStateService;
+  protected localStorageService: AbpLocalStorageService;
   protected tenantKey: string;
   protected router: Router;
 
@@ -48,6 +50,7 @@ export abstract class AuthFlowStrategy {
     this.configState = injector.get(ConfigStateService);
     this.oAuthService = injector.get(OAuthService2);
     this.sessionState = injector.get(SessionStateService);
+    this.localStorageService = injector.get(AbpLocalStorageService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig || {};
     this.tenantKey = injector.get(TENANT_KEY);
     this.router = injector.get(Router);
