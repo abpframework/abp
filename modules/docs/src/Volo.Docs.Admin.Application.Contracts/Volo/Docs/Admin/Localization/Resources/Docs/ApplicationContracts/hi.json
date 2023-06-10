@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "भाषा कोड",
     "DisplayName:Version": "संस्करण",
     "Documents": "दस्तावेज़",
-    "RemoveFromCache": "कैश से निकालें",
+    "RemoveFromCache": "कैश और रीइंडेक्स से निकालें",
     "Reindex": "अनुक्रमणः",
     "ReindexCompleted": "रेनडेक्स पूरा किया",
-    "RemovedFromCache": "कैश से निकाला गया",
+    "RemovedFromCache": "संचय से निकाला गया और पुनः अनुक्रमित किया गया",
     "RemoveFromCacheConfirmation": "क्या आप वाकई इस आइटम को कैश से निकालना चाहते हैं?",
-    "ReIndexDocumentConfirmation": "क्या आप वाकई इस आइटम को फिर से दिखाना चाहते हैं?",
+    "ReIndexDocumentConfirmation": "क्या आप वाकई \"{0}\" को फिर से अनुक्रमित करना चाहते हैं?",
     "DeleteFromDatabase": "डेटाबेस से हटाएं",
     "Deleted": "हटाए गए",
     "Search": "खोज",
@@ -55,6 +55,7 @@
     "LanguageCode": "भाषा कोड",
     "FileName": "फ़ाइल का नाम",
     "LastCachedTime": "कैश समय",
-    "Project": "परियोजना"
+    "Project": "परियोजना",
+    "RemoveCacheAndReIndexConfirmation": "दस्u200Dतावेज़ \"{0}\" को संचय से हटा दिया जाएगा और पुन: अनुक्रमित किया जाएगा। क्या आप पुष्टि करते हैं?"
   }
 }

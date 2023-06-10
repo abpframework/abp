@@ -121,7 +121,7 @@ public class CommentingViewComponent : AbpViewComponent
         public string EntityType { get; set; }
 
         public string EntityId { get; set; }
-        
+
         public IEnumerable<string> ReferralLinks { get; set; }
 
         public string LoginUrl { get; set; }

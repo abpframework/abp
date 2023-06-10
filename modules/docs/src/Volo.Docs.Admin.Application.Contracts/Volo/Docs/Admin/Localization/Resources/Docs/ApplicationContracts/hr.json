@@ -37,12 +37,12 @@
         "DisplayName:LanguageCode": "Jezični kod",
         "DisplayName:Version": "Verzija",
         "Documents": "Dokumenti",
-        "RemoveFromCache": "Ukloni iz predmemorije",
+        "RemoveFromCache": "Ukloni iz predmemorije i ponovno indeksiraj",
         "Reindex": "Ponovno indeksiranje",
         "ReindexCompleted": "Ponovno indeksiranje dovršeno",
-        "RemovedFromCache": "Uklonjeno iz predmemorije",
+        "RemovedFromCache": "Uklonjeno iz predmemorije i ponovno indeksirano",
         "RemoveFromCacheConfirmation": "Jeste li sigurni da želite ukloniti ovu stavku iz predmemorije?",
-        "ReIndexDocumentConfirmation": "Jeste li sigurni da želite ponovno indeksirati ovu stavku?",
+        "ReIndexDocumentConfirmation": "Jeste li sigurni da želite ponovno indeksirati \"{0}\"?",
         "DeleteFromDatabase": "Izbriši iz baze podataka",
         "Deleted": "Izbrisano",
         "Search": "Pretraga",
@@ -56,6 +56,7 @@
         "FileName": "Naziv datoteke",
         "LastCachedTime": "Vrijeme predmemorije",
         "Project": "Projekt",
-        "AdvancedFilters": "Napredni filtri"
+        "AdvancedFilters": "Napredni filtri",
+        "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" bit će uklonjen iz predmemorije i ponovno indeksiran. Potvrđujete li?"
     }
 }

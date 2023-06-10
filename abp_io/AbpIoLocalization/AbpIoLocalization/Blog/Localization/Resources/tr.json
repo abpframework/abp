@@ -1,7 +1,7 @@
 {
   "culture": "tr",
   "texts": {
-    "AbpTitle": "ABP Framework - Açık Kaynak Web Uygulama Çerçevesi",
+    "AbpTitle": "Tüm Blog Yazılarını Oku",
     "AbpDescription": "ABP, AspNet Core tabanlı web uygulaması geliştirmeye odaklanan açık kaynaklı bir uygulama çerçevesidir. Kendinizi tekrar etmeyin, kendi iş kodunuza odaklanın."
   }
 }

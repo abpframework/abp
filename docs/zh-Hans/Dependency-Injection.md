@@ -270,16 +270,16 @@ using (var scope = _serviceProvider.CreateScope())
 
 ## 高级特性
 
-### IServiceCollection.OnRegistred 事件
+### IServiceCollection.OnRegistered 事件
 
-你可能想在注册到依赖注入的每个服务上执行一个操作, 在你的模块的 `PreConfigureServices` 方法中, 使用 `OnRegistred` 方法注册一个回调(callback) , 如下所示:
+你可能想在注册到依赖注入的每个服务上执行一个操作, 在你的模块的 `PreConfigureServices` 方法中, 使用 `OnRegistered` 方法注册一个回调(callback) , 如下所示:
 
 ````csharp
 public class AppModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(ctx =>
+        context.Services.OnRegistered(ctx =>
         {
             var type = ctx.ImplementationType;
             //...
@@ -295,7 +295,7 @@ public class AppModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(ctx =>
+        context.Services.OnRegistered(ctx =>
         {
             if (ctx.ImplementationType.IsDefined(typeof(MyLogAttribute), true))
             {
@@ -308,7 +308,7 @@ public class AppModule : AbpModule
 
 这个示例判断一个服务类是否具有 `MyLogAttribute` 特性, 如果有的话就添加一个 `MyLogInterceptor` 到拦截器集合中.
 
-> 注意, 如果服务类公开了多于一个服务或接口, `OnRegistred` 回调(callback)可能被同一服务类多次调用. 因此, 较安全的方法是使用 `Interceptors.TryAdd` 方法而不是 `Interceptors.Add` 方法. 请参阅动态代理(dynamic proxying)/拦截器 [文档](Dynamic-Proxying-Interceptors.md).
+> 注意, 如果服务类公开了多于一个服务或接口, `OnRegistered` 回调(callback)可能被同一服务类多次调用. 因此, 较安全的方法是使用 `Interceptors.TryAdd` 方法而不是 `Interceptors.Add` 方法. 请参阅动态代理(dynamic proxying)/拦截器 [文档](Dynamic-Proxying-Interceptors.md).
 
 ## 第三方提供程序
 

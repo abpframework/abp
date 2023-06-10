@@ -48,6 +48,7 @@
     "Search": "Leita",
     "ItemWillBeDeletedMessageWithFormat": "{0} verður eytt!",
     "ItemWillBeDeletedMessage": "Þessum lið verður eytt!",
-    "ManageYourAccount": "Stillingar notandaaðgangs"
+    "ManageYourAccount": "Stillingar notandaaðgangs",
+    "OthersGroup": "Annað"
   }
 }

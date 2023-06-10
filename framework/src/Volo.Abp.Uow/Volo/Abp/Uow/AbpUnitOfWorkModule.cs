@@ -7,6 +7,6 @@ public class AbpUnitOfWorkModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
+        context.Services.OnRegistered(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
     }
 }

@@ -42,7 +42,7 @@ public class AbpDataModule : AbpModule
     {
         var contributors = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IDataSeedContributor).IsAssignableFrom(context.ImplementationType))
             {

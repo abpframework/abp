@@ -125,6 +125,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             output.Attributes.Add("data-autocomplete-selected-item-value", TagHelper.AutocompleteSelectedItemValue);
             output.Attributes.Add("data-autocomplete-allow-clear", TagHelper.AllowClear);
             output.Attributes.Add("data-autocomplete-placeholder", TagHelper.Placeholder);
+            output.Attributes.Add("data-autocomplete-parent-selector", TagHelper.AutocompleteParentSelector);
         }
     }
 
@@ -182,7 +183,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             var label = new TagBuilder("label");
             label.AddCssClass("form-label");
             label.Attributes.Add("for", GetIdAttributeValue(selectTag));
-            label.InnerHtml.AppendHtml(TagHelper.Label);
+            label.InnerHtml.AppendHtml(_encoder.Encode(TagHelper.Label));
 
             return label.ToHtmlString() + GetRequiredSymbol(context, output);
         }
@@ -197,7 +198,9 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             return "";
         }
 
-        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>" : "";
+        var isHaveRequiredAttribute = context.AllAttributes.Any(a => a.Name == "required");
+
+        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null || isHaveRequiredAttribute ? "<span> * </span>" : "";
     }
 
     protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
