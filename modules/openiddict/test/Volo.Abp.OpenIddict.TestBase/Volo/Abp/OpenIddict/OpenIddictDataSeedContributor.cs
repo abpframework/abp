@@ -25,9 +25,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
     private readonly IClock _clock;
 
     public OpenIddictDataSeedContributor(
-        IOpenIddictApplicationManager applicationManager, 
+        IOpenIddictApplicationManager applicationManager,
         IOpenIddictScopeManager scopeManager,
-        IOpenIddictTokenManager tokenManager, 
+        IOpenIddictTokenManager tokenManager,
         IOpenIddictAuthorizationManager authorizationManager,
         IClock clock,
         AbpOpenIddictTestData testData)
@@ -65,7 +65,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 "TestScope1Resource"
             }
         }));
-        
+
         await _scopeManager.CreateAsync(await GetOpenIddictScopeModelAsync(_testData.Scope2Id, new OpenIddictScopeDescriptor()
         {
             Name = _testData.Scope2Name,
@@ -89,10 +89,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         await _scopeManager.PopulateAsync(scope, scopeDescriptor);
         return scope;
     }
-    
+
     private async Task CreateApplicationsAsync()
     {
-        await _applicationManager.CreateAsync(await GetOpenIddictApplicationModelAsync(_testData.App1Id, new OpenIddictApplicationDescriptor
+        await _applicationManager.CreateAsync(await GetOpenIddictApplicationModelAsync(_testData.App1Id, new AbpApplicationDescriptor
         {
             ClientId = _testData.App1ClientId,
             ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
@@ -137,10 +137,12 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 OpenIddictConstants.Permissions.Scopes.Phone,
 
                 OpenIddictConstants.Permissions.Prefixes.Scope + _testData.Scope1Name
-            }
-        })); 
-        
-        await _applicationManager.CreateAsync(await GetOpenIddictApplicationModelAsync(_testData.App2Id, new OpenIddictApplicationDescriptor
+            },
+            ClientUri = "https://abp.io/TestApplication",
+            LogoUri = "https://abp.io/TestApplication.png"
+        }));
+
+        await _applicationManager.CreateAsync(await GetOpenIddictApplicationModelAsync(_testData.App2Id, new AbpApplicationDescriptor
         {
             ClientId = _testData.App2ClientId,
             ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
@@ -186,7 +188,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
                 OpenIddictConstants.Permissions.Prefixes.Scope + _testData.Scope1Name,
                 OpenIddictConstants.Permissions.Prefixes.Scope + _testData.Scope2Name,
-            }
+            },
+            ClientUri = "https://abp.io/TestApplication2",
+            LogoUri = "https://abp.io/TestApplication2.png"
         }));
     }
 
@@ -211,7 +215,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             ExpirationDate = _clock.Now.AddDays(-30),
             CreationDate = _clock.Now.AddDays(-30)
         }));
-        
+
         await _tokenManager.CreateAsync(await GetOpenIddictTokenModelAsync(_testData.Token2Id, new OpenIddictTokenDescriptor
         {
             ApplicationId = _testData.App2Id.ToString(),
@@ -240,9 +244,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             Subject = "TestSubject1",
             Type = OpenIddictConstants.AuthorizationTypes.Permanent,
             CreationDate = _clock.Now.AddDays(-30)
-     
+
         }));
-        
+
         await _authorizationManager.CreateAsync(await GetOpenIddictAuthorizationModelAsync(_testData.Authorization2Id, new OpenIddictAuthorizationDescriptor
         {
             ApplicationId = _testData.App2Id.ToString(),
@@ -252,7 +256,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             CreationDate = _clock.Now
         }));
     }
-    
+
     private async Task<OpenIddictAuthorizationModel> GetOpenIddictAuthorizationModelAsync(Guid id, OpenIddictAuthorizationDescriptor authorizationDescriptor)
     {
         var authorization = new OpenIddictAuthorizationModel{Id = id};
