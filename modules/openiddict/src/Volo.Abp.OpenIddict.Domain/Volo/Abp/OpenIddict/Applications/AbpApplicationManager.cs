@@ -44,8 +44,8 @@ public class AbpApplicationManager : OpenIddictApplicationManager<OpenIddictAppl
 
         if (descriptor is AbpApplicationDescriptor model)
         {
-            application.ClientUri = model.ClientUri;
-            application.LogoUri = model.LogoUri;
+            model.ClientUri = application.ClientUri;
+            model.LogoUri = application.LogoUri;
         }
     }
 
