@@ -6,16 +6,16 @@ namespace Volo.Abp.Tracing;
 
 public class DefaultCorrelationIdProvider : ICorrelationIdProvider, ISingletonDependency
 {
-    private readonly AsyncLocal<string> _currentCorrelationId = new AsyncLocal<string>();
+    private readonly AsyncLocal<string?> _currentCorrelationId = new AsyncLocal<string?>();
 
-    private string CorrelationId => _currentCorrelationId.Value ?? GetDefaultCorrelationId();
+    private string? CorrelationId => _currentCorrelationId.Value;
 
-    public virtual string Get()
+    public virtual string? Get()
     {
         return CorrelationId;
     }
 
-    public virtual IDisposable Change(string correlationId)
+    public virtual IDisposable Change(string? correlationId)
     {
         var parent = CorrelationId;
         _currentCorrelationId.Value = correlationId;
@@ -23,10 +23,5 @@ public class DefaultCorrelationIdProvider : ICorrelationIdProvider, ISingletonDe
         {
             _currentCorrelationId.Value = parent;
         });
-    }
-
-    protected virtual string GetDefaultCorrelationId()
-    {
-        return Guid.NewGuid().ToString("N");
     }
 }
