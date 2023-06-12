@@ -54,7 +54,7 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
         var document = JsonDocument.Parse(data);
         var objects = document.RootElement.EnumerateObject().ToList();
         return objects.Count == 2 &&
-               objects.Any(x => x.Name.Equals("correlationId", StringComparison.CurrentCultureIgnoreCase)) &&
-               objects.Any(x => x.Name.Equals("data", StringComparison.CurrentCultureIgnoreCase));
+               objects.Any(x => x.Name.Equals("data", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("correlationId", StringComparison.CurrentCultureIgnoreCase));
     }
 }
