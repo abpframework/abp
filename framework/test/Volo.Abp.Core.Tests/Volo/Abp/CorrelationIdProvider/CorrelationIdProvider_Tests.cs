@@ -18,8 +18,8 @@ public class CorrelationIdProvider_Tests
             await application.InitializeAsync();
 
             var correlationIdProvider = application.ServiceProvider.GetRequiredService<ICorrelationIdProvider>();
-            var currentCorrelationId = correlationIdProvider.Get();
-            currentCorrelationId.ShouldNotBeNull();
+
+            correlationIdProvider.Get().ShouldBeNull();
 
             var correlationId = Guid.NewGuid().ToString("N");
             using (correlationIdProvider.Change(correlationId))
@@ -27,8 +27,7 @@ public class CorrelationIdProvider_Tests
                 correlationIdProvider.Get().ShouldBe(correlationId);
             }
 
-            //The default correlation id always changes.
-            correlationIdProvider.Get().ShouldNotBe(currentCorrelationId);
+            correlationIdProvider.Get().ShouldBeNull();
         }
     }
 }
