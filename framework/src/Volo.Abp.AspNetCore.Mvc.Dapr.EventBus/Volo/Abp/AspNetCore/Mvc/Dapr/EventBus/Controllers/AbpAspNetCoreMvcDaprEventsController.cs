@@ -34,7 +34,7 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
 
         var distributedEventBus = HttpContext.RequestServices.GetRequiredService<DaprDistributedEventBus>();
 
-        if (data.Contains("Data") && data.Contains("CorrelationId")) //TODO: Check the json with JSON Schema.
+        if (IsAbpDaprEventData(data))
         {
             var abpDaprEventData = daprSerializer.Deserialize(data, typeof(AbpDaprEventData<>).MakeGenericType(distributedEventBus.GetEventType(topic)));
             var eventData = abpDaprEventData.GetType().GetProperties().First(x => x.Name == "Data").GetValue(abpDaprEventData);
@@ -47,5 +47,14 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
             await distributedEventBus.TriggerHandlersAsync(id, distributedEventBus.GetEventType(topic), eventData, null);
         }
         return Ok();
+    }
+
+    protected  virtual bool IsAbpDaprEventData(string data)
+    {
+        var document = JsonDocument.Parse(data);
+        var objects = document.RootElement.EnumerateObject().ToList();
+        return objects.Count == 2 &&
+               objects.Any(x => x.Name.Equals("correlationId", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("data", StringComparison.CurrentCultureIgnoreCase));
     }
 }
