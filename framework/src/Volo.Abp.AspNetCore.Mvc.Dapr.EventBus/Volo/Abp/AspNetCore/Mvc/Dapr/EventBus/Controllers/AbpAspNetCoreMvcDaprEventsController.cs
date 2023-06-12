@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -32,9 +33,19 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
         }
 
         var distributedEventBus = HttpContext.RequestServices.GetRequiredService<DaprDistributedEventBus>();
-        var eventData = daprSerializer.Deserialize(data, distributedEventBus.GetEventType(topic));
-        string correlationId = null;
-        await distributedEventBus.TriggerHandlersAsync(id, distributedEventBus.GetEventType(topic), eventData, correlationId);
+
+        if (data.Contains("Data") && data.Contains("CorrelationId")) //TODO: Check the json with JSON Schema.
+        {
+            var abpDaprEventData = daprSerializer.Deserialize(data, typeof(AbpDaprEventData<>).MakeGenericType(distributedEventBus.GetEventType(topic)));
+            var eventData = abpDaprEventData.GetType().GetProperties().First(x => x.Name == "Data").GetValue(abpDaprEventData);
+            var correlationId = abpDaprEventData.GetType().GetProperties().First(x => x.Name == "CorrelationId").GetValue(abpDaprEventData) as string;
+            await distributedEventBus.TriggerHandlersAsync(id, distributedEventBus.GetEventType(topic), eventData, correlationId);
+        }
+        else
+        {
+            var eventData = daprSerializer.Deserialize(data, distributedEventBus.GetEventType(topic));
+            await distributedEventBus.TriggerHandlersAsync(id, distributedEventBus.GetEventType(topic), eventData, null);
+        }
         return Ok();
     }
 }
