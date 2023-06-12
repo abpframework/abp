@@ -19,5 +19,5 @@ public partial class ExtensionProperties<TEntityType, TResourceType> : Component
     public TEntityType Entity { get; set; }
     
     [Parameter]
-    public bool? EditForm { get; set; }
+    public ExtensionPropertyModalType? ModalType { get; set; }
 }
