@@ -856,7 +856,6 @@
     "MVC": "MVC",
     "HowItWorks_Page_Title": "How it works?",
     "HowItWorks_Page_Description": "ABP Framework extends the .NET platform. So, anything you can do with a plain .NET solution is already possible with the ABP Framework. That makes it easy to get started with a low learning curve.",
-    "HowItWorks": "How it works?",
     "HowItWorks_Description1": "ABP Framework extends the .NET platform. So, anything you can do with a plain .NET solution is already possible with the ABP Framework. That makes it easy to get started with a low learning curve.",
     "HowItWorks_Description2": "Once you start learning and using the ABP Framework features, developing your software will be much more enjoyable than ever.",
     "HowItWorks_Description3": "This page basically explains how you use the ABP.IO Platform as a .NET developer.",
@@ -868,8 +867,7 @@
     "MicroserviceSolutionTemplate": "Microservice solution template",
     "CreateEmptySolutionAndUseAbp": "Or create a new empty .NET solution and install ABP NuGet & NPM <a href=\"https://abp.io/packages\" target=\"_blank\">packages</a> yourself.",
     "CreatingSolutionWithMultipleOptions": "There are multiple User Interface and Database options while creating a new solution.",
-    "DatabaseOptions": "Database Options",
-    "UIOptions": "UI Options",
+    "UIFrameworkOptions": "UI Framework Options",
     "DotnetSolutionWithoutDependency": "Now, you have a regular .NET solution in your local computer that has no dependency to a cloud platform or external service.",
     "CheckTheDocumentForDetails": "You can check the <a href=\"{0}\" target=\"_blank\">{1}</a> document for details.",
     "UIAndDatabaseIndependent": "ABP can work with any UI and any database provider supported by .NET. \n However, these UI and database providers are pre-integrated and well documented.",
@@ -893,7 +891,8 @@
     "HavingTrouble": "Having Trouble?",
     "HavingTrouble_Description1": "Do you have problems with developing your solution? We are here! Use the ABP Support platform \n or send an email to get help directly from the Core ABP Framework team members.",
     "WeAreHereToHelp_Description1": "You can browse our help topics or search in the frequently asked questions, \n or you can ask us a question by using the contact form.",
-    "AllModules": "All Modules",
-    "AllModules_Description1": "Account, Audit Logging, CMS Kit, Forms, GDPR, Identity, Identity Server UI, Language Management, LeptonX Theme and more..."
+    "OtherModules": "Other Modules",
+    "OtherModules_Description1": "Account, Audit Logging, Chat , CMS Kit,File Management , Forms, GDPR, Identity, Language Management, Payment , Saas and more...",
+    "HowItWorks_DatabaseProviderOptions": "Database provider options"
   }
 }
