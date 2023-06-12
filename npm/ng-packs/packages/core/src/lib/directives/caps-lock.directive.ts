@@ -9,14 +9,14 @@ export class TrackCapsLockDirective {
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
-    this.capsLock.emit(this.capS(event));
+    this.capsLock.emit(this.isCapsLockOpen(event));
   }
   @HostListener('window:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent): void {
-    this.capsLock.emit(this.capS(event));
+    this.capsLock.emit(this.isCapsLockOpen(event));
   }
 
-  capS(e) {
+  isCapsLockOpen(e): boolean {
     var s = String.fromCharCode(e.which);
     if (
       (s.toUpperCase() === s && s.toLowerCase() !== s && e.shiftKey) ||
