@@ -61,7 +61,7 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
         Dictionary<string, object> globalContext,
         object model = null)
     {
-        var templateDefinition = TemplateDefinitionManager.Get(templateName);
+        var templateDefinition = await TemplateDefinitionManager.GetAsync(templateName);
 
         var renderedContent = await RenderSingleTemplateAsync(
             templateDefinition,
