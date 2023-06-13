@@ -12,7 +12,7 @@ import { SettingManagementConfigModule } from '@abp/ng.setting-management/config
 import { TenantManagementConfigModule } from '@abp/ng.tenant-management/config';
 import { FeatureManagementModule } from '@abp/ng.feature-management';
 import { AccountConfigModule } from '@abp/ng.account/config';
-import { AccountLayoutModule } from '@abp/ng.theme.lepton-x/account/account-layout';
+import { AccountLayoutModule } from '@abp/ng.theme.lepton-x/account';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
