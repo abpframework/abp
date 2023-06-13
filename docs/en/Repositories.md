@@ -140,9 +140,9 @@ public async Task<List<PersonDto>> GetListAsync(string filter)
 
 Any standard LINQ method can be used over the `IQueryable` returned from the repository.
 
-> This sample uses `ToList()` method, but it is **strongly suggested to use the asynchronous methods** to perform database queries, like `ToListAsync()` for this example.
->
-> See the **IQueryable & Async Operations** section to learn how you can do it.
+> This sample uses `ToList()` method, but it is **strongly suggested to use the asynchronous methods** to perform database queries, like `ToListAsync()` for this example. See the **`IQueryable` & Async Operations** section to learn how you can do it.
+
+> **Exposing `IQueryable` to outside of a repository** class may leak your data access logic to the application layer. If you want to strictly follow the **layered architecture** principles, you can consider to implement a **custom repository** class and wrap your data access logic inside your repository class. You can see [EF Core](Entity-Framework-Core.md) or [MongoDb](MongoDB.md) document to learn how to create custom repository classes for your application.
 
 ### Bulk Operations
 
