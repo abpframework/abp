@@ -6,12 +6,12 @@ namespace Volo.Abp.TextTemplating;
 
 public interface ITemplateDefinitionManager
 {
-    [NotNull]
+    [ItemNotNull]
     Task<TemplateDefinition> GetAsync([NotNull] string name);
 
-    [NotNull]
+    [ItemNotNull]
     Task<IReadOnlyList<TemplateDefinition>> GetAllAsync();
 
-    [CanBeNull]
+    [ItemCanBeNull]
     Task<TemplateDefinition> GetOrNullAsync(string name);
 }
