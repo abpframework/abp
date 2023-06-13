@@ -131,7 +131,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await PublishToDaprAsync(eventType, eventData, CorrelationIdProvider.Get());
+        await PublishToDaprAsync(eventType, eventData, null, CorrelationIdProvider.Get());
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -163,7 +163,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
             });
         }
 
-        await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.GetCorrelationId());
+        await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.Id, outgoingEvent.GetCorrelationId());
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -182,11 +182,11 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
                 });
             }
 
-            await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.GetCorrelationId());
+            await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.Id, outgoingEvent.GetCorrelationId());
         }
     }
 
-    public virtual async Task TriggerHandlersAsync(string messageId, Type eventType, object eventData, string correlationId)
+    public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, string messageId = null, string correlationId = null)
     {
         if (await AddToInboxAsync(messageId, EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, correlationId))
         {
@@ -248,15 +248,15 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         return EventTypes.GetOrDefault(eventName);
     }
 
-    protected virtual async Task PublishToDaprAsync(Type eventType, object eventData, string correlationId)
+    protected virtual async Task PublishToDaprAsync(Type eventType, object eventData, Guid? messageId = null, string correlationId = null)
     {
-        await PublishToDaprAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData, correlationId);
+        await PublishToDaprAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData, messageId, correlationId);
     }
 
-    protected virtual async Task PublishToDaprAsync(string eventName, object eventData, string correlationId)
+    protected virtual async Task PublishToDaprAsync(string eventName, object eventData, Guid? messageId = null, string correlationId = null)
     {
         var client = DaprClientFactory.Create();
-        var data = AbpDaprEventData<object>.Create(eventData, correlationId);
+        var data = new AbpDaprEventData(DaprEventBusOptions.PubSubName, eventName, (messageId ?? GuidGenerator.Create()).ToString("N"), Serializer.SerializeToString(eventData), correlationId);
         await client.PublishEventAsync(pubsubName: DaprEventBusOptions.PubSubName, topicName: eventName, data: data);
     }
 

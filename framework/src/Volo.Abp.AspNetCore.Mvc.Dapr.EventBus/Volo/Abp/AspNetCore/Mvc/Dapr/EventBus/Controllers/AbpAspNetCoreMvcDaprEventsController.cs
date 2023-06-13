@@ -22,7 +22,6 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
         var daprSerializer = HttpContext.RequestServices.GetRequiredService<IDaprSerializer>();
         var body = (await JsonDocument.ParseAsync(HttpContext.Request.Body));
 
-        var id = body.RootElement.GetProperty("id").GetString();
         var pubSubName = body.RootElement.GetProperty("pubsubname").GetString();
         var topic = body.RootElement.GetProperty("topic").GetString();
         var data = body.RootElement.GetProperty("data").GetRawText();
@@ -36,16 +35,16 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
 
         if (IsAbpDaprEventData(data))
         {
-            var abpDaprEventData = daprSerializer.Deserialize(data, typeof(AbpDaprEventData<>).MakeGenericType(distributedEventBus.GetEventType(topic)));
-            var eventData = abpDaprEventData.GetType().GetProperties().First(x => x.Name == "Data").GetValue(abpDaprEventData);
-            var correlationId = abpDaprEventData.GetType().GetProperties().First(x => x.Name == "CorrelationId").GetValue(abpDaprEventData) as string;
-            await distributedEventBus.TriggerHandlersAsync(id, distributedEventBus.GetEventType(topic), eventData, correlationId);
+            var daprEventData = daprSerializer.Deserialize(data, typeof(AbpDaprEventData)).As<AbpDaprEventData>();
+            var eventData = daprSerializer.Deserialize(daprEventData.JsonData, distributedEventBus.GetEventType(daprEventData.Topic));
+            await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(daprEventData.Topic), eventData, daprEventData.MessageId, daprEventData.CorrelationId);
         }
         else
         {
             var eventData = daprSerializer.Deserialize(data, distributedEventBus.GetEventType(topic));
-            await distributedEventBus.TriggerHandlersAsync(id, distributedEventBus.GetEventType(topic), eventData, null);
+            await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(topic), eventData);
         }
+
         return Ok();
     }
 
@@ -53,8 +52,11 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
     {
         var document = JsonDocument.Parse(data);
         var objects = document.RootElement.EnumerateObject().ToList();
-        return objects.Count == 2 &&
-               objects.Any(x => x.Name.Equals("data", StringComparison.CurrentCultureIgnoreCase)) &&
-               objects.Any(x => x.Name.Equals("correlationId", StringComparison.CurrentCultureIgnoreCase));
+        return objects.Count == 5 &&
+               objects.Any(x => x.Name.Equals("PubSubName", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("Topic", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("MessageId", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("jsonData", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("CorrelationId", StringComparison.CurrentCultureIgnoreCase));
     }
 }

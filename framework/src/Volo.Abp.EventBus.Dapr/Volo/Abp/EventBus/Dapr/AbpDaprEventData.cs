@@ -1,27 +1,23 @@
-using System;
-using System.Reflection;
-
 namespace Volo.Abp.EventBus.Dapr;
 
-public class AbpDaprEventData<TData>
+public class AbpDaprEventData
 {
-    public TData Data { get; set; }
+    public string PubSubName { get; set; }
+
+    public string Topic { get; set; }
+
+    public string MessageId { get; set; }
+
+    public string JsonData { get; set; }
 
     public string CorrelationId { get; set; }
 
-    public AbpDaprEventData(TData data, string correlationId)
+    public AbpDaprEventData(string pubSubName, string topic, string messageId, string jsonData, string correlationId)
     {
-        Data = data;
+        PubSubName = pubSubName;
+        Topic = topic;
+        MessageId = messageId;
+        JsonData = jsonData;
         CorrelationId = correlationId;
-    }
-
-    public static object Create(object data, string correlationId)
-    {
-        return Activator.CreateInstance(
-            typeof(AbpDaprEventData<>).MakeGenericType(data.GetType()),
-            BindingFlags.Instance | BindingFlags.Public,
-            binder: null,
-            new object[] { data, correlationId },
-            culture: null)!;
     }
 }
