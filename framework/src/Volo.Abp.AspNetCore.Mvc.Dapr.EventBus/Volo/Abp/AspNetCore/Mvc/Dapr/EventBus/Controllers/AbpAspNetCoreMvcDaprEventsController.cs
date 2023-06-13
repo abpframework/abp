@@ -56,7 +56,7 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
                objects.Any(x => x.Name.Equals("PubSubName", StringComparison.CurrentCultureIgnoreCase)) &&
                objects.Any(x => x.Name.Equals("Topic", StringComparison.CurrentCultureIgnoreCase)) &&
                objects.Any(x => x.Name.Equals("MessageId", StringComparison.CurrentCultureIgnoreCase)) &&
-               objects.Any(x => x.Name.Equals("jsonData", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("JsonData", StringComparison.CurrentCultureIgnoreCase)) &&
                objects.Any(x => x.Name.Equals("CorrelationId", StringComparison.CurrentCultureIgnoreCase));
     }
 }
