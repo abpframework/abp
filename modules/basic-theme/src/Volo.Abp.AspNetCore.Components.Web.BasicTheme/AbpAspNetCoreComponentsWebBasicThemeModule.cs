@@ -21,3 +21,4 @@ public class AbpAspNetCoreComponentsWebBasicThemeModule : AbpModule
             }
         });
     }
+}
