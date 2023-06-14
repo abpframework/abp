@@ -7,10 +7,9 @@
 } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  ApplicationRef,
   ComponentFactoryResolver,
   ComponentRef,
-  EmbeddedViewRef,
+  inject,
   Injectable,
   Injector,
   RendererFactory2,
@@ -23,57 +22,12 @@ import { ErrorScreenErrorCodes, HttpErrorConfig } from '../models/common';
 import { Confirmation } from '../models/confirmation';
 import { ConfirmationService } from '../services/confirmation.service';
 import { HTTP_ERROR_HANDLER } from '../tokens/http-error.token';
-
-export const DEFAULT_ERROR_MESSAGES = {
-  defaultError: {
-    title: 'An error has occurred!',
-    details: 'Error detail not sent by server.',
-  },
-  defaultError401: {
-    title: 'You are not authenticated!',
-    details: 'You should be authenticated (sign in) in order to perform this operation.',
-  },
-  defaultError403: {
-    title: 'You are not authorized!',
-    details: 'You are not allowed to perform this operation.',
-  },
-  defaultError404: {
-    title: 'Resource not found!',
-    details: 'The resource requested could not found on the server.',
-  },
-  defaultError500: {
-    title: 'Internal server error',
-    details: 'Error detail not sent by server.',
-  },
-};
-
-export const DEFAULT_ERROR_LOCALIZATIONS = {
-  defaultError: {
-    title: 'AbpUi::DefaultErrorMessage',
-    details: 'AbpUi::DefaultErrorMessageDetail',
-  },
-  defaultError401: {
-    title: 'AbpUi::DefaultErrorMessage401',
-    details: 'AbpUi::DefaultErrorMessage401Detail',
-  },
-  defaultError403: {
-    title: 'AbpUi::DefaultErrorMessage403',
-    details: 'AbpUi::DefaultErrorMessage403Detail',
-  },
-  defaultError404: {
-    title: 'AbpUi::DefaultErrorMessage404',
-    details: 'AbpUi::DefaultErrorMessage404Detail',
-  },
-  defaultError500: {
-    title: 'AbpUi::500Message',
-    details: 'AbpUi::DefaultErrorMessage',
-  },
-};
+import { CreateErrorComponentService } from '../services/create-error-component.service';
+import { CanCreateCustomErrorService } from '../services/can-create-custom-error.service';
+import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/error';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorHandler {
-  componentRef: ComponentRef<HttpErrorWrapperComponent> | null = null;
-
   protected httpErrorHandler = this.injector.get(HTTP_ERROR_HANDLER, (_, err: HttpErrorResponse) =>
     throwError(err),
   );
@@ -88,6 +42,8 @@ export class ErrorHandler {
   private authService: AuthService;
   
 
+  private createErrorComponentService = inject(CreateErrorComponentService);
+  private canCreateCustomErrorService = inject(CanCreateCustomErrorService);
   constructor(protected injector: Injector) {
     this.httpErrorReporter = injector.get(HttpErrorReporterService);
     this.routerEvents = injector.get(RouterEvents);
@@ -100,7 +56,6 @@ export class ErrorHandler {
 
     this.listenToRestError();
     this.listenToRouterError();
-    this.listenToRouterDataResolved();
   }
 
   protected listenToRouterError() {
@@ -108,16 +63,6 @@ export class ErrorHandler {
       .getNavigationEvents('Error')
       .pipe(filter(this.filterRouteErrors))
       .subscribe(() => this.show404Page());
-  }
-
-  protected listenToRouterDataResolved() {
-    this.routerEvents
-      .getEvents(ResolveEnd)
-      .pipe(filter(() => !!this.componentRef))
-      .subscribe(() => {
-        this.componentRef?.destroy();
-        this.componentRef = null;
-      });
   }
 
   protected listenToRestError() {
@@ -151,7 +96,8 @@ export class ErrorHandler {
       return;
     }
 
-    if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
+    const isAbpErrorFormat = err.headers.get('_AbpErrorFormat');
+    if (err instanceof HttpErrorResponse && isAbpErrorFormat) {
       const confirmation$ = this.showErrorWithRequestBody(body);
 
       if (err.status === 401) {
@@ -302,47 +248,11 @@ export class ErrorHandler {
   }
 
   createErrorComponent(instance: Partial<HttpErrorWrapperComponent>) {
-    const renderer = this.rendererFactory.createRenderer(null, null);
-    const host = renderer.selectRootElement(document.body, true);
-
-    this.componentRef = this.cfRes
-      .resolveComponentFactory(HttpErrorWrapperComponent)
-      .create(this.injector);
-
-    for (const key in instance) {
-      /* istanbul ignore else */
-      if (Object.prototype.hasOwnProperty.call(this.componentRef.instance, key)) {
-        (this.componentRef.instance as any)[key] = (instance as any)[key];
-      }
-    }
-
-    this.componentRef.instance.hideCloseIcon = !!this.httpErrorConfig.errorScreen?.hideCloseIcon;
-    const appRef = this.injector.get(ApplicationRef);
-
-    if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
-      this.componentRef.instance.cfRes = this.cfRes;
-      this.componentRef.instance.appRef = appRef;
-      this.componentRef.instance.injector = this.injector;
-      this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen?.component;
-    }
-
-    appRef.attachView(this.componentRef.hostView);
-    renderer.appendChild(host, (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
-
-    const destroy$ = new Subject<void>();
-    this.componentRef.instance.destroy$ = destroy$;
-    destroy$.subscribe(() => {
-      this.componentRef?.destroy();
-      this.componentRef = null;
-    });
+    this.createErrorComponentService.execute(instance);
   }
 
   canCreateCustomError(status: ErrorScreenErrorCodes): boolean {
-    return !!(
-      this.httpErrorConfig?.errorScreen?.component &&
-      this.httpErrorConfig?.errorScreen?.forWhichErrors &&
-      this.httpErrorConfig?.errorScreen?.forWhichErrors.indexOf(status) > -1
-    );
+    return this.canCreateCustomErrorService.execute(status);
   }
 
   protected filterRestErrors = ({ status }: HttpErrorResponse): boolean => {
