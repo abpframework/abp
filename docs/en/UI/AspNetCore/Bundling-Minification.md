@@ -12,7 +12,7 @@ ABP offers a simple, dynamic, powerful, modular and built-in way.
 
 > This package is already installed by default with the startup templates. So, most of the time, you don't need to install it manually.
 
-If you're not using a startup template, then execute the following command in the folder that contains the .csproj file of your project:
+If you're not using a startup template, you can use the [ABP CLI](../../CLI.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
 
 ````
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
@@ -294,7 +294,7 @@ Using the built-in contributors for standard packages;
 
 > This package is already installed by default in the startup templates. So, most of the time, you don't need to install it manually.
 
-If you're not using a startup template, then execute the following command in the folder that contains the .csproj file of your project:
+If you're not using a startup template, you can use the [ABP CLI](../../CLI.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
 
 ````
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Packages
