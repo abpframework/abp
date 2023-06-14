@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.AspNetCore.Components.Web.Theming.Theming;
 
-public class 
+public class AbpThemingOptions
 {
     public ThemeDictionary Themes { get; }
 
