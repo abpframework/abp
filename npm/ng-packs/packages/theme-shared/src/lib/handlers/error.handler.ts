@@ -1,34 +1,28 @@
-import { AuthService, HttpErrorReporterService } from '@abp/ng.core';
+import { HttpErrorReporterService } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, Injector } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, filter, switchMap } from 'rxjs/operators';
-import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
-import { CustomHttpErrorHandlerService, HttpErrorConfig } from '../models/common';
+import { CustomHttpErrorHandlerService } from '../models/common';
 import { Confirmation } from '../models/confirmation';
 import { ConfirmationService } from '../services/confirmation.service';
 import { CUSTOM_ERROR_HANDLERS, HTTP_ERROR_HANDLER } from '../tokens/http-error.token';
-import { CreateErrorComponentService } from '../services/create-error-component.service';
 import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/error';
 import { RouterErrorHandlerService } from '../services/router-error-handler.service';
+import { HTTP_ERROR_CONFIG } from '../tokens/http-error.token';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorHandler {
-  protected httpErrorHandler = this.injector.get(HTTP_ERROR_HANDLER, (_, err: HttpErrorResponse) =>
-    throwError(err),
-  );
-  protected httpErrorReporter: HttpErrorReporterService;
-  protected confirmationService: ConfirmationService;
-  protected httpErrorConfig: HttpErrorConfig;
-
-  private createErrorComponentService = inject(CreateErrorComponentService);
-  private customErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
+  protected httpErrorReporter = inject(HttpErrorReporterService);
+  protected confirmationService = inject(ConfirmationService);
   private routerErrorHandlerService = inject(RouterErrorHandlerService);
+  protected httpErrorConfig = inject(HTTP_ERROR_CONFIG);
+  private customErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
+  private defaultHttpErrorHandler = (_, err: HttpErrorResponse) => throwError(() => err);
+  protected httpErrorHandler =
+    inject(HTTP_ERROR_HANDLER, { optional: true }) || this.defaultHttpErrorHandler;
 
   constructor(protected injector: Injector) {
-    this.httpErrorReporter = injector.get(HttpErrorReporterService);
-    this.confirmationService = injector.get(ConfirmationService);
-    this.httpErrorConfig = injector.get('HTTP_ERROR_CONFIG');
     this.listenToRestError();
     this.listenToRouterError();
   }
@@ -43,7 +37,7 @@ export class ErrorHandler {
       .subscribe();
   }
 
-  private executeErrorHandler = (error: any) => {
+  private executeErrorHandler = (error: HttpErrorResponse) => {
     const errHandler = this.httpErrorHandler(this.injector, error);
     const isObservable = errHandler instanceof Observable;
     const response = isObservable ? errHandler : of(null);
@@ -89,10 +83,6 @@ export class ErrorHandler {
       hideCancelBtn: true,
       yesText: 'AbpAccount::Close',
     });
-  }
-
-  createErrorComponent(instance: Partial<HttpErrorWrapperComponent>) {
-    this.createErrorComponentService.execute(instance);
   }
 
   protected filterRestErrors = ({ status }: HttpErrorResponse): boolean => {

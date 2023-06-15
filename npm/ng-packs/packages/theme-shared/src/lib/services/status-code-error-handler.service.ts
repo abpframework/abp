@@ -40,25 +40,19 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
     const canCreateCustomError = this.canCreateCustomErrorService.execute(this.status);
     switch (this.status) {
       case 401:
-        if (canCreateCustomError) {
-          this.showPage();
-        } else {
-          this.showConfirmation(title, message).subscribe(() => this.navigateToLogin());
-        }
-        break;
-
-      case 403:
-        this.showPage();
-        break;
-
       case 404:
         if (canCreateCustomError) {
           this.showPage();
-        } else {
-          this.showConfirmation(title, message).subscribe();
+          break;
         }
+        this.showConfirmation(title, message).subscribe(() => {
+          if (this.status === 401) {
+            this.navigateToLogin();
+          }
+        });
         break;
 
+      case 403:
       case 500:
         this.showPage();
         break;
