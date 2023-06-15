@@ -8,16 +8,14 @@ import {
   Injector,
   RendererFactory2,
 } from '@angular/core';
-import {
-  ErrorScreenErrorCodes,
-  HTTP_ERROR_CONFIG,
-  HttpErrorWrapperComponent,
-} from '@abp/ng.theme.shared';
 import { Subject } from 'rxjs';
 import { ResolveEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { RouterEvents } from '@abp/ng.core';
 import { CanCreateCustomErrorService } from './can-create-custom-error.service';
+import { HTTP_ERROR_CONFIG } from '../tokens/http-error.token';
+import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
+import { ErrorScreenErrorCodes } from '../models/common';
 
 @Injectable({ providedIn: 'root' })
 export class CreateErrorComponentService {

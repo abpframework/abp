@@ -27,3 +27,9 @@ export type HttpErrorHandler = (
 ) => Observable<any>;
 
 export type LocaleDirection = 'ltr' | 'rtl';
+
+export interface CustomHttpErrorHandlerService {
+  readonly priority: number;
+  canHandle(error: unknown): boolean;
+  execute();
+}

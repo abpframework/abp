@@ -43,3 +43,11 @@ export const DEFAULT_ERROR_LOCALIZATIONS = {
     details: 'AbpUi::DefaultErrorMessage',
   },
 };
+
+export const CUSTOM_HTTP_ERROR_HANDLER_PRIORITY = Object.freeze({
+  veryLow: -9,
+  low: -9,
+  normal: 0,
+  high: 9,
+  veryHigh: 99,
+});

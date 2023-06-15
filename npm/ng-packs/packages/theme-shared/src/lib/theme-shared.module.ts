@@ -29,7 +29,7 @@ import { NgxDatatableListDirective } from './directives/ngx-datatable-list.direc
 import { DocumentDirHandlerService } from './handlers/document-dir.handler';
 import { ErrorHandler } from './handlers/error.handler';
 import { RootParams } from './models/common';
-import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
+import { errorHandlersProviders, NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
@@ -58,7 +58,7 @@ const declarationsWithExports = [
   ModalCloseDirective,
   AbpVisibleDirective,
   FormInputComponent,
-  FormCheckboxComponent
+  FormCheckboxComponent,
 ];
 
 @NgModule({
@@ -69,7 +69,6 @@ const declarationsWithExports = [
     NgbPaginationModule,
     EllipsisModule,
     CardModule,
-
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
   exports: [
@@ -77,11 +76,11 @@ const declarationsWithExports = [
     EllipsisModule,
     NgxValidateCoreModule,
     CardModule,
-    ...declarationsWithExports
+    ...declarationsWithExports,
   ],
   providers: [DatePipe],
 })
-export class BaseThemeSharedModule { }
+export class BaseThemeSharedModule {}
 
 @NgModule({
   imports: [BaseThemeSharedModule],
@@ -144,6 +143,7 @@ export class ThemeSharedModule {
             ...(confirmationIcons || {}),
           },
         },
+        errorHandlersProviders,
       ],
     };
   }

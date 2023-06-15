@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ErrorScreenErrorCodes } from '../models/common';
-import { HTTP_ERROR_CONFIG } from '@abp/ng.theme.shared';
+import { HTTP_ERROR_CONFIG } from '../tokens/http-error.token';
 
 @Injectable({
   providedIn: 'root',
