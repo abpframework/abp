@@ -21,6 +21,8 @@ Open a command line window in the folder of the `Web` or `HttpApi.Host` project 
 abp add-package Volo.Abp.Swashbuckle
 ```
 
+> If you haven't done it yet, you first need to install the [ABP CLI](../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Swashbuckle).
+
 ### Manual Installation
 
 If you want to manually install;
