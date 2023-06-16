@@ -3,7 +3,6 @@ export * from './nav-items.service';
 export * from './page-alert.service';
 export * from './toaster.service';
 export * from './user-menu.service';
-export * from './can-create-custom-error.service';
 export * from './create-error-component.service';
 export * from './abp-format-error-handler.service';
 export * from './tenant-resolve-error-handler.service';

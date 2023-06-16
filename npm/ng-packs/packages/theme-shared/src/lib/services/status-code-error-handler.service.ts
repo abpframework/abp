@@ -3,18 +3,16 @@ import {
   CUSTOM_HTTP_ERROR_HANDLER_PRIORITY,
   DEFAULT_ERROR_LOCALIZATIONS,
   DEFAULT_ERROR_MESSAGES,
-} from '../constants/error';
+} from '../constants/default-errors';
 import { AuthService, LocalizationParam } from '@abp/ng.core';
 import { Observable } from 'rxjs';
 import { inject, Injectable } from '@angular/core';
 import { ConfirmationService } from './confirmation.service';
-import { CanCreateCustomErrorService } from './can-create-custom-error.service';
 import { CreateErrorComponentService } from './create-error-component.service';
 
 @Injectable({ providedIn: 'root' })
 export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerService {
   private readonly confirmationService = inject(ConfirmationService);
-  private readonly canCreateCustomErrorService = inject(CanCreateCustomErrorService);
   private readonly createErrorComponentService = inject(CreateErrorComponentService);
   private readonly authService = inject(AuthService);
   readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.normal;
@@ -37,7 +35,7 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
       defaultValue: DEFAULT_ERROR_MESSAGES[key]?.details,
     };
 
-    const canCreateCustomError = this.canCreateCustomErrorService.execute(this.status);
+    const canCreateCustomError = this.createErrorComponentService.canCreateCustomError(this.status);
     switch (this.status) {
       case 401:
       case 404:

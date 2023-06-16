@@ -4,7 +4,7 @@ import { RouterEvents } from '@abp/ng.core';
 import { NavigationError } from '@angular/router';
 import { HTTP_ERROR_CONFIG } from '../tokens/';
 import { CreateErrorComponentService } from '../services';
-import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/error';
+import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/default-errors';
 
 @Injectable({ providedIn: 'root' })
 export class RouterErrorHandlerService {

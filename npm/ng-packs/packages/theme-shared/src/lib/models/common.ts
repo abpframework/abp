@@ -21,10 +21,7 @@ export interface HttpErrorConfig {
   };
 }
 
-export type HttpErrorHandler = (
-  injector: Injector,
-  httpError: HttpErrorResponse,
-) => Observable<any>;
+export type HttpErrorHandler = (httpError: HttpErrorResponse) => Observable<any>;
 
 export type LocaleDirection = 'ltr' | 'rtl';
 

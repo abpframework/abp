@@ -3,13 +3,13 @@ import {
   CUSTOM_HTTP_ERROR_HANDLER_PRIORITY,
   DEFAULT_ERROR_LOCALIZATIONS,
   DEFAULT_ERROR_MESSAGES,
-} from '../constants/error';
+} from '../constants/default-errors';
 import { inject, Injectable } from '@angular/core';
 import { CreateErrorComponentService } from './create-error-component.service';
 
 @Injectable({ providedIn: 'root' })
 export class UnknownStatusCodeErrorHandlerService implements CustomHttpErrorHandlerService {
-  priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.normal;
+  readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.normal;
   private statusText = 'Unknown Error';
   private message = '';
   private createErrorComponentService = inject(CreateErrorComponentService);

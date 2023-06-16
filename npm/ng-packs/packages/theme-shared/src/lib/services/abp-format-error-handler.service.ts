@@ -4,11 +4,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { getErrorFromRequestBody } from '../utils/error.utils';
 import { CustomHttpErrorHandlerService } from '../models/common';
 import { ConfirmationService } from '../services/confirmation.service';
-import { CUSTOM_HTTP_ERROR_HANDLER_PRIORITY } from '../constants/error';
+import { CUSTOM_HTTP_ERROR_HANDLER_PRIORITY } from '../constants/default-errors';
 
 @Injectable({ providedIn: 'root' })
 export class AbpFormatErrorHandlerService implements CustomHttpErrorHandlerService {
-  priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.high;
+  readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.high;
   private confirmationService = inject(ConfirmationService);
   private authService = inject(AuthService);
   private error: HttpErrorResponse | undefined = undefined;

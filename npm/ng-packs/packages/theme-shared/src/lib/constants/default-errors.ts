@@ -45,7 +45,7 @@ export const DEFAULT_ERROR_LOCALIZATIONS = {
 };
 
 export const CUSTOM_HTTP_ERROR_HANDLER_PRIORITY = Object.freeze({
-  veryLow: -9,
+  veryLow: -99,
   low: -9,
   normal: 0,
   high: 9,

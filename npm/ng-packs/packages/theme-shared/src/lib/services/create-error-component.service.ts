@@ -12,7 +12,6 @@ import { Subject } from 'rxjs';
 import { ResolveEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { RouterEvents } from '@abp/ng.core';
-import { CanCreateCustomErrorService } from './can-create-custom-error.service';
 import { HTTP_ERROR_CONFIG } from '../tokens/http-error.token';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { ErrorScreenErrorCodes } from '../models/common';
@@ -23,18 +22,26 @@ export class CreateErrorComponentService {
   protected cfRes = inject(ComponentFactoryResolver);
   private routerEvents = inject(RouterEvents);
   private injector = inject(Injector);
-  private canCreateCustomErrorService = inject(CanCreateCustomErrorService);
   private httpErrorConfig = inject(HTTP_ERROR_CONFIG);
 
   componentRef: ComponentRef<HttpErrorWrapperComponent> | null = null;
 
-  protected getErrorHostElement() {
+  private getErrorHostElement() {
     return document.body;
+  }
+
+  public canCreateCustomError(status: ErrorScreenErrorCodes) {
+    return !!(
+      this.httpErrorConfig?.errorScreen?.component &&
+      this.httpErrorConfig?.errorScreen?.forWhichErrors &&
+      this.httpErrorConfig?.errorScreen?.forWhichErrors.indexOf(status) > -1
+    );
   }
 
   constructor() {
     this.listenToRouterDataResolved();
   }
+
   protected listenToRouterDataResolved() {
     this.routerEvents
       .getEvents(ResolveEnd)
@@ -48,6 +55,7 @@ export class CreateErrorComponentService {
   private isCloseIconHidden() {
     return !!this.httpErrorConfig.errorScreen?.hideCloseIcon;
   }
+
   execute(instance: Partial<HttpErrorWrapperComponent>) {
     const renderer = this.rendererFactory.createRenderer(null, null);
     const hostElement = this.getErrorHostElement();
@@ -67,7 +75,7 @@ export class CreateErrorComponentService {
     this.componentRef.instance.hideCloseIcon = this.isCloseIconHidden();
     const appRef = this.injector.get(ApplicationRef);
 
-    if (this.canCreateCustomErrorService.execute(instance.status as ErrorScreenErrorCodes)) {
+    if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;
       this.componentRef.instance.appRef = appRef;
       this.componentRef.instance.injector = this.injector;

@@ -7,19 +7,19 @@ import { CustomHttpErrorHandlerService } from '../models/common';
 import { Confirmation } from '../models/confirmation';
 import { ConfirmationService } from '../services/confirmation.service';
 import { CUSTOM_ERROR_HANDLERS, HTTP_ERROR_HANDLER } from '../tokens/http-error.token';
-import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/error';
+import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/default-errors';
 import { RouterErrorHandlerService } from '../services/router-error-handler.service';
 import { HTTP_ERROR_CONFIG } from '../tokens/http-error.token';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorHandler {
-  protected httpErrorReporter = inject(HttpErrorReporterService);
-  protected confirmationService = inject(ConfirmationService);
+  private httpErrorReporter = inject(HttpErrorReporterService);
+  private confirmationService = inject(ConfirmationService);
   private routerErrorHandlerService = inject(RouterErrorHandlerService);
   protected httpErrorConfig = inject(HTTP_ERROR_CONFIG);
   private customErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
   private defaultHttpErrorHandler = (_, err: HttpErrorResponse) => throwError(() => err);
-  protected httpErrorHandler =
+  private httpErrorHandler =
     inject(HTTP_ERROR_HANDLER, { optional: true }) || this.defaultHttpErrorHandler;
 
   constructor(protected injector: Injector) {
@@ -34,7 +34,9 @@ export class ErrorHandler {
   protected listenToRestError() {
     this.httpErrorReporter.reporter$
       .pipe(filter(this.filterRestErrors), switchMap(this.executeErrorHandler))
-      .subscribe();
+      .subscribe(err => {
+        this.handleError(err);
+      });
   }
 
   private executeErrorHandler = (error: HttpErrorResponse) => {

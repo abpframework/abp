@@ -1,5 +1,5 @@
 import { LocalizationParam } from '@abp/ng.core';
-import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/error';
+import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/default-errors';
 
 export function getErrorFromRequestBody(body: { details?: string; message?: string } | undefined) {
   let message: LocalizationParam;
