@@ -14,25 +14,42 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore.Migrations;
 
-public abstract class DatabaseMigrationEventHandlerBase<TDbContext> : ITransientDependency
+public abstract class DatabaseMigrationEventHandlerBase<TDbContext> :
+    IDistributedEventHandler<TenantCreatedEto>,
+    IDistributedEventHandler<TenantConnectionStringUpdatedEto>,
+    IDistributedEventHandler<ApplyDatabaseMigrationsEto>,
+    ITransientDependency
     where TDbContext : DbContext, IEfCoreDbContext
 {
-    protected const string TryCountPropertyName = "TryCount";
-    protected const int MaxEventTryCount = 3;
+    protected string DatabaseName { get; }
+
+    protected const string TryCountPropertyName = "__TryCount";
+
+    protected int MaxEventTryCount { get; set; } = 3;
+
+    /// <summary>
+    /// As milliseconds.
+    /// </summary>
+    protected int MinValueToWaitOnFailure { get; set; } = 5000;
+
+    /// <summary>
+    /// As milliseconds.
+    /// </summary>
+    protected int MaxValueToWaitOnFailure { get; set; } = 15000;
+
     protected ICurrentTenant CurrentTenant { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected ITenantStore TenantStore { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
     protected ILogger<DatabaseMigrationEventHandlerBase<TDbContext>> Logger { get; }
-    protected string DatabaseName { get; }
 
     protected DatabaseMigrationEventHandlerBase(
-        ILoggerFactory loggerFactory,
+        string databaseName,
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         ITenantStore tenantStore,
         IDistributedEventBus distributedEventBus,
-        string databaseName)
+        ILoggerFactory loggerFactory)
     {
         CurrentTenant = currentTenant;
         UnitOfWorkManager = unitOfWorkManager;
@@ -41,6 +58,120 @@ public abstract class DatabaseMigrationEventHandlerBase<TDbContext> : ITransient
         DistributedEventBus = distributedEventBus;
 
         Logger = loggerFactory.CreateLogger<DatabaseMigrationEventHandlerBase<TDbContext>>();
+    }
+
+    public virtual async Task HandleEventAsync(ApplyDatabaseMigrationsEto eventData)
+    {
+        if (eventData.DatabaseName != DatabaseName)
+        {
+            return;
+        }
+
+        var schemaMigrated = false;
+        try
+        {
+            schemaMigrated = await MigrateDatabaseSchemaAsync(eventData.TenantId);
+            await SeedAsync(eventData.TenantId);
+
+            if (schemaMigrated)
+            {
+                await DistributedEventBus.PublishAsync(
+                    new AppliedDatabaseMigrationsEto
+                    {
+                        DatabaseName = DatabaseName,
+                        TenantId = eventData.TenantId
+                    }
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorOnApplyDatabaseMigrationAsync(eventData, ex);
+        }
+
+        await AfterApplyDatabaseMigrations(eventData, schemaMigrated);
+    }
+
+    protected virtual Task AfterApplyDatabaseMigrations(ApplyDatabaseMigrationsEto eventData, bool schemaMigrated)
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual async Task HandleEventAsync(TenantCreatedEto eventData)
+    {
+        var schemaMigrated = false;
+        try
+        {
+            schemaMigrated = await MigrateDatabaseSchemaAsync(eventData.Id);
+            await SeedAsync(eventData.Id);
+
+            if (schemaMigrated)
+            {
+                await DistributedEventBus.PublishAsync(
+                    new AppliedDatabaseMigrationsEto
+                    {
+                        DatabaseName = DatabaseName,
+                        TenantId = eventData.Id
+                    }
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorTenantCreatedAsync(eventData, ex);
+        }
+
+        await AfterTenantCreated(eventData, schemaMigrated);
+    }
+
+    protected virtual Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual async Task HandleEventAsync(TenantConnectionStringUpdatedEto eventData)
+    {
+        if (eventData.ConnectionStringName != DatabaseName &&
+            eventData.ConnectionStringName != Volo.Abp.Data.ConnectionStrings.DefaultConnectionStringName ||
+            eventData.NewValue.IsNullOrWhiteSpace())
+        {
+            return;
+        }
+
+        var schemaMigrated = false;
+        try
+        {
+            schemaMigrated = await MigrateDatabaseSchemaAsync(eventData.Id);
+            await SeedAsync(eventData.Id);
+
+            if (schemaMigrated)
+            {
+                await DistributedEventBus.PublishAsync(
+                    new AppliedDatabaseMigrationsEto
+                    {
+                        DatabaseName = DatabaseName,
+                        TenantId = eventData.Id
+                    }
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorTenantConnectionStringUpdatedAsync(eventData, ex);
+        }
+
+        await AfterTenantConnectionStringUpdated(eventData, schemaMigrated);
+    }
+
+    protected virtual Task AfterTenantConnectionStringUpdated(TenantConnectionStringUpdatedEto eventData,
+        bool schemaMigrated)
+    {
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task SeedAsync(Guid? tenantId)
+    {
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -83,7 +214,8 @@ public abstract class DatabaseMigrationEventHandlerBase<TDbContext> : ITransient
                         !tenantConfiguration.ConnectionStrings.GetOrDefault(DatabaseName).IsNullOrWhiteSpace())
                     {
                         //Migrating the tenant database (only if tenant has a separate database)
-                        Logger.LogInformation($"Migrating separate database of tenant. Database Name = {DatabaseName}, TenantId = {tenantId}");
+                        Logger.LogInformation(
+                            $"Migrating separate database of tenant. Database Name = {DatabaseName}, TenantId = {tenantId}");
                         result = await MigrateDatabaseSchemaWithDbContextAsync();
                     }
                 }
@@ -102,15 +234,17 @@ public abstract class DatabaseMigrationEventHandlerBase<TDbContext> : ITransient
         var tryCount = IncrementEventTryCount(eventData);
         if (tryCount <= MaxEventTryCount)
         {
-            Logger.LogWarning($"Could not apply database migrations. Re-queueing the operation. TenantId = {eventData.TenantId}, Database Name = {eventData.DatabaseName}.");
+            Logger.LogWarning(
+                $"Could not apply database migrations. Re-queueing the operation. TenantId = {eventData.TenantId}, Database Name = {eventData.DatabaseName}.");
             Logger.LogException(exception, LogLevel.Warning);
 
-            await Task.Delay(RandomHelper.GetRandom(5000, 15000));
+            await Task.Delay(RandomHelper.GetRandom(MinValueToWaitOnFailure, MaxValueToWaitOnFailure));
             await DistributedEventBus.PublishAsync(eventData);
         }
         else
         {
-            Logger.LogError($"Could not apply database migrations. Canceling the operation. TenantId = {eventData.TenantId}, DatabaseName = {eventData.DatabaseName}.");
+            Logger.LogError(
+                $"Could not apply database migrations. Canceling the operation. TenantId = {eventData.TenantId}, DatabaseName = {eventData.DatabaseName}.");
             Logger.LogException(exception);
         }
     }
@@ -122,7 +256,8 @@ public abstract class DatabaseMigrationEventHandlerBase<TDbContext> : ITransient
         var tryCount = IncrementEventTryCount(eventData);
         if (tryCount <= MaxEventTryCount)
         {
-            Logger.LogWarning($"Could not perform tenant created event. Re-queueing the operation. TenantId = {eventData.Id}, TenantName = {eventData.Name}.");
+            Logger.LogWarning(
+                $"Could not perform tenant created event. Re-queueing the operation. TenantId = {eventData.Id}, TenantName = {eventData.Name}.");
             Logger.LogException(exception, LogLevel.Warning);
 
             await Task.Delay(RandomHelper.GetRandom(5000, 15000));
@@ -130,7 +265,8 @@ public abstract class DatabaseMigrationEventHandlerBase<TDbContext> : ITransient
         }
         else
         {
-            Logger.LogError($"Could not perform tenant created event. Canceling the operation. TenantId = {eventData.Id}, TenantName = {eventData.Name}.");
+            Logger.LogError(
+                $"Could not perform tenant created event. Canceling the operation. TenantId = {eventData.Id}, TenantName = {eventData.Name}.");
             Logger.LogException(exception);
         }
     }
@@ -142,7 +278,8 @@ public abstract class DatabaseMigrationEventHandlerBase<TDbContext> : ITransient
         var tryCount = IncrementEventTryCount(eventData);
         if (tryCount <= MaxEventTryCount)
         {
-            Logger.LogWarning($"Could not perform tenant connection string updated event. Re-queueing the operation. TenantId = {eventData.Id}, TenantName = {eventData.Name}.");
+            Logger.LogWarning(
+                $"Could not perform tenant connection string updated event. Re-queueing the operation. TenantId = {eventData.Id}, TenantName = {eventData.Name}.");
             Logger.LogException(exception, LogLevel.Warning);
 
             await Task.Delay(RandomHelper.GetRandom(5000, 15000));
@@ -150,32 +287,10 @@ public abstract class DatabaseMigrationEventHandlerBase<TDbContext> : ITransient
         }
         else
         {
-            Logger.LogError($"Could not perform tenant connection string updated event. Canceling the operation. TenantId = {eventData.Id}, TenantName = {eventData.Name}.");
+            Logger.LogError(
+                $"Could not perform tenant connection string updated event. Canceling the operation. TenantId = {eventData.Id}, TenantName = {eventData.Name}.");
             Logger.LogException(exception);
         }
-    }
-
-    protected virtual async Task QueueTenantMigrationsAsync()
-    {
-        await DistributedEventBus.PublishAsync(
-            new DatabaseMigrationsAvailableEto
-            {
-                DatabaseName = DatabaseName
-            }
-        );
-        /*
-        var tenants = await TenantStore.GetListWithSeparateConnectionStringAsync();
-        foreach (var tenant in tenants)
-        {
-            await DistributedEventBus.PublishAsync(
-                new ApplyDatabaseMigrationsEto
-                {
-                    DatabaseName = DatabaseName,
-                    TenantId = tenant.Id
-                }
-            );
-        }
-        */
     }
 
     private static int GetEventTryCount(EtoBase eventData)
