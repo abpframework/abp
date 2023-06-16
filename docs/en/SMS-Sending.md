@@ -17,6 +17,8 @@ Open a command line window in the folder of the project (.csproj file) and type 
 abp add-package Volo.Abp.Sms
 ```
 
+> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Sms).
+
 ### Manual Installation
 
 If you want to manually install;

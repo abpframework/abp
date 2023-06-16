@@ -10,9 +10,13 @@ Virtual File Explorer Module provided a simple UI to view all files in [virtual 
 
 #### 1- Use ABP CLI
 
-It is recommended to use the ABP CLI to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
+It is recommended to use the [ABP CLI](../CLI.md) to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
 
-`abp add-module Volo.VirtualFileExplorer`
+```
+abp add-module Volo.VirtualFileExplorer
+```
+
+> If you haven't done it yet, you first need to install the [ABP CLI](../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.VirtualFileExplorer.Web).
 
 #### 2- Manually install
 
