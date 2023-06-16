@@ -461,6 +461,9 @@
     "UnitPrice": "Unit Price",
     "OverallDiscountAmount": "Overall Discount Amount",
     "DiscountAmount": "Discount Amount",
-    "FullChangeHistory": "Full Change History"
+    "FullChangeHistory": "Full Change History",
+    "Permission:RefreshReleaseLogs": "Refresh Release Logs",
+    "ReleaseLogs": "Release Logs",
+    "AuthorUserName": "Author User Name"
   }
 }

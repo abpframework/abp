@@ -18,11 +18,13 @@ If you [create a new console application with Visual Studio](https://learn.micro
 
 This example uses the [top level statements](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/top-level-statements), so it consists of only a single line of code.
 
-The first step is to install the [Volo.Abp.Core](https://www.nuget.org/packages/Volo.Abp.Core) NuGet package, which is the most core NuGet package of the ABP framework. You can install it using the [Package Manager Console](https://learn.microsoft.com/en-us/nuget/consume-packages/install-use-packages-powershell) in Visual Studio:
+The first step is to install the [Volo.Abp.Core](https://www.nuget.org/packages/Volo.Abp.Core) NuGet package, which is the most core NuGet package of the ABP framework. You can install it using the ABP CLI. Execute the following command in the folder of the .csproj file that you want to install the package on:
 
 ````bash
-Install-Package Volo.Abp.Core
+abp add-package Volo.Abp.Core
 ````
+
+> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
 
 Alternatively, you can use a command-line terminal in the root folder of the project (the folder containing the `MyConsoleDemo.csproj` file, for this example):
 

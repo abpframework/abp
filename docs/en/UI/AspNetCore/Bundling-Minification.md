@@ -12,27 +12,13 @@ ABP offers a simple, dynamic, powerful, modular and built-in way.
 
 > This package is already installed by default with the startup templates. So, most of the time, you don't need to install it manually.
 
-Install the `Volo.Abp.AspNetCore.Mvc.UI.Bundling` nuget package to your project:
+If you're not using a startup template, you can use the [ABP CLI](../../CLI.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
 
 ````
-install-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
+abp add-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
 ````
 
-Then you can add the `AbpAspNetCoreMvcUiBundlingModule` dependency to your module:
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpAspNetCoreMvcUiBundlingModule))]
-    public class MyWebModule : AbpModule
-    {
-        //...
-    }
-}
-````
+> If you haven't done it yet, you first need to install the [ABP CLI](../../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Bundling).
 
 ## Razor Bundling Tag Helpers
 
@@ -308,28 +294,13 @@ Using the built-in contributors for standard packages;
 
 > This package is already installed by default in the startup templates. So, most of the time, you don't need to install it manually.
 
-Standard package contributors are defined in the `Volo.Abp.AspNetCore.Mvc.UI.Packages` NuGet package. 
-To install it to your project:
+If you're not using a startup template, you can use the [ABP CLI](../../CLI.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
 
 ````
-install-package Volo.Abp.AspNetCore.Mvc.UI.Packages
+abp add-package Volo.Abp.AspNetCore.Mvc.UI.Packages
 ````
 
-Then add the `AbpAspNetCoreMvcUiPackagesModule` module dependency to your own module;
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpAspNetCoreMvcUiPackagesModule))]
-    public class MyWebModule : AbpModule
-    {
-        //...
-    }
-}
-````
+> If you haven't done it yet, you first need to install the [ABP CLI](../../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Packages).
 
 ### Bundle Inheritance
 

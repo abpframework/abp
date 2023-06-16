@@ -25,7 +25,6 @@ public class AbpValidateAuthorizedParty : AbpOpenIddictWildcardDomainBase<OpenId
     public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
     {
         Check.NotNull(context, nameof(context));
-        Check.NotNull(context.IdentityTokenHintPrincipal, nameof(context.IdentityTokenHintPrincipal));
 
         if (await CheckWildcardDomainAsync(context.PostLogoutRedirectUri))
         {

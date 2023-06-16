@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
@@ -10,6 +11,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Features;
+using Volo.Abp.Json.SystemTextJson.Modifiers;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
@@ -297,13 +299,25 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
         IEnumerable<string> deletedFeatureGroups,
         IEnumerable<string> deletedFeatures)
     {
+        var jsonSerializerOptions = new JsonSerializerOptions
+        {
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver
+            {
+                Modifiers =
+                {
+                    new AbpIgnorePropertiesModifiers<FeatureGroupDefinitionRecord, Guid>().CreateModifyAction(x => x.Id),
+                    new AbpIgnorePropertiesModifiers<FeatureDefinitionRecord, Guid>().CreateModifyAction(x => x.Id)
+                }
+            }
+        };
+
         var stringBuilder = new StringBuilder();
 
         stringBuilder.Append("FeatureGroupRecords:");
-        stringBuilder.AppendLine(JsonSerializer.Serialize(featureGroupRecords));
+        stringBuilder.AppendLine(JsonSerializer.Serialize(featureGroupRecords, jsonSerializerOptions));
 
         stringBuilder.Append("FeatureRecords:");
-        stringBuilder.AppendLine(JsonSerializer.Serialize(featureRecords));
+        stringBuilder.AppendLine(JsonSerializer.Serialize(featureRecords, jsonSerializerOptions));
 
         stringBuilder.Append("DeletedFeatureGroups:");
         stringBuilder.AppendLine(deletedFeatureGroups.JoinAsString(","));

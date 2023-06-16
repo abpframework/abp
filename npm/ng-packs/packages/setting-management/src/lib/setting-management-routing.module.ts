@@ -1,11 +1,11 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
 import {
   AuthGuard,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
 } from '@abp/ng.core';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 import { SettingManagementComponent } from './components/setting-management.component';
 import { eSettingManagementComponents } from './enums/components';
 
@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: [AuthGuard],
+    canActivate: mapToCanActivate([AuthGuard]),
     children: [
       {
         path: '',

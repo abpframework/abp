@@ -21,13 +21,15 @@ public abstract class AbpOpenIddictStoreBase<TRepository>
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected AbpOpenIddictIdentifierConverter IdentifierConverter { get; }
+    protected IOpenIddictDbConcurrencyExceptionHandler ConcurrencyExceptionHandler { get; }
 
-    protected AbpOpenIddictStoreBase(TRepository repository, IUnitOfWorkManager unitOfWorkManager, IGuidGenerator guidGenerator, AbpOpenIddictIdentifierConverter identifierConverter)
+    protected AbpOpenIddictStoreBase(TRepository repository, IUnitOfWorkManager unitOfWorkManager, IGuidGenerator guidGenerator, AbpOpenIddictIdentifierConverter identifierConverter, IOpenIddictDbConcurrencyExceptionHandler concurrencyExceptionHandler)
     {
         Repository = repository;
         UnitOfWorkManager = unitOfWorkManager;
         GuidGenerator = guidGenerator;
         IdentifierConverter = identifierConverter;
+        ConcurrencyExceptionHandler = concurrencyExceptionHandler;
 
         Logger = NullLogger<AbpOpenIddictStoreBase<TRepository>>.Instance;
     }

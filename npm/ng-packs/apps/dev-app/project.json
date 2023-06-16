@@ -24,9 +24,9 @@
             "bundleName": "bootstrap-rtl.min"
           },
           {
-              "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "inject": true,
-              "bundleName": "bootstrap-ltr.min"
+            "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+            "inject": true,
+            "bundleName": "bootstrap-ltr.min"
           },
           {
             "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.css",

@@ -73,9 +73,9 @@ The following commands are for creating MVC UI projects:
   _Note that Public Website is only included in PRO templates._
   
 
-## Blazor
+## Blazor WebAssembly
 
-The following commands are for creating Blazor projects:
+The following commands are for creating Blazor WASM projects:
 
 * **Entity Framework Core**, no mobile app:
 
