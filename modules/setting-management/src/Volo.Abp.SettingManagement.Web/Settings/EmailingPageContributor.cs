@@ -29,7 +29,7 @@ public class EmailingPageContributor : SettingPageContributorBase
             )
         );
 
-        if (!context.ServiceProvider.GetRequiredService<IClock>().SupportsMultipleTimezone)
+        if (context.ServiceProvider.GetRequiredService<IClock>().SupportsMultipleTimezone)
         {
             context.Groups.Add(
                 new SettingPageGroup(
