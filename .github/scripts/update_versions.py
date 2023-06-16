@@ -45,7 +45,7 @@ def create_pr():
 
     pr.create_review_request(reviewers=["ebicoglu", "gizemmutukurt", "skoc10"])
 
-if __name__ == "__dev__":
+if __name__ == "__main__":
     should_create_pr = update_latest_versions()
     if should_create_pr:
         create_pr()
