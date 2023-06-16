@@ -5,7 +5,7 @@ import { AbpFormatErrorHandlerService } from '../services/abp-format-error-handl
 import { StatusCodeErrorHandlerService } from '../services/status-code-error-handler.service';
 import { UnknownStatusCodeErrorHandlerService } from '../services/unknown-status-code-error-handler.service';
 
-export const errorHandlersProviders: Provider[] = [
+export const ERROR_HANDLERS_PROVIDERS: Provider[] = [
   {
     provide: CUSTOM_ERROR_HANDLERS,
     multi: true,
