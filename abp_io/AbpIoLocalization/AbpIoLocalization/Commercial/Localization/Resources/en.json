@@ -893,6 +893,7 @@
     "WeAreHereToHelp_Description1": "You can browse our help topics or search in the frequently asked questions, \n or you can ask us a question by using the contact form.",
     "OtherModules": "Other Modules",
     "OtherModules_Description1": "Account, Audit Logging, Chat , CMS Kit,File Management , Forms, GDPR, Identity, Language Management, Payment , Saas and more...",
-    "HowItWorks_DatabaseProviderOptions": "Database provider options"
+    "HowItWorks_DatabaseProviderOptions": "Database provider options",
+    "SeeFAQ" : "See FAQ"
   }
 }
