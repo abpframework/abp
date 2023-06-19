@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -20,16 +21,31 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var correlationId = _correlationIdProvider.Get();
+        var correlationId = GetCorrelationIdFromRequest(context);
 
-        try
+        using (_correlationIdProvider.Change(correlationId))
         {
-            await next(context);
+            try
+            {
+                await next(context);
+            }
+            finally
+            {
+                CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
+            }
         }
-        finally
+    }
+
+    protected virtual string GetCorrelationIdFromRequest(HttpContext context)
+    {
+        string correlationId = context.Request.Headers[_options.HttpHeaderName];
+        if (correlationId.IsNullOrEmpty())
         {
-            CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
+            correlationId = Guid.NewGuid().ToString("N");
+            context.Request.Headers[_options.HttpHeaderName] = correlationId;
         }
+
+        return correlationId;
     }
 
     protected virtual void CheckAndSetCorrelationIdOnResponse(
