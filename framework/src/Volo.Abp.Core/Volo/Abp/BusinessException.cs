@@ -13,17 +13,17 @@ public class BusinessException : Exception,
     IHasErrorDetails,
     IHasLogLevel
 {
-    public string Code { get; set; }
+    public string? Code { get; set; }
 
-    public string Details { get; set; }
+    public string? Details { get; set; }
 
     public LogLevel LogLevel { get; set; }
 
     public BusinessException(
-        string code = null,
-        string message = null,
-        string details = null,
-        Exception innerException = null,
+        string? code = null,
+        string? message = null,
+        string? details = null,
+        Exception? innerException = null,
         LogLevel logLevel = LogLevel.Warning)
         : base(message, innerException)
     {

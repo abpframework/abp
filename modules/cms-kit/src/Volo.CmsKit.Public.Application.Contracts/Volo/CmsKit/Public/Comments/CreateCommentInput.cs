@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Comments;
 
 namespace Volo.CmsKit.Public.Comments;
 
 [Serializable]
-public class CreateCommentInput
+public class CreateCommentInput: ExtensibleObject
 {
     [Required]
     [DynamicStringLength(typeof(CommentConsts), nameof(CommentConsts.MaxTextLength))]
@@ -17,4 +18,6 @@ public class CreateCommentInput
     public Guid? CaptchaToken { get; set; }
     
     public int CaptchaAnswer { get; set; }
+    
+    public string Url { get; set; }
 }

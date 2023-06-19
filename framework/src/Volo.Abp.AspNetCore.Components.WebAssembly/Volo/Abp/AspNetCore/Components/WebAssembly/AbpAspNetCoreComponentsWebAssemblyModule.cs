@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly;
     typeof(AbpAspNetCoreMvcClientCommonModule),
     typeof(AbpUiModule),
     typeof(AbpAspNetCoreComponentsWebModule)
-    )]
+)]
 public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

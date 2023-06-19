@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -47,27 +45,8 @@ public partial class TokenController
         principal.SetScopes(request.GetScopes());
         principal.SetResources(await GetResourcesAsync(request.GetScopes()));
 
-        foreach (var claim in principal.Claims)
-        {
-            claim.SetDestinations(GetDestinations(claim));
-        }
+        await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-    }
-
-
-    protected virtual IEnumerable<string> GetDestinations(Claim claim)
-    {
-        // Note: by default, claims are NOT automatically included in the access and identity tokens.
-        // To allow OpenIddict to serialize them, you must attach them a destination, that specifies
-        // whether they should be included in access tokens, in identity tokens or in both.
-
-        return claim.Type switch {
-            OpenIddictConstants.Claims.PreferredUsername or OpenIddictConstants.Claims.Subject
-                => ImmutableArray.Create(OpenIddictConstants.Destinations.AccessToken,
-                    OpenIddictConstants.Destinations.IdentityToken),
-
-            _ => ImmutableArray.Create(OpenIddictConstants.Destinations.AccessToken)
-        };
     }
 }

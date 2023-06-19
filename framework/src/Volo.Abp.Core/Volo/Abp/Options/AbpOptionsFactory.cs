@@ -9,7 +9,7 @@ public class AbpOptionsFactory<TOptions> : IOptionsFactory<TOptions> where TOpti
 {
     private readonly IEnumerable<IConfigureOptions<TOptions>> _setups;
     private readonly IEnumerable<IPostConfigureOptions<TOptions>> _postConfigures;
-    private readonly IEnumerable<IValidateOptions<TOptions>> _validations;
+    private readonly IEnumerable<IValidateOptions<TOptions>>? _validations;
 
     public AbpOptionsFactory(
         IEnumerable<IConfigureOptions<TOptions>> setups,
@@ -22,7 +22,7 @@ public class AbpOptionsFactory<TOptions> : IOptionsFactory<TOptions> where TOpti
     public AbpOptionsFactory(
         IEnumerable<IConfigureOptions<TOptions>> setups,
         IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
-        IEnumerable<IValidateOptions<TOptions>> validations)
+        IEnumerable<IValidateOptions<TOptions>>? validations)
     {
         _setups = setups;
         _postConfigures = postConfigures;

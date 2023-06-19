@@ -6,6 +6,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.ObjectExtending;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
@@ -69,7 +70,7 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
         {
             MenuManager.SetPageUrl(menuItem, await PageRepository.GetAsync(input.PageId.Value));
         }
-
+        input.MapExtraPropertiesTo(menuItem);
         await MenuItemRepository.InsertAsync(menuItem);
 
         return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);
@@ -96,7 +97,7 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
         menuItem.ElementId = input.ElementId;
         menuItem.CssClass = input.CssClass;
         menuItem.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
-
+        input.MapExtraPropertiesTo(menuItem);
         await MenuItemRepository.UpdateAsync(menuItem);
 
         return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);
