@@ -28,6 +28,7 @@ using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.Infrastructure;
 using Volo.Abp.AspNetCore.Mvc.Json;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
@@ -201,6 +202,8 @@ public class AbpAspNetCoreMvcModule : AbpModule
         {
             options.DisableModule("abp");
         });
+
+        context.Services.Replace(ServiceDescriptor.Singleton<IHttpResponseStreamWriterFactory, AbpMemoryPoolHttpResponseStreamWriterFactory>());
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)

@@ -115,6 +115,16 @@ $(function (){
                 }
             },
             {
+                title: l("URL"),
+                data: "url",
+                render: function (data, type, row) {
+                    if (data !== null) {
+                        return '<a href="' + data + '#comment-'+ row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
+                    }
+                    return "";
+                }
+            },
+            {
                 title: l("Text"),
                 data: "text",
                 orderable: false,

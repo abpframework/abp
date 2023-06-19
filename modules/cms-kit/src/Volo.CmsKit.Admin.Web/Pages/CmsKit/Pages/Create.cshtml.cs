@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Pages;
 using Volo.CmsKit.Pages;
@@ -19,6 +20,7 @@ public class CreateModel : CmsKitAdminPageModel
     public CreateModel(IPageAdminAppService pageAdminAppService)
     {
         this.pageAdminAppService = pageAdminAppService;
+        ViewModel = new CreatePageViewModel();
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -31,7 +33,7 @@ public class CreateModel : CmsKitAdminPageModel
     }
 
     [AutoMap(typeof(CreatePageInputDto), ReverseMap = true)]
-    public class CreatePageViewModel
+    public class CreatePageViewModel : ExtensibleObject
     {
         [Required]
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]

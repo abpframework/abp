@@ -99,7 +99,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
         if (!filter.IsNullOrWhiteSpace())
         {
             mongoQueryable = mongoQueryable.Where(x =>
-                    x.Name.ToLower().Contains(filter) ||
+                    x.Name.ToLower().Contains(filter.ToLower()) ||
                     x.EntityType.ToLower().Contains(filter));
         }
 

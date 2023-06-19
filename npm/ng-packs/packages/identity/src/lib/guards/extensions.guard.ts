@@ -1,4 +1,9 @@
-import { ConfigStateService } from '@abp/ng.core';
+import { Injectable, inject } from '@angular/core';
+
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+
+import { ConfigStateService, IAbpGuard } from '@abp/ng.core';
 import {
   ExtensionsService,
   getObjectExtensionEntitiesFromStore,
@@ -6,18 +11,8 @@ import {
   mergeWithDefaultActions,
   mergeWithDefaultProps,
 } from '@abp/ng.theme.shared/extensions';
-import { Injectable, Injector } from '@angular/core';
-import { CanActivate } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, mapTo, tap } from 'rxjs/operators';
+
 import { eIdentityComponents } from '../enums/components';
-import {
-  IdentityCreateFormPropContributors,
-  IdentityEditFormPropContributors,
-  IdentityEntityActionContributors,
-  IdentityEntityPropContributors,
-  IdentityToolbarActionContributors,
-} from '../models/config-options';
 import {
   DEFAULT_IDENTITY_CREATE_FORM_PROPS,
   DEFAULT_IDENTITY_EDIT_FORM_PROPS,
@@ -32,60 +27,56 @@ import {
 } from '../tokens/extensions.token';
 
 @Injectable()
-export class IdentityExtensionsGuard implements CanActivate {
-  constructor(private injector: Injector) {}
+export class IdentityExtensionsGuard implements IAbpGuard {
+  protected readonly configState = inject(ConfigStateService);
+  protected readonly extensions = inject(ExtensionsService);
 
   canActivate(): Observable<boolean> {
-    const extensions: ExtensionsService = this.injector.get(ExtensionsService);
-    const actionContributors: IdentityEntityActionContributors =
-      this.injector.get(IDENTITY_ENTITY_ACTION_CONTRIBUTORS, null) || {};
-    const toolbarContributors: IdentityToolbarActionContributors =
-      this.injector.get(IDENTITY_TOOLBAR_ACTION_CONTRIBUTORS, null) || {};
-    const propContributors: IdentityEntityPropContributors =
-      this.injector.get(IDENTITY_ENTITY_PROP_CONTRIBUTORS, null) || {};
-    const createFormContributors: IdentityCreateFormPropContributors =
-      this.injector.get(IDENTITY_CREATE_FORM_PROP_CONTRIBUTORS, null) || {};
-    const editFormContributors: IdentityEditFormPropContributors =
-      this.injector.get(IDENTITY_EDIT_FORM_PROP_CONTRIBUTORS, null) || {};
+    const config = { optional: true };
 
-    const configState = this.injector.get(ConfigStateService);
-    return getObjectExtensionEntitiesFromStore(configState, 'Identity').pipe(
+    const actionContributors = inject(IDENTITY_ENTITY_ACTION_CONTRIBUTORS, config) || {};
+    const toolbarContributors = inject(IDENTITY_TOOLBAR_ACTION_CONTRIBUTORS, config) || {};
+    const propContributors = inject(IDENTITY_ENTITY_PROP_CONTRIBUTORS, config) || {};
+    const createFormContributors = inject(IDENTITY_CREATE_FORM_PROP_CONTRIBUTORS, config) || {};
+    const editFormContributors = inject(IDENTITY_EDIT_FORM_PROP_CONTRIBUTORS, config) || {};
+
+    return getObjectExtensionEntitiesFromStore(this.configState, 'Identity').pipe(
       map(entities => ({
         [eIdentityComponents.Roles]: entities.Role,
         [eIdentityComponents.Users]: entities.User,
       })),
-      mapEntitiesToContributors(configState, 'AbpIdentity'),
+      mapEntitiesToContributors(this.configState, 'AbpIdentity'),
       tap(objectExtensionContributors => {
         mergeWithDefaultActions(
-          extensions.entityActions,
+          this.extensions.entityActions,
           DEFAULT_IDENTITY_ENTITY_ACTIONS,
           actionContributors,
         );
         mergeWithDefaultActions(
-          extensions.toolbarActions,
+          this.extensions.toolbarActions,
           DEFAULT_IDENTITY_TOOLBAR_ACTIONS,
           toolbarContributors,
         );
         mergeWithDefaultProps(
-          extensions.entityProps,
+          this.extensions.entityProps,
           DEFAULT_IDENTITY_ENTITY_PROPS,
           objectExtensionContributors.prop,
           propContributors,
         );
         mergeWithDefaultProps(
-          extensions.createFormProps,
+          this.extensions.createFormProps,
           DEFAULT_IDENTITY_CREATE_FORM_PROPS,
           objectExtensionContributors.createForm,
           createFormContributors,
         );
         mergeWithDefaultProps(
-          extensions.editFormProps,
+          this.extensions.editFormProps,
           DEFAULT_IDENTITY_EDIT_FORM_PROPS,
           objectExtensionContributors.editForm,
           editFormContributors,
         );
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 }

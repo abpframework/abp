@@ -41,7 +41,7 @@ permissions:
 
 jobs:
   build-test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     if: ${{ !github.event.pull_request.draft }}
     steps:
     - uses: actions/checkout@v2
@@ -49,15 +49,19 @@ jobs:
       with:
         dotnet-version: 7.0.100
 
+    - name: chown
+      run: |
+        sudo chown -R $USER:$USER /home/runneradmin
+
     - name: Build All
-      run: .\build-all.ps1 -f
-      working-directory: .\build
-      shell: powershell
+      run: ./build-all.ps1
+      working-directory: ./build
+      shell: pwsh
 
     - name: Test All
-      run: .\test-all.ps1 -f
-      working-directory: .\build
-      shell: powershell
+      run: ./test-all.ps1
+      working-directory: ./build
+      shell: pwsh
 
     - name: Codecov
       uses: codecov/codecov-action@v2

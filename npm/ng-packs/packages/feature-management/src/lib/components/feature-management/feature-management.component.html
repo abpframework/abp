@@ -122,6 +122,7 @@
       iconClass="fa fa-refresh"
       [disabled]="modalBusy"
       (click)="resetToDefault()"
+      aria-hidden="true"
     >
       {{ 'AbpFeatureManagement::ResetToDefault' | abpLocalization }}
     </abp-button>
@@ -134,6 +135,7 @@
       iconClass="fa fa-check"
       [disabled]="modalBusy"
       (click)="save()"
+      aria-hidden="true"
     >
       {{ 'AbpFeatureManagement::Save' | abpLocalization }}
     </abp-button>

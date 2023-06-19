@@ -72,11 +72,22 @@
                 {
                     @if (column.Component != null)
                     {
-                        <DataGridColumn TItem="TItem" Field="@typeof(TItem).GetProperties().First().Name" Caption="@column.Title">
-                            <DisplayTemplate>
-                                @RenderCustomTableColumnComponent(column.Component, context)
-                            </DisplayTemplate>
-                        </DataGridColumn>
+                        @if (column.ValueConverter == null)
+                        {
+                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" Sortable="@column.Sortable" DisplayFormat="@column.DisplayFormat" DisplayFormatProvider="@column.DisplayFormatProvider" >
+                                <DisplayTemplate>
+                                    @RenderCustomTableColumnComponent(column.Component, context)
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        }
+                        else
+                        {
+                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" Sortable="@column.Sortable">
+                                <DisplayTemplate>
+                                    @RenderCustomTableColumnComponent(column.Component, context)
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        }
                     }
                     else
                     {

@@ -8,7 +8,7 @@ public class ServiceConfigurationContext
 {
     public IServiceCollection Services { get; }
 
-    public IDictionary<string, object> Items { get; }
+    public IDictionary<string, object?> Items { get; }
 
     /// <summary>
     /// Gets/sets arbitrary named objects those can be stored during
@@ -19,7 +19,7 @@ public class ServiceConfigurationContext
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    public object this[string key] {
+    public object? this[string key] {
         get => Items.GetOrDefault(key);
         set => Items[key] = value;
     }
@@ -27,6 +27,6 @@ public class ServiceConfigurationContext
     public ServiceConfigurationContext([NotNull] IServiceCollection services)
     {
         Services = Check.NotNull(services, nameof(services));
-        Items = new Dictionary<string, object>();
+        Items = new Dictionary<string, object?>();
     }
 }

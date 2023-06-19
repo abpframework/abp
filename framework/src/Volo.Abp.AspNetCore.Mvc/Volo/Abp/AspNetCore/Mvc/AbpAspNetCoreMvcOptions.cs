@@ -12,6 +12,8 @@ public class AbpAspNetCoreMvcOptions
 
     public HashSet<Type> IgnoredControllersOnModelExclusion { get; }
 
+    public HashSet<Type> ControllersToRemove { get; }
+
     public bool AutoModelValidation { get; set; }
 
     public bool EnableRazorRuntimeCompilationOnDevelopment { get; set; }
@@ -22,6 +24,7 @@ public class AbpAspNetCoreMvcOptions
     {
         ConventionalControllers = new AbpConventionalControllerOptions();
         IgnoredControllersOnModelExclusion = new HashSet<Type>();
+        ControllersToRemove = new HashSet<Type>();
         AutoModelValidation = true;
         EnableRazorRuntimeCompilationOnDevelopment = true;
         ChangeControllerModelApiExplorerGroupName = true;

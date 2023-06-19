@@ -5,6 +5,7 @@ namespace Volo.Abp.UI.Navigation;
 public class ApplicationMenuGroup
 {
     private string _displayName;
+    private string _elementId;
 
     /// <summary>
     /// Default <see cref="Order"/> value of a group item.
@@ -32,7 +33,12 @@ public class ApplicationMenuGroup
     /// <summary>
     /// Can be used to render the element with a specific Id for DOM selections.
     /// </summary>
-    public string ElementId { get; set; }
+    public string ElementId {
+        get { return _elementId; }
+        set {
+            _elementId = NormalizeElementId(value);
+        }
+    }
 
     /// <summary>
     /// The Display order of the group.
@@ -58,6 +64,11 @@ public class ApplicationMenuGroup
     private string GetDefaultElementId()
     {
         return "MenuGroup_" + Name;
+    }
+
+    private string NormalizeElementId(string elementId)
+    {
+        return elementId?.Replace(".", "_");
     }
 
     public override string ToString()
