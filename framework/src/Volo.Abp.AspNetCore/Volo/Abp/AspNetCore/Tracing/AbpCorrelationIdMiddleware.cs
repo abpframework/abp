@@ -41,14 +41,8 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
         string correlationId = context.Request.Headers[_options.HttpHeaderName];
         if (correlationId.IsNullOrEmpty())
         {
-            lock (context.Request.Headers)
-            {
-                if (correlationId.IsNullOrEmpty())
-                {
-                    correlationId = Guid.NewGuid().ToString("N");
-                    context.Request.Headers[_options.HttpHeaderName] = correlationId;
-                }
-            }
+            correlationId = Guid.NewGuid().ToString("N");
+            context.Request.Headers[_options.HttpHeaderName] = correlationId;
         }
 
         return correlationId;
