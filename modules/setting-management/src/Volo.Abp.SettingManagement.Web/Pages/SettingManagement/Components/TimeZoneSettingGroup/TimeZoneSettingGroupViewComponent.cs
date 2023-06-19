@@ -8,7 +8,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Timing.Localization.Resources.AbpTiming;
 
-namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.EmailSettingGroup;
+namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.TimeZoneSettingGroup;
 
 public class TimeZoneSettingGroupViewComponent : AbpViewComponent
 {

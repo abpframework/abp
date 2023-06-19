@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.EmailSettingGroup;
+using Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.TimeZoneSettingGroup;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.SettingManagement.Web.Settings;
