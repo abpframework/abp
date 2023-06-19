@@ -153,6 +153,10 @@
         [formControlName]="prop.name"
       ></abp-password>
     </ng-template>
+
+    <small *ngIf="prop.formText" class="form-text text-muted">{{
+      prop.formText | abpLocalization
+    }}</small>
   </div>
 </ng-container>
 

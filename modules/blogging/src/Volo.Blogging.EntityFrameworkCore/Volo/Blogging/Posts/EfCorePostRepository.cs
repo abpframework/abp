@@ -8,6 +8,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Blogging.EntityFrameworkCore;
+using Volo.Blogging.Users;
 
 namespace Volo.Blogging.Posts
 {
@@ -59,6 +60,23 @@ namespace Volo.Blogging.Posts
                 return await (await GetDbSetAsync()).Where(x => x.BlogId == blogId).OrderBy(x => x.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
             }
 
+        }
+
+        public async Task<List<Post>> GetListByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            var query = (await GetDbSetAsync()).Where(p => p.CreatorId == userId)
+                .OrderByDescending(p => p.CreationTime);
+            
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<List<Post>> GetLatestBlogPostsAsync(Guid blogId, int count, CancellationToken cancellationToken = default)
+        {
+            var query = (await GetDbSetAsync()).Where(p => p.BlogId == blogId)
+                .OrderByDescending(p => p.CreationTime)
+                .Take(count);
+
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override async Task<IQueryable<Post>> WithDetailsAsync()

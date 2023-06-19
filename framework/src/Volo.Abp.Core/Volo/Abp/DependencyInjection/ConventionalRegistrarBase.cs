@@ -52,12 +52,12 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
         }
     }
 
-    protected virtual DependencyAttribute GetDependencyAttributeOrNull(Type type)
+    protected virtual DependencyAttribute? GetDependencyAttributeOrNull(Type type)
     {
         return type.GetCustomAttribute<DependencyAttribute>(true);
     }
 
-    protected virtual ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
+    protected virtual ServiceLifetime? GetLifeTimeOrNull(Type type, DependencyAttribute? dependencyAttribute)
     {
         return dependencyAttribute?.Lifetime ?? GetServiceLifetimeFromClassHierarchy(type) ?? GetDefaultLifeTimeOrNull(type);
     }
@@ -110,7 +110,7 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
             {
                 return ServiceDescriptor.Describe(
                     exposingServiceType,
-                    provider => provider.GetService(redirectedType),
+                    provider => provider.GetService(redirectedType)!,
                     lifeTime
                 );
             }
@@ -123,7 +123,7 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
         );
     }
 
-    protected virtual Type GetRedirectedTypeOrNull(
+    protected virtual Type? GetRedirectedTypeOrNull(
         Type implementationType,
         Type exposingServiceType,
         List<Type> allExposingServiceTypes)

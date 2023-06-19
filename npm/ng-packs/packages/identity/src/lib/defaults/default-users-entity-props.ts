@@ -16,7 +16,7 @@ export const DEFAULT_USERS_ENTITY_PROPS = EntityProp.createMany<IdentityUserDto>
 
       const inactiveIcon = `<i title="${t(
         'AbpIdentity::ThisUserIsNotActiveMessage',
-      )}" class="fas fa-ban text-danger me-1"></i>`;
+      )}" class="fas fa-ban text-danger me-1" aria-hidden="true"></i>`;
 
       return of(
         `

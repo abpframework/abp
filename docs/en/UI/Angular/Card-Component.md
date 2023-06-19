@@ -29,7 +29,7 @@ ABP Card Component is a part of the `ThemeSharedModule` module. If you've import
 // my-feature.module.ts
 
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { CardDemoComponent } from './chart-demo.component';
+import { CardDemoComponent } from './card-demo.component';
 
 @NgModule({
   imports: [

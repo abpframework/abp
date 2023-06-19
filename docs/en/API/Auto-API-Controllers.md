@@ -169,3 +169,48 @@ public class PersonAppService : ApplicationService
 ````
 
 Disabled `IsMetadataEnabled` which hides this service from API explorer and it will not be discoverable. However, it still can be usable for the clients know the exact API path/route.
+
+## Replace or Remove Controllers.
+
+In addition to [Overriding a Controller](../Customizing-Application-Modules-Overriding-Services.md#example-overriding-a-controller), you can also use a completely independent **Controller** to replace the controller in the framework or module. 
+
+They have the same [route](https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/routing?view=aspnetcore-7.0), but can have **different** input and output parameters.
+
+### Replace built-in AbpApplicationConfigurationController
+
+The `ReplaceControllersAttribute` indicates the replaced controller type.
+
+````csharp
+[ReplaceControllers(typeof(AbpApplicationConfigurationController))]
+[Area("abp")]
+[RemoteService(Name = "abp")]
+public class ReplaceBuiltInController : AbpController
+{
+    [HttpGet("api/abp/application-configuration")]
+    public virtual Task<MyApplicationConfigurationDto> GetAsync(MyApplicationConfigurationRequestOptions options)
+    {
+        return Task.FromResult(new MyApplicationConfigurationDto());
+    }
+}
+
+public class MyApplicationConfigurationRequestOptions : ApplicationConfigurationRequestOptions
+{
+
+}
+
+public class MyApplicationConfigurationDto : ApplicationConfigurationDto
+{
+
+}
+````
+
+### Remove contoller
+
+Configure `ControllersToRemove` of `AbpAspNetCoreMvcOptions` to remove the controllers.
+
+````csharp
+services.Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.ControllersToRemove.Add(typeof(AbpLanguagesController));
+});
+````

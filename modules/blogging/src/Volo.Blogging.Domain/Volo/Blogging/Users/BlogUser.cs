@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Users;
 
@@ -23,6 +24,27 @@ namespace Volo.Blogging.Users
         public virtual string PhoneNumber { get; protected set; }
 
         public virtual bool PhoneNumberConfirmed { get; protected set; }
+        
+        [CanBeNull]
+        public virtual string WebSite { get; set; }
+
+        [CanBeNull]
+        public virtual string Twitter { get; set; }
+
+        [CanBeNull]
+        public virtual string Github { get; set; }
+
+        [CanBeNull]
+        public virtual string Linkedin { get; set; }
+
+        [CanBeNull]
+        public virtual string Company { get; set; }
+
+        [CanBeNull]
+        public virtual string JobTitle { get; set; }
+
+        [CanBeNull]
+        public virtual string Biography { get; set; }
 
         protected BlogUser()
         {

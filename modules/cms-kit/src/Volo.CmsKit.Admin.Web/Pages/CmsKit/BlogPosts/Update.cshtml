@@ -1,6 +1,12 @@
 ﻿@page "{Id}"
 
 @using System.Globalization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.CmsKit.Blogs
 @using Volo.CmsKit.Admin.Web.Pages
@@ -10,6 +16,10 @@
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.Components.TagEditor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
+@using Volo.Abp.Data
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+@inject IStringLocalizerFactory StringLocalizerFactory
 
 @inherits CmsKitAdminPageBase
 
@@ -62,14 +72,15 @@
             <input type="file" id="BlogPostCoverImage" class="form-control"/>
         </div>
 
-        <abp-dynamic-form abp-model="ViewModel" asp-page="/CmsKit/BlogPosts/Update" id="form-blog-post-update">
+        <form asp-page="/CmsKit/BlogPosts/Update" id="form-blog-post-update">
             <abp-input asp-for="Id" />
-
+            <abp-input asp-for="ViewModel.ConcurrencyStamp" hidden />
+            
             <abp-input asp-for="ViewModel.Title" />
 
             <abp-input asp-for="ViewModel.Slug" />
 
-            <abp-form-content />
+            <abp-input asp-for="ViewModel.ShortDescription" />
 
             <div class="content-editor cms-kit-editor"
                  id="ContentEditor"
@@ -77,7 +88,38 @@
                  data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
             </div>
 
-        </abp-dynamic-form>
+            @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<UpdateModel.UpdateBlogPostViewModel>())
+            {
+                if (!propertyInfo.Name.EndsWith("_Text"))
+                {
+                    if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                    {
+                        if (propertyInfo.Type.IsEnum)
+                        {
+                            Model.ViewModel.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
+                        }
+                        <abp-select asp-for="ViewModel.ExtraProperties[propertyInfo.Name]"
+                                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                    autocomplete-api-url="@propertyInfo.Lookup.Url"
+                                    autocomplete-selected-item-name="@Model.ViewModel.GetProperty(propertyInfo.Name+"_Text")"
+                                    autocomplete-selected-item-value="@Model.ViewModel.GetProperty(propertyInfo.Name)"
+                                    autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                                    autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                                    autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                                    autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></abp-select>
+                    }
+                    else
+                    {
+                        <abp-input type="@propertyInfo.GetInputType()"
+                                   asp-for="ViewModel.ExtraProperties[propertyInfo.Name]"
+                                   label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                   asp-format="@propertyInfo.GetInputFormatOrNull()"
+                                   value="@propertyInfo.GetInputValueOrNull(Model.ViewModel.GetProperty(propertyInfo.Name))" />
+                    }
+                }
+            }
+            
+        </form>
 
         @if (Model.TagsFeature?.IsEnabled == true)
         {

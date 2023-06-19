@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
@@ -41,10 +42,8 @@ public class UpdateModalModel : CmsKitAdminPageModel
 
         return NoContent();
     }
-
-    [AutoMap(typeof(BlogDto))]
-    [AutoMap(typeof(UpdateBlogDto), ReverseMap = true)]
-    public class UpdateBlogViewModel : IHasConcurrencyStamp
+    
+    public class UpdateBlogViewModel : ExtensibleObject, IHasConcurrencyStamp
     {
         [Required]
         [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxNameLength))]

@@ -23,7 +23,7 @@
             <Content>
                 @foreach (var group in SettingComponentCreationContext.Groups)
                 {
-                    <TabPanel Name="@GetNormalizedString(group.Id)">
+                    <TabPanel Name="@GetNormalizedString(group.Id)" class="abp-md-form">
                         <h2>@group.DisplayName</h2>
                         <Divider />
 

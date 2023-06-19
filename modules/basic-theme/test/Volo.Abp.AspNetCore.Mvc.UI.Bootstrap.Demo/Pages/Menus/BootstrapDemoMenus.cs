@@ -17,6 +17,7 @@ public class BootstrapDemoMenus
         public const string Cards = Root + ".Cards";
         public const string Carousel = Root + ".Carousel";
         public const string Collapse = Root + ".Collapse";
+        public const string DatePicker = Root + ".DatePicker";
         public const string Dropdowns = Root + ".Dropdowns";
         public const string DynamicForms = Root + ".DynamicForms";
         public const string FormElements = Root + ".FormElements";

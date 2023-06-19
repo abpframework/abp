@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.Content;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
@@ -39,6 +40,7 @@ public class ClientProxyBase<TService> : ITransientDependency
     protected ClientProxyRequestPayloadBuilder ClientProxyRequestPayloadBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyRequestPayloadBuilder>();
     protected ClientProxyUrlBuilder ClientProxyUrlBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
     protected ICurrentApiVersionInfo CurrentApiVersionInfo => LazyServiceProvider.LazyGetRequiredService<ICurrentApiVersionInfo>();
+    protected ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
 
     protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue arguments = null)
     {
@@ -66,7 +68,7 @@ public class ClientProxyBase<TService> : ITransientDependency
 
         var actionArguments = action.Parameters.GroupBy(x => x.NameOnMethod).ToList();
         if (action.SupportedVersions.Any())
-        {   
+        {
             //TODO: make names configurable
             actionArguments.RemoveAll(x => x.Key == "api-version" || x.Key == "apiVersion");
         }
@@ -216,6 +218,12 @@ public class ClientProxyBase<TService> : ITransientDependency
 
     protected virtual async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
     {
+        await LocalEventBus.PublishAsync(new ClientProxyExceptionEventData()
+        {
+            StatusCode = (int?)response?.StatusCode,
+            ReasonPhrase = response?.ReasonPhrase
+        });
+
         if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
         {
             RemoteServiceErrorResponse errorResponse;

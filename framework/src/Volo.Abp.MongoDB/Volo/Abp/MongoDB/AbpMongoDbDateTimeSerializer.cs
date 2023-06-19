@@ -34,7 +34,7 @@ public class AbpMongoDbDateTimeSerializer : DateTimeSerializer
         return (dateTime - BsonConstants.UnixEpoch).Ticks / 10000L;
     }
 
-    // For unit testing.
+    // For unit testing
     internal void SetDateTimeKind(DateTimeKind dateTimeKind)
     {
         DateTimeKind = dateTimeKind;

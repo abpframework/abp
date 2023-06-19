@@ -59,6 +59,23 @@
     "ClearCacheConfirmationMessage": "Are you sure you want to clear the cache?",
     "MarkdownSupported": "Markdown is supported",
     "FileUploadInfo": "Drag, drop, or paste a copied image.",
-    "PostDescriptionHint": "* Will be rendered in the article link preview, supports HTML"
+    "PostDescriptionHint": "* Will be rendered in the article link preview, supports HTML",
+    "ReadMore": "Continue Reading",
+    "MemberNotPublishedPostYet": "No posts yet!",
+    "UpdateUserWebSiteInfo": "Example: https://johndoe.com",
+    "UpdateUserTwitterInfo": "Example: johndoe",
+    "UpdateUserGithubInfo": "Example: johndoe",
+    "UpdateUserLinkedinInfo": "Example: https://www.linkedin.com/...",
+    "UpdateUserCompanyInfo": "Example: Volosoft",
+    "UpdateUserJobTitleInfo": "Example: Software Developer",
+    "WebSite": "Web Site",
+    "UserName": "Username",
+    "FullURL": "Full URL",
+    "JobTitle": "Job Title",
+    "PersonalWebsite": "PERSONAL WEBSITE",
+    "EditProfile": "Edit Profile",
+    "MoreFromBlog": "More From Blog",
+    "MoreFromUser": "More From {0}",
+    "BlogPosts": "Posts"
   }
 }

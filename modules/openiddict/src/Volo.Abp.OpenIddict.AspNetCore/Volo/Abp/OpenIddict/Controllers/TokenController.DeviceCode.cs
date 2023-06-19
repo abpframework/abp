@@ -44,7 +44,7 @@ public partial class TokenController
                     }));
             }
 
-            await SetClaimsDestinationsAsync(principal);
+            await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
             // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
             return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);

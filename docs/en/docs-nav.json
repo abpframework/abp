@@ -418,6 +418,10 @@
           "path": "Guid-Generation.md"
         },
         {
+          "text": "Image Manipulation",
+          "path": "Image-Manipulation.md"
+        },
+        {
           "text": "JSON",
           "path": "JSON.md"
         },
@@ -843,6 +847,15 @@
                 {
                   "text": "Page Toolbar Extensions",
                   "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
+                }
+              ]
+            },
+            {
+              "text": "Security",
+              "items": [
+                {
+                  "text": "Security Headers",
+                  "path": "UI/AspNetCore/Security-Headers.md"
                 }
               ]
             }

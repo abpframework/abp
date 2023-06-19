@@ -60,6 +60,7 @@ export interface ExtensionPropertyDto {
   attributes: ExtensionPropertyAttributeDto[];
   configuration: Record<string, any>;
   defaultValue: any;
+  formText?: string;
 }
 
 export interface ExtensionPropertyUiDto {

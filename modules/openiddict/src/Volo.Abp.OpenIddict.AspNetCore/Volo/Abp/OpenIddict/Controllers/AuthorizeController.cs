@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
+using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.OpenIddict.ViewModels.Authorization;
 
 namespace Volo.Abp.OpenIddict.Controllers;
@@ -20,6 +21,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
 {
     [HttpGet, HttpPost]
     [IgnoreAntiforgeryToken]
+    [IgnoreAbpSecurityHeader]
     public virtual async Task<IActionResult> HandleAsync()
     {
         var request = await GetOpenIddictServerRequestAsync(HttpContext);
@@ -132,7 +134,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
 
                 principal.SetAuthorizationId(await AuthorizationManager.GetIdAsync(authorization));
 
-                await SetClaimsDestinationsAsync(principal);
+                await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
                 return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
@@ -227,7 +229,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         principal.SetScopes(request.GetScopes());
         principal.SetResources(await GetResourcesAsync(request.GetScopes()));
 
-        await SetClaimsDestinationsAsync(principal);
+        await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
         // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
