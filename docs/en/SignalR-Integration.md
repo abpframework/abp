@@ -18,6 +18,8 @@ abp add-package Volo.Abp.AspNetCore.SignalR
 
 > You typically want to add this package to the web or API layer of your application, depending on your architecture.
 
+> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.SignalR).
+
 #### Manual Installation
 
 If you want to manually install;
