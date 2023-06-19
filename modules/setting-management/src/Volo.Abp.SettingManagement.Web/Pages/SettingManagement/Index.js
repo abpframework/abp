@@ -19,7 +19,7 @@
                processData: false
            }).done(function (response) {
                $('#tab-content').children('.tab-pane').removeClass('show').removeClass('active');
-               _this.attr('data-bs-target', '#' + $.escapeSelector($.escapeSelector(id)));
+               _this.attr('data-bs-target', '#' + $.escapeSelector(id));
                $('#tab-content').append('<div id=' + $.escapeSelector(id) + ' class="tab-pane fade active show">' + response + '</div>');
            })
         });
