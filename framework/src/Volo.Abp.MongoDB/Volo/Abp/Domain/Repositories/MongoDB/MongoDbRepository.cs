@@ -92,6 +92,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     public IDistributedEventBus DistributedEventBus => LazyServiceProvider.LazyGetService<IDistributedEventBus>(NullDistributedEventBus.Instance);
 
     public IEntityChangeEventHelper EntityChangeEventHelper => LazyServiceProvider.LazyGetService<IEntityChangeEventHelper>(NullEntityChangeEventHelper.Instance);
+    public IBulkEntityChangeEventHelper BulkEntityChangeEventHelper => LazyServiceProvider.LazyGetService<IBulkEntityChangeEventHelper>(NullBulkEntityChangeEventHelper.Instance);
 
     public IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
