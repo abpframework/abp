@@ -6,26 +6,26 @@ namespace Volo.Abp.DependencyInjection;
 public abstract class CachedServiceProviderBase : ICachedServiceProviderBase
 {
     protected IServiceProvider ServiceProvider { get; }
-    protected ConcurrentDictionary<Type, Lazy<object>> CachedServices { get; }
+    protected ConcurrentDictionary<Type, Lazy<object?>> CachedServices { get; }
 
     protected CachedServiceProviderBase(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
-        CachedServices = new ConcurrentDictionary<Type, Lazy<object>>();
-        CachedServices.TryAdd(typeof(IServiceProvider), new Lazy<object>(() => ServiceProvider));
+        CachedServices = new ConcurrentDictionary<Type, Lazy<object?>>();
+        CachedServices.TryAdd(typeof(IServiceProvider), new Lazy<object?>(() => ServiceProvider));
     }
 
-    public virtual object GetService(Type serviceType)
+    public virtual object? GetService(Type serviceType)
     {
         return CachedServices.GetOrAdd(
             serviceType,
-            _ => new Lazy<object>(() => ServiceProvider.GetService(serviceType))
+            _ => new Lazy<object?>(() => ServiceProvider.GetService(serviceType))
         ).Value;
     }
     
     public T GetService<T>(T defaultValue)
     {
-        return (T)GetService(typeof(T), defaultValue);
+        return (T)GetService(typeof(T), defaultValue!);
     }
 
     public object GetService(Type serviceType, object defaultValue)
@@ -42,7 +42,7 @@ public abstract class CachedServiceProviderBase : ICachedServiceProviderBase
     {
         return CachedServices.GetOrAdd(
             serviceType,
-            _ => new Lazy<object>(() => factory(ServiceProvider))
-        ).Value;
+            _ => new Lazy<object?>(() => factory(ServiceProvider))
+        ).Value!;
     }
 }

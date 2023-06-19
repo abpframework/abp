@@ -6,11 +6,13 @@ ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-Volo.Abp.Localization is the core package of the localization system. Install it to your project using the package manager console (PMC):
+You can use the [ABP CLI](CLI.md) to install the Volo.Abp.Localization package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
 
+```bash
+abp add-package Volo.Abp.Localization
 ```
-Install-Package Volo.Abp.Localization
-```
+
+> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Localization).
 
 Then you can add **AbpLocalizationModule** dependency to your module:
 

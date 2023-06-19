@@ -4,7 +4,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.Authorization;
 
 [DependsOn(
-    typeof(AbpMultiTenancyModule)
+    typeof(AbpMultiTenancyAbstractionsModule)
 )]
 public class AbpAuthorizationAbstractionsModule : AbpModule
 {

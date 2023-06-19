@@ -1,0 +1,45 @@
+{
+  "name": "theme-basic",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/theme-basic/src",
+  "prefix": "abp",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/theme-basic"],
+      "options": {
+        "project": "packages/theme-basic/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/theme-basic/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/theme-basic/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/packages/theme-basic"],
+      "options": {
+        "jestConfig": "packages/theme-basic/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/theme-basic/src/**/*.ts",
+          "packages/theme-basic/src/**/*.html"
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared", "account-core"]
+}

@@ -6,8 +6,8 @@ namespace Microsoft.Extensions.Configuration;
 public static class ConfigurationHelper
 {
     public static IConfigurationRoot BuildConfiguration(
-        AbpConfigurationBuilderOptions options = null,
-        Action<IConfigurationBuilder> builderAction = null)
+        AbpConfigurationBuilderOptions? options = null,
+        Action<IConfigurationBuilder>? builderAction = null)
     {
         options ??= new AbpConfigurationBuilderOptions();
 
@@ -17,7 +17,7 @@ public static class ConfigurationHelper
         }
 
         var builder = new ConfigurationBuilder()
-            .SetBasePath(options.BasePath)
+            .SetBasePath(options.BasePath!)
             .AddJsonFile(options.FileName + ".json", optional: options.Optional, reloadOnChange: options.ReloadOnChange);
 
         if (!options.EnvironmentName.IsNullOrEmpty())

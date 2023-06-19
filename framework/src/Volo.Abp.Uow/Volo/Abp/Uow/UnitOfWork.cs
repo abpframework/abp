@@ -75,7 +75,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
         if (Options != null)
         {
-            throw new AbpException("This unit of work is already initialized before!");
+            throw new AbpException("This unit of work has already been initialized.");
         }
 
         Options = _defaultOptions.Normalize(options.Clone());
@@ -84,7 +84,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
     public virtual void Reserve(string reservationName)
     {
-        Check.NotNull(reservationName, nameof(reservationName));
+        Check.NotNullOrWhiteSpace(reservationName, nameof(reservationName));
 
         ReservationName = reservationName;
         IsReserved = true;
@@ -158,7 +158,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
                 await SaveChangesAsync(cancellationToken);
             }
 
-            await CommitTransactionsAsync();
+            await CommitTransactionsAsync(cancellationToken);
             IsCompleted = true;
             await OnCompletedAsync();
         }
@@ -188,12 +188,12 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
     public virtual void AddDatabaseApi(string key, IDatabaseApi api)
     {
-        Check.NotNull(key, nameof(key));
+        Check.NotNullOrWhiteSpace(key, nameof(key));
         Check.NotNull(api, nameof(api));
 
         if (_databaseApis.ContainsKey(key))
         {
-            throw new AbpException("There is already a database API in this unit of work with given key.");
+            throw new AbpException("This unit of work already contains a database API for the given key.");
         }
 
         _databaseApis.Add(key, api);
@@ -201,7 +201,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
     public virtual IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
     {
-        Check.NotNull(key, nameof(key));
+        Check.NotNullOrWhiteSpace(key, nameof(key));
         Check.NotNull(factory, nameof(factory));
 
         return _databaseApis.GetOrAdd(key, factory);
@@ -209,19 +209,19 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
     public virtual ITransactionApi FindTransactionApi(string key)
     {
-        Check.NotNull(key, nameof(key));
+        Check.NotNullOrWhiteSpace(key, nameof(key));
 
         return _transactionApis.GetOrDefault(key);
     }
 
     public virtual void AddTransactionApi(string key, ITransactionApi api)
     {
-        Check.NotNull(key, nameof(key));
+        Check.NotNullOrWhiteSpace(key, nameof(key));
         Check.NotNull(api, nameof(api));
 
         if (_transactionApis.ContainsKey(key))
         {
-            throw new AbpException("There is already a transaction API in this unit of work with given key.");
+            throw new AbpException("This unit of work already contains a transaction API for the given key.");
         }
 
         _transactionApis.Add(key, api);
@@ -229,7 +229,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
     public virtual ITransactionApi GetOrAddTransactionApi(string key, Func<ITransactionApi> factory)
     {
-        Check.NotNull(key, nameof(key));
+        Check.NotNullOrWhiteSpace(key, nameof(key));
         Check.NotNull(factory, nameof(factory));
 
         return _transactionApis.GetOrAdd(key, factory);
@@ -332,7 +332,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
         if (IsCompleted || _isCompleting)
         {
-            throw new AbpException("Complete is called before!");
+            throw new AbpException("Completion has already been requested for this unit of work.");
         }
     }
 
@@ -363,11 +363,11 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
         }
     }
 
-    protected virtual async Task CommitTransactionsAsync()
+    protected virtual async Task CommitTransactionsAsync(CancellationToken cancellationToken)
     {
         foreach (var transaction in GetAllActiveTransactionApis())
         {
-            await transaction.CommitAsync();
+            await transaction.CommitAsync(cancellationToken);
         }
     }
 

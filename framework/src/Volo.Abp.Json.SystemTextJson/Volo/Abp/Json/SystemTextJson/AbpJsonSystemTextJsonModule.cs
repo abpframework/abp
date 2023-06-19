@@ -2,6 +2,7 @@
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Data;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Volo.Abp.Json.SystemTextJson.Modifiers;
 using Volo.Abp.Modularity;
@@ -9,7 +10,7 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.SystemTextJson;
 
-[DependsOn(typeof(AbpJsonAbstractionsModule), typeof(AbpTimingModule))]
+[DependsOn(typeof(AbpJsonAbstractionsModule), typeof(AbpTimingModule), typeof(AbpDataModule))]
 public class AbpJsonSystemTextJsonModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

@@ -16,6 +16,8 @@ Open a command line window in the folder of the project (.csproj file) and type 
 abp add-package Volo.Abp.BackgroundJobs.HangFire
 ````
 
+>  If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.BackgroundJobs.HangFire).
+
 ### Manual Installation
 
 If you want to manually install;
@@ -52,7 +54,7 @@ After you have installed these NuGet packages, you need to configure your projec
       var configuration = context.Services.GetConfiguration();
       var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-      //... other configarations.
+      //... other configurations.
 
       ConfigureHangfire(context, configuration);
   }
@@ -68,7 +70,7 @@ After you have installed these NuGet packages, you need to configure your projec
 
 > You have to configure a storage for Hangfire.
 
-2. If you want to use hangfire's dashboard, you can add `UseHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class
+2. If you want to use hangfire's dashboard, you can add `UseHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class:
 
 ````csharp
  public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -84,7 +86,7 @@ After you have installed these NuGet packages, you need to configure your projec
 
 ### Specifying Queue
 
-You can use the [`QueueAttribute`](https://docs.hangfire.io/en/latest/background-processing/configuring-queues.html) to specify the queue.
+You can use the [`QueueAttribute`](https://docs.hangfire.io/en/latest/background-processing/configuring-queues.html) to specify the queue:
 
 ````csharp
 using System.Threading.Tasks;

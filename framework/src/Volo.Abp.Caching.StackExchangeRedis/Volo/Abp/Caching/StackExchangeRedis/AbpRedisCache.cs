@@ -28,8 +28,8 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
     private readonly static MethodInfo GetAbsoluteExpirationMethod;
     private readonly static MethodInfo GetExpirationInSecondsMethod;
 
-    protected IDatabase RedisDatabase => GetRedisDatabase();
-    private IDatabase _redisDatabase;
+    protected IDatabase RedisDatabase => GetRedisDatabase()!;
+    private IDatabase? _redisDatabase;
 
     protected string Instance { get; }
 
@@ -37,28 +37,27 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
     {
         var type = typeof(RedisCache);
 
-        RedisDatabaseField = Check.NotNull(type.GetField("_cache", BindingFlags.Instance | BindingFlags.NonPublic), nameof(RedisDatabaseField));
+        RedisDatabaseField = Check.NotNull(type.GetField("_cache", BindingFlags.Instance | BindingFlags.NonPublic), nameof(RedisDatabaseField))!;
 
-        SetScriptField = Check.NotNull(type.GetField("_setScript", BindingFlags.Instance | BindingFlags.NonPublic), nameof(SetScriptField));
+        SetScriptField = Check.NotNull(type.GetField("_setScript", BindingFlags.Instance | BindingFlags.NonPublic), nameof(SetScriptField))!;
+        
+        ConnectMethod = Check.NotNull(type.GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic), nameof(ConnectMethod))!;
 
-        ConnectMethod = Check.NotNull(type.GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic), nameof(ConnectMethod));
+        ConnectAsyncMethod = Check.NotNull(type.GetMethod("ConnectAsync", BindingFlags.Instance | BindingFlags.NonPublic), nameof(ConnectAsyncMethod))!;
 
-        ConnectAsyncMethod = Check.NotNull(type.GetMethod("ConnectAsync", BindingFlags.Instance | BindingFlags.NonPublic), nameof(ConnectAsyncMethod));
+        MapMetadataMethod = Check.NotNull(type.GetMethod("MapMetadata", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static), nameof(MapMetadataMethod))!;
 
-        MapMetadataMethod = Check.NotNull(type.GetMethod("MapMetadata", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static), nameof(MapMetadataMethod));
+        GetAbsoluteExpirationMethod = Check.NotNull(type.GetMethod("GetAbsoluteExpiration", BindingFlags.Static | BindingFlags.NonPublic), nameof(GetAbsoluteExpirationMethod))!;
 
-        GetAbsoluteExpirationMethod = Check.NotNull(type.GetMethod("GetAbsoluteExpiration", BindingFlags.Static | BindingFlags.NonPublic), nameof(GetAbsoluteExpirationMethod));
+        GetExpirationInSecondsMethod = Check.NotNull(type.GetMethod("GetExpirationInSeconds", BindingFlags.Static | BindingFlags.NonPublic), nameof(GetExpirationInSecondsMethod))!;
 
-        GetExpirationInSecondsMethod = Check.NotNull(type.GetMethod("GetExpirationInSeconds", BindingFlags.Static | BindingFlags.NonPublic), nameof(GetExpirationInSecondsMethod));
+        AbsoluteExpirationKey = type.GetField("AbsoluteExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!.ToString()!;
 
-        AbsoluteExpirationKey = type.GetField("AbsoluteExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null).ToString();
+        SlidingExpirationKey = type.GetField("SlidingExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!.ToString()!;
 
-        SlidingExpirationKey = type.GetField("SlidingExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null).ToString();
+        DataKey = type.GetField("DataKey", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!.ToString()!;
 
-        DataKey = type.GetField("DataKey", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null).ToString();
-
-        // ReSharper disable once PossibleNullReferenceException
-        NotPresent = Check.NotNull(type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic), nameof(NotPresent)).GetValue(null).To<int>();
+        NotPresent = type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!.To<int>();
     }
 
     public AbpRedisCache(IOptions<RedisCacheOptions> optionsAccessor)
@@ -84,10 +83,10 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
             return;
         }
 
-        await (Task)ConnectAsyncMethod.Invoke(this, new object[] { token });
+        await (Task)ConnectAsyncMethod.Invoke(this, new object[] { token })!;
     }
 
-    public byte[][] GetMany(
+    public byte[]?[] GetMany(
         IEnumerable<string> keys)
     {
         keys = Check.NotNull(keys, nameof(keys));
@@ -95,7 +94,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         return GetAndRefreshMany(keys, true);
     }
 
-    public async Task<byte[][]> GetManyAsync(
+    public async Task<byte[]?[]> GetManyAsync(
         IEnumerable<string> keys,
         CancellationToken token = default)
     {
@@ -161,7 +160,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         await RedisDatabase.KeyDeleteAsync(keys.Select(key => (RedisKey)(Instance + key)).ToArray());
     }
 
-    protected virtual byte[][] GetAndRefreshMany(
+    protected virtual byte[]?[] GetAndRefreshMany(
         IEnumerable<string> keys,
         bool getData)
     {
@@ -186,7 +185,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         return bytes;
     }
 
-    protected virtual async Task<byte[][]> GetAndRefreshManyAsync(
+    protected virtual async Task<byte[]?[]> GetAndRefreshManyAsync(
         IEnumerable<string> keys,
         bool getData,
         CancellationToken token = default)
@@ -217,7 +216,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
     protected virtual Task[] PipelineRefreshManyAndOutData(
         string[] keys,
         RedisValue[][] results,
-        out byte[][] bytes)
+        out byte[]?[] bytes)
     {
         bytes = new byte[keys.Length][];
         var tasks = new Task[keys.Length];
@@ -226,7 +225,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         {
             if (results[i].Length >= 2)
             {
-                MapMetadata(results[i], out DateTimeOffset? absExpr, out TimeSpan? sldExpr);
+                MapMetadata(results[i], out var absExpr, out var sldExpr);
 
                 if (sldExpr.HasValue)
                 {
@@ -295,7 +294,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         out DateTimeOffset? absoluteExpiration,
         out TimeSpan? slidingExpiration)
     {
-        var parameters = new object[] { results, null, null };
+        var parameters = new object?[] { results, null, null };
         MapMetadataMethod.Invoke(this, parameters);
 
         absoluteExpiration = (DateTimeOffset?)parameters[1];
@@ -308,7 +307,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         DistributedCacheEntryOptions options)
     {
         return (long?)GetExpirationInSecondsMethod.Invoke(null,
-            new object[] { creationTime, absoluteExpiration, options });
+            new object?[] { creationTime, absoluteExpiration, options });
     }
 
     protected virtual DateTimeOffset? GetAbsoluteExpiration(
@@ -318,18 +317,13 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         return (DateTimeOffset?)GetAbsoluteExpirationMethod.Invoke(null, new object[] { creationTime, options });
     }
 
-    private IDatabase GetRedisDatabase()
+    private IDatabase? GetRedisDatabase()
     {
-        if (_redisDatabase == null)
-        {
-            _redisDatabase = RedisDatabaseField.GetValue(this) as IDatabase;
-        }
-
-        return _redisDatabase;
+        return _redisDatabase ??= RedisDatabaseField.GetValue(this) as IDatabase;
     }
-
+    
     private string GetSetScript()
     {
-        return SetScriptField?.GetValue(this).ToString();
+        return SetScriptField.GetValue(this)!.ToString()!;
     }
 }
