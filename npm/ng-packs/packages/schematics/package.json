@@ -1,12 +1,7 @@
 {
   "name": "@abp/ng.schematics",
   "version": "7.3.0-rc.1",
-  "description": "Schematics that works with ABP Backend",
-  "keywords": [
-    "schematics"
-  ],
   "author": "",
-  "license": "MIT",
   "schematics": "./collection.json",
   "dependencies": {
     "@angular-devkit/core": "16.0.1",
@@ -26,5 +21,19 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "license": "LGPL-3.0",
+  "keywords": [
+    "aspnetcore",
+    "boilerplate",
+    "framework",
+    "web",
+    "best-practices",
+    "angular",
+    "maui",
+    "blazor",
+    "mvc",
+    "csharp",
+    "webapp"
+  ]
 }
