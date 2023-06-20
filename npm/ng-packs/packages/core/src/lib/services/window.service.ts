@@ -10,6 +10,10 @@ export class AbpWindowService {
     return this.navigator.clipboard.writeText(text);
   }
 
+  open(url?: string | URL, target?: string, features?: string): Window {
+    return this.window.open(url, target, features);
+  }
+
   reloadPage(): void {
     this.window.location.reload();
   }
