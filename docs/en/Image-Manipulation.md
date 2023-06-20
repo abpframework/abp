@@ -41,7 +41,7 @@ public class YourModule : AbpModule
 
 ABP Framework provides two image resizer/compressor implementations out of the box:
 
-* [Magick.NET](#magicknet-provider)
+* [Magick.NET](#magick-net-provider)
 * [ImageSharp](#imagesharp-provider)
 
 You should install one of these provides to make it actually working.
