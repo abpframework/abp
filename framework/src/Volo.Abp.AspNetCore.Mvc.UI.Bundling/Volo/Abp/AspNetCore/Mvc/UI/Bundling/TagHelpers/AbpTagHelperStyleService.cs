@@ -8,19 +8,23 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Security;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
 
 public class AbpTagHelperStyleService : AbpTagHelperResourceService
 {
+    protected AbpSecurityHeadersOptions SecurityHeadersOptions;
     public AbpTagHelperStyleService(
         IBundleManager bundleManager,
         IOptions<AbpBundlingOptions> options,
-        IWebHostEnvironment hostingEnvironment) : base(
+        IWebHostEnvironment hostingEnvironment, 
+        IOptions<AbpSecurityHeadersOptions> securityHeadersOptions) : base(
             bundleManager,
             options,
             hostingEnvironment)
     {
+        SecurityHeadersOptions = securityHeadersOptions.Value;
     }
 
     protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
@@ -48,7 +52,9 @@ public class AbpTagHelperStyleService : AbpTagHelperResourceService
 
         if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
         {
-            output.Content.AppendHtml($"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" onload=\"this.rel='stylesheet'\" />{Environment.NewLine}");
+            output.Content.AppendHtml(SecurityHeadersOptions.UseContentSecurityPolicyScriptNonce
+                ? $"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" abp-csp-style />{Environment.NewLine}"
+                : $"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" onload=\"this.rel='stylesheet'\" />{Environment.NewLine}");
         }
         else
         {

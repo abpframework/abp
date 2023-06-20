@@ -49,6 +49,9 @@ public class AbpTagHelperScriptService : AbpTagHelperResourceService
         var deferText = (defer || Options.DeferScriptsByDefault || Options.DeferScripts.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
                 ? "defer"
                 : string.Empty;
-        output.Content.AppendHtml($"<script {deferText} src=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\"></script>{Environment.NewLine}");
+        var nonceText = (viewContext.HttpContext.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) && nonce is string nonceString && !string.IsNullOrEmpty(nonceString))
+            ? $"nonce=\"{nonceString}\""
+            : string.Empty;
+        output.Content.AppendHtml($"<script {deferText} {nonceText} src=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\"></script>{Environment.NewLine}");
     }
 }

@@ -30,7 +30,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
             .WhereIf<Page, IMongoQueryable<Page>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Title.ToLower().Contains(filter) || u.Slug.Contains(filter)
+                    u.Title.ToLower().Contains(filter.ToLower()) || u.Slug.Contains(filter)
             ).CountAsync(cancellation);
     }
 

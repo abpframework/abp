@@ -54,6 +54,10 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             LeaveOnlyGroupAttributes(context, output);
+            if (TagHelper.FloatingLabel && !isCheckBox)
+            {
+                output.Attributes.AddClass("form-floating");
+            }
             output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
             if (isCheckBox)
             {

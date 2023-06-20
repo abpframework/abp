@@ -6,6 +6,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 
@@ -16,7 +17,8 @@ namespace Volo.Abp.BackgroundJobs;
     typeof(AbpBackgroundWorkersModule),
     typeof(AbpTimingModule),
     typeof(AbpGuidsModule),
-    typeof(AbpDistributedLockingAbstractionsModule)
+    typeof(AbpDistributedLockingAbstractionsModule),
+    typeof(AbpMultiTenancyModule)
     )]
 public class AbpBackgroundJobsModule : AbpModule
 {
