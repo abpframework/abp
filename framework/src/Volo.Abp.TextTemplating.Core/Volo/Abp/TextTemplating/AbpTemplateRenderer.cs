@@ -29,7 +29,7 @@ public class AbpTemplateRenderer : ITemplateRenderer, ITransientDependency
         string cultureName = null,
         Dictionary<string, object> globalContext = null)
     {
-        var templateDefinition = TemplateDefinitionManager.Get(templateName);
+        var templateDefinition = await TemplateDefinitionManager.GetAsync(templateName);
 
         var renderEngine = templateDefinition.RenderEngine;
 
