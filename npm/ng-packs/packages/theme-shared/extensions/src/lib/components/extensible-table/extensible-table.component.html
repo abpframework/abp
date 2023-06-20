@@ -25,10 +25,22 @@
   <ng-container *ngFor="let prop of propList; let i = index; trackBy: trackByFn">
     <ngx-datatable-column
       [width]="columnWidths[i + 1] || 200"
-      [name]="prop.displayName | abpLocalization"
+      [name]="prop.displayName | abpLocalization "
       [prop]="prop.name"
       [sortable]="prop.sortable"
     >
+    <ng-template ngx-datatable-header-template let-column="column" >
+      <span     
+      *ngIf="prop.tooltip; else elseBlock"
+      [ngbTooltip]="prop.tooltip | abpLocalization" 
+      container="body"
+      >
+      {{column.name}} <i class="fa fa-info-circle" aria-hidden="true"></i>
+      </span>
+      <ng-template #elseBlock>
+        {{column.name}}
+      </ng-template>
+    </ng-template>
       <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
         <ng-container *abpPermission="prop.permission; runChangeDetection: false">
           <ng-container *ngIf="row['_' + prop.name]?.visible">
