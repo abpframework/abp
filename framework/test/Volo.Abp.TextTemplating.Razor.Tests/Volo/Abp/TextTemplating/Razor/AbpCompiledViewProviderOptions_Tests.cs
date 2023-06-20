@@ -38,7 +38,7 @@ public class AbpCompiledViewProviderOptions_Tests : TemplateDefinitionTests<Razo
     [Fact]
     public async Task Custom_TemplateReferences_Test()
     {
-        var templateDefinition = _templateDefinitionManager.GetOrNull(RazorTestTemplates.TestTemplate);
+        var templateDefinition = await _templateDefinitionManager.GetOrNullAsync(RazorTestTemplates.TestTemplate);
 
         var assembly = await _compiledViewProvider.GetAssemblyAsync(templateDefinition);
 
