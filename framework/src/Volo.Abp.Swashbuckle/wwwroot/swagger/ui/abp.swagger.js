@@ -8,7 +8,6 @@ var abp = abp || {};
         var firstRequest = true;
         var oidcSupportedFlows = configObject.oidcSupportedFlows || [];
         var oidcSupportedScopes = configObject.oidcSupportedScopes || [];
-        var oidcAuthority = configObject.oidcAuthority || [];
         var oidcDiscoveryEndpoint = configObject.oidcDiscoveryEndpoint || [];
         abp.appPath = configObject.baseUrl || abp.appPath;
 
@@ -29,7 +28,7 @@ var abp = abp || {};
             }
             // Intercept .well-known request when the discoveryEndpoint is provided
             if (!firstRequest && oidcDiscoveryEndpoint.length !== 0 && request.url.includes(".well-known/openid-configuration")) {
-                request.url = new URL(oidcAuthority) + ".well-known/openid-configuration";
+                request.url = oidcDiscoveryEndpoint;
             }
 
             var antiForgeryToken = abp.security.antiForgery.getToken();
