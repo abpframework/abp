@@ -1,19 +1,21 @@
 var abp = abp || {};
 
-(function() {
+(function () {
 
-    abp.SwaggerUIBundle = function(configObject) {
+    abp.SwaggerUIBundle = function (configObject) {
 
         var excludeUrl = ["swagger.json", "connect/token"]
         var firstRequest = true;
         var oidcSupportedFlows = configObject.oidcSupportedFlows || [];
         var oidcSupportedScopes = configObject.oidcSupportedScopes || [];
+        var oidcAuthority = configObject.oidcAuthority || [];
+        var oidcDiscoveryEndpoint = configObject.oidcDiscoveryEndpoint || [];
         abp.appPath = configObject.baseUrl || abp.appPath;
 
         var requestInterceptor = configObject.requestInterceptor;
         var responseInterceptor = configObject.responseInterceptor;
 
-        configObject.requestInterceptor = async function(request) {
+        configObject.requestInterceptor = async function (request) {
 
             if (request.url.includes(excludeUrl[1])) {
                 firstRequest = true;
@@ -24,6 +26,10 @@ var abp = abp || {};
                     headers: request.headers
                 });
                 firstRequest = false;
+            }
+            // Intercept .well-known request when the discoveryEndpoint is provided
+            if (!firstRequest && oidcDiscoveryEndpoint.length !== 0 && request.url.includes(".well-known/openid-configuration")) {
+                request.url = new URL(oidcAuthority) + ".well-known/openid-configuration";
             }
 
             var antiForgeryToken = abp.security.antiForgery.getToken();
@@ -41,18 +47,22 @@ var abp = abp || {};
             return request;
         };
 
-        configObject.responseInterceptor = async function(response) {
-            if(response.url.endsWith(".well-known/openid-configuration") && response.status === 200) {
+        configObject.responseInterceptor = async function (response) {
+            if (response.url.endsWith(".well-known/openid-configuration") && response.status === 200) {
                 var openIdConnectData = JSON.parse(response.text);
-                
-                if(oidcSupportedFlows.length > 0){
+
+                if (oidcDiscoveryEndpoint.length > 0) {
                     openIdConnectData.grant_types_supported = oidcSupportedFlows;
                 }
-                
-                if(oidcSupportedScopes.length > 0) {
+
+                if (oidcSupportedFlows.length > 0) {
+                    openIdConnectData.grant_types_supported = oidcSupportedFlows;
+                }
+
+                if (oidcSupportedScopes.length > 0) {
                     openIdConnectData.scopes_supported = oidcSupportedScopes;
                 }
-                
+
                 response.text = JSON.stringify(openIdConnectData);
             }
 

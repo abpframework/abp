@@ -97,6 +97,8 @@ public static class AbpSwaggerGenServiceCollectionExtensions
         {
             swaggerUiOptions.ConfigObject.AdditionalItems["oidcSupportedFlows"] = flows;
             swaggerUiOptions.ConfigObject.AdditionalItems["oidcSupportedScopes"] = scopes;
+            swaggerUiOptions.ConfigObject.AdditionalItems["oidcAuthority"] = authority;
+            swaggerUiOptions.ConfigObject.AdditionalItems["oidcDiscoveryEndpoint"] = discoveryEndpoint;
         });
         
         return services
