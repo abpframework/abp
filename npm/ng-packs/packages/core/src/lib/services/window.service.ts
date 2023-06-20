@@ -9,4 +9,8 @@ export class AbpWindowService {
   copyToClipboard(text: string): Promise<void> {
     return this.navigator.clipboard.writeText(text);
   }
+
+  reloadPage(): void {
+    this.window.location.reload();
+  }
 }
