@@ -5,7 +5,7 @@ import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
   selector: '[abpCapsLock]',
 })
 export class TrackCapsLockDirective {
-  @Output('abpCapsLock') capsLock = new EventEmitter<Boolean>();
+  @Output('abpCapsLock') capsLock = new EventEmitter<boolean>();
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
@@ -17,7 +17,7 @@ export class TrackCapsLockDirective {
   }
 
   isCapsLockOpen(e): boolean {
-    var s = String.fromCharCode(e.which);
+    const s = String.fromCharCode(e.which);
     if (
       (s.toUpperCase() === s && s.toLowerCase() !== s && e.shiftKey) ||
       (s.toUpperCase() !== s && s.toLowerCase() === s && e.shiftKey) ||
