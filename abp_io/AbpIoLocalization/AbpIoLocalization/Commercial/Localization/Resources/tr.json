@@ -21,7 +21,7 @@
     "SetDefault": "Varsayılan olarak ayarla",
     "DefaultOrganization": "Varsayılan",
     "StartDate": "Başlangıç tarihi",
-    "EndDate": "bitiş tarihi",
+    "EndDate": "Bitiş tarihi",
     "Modules": "Modüller",
     "LicenseExtendMessage": "Lisans bitiş tarihiniz {0} tarihine kadar uzatıldı",
     "LicenseUpgradeMessage": "Lisansınız {0} lisansa yükseltildi",
