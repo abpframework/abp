@@ -46,7 +46,7 @@ def create_pr():
     except Exception as e:
         print(f"Error while creating PR: {e}")
 
-    pr.create_review_request(reviewers=["gizemmutukurt"])
+    pr.create_review_request(reviewers=["ebicoglu", "gizemmutukurt", "skoc10"])
 
 if __name__ == "__main__":
     should_create_pr = update_latest_versions()
