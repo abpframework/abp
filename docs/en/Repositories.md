@@ -192,6 +192,31 @@ Major vendors, like Entity Framework, NHibernate or MongoDB already support `IQu
 
 There are also `IReadOnlyRepository<TEntity, TKey>` and `IReadOnlyBasicRepository<Tentity, TKey>` interfaces for who only want to depend on querying capabilities of the repositories.
 
+The `IReadOnlyRepository<TEntity, TKey>` derives the `IReadOnlyBasicRepository<Tentity, TKey>` and provides the following properties and methods as well:
+
+Properties:
+
+`AsyncExecuter`: a service that is used to execute an `IQueryable<T>` object asynchronously **without depending on the actual database provider**.
+
+Methods:
+
+- `GetListAsync()`
+- `GetQueryableAsync()`
+- `WithDetails()` 1 overload
+- `WithDetailsAsync()` 1 overload
+
+
+
+Where as the `IReadOnlyBasicRepository<Tentity, TKey>` provides the following methods:
+
+- `GetCountAsync()`
+- `GetListAsync()`
+- `GetPagedListAsync()`
+
+They can all be seen as below:
+
+![generic-repositories](\images\generic-repositories.png)
+
 ### Generic Repository without a Primary Key
 
 If your entity does not have an Id primary key (it may have a composite primary key for instance) then you cannot use the `IRepository<TEntity, TKey>` (or basic/readonly versions) defined above. In that case, you can inject and use `IRepository<TEntity>` for your entity.
