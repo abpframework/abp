@@ -14,10 +14,8 @@ export function createTypeSimplifier() {
     );
 
     type = /any</.test(type) ? 'any' : type;
-
-    const { identifier, generics } = extractSimpleGenerics(type);
-
-    return generics.length ? `${identifier}<${generics.join(', ')}>` : identifier;
+     const { identifier, generics, array} = extractSimpleGenerics(type);
+    return generics.length ? `${identifier}<${generics.join(', ')}>${array}` : identifier;
   });
 
   return (type: string) => {
