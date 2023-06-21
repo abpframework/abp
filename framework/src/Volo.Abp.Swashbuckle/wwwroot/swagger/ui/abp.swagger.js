@@ -3,8 +3,9 @@ var abp = abp || {};
 (function () {
 
     abp.SwaggerUIBundle = function (configObject) {
-
-        var excludeUrl = ["swagger.json", "connect/token"]
+        const wellKnownOpenIdConfiguration = ".well-known/openid-configuration"; 
+        var excludeUrl = ["swagger.json", "connect/token"];
+        var csrfExecludeUrl = [wellKnownOpenIdConfiguration];
         var firstRequest = true;
         var oidcSupportedFlows = configObject.oidcSupportedFlows || [];
         var oidcSupportedScopes = configObject.oidcSupportedScopes || [];
@@ -27,12 +28,13 @@ var abp = abp || {};
                 firstRequest = false;
             }
             // Intercept .well-known request when the discoveryEndpoint is provided
-            if (!firstRequest && oidcDiscoveryEndpoint.length !== 0 && request.url.includes(".well-known/openid-configuration")) {
+            if (!firstRequest && oidcDiscoveryEndpoint.length !== 0 && request.url.includes(wellKnownOpenIdConfiguration)) {
                 request.url = oidcDiscoveryEndpoint;
             }
 
             var antiForgeryToken = abp.security.antiForgery.getToken();
-            if (antiForgeryToken) {
+            //don't send anti forgery tokens to auth server (like keycloak)
+            if (antiForgeryToken && !csrfExecludeUrl.some(url => request.url.includes(url)) && !(configObject.resolvedIssuer && request.url.includes(configObject.resolvedIssuer))) {
                 request.headers[abp.security.antiForgery.tokenHeaderName] = antiForgeryToken;
             }
 
@@ -47,7 +49,7 @@ var abp = abp || {};
         };
 
         configObject.responseInterceptor = async function (response) {
-            if (response.url.endsWith(".well-known/openid-configuration") && response.status === 200) {
+            if (response.url.endsWith(wellKnownOpenIdConfiguration) && response.status === 200) {
                 var openIdConnectData = JSON.parse(response.text);
 
                 if (oidcDiscoveryEndpoint.length > 0) {
@@ -62,6 +64,10 @@ var abp = abp || {};
                     openIdConnectData.scopes_supported = oidcSupportedScopes;
                 }
 
+                if (openIdConnectData.issuer) {
+                    configObject.resolvedIssuer = openIdConnectData.issuer;
+                }
+                
                 response.text = JSON.stringify(openIdConnectData);
             }
 
