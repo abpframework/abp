@@ -67,10 +67,10 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       ),
     ).pipe(pipeToLogin(params, this.injector));
   }
-  logout(queryParams?: Params) {
+  logout() {
     const router = this.injector.get(Router);
-
-    return from(this.oAuthService.revokeTokenAndLogout(queryParams)).pipe(
+    const noRedirectToLogoutUrl = true;
+    return from(this.oAuthService.revokeTokenAndLogout(noRedirectToLogoutUrl)).pipe(
       switchMap(() => this.configState.refreshAppState()),
       tap(() => {
         router.navigateByUrl('/');
