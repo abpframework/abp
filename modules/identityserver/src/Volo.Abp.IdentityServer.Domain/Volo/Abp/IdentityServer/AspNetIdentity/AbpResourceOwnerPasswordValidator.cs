@@ -178,6 +178,20 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
     protected virtual async Task HandleTwoFactorLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user)
     {
+        var recoveryCode = context.Request?.Raw?["RecoveryCode"];
+        if (!recoveryCode.IsNullOrWhiteSpace())
+        {
+            var result = await UserManager.RedeemTwoFactorRecoveryCodeAsync(user, recoveryCode);
+            if (result.Succeeded)
+            {
+                await SetSuccessResultAsync(context, user);
+                return;
+            }
+
+            Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidRecoveryCode", context.UserName);
+            context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["InvalidRecoveryCode"]);
+        }
+
         var twoFactorProvider = context.Request?.Raw?["TwoFactorProvider"];
         var twoFactorCode = context.Request?.Raw?["TwoFactorCode"];
         if (!twoFactorProvider.IsNullOrWhiteSpace() && !twoFactorCode.IsNullOrWhiteSpace())

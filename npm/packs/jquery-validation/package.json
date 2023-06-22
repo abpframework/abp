@@ -1,5 +1,5 @@
 {
-  "version": "7.3.0-rc.1",
+  "version": "7.3.0-rc.2",
   "name": "@abp/jquery-validation",
   "repository": {
     "type": "git",
@@ -10,8 +10,23 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "~7.3.0-rc.1",
+    "@abp/jquery": "~7.3.0-rc.2",
     "jquery-validation": "^1.19.3"
   },
-  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
+  "homepage": "https://abp.io",
+  "license": "LGPL-3.0",
+  "keywords": [
+    "aspnetcore",
+    "boilerplate",
+    "framework",
+    "web",
+    "best-practices",
+    "angular",
+    "maui",
+    "blazor",
+    "mvc",
+    "csharp",
+    "webapp"
+  ]
 }

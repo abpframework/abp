@@ -140,6 +140,7 @@
     "Address": "Osoite",
     "Homepage": "Kotisivu",
     "Year": "vuosi",
+    "Year_Plural": "vuotta",
     "Copyright": "Tekijänoikeus © <a href=\"{0}\" target=\"_blank\">{1}</a>",
     "DomainDrivenDesign": "Domain Driven Design",
     "CrossCuttingConcerns": "Cross Cutting Concerns",

@@ -175,8 +175,26 @@ public partial class TokenController
 
     protected virtual async Task<IActionResult> HandleTwoFactorLoginAsync(OpenIddictRequest request, IdentityUser user)
     {
+        var recoveryCode = request.GetParameter("RecoveryCode")?.ToString();
+        if (!recoveryCode.IsNullOrWhiteSpace())
+        {
+            var result = await UserManager.RedeemTwoFactorRecoveryCodeAsync(user, recoveryCode);
+            if (result.Succeeded)
+            {
+                return await SetSuccessResultAsync(request, user);
+            }
+
+            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            {
+                [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid recovery code!"
+            });
+
+            return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
         var twoFactorProvider = request.GetParameter("TwoFactorProvider")?.ToString();
-        var twoFactorCode = request.GetParameter("TwoFactorCode")?.ToString();;
+        var twoFactorCode = request.GetParameter("TwoFactorCode")?.ToString();
         if (!twoFactorProvider.IsNullOrWhiteSpace() && !twoFactorCode.IsNullOrWhiteSpace())
         {
             var providers = await UserManager.GetValidTwoFactorProvidersAsync(user);

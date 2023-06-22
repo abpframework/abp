@@ -30,6 +30,7 @@ export class EntityProp<R = any> extends Prop<R> {
   readonly action?: ActionCallback<R>;
   readonly component?: Type<any>;
   readonly enumList?: Array<ABP.Option<any>>;
+  readonly tooltip?: string;
 
   constructor(options: EntityPropOptions<R>) {
     super(
@@ -40,7 +41,7 @@ export class EntityProp<R = any> extends Prop<R> {
       options.visible,
       options.isExtra,
     );
-
+    
     this.columnWidth = options.columnWidth;
     this.sortable = options.sortable || false;
     this.valueResolver =
@@ -55,6 +56,7 @@ export class EntityProp<R = any> extends Prop<R> {
     if (options.enumList) {
       this.enumList = options.enumList;
     }
+    this.tooltip = options.tooltip;
   }
 
   static create<R = any>(options: EntityPropOptions<R>) {

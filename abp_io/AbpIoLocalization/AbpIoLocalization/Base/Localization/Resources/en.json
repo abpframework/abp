@@ -141,6 +141,7 @@
     "Address": "Address",
     "Homepage": "Homepage",
     "Year": "Year",
+    "Year_Plural": "Years",
     "Copyright": "Copyright © <a href=\"{0}\" target=\"_blank\">{1}</a>",
     "DomainDrivenDesign": "Domain Driven Design",
     "CrossCuttingConcerns": "Cross Cutting Concerns",
@@ -214,7 +215,7 @@
     "AboutUs": "About Us",
     "HowItWorks": "How it works?",
     "ReleaseNotes": "Release Notes",
-    "DetailedChangeNotes" : "Detailed change notes",
+    "DetailedChangeNotes" : "Detailed Change Notes",
     "SeeTrainings": "See Trainings"
   }
 }

@@ -14,7 +14,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore.Migrations;
 
-public abstract class DatabaseMigrationEventHandlerBase<TDbContext> :
+public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
     IDistributedEventHandler<TenantCreatedEto>,
     IDistributedEventHandler<TenantConnectionStringUpdatedEto>,
     IDistributedEventHandler<ApplyDatabaseMigrationsEto>,
@@ -41,9 +41,9 @@ public abstract class DatabaseMigrationEventHandlerBase<TDbContext> :
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected ITenantStore TenantStore { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
-    protected ILogger<DatabaseMigrationEventHandlerBase<TDbContext>> Logger { get; }
+    protected ILogger<EfCoreDatabaseMigrationEventHandlerBase<TDbContext>> Logger { get; }
 
-    protected DatabaseMigrationEventHandlerBase(
+    protected EfCoreDatabaseMigrationEventHandlerBase(
         string databaseName,
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
@@ -57,7 +57,7 @@ public abstract class DatabaseMigrationEventHandlerBase<TDbContext> :
         DatabaseName = databaseName;
         DistributedEventBus = distributedEventBus;
 
-        Logger = loggerFactory.CreateLogger<DatabaseMigrationEventHandlerBase<TDbContext>>();
+        Logger = loggerFactory.CreateLogger<EfCoreDatabaseMigrationEventHandlerBase<TDbContext>>();
     }
 
     public virtual async Task HandleEventAsync(ApplyDatabaseMigrationsEto eventData)

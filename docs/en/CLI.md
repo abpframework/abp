@@ -419,7 +419,7 @@ abp remove-proxy -t csharp --folder MyProxies/InnerFolder
 
 ### switch-to-preview
 
-You can use this command to switch your project to latest preview version of the ABP framework.
+You can use this command to switch your solution or project to latest preview version of the ABP framework.
 
 Usage:
 
@@ -429,12 +429,12 @@ abp switch-to-preview [options]
 
 #### Options
 
-* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--directory` or `-d`: Specifies the directory. The solution or project should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 
 ### switch-to-nightly
 
-You can use this command to switch your project to latest [nightly](Nightly-Builds.md) preview version of the ABP framework packages.
+You can use this command to switch your solution or project to latest [nightly](Nightly-Builds.md) preview version of the ABP framework packages.
 
 Usage:
 
@@ -444,7 +444,7 @@ abp switch-to-nightly [options]
 
 #### Options
 
-* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--directory` or `-d`: Specifies the directory. The solution or project should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### switch-to-stable
 
@@ -457,7 +457,7 @@ abp switch-to-stable [options]
 ````
 #### Options
 
-* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--directory` or `-d`: Specifies the directory. The solution or project should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### switch-to-local
 
