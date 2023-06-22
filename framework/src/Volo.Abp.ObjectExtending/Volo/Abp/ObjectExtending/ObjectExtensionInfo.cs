@@ -69,8 +69,7 @@ public class ObjectExtensionInfo
     [NotNull]
     public virtual ImmutableList<ObjectExtensionPropertyInfo> GetProperties()
     {
-        return Properties.OrderBy(t => t.Key)
-                        .Select(t => t.Value)
+        return Properties.OrderBy(t => t.Value.Order).Select(t => t.Value)
                         .ToImmutableList();
     }
 
