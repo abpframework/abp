@@ -6,6 +6,7 @@
     "Permission:SettingManagement": "Setting Management",
     "Permission:Emailing": "Emailing",
     "Permission:EmailingTest": "Emailing test",
+    "Permission:TimeZone": "Time zone",
     "SendTestEmail": "Send test email",
     "SenderEmailAddress": "Sender email address",
     "TargetEmailAddress": "Target email address",

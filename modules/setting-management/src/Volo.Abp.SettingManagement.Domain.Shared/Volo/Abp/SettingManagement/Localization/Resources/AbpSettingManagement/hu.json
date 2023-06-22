@@ -6,6 +6,7 @@
     "Permission:SettingManagement": "Beállításkezelés",
     "Permission:Emailing": "E-mailezés",
     "Permission:EmailingTest": "E-mail teszt",
+    "Permission:TimeZone": "Időzóna",
     "SendTestEmail": "Küldj teszt e-mailt",
     "SenderEmailAddress": "Feladó e-mail címe",
     "TargetEmailAddress": "Cél e-mail cím",

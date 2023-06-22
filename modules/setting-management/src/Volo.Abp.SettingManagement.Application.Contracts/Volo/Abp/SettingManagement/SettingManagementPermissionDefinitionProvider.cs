@@ -15,6 +15,9 @@ public class SettingManagementPermissionDefinitionProvider : PermissionDefinitio
         emailPermission.StateCheckers.Add(new AllowChangingEmailSettingsFeatureSimpleStateChecker());
 
         emailPermission.AddChild(SettingManagementPermissions.EmailingTest, L("Permission:EmailingTest"));
+
+        moduleGroup.AddPermission(SettingManagementPermissions.TimeZone, L("Permission:TimeZone"));
+        emailPermission.StateCheckers.Add(new AllowChangingTimeZoneSettingsFeatureSimpleStateChecker());
     }
 
     private static LocalizableString L(string name)

@@ -6,6 +6,7 @@
     "Permission:SettingManagement": "Ayarlar yönetimi",
     "Permission:Emailing": "Email",
     "Permission:EmailingTest": "Email testi",
+    "Permission:TimeZone": "Zaman dilimi",
     "SendTestEmail": "Test emaili gönder",
     "SenderEmailAddress": "Gönderen email adresi",
     "TargetEmailAddress": "Hedef email adresi",
