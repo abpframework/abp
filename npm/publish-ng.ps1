@@ -17,7 +17,7 @@ if (-Not $Registry) {
 }
 $UpdateNgPacksCommand = "yarn update-version $Version"
 $NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry --skipVersionValidation"
-#$UpdateGulpCommand = "yarn update-gulp --registry $Registry"
+$UpdateGulpCommand = "yarn update-gulp --registry $Registry"
 
 
 $IsPrerelease = $(node publish-utils.js --prerelease --customVersion $Version) -eq "true";
@@ -36,9 +36,9 @@ $commands = (
   $NgPacksPublishCommand,
   "cd ../../",
   "cd scripts",
-  "yarn remove-lock-files"
-  # "cd ..",
-  # $UpdateGulpCommand
+  "yarn remove-lock-files",
+  "cd ..",
+  $UpdateGulpCommand
 )
 
 foreach ($command in $commands) { 
