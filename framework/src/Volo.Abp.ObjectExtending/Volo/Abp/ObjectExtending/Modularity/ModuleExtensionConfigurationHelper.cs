@@ -174,6 +174,7 @@ public static class ModuleExtensionConfigurationHelper
                         property.DefaultValue = propertyConfig.DefaultValue;
                         property.DefaultValueFactory = propertyConfig.DefaultValueFactory;
                         property.Lookup = propertyConfig.UI.Lookup;
+                        property.Order = propertyConfig.UI.Order;
                         foreach (var configuration in propertyConfig.Configuration)
                         {
                             property.Configuration[configuration.Key] = configuration.Value;

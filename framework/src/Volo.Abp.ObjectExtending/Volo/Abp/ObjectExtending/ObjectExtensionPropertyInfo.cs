@@ -59,6 +59,11 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
 
     [NotNull]
     public ExtensionPropertyLookupConfiguration Lookup { get; set; }
+    
+    /// <summary>
+    /// The Display order of the Property.
+    /// </summary>
+    public int Order { get; set; }
 
     public ObjectExtensionPropertyInfo(
         [NotNull] ObjectExtensionInfo objectExtension,
