@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Markdig;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization;
 using Volo.Blogging.Localization;
 
 namespace Volo.Blogging.Pages.Blog
@@ -96,45 +98,42 @@ namespace Volo.Blogging.Pages.Blog
                     .Build());
         }
 
-        public LocalizedHtmlString ConvertDatetimeToTimeAgo(DateTime dt)
+        public LocalizedHtmlString GetLocalizedTimeAgoText(DateTime dt)
         {
             var timeDiff = DateTime.Now - dt;
 
             var diffInDays = (int) timeDiff.TotalDays;
 
-            if (diffInDays >= 365)
+            switch (diffInDays)
             {
-                return  L["YearsAgo", diffInDays / 365];
-            }
-            if (diffInDays >= 30)
-            {
-                return L["MonthsAgo", diffInDays / 30];
-            }
-            if (diffInDays >= 7)
-            {
-                return L["WeeksAgo", diffInDays / 7];
-            }
-            if (diffInDays >= 1)
-            {
-                return L["DaysAgo", diffInDays];
+                case >= 365:
+                    return GetLocalizedTextAsSingularOrPlural("YearsAgo", "YearAgo", diffInDays / 365);
+                case >= 30:
+                    return GetLocalizedTextAsSingularOrPlural("MonthsAgo", "MonthAgo", diffInDays / 30);
+                case >= 7:
+                    return GetLocalizedTextAsSingularOrPlural("WeeksAgo", "WeekAgo", diffInDays / 7);
+                case >= 1:
+                    return GetLocalizedTextAsSingularOrPlural("DaysAgo", "DayAgo", diffInDays);
             }
 
             var diffInSeconds = (int) timeDiff.TotalSeconds;
 
-            if (diffInSeconds >= 3600)
+            switch (diffInSeconds)
             {
-                return L["HoursAgo", diffInSeconds / 3600];
+                case >= 3600:
+                    return GetLocalizedTextAsSingularOrPlural("HoursAgo", "HourAgo", diffInSeconds / 3600);
+                case >= 60:
+                    return GetLocalizedTextAsSingularOrPlural("MinutesAgo", "MinuteAgo", diffInSeconds / 60);
+                case >= 1:
+                    return  GetLocalizedTextAsSingularOrPlural("SecondsAgo", "SecondAgo", diffInSeconds);
+                default:
+                    return L["Now"];
             }
-            if (diffInSeconds >= 60)
-            {
-                return L["MinutesAgo", diffInSeconds / 60];
-            }
-            if (diffInSeconds >= 1)
-            {
-                return  L["SecondsAgo", diffInSeconds];
-            }
-
-            return L["Now"];
+        }
+        
+        protected virtual LocalizedHtmlString GetLocalizedTextAsSingularOrPlural(string pluralKey, string singularKey, int value)
+        {
+            return value != 1 ? L[pluralKey, value] : L[singularKey, value];
         }
     }
 }
