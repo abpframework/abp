@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Features;
@@ -13,7 +14,7 @@ public class TimeZonePageContributor : ISettingComponentContributor
     public async Task ConfigureAsync(SettingComponentCreationContext context)
     {
         await CheckFeatureAsync(context);
-        
+
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpSettingManagementResource>>();
         if (context.ServiceProvider.GetRequiredService<IClock>().SupportsMultipleTimezone)
         {
@@ -27,11 +28,18 @@ public class TimeZonePageContributor : ISettingComponentContributor
         }
     }
 
-    public Task<bool> CheckPermissionsAsync(SettingComponentCreationContext context)
+    public async Task<bool> CheckPermissionsAsync(SettingComponentCreationContext context)
     {
-        return Task.FromResult(true);
+        if (!await CheckFeatureAsync(context))
+        {
+            return false;
+        }
+
+        var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
+
+        return await authorizationService.IsGrantedAsync(SettingManagementPermissions.TimeZone);
     }
-    
+
     private async Task<bool> CheckFeatureAsync(SettingComponentCreationContext context)
     {
         var featureCheck = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
