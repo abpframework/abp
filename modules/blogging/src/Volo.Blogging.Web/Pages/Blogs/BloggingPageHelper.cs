@@ -133,20 +133,7 @@ namespace Volo.Blogging.Pages.Blog
         
         protected virtual LocalizedHtmlString ConvertDatetimeToTimeAgo(string pluralKey, string singularKey, int value)
         {
-            if(value != 1)
-            {
-                return L[pluralKey, value];
-            }
-            
-            var allStrings = L.GetAllStrings(false);
-            
-            var singularString = allStrings.FirstOrDefault(s => s.Name == singularKey);
-            if(singularString == null || singularString.ResourceNotFound)
-            {
-                return L[pluralKey, value];
-            }
-
-            return new LocalizedHtmlString(singularKey, singularString.Value, singularString.ResourceNotFound, value);
+            return value != 1 ? L[pluralKey, value] : L[singularKey, value];
         }
     }
 }
