@@ -5,9 +5,7 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.EmailSettingGroup;
-using Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.TimeZoneSettingGroup;
 using Volo.Abp.SettingManagement.Localization;
-using Volo.Abp.Timing;
 
 namespace Volo.Abp.SettingManagement.Blazor.Settings;
 
@@ -28,17 +26,6 @@ public class EmailingPageContributor : ISettingComponentContributor
                 typeof(EmailSettingGroupViewComponent)
             )
         );
-
-        if (context.ServiceProvider.GetRequiredService<IClock>().SupportsMultipleTimezone)
-        {
-            context.Groups.Add(
-                new SettingComponentGroup(
-                    "Volo.Abp.TimeZone",
-                    l["Menu:TimeZone"],
-                    typeof(TimeZoneSettingGroupViewComponent)
-                )
-            );
-        }
     }
 
     public async Task<bool> CheckPermissionsAsync(SettingComponentCreationContext context)
