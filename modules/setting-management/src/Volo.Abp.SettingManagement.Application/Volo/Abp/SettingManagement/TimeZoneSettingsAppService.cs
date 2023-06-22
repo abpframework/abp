@@ -10,7 +10,7 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.SettingManagement;
 
-//[RequiresFeature(SettingManagementFeatures.EnableTimeZone)]
+[RequiresFeature(SettingManagementFeatures.EnableTimeZone)]
 public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITimeZoneSettingsAppService
 {
     protected ISettingManager SettingManager { get; }
