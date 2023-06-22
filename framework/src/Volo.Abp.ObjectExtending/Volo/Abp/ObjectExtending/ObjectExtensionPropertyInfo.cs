@@ -62,7 +62,6 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
     
     /// <summary>
     /// The Display order of the Property.
-    /// Default value: 1000.
     /// </summary>
     public int Order { get; set; }
 
