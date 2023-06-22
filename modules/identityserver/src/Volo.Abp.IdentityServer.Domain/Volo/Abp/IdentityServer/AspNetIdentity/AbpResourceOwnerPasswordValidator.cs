@@ -185,6 +185,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
             if (result.Succeeded)
             {
                 await SetSuccessResultAsync(context, user);
+                return;
             }
 
             Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidRecoveryCode", context.UserName);
