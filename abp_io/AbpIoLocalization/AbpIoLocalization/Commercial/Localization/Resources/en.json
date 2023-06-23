@@ -854,6 +854,8 @@
     "Feature": "Feature",
     "AllUIs": "All UI's",
     "MVC": "MVC",
+    "BlazorServer": "Blazor Server",
+    "MAUI": "MAUI",
     "HowItWorks_Page_Title": "How it works?",
     "HowItWorks_Page_Description": "ABP Framework extends the .NET platform. So, anything you can do with a plain .NET solution is already possible with the ABP Framework. That makes it easy to get started with a low learning curve.",
     "HowItWorks_Description1": "ABP Framework extends the .NET platform. So, anything you can do with a plain .NET solution is already possible with the ABP Framework. That makes it easy to get started with a low learning curve.",
