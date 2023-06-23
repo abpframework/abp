@@ -1,5 +1,4 @@
 ﻿using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.SettingManagement.Localization;
 
@@ -16,8 +15,6 @@ public class SettingManagementPermissionDefinitionProvider : PermissionDefinitio
         emailPermission.StateCheckers.Add(new AllowChangingEmailSettingsFeatureSimpleStateChecker());
 
         emailPermission.AddChild(SettingManagementPermissions.EmailingTest, L("Permission:EmailingTest"));
-
-        moduleGroup.AddPermission(SettingManagementPermissions.TimeZone, L("Permission:TimeZone")).RequireFeatures(SettingManagementFeatures.EnableTimeZone);
     }
 
     private static LocalizableString L(string name)
