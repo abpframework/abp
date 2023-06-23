@@ -4,25 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using TimeZoneConverter;
-using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Settings;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.SettingManagement;
 
-[RequiresFeature(SettingManagementFeatures.EnableTimeZone)]
 [Authorize(SettingManagementPermissions.TimeZone)]
 public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITimeZoneSettingsAppService
 {
     protected ISettingManager SettingManager { get; }
-    protected ISettingProvider SettingProvider { get; }
     protected ITimezoneProvider TimezoneProvider { get; }
 
-    public TimeZoneSettingsAppService(ISettingManager settingManager, ISettingProvider settingProvider, ITimezoneProvider timezoneProvider)
+    public TimeZoneSettingsAppService(ISettingManager settingManager, ITimezoneProvider timezoneProvider)
     {
         SettingManager = settingManager;
-        SettingProvider = settingProvider;
         TimezoneProvider = timezoneProvider;
     }
 
