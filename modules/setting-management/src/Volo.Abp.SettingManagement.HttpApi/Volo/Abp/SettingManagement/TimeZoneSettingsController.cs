@@ -24,6 +24,7 @@ public class TimeZoneSettingsController : AbpControllerBase, ITimeZoneSettingsAp
     }
 
     [HttpGet]
+    [Route("timezones")]
     public Task<List<NameValue>> GetTimezonesAsync()
     {
         return _timeZoneSettingsAppService.GetTimezonesAsync();
