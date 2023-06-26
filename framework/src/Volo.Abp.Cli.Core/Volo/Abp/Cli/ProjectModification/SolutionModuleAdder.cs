@@ -103,7 +103,6 @@ public class SolutionModuleAdder : ITransientDependency
         await PublishEventAsync(1, "Retrieving module info...");
         var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
 
-
         await PublishEventAsync(2, "Removing incompatible packages from module...");
         module = RemoveIncompatiblePackages(module, version);
 
@@ -259,6 +258,11 @@ public class SolutionModuleAdder : ITransientDependency
             {
                 projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.BlazorServer, isProjectTiered));
             }
+        }
+
+        if (!projectFiles.Any(p => p.EndsWith(".MauiBlazor.csproj")))
+        {
+            projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.MauiBlazor, isProjectTiered));
         }
 
         if (!projectFiles.Any(p => p.EndsWith(".Web.csproj")) && !webPackagesWillBeAddedToBlazorServerProject)
