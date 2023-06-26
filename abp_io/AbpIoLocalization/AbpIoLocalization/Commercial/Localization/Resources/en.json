@@ -896,6 +896,9 @@
     "OtherModules": "Other Modules",
     "OtherModules_Description1": "Account, Audit Logging, Chat , CMS Kit,File Management , Forms, GDPR, Identity, Language Management, Payment , Saas and more...",
     "HowItWorks_DatabaseProviderOptions": "Database provider options",
-    "SeeFAQ" : "See FAQ"
+    "SeeFAQ" : "See FAQ",
+    "ReleaseLogs": "Release Logs",
+    "ReleaseLogs_Tag": "{0} Release Logs",
+    "ReleaseLogs_Pr": "Pull Request #{0} - {1}"
   }
 }
