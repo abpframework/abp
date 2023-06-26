@@ -221,7 +221,7 @@
               "uniqueName": "GetTimezonesAsync",
               "name": "GetTimezonesAsync",
               "httpMethod": "GET",
-              "url": "api/setting-management/timezone",
+              "url": "api/setting-management/timezone/timezones",
               "supportedVersions": [],
               "parametersOnMethod": [],
               "parameters": [],
