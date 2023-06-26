@@ -145,6 +145,7 @@ public class MyProjectNameWebModule : AbpModule
             .AddCookie("Cookies", options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromDays(365);
+                options.CheckTokenExpiration();
             })
             .AddAbpOpenIdConnect("oidc", options =>
             {
@@ -232,7 +233,7 @@ public class MyProjectNameWebModule : AbpModule
             dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
         }
     }
-    
+
     private void ConfigureDistributedLocking(
         ServiceConfigurationContext context,
         IConfiguration configuration)

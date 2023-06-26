@@ -68,7 +68,7 @@ public class FormattedStringValueExtracter
 
                     Debug.Assert(previousToken != null, "previousToken can not be null since i > 0 here");
 
-                    result.Matches.Add(new NameValue(previousToken.Text, str.Substring(0, matchIndex)));
+                    result.Matches.Add(new NameValue(previousToken!.Text, str.Substring(0, matchIndex)));
                     str = str.Substring(matchIndex + currentToken.Text.Length);
                 }
             }

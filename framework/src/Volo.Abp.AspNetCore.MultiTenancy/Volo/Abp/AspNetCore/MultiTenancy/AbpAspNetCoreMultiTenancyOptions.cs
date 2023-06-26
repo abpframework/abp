@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
+using System.Runtime.ExceptionServices;
+using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Internal;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
+using Volo.Abp.Http;
+using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy;
@@ -58,14 +67,70 @@ public class AbpAspNetCoreMultiTenancyOptions
                 }
             }
 
+            context.Response.Headers.Add("Abp-Tenant-Resolve-Error", HtmlEncoder.Default.Encode(exception.Message));
             if (isCookieAuthentication && context.Request.Method.Equals("Get", StringComparison.OrdinalIgnoreCase) && !context.Request.IsAjax())
             {
-                context.Response.Headers.Add("Abp-Tenant-Resolve-Error", HtmlEncoder.Default.Encode(exception.Message));
                 context.Response.Redirect(context.Request.GetEncodedUrl());
+            }
+            else if (context.Request.IsAjax())
+            {
+                var error = new RemoteServiceErrorResponse(new RemoteServiceErrorInfo(exception.Message, exception is BusinessException businessException ? businessException.Details : string.Empty));
+
+                var jsonSerializerOptions = context.RequestServices.GetRequiredService<IOptions<JsonOptions>>().Value.SerializerOptions;
+
+                ResponseContentTypeHelper.ResolveContentTypeAndEncoding(
+                    null,
+                    context.Response.ContentType,
+                    (new MediaTypeHeaderValue("application/json")
+                    {
+                        Encoding = Encoding.UTF8
+                    }.ToString(), Encoding.UTF8),
+                    MediaType.GetEncoding,
+                    out var resolvedContentType,
+                    out var resolvedContentTypeEncoding);
+
+                context.Response.ContentType = resolvedContentType;
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+
+                var responseStream = context.Response.Body;
+                if (resolvedContentTypeEncoding.CodePage == Encoding.UTF8.CodePage)
+                {
+                    try
+                    {
+                        await JsonSerializer.SerializeAsync(responseStream, error, error.GetType(), jsonSerializerOptions, context.RequestAborted);
+                        await responseStream.FlushAsync(context.RequestAborted);
+                    }
+                    catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested) { }
+                }
+                else
+                {
+                    var transcodingStream = Encoding.CreateTranscodingStream(context.Response.Body, resolvedContentTypeEncoding, Encoding.UTF8, leaveOpen: true);
+                    ExceptionDispatchInfo exceptionDispatchInfo = null;
+                    try
+                    {
+                        await JsonSerializer.SerializeAsync(transcodingStream, error, error.GetType(), jsonSerializerOptions, context.RequestAborted);
+                        await transcodingStream.FlushAsync(context.RequestAborted);
+                    }
+                    catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested) { }
+                    catch (Exception ex)
+                    {
+                        exceptionDispatchInfo = ExceptionDispatchInfo.Capture(ex);
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            await transcodingStream.DisposeAsync();
+                        }
+                        catch when (exceptionDispatchInfo != null)
+                        {
+                        }
+                        exceptionDispatchInfo?.Throw();
+                    }
+                }
             }
             else
             {
-                context.Response.Headers.Add("Abp-Tenant-Resolve-Error", HtmlEncoder.Default.Encode(exception.Message));
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 context.Response.ContentType = "text/html";
 

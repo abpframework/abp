@@ -1,9 +1,10 @@
 ﻿using System;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Admin.Comments;
 
 [Serializable]
-public class CommentDto
+public class CommentDto : ExtensibleObject
 {
     public Guid Id { get; set; }
 

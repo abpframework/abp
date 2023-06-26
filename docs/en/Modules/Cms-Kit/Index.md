@@ -80,3 +80,66 @@ All tables/collections use the `Cms` prefix by default. Set static properties on
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
 See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+
+## Entity Extensions
+
+[Module entity extension](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) system is a **high-level** extension system that allows you to **define new properties** for existing entities of the dependent modules. It automatically **adds properties to the entity**, **database**, **HTTP API and user interface** in a single point.
+
+To extend entities of the CMS Kit Pro module, open your `YourProjectNameModuleExtensionConfigurator` class inside of your `DomainShared` project and change the `ConfigureExtraProperties` method like shown below.
+
+```csharp
+public static void ConfigureExtraProperties()
+{
+    OneTimeRunner.Run(() =>
+    {
+        ObjectExtensionManager.Instance.Modules()
+            .ConfigureCmsKit(cmsKit =>
+            {
+                cmsKit.ConfigureBlog(plan => // extend the Blog entity
+                {
+                    plan.AddOrUpdateProperty<string>( //property type: string
+                      "BlogDescription", //property name
+                      property => {
+                        //validation rules
+                        property.Attributes.Add(new RequiredAttribute()); //adds required attribute to the defined property
+
+                        //...other configurations for this property
+                      }
+                    );
+                });
+              
+                cmsKit.ConfigureBlogPost(blogPost => // extend the BlogPost entity
+                    {
+                        blogPost.AddOrUpdateProperty<string>( //property type: string
+                        "BlogPostDescription", //property name
+                        property => {
+                            //validation rules
+                            property.Attributes.Add(new RequiredAttribute()); //adds required attribute to the defined property
+                            property.Attributes.Add(
+                            new StringLengthAttribute(MyConsts.MaximumDescriptionLength) {
+                                MinimumLength = MyConsts.MinimumDescriptionLength
+                            }
+                            );
+
+                            //...other configurations for this property
+                        }
+                        );
+                });  
+            });
+    });
+}
+```
+ 
+* `ConfigureCmsKit(...)` method is used to configure the entities of the CMS Kit module.
+
+* `cmsKit.ConfigureBlog(...)` is used to configure the **Blog** entity of the CMS Kit module. You can add or update your extra properties of the
+**Blog** entity. 
+
+* `cmsKit.ConfigureBlogPost(...)` is used to configure the **BlogPost** entity of the CMS Kit module. You can add or update your extra properties of the **BlogPost** entity.
+
+* You can also set some validation rules for the property that you defined. In the above sample, `RequiredAttribute` and `StringLengthAttribute` were added for the property named **"BlogPostDescription"**. 
+
+* When you define the new property, it will automatically add to **Entity**, **HTTP API** and **UI** for you. 
+  * Once you define a property, it appears in the create and update forms of the related entity. 
+  * New properties also appear in the datatable of the related page.
+

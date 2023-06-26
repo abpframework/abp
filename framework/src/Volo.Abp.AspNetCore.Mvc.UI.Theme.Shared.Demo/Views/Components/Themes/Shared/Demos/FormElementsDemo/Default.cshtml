@@ -100,6 +100,14 @@ public class FormElementsDemoModel
     <abp-input asp-for="@Model.MyDetailsModel.Description" label="Description" />
 </abp-component-demo-section>
 
+<abp-component-demo-section title="Floating Labels" view-path="@FormElementsDemoViewComponent.ViewPath">
+    <abp-input asp-for="@Model.MyDetailsModel.EmailAddress" label="Email Address" placeholder="name@example.com" floating-label="true" />
+    <abp-select asp-for="@Model.MyDetailsModel.City" asp-items="@Model.CityList" label="City" floating-label="true" />
+    <abp-select asp-for="@Model.MyDetailsModel.Cities" asp-items="@Model.CityList" label="Cities" floating-label="true" />
+    <abp-input asp-for="@Model.MyDetailsModel.Description" label="Description" floating-label="true" />
+</abp-component-demo-section>
+
+
 <abp-component-demo-section title="Sizing" view-path="@FormElementsDemoViewComponent.ViewPath">
     <abp-input asp-for="@Model.MyInformMeModel.Name" size="Large" />
     <abp-input asp-for="@Model.MyInformMeModel.Name" size="Small" />

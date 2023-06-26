@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Tags;
 using Volo.CmsKit.Tags;
@@ -24,6 +25,7 @@ public class CreateModalModel : CmsKitAdminPageModel
     public CreateModalModel(ITagAdminAppService tagAdminAppService)
     {
         TagAdminAppService = tagAdminAppService;
+        ViewModel = new TagCreateViewModel();
     }
 
     public async Task OnGetAsync()
@@ -43,7 +45,7 @@ public class CreateModalModel : CmsKitAdminPageModel
     }
 
     [AutoMap(typeof(TagCreateDto), ReverseMap = true)]
-    public class TagCreateViewModel
+    public class TagCreateViewModel : ExtensibleObject
     {
         [DynamicMaxLength(typeof(TagConsts), nameof(TagConsts.MaxEntityTypeLength))]
         [Required]

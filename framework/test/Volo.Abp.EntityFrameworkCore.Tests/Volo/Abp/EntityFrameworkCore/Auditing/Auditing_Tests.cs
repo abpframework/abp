@@ -30,6 +30,28 @@ public class Auditing_Tests : Auditing_Tests<AbpEntityFrameworkCoreTestModule>
     }
 
     [Fact]
+    public async Task Should_Set_Modification_If_Properties_Changed_With_Default_Value()
+    {
+        var date = DateTime.Parse("2022-01-01");
+        await WithUnitOfWorkAsync((async () =>
+        {
+            var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            douglas.HasDefaultValue = date;
+        }));
+
+        await WithUnitOfWorkAsync((async () =>
+        {
+            var douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+
+            douglas.ShouldNotBeNull();
+            douglas.HasDefaultValue.ShouldBe(date);
+            douglas.LastModificationTime.ShouldNotBeNull();
+            douglas.LastModificationTime.Value.ShouldBeLessThanOrEqualTo(Clock.Now);
+            douglas.LastModifierId.ShouldBe(CurrentUserId);
+        }));
+    }
+
+    [Fact]
     public async Task Should_Set_Modification_If_Properties_Not_Generated_By_Database()
     {
         await WithUnitOfWorkAsync((async () =>
