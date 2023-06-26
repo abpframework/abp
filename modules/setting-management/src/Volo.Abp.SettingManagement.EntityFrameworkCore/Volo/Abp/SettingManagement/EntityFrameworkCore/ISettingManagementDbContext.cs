@@ -10,4 +10,6 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore;
 public interface ISettingManagementDbContext : IEfCoreDbContext
 {
     DbSet<Setting> Settings { get; }
+
+    DbSet<SettingDefinitionRecord> SettingDefinitionRecords { get; }
 }

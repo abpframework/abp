@@ -1,72 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings;
 
 public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDependency
 {
-    protected Lazy<IDictionary<string, SettingDefinition>> SettingDefinitions { get; }
+    protected readonly IStaticSettingDefinitionStore StaticStore;
+    protected readonly IDynamicSettingDefinitionStore DynamicStore;
 
-    protected AbpSettingOptions Options { get; }
-
-    protected IServiceProvider ServiceProvider { get; }
-
-    public SettingDefinitionManager(
-        IOptions<AbpSettingOptions> options,
-        IServiceProvider serviceProvider)
+    public SettingDefinitionManager(IStaticSettingDefinitionStore staticStore, IDynamicSettingDefinitionStore dynamicStore)
     {
-        ServiceProvider = serviceProvider;
-        Options = options.Value;
-
-        SettingDefinitions = new Lazy<IDictionary<string, SettingDefinition>>(CreateSettingDefinitions, true);
+        StaticStore = staticStore;
+        DynamicStore = dynamicStore;
     }
 
-    public virtual SettingDefinition Get(string name)
+    public virtual async Task<SettingDefinition> GetAsync(string name)
+    {
+        var permission = await GetOrNullAsync(name);
+        if (permission == null)
+        {
+            throw new AbpException("Undefined Template: " + name);
+        }
+
+        return permission;
+    }
+
+    public virtual async Task<SettingDefinition> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
-        var setting = GetOrNull(name);
-
-        if (setting == null)
-        {
-            throw new AbpException("Undefined setting: " + name);
-        }
-
-        return setting;
+        return await StaticStore.GetOrNullAsync(name) ?? await DynamicStore.GetOrNullAsync(name);
     }
 
-    public virtual IReadOnlyList<SettingDefinition> GetAll()
+    public virtual async Task<IReadOnlyList<SettingDefinition>> GetAllAsync()
     {
-        return SettingDefinitions.Value.Values.ToImmutableList();
-    }
+        var staticTemplates = await StaticStore.GetAllAsync();
+        var staticTemplateNames = staticTemplates
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
 
-    public virtual SettingDefinition GetOrNull(string name)
-    {
-        return SettingDefinitions.Value.GetOrDefault(name);
-    }
+        var dynamicTemplates = await DynamicStore.GetAllAsync();
 
-    protected virtual IDictionary<string, SettingDefinition> CreateSettingDefinitions()
-    {
-        var settings = new Dictionary<string, SettingDefinition>();
-
-        using (var scope = ServiceProvider.CreateScope())
-        {
-            var providers = Options
-                .DefinitionProviders
-                .Select(p => scope.ServiceProvider.GetRequiredService(p) as ISettingDefinitionProvider)
-                .ToList();
-
-            foreach (var provider in providers)
-            {
-                provider.Define(new SettingDefinitionContext(settings));
-            }
-        }
-
-        return settings;
+        /* We prefer static Templates over dynamics */
+        return staticTemplates.Concat(dynamicTemplates.Where(d => !staticTemplateNames.Contains(d.Name))).ToImmutableList();
     }
 }
