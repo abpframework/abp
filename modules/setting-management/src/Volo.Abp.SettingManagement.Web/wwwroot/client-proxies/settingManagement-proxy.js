@@ -53,7 +53,7 @@
 
     volo.abp.settingManagement.timeZoneSettings.getTimezones = function(ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/setting-management/timezone',
+        url: abp.appPath + 'api/setting-management/timezone/timezones',
         type: 'GET'
       }, ajaxParams));
     };
