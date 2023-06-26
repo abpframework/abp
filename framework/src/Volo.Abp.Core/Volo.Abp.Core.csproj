@@ -4,7 +4,9 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.Core</AssemblyName>
     <PackageId>Volo.Abp.Core</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -31,5 +33,8 @@
     <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
     <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
     <PackageReference Include="Nito.AsyncEx.Context" Version="5.1.2" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETStandard' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '2.1')) ">
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 </Project>

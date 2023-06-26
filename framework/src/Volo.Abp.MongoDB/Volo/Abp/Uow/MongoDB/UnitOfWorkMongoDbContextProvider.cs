@@ -17,7 +17,7 @@ namespace Volo.Abp.Uow.MongoDB;
 public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContextProvider<TMongoDbContext>
     where TMongoDbContext : IAbpMongoDbContext
 {
-    private const string TransactionsNotSupportedErrorMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
+    private const string TransactionsNotSupportedWarningMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
     public ILogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>> Logger { get; set; }
 
     protected readonly IUnitOfWorkManager UnitOfWorkManager;
@@ -194,8 +194,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
             }
             catch (NotSupportedException e)
             {
-                Logger.LogError(TransactionsNotSupportedErrorMessage);
-                Logger.LogException(e);
+                Logger.LogWarning(TransactionsNotSupportedWarningMessage);
 
                 dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
                 return dbContext;
@@ -245,8 +244,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
             }
             catch (NotSupportedException e)
             {
-                Logger.LogError(TransactionsNotSupportedErrorMessage);
-                Logger.LogException(e);
+                Logger.LogWarning(TransactionsNotSupportedWarningMessage);
 
                 dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
                 return dbContext;

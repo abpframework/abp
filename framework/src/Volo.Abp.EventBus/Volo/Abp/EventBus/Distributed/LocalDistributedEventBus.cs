@@ -28,6 +28,30 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
         ServiceScopeFactory = serviceScopeFactory;
         AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
         Subscribe(distributedEventBusOptions.Value.Handlers);
+
+        // For unit testing
+        if (localEventBus is LocalEventBus eventBus)
+        {
+            eventBus.OnEventHandleInvoking = async (eventType, eventData) =>
+            {
+                await localEventBus.PublishAsync(new DistributedEventReceived()
+                {
+                    Source = DistributedEventSource.Direct,
+                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                    EventData = eventData
+                }, onUnitOfWorkComplete: false);
+            };
+
+            eventBus.OnPublishing = async (eventType, eventData) =>
+            {
+                await localEventBus.PublishAsync(new DistributedEventSent()
+                {
+                    Source = DistributedEventSource.Direct,
+                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                    EventData = eventData
+                }, onUnitOfWorkComplete: false);
+            };
+        }
     }
 
     public virtual void Subscribe(ITypeList<IEventHandler> handlers)
@@ -132,7 +156,7 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
     {
         return _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
     }
-    
+
     public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true) where TEvent : class
     {
         return _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);

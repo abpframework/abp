@@ -1,10 +1,11 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Public.Comments;
 
 [Serializable]
-public class CommentDto : IHasConcurrencyStamp
+public class CommentDto : ExtensibleObject, IHasConcurrencyStamp
 {
     public Guid Id { get; set; }
 
@@ -23,4 +24,6 @@ public class CommentDto : IHasConcurrencyStamp
     public CmsUserDto Author { get; set; } //TODO: Should only have AuthorId for the basic dto. see https://docs.abp.io/en/abp/latest/Best-Practices/Application-Services
 
     public string ConcurrencyStamp { get; set; }
+
+    public string Url { get; set; }
 }

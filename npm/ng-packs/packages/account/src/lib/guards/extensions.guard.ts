@@ -1,46 +1,46 @@
-import { Injectable, Injector } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { Injectable, inject } from '@angular/core';
+
 import { Observable } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
+
+import { ConfigStateService, IAbpGuard } from '@abp/ng.core';
 import {
   ExtensionsService,
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
   mergeWithDefaultProps,
 } from '@abp/ng.theme.shared/extensions';
-import { ConfigStateService } from '@abp/ng.core';
-import { tap, map, mapTo } from 'rxjs/operators';
+
 import {
   ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS,
   DEFAULT_ACCOUNT_FORM_PROPS,
 } from '../tokens/extensions.token';
-import { AccountEditFormPropContributors } from '../models/config-options';
 import { eAccountComponents } from '../enums/components';
 
 @Injectable()
-export class AccountExtensionsGuard implements CanActivate {
-  constructor(private injector: Injector) {}
+export class AccountExtensionsGuard implements IAbpGuard {
+  protected readonly configState = inject(ConfigStateService);
+  protected readonly extensions = inject(ExtensionsService);
 
   canActivate(): Observable<boolean> {
-    const extensions: ExtensionsService = this.injector.get(ExtensionsService);
+    const config = { optional: true };
 
-    const editFormContributors: AccountEditFormPropContributors =
-      this.injector.get(ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, null) || {};
+    const editFormContributors = inject(ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, config) || {};
 
-    const configState = this.injector.get(ConfigStateService);
-    return getObjectExtensionEntitiesFromStore(configState, 'Identity').pipe(
+    return getObjectExtensionEntitiesFromStore(this.configState, 'Identity').pipe(
       map(entities => ({
         [eAccountComponents.PersonalSettings]: entities.User,
       })),
-      mapEntitiesToContributors(configState, 'AbpIdentity'),
+      mapEntitiesToContributors(this.configState, 'AbpIdentity'),
       tap(objectExtensionContributors => {
         mergeWithDefaultProps(
-          extensions.editFormProps,
+          this.extensions.editFormProps,
           DEFAULT_ACCOUNT_FORM_PROPS,
           objectExtensionContributors.editForm,
           editFormContributors,
         );
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 }

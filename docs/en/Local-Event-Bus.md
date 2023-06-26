@@ -149,7 +149,7 @@ namespace AbpDemo
 }
 ````
 
-That's all. `MyHandler` is **automatically discovered** by the ABP Framework and `HandleEventAsync` is called whenever a `StockCountChangedEvent` occurs.  You can inject any service and perform any required logic in your handler class.
+That's all. `MyHandler` is **automatically discovered** by the ABP Framework and `HandleEventAsync` is called whenever a `StockCountChangedEvent` occurs. You can inject any service and perform any required logic in your handler class.
 
 * **One or more handlers** can subscribe to the same event.
 * A single event handler class can **subscribe to multiple events** by implementing the `ILocalEventHandler<TEvent>` interface for each event type.
@@ -157,6 +157,29 @@ That's all. `MyHandler` is **automatically discovered** by the ABP Framework and
 If you perform **database operations** and use the [repositories](Repositories.md) inside the event handler, you may need to create a [unit of work](Unit-Of-Work.md), because some repository methods need to work inside an **active unit of work**. Make the handle method `virtual` and add a `[UnitOfWork]` attribute for the method, or manually use the `IUnitOfWorkManager` to create a unit of work scope.
 
 > The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
+
+### LocalEventHandlerOrder Attribute
+
+`LocalEventHandlerOrder` attribute can be used to set the execution order for the event handlers, which can be helpful if you want to handle your event handlers in a specific order.
+
+````csharp
+[LocalEventHandlerOrder(-1)]
+public class MyHandler
+    : ILocalEventHandler<StockCountChangedEvent>,
+      ITransientDependency
+{
+    public async Task HandleEventAsync(StockCountChangedEvent eventData)
+    {
+        //TODO: your code that does something on the event
+    }
+}
+````
+
+> By default, all event handlers have an order value of 0. Thus, if you want to take certain event handlers to be executed before other event handlers, you can set the order value as a negative value.
+
+#### LocalEventHandlerOrderAttribute Properties
+
+* `Order` (`int`): Used to set the execution order for a certain event handler.
 
 ### Transaction & Exception Behavior
 
@@ -205,7 +228,7 @@ The pre-built event types are;
 * `EntityDeletedEventData<T>` is published just after an entity was successfully deleted.
 * `EntityChangedEventData<T>` is published just after an entity was successfully created, updated or deleted. It can be a shortcut if you need to listen any type of change - instead of subscribing to the individual events.
 
-#### How It Was Implemented?
+### How It Was Implemented?
 
 Pre-build events are published when you save changes to the database;
 

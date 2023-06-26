@@ -419,6 +419,17 @@
     "WhoWeAre_Expert": "About Me",
     "CreateSolutionFolder": "Create Solution Folder",
     "CreateSolutionFolderOption": "Specifies if the project will be in a new folder in the output folder or directly the output folder.",
-    "BooksPageTitle": "ABP Books"
+    "BooksPageTitle": "ABP Books",
+    "PackageDetailPage_NuGetPackageInstallationOptions": "There are three ways to install <code>{0}</code> NuGet package to your project",
+    "PackageDetailPage_InstallingWithABPCLI": "1: Installing with the ABP CLI",
+    "PackageDetailPage_InstallingWithABPCLIDescription1": "If you haven't installed the <a href=\"https://docs.abp.io/en/abp/latest/CLI\">ABP CLI</a>, first install by executing the following command in a command-line terminal",
+    "PackageDetailPage_InstallingWithABPCLIDescription2": "Once you have installed the ABP CLI, open a command-line terminal in the location of the project (<code>.csproj</code> file) you want to install it and execute the following command",
+    "PackageDetailPage_InstallingWithABPCLIDescription3": "It will add the <code>{0}</code> package reference to your project and the <code>{1}</code> dependency to your module class.",
+    "PackageDetailPage_ManualInstallation": "2: Installing with the Dotnet CLI",
+    "PackageDetailPage_ManualInstallationDescription1": "Add <code>{0}</code> NuGet package reference to your project using your IDE or executing the following command",
+    "PackageDetailPage_ManualInstallationDescription2": "Then add the <code>{0}</code> dependency to your <a href=\"https://docs.abp.io/en/abp/latest/Module-Development-Basics\">module class</a> as shown in the following example",
+    "PackageDetailPage_SeeDocumentation": "<a href=\"{0}\">See the documentation</a> to learn how to use this package in your applications.",
+    "PackageDetailPage_InstallingUsingPMC": "3: Installing with the Package Manager Console",
+    "PackageDetailPage_InstallingUsingPMCDescription1": "Open the <strong>Package Manager Console</strong> in Visual Studio (Tools -> Nuget Package Manager -> Package Manager Console) and execute the following command"
   }
 }

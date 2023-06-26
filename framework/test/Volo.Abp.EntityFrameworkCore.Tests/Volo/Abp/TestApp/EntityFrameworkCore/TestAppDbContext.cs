@@ -29,7 +29,7 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
     public DbSet<Author> Author { get; set; }
 
     public DbSet<FourthDbContextDummyEntity> FourthDummyEntities { get; set; }
-    
+
     public DbSet<Product> Products { get; set; }
 
     public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
@@ -60,6 +60,7 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         modelBuilder.Entity<Person>(b =>
         {
             b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
+            b.Property(x => x.HasDefaultValue).HasDefaultValue(DateTime.Now);
         });
 
         modelBuilder

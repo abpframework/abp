@@ -20,7 +20,7 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
     public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
 
     public DbSet<Author> Author { get; set; }
-    
+
     public DbSet<Product> Products { get; set; }
 
     public TestMigrationsDbContext(DbContextOptions<TestMigrationsDbContext> options)
@@ -44,6 +44,7 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         modelBuilder.Entity<Person>(b =>
         {
             b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
+            b.Property(x => x.HasDefaultValue).HasDefaultValue(DateTime.Now);
         });
 
         modelBuilder.Entity<City>(b =>
