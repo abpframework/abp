@@ -8,10 +8,15 @@
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/abpframework/abp/</RepositoryUrl>
+    <PackageReadmeFile>NuGet.md</PackageReadmeFile>
+    <PackageTags>aspnetcore boilerplate framework web best-practices angular maui blazor mvc csharp webapp</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!-- Include symbol files (*.pdb) in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\NuGet.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
