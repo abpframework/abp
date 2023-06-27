@@ -45,9 +45,15 @@ public class SettingDefinitionSerializer : ISettingDefinitionSerializer, ITransi
         }
     }
 
-    public virtual Task<List<SettingDefinitionRecord>> SerializeAsync(IEnumerable<SettingDefinition> settings)
+    public virtual async Task<List<SettingDefinitionRecord>> SerializeAsync(IEnumerable<SettingDefinition> settings)
     {
-        return Task.FromResult(settings.Select(SerializeAsync).Select(t => t.Result).ToList());
+        var records = new List<SettingDefinitionRecord>();
+        foreach (var setting in settings)
+        {
+            records.Add(await SerializeAsync(setting));
+        }
+
+        return records;
     }
 
     protected virtual string SerializeProviders(ICollection<string> providers)
