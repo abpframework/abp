@@ -144,7 +144,7 @@ public class RegisterModel : AccountPageModel
             ))).CheckErrors();
         }
 
-        await SignInManager.SignInAsync(user, isPersistent: true);
+        await SignInManager.SignInAsync(user, isPersistent: true, ExternalLoginAuthSchema);
     }
 
     protected virtual async Task CheckSelfRegistrationAsync()
