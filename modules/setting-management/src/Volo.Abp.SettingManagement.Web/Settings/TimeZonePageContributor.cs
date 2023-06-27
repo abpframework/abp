@@ -10,6 +10,11 @@ namespace Volo.Abp.SettingManagement.Web.Settings;
 
 public class TimeZonePageContributor : SettingPageContributorBase
 {
+    public TimeZonePageContributor()
+    {
+        RequiredPermissions(SettingManagementPermissions.TimeZone);
+    }
+    
     public override Task ConfigureAsync(SettingPageCreationContext context)
     {
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpSettingManagementResource>>();
