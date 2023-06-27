@@ -1,24 +1,19 @@
 {
-  "name": "Volo.Abp.Identity.Domain.Shared",
+  "name": "Volo.Abp.Identity.Blazor.Server",
   "hash": "",
   "contents": [
     {
-      "namespace": "Volo.Abp.Identity",
+      "namespace": "Volo.Abp.Identity.Blazor.Server",
       "dependsOnModules": [
         {
-          "declaringAssemblyName": "Volo.Abp.Users.Domain.Shared",
-          "namespace": "Volo.Abp.Users",
-          "name": "AbpUsersDomainSharedModule"
+          "declaringAssemblyName": "Volo.Abp.Identity.Blazor",
+          "namespace": "Volo.Abp.Identity.Blazor",
+          "name": "AbpIdentityBlazorModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.Validation",
-          "namespace": "Volo.Abp.Validation",
-          "name": "AbpValidationModule"
-        },
-        {
-          "declaringAssemblyName": "Volo.Abp.Features",
-          "namespace": "Volo.Abp.Features",
-          "name": "AbpFeaturesModule"
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Blazor.Server",
+          "namespace": "Volo.Abp.PermissionManagement.Blazor.Server",
+          "name": "AbpPermissionManagementBlazorServerModule"
         }
       ],
       "implementingInterfaces": [
@@ -66,7 +61,7 @@
         }
       ],
       "contentType": "abpModule",
-      "name": "AbpIdentityDomainSharedModule",
+      "name": "AbpIdentityBlazorServerModule",
       "summary": null
     }
   ]

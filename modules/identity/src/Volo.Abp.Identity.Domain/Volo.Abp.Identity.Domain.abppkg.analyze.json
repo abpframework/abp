@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.Domain",
-  "hash": "3a0497c62459a4c0ad393a295e33af27",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity",
@@ -240,7 +240,7 @@
       ],
       "contentType": "entity",
       "name": "OrganizationUnitRole",
-      "summary": "Represents membership of a User to an OU."
+      "summary": "Represents the link between a role and an organization unit."
     },
     {
       "baseClass": {
@@ -479,8 +479,14 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        },
+        {
+          "name": "IHasEntityVersion",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasEntityVersion"
         }
       ],
       "methods": [
@@ -631,6 +637,11 @@
           "type": "System.Boolean",
           "name": "IsPublic",
           "summary": "A user can see other user's public roles"
+        },
+        {
+          "type": "System.Int32",
+          "name": "EntityVersion",
+          "summary": "A version value that is increased whenever the entity is changed."
         }
       ],
       "contentType": "aggregateRoot",
@@ -690,7 +701,7 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
@@ -884,8 +895,14 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        },
+        {
+          "name": "IHasEntityVersion",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasEntityVersion"
         }
       ],
       "methods": [
@@ -1271,6 +1288,38 @@
           ]
         },
         {
+          "returnType": "Void",
+          "name": "SetShouldChangePasswordOnNextLogin",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Boolean",
+              "name": "shouldChangePasswordOnNextLogin",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "SetLastPasswordChangeTime",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<DateTimeOffset>",
+              "name": "lastPasswordChangeTime",
+              "isOptional": false
+            }
+          ]
+        },
+        {
           "returnType": "String",
           "name": "ToString",
           "summary": null,
@@ -1408,6 +1457,21 @@
           "summary": "Gets or sets the number of failed login attempts for the current user."
         },
         {
+          "type": "System.Boolean",
+          "name": "ShouldChangePasswordOnNextLogin",
+          "summary": "Should change password on next login."
+        },
+        {
+          "type": "System.Int32",
+          "name": "EntityVersion",
+          "summary": "A version value that is increased whenever the entity is changed."
+        },
+        {
+          "type": "System.Nullable`1[System.DateTimeOffset]",
+          "name": "LastPasswordChangeTime",
+          "summary": "Gets or sets the last password change time for the user."
+        },
+        {
           "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserRole]",
           "name": "Roles",
           "summary": "Navigation property for the roles this user belongs to."
@@ -1435,6 +1499,87 @@
       ],
       "contentType": "aggregateRoot",
       "name": "IdentityUser",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "BasicAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.BasicAggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
+          "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        }
+      ],
+      "methods": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "SourceUserId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "TargetUserId",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "StartTime",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "EndTime",
+          "summary": null
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "IdentityUserDelegation",
       "summary": null
     },
     {
@@ -1550,8 +1695,14 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        },
+        {
+          "name": "IHasEntityVersion",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasEntityVersion"
         }
       ],
       "methods": [
@@ -1741,6 +1892,11 @@
           "type": "System.String",
           "name": "DisplayName",
           "summary": "Display name of this OrganizationUnit."
+        },
+        {
+          "type": "System.Int32",
+          "name": "EntityVersion",
+          "summary": "A version value that is increased whenever the entity is changed."
         },
         {
           "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.OrganizationUnitRole]",
@@ -2096,6 +2252,164 @@
     {
       "namespace": "Volo.Abp.Identity",
       "baseClass": {
+        "name": "DomainService",
+        "namespace": "Volo.Abp.Domain.Services",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Services.DomainService"
+      },
+      "methods": [
+        {
+          "returnType": "List<IdentityUserDelegation>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "sourceUserId",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "targetUserId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUserDelegation>",
+          "name": "GetActiveDelegationsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "targetUseId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUserDelegation",
+          "name": "FindActiveDelegationByIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "DelegateNewUserAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "sourceUserId",
+              "isOptional": false
+            },
+            {
+              "type": "Guid",
+              "name": "targetUserId",
+              "isOptional": false
+            },
+            {
+              "type": "DateTime",
+              "name": "startTime",
+              "isOptional": false
+            },
+            {
+              "type": "DateTime",
+              "name": "endTime",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "DeleteDelegationAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "Guid",
+              "name": "sourceUserId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDomainService",
+          "namespace": "Volo.Abp.Domain.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Services.IDomainService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "domainService",
+      "name": "IdentityUserDelegationManager",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "baseClass": {
         "name": "UserManager<IdentityUser>",
         "namespace": "Microsoft.AspNetCore.Identity",
         "declaringAssemblyName": "Microsoft.Extensions.Identity.Core",
@@ -2378,6 +2692,38 @@
         {
           "returnType": "IdentityResult",
           "name": "AddDefaultRolesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "name": "ShouldPeriodicallyChangePasswordAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "name": "ResetRecoveryCodesAsync",
           "summary": null,
           "isAsync": true,
           "isPublic": true,
@@ -3345,6 +3691,122 @@
         "primaryKeyType": "Guid",
         "properties": [],
         "contentType": "entity",
+        "name": "IdentityUserDelegation",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<IdentityUserDelegation, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityUserDelegation, Guid>"
+        },
+        {
+          "name": "IBasicRepository<IdentityUserDelegation>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentityUserDelegation>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityUserDelegation>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityUserDelegation>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentityUserDelegation, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentityUserDelegation, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<IdentityUserDelegation>",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "sourceUserId",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "targetUserId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUserDelegation>",
+          "name": "GetActiveDelegationsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "targetUserId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUserDelegation",
+          "name": "FindActiveDelegationByIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IIdentityUserDelegationRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.Identity",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
         "name": "IdentityUser",
         "summary": null
       },
@@ -3618,6 +4080,16 @@
               "isOptional": true
             },
             {
+              "type": "String",
+              "name": "name",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "surname",
+              "isOptional": true
+            },
+            {
               "type": "Nullable<Boolean>",
               "name": "isLockedOut",
               "isOptional": true
@@ -3625,6 +4097,36 @@
             {
               "type": "Nullable<Boolean>",
               "name": "notActive",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "emailConfirmed",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "isExternal",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "maxCreationTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "minCreationTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "maxModifitionTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "minModifitionTime",
               "isOptional": true
             },
             {
@@ -3789,6 +4291,16 @@
               "isOptional": true
             },
             {
+              "type": "String",
+              "name": "name",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "surname",
+              "isOptional": true
+            },
+            {
               "type": "Nullable<Boolean>",
               "name": "isLockedOut",
               "isOptional": true
@@ -3796,6 +4308,36 @@
             {
               "type": "Nullable<Boolean>",
               "name": "notActive",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "emailConfirmed",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Boolean>",
+              "name": "isExternal",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "maxCreationTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "minCreationTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "maxModifitionTime",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<DateTime>",
+              "name": "minModifitionTime",
               "isOptional": true
             },
             {
@@ -3822,6 +4364,32 @@
             {
               "type": "Nullable<Guid>",
               "name": "tenantId",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUser>",
+          "name": "GetListByIdsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IEnumerable<Guid>",
+              "name": "ids",
               "isOptional": false
             },
             {
@@ -4418,6 +4986,28 @@
       "isEncrypted": false,
       "contentType": "setting",
       "name": "Abp.Identity.Password.RequireDigit",
+      "summary": null
+    },
+    {
+      "defaultValue": "False",
+      "displayName": "Force users to periodically change password",
+      "description": "Whether users are forced to periodically change their password.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword",
+      "summary": null
+    },
+    {
+      "defaultValue": "0",
+      "displayName": "Password change period(days)",
+      "description": "The number of days a user's password is valid for.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.PasswordChangePeriodDays",
       "summary": null
     },
     {

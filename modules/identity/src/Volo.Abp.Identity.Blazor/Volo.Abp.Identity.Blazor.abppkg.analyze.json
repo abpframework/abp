@@ -1,9 +1,9 @@
 {
-  "name": "Volo.Abp.Identity.Web",
+  "name": "Volo.Abp.Identity.Blazor",
   "hash": "",
   "contents": [
     {
-      "namespace": "Volo.Abp.Identity.Web",
+      "namespace": "Volo.Abp.Identity.Blazor",
       "dependsOnModules": [
         {
           "declaringAssemblyName": "Volo.Abp.Identity.Application.Contracts",
@@ -16,14 +16,14 @@
           "name": "AbpAutoMapperModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Web",
-          "namespace": "Volo.Abp.PermissionManagement.Web",
-          "name": "AbpPermissionManagementWebModule"
+          "declaringAssemblyName": "Volo.Abp.PermissionManagement.Blazor",
+          "namespace": "Volo.Abp.PermissionManagement.Blazor",
+          "name": "AbpPermissionManagementBlazorModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
-          "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
-          "name": "AbpAspNetCoreMvcUiThemeSharedModule"
+          "declaringAssemblyName": "Volo.Abp.BlazoriseUI",
+          "namespace": "Volo.Abp.BlazoriseUI",
+          "name": "AbpBlazoriseUIModule"
         }
       ],
       "implementingInterfaces": [
@@ -71,49 +71,19 @@
         }
       ],
       "contentType": "abpModule",
-      "name": "AbpIdentityWebModule",
+      "name": "AbpIdentityBlazorModule",
       "summary": null
     },
     {
-      "apis": [],
-      "contentType": "httpApi",
-      "name": "Defined Http Apis",
-      "summary": null
-    },
-    {
-      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Users",
+      "namespace": "Volo.Abp.Identity.Blazor.Pages.Identity",
       "contentType": "webPage",
-      "name": "CreateModalModel",
+      "name": "RoleManagement",
       "summary": null
     },
     {
-      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Users",
+      "namespace": "Volo.Abp.Identity.Blazor.Pages.Identity",
       "contentType": "webPage",
-      "name": "EditModalModel",
-      "summary": null
-    },
-    {
-      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Users",
-      "contentType": "webPage",
-      "name": "IndexModel",
-      "summary": null
-    },
-    {
-      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Roles",
-      "contentType": "webPage",
-      "name": "CreateModalModel",
-      "summary": null
-    },
-    {
-      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Roles",
-      "contentType": "webPage",
-      "name": "EditModalModel",
-      "summary": null
-    },
-    {
-      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Roles",
-      "contentType": "webPage",
-      "name": "IndexModel",
+      "name": "UserManagement",
       "summary": null
     }
   ]
