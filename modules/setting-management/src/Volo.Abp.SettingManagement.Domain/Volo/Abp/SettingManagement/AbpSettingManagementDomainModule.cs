@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
@@ -24,6 +25,7 @@ namespace Volo.Abp.SettingManagement;
 public class AbpSettingManagementDomainModule : AbpModule
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+    private Task _initializeDynamicSettingsTask;
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
@@ -35,6 +37,15 @@ public class AbpSettingManagementDomainModule : AbpModule
             options.Providers.Add<TenantSettingManagementProvider>();
             options.Providers.Add<UserSettingManagementProvider>();
         });
+
+        if (context.Services.IsDataMigrationEnvironment())
+        {
+            Configure<SettingManagementOptions>(options =>
+            {
+                options.SaveStaticSettingsToDatabase = false;
+                options.IsDynamicSettingStoreEnabled = false;
+            });
+        }
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -54,6 +65,11 @@ public class AbpSettingManagementDomainModule : AbpModule
         return Task.CompletedTask;
     }
 
+    public Task GetInitializeDynamicSettingsTask()
+    {
+        return _initializeDynamicSettingsTask ?? Task.CompletedTask;
+    }
+
     private void InitializeDynamicSettings(ApplicationInitializationContext context)
     {
         var options = context
@@ -68,7 +84,7 @@ public class AbpSettingManagementDomainModule : AbpModule
 
         var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
 
-        Task.Run(async () =>
+        _initializeDynamicSettingsTask = Task.Run(async () =>
         {
             using var scope = rootServiceProvider.CreateScope();
             var applicationLifetime = scope.ServiceProvider.GetService<IHostApplicationLifetime>();
