@@ -74,7 +74,7 @@ public class SettingDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), SettingDefinitionRecordConsts.MaxNameLength);
         DisplayName =  Check.NotNullOrWhiteSpace(displayName, nameof(displayName), SettingDefinitionRecordConsts.MaxDisplayNameLength);
         Description = Check.Length(description, nameof(description), SettingDefinitionRecordConsts.MaxDescriptionLength);
-        DefaultValue = defaultValue;
+        DefaultValue = Check.Length(defaultValue, nameof(defaultValue), SettingDefinitionRecordConsts.MaxDefaultValueLength);
         IsVisibleToClients = isVisibleToClients;
         Providers = Check.Length(providers, nameof(providers), SettingDefinitionRecordConsts.MaxProvidersLength);
         IsInherited = isInherited;

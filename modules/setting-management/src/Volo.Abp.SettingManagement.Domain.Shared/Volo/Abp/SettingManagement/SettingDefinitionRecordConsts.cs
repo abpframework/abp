@@ -8,5 +8,7 @@ public class SettingDefinitionRecordConsts
 
     public static int MaxDescriptionLength { get; set; } = 512;
 
+    public static int MaxDefaultValueLength { get; set; } = 256;
+
     public static int MaxProvidersLength { get; set; } = 128;
 }
