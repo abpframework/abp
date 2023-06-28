@@ -11,7 +11,7 @@ namespace Volo.Abp.Autofac;
 public class AbpAutofacServiceProviderFactory : IServiceProviderFactory<ContainerBuilder>
 {
     private readonly ContainerBuilder _builder;
-    private IServiceCollection _services;
+    private IServiceCollection _services = default!;
 
     public AbpAutofacServiceProviderFactory(ContainerBuilder builder)
     {
