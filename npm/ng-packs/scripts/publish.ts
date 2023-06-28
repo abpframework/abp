@@ -31,10 +31,6 @@ program.parse(process.argv);
   try {
     await fse.remove('../dist/packages');
 
-    await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
-
-    await updateVersion(program.nextVersion);
-
     if (!program.skipVersionValidation) {
       await execa(
         'yarn',
@@ -102,15 +98,12 @@ program.parse(process.argv);
 })();
 
 async function updateVersion(version: string) {
-  await fse.rename('../lerna.version.json', '../lerna.json');
 
   await execa(
     'yarn',
-    ['lerna', 'version', version, '--yes', '--no-commit-hooks', '--skip-git', '--force-publish'],
+    ['update-version', version],
     { stdout: 'inherit', cwd: '../' },
   );
-
-  await fse.rename('../lerna.json', '../lerna.version.json');
 
   await execa('yarn', ['replace-with-tilde']);
 }

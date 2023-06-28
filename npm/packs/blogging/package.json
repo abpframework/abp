@@ -1,14 +1,33 @@
 {
-  "version": "7.2.2",
+  "version": "7.3.0-rc.2",
   "name": "@abp/blogging",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "~7.2.2",
-    "@abp/owl.carousel": "~7.2.2",
-    "@abp/prismjs": "~7.2.2",
-    "@abp/tui-editor": "~7.2.2"
+    "@abp/aspnetcore.mvc.ui.theme.shared": "~7.3.0-rc.2",
+    "@abp/owl.carousel": "~7.3.0-rc.2",
+    "@abp/prismjs": "~7.3.0-rc.2",
+    "@abp/tui-editor": "~7.3.0-rc.2"
   },
-  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
+  "homepage": "https://abp.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
+  "license": "LGPL-3.0",
+  "keywords": [
+    "aspnetcore",
+    "boilerplate",
+    "framework",
+    "web",
+    "best-practices",
+    "angular",
+    "maui",
+    "blazor",
+    "mvc",
+    "csharp",
+    "webapp"
+  ]
 }

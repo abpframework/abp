@@ -566,28 +566,37 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
     private static void ChangeThemeToBasicForMvcProjects(ProjectBuildContext context, string defaultThemeName)
     {
-        var projects = new Dictionary<string, string>
-        {
-            {".Web", "MyProjectNameWebModule"},
-            {".HttpApi.Host", "MyProjectNameHttpApiHostModule"},
-            {".AuthServer", "MyProjectNameAuthServerModule"},
-            {".Web.Public", "MyProjectNameWebPublicModule"},
-            {".Web.Public.Host", "MyProjectNameWebPublicModule"},
-            {"", "MyProjectNameWebModule"}
+        var projectNames = new[]
+{
+            ".Web", ".HttpApi.Host", ".AuthServer", ".Web.Public", ".Web.Public.Host",
+            "" //for app-nolayers-mvc
         };
 
-        foreach (var project in projects)
+        foreach (var projectName in projectNames)
         {
+            var projectPath = $"/MyCompanyName.MyProjectName{projectName}/MyCompanyName.MyProjectName{projectName}.csproj";
+            var projectFile = context.Files.FirstOrDefault(x => x.Name.Contains(projectPath));
+            if (projectFile == null)
+            {
+                continue;
+            }
+
+            var moduleFile = ConvertProjectFileToModuleFile(context, projectFile);
+            if (moduleFile == null)
+            {
+                continue;
+            }
+
             ReplacePackageReferenceWithProjectReference(
                 context,
-                $"/MyCompanyName.MyProjectName{project.Key}/MyCompanyName.MyProjectName{project.Key}.csproj",
+                projectFile.Name,
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
                 @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
             );
-            
+
             ReplaceAllKeywords(
                 context,
-                $"/MyCompanyName.MyProjectName{project.Key}/{project.Value}.cs",
+                moduleFile.Name,
                 defaultThemeName,
                 Basic
             );

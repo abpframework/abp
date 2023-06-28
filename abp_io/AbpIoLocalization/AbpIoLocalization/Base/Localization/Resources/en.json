@@ -141,6 +141,7 @@
     "Address": "Address",
     "Homepage": "Homepage",
     "Year": "Year",
+    "Year_Plural": "Years",
     "Copyright": "Copyright © <a href=\"{0}\" target=\"_blank\">{1}</a>",
     "DomainDrivenDesign": "Domain Driven Design",
     "CrossCuttingConcerns": "Cross Cutting Concerns",
@@ -211,6 +212,11 @@
     "RecentActivities": "Recent Activities",
     "SpringCampaign": "Welcome <br>Spring Sale!",
     "SpringCampaign2": "<span>Limited <br> Time Offer!</span>",
-    "AboutUs": "About Us"
+    "AboutUs": "About Us",
+    "HowItWorks": "How it works?",
+    "ReleaseNotes": "Release Notes",
+    "DetailedChangeNotes" : "Detailed Change Notes",
+    "SeeTrainings": "See Trainings",
+    "NoContent": "No content"
   }
 }

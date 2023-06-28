@@ -16,8 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Localization.Abstractions\Volo.Abp.Localization.Abstractions.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
 
@@ -74,7 +75,7 @@ public class EntityExtensionConfiguration
     [NotNull]
     public virtual ImmutableList<ExtensionPropertyConfiguration> GetProperties()
     {
-        return Properties.Values.ToImmutableList();
+        return Properties.Values.OrderBy(t => t.UI.Order).ToImmutableList();
     }
 
     private static void NormalizeProperty(ExtensionPropertyConfiguration propertyInfo)

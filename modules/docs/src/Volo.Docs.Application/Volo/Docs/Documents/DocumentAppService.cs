@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 using Volo.Docs.Caching;
 using Volo.Docs.Documents.FullSearch.Elastic;
@@ -176,16 +177,16 @@ namespace Volo.Docs.Documents
             );
         }
 
-        public async Task<List<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input)
+        public async Task<PagedResultDto<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
             input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
 
-            var esDocs =
-                await _documentFullSearch.SearchAsync(input.Context, project.Id, input.LanguageCode, input.Version);
+            var esDocResult =
+                await _documentFullSearch.SearchAsync(input.Context, project.Id, input.LanguageCode, input.Version, input.SkipCount, input.MaxResultCount);
 
-            return esDocs.Select(esDoc => new DocumentSearchOutput //TODO: auto map
+            return new PagedResultDto<DocumentSearchOutput>(esDocResult.TotalCount,esDocResult.EsDocuments.Select(esDoc => new DocumentSearchOutput //TODO: auto map
                 {
                     Name = esDoc.Name,
                     FileName = esDoc.FileName,
@@ -194,7 +195,7 @@ namespace Volo.Docs.Documents
                     Highlight = esDoc.Highlight
                 }).Where(x =>
                     x.FileName != project.NavigationDocumentName && x.FileName != project.ParametersDocumentName)
-                .ToList();
+                .ToList());
         }
 
         public async Task<bool> FullSearchEnabledAsync()

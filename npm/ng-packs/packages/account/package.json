@@ -1,17 +1,31 @@
 {
   "name": "@abp/ng.account",
-  "version": "7.2.2",
+  "version": "7.3.0-rc.2",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.account.core": "~7.2.2",
-    "@abp/ng.theme.shared": "~7.2.2",
+    "@abp/ng.account.core": "~7.3.0-rc.2",
+    "@abp/ng.theme.shared": "~7.3.0-rc.2",
     "tslib": "^2.0.0"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "license": "LGPL-3.0",
+  "keywords": [
+    "aspnetcore",
+    "boilerplate",
+    "framework",
+    "web",
+    "best-practices",
+    "angular",
+    "maui",
+    "blazor",
+    "mvc",
+    "csharp",
+    "webapp"
+  ]
 }

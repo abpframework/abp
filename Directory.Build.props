@@ -42,6 +42,9 @@
 
     <IsTestProject Condition="$(MSBuildProjectFullPath.Contains('test')) and ($(MSBuildProjectName.EndsWith('.Tests')) or $(MSBuildProjectName.EndsWith('.TestBase')))">true</IsTestProject>
 
+    <!-- OpenIddict https://www.nuget.org/packages/OpenIddict.Core -->
+    <OpenIddictPackageVersion>4.5.0</OpenIddictPackageVersion>
+
   </PropertyGroup>
 
   <ItemGroup>

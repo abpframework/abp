@@ -26,6 +26,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         {
             case DatabaseProvider.NotSpecified:
             case DatabaseProvider.EntityFrameworkCore:
+                context.Symbols.Add("EFCORE");
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo"));
@@ -50,6 +51,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         switch (context.BuildArgs.UiFramework)
         {
             case UiFramework.Angular:
+                context.Symbols.Add("ui:angular");
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host", "MyCompanyName.MyProjectName"));
@@ -65,6 +67,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 break;
 
             case UiFramework.Blazor:
+                context.Symbols.Add("ui:blazor");
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
@@ -83,6 +86,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 break;
 
             case UiFramework.BlazorServer:
+                context.Symbols.Add("ui:blazor-server");
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
@@ -92,6 +96,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
 
             case UiFramework.NotSpecified:
             case UiFramework.Mvc:
+                context.Symbols.Add("ui:mvc");
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));

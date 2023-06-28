@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.HttpApi",
-  "hash": "c699923fe0e6c7a289534c4ba7d16e40",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity",
@@ -62,6 +62,311 @@
       ],
       "contentType": "abpModule",
       "name": "AbpIdentityHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/identity/roles/all",
+          "method": "GET",
+          "groupName": "IdentityRole",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Abp.Identity.IdentityRoleDto]",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/identity/roles",
+          "method": "GET",
+          "groupName": "IdentityRole",
+          "responseType": "Volo.Abp.Application.Dtos.PagedResultDto`1[Volo.Abp.Identity.IdentityRoleDto]",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "Filter",
+              "type": "String"
+            },
+            {
+              "name": "Sorting",
+              "type": "String"
+            },
+            {
+              "name": "SkipCount",
+              "type": "Int32"
+            },
+            {
+              "name": "MaxResultCount",
+              "type": "Int32"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/roles/{id}",
+          "method": "GET",
+          "groupName": "IdentityRole",
+          "responseType": "Volo.Abp.Identity.IdentityRoleDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/roles",
+          "method": "POST",
+          "groupName": "IdentityRole",
+          "responseType": "Volo.Abp.Identity.IdentityRoleDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "IdentityRoleCreateDto"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/roles/{id}",
+          "method": "PUT",
+          "groupName": "IdentityRole",
+          "responseType": "Volo.Abp.Identity.IdentityRoleDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            },
+            {
+              "name": "input",
+              "type": "IdentityRoleUpdateDto"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/roles/{id}",
+          "method": "DELETE",
+          "groupName": "IdentityRole",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/{id}",
+          "method": "GET",
+          "groupName": "IdentityUser",
+          "responseType": "Volo.Abp.Identity.IdentityUserDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users",
+          "method": "GET",
+          "groupName": "IdentityUser",
+          "responseType": "Volo.Abp.Application.Dtos.PagedResultDto`1[Volo.Abp.Identity.IdentityUserDto]",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "Filter",
+              "type": "String"
+            },
+            {
+              "name": "Sorting",
+              "type": "String"
+            },
+            {
+              "name": "SkipCount",
+              "type": "Int32"
+            },
+            {
+              "name": "MaxResultCount",
+              "type": "Int32"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users",
+          "method": "POST",
+          "groupName": "IdentityUser",
+          "responseType": "Volo.Abp.Identity.IdentityUserDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "IdentityUserCreateDto"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/{id}",
+          "method": "PUT",
+          "groupName": "IdentityUser",
+          "responseType": "Volo.Abp.Identity.IdentityUserDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            },
+            {
+              "name": "input",
+              "type": "IdentityUserUpdateDto"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/{id}",
+          "method": "DELETE",
+          "groupName": "IdentityUser",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/{id}/roles",
+          "method": "GET",
+          "groupName": "IdentityUser",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Abp.Identity.IdentityRoleDto]",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/assignable-roles",
+          "method": "GET",
+          "groupName": "IdentityUser",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Abp.Identity.IdentityRoleDto]",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/identity/users/{id}/roles",
+          "method": "PUT",
+          "groupName": "IdentityUser",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            },
+            {
+              "name": "input",
+              "type": "IdentityUserUpdateRolesDto"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/by-username/{userName}",
+          "method": "GET",
+          "groupName": "IdentityUser",
+          "responseType": "Volo.Abp.Identity.IdentityUserDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "userName",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/by-email/{email}",
+          "method": "GET",
+          "groupName": "IdentityUser",
+          "responseType": "Volo.Abp.Identity.IdentityUserDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "email",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/lookup/{id}",
+          "method": "GET",
+          "groupName": "IdentityUserLookup",
+          "responseType": "Volo.Abp.Users.UserData",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/lookup/by-username/{userName}",
+          "method": "GET",
+          "groupName": "IdentityUserLookup",
+          "responseType": "Volo.Abp.Users.UserData",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "userName",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/lookup/search",
+          "method": "GET",
+          "groupName": "IdentityUserLookup",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Abp.Users.UserData]",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "Filter",
+              "type": "String"
+            },
+            {
+              "name": "Sorting",
+              "type": "String"
+            },
+            {
+              "name": "SkipCount",
+              "type": "Int32"
+            },
+            {
+              "name": "MaxResultCount",
+              "type": "Int32"
+            }
+          ]
+        },
+        {
+          "path": "api/identity/users/lookup/count",
+          "method": "GET",
+          "groupName": "IdentityUserLookup",
+          "responseType": "System.Int64",
+          "responseTypeAsJson": "42",
+          "parameterDescriptions": [
+            {
+              "name": "Filter",
+              "type": "String"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

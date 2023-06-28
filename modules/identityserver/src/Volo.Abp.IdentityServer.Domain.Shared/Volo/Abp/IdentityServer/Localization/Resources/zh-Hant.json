@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "無法登入!你的賬號未激活或者需要驗證郵箱地址/手機號碼.",
     "InvalidUsername": "用戶名或密碼錯誤!",
     "InvalidAuthenticatorCode": "驗證碼無效！",
+    "InvalidRecoveryCode": "恢復碼無效！",
     "TheTargetUserIsNotLinkedToYou": "目標用戶與您無關！"
   }
 }

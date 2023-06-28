@@ -6,6 +6,7 @@
     "Permission:SettingManagement": "Gestão de Cenários",
     "Permission:Emailing": "Enviando por e-mail",
     "Permission:EmailingTest": "Teste de e-mail",
+    "Permission:TimeZone": "Fuso horário",
     "SendTestEmail": "Enviar e-mail de teste",
     "SenderEmailAddress": "E-mail remetente",
     "TargetEmailAddress": "E-mail destinatário",

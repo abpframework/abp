@@ -28,8 +28,9 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         IGuidGenerator guidGenerator,
         IOpenIddictApplicationRepository applicationRepository,
         IOpenIddictAuthorizationRepository authorizationRepository,
-        AbpOpenIddictIdentifierConverter identifierConverter)
-        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter)
+        AbpOpenIddictIdentifierConverter identifierConverter,
+        IOpenIddictDbConcurrencyExceptionHandler concurrencyExceptionHandler)
+        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter, concurrencyExceptionHandler)
     {
         ApplicationRepository = applicationRepository;
         AuthorizationRepository = authorizationRepository;
@@ -65,6 +66,7 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         catch (AbpDbConcurrencyException e)
         {
             Logger.LogException(e);
+            await ConcurrencyExceptionHandler.HandleAsync(e);
             throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
         }
     }
@@ -449,6 +451,7 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         catch (AbpDbConcurrencyException e)
         {
             Logger.LogException(e);
+            await ConcurrencyExceptionHandler.HandleAsync(e);
             throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
         }
 

@@ -61,11 +61,13 @@ Create a simple **Class Library Project** in a solution:
 
 ![simple-plugin-library](images/simple-plugin-library.png)
 
-You can add ABP Framework packages you need to use in the module. At least, you should add the `Volo.Abp.Core` package to the project:
+You can add the ABP Framework packages that you need to use in the module. At least, you should add the `Volo.Abp.Core` package to the project, Execute the following command in the folder of the .csproj file that you want to install the package on:
 
+````bash
+abp add-package Volo.Abp.Core
 ````
-Install-Package Volo.Abp.Core
-````
+
+ If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
 
 Every [module](Module-Development-Basics.md) must declare a class derived from the `AbpModule`. Here, a simple module class that resolves a service and initializes it on the application startup:
 

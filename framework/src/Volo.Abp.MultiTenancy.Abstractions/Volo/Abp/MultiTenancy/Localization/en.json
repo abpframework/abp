@@ -1,0 +1,9 @@
+{
+  "culture": "en",
+  "texts": {
+    "TenantNotFoundMessage": "Tenant not found!",
+    "TenantNotFoundDetails": "There is no tenant with the tenant id or name: {0}",
+    "TenantNotActiveMessage": "Tenant is not active!",
+    "TenantNotActiveDetails": "The tenant is not active with the tenant id or name: {0}"
+  }
+}

@@ -138,6 +138,7 @@
     "Address": "Cím",
     "Homepage": "Kezdőlap",
     "Year": "Év",
+    "Year_Plural": "Év",
     "Copyright": "Copyright © <a href=\"{0}\" target=\"_blank\">{1}</a>",
     "DomainDrivenDesign": "Domainvezérelt tervezés",
     "CrossCuttingConcerns": "Cross Cutting Concerns",

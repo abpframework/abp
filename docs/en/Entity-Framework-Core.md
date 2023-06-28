@@ -7,24 +7,11 @@ This document explains how to integrate EF Core as an ORM provider to ABP based 
 `Volo.Abp.EntityFrameworkCore` is the main NuGet package for the EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
 
 ```` shell
-Install-Package Volo.Abp.EntityFrameworkCore
+abp add-package Volo.Abp.EntityFrameworkCore
 ````
 
-Then add `AbpEntityFrameworkCoreModule` module dependency (`DependsOn` attribute) to your [module](Module-Development-Basics.md):
-
-````c#
-using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Modularity;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
+> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.EntityFrameworkCore).
+>
 
 > Note: Instead, you can directly download a [startup template](https://abp.io/Templates) with EF Core pre-installed.
 

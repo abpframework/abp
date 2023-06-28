@@ -245,8 +245,9 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
             throw new AbpException(response.ErrorDescription);
         }
 
-        Logger.LogInformation($"First copy your one-time code: {response.UserCode}");
-        Logger.LogInformation($"Open {response.VerificationUri} in your browser...");
+        Logger.LogInformation($"Open your browser, go to: \"{response.VerificationUri}\"");
+        Logger.LogInformation($"and enter the following one-time code:");
+        Logger.LogInformation(response.UserCode);
 
         for (var i = 0; i < ((response.ExpiresIn ?? 300) / response.Interval + 1); i++)
         {

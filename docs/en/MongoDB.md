@@ -4,11 +4,13 @@ This document explains how to integrate MongoDB as a database provider to ABP ba
 
 ## Installation
 
-`Volo.Abp.MongoDB` is the main nuget package for the MongoDB integration. Install it to your project (for a layered application, to your data/infrastructure layer):
+`Volo.Abp.MongoDB` is the main NuGet package for the MongoDB integration. Install it to your project (for a layered application, to your data/infrastructure layer), You can use the [ABP CLI](CLI.md) to install it to your project. Execute the following command in the folder of the .csproj file of the layer:
 
 ```
-Install-Package Volo.Abp.MongoDB
+abp add-package Volo.Abp.MongoDB
 ```
+
+> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.MongoDB).
 
 Then add `AbpMongoDbModule` module dependency to your [module](Module-Development-Basics.md):
 
