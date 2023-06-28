@@ -19,7 +19,7 @@ public static class UnitOfWorkExtensions
     {
         Check.NotNull(unitOfWork, nameof(unitOfWork));
 
-        if (!unitOfWork.Items.ContainsKey(key))
+        if (unitOfWork.Items.ContainsKey(key))
         {
             unitOfWork.Items[key] = value;
         }
