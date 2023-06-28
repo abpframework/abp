@@ -220,7 +220,17 @@ Become a pioneer and try the new features of .NET 8 now.
 Adapt it to your project or start a new .NET 8 project. 
 [Claim your copy of .NET 8](https://dotnet.microsoft.com/next) today 🏎️ !
 
+
+
 〰️〰️〰️
 
 Happy Coding ⌨️
 
+---
+
+> I'm Alper Ebicoglu 🧑🏽‍💻 ABP Framework Core Team Member
+> Follow me for the latest news about .NET and software development:
+> 📌 [twitter.com/alperebicoglu](https://twitter.com/alperebicoglu)
+> 📌 [github.com/ebicoglu](https://github.com/ebicoglu)
+> 📌 [linkedin.com/in/ebicoglu](https://www.linkedin.com/in/ebicoglu)
+> 📌 [medium.com/@alperonline](https://medium.com/@alperonline)

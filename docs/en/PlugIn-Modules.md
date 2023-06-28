@@ -122,6 +122,8 @@ Build the project, open the build folder, find the `MyPlugIn.dll`:
 
 Copy `MyPlugIn.dll` into the plug-in folder (`D:\Temp\MyPlugIns` for this example).
 
+> Please delete the `MyPlugIn.deps.json` file if you use `build folder` folder as `PlugInSources`.
+
 If you have configured the main application like described above (see Basic Usage section), you should see the `MyService has been initialized` log in the application startup.
 
 ## Example: Creating a Plug-In With Razor Pages

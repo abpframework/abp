@@ -119,3 +119,7 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 - CmsBlogs
 - CmsBlogPosts
 - CmsBlogFeatures
+
+## Entity Extensions
+
+Check the ["Entity Extensions" section of the CMS Kit Module documentation](Index.md#entity-extensions) to see how to extend entities of the Blogging Feature of the CMS Kit module.

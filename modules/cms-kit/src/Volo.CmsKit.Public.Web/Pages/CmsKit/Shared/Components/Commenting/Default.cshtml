@@ -20,8 +20,8 @@
     @<span>
         <i class="far fa-comment-alt me-2"></i>
         @((string.IsNullOrWhiteSpace(author.Name)
-                ? author.UserName
-                : author.Name + " " + author.Surname).Trim())
+            ? author.UserName
+            : author.Name + " " + author.Surname).Trim())
         <small class="text-muted float-end" style="opacity: .5; font-size: 14px">@creationTime.ToString()</small>
     </span>;
 }
@@ -157,7 +157,7 @@
     }
     @foreach (var comment in Model.Input.Comments)
     {
-        <div class="comment">
+        <div class="comment" id="comment-@comment.Id.ToString()">
             <div class="card p-3 mx-0 my-3">
                 <h5>
                     @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)

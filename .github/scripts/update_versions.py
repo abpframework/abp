@@ -52,3 +52,4 @@ if __name__ == "__main__":
     should_create_pr = update_latest_versions()
     if should_create_pr:
         create_pr()
+

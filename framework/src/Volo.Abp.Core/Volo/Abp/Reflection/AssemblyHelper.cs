@@ -31,7 +31,7 @@ internal static class AssemblyHelper
         }
         catch (ReflectionTypeLoadException ex)
         {
-            return ex.Types;
+            return ex.Types!;
         }
     }
 }

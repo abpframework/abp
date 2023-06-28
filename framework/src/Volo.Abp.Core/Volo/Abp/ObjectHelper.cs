@@ -9,8 +9,8 @@ namespace Volo.Abp;
 
 public static class ObjectHelper
 {
-    private static readonly ConcurrentDictionary<string, PropertyInfo> CachedObjectProperties =
-        new ConcurrentDictionary<string, PropertyInfo>();
+    private static readonly ConcurrentDictionary<string, PropertyInfo?> CachedObjectProperties =
+        new ConcurrentDictionary<string, PropertyInfo?>();
 
     public static void TrySetProperty<TObject, TValue>(
         TObject obj,
@@ -25,9 +25,9 @@ public static class ObjectHelper
         TObject obj,
         Expression<Func<TObject, TValue>> propertySelector,
         Func<TObject, TValue> valueFactory,
-        params Type[] ignoreAttributeTypes)
+        params Type[]? ignoreAttributeTypes)
     {
-        var cacheKey = $"{obj.GetType().FullName}-" +
+        var cacheKey = $"{obj?.GetType().FullName}-" +
                        $"{propertySelector}-" +
                        $"{(ignoreAttributeTypes != null ? "-" + string.Join("-", ignoreAttributeTypes.Select(x => x.FullName)) : "")}";
 
@@ -40,7 +40,7 @@ public static class ObjectHelper
 
             var memberExpression = propertySelector.Body.As<MemberExpression>();
 
-            var propertyInfo = obj.GetType().GetProperties().FirstOrDefault(x =>
+            var propertyInfo = obj?.GetType().GetProperties().FirstOrDefault(x =>
                 x.Name == memberExpression.Member.Name &&
                 x.GetSetMethod(true) != null);
 

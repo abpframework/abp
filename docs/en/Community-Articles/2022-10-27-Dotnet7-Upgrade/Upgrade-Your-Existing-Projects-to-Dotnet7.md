@@ -258,8 +258,19 @@ Not all the changes are here, but you can check out the following PR of the .NET
 * [github.com/abpframework/abp/pull/13626/files](https://github.com/abpframework/abp/pull/13626/files)
 
 
-...
 
-Happy coding with .NET 7 🤗
+〰️〰️〰️
 
-...
+Happy Coding 🤗
+
+---
+
+> I'm Alper Ebicoglu 🧑🏽‍💻 ABP Framework Core Team Member
+> Follow me for the latest news about .NET and software development:
+> 📌 [twitter.com/alperebicoglu](https://twitter.com/alperebicoglu)
+>
+> 📌 [github.com/ebicoglu](https://github.com/ebicoglu)
+>
+> 📌 [linkedin.com/in/ebicoglu](https://www.linkedin.com/in/ebicoglu)
+>
+> 📌 [medium.com/@alperonline](https://medium.com/@alperonline)https://medium.com/@alperonline)\

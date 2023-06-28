@@ -1,0 +1,14 @@
+{
+  "name": "@abp/nx.generators",
+  "version": "7.3.0-rc.2",
+  "homepage": "https://abp.io",
+  "generators": "./generators.json",
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

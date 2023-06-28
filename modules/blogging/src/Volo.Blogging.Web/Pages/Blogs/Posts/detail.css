@@ -1,0 +1,28 @@
+.last-post-title{
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 700;
+    letter-spacing: 0px;
+    text-decoration: none;
+    color: black;
+}
+.last-post-image{
+    width: 30px;
+    height: 30px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+}
+.last-post-name{
+    padding-right: 2px;
+    max-height: 16px;
+    padding-top: 0.5em;
+    padding-right: 0.5em;
+}
+#CopyLink{
+    padding: 0;
+    border: none;
+    background: none;
+    color: rgba(0,0,0,.6);
+}

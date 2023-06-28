@@ -5,6 +5,7 @@ import {
   NgbDatepickerModule,
   NgbDropdownModule,
   NgbTimepickerModule,
+  NgbTooltipModule,
   NgbTypeaheadModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
@@ -48,6 +49,7 @@ import { CreateInjectorPipe } from './pipes/create-injector.pipe';
     NgbDropdownModule,
     NgbTimepickerModule,
     NgbTypeaheadModule,
+    NgbTooltipModule
   ],
 })
 export class BaseUiExtensionsModule {}
