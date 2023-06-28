@@ -36,6 +36,7 @@ public class SolutionModuleAdder : ITransientDependency
     public BundleCommand BundleCommand { get; }
     public ICmdHelper CmdHelper { get; }
     public ILocalEventBus LocalEventBus { get; }
+    public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
 
     protected IJsonSerializer JsonSerializer { get; }
     protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
@@ -66,7 +67,8 @@ public class SolutionModuleAdder : ITransientDependency
         BundleCommand bundleCommand,
         CliHttpClientFactory cliHttpClientFactory,
         ICmdHelper cmdHelper,
-        ILocalEventBus localEventBus)
+        ILocalEventBus localEventBus,
+        SolutionPackageVersionFinder solutionPackageVersionFinder)
     {
         JsonSerializer = jsonSerializer;
         ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -84,6 +86,7 @@ public class SolutionModuleAdder : ITransientDependency
         BundleCommand = bundleCommand;
         CmdHelper = cmdHelper;
         LocalEventBus = localEventBus;
+        SolutionPackageVersionFinder = solutionPackageVersionFinder;
         _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<SolutionModuleAdder>.Instance;
     }
@@ -103,7 +106,6 @@ public class SolutionModuleAdder : ITransientDependency
         await PublishEventAsync(1, "Retrieving module info...");
         var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
 
-
         await PublishEventAsync(2, "Removing incompatible packages from module...");
         module = RemoveIncompatiblePackages(module, version);
 
@@ -112,10 +114,11 @@ public class SolutionModuleAdder : ITransientDependency
         var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
         await AddNugetAndNpmReferences(module, projectFiles, !(newTemplate || newProTemplate));
+        
+        var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
 
         if (withSourceCode || newTemplate || newProTemplate)
         {
-            var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
 
             await PublishEventAsync(5, $"Downloading source code of {moduleName}");
             await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version, newTemplate, newProTemplate);
@@ -150,6 +153,11 @@ public class SolutionModuleAdder : ITransientDependency
 
         await ModifyDbContext(projectFiles, module, skipDbMigrations);
 
+        if (module.Name.Contains("LeptonX"))
+        {
+            await SetLeptonXAbpVersionsAsync(solutionFile, Path.Combine(modulesFolderInSolution, module.Name));
+        }
+
         var documentationLink = module.GetFirstDocumentationLinkOrNull();
         if (documentationLink != null)
         {
@@ -157,6 +165,20 @@ public class SolutionModuleAdder : ITransientDependency
         }
 
         return module;
+    }
+
+    private async Task SetLeptonXAbpVersionsAsync(string solutionFile, string combine)
+    {
+        var abpVersion = SolutionPackageVersionFinder.FindByCsprojVersion(solutionFile);
+        
+        var projects = Directory.GetFiles(Path.GetDirectoryName(solutionFile)!, "*.csproj", SearchOption.AllDirectories);
+
+        foreach (var project in projects)
+        {
+            File.WriteAllText(project,
+                File.ReadAllText(project).Replace("\"$(AbpVersion)\"", $"\"{abpVersion}\"")
+            );
+        }
     }
 
     private async Task PublishEventAsync(int currentStep, string message)
@@ -259,6 +281,11 @@ public class SolutionModuleAdder : ITransientDependency
             {
                 projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.BlazorServer, isProjectTiered));
             }
+        }
+
+        if (!projectFiles.Any(p => p.EndsWith(".MauiBlazor.csproj")))
+        {
+            projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.MauiBlazor, isProjectTiered));
         }
 
         if (!projectFiles.Any(p => p.EndsWith(".Web.csproj")) && !webPackagesWillBeAddedToBlazorServerProject)

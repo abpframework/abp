@@ -75,7 +75,19 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
         if (version == null)
         {
-            version = SolutionPackageVersionFinder.Find(solutionFile);
+            if (commandLineArgs.Target.Contains("LeptonX"))
+            {
+                version = SolutionPackageVersionFinder.FindByCsprojVersion(solutionFile, excludedKeywords: null, includedKeyword: "LeptonX");
+
+                if (version.Contains("*"))
+                {
+                    version = SolutionPackageVersionFinder.FindByDllVersion(solutionFile, "Volo.Abp.*LeptonX*");
+                }
+            }
+            else
+            {
+                version = SolutionPackageVersionFinder.FindByCsprojVersion(solutionFile);
+            }
         }
 
         var moduleInfo = await SolutionModuleAdder.AddAsync(
