@@ -21,6 +21,11 @@ public class UnitOfWorkExtensions_Tests : AbpIntegratedTest<AbpUnitOfWorkModule>
 
         uow.Items.ShouldContainKey("testKey");
         uow.Items.ContainsValue("testValue");
+
+        uow.AddItem("testKey", "testValue2");
+
+        uow.Items.ShouldContainKey("testKey");
+        uow.Items.ContainsValue("testValue2");
     }
 
     [Fact]
