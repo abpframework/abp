@@ -56,15 +56,19 @@
     }
 
     abp.dom.initializers.initializeToolTips = function ($tooltips) {
-        $tooltips.tooltip({
-            container: 'body'
-        });
+        for (var i = 0; i < $tooltips.length; i++) {
+            new bootstrap.Tooltip($tooltips[i], {
+                container: `body`
+              });
+        }
     }
 
     abp.dom.initializers.initializePopovers = function ($popovers) {
-        $popovers.popover({
-            container: 'body'
-        });
+        for (var i = 0; i < $popovers.length; i++) {
+            new bootstrap.Popover($popovers[i], {
+                container: `body`
+              });
+        }
     }
 
     abp.dom.initializers.initializeTimeAgos = function ($timeagos) {
@@ -192,8 +196,8 @@
     }
 
     abp.dom.onNodeAdded(function (args) {
-        abp.dom.initializers.initializeToolTips(args.$el.findWithSelf('[data-toggle="tooltip"]'));
-        abp.dom.initializers.initializePopovers(args.$el.findWithSelf('[data-toggle="popover"]'));
+        abp.dom.initializers.initializeToolTips(args.$el.findWithSelf('[data-bs-toggle="tooltip"]'));
+        abp.dom.initializers.initializePopovers(args.$el.findWithSelf('[data-bs-toggle="popover"]'));
         abp.dom.initializers.initializeTimeAgos(args.$el.findWithSelf('.timeago'));
         abp.dom.initializers.initializeForms(args.$el.findWithSelf('form'), true);
         abp.dom.initializers.initializeScript(args.$el);
@@ -201,7 +205,7 @@
     });
 
     abp.dom.onNodeRemoved(function (args) {
-        args.$el.findWithSelf('[data-toggle="tooltip"]').each(function () {
+        args.$el.findWithSelf('[data-bs-toggle="tooltip"]').each(function () {
             $('#' + $(this).attr('aria-describedby')).remove();
         });
     });
@@ -211,8 +215,8 @@
     });
 
     $(function () {
-        abp.dom.initializers.initializeToolTips($('[data-toggle="tooltip"]'));
-        abp.dom.initializers.initializePopovers($('[data-toggle="popover"]'));
+        abp.dom.initializers.initializeToolTips($('[data-bs-toggle="tooltip"]'));
+        abp.dom.initializers.initializePopovers($('[data-bs-toggle="popover"]'));
         abp.dom.initializers.initializeTimeAgos($('.timeago'));
         abp.dom.initializers.initializeDatepickers($(document));
         abp.dom.initializers.initializeForms($('form'));
