@@ -227,9 +227,7 @@ public class LoginModel : AccountPageModel
             return RedirectSafely(returnUrl, returnUrlHash);
         }
 
-        //TODO: Handle other cases for result!
-
-        var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email);
+        var email = await FindEmailInLoginInfoAsync(loginInfo);
         if (email.IsNullOrWhiteSpace())
         {
             return RedirectToPage("./Register", new {
@@ -262,6 +260,22 @@ public class LoginModel : AccountPageModel
         });
 
         return RedirectSafely(returnUrl, returnUrlHash);
+    }
+
+    protected virtual Task<string> FindEmailInLoginInfoAsync(ExternalLoginInfo loginInfo)
+    {
+        // TODO: Handle other cases for result!
+
+        var emailClaimTypes = new Dictionary<string, string> {
+            { "GitHub", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" }
+        };
+
+        if (!emailClaimTypes.TryGetValue(loginInfo.LoginProvider, out var emailClaimType))
+        {
+            emailClaimType = AbpClaimTypes.Email;
+        }
+
+        return Task.FromResult(loginInfo.Principal.FindFirstValue(emailClaimType));
     }
 
     protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
