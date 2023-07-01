@@ -266,16 +266,22 @@ public class LoginModel : AccountPageModel
     {
         // TODO: Handle other cases for result!
 
-        var emailClaimTypes = new Dictionary<string, string> {
-            { "GitHub", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" }
+        var emailClaimTypes = new[] {
+            AbpClaimTypes.Email,
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
         };
 
-        if (!emailClaimTypes.TryGetValue(loginInfo.LoginProvider, out var emailClaimType))
+        foreach (var emailClaimType in emailClaimTypes)
         {
-            emailClaimType = AbpClaimTypes.Email;
+            var email = loginInfo.Principal.FindFirstValue(emailClaimType);
+
+            if (!email.IsNullOrWhiteSpace())
+            {
+                return Task.FromResult(email);
+            }
         }
 
-        return Task.FromResult(loginInfo.Principal.FindFirstValue(emailClaimType));
+        return Task.FromResult<string>(null);
     }
 
     protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
