@@ -899,6 +899,7 @@
     "SeeFAQ" : "See FAQ",
     "ReleaseLogs": "Release Logs",
     "ReleaseLogs_Tag": "{0} Release Logs",
-    "ReleaseLogs_Pr": "Pull Request #{0} - {1}"
+    "ReleaseLogs_Pr": "Pull Request #{0} - {1}",
+    "NoLabels": "No labels"
   }
 }
