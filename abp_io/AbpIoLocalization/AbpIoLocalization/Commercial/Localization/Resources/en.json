@@ -900,6 +900,8 @@
     "ReleaseLogs": "Release Logs",
     "ReleaseLogs_Tag": "{0} Release Logs",
     "ReleaseLogs_Pr": "Pull Request #{0} - {1}",
-    "NoLabels": "No labels"
+    "NoLabels": "No labels",
+    "DoesTheSubscriptionRenewAutomatically": "Does the subscription renew automatically?",
+    "DoesTheSubscriptionRenewAutomaticallyExplanation": "The ABP Commercial does not have an auto-renewal billing model. Therefore <strong>your subscription will not be automatically renewed</strong> at the end of your license period. If you want to continue to have the benefits of ABP Commercial, you can manually renew it at the <a href=\"/my-organizations\">organization management page</a>. If you have multiple organizations, click the \"Manage\" button at your expiring organization and then click the \"Extend Now\" button to renew your license. You may also want to take a look at the <a href=\"/faq#what-happens-when-license-ends\">What Happens When My License Ends?</a> section."
   }
 }
