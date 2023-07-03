@@ -4,17 +4,17 @@
 
 In this article, I will show how to compress and resize images easily with the ABP Framework's new [Image Manipulation System](https://docs.abp.io/en/abp/7.3/Image-Manipulation), which is introduced in v7.3.0.
 
-ABP Framework provides services to compress and resize images and implements these services with popular [ImageSharp](https://sixlabors.com/products/imagesharp/) and [Magick.NET](https://github.com/dlemstra/Magick.NET) libraries. Currently, only these two providers are officially supported by the ABP Frameework but thanks to the system being designed extensible, you can implement your own image resizer/compressor and use it in your application.
+ABP Framework provides services to compress and resize images and implements these services with popular [ImageSharp](https://sixlabors.com/products/imagesharp/) and [Magick.NET](https://github.com/dlemstra/Magick.NET) libraries. Currently, only these two providers are officially supported by the ABP Framework but thanks to the system being designed extensible, you can implement your own image resizer/compressor and use it in your application.
 
 > Refer to the documentation for more info: [Image Manipulation](https://docs.abp.io/en/abp/7.3/Image-Manipulation)
 
 ### Source Code
 
-You can find the source code of the application at [https://github.com/abpframework/abp-samples/tree/master/ImageManipulation](https://github.com/abpframework/abp-samples/tree/master/ImageManipulation). Don't hesitate to check the source code, if you stuck on any point.
+You can find the source code of the application at [https://github.com/abpframework/abp-samples/tree/master/ImageManipulation](https://github.com/abpframework/abp-samples/tree/master/ImageManipulation). Don't hesitate to check the source code, if you are stuck on any point.
 
 ## Demo: Image Compression and Resize
 
-Best way to see what ABP's Image Manipulation System capable of is to see it in action. Thus, we can create a simple application that basically allow us to upload, search and display images.
+The best way to see what ABP's Image Manipulation System is capable of is to see it in action. Thus, we can create a simple application that basically allow us to upload, search and display images.
 
 ### Creating a New ABP Solution
 
@@ -34,11 +34,11 @@ abp new ImageManipulationDemo -t app --version 7.3.0-rc.2
 
 > As I have mentioned above, ABP introduced the Image Manipulation System in v7.3.0. So, ensure your application is v7.3.0 or higher.
 
-After creating the application, let's create the database and seed the initial data by running the `*.DbMigrator` project. Also, you can run the application to see it's working as expected.
+After creating the application, let's create the database and seed the initial data by running the `*.DbMigrator` project. Also, you can run the application to see if it's working as expected.
 
 ### Configuring the BLOB Storing System
 
-Since, we are creating a image upload application, we need to store our images in somewhere and read these image contents when its needed. [BLOB Storing System](https://docs.abp.io/en/abp/latest/Blob-Storing) is a great solution to achieve this. Let's install & configure the BLOB Storing System into our application.
+Since we are creating an image upload application, we need to store our images somewhere and read these image contents when it's needed. [BLOB Storing System](https://docs.abp.io/en/abp/latest/Blob-Storing) is a great solution to achieve this. Let's install & configure the BLOB Storing System into our application.
 
 First, run the following command under the directory of your `*.HttpApi` project:
 
@@ -46,21 +46,21 @@ First, run the following command under the directory of your `*.HttpApi` project
 abp add-package Volo.Abp.BlobStoring
 ```
 
-Then, we need to select and configure a storage provider to tell the BLOB Storing System to where to store the file contents. There are [multiple providers](https://docs.abp.io/en/abp/latest/Blob-Storing#blob-storage-providers) that we can choose. For the simplicity of the demo, let's continue with the **database provider** and run the following command under the directory of your solution (`*.sln`):
+Then, we need to select and configure a storage provider to tell the BLOB Storing System where to store the file contents. There are [multiple providers](https://docs.abp.io/en/abp/latest/Blob-Storing#blob-storage-providers) that we can choose. For the simplicity of the demo, let's continue with the **database provider** and run the following command under the directory of your solution (`*.sln`):
 
 ```bash
 abp add-module Volo.Abp.BlobStoring.Database
 ```
 
 * This command adds all the NuGet packages to the corresponding layers of your solution.
-* Also, it makes the necessary configurations, adds a new database migration and updates the database.
-* Since, we are not configuring the connection string, the BLOB Storing system will use the default connection string in our application.
+* Also, it makes the necessary configurations, adds a new database migration, and updates the database.
+* Since we are not configuring the connection string, the BLOB Storing system will use the default connection string in our application.
 
-That's it. We have installed and configured the BLOB Storing System in our applicaton. 
+That's it. We have installed and configured the BLOB Storing System in our application. 
 
 ### Configuring the Image Manipulation System
 
-After, configuring the BLOB Storing System, now we can install and configure the Image Manipulation System for to be able to compress and resize images.
+After, configuring the BLOB Storing System, now we can install and configure the Image Manipulation System to be able to compress and resize images.
 
 ABP Framework provides two image resizer/compressor implementations out of the box: [ImageSharp](https://docs.abp.io/en/abp/7.3/Image-Manipulation#imagesharp-provider) and [Magick.NET](https://docs.abp.io/en/abp/7.3/Image-Manipulation#magick-net-provider).
 
@@ -82,7 +82,7 @@ To be able to use these attributes, we need to install the `Volo.Abp.Imaging.Asp
 abp add-package Volo.Abp.Imaging.AspNetCore
 ```
 
-This package provides two attributes: `[CompressImage]` and `[ResizeImage]`. Whenever we use these attributes, the Image Manipulation System will automaticall compress and/or resize uploaded files.
+This package provides two attributes: `[CompressImage]` and `[ResizeImage]`. Whenever we use these attributes, the Image Manipulation System will automatically compress and/or resize uploaded files.
 
 ### Image Upload (with Compress & Resize)
 
@@ -132,12 +132,12 @@ namespace ImageManipulationDemo.Controllers
 }
 ```
 
-* Here, we have used both `CompressImage` and `ResizeImage` attributes to automaticall compress & resize the uploaded file.
+* Here, we have used both `CompressImage` and `ResizeImage` attributes to automatically compress & resize the uploaded file.
 * As you can see, we used the `IBlobContainer<TContainer>` service to save our file content.
-* Since, we are using the *database provider* as BLOB storing provider, the file contents will be added into our database and then we will be able to fetch them whenever its needed like we have done in the `GetImageAsync` method above.
-* We simply used the required attributes (and they do the rest behalf of us and call the related image resize and compress services) to resize & compress images and saved the new resized/compressed image into the database.
+* Since we are using the *database provider* as BLOB storing provider, the file contents will be added to our database and then we will be able to fetch them whenever it's needed like we have done in the `GetImageAsync` method above.
+* We simply used the required attributes (and they do the rest on behalf of us and call the related image resize and compress services) to resize & compress images and saved the new resized/compressed image into the database.
 
-Before implementing the UI side, as you may notice, we injected the `IBlobContainer` as typed service (`IBlobContainer<ImageManipulationContainer>`). Typed BLOB container system is a way of creating and managing multiple containers in an application and we haven't created the `ImageManipulationContainer` class yet.
+Before implementing the UI side, as you may notice, we injected the `IBlobContainer` as a typed service (`IBlobContainer<ImageManipulationContainer>`). Typed BLOB container system is a way of creating and managing multiple containers in an application and we haven't created the `ImageManipulationContainer` class yet.
 
 Let's create this class as below:
 
@@ -154,13 +154,13 @@ namespace ImageManipulationDemo
 ```
 
 * We have used the `BlobContainerName` attribute to define the name of the container.
-* If we haven't use the `BlobContainerName` attribute, ABP Framework uses the full name of the class with its namespace.
+* If we haven't used the `BlobContainerName` attribute, ABP Framework uses the full name of the class with its namespace.
 
 We have implemented the endpoints and now can start implementing the UI side. You can see the following figure to see what we are going to design for the image upload page:
 
 ![](image-upload-ui.png)
 
-Let's start designing this page. Open the `Index.cshtml` file (*/Pages/Index.cshtml*) under the `*.Web` project and update the file content with the following:
+Let's start designing this page. Open the `Index.cshtml` file (*/Pages/Index.cshtml*) under the `*.Web` project and update it the file content with the following:
 
 ```html
 @page
@@ -283,9 +283,9 @@ The results are impressive for the example above:
 
 ## Conclusion
 
-In this article, I have showed you how to compress and/or resize images with ABP Framework's Image Manipulation System by just defining some attributes to top of the controller actions. 
+In this article, I have shown you how to compress and/or resize images with ABP Framework's Image Manipulation System by just defining some attributes to the top of the controller actions. 
 
-Also, I have showed that you can use BLOB Storing System to store file contents and compress/resize images before saving them into BLOB Storages thanks to the image resizers/compressors that provided by ABP Framework.
+Also, I have shown that you can use BLOB Storing System to store file contents and compress/resize images before saving them into BLOB Storages thanks to the image resizers/compressors provided by ABP Framework.
 
 ## See Also
 
