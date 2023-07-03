@@ -101,7 +101,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual string GetContent(TagHelperContext context, TagHelperOutput output, string label, string inputHtml, string validation, string infoHtml, bool isCheckbox)
     {
-        var innerContent = isCheckbox ?
+        var innerContent = isCheckbox || TagHelper.FloatingLabel ?
             inputHtml + label :
             label + inputHtml;
 

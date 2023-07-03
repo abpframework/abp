@@ -196,6 +196,8 @@ Model:
   - `AbpFormControlSize.Large`
 - `label`: 为输入设置标签。
 - `display-required-symbol`: 如果输入是必需的，则向标签添加必需符号 (*)。默认为 `True`。
+- `floating-label`: 设置输入的标签是否应该是浮动的。默认为 `False`。
+
 
 ### 标签和本地化
 
