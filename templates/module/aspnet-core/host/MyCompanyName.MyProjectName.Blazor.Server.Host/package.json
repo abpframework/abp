@@ -3,7 +3,7 @@
   "name": "my-app",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "~7.2.2",
-    "@abp/aspnetcore.components.server.basictheme": "~7.2.2"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "~7.2.3",
+    "@abp/aspnetcore.components.server.basictheme": "~7.2.3"
   }
 }
