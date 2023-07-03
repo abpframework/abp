@@ -87,6 +87,7 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
 * `readonly`: Sets the input as read-only.
 * `label`: Sets the label of input.
 * `required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
+* `floating-label`: Sets the label as floating label. The default value is `False`.
 
 `asp-format`, `name` and `value` attributes of [Asp.Net Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-7.0#the-input-tag-helper) are also valid for `abp-input` tag helper.
 
