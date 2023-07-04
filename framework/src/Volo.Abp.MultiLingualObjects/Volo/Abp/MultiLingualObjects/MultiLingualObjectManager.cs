@@ -20,7 +20,7 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
         SettingProvider = settingProvider;
     }
     public virtual async Task<TTranslation?> GetTranslationAsync<TTranslation>(
-        IEnumerable<TTranslation> translations,
+        IEnumerable<TTranslation>? translations,
         string? culture,
         bool fallbackToParentCultures)
         where TTranslation : class, IObjectTranslation
@@ -76,7 +76,7 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
     }
 
     protected virtual TTranslation? GetTranslationBasedOnCulturalRecursive<TTranslation>(
-        CultureInfo culture, IEnumerable<TTranslation> translations, int currentDepth)
+        CultureInfo? culture, IEnumerable<TTranslation>? translations, int currentDepth)
         where TTranslation : class, IObjectTranslation
     {
         if (culture == null ||
@@ -91,7 +91,7 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
         return translation ?? GetTranslationBasedOnCulturalRecursive(culture.Parent, translations, currentDepth + 1);
     }
 
-    public virtual async Task<List<TTranslation?>> GetBulkTranslationsAsync<TTranslation>(IEnumerable<IEnumerable<TTranslation>> translationsCombined, string? culture, bool fallbackToParentCultures)
+    public virtual async Task<List<TTranslation?>> GetBulkTranslationsAsync<TTranslation>(IEnumerable<IEnumerable<TTranslation>>? translationsCombined, string? culture, bool fallbackToParentCultures)
        where TTranslation : class, IObjectTranslation
     {
         culture ??= CultureInfo.CurrentUICulture.Name;
