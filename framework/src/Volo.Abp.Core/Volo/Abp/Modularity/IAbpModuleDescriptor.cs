@@ -19,7 +19,7 @@ public interface IAbpModuleDescriptor
     /// <summary>
     /// All the assemblies of the module.
     /// Includes the main <see cref="Assembly"/> and other assemblies defined
-    /// on the module <see cref="Type"/> using the <see cref="AdditionalModuleAssemblyAttribute"/> attribute.
+    /// on the module <see cref="Type"/> using the <see cref="AdditionalAssemblyAttribute"/> attribute.
     /// </summary>
     List<Assembly> AllAssemblies { get; }
 

@@ -8,11 +8,11 @@ namespace Volo.Abp.Modularity;
 /// Used to define additional assemblies for a module.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class AdditionalModuleAssemblyAttribute : Attribute, IAdditionalModuleAssemblyProvider
+public class AdditionalAssemblyAttribute : Attribute, IAdditionalModuleAssemblyProvider
 {
     public Type[] TypesInAssemblies { get; }
 
-    public AdditionalModuleAssemblyAttribute(params Type[]? typesInAssemblies)
+    public AdditionalAssemblyAttribute(params Type[]? typesInAssemblies)
     {
         TypesInAssemblies = typesInAssemblies ?? Type.EmptyTypes;
     }

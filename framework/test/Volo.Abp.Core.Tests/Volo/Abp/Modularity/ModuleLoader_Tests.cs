@@ -28,7 +28,7 @@ public class ModuleLoader_Tests
     }
 
     [DependsOn(typeof(IndependentEmptyModule))]
-    [AdditionalModuleAssembly(typeof(IAbpApplication))]
+    [AdditionalAssembly(typeof(IAbpApplication))]
     public class MyStartupModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
