@@ -195,7 +195,7 @@ public abstract class ProjectCreationCommandBase
 
             var microserviceSolutionName = Path.GetFileName(slnPath).RemovePostFix(".sln");
 
-            version ??= SolutionPackageVersionFinder.Find(slnPath);
+            version ??= SolutionPackageVersionFinder.FindByCsprojVersion(slnPath);
             solutionName = SolutionName.Parse(microserviceSolutionName, projectName);
             outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, solutionName.ProjectName);
             uiFramework = uiFramework == UiFramework.NotSpecified ? FindMicroserviceSolutionUiFramework(outputFolderRoot) : uiFramework;

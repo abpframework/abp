@@ -102,11 +102,16 @@ public abstract class ModuleTemplateBase : TemplateInfo
         steps.Add(new UpdateNuGetConfigStep("/NuGet.Config"));
     }
 
-    private static void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    private void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ConnectionString != null)
         {
             steps.Add(new ConnectionStringChangeStep());
+        }
+
+        if (IsPro())
+        {
+            steps.Add(new ConnectionStringRenameStep());
         }
     }
 

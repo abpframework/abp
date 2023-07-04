@@ -54,7 +54,7 @@
                                     </Feedback>
                                 </TextEdit>
                             </Field>
-                            <ExtensionProperties TEntityType="IdentityRoleCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH"/>
+                            <ExtensionProperties TEntityType="IdentityRoleCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH" ModalType="ExtensionPropertyModalType.CreateModal" />
                         </Validation>
                         <Field>
                             <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
@@ -92,7 +92,7 @@
                                     </Feedback>
                                 </TextEdit>
                             </Field>
-                            <ExtensionProperties TEntityType="IdentityRoleUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH"/>
+                            <ExtensionProperties TEntityType="IdentityRoleUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH"  ModalType="ExtensionPropertyModalType.EditModal" />
                         </Validation>
                         <Field>
                             <Check TValue="bool" @bind-Checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>

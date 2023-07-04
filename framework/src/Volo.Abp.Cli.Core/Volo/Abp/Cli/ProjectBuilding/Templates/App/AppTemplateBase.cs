@@ -645,6 +645,11 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             steps.Add(new ConnectionStringChangeStep());
         }
+
+        if (IsPro())
+        {
+            steps.Add(new ConnectionStringRenameStep());
+        }
     }
 
     protected void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
