@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 
@@ -11,6 +12,8 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
     public Type Type { get; }
 
     public Assembly Assembly { get; }
+    
+    public List<Assembly> AllAssemblies { get; }
 
     public IAbpModule Instance { get; }
 
@@ -26,6 +29,7 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
     {
         Check.NotNull(type, nameof(type));
         Check.NotNull(instance, nameof(instance));
+        AbpModule.CheckAbpModuleType(type);
 
         if (!type.GetTypeInfo().IsAssignableFrom(instance.GetType()))
         {
@@ -34,6 +38,7 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
 
         Type = type;
         Assembly = type.Assembly;
+        AllAssemblies = CreateAllAssembliesList(type);
         Instance = instance;
         IsLoadedAsPlugIn = isLoadedAsPlugIn;
 
@@ -48,5 +53,26 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
     public override string ToString()
     {
         return $"[AbpModuleDescriptor {Type.FullName}]";
+    }
+    
+    private static List<Assembly> CreateAllAssembliesList(Type moduleType)
+    {
+        var assemblies = new List<Assembly>();
+
+        var additionalAssemblyDescriptors = moduleType
+            .GetCustomAttributes()
+            .OfType<IAdditionalModuleAssemblyProvider>();
+
+        foreach (var descriptor in additionalAssemblyDescriptors)
+        {
+            foreach (var assembly in descriptor.GetAssemblies())
+            {
+                assemblies.AddIfNotContains(assembly);
+            }
+        }
+        
+        assemblies.Add(moduleType.Assembly);
+
+        return assemblies;
     }
 }
