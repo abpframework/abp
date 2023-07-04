@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 
@@ -38,7 +37,7 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
 
         Type = type;
         Assembly = type.Assembly;
-        AllAssemblies = CreateAllAssembliesList(type);
+        AllAssemblies = AbpModuleHelper.GetAllAssemblies(type);
         Instance = instance;
         IsLoadedAsPlugIn = isLoadedAsPlugIn;
 
@@ -53,26 +52,5 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
     public override string ToString()
     {
         return $"[AbpModuleDescriptor {Type.FullName}]";
-    }
-    
-    private static List<Assembly> CreateAllAssembliesList(Type moduleType)
-    {
-        var assemblies = new List<Assembly>();
-
-        var additionalAssemblyDescriptors = moduleType
-            .GetCustomAttributes()
-            .OfType<IAdditionalModuleAssemblyProvider>();
-
-        foreach (var descriptor in additionalAssemblyDescriptors)
-        {
-            foreach (var assembly in descriptor.GetAssemblies())
-            {
-                assemblies.AddIfNotContains(assembly);
-            }
-        }
-        
-        assemblies.Add(moduleType.Assembly);
-
-        return assemblies;
     }
 }
