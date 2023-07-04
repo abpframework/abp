@@ -14,7 +14,7 @@ You can find the source code of the application at [https://github.com/abpframew
 
 ## Demo: Image Compression and Resize
 
-The best way to see what ABP's Image Manipulation System is capable of is to see it in action. Thus, we can create a simple application that basically allow us to upload, search and display images.
+The best way to see what ABP's Image Manipulation System is capable of is to see it in action. Thus, we can create a simple application that basically allows us to upload, search and display images.
 
 ### Creating a New ABP Solution
 
@@ -74,7 +74,7 @@ abp add-package Volo.Abp.Imaging.ImageSharp
 * You can [configure the `ImageSharpCompressOptions`](https://docs.abp.io/en/abp/7.3/Image-Manipulation#configuration-1) to define *DefaultQuality* and encoders.
 
 
-After installing the provider, now we can use the services to compress and resize our images, such as `IImageCompression` and `IImageResizer`. But there is an easier way. `Volo.Abp.Imaging.AspNetCore` NuGet package defines some attributes for controller actions that can automatically compress and/or resize uploaded files.
+After installing the provider, now we can use the services to compress and resize our images, such as `IImageCompression` and `IImageResizer`. But there is an easier way. The `Volo.Abp.Imaging.AspNetCore` NuGet package defines some attributes for controller actions that can automatically compress and/or resize the uploaded files.
 
 To be able to use these attributes, we need to install the `Volo.Abp.Imaging.AspNetCore` package. Type the following command under the `*.HttpApi` project:
 
@@ -86,9 +86,9 @@ This package provides two attributes: `[CompressImage]` and `[ResizeImage]`. Whe
 
 ### Image Upload (with Compress & Resize)
 
-After all the required package installations and configurations are done, now we can start implementing the API and UI for Image Upload.
+After all the required package installations and configurations are done, now we can start implementing the API and UI for the Image Upload.
 
-Let's start with creating the API. Create a controller in the `*.HttpApi` project named `ImageController` and perform image upload and image display operations:
+Let's start with creating the API. Create a controller in the `*.HttpApi` project named `ImageController` and perform the image upload and image display operations:
 
 ```csharp
 using Microsoft.AspNetCore.Http;
@@ -135,9 +135,9 @@ namespace ImageManipulationDemo.Controllers
 * Here, we have used both `CompressImage` and `ResizeImage` attributes to automatically compress & resize the uploaded file.
 * As you can see, we used the `IBlobContainer<TContainer>` service to save our file content.
 * Since we are using the *database provider* as BLOB storing provider, the file contents will be added to our database and then we will be able to fetch them whenever it's needed like we have done in the `GetImageAsync` method above.
-* We simply used the required attributes (and they do the rest on behalf of us and call the related image resize and compress services) to resize & compress images and saved the new resized/compressed image into the database.
+* We simply used the required attributes (and they do the rest on behalf of us and call the related image resize and compress services) to resize & compress images and save the new resized/compressed image into the database.
 
-Before implementing the UI side, as you may notice, we injected the `IBlobContainer` as a typed service (`IBlobContainer<ImageManipulationContainer>`). Typed BLOB container system is a way of creating and managing multiple containers in an application and we haven't created the `ImageManipulationContainer` class yet.
+Before implementing the UI side, as you may notice, we've injected the `IBlobContainer` as a typed service (`IBlobContainer<ImageManipulationContainer>`). A typed BLOB container system is a way of creating and managing multiple containers in an application. We haven't created the `ImageManipulationContainer` class yet.
 
 Let's create this class as below:
 
@@ -160,7 +160,7 @@ We have implemented the endpoints and now can start implementing the UI side. Yo
 
 ![](image-upload-ui.png)
 
-Let's start designing this page. Open the `Index.cshtml` file (*/Pages/Index.cshtml*) under the `*.Web` project and update it the file content with the following:
+Let's start designing this page. Open the `Index.cshtml` file (*/Pages/Index.cshtml*) under the `*.Web` project and replace it with the following content:
 
 ```html
 @page
@@ -219,7 +219,7 @@ Let's start designing this page. Open the `Index.cshtml` file (*/Pages/Index.csh
 </div>
 ```
 
-Then, open the `index.js` file and update with the following content:
+Then, open the `index.js` file and replace it with the following content:
 
 ```js
 $(function () {
@@ -278,14 +278,14 @@ Now, we can run the application and see the Image Manipulation System in action:
 
 The results are impressive for the example above:
 
-* The original image was 12 KB and now the compressed & resized image reduced to 8 KB. 
+* The original image was 12 KB and now the compressed & resized image has been reduced to 8 KB. 
 * The original image was 225x225 and now resized as 200x200.
 
 ## Conclusion
 
 In this article, I have shown you how to compress and/or resize images with ABP Framework's Image Manipulation System by just defining some attributes to the top of the controller actions. 
 
-Also, I have shown that you can use BLOB Storing System to store file contents and compress/resize images before saving them into BLOB Storages thanks to the image resizers/compressors provided by ABP Framework.
+Also, I have shown that you can use the BLOB Storing System to store file contents and compress/resize images before saving them into BLOB Storages thanks to the image resizers/compressors provided by ABP Framework.
 
 ## See Also
 
