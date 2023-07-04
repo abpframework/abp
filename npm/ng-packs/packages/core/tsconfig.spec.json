@@ -7,5 +7,5 @@
     "esModuleInterop": true
   },
   "files": ["src/test-setup.ts"],
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "../theme-shared/src/lib/components/internet-connection-status/internet-connection-status.component.ts"]
 }

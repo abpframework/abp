@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
+import { InternetConnectionStatusComponent } from '../../../theme-shared/src/lib/components/internet-connection-status/internet-connection-status.component';
 import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
 import { RouterOutletComponent } from './components/router-outlet.component';
 import { AutofocusDirective } from './directives/autofocus.directive';
@@ -56,6 +57,7 @@ import { IncludeLocalizationResourcesProvider } from './providers/include-locali
     AbstractNgModelComponent,
     AutofocusDirective,
     DynamicLayoutComponent,
+    InternetConnectionStatusComponent,
     ForDirective,
     FormSubmitDirective,
     InitDirective,
@@ -84,6 +86,7 @@ import { IncludeLocalizationResourcesProvider } from './providers/include-locali
     AbstractNgModelComponent,
     AutofocusDirective,
     DynamicLayoutComponent,
+    InternetConnectionStatusComponent,
     ForDirective,
     FormSubmitDirective,
     InitDirective,
