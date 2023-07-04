@@ -49,6 +49,7 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} 將被刪除!",
     "ItemWillBeDeletedMessage": "此項目將被刪除!",
     "ManageYourAccount": "管理個人帳號",
-    "OthersGroup": "其他"
+    "OthersGroup": "其他",
+    "CopiedToTheClipboard": "已复制到剪贴板"
   }
 }
