@@ -166,7 +166,7 @@ A depended module may depend on another module, but you only need to define your
 
 ABP automatically registers all the services of your module to the [dependency injection](Dependency-Injection.md) system. It finds the service types by scanning types in the assembly that defines your module class. That assembly is considered as the main assembly of your module.
 
-Typically, every assembly contains a separate module class definition. Then modules depends on each other using the `DependsOn` attribute as explained in the previous section. However, in some rare cases, your module may be consisting of multiple assemblies, and only one of them defines a module class, and you want to make the other assemblies parts of your module. In that case, you can use the `AdditionalAssembly` attribute as shown below:
+Typically, every assembly contains a separate module class definition. Then modules depend on each other using the `DependsOn` attribute as explained in the previous section. However, in some rare cases, your module may be consisting of multiple assemblies, and only one of them defines a module class, and you want to make the other assemblies parts of your module. In that case, you can use the `AdditionalAssembly` attribute as shown below:
 
 ````csharp
 [DependsOn(...)] // Your module dependencies as you normally do
@@ -181,7 +181,7 @@ In this example, we assume that the `BlogService` class is inside one assembly (
 
 Notice that `BlogService` is only an arbitrary selected type in the target assembly. It is just used to indicate the related assembly. You could use any type in the assembly.
 
-> WARNING: If you need to use the `AdditionalAssembly`, be sure that you don't design your system in a wrong way. With this example above, `BlogService` class' assembly should normally have its own module class and the `BlogModule` should depend on it using the `DependsOn` attribute. Do not use the `AdditionalAssembly` attribute when you can use the `DependsOn` attribute.
+> WARNING: If you need to use the `AdditionalAssembly`, be sure that you don't design your system in a wrong way. With this example above, `BlogService` class' assembly should normally have its own module class and the `BlogModule` should depend on it using the `DependsOn` attribute. Do not use the `AdditionalAssembly` attribute when you can already use the `DependsOn` attribute.
 
 ## Framework Modules vs Application Modules
 
