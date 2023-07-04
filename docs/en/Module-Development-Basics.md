@@ -170,7 +170,7 @@ Typically, every assembly contains a separate module class definition. Then modu
 
 ````csharp
 [DependsOn(...)] // Your module dependencies as you normally do
-[AdditionalAssembly(typeof(BlogService))]
+[AdditionalAssembly(typeof(BlogService))] // A type in the target assembly
 public class BlogModule
 {
     //...
@@ -178,6 +178,8 @@ public class BlogModule
 ````
 
 In this example, we assume that the `BlogService` class is inside one assembly (`csproj`) and the `BlogModule` class is inside another assembly (`csproj`). With the `AdditionalAssembly` definition, ABP will load the assembly containing the `BlogService` class as a part of the blog module.
+
+Notice that `BlogService` is only an arbitrary selected type in the target assembly. It is just used to indicate the related assembly. You could use any type in the assembly.
 
 > WARNING: If you need to use the `AdditionalAssembly`, be sure that you don't design your system in a wrong way. With this example above, `BlogService` class' assembly should normally have its own module class and the `BlogModule` should depend on it using the `DependsOn` attribute. Do not use the `AdditionalAssembly` attribute when you can use the `DependsOn` attribute.
 
