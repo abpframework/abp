@@ -15,7 +15,7 @@ public class GlobalSettingValueProvider : SettingValueProvider
     {
     }
 
-    public override Task<string> GetOrNullAsync(SettingDefinition setting)
+    public override Task<string?> GetOrNullAsync(SettingDefinition setting)
     {
         return SettingStore.GetOrNullAsync(setting.Name, Name, null);
     }

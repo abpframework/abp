@@ -10,16 +10,15 @@ public abstract class LocalizationResourceBase
     
     public List<string> BaseResourceNames { get; }
     
-    [CanBeNull]
-    public string DefaultCultureName { get; set; }
+    public string? DefaultCultureName { get; set; }
     
     [NotNull]
     public LocalizationResourceContributorList Contributors { get; }
 
     public LocalizationResourceBase(
         [NotNull] string resourceName,
-        [CanBeNull] string defaultCultureName = null,
-        [CanBeNull] ILocalizationResourceContributor initialContributor = null)
+        string? defaultCultureName = null,
+        ILocalizationResourceContributor? initialContributor = null)
     {
         ResourceName = Check.NotNullOrWhiteSpace(resourceName, nameof(resourceName));
         DefaultCultureName = defaultCultureName;

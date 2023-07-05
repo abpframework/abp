@@ -23,8 +23,7 @@ public class ExtensionPropertyConfiguration : IHasNameWithLocalizableDisplayName
     [NotNull]
     public List<Action<ObjectExtensionPropertyValidationContext>> Validators { get; }
 
-    [CanBeNull]
-    public ILocalizableString DisplayName { get; set; }
+    public ILocalizableString? DisplayName { get; set; }
 
     [NotNull]
     public Dictionary<string, object> Configuration { get; }
@@ -49,15 +48,13 @@ public class ExtensionPropertyConfiguration : IHasNameWithLocalizableDisplayName
     /// <summary>
     /// Uses as the default value if <see cref="DefaultValueFactory"/> was not set.
     /// </summary>
-    [CanBeNull]
-    public object DefaultValue { get; set; }
+    public object? DefaultValue { get; set; }
 
     /// <summary>
     /// Used with the first priority to create the default value for the property.
     /// Uses to the <see cref="DefaultValue"/> if this was not set.
     /// </summary>
-    [CanBeNull]
-    public Func<object> DefaultValueFactory { get; set; }
+    public Func<object>? DefaultValueFactory { get; set; }
 
     public ExtensionPropertyConfiguration(
         [NotNull] EntityExtensionConfiguration entityExtensionConfiguration,
@@ -80,7 +77,7 @@ public class ExtensionPropertyConfiguration : IHasNameWithLocalizableDisplayName
         DefaultValue = TypeHelper.GetDefaultValue(Type);
     }
 
-    public object GetDefaultValue()
+    public object? GetDefaultValue()
     {
         return ExtensionPropertyHelper.GetDefaultValue(Type, DefaultValueFactory, DefaultValue);
     }
