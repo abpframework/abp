@@ -8,7 +8,7 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters;
 
 public class AbpStringToBooleanConverter : JsonConverter<bool>
 {
-    private JsonSerializerOptions _writeJsonSerializerOptions;
+    private JsonSerializerOptions? _writeJsonSerializerOptions;
 
     public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

@@ -24,8 +24,7 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
     [NotNull]
     public List<Action<ObjectExtensionPropertyValidationContext>> Validators { get; }
 
-    [CanBeNull]
-    public ILocalizableString DisplayName { get; set; }
+    public ILocalizableString? DisplayName { get; set; }
 
     /// <summary>
     /// Indicates whether to check the other side of the object mapping
@@ -47,15 +46,13 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
     /// <summary>
     /// Uses as the default value if <see cref="DefaultValueFactory"/> was not set.
     /// </summary>
-    [CanBeNull]
-    public object DefaultValue { get; set; }
+    public object? DefaultValue { get; set; }
 
     /// <summary>
     /// Used with the first priority to create the default value for the property.
     /// Uses to the <see cref="DefaultValue"/> if this was not set.
     /// </summary>
-    [CanBeNull]
-    public Func<object> DefaultValueFactory { get; set; }
+    public Func<object>? DefaultValueFactory { get; set; }
 
     [NotNull]
     public ExtensionPropertyLookupConfiguration Lookup { get; set; }
@@ -81,7 +78,7 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
         UI = new ExtensionPropertyUI();
     }
 
-    public object GetDefaultValue()
+    public object? GetDefaultValue()
     {
         return ExtensionPropertyHelper.GetDefaultValue(Type, DefaultValueFactory, DefaultValue);
     }

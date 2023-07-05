@@ -52,7 +52,7 @@ public class UnitOfWorkInterceptor : AbpInterceptor, ITransientDependency
         }
     }
 
-    private AbpUnitOfWorkOptions CreateOptions(IServiceProvider serviceProvider, IAbpMethodInvocation invocation, [CanBeNull] UnitOfWorkAttribute unitOfWorkAttribute)
+    private AbpUnitOfWorkOptions CreateOptions(IServiceProvider serviceProvider, IAbpMethodInvocation invocation, UnitOfWorkAttribute? unitOfWorkAttribute)
     {
         var options = new AbpUnitOfWorkOptions();
 

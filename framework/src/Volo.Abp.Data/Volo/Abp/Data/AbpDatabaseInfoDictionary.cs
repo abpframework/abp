@@ -13,8 +13,7 @@ public class AbpDatabaseInfoDictionary : Dictionary<string, AbpDatabaseInfo>
         ConnectionIndex = new Dictionary<string, AbpDatabaseInfo>();
     }
 
-    [CanBeNull]
-    public AbpDatabaseInfo GetMappedDatabaseOrNull(string connectionStringName)
+    public AbpDatabaseInfo? GetMappedDatabaseOrNull(string connectionStringName)
     {
         return ConnectionIndex.GetOrDefault(connectionStringName);
     }

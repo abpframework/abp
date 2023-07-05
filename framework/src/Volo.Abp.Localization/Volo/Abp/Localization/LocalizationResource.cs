@@ -12,8 +12,8 @@ public class LocalizationResource : LocalizationResourceBase
 
     public LocalizationResource(
         [NotNull] Type resourceType,
-        [CanBeNull] string defaultCultureName = null,
-        [CanBeNull] ILocalizationResourceContributor initialContributor = null)
+        string? defaultCultureName = null,
+        ILocalizationResourceContributor? initialContributor = null)
         : base(
             LocalizationResourceNameAttribute.GetName(resourceType),
             defaultCultureName,

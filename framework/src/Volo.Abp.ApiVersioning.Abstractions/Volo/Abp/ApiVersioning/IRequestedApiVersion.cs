@@ -2,5 +2,5 @@
 
 public interface IRequestedApiVersion
 {
-    string Current { get; }
+    string? Current { get; }
 }
