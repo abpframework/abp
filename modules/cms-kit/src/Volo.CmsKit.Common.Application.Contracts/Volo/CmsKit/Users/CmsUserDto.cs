@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 namespace Volo.CmsKit.Users;
 
 [Serializable]
-public class CmsUserDto : EntityDto<Guid>
+public class CmsUserDto : ExtensibleEntityDto<Guid>
 {
     public virtual Guid? TenantId { get; protected set; }
 

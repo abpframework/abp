@@ -1108,6 +1108,21 @@ public class IdentityUserStore :
         return false;
     }
 
+    public virtual Task<string> GetInternalLoginProviderAsync()
+    {
+        return Task.FromResult(InternalLoginProvider);
+    }
+
+    public virtual Task<string> GetAuthenticatorKeyTokenNameAsync()
+    {
+        return Task.FromResult(AuthenticatorKeyTokenName);
+    }
+
+    public virtual Task<string> GetRecoveryCodeTokenNameAsync()
+    {
+        return Task.FromResult(RecoveryCodeTokenName);
+    }
+
     public virtual void Dispose()
     {
 

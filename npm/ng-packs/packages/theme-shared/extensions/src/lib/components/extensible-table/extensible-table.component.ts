@@ -116,8 +116,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   private getIcon(value: boolean) {
     return value
-      ? '<div class="text-success"><i class="fa fa-check"></i></div>'
-      : '<div class="text-danger"><i class="fa fa-times"></i></div>';
+      ? '<div class="text-success"><i class="fa fa-check" aria-hidden="true"></i></div>'
+      : '<div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i></div>';
   }
 
   private getEnum(rowValue: any, list: Array<ABP.Option<any>>) {

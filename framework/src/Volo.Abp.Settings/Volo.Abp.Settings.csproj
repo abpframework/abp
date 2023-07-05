@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
     <AssemblyName>Volo.Abp.Settings</AssemblyName>
     <PackageId>Volo.Abp.Settings</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -16,8 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Localization.Abstractions\Volo.Abp.Localization.Abstractions.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
   </ItemGroup>
 
 </Project>

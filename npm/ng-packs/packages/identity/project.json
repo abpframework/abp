@@ -1,0 +1,42 @@
+{
+  "name": "identity",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/identity/src",
+  "prefix": "abp",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/identity"],
+      "options": {
+        "project": "packages/identity/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/identity/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/identity/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/packages/identity"],
+      "options": {
+        "jestConfig": "packages/identity/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["packages/identity/src/**/*.ts", "packages/identity/src/**/*.html"]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared", "permission-management"]
+}

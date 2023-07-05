@@ -26,6 +26,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         {
             case DatabaseProvider.NotSpecified:
             case DatabaseProvider.EntityFrameworkCore:
+                context.Symbols.Add("EFCORE");
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host.Mongo"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo"));
@@ -50,6 +51,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         switch (context.BuildArgs.UiFramework)
         {
             case UiFramework.Angular:
+                context.Symbols.Add("ui:angular");
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host", "MyCompanyName.MyProjectName"));
@@ -65,24 +67,26 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 break;
 
             case UiFramework.Blazor:
+                context.Symbols.Add("ui:blazor");
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
-                
+
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server",
                      "MyCompanyName.MyProjectName.Host"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Client",
                      "MyCompanyName.MyProjectName.Blazor"));
-                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared", 
+                steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared",
                     "MyCompanyName.MyProjectName.Contracts"));
-                
+
                 steps.Add(new AppNoLayersMoveProjectsStep());
                 steps.Add(new AppNoLayersMigrateDatabaseChangeStep());
                 steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
                 break;
-            
+
             case UiFramework.BlazorServer:
+                context.Symbols.Add("ui:blazor-server");
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
@@ -92,13 +96,14 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
 
             case UiFramework.NotSpecified:
             case UiFramework.Mvc:
+                context.Symbols.Add("ui:mvc");
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Mvc", "MyCompanyName.MyProjectName"));
                 RemoveBlazorWasmProjects(steps);
                 break;
-            
+
             default:
                 throw new AbpException("Unkown UI framework: " + context.BuildArgs.UiFramework);
         }
@@ -107,6 +112,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
         steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Host/Migrations"));
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
+        RandomizeAuthServerPassPhrase(context, steps);
         UpdateNuGetConfig(context, steps);
         ChangeConnectionString(context, steps);
         ConfigureDockerFiles(context, steps);

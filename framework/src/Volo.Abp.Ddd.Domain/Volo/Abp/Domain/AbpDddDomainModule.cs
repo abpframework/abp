@@ -22,7 +22,8 @@ namespace Volo.Abp.Domain;
     typeof(AbpObjectMappingModule),
     typeof(AbpExceptionHandlingModule),
     typeof(AbpSpecificationsModule),
-    typeof(AbpCachingModule)
+    typeof(AbpCachingModule),
+    typeof(AbpDddDomainSharedModule)
     )]
 public class AbpDddDomainModule : AbpModule
 {

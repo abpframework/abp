@@ -323,16 +323,16 @@ Configure<TokenCleanupOptions>(options =>
 
 [Claims Principal Factory](https://docs.abp.io/en/abp/latest/Authorization#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
 
-The `AbpDefaultOpenIddictClaimDestinationsProvider` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
+The `AbpDefaultOpenIddictClaimsPrincipalHandler` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
 
-Create a service that inherits from `IAbpOpenIddictClaimDestinationsProvider` and add it to DI to fully control the destinations of claims.
+Create a service that inherits from `IAbpOpenIddictClaimsPrincipalHandler` and add it to DI to fully control the destinations of claims.
 
 ```cs
-public class MyClaimDestinationsProvider : IAbpOpenIddictClaimDestinationsProvider, ITransientDependency
+public class MyClaimDestinationsHandler : IAbpOpenIddictClaimsPrincipalHandler, ITransientDependency
 {
-    public virtual Task SetDestinationsAsync(AbpOpenIddictClaimDestinationsProviderContext context)
+    public virtual Task HandleAsync(AbpOpenIddictClaimsPrincipalHandlerContext context)
     {
-        foreach (var claim in context.Claims)
+        foreach (var claim in context.Principal.Claims)
         {
             if (claim.Type == MyClaims.MyClaimsType)
             {
@@ -351,7 +351,7 @@ public class MyClaimDestinationsProvider : IAbpOpenIddictClaimDestinationsProvid
 
 Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
 {
-    options.ClaimDestinationsProvider.Add<MyClaimDestinationsProvider>();
+    options.ClaimsPrincipalHandlers.Add<MyClaimDestinationsHandler>();
 });
 ```
 

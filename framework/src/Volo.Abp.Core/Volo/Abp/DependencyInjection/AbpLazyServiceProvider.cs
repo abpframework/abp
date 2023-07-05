@@ -28,12 +28,12 @@ public class AbpLazyServiceProvider :
         return this.GetRequiredService(serviceType);
     }
 
-    public virtual T LazyGetService<T>()
+    public virtual T? LazyGetService<T>()
     {
-        return (T)LazyGetService(typeof(T));
+        return (T?)LazyGetService(typeof(T));
     }
 
-    public virtual object LazyGetService(Type serviceType)
+    public virtual object? LazyGetService(Type serviceType)
     {
         return GetService(serviceType);
     }

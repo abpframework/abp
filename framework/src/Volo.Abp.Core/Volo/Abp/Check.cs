@@ -136,8 +136,8 @@ public static class Check
         return type;
     }
 
-    public static string Length(
-        [CanBeNull] string value,
+    public static string? Length(
+        string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength,
         int minLength = 0)
@@ -149,7 +149,7 @@ public static class Check
                 throw new ArgumentException(parameterName + " can not be null or empty!", parameterName);
             }
 
-            if (value.Length < minLength)
+            if (value!.Length < minLength)
             {
                 throw new ArgumentException($"{parameterName} length must be equal to or bigger than {minLength}!", parameterName);
             }
