@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Injectable, inject } from '@angular/core';
 import { fromEvent, merge, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -6,8 +7,11 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class InternetConnectionService{
+  protected readonly window = inject(DOCUMENT).defaultView;
+  protected readonly navigator = this.window.navigator;
+
   networkStatus$ = merge(
-    of(null),
+    of(navigator.onLine),
     fromEvent(window, 'offline'),
     fromEvent(window, 'online')
   ).pipe(map(() => navigator.onLine))
