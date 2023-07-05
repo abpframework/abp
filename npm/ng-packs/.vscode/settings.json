@@ -38,5 +38,6 @@
     "statusBarItem.hoverBackground": "#258ecd",
     "statusBar.foreground": "#e7e7e7"
   },
-  "peacock.color": "#1D70A2"
+  "peacock.color": "#1D70A2",
+  "eslint.validate": ["json"]
 }

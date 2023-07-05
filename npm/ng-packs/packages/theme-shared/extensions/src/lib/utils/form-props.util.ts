@@ -17,7 +17,7 @@ export function generateFormFromProps<R = any>(data: PropData<R>) {
   const extraForm = new UntypedFormGroup({});
   form.addControl(EXTRA_PROPERTIES_KEY, extraForm);
 
-  const record = data.record || {} as {[key:string]: any};
+  const record = data.record || {};
   const type = JSON.stringify(record) === '{}' ? 'create' : 'edit';
   const props: FormPropList<R> = extensions[`${type}FormProps`].get(identifier).props;
   const extraProperties = record[EXTRA_PROPERTIES_KEY] || {};

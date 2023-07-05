@@ -9,10 +9,10 @@ public class RootServiceProvider : IRootServiceProvider, ISingletonDependency
     
     public RootServiceProvider(IObjectAccessor<IServiceProvider> objectAccessor)
     {
-        ServiceProvider = objectAccessor.Value;
+        ServiceProvider = objectAccessor.Value!;
     }
 
-    public virtual object GetService(Type serviceType)
+    public virtual object? GetService(Type serviceType)
     {
         return ServiceProvider.GetService(serviceType);
     }

@@ -121,7 +121,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         string policyName;
         if (providerName == TenantFeatureValueProvider.ProviderName && CurrentTenant.Id == null && providerKey == null)
         {
-            policyName = "FeatureManagement.ManageHostFeatures";
+            policyName = FeatureManagementPermissions.ManageHostFeatures;
         }
         else
         {

@@ -39,7 +39,7 @@ public abstract class ProjectCreationCommandBase
     public ILogger<NewCommand> Logger { get; set; }
 
     public ThemePackageAdder ThemePackageAdder { get; }
-    
+
     public AngularThemeConfigurer AngularThemeConfigurer { get; }
 
     public ProjectCreationCommandBase(
@@ -52,7 +52,7 @@ public abstract class ProjectCreationCommandBase
         InitialMigrationCreator initialMigrationCreator,
         ThemePackageAdder themePackageAdder,
         ILocalEventBus eventBus,
-        IBundlingService bundlingService, 
+        IBundlingService bundlingService,
         AngularThemeConfigurer angularThemeConfigurer)
     {
         _bundlingService = bundlingService;
@@ -221,9 +221,11 @@ public abstract class ProjectCreationCommandBase
         }
 
         commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
-        
+
         var theme = uiFramework == UiFramework.None ? (Theme?)null : GetThemeByTemplateOrNull(commandLineArgs, template);
         var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs, theme.Value) : (ThemeStyle?)null;
+
+        var skipCache = commandLineArgs.Options.ContainsKey(Options.SkipCache.Long) || commandLineArgs.Options.ContainsKey(Options.SkipCache.Short);
 
         return new ProjectBuildArgs(
             solutionName,
@@ -242,7 +244,8 @@ public abstract class ProjectCreationCommandBase
             connectionString,
             pwa,
             theme,
-            themeStyle
+            themeStyle,
+            skipCache
         );
     }
 
@@ -417,7 +420,7 @@ public abstract class ProjectCreationCommandBase
 
     protected async Task RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(ProjectBuildArgs projectArgs)
     {
-        if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName)) 
+        if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
             && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
         {
             var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
@@ -432,7 +435,7 @@ public abstract class ProjectCreationCommandBase
             var directory = Path.GetDirectoryName(
                 Directory.GetFiles(projectArgs.OutputFolder, isWebassembly? "*.Blazor.csproj" :"*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
                 );
-            
+
             await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
         }
     }
@@ -584,10 +587,10 @@ public abstract class ProjectCreationCommandBase
             {
                 // null or "leptonx-lite" => Theme.LeptonXLite,
                 "basic" => Theme.Basic,
-                _ => Theme.LeptonXLite 
+                _ => Theme.LeptonXLite
             };
         }
-    
+
         Theme GetAppProTheme()
         {
             return theme switch
@@ -600,16 +603,16 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected virtual ThemeStyle? GetThemeStyleOrNull(CommandLineArgs commandLineArgs, Theme theme) 
+    protected virtual ThemeStyle? GetThemeStyleOrNull(CommandLineArgs commandLineArgs, Theme theme)
     {
-        if(theme != Theme.LeptonX) 
+        if(theme != Theme.LeptonX)
         {
             return null;
         }
 
         var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLower();
-        
-        return themeStyle switch 
+
+        return themeStyle switch
         {
             "system" or null => ThemeStyle.System,
             "dim" => ThemeStyle.Dim,
@@ -660,7 +663,7 @@ public abstract class ProjectCreationCommandBase
             ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
         }
     }
-    
+
     private void ConfigureNpmPackagesForLeptonTheme(ProjectBuildArgs projectArgs)
     {
         if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
@@ -686,7 +689,7 @@ public abstract class ProjectCreationCommandBase
         {
             return;
         }
-                
+
         if (projectArgs.Theme.HasValue && projectArgs.UiFramework == UiFramework.Angular)
         {
             var angularFolderPath = projectArgs.TemplateName == MicroserviceProTemplate.TemplateName
@@ -789,6 +792,13 @@ public abstract class ProjectCreationCommandBase
             public const string Short = "sb";
             public const string Long = "skip-bundling";
         }
+
+        public static class SkipCache
+        {
+            public const string Short = "sc";
+            public const string Long = "skip-cache";
+        }
+
 
         public static class Tiered
         {

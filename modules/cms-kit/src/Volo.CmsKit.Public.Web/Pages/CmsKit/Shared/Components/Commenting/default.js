@@ -150,6 +150,7 @@
                             entityType: $commentArea.attr('data-entity-type'),
                             repliedCommentId: formAsObject.repliedCommentId,
                             text: formAsObject.commentText,
+                            url: window.location.href,
                             captchaToken: formAsObject.captchaId,
                             captchaAnswer: formAsObject.input?.captcha
                         }),
@@ -178,7 +179,7 @@
                 $(location.hash).find('textarea').focus();
             }
         }
-
+        
         function init() {
             registerReplyLinks($widget);
             registerEditLinks($widget);
