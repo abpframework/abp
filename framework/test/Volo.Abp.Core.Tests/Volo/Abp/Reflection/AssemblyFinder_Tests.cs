@@ -51,7 +51,7 @@ public class AssemblyFinder_Tests
     {
         var moduleDescriptor = Substitute.For<IAbpModuleDescriptor>();
         moduleDescriptor.Type.Returns(moduleType);
-        moduleDescriptor.AllAssemblies.Returns(new List<Assembly> { moduleType.Assembly });
+        moduleDescriptor.AllAssemblies.Returns(new [] { moduleType.Assembly });
         return moduleDescriptor;
     }
 }

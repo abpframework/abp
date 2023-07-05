@@ -12,7 +12,7 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
 
     public Assembly Assembly { get; }
     
-    public List<Assembly> AllAssemblies { get; }
+    public Assembly[] AllAssemblies { get; }
 
     public IAbpModule Instance { get; }
 

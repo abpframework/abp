@@ -37,7 +37,7 @@ internal static class AbpModuleHelper
         return dependencies;
     }
     
-    public static List<Assembly> GetAllAssemblies(Type moduleType)
+    public static Assembly[] GetAllAssemblies(Type moduleType)
     {
         var assemblies = new List<Assembly>();
 
@@ -55,7 +55,7 @@ internal static class AbpModuleHelper
         
         assemblies.Add(moduleType.Assembly);
 
-        return assemblies;
+        return assemblies.ToArray();
     }
 
     private static void AddModuleAndDependenciesRecursively(
