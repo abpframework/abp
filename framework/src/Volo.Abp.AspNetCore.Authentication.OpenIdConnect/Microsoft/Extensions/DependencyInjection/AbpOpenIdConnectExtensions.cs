@@ -28,8 +28,6 @@ public static class AbpOpenIdConnectExtensions
         {
             options.ClaimActions.MapAbpClaimTypes();
 
-            configureOptions?.Invoke(options);
-
             options.Events ??= new OpenIdConnectEvents();
             var authorizationCodeReceived = options.Events.OnAuthorizationCodeReceived ?? (_ => Task.CompletedTask);
 
@@ -63,6 +61,8 @@ public static class AbpOpenIdConnectExtensions
                     logger?.LogException(ex);
                 }
             };
+
+            configureOptions?.Invoke(options);
         });
     }
 
