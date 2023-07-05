@@ -2,10 +2,6 @@ import { Injectable } from '@angular/core';
 import { fromEvent, merge, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export interface InternetConnectionState{
-  status: boolean;
-}
-
 @Injectable({
   providedIn: 'root',
 })
