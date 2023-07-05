@@ -6,7 +6,7 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters;
 
 public class AbpNullableStringToGuidConverter : JsonConverter<Guid?>
 {
-    private JsonSerializerOptions _writeJsonSerializerOptions;
+    private JsonSerializerOptions? _writeJsonSerializerOptions;
 
     public override Guid? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

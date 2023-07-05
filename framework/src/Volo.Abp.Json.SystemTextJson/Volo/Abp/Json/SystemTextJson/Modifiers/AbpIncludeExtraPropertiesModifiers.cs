@@ -17,7 +17,7 @@ public static class AbpIncludeExtraPropertiesModifiers
                 .Where(x => x.AttributeProvider is MemberInfo)
                 .FirstOrDefault(x =>
                     x.PropertyType == typeof(ExtraPropertyDictionary) &&
-                    x.AttributeProvider.As<MemberInfo>().Name == nameof(ExtensibleObject.ExtraProperties) &&
+                    x.AttributeProvider!.As<MemberInfo>().Name == nameof(ExtensibleObject.ExtraProperties) &&
                     x.Set == null);
 
             if (propertyJsonInfo != null)

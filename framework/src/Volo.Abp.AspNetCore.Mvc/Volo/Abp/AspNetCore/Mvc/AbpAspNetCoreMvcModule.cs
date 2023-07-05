@@ -233,7 +233,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
             .GetRequiredService<IModuleContainer>()
             .Modules
             .Where(m => m.IsLoadedAsPlugIn)
-            .Select(m => m.Type.Assembly)
+            .SelectMany(m => m.AllAssemblies)
             .Distinct();
 
         AddToApplicationParts(partManager, moduleAssemblies);

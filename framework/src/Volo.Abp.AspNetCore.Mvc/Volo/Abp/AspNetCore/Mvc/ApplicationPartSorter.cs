@@ -125,7 +125,7 @@ public static class ApplicationPartSorter
 
         var moduleDependedAssemblies = moduleDescriptor
             .Dependencies
-            .Select(d => d.Assembly)
+            .SelectMany(d => d.AllAssemblies)
             .ToArray();
 
         return partManager.ApplicationParts
@@ -161,6 +161,6 @@ public static class ApplicationPartSorter
     {
         return moduleContainer
             .Modules
-            .FirstOrDefault(m => m.Assembly == assembly);
+            .FirstOrDefault(m => m.AllAssemblies.Contains(assembly));
     }
 }

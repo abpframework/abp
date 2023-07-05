@@ -13,8 +13,7 @@ public class UnitOfWorkFailedEventArgs : UnitOfWorkEventArgs
     /// Can be null if there is no exception, but <see cref="IUnitOfWork.CompleteAsync"/> is not called.
     /// Can be null if another exception occurred during the UOW.
     /// </summary>
-    [CanBeNull]
-    public Exception Exception { get; }
+    public Exception? Exception { get; }
 
     /// <summary>
     /// True, if the unit of work is manually rolled back.
@@ -24,7 +23,7 @@ public class UnitOfWorkFailedEventArgs : UnitOfWorkEventArgs
     /// <summary>
     /// Creates a new <see cref="UnitOfWorkFailedEventArgs"/> object.
     /// </summary>
-    public UnitOfWorkFailedEventArgs([NotNull] IUnitOfWork unitOfWork, [CanBeNull] Exception exception, bool isRolledback)
+    public UnitOfWorkFailedEventArgs([NotNull] IUnitOfWork unitOfWork, Exception? exception, bool isRolledback)
         : base(unitOfWork)
     {
         Exception = exception;

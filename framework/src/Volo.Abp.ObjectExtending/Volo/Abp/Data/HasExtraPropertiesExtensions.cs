@@ -18,13 +18,13 @@ public static class HasExtraPropertiesExtensions
         return source.ExtraProperties.ContainsKey(name);
     }
 
-    public static object GetProperty(this IHasExtraProperties source, string name, object defaultValue = null)
+    public static object? GetProperty(this IHasExtraProperties source, string name, object? defaultValue = null)
     {
         return source.ExtraProperties?.GetOrDefault(name)
                ?? defaultValue;
     }
 
-    public static TProperty GetProperty<TProperty>(this IHasExtraProperties source, string name, TProperty defaultValue = default)
+    public static TProperty? GetProperty<TProperty>(this IHasExtraProperties source, string name, TProperty? defaultValue = default)
     {
         var value = source.GetProperty(name);
         if (value == null)
@@ -42,7 +42,7 @@ public static class HasExtraPropertiesExtensions
 
             if (conversionType == typeof(Guid))
             {
-                return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString());
+                return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString()!)!;
             }
 
             if (conversionType.IsEnum)
@@ -80,7 +80,7 @@ public static class HasExtraPropertiesExtensions
         return source;
     }
 
-    public static TSource SetDefaultsForExtraProperties<TSource>(this TSource source, Type objectType = null)
+    public static TSource SetDefaultsForExtraProperties<TSource>(this TSource source, Type? objectType = null)
         where TSource : IHasExtraProperties
     {
         if (objectType == null)
@@ -98,7 +98,7 @@ public static class HasExtraPropertiesExtensions
                 continue;
             }
 
-            source.ExtraProperties[property.Name] = property.GetDefaultValue();
+            source.ExtraProperties[property.Name] = property.GetDefaultValue()!;
         }
 
         return source;

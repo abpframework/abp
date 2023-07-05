@@ -27,7 +27,7 @@ public class ConnectionStringNameAttribute : Attribute
 
         if (nameAttribute == null)
         {
-            return type.FullName;
+            return type.FullName!;
         }
 
         return nameAttribute.Name;

@@ -16,7 +16,7 @@ public class DefaultValueSettingValueProvider : SettingValueProvider
 
     }
 
-    public override Task<string> GetOrNullAsync(SettingDefinition setting)
+    public override Task<string?> GetOrNullAsync(SettingDefinition setting)
     {
         return Task.FromResult(setting.DefaultValue);
     }

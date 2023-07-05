@@ -38,7 +38,7 @@ public class ObjectExtensionInfo
     [NotNull]
     public virtual ObjectExtensionInfo AddOrUpdateProperty<TProperty>(
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
     {
         return AddOrUpdateProperty(
             typeof(TProperty),
@@ -51,7 +51,7 @@ public class ObjectExtensionInfo
     public virtual ObjectExtensionInfo AddOrUpdateProperty(
         [NotNull] Type propertyType,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
     {
         Check.NotNull(propertyType, nameof(propertyType));
         Check.NotNull(propertyName, nameof(propertyName));
@@ -73,8 +73,7 @@ public class ObjectExtensionInfo
                         .ToImmutableList();
     }
 
-    [CanBeNull]
-    public virtual ObjectExtensionPropertyInfo GetPropertyOrNull(
+    public virtual ObjectExtensionPropertyInfo? GetPropertyOrNull(
         [NotNull] string propertyName)
     {
         Check.NotNullOrEmpty(propertyName, nameof(propertyName));
