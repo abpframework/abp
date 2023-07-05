@@ -168,6 +168,11 @@ public abstract class AbpComponentBase : OwningComponentBase
 
     protected virtual async Task HandleErrorAsync(Exception exception)
     {
+        if (IsDisposed)
+        {
+            return;
+        }
+       
         Logger.LogException(exception);
         await InvokeAsync(async () =>
         {
