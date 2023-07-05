@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -19,6 +20,7 @@ public static class MvcCoreBuilderExtensions
                 options.JsonSerializerOptions.AllowTrailingCommas = true;
 
                 options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
                 options.JsonSerializerOptions.Converters.Add(new AbpStringToGuidConverter());
                 options.JsonSerializerOptions.Converters.Add(new AbpNullableStringToGuidConverter());
