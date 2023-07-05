@@ -215,9 +215,9 @@ public abstract class AbpCrudPageBase<
 
     protected async override Task OnInitializedAsync()
     {
-        await SetPermissionsAsync();
-        await SetEntityActionsAsync();
-        await SetTableColumnsAsync();
+        await TrySetPermissionsAsync();
+        await TrySetEntityActionsAsync();
+        await TrySetTableColumnsAsync();
         await InvokeAsync(StateHasChanged);
     }
 
@@ -231,7 +231,15 @@ public abstract class AbpCrudPageBase<
         await base.OnAfterRenderAsync(firstRender);
     }
 
+    private async Task TrySetPermissionsAsync()
+    {
+        if (IsDisposed)
+        {
+            return;
+        }
 
+        await SetPermissionsAsync();
+    }
 
     protected virtual async Task SetPermissionsAsync()
     {
@@ -579,13 +587,34 @@ public abstract class AbpCrudPageBase<
         return ValueTask.CompletedTask;
     }
 
+    private async ValueTask TrySetEntityActionsAsync()
+    {
+        if (IsDisposed)
+        {
+            return;
+        }
+
+        await SetEntityActionsAsync();
+    }
+    
     protected virtual ValueTask SetEntityActionsAsync()
     {
         return ValueTask.CompletedTask;
     }
+    
+    private async ValueTask TrySetTableColumnsAsync()
+    {
+        if (IsDisposed)
+        {
+            return;
+        }
+
+        await SetTableColumnsAsync();
+    }
 
     protected virtual ValueTask SetTableColumnsAsync()
     {
+        
         return ValueTask.CompletedTask;
     }
 

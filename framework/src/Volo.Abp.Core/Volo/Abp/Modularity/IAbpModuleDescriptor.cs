@@ -21,7 +21,7 @@ public interface IAbpModuleDescriptor
     /// Includes the main <see cref="Assembly"/> and other assemblies defined
     /// on the module <see cref="Type"/> using the <see cref="AdditionalAssemblyAttribute"/> attribute.
     /// </summary>
-    List<Assembly> AllAssemblies { get; }
+    Assembly[] AllAssemblies { get; }
 
     /// <summary>
     /// The instance of the module class (singleton).
