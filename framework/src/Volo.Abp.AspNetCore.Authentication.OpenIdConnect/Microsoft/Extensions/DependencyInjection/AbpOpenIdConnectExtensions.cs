@@ -37,16 +37,7 @@ public static class AbpOpenIdConnectExtensions
                 return authorizationCodeReceived.Invoke(receivedContext);
             };
 
-            options.Events.OnRemoteFailure = remoteFailureContext =>
-            {
-                if (remoteFailureContext.Failure is OpenIdConnectProtocolException &&
-                    remoteFailureContext.Failure.Message.Contains("access_denied"))
-                {
-                    remoteFailureContext.HandleResponse();
-                    remoteFailureContext.Response.Redirect($"{remoteFailureContext.Request.PathBase}/");
-                }
-                return Task.CompletedTask;
-            };
+            options.AccessDeniedPath = "/";
             
             options.Events.OnTokenValidated = async (context) =>
             {
