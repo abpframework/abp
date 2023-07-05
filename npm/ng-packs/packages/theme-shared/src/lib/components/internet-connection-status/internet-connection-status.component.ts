@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common'
-import { of } from 'rxjs';
+import { map } from 'rxjs';
 import { InternetConnectionService, LocalizationModule } from '@abp/ng.core';
 
 @Component({
@@ -8,7 +8,7 @@ import { InternetConnectionService, LocalizationModule } from '@abp/ng.core';
   standalone: true,
   imports:[CommonModule,LocalizationModule],
   template: `
-    <div class="status-icon" *ngIf="!(internetConnection$ | async)">
+    <div class="status-icon" *ngIf="isOffline$ | async">
       <i data-toggle="tooltip" title="{{ 'AbpUi::InternetConnectionInfo' | abpLocalization }}" data-placement="left" class="fa fa-circle text-blinking blink">
       </i>
     </div>
@@ -41,12 +41,7 @@ import { InternetConnectionService, LocalizationModule } from '@abp/ng.core';
     }
   `]
 })
-export class InternetConnectionStatusComponent implements OnInit{
-  internetConnection$ = of(true);
+export class InternetConnectionStatusComponent{
   internetConnectionService = inject(InternetConnectionService)
-
-  ngOnInit(): void {
-    this.internetConnection$ = this.internetConnectionService.getStatus$()
-  }
-  
+  isOffline$ = this.internetConnectionService.networkStatus$.pipe(map((val) => !val));
 }
