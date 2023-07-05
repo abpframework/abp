@@ -22,7 +22,7 @@
     "SmtpHost": "Sunucu",
     "SmtpPort": "Port",
     "SmtpUserName": "Kullanıcı adı",
-    "SmtpPassword": "şifre",
+    "SmtpPassword": "Şifre",
     "SmtpDomain": "Domain",
     "SmtpEnableSsl": "Ssl'i aktif et",
     "SmtpUseDefaultCredentials": "Varsayılan yetkilendirmeleri kullan",
