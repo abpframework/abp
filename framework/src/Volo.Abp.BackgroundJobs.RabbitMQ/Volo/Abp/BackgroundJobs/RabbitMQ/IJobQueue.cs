@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Threading;
 
@@ -10,5 +10,11 @@ public interface IJobQueue<in TArgs> : IRunnable, IDisposable
         TArgs args,
         BackgroundJobPriority priority = BackgroundJobPriority.Normal,
         TimeSpan? delay = null
+    );
+        
+    Task<string> EnqueueAsync(
+        TArgs args,
+        DateTime executionTime,
+        BackgroundJobPriority priority = BackgroundJobPriority.Normal
     );
 }

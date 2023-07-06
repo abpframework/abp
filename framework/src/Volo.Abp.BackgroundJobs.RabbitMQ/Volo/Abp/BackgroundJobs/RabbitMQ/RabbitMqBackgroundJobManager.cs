@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -14,12 +14,21 @@ public class RabbitMqBackgroundJobManager : IBackgroundJobManager, ITransientDep
         _jobQueueManager = jobQueueManager;
     }
 
-    public async Task<string> EnqueueAsync<TArgs>(
-        TArgs args,
+    public virtual async Task<string> EnqueueAsync<TArgs>(
+        TArgs args, 
         BackgroundJobPriority priority = BackgroundJobPriority.Normal,
         TimeSpan? delay = null)
     {
         var jobQueue = await _jobQueueManager.GetAsync<TArgs>();
         return await jobQueue.EnqueueAsync(args, priority, delay);
+    }
+
+    public virtual async Task<string> EnqueueAsync<TArgs>(
+        TArgs args,
+        DateTime executionTime,
+        BackgroundJobPriority priority = BackgroundJobPriority.Normal)
+    {
+        var jobQueue = await _jobQueueManager.GetAsync<TArgs>();
+        return await jobQueue.EnqueueAsync(args, executionTime, priority);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -16,7 +16,7 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
     protected IBackgroundJobSerializer Serializer { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IBackgroundJobStore Store { get; }
-
+    
     public DefaultBackgroundJobManager(
         IClock clock,
         IBackgroundJobSerializer serializer,
@@ -32,11 +32,24 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
         var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
-        var jobId = await EnqueueAsync(jobName, args, priority, delay);
+        
+        var executionTime = delay.HasValue ? Clock.Now.Add(delay.Value) : (DateTime?) null;
+        
+        var jobId = await EnqueueAsync(jobName, args, priority, executionTime);
+        
         return jobId.ToString();
     }
 
-    protected virtual async Task<Guid> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
+    public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, DateTime executionTime, BackgroundJobPriority priority = BackgroundJobPriority.Normal)
+    {
+        var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
+        
+        var jobId = await EnqueueAsync(jobName, args, priority, executionTime);
+        
+        return jobId.ToString();
+    }
+
+    protected virtual async Task<Guid> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, DateTime? executionTime = null)
     {
         var jobInfo = new BackgroundJobInfo
         {
@@ -48,9 +61,9 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
             NextTryTime = Clock.Now
         };
 
-        if (delay.HasValue)
+        if (executionTime.HasValue)
         {
-            jobInfo.NextTryTime = Clock.Now.Add(delay.Value);
+            jobInfo.NextTryTime = executionTime.Value;
         }
 
         await Store.InsertAsync(jobInfo);

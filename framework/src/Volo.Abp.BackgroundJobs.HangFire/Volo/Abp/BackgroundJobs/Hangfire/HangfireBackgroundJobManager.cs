@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Hangfire;
@@ -29,6 +29,14 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
             : BackgroundJob.Enqueue<HangfireJobExecutionAdapter<TArgs>>(
                 adapter => adapter.ExecuteAsync(GetQueueName(typeof(TArgs)), args, default)
             ));
+    }
+
+    public virtual Task<string> EnqueueAsync<TArgs>(TArgs args, DateTime executionTime, BackgroundJobPriority priority = BackgroundJobPriority.Normal)
+    {
+        return Task.FromResult(BackgroundJob.Schedule<HangfireJobExecutionAdapter<TArgs>>(
+            adapter => adapter.ExecuteAsync(GetQueueName(typeof(TArgs)), args),
+            new DateTimeOffset(executionTime)
+        ));
     }
 
     protected virtual string GetQueueName(Type argsType)
