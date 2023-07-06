@@ -30,5 +30,5 @@ public class UiMessageEventArgs : EventArgs
 
     public UiMessageOptions Options { get; }
 
-    public TaskCompletionSource<bool> Callback { get; }
+    public TaskCompletionSource<bool> Callback { get; } = default!;
 }
