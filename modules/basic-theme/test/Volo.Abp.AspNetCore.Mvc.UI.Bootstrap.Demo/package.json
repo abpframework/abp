@@ -5,7 +5,7 @@
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.shared": "~7.2.3",
     "@abp/prismjs": "^7.2.3",
-    "highlight.js": "^9.13.1"
+    "@abp/highlight.js": "^7.2.3"
   },
   "devDependencies": {}
 }
