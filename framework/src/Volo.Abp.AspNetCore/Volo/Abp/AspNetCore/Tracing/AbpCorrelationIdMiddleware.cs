@@ -38,14 +38,14 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
 
     protected virtual string GetCorrelationIdFromRequest(HttpContext context)
     {
-        string correlationId = context.Request.Headers[_options.HttpHeaderName];
+        string? correlationId = context.Request.Headers[_options.HttpHeaderName];
         if (correlationId.IsNullOrEmpty())
         {
             correlationId = Guid.NewGuid().ToString("N");
             context.Request.Headers[_options.HttpHeaderName] = correlationId;
         }
 
-        return correlationId;
+        return correlationId!;
     }
 
     protected virtual void CheckAndSetCorrelationIdOnResponse(
