@@ -1,7 +1,6 @@
 import { Component, inject  } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common'
 import { InternetConnectionService , LocalizationModule } from '@abp/ng.core';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'abp-internet-status',
