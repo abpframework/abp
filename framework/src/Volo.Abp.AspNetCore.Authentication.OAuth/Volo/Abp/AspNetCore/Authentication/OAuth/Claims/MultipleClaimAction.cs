@@ -29,7 +29,7 @@ public class MultipleClaimAction : ClaimAction
         switch (prop.ValueKind)
         {
             case JsonValueKind.String:
-                claim = new Claim(ClaimType, prop.GetString(), ValueType, issuer);
+                claim = new Claim(ClaimType, prop.GetString()!, ValueType, issuer);
                 if (!identity.Claims.Any(c => c.Type == claim.Type && c.Value == claim.Value))
                 {
                     identity.AddClaim(claim);
@@ -38,7 +38,7 @@ public class MultipleClaimAction : ClaimAction
             case JsonValueKind.Array:
                 foreach (var arramItem in prop.EnumerateArray())
                 {
-                    claim = new Claim(ClaimType, arramItem.GetString(), ValueType, issuer);
+                    claim = new Claim(ClaimType, arramItem.GetString()!, ValueType, issuer);
                     if (!identity.Claims.Any(c => c.Type == claim.Type && c.Value == claim.Value))
                     {
                         identity.AddClaim(claim);
