@@ -476,7 +476,7 @@
     "MultipleUIOptionsExplanation": "我们喜欢不同的方式来创建用户界面。 此启动解决方案为您的业务应用程序提供了三种不同的 UI 框架选项。",
     "MultipleDatabaseOptions": "多个数据库选项",
     "MultipleDatabaseOptionsExplanation": "您有两个数据库提供程序选项（除了在单个应用程序中使用两者）。 使用 Entity Framework Core 处理任何关系数据库，当您需要编写低级查询以获得更好的性能时，可以选择使用 Dapper。 如果您需要使用基于文档的 NoSQL 数据库，MongoDB 是另一种选择。 虽然这些提供程序是良好集成、抽象和预配置的，但您实际上可以与任何可与 .NET 一起使用的数据库系统进行交互。",
-    "ModularArchitectureExplanation2": "模块化是 ABP.IO 平台的一等公民。 所有应用程序功能都被拆分为隔离良好的可选模块。 启动解决方案已经预装了基本的 <a href=\"@Url.Page(\"/Modules\")\" class=\"text-primary\">ABP 商业模块</a>。 您还可以创建自己的模块来为自己的应用程序构建模块化系统。",
+    "ModularArchitectureExplanation2": "模块化是 ABP.IO 平台的一等公民。 所有应用程序功能都被拆分为隔离良好的可选模块。 启动解决方案已经预装了基本的 <a href=\"/modules\" class=\"text-primary\">ABP 商业模块</a>。 您还可以创建自己的模块来为自己的应用程序构建模块化系统。",
     "MultiTenancyForSaasBusiness": "SaaS 业务的多租户",
     "MultiTenancyForSaasBusinessExplanation": "ABP 商业版 提供完整的端到端多租户系统来创建您的 SaaS（软件即服务）系统。 它允许租户通过动态数据库创建和迁移系统共享或拥有自己的数据库。",
     "MicroserviceStartupSolution": "微服务启动解决方案",
