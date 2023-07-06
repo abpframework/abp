@@ -28,8 +28,6 @@ public static class AbpOpenIdConnectExtensions
         {
             options.ClaimActions.MapAbpClaimTypes();
 
-            configureOptions?.Invoke(options);
-
             options.Events ??= new OpenIdConnectEvents();
             var authorizationCodeReceived = options.Events.OnAuthorizationCodeReceived ?? (_ => Task.CompletedTask);
 
@@ -39,16 +37,7 @@ public static class AbpOpenIdConnectExtensions
                 return authorizationCodeReceived.Invoke(receivedContext);
             };
 
-            options.Events.OnRemoteFailure = remoteFailureContext =>
-            {
-                if (remoteFailureContext.Failure is OpenIdConnectProtocolException &&
-                    remoteFailureContext.Failure.Message.Contains("access_denied"))
-                {
-                    remoteFailureContext.HandleResponse();
-                    remoteFailureContext.Response.Redirect($"{remoteFailureContext.Request.PathBase}/");
-                }
-                return Task.CompletedTask;
-            };
+            options.AccessDeniedPath = "/";
             
             options.Events.OnTokenValidated = async (context) =>
             {
@@ -63,6 +52,8 @@ public static class AbpOpenIdConnectExtensions
                     logger?.LogException(ex);
                 }
             };
+
+            configureOptions?.Invoke(options);
         });
     }
 
