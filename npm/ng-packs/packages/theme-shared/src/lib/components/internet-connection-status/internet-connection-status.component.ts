@@ -36,12 +36,13 @@ import { InternetConnectionService, LocalizationModule } from '@abp/ng.core';
 
     @media (width < 768px){
       .status-icon{
-        top: 80px;
+        top: 26px;
+        right: 134px;
       }
     }
   `]
 })
-export class InternetConnectionStatusComponent{
+export class  InternetConnectionStatusComponent{
   internetConnectionService = inject(InternetConnectionService)
   isOffline$ = this.internetConnectionService.networkStatus$.pipe(map((val) => !val));
 }
