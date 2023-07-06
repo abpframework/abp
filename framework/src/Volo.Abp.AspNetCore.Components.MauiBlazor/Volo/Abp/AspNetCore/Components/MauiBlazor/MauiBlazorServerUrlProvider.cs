@@ -17,12 +17,12 @@ public class MauiBlazorServerUrlProvider : IServerUrlProvider, ITransientDepende
         RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
     }
 
-    public async Task<string> GetBaseUrlAsync(string remoteServiceName = null)
+    public async Task<string> GetBaseUrlAsync(string? remoteServiceName = null)
     {
         var remoteServiceConfiguration = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(
             remoteServiceName ?? RemoteServiceConfigurationDictionary.DefaultName
         );
 
-        return remoteServiceConfiguration.BaseUrl.EnsureEndsWith('/');
+        return remoteServiceConfiguration.BaseUrl!.EnsureEndsWith('/');
     }
 }
