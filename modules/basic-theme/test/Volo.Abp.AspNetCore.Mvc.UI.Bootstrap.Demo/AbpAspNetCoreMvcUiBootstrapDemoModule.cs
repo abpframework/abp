@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Favicon;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Menus;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.Abp.Ui.LayoutHooks;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo;
@@ -39,11 +42,14 @@ public class AbpAspNetCoreMvcUiBootstrapDemoModule : AbpModule
             options.StyleBundles
                 .Get(StandardBundles.Styles.Global)
                 .AddFiles("/css/demo.css")
-                .AddContributors(typeof(PrismjsStyleBundleContributor));
+                .AddContributors(typeof(PrismjsStyleBundleContributor))
+                .AddContributors(typeof(HighlightJsStyleContributor));
             
             options.ScriptBundles
                 .Get(StandardBundles.Scripts.Global)
-                .AddContributors(typeof(PrismjsScriptBundleContributor));
+                .AddFiles("/js/demo.js")
+                .AddContributors(typeof(PrismjsScriptBundleContributor))
+                .AddContributors(typeof(HighlightJsScriptContributor));
         } );
         
         Configure<AbpNavigationOptions>(options =>
@@ -62,5 +68,9 @@ public class AbpAspNetCoreMvcUiBootstrapDemoModule : AbpModule
             );
         });
 
+        Configure<AbpLayoutHookOptions>(options =>
+        {
+            options.Add(LayoutHooks.Head.First, typeof(FaviconViewComponent));
+        });
     }
 }

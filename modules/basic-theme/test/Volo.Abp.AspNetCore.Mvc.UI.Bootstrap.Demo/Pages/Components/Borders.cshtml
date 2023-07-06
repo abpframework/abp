@@ -1,20 +1,8 @@
 ﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.BordersModel
 @{
     ViewData["Title"] = "Borders";
-}
-
-@section styles {
-    <abp-style-bundle>
-        <abp-style src="/css/demo.css" />
-    </abp-style-bundle>
-}
-
-@section scripts {
-    <abp-script-bundle>
-        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
-            <abp-script src="/Pages/Components/highlightCode.js" />*@
-    </abp-script-bundle>
 }
 
 <style>
@@ -27,14 +15,9 @@
     }
 </style>
 
-<link rel="stylesheet"
-      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
 <h2>Borders</h2>
 
-<p>Based on <a href="https://getbootstrap.com/docs/4.1/utilities/borders/" target="_blank"> Bootstrap Border</a>.</p>
+<p>Based on <a href="@BootstrapUrlHelper.GetDocUrl("utilities/borders")" target="_blank"> Bootstrap Border</a>.</p>
 
 <h4>Border</h4>
 
