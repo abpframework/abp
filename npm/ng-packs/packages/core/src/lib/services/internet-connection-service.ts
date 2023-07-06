@@ -26,7 +26,7 @@ export class InternetConnectionSignalService{
   readonly networkStatus = signal(navigator.onLine);
   
   constructor(){
-    window.addEventListener('offline', () => { this.networkStatus.set(navigator.onLine) });
-    window.addEventListener('online', () => { this.networkStatus.set(navigator.onLine) });
+    this.window.addEventListener('offline', () => { this.networkStatus.set(navigator.onLine) });
+    this.window.addEventListener('online', () => { this.networkStatus.set(navigator.onLine) });
   }
 }
