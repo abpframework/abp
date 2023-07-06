@@ -1,7 +1,6 @@
 import { DOCUMENT } from '@angular/common';
-import { Injectable, inject, signal } from '@angular/core';
-import { fromEvent, merge, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,23 +9,29 @@ export class InternetConnectionService{
   protected readonly window = inject(DOCUMENT).defaultView;
   protected readonly navigator = this.window.navigator;
 
-  networkStatus$ = merge(
-    of(navigator.onLine),
-    fromEvent(window, 'offline'),
-    fromEvent(window, 'online')
-  ).pipe(map(() => navigator.onLine));
-}
+  /* observable */
+  private status$ = new Subject<boolean>()
 
-@Injectable({
-  providedIn: 'root',
-})
-export class InternetConnectionSignalService{
-  protected readonly window = inject(DOCUMENT).defaultView;
-  protected readonly navigator = this.window.navigator;
-  readonly networkStatus = signal(navigator.onLine);
+  /* creates writableSignal */
+  private status = signal(navigator.onLine);
   
   constructor(){
-    this.window.addEventListener('offline', () => { this.networkStatus.set(navigator.onLine) });
-    this.window.addEventListener('online', () => { this.networkStatus.set(navigator.onLine) });
+    this.window.addEventListener('offline', () => this.setStatus() );
+    this.window.addEventListener('online', () => this.setStatus() );
+  }
+
+  private setStatus(){
+    this.status.set(navigator.onLine)
+    this.status$.next(navigator.onLine)
+  }
+  
+  /* returns READONLY ANGULAR SIGNAL */
+  get networkStatus(){
+    return computed(this.status)
+  }
+
+  /* returns OBSERVABLE */
+  get networkStatus$(){
+    return this.status$
   }
 }
