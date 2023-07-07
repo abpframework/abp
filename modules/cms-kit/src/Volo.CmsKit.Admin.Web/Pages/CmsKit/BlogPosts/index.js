@@ -58,7 +58,7 @@ $(function () {
                                 blogsService
                                     .publish(data.record.id)
                                     .then(function () {
-                                        dataTable.ajax.reload();
+                                        dataTable.ajax.reloadEx();
                                         abp.notify.success(l('SuccessfullyPublished'));
                                         checkHasBlogPostWaitingForReview();
                                     });
@@ -77,7 +77,7 @@ $(function () {
                                 blogsService
                                     .sendToReview(data.record.id)
                                     .then(function () {
-                                        dataTable.ajax.reload();
+                                        dataTable.ajax.reloadEx();
                                         abp.notify.success(l('BlogPostSendToReviewSuccessMessage', data.record.title));
                                     });
                             }
@@ -94,7 +94,7 @@ $(function () {
                                 blogsService
                                     .draft(data.record.id)
                                     .then(function () {
-                                        dataTable.ajax.reload();
+                                        dataTable.ajax.reloadEx();
                                         abp.notify.success(l('SuccessfullySaved'));
                                         checkHasBlogPostWaitingForReview();
                                     });
@@ -110,7 +110,7 @@ $(function () {
                                 blogsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        dataTable.ajax.reload();
+                                        dataTable.ajax.reloadEx();
                                         abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
@@ -152,7 +152,7 @@ $(function () {
 
     $('#CmsKitBlogPostsWrapper form.page-search-form').submit(function (e) {
         e.preventDefault();
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
     });
     
     $('#AbpContentToolbar button[name=CreateBlogPost]').on('click', function (e) {
@@ -163,7 +163,7 @@ $(function () {
     $('#button-show-waiting-for-review').on('click', function (e) {
         e.preventDefault();
         $statusFilter.val(blogPostStatus.SendToReview);
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
     });
     
     function checkHasBlogPostWaitingForReview(){

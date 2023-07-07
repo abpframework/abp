@@ -42,7 +42,7 @@ $(function () {
                                 pagesService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        _dataTable.ajax.reload();
+                                        _dataTable.ajax.reloadEx();
                                         abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
@@ -55,7 +55,7 @@ $(function () {
                                     .setAsHomePage(data.record.id)
                                     .then(function () {
 
-                                        _dataTable.ajax.reload();
+                                        _dataTable.ajax.reloadEx();
                                         data.record.isHomePage ?
                                             abp.notify.warn(l('RemovedSettingAsHomePage'))
                                             : abp.notify.success(l('CompletedSettingAsHomePage'));
@@ -97,7 +97,7 @@ $(function () {
 
     $('#CmsKitPagesWrapper form.page-search-form').submit(function (e) {
         e.preventDefault();
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 
     $('#AbpContentToolbar button[name=CreatePage]').on('click', function (e) {
