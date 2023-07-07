@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,14 +10,14 @@ export class InternetConnectionService{
   protected readonly navigator = this.window.navigator;
 
   /* observable */
-  private status$ = new Subject<boolean>()
+  private status$ = new BehaviorSubject<boolean>(navigator.onLine)
 
   /* creates writableSignal */
   private status = signal(navigator.onLine);
   
   constructor(){
-    this.window.addEventListener('offline', () => this.setStatus() );
-    this.window.addEventListener('online', () => this.setStatus() );
+    this.window.addEventListener('offline', () => this.setStatus());
+    this.window.addEventListener('online', () => this.setStatus());
   }
 
   private setStatus(){
