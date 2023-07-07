@@ -8,23 +8,20 @@ namespace Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 
 public class TableColumn
 {
-    public string Title { get; set; }
-    public string Data { get; set; }
+    public string Title { get; set; } = default!;
+    public string Data { get; set; } = default!;
 
-    public string PropertyName { get; set; }
+    public string PropertyName { get; set; } = default!;
 
-    [CanBeNull]
-    public string DisplayFormat { get; set; }
+    public string? DisplayFormat { get; set; }
 
     public IFormatProvider DisplayFormatProvider { get; set; } = CultureInfo.CurrentCulture;
 
-    [CanBeNull]
-    public Type Component { get; set; }
+    public Type? Component { get; set; }
 
     public List<EntityAction> Actions { get; set; }
 
-    [CanBeNull]
-    public Func<object, string> ValueConverter { get; set; }
+    public Func<object, string>? ValueConverter { get; set; }
 
     public bool Sortable { get; set; }
 

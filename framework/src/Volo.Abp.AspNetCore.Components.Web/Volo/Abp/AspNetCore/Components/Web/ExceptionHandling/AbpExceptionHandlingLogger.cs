@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 public class AbpExceptionHandlingLogger : ILogger
 {
     private readonly IServiceCollection _serviceCollection;
-    private IUserExceptionInformer _userExceptionInformer;
+    private IUserExceptionInformer? _userExceptionInformer;
 
     public AbpExceptionHandlingLogger(IServiceCollection serviceCollection)
     {
@@ -19,7 +19,7 @@ public class AbpExceptionHandlingLogger : ILogger
         LogLevel logLevel,
         EventId eventId,
         TState state,
-        Exception exception,
+        Exception? exception,
         Func<TState, Exception, string> formatter)
     {
         if (exception == null)
@@ -58,7 +58,7 @@ public class AbpExceptionHandlingLogger : ILogger
         return logLevel == LogLevel.Critical || logLevel == LogLevel.Error;
     }
 
-    public virtual IDisposable BeginScope<TState>(TState state)
+    public virtual IDisposable? BeginScope<TState>(TState state) where TState : notnull
     {
         return NullDisposable.Instance;
     }
