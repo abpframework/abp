@@ -7,8 +7,8 @@ public class RemoteServiceConfiguration : Dictionary<string, string?>
     /// <summary>
     /// Base Url.
     /// </summary>
-    public string? BaseUrl {
-        get => this.GetOrDefault(nameof(BaseUrl));
+    public string BaseUrl {
+        get => this.GetOrDefault(nameof(BaseUrl))!;
         set => this[nameof(BaseUrl)] = value;
     }
 

@@ -52,7 +52,7 @@ public class BlazorServerLookupApiRequestService : ILookupApiRequestService, ITr
             {
                 //Blazor tiered -- mode
                 var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
-                baseUrl = remoteServiceConfig.BaseUrl!;
+                baseUrl = remoteServiceConfig.BaseUrl;
                 client.BaseAddress = new Uri(baseUrl);
                 AddHeaders(requestMessage);
                 await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client,

@@ -23,6 +23,6 @@ public class MauiBlazorServerUrlProvider : IServerUrlProvider, ITransientDepende
             remoteServiceName ?? RemoteServiceConfigurationDictionary.DefaultName
         );
 
-        return remoteServiceConfiguration.BaseUrl!.EnsureEndsWith('/');
+        return remoteServiceConfiguration.BaseUrl.EnsureEndsWith('/');
     }
 }
