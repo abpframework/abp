@@ -7,7 +7,7 @@ import { InternetConnectionService , LocalizationModule } from '@abp/ng.core';
   standalone: true,
   imports:[NgIf, LocalizationModule],
   template: `
-    <div class="status-icon" *ngIf="!isOffline()">
+    <div class="status-icon" *ngIf="!isOnline()">
       <i data-toggle="tooltip" title="{{ 'AbpUi::InternetConnectionInfo' | abpLocalization }}" data-placement="left" class="fa fa-circle text-blinking blink">
       </i>
     </div>
@@ -43,5 +43,5 @@ import { InternetConnectionService , LocalizationModule } from '@abp/ng.core';
 })
 export class InternetConnectionStatusComponent{
   internetConnectionService = inject(InternetConnectionService);
-  isOffline = this.internetConnectionService.networkStatus
+  isOnline = this.internetConnectionService.networkStatus
 }
