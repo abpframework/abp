@@ -7,10 +7,10 @@ public interface IBrandingProvider
     /// <summary>
     /// Logo on white background
     /// </summary>
-    string LogoUrl { get; }
+    string? LogoUrl { get; }
 
     /// <summary>
     /// Logo on dark background
     /// </summary>
-    string LogoReverseUrl { get; }
+    string? LogoReverseUrl { get; }
 }

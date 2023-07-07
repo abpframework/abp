@@ -22,12 +22,12 @@ public class AbpSystemTextJsonSerializer : IJsonSerializer, ITransientDependency
 
     public T Deserialize<T>(string jsonString, bool camelCase = true)
     {
-        return JsonSerializer.Deserialize<T>(jsonString, CreateJsonSerializerOptions(camelCase));
+        return JsonSerializer.Deserialize<T>(jsonString, CreateJsonSerializerOptions(camelCase))!;
     }
 
     public object Deserialize(Type type, string jsonString, bool camelCase = true)
     {
-        return JsonSerializer.Deserialize(jsonString, type, CreateJsonSerializerOptions(camelCase));
+        return JsonSerializer.Deserialize(jsonString, type, CreateJsonSerializerOptions(camelCase))!;
     }
 
     private static readonly ConcurrentDictionary<object, JsonSerializerOptions> JsonSerializerOptionsCache =

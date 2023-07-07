@@ -9,9 +9,9 @@ public class AbpStringToEnumConverter<T> : JsonConverter<T>
 {
     private readonly JsonStringEnumConverter _innerJsonStringEnumConverter;
 
-    private JsonSerializerOptions _readJsonSerializerOptions;
+    private JsonSerializerOptions? _readJsonSerializerOptions;
 
-    private JsonSerializerOptions _writeJsonSerializerOptions;
+    private JsonSerializerOptions? _writeJsonSerializerOptions;
 
     public AbpStringToEnumConverter()
         : this(namingPolicy: null, allowIntegerValues: true)
@@ -19,7 +19,7 @@ public class AbpStringToEnumConverter<T> : JsonConverter<T>
 
     }
 
-    public AbpStringToEnumConverter(JsonNamingPolicy namingPolicy = null, bool allowIntegerValues = true)
+    public AbpStringToEnumConverter(JsonNamingPolicy? namingPolicy = null, bool allowIntegerValues = true)
     {
         _innerJsonStringEnumConverter = new JsonStringEnumConverter(namingPolicy, allowIntegerValues);
     }
@@ -50,11 +50,11 @@ public class AbpStringToEnumConverter<T> : JsonConverter<T>
 
     public override T ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return (T)Enum.Parse(typeToConvert, reader.GetString());
+        return (T)Enum.Parse(typeToConvert, reader.GetString()!);
     }
 
     public override void WriteAsPropertyName(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
-        writer.WritePropertyName(Enum.GetName(typeof(T), value));
+        writer.WritePropertyName(Enum.GetName(typeof(T), value)!);
     }
 }

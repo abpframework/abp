@@ -19,6 +19,11 @@ public class Utf8JsonDaprSerializer : IDaprSerializer, ITransientDependency
         return Encoding.UTF8.GetBytes(_jsonSerializer.Serialize(obj));
     }
 
+    public string SerializeToString(object obj)
+    {
+        return _jsonSerializer.Serialize(obj);
+    }
+
     public object Deserialize(byte[] value, Type type)
     {
         return _jsonSerializer.Deserialize(type, Encoding.UTF8.GetString(value));

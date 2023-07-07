@@ -17,7 +17,7 @@ namespace Volo.Abp.Cli.Commands;
 public class LoginCommand : IConsoleCommand, ITransientDependency
 {
     public const string Name = "login";
-    
+
     public ILogger<LoginCommand> Logger { get; set; }
 
     protected AuthService AuthService { get; }
@@ -119,6 +119,12 @@ public class LoginCommand : IConsoleCommand, ITransientDependency
         if (ex.Message.Contains("Invalid username or password"))
         {
             Logger.LogError("Invalid username or password!");
+            return;
+        }
+
+        if (ex.Message.Contains("RequiresTwoFactor"))
+        {
+            Logger.LogError("Two factor authentication is enabled for your account. Please use `abp login --device` command to login.");
             return;
         }
 

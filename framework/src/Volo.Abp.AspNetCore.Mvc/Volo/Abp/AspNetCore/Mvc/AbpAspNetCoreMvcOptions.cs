@@ -14,6 +14,8 @@ public class AbpAspNetCoreMvcOptions
 
     public HashSet<Type> ControllersToRemove { get; }
 
+    public bool ExposeIntegrationServices { get; set; } = false;
+
     public bool AutoModelValidation { get; set; }
 
     public bool EnableRazorRuntimeCompilationOnDevelopment { get; set; }

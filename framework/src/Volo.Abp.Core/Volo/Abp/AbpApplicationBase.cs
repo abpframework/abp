@@ -188,11 +188,13 @@ public abstract class AbpApplicationBase : IAbpApplication
             {
                 if (!abpModule.SkipAutoServiceRegistration)
                 {
-                    var assembly = module.Type.Assembly;
-                    if (!assemblies.Contains(assembly))
+                    foreach (var assembly in module.AllAssemblies)
                     {
-                        Services.AddAssembly(assembly);
-                        assemblies.Add(assembly);
+                        if (!assemblies.Contains(assembly))
+                        {
+                            Services.AddAssembly(assembly);
+                            assemblies.Add(assembly);
+                        }
                     }
                 }
             }
@@ -279,11 +281,13 @@ public abstract class AbpApplicationBase : IAbpApplication
             {
                 if (!abpModule.SkipAutoServiceRegistration)
                 {
-                    var assembly = module.Type.Assembly;
-                    if (!assemblies.Contains(assembly))
+                    foreach (var assembly in module.AllAssemblies)
                     {
-                        Services.AddAssembly(assembly);
-                        assemblies.Add(assembly);
+                        if (!assemblies.Contains(assembly))
+                        {
+                            Services.AddAssembly(assembly);
+                            assemblies.Add(assembly);
+                        }
                     }
                 }
             }

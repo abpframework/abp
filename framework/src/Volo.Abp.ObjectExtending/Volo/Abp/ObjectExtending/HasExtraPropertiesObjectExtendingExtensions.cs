@@ -24,7 +24,7 @@ public static class HasExtraPropertiesObjectExtendingExtensions
         [NotNull] this TSource source,
         [NotNull] TDestination destination,
         MappingPropertyDefinitionChecks? definitionChecks = null,
-        string[] ignoredProperties = null)
+        string[]? ignoredProperties = null)
         where TSource : IHasExtraProperties
         where TDestination : IHasExtraProperties
     {
