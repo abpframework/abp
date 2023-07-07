@@ -14,6 +14,9 @@ export class InternetConnectionService{
 
   /* creates writableSignal */
   private status = signal(navigator.onLine);
+
+  /* READONLY ANGULAR SIGNAL */
+  networkStatus = computed(() => this.status())
   
   constructor(){
     this.window.addEventListener('offline', () => this.setStatus());
@@ -23,11 +26,6 @@ export class InternetConnectionService{
   private setStatus(){
     this.status.set(navigator.onLine)
     this.status$.next(navigator.onLine)
-  }
-  
-  /* returns READONLY ANGULAR SIGNAL */
-  get networkStatus(){
-    return computed(() => this.status())
   }
 
   /* returns OBSERVABLE */
