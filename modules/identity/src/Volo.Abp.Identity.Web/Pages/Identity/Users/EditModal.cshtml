@@ -98,13 +98,13 @@
                             <span class="fw-bold">@L["ModificationTime"] :</span> @ConvertUserFriendlyFormat(Model.Detail.LastModificationTime)
                         </div>
                         <div class="mb-3">
-                            <span class="fw-bold">@L["PasswordChangedTime"] :</span> @ConvertUserFriendlyFormat(Model.Detail.LastPasswordChangeTime)
+                            <span class="fw-bold">@L["PasswordUpdateTime"] :</span> @ConvertUserFriendlyFormat(Model.Detail.LastPasswordChangeTime)
                         </div>
                         <div class="mb-3">
-                            <span class="fw-bold">@L["LockoutEnd"] :</span> @ConvertUserFriendlyFormat(Model.Detail.LockoutEnd)
+                            <span class="fw-bold">@L["LockoutEndTime"] :</span> @ConvertUserFriendlyFormat(Model.Detail.LockoutEnd)
                         </div>
                         <div class="mb-3">
-                            <span class="fw-bold">@L["AccessFailedCount"] :</span> @Model.Detail.AccessFailedCount
+                            <span class="fw-bold">@L["FailedAccessCount"] :</span> @Model.Detail.AccessFailedCount
                         </div>
                     </div>
                 </abp-tab>
@@ -121,12 +121,12 @@
     
     static string ConvertUserFriendlyFormat(DateTime? dateTime)
     {
-        return dateTime == null ? DefaultEmptyValue : dateTime.Value.ToString(DateTimeFormat);
+        return dateTime == null ? DefaultEmptyValue : dateTime.Value.ToUniversalTime().ToString(DateTimeFormat);
     }
     
     static string ConvertUserFriendlyFormat(DateTimeOffset? dateTime)
     {
-        return dateTime == null ? DefaultEmptyValue : dateTime.Value.ToString(DateTimeFormat);
+        return dateTime == null ? DefaultEmptyValue : dateTime.Value.UtcDateTime.ToString(DateTimeFormat);
     }
     
     static string ConvertUserFriendlyFormat(string value)

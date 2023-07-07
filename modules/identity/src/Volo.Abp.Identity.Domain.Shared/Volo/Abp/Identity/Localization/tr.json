@@ -118,8 +118,8 @@
     "CreatedBy": "Oluşturan",
     "ModifiedBy": "Düzenleyen",
     "ModificationTime": "Düzenleme zamanı",
-    "PasswordChangedTime": "Şifre değiştirme zamanı",
-    "LockoutEnd": "Kilitlenme bitişi",
-    "AccessFailedCount": "Başarısız giriş denemesi sayısı"
+    "PasswordUpdateTime": "Şifre güncelleme zamanı",
+    "LockoutEndTime": "Kilitlenme bitiş zamanı",
+    "FailedAccessCount": "Başarısız giriş denemesi sayısı"
   }
 }

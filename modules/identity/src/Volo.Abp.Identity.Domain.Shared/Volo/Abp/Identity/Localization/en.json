@@ -118,8 +118,8 @@
     "CreatedBy": "Created by",
     "ModifiedBy": "Modified by",
     "ModificationTime": "Modification time",
-    "PasswordChangedTime": "Password changed time",
-    "LockoutEnd": "Lockout end",
-    "AccessFailedCount": "Access failed count"
+    "PasswordUpdateTime": "Password update time",
+    "LockoutEndTime": "Lockout end time",
+    "FailedAccessCount": "Failed access count"
   }
 }
