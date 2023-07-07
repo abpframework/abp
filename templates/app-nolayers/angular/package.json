@@ -57,7 +57,7 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.7.0",
-    "ng-packagr": "^16.0.1",
+    "ng-packagr": "^16.0.0",
     "typescript": "~5.0.4"
   }
 }
