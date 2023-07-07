@@ -83,7 +83,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
             case null:
                 await InstallSuiteIfNotInstalledAsync(currentSuiteVersionAsString);
                 _abpSuitePort = await _suiteAppSettingsService.GetSuitePortAsync(currentSuiteVersionAsString);
-                RunSuite();
+                RunSuite(commandLineArgs);
                 break;
 
             case "generate":
@@ -418,7 +418,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         CmdHelper.RunCmd("dotnet tool uninstall " + SuitePackageName + " -g");
     }
 
-    private void RunSuite()
+    private void RunSuite(CommandLineArgs commandLineArgs)
     {
         try
         {
@@ -433,11 +433,16 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         {
             Logger.LogWarning("Couldn't check ABP Suite installed status: " + ex.Message);
         }
-
+        
+        var targetSolution = GetTargetSolutionOrNull(commandLineArgs);
+        var launchUrl = targetSolution == null?
+            $"http://localhost:{_abpSuitePort}":
+            $"http://localhost:{_abpSuitePort}/CrudPageGenerator/Create?targetSolution={targetSolution}";
+        
         if (IsSuiteAlreadyRunning())
         {
             Logger.LogInformation("Opening suite...");
-            CmdHelper.Open($"http://localhost:{_abpSuitePort}");
+            CmdHelper.Open(launchUrl);
             return;
         }
 
@@ -447,7 +452,28 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
             return;
         }
 
-        CmdHelper.RunCmd("abp-suite");
+        if (targetSolution == null)
+        {
+            CmdHelper.RunCmd("abp-suite");
+        }
+        else
+        {
+            new Thread(OpenSuiteInBrowserWithLaunchUrl).Start();
+            
+            CmdHelper.RunCmd("abp-suite --no-browser");
+            
+            void OpenSuiteInBrowserWithLaunchUrl()
+            {
+                Thread.Sleep(2500); // needed for suite to be ready.
+                CmdHelper.Open(launchUrl);
+            }
+        }
+    }
+
+    private object GetTargetSolutionOrNull(CommandLineArgs commandLineArgs)
+    {
+        return commandLineArgs.Options.GetOrNull(Options.Crud.Solution.Short, Options.Crud.Solution.Long)
+            ?? Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
     }
 
     private Process StartSuite()
