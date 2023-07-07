@@ -58,7 +58,7 @@
     "@abp/ng.theme.lepton-x": "^2.3.0-rc.1",
     "@abp/ng.theme.shared": "~7.3.0-rc.3",
     "@abp/utils": "~7.3.0-rc.3",
-    "@angular-devkit/build-angular": "16.0.0",
+    "@angular-devkit/build-angular": "~16.0.0",
     "@angular-devkit/core": "~16.0.0",
     "@angular-devkit/schematics": "~16.0.0",
     "@angular-devkit/schematics-cli": "~16.0.0",
