@@ -27,7 +27,7 @@ export class InternetConnectionService{
   
   /* returns READONLY ANGULAR SIGNAL */
   get networkStatus(){
-    return computed(this.status)
+    return computed(() => this.status())
   }
 
   /* returns OBSERVABLE */
