@@ -9,7 +9,7 @@ export class InternetConnectionService{
   protected readonly window = inject(DOCUMENT).defaultView;
   protected readonly navigator = this.window.navigator;
 
-  /* observable */
+  /* BehaviorSubject */
   private status$ = new BehaviorSubject<boolean>(navigator.onLine)
 
   /* creates writableSignal */
@@ -32,6 +32,6 @@ export class InternetConnectionService{
 
   /* returns OBSERVABLE */
   get networkStatus$(){
-    return this.status$
+    return this.status$.asObservable()
   }
 }
