@@ -3,7 +3,7 @@
 
 
 ### internet-connection-service.ts
-```
+```js
 import { DOCUMENT } from  '@angular/common';
 import { Injectable, computed, inject, signal } from  '@angular/core';
 import { BehaviorSubject } from  'rxjs';
@@ -54,14 +54,14 @@ As you can see from the code above, `InternetConnectionService` is providing 2 a
 İt's easy just inject the service and get network status
 
 **You can get via signal**
-```
+```js
 class someComponent{
 	internetConnectionService  =  inject(InternetConnectionService);
 	isOnline = this.internetConnectionService.networkStatus
 }
 ```
 **or you can get as observable**
-```
+```js
 class someComponent{
 	internetConnectionService = inject(InternetConnectionService);
 	isOnline = this.internetConnectionService.networkStatus$
