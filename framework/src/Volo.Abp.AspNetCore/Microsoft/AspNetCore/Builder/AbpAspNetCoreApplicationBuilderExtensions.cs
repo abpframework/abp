@@ -17,7 +17,7 @@ public static class AbpAspNetCoreApplicationBuilderExtensions
     /// <returns></returns>
     public static IApplicationBuilder UseConfiguredEndpoints(
         this IApplicationBuilder app,
-        Action<IEndpointRouteBuilder> additionalConfigurationAction = null)
+        Action<IEndpointRouteBuilder>? additionalConfigurationAction = null)
     {
         var options = app.ApplicationServices
             .GetRequiredService<IOptions<AbpEndpointRouterOptions>>()
