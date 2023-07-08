@@ -12,7 +12,7 @@ public class TemplateDefinitionContext : ITemplateDefinitionContext
         Templates = templates;
     }
 
-    public IReadOnlyList<TemplateDefinition> GetAll(string name)
+    public IReadOnlyList<TemplateDefinition> GetAll()
     {
         return Templates.Values.ToImmutableList();
     }
