@@ -12,7 +12,7 @@ public class TemplateDefinitionContext : ITemplateDefinitionContext
         Templates = templates;
     }
 
-    public IReadOnlyList<TemplateDefinition> GetAll(string name)
+    public virtual IReadOnlyList<TemplateDefinition> GetAll()
     {
         return Templates.Values.ToImmutableList();
     }
@@ -20,11 +20,6 @@ public class TemplateDefinitionContext : ITemplateDefinitionContext
     public virtual TemplateDefinition GetOrNull(string name)
     {
         return Templates.GetOrDefault(name);
-    }
-
-    public virtual IReadOnlyList<TemplateDefinition> GetAll()
-    {
-        return Templates.Values.ToImmutableList();
     }
 
     public virtual void Add(params TemplateDefinition[] definitions)
