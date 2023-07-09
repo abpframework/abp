@@ -336,8 +336,8 @@ var abp = abp || {};
                 return;
             }
             table.ajax.reload(function (data) {
-                if (data.data.length <= 0) {
-                    table.page(0).draw(false);
+                if (data.data.length <= 0 && table.page.info().pages > 0) {
+                    table.page(table.page.info().pages - 1).draw(false);
                 }
             }, false);
         });
