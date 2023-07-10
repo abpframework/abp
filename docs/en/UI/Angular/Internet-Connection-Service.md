@@ -9,7 +9,7 @@ import { Injectable, computed, inject, signal } from  '@angular/core';
 import { BehaviorSubject } from  'rxjs';
 
 @Injectable({
-	providedIn: 'root',
+ providedIn: 'root',
 })
 
 export  class  InternetConnectionService{
@@ -31,13 +31,13 @@ export  class  InternetConnectionService{
  }
 
  private setStatus(){
- 	this.status.set(navigator.onLine)
- 	this.status$.next(navigator.onLine)
+  this.status.set(navigator.onLine)
+  this.status$.next(navigator.onLine)
  }
  
  /* returns OBSERVABLE */
  get networkStatus$(){
- 	return this.status$.asObservable()
+  return this.status$.asObservable()
  }
 }
 ```
