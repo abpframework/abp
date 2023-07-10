@@ -13,31 +13,31 @@ import { BehaviorSubject } from  'rxjs';
 })
 
 export  class  InternetConnectionService{
- protected  readonly  window  =  inject(DOCUMENT).defaultView;
- protected  readonly  navigator  =  this.window.navigator;
+ protected readonly window = inject(DOCUMENT).defaultView;
+ protected readonly navigator = this.window.navigator;
 
  /* BehaviorSubject */
- private  status$  =  new  BehaviorSubject<boolean>(navigator.onLine)
+ private  status$ = new BehaviorSubject<boolean>(navigator.onLine)
 
  /* creates writableSignal */
-private  status  =  signal(navigator.onLine);
+ private  status = signal(navigator.onLine);
 
  /* READONLY ANGULAR SIGNAL */
- networkStatus  =  computed(() =>  this.status())
+ networkStatus = computed(() =>  this.status())
 
  constructor(){
   this.window.addEventListener('offline', () =>  this.setStatus());
- 	this.window.addEventListener('online', () =>  this.setStatus());
+  this.window.addEventListener('online', () =>  this.setStatus());
  }
 
- private  setStatus(){
+ private setStatus(){
  	this.status.set(navigator.onLine)
  	this.status$.next(navigator.onLine)
  }
  
  /* returns OBSERVABLE */
- get  networkStatus$(){
- 	return  this.status$.asObservable()
+ get networkStatus$(){
+ 	return this.status$.asObservable()
  }
 }
 ```
