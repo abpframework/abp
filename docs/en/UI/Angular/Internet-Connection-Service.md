@@ -13,32 +13,32 @@ import { BehaviorSubject } from  'rxjs';
 })
 
 export  class  InternetConnectionService{
-	protected  readonly  window  =  inject(DOCUMENT).defaultView;
-	protected  readonly  navigator  =  this.window.navigator;
+ protected  readonly  window  =  inject(DOCUMENT).defaultView;
+ protected  readonly  navigator  =  this.window.navigator;
 
-	/* BehaviorSubject */
-	private  status$  =  new  BehaviorSubject<boolean>(navigator.onLine)
+ /* BehaviorSubject */
+ private  status$  =  new  BehaviorSubject<boolean>(navigator.onLine)
 
-	/* creates writableSignal */
-	private  status  =  signal(navigator.onLine);
+ /* creates writableSignal */
+private  status  =  signal(navigator.onLine);
 
-	/* READONLY ANGULAR SIGNAL */
-	networkStatus  =  computed(() =>  this.status())
+ /* READONLY ANGULAR SIGNAL */
+ networkStatus  =  computed(() =>  this.status())
 
-	constructor(){
-		this.window.addEventListener('offline', () =>  this.setStatus());
-		this.window.addEventListener('online', () =>  this.setStatus());
-	}
+ constructor(){
+  this.window.addEventListener('offline', () =>  this.setStatus());
+ 	this.window.addEventListener('online', () =>  this.setStatus());
+ }
 
-	private  setStatus(){
-		this.status.set(navigator.onLine)
-		this.status$.next(navigator.onLine)
-	}
-
-	/* returns OBSERVABLE */
-	get  networkStatus$(){
-		return  this.status$.asObservable()
-	}
+ private  setStatus(){
+ 	this.status.set(navigator.onLine)
+ 	this.status$.next(navigator.onLine)
+ }
+ 
+ /* returns OBSERVABLE */
+ get  networkStatus$(){
+ 	return  this.status$.asObservable()
+ }
 }
 ```
 
@@ -56,15 +56,15 @@ As you can see from the code above, `InternetConnectionService` is providing 2 a
 **You can get via signal**
 ```js
 class someComponent{
-	internetConnectionService  =  inject(InternetConnectionService);
-	isOnline = this.internetConnectionService.networkStatus
+ internetConnectionService  =  inject(InternetConnectionService);
+ isOnline = this.internetConnectionService.networkStatus
 }
 ```
 **or you can get as observable**
 ```js
 class someComponent{
-	internetConnectionService = inject(InternetConnectionService);
-	isOnline = this.internetConnectionService.networkStatus$
+ internetConnectionService = inject(InternetConnectionService);
+ isOnline = this.internetConnectionService.networkStatus$
 }
 ```
 
