@@ -135,7 +135,7 @@ public static class ApplicationPartSorter
             .ToArray();
     }
 
-    private static CompiledRazorAssemblyPart GetViewsPartOrNull(ApplicationPartManager partManager,
+    private static CompiledRazorAssemblyPart? GetViewsPartOrNull(ApplicationPartManager partManager,
         ApplicationPart assemblyPart)
     {
         var viewsAssemblyName = assemblyPart.Name + ".Views";
@@ -145,7 +145,7 @@ public static class ApplicationPartSorter
             .FirstOrDefault(p => p.Name == viewsAssemblyName);
     }
 
-    private static AssemblyPart GetOriginalAssemblyPartOrNull(
+    private static AssemblyPart? GetOriginalAssemblyPartOrNull(
         CompiledRazorAssemblyPart compiledRazorAssemblyPart,
         ApplicationPartManager partManager)
     {
@@ -155,7 +155,7 @@ public static class ApplicationPartSorter
             .FirstOrDefault(p => p.Name == originalAssemblyName);
     }
 
-    private static IAbpModuleDescriptor GetModuleDescriptorForAssemblyOrNull(
+    private static IAbpModuleDescriptor? GetModuleDescriptorForAssemblyOrNull(
         IModuleContainer moduleContainer,
         Assembly assembly)
     {

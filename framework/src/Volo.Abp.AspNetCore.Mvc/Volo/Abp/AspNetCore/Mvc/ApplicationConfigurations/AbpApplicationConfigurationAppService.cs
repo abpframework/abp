@@ -346,7 +346,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
                 {
                     TimeZoneName = windowsTimeZoneId.IsNullOrWhiteSpace()
                         ? null
-                        : _timezoneProvider.WindowsToIana(windowsTimeZoneId)
+                        : _timezoneProvider.WindowsToIana(windowsTimeZoneId!)
                 }
             }
         };
