@@ -6,7 +6,7 @@ public class TenantResolveContext : ITenantResolveContext
 {
     public IServiceProvider ServiceProvider { get; }
 
-    public string TenantIdOrName { get; set; }
+    public string? TenantIdOrName { get; set; }
 
     public bool Handled { get; set; }
 
