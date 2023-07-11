@@ -4,6 +4,5 @@ namespace Volo.Abp.MultiTenancy;
 
 public interface ITenantResolveResultAccessor
 {
-    [CanBeNull]
-    TenantResolveResult Result { get; set; }
+    TenantResolveResult? Result { get; set; }
 }

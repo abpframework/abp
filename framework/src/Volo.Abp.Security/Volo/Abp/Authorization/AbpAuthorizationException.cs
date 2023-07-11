@@ -21,7 +21,7 @@ public class AbpAuthorizationException : AbpException, IHasLogLevel, IHasErrorCo
     /// <summary>
     /// Error code.
     /// </summary>
-    public string Code { get; }
+    public string? Code { get; }
 
     /// <summary>
     /// Creates a new <see cref="AbpAuthorizationException"/> object.
@@ -67,7 +67,7 @@ public class AbpAuthorizationException : AbpException, IHasLogLevel, IHasErrorCo
     /// <param name="message">Exception message</param>
     /// <param name="code">Exception code</param>
     /// <param name="innerException">Inner exception</param>
-    public AbpAuthorizationException(string message = null, string code = null, Exception innerException = null)
+    public AbpAuthorizationException(string? message = null, string? code = null, Exception? innerException = null)
         : base(message, innerException)
     {
         Code = code;

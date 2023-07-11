@@ -52,12 +52,12 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         return CreateInternal(resource.ResourceName, resource, lockCache);
     }
     
-    public IStringLocalizer CreateByResourceNameOrNull(string resourceName)
+    public IStringLocalizer? CreateByResourceNameOrNull(string resourceName)
     {
         return CreateByResourceNameOrNullInternal(resourceName, lockCache: true);
     }
     
-    private IStringLocalizer CreateByResourceNameOrNullInternal(
+    private IStringLocalizer? CreateByResourceNameOrNullInternal(
         string resourceName,
         bool lockCache)
     {
@@ -74,12 +74,12 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         return CreateInternal(resourceName, resource, lockCache);
     }
 
-    public Task<IStringLocalizer> CreateByResourceNameOrNullAsync(string resourceName)
+    public Task<IStringLocalizer?> CreateByResourceNameOrNullAsync(string resourceName)
     {
         return CreateByResourceNameOrNullInternalAsync(resourceName, lockCache: true);
     }
     
-    private async Task<IStringLocalizer> CreateByResourceNameOrNullInternalAsync(
+    private async Task<IStringLocalizer?> CreateByResourceNameOrNullInternalAsync(
         string resourceName,
         bool lockCache)
     {
@@ -175,7 +175,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         {
             resource.Contributors.Add(
                 Activator
-                    .CreateInstance(globalContributorType)
+                    .CreateInstance(globalContributorType)!
                     .As<ILocalizationResourceContributor>()
             );
         }
@@ -194,7 +194,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
                     .BaseResourceNames
                     .Select(x => CreateByResourceNameOrNullInternal(x, lockCache: false))
                     .Where(x => x != null)
-                    .ToList(),
+                    .ToList()!,
                 AbpLocalizationOptions
             )
         );
@@ -206,7 +206,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         {
             resource.Contributors.Add(
                 Activator
-                    .CreateInstance(globalContributorType)
+                    .CreateInstance(globalContributorType)!
                     .As<ILocalizationResourceContributor>()
             );
         }
@@ -259,7 +259,7 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         }
     }
 
-    public IStringLocalizer CreateDefaultOrNull()
+    public IStringLocalizer? CreateDefaultOrNull()
     {
         if (AbpLocalizationOptions.DefaultResourceType == null)
         {

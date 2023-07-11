@@ -45,6 +45,7 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
     protected virtual void ApplyForControllers(ApplicationModel application)
     {
         RemoveDuplicateControllers(application);
+        RemoveIntegrationControllersIfNotExposed(application);
 
         foreach (var controller in GetControllers(application))
         {
@@ -70,6 +71,20 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
                 }
             }
         }
+    }
+
+    protected virtual void RemoveIntegrationControllersIfNotExposed(ApplicationModel application)
+    {
+        if (Options.ExposeIntegrationServices)
+        {
+            return;
+        }
+        
+        var integrationControllers = GetControllers(application)
+            .Where(c => IntegrationServiceAttribute.IsDefinedOrInherited(c.ControllerType))
+            .ToArray();
+
+        application.Controllers.RemoveAll(integrationControllers);
     }
 
     protected virtual IList<ControllerModel> GetControllers(ApplicationModel application)

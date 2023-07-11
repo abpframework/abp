@@ -45,7 +45,7 @@ public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDep
         return SettingDefinitions.Value.Values.ToImmutableList();
     }
 
-    public virtual SettingDefinition GetOrNull(string name)
+    public virtual SettingDefinition? GetOrNull(string name)
     {
         return SettingDefinitions.Value.GetOrDefault(name);
     }
@@ -63,7 +63,7 @@ public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDep
 
             foreach (var provider in providers)
             {
-                provider.Define(new SettingDefinitionContext(settings));
+                provider!.Define(new SettingDefinitionContext(settings));
             }
         }
 

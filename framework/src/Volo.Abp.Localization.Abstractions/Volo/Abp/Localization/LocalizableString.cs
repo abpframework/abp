@@ -7,16 +7,14 @@ namespace Volo.Abp.Localization;
 
 public class LocalizableString : ILocalizableString, IAsyncLocalizableString
 {
-    [CanBeNull]
-    public string ResourceName { get; }
+    public string? ResourceName { get; }
     
-    [CanBeNull]
-    public Type ResourceType { get; }
+    public Type? ResourceType { get; }
 
     [NotNull]
     public string Name { get; }
 
-    public LocalizableString([CanBeNull] Type resourceType, [NotNull] string name)
+    public LocalizableString(Type? resourceType, [NotNull] string name)
     {
         Name = Check.NotNullOrEmpty(name, nameof(name));
         ResourceType = resourceType;
@@ -27,7 +25,7 @@ public class LocalizableString : ILocalizableString, IAsyncLocalizableString
         }
     }
 
-    public LocalizableString([NotNull] string name, [CanBeNull] string resourceName = null)
+    public LocalizableString([NotNull] string name, string? resourceName = null)
     {
         Name = Check.NotNullOrEmpty(name, nameof(name));
         ResourceName = resourceName;
@@ -79,7 +77,7 @@ public class LocalizableString : ILocalizableString, IAsyncLocalizableString
         return result;
     }
 
-    private IStringLocalizer CreateStringLocalizerOrNull(IStringLocalizerFactory stringLocalizerFactory)
+    private IStringLocalizer? CreateStringLocalizerOrNull(IStringLocalizerFactory stringLocalizerFactory)
     {
         if (ResourceType != null)
         {
@@ -98,7 +96,7 @@ public class LocalizableString : ILocalizableString, IAsyncLocalizableString
         return stringLocalizerFactory.CreateDefaultOrNull();
     }
     
-    private async Task<IStringLocalizer> CreateStringLocalizerOrNullAsync(IStringLocalizerFactory stringLocalizerFactory)
+    private async Task<IStringLocalizer?> CreateStringLocalizerOrNullAsync(IStringLocalizerFactory stringLocalizerFactory)
     {
         if (ResourceType != null)
         {
@@ -127,7 +125,7 @@ public class LocalizableString : ILocalizableString, IAsyncLocalizableString
         return new LocalizableString(resourceType, name);
     }
     
-    public static LocalizableString Create([NotNull] string name, [CanBeNull] string resourceName = null)
+    public static LocalizableString Create([NotNull] string name, string? resourceName = null)
     {
         return new LocalizableString(name, resourceName);
     }

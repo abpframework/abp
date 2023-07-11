@@ -463,6 +463,7 @@
     "DiscountAmount": "Discount Amount",
     "FullChangeHistory": "Full Change History",
     "Permission:RefreshReleaseLogs": "Refresh Release Logs",
-    "ReleaseLogs": "Release Logs"
+    "ReleaseLogs": "Release Logs",
+    "AuthorUserName": "Author User Name"
   }
 }

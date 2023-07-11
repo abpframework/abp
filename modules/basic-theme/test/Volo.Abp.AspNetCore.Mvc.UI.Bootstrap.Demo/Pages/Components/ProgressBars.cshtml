@@ -1,18 +1,14 @@
 ﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.ProgressBarsModel
 @{
     ViewData["Title"] = "Progress Bars";
 }
 
-@section styles {
-    <abp-style-bundle>
-        <abp-style src="/css/demo.css" />
-    </abp-style-bundle>
-}
 
 <h2>Progress Bars</h2>
 
-<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/progress/" target="_blank"> Bootstrap Progress Bars</a>.</p>
+<p>Based on <a href="@BootstrapUrlHelper.GetDocUrl("components/progress")" target="_blank"> Bootstrap Progress Bars</a>.</p>
 
 
 <h4>Example</h4>

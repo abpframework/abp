@@ -6,6 +6,7 @@
     "Permission:SettingManagement": "Asetusten hallinta",
     "Permission:Emailing": "Sähköpostiviestit",
     "Permission:EmailingTest": "Sähköpostitesti",
+    "Permission:TimeZone": "Aikavyöhyke",
     "SendTestEmail": "Lähetä testisähköposti",
     "SenderEmailAddress": "Lähettäjän sähköpostiosoite",
     "TargetEmailAddress": "Kohdesähköpostiosoite",

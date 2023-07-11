@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Distributed;
@@ -18,6 +20,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
     protected IClock Clock { get; }
     protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
     protected ILocalEventBus LocalEventBus { get; }
+    protected ICorrelationIdProvider CorrelationIdProvider { get; }
 
     protected DistributedEventBusBase(
         IServiceScopeFactory serviceScopeFactory,
@@ -27,7 +30,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         IGuidGenerator guidGenerator,
         IClock clock,
         IEventHandlerInvoker eventHandlerInvoker,
-        ILocalEventBus localEventBus) : base(
+        ILocalEventBus localEventBus,
+        ICorrelationIdProvider correlationIdProvider) : base(
         serviceScopeFactory,
         currentTenant,
         unitOfWorkManager,
@@ -37,6 +41,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         Clock = clock;
         AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
         LocalEventBus = localEventBus;
+        CorrelationIdProvider = correlationIdProvider;
     }
 
     public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
@@ -129,14 +134,14 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                     EventData = eventData
                 });
 
-                await eventOutbox.EnqueueAsync(
-                    new OutgoingEventInfo(
-                        GuidGenerator.Create(),
-                        eventName,
-                        Serialize(eventData),
-                        Clock.Now
-                    )
+                var outgoingEventInfo = new OutgoingEventInfo(
+                    GuidGenerator.Create(),
+                    eventName,
+                    Serialize(eventData),
+                    Clock.Now
                 );
+                outgoingEventInfo.SetCorrelationId(CorrelationIdProvider.Get());
+                await eventOutbox.EnqueueAsync(outgoingEventInfo);
                 return true;
             }
         }
@@ -153,7 +158,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         string messageId,
         string eventName,
         Type eventType,
-        object eventData)
+        object eventData,
+        [CanBeNull] string correlationId)
     {
         if (AbpDistributedEventBusOptions.Inboxes.Count <= 0)
         {
@@ -177,22 +183,25 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                         }
                     }
 
-                    await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
+                    using (CorrelationIdProvider.Change(correlationId))
                     {
-                        Source = DistributedEventSource.Direct,
-                        EventName = EventNameAttribute.GetNameOrDefault(eventType),
-                        EventData = eventData
-                    });
+                        await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
+                        {
+                            Source = DistributedEventSource.Direct,
+                            EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                            EventData = eventData
+                        });
+                    }
 
-                    await eventInbox.EnqueueAsync(
-                        new IncomingEventInfo(
-                            GuidGenerator.Create(),
-                            messageId,
-                            eventName,
-                            Serialize(eventData),
-                            Clock.Now
-                        )
+                    var incomingEventInfo = new IncomingEventInfo(
+                        GuidGenerator.Create(),
+                        messageId,
+                        eventName,
+                        Serialize(eventData),
+                        Clock.Now
                     );
+                    incomingEventInfo.SetCorrelationId(correlationId);
+                    await eventInbox.EnqueueAsync(incomingEventInfo);
                 }
             }
         }

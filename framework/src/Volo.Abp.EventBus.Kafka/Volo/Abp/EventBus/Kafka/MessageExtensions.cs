@@ -15,4 +15,16 @@ public static class MessageExtensions
 
         return messageId;
     }
+
+    public static string GetCorrelationId<TKey, TValue>(this Message<TKey, TValue> message)
+    {
+        string correlationId = null;
+
+        if (message.Headers.TryGetLastBytes(EventBusConsts.CorrelationIdHeaderName, out var correlationIdBytes))
+        {
+            correlationId = System.Text.Encoding.UTF8.GetString(correlationIdBytes);
+        }
+
+        return correlationId;
+    }
 }

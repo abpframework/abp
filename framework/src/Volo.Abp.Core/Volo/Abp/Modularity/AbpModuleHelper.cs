@@ -36,6 +36,27 @@ internal static class AbpModuleHelper
 
         return dependencies;
     }
+    
+    public static Assembly[] GetAllAssemblies(Type moduleType)
+    {
+        var assemblies = new List<Assembly>();
+
+        var additionalAssemblyDescriptors = moduleType
+            .GetCustomAttributes()
+            .OfType<IAdditionalModuleAssemblyProvider>();
+
+        foreach (var descriptor in additionalAssemblyDescriptors)
+        {
+            foreach (var assembly in descriptor.GetAssemblies())
+            {
+                assemblies.AddIfNotContains(assembly);
+            }
+        }
+        
+        assemblies.Add(moduleType.Assembly);
+
+        return assemblies.ToArray();
+    }
 
     private static void AddModuleAndDependenciesRecursively(
         List<Type> moduleTypes,

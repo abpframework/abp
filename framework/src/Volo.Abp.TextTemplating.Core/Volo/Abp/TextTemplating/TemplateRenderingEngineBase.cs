@@ -31,9 +31,9 @@ public abstract class TemplateRenderingEngineBase : ITemplateRenderingEngine
 
     protected virtual IStringLocalizer GetLocalizerOrNull(TemplateDefinition templateDefinition)
     {
-        if (templateDefinition.LocalizationResource != null)
+        if (templateDefinition.LocalizationResourceName != null)
         {
-            return StringLocalizerFactory.Create(templateDefinition.LocalizationResource);
+            return StringLocalizerFactory.CreateByResourceName(templateDefinition.LocalizationResourceName);
         }
 
         return StringLocalizerFactory.CreateDefaultOrNull();

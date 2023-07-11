@@ -7,11 +7,15 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.TestBase;
 
-public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWithServiceProvider, IDisposable
-    where TStartup : class
+/// <typeparam name="TStartupModule">
+/// Can be a module type or old-style ASP.NET Core Startup class.
+/// </typeparam>
+public abstract class AbpAspNetCoreIntegratedTestBase<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
+    where TStartupModule : class
 {
     protected TestServer Server { get; }
 
@@ -39,7 +43,15 @@ public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWit
         return Host.CreateDefaultBuilder()
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<TStartup>();
+                if (typeof(TStartupModule).IsAssignableTo<IAbpModule>())
+                {
+                    webBuilder.UseStartup<TestStartup<TStartupModule>>();
+                }
+                else
+                {
+                    webBuilder.UseStartup<TStartupModule>();
+                }
+                
                 webBuilder.UseAbpTestServer();
             })
             .UseAutofac()

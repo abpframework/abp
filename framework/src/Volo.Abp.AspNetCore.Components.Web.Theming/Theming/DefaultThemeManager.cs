@@ -9,7 +9,7 @@ public class DefaultThemeManager : IThemeManager, IScopedDependency, IServicePro
     public IServiceProvider ServiceProvider { get; }
     public ITheme CurrentTheme => GetCurrentTheme();
     
-    private ITheme _currentTheme;
+    private ITheme? _currentTheme;
 
     protected IThemeSelector ThemeSelector { get; }
 

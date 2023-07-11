@@ -13,7 +13,7 @@ public static class ExtraPropertyDictionaryExtensions
             return (T)extraPropertyDictionary[key];
         }
 
-        extraPropertyDictionary[key] = Enum.Parse(typeof(T), extraPropertyDictionary[key].ToString(), ignoreCase: true);
+        extraPropertyDictionary[key] = Enum.Parse(typeof(T), extraPropertyDictionary[key].ToString()!, ignoreCase: true);
         return (T)extraPropertyDictionary[key];
     }
 
@@ -24,7 +24,7 @@ public static class ExtraPropertyDictionaryExtensions
             return extraPropertyDictionary[key];
         }
 
-        extraPropertyDictionary[key] = Enum.Parse(enumType, extraPropertyDictionary[key].ToString(), ignoreCase: true);
+        extraPropertyDictionary[key] = Enum.Parse(enumType, extraPropertyDictionary[key].ToString()!, ignoreCase: true);
         return extraPropertyDictionary[key];
     }
 
