@@ -182,7 +182,7 @@ $(function () {
                                         .removeFromCache(data.record.id)
                                         .then(function () {
                                             abp.notify.success(l('RemovedFromCache'));
-                                            dataTable.ajax.reload();
+                                            dataTable.ajax.reloadEx();
                                         });
                                 },
                             },
@@ -200,7 +200,7 @@ $(function () {
                                         .reindex(data.record.id)
                                         .then(function () {
                                             abp.message.success(l('ReindexCompleted'));
-                                            dataTable.ajax.reload();
+                                            dataTable.ajax.reloadEx();
                                         });
                                 },
                             }
@@ -281,13 +281,13 @@ $(function () {
 
     $("#FilterForm input[type='text']").keypress(function (e) {
         if (e.which === 13) {
-            dataTable.ajax.reload();
+            dataTable.ajax.reloadEx();
         }
     });
 
     $('#SearchButton').click(function (e) {
         e.preventDefault();
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
     });
 
     $("#AdvancedFilterSectionToggler").click(function (e) {

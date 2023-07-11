@@ -7,7 +7,7 @@ public static class AbpHostingEnvironmentExtensions
 {
     public static IConfigurationRoot BuildConfiguration(
         this IWebHostEnvironment env,
-        AbpConfigurationBuilderOptions options = null)
+        AbpConfigurationBuilderOptions? options = null)
     {
         options ??= new AbpConfigurationBuilderOptions();
 

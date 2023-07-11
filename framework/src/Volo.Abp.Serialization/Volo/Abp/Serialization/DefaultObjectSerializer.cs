@@ -15,7 +15,7 @@ public class DefaultObjectSerializer : IObjectSerializer, ITransientDependency
         _serviceProvider = serviceProvider;
     }
 
-    public virtual byte[] Serialize<T>(T obj)
+    public virtual byte[]? Serialize<T>(T? obj)
     {
         if (obj == null)
         {
@@ -35,8 +35,7 @@ public class DefaultObjectSerializer : IObjectSerializer, ITransientDependency
         return AutoSerialize(obj);
     }
 
-    [CanBeNull]
-    public virtual T Deserialize<T>(byte[] bytes)
+    public virtual T? Deserialize<T>(byte[]? bytes)
     {
         if (bytes == null)
         {
@@ -61,7 +60,7 @@ public class DefaultObjectSerializer : IObjectSerializer, ITransientDependency
         return JsonSerializer.SerializeToUtf8Bytes(obj);
     }
 
-    protected virtual T AutoDeserialize<T>(byte[] bytes)
+    protected virtual T? AutoDeserialize<T>(byte[] bytes)
     {
         return JsonSerializer.Deserialize<T>(bytes);
     }

@@ -1,31 +1,15 @@
 ﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.TabsModel
 @{
     ViewData["Title"] = "Tabs";
 }
 
-@section styles {
-    <abp-style-bundle>
-        <abp-style src="/css/demo.css" />
-    </abp-style-bundle>
-}
-
-@section scripts {
-    <abp-script-bundle>
-        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
-            <abp-script src="/Pages/Components/highlightCode.js" />*@
-    </abp-script-bundle>
-}
-
-<link rel="stylesheet"
-      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
 
 
 <h2>Tabs</h2>
 
-<p>Based on <a href="http://getbootstrap.com/docs/4.1/components/navs/#tabs" target="_blank"> Bootstrap tab</a>.</p>
+<p>Based on <a href="@BootstrapUrlHelper.GetDocUrl("components/navs/#tabs")" target="_blank"> Bootstrap tab</a>.</p>
 
 <h4>Example</h4>
 

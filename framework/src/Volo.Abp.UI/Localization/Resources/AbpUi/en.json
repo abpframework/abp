@@ -51,6 +51,8 @@
     "ManageYourAccount": "Manage your account",
     "OthersGroup": "Other",
     "Today": "Today",
-    "Apply": "Apply"
+    "Apply": "Apply",
+    "InternetConnectionInfo": "The operation could not be performed. Your internet connection is not available at the moment.",
+    "CopiedToTheClipboard": "Copied to the clipboard"
   }
 }

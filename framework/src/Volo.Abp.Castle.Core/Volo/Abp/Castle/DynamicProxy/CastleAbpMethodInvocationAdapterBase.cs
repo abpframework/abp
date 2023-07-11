@@ -20,7 +20,7 @@ public abstract class CastleAbpMethodInvocationAdapterBase : IAbpMethodInvocatio
 
     public MethodInfo Method => Invocation.MethodInvocationTarget ?? Invocation.Method;
 
-    public object ReturnValue { get; set; }
+    public object ReturnValue { get; set; } = default!;
 
     protected IInvocation Invocation { get; }
 
@@ -39,7 +39,7 @@ public abstract class CastleAbpMethodInvocationAdapterBase : IAbpMethodInvocatio
         var methodParameters = Method.GetParameters();
         for (int i = 0; i < methodParameters.Length; i++)
         {
-            dict[methodParameters[i].Name] = Invocation.Arguments[i];
+            dict[methodParameters[i].Name!] = Invocation.Arguments[i];
         }
 
         return dict;

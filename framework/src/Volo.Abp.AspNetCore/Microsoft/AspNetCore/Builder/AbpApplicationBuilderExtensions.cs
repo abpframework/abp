@@ -82,7 +82,7 @@ public static class AbpApplicationBuilderExtensions
     }
 
     public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app,
-        Action<RequestLocalizationOptions> optionsAction = null)
+        Action<RequestLocalizationOptions>? optionsAction = null)
     {
         app.ApplicationServices
             .GetRequiredService<IAbpRequestLocalizationOptionsProvider>()

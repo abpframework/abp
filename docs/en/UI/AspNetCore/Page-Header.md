@@ -10,12 +10,12 @@
 
 Page Title can be set as shown in the example below:
 
-````csharp
+```csharp
 @inject IPageLayout PageLayout
 @{
     PageLayout.Content.Title = "Book List";
 }
-````
+```
 
 * The Page Title is set to the HTML `title` tag (in addition to the [brand/application name](Branding.md)).
 * The theme may render the Page Title before the Page Content (not implemented by the Basic Theme).
@@ -30,9 +30,9 @@ Breadcrumb items can be added to the `PageLayout.Content.BreadCrumb`.
 
 **Example: Add Language Management to the breadcrumb items.**
 
-````
+```
 PageLayout.Content.BreadCrumb.Add("Language Management");
-````
+```
 
 The theme then renders the breadcrumb. An example render result can be:
 

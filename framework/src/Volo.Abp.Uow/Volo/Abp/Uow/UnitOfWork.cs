@@ -21,9 +21,9 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
     public Guid Id { get; } = Guid.NewGuid();
 
-    public IAbpUnitOfWorkOptions Options { get; private set; }
+    public IAbpUnitOfWorkOptions? Options { get; private set; }
 
-    public IUnitOfWork Outer { get; private set; }
+    public IUnitOfWork? Outer { get; private set; }
 
     public bool IsReserved { get; set; }
 
@@ -31,14 +31,14 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
     public bool IsCompleted { get; private set; }
 
-    public string ReservationName { get; set; }
+    public string? ReservationName { get; set; }
 
     protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
     protected List<UnitOfWorkEventRecord> DistributedEvents { get; } = new List<UnitOfWorkEventRecord>();
     protected List<UnitOfWorkEventRecord> LocalEvents { get; } = new List<UnitOfWorkEventRecord>();
 
-    public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
-    public event EventHandler<UnitOfWorkEventArgs> Disposed;
+    public event EventHandler<UnitOfWorkFailedEventArgs> Failed = default!;
+    public event EventHandler<UnitOfWorkEventArgs> Disposed = default!;
 
     public IServiceProvider ServiceProvider { get; }
     protected IUnitOfWorkEventPublisher UnitOfWorkEventPublisher { get; }
@@ -50,7 +50,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
     private readonly Dictionary<string, ITransactionApi> _transactionApis;
     private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
 
-    private Exception _exception;
+    private Exception? _exception;
     private bool _isCompleting;
     private bool _isRolledback;
 
@@ -90,7 +90,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
         IsReserved = true;
     }
 
-    public virtual void SetOuter(IUnitOfWork outer)
+    public virtual void SetOuter(IUnitOfWork? outer)
     {
         Outer = outer;
     }
@@ -104,9 +104,9 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
         foreach (var databaseApi in GetAllActiveDatabaseApis())
         {
-            if (databaseApi is ISupportsSavingChanges)
+            if (databaseApi is ISupportsSavingChanges supportsSavingChangesDatabaseApi)
             {
-                await (databaseApi as ISupportsSavingChanges).SaveChangesAsync(cancellationToken);
+                await supportsSavingChangesDatabaseApi.SaveChangesAsync(cancellationToken);
             }
         }
     }
@@ -181,7 +181,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
         await RollbackAllAsync(cancellationToken);
     }
 
-    public virtual IDatabaseApi FindDatabaseApi(string key)
+    public virtual IDatabaseApi? FindDatabaseApi(string key)
     {
         return _databaseApis.GetOrDefault(key);
     }
@@ -207,7 +207,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
         return _databaseApis.GetOrAdd(key, factory);
     }
 
-    public virtual ITransactionApi FindTransactionApi(string key)
+    public virtual ITransactionApi? FindTransactionApi(string key)
     {
         Check.NotNullOrWhiteSpace(key, nameof(key));
 
@@ -242,14 +242,14 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
     public virtual void AddOrReplaceLocalEvent(
         UnitOfWorkEventRecord eventRecord,
-        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        Predicate<UnitOfWorkEventRecord>? replacementSelector = null)
     {
         AddOrReplaceEvent(LocalEvents, eventRecord, replacementSelector);
     }
 
     public virtual void AddOrReplaceDistributedEvent(
         UnitOfWorkEventRecord eventRecord,
-        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        Predicate<UnitOfWorkEventRecord>? replacementSelector = null)
     {
         AddOrReplaceEvent(DistributedEvents, eventRecord, replacementSelector);
     }
@@ -257,7 +257,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
     public virtual void AddOrReplaceEvent(
         List<UnitOfWorkEventRecord> eventRecords,
         UnitOfWorkEventRecord eventRecord,
-        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        Predicate<UnitOfWorkEventRecord>? replacementSelector = null)
     {
         if (replacementSelector == null)
         {
@@ -340,11 +340,11 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
         foreach (var databaseApi in GetAllActiveDatabaseApis())
         {
-            if (databaseApi is ISupportsRollback)
+            if (databaseApi is ISupportsRollback supportsRollbackDatabaseApi)
             {
                 try
                 {
-                    await (databaseApi as ISupportsRollback).RollbackAsync(cancellationToken);
+                    await supportsRollbackDatabaseApi.RollbackAsync(cancellationToken);
                 }
                 catch { }
             }
@@ -352,11 +352,11 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
         foreach (var transactionApi in GetAllActiveTransactionApis())
         {
-            if (transactionApi is ISupportsRollback)
+            if (transactionApi is ISupportsRollback supportsRollbackTransactionApi)
             {
                 try
                 {
-                    await (transactionApi as ISupportsRollback).RollbackAsync(cancellationToken);
+                    await supportsRollbackTransactionApi.RollbackAsync(cancellationToken);
                 }
                 catch { }
             }
