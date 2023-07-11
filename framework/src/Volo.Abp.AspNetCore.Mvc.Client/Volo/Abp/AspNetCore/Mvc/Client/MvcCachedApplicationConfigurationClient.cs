@@ -37,7 +37,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         Cache = cache;
     }
 
-    public async Task<ApplicationConfigurationDto?> GetAsync()
+    public async Task<ApplicationConfigurationDto> GetAsync()
     {
         var cacheKey = CreateCacheKey();
         var httpContext = HttpContextAccessor?.HttpContext;
@@ -85,7 +85,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         return config;
     }
 
-    public ApplicationConfigurationDto? Get()
+    public ApplicationConfigurationDto Get()
     {
         var cacheKey = CreateCacheKey();
         var httpContext = HttpContextAccessor?.HttpContext;

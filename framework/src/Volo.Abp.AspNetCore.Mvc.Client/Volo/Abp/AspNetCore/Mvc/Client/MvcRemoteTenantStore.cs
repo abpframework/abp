@@ -146,7 +146,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
             return null;
         }
 
-        return new TenantConfiguration(tenantResultDto.TenantId.Value, tenantResultDto.Name);
+        return new TenantConfiguration(tenantResultDto.TenantId.Value, tenantResultDto.Name!);
     }
 
     protected virtual string CreateCacheKey(string tenantName)
