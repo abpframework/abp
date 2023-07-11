@@ -121,7 +121,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   }
 
   private getEnum(rowValue: any, list: Array<ABP.Option<any>>) {
-    if (!list) return rowValue;
+    if (!list || list.length < 1) return rowValue;
     const { key } = list.find(({ value }) => value === rowValue) || {};
     return key;
   }
