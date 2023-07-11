@@ -19,13 +19,13 @@ public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDep
 
     public virtual async Task<SettingDefinition> GetAsync(string name)
     {
-        var permission = await GetOrNullAsync(name);
-        if (permission == null)
+        var setting = await GetOrNullAsync(name);
+        if (setting == null)
         {
             throw new AbpException("Undefined setting: " + name);
         }
 
-        return permission;
+        return setting;
     }
 
     public virtual async Task<SettingDefinition?> GetOrNullAsync(string name)
@@ -37,14 +37,14 @@ public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDep
 
     public virtual async Task<IReadOnlyList<SettingDefinition>> GetAllAsync()
     {
-        var staticTemplates = await StaticStore.GetAllAsync();
-        var staticTemplateNames = staticTemplates
+        var staticSettings = await StaticStore.GetAllAsync();
+        var staticSettingNames = staticSettings
             .Select(p => p.Name)
             .ToImmutableHashSet();
 
-        var dynamicTemplates = await DynamicStore.GetAllAsync();
+        var dynamicSettings = await DynamicStore.GetAllAsync();
 
         /* We prefer static settings over dynamics */
-        return staticTemplates.Concat(dynamicTemplates.Where(d => !staticTemplateNames.Contains(d.Name))).ToImmutableList();
+        return staticSettings.Concat(dynamicSettings.Where(d => !staticSettingNames.Contains(d.Name))).ToImmutableList();
     }
 }
