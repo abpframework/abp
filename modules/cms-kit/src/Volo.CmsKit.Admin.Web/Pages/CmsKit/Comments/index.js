@@ -82,7 +82,7 @@ $(function (){
                                 commentsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        _dataTable.ajax.reload();
+                                        _dataTable.ajax.reloadEx();
                                         abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
@@ -167,11 +167,11 @@ $(function (){
         
         $(inputSelector).val(value);
         
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 
     filterForm.submit(function (e){
         e.preventDefault();
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 });
