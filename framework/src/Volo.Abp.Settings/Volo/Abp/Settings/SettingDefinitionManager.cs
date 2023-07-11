@@ -22,7 +22,7 @@ public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDep
         var permission = await GetOrNullAsync(name);
         if (permission == null)
         {
-            throw new AbpException("Undefined Template: " + name);
+            throw new AbpException("Undefined setting: " + name);
         }
 
         return permission;
