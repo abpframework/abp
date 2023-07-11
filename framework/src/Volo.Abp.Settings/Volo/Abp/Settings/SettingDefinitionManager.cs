@@ -44,7 +44,7 @@ public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDep
 
         var dynamicTemplates = await DynamicStore.GetAllAsync();
 
-        /* We prefer static Templates over dynamics */
+        /* We prefer static settings over dynamics */
         return staticTemplates.Concat(dynamicTemplates.Where(d => !staticTemplateNames.Contains(d.Name))).ToImmutableList();
     }
 }
