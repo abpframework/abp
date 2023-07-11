@@ -10,5 +10,5 @@ public interface IDynamicSettingDefinitionStore
 
     Task<IReadOnlyList<SettingDefinition>> GetAllAsync();
 
-    Task<SettingDefinition> GetOrNullAsync([NotNull] string name);
+    Task<SettingDefinition?> GetOrNullAsync([NotNull] string name);
 }

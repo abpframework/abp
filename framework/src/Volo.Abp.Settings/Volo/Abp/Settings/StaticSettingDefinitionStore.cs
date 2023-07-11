@@ -44,7 +44,7 @@ public class StaticSettingDefinitionStore : IStaticSettingDefinitionStore, ISing
         return Task.FromResult<IReadOnlyList<SettingDefinition>>(SettingDefinitions.Value.Values.ToImmutableList());
     }
 
-    public virtual Task<SettingDefinition> GetOrNullAsync(string name)
+    public virtual Task<SettingDefinition?> GetOrNullAsync(string name)
     {
         return Task.FromResult(SettingDefinitions.Value.GetOrDefault(name));
     }
@@ -62,7 +62,7 @@ public class StaticSettingDefinitionStore : IStaticSettingDefinitionStore, ISing
 
             foreach (var provider in providers)
             {
-                provider.Define(new SettingDefinitionContext(settings));
+                provider?.Define(new SettingDefinitionContext(settings));
             }
         }
 

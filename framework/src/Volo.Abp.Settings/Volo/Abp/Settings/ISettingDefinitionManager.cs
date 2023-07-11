@@ -13,5 +13,5 @@ public interface ISettingDefinitionManager
     Task<IReadOnlyList<SettingDefinition>> GetAllAsync();
 
     [ItemCanBeNull]
-    Task<SettingDefinition> GetOrNullAsync([NotNull] string name);
+    Task<SettingDefinition?> GetOrNullAsync([NotNull] string name);
 }

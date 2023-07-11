@@ -28,7 +28,7 @@ public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDep
         return permission;
     }
 
-    public virtual async Task<SettingDefinition> GetOrNullAsync(string name)
+    public virtual async Task<SettingDefinition?> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
