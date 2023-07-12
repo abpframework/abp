@@ -2,7 +2,7 @@
 
 public class BreadcrumbItem
 {
-    public string Html { get; set; }
+    public string Html { get; set; } = default!;
 
     public bool Active { get; set; }
 }

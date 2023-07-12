@@ -5,11 +5,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Layout;
 
 public class ContentLayout
 {
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     public BreadCrumb BreadCrumb { get; }
 
-    public string MenuItemName { get; set; }
+    public string? MenuItemName { get; set; }
 
     public ContentLayout()
     {

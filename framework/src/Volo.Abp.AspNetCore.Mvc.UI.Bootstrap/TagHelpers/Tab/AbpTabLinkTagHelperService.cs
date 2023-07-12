@@ -16,7 +16,7 @@ public class AbpTabLinkTagHelperService : AbpTagHelperService<AbpTabLinkTagHelpe
 
         var tabHeaderItems = context.GetValue<List<TabItem>>(TabItems);
 
-        tabHeaderItems.Add(new TabItem(tabHeader, "", false, TagHelper.Name, TagHelper.ParentDropdownName, false));
+        tabHeaderItems.Add(new TabItem(tabHeader, "", false, TagHelper.Name!, TagHelper.ParentDropdownName, false));
 
         output.SuppressOutput();
 

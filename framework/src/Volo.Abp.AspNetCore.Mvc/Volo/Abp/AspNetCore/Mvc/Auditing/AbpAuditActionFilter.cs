@@ -30,12 +30,12 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
 
                 if (result.Exception != null && !result.ExceptionHandled)
                 {
-                    auditLog.Exceptions.Add(result.Exception);
+                    auditLog!.Exceptions.Add(result.Exception);
                 }
             }
             catch (Exception ex)
             {
-                auditLog.Exceptions.Add(ex);
+                auditLog!.Exceptions.Add(ex);
                 throw;
             }
             finally
@@ -45,13 +45,13 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
                 if (auditLogAction != null)
                 {
                     auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                    auditLog.Actions.Add(auditLogAction);
+                    auditLog!.Actions.Add(auditLogAction);
                 }
             }
         }
     }
 
-    private bool ShouldSaveAudit(ActionExecutingContext context, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
+    private bool ShouldSaveAudit(ActionExecutingContext context, out AuditLogInfo? auditLog, out AuditLogActionInfo? auditLogAction)
     {
         auditLog = null;
         auditLogAction = null;

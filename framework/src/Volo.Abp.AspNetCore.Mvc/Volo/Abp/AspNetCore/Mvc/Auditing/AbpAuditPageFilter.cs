@@ -35,12 +35,12 @@ public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
 
                 if (result.Exception != null && !result.ExceptionHandled)
                 {
-                    auditLog.Exceptions.Add(result.Exception);
+                    auditLog!.Exceptions.Add(result.Exception);
                 }
             }
             catch (Exception ex)
             {
-                auditLog.Exceptions.Add(ex);
+                auditLog!.Exceptions.Add(ex);
                 throw;
             }
             finally
@@ -50,13 +50,13 @@ public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
                 if (auditLogAction != null)
                 {
                     auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                    auditLog.Actions.Add(auditLogAction);
+                    auditLog!.Actions.Add(auditLogAction);
                 }
             }
         }
     }
 
-    private bool ShouldSaveAudit(PageHandlerExecutingContext context, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
+    private bool ShouldSaveAudit(PageHandlerExecutingContext context, out AuditLogInfo? auditLog, out AuditLogActionInfo? auditLogAction)
     {
         auditLog = null;
         auditLogAction = null;
@@ -79,7 +79,7 @@ public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
         }
 
         var auditingHelper = context.GetRequiredService<IAuditingHelper>();
-        if (!auditingHelper.ShouldSaveAudit(context.HandlerMethod.MethodInfo, defaultValue: true))
+        if (!auditingHelper.ShouldSaveAudit(context.HandlerMethod!.MethodInfo, defaultValue: true))
         {
             return false;
         }

@@ -2,5 +2,5 @@
 
 public class ClockDto
 {
-    public string Kind { get; set; }
+    public string Kind { get; set; } = default!;
 }

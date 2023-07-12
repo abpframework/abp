@@ -26,7 +26,7 @@ public class WidgetDefinition
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
 
     [NotNull]
     public Type ViewComponentType { get; }
@@ -46,14 +46,13 @@ public class WidgetDefinition
     [NotNull]
     public List<WidgetResourceItem> Scripts { get; }
 
-    [CanBeNull]
-    public string RefreshUrl { get; set; }
+    public string? RefreshUrl { get; set; }
 
     public bool AutoInitialize { get; set; }
 
     public WidgetDefinition(
         [NotNull] Type viewComponentType,
-        [CanBeNull] ILocalizableString displayName = null)
+        ILocalizableString? displayName = null)
     {
         ViewComponentType = Check.NotNull(viewComponentType, nameof(viewComponentType));
 
@@ -74,12 +73,12 @@ public class WidgetDefinition
 
         if (!widgetAttribute.StyleTypes.IsNullOrEmpty())
         {
-            styles.AddRange(widgetAttribute.StyleTypes.Select(type => new WidgetResourceItem(type)));
+            styles.AddRange(widgetAttribute.StyleTypes!.Select(type => new WidgetResourceItem(type)));
         }
 
         if (!widgetAttribute.StyleFiles.IsNullOrEmpty())
         {
-            styles.AddRange(widgetAttribute.StyleFiles.Select(src => new WidgetResourceItem(src)));
+            styles.AddRange(widgetAttribute.StyleFiles!.Select(src => new WidgetResourceItem(src)));
         }
 
         return styles;
@@ -91,12 +90,12 @@ public class WidgetDefinition
 
         if (!widgetAttribute.ScriptTypes.IsNullOrEmpty())
         {
-            scripts.AddRange(widgetAttribute.ScriptTypes.Select(type => new WidgetResourceItem(type)));
+            scripts.AddRange(widgetAttribute.ScriptTypes!.Select(type => new WidgetResourceItem(type)));
         }
 
         if (!widgetAttribute.ScriptFiles.IsNullOrEmpty())
         {
-            scripts.AddRange(widgetAttribute.ScriptFiles.Select(src => new WidgetResourceItem(src)));
+            scripts.AddRange(widgetAttribute.ScriptFiles!.Select(src => new WidgetResourceItem(src)));
         }
 
         return scripts;
@@ -108,7 +107,7 @@ public class WidgetDefinition
 
         if (!widgetAttribute.RequiredPolicies.IsNullOrEmpty())
         {
-            policies.AddRange(widgetAttribute.RequiredPolicies);
+            policies.AddRange(widgetAttribute.RequiredPolicies!);
         }
 
         return policies;

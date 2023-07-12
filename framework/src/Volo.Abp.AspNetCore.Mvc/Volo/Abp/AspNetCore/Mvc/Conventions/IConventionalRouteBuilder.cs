@@ -10,6 +10,6 @@ public interface IConventionalRouteBuilder
         string controllerName,
         ActionModel action,
         string httpMethod,
-        [CanBeNull] ConventionalControllerSetting configuration
+        ConventionalControllerSetting? configuration
     );
 }
