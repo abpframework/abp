@@ -836,6 +836,8 @@
     "BlazoriseSupportExplanation2": "通过查看您的电子邮件信箱来验证您的电子邮件地址。如果在收件箱中没有看到电子邮件，请检查您的垃圾邮件箱！",
     "BlazoriseSupportExplanation3": "在<a href=\"https://blazorise.com/support/login\" rel=\"nofollow\">blazorise.com/support/login</a>上登录Blazorise支持网站。",
     "BlazoriseSupportExplanation4": "如果您有有效的ABP商业版许可证，您还将拥有Blazorise PRO许可证。您可以在<a href=\"https://blazorise.com/support/user/manage/license\" rel=\"nofollow\">blazorise.com/support/user/manage/license</a>获取您的Blazorise许可密钥。",
-    "BlazoriseSupportExplanation5": "您可以在support网站上发布您的问题，并为您的应用程序生成一个产品令牌。"
+    "BlazoriseSupportExplanation5": "您可以在support网站上发布您的问题，并为您的应用程序生成一个产品令牌。",
+    "ExtraQuestionCreditsFaqTitle": "我可以购买额外的问题支持次数吗？",
+    "ExtraQuestionCreditsFaqExplanation": "是的，您可以购买额外的问题支持次数，请发送电子邮件至<a href=\"mailto:info@abp.io\">info@abp.io</a>，并提供您的组织名称。以下是额外问题支持次数的价格列表： <ul><li>50次问题 $999</li><li>25次问题 $625</li><li>15次问题 $450</li></ul>"
   }
 }
