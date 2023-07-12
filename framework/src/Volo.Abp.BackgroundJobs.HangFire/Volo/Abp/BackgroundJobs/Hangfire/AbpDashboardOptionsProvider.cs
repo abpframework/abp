@@ -3,7 +3,7 @@ using Hangfire;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BackgroundJobs.Hangfire;
+`namespace Volo.Abp.BackgroundJobs.Hangfire;
 
 public class AbpDashboardOptionsProvider : ITransientDependency
 {

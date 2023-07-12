@@ -57,7 +57,7 @@ public abstract class AbpButtonTagHelperServiceBase<TTagHelper> : AbpTagHelperSe
             case FontIconType.FontAwesome:
                 return "fa fa-" + TagHelper.Icon;
             default:
-                return TagHelper.Icon;
+                return TagHelper.Icon!;
         }
     }
 
@@ -69,7 +69,7 @@ public abstract class AbpButtonTagHelperServiceBase<TTagHelper> : AbpTagHelperSe
         }
 
         var span = new TagBuilder("span");
-        span.InnerHtml.AppendHtml(TagHelper.Text);
+        span.InnerHtml.AppendHtml(TagHelper.Text!);
         output.Content.AppendHtml(span);
     }
 

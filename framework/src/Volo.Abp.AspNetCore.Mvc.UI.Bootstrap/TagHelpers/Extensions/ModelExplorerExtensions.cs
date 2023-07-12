@@ -7,9 +7,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 public static class ModelExplorerExtensions
 {
-    public static T GetAttribute<T>(this ModelExplorer property) where T : Attribute
+    public static T? GetAttribute<T>(this ModelExplorer property) where T : Attribute
     {
-        return property?.Metadata?.ContainerType?.GetTypeInfo()?.GetProperty(property.Metadata.PropertyName)?.GetCustomAttribute<T>();
+        return property?.Metadata?.ContainerType?.GetTypeInfo()?.GetProperty(property.Metadata.PropertyName!)?.GetCustomAttribute<T>();
     }
 
     public static int GetDisplayOrder(this ModelExplorer explorer)

@@ -201,7 +201,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     private AbpTagHelper GetAbpDateRangeInputTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
     {
-        var modelAttribute = model.ModelExplorer.GetAttribute<DateRangePickerAttribute>();
+        var modelAttribute = model.ModelExplorer.GetAttribute<DateRangePickerAttribute>()!;
 
         var pickerId = modelAttribute.PickerId;
 
@@ -214,16 +214,16 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
             abpDateRangeInputTagHelper.AspForStart = model;
 
             var otherModelExists = TryToGetOtherDateModel(model, pickerId, out var otherModel);
-            if (otherModelExists && otherModel.GetAttribute<DateRangePickerAttribute>().IsEnd)
+            if (otherModelExists && otherModel!.GetAttribute<DateRangePickerAttribute>()!.IsEnd)
             {
-                abpDateRangeInputTagHelper.AspForEnd = ModelExplorerToModelExpressionConverter(otherModel);
+                abpDateRangeInputTagHelper.AspForEnd = ModelExplorerToModelExpressionConverter(otherModel!);
             }
         }
 
         return abpDateRangeInputTagHelper;
     }
 
-    private bool TryToGetOtherDateModel(ModelExpression model, string pickerId, out ModelExplorer otherModel)
+    private bool TryToGetOtherDateModel(ModelExpression model, string pickerId, out ModelExplorer? otherModel)
     {
         otherModel = TagHelper.Model.ModelExplorer.Properties.SingleOrDefault(x => x != model.ModelExplorer && x.GetAttribute<DateRangePickerAttribute>()?.PickerId == pickerId);
         return otherModel != null;
@@ -266,7 +266,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     protected virtual AbpTagHelper GetAbpRadioInputTagHelper(ModelExpression model)
     {
-        var radioButtonAttribute = model.ModelExplorer.GetAttribute<AbpRadioButton>();
+        var radioButtonAttribute = model.ModelExplorer.GetAttribute<AbpRadioButton>()!;
         var abpRadioInputTagHelper = _serviceProvider.GetRequiredService<AbpRadioInputTagHelper>();
         abpRadioInputTagHelper.AspFor = model;
         abpRadioInputTagHelper.AspItems = null;
@@ -356,7 +356,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         return type.ToString().StartsWith("System.Collections.Generic.IEnumerable`") || type.ToString().StartsWith("System.Collections.Generic.List`");
     }
 
-    protected virtual bool IsCsharpClassOrPrimitive(Type type)
+    protected virtual bool IsCsharpClassOrPrimitive(Type? type)
     {
         if (type == null)
         {

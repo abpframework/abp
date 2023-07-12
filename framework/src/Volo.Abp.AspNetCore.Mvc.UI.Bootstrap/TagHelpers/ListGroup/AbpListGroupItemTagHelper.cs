@@ -6,7 +6,7 @@ public class AbpListGroupItemTagHelper : AbpTagHelper<AbpListGroupItemTagHelper,
 
     public bool? Disabled { get; set; }
 
-    public string Href { get; set; }
+    public string? Href { get; set; }
 
     public AbpListItemTagType TagType { get; set; } = AbpListItemTagType.Default;
 
