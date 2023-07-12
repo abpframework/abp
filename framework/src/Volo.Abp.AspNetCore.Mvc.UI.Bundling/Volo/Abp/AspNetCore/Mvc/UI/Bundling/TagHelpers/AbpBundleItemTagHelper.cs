@@ -10,12 +10,12 @@ public abstract class AbpBundleItemTagHelper<TTagHelper, TTagHelperService> : Ab
     /// <summary>
     /// A file path.
     /// </summary>
-    public string Src { get; set; }
+    public string? Src { get; set; }
 
     /// <summary>
     /// A bundle contributor type.
     /// </summary>
-    public Type Type { get; set; }
+    public Type? Type { get; set; }
 
     protected AbpBundleItemTagHelper(TTagHelperService service)
         : base(service)
@@ -26,7 +26,7 @@ public abstract class AbpBundleItemTagHelper<TTagHelper, TTagHelperService> : Ab
     {
         if (Type != null)
         {
-            return Type.FullName;
+            return Type.FullName!;
         }
 
         if (Src != null)
