@@ -14,24 +14,24 @@ namespace Volo.Abp.AspNetCore.SignalR;
 
 public abstract class AbpHub : Hub
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
     [Obsolete("Use LazyServiceProvider instead.")]
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
-    protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetService<ILoggerFactory>();
+    protected ILoggerFactory? LoggerFactory => LazyServiceProvider.LazyGetService<ILoggerFactory>();
 
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
-    protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetService<ICurrentUser>();
+    protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetService<ICurrentUser>()!;
 
-    protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetService<ICurrentTenant>();
+    protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetService<ICurrentTenant>()!;
 
-    protected IAuthorizationService AuthorizationService => LazyServiceProvider.LazyGetService<IAuthorizationService>();
+    protected IAuthorizationService AuthorizationService => LazyServiceProvider.LazyGetService<IAuthorizationService>()!;
 
-    protected IClock Clock => LazyServiceProvider.LazyGetService<IClock>();
+    protected IClock Clock => LazyServiceProvider.LazyGetService<IClock>()!;
 
-    protected IStringLocalizerFactory StringLocalizerFactory => LazyServiceProvider.LazyGetService<IStringLocalizerFactory>();
+    protected IStringLocalizerFactory StringLocalizerFactory => LazyServiceProvider.LazyGetService<IStringLocalizerFactory>()!;
 
     protected IStringLocalizer L {
         get {
@@ -43,16 +43,16 @@ public abstract class AbpHub : Hub
             return _localizer;
         }
     }
-    private IStringLocalizer _localizer;
+    private IStringLocalizer? _localizer;
 
-    protected Type LocalizationResource {
+    protected Type? LocalizationResource {
         get => _localizationResource;
         set {
             _localizationResource = value;
             _localizer = null;
         }
     }
-    private Type _localizationResource = typeof(DefaultResource);
+    private Type? _localizationResource = typeof(DefaultResource);
 
     protected virtual IStringLocalizer CreateLocalizer()
     {
@@ -74,23 +74,23 @@ public abstract class AbpHub : Hub
 public abstract class AbpHub<T> : Hub<T>
     where T : class
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
-    protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetService<ILoggerFactory>();
+    protected ILoggerFactory? LoggerFactory => LazyServiceProvider.LazyGetService<ILoggerFactory>();
 
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
-    protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetService<ICurrentUser>();
+    protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetService<ICurrentUser>()!;
 
-    protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetService<ICurrentTenant>();
+    protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetService<ICurrentTenant>()!;
 
-    protected IAuthorizationService AuthorizationService => LazyServiceProvider.LazyGetService<IAuthorizationService>();
+    protected IAuthorizationService AuthorizationService => LazyServiceProvider.LazyGetService<IAuthorizationService>()!;
 
-    protected IClock Clock => LazyServiceProvider.LazyGetService<IClock>();
+    protected IClock Clock => LazyServiceProvider.LazyGetService<IClock>()!;
 
-    protected IStringLocalizerFactory StringLocalizerFactory => LazyServiceProvider.LazyGetService<IStringLocalizerFactory>();
+    protected IStringLocalizerFactory StringLocalizerFactory => LazyServiceProvider.LazyGetService<IStringLocalizerFactory>()!;
 
     protected IStringLocalizer L {
         get {
@@ -102,16 +102,16 @@ public abstract class AbpHub<T> : Hub<T>
             return _localizer;
         }
     }
-    private IStringLocalizer _localizer;
+    private IStringLocalizer? _localizer;
 
-    protected Type LocalizationResource {
+    protected Type? LocalizationResource {
         get => _localizationResource;
         set {
             _localizationResource = value;
             _localizer = null;
         }
     }
-    private Type _localizationResource = typeof(DefaultResource);
+    private Type? _localizationResource = typeof(DefaultResource);
 
     protected virtual IStringLocalizer CreateLocalizer()
     {
