@@ -289,7 +289,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             Values = new Dictionary<string, string?>()
         };
 
-        var settingDefinitions = _settingDefinitionManager.GetAll().Where(x => x.IsVisibleToClients);
+        var settingDefinitions = (await _settingDefinitionManager.GetAllAsync()).Where(x => x.IsVisibleToClients);
 
         var settingValues = await _settingProvider.GetAllAsync(settingDefinitions.Select(x => x.Name).ToArray());
 

@@ -17,7 +17,7 @@ public class DefaultValueSettingManagementProvider_Tests : SettingsTestBase
     [Fact]
     public async Task GetOrNullAsync()
     {
-        var mySetting3 = _settingDefinitionManager.Get("MySetting3");
+        var mySetting3 = await _settingDefinitionManager.GetAsync("MySetting3");
 
         var defaultValueSettingManagementProvider = new DefaultValueSettingManagementProvider();
         (await defaultValueSettingManagementProvider
@@ -27,7 +27,7 @@ public class DefaultValueSettingManagementProvider_Tests : SettingsTestBase
     [Fact]
     public async Task SetAsync()
     {
-        var mySetting3 = _settingDefinitionManager.Get("MySetting3");
+        var mySetting3 = await _settingDefinitionManager.GetAsync("MySetting3");
 
         await Assert.ThrowsAsync<AbpException>(async () => await new DefaultValueSettingManagementProvider().SetAsync(mySetting3, "123",
             DefaultValueSettingValueProvider.ProviderName));
@@ -36,7 +36,7 @@ public class DefaultValueSettingManagementProvider_Tests : SettingsTestBase
     [Fact]
     public async Task ClearAsync()
     {
-        var mySetting3 = _settingDefinitionManager.Get("MySetting3");
+        var mySetting3 = await _settingDefinitionManager.GetAsync("MySetting3");
 
         await Assert.ThrowsAsync<AbpException>(async () =>
             await new DefaultValueSettingManagementProvider().ClearAsync(mySetting3,
