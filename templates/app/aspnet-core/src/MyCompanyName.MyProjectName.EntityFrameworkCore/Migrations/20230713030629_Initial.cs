@@ -46,6 +46,27 @@ namespace MyCompanyName.MyProjectName.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpBackgroundJobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    JobArgs = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: false),
+                    TryCount = table.Column<short>(type: "smallint", nullable: false, defaultValue: (short)0),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NextTryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastTryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsAbandoned = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    Priority = table.Column<byte>(type: "tinyint", nullable: false, defaultValue: (byte)15),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpClaimTypes",
                 columns: table => new
                 {
@@ -256,7 +277,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpSettingDefinitionRecords",
+                name: "AbpSettingDefinitions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -272,7 +293,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AbpSettingDefinitionRecords", x => x.Id);
+                    table.PrimaryKey("PK_AbpSettingDefinitions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -778,6 +799,11 @@ namespace MyCompanyName.MyProjectName.Migrations
                 columns: new[] { "TenantId", "UserId", "ExecutionTime" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpBackgroundJobs_IsAbandoned_NextTryTime",
+                table: "AbpBackgroundJobs",
+                columns: new[] { "IsAbandoned", "NextTryTime" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
                 table: "AbpEntityChanges",
                 column: "AuditLogId");
@@ -893,8 +919,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                 columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpSettingDefinitionRecords_Name",
-                table: "AbpSettingDefinitionRecords",
+                name: "IX_AbpSettingDefinitions_Name",
+                table: "AbpSettingDefinitions",
                 column: "Name",
                 unique: true);
 
@@ -988,6 +1014,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "AbpAuditLogActions");
 
             migrationBuilder.DropTable(
+                name: "AbpBackgroundJobs");
+
+            migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
 
             migrationBuilder.DropTable(
@@ -1024,7 +1053,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "AbpSecurityLogs");
 
             migrationBuilder.DropTable(
-                name: "AbpSettingDefinitionRecords");
+                name: "AbpSettingDefinitions");
 
             migrationBuilder.DropTable(
                 name: "AbpSettings");

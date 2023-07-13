@@ -16,7 +16,7 @@ public static class SettingManagementMongoDbContextExtensions
 
         builder.Entity<SettingDefinitionRecord>(b =>
         {
-            b.CollectionName = AbpSettingManagementDbProperties.DbTablePrefix + "SettingDefinitionRecords";
+            b.CollectionName = AbpSettingManagementDbProperties.DbTablePrefix + "SettingDefinitions";
         });
     }
 }

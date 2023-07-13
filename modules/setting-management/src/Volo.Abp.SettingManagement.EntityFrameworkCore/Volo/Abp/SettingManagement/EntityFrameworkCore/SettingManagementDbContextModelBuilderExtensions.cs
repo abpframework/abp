@@ -38,7 +38,7 @@ public static class SettingManagementDbContextModelBuilderExtensions
 
         builder.Entity<SettingDefinitionRecord>(b =>
         {
-            b.ToTable(AbpSettingManagementDbProperties.DbTablePrefix + "SettingDefinitionRecords", AbpSettingManagementDbProperties.DbSchema);
+            b.ToTable(AbpSettingManagementDbProperties.DbTablePrefix + "SettingDefinitions", AbpSettingManagementDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
