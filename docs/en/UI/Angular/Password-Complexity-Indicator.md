@@ -88,6 +88,7 @@ export class myComponent{
   });
   progressBar: ProgressBarModel = { bgColor: '', width: 0 }
   private readonly passwordComplexityService: PasswordComplexityIndicatorService = inject(PasswordComplexityIndicatorService);
+  private readonly fb: UntypedFormBuilder = inject(UntypedFormBuilder);
 
   get password(): string{
     return this.form.get('password').value;
