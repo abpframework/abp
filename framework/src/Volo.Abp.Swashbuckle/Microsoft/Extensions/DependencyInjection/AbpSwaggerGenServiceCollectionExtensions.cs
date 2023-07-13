@@ -12,7 +12,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
 {
     public static IServiceCollection AddAbpSwaggerGen(
         this IServiceCollection services,
-        Action<SwaggerGenOptions> setupAction = null)
+        Action<SwaggerGenOptions>? setupAction = null)
     {
         return services.AddSwaggerGen(
             options =>
@@ -34,7 +34,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
         this IServiceCollection services,
         [NotNull] string authority,
         [NotNull] Dictionary<string, string> scopes,
-        Action<SwaggerGenOptions> setupAction = null,
+        Action<SwaggerGenOptions>? setupAction = null,
         string authorizationEndpoint = "/connect/authorize",
         string tokenEndpoint = "/connect/token")
     {
@@ -82,10 +82,10 @@ public static class AbpSwaggerGenServiceCollectionExtensions
     public static IServiceCollection AddAbpSwaggerGenWithOidc(
         this IServiceCollection services,
         [NotNull] string authority,
-        string[] scopes = null,
-        string[] flows = null,
-        string discoveryEndpoint = null,
-        Action<SwaggerGenOptions> setupAction = null)
+        string[]? scopes = null,
+        string[]? flows = null,
+        string? discoveryEndpoint = null,
+        Action<SwaggerGenOptions>? setupAction = null)
     {
         var discoveryUrl = discoveryEndpoint != null ?
             new Uri(discoveryEndpoint) :
