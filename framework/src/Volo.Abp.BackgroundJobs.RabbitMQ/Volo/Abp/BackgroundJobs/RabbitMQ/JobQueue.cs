@@ -180,7 +180,7 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
             exchange: "",
             routingKey: routingKey,
             basicProperties: basicProperties,
-            body: Serializer.Serialize(args)
+            body: Serializer.Serialize(args!)
         );
 
         return Task.CompletedTask;

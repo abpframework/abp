@@ -19,11 +19,11 @@ public class AbpHangfireOptions
     public JobStorage? Storage { get; set; }
 
     [NotNull]
-    public Func<IServiceProvider, BackgroundJobServer> BackgroundJobServerFactory {
+    public Func<IServiceProvider, BackgroundJobServer?> BackgroundJobServerFactory {
         get => _backgroundJobServerFactory;
         set => _backgroundJobServerFactory = Check.NotNull(value, nameof(value));
     }
-    private Func<IServiceProvider, BackgroundJobServer> _backgroundJobServerFactory;
+    private Func<IServiceProvider, BackgroundJobServer?> _backgroundJobServerFactory;
 
     public AbpHangfireOptions()
     {
