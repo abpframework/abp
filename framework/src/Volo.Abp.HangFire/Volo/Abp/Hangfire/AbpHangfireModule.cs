@@ -9,7 +9,7 @@ namespace Volo.Abp.Hangfire;
 [DependsOn(typeof(AbpAuthorizationAbstractionsModule))]
 public class AbpHangfireModule : AbpModule
 {
-    private AbpHangfireBackgroundJobServer _backgroundJobServer;
+    private AbpHangfireBackgroundJobServer? _backgroundJobServer;
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {

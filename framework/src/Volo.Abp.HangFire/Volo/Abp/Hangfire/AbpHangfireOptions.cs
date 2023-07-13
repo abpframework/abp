@@ -12,14 +12,11 @@ namespace Volo.Abp.Hangfire;
 
 public class AbpHangfireOptions
 {
-    [CanBeNull]
-    public BackgroundJobServerOptions ServerOptions { get; set; }
+    public BackgroundJobServerOptions? ServerOptions { get; set; }
 
-    [CanBeNull]
-    public IEnumerable<IBackgroundProcess> AdditionalProcesses { get; set; }
+    public IEnumerable<IBackgroundProcess>? AdditionalProcesses { get; set; }
 
-    [CanBeNull]
-    public JobStorage Storage { get; set; }
+    public JobStorage? Storage { get; set; }
 
     [NotNull]
     public Func<IServiceProvider, BackgroundJobServer> BackgroundJobServerFactory {
