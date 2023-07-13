@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -84,8 +85,25 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
     
     public async Task<List<PopularTag>> GetPopularTagsAsync(string entityType, int maxCount, CancellationToken cancellationToken = default)
     {
-        //TODO: Implement this method
-        throw new NotImplementedException();
+        var tags = await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => x.EntityType == entityType)
+            .Select(x => new { x.Id, x.Name })
+            .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+
+        var tagIds = tags.Select(x => x.Id);
+
+        var entityTagCounts = await (await GetMongoQueryableAsync<EntityTag>(cancellationToken))
+            .Where(q => tagIds.Contains(q.TagId))
+            .GroupBy(q => q.TagId)
+            .Select(q => new { TagId = q.Key, Count = q.Count() })
+            .OrderByDescending(q => q.Count)
+            .Take(maxCount)
+            .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+
+        return (from entityTagId in entityTagCounts
+            let tag = tags.FirstOrDefault(x => x.Id == entityTagId.TagId)
+            where tag != null
+            select new PopularTag(tag.Id, tag.Name, entityTagId.Count)).ToList();
     }
 
 
