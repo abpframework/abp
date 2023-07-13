@@ -37,7 +37,7 @@ public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
         await base.StopAsync(cancellationToken);
     }
 
-    private void Timer_Elapsed(object sender, System.EventArgs e)
+    private void Timer_Elapsed(object? sender, System.EventArgs e)
     {
         using (var scope = ServiceScopeFactory.CreateScope())
         {
