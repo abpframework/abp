@@ -24,7 +24,7 @@ public abstract class EmailSenderBase : IEmailSender
         BackgroundJobManager = backgroundJobManager;
     }
 
-    public virtual async Task SendAsync(string to, string subject, string body, bool isBodyHtml = true)
+    public virtual async Task SendAsync(string to, string? subject, string? body, bool isBodyHtml = true)
     {
         await SendAsync(new MailMessage
         {
@@ -35,7 +35,7 @@ public abstract class EmailSenderBase : IEmailSender
         });
     }
 
-    public virtual async Task SendAsync(string from, string to, string subject, string body, bool isBodyHtml = true)
+    public virtual async Task SendAsync(string from, string to, string? subject, string? body, bool isBodyHtml = true)
     {
         await SendAsync(new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml });
     }
