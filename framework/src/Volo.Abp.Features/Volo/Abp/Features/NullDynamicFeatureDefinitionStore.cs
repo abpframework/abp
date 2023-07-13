@@ -8,7 +8,7 @@ namespace Volo.Abp.Features;
 
 public class NullDynamicFeatureDefinitionStore : IDynamicFeatureDefinitionStore, ISingletonDependency
 {
-    private static readonly Task<FeatureDefinition> CachedFeatureResult = Task.FromResult((FeatureDefinition)null);
+    private static readonly Task<FeatureDefinition?> CachedFeatureResult = Task.FromResult((FeatureDefinition?)null);
 
     private static readonly Task<IReadOnlyList<FeatureDefinition>> CachedFeaturesResult =
         Task.FromResult((IReadOnlyList<FeatureDefinition>)Array.Empty<FeatureDefinition>().ToImmutableList());
@@ -16,7 +16,7 @@ public class NullDynamicFeatureDefinitionStore : IDynamicFeatureDefinitionStore,
     private static readonly Task<IReadOnlyList<FeatureGroupDefinition>> CachedGroupsResult =
         Task.FromResult((IReadOnlyList<FeatureGroupDefinition>)Array.Empty<FeatureGroupDefinition>().ToImmutableList());
 
-    public Task<FeatureDefinition> GetOrNullAsync(string name)
+    public Task<FeatureDefinition?> GetOrNullAsync(string name)
     {
         return CachedFeatureResult;
     }
