@@ -10,10 +10,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Host.Migrations
+namespace MyCompanyName.MyProjectName.Mvc.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20230627075201_Initial")]
+    [Migration("20230713030711_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1599,7 +1599,7 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("AbpSettingDefinitionRecords", (string)null);
+                    b.ToTable("AbpSettingDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>

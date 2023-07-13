@@ -256,7 +256,7 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpSettingDefinitionRecords",
+                name: "AbpSettingDefinitions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -272,7 +272,7 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AbpSettingDefinitionRecords", x => x.Id);
+                    table.PrimaryKey("PK_AbpSettingDefinitions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -893,8 +893,8 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                 columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpSettingDefinitionRecords_Name",
-                table: "AbpSettingDefinitionRecords",
+                name: "IX_AbpSettingDefinitions_Name",
+                table: "AbpSettingDefinitions",
                 column: "Name",
                 unique: true);
 
@@ -1024,7 +1024,7 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                 name: "AbpSecurityLogs");
 
             migrationBuilder.DropTable(
-                name: "AbpSettingDefinitionRecords");
+                name: "AbpSettingDefinitions");
 
             migrationBuilder.DropTable(
                 name: "AbpSettings");

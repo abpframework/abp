@@ -832,10 +832,12 @@ namespace Volo.Abp.SettingManagement.DemoApp.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DefaultValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -869,7 +871,7 @@ namespace Volo.Abp.SettingManagement.DemoApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("AbpSettingDefinitionRecords", (string)null);
+                    b.ToTable("AbpSettingDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>

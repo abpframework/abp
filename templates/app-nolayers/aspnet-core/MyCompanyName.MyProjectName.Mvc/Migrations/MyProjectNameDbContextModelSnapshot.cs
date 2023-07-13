@@ -1596,7 +1596,7 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("AbpSettingDefinitionRecords", (string)null);
+                    b.ToTable("AbpSettingDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
