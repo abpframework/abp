@@ -11,6 +11,8 @@ public class CmsKitCommonApplicationAutoMapperProfile : Profile
     {
         CreateMap<Tag, TagDto>().MapExtraProperties();
 
+        CreateMap<PopularTag, PopularTagDto>();
+
         CreateMap<CmsUser, CmsUserDto>().MapExtraProperties();
 
         CreateMap<BlogFeature, BlogFeatureCacheItem>().MapExtraProperties();

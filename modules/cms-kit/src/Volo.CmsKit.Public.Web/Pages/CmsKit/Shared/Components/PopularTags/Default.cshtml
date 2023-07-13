@@ -1,0 +1,29 @@
+﻿@inject IHtmlLocalizer<CmsKitResource> L
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.CmsKit.Localization
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.PopularTags.PopularTagsViewComponent.PopularTagsViewModel
+
+@if (Model.Tags != null && Model.Tags.Any())
+{
+    <h4 class="mb-3 fw--6">@L["PopularTags"]</h4>
+
+    <div class="cms-tags-area my-3">
+        @foreach (var tag in Model.Tags)
+        {
+            if (Model.UrlFactory == null)
+            {
+                <span class="br-8 me-2 mb-2 p-2 d-inline-block cmskit-tag fw--5" style="background: #eeedf7; color: #766bc8">
+                    @tag.Name
+                </span>
+            }
+            else
+            {
+                <a href="@Model.UrlFactory(tag)">
+                    <span class="br-8 me-2 mb-2 p-2 d-inline-block cmskit-tag fw--5" style="background: #eeedf7; color: #766bc8">
+                        @tag.Name
+                    </span>
+                </a>
+            }
+        }
+    </div>
+}

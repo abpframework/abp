@@ -81,6 +81,13 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
         return result;
     }
 
+    
+    public async Task<List<PopularTag>> GetPopularTagsAsync(string entityType, int maxCount, CancellationToken cancellationToken = default)
+    {
+        //TODO: Implement this method
+        throw new NotImplementedException();
+    }
+
 
     public async Task<List<Tag>> GetListAsync(string filter, CancellationToken cancellationToken = default)
     {
