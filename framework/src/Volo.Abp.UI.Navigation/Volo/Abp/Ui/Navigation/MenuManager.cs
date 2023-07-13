@@ -110,7 +110,7 @@ public class MenuManager : IMenuManager, ITransientDependency
         {
             if (!item.RequiredPermissionName.IsNullOrWhiteSpace())
             {
-                item.RequirePermissions(item.RequiredPermissionName);
+                item.RequirePermissions(item.RequiredPermissionName!);
             }
         }
 

@@ -12,7 +12,7 @@ public class PermissionsSimpleStateCheckerSerializerContributor :
 {
     public const string CheckerShortName = "P";
 
-    public string SerializeToJson<TState>(ISimpleStateChecker<TState> checker)
+    public string? SerializeToJson<TState>(ISimpleStateChecker<TState> checker)
         where TState : IHasSimpleStateCheckers<TState>
     {
         if (checker is not RequirePermissionsSimpleStateChecker<TState> permissionsSimpleStateChecker)
@@ -35,7 +35,7 @@ public class PermissionsSimpleStateCheckerSerializerContributor :
         return jsonObject.ToJsonString();
     }
 
-    public ISimpleStateChecker<TState> Deserialize<TState>(
+    public ISimpleStateChecker<TState>? Deserialize<TState>(
         JsonObject jsonObject,
         TState state)
         where TState : IHasSimpleStateCheckers<TState>
@@ -54,7 +54,7 @@ public class PermissionsSimpleStateCheckerSerializerContributor :
         return new RequirePermissionsSimpleStateChecker<TState>(
             new RequirePermissionsSimpleBatchStateCheckerModel<TState>(
                 state,
-                nameArray.Select(x => x.ToString()).ToArray(),
+                nameArray.Select(x => x!.ToString()).ToArray(),
                 (bool?)jsonObject["A"] ?? false
             )
         );

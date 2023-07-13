@@ -8,7 +8,7 @@ namespace Volo.Abp.Authorization.Permissions;
 
 public class NullDynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStore, ISingletonDependency
 {
-    private readonly static Task<PermissionDefinition> CachedPermissionResult = Task.FromResult((PermissionDefinition)null);
+    private readonly static Task<PermissionDefinition> CachedPermissionResult = Task.FromResult((PermissionDefinition)null!);
     
     private readonly static Task<IReadOnlyList<PermissionDefinition>> CachedPermissionsResult =
         Task.FromResult((IReadOnlyList<PermissionDefinition>)Array.Empty<PermissionDefinition>().ToImmutableList());
