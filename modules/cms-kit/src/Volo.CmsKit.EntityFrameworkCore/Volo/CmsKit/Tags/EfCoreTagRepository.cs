@@ -88,11 +88,10 @@ public class EfCoreTagRepository : EfCoreRepository<ICmsKitDbContext, Tag, Guid>
         return await (from tag in await GetDbSetAsync()
                 join entityTag in (await GetDbContextAsync()).Set<EntityTag>() on tag.Id equals entityTag.TagId
                 where tag.EntityType == entityType
-                select new { tag, entityTag } into tagEntityTag
-                group tagEntityTag by tagEntityTag.entityTag.TagId
+                group tag by tag.Id
                 into g
                 orderby g.Count() descending
-                select new PopularTag(g.Key, g.First().tag.Name, g.Count()))
+                select new PopularTag(g.Key, g.First().Name, g.Count()))
             .Take(maxCount)
             .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
