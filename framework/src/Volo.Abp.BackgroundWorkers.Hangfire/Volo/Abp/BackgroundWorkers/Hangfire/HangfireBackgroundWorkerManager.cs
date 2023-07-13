@@ -14,7 +14,7 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire;
 [Dependency(ReplaceServices = true)]
 public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISingletonDependency
 {
-    protected AbpHangfireBackgroundJobServer BackgroundJobServer { get; set; }
+    protected AbpHangfireBackgroundJobServer BackgroundJobServer { get; set; } = default!;
     protected IServiceProvider ServiceProvider { get; }
 
     public HangfireBackgroundWorkerManager(IServiceProvider serviceProvider)
@@ -57,7 +57,7 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
                 var timer = worker.GetType()
                     .GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
 
-                var period = worker is AsyncPeriodicBackgroundWorkerBase ? ((AbpAsyncTimer)timer)?.Period : ((AbpTimer)timer)?.Period;
+                var period = worker is AsyncPeriodicBackgroundWorkerBase ? ((AbpAsyncTimer?)timer)?.Period : ((AbpTimer?)timer)?.Period;
 
                 if (period == null)
                 {
@@ -65,7 +65,7 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
                 }
 
                 var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
-                var workerAdapter = Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker;
+                var workerAdapter = (Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker)!;
 
                 RecurringJob.AddOrUpdate(() => workerAdapter.DoWorkAsync(cancellationToken), GetCron(period.Value), workerAdapter.TimeZone, workerAdapter.Queue);
 
