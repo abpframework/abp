@@ -10,13 +10,13 @@ public partial class ExtensionProperties<TEntityType, TResourceType> : Component
     where TEntityType : IHasExtraProperties
 {
     [Inject]
-    public IStringLocalizerFactory StringLocalizerFactory { get; set; }
+    public IStringLocalizerFactory StringLocalizerFactory { get; set; } = default!;
 
     [Parameter]
-    public AbpBlazorMessageLocalizerHelper<TResourceType> LH { get; set; }
+    public AbpBlazorMessageLocalizerHelper<TResourceType> LH { get; set; } = default!;
 
     [Parameter]
-    public TEntityType Entity { get; set; }
+    public TEntityType Entity { get; set; } = default!;
     
     [Parameter]
     public ExtensionPropertyModalType? ModalType { get; set; }

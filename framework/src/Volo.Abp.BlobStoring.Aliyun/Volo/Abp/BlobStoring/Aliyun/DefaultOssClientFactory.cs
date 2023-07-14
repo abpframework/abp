@@ -49,7 +49,7 @@ public class DefaultOssClientFactory : IOssClientFactory, ITransientDependency
     {
         Check.NotNullOrWhiteSpace(configuration.RoleArn, nameof(configuration.RoleArn));
         Check.NotNullOrWhiteSpace(configuration.RoleSessionName, nameof(configuration.RoleSessionName));
-        var cacheItem = Cache.Get(configuration.TemporaryCredentialsCacheKey);
+        var cacheItem = Cache.Get(configuration.TemporaryCredentialsCacheKey!);
         if (cacheItem == null)
         {
             IClientProfile profile = DefaultProfile.GetProfile(
@@ -83,11 +83,11 @@ public class DefaultOssClientFactory : IOssClientFactory, ITransientDependency
         AssumeRole_Credentials credentials)
     {
         var temporaryCredentialsCache = new AliyunTemporaryCredentialsCacheItem(
-            StringEncryptionService.Encrypt(credentials.AccessKeyId),
-            StringEncryptionService.Encrypt(credentials.AccessKeySecret),
-            StringEncryptionService.Encrypt(credentials.SecurityToken));
+            StringEncryptionService.Encrypt(credentials.AccessKeyId)!,
+            StringEncryptionService.Encrypt(credentials.AccessKeySecret)!,
+            StringEncryptionService.Encrypt(credentials.SecurityToken)!);
 
-        Cache.Set(configuration.TemporaryCredentialsCacheKey, temporaryCredentialsCache,
+        Cache.Set(configuration.TemporaryCredentialsCacheKey!, temporaryCredentialsCache,
             new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(configuration.DurationSeconds - 10)

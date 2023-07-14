@@ -17,17 +17,17 @@ public static class EnumHelper
         var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
             new[]
             {
-                        stringLocalizerFactory.CreateDefaultOrNull()
+                stringLocalizerFactory.CreateDefaultOrNull()
             },
             new[]
             {
-                        $"Enum:{enumType.Name}.{value}",
-                        $"Enum:{enumType.Name}.{memberName}",
-                        $"{enumType.Name}.{value}",
-                        $"{enumType.Name}.{memberName}",
-                        memberName
-            },
-            memberName
+                $"Enum:{enumType.Name}.{value}",
+                $"Enum:{enumType.Name}.{memberName}",
+                $"{enumType.Name}.{value}",
+                $"{enumType.Name}.{memberName}",
+                memberName
+            }!,
+            memberName!
         );
 
         return localizedMemberName;

@@ -69,7 +69,7 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
         return await BlobExistsAsync(client, containerName, blobName);
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public override async Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var blobName = MinioBlobNameCalculator.Calculate(args);
         var client = GetMinioClient(args);
@@ -152,6 +152,6 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
 
         return configuration.BucketName.IsNullOrWhiteSpace()
             ? args.ContainerName
-            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.BucketName);
+            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.BucketName!);
     }
 }

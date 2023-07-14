@@ -22,8 +22,8 @@ public static class AbpAutoMapperExtensibleDtoExtensions
                     (source, destination, extraProps) =>
                     {
                         var result = extraProps.IsNullOrEmpty()
-                            ? new Dictionary<string, object>()
-                            : new Dictionary<string, object>(extraProps);
+                            ? new Dictionary<string, object?>()
+                            : new Dictionary<string, object?>(extraProps);
 
                         ExtensibleObjectMapper
                             .MapExtraPropertiesTo<TSource, TDestination>(

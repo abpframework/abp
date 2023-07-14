@@ -16,22 +16,22 @@ public abstract class ExtensionPropertyComponentBase<TEntity, TResourceType> : O
     where TEntity : IHasExtraProperties
 {
     [Inject]
-    public IStringLocalizerFactory StringLocalizerFactory { get; set; }
+    public IStringLocalizerFactory StringLocalizerFactory { get; set; } = default!;
 
     [Inject]
-    public IAbpEnumLocalizer AbpEnumLocalizer { get; set; }
+    public IAbpEnumLocalizer AbpEnumLocalizer { get; set; } = default!;
 
     [Inject]
-    public IValidationMessageLocalizerAttributeFinder ValidationMessageLocalizerAttributeFinder { get; set; }
+    public IValidationMessageLocalizerAttributeFinder ValidationMessageLocalizerAttributeFinder { get; set; } = default!;
 
     [Parameter]
-    public TEntity Entity { get; set; }
+    public TEntity Entity { get; set; } = default!;
 
     [Parameter]
-    public ObjectExtensionPropertyInfo PropertyInfo { get; set; }
+    public ObjectExtensionPropertyInfo PropertyInfo { get; set; } = default!;
 
     [Parameter]
-    public AbpBlazorMessageLocalizerHelper<TResourceType> LH { get; set; }
+    public AbpBlazorMessageLocalizerHelper<TResourceType> LH { get; set; } = default!;
 
     [Parameter]
     public ExtensionPropertyModalType? ModalType { get; set; }
