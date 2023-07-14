@@ -1,6 +1,6 @@
 // This file is part of RatingPublicClientProxy, you can customize it here
 // ReSharper disable once CheckNamespace
-namespace Volo.CmsKit.Public.Ratings.ClientProxies;
+namespace Volo.CmsKit.Public.Ratings;
 
 public partial class RatingPublicClientProxy
 {
