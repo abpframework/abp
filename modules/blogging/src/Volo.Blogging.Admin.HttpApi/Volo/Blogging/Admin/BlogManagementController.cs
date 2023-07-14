@@ -23,41 +23,41 @@ namespace Volo.Blogging.Admin
         }
 
         [HttpGet]
-        public async Task<ListResultDto<BlogDto>> GetListAsync()
+        public virtual async Task<ListResultDto<BlogDto>> GetListAsync()
         {
             return await _blogManagementAppService.GetListAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<BlogDto> GetAsync(Guid id)
+        public virtual async Task<BlogDto> GetAsync(Guid id)
         {
             return await _blogManagementAppService.GetAsync(id);
         }
 
         [HttpPost]
-        public async Task<BlogDto> CreateAsync(CreateBlogDto input)
+        public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
         {
             return await _blogManagementAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
+        public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
         {
             return await _blogManagementAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             await _blogManagementAppService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("clear-cache/{id}")]
-        public async Task ClearCacheAsync(Guid id)
+        public virtual async Task ClearCacheAsync(Guid id)
         {
             await _blogManagementAppService.ClearCacheAsync(id);
         }
