@@ -16,7 +16,7 @@ public class PopularTagsViewComponent : AbpViewComponent
         _tagAppService = tagAppService;
     }
     
-    public async Task<IViewComponentResult> InvokeAsync(string entityType, int maxCount, string urlFormat)
+    public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, int maxCount, string urlFormat)
     {
         var model = new PopularTagsViewModel
         {

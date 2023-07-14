@@ -80,7 +80,7 @@ public class EfCoreTagRepository : EfCoreRepository<ICmsKitDbContext, Tag, Guid>
         return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<PopularTag>> GetPopularTagsAsync(
+    public virtual async Task<List<PopularTag>> GetPopularTagsAsync(
         [NotNull] string entityType, 
         int maxCount, 
         CancellationToken cancellationToken = default)

@@ -83,7 +83,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
     }
 
     
-    public async Task<List<PopularTag>> GetPopularTagsAsync(string entityType, int maxCount, CancellationToken cancellationToken = default)
+    public virtual async Task<List<PopularTag>> GetPopularTagsAsync(string entityType, int maxCount, CancellationToken cancellationToken = default)
     {
         var tags = await (await GetMongoQueryableAsync(cancellationToken))
             .Where(x => x.EntityType == entityType)
