@@ -4,48 +4,42 @@
 # Service
 ### password-complextiy-indicator.service.ts
 ```ts
-import { Injectable } from  "@angular/core";
-import { ProgressBarModel, RegexRequirementsModel } from  '../models/password-complexity';
+import { Injectable } from "@angular/core";
+import { ProgressBarStats } from '../models/password-complexity';
 
 @Injectable({providedIn: 'root'})
-export  class  PasswordComplexityIndicatorService {
+  colors: string[] = [
+    '#B0284B',
+    '#F2A34F',
+    '#FFE500',
+    '#A4BD6E',
+    '#6EBD70',
+  ];
 
-progressBar: ProgressBarModel;
+  requirements: RegexRequirementsModel = {
+    minLengthRegex: /(?=.{6,})/,                                        // Default min length 6
+    numberRegex: /(?=.*[0-9])/,                                         // Default isContain number
+    lowercaseRegex: /(?=.*[a-z])/,                                      // Default isContainLowercase
+    uppercaseRegex: /(?=.*[A-Z])/,                                      // Default isContainUppercase
+    specialCharacterRegex: /^(?=.*[!@#$%^&*()\-_=+[\]{};:'"<>/?])\S+$/, // Default isContainSpecialCharacter
+  };
 
-stats: ProgressBarModel[] = [
-  { bgColor: '', width: 0 },
-  { bgColor: 'danger', width: 20 },
-  { bgColor: 'warning', width: 40 },
-  { bgColor: 'info', width: 60 },
-  { bgColor: 'primary', width: 80 },
-  { bgColor: 'success', width: 100 },
-];
+  validatePassword(password: string): ProgressBarStats {
+    let passedCounter = 0;
 
-requirements: RegexRequirementsModel  = {
-  minLengthRegex: /(?=.{6,})/, 						  // min length 6
-  numberRegex: /(?=.*[0-9])/,  						  // isContain number
-  lowercaseRegex: /(?=.*[a-z])/,                                	  // isContainLowercase
-  uppercaseRegex: /(?=.*[A-Z])/, 					  // isContainUppercase
-  specialCharacterRegex: /^(?=.*[!@#$%^&*()\-_=+[\]{};:'"<>/?])\S+$/,     // isContainSpecialCharacter
-};
-
-validatePassword(password: string): ProgressBarModel {
-  let  passedCounter  =  0;
-
-  Object.values(this.requirements).forEach((reg:RegExp)=>{
-    const  isValid  =  reg.test(password);
-
-    if(isValid){
-      passedCounter++;
-    }
-  })
-
-  return this.stats[passedCounter];
-}}
+    Object.values(this.requirements).forEach((reg:RegExp)=>{
+      const isValid = reg.test(password);
+      
+      if(isValid){
+        passedCounter++;
+      }
+    })
+    return { bgColors:this.colors, passedTestCount: passedCounter};
+  }
 ```
-- As you can see from the code above we set default regular expressions tests and width values. 
-- You can change tests and bg-color as you wish, ( **These colors must be bootstrap colors**)
-- if you change the tests, don't forget to change the width values
+- As you can see from the code above we set default regular expressions requirements and colors. 
+- You can change tests and colors as you wish
+- **but remember if you change the requirements, it's length must be equal with the colors array**
 # Component
 ```ts
 import { Component, Input } from  '@angular/core';
@@ -54,16 +48,28 @@ import { ProgressBarModel } from  '../../models/password-complexity';
 @Component({
   selector: 'abp-password-complexity-indicator',
   template: `
-    <div *ngIf="progressBar.width  !=  0" class="progress" attr.aria-valuenow="{{progressBar.width}}"  aria-valuemin="0" aria-valuemax="100">
-      <div class="progress-bar bg-{{progressBar.bgColor}}" [style.width]="progressBar.width  +  '%'"></div>
+    <div [style.opacity]="progressBar?.passedTestCount > 0 ? 1 : 0" class="d-flex justify-content-between mx-1 transition" style="height: 8px;">
+      <div *ngFor="let color of progressBar?.bgColors; let i=index;" class="progress w-100 me-1" >
+        <div class="progress-bar transition" [style.background]="progressBar.passedTestCount > i ? color : 'var(--lpx-border-color)'" [style.width]="progressBar.width < 20 ? '0%' : '100%'"></div>
+      </div>
     </div>
-  `
+  `,
+  styles: [`
+      .transition { transition: all 0.2s ease-out; }
+      .progress {backgroundColor: var(--lpx-border-color); height: 8px; border-radius:2px}
+    `
+  ]
 })
 export  class  PasswordComplexityIndicatorComponent{
-  @Input({required:true}) progressBar! : ProgressBarModel;
+  @Input({required:true}) progressBar? : ProgressBarStats;
 }
 ```
-- abp-password-complexity-indicator component is **takes only one required input which type is ProgressBarModel** ( { bgColor:string, width: number } )
+- abp-password-complexity-indicator component is **takes only one required input which type is ProgressBarStats**
+- ```ts
+  interface ProgressBarStats{
+    bgColor:string, width: number
+  })
+  ``` 
 
 
 
@@ -76,8 +82,8 @@ export  class  PasswordComplexityIndicatorComponent{
   templateUrl: `
     <form [formGroup]="form">
       <input inputId="new-password" formControlName="password" (keyup)="validatePassword()">
-      <div  class="mt-3">
-        <abp-password-complexity-indicator [progressBar]="progressBar"></abp-password-complexity-indicator>
+      <div class="mt-3">
+        <abp-password-complexity-indicator [progressBar]="passwordProgressBarStats"></abp-password-complexity-indicator>
       </div>
     </form>
   `,
@@ -86,7 +92,7 @@ export class myComponent{
   this.form = this.fb.group({
     password: [''],
   });
-  progressBar: ProgressBarModel = { bgColor: '', width: 0 }
+  passwordProgressBarStats: ProgressBarStats;
   private readonly passwordComplexityService: PasswordComplexityIndicatorService = inject(PasswordComplexityIndicatorService);
   private readonly fb: UntypedFormBuilder = inject(UntypedFormBuilder);
 
@@ -95,10 +101,10 @@ export class myComponent{
   }
 
   validatePassword(){
-    this.progressBar = this.passwordComplexityService.validatePassword(this.password);
+    this.passwordProgressBarStats = this.passwordComplexityService.validatePassword(this.password);
   }
 }
 ```
 
-- give the password to passwordComplexityService's validatePassword method, and equalize returned value with the this.progressBar
-- thats it you can start typing :)
+- give the password to `PasswordComplexityIndicatorService`'s `validatePassword` method, and equalize returned value with the `this.passwordProgressBarStats`
+- thats it you can start typing to password input :)
