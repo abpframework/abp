@@ -45,11 +45,27 @@ The tag system provides a tag [widget](../../UI/AspNetCore/Widgets.md) to displa
 @await Component.InvokeAsync(typeof(TagViewComponent), new
 {
   entityType = "Product",
-  entityId = "..."
+  entityId = "...",
+  urlFormat = "/products?tagId={TagId}&tagName={TagName}"
 })
 ```
 
-`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here.
+`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. `urlFormat` is the format of the URL that will be generated for each tag. You can use the `{TagId}` and `{TagName}` placeholders to generate the URL. For example, the above URL format will generate URLs like `/products?tagId=1&tagName=tag1`.
+
+## The Popular Tags Widget
+
+The tag system provides a popular tags [widget](../../UI/AspNetCore/Widgets.md) to display popular tags of a resource that was configured for tagging. You can simply place the widget on a page like below:
+
+```csharp
+@await Component.InvokeAsync(typeof(PopularTagsViewComponent), new
+{
+  entityType = "Product",
+  urlFormat = "/products?tagId={TagId}&tagName={TagName}",
+  maxCount = 10
+})
+```
+
+`entityType` was explained in the previous section. `urlFormat` was explained in the previous section. `maxCount` is the maximum number of tags to be displayed.
 
 ## User Interface
 
