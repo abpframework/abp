@@ -30,7 +30,7 @@ public class AbpBackgroundJobQuartzOptions
     {
         exception.RefireImmediately = true;
 
-        var retryCount = executionContext.JobDetail.JobDataMap.GetString(QuartzBackgroundJobManager.JobDataPrefix + nameof(RetryCount)).To<int>();
+        var retryCount = executionContext.JobDetail.JobDataMap.GetString(QuartzBackgroundJobManager.JobDataPrefix + nameof(RetryCount))!.To<int>();
         if (retryIndex > retryCount)
         {
             exception.RefireImmediately = false;
@@ -38,7 +38,7 @@ public class AbpBackgroundJobQuartzOptions
             return;
         }
 
-        var retryInterval = executionContext.JobDetail.JobDataMap.GetString(QuartzBackgroundJobManager.JobDataPrefix + nameof(RetryIntervalMillisecond)).To<int>();
+        var retryInterval = executionContext.JobDetail.JobDataMap.GetString(QuartzBackgroundJobManager.JobDataPrefix + nameof(RetryIntervalMillisecond))!.To<int>();
         await Task.Delay(retryInterval);
     }
 }
