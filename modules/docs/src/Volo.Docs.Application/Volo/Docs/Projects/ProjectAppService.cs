@@ -31,7 +31,7 @@ namespace Volo.Docs.Projects
             LanguageCache = languageCache;
         }
 
-        public async Task<ListResultDto<ProjectDto>> GetListAsync()
+        public virtual async Task<ListResultDto<ProjectDto>> GetListAsync()
         {
             var projects = await _projectRepository.GetListAsync();
 
@@ -44,7 +44,7 @@ namespace Volo.Docs.Projects
             ); 
         }
 
-        public async Task<ProjectDto> GetAsync(string shortName)
+        public virtual async Task<ProjectDto> GetAsync(string shortName)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
@@ -53,7 +53,7 @@ namespace Volo.Docs.Projects
             return HidePrivateProperties(projectDto);
         }
 
-        public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
+        public virtual async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
@@ -95,12 +95,12 @@ namespace Volo.Docs.Projects
             return versions;
         }
 
-        public async Task<LanguageConfig> GetLanguageListAsync(string shortName, string version)
+        public virtual async Task<LanguageConfig> GetLanguageListAsync(string shortName, string version)
         {
             return await GetLanguageListInternalAsync(shortName, version);
         }
 
-        public async Task<string> GetDefaultLanguageCodeAsync(string shortName, string version)
+        public virtual async Task<string> GetDefaultLanguageCodeAsync(string shortName, string version)
         {
             var languageList = await GetLanguageListInternalAsync(shortName, version);
 

@@ -18,7 +18,7 @@ namespace Volo.Blogging.Blogs
             BlogRepository = blogRepository;
         }
 
-        public async Task<ListResultDto<BlogDto>> GetListAsync()
+        public virtual async Task<ListResultDto<BlogDto>> GetListAsync()
         {
             var blogs = await BlogRepository.GetListAsync();
 
@@ -27,7 +27,7 @@ namespace Volo.Blogging.Blogs
             );
         }
 
-        public async Task<BlogDto> GetByShortNameAsync(string shortName)
+        public virtual async Task<BlogDto> GetByShortNameAsync(string shortName)
         {
             Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
 
@@ -41,7 +41,7 @@ namespace Volo.Blogging.Blogs
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
 
-        public async Task<BlogDto> GetAsync(Guid id)
+        public virtual async Task<BlogDto> GetAsync(Guid id)
         {
             var blog = await BlogRepository.GetAsync(id);
 

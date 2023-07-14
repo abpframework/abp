@@ -18,27 +18,27 @@ namespace Volo.Blogging.Tagging
         {
         }
 
-        public async Task<List<Tag>> GetListAsync(Guid blogId, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Tag>> GetListAsync(Guid blogId, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(t => t.BlogId == blogId).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<Tag> GetByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
+        public virtual async Task<Tag> GetByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(t => t.BlogId == blogId && t.Name == name).FirstAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<Tag> FindByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
+        public virtual async Task<Tag> FindByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(t => t.BlogId == blogId && t.Name == name).FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(t => ids.Contains(t.Id)).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task DecreaseUsageCountOfTagsAsync(List<Guid> ids, CancellationToken cancellationToken = default)
+        public virtual async Task DecreaseUsageCountOfTagsAsync(List<Guid> ids, CancellationToken cancellationToken = default)
         {
             var tags = await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(t => ids.Contains(t.Id))

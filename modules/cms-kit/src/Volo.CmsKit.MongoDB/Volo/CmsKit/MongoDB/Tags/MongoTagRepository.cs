@@ -20,7 +20,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
     {
     }
 
-    public async Task<bool> AnyAsync(
+    public virtual async Task<bool> AnyAsync(
         [NotNull] string entityType,
         [NotNull] string name,
         CancellationToken cancellationToken = default)
@@ -107,12 +107,12 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
     }
 
 
-    public async Task<List<Tag>> GetListAsync(string filter, CancellationToken cancellationToken = default)
+    public virtual async Task<List<Tag>> GetListAsync(string filter, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableByFilterAsync(filter, cancellationToken)).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<int> GetCountAsync(string filter, CancellationToken cancellationToken = default)
+    public virtual async Task<int> GetCountAsync(string filter, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableByFilterAsync(filter, cancellationToken)).CountAsync(GetCancellationToken(cancellationToken));
     }

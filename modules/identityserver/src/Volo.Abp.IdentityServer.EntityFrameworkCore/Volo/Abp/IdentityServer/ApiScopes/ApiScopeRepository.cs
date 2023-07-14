@@ -18,7 +18,7 @@ public class ApiScopeRepository : EfCoreRepository<IIdentityServerDbContext, Api
     {
     }
 
-    public async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
+    public virtual async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
@@ -26,7 +26,7 @@ public class ApiScopeRepository : EfCoreRepository<IIdentityServerDbContext, Api
             .FirstOrDefaultAsync(x => x.Name == scopeName, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
+    public virtual async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -36,7 +36,7 @@ public class ApiScopeRepository : EfCoreRepository<IIdentityServerDbContext, Api
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, bool includeDetails = false, CancellationToken cancellationToken = default)
+    public virtual async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
@@ -48,7 +48,7 @@ public class ApiScopeRepository : EfCoreRepository<IIdentityServerDbContext, Api
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(),
@@ -58,7 +58,7 @@ public class ApiScopeRepository : EfCoreRepository<IIdentityServerDbContext, Api
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync()).AnyAsync(x => x.Id != expectedId && x.Name == name, GetCancellationToken(cancellationToken));
     }

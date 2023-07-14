@@ -32,7 +32,7 @@ public class MongoFeatureValueRepository :
             .FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<FeatureValue>> FindAllAsync(
+    public virtual async Task<List<FeatureValue>> FindAllAsync(
         string name,
         string providerName,
         string providerKey,

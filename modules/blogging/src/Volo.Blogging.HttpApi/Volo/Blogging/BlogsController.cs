@@ -22,21 +22,21 @@ namespace Volo.Blogging
         }
 
         [HttpGet]
-        public async Task<ListResultDto<BlogDto>> GetListAsync()
+        public virtual async Task<ListResultDto<BlogDto>> GetListAsync()
         {
             return await _blogAppService.GetListAsync();
         }
 
         [HttpGet]
         [Route("by-shortname/{shortName}")]
-        public async Task<BlogDto> GetByShortNameAsync(string shortName)
+        public virtual async Task<BlogDto> GetByShortNameAsync(string shortName)
         {
             return await _blogAppService.GetByShortNameAsync(shortName);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<BlogDto> GetAsync(Guid id)
+        public virtual async Task<BlogDto> GetAsync(Guid id)
         {
             return await _blogAppService.GetAsync(id);
         }

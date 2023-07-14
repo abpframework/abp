@@ -22,7 +22,7 @@ namespace Volo.Blogging.Admin.Blogs
             _postsCache = postsCache;
         }
 
-        public async Task<ListResultDto<BlogDto>> GetListAsync()
+        public virtual async Task<ListResultDto<BlogDto>> GetListAsync()
         {
             var blogs = await _blogRepository.GetListAsync();
 
@@ -31,7 +31,7 @@ namespace Volo.Blogging.Admin.Blogs
             );
         }
 
-        public async Task<BlogDto> GetAsync(Guid id)
+        public virtual async Task<BlogDto> GetAsync(Guid id)
         {
             var blog = await _blogRepository.GetAsync(id);
 
@@ -39,7 +39,7 @@ namespace Volo.Blogging.Admin.Blogs
         }
 
         [Authorize(BloggingPermissions.Blogs.Create)]
-        public async Task<BlogDto> CreateAsync(CreateBlogDto input)
+        public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
         {
             var newBlog = new Blog(GuidGenerator.Create(), input.Name, input.ShortName)
             {
@@ -52,7 +52,7 @@ namespace Volo.Blogging.Admin.Blogs
         }
 
         [Authorize(BloggingPermissions.Blogs.Update)]
-        public async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
+        public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
         {
             var blog = await _blogRepository.GetAsync(id);
 
@@ -65,13 +65,13 @@ namespace Volo.Blogging.Admin.Blogs
         }
 
         [Authorize(BloggingPermissions.Blogs.Delete)]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             await _blogRepository.DeleteAsync(id);
         }
 
         [Authorize(BloggingPermissions.Blogs.ClearCache)]
-        public async Task ClearCacheAsync(Guid id)
+        public virtual async Task ClearCacheAsync(Guid id)
         {
             await _postsCache.RemoveAsync(id.ToString());
         }

@@ -22,7 +22,7 @@ public class GlobalResourceAdminAppService : ApplicationService, IGlobalResource
         GlobalResourceManager = globalResourceManager;
     }
 
-    public async Task<GlobalResourcesDto> GetAsync()
+    public virtual async Task<GlobalResourcesDto> GetAsync()
     {
         return new GlobalResourcesDto
         {
@@ -31,7 +31,7 @@ public class GlobalResourceAdminAppService : ApplicationService, IGlobalResource
         };
     }
 
-    public async Task SetGlobalResourcesAsync(GlobalResourcesUpdateDto input)
+    public virtual async Task SetGlobalResourcesAsync(GlobalResourcesUpdateDto input)
     {
         await GlobalResourceManager.SetGlobalStyleAsync(input.Style);
         await GlobalResourceManager.SetGlobalScriptAsync(input.Script);
