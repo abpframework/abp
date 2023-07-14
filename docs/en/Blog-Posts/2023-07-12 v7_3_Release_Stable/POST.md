@@ -51,6 +51,14 @@ Please see the following migration documents, if you are upgrading from v7.2:
 
 ## Community News
 
+### ABP Community Talks 2023.5: Mobile Development with the ABP Framework
+
+![](community-talks.png)
+
+In this episode, we'll talk about Exploring Options for Mobile Development with the ABP Framework. 
+
+> Join us to explore the options for Mobile Development in ABP Framework on July 27, 2023, at 17:00 UTC. You can register from [here](https://kommunity.com/volosoft/events/abp-community-talks-20235-mobile-development-with-the-abp-framework-68e64e59).
+
 ### New ABP Community Posts
 
 There are exciting articles contributed by the ABP community as always. I will highlight some of them here:
