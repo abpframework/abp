@@ -20,14 +20,14 @@ public class MongoApiScopeRepository : MongoDbRepository<IAbpIdentityServerMongo
     {
     }
 
-    public async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
+    public virtual async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(x => x.Name == scopeName, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
+    public virtual async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
@@ -36,7 +36,7 @@ public class MongoApiScopeRepository : MongoDbRepository<IAbpIdentityServerMongo
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, bool includeDetails = false,
+    public virtual async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
@@ -50,7 +50,7 @@ public class MongoApiScopeRepository : MongoDbRepository<IAbpIdentityServerMongo
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<ApiScope, IMongoQueryable<ApiScope>>(!filter.IsNullOrWhiteSpace(),
@@ -60,7 +60,7 @@ public class MongoApiScopeRepository : MongoDbRepository<IAbpIdentityServerMongo
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .AnyAsync(x => x.Id != expectedId && x.Name == name, GetCancellationToken(cancellationToken));

@@ -42,7 +42,7 @@ namespace Volo.Blogging.Posts
             LocalEventBus = localEventBus;
         }
 
-        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagNameAsync(Guid id, string tagName)
+        public virtual async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagNameAsync(Guid id, string tagName)
         {
             var posts = await PostRepository.GetPostsByBlogId(id);
             var tag = tagName.IsNullOrWhiteSpace() ? null : await TagRepository.FindByNameAsync(id, tagName);
@@ -82,7 +82,7 @@ namespace Volo.Blogging.Posts
             return new ListResultDto<PostWithDetailsDto>(postDtos);
         }
 
-        public async Task<ListResultDto<PostWithDetailsDto>> GetTimeOrderedListAsync(Guid blogId)
+        public virtual async Task<ListResultDto<PostWithDetailsDto>> GetTimeOrderedListAsync(Guid blogId)
         {
             var postCacheItems = await PostsCache.GetOrAddAsync(
                 blogId.ToString(),
@@ -110,7 +110,7 @@ namespace Volo.Blogging.Posts
             return new ListResultDto<PostWithDetailsDto>(postsWithDetails);
         }
 
-        public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
+        public virtual async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
         {
             var post = await PostRepository.GetPostByUrl(input.BlogId, input.Url);
 
@@ -130,7 +130,7 @@ namespace Volo.Blogging.Posts
             return postDto;
         }
 
-        public async Task<PostWithDetailsDto> GetAsync(Guid id)
+        public virtual async Task<PostWithDetailsDto> GetAsync(Guid id)
         {
             var post = await PostRepository.GetAsync(id);
 
@@ -149,7 +149,7 @@ namespace Volo.Blogging.Posts
         }
 
         [Authorize(BloggingPermissions.Posts.Delete)]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             var post = await PostRepository.GetAsync(id);
 
@@ -164,7 +164,7 @@ namespace Volo.Blogging.Posts
         }
 
         [Authorize(BloggingPermissions.Posts.Update)]
-        public async Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input)
+        public virtual async Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input)
         {
             var post = await PostRepository.GetAsync(id);
 
@@ -188,14 +188,14 @@ namespace Volo.Blogging.Posts
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
 
-        public async Task<List<PostWithDetailsDto>> GetListByUserIdAsync(Guid userId)
+        public virtual async Task<List<PostWithDetailsDto>> GetListByUserIdAsync(Guid userId)
         {
             var posts = await PostRepository.GetListByUserIdAsync(userId);
             
             return ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts);
         }
 
-        public async Task<List<PostWithDetailsDto>> GetLatestBlogPostsAsync(Guid blogId, int count)
+        public virtual async Task<List<PostWithDetailsDto>> GetLatestBlogPostsAsync(Guid blogId, int count)
         {
             var posts = await PostRepository.GetLatestBlogPostsAsync(blogId, count);
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
@@ -226,7 +226,7 @@ namespace Volo.Blogging.Posts
         }
 
         [Authorize(BloggingPermissions.Posts.Create)]
-        public async Task<PostWithDetailsDto> CreateAsync(CreatePostDto input)
+        public virtual async Task<PostWithDetailsDto> CreateAsync(CreatePostDto input)
         {
             input.Url = await RenameUrlIfItAlreadyExistAsync(input.BlogId, input.Url);
 

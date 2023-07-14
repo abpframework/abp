@@ -142,7 +142,7 @@ namespace Volo.Docs.Documents
             return navigationNode;
         }
 
-        public async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
+        public virtual async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
@@ -177,7 +177,7 @@ namespace Volo.Docs.Documents
             );
         }
 
-        public async Task<PagedResultDto<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input)
+        public virtual async Task<PagedResultDto<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
@@ -198,12 +198,12 @@ namespace Volo.Docs.Documents
                 .ToList());
         }
 
-        public async Task<bool> FullSearchEnabledAsync()
+        public virtual async Task<bool> FullSearchEnabledAsync()
         {
             return await Task.FromResult(_docsElasticSearchOptions.Enable);
         }
 
-        public async Task<List<string>> GetUrlsAsync(string prefix)
+        public virtual async Task<List<string>> GetUrlsAsync(string prefix)
         {
             var documentUrls = new List<string>();
             var projects = await _projectRepository.GetListAsync();
@@ -322,7 +322,7 @@ namespace Volo.Docs.Documents
                    path.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
         }
 
-        public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
+        public virtual async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 

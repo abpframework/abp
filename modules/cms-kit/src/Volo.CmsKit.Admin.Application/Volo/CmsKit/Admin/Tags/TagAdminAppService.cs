@@ -39,7 +39,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Create)]
-    public async Task<TagDto> CreateAsync(TagCreateDto input)
+    public virtual async Task<TagDto> CreateAsync(TagCreateDto input)
     {
         var tag = await TagManager.CreateAsync(
             GuidGenerator.Create(),
@@ -52,7 +52,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Update)]
-    public async Task<TagDto> UpdateAsync(Guid id, TagUpdateDto input)
+    public virtual async Task<TagDto> UpdateAsync(Guid id, TagUpdateDto input)
     {
         var tag = await TagManager.UpdateAsync(
             id,
@@ -82,7 +82,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
-    public async Task<TagDto> GetAsync(Guid id)
+    public virtual async Task<TagDto> GetAsync(Guid id)
     {
         var tag = await Repository.GetAsync(id);
 
@@ -90,7 +90,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
-    public async Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
+    public virtual async Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
     {
         var tags = await Repository.GetListAsync(input.Filter);
         var count = await Repository.GetCountAsync(input.Filter);
@@ -102,7 +102,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Delete)]
-    public async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
     {
         await Repository.DeleteAsync(id);
     }

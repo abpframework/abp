@@ -66,7 +66,7 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
             authorDtos);
     }
 
-    public async Task<CmsUserDto> GetAuthorHasBlogPostAsync(Guid id)
+    public virtual async Task<CmsUserDto> GetAuthorHasBlogPostAsync(Guid id)
     {
         var author = await BlogPostRepository.GetAuthorHasBlogPostAsync(id);
 
@@ -74,7 +74,7 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
     }
 
     [Authorize]
-    public async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
     {
         var rating = await BlogPostRepository.GetAsync(id);
 

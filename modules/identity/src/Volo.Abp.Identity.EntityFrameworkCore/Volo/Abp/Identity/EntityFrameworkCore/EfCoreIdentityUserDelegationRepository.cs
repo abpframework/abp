@@ -20,7 +20,7 @@ public class EfCoreIdentityUserDelegationRepository : EfCoreRepository<IIdentity
         Clock = clock;
     }
 
-    public async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId, Guid? targetUserId, CancellationToken cancellationToken = default)
+    public virtual async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId, Guid? targetUserId, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .AsNoTracking()
@@ -29,7 +29,7 @@ public class EfCoreIdentityUserDelegationRepository : EfCoreRepository<IIdentity
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId, CancellationToken cancellationToken = default)
+    public virtual async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .AsNoTracking()
@@ -39,7 +39,7 @@ public class EfCoreIdentityUserDelegationRepository : EfCoreRepository<IIdentity
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .AsNoTracking()

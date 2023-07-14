@@ -25,7 +25,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
     [Obsolete("Use GetCollectionAsync method.")]
     public virtual IMemoryDatabaseCollection<TEntity> Collection => Database.Collection<TEntity>();
 
-    public async Task<IMemoryDatabaseCollection<TEntity>> GetCollectionAsync()
+    public virtual async Task<IMemoryDatabaseCollection<TEntity>> GetCollectionAsync()
     {
         return (await GetDatabaseAsync()).Collection<TEntity>();
     }

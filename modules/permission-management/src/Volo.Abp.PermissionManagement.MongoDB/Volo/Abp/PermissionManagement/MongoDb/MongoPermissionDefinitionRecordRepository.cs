@@ -17,7 +17,7 @@ public class MongoPermissionDefinitionRecordRepository :
     {
     }
 
-    public async Task<PermissionDefinitionRecord> FindByNameAsync(
+    public virtual async Task<PermissionDefinitionRecord> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default)
     {
