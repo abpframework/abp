@@ -24,7 +24,7 @@ public class AmbientDataContextAmbientScopeProvider<T> : IAmbientScopeProvider<T
         Logger = NullLogger<AmbientDataContextAmbientScopeProvider<T>>.Instance;
     }
 
-    public T GetValue(string contextKey)
+    public T? GetValue(string contextKey)
     {
         var item = GetCurrentItem(contextKey);
         if (item == null)
@@ -52,6 +52,11 @@ public class AmbientDataContextAmbientScopeProvider<T> : IAmbientScopeProvider<T
 
             scopeDictionary.TryRemove(item.Id, out item);
 
+            if (item == null)
+            {
+                return;
+            }
+            
             if (item.Outer == null)
             {
                 dataContext.SetData(contextKey, null);
@@ -63,7 +68,7 @@ public class AmbientDataContextAmbientScopeProvider<T> : IAmbientScopeProvider<T
         }, (ScopeDictionary, item, _dataContext, contextKey));
     }
 
-    private ScopeItem GetCurrentItem(string contextKey)
+    private ScopeItem? GetCurrentItem(string contextKey)
     {
         return _dataContext.GetData(contextKey) is string objKey ? ScopeDictionary.GetOrDefault(objKey) : null;
     }
@@ -72,11 +77,11 @@ public class AmbientDataContextAmbientScopeProvider<T> : IAmbientScopeProvider<T
     {
         public string Id { get; }
 
-        public ScopeItem Outer { get; }
+        public ScopeItem? Outer { get; }
 
         public T Value { get; }
 
-        public ScopeItem(T value, ScopeItem outer = null)
+        public ScopeItem(T value, ScopeItem? outer = null)
         {
             Id = Guid.NewGuid().ToString();
 

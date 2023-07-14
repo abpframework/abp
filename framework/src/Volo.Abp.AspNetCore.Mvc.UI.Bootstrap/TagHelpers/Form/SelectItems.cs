@@ -16,9 +16,9 @@ public class SelectItems : Attribute
         ItemsListPropertyName = itemsListPropertyName;
     }
 
-    public IEnumerable<SelectListItem> GetItems(ModelExplorer explorer)
+    public IEnumerable<SelectListItem>? GetItems(ModelExplorer explorer)
     {
-        var properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
+        var properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName!.Equals(ItemsListPropertyName)).ToList();
 
         while (properties.Count == 0)
         {
@@ -28,10 +28,10 @@ public class SelectItems : Attribute
                 return null;
             }
 
-            properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
+            properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName!.Equals(ItemsListPropertyName)).ToList();
         }
 
-        var selectItems = (properties.First().Model as IEnumerable<SelectListItem>).ToList();
+        var selectItems = (properties.First().Model as IEnumerable<SelectListItem>)!.ToList();
 
         return selectItems;
     }

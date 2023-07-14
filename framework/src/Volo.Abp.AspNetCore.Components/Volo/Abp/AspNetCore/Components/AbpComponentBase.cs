@@ -20,8 +20,8 @@ namespace Volo.Abp.AspNetCore.Components;
 
 public abstract class AbpComponentBase : OwningComponentBase
 {
-    protected IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
-    private IStringLocalizerFactory _stringLocalizerFactory;
+    protected IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory)!;
+    private IStringLocalizerFactory? _stringLocalizerFactory;
 
     protected IStringLocalizer L {
         get {
@@ -33,46 +33,46 @@ public abstract class AbpComponentBase : OwningComponentBase
             return _localizer;
         }
     }
-    private IStringLocalizer _localizer;
+    private IStringLocalizer? _localizer;
 
-    protected Type LocalizationResource {
+    protected Type? LocalizationResource {
         get => _localizationResource;
         set {
             _localizationResource = value;
             _localizer = null;
         }
     }
-    private Type _localizationResource = typeof(DefaultResource);
+    private Type? _localizationResource = typeof(DefaultResource);
 
     protected ILogger Logger => _lazyLogger.Value;
-    private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+    private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance, true);
 
-    protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
-    private ILoggerFactory _loggerFactory;
+    protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory)!;
+    private ILoggerFactory? _loggerFactory;
 
-    protected IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
-    private IAuthorizationService _authorizationService;
+    protected IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService)!;
+    private IAuthorizationService? _authorizationService;
 
-    protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
-    private ICurrentUser _currentUser;
+    protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser)!;
+    private ICurrentUser? _currentUser;
 
-    protected ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
-    private ICurrentTenant _currentTenant;
+    protected ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant)!;
+    private ICurrentTenant? _currentTenant;
 
-    protected IUiMessageService Message => LazyGetNonScopedRequiredService(ref _message);
-    private IUiMessageService _message;
+    protected IUiMessageService Message => LazyGetNonScopedRequiredService(ref _message)!;
+    private IUiMessageService? _message;
 
-    protected IUiNotificationService Notify => LazyGetNonScopedRequiredService(ref _notify);
-    private IUiNotificationService _notify;
+    protected IUiNotificationService Notify => LazyGetNonScopedRequiredService(ref _notify)!;
+    private IUiNotificationService? _notify;
 
-    protected IUserExceptionInformer UserExceptionInformer => LazyGetNonScopedRequiredService(ref _userExceptionInformer);
-    private IUserExceptionInformer _userExceptionInformer;
+    protected IUserExceptionInformer UserExceptionInformer => LazyGetNonScopedRequiredService(ref _userExceptionInformer)!;
+    private IUserExceptionInformer? _userExceptionInformer;
 
-    protected IAlertManager AlertManager => LazyGetNonScopedRequiredService(ref _alertManager);
-    private IAlertManager _alertManager;
+    protected IAlertManager AlertManager => LazyGetNonScopedRequiredService(ref _alertManager)!;
+    private IAlertManager? _alertManager;
 
-    protected IClock Clock => LazyGetNonScopedRequiredService(ref _clock);
-    private IClock _clock;
+    protected IClock Clock => LazyGetNonScopedRequiredService(ref _clock)!;
+    private IClock? _clock;
 
     protected AlertList Alerts => AlertManager.Alerts;
 
@@ -85,19 +85,19 @@ public abstract class AbpComponentBase : OwningComponentBase
 
             if (ObjectMapperContext == null)
             {
-                return LazyGetRequiredService(ref _objectMapper);
+                return LazyGetRequiredService(ref _objectMapper)!;
             }
 
             return LazyGetRequiredService(
                 typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
                 ref _objectMapper
-            );
+            )!;
         }
     }
 
-    private IObjectMapper _objectMapper;
+    private IObjectMapper? _objectMapper;
 
-    protected Type ObjectMapperContext { get; set; }
+    protected Type? ObjectMapperContext { get; set; }
 
     protected TService LazyGetRequiredService<TService>(ref TService reference) => LazyGetRequiredService(typeof(TService), ref reference);
 
@@ -111,13 +111,13 @@ public abstract class AbpComponentBase : OwningComponentBase
         return reference;
     }
 
-    protected TService LazyGetService<TService>(ref TService reference) => LazyGetService(typeof(TService), ref reference);
+    protected TService? LazyGetService<TService>(ref TService? reference) => LazyGetService(typeof(TService), ref reference);
 
-    protected TRef LazyGetService<TRef>(Type serviceType, ref TRef reference)
+    protected TRef? LazyGetService<TRef>(Type serviceType, ref TRef? reference)
     {
         if (reference == null)
         {
-            reference = (TRef)ScopedServices.GetService(serviceType);
+            reference = (TRef?)ScopedServices.GetService(serviceType);
         }
 
         return reference;
@@ -135,20 +135,20 @@ public abstract class AbpComponentBase : OwningComponentBase
         return reference;
     }
 
-    protected TService LazyGetNonScopedService<TService>(ref TService reference) => LazyGetNonScopedService(typeof(TService), ref reference);
+    protected TService? LazyGetNonScopedService<TService>(ref TService? reference) => LazyGetNonScopedService(typeof(TService), ref reference);
 
-    protected TRef LazyGetNonScopedService<TRef>(Type serviceType, ref TRef reference)
+    protected TRef? LazyGetNonScopedService<TRef>(Type serviceType, ref TRef? reference)
     {
         if (reference == null)
         {
-            reference = (TRef)NonScopedServices.GetService(serviceType);
+            reference = (TRef?)NonScopedServices.GetService(serviceType);
         }
 
         return reference;
     }
 
     [Inject]
-    protected IServiceProvider NonScopedServices { get; set; }
+    protected IServiceProvider NonScopedServices { get; set; } = default!;
 
     protected virtual IStringLocalizer CreateLocalizer()
     {
@@ -168,6 +168,11 @@ public abstract class AbpComponentBase : OwningComponentBase
 
     protected virtual async Task HandleErrorAsync(Exception exception)
     {
+        if (IsDisposed)
+        {
+            return;
+        }
+       
         Logger.LogException(exception);
         await InvokeAsync(async () =>
         {

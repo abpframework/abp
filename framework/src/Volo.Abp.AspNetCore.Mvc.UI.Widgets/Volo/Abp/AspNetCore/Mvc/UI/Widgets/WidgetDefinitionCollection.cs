@@ -30,34 +30,31 @@ public class WidgetDefinitionCollection
     }
 
     public WidgetDefinition Add<TViewComponent>(
-        [CanBeNull] ILocalizableString displayName = null)
+        ILocalizableString? displayName = null)
     {
         return Add(typeof(TViewComponent), displayName);
     }
 
     public WidgetDefinition Add(
         [NotNull] Type viewComponentType,
-        [CanBeNull] ILocalizableString displayName = null)
+        ILocalizableString? displayName = null)
     {
         var widget = new WidgetDefinition(viewComponentType, displayName);
         Add(widget);
         return widget;
     }
 
-    [CanBeNull]
-    public WidgetDefinition Find(string name)
+    public WidgetDefinition? Find(string name)
     {
         return _widgetsByName.GetOrDefault(name);
     }
 
-    [CanBeNull]
-    public WidgetDefinition Find<TViewComponent>()
+    public WidgetDefinition? Find<TViewComponent>()
     {
         return Find(typeof(TViewComponent));
     }
 
-    [CanBeNull]
-    public WidgetDefinition Find(Type viewComponentType)
+    public WidgetDefinition? Find(Type viewComponentType)
     {
         return _widgetsByType.GetOrDefault(viewComponentType);
     }

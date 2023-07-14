@@ -88,6 +88,8 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
                         ? "phones"
                         : urlActionNameNormalizerContext.ActionNameInUrl;
             });
+
+            options.ExposeIntegrationServices = true;
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>

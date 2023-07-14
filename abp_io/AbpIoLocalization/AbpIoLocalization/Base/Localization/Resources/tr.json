@@ -132,6 +132,7 @@
     "Address": "Adres",
     "Homepage": "Anasayfa",
     "Year": "Yıl",
+    "Year_Plural": "Yıl",
     "Copyright": "Telif hakkı © <a href=\"{0}\" target=\"_blank\">{1}</a>",
     "DomainDrivenDesign": "Alan Odaklı Tasarım",
     "CrossCuttingConcerns": "Cross Cutting Concerns",

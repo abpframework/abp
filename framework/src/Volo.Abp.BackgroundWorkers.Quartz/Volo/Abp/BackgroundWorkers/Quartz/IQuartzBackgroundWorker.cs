@@ -12,5 +12,5 @@ public interface IQuartzBackgroundWorker : IBackgroundWorker, IJob
 
     bool AutoRegister { get; set; }
 
-    Func<IScheduler, Task> ScheduleJob { get; set; }
+    Func<IScheduler, Task>? ScheduleJob { get; set; }
 }

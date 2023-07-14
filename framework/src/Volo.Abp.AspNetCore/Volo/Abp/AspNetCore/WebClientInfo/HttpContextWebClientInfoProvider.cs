@@ -18,16 +18,16 @@ public class HttpContextWebClientInfoProvider : IWebClientInfoProvider, ITransie
         HttpContextAccessor = httpContextAccessor;
     }
 
-    public string BrowserInfo => GetBrowserInfo();
+    public string? BrowserInfo => GetBrowserInfo();
 
-    public string ClientIpAddress => GetClientIpAddress();
+    public string? ClientIpAddress => GetClientIpAddress();
 
-    protected virtual string GetBrowserInfo()
+    protected virtual string? GetBrowserInfo()
     {
         return HttpContextAccessor.HttpContext?.Request?.Headers?["User-Agent"];
     }
 
-    protected virtual string GetClientIpAddress()
+    protected virtual string? GetClientIpAddress()
     {
         try
         {

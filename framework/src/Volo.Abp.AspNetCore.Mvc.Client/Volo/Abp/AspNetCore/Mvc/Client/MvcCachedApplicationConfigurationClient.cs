@@ -47,14 +47,14 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
             return configuration;
         }
 
-        configuration = await Cache.GetOrAddAsync(
+        configuration = (await Cache.GetOrAddAsync(
             cacheKey,
             async () => await GetRemoteConfigurationAsync(),
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = Options.ApplicationConfigurationDtoCacheAbsoluteExpiration
             }
-        );
+        ))!;
 
         if (httpContext != null)
         {

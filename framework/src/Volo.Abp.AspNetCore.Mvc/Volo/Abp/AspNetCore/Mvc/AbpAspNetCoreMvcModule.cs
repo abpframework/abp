@@ -227,18 +227,16 @@ public class AbpAspNetCoreMvcModule : AbpModule
             return;
         }
 
-        //Plugin modules
-        var moduleAssemblies = context
-            .ServiceProvider
-            .GetRequiredService<IModuleContainer>()
+        var moduleContainer = context.ServiceProvider.GetRequiredService<IModuleContainer>();
+
+        var plugInModuleAssemblies = moduleContainer
             .Modules
             .Where(m => m.IsLoadedAsPlugIn)
-            .Select(m => m.Type.Assembly)
+            .SelectMany(m => m.AllAssemblies)
             .Distinct();
 
-        AddToApplicationParts(partManager, moduleAssemblies);
+        AddToApplicationParts(partManager, plugInModuleAssemblies);
 
-        //Controllers for application services
         var controllerAssemblies = context
             .ServiceProvider
             .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>()
@@ -249,6 +247,13 @@ public class AbpAspNetCoreMvcModule : AbpModule
             .Distinct();
 
         AddToApplicationParts(partManager, controllerAssemblies);
+        
+        var additionalAssemblies = moduleContainer
+            .Modules
+            .SelectMany(m => m.GetAdditionalAssemblies())
+            .Distinct();
+
+        AddToApplicationParts(partManager, additionalAssemblies);
     }
 
     private static void AddToApplicationParts(ApplicationPartManager partManager, IEnumerable<Assembly> moduleAssemblies)

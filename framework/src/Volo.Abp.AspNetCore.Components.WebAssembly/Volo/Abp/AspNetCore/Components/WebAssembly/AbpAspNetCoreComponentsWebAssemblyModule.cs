@@ -67,7 +67,7 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
         var cultureName = configuration.Localization?.CurrentCulture?.CultureName;
         if (!cultureName.IsNullOrEmpty())
         {
-            var culture = new CultureInfo(cultureName);
+            var culture = new CultureInfo(cultureName!);
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
         }

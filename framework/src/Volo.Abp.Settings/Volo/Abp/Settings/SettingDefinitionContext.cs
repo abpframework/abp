@@ -12,7 +12,7 @@ public class SettingDefinitionContext : ISettingDefinitionContext
         Settings = settings;
     }
 
-    public virtual SettingDefinition GetOrNull(string name)
+    public virtual SettingDefinition? GetOrNull(string name)
     {
         return Settings.GetOrDefault(name);
     }

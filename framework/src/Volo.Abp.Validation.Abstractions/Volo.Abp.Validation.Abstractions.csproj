@@ -5,6 +5,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.Validation.Abstractions</AssemblyName>
     <PackageId>Volo.Abp.Validation.Abstractions</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>

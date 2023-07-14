@@ -73,7 +73,7 @@ public class AbpUowPageFilter : IAsyncPageFilter, ITransientDependency
         }
     }
 
-    private AbpUnitOfWorkOptions CreateOptions(PageHandlerExecutingContext context, UnitOfWorkAttribute unitOfWorkAttribute)
+    private AbpUnitOfWorkOptions CreateOptions(PageHandlerExecutingContext context, UnitOfWorkAttribute? unitOfWorkAttribute)
     {
         var options = new AbpUnitOfWorkOptions();
 

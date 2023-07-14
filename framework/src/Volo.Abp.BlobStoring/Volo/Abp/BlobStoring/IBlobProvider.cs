@@ -11,5 +11,5 @@ public interface IBlobProvider
 
     Task<bool> ExistsAsync(BlobProviderExistsArgs args);
 
-    Task<Stream> GetOrNullAsync(BlobProviderGetArgs args);
+    Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args);
 }

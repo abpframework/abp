@@ -41,11 +41,18 @@ public class OutgoingEventRecord :
 
     public OutgoingEventInfo ToOutgoingEventInfo()
     {
-        return new OutgoingEventInfo(
+        var info = new OutgoingEventInfo(
             Id,
             EventName,
             EventData,
             CreationTime
         );
+
+        foreach (var property in ExtraProperties)
+        {
+            info.SetProperty(property.Key, property.Value);
+        }
+
+        return info;
     }
 }

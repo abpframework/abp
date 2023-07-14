@@ -9,11 +9,11 @@ public abstract class DictionaryBasedFileProvider : IFileProvider
 {
     protected abstract IDictionary<string, IFileInfo> Files { get; }
 
-    public virtual IFileInfo GetFileInfo(string subpath)
+    public virtual IFileInfo GetFileInfo(string? subpath)
     {
         if (subpath == null)
         {
-            return new NotFoundFileInfo(subpath);
+            return new NotFoundFileInfo(subpath!);
         }
 
         var file = Files.GetOrDefault(NormalizePath(subpath));
@@ -40,7 +40,7 @@ public abstract class DictionaryBasedFileProvider : IFileProvider
         foreach (var fileInfo in Files.Values)
         {
             var fullPath = fileInfo.GetVirtualOrPhysicalPathOrNull();
-            if (!fullPath.StartsWith(directoryPath))
+            if (fullPath == null || !fullPath.StartsWith(directoryPath))
             {
                 continue;
             }

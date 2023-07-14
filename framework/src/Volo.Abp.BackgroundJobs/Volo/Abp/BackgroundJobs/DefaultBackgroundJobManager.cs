@@ -32,7 +32,7 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
         var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
-        var jobId = await EnqueueAsync(jobName, args, priority, delay);
+        var jobId = await EnqueueAsync(jobName, args!, priority, delay);
         return jobId.ToString();
     }
 

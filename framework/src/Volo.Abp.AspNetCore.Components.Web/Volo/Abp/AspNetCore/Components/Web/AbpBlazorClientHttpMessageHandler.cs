@@ -82,7 +82,7 @@ public class AbpBlazorClientHttpMessageHandler : DelegatingHandler, ITransientDe
 
         var selfUri = new Uri(_navigationManager.Uri);
 
-        if (request.RequestUri.Host != selfUri.Host || request.RequestUri.Port != selfUri.Port)
+        if (request.RequestUri!.Host != selfUri.Host || request.RequestUri.Port != selfUri.Port)
         {
             return;
         }

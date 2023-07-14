@@ -38,7 +38,7 @@ public class AbpBackgroundWorkersHangfireModule : AbpModule
         AsyncHelper.RunSync(() => OnPreApplicationInitializationAsync(context));
     }
     
-    private BackgroundJobServer CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
+    private BackgroundJobServer? CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
     {
         serviceProvider.GetRequiredService<JobStorage>();
         return null;

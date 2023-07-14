@@ -53,7 +53,7 @@ public class AccountEmailer : IAccountEmailer, ITransientDependency
 
         if (!returnUrl.IsNullOrEmpty())
         {
-            link += "&returnUrl=" + NormalizeReturnUrl(returnUrl);
+            link += "&returnUrl=" + UrlEncoder.Default.Encode(NormalizeReturnUrl(returnUrl));
         }
 
         if (!returnUrlHash.IsNullOrEmpty())

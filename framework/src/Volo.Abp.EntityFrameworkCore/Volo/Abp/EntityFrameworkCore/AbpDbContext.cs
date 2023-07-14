@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -181,6 +182,20 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
         catch (DbUpdateConcurrencyException ex)
         {
+            if (ex.Entries.Count > 0)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine(ex.Entries.Count > 1
+                    ? "There are some entries which are not saved due to concurrency exception:"
+                    : "There is an entry which is not saved due to concurrency exception:");
+                foreach (var entry in ex.Entries)
+                {
+                    sb.AppendLine(entry.ToString());
+                }
+
+                Logger.LogWarning(sb.ToString());
+            }
+
             throw new AbpDbConcurrencyException(ex.Message, ex);
         }
         finally
