@@ -24,7 +24,7 @@ public class MenuItemPublicAppService : CmsKitPublicAppServiceBase, IMenuItemPub
         DistributedCache = distributedCache;
     }
 
-    public async Task<List<MenuItemDto>> GetListAsync()
+    public virtual async Task<List<MenuItemDto>> GetListAsync()
     {
         var cachedMenu = await DistributedCache.GetOrAddAsync(
             MenuApplicationConsts.MainMenuCacheKey,

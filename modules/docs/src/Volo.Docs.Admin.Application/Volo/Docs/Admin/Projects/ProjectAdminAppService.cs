@@ -37,7 +37,7 @@ namespace Volo.Docs.Admin.Projects
             _guidGenerator = guidGenerator;
         }
 
-        public async Task<PagedResultDto<ProjectDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public virtual async Task<PagedResultDto<ProjectDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
             var projects = await _projectRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
 
@@ -49,7 +49,7 @@ namespace Volo.Docs.Admin.Projects
                 );
         }
 
-        public async Task<ProjectDto> GetAsync(Guid id)
+        public virtual async Task<ProjectDto> GetAsync(Guid id)
         {
             var project = await _projectRepository.GetAsync(id);
 
@@ -57,7 +57,7 @@ namespace Volo.Docs.Admin.Projects
         }
 
         [Authorize(DocsAdminPermissions.Projects.Create)]
-        public async Task<ProjectDto> CreateAsync(CreateProjectDto input)
+        public virtual async Task<ProjectDto> CreateAsync(CreateProjectDto input)
         {
             if (await _projectRepository.ShortNameExistsAsync(input.ShortName))
             {
@@ -90,7 +90,7 @@ namespace Volo.Docs.Admin.Projects
         }
 
         [Authorize(DocsAdminPermissions.Projects.Update)]
-        public async Task<ProjectDto> UpdateAsync(Guid id, UpdateProjectDto input)
+        public virtual async Task<ProjectDto> UpdateAsync(Guid id, UpdateProjectDto input)
         {
             var project = await _projectRepository.GetAsync(id);
 
@@ -115,12 +115,12 @@ namespace Volo.Docs.Admin.Projects
         }
 
         [Authorize(DocsAdminPermissions.Projects.Delete)]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             await _projectRepository.DeleteAsync(id);
         }
 
-        public async Task ReindexAsync(ReindexInput input)
+        public virtual async Task ReindexAsync(ReindexInput input)
         {
             _elasticSearchService.ValidateElasticSearchEnabled();
 
@@ -146,7 +146,7 @@ namespace Volo.Docs.Admin.Projects
             }
         }
 
-        public async Task ReindexAllAsync()
+        public virtual async Task ReindexAllAsync()
         {
             _elasticSearchService.ValidateElasticSearchEnabled();
             var projects = await _projectRepository.GetListAsync();
@@ -157,7 +157,7 @@ namespace Volo.Docs.Admin.Projects
             }
         }
         
-        public async Task<List<ProjectWithoutDetailsDto>> GetListWithoutDetailsAsync()
+        public virtual async Task<List<ProjectWithoutDetailsDto>> GetListWithoutDetailsAsync()
         {
             var projects = await _projectRepository.GetListWithoutDetailsAsync();
             return ObjectMapper.Map<List<ProjectWithoutDetails>, List<ProjectWithoutDetailsDto>>(projects);
