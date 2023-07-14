@@ -539,6 +539,17 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             return NormalizeTypeName(typeName.Split(".").Last());
         }
 
+        if (typeName.Contains("<") && typeName.Contains(">"))
+        {
+            var left = typeName.IndexOf("<", StringComparison.Ordinal);
+            var right = typeName.LastIndexOf(">", StringComparison.Ordinal);
+            var genericTypes = typeName.Substring(left + 1, right - left - 1);
+            foreach (var genericType in genericTypes.Split(",").Where(x => x.Contains(".")))
+            {
+                usingNamespaceList?.AddIfNotContains($"using {GetTypeNamespace(genericType)};");
+            }
+        }
+
         var type = new StringBuilder();
         var s1 = typeName.Split("<");
         for (var i = 0; i < s1.Length; i++)
