@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Uow;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.PopularTags;
@@ -17,12 +16,12 @@ public class PopularTagsViewComponent : AbpViewComponent
         _tagAppService = tagAppService;
     }
     
-    public async Task<IViewComponentResult> InvokeAsync(string entityType, int maxCount, Func<PopularTagDto, string> urlFactory = null)
+    public async Task<IViewComponentResult> InvokeAsync(string entityType, int maxCount, string urlFormat)
     {
         var model = new PopularTagsViewModel
         {
             Tags = await _tagAppService.GetPopularTagsAsync(entityType, maxCount),
-            UrlFactory = urlFactory
+            UrlFormat = urlFormat
         };
         return View("~/Pages/CmsKit/Shared/Components/PopularTags/Default.cshtml", model);
     }
@@ -30,6 +29,6 @@ public class PopularTagsViewComponent : AbpViewComponent
     public class PopularTagsViewModel
     {
         public List<PopularTagDto> Tags { get; set; }
-        public Func<PopularTagDto, string> UrlFactory { get; set; }
+        public string UrlFormat { get; set; }
     }
 }

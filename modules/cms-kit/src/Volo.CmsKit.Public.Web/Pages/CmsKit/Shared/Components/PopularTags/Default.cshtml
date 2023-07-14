@@ -10,7 +10,7 @@
     <div class="cms-tags-area my-3">
         @foreach (var tag in Model.Tags)
         {
-            if (Model.UrlFactory == null)
+            if (Model.UrlFormat.IsNullOrWhiteSpace())
             {
                 <span class="br-8 me-2 mb-2 p-2 d-inline-block cmskit-tag fw--5" style="background: #eeedf7; color: #766bc8">
                     @tag.Name
@@ -18,7 +18,7 @@
             }
             else
             {
-                <a href="@Model.UrlFactory(tag)">
+                <a href="@Model.UrlFormat.Replace("{TagId}", tag.Id.ToString()).Replace("{TagName}",tag.Name)">
                     <span class="br-8 me-2 mb-2 p-2 d-inline-block cmskit-tag fw--5" style="background: #eeedf7; color: #766bc8">
                         @tag.Name
                     </span>
