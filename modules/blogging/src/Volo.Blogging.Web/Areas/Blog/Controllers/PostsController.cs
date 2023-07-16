@@ -20,7 +20,7 @@ namespace Volo.Blogging.Areas.Blog.Controllers
         }
 
         [HttpPost]
-        public async Task Delete(Guid id)
+        public virtual async Task Delete(Guid id)
         {
             await _postAppService.DeleteAsync(id);
         }

@@ -24,7 +24,7 @@ namespace Volo.Docs.Areas.Documents
 
         [HttpGet]
         [Route("")]
-        public async Task<FileResult> GetResource(GetDocumentResourceInput input)
+        public virtual async Task<FileResult> GetResource(GetDocumentResourceInput input)
         {
             input.Name = input.Name.RemovePreFix("/");
             var documentResource = await _documentAppService.GetResourceAsync(input);

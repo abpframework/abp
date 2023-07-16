@@ -56,7 +56,7 @@
                             _tenantAppService
                                 .delete(data.record.id)
                                 .then(function () {
-                                    _dataTable.ajax.reload();
+                                    _dataTable.ajax.reloadEx();
                                     abp.notify.success(l('SuccessfullyDeleted'));
                                 });
                         },
@@ -102,11 +102,11 @@
         );
 
         _createModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _dataTable.ajax.reloadEx();
         });
 
         _editModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _dataTable.ajax.reloadEx();
         });
 
         $('#AbpContentToolbar button[name=CreateTenant]').click(function (e) {

@@ -174,32 +174,32 @@ public abstract class AbpCrudPageBase<
     where TCreateViewModel : class, new()
     where TUpdateViewModel : class, new()
 {
-    [Inject] protected TAppService AppService { get; set; }
-    [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
-    [Inject] public IAbpEnumLocalizer AbpEnumLocalizer { get; set; }
+    [Inject] protected TAppService AppService { get; set; } = default!;
+    [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; } = default!;
+    [Inject] public IAbpEnumLocalizer AbpEnumLocalizer { get; set; } = default!;
 
     protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
     protected int CurrentPage = 1;
-    protected string CurrentSorting;
+    protected string CurrentSorting = default!;
     protected int? TotalCount;
     protected TGetListInput GetListInput = new TGetListInput();
     protected IReadOnlyList<TListViewModel> Entities = Array.Empty<TListViewModel>();
     protected TCreateViewModel NewEntity;
-    protected TKey EditingEntityId;
+    protected TKey EditingEntityId = default!;
     protected TUpdateViewModel EditingEntity;
-    protected Modal CreateModal;
-    protected Modal EditModal;
-    protected Validations CreateValidationsRef;
-    protected Validations EditValidationsRef;
+    protected Modal? CreateModal;
+    protected Modal? EditModal;
+    protected Validations? CreateValidationsRef;
+    protected Validations? EditValidationsRef;
     protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
-    protected DataGridEntityActionsColumn<TListViewModel> EntityActionsColumn;
+    protected DataGridEntityActionsColumn<TListViewModel> EntityActionsColumn = default!;
     protected EntityActionDictionary EntityActions { get; set; }
     protected TableColumnDictionary TableColumns { get; set; }
 
-    protected string CreatePolicyName { get; set; }
-    protected string UpdatePolicyName { get; set; }
-    protected string DeletePolicyName { get; set; }
+    protected string? CreatePolicyName { get; set; }
+    protected string? UpdatePolicyName { get; set; }
+    protected string? DeletePolicyName { get; set; }
 
     public bool HasCreatePermission { get; set; }
     public bool HasUpdatePermission { get; set; }
@@ -360,7 +360,7 @@ public abstract class AbpCrudPageBase<
     protected virtual Task CloseCreateModalAsync()
     {
         NewEntity = new TCreateViewModel();
-        return InvokeAsync(CreateModal.Hide);
+        return InvokeAsync(CreateModal!.Hide);
     }
 
     protected virtual Task ClosingCreateModal(ModalClosingEventArgs eventArgs)
@@ -429,7 +429,7 @@ public abstract class AbpCrudPageBase<
 
     protected virtual Task CloseEditModalAsync()
     {
-        InvokeAsync(EditModal.Hide);
+        InvokeAsync(EditModal!.Hide);
         return Task.CompletedTask;
     }
 
@@ -477,7 +477,7 @@ public abstract class AbpCrudPageBase<
         NewEntity = new TCreateViewModel();
         await GetEntitiesAsync();
 
-        await InvokeAsync(CreateModal.Hide);
+        await InvokeAsync(CreateModal!.Hide);
     }
 
     protected virtual async Task UpdateEntityAsync()
@@ -515,7 +515,7 @@ public abstract class AbpCrudPageBase<
     {
         await GetEntitiesAsync();
 
-        await InvokeAsync(EditModal.Hide);
+        await InvokeAsync(EditModal!.Hide);
     }
 
     protected virtual async Task DeleteEntityAsync(TListViewModel entity)
@@ -572,7 +572,7 @@ public abstract class AbpCrudPageBase<
     /// Does nothing if <paramref name="policyName"/> is null or empty.
     /// </summary>
     /// <param name="policyName">A policy name to check</param>
-    protected virtual async Task CheckPolicyAsync([CanBeNull] string policyName)
+    protected virtual async Task CheckPolicyAsync(string? policyName)
     {
         if (string.IsNullOrEmpty(policyName))
         {
@@ -633,7 +633,7 @@ public abstract class AbpCrudPageBase<
                 if (propertyInfo.Name.EndsWith("_Text"))
                 {
                     var lookupPropertyName = propertyInfo.Name.RemovePostFix("_Text");
-                    var lookupPropertyDefinition = properties.SingleOrDefault(t => t.Name == lookupPropertyName);
+                    var lookupPropertyDefinition = properties.SingleOrDefault(t => t.Name == lookupPropertyName)!;
                     yield return new TableColumn
                     {
                         Title = lookupPropertyDefinition.GetLocalizedDisplayName(StringLocalizerFactory),
@@ -658,7 +658,7 @@ public abstract class AbpCrudPageBase<
                     if (propertyInfo.Type.IsEnum)
                     {
                         column.ValueConverter = (val) =>
-                            AbpEnumLocalizer.GetString(propertyInfo.Type, val.As<ExtensibleObject>().ExtraProperties[propertyInfo.Name], new IStringLocalizer[]{ StringLocalizerFactory.CreateDefaultOrNull() });
+                            AbpEnumLocalizer.GetString(propertyInfo.Type, val.As<ExtensibleObject>().ExtraProperties[propertyInfo.Name]!, new IStringLocalizer?[]{ StringLocalizerFactory.CreateDefaultOrNull() });
                     }
 
                     yield return column;

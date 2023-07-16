@@ -20,7 +20,7 @@ public static class HasExtraPropertiesExtensions
 
     public static object? GetProperty(this IHasExtraProperties source, string name, object? defaultValue = null)
     {
-        return source.ExtraProperties?.GetOrDefault(name)
+        return source.ExtraProperties.GetOrDefault(name)
                ?? defaultValue;
     }
 
@@ -59,7 +59,7 @@ public static class HasExtraPropertiesExtensions
     public static TSource SetProperty<TSource>(
         this TSource source,
         string name,
-        object value,
+        object? value,
         bool validate = true)
         where TSource : IHasExtraProperties
     {
@@ -98,7 +98,7 @@ public static class HasExtraPropertiesExtensions
                 continue;
             }
 
-            source.ExtraProperties[property.Name] = property.GetDefaultValue()!;
+            source.ExtraProperties[property.Name] = property.GetDefaultValue();
         }
 
         return source;

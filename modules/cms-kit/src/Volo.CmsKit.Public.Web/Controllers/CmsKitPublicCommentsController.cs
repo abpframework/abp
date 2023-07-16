@@ -29,7 +29,7 @@ public class CmsKitPublicCommentsController : AbpController
     }
 
     [HttpPost]
-    public async Task ValidateAsync([FromBody] CreateCommentWithParametersInput input)
+    public virtual async Task ValidateAsync([FromBody] CreateCommentWithParametersInput input)
     {
         if (CmsKitCommentOptions.IsRecaptchaEnabled && input.CaptchaToken.HasValue)
         {

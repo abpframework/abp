@@ -10,17 +10,17 @@ public class SimplePageToolbarContributor : IPageToolbarContributor
 {
     public Type ComponentType { get; }
 
-    public Dictionary<string, object> Arguments { get; set; }
+    public Dictionary<string, object?>? Arguments { get; set; }
 
     public int Order { get; }
 
-    public string RequiredPolicyName { get; }
+    public string? RequiredPolicyName { get; }
 
     public SimplePageToolbarContributor(
         Type componentType,
-        Dictionary<string, object> arguments = null,
+        Dictionary<string, object?>? arguments = null,
         int order = 0,
-        string requiredPolicyName = null)
+        string? requiredPolicyName = null)
     {
         ComponentType = componentType;
         Arguments = arguments;

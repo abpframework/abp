@@ -12,11 +12,11 @@ namespace Volo.Abp.AspNetCore.Mvc;
 
 public class AspNetCoreApiDescriptionModelProviderOptions
 {
-    public Func<Type, ConventionalControllerSetting, string> ControllerNameGenerator { get; set; }
+    public Func<Type, ConventionalControllerSetting?, string> ControllerNameGenerator { get; set; }
 
     public Func<MethodInfo, string> ActionNameGenerator { get; set; }
 
-    public Func<ApiParameterDescription, string> ApiParameterNameGenerator { get; set; }
+    public Func<ApiParameterDescription, string?> ApiParameterNameGenerator { get; set; }
 
     public AspNetCoreApiDescriptionModelProviderOptions()
     {
@@ -51,7 +51,7 @@ public class AspNetCoreApiDescriptionModelProviderOptions
                         methodNameBuilder.Append("And");
                     }
 
-                    methodNameBuilder.Append(parameters[i].Name.ToPascalCase());
+                    methodNameBuilder.Append(parameters[i].Name!.ToPascalCase());
                 }
             }
 
@@ -62,7 +62,7 @@ public class AspNetCoreApiDescriptionModelProviderOptions
         {
             if (apiParameterDescription.ModelMetadata is DefaultModelMetadata defaultModelMetadata)
             {
-                var jsonPropertyNameAttribute = (JsonPropertyNameAttribute)
+                var jsonPropertyNameAttribute = (JsonPropertyNameAttribute?)
                     defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is JsonPropertyNameAttribute);
                 if (jsonPropertyNameAttribute != null)
                 {

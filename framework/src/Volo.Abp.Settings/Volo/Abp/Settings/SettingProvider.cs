@@ -23,7 +23,7 @@ public class SettingProvider : ISettingProvider, ITransientDependency
 
     public virtual async Task<string?> GetOrNullAsync(string name)
     {
-        var setting = SettingDefinitionManager.Get(name);
+        var setting = await SettingDefinitionManager.GetAsync(name);
         var providers = Enumerable
             .Reverse(SettingValueProviderManager.Providers);
 
@@ -46,7 +46,7 @@ public class SettingProvider : ISettingProvider, ITransientDependency
     public virtual async Task<List<SettingValue>> GetAllAsync(string[] names)
     {
         var result = new Dictionary<string, SettingValue>();
-        var settingDefinitions = SettingDefinitionManager.GetAll().Where(x => names.Contains(x.Name)).ToList();
+        var settingDefinitions = (await SettingDefinitionManager.GetAllAsync()).Where(x => names.Contains(x.Name)).ToList();
 
         foreach (var definition in settingDefinitions)
         {
@@ -85,7 +85,7 @@ public class SettingProvider : ISettingProvider, ITransientDependency
     public virtual async Task<List<SettingValue>> GetAllAsync()
     {
         var settingValues = new List<SettingValue>();
-        var settingDefinitions = SettingDefinitionManager.GetAll();
+        var settingDefinitions = await SettingDefinitionManager.GetAllAsync();
 
         foreach (var setting in settingDefinitions)
         {

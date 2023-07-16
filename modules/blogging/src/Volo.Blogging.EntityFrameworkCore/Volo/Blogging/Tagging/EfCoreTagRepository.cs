@@ -17,27 +17,27 @@ namespace Volo.Blogging.Tagging
         {
         }
 
-        public async Task<List<Tag>> GetListAsync(Guid blogId, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Tag>> GetListAsync(Guid blogId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).Where(t=>t.BlogId == blogId).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<Tag> GetByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
+        public virtual async Task<Tag> GetByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).FirstAsync(t=> t.BlogId == blogId && t.Name == name, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<Tag> FindByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
+        public virtual async Task<Tag> FindByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).FirstOrDefaultAsync(t => t.BlogId == blogId && t.Name == name, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).Where(t => ids.Contains(t.Id)).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task DecreaseUsageCountOfTagsAsync(List<Guid> ids, CancellationToken cancellationToken = default)
+        public virtual async Task DecreaseUsageCountOfTagsAsync(List<Guid> ids, CancellationToken cancellationToken = default)
         {
             var tags = await (await GetDbSetAsync())
                 .Where(t => ids.Any(id => id == t.Id))

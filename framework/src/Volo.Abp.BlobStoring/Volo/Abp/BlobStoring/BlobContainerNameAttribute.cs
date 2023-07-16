@@ -32,7 +32,7 @@ public class BlobContainerNameAttribute : Attribute
 
         if (nameAttribute == null)
         {
-            return type.FullName;
+            return type.FullName!;
         }
 
         return nameAttribute.GetName(type);

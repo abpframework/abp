@@ -177,7 +177,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     }
 
     [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
-    public async Task<bool> HasBlogPostWaitingForReviewAsync()
+    public virtual async Task<bool> HasBlogPostWaitingForReviewAsync()
     {
         return await BlogPostRepository.HasBlogPostWaitingForReviewAsync();
     }

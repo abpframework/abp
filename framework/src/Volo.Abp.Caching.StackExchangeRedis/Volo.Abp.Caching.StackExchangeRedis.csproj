@@ -22,6 +22,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
+        <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
     </ItemGroup>
 
 </Project>

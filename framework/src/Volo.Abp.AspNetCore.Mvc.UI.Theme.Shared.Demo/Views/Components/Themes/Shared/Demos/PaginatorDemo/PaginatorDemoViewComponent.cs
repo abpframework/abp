@@ -13,7 +13,7 @@ public class PaginatorDemoViewComponent : AbpViewComponent
 {
     public const string ViewPath = "/Views/Components/Themes/Shared/Demos/PaginatorDemo/Default.cshtml";
 
-    public PagerModel PagerModel { get; set; }
+    public PagerModel PagerModel { get; set; } = default!;
 
     public IViewComponentResult Invoke(PagerModel pagerModel)
     {

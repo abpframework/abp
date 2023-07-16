@@ -28,7 +28,7 @@ public static class ResponseContentTypeHelper
         string? actionResultContentType,
         string? httpResponseContentType,
         (string defaultContentType, Encoding defaultEncoding) @default,
-        Func<string, Encoding> getEncoding,
+        Func<string, Encoding?> getEncoding,
         out string resolvedContentType,
         out Encoding resolvedContentTypeEncoding)
     {
@@ -66,7 +66,7 @@ public static class ResponseContentTypeHelper
         resolvedContentTypeEncoding = defaultContentTypeEncoding;
     }
 
-    public static Encoding GetEncoding(string mediaType)
+    public static Encoding? GetEncoding(string mediaType)
     {
         if (MediaTypeHeaderValue.TryParse(mediaType, out var parsed))
         {

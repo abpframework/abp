@@ -54,7 +54,7 @@ public class BundleContributorCollection
         if (!includeDependencies)
         {
             _contributors.ReplaceOne(x => x.GetType() == sourceContributorType,
-                contributor => (IBundleContributor)Activator.CreateInstance(destContributorType));
+                contributor => (IBundleContributor)Activator.CreateInstance(destContributorType)!);
         }
         else
         {
@@ -131,7 +131,7 @@ public class BundleContributorCollection
 
         try
         {
-            _contributors.Add((IBundleContributor)Activator.CreateInstance(contributorType));
+            _contributors.Add((IBundleContributor)Activator.CreateInstance(contributorType)!);
         }
         catch (Exception ex)
         {

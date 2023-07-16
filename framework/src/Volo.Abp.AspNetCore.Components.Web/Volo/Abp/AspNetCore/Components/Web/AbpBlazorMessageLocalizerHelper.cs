@@ -14,12 +14,12 @@ public class AbpBlazorMessageLocalizerHelper<T>
         this.stringLocalizer = stringLocalizer;
     }
 
-    public string Localize(string message, [CanBeNull] IEnumerable<string> arguments)
+    public string Localize(string message, IEnumerable<string>? arguments)
     {
         try
         {
             return arguments?.Count() > 0
-                ? stringLocalizer[message, LocalizeMessageArguments(arguments)?.ToArray()]
+                ? stringLocalizer[message, LocalizeMessageArguments(arguments)?.ToArray()!]
                 : stringLocalizer[message];
         }
         catch

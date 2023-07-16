@@ -828,14 +828,16 @@
     "TermsConditionsPageTitle": "条款和条件",
     "TrainingsPageTitle": "ABP培训套餐",
     "ModulesPageTitle": "ABP内置的应用模块",
-    "DoesTheSubscriptionRenewAutomatically": "订阅会自动续订吗？",
-    "DoesTheSubscriptionRenewAutomaticallyExplanation": "ABP 商业版没有自动续订计费模式。因此，在您的许可期结束时，<strong>您的订阅将不会自动续订</strong>。如果您希望继续享受 ABP 商业版的好处，您可以在<a href=\"/my-organizations\">组织管理</a>页面手动续订。如果您有多个组织，请点击即将到期的组织上的“管理”按钮，然后点击“立即续订”按钮来续订您的许可证。您还可以查看<a href=\"/faq#what-happens-when-license-ends\">许可证到期后会发生什么？</a>部分。",
+    "DoesTheSubscriptionRenewAutomatically": "许可会自动续费吗？",
+    "DoesTheSubscriptionRenewAutomaticallyExplanation": "ABP 商业版没有自动续费的计费模式。因此，在您的许可期结束时，<strong>您的订阅将不会自动续订</strong>。如果您希望继续享受ABP商业版的服务，请在<a href=\"/my-organizations\">组织管理页面</a>手动进行续费操作。如果您拥有多个组织，您可以点击即将到期的组织上的\"管理\"按钮，然后点击\"立即续费\"按钮来续订您的许可。您还可以查看<a href=\"/faq#what-happens-when-license-ends\">许可到期后会发生什么？</a>部分了解更多信息。",
     "BlazoriseSupport": "如何获取Blazorise许可密钥并获得Blazorise团队的支持？",
     "BlazoriseSupportExplanation": "请按照以下步骤获取Blazorise团队的支持并获得您的Blazorise许可密钥：",
     "BlazoriseSupportExplanation1": "使用与您的abp.io账户相同的电子邮件地址在<a href=\"https://blazorise.com/support/register\" rel=\"nofollow\">blazorise.com/support/register</a>上注册一个新账户。请将“许可密钥”一栏留空，<strong>并确保该电子邮件地址与您在abp.io上的电子邮件账户相同</strong>。",
     "BlazoriseSupportExplanation2": "通过查看您的电子邮件信箱来验证您的电子邮件地址。如果在收件箱中没有看到电子邮件，请检查您的垃圾邮件箱！",
     "BlazoriseSupportExplanation3": "在<a href=\"https://blazorise.com/support/login\" rel=\"nofollow\">blazorise.com/support/login</a>上登录Blazorise支持网站。",
     "BlazoriseSupportExplanation4": "如果您有有效的ABP商业版许可证，您还将拥有Blazorise PRO许可证。您可以在<a href=\"https://blazorise.com/support/user/manage/license\" rel=\"nofollow\">blazorise.com/support/user/manage/license</a>获取您的Blazorise许可密钥。",
-    "BlazoriseSupportExplanation5": "您可以在support网站上发布您的问题，并为您的应用程序生成一个产品令牌。"
+    "BlazoriseSupportExplanation5": "您可以在support网站上发布您的问题，并为您的应用程序生成一个产品令牌。",
+    "ExtraQuestionCreditsFaqTitle": "我可以购买额外的问题支持次数吗？",
+    "ExtraQuestionCreditsFaqExplanation": "是的，您可以购买额外的问题支持次数，请发送电子邮件至<a href=\"mailto:info@abp.io\">info@abp.io</a>，并提供您的组织名称。以下是额外问题支持次数的价格列表： <ul><li>50次问题 $999</li><li>25次问题 $625</li><li>15次问题 $450</li></ul>"
   }
 }

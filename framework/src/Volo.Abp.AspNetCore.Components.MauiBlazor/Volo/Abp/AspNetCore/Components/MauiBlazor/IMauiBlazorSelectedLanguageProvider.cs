@@ -4,5 +4,5 @@ namespace Volo.Abp.AspNetCore.Components.MauiBlazor;
 
 public interface IMauiBlazorSelectedLanguageProvider
 {
-    Task<string> GetSelectedLanguageAsync();
+    Task<string?> GetSelectedLanguageAsync();
 }

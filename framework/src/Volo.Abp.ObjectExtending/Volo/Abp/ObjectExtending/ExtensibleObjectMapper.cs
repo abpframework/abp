@@ -75,8 +75,8 @@ public static class ExtensibleObjectMapper
     /// </param>
     /// <param name="ignoredProperties">Used to ignore some properties</param>
     public static void MapExtraPropertiesTo<TSource, TDestination>(
-        [NotNull] Dictionary<string, object> sourceDictionary,
-        [NotNull] Dictionary<string, object> destinationDictionary,
+        [NotNull] Dictionary<string, object?> sourceDictionary,
+        [NotNull] Dictionary<string, object?> destinationDictionary,
         MappingPropertyDefinitionChecks? definitionChecks = null,
         string[]? ignoredProperties = null)
         where TSource : IHasExtraProperties
@@ -110,8 +110,8 @@ public static class ExtensibleObjectMapper
     public static void MapExtraPropertiesTo(
         [NotNull] Type sourceType,
         [NotNull] Type destinationType,
-        [NotNull] Dictionary<string, object> sourceDictionary,
-        [NotNull] Dictionary<string, object> destinationDictionary,
+        [NotNull] Dictionary<string, object?> sourceDictionary,
+        [NotNull] Dictionary<string, object?> destinationDictionary,
         MappingPropertyDefinitionChecks? definitionChecks = null,
         string[]? ignoredProperties = null)
     {

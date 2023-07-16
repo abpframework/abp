@@ -48,7 +48,7 @@ $(function () {
                                 blogsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        dataTable.ajax.reload();
+                                        dataTable.ajax.reloadEx();
                                         abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
@@ -75,10 +75,10 @@ $(function () {
     });
 
     createModal.onResult(function () {
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
     });
 
     updateModal.onResult(function () {
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
     });
 });

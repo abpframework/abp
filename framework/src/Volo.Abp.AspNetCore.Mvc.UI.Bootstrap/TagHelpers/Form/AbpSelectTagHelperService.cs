@@ -266,7 +266,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         if (isNullableType)
         {
-            enumType = Nullable.GetUnderlyingType(explorer.ModelType);
+            enumType = Nullable.GetUnderlyingType(explorer.ModelType)!;
             selectItems.Add(new SelectListItem());
         }
 
@@ -279,7 +279,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
                 {
                     containerLocalizer,
                     _stringLocalizerFactory.CreateDefaultOrNull()
-                });
+                }!);
             selectItems.Add(new SelectListItem
             {
                 Value = enumValue.ToString(),
@@ -386,7 +386,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     {
         var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
 
-        return idAttr != null ? idAttr.Value.ToString() : string.Empty;
+        return idAttr != null ? idAttr.Value.ToString()! : string.Empty;
     }
 
     protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)

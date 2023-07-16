@@ -24,7 +24,7 @@ public class AbpApplicationLocalizationAppService :
         LocalizationOptions = localizationOptions.Value;
     }
     
-    public async Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input)
+    public virtual async Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input)
     {
         if (!CultureHelper.IsValidCultureCode(input.CultureName))
         {
@@ -50,7 +50,7 @@ public class AbpApplicationLocalizationAppService :
                 var localizer = await StringLocalizerFactory.CreateByResourceNameOrNullAsync(resource.ResourceName);
                 if (localizer != null)
                 {
-                    Dictionary<string, LocalizedString> staticLocalizedStrings = null;
+                    Dictionary<string, LocalizedString>? staticLocalizedStrings = null;
                     
                     if (input.OnlyDynamics)
                     {
@@ -71,7 +71,7 @@ public class AbpApplicationLocalizationAppService :
                     {
                         if (input.OnlyDynamics)
                         {
-                            var staticLocalizedString = staticLocalizedStrings.GetOrDefault(localizedString.Name);
+                            var staticLocalizedString = staticLocalizedStrings!.GetOrDefault(localizedString.Name);
                             if (staticLocalizedString != null &&
                                 localizedString.Value == staticLocalizedString.Value)
                             {

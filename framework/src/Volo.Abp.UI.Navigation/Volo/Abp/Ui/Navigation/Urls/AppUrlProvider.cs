@@ -112,7 +112,7 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         if (CurrentTenant.Id.HasValue && CurrentTenant.Name.IsNullOrEmpty())
         {
             var tenantConfiguration = await TenantStore.FindAsync(CurrentTenant.Id.Value);
-            return tenantConfiguration.Name;
+            return tenantConfiguration!.Name;
         }
 
         return CurrentTenant.Name!;
