@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.PopularTags;
 
+[Widget(
+    StyleFiles = new[]
+    {
+        "/Pages/CmsKit/Shared/Components/PopularTags/default.css"
+    })]
 public class PopularTagsViewComponent : AbpViewComponent
 {
     private readonly ITagAppService _tagAppService;
