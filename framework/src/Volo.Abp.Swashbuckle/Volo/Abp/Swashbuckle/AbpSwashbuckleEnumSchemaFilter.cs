@@ -13,6 +13,8 @@ public class AbpSwashbuckleEnumSchemaFilter : ISchemaFilter
         if (context.Type.IsEnum)
         {
             schema.Enum.Clear();
+            schema.Type = nameof(String);
+            schema.Format = nameof(String);
             Enum.GetNames(context.Type)
                 .ToList()
                 .ForEach(name => schema.Enum.Add(new OpenApiString($"{name}")));

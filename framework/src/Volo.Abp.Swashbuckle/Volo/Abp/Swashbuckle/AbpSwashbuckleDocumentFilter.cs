@@ -28,22 +28,6 @@ public class AbpSwashbuckleDocumentFilter : IDocumentFilter
         swaggerDoc
             .Paths
             .RemoveAll(path => !actionUrls.Contains(path.Key));
-
-        foreach (OpenApiSchema schema in swaggerDoc.Components.Schemas.Values)
-        {
-            ICollection<OpenApiSchema> properties = schema.Properties?.Values;
-            if (properties != null)
-            {
-                foreach (OpenApiSchema property in properties)
-                {
-                    List<object> propertyEnums = property.Enum?.Cast<object>().ToList();
-                    if (propertyEnums != null && propertyEnums.Any())
-                    {
-                        property.Description += "<br><br><strong>Possible values:</strong><br>" + string.Join("<br>", propertyEnums);
-                    }
-                }
-            }
-        }
     }
 
     protected virtual string? RemoveRouteParameterConstraints(ActionDescriptor actionDescriptor)
