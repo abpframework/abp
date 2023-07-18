@@ -905,7 +905,7 @@
     "DoesTheSubscriptionRenewAutomaticallyExplanation": "The ABP Commercial does not have an auto-renewal billing model. Therefore <strong>your subscription will not be automatically renewed</strong> at the end of your license period. If you want to continue to have the benefits of ABP Commercial, you need to manually renew it at the <a href=\"/my-organizations\">organization management page</a>. If you have multiple organizations, click the \"Manage\" button at your expiring organization and then click the \"Extend Now\" button to renew your license. You may also want to take a look at the <a href=\"/faq#what-happens-when-license-ends\">What Happens When My License Ends?</a> section.",
     "ExtraQuestionCreditsFaqTitle": "Can I purchase extra support question credits?",
     "ExtraQuestionCreditsFaqExplanation": "Yes, you can. To buy extra question credits, send an e-mail to <a href=\"mailto:info@abp.io\">info@abp.io</a> with your organization's name. Here's the price list for the extra question credits: <ul><li>50 questions pack $999</li><li>25 questions pack $625</li><li>15 questions pack $450</li></ul>",
-    "PricingExplanation2": "30 days money back guarantee* . <a href=\"/faq#refund-policy\">Learn more</a>",
+    "PricingExplanation2": "30 days money back guarantee *. <a href=\"/faq#refund-policy\">Learn more</a>",
     "MoneyBackGuaranteeText": "* 30-day money-back guarantee on all licenses! 100% refund on Team, 60% refund on Business and Enterprise licenses within 30 days."
   }
 }
