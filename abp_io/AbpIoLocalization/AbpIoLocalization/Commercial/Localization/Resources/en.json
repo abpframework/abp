@@ -930,6 +930,9 @@
     "Studio_GetInformed_Description1": "Leave your contact information to <span class=\"text-info\">get informed</span> and <span class=\"text-info\">try it first</span> when ABP Studio has been launched.",
     "Studio_GetInformed_Description2": "Planned preview release date: <br/>Q3 of 2023.",
     "ThankYou!": "Thank you!",
-    "YouJoinedTheBetaTesterProgram": "You joined the ABP Studio beta tester program."
+    "SendBetaRequest": "Send Beta Request",
+    "YouJoinedTheBetaTesterProgram": "You joined the ABP Studio beta tester program.",
+    "PricingExplanation2": "30 days money back guarantee *. <a href=\"/faq#refund-policy\">Learn more</a>",
+    "MoneyBackGuaranteeText": "* 30-day money-back guarantee on all licenses! 100% refund on Team, 60% refund on Business and Enterprise licenses within 30 days."
   }
 }

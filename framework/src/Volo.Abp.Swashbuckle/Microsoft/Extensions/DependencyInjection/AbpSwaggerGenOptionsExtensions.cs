@@ -9,4 +9,9 @@ public static class AbpSwaggerGenOptionsExtensions
     {
         swaggerGenOptions.DocumentFilter<AbpSwashbuckleDocumentFilter>();
     }
+
+    public static void UserFriendlyEnums(this SwaggerGenOptions swaggerGenOptions)
+    {
+        swaggerGenOptions.SchemaFilter<AbpSwashbuckleEnumSchemaFilter>();
+    }
 }
