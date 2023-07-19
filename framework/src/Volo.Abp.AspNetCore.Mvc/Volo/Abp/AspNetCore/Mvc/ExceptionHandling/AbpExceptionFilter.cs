@@ -77,7 +77,7 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
             context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
         }
 
-        context.Exception = null; //Handled!
+        context.Exception = null!; //Handled!
     }
 
     protected virtual void LogException(ExceptionContext context, out RemoteServiceErrorInfo remoteServiceErrorInfo)
@@ -94,7 +94,7 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
         remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
         remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
 
-        var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance);
+        var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance)!;
         var logLevel = context.Exception.GetLogLevel();
         logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
         logger.LogException(context.Exception, logLevel);

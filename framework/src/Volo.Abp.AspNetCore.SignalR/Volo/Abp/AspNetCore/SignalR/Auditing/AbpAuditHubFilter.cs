@@ -14,7 +14,7 @@ namespace Volo.Abp.AspNetCore.SignalR.Auditing;
 
 public class AbpAuditHubFilter : IHubFilter
 {
-    public virtual async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
+    public virtual async ValueTask<object?> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object?>> next)
     {
         var options = invocationContext.ServiceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
         if (!options.IsEnabled)
@@ -27,7 +27,7 @@ public class AbpAuditHubFilter : IHubFilter
         using (var saveHandle = auditingManager.BeginScope())
         {
             Debug.Assert(auditingManager.Current != null);
-            object result;
+            object? result;
             try
             {
                 result = await next(invocationContext);

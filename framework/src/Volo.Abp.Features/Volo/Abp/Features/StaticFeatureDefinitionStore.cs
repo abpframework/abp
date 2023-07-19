@@ -92,7 +92,7 @@ public class StaticFeatureDefinitionStore: IStaticFeatureDefinitionStore, ISingl
         {
             var providers = Options
                 .DefinitionProviders
-                .Select(p => scope.ServiceProvider.GetRequiredService(p) as IFeatureDefinitionProvider)
+                .Select(p => (scope.ServiceProvider.GetRequiredService(p) as IFeatureDefinitionProvider)!)
                 .ToList();
 
             foreach (var provider in providers)
@@ -104,7 +104,7 @@ public class StaticFeatureDefinitionStore: IStaticFeatureDefinitionStore, ISingl
         return context.Groups;
     }
 
-    public virtual Task<FeatureDefinition> GetOrNullAsync(string name)
+    public virtual Task<FeatureDefinition?> GetOrNullAsync(string name)
     {
         return Task.FromResult(FeatureDefinitions.GetOrDefault(name));
     }

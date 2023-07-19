@@ -7,8 +7,7 @@ namespace Volo.Abp.Users;
 
 public static class CurrentUserExtensions
 {
-    [CanBeNull]
-    public static string FindClaimValue(this ICurrentUser currentUser, string claimType)
+    public static string? FindClaimValue(this ICurrentUser currentUser, string claimType)
     {
         return currentUser.FindClaim(claimType)?.Value;
     }
@@ -29,7 +28,7 @@ public static class CurrentUserExtensions
     {
         Debug.Assert(currentUser.Id != null, "currentUser.Id != null");
 
-        return currentUser.Id.Value;
+        return currentUser!.Id!.Value;
     }
 
     public static Guid? FindImpersonatorTenantId([NotNull] this ICurrentUser currentUser)
@@ -62,12 +61,12 @@ public static class CurrentUserExtensions
         return null;
     }
 
-    public static string FindImpersonatorTenantName([NotNull] this ICurrentUser currentUser)
+    public static string? FindImpersonatorTenantName([NotNull] this ICurrentUser currentUser)
     {
         return currentUser.FindClaimValue(AbpClaimTypes.ImpersonatorTenantName);
     }
 
-    public static string FindImpersonatorUserName([NotNull] this ICurrentUser currentUser)
+    public static string? FindImpersonatorUserName([NotNull] this ICurrentUser currentUser)
     {
         return currentUser.FindClaimValue(AbpClaimTypes.ImpersonatorUserName);
     }

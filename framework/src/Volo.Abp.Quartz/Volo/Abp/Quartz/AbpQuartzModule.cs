@@ -10,7 +10,7 @@ namespace Volo.Abp.Quartz;
 
 public class AbpQuartzModule : AbpModule
 {
-    private IScheduler _scheduler;
+    private IScheduler _scheduler = default!;
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {

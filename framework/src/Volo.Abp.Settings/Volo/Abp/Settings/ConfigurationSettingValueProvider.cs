@@ -21,7 +21,7 @@ public class ConfigurationSettingValueProvider : ISettingValueProvider, ITransie
         Configuration = configuration;
     }
 
-    public virtual Task<string> GetOrNullAsync(SettingDefinition setting)
+    public virtual Task<string?> GetOrNullAsync(SettingDefinition setting)
     {
         return Task.FromResult(Configuration[ConfigurationNamePrefix + setting.Name]);
     }

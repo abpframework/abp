@@ -52,6 +52,7 @@
     "OthersGroup": "Diğer",
     "Today": "Bugün",
     "Apply": "Uygula",
+    "InternetConnectionInfo": "İşlem gerçekleştirilemedi. İnternet bağlantısı mevcut değil.",
     "CopiedToTheClipboard": "Panoya kopyalandı"
   }
 }

@@ -4,7 +4,7 @@ namespace Volo.Abp.MultiTenancy;
 
 public class TenantResolveResult
 {
-    public string TenantIdOrName { get; set; }
+    public string? TenantIdOrName { get; set; }
 
     public List<string> AppliedResolvers { get; }
 

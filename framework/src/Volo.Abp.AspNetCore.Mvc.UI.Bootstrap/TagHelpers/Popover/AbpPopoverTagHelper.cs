@@ -20,15 +20,15 @@ public class AbpPopoverTagHelper : AbpTagHelper<AbpPopoverTagHelper, AbpPopoverT
 
     public bool? Hoverable { get; set; }
 
-    public string AbpPopover { get; set; }
+    public string? AbpPopover { get; set; }
 
-    public string AbpPopoverRight { get; set; }
+    public string? AbpPopoverRight { get; set; }
 
-    public string AbpPopoverLeft { get; set; }
+    public string? AbpPopoverLeft { get; set; }
 
-    public string AbpPopoverTop { get; set; }
+    public string? AbpPopoverTop { get; set; }
 
-    public string AbpPopoverBottom { get; set; }
+    public string? AbpPopoverBottom { get; set; }
 
     public AbpPopoverTagHelper(AbpPopoverTagHelperService tagHelperService)
         : base(tagHelperService)

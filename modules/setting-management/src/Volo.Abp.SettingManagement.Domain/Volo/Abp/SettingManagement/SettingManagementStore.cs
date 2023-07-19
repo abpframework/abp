@@ -92,7 +92,7 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         string currentName,
         SettingCacheItem currentCacheItem)
     {
-        var settingDefinitions = SettingDefinitionManager.GetAll();
+        var settingDefinitions = await SettingDefinitionManager.GetAllAsync();
         var settingsDictionary = (await SettingRepository.GetListAsync(providerName, providerKey))
             .ToDictionary(s => s.Name, s => s.Value);
 
@@ -176,7 +176,7 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         string providerKey,
         List<string> notCacheKeys)
     {
-        var settingDefinitions = SettingDefinitionManager.GetAll().Where(x => notCacheKeys.Any(k => GetSettingNameFormCacheKeyOrNull(k) == x.Name));
+        var settingDefinitions = (await SettingDefinitionManager.GetAllAsync()).Where(x => notCacheKeys.Any(k => GetSettingNameFormCacheKeyOrNull(k) == x.Name));
 
         var settingsDictionary = (await SettingRepository.GetListAsync(notCacheKeys.Select(GetSettingNameFormCacheKeyOrNull).ToArray(), providerName, providerKey))
             .ToDictionary(s => s.Name, s => s.Value);

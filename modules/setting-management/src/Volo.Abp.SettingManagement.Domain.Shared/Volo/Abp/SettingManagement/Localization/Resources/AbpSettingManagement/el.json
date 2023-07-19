@@ -6,6 +6,7 @@
     "Permission:SettingManagement": "Διαχείριση ρυθμίσεων",
     "Permission:Emailing": "Αποστολή email",
     "Permission:EmailingTest": "Αποστολή δοκιμαστικού email",
+    "Permission:TimeZone": "Ζώνη ώρας",
     "SendTestEmail": "Αποστολή δοκιμαστικού email",
     "SenderEmailAddress": "Διεύθυνση email αποστολέα",
     "TargetEmailAddress": "Διεύθυνση email παραλήπτη",

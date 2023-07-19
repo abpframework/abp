@@ -31,7 +31,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         Options = options.Value;
     }
 
-    public async Task<TenantConfiguration> FindAsync(string name)
+    public async Task<TenantConfiguration?> FindAsync(string name)
     {
         var cacheKey = CreateCacheKey(name);
         var httpContext = HttpContextAccessor?.HttpContext;
@@ -41,14 +41,14 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
             return tenantConfiguration;
         }
 
-        tenantConfiguration = await Cache.GetOrAddAsync(
+        tenantConfiguration = (await Cache.GetOrAddAsync(
             cacheKey,
-            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name)),
+            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name))!,
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = Options.TenantConfigurationCacheAbsoluteExpiration
             }
-        );
+        ))!;
 
         if (httpContext != null)
         {
@@ -58,7 +58,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         return tenantConfiguration;
     }
 
-    public async Task<TenantConfiguration> FindAsync(Guid id)
+    public async Task<TenantConfiguration?> FindAsync(Guid id)
     {
         var cacheKey = CreateCacheKey(id);
         var httpContext = HttpContextAccessor?.HttpContext;
@@ -68,14 +68,14 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
             return tenantConfiguration;
         }
 
-        tenantConfiguration = await Cache.GetOrAddAsync(
+        tenantConfiguration = (await Cache.GetOrAddAsync(
             cacheKey,
-            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id)),
+            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id))!,
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = Options.TenantConfigurationCacheAbsoluteExpiration
             }
-        );
+        ))!;
 
         if (httpContext != null)
         {
@@ -97,12 +97,12 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
 
         tenantConfiguration = Cache.GetOrAdd(
             cacheKey,
-            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name))),
+            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name))!),
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = Options.TenantConfigurationCacheAbsoluteExpiration
             }
-        );
+        )!;
 
         if (httpContext != null)
         {
@@ -124,12 +124,12 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
 
         tenantConfiguration = Cache.GetOrAdd(
             cacheKey,
-            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id))),
+            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id))!),
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = Options.TenantConfigurationCacheAbsoluteExpiration
             }
-        );
+        )!;
 
         if (httpContext != null)
         {
@@ -139,14 +139,14 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         return tenantConfiguration;
     }
 
-    protected virtual TenantConfiguration CreateTenantConfiguration(FindTenantResultDto tenantResultDto)
+    protected virtual TenantConfiguration? CreateTenantConfiguration(FindTenantResultDto tenantResultDto)
     {
         if (!tenantResultDto.Success || tenantResultDto.TenantId == null)
         {
             return null;
         }
 
-        return new TenantConfiguration(tenantResultDto.TenantId.Value, tenantResultDto.Name);
+        return new TenantConfiguration(tenantResultDto.TenantId.Value, tenantResultDto.Name!);
     }
 
     protected virtual string CreateCacheKey(string tenantName)

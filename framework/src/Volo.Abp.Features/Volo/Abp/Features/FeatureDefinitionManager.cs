@@ -31,7 +31,7 @@ public class FeatureDefinitionManager : IFeatureDefinitionManager, ISingletonDep
         return permission;
     }
 
-    public virtual async Task<FeatureDefinition> GetOrNullAsync(string name)
+    public virtual async Task<FeatureDefinition?> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 

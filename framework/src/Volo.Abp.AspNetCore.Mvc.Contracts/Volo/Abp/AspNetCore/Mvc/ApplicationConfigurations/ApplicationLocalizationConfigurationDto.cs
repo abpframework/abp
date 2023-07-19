@@ -28,7 +28,7 @@ public class ApplicationLocalizationConfigurationDto
 
     public CurrentCultureDto CurrentCulture { get; set; }
 
-    public string DefaultResourceName { get; set; }
+    public string? DefaultResourceName { get; set; }
 
     public Dictionary<string, List<NameValue>> LanguagesMap { get; set; }
 
@@ -38,5 +38,8 @@ public class ApplicationLocalizationConfigurationDto
     {
         Values = new Dictionary<string, Dictionary<string, string>>();
         Languages = new List<LanguageInfo>();
+        CurrentCulture = new CurrentCultureDto();
+        LanguagesMap = new Dictionary<string, List<NameValue>>();
+        LanguageFilesMap = new Dictionary<string, List<NameValue>>();
     }
 }

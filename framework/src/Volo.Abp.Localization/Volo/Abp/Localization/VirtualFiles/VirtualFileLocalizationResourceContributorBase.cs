@@ -16,11 +16,11 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     public bool IsDynamic => false;
 
     private readonly string _virtualPath;
-    private IVirtualFileProvider _virtualFileProvider;
-    private Dictionary<string, ILocalizationDictionary> _dictionaries;
+    private IVirtualFileProvider _virtualFileProvider = default!;
+    private Dictionary<string, ILocalizationDictionary>? _dictionaries;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
-    private LocalizationResourceBase _resource;
+    private LocalizationResourceBase _resource = default!;
 
     protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
     {
@@ -33,7 +33,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
         _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
     }
 
-    public virtual LocalizedString GetOrNull(string cultureName, string name)
+    public virtual LocalizedString? GetOrNull(string cultureName, string name)
     {
         return GetDictionaries().GetOrDefault(cultureName)?.GetOrNull(name);
     }
@@ -118,8 +118,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     protected abstract bool CanParseFile(IFileInfo file);
 
-    [CanBeNull]
-    protected virtual ILocalizationDictionary CreateDictionaryFromFile(IFileInfo file)
+    protected virtual ILocalizationDictionary? CreateDictionaryFromFile(IFileInfo file)
     {
         using (var stream = file.CreateReadStream())
         {
@@ -127,6 +126,5 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
         }
     }
 
-    [CanBeNull] 
-    protected abstract ILocalizationDictionary CreateDictionaryFromFileContent(string fileContent);
+    protected abstract ILocalizationDictionary? CreateDictionaryFromFileContent(string fileContent);
 }

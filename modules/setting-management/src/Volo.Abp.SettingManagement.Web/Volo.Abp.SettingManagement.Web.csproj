@@ -41,8 +41,4 @@
     <Content Remove="wwwroot\**\*.css" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\SettingManagement\Components" />
-  </ItemGroup>
-
 </Project>

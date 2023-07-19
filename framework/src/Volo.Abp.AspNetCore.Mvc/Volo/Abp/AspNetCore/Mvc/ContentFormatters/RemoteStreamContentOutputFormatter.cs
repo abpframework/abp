@@ -13,14 +13,14 @@ public class RemoteStreamContentOutputFormatter : OutputFormatter
         SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("*/*"));
     }
 
-    protected override bool CanWriteType(Type type)
+    protected override bool CanWriteType(Type? type)
     {
         return typeof(IRemoteStreamContent).IsAssignableFrom(type);
     }
 
     public async override Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
     {
-        var remoteStream = (IRemoteStreamContent)context.Object;
+        var remoteStream = (IRemoteStreamContent?)context.Object;
 
         if (remoteStream != null)
         {

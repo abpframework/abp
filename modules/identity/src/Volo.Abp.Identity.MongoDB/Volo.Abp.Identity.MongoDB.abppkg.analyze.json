@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.MongoDB",
-  "hash": "a42f1167e4a0f3aa2f9ca919442cadd2",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.MongoDB",
@@ -69,6 +69,30 @@
       "connectionStringName": "AbpIdentity",
       "databaseCollections": [
         {
+          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
+          "contentType": "databaseCollection",
+          "name": "AbpLinkUsers",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserDelegation",
+          "contentType": "databaseCollection",
+          "name": "AbpUserDelegations",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
+          "contentType": "databaseCollection",
+          "name": "AbpClaimTypes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
+          "contentType": "databaseCollection",
+          "name": "AbpOrganizationUnits",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
           "contentType": "databaseCollection",
           "name": "AbpSecurityLogs",
@@ -81,27 +105,9 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
-          "contentType": "databaseCollection",
-          "name": "AbpOrganizationUnits",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
-          "contentType": "databaseCollection",
-          "name": "AbpClaimTypes",
-          "summary": null
-        },
-        {
           "entityFullName": "Volo.Abp.Identity.IdentityUser",
           "contentType": "databaseCollection",
           "name": "AbpUsers",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
-          "contentType": "databaseCollection",
-          "name": "AbpLinkUsers",
           "summary": null
         }
       ],

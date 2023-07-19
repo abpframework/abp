@@ -46,6 +46,34 @@ public class SuiteAppSettingsService : ITransientDependency
         
         return Convert.ToInt32(url.Split(":").Last());
     }
+    
+    public int GetSuitePort()
+    {
+        return GetSuitePort(GetCurrentSuiteVersion());
+    }
+    
+    public int GetSuitePort(string version)
+    {
+        var filePath = GetFilePathOrNull(version);
+
+        if (filePath == null)
+        {
+            return DefaultPort;
+        }
+
+        var content = File.ReadAllText(filePath);
+
+        var contentAsJson = JObject.Parse(content);
+
+        var url = contentAsJson["AbpSuite"]?["ApplicationUrl"]?.ToString();
+
+        if (url == null)
+        {
+            return DefaultPort;
+        }
+        
+        return Convert.ToInt32(url.Split(":").Last());
+    }
 
     private string GetFilePathOrNull(string version)
     {

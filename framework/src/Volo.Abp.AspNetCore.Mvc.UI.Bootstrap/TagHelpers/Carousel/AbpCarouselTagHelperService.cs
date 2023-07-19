@@ -138,7 +138,7 @@ public class AbpCarouselTagHelperService : AbpTagHelperService<AbpCarouselTagHel
     {
         if (!itemList.Any(it => it.Active) && itemList.Count > 0)
         {
-            itemList.FirstOrDefault().Active = true;
+            itemList.FirstOrDefault()!.Active = true;
         }
     }
 

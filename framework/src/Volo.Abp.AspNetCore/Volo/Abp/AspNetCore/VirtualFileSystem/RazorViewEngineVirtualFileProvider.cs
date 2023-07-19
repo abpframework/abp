@@ -16,7 +16,7 @@ public class RazorViewEngineVirtualFileProvider : IFileProvider
     {
         _serviceProviderAccessor = serviceProviderAccessor;
         _fileProvider = new Lazy<IFileProvider>(
-            () => serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>(),
+            () => serviceProviderAccessor.Value!.GetRequiredService<IVirtualFileProvider>(),
             true
         );
     }

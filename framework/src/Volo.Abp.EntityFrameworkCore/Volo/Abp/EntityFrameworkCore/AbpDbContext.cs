@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -181,6 +182,20 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
         catch (DbUpdateConcurrencyException ex)
         {
+            if (ex.Entries.Count > 0)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine(ex.Entries.Count > 1
+                    ? "There are some entries which are not saved due to concurrency exception:"
+                    : "There is an entry which is not saved due to concurrency exception:");
+                foreach (var entry in ex.Entries)
+                {
+                    sb.AppendLine(entry.ToString());
+                }
+
+                Logger.LogWarning(sb.ToString());
+            }
+
             throw new AbpDbConcurrencyException(ex.Message, ex);
         }
         finally
@@ -611,7 +626,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             var filterExpression = CreateFilterExpression<TEntity>();
             if (filterExpression != null)
             {
-                modelBuilder.Entity<TEntity>().HasQueryFilter(filterExpression);
+                modelBuilder.Entity<TEntity>().HasAbpQueryFilter(filterExpression);
             }
         }
     }
@@ -690,44 +705,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
         {
             Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
-            expression = expression == null ? multiTenantFilter : CombineExpressions(expression, multiTenantFilter);
+            expression = expression == null ? multiTenantFilter : QueryFilterExpressionHelper.CombineExpressions(expression, multiTenantFilter);
         }
 
         return expression;
-    }
-
-    protected virtual Expression<Func<T, bool>> CombineExpressions<T>(Expression<Func<T, bool>> expression1, Expression<Func<T, bool>> expression2)
-    {
-        var parameter = Expression.Parameter(typeof(T));
-
-        var leftVisitor = new ReplaceExpressionVisitor(expression1.Parameters[0], parameter);
-        var left = leftVisitor.Visit(expression1.Body);
-
-        var rightVisitor = new ReplaceExpressionVisitor(expression2.Parameters[0], parameter);
-        var right = rightVisitor.Visit(expression2.Body);
-
-        return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left, right), parameter);
-    }
-
-    class ReplaceExpressionVisitor : ExpressionVisitor
-    {
-        private readonly Expression _oldValue;
-        private readonly Expression _newValue;
-
-        public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
-        {
-            _oldValue = oldValue;
-            _newValue = newValue;
-        }
-
-        public override Expression Visit(Expression node)
-        {
-            if (node == _oldValue)
-            {
-                return _newValue;
-            }
-
-            return base.Visit(node);
-        }
     }
 }

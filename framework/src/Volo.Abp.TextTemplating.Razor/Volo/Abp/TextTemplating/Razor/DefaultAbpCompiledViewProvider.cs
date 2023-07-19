@@ -45,6 +45,11 @@ public class DefaultAbpCompiledViewProvider : IAbpCompiledViewProvider, ITransie
         }
 
         var templateContent = await _templateContentProvider.GetContentOrNullAsync(templateDefinition);
+        if (templateContent == null)
+        {
+            throw new AbpException($"Razor template content of {templateDefinition.Name} is null!");
+        }
+
         return CachedAssembles.GetOrAdd((templateDefinition.Name + templateContent).ToMd5(), await CreateAssembly(templateContent));
     }
 

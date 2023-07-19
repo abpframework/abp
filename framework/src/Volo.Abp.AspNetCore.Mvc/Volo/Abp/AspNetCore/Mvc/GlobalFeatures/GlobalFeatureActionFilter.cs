@@ -23,8 +23,8 @@ public class GlobalFeatureActionFilter : IAsyncActionFilter, ITransientDependenc
 
         if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.Controller.GetType(), out var attribute))
         {
-            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
-            logger.LogWarning($"The '{context.Controller.GetType().FullName}' controller needs to enable '{attribute.Name}' feature.");
+            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance)!;
+            logger.LogWarning($"The '{context.Controller.GetType().FullName}' controller needs to enable '{attribute!.Name}' feature.");
             context.Result = new NotFoundResult();
             return;
         }

@@ -10,11 +10,11 @@ public class TenantConnectionStringUpdatedEto : EtoBase
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string ConnectionStringName { get; set; }
+    public string ConnectionStringName { get; set; } = default!;
 
-    public string OldValue { get; set; }
+    public string? OldValue { get; set; }
 
-    public string NewValue { get; set; }
+    public string? NewValue { get; set; }
 }

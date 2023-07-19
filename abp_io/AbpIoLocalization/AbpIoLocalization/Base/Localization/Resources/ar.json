@@ -137,6 +137,7 @@
     "Address": "العنوان",
     "Homepage": "الصفحة الرئيسية",
     "Year": "السنة",
+    "Year_Plural": "سنوات",
     "Copyright": "حقوق النشر © <a href=\"{0}\" target=\"_blank\">{1}</a>",
     "DomainDrivenDesign": "التصميم المُقاد بالنطاق DDD",
     "CrossCuttingConcerns": "اهتمامات مشتركة",

@@ -23,11 +23,11 @@ public class EntityPropertyChangeInfo
     /// </summary>
     public static int MaxPropertyTypeFullNameLength = 192;
 
-    public virtual string NewValue { get; set; }
+    public virtual string? NewValue { get; set; }
 
-    public virtual string OriginalValue { get; set; }
+    public virtual string? OriginalValue { get; set; }
 
-    public virtual string PropertyName { get; set; }
+    public virtual string PropertyName { get; set; } = default!;
 
-    public virtual string PropertyTypeFullName { get; set; }
+    public virtual string PropertyTypeFullName { get; set; } = default!;
 }

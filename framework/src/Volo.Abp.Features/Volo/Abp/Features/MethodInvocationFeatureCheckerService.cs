@@ -47,7 +47,7 @@ public class MethodInvocationFeatureCheckerService : IMethodInvocationFeatureChe
         {
             attributes = attributes
                 .Union(
-                    methodInfo.DeclaringType
+                    methodInfo.DeclaringType!
                         .GetCustomAttributes(true)
                         .OfType<RequiresFeatureAttribute>()
                 );

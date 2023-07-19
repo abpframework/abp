@@ -11,7 +11,7 @@ public static class AbpWebAssemblyApplicationCreationOptionsAutofacExtensions
 {
     public static void UseAutofac(
         [NotNull] this AbpWebAssemblyApplicationCreationOptions options,
-        [CanBeNull] Action<ContainerBuilder> configure = null)
+        Action<ContainerBuilder>? configure = null)
     {
         options.HostBuilder.Services.AddAutofacServiceProviderFactory();
         options.HostBuilder.ConfigureContainer(

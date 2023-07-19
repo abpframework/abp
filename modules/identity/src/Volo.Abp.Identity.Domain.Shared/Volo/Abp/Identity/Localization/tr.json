@@ -113,6 +113,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Oturum açmak için telefon numarası gerekli",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Oturum açmak için onaylanmış bir telefon numarasının gerekli olup olmadığı.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Kullanıcı adının, kullanıcının kendisi tarafından güncellenebilirliği.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "E-posta alanının, kullanıcının kendisi tarafından güncellenebilirliği"
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "E-posta alanının, kullanıcının kendisi tarafından güncellenebilirliği",
+    "Details": "Detaylar",
+    "CreatedBy": "Oluşturan",
+    "ModifiedBy": "Düzenleyen",
+    "ModificationTime": "Düzenleme zamanı",
+    "PasswordUpdateTime": "Şifre güncelleme zamanı",
+    "LockoutEndTime": "Kilitlenme bitiş zamanı",
+    "FailedAccessCount": "Başarısız giriş denemesi sayısı"
   }
 }

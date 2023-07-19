@@ -155,6 +155,6 @@ public class AbpRemoteStreamContentModelBinder<TRemoteStreamContent> : IModelBin
             return new List<T>();
         }
 
-        return (ICollection<T>)Activator.CreateInstance(modelType);
+        return (ICollection<T>)Activator.CreateInstance(modelType)!;
     }
 }
