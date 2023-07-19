@@ -6,8 +6,6 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters;
 
 public class AbpNullableStringToGuidConverter : JsonConverter<Guid?>
 {
-    private JsonSerializerOptions _writeJsonSerializerOptions;
-
     public override Guid? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.String)
@@ -33,9 +31,13 @@ public class AbpNullableStringToGuidConverter : JsonConverter<Guid?>
 
     public override void Write(Utf8JsonWriter writer, Guid? value, JsonSerializerOptions options)
     {
-        _writeJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, this);
-        var entityConverter = (JsonConverter<Guid?>)_writeJsonSerializerOptions.GetConverter(typeof(Guid?));
-
-        entityConverter.Write(writer, value, _writeJsonSerializerOptions);
+        if (value == null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value);
+        }
     }
 }
