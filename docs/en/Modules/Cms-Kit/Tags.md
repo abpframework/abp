@@ -54,7 +54,7 @@ The tag system provides a tag [widget](../../UI/AspNetCore/Widgets.md) to displa
 
 ## The Popular Tags Widget
 
-The tag system provides a popular tags [widget](../../UI/AspNetCore/Widgets.md) to display popular tags of a resource that was configured for tagging. You can simply place the widget on a page like below:
+The tag system provides a popular tags [widget](../../UI/AspNetCore/Widgets.md) to display popular tags of a resource that was configured for tagging. You can simply place the widget on a page as below:
 
 ```csharp
 @await Component.InvokeAsync(typeof(PopularTagsViewComponent), new
