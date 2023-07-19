@@ -11,8 +11,6 @@ public class AbpStringToEnumConverter<T> : JsonConverter<T>
 
     private JsonSerializerOptions? _readJsonSerializerOptions;
 
-    private JsonSerializerOptions? _writeJsonSerializerOptions;
-
     public AbpStringToEnumConverter()
         : this(namingPolicy: null, allowIntegerValues: true)
     {
@@ -41,11 +39,7 @@ public class AbpStringToEnumConverter<T> : JsonConverter<T>
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
-        _writeJsonSerializerOptions ??= JsonSerializerOptionsHelper.Create(options, x =>
-            x == this ||
-            x.GetType() == typeof(AbpStringToEnumFactory));
-
-        JsonSerializer.Serialize(writer, value, _writeJsonSerializerOptions);
+        JsonSerializer.Serialize(writer, value);
     }
 
     public override T ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

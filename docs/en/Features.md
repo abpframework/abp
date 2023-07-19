@@ -32,7 +32,7 @@ public class ReportingAppService : ApplicationService, IReportingAppService
 * `RequiresFeature(...)` simply gets a feature name to check if it is enabled or not. If not enabled, an authorization [exception](Exception-Handling.md) is thrown and a proper response is returned to the client side.
 * `[RequiresFeature]` can be used for a **method** or a **class**. When you use it for a class, all the methods of that class require the given feature.
 * `RequiresFeature` may get multiple feature names, like `[RequiresFeature("Feature1", "Feature2")]`. In this case ABP checks if any of the features enabled. Use `RequiresAll` option, like `[RequiresFeature("Feature1", "Feature2", RequiresAll = true)]` to force to check all of the features to be enabled.
-* Multiple usage of `[RequiresFeature]` attribute is supported for a method or class. ABP check checks all of them in that case.
+* Multiple usage of `[RequiresFeature]` attribute is supported for a method or class. ABP checks all of them in that case.
 
 > Feature name can be any arbitrary string. It should be unique for a feature.
 
