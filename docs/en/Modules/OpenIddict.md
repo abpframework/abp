@@ -108,7 +108,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 These services contain:
 
-- `AddAudiances()` for resource servers.
+- `AddAudiences()` for resource servers.
 - `SetIssuer()` URI that is used to determine the actual location of the OAuth 2.0/OpenID Connect configuration document when using provider discovery.
 - `SetConfiguration()` to configure `OpenIdConnectConfiguration`.
 - `UseIntrospection()` to use introspection instead of local/direct validation.

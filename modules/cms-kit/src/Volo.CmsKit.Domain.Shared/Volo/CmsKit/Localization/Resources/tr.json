@@ -214,6 +214,7 @@
     "Feature:TagEnableDescription": "Cmskit etiket sistemi",
     "DeleteBlogPostMessage": "Blog silinecek. Emin misiniz?",
     "CaptchaCode": "Captcha kodu",
-    "CommentTextRequired": "Yorum zorunlu"
+    "CommentTextRequired": "Yorum zorunlu",
+    "PopularTags": "Popüler Etiketler"
   }
 }
