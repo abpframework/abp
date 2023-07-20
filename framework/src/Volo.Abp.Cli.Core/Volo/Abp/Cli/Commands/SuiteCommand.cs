@@ -454,7 +454,11 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
 
         if (targetSolution == null)
         {
-            CmdHelper.RunCmd("abp-suite");
+            var args = Environment.GetCommandLineArgs();
+            var suiteArgs = args.Skip(2).JoinAsString(" ");
+            var command = string.Concat("abp-suite ", suiteArgs);
+
+            CmdHelper.RunCmd(command);
         }
         else
         {
