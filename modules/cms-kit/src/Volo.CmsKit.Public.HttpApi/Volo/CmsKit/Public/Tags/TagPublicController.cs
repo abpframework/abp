@@ -30,4 +30,11 @@ public class TagPublicController : CmsKitPublicControllerBase, ITagAppService
     {
         return TagAppService.GetAllRelatedTagsAsync(entityType, entityId);
     }
+
+    [HttpGet]
+    [Route("popular/{entityType}/{maxCount:int}")]
+    public Task<List<PopularTagDto>> GetPopularTagsAsync(string entityType, int maxCount)
+    {
+        return TagAppService.GetPopularTagsAsync(entityType, maxCount);
+    }
 }

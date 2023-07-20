@@ -218,6 +218,7 @@
     "CaptchaCodeErrorMessage" : "The answer you entered for the CAPTCHA was not correct. Please try again",
     "CaptchaCodeMissingMessage": "The captcha code is missing!",
     "UnAllowedExternalUrlMessage": "You included an unallowed external URL. Please try again without the external URL.",
-    "URL": "URL"
+    "URL": "URL",
+    "PopularTags": "Popular Tags"
   }
 }
