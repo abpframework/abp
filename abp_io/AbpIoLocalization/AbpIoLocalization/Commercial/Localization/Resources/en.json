@@ -928,7 +928,7 @@
     "IntegrateToYourKubernetesCluster_Description3": "<span class=\"text-info\">Intercept any service</span> in that cluster, so all the <span class=\"text-info\">traffic to the intercepted service is automatically redirected to your service</span>that is running in your local machine. When your service needs to use any service in Kubernetes, the traffic is redirected back to the cluster, just like your local service is running inside the Kubernetes.",
     "GetInformed": "Get Informed",
     "Studio_GetInformed_Description1": "Leave your contact information to <span class=\"text-info\">get informed</span> and <span class=\"text-info\">try it first</span> when ABP Studio has been launched.",
-    "Studio_GetInformed_Description2": "Planned preview release date: <br/>Q3 of 2023.",
+    "Studio_GetInformed_Description2": "Planned preview release date: Q3 of 2023.",
     "ThankYou!": "Thank you!",
     "SendBetaRequest": "Send Beta Request",
     "YouJoinedTheBetaTesterProgram": "You joined the ABP Studio beta tester program.",
