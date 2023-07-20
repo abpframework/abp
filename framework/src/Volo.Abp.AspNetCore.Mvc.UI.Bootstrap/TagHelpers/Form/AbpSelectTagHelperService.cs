@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Localization;
@@ -37,7 +38,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         _abpEnumLocalizer = abpEnumLocalizer;
     }
 
-    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var childContent = await output.GetChildContentAsync();
 
@@ -73,8 +74,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         var validation = await GetValidationAsHtmlAsync(context, output, selectTag);
         var infoText = GetInfoAsHtml(context, output, selectTag);
 
-        return TagHelper.FloatingLabel ? selectAsHtml + Environment.NewLine + label + Environment.NewLine + infoText + Environment.NewLine + validation :
-                                         label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
+        return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
     }
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
@@ -156,15 +156,23 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         }
 
         var selectItemsAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<SelectItems>();
-        return selectItemsAttribute != null
-            ? GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer)
-            : throw new Exception("No items provided for select attribute.");
+        if (selectItemsAttribute != null)
+        {
+            return GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer);
+        }
+
+        throw new Exception("No items provided for select attribute.");
     }
 
     private bool IsEnum()
     {
         var value = TagHelper.AspFor.Model;
-        return (value != null && value.GetType().IsEnum) || TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
+        if (value != null && value.GetType().IsEnum)
+        {
+            return true;
+        }
+
+        return TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
@@ -288,7 +296,12 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     {
         var selectItems = selectItemsAttribute.GetItems(explorer)?.ToList();
 
-        return selectItems ?? new List<SelectListItem>();
+        if (selectItems == null)
+        {
+            return new List<SelectListItem>();
+        }
+
+        return selectItems;
     }
 
     protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output)
@@ -324,13 +337,17 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             TagHelper.Size = attribute.Size;
         }
 
-        return TagHelper.Size switch
+        switch (TagHelper.Size)
         {
-            AbpFormControlSize.Small => "form-select-sm",
-            AbpFormControlSize.Medium => "form-select-md",
-            AbpFormControlSize.Large => "form-select-lg",
-            _ => "",
-        };
+            case AbpFormControlSize.Small:
+                return "form-select-sm";
+            case AbpFormControlSize.Medium:
+                return "form-select-md";
+            case AbpFormControlSize.Large:
+                return "form-select-lg";
+        }
+
+        return "";
     }
 
     protected virtual TagHelperAttributeList GetInputAttributes(TagHelperContext context, TagHelperOutput output)
@@ -359,7 +376,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         foreach (var tagHelperAttribute in tagHelperAttributes)
         {
-            var nameWithoutPrefix = tagHelperAttribute.Name[groupPrefix.Length..];
+            var nameWithoutPrefix = tagHelperAttribute.Name.Substring(groupPrefix.Length);
             var newAttritube = new TagHelperAttribute(nameWithoutPrefix, tagHelperAttribute.Value);
             output.Attributes.Add(newAttritube);
         }
