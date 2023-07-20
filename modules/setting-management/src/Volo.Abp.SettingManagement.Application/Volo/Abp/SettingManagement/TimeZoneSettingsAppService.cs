@@ -20,8 +20,12 @@ public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITime
 
     public virtual async Task<string> GetAsync()
     {
-        var timezone = await SettingProvider.GetOrNullAsync(TimingSettingNames.TimeZone);
-        return timezone ?? "UTC";
+        if (CurrentTenant.GetMultiTenancySide() == MultiTenancySides.Host)
+        {
+            return await SettingManager.GetOrNullGlobalAsync(TimingSettingNames.TimeZone);
+        }
+
+        return await SettingManager.GetOrNullForCurrentTenantAsync(TimingSettingNames.TimeZone);
     }
 
     public virtual Task<List<NameValue>> GetTimezonesAsync()
