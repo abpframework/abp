@@ -4,7 +4,8 @@ import { InternetConnectionService } from '../services/internet-connection-servi
 
 describe('InternetConnectionService', () => {
   let service: InternetConnectionService;
-
+  const internetConnectionStatus = window.navigator.onLine
+  
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(InternetConnectionService);
@@ -14,15 +15,13 @@ describe('InternetConnectionService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('#networkStatus should return real value (true | false)', () => {
-    expect(typeof service.networkStatus()).toEqual('boolean')
-    expect(typeof !service.networkStatus()).toEqual('boolean')
+  it('networkStatus value should be same with current internetConnectionStatus', () => {
+    expect(service.networkStatus()).toEqual(internetConnectionStatus)
   });
 
-  it('#networkStatus$ should return real value (true | false)', () => {
+  it('networkStatus$ return value should be with the current internetConnectionStatus', () => {
     service.networkStatus$.subscribe(val=>{
-      expect(typeof val).toEqual('boolean')
-      expect(typeof !val).toEqual('boolean')
+      expect(val).toEqual(internetConnectionStatus)
     })
   });
 });

@@ -1,4 +1,4 @@
-import { Component, inject  } from '@angular/core';
+import { Component, computed, inject  } from '@angular/core';
 import { NgIf } from '@angular/common'
 import { InternetConnectionService , LocalizationModule } from '@abp/ng.core';
 
@@ -43,5 +43,5 @@ import { InternetConnectionService , LocalizationModule } from '@abp/ng.core';
 })
 export class InternetConnectionStatusComponent{
   internetConnectionService = inject(InternetConnectionService);
-  isOnline = this.internetConnectionService.networkStatus
+  isOnline = computed(() => this.internetConnectionService.networkStatus())
 }
