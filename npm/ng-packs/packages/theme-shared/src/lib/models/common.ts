@@ -20,9 +20,7 @@ export interface HttpErrorConfig {
     hideCloseIcon?: boolean;
   };
 }
-
-export type HttpErrorHandler = (httpError: HttpErrorResponse) => Observable<any>;
-
+export type HttpErrorHandler<T = any> = (httpError: HttpErrorResponse) => Observable<T>;
 export type LocaleDirection = 'ltr' | 'rtl';
 
 export interface CustomHttpErrorHandlerService {
