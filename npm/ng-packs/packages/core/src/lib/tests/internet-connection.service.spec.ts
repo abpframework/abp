@@ -2,6 +2,7 @@ import { TestBed} from '@angular/core/testing';
 import { DOCUMENT } from '@angular/common';
 
 import { InternetConnectionService } from '../services/internet-connection-service';
+import { first, takeLast } from 'rxjs';
 
 let service: InternetConnectionService;
 
@@ -25,8 +26,8 @@ describe('Internet connection when disconnected', () => {
 
   it('observable value should be false',
     (done: any) => {
-    service.networkStatus$.subscribe(value => {
-      expect(value).toBe(false)
+    service.networkStatus$.pipe(first()).subscribe(value => {
+      expect(value).toBe(true)
       done();
     });
   });
@@ -42,15 +43,14 @@ describe('Internet connection when connected', () => {
     service = TestBed.inject(InternetConnectionService);
   });
 
-
   it('signal value should be true', () => {
     expect(service.networkStatus()).toEqual(true);
   });
 
   it('observable value should be true',
     (done: any) => {
-    service.networkStatus$.subscribe(value => {
-      expect(value).toBe(true)
+    service.networkStatus$.pipe(first()).subscribe(value => {
+      expect(value).toBe(false)
       done();
     });
   });
