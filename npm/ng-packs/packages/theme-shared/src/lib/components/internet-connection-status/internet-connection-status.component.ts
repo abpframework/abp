@@ -43,5 +43,5 @@ import { InternetConnectionService , LocalizationModule } from '@abp/ng.core';
 })
 export class InternetConnectionStatusComponent{
   internetConnectionService = inject(InternetConnectionService);
-  isOnline = computed(() => this.internetConnectionService.networkStatus())
+  isOnline = this.internetConnectionService.networkStatus
 }

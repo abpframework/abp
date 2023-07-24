@@ -1,27 +1,57 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed} from '@angular/core/testing';
+import { DOCUMENT } from '@angular/common';
 
 import { InternetConnectionService } from '../services/internet-connection-service';
 
-describe('InternetConnectionService', () => {
-  let service: InternetConnectionService;
-  const internetConnectionStatus = window.navigator.onLine
+let service: InternetConnectionService;
+
+describe('Internet connection when disconnected', () => {
+  let mockDocument = { defaultView: {navigator: {onLine: false}, addEventListener: jest.fn()} }
   
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers:[{provide:DOCUMENT, useValue: mockDocument}]
+    })
     service = TestBed.inject(InternetConnectionService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('document should be created', () => {
+    expect(service.document).toEqual(mockDocument);
   });
 
-  it('networkStatus value should be same with current internetConnectionStatus', () => {
-    expect(service.networkStatus()).toEqual(internetConnectionStatus)
+  it('signal value should be false', () => {
+    expect(service.networkStatus()).toEqual(false);
   });
 
-  it('networkStatus$ return value should be with the current internetConnectionStatus', () => {
-    service.networkStatus$.subscribe(val=>{
-      expect(val).toEqual(internetConnectionStatus)
+  it('observable value should be false',
+    (done: any) => {
+    service.networkStatus$.subscribe(value => {
+      expect(value).toBe(false)
+      done();
+    });
+  });
+});
+
+describe('Internet connection when connected', () => {
+  let mockDocument = { defaultView: {navigator: {onLine: true}, addEventListener: jest.fn()} }
+  
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers:[{provide:DOCUMENT, useValue: mockDocument}]
     })
+    service = TestBed.inject(InternetConnectionService);
+  });
+
+
+  it('signal value should be true', () => {
+    expect(service.networkStatus()).toEqual(true);
+  });
+
+  it('observable value should be true',
+    (done: any) => {
+    service.networkStatus$.subscribe(value => {
+      expect(value).toBe(true)
+      done();
+    });
   });
 });

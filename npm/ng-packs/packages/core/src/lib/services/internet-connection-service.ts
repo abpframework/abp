@@ -6,12 +6,13 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class InternetConnectionService{
-  protected readonly window = inject(DOCUMENT).defaultView;
-  protected readonly navigator = this.window.navigator;
+  readonly document = inject(DOCUMENT)
+  readonly window = this.document.defaultView;
+  readonly navigator = this.window.navigator;
 
-  private status$ = new BehaviorSubject<boolean>(navigator.onLine)
+  private status$ = new BehaviorSubject<boolean>(this.navigator.onLine)
 
-  private status = signal(navigator.onLine);
+  private status = signal(this.navigator.onLine);
 
   networkStatus = computed(() => this.status())
   
