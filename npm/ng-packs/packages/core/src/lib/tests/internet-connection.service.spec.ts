@@ -27,7 +27,7 @@ describe('Internet connection when disconnected', () => {
   it('observable value should be false',
     (done: any) => {
     service.networkStatus$.pipe(first()).subscribe(value => {
-      expect(value).toBe(true)
+      expect(value).toBe(false)
       done();
     });
   });
@@ -50,7 +50,7 @@ describe('Internet connection when connected', () => {
   it('observable value should be true',
     (done: any) => {
     service.networkStatus$.pipe(first()).subscribe(value => {
-      expect(value).toBe(false)
+      expect(value).toBe(true)
       done();
     });
   });
