@@ -7,7 +7,7 @@
     "nx": "nx",
     "start": "nx serve",
     "build": "ng build",
-    "build:all": "nx run-many --target=build --all --exclude=dev-app,schematics --prod  ",
+    "build:all": "nx run-many --target=build --all --exclude=dev-app,schematics --prod &&  npm run build:schematics",
     "test": "ng test --detect-open-handles=true --run-in-band=true --watch-all=true",
     "test:all": "nx run-many --target=test --all",
     "lint-staged": "lint-staged",
