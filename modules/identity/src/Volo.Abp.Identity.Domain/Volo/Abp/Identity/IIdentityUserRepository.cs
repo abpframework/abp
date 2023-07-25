@@ -132,9 +132,15 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         CancellationToken cancellationToken = default
     );
 
-    Task UpdateRolesAsync(
+    Task UpdateRoleAsync(
         Guid sourceRoleId,
         Guid? targetRoleId,
+        CancellationToken cancellationToken = default
+    );
+
+    Task UpdateOrganizationAsync(
+        Guid sourceOrganizationId,
+        Guid? targetOrganizationId,
         CancellationToken cancellationToken = default
     );
 }
