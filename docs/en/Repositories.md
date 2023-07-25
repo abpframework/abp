@@ -215,7 +215,7 @@ Where as the `IReadOnlyBasicRepository<Tentity, TKey>` provides the following me
 
 They can all be seen as below:
 
-![generic-repositories](\images\generic-repositories.png)
+![generic-repositories](images/generic-repositories.png)
 
 ### Generic Repository without a Primary Key
 
