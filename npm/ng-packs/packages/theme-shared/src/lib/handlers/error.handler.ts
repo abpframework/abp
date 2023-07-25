@@ -1,8 +1,9 @@
-import {
+ import {
   AuthService,
   HttpErrorReporterService,
   LocalizationParam,
   RouterEvents,
+  SessionStateService,
 } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
@@ -83,7 +84,9 @@ export class ErrorHandler {
   protected cfRes: ComponentFactoryResolver;
   protected rendererFactory: RendererFactory2;
   protected httpErrorConfig: HttpErrorConfig;
+  protected sessionStateService: SessionStateService;
   private authService: AuthService;
+  
 
   constructor(protected injector: Injector) {
     this.httpErrorReporter = injector.get(HttpErrorReporterService);
@@ -93,6 +96,7 @@ export class ErrorHandler {
     this.rendererFactory = injector.get(RendererFactory2);
     this.httpErrorConfig = injector.get('HTTP_ERROR_CONFIG');
     this.authService = this.injector.get(AuthService);
+    this.sessionStateService = this.injector.get(SessionStateService);
 
     this.listenToRestError();
     this.listenToRouterError();
@@ -142,6 +146,7 @@ export class ErrorHandler {
     };
 
     if (err instanceof HttpErrorResponse && err.headers.get('Abp-Tenant-Resolve-Error')) {
+      this.sessionStateService.setTenant(null)
       this.authService.logout().subscribe();
       return;
     }
