@@ -2,15 +2,18 @@ import { TestBed} from '@angular/core/testing';
 import { DOCUMENT } from '@angular/common';
 
 import { InternetConnectionService } from '../services/internet-connection-service';
-import { BehaviorSubject, first, of, takeLast } from 'rxjs';
-import { computed, signal } from '@angular/core';
+import { first } from 'rxjs';
 
 let service: InternetConnectionService;
 
 describe('Internet connection when disconnected', () => {
-  let mockDocument = { defaultView: {navigator: {onLine: false}, addEventListener: jest.fn()} }
-  
-  beforeEach(() => {
+  const events = {};
+  const addEventListener =  jest.fn((event, callback) => {
+    events[event] = callback;
+  });
+  const mockDocument = { defaultView: {navigator: {onLine: false}, addEventListener } }
+
+  beforeAll(() => {
     TestBed.configureTestingModule({
       providers:[{provide:DOCUMENT, useValue: mockDocument}]
     })
@@ -32,11 +35,21 @@ describe('Internet connection when disconnected', () => {
       done();
     });
   });
+
+  test.each(['offline',"online"])('should addEventListener for "%i",event',(v)=>{
+    expect(events[v]).toBeTruthy()
+  })
+
+  test.each([['offline',false],["online",true]])('should called %i, then value must be %i',(eventName,value)=>{
+    events[eventName]()
+    expect(service.networkStatus()).toEqual(value);
+  })
+
 });
 
 describe('Internet connection when connected', () => {
-  let mockDocument = { defaultView: {navigator: {onLine: true}, addEventListener: jest.fn()} }
-  
+  const mockDocument = { defaultView: {navigator: {onLine: true}, addEventListener: jest.fn()} }
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers:[{provide:DOCUMENT, useValue: mockDocument}]
@@ -58,9 +71,9 @@ describe('Internet connection when connected', () => {
 });
 
 describe('when connection value changes', () => {
-  let mockDocument = { defaultView: {navigator: {onLine: true}, addEventListener: (eventName,cb)=>{
+  const mockDocument = { defaultView: {navigator: {onLine: true}, addEventListener: (eventName,cb)=>{
     window.addEventListener(eventName,cb)
-  }, dispatchEvent: function(event){
+  }, dispatchEvent: function(){
     this.navigator.onLine = !this.navigator.onLine
   }}}
 
@@ -70,7 +83,7 @@ describe('when connection value changes', () => {
     })
     service = TestBed.inject(InternetConnectionService);
   });
-  
+
   it('check is signal value changes', () => {
     expect(service.networkStatus()).toEqual(true);
     const event = new Event("offline");
