@@ -12,7 +12,6 @@ describe('Internet connection when disconnected', () => {
     events[event] = callback;
   });
   const mockDocument = { defaultView: {navigator: {onLine: false}, addEventListener } }
-
   beforeAll(() => {
     TestBed.configureTestingModule({
       providers:[{provide:DOCUMENT, useValue: mockDocument}]
@@ -36,74 +35,66 @@ describe('Internet connection when disconnected', () => {
     });
   });
 
-  test.each(['offline',"online"])('should addEventListener for "%i",event',(v)=>{
+  test.each(['offline','online'])('should addEventListener for %p, event',(v)=>{
     expect(events[v]).toBeTruthy()
   })
 
-  test.each([['offline',false],["online",true]])('should called %i, then value must be %i',(eventName,value)=>{
+  test.each([['offline',false],["online",true]])('when %p called ,then signal value must be %p',(eventName,value)=>{
     events[eventName]()
     expect(service.networkStatus()).toEqual(value);
   })
 
+  test.each([['offline',false],["online",true]])('when %p called,then observable must return %p',(eventName,value)=>{
+    events[eventName]()
+    service.networkStatus$.subscribe(val=>{
+      expect(val).toEqual(value)
+    })
+  })
 });
 
-describe('Internet connection when connected', () => {
-  const mockDocument = { defaultView: {navigator: {onLine: true}, addEventListener: jest.fn()} }
-
-  beforeEach(() => {
+describe('when connection value changes for signals', () => {
+  const events = {};
+  const addEventListener =  jest.fn((event, callback) => {
+    events[event] = callback;
+  });
+  const mockDocument = { defaultView: {navigator: {onLine: false}, addEventListener } }
+  beforeAll(() => {
     TestBed.configureTestingModule({
       providers:[{provide:DOCUMENT, useValue: mockDocument}]
     })
     service = TestBed.inject(InternetConnectionService);
   });
 
-  it('signal value should be true', () => {
+  it('signal value must be false when offline event is called while internet is connected', () => {
+    events['online']()
     expect(service.networkStatus()).toEqual(true);
-  });
-
-  it('observable value should be true',
-    (done: any) => {
-    service.networkStatus$.pipe(first()).subscribe(value => {
-      expect(value).toBe(true)
-      done();
-    });
-  });
-});
-
-describe('when connection value changes', () => {
-  const mockDocument = { defaultView: {navigator: {onLine: true}, addEventListener: (eventName,cb)=>{
-    window.addEventListener(eventName,cb)
-  }, dispatchEvent: function(){
-    this.navigator.onLine = !this.navigator.onLine
-  }}}
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers:[{provide:DOCUMENT, useValue: mockDocument}]
-    })
-    service = TestBed.inject(InternetConnectionService);
-  });
-
-  it('check is signal value changes', () => {
-    expect(service.networkStatus()).toEqual(true);
-    const event = new Event("offline");
-    service.window.dispatchEvent(event)
-    service.setStatus(service.window.navigator.onLine)
+    events['offline']()
     expect(service.networkStatus()).toEqual(false);
   });
 
-  it('check is observable value changes',(done: any) => {
-    const event = new Event("online");
-    service.window.dispatchEvent(event)
-    service.networkStatus$.pipe(first()).subscribe(value => {
-      expect(value).toEqual(true)
+  it('signal value must be true when online event is called while internet is disconnected', () => {
+    events['offline']()
+    expect(service.networkStatus()).toEqual(false);
+    events['online']()
+    expect(service.networkStatus()).toEqual(true);
+  });
+
+  it('observable value must be false when offline event is called while internet is connected', (done:any) => {
+    events['online']()
+    events['offline']()
+    service.networkStatus$.subscribe(val=>{
+      expect(val).toEqual(false)
       done()
-    });
-    service.window.dispatchEvent(event)
-    service.setStatus(service.window.navigator.onLine)
-    service.networkStatus$.pipe().subscribe(value => {
-      expect(value).toEqual(false)
+    })
+  });
+
+  it('observable value must be true when online event is called while internet is disconnected', (done:any) => {
+    events['offline']()
+    events['online']()
+    service.networkStatus$.subscribe(val=>{
+      console.log(val);
+      expect(val).toEqual(true)
       done()
-    });
+    })
   });
 });
