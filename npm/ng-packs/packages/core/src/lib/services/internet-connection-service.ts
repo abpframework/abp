@@ -17,13 +17,13 @@ export class InternetConnectionService{
   networkStatus = computed(() => this.status())
   
   constructor(){
-    this.window.addEventListener('offline', () => this.setStatus());
-    this.window.addEventListener('online', () => this.setStatus());
+    this.window.addEventListener('offline', () => this.setStatus(false));
+    this.window.addEventListener('online', () => this.setStatus(true));
   }
 
-  private setStatus(){
-    this.status.set(navigator.onLine)
-    this.status$.next(navigator.onLine)
+  setStatus(val:boolean){
+    this.status.set(val)
+    this.status$.next(val)
   }
 
   get networkStatus$(){
