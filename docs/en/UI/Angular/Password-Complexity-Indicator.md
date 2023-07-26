@@ -4,17 +4,10 @@
 # Service
 ### password-complextiy-indicator.service.ts
 ```ts
-import { Injectable } from "@angular/core";
-import { ProgressBarStats } from '../models/password-complexity';
-
 @Injectable({providedIn: 'root'})
-  colors: string[] = [
-    '#B0284B',
-    '#F2A34F',
-    '#FFE500',
-    '#A4BD6E',
-    '#6EBD70',
-  ];
+export class PasswordComplexityIndicatorService{
+  colors: string[] = ['#B0284B', '#F2A34F', '#5588A4', '#3E5CF6', '#6EBD70'];
+  texts: string[] = ['Weak', 'Fair', 'Normal', 'Good', 'Strong']
 
   requirements: RegexRequirementsModel = {
     minLengthRegex: /(?=.{6,})/,                                        // Default min length 6
@@ -26,51 +19,56 @@ import { ProgressBarStats } from '../models/password-complexity';
 
   validatePassword(password: string): ProgressBarStats {
     let passedCounter = 0;
-
-    Object.values(this.requirements).forEach((reg:RegExp)=>{
+    Object.values(this.requirements).forEach((reg:RegExp) => {
       const isValid = reg.test(password);
       
       if(isValid){
         passedCounter++;
       }
     })
-    return { bgColors:this.colors, passedTestCount: passedCounter};
+    return { bgColor:this.colors[passedCounter - 1], text:this.texts[passedCounter - 1], width: (100 / this.texts.length) * passedCounter };
   }
+}
 ```
-- As you can see from the code above we set default regular expressions requirements and colors. 
-- You can change tests and colors as you wish
-- **but remember if you change the requirements, it's length must be equal with the colors array**
+- In PasswordComplexityIndicatorService we set default values for complexity indicator. These are;
+  - regex
+  - colors
+  - texts
+- Make sure these values length are equal (In our example we have **5** tests/colors/texts)
+- We have only one method validatePassword which we pass password as an argument. At the end this method will return the properties of the complexity bar..
 # Component
-```ts
-import { Component, Input } from  '@angular/core';
-import { ProgressBarModel } from  '../../models/password-complexity';
 
+```ts
 @Component({
   selector: 'abp-password-complexity-indicator',
   template: `
-    <div [style.opacity]="progressBar?.passedTestCount > 0 ? 1 : 0" class="d-flex justify-content-between mx-1 transition" style="height: 8px;">
-      <div *ngFor="let color of progressBar?.bgColors; let i=index;" class="progress w-100 me-1" >
-        <div class="progress-bar transition" [style.background]="progressBar.passedTestCount > i ? color : 'var(--lpx-border-color)'" [style.width]="progressBar.width < 20 ? '0%' : '100%'"></div>
-      </div>
+    <div [style.opacity]="progressBar?.width > 0 ? 1 : 0" [style.backgroundColor]="'var(--lpx-border-color)'" class="progress transition mx-3">
+      <div class="progress-bar transition" [style.width]="progressBar?.width + '%'" [style.backgroundColor]="progressBar?.bgColor"></div>
     </div>
   `,
   styles: [`
-      .transition { transition: all 0.2s ease-out; }
-      .progress {backgroundColor: var(--lpx-border-color); height: 8px; border-radius:2px}
+      .transition { transition: all 0.3s ease-out; }
+      .progress { backgroundColor: var(--lpx-border-color); height: 4px; border-radius:3px 3px 0 0; margin-top:-4px; z-index:1; position:relative}
+      :host-context{ order:1 }
     `
   ]
 })
-export  class  PasswordComplexityIndicatorComponent{
+export class PasswordComplexityIndicatorComponent{
   @Input({required:true}) progressBar? : ProgressBarStats;
 }
 ```
 - abp-password-complexity-indicator component is **takes only one required input which type is ProgressBarStats**
 - ```ts
   interface ProgressBarStats{
-    bgColor:string, width: number
+    bgColor: string,
+    text: string,
+    width: number
   })
   ``` 
-
+- as you can see from interface above, progressBar input has;
+  - ***bgColor:*** decides color of the bar.
+  - ***text:*** () // TODO bu belki optional olabilir düzelt
+  - ***width:*** decides how full the bar will be
 
 
 # How To Use
@@ -81,9 +79,16 @@ export  class  PasswordComplexityIndicatorComponent{
   selector: 'myComponent',
   templateUrl: `
     <form [formGroup]="form">
-      <input inputId="new-password" formControlName="password" (keyup)="validatePassword()">
+      <label for="input-password">
+        {{ 'AbpAccount::Password' | abpLocalization }}
+        <ng-container *ngIf="progressBar?.width > 0">
+          {{'AbpAccount::Strength' | abpLocalization}}
+          <span [style.color]="progressBar?.bgColor">{{'AbpAccount::' + progressBar?.text | abpLocalization}}</span>
+        </ng-container>
+      </label>  
+      <input id="input-password" type="password" class="form-control" formControlName="password" (keyup)="validatePassword()"/>
       <div class="mt-3">
-        <abp-password-complexity-indicator [progressBar]="passwordProgressBarStats"></abp-password-complexity-indicator>
+        <abp-password-complexity-indicator [progressBar]="progressBar"></abp-password-complexity-indicator>
       </div>
     </form>
   `,
@@ -92,7 +97,7 @@ export class myComponent{
   this.form = this.fb.group({
     password: [''],
   });
-  passwordProgressBarStats: ProgressBarStats;
+  progressBar: ProgressBarStats;
   private readonly passwordComplexityService: PasswordComplexityIndicatorService = inject(PasswordComplexityIndicatorService);
   private readonly fb: UntypedFormBuilder = inject(UntypedFormBuilder);
 
@@ -106,5 +111,21 @@ export class myComponent{
 }
 ```
 
-- give the password to `PasswordComplexityIndicatorService`'s `validatePassword` method, and equalize returned value with the `this.passwordProgressBarStats`
+- give the password to `PasswordComplexityIndicatorService`'s `validatePassword` method, and equalize returned value with the `this.progressBar`
+- as you can see we also using color and text value in our template for better looking
+
+# How To Customize
+- If you want to change the test count be sure that in `PasswordComplexityIndicatorService` those arrays length are equal
+- we have used text value in our template and instead of using directly make it localizable
+- en.json
+  ```json
+    ...
+    "Strength": "Strength",
+    "Weak": "Weak!",
+    "Fair": "Fair.",
+    "Normal": "Normal.",
+    "Good": "Good.",
+    "Strong": "Strong!"
+  ``` 
+- If you change texts, you must change the localization file
 - thats it you can start typing to password input :)
