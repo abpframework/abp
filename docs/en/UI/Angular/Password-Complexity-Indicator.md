@@ -30,7 +30,7 @@ export class PasswordComplexityIndicatorService{
   }
 }
 ```
-- In PasswordComplexityIndicatorService we set default values for complexity indicator. These are;
+- In PasswordComplexityIndicatorService we set default values for complexity indicator bar. These are;
   - regex
   - colors
   - texts
