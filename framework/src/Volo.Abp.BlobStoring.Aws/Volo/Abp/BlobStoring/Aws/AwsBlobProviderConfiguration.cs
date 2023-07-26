@@ -4,12 +4,12 @@ namespace Volo.Abp.BlobStoring.Aws;
 
 public class AwsBlobProviderConfiguration
 {
-    public string AccessKeyId {
+    public string? AccessKeyId {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.AccessKeyId);
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.AccessKeyId, value);
     }
 
-    public string SecretAccessKey {
+    public string? SecretAccessKey {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.SecretAccessKey);
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.SecretAccessKey, value);
     }
@@ -29,12 +29,12 @@ public class AwsBlobProviderConfiguration
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.UseTemporaryFederatedCredentials, value);
     }
 
-    public string ProfileName {
+    public string? ProfileName {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.ProfileName);
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.ProfileName, value);
     }
 
-    public string ProfilesLocation {
+    public string? ProfilesLocation {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.ProfilesLocation);
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.ProfilesLocation, value);
     }
@@ -52,7 +52,7 @@ public class AwsBlobProviderConfiguration
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.Name, value);
     }
 
-    public string Policy {
+    public string? Policy {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.Policy);
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.Policy, value);
     }
@@ -68,7 +68,7 @@ public class AwsBlobProviderConfiguration
     /// The name must also be between 3 and 63 characters long.
     /// If this parameter is not specified, the ContainerName of the <see cref="BlobProviderArgs"/> will be used.
     /// </summary>
-    public string ContainerName {
+    public string? ContainerName {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.ContainerName);
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.ContainerName, value);
     }
@@ -82,7 +82,7 @@ public class AwsBlobProviderConfiguration
     }
 
     private readonly string _temporaryCredentialsCacheKey;
-    public string TemporaryCredentialsCacheKey {
+    public string? TemporaryCredentialsCacheKey {
         get => _containerConfiguration.GetConfigurationOrDefault(AwsBlobProviderConfigurationNames.TemporaryCredentialsCacheKey, _temporaryCredentialsCacheKey);
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.TemporaryCredentialsCacheKey, value);
     }

@@ -255,6 +255,20 @@ property =>
 
 Use `property.UI.OnCreateForm` and `property.UI.OnEditForm` to control forms too. If a property is required, but not added to the create form, you definitely get a validation exception, so use this option carefully. But a required property may not be in the edit form if that's your requirement.
 
+### UI Order
+
+When you define a property, it appears on the data table, create and edit forms on the related UI page. However, you can control its order. Example:
+
+````csharp
+property =>
+{
+    property.UI.Order = 1;
+    //...other configurations
+}
+````
+
+Use `property.UI.OnCreateForm` and `property.UI.OnEditForm` to control forms too. If a property is required, but not added to the create form, you definitely get a validation exception, so use this option carefully. But a required property may not be in the edit form if that's your requirement.
+
 ### HTTP API Availability
 
 Even if you disable a property on UI, it can be still available through the HTTP API. By default, a property is available on all APIs.

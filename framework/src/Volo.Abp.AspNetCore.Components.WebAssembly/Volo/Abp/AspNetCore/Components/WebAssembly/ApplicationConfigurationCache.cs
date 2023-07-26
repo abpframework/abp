@@ -5,9 +5,9 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 
 public class ApplicationConfigurationCache : ISingletonDependency
 {
-    protected ApplicationConfigurationDto Configuration { get; set; }
+    protected ApplicationConfigurationDto? Configuration { get; set; }
 
-    public virtual ApplicationConfigurationDto Get()
+    public virtual ApplicationConfigurationDto? Get()
     {
         return Configuration;
     }

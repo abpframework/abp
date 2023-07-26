@@ -8,12 +8,12 @@ public class LocalizationResourceDictionary : Dictionary<string, LocalizationRes
 {
     private readonly Dictionary<Type, LocalizationResourceBase> _resourcesByTypes = new();
 
-    public LocalizationResource Add<TResouce>([CanBeNull] string defaultCultureName = null)
+    public LocalizationResource Add<TResouce>(string? defaultCultureName = null)
     {
         return Add(typeof(TResouce), defaultCultureName);
     }
 
-    public LocalizationResource Add(Type resourceType, [CanBeNull] string defaultCultureName = null)
+    public LocalizationResource Add(Type resourceType, string? defaultCultureName = null)
     {
         var resourceName = LocalizationResourceNameAttribute.GetName(resourceType);
         if (ContainsKey(resourceName))
@@ -29,7 +29,7 @@ public class LocalizationResourceDictionary : Dictionary<string, LocalizationRes
         return resource;
     }
     
-    public NonTypedLocalizationResource Add([NotNull] string resourceName, [CanBeNull] string defaultCultureName = null)
+    public NonTypedLocalizationResource Add([NotNull] string resourceName, string? defaultCultureName = null)
     {
         Check.NotNullOrWhiteSpace(resourceName, nameof(resourceName));
         
@@ -80,7 +80,7 @@ public class LocalizationResourceDictionary : Dictionary<string, LocalizationRes
         return resource;
     }
 
-    public LocalizationResourceBase GetOrNull(Type resourceType)
+    public LocalizationResourceBase? GetOrNull(Type resourceType)
     {
         return _resourcesByTypes.GetOrDefault(resourceType);
     }

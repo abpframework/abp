@@ -29,8 +29,7 @@ public static class ApplicationMenuExtensions
         return menuItem;
     }
 
-    [CanBeNull]
-    public static ApplicationMenuItem GetMenuItemOrNull(
+    public static ApplicationMenuItem? GetMenuItemOrNull(
         [NotNull] this IHasMenuItems menuWithItems,
         string menuItemName)
     {
@@ -79,8 +78,7 @@ public static class ApplicationMenuExtensions
         return menuGroup;
     }
 
-    [CanBeNull]
-    public static ApplicationMenuGroup GetMenuGroupOrNull(
+    public static ApplicationMenuGroup? GetMenuGroupOrNull(
         [NotNull] this IHasMenuGroups menuWithGroups,
         string menuGroupName)
     {

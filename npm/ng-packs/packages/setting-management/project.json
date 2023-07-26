@@ -34,7 +34,9 @@
       "options": {
         "lintFilePatterns": [
           "packages/setting-management/src/**/*.ts",
-          "packages/setting-management/src/**/*.html"
+          "packages/setting-management/src/**/*.html",
+          "packages/setting-management/proxy/**/*.ts",
+          "packages/setting-management/proxy/**/*.html"
         ]
       },
       "outputs": ["{options.outputFile}"]

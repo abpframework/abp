@@ -327,6 +327,11 @@ namespace Volo.Docs.Pages.Documents.Project
                     $"{DocsAppConsts.Latest}",
                     DocsAppConsts.Latest,
                     true);
+                
+                if(string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
+                {
+                    Version = RemoveVersionPrefix(Project.LatestVersionBranchName);
+                }
             }
 
             VersionSelectItems = versions.Select(v => new SelectListItem

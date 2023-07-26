@@ -25,7 +25,7 @@ public static class AbpInternalLocalizationHelper
     /// <returns></returns>
     [Obsolete("Use IAbpEnumLocalizer instead.")]
     public static string LocalizeWithFallback(
-        IStringLocalizer[] localizers,
+        IStringLocalizer?[] localizers,
         string[] keys,
         string defaultValue)
     {

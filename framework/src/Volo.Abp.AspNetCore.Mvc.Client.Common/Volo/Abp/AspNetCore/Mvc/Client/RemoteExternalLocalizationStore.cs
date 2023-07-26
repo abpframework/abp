@@ -22,13 +22,13 @@ public class RemoteExternalLocalizationStore : IExternalLocalizationStore, ITran
         LocalizationOptions = localizationOptions.Value;
     }
     
-    public virtual LocalizationResourceBase GetResourceOrNull(string resourceName)
+    public virtual LocalizationResourceBase? GetResourceOrNull(string resourceName)
     {
         var configurationDto = ConfigurationClient.Get();
         return CreateLocalizationResourceFromConfigurationOrNull(resourceName, configurationDto);
     }
 
-    public virtual async Task<LocalizationResourceBase> GetResourceOrNullAsync(string resourceName)
+    public virtual async Task<LocalizationResourceBase?> GetResourceOrNullAsync(string resourceName)
     {
         var configurationDto = await ConfigurationClient.GetAsync();
         return CreateLocalizationResourceFromConfigurationOrNull(resourceName, configurationDto);
@@ -63,7 +63,7 @@ public class RemoteExternalLocalizationStore : IExternalLocalizationStore, ITran
         return resources.ToArray();
     }
     
-    protected virtual LocalizationResourceBase CreateLocalizationResourceFromConfigurationOrNull(
+    protected virtual LocalizationResourceBase? CreateLocalizationResourceFromConfigurationOrNull(
         string resourceName,
         ApplicationConfigurationDto configurationDto)
     {

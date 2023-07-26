@@ -5,7 +5,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab;
 
 public class AbpTabsTagHelper : AbpTagHelper<AbpTabsTagHelper, AbpTabsTagHelperService>
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public TabStyle TabStyle { get; set; } = TabStyle.Tab;
 

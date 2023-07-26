@@ -15,7 +15,7 @@ public static class DataSeederExtensions
         return seeder.SeedAsync(new DataSeedContext(tenantId));
     }
 
-    public static Task SeedInSeparateUowAsync(this IDataSeeder seeder, Guid? tenantId = null, AbpUnitOfWorkOptions options = null, bool requiresNew = false)
+    public static Task SeedInSeparateUowAsync(this IDataSeeder seeder, Guid? tenantId = null, AbpUnitOfWorkOptions? options = null, bool requiresNew = false)
     {
         var context = new DataSeedContext(tenantId);
         context.WithProperty(SeedInSeparateUow, true);

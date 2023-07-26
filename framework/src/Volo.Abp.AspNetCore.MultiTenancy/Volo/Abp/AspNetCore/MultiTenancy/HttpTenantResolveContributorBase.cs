@@ -39,5 +39,5 @@ public abstract class HttpTenantResolveContributorBase : TenantResolveContributo
         }
     }
 
-    protected abstract Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync([NotNull] ITenantResolveContext context, [NotNull] HttpContext httpContext);
+    protected abstract Task<string?> GetTenantIdOrNameFromHttpContextOrNullAsync([NotNull] ITenantResolveContext context, [NotNull] HttpContext httpContext);
 }

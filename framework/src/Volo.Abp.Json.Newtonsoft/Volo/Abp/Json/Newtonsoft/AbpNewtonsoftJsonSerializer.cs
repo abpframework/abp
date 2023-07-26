@@ -26,12 +26,12 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
 
     public T Deserialize<T>(string jsonString, bool camelCase = true)
     {
-        return JsonConvert.DeserializeObject<T>(jsonString, CreateJsonSerializerOptions(camelCase));
+        return JsonConvert.DeserializeObject<T>(jsonString, CreateJsonSerializerOptions(camelCase))!;
     }
 
     public object Deserialize(Type type, string jsonString, bool camelCase = true)
     {
-        return JsonConvert.DeserializeObject(jsonString, type, CreateJsonSerializerOptions(camelCase));
+        return JsonConvert.DeserializeObject(jsonString, type, CreateJsonSerializerOptions(camelCase))!;
     }
 
     private readonly static ConcurrentDictionary<object, JsonSerializerSettings> JsonSerializerOptionsCache =

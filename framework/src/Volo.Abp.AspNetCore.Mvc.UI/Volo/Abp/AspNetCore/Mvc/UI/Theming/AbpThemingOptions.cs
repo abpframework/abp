@@ -4,7 +4,7 @@ public class AbpThemingOptions
 {
     public ThemeDictionary Themes { get; }
 
-    public string DefaultThemeName { get; set; }
+    public string? DefaultThemeName { get; set; }
 
     public AbpThemingOptions()
     {

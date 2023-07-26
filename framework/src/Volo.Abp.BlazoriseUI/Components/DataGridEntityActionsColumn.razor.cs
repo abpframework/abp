@@ -10,7 +10,7 @@ namespace Volo.Abp.BlazoriseUI.Components;
 public partial class DataGridEntityActionsColumn<TItem> : DataGridColumn<TItem>
 {
     [Inject]
-    public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
+    public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {

@@ -39,11 +39,11 @@ public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
 
         if (errorInfo.Details.IsNullOrEmpty())
         {
-            MessageService.Error(errorInfo.Message);
+            MessageService.Error(errorInfo.Message!);
         }
         else
         {
-            MessageService.Error(errorInfo.Details, errorInfo.Message);
+            MessageService.Error(errorInfo.Details!, errorInfo.Message);
         }
     }
 
@@ -53,11 +53,11 @@ public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
 
         if (errorInfo.Details.IsNullOrEmpty())
         {
-            await MessageService.Error(errorInfo.Message);
+            await MessageService.Error(errorInfo.Message!);
         }
         else
         {
-            await MessageService.Error(errorInfo.Details, errorInfo.Message);
+            await MessageService.Error(errorInfo.Details!, errorInfo.Message);
         }
     }
 

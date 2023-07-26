@@ -31,7 +31,7 @@ public class AbpDateTimeConverter : DateTimeConverterBase, ITransientDependency
         return objectType == typeof(DateTime) || objectType == typeof(DateTime?);
     }
 
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
         var nullable = Nullable.GetUnderlyingType(objectType) != null;
         if (reader.TokenType == JsonToken.Null)
@@ -46,7 +46,7 @@ public class AbpDateTimeConverter : DateTimeConverterBase, ITransientDependency
 
         if (reader.TokenType == JsonToken.Date)
         {
-            return _clock.Normalize(reader.Value.To<DateTime>());
+            return _clock.Normalize(reader.Value!.To<DateTime>());
         }
 
         if (reader.TokenType != JsonToken.String)
@@ -72,11 +72,11 @@ public class AbpDateTimeConverter : DateTimeConverterBase, ITransientDependency
             }
         }
 
-        var date = DateTime.Parse(dateText, _culture, _dateTimeStyles);
+        var date = DateTime.Parse(dateText!, _culture, _dateTimeStyles);
         return _clock.Normalize(date);
     }
 
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
     {
         if (value != null)
         {
@@ -97,7 +97,7 @@ public class AbpDateTimeConverter : DateTimeConverterBase, ITransientDependency
         }
         else
         {
-            throw new JsonSerializationException($"Unexpected value when converting date. Expected DateTime or DateTimeOffset, got {value.GetType()}.");
+            throw new JsonSerializationException($"Unexpected value when converting date. Expected DateTime or DateTimeOffset, got {value?.GetType()}.");
         }
     }
 

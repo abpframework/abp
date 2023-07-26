@@ -9,7 +9,7 @@ public class JobQueueConfiguration : QueueDeclareConfiguration
 {
     public Type JobArgsType { get; }
 
-    public string ConnectionName { get; set; }
+    public string? ConnectionName { get; set; }
 
     public string DelayedQueueName { get; set; }
 
@@ -17,7 +17,7 @@ public class JobQueueConfiguration : QueueDeclareConfiguration
         Type jobArgsType,
         string queueName,
         string delayedQueueName,
-        string connectionName = null,
+        string? connectionName = null,
         bool durable = true,
         bool exclusive = false,
         bool autoDelete = false,

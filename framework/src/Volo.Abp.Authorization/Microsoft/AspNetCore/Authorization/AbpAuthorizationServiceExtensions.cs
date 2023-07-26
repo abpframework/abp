@@ -25,7 +25,7 @@ public static class AbpAuthorizationServiceExtensions
         );
     }
 
-    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
+    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object? resource, AuthorizationPolicy policy)
     {
         return await authorizationService.AuthorizeAsync(
             authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
@@ -52,7 +52,7 @@ public static class AbpAuthorizationServiceExtensions
         );
     }
 
-    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, string policyName)
+    public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object? resource, string policyName)
     {
         return await authorizationService.AuthorizeAsync(
             authorizationService.AsAbpAuthorizationService().CurrentPrincipal,

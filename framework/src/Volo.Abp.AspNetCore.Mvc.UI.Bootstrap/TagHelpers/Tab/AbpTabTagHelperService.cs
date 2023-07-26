@@ -21,7 +21,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
 
         var active = TagHelper.Active ?? false;
 
-        tabHeaderItems.Add(new TabItem(tabHeader, tabContent, active, TagHelper.Name, TagHelper.ParentDropdownName, false));
+        tabHeaderItems.Add(new TabItem(tabHeader, tabContent, active, TagHelper.Name!, TagHelper.ParentDropdownName, false));
 
         output.SuppressOutput();
     }

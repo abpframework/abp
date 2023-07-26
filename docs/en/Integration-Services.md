@@ -34,10 +34,46 @@ public interface IProductAppService : IApplicationService
 
 That's all. From now, ABP will handle your application service as integration service and implement the followings by convention:
 
-* If you are using the [Auto API Controllers](API/Auto-API-Controllers.md) feature in your application, the URL prefix will be `/integration-api` instead of `/api` for your integration services. Thus, you can distinguish internal and external service communications and take additional actions, such as preventing REST API calls for integration services out of API Gateway.
-* Audit logging is disabled by default for the integration services. See the next section if you want to enable it.
+* That service is **not exposed** by default, unless you explicitly set `ExposeIntegrationServices` options (see the *Exposing Integration Services* section).
+* If you are using the [Auto API Controllers](API/Auto-API-Controllers.md) feature in your application, the **URL prefix** will be `/integration-api` instead of `/api` for your integration services. Thus, you can distinguish internal and external service communications and take additional actions, such as preventing REST API calls for integration services out of API Gateway.
+* **Audit logging** is disabled by default for the integration services. See the next section if you want to enable it.
+
+## Marking an MVC Controller as Integration Service
+
+In addition to application services, you can mark a regular MVC Controller as integration service, using the same `IntegrationService` attribute, or inheriting an interface that has the `IntegrationService` attribute.
+
+**Example:**
+
+````csharp
+[IntegrationService] // Mark as integration service
+[Route("integration-api/products")]
+public class ProductController : AbpControllerBase
+{
+    //...
+}
+````
+
+When you use the `IntegrationService` attribute, ABP will handle your controller as integration service and implement the followings by convention:
+
+* That controller is **not exposed** to clients by default, unless you explicitly set `ExposeIntegrationServices` options (see the *Exposing Integration Services* section).
+* **Audit logging** is disabled by default for controller. See the next section if you want to enable it.
 
 ## Configuration
+
+### Exposing Integration Services
+
+Integration services and controllers are not exposed by default for security reasons. They typically don't require authorization, so you should **carefully and explicitly** allow them to be visible and usable to client applications.
+
+To expose integration services and controllers, set `AbpAspNetCoreMvcOptions.ExposeIntegrationServices` to `true` in the `ConfigureServices` method of your [module class](Module-Development-Basics.md):
+
+````csharp
+Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.ExposeIntegrationServices = true;
+});
+````
+
+> Hiding integration services is useful when you are building reusable application modules, where they may be used in a monolith application or in a microservice system. In a monolith application, integration services don't need to be exposed outside since the modules may in-process communicate with each other. On the other hand, if you build a microservice solution and use that module as a service, it will be proper to expose the integration services, so other microservices can consume them remotely inside your private network (or Kubernetes cluster). In that case, be careful to not accidently expose the integration services out of your private network. Configuring your API Gateway so that it blocks requests to `integration-api` prefixed URLs from outside of your network will be a good option.
 
 ### Enabling/Disabling the Audit Logging
 

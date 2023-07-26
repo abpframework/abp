@@ -13,7 +13,7 @@ public static class ObjectExtensionManagerExtensions
         [NotNull] this ObjectExtensionManager objectExtensionManager,
         [NotNull] Type[] objectTypes,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
     {
         return objectExtensionManager.AddOrUpdateProperty(
             objectTypes,
@@ -26,7 +26,7 @@ public static class ObjectExtensionManagerExtensions
     public static ObjectExtensionManager AddOrUpdateProperty<TObject, TProperty>(
         [NotNull] this ObjectExtensionManager objectExtensionManager,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
         where TObject : IHasExtraProperties
     {
         return objectExtensionManager.AddOrUpdateProperty(
@@ -43,7 +43,7 @@ public static class ObjectExtensionManagerExtensions
         [NotNull] Type[] objectTypes,
         [NotNull] Type propertyType,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
     {
         Check.NotNull(objectTypes, nameof(objectTypes));
 
@@ -66,7 +66,7 @@ public static class ObjectExtensionManagerExtensions
         [NotNull] Type objectType,
         [NotNull] Type propertyType,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
     {
         Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
 
@@ -82,7 +82,7 @@ public static class ObjectExtensionManagerExtensions
             });
     }
 
-    public static ObjectExtensionPropertyInfo GetPropertyOrNull<TObject>(
+    public static ObjectExtensionPropertyInfo? GetPropertyOrNull<TObject>(
         [NotNull] this ObjectExtensionManager objectExtensionManager,
         [NotNull] string propertyName)
     {
@@ -92,7 +92,7 @@ public static class ObjectExtensionManagerExtensions
         );
     }
 
-    public static ObjectExtensionPropertyInfo GetPropertyOrNull(
+    public static ObjectExtensionPropertyInfo? GetPropertyOrNull(
         [NotNull] this ObjectExtensionManager objectExtensionManager,
         [NotNull] Type objectType,
         [NotNull] string propertyName)

@@ -21,8 +21,8 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
 
     protected BackgroundJobConfiguration JobConfiguration { get; }
     protected JobQueueConfiguration QueueConfiguration { get; }
-    protected IChannelAccessor ChannelAccessor { get; private set; }
-    protected AsyncEventingBasicConsumer Consumer { get; private set; }
+    protected IChannelAccessor? ChannelAccessor { get; private set; }
+    protected AsyncEventingBasicConsumer? Consumer { get; private set; }
 
     public ILogger<JobQueue<TArgs>> Logger { get; set; }
 
@@ -71,7 +71,7 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
                );
     }
 
-    public virtual async Task<string> EnqueueAsync(
+    public virtual async Task<string?> EnqueueAsync(
         TArgs args,
         BackgroundJobPriority priority = BackgroundJobPriority.Normal,
         TimeSpan? delay = null)
@@ -176,11 +176,11 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
             basicProperties.Expiration = delay.Value.TotalMilliseconds.ToString();
         }
 
-        ChannelAccessor.Channel.BasicPublish(
+        ChannelAccessor!.Channel.BasicPublish(
             exchange: "",
             routingKey: routingKey,
             basicProperties: basicProperties,
-            body: Serializer.Serialize(args)
+            body: Serializer.Serialize(args!)
         );
 
         return Task.CompletedTask;
@@ -188,7 +188,7 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
 
     protected virtual IBasicProperties CreateBasicPropertiesToPublish()
     {
-        var properties = ChannelAccessor.Channel.CreateBasicProperties();
+        var properties = ChannelAccessor!.Channel.CreateBasicProperties();
         properties.Persistent = true;
         return properties;
     }
@@ -206,17 +206,17 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
             try
             {
                 await JobExecuter.ExecuteAsync(context);
-                ChannelAccessor.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                ChannelAccessor!.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             }
             catch (BackgroundJobExecutionException)
             {
                 //TODO: Reject like that?
-                ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: true);
+                ChannelAccessor!.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: true);
             }
             catch (Exception)
             {
                 //TODO: Reject like that?
-                ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: false);
+                ChannelAccessor!.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: false);
             }
         }
     }

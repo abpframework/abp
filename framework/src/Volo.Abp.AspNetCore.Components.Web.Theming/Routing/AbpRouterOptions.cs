@@ -4,7 +4,7 @@ namespace Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 
 public class AbpRouterOptions
 {
-    public Assembly AppAssembly { get; set; }
+    public Assembly AppAssembly { get; set; } = default!;
 
     public RouterAssemblyList AdditionalAssemblies { get; }
 

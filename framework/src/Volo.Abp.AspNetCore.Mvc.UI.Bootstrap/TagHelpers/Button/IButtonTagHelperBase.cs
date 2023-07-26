@@ -6,9 +6,9 @@ public interface IButtonTagHelperBase
 
     AbpButtonSize Size { get; }
 
-    string Text { get; }
+    string? Text { get; }
 
-    string Icon { get; }
+    string? Icon { get; }
 
     bool? Disabled { get; }
 

@@ -7,5 +7,5 @@ namespace Volo.Abp.MultiTenancy;
 
 public interface ICurrentTenantAccessor
 {
-    BasicTenantInfo Current { get; set; }
+    BasicTenantInfo? Current { get; set; }
 }

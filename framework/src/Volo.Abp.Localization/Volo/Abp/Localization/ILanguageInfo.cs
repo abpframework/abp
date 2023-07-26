@@ -8,5 +8,5 @@ public interface ILanguageInfo
 
     string DisplayName { get; }
 
-    string FlagIcon { get; }
+    string? FlagIcon { get; }
 }
