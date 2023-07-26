@@ -34,8 +34,8 @@ export class PasswordComplexityIndicatorService{
   - regex
   - colors
   - texts
-- Make sure these values length are equal (In our example we have **5** tests/colors/texts)
-- We have only one method validatePassword which we pass password as an argument. At the end this method will return the properties of the complexity bar..
+- Make sure these values length are equal (In our example we have **5** tests/colors/texts).
+- We have only one method validatePassword which we pass password as an argument. At the end this method will return the properties of the complexity bar.
 # Component
 
 ```ts
@@ -57,7 +57,7 @@ export class PasswordComplexityIndicatorComponent{
   @Input({required:true}) progressBar? : ProgressBarStats;
 }
 ```
-- abp-password-complexity-indicator component is **takes only one required input which type is ProgressBarStats**
+- abp-password-complexity-indicator component is **takes only one required input which type is ProgressBarStats**.
 - ```ts
   interface ProgressBarStats{
     bgColor: string,
@@ -111,15 +111,15 @@ export class myComponent{
 }
 ```
 
-- give the password to `PasswordComplexityIndicatorService`'s `validatePassword` method, and equalize returned value with the `this.progressBar`
-- as you can see we also using color and text value in our template for better looking
+- Give the password to `PasswordComplexityIndicatorService`'s `validatePassword` method, and equalize returned value with the `this.progressBar`.
+- In our component we used color and text value in template for better looking.
 
 # How To Customize
-- If you want to change the test count be sure that in `PasswordComplexityIndicatorService` those arrays length are equal
-- we have used text value in our template and instead of using directly make it localizable
+- If you want to change the test count be sure that in `PasswordComplexityIndicatorService` `colors,texts,regex` arrays length are equal.
+- Instead of using text value directly make it localizable.
 - en.json
   ```json
-    ...
+    ....
     "Strength": "Strength",
     "Weak": "Weak!",
     "Fair": "Fair.",
@@ -127,5 +127,5 @@ export class myComponent{
     "Good": "Good.",
     "Strong": "Strong!"
   ``` 
-- If you change texts, you must change the localization file
-- thats it you can start typing to password input :)
+- If you change texts, you must change the localization file.
+- Thats it you can start typing to password input :)
