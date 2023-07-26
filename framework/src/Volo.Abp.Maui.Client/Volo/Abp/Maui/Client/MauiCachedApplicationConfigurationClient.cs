@@ -1,46 +1,42 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Authorization;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Threading;
 
-namespace Volo.Abp.AspNetCore.Components.MauiBlazor;
+namespace Volo.Abp.Maui.Client;
 
-public class MauiBlazorCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ISingletonDependency
+public class MauiCachedApplicationConfigurationClient :
+    ICachedApplicationConfigurationClient,
+    ISingletonDependency
 {
     protected AbpApplicationConfigurationClientProxy ApplicationConfigurationClientProxy { get; }
-
     protected AbpApplicationLocalizationClientProxy ApplicationLocalizationClientProxy { get; }
-
     protected ApplicationConfigurationCache Cache { get; }
-
     protected ICurrentTenantAccessor CurrentTenantAccessor { get; }
 
-    public MauiBlazorCachedApplicationConfigurationClient(
+    public MauiCachedApplicationConfigurationClient(
         AbpApplicationConfigurationClientProxy applicationConfigurationClientProxy,
+        AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
         ApplicationConfigurationCache cache,
-        ICurrentTenantAccessor currentTenantAccessor,
-        AuthenticationStateProvider authenticationStateProvider,
-        AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy)
+        ICurrentTenantAccessor currentTenantAccessor)
     {
         ApplicationConfigurationClientProxy = applicationConfigurationClientProxy;
-        Cache = cache;
-        CurrentTenantAccessor = currentTenantAccessor;
         ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
-
-        authenticationStateProvider.AuthenticationStateChanged += async _ => { await InitializeAsync(); };
+        CurrentTenantAccessor = currentTenantAccessor;
+        Cache = cache;
     }
 
-    public virtual async Task InitializeAsync()
+    public virtual async Task<ApplicationConfigurationDto> InitializeAsync()
     {
         var configurationDto = await ApplicationConfigurationClientProxy.GetAsync(
             new ApplicationConfigurationRequestOptions
             {
-                IncludeLocalizationResources = false
-            }
-        );
+                IncludeLocalizationResources = false,
+            });
 
         var localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
             new ApplicationLocalizationRequestDto
@@ -52,32 +48,28 @@ public class MauiBlazorCachedApplicationConfigurationClient : ICachedApplication
 
         configurationDto.Localization.Resources = localizationDto.Resources;
 
-        Cache.Set(configurationDto);
-
         CurrentTenantAccessor.Current = new BasicTenantInfo(
             configurationDto.CurrentTenant.Id,
             configurationDto.CurrentTenant.Name);
-    }
 
-    public virtual Task<ApplicationConfigurationDto> GetAsync()
-    {
-        return Task.FromResult(GetConfigurationByChecking());
+        Cache.Set(configurationDto);
+
+        return configurationDto;
     }
 
     public virtual ApplicationConfigurationDto Get()
     {
-        return GetConfigurationByChecking();
+        return AsyncHelper.RunSync(GetAsync);
     }
 
-    private ApplicationConfigurationDto GetConfigurationByChecking()
+    public virtual async Task<ApplicationConfigurationDto> GetAsync()
     {
-        var configuration = Cache.Get();
-        if (configuration == null)
+        var configurationDto = Cache.Get();
+        if (configurationDto is null)
         {
-            throw new AbpException(
-                    $"{nameof(MauiBlazorCachedApplicationConfigurationClient)} should be initialized before using it.");
+            return await InitializeAsync();
         }
 
-        return configuration;
+        return configurationDto;
     }
 }
