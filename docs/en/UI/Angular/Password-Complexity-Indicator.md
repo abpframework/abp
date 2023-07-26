@@ -30,12 +30,12 @@ export class PasswordComplexityIndicatorService{
   }
 }
 ```
-- In PasswordComplexityIndicatorService we set default values for complexity indicator bar. These are;
+- In PasswordComplexityIndicatorService set default values for complexity indicator bar. These are;
   - regex
   - colors
   - texts
 - Make sure these values length are equal (In our example we have **5** tests/colors/texts).
-- We have only one method validatePassword which we pass password as an argument. At the end this method will return the properties of the complexity bar.
+- `PasswordComplexityIndicatorService` has only one method validatePassword which we pass password as an argument. At the end this method will return the properties of the complexity bar.
 # Component
 
 ```ts
