@@ -1,4 +1,4 @@
-import { Component, Injector, isDevMode, Optional, SkipSelf, Type } from '@angular/core';
+import { Component, Injector, isDevMode, OnInit, Optional, SkipSelf, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
@@ -16,7 +16,7 @@ import { TreeNode } from '../utils/tree-utils';
   template: ` <ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container> `,
   providers: [SubscriptionService],
 })
-export class DynamicLayoutComponent {
+export class DynamicLayoutComponent implements OnInit {
   layout?: Type<any>;
   layoutKey?: eLayoutType;
 
@@ -51,6 +51,13 @@ export class DynamicLayoutComponent {
 
     this.checkLayoutOnNavigationEnd();
     this.listenToLanguageChange();
+  }
+
+  ngOnInit(): void {
+    if(this.layout){
+      return;
+    }
+    this.getLayout()
   }
 
   private checkLayoutOnNavigationEnd() {

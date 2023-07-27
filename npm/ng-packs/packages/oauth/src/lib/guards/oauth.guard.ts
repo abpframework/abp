@@ -23,14 +23,8 @@ export class AbpOAuthGuard implements IAbpGuard {
     if (hasValidAccessToken) {
       return true;
     }
-
-    return of(false).pipe(
-      tap(() => this.httpErrorReporter.reportError({ status: 401 } as HttpErrorResponse)),
-      delay(1500),
-      tap(() => {
-        const params = { returnUrl: state.url };
-        this.authService.navigateToLogin(params);
-      }),
-    );
+    const params = { returnUrl: state.url };
+    this.authService.navigateToLogin(params);
+    return false;
   }
 }
