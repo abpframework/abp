@@ -1,5 +1,5 @@
 # Password Complexity Indicator
-`PasswordComplexityIndicatorService` is for Calculating Password Complexity.
+`PasswordComplexityIndicatorService` is for calculating the password complexity.
 
 # Service
 ### password-complextiy-indicator.service.ts
@@ -30,12 +30,12 @@ export class PasswordComplexityIndicatorService{
   }
 }
 ```
-- Set default values for complexity indicator bar. These are;
+- Set the default values for the complexity indicator bar with the:
   - regex
   - colors
   - texts
-- Make sure these values length are equal (In our service we have **5** tests/colors/texts).
-- `PasswordComplexityIndicatorService` has only one method validatePassword which we pass password as an argument. This method will return the properties of the bar.
+- Make sure that the lengths of these values are equal (In our service we have **5** tests/colors/texts).
+- `PasswordComplexityIndicatorService` has only one method `validatePassword` that passes the password as an argument and returns the properties of the bar.
 # Component
 
 ```ts
@@ -57,7 +57,7 @@ export class PasswordComplexityIndicatorComponent{
   @Input({required:true}) progressBar? : ProgressBarStats;
 }
 ```
-- abp-password-complexity-indicator component is **takes only one required input which type is ProgressBarStats**.
+- The abp-password-complexity-indicator component **takes only one required input which type is ProgressBarStats**.
 - ```ts
   interface ProgressBarStats{
     bgColor: string,
@@ -65,14 +65,14 @@ export class PasswordComplexityIndicatorComponent{
     width: number
   })
   ``` 
-- as you can see from interface above, progressBar input has;
-  - ***bgColor:*** decides color of the bar.
-  - ***text:*** u can tell user to meaning of the bar with this value. 
+- as you can see from the interface above, the progressBar input has:
+  - ***bgColor:*** decides the color of the bar.
+  - ***text:*** explains the meaning of the bar to the user. 
   - ***width:*** decides how full the bar will be.
 
 
 # How To Use
-İt's easy, imagine you have password input that you want to add complexity indicator under it.
+İt's easy, imagine you have a password input that you want to add the complexity indicator under.
 
 ```ts
 @Component({
@@ -109,9 +109,9 @@ export class myComponent{
 }
 ```
 
-- Give the password to `PasswordComplexityIndicatorService`'s `validatePassword` method, and equalize returned value with the `this.progressBar`.
-- In our component we used color and text value in template for better looking.
-- We suggest Instead of using text value directly make it localizable.
+- Pass the password to the `validatePassword` method of `PasswordComplexityIndicatorService`, and equalize the returned value with the `this.progressBar`.
+- In our component we used the color and text value in the template for a better look.
+- We suggest localization instead of using the text value directly.
 - en.json
   ```json
     ....
@@ -124,6 +124,6 @@ export class myComponent{
   ``` 
 
 # How To Customize
-- If you want to change the test count be sure that in `PasswordComplexityIndicatorService` `colors,texts,regex` arrays length are equal otherwise it wont work.
-- If you change texts, you must change the localization file.
-- Thats it you can start typing to password input :)
+- If you want to change the test count, make sure that the lengths of the arrays of the `colors,texts,regex` in the `PasswordComplexityIndicatorService` are equal. Otherwise, it won't work.
+- If you change any of the texts, you must change the localization file.
+- That's it you can start typing the password input!
