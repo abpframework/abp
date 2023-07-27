@@ -30,12 +30,12 @@ export class PasswordComplexityIndicatorService{
   }
 }
 ```
-- In PasswordComplexityIndicatorService set default values for complexity indicator bar. These are;
+- Set default values for complexity indicator bar. These are;
   - regex
   - colors
   - texts
-- Make sure these values length are equal (In our example we have **5** tests/colors/texts).
-- `PasswordComplexityIndicatorService` has only one method validatePassword which we pass password as an argument. At the end this method will return the properties of the complexity bar.
+- Make sure these values length are equal (In our service we have **5** tests/colors/texts).
+- `PasswordComplexityIndicatorService` has only one method validatePassword which we pass password as an argument. This method will return the properties of the bar.
 # Component
 
 ```ts
@@ -67,7 +67,7 @@ export class PasswordComplexityIndicatorComponent{
   ``` 
 - as you can see from interface above, progressBar input has;
   - ***bgColor:*** decides color of the bar.
-  - ***text:*** shows text for specific bar. 
+  - ***text:*** u can tell user to meaning of the bar with this value. 
   - ***width:*** decides how full the bar will be.
 
 
@@ -80,16 +80,14 @@ export class PasswordComplexityIndicatorComponent{
   templateUrl: `
     <form [formGroup]="form">
       <label class="form-label" for="input-password">
-        {{ 'AbpAccount::Password' | abpLocalization }}
+        Password
         <ng-container *ngIf="progressBar?.width > 0">
-          {{'AbpAccount::Strength' | abpLocalization}}
-          <span [style.color]="progressBar?.bgColor">{{'AbpAccount::' + progressBar?.text | abpLocalization}}</span>
+          Strength
+          <span [style.color]="progressBar?.bgColor">{{progressBar?.text}}</span>
         </ng-container>
       </label>  
       <input id="input-password" type="password" class="form-control" formControlName="password" (keyup)="validatePassword()"/>
-      <div class="mt-3">
-        <abp-password-complexity-indicator [progressBar]="progressBar"></abp-password-complexity-indicator>
-      </div>
+      <abp-password-complexity-indicator [progressBar]="progressBar"></abp-password-complexity-indicator>
     </form>
   `,
 })
@@ -106,17 +104,14 @@ export class myComponent{
   }
 
   validatePassword(){
-    this.passwordProgressBarStats = this.passwordComplexityService.validatePassword(this.password);
+    this.progressBar = this.passwordComplexityService.validatePassword(this.password);
   }
 }
 ```
 
 - Give the password to `PasswordComplexityIndicatorService`'s `validatePassword` method, and equalize returned value with the `this.progressBar`.
 - In our component we used color and text value in template for better looking.
-
-# How To Customize
-- If you want to change the test count be sure that in `PasswordComplexityIndicatorService` `colors,texts,regex` arrays length are equal.
-- Instead of using text value directly make it localizable.
+- We suggest Instead of using text value directly make it localizable.
 - en.json
   ```json
     ....
@@ -127,5 +122,8 @@ export class myComponent{
     "Good": "Good.",
     "Strong": "Strong!"
   ``` 
+
+# How To Customize
+- If you want to change the test count be sure that in `PasswordComplexityIndicatorService` `colors,texts,regex` arrays length are equal otherwise it wont work.
 - If you change texts, you must change the localization file.
 - Thats it you can start typing to password input :)
