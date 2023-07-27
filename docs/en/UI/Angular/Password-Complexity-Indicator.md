@@ -79,7 +79,7 @@ export class PasswordComplexityIndicatorComponent{
   selector: 'myComponent',
   templateUrl: `
     <form [formGroup]="form">
-      <label for="input-password">
+      <label class="form-label" for="input-password">
         {{ 'AbpAccount::Password' | abpLocalization }}
         <ng-container *ngIf="progressBar?.width > 0">
           {{'AbpAccount::Strength' | abpLocalization}}
