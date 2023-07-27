@@ -26,7 +26,7 @@ export class PasswordComplexityIndicatorService{
         passedCounter++;
       }
     })
-    return { bgColor:this.colors[passedCounter - 1], text:this.texts[passedCounter - 1], width: (100 / this.texts.length) * passedCounter };
+    return { bgColor:this.colors[passedCounter - 1], text:this.texts[passedCounter - 1], width: (100 / this.colors.length) * passedCounter };
   }
 }
 ```
@@ -61,14 +61,14 @@ export class PasswordComplexityIndicatorComponent{
 - ```ts
   interface ProgressBarStats{
     bgColor: string,
-    text: string,
+    text?: string,
     width: number
   })
   ``` 
 - as you can see from interface above, progressBar input has;
   - ***bgColor:*** decides color of the bar.
-  - ***text:*** () // TODO bu belki optional olabilir düzelt
-  - ***width:*** decides how full the bar will be
+  - ***text:*** shows text for specific bar. 
+  - ***width:*** decides how full the bar will be.
 
 
 # How To Use
