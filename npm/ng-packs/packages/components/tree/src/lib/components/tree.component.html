@@ -23,7 +23,7 @@
     <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }"></ng-container>
 
     <ng-template #nodeTemplate let-node>
-      <div class="d-inline-block">
+      <div class="d-inline-flex align-items-center abp-ellipsis-inline">
         <ng-container
           *ngTemplateOutlet="
             customNodeTemplate ? customNodeTemplate?.template : defaultNodeTemplate;
