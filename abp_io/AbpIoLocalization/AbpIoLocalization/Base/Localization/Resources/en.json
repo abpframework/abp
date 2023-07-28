@@ -218,6 +218,7 @@
     "DetailedChangeNotes" : "Detailed Change Notes",
     "SeeTrainings": "See Trainings",
     "NoContent": "No content",
-    "ABPStudioBeta": "ABP Studio <span class=\"badge border rounded fw--5\" style=\"border-color: #B84297 !important;\">BETA</span>"
+    "ABPStudioBeta": "ABP Studio <span class=\"badge border rounded fw--5\" style=\"border-color: #B84297 !important;\">BETA</span>",
+    "More": "More"
   }
 }
