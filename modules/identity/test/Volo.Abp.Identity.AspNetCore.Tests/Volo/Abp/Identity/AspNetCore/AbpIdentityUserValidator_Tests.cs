@@ -20,7 +20,7 @@ public class AbpIdentityUserValidator_Tests : AbpIdentityAspNetCoreTestBase
     }
 
     [Fact]
-    public async Task Test()
+    public async Task Can_Not_Use_Another_Users_Email_As_Your_Username_Test()
     {
         var user1 = new IdentityUser(Guid.NewGuid(), "user1", "user1@volosoft.com");
         var identityResult = await _identityUserManager.CreateAsync(user1);
