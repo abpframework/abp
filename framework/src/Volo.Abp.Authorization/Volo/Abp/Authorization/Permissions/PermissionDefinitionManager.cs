@@ -30,7 +30,7 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ITransi
         return permission;
     }
 
-    public virtual async Task<PermissionDefinition> GetOrNullAsync(string name)
+    public virtual async Task<PermissionDefinition?> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 

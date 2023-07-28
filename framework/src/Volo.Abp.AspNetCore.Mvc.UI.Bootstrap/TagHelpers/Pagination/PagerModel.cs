@@ -25,13 +25,13 @@ public class PagerModel
 
     public int NextPage { get; set; }
 
-    public string Sort { get; set; }
+    public string? Sort { get; set; }
 
     public string PageUrl { get; set; }
 
     private const int MaxItemsCountToShowAllPages = 4;
 
-    public PagerModel(long totalCount, int shownItemsCount, int currentPage, int pageSize, string pageUrl, string sort = null)
+    public PagerModel(long totalCount, int shownItemsCount, int currentPage, int pageSize, string pageUrl, string? sort = null)
     {
         TotalItemsCount = totalCount;
         ShownItemsCount = shownItemsCount;

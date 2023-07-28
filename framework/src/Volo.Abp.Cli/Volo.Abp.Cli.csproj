@@ -5,6 +5,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <TargetFramework>net7.0</TargetFramework>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>abp</ToolCommandName>

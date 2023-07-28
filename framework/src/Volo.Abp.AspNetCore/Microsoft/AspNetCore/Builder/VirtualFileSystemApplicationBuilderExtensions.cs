@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.Builder;
 public static class VirtualFileSystemApplicationBuilderExtensions
 {
     [Obsolete("Use UseStaticFiles() instead. UseVirtualFiles is not needed anymore.")]
-    public static IApplicationBuilder UseVirtualFiles(this IApplicationBuilder app, Action<StaticFileOptions> configure = null)
+    public static IApplicationBuilder UseVirtualFiles(this IApplicationBuilder app, Action<StaticFileOptions>? configure = null)
     {
         if (configure != null)
         {

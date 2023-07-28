@@ -33,7 +33,7 @@ public class ConventionalControllerSetting
             _rootPath = value;
         }
     }
-    private string _rootPath;
+    private string _rootPath = default!;
 
     [NotNull]
     public string RemoteServiceName {
@@ -43,28 +43,24 @@ public class ConventionalControllerSetting
             _remoteServiceName = value;
         }
     }
-    private string _remoteServiceName;
+    private string _remoteServiceName = default!;
 
-    [CanBeNull]
-    public Func<Type, bool> TypePredicate { get; set; }
+    public Func<Type, bool>? TypePredicate { get; set; }
 
     /// <summary>
     /// Default value: All.
     /// </summary>
     public ApplicationServiceTypes ApplicationServiceTypes { get; set; } = ApplicationServiceTypes.All;
 
-    [CanBeNull]
-    public Action<ControllerModel> ControllerModelConfigurer { get; set; }
+    public Action<ControllerModel>? ControllerModelConfigurer { get; set; }
 
-    [CanBeNull]
-    public Func<UrlControllerNameNormalizerContext, string> UrlControllerNameNormalizer { get; set; }
+    public Func<UrlControllerNameNormalizerContext, string>? UrlControllerNameNormalizer { get; set; }
 
-    [CanBeNull]
-    public Func<UrlActionNameNormalizerContext, string> UrlActionNameNormalizer { get; set; }
+    public Func<UrlActionNameNormalizerContext, string>? UrlActionNameNormalizer { get; set; }
 
     public List<ApiVersion> ApiVersions { get; }
 
-    public Action<ApiVersioningOptions> ApiVersionConfigurer { get; set; }
+    public Action<ApiVersioningOptions>? ApiVersionConfigurer { get; set; }
 
     public ConventionalControllerSetting(
         [NotNull] Assembly assembly,
@@ -84,7 +80,7 @@ public class ConventionalControllerSetting
         var types = Assembly.GetTypes()
             .Where(IsRemoteService)
             .Where(IsPreferredApplicationServiceType)
-            .WhereIf(TypePredicate != null, TypePredicate);
+            .WhereIf(TypePredicate != null, TypePredicate!);
 
         foreach (var type in types)
         {

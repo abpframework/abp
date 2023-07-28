@@ -12,10 +12,13 @@ public class AbpTextTemplatingOptions
 
     public string DefaultRenderingEngine { get; set; }
 
+    public HashSet<string> DeletedTemplates { get; }
+
     public AbpTextTemplatingOptions()
     {
         DefinitionProviders = new TypeList<ITemplateDefinitionProvider>();
         ContentContributors = new TypeList<ITemplateContentContributor>();
         RenderingEngines = new Dictionary<string, Type>();
+        DeletedTemplates = new HashSet<string>();
     }
 }

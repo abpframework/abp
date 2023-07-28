@@ -14,8 +14,8 @@ public class DefaultValueFeatureValueProvider : FeatureValueProvider //TODO: Dir
 
     }
 
-    public override Task<string> GetOrNullAsync(FeatureDefinition setting)
+    public override Task<string?> GetOrNullAsync(FeatureDefinition setting)
     {
-        return Task.FromResult(setting.DefaultValue);
+        return Task.FromResult<string?>(setting.DefaultValue);
     }
 }

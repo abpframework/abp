@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -32,7 +33,7 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
     {
         httpContext.Response.OnStarting(() =>
         {
-            if (options.SetResponseHeader &&!httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
+            if (options.SetResponseHeader && !httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
             {
                 httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
             }

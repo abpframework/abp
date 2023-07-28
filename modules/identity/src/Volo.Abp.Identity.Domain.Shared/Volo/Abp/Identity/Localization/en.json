@@ -113,6 +113,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Whether the phoneNumber can be confirmed by the user.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Whether a confirmed telephone number is required to sign in.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Whether the username can be updated by the user.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user.",
+    "Details": "Details",
+    "CreatedBy": "Created by",
+    "ModifiedBy": "Modified by",
+    "ModificationTime": "Modification time",
+    "PasswordUpdateTime": "Password update time",
+    "LockoutEndTime": "Lockout end time",
+    "FailedAccessCount": "Failed access count"
   }
 }

@@ -4,7 +4,7 @@ namespace Volo.Abp.UI.Navigation.Urls;
 
 public class ApplicationUrlInfo
 {
-    public string RootUrl { get; set; }
+    public string? RootUrl { get; set; }
 
     public IDictionary<string, string> Urls { get; }
 

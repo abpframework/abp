@@ -25,7 +25,7 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransi
         StringLocalizer = stringLocalizer;
     }
 
-    public virtual async Task<TenantConfiguration> GetAsync(bool saveResolveResult = false)
+    public virtual async Task<TenantConfiguration?> GetAsync(bool saveResolveResult = false)
     {
         var resolveResult = await TenantResolver.ResolveTenantIdOrNameAsync();
 
@@ -34,7 +34,7 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransi
             TenantResolveResultAccessor.Result = resolveResult;
         }
 
-        TenantConfiguration tenant = null;
+        TenantConfiguration? tenant = null;
         if (resolveResult.TenantIdOrName != null)
         {
             tenant = await FindTenantAsync(resolveResult.TenantIdOrName);
@@ -61,7 +61,7 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransi
         return tenant;
     }
 
-    protected virtual async Task<TenantConfiguration> FindTenantAsync(string tenantIdOrName)
+    protected virtual async Task<TenantConfiguration?> FindTenantAsync(string tenantIdOrName)
     {
         if (Guid.TryParse(tenantIdOrName, out var parsedTenantId))
         {

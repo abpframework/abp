@@ -26,14 +26,14 @@ public class TemplateContentProvider : ITemplateContentProvider, ITransientDepen
         _templateDefinitionManager = templateDefinitionManager;
     }
 
-    public virtual Task<string> GetContentOrNullAsync(
+    public virtual async Task<string> GetContentOrNullAsync(
         [NotNull] string templateName,
         [CanBeNull] string cultureName = null,
         bool tryDefaults = true,
         bool useCurrentCultureIfCultureNameIsNull = true)
     {
-        var template = _templateDefinitionManager.Get(templateName);
-        return GetContentOrNullAsync(template, cultureName);
+        var template = await _templateDefinitionManager.GetAsync(templateName);
+        return await GetContentOrNullAsync(template, cultureName);
     }
 
     public virtual async Task<string> GetContentOrNullAsync(

@@ -23,7 +23,7 @@ public class AbpAspNetCoreSignalRModule : AbpModule
 {
     private static readonly MethodInfo MapHubGenericMethodInfo =
         typeof(AbpAspNetCoreSignalRModule)
-            .GetMethod("MapHub", BindingFlags.Static | BindingFlags.NonPublic);
+            .GetMethod("MapHub", BindingFlags.Static | BindingFlags.NonPublic)!;
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {

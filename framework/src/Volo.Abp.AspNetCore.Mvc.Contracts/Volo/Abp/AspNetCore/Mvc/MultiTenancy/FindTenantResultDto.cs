@@ -9,7 +9,7 @@ public class FindTenantResultDto
 
     public Guid? TenantId { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public bool IsActive { get; set; }
 }

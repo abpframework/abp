@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
 
@@ -26,7 +27,7 @@ public class EntityExtensionConfiguration
     [NotNull]
     public virtual EntityExtensionConfiguration AddOrUpdateProperty<TProperty>(
         [NotNull] string propertyName,
-        [CanBeNull] Action<ExtensionPropertyConfiguration> configureAction = null)
+        Action<ExtensionPropertyConfiguration>? configureAction = null)
     {
         return AddOrUpdateProperty(
             typeof(TProperty),
@@ -39,7 +40,7 @@ public class EntityExtensionConfiguration
     public virtual EntityExtensionConfiguration AddOrUpdateProperty(
         [NotNull] Type propertyType,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ExtensionPropertyConfiguration> configureAction = null)
+        Action<ExtensionPropertyConfiguration>? configureAction = null)
     {
         Check.NotNull(propertyType, nameof(propertyType));
         Check.NotNull(propertyName, nameof(propertyName));
@@ -74,7 +75,7 @@ public class EntityExtensionConfiguration
     [NotNull]
     public virtual ImmutableList<ExtensionPropertyConfiguration> GetProperties()
     {
-        return Properties.Values.ToImmutableList();
+        return Properties.Values.OrderBy(t => t.UI.Order).ToImmutableList();
     }
 
     private static void NormalizeProperty(ExtensionPropertyConfiguration propertyInfo)

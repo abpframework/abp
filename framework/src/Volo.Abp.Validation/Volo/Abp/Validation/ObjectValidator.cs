@@ -19,7 +19,7 @@ public class ObjectValidator : IObjectValidator, ITransientDependency
         Options = options.Value;
     }
 
-    public virtual async Task ValidateAsync(object validatingObject, string name = null, bool allowNull = false)
+    public virtual async Task ValidateAsync(object validatingObject, string? name = null, bool allowNull = false)
     {
         var errors = await GetErrorsAsync(validatingObject, name, allowNull);
 
@@ -32,7 +32,7 @@ public class ObjectValidator : IObjectValidator, ITransientDependency
         }
     }
 
-    public virtual async Task<List<ValidationResult>> GetErrorsAsync(object validatingObject, string name = null, bool allowNull = false)
+    public virtual async Task<List<ValidationResult>> GetErrorsAsync(object validatingObject, string? name = null, bool allowNull = false)
     {
         if (validatingObject == null)
         {

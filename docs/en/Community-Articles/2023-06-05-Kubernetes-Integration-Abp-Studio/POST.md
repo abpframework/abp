@@ -163,11 +163,9 @@ The solution runner is a great way of running multiple services locally. However
 
 ### How ABP Studio Kubernetes Tunnel works
 
-I am sure that you want to see it in action, but before that, let me explain how the solution works. No problem if you can not understand it completely. It is enough to see the big picture:
+I am sure that you want to see it in action, but before that, let me explain how the solution works.
 
 ![abp-studio-kubernetes-tunnel-how-it-works](06-abp-studio-kubernetes-tunnel-how-it-works.png)
-
-Let's explain how it works:
 
 * **Kubernetes cluster** is shown on the right side and your **local development machine** is shown on the left side.
 * As you know, when a **user requests a web page** from your web application, the request is accepted by an **Ingress Controller** inside your Kubernetes cluster.

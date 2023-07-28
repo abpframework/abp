@@ -31,7 +31,7 @@ public class AbpHttpClientWebModule : AbpModule
             .ServiceProvider
             .GetRequiredService<IModuleContainer>()
             .Modules
-            .Select(m => m.Type.Assembly)
+            .SelectMany(m => m.AllAssemblies)
             .Where(a => a.GetTypes().Any(AbpHttpClientProxyHelper.IsClientProxyService))
             .Distinct())
         {

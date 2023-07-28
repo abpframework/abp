@@ -105,7 +105,7 @@ public class AbpAspNetCoreMultiTenancyOptions
                 else
                 {
                     var transcodingStream = Encoding.CreateTranscodingStream(context.Response.Body, resolvedContentTypeEncoding, Encoding.UTF8, leaveOpen: true);
-                    ExceptionDispatchInfo exceptionDispatchInfo = null;
+                    ExceptionDispatchInfo? exceptionDispatchInfo = null;
                     try
                     {
                         await JsonSerializer.SerializeAsync(transcodingStream, error, error.GetType(), jsonSerializerOptions, context.RequestAborted);
@@ -138,7 +138,7 @@ public class AbpAspNetCoreMultiTenancyOptions
                 var details = exception is BusinessException businessException ? businessException.Details : string.Empty;
 
                 await context.Response.WriteAsync($"<html lang=\"{HtmlEncoder.Default.Encode(CultureInfo.CurrentCulture.Name)}\"><body>\r\n");
-                await context.Response.WriteAsync($"<h3>{HtmlEncoder.Default.Encode(message)}</h3>{HtmlEncoder.Default.Encode(details)}<br>\r\n");
+                await context.Response.WriteAsync($"<h3>{HtmlEncoder.Default.Encode(message)}</h3>{HtmlEncoder.Default.Encode(details!)}<br>\r\n");
                 await context.Response.WriteAsync("</body></html>\r\n");
 
                 // Note the 500 spaces are to work around an IE 'feature'

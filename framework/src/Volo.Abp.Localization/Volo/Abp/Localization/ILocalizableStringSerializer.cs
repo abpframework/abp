@@ -2,7 +2,7 @@
 
 public interface ILocalizableStringSerializer
 {
-    string Serialize(ILocalizableString localizableString);
+    string? Serialize(ILocalizableString localizableString);
     
     ILocalizableString Deserialize(string value);
 }

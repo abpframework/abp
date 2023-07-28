@@ -35,7 +35,7 @@ public class AbpExtraPropertyModelBinder : IModelBinder
         return Task.CompletedTask;
     }
 
-    protected virtual object ConvertStringToPropertyType(ModelBindingContext bindingContext, string value)
+    protected virtual object? ConvertStringToPropertyType(ModelBindingContext bindingContext, string? value)
     {
         if (bindingContext.ModelMetadata.ConvertEmptyStringToNull && string.IsNullOrWhiteSpace(value))
         {

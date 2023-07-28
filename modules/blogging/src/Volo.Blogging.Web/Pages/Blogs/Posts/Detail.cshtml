@@ -79,7 +79,7 @@
                                                 <a href="/Members/@Model.Post.Writer.UserName">
                                                     @(Model.Post.Writer.UserName)
                                                 </a>
-                                                <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span>
+                                                <span>@BloggingPageHelper.GetLocalizedTimeAgoText(Model.Post.CreationTime)</span>
                                             </h5>
                                         }
 
@@ -262,7 +262,7 @@
                 <div class="media-body">
                     <h5 class="comment-owner">
                         @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
-                        <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(commentWithRepliesDto.Comment.CreationTime)</span>
+                        <span>@BloggingPageHelper.GetLocalizedTimeAgoText(commentWithRepliesDto.Comment.CreationTime)</span>
                     </h5>
                     <p id="@commentWithRepliesDto.Comment.Id">
                         @commentWithRepliesDto.Comment.Text
@@ -342,7 +342,7 @@
                             <div class="media-body">
                                 <h5 class="comment-owner">
                                     @(reply.Writer == null ? "" : reply.Writer.UserName)
-                                    <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(reply.CreationTime)</span>
+                                    <span>@BloggingPageHelper.GetLocalizedTimeAgoText(reply.CreationTime)</span>
                                 </h5>
                                 <p id="@reply.Id">
                                     @reply.Text

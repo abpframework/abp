@@ -12,10 +12,10 @@ public class ServiceBasedPageModelActivatorProvider : IPageModelActivatorProvide
     public Func<PageContext, object> CreateActivator([NotNull] CompiledPageActionDescriptor descriptor)
     {
         Check.NotNull(descriptor, nameof(descriptor));
-        return context => context.HttpContext.RequestServices.GetRequiredService(descriptor.ModelTypeInfo);
+        return context => context.HttpContext.RequestServices.GetRequiredService(descriptor.ModelTypeInfo!);
     }
 
-    public Action<PageContext, object> CreateReleaser([NotNull] CompiledPageActionDescriptor descriptor)
+    public Action<PageContext, object>? CreateReleaser([NotNull] CompiledPageActionDescriptor descriptor)
     {
         return null;
     }

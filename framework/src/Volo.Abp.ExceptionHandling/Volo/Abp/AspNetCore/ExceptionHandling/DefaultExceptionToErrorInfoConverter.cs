@@ -54,7 +54,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         return errorInfo;
     }
 
-    public RemoteServiceErrorInfo Convert(Exception exception, Action<AbpExceptionHandlingOptions> options = null)
+    public RemoteServiceErrorInfo Convert(Exception exception, Action<AbpExceptionHandlingOptions>? options = null)
     {
         var exceptionHandlingOptions = CreateDefaultOptions();
         options?.Invoke(exceptionHandlingOptions);
@@ -90,7 +90,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
 
         if (exception is EntityNotFoundException)
         {
-            return CreateEntityNotFoundError(exception as EntityNotFoundException);
+            return CreateEntityNotFoundError((exception as EntityNotFoundException)!);
         }
 
         var errorInfo = new RemoteServiceErrorInfo();
@@ -110,10 +110,10 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
 
             if (errorInfo.Details.IsNullOrEmpty())
             {
-                errorInfo.Details = GetValidationErrorNarrative(exception as IHasValidationErrors);
+                errorInfo.Details = GetValidationErrorNarrative((exception as IHasValidationErrors)!);
             }
 
-            errorInfo.ValidationErrors = GetValidationErrorInfos(exception as IHasValidationErrors);
+            errorInfo.ValidationErrors = GetValidationErrorInfos((exception as IHasValidationErrors)!);
         }
 
         TryToLocalizeExceptionMessage(exception, errorInfo);
@@ -146,7 +146,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         }
 
         if (exceptionWithErrorCode.Code.IsNullOrWhiteSpace() ||
-            !exceptionWithErrorCode.Code.Contains(":"))
+            !exceptionWithErrorCode.Code!.Contains(":"))
         {
             return;
         }
@@ -197,10 +197,8 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
 
     protected virtual Exception TryToGetActualException(Exception exception)
     {
-        if (exception is AggregateException && exception.InnerException != null)
+        if (exception is AggregateException aggException && aggException.InnerException != null)
         {
-            var aggException = exception as AggregateException;
-
             if (aggException.InnerException is AbpValidationException ||
                 aggException.InnerException is AbpAuthorizationException ||
                 aggException.InnerException is EntityNotFoundException ||
@@ -223,7 +221,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
 
         if (exception is AbpValidationException)
         {
-            errorInfo.ValidationErrors = GetValidationErrorInfos(exception as AbpValidationException);
+            errorInfo.ValidationErrors = GetValidationErrorInfos((exception as AbpValidationException)!);
         }
 
         return errorInfo;
@@ -246,9 +244,8 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         }
 
         //Additional info for AbpValidationException
-        if (exception is AbpValidationException)
+        if (exception is AbpValidationException validationException)
         {
-            var validationException = exception as AbpValidationException;
             if (validationException.ValidationErrors.Count > 0)
             {
                 detailBuilder.AppendLine(GetValidationErrorNarrative(validationException));
@@ -268,9 +265,8 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         }
 
         //Inner exceptions for AggregateException
-        if (exception is AggregateException)
+        if (exception is AggregateException aggException)
         {
-            var aggException = exception as AggregateException;
             if (aggException.InnerExceptions.IsNullOrEmpty())
             {
                 return;
@@ -289,7 +285,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
 
         foreach (var validationResult in validationException.ValidationErrors)
         {
-            var validationError = new RemoteServiceValidationErrorInfo(validationResult.ErrorMessage);
+            var validationError = new RemoteServiceValidationErrorInfo(validationResult.ErrorMessage!);
 
             if (validationResult.MemberNames != null && validationResult.MemberNames.Any())
             {

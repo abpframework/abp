@@ -80,7 +80,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
     {
         var auditLog = auditLogScope.Log;
 
-        AuditLogActionInfo auditLogAction = null;
+        AuditLogActionInfo? auditLogAction = null;
         if (!options.DisableLogActionInfo)
         {
             auditLogAction = auditingHelper.CreateAuditLogAction(
@@ -127,10 +127,10 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         {
             try
             {
-                await ProceedByLoggingAsync(invocation, options, auditingHelper, auditingManager.Current);
+                await ProceedByLoggingAsync(invocation, options, auditingHelper, auditingManager.Current!);
 
                 Debug.Assert(auditingManager.Current != null);
-                if (auditingManager.Current.Log.Exceptions.Any())
+                if (auditingManager.Current!.Log.Exceptions.Any())
                 {
                     hasError = true;
                 }
@@ -142,7 +142,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             }
             finally
             {
-                if (await ShouldWriteAuditLogAsync(invocation, auditingManager.Current.Log, options, currentUser, hasError))
+                if (await ShouldWriteAuditLogAsync(invocation, auditingManager.Current!.Log, options, currentUser, hasError))
                 {
                     if (unitOfWorkManager.Current != null)
                     {
