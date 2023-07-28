@@ -53,6 +53,9 @@
     "Today": "Bugün",
     "Apply": "Uygula",
     "InternetConnectionInfo": "İşlem gerçekleştirilemedi. İnternet bağlantısı mevcut değil.",
-    "CopiedToTheClipboard": "Panoya kopyalandı"
+    "CopiedToTheClipboard": "Panoya kopyalandı",
+    "AddNew": "Yeni ekle",
+    "ProfilePicture": "Profil resmi",
+    "Theme": "Tema"
   }
 }
