@@ -48,7 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Perfil '{0}' inválido.",
     "Volo.Abp.Identity:InvalidToken": "Token inválido.",
     "Volo.Abp.Identity:InvalidUserName": "Usuário '{0}' é inválido, somente pode conter letras ou números.",
-    "Volo.Abp.Identity:YouCanNotUseAnotherUsersEmailAsYourUsername": "Usuário '{0}' é inválido, Você não pode usar o e-mail de outro usuário como seu nome de usuário.",
+    "InvalidUserName": "Usuário '{0}' é inválido.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Um usuário com este login já existe.",
     "Volo.Abp.Identity:PasswordMismatch": "Senha incorreta.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Senhas devem possuir pelo menos um dígito ('0'-'9').",

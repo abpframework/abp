@@ -37,7 +37,7 @@ namespace Volo.Abp.Identity
                     errors.Add(new IdentityError
                     {
                         Code = "InvalidUserName",
-                        Description = Localizer["Volo.Abp.Identity:YouCanNotUseAnotherUsersEmailAsYourUsername", userName]
+                        Description = Localizer["InvalidUserName", userName]
                     });
                 }
             }

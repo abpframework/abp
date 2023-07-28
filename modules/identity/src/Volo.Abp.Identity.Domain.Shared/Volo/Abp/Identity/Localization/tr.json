@@ -48,7 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "'{0}' rol ismi geçersizdir.",
     "Volo.Abp.Identity:InvalidToken": "Geçersiz token.",
     "Volo.Abp.Identity:InvalidUserName": "'{0}' kullanıcı adı geçersiz, sadece harf ve rakamlardan oluşmalı.",
-    "Volo.Abp.Identity:YouCanNotUseAnotherUsersEmailAsYourUsername": "'{0}' kullanıcı adı geçersiz, Başka bir kullanıcının e-posta adresini kullanıcı adı olarak kullanamazsınız.",
+    "InvalidUserName": "'{0}' kullanıcı adı geçersiz.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Bu giriş bilgilerine sahip bir kullanıcı zaten var.",
     "Volo.Abp.Identity:PasswordMismatch": "Hatalı şifre.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Şifre en az bir sayı içermeli ('0'-'9').",
