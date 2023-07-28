@@ -29,11 +29,11 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
     protected virtual void CheckAndSetCorrelationIdOnResponse(
         HttpContext httpContext,
         AbpCorrelationIdOptions options,
-        string correlationId)
+        string? correlationId)
     {
         httpContext.Response.OnStarting(() =>
         {
-            if (options.SetResponseHeader && !httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
+            if (options.SetResponseHeader && !httpContext.Response.Headers.ContainsKey(options.HttpHeaderName) && !string.IsNullOrWhiteSpace(correlationId))
             {
                 httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
             }
