@@ -31,6 +31,6 @@ public class AbpIdentityUserValidator_Tests : AbpIdentityAspNetCoreTestBase
         identityResult.Succeeded.ShouldBeFalse();
         identityResult.Errors.Count().ShouldBe(1);
         identityResult.Errors.First().Code.ShouldBe("InvalidUserName");
-        identityResult.Errors.First().Description.ShouldBe(Localizer["Volo.Abp.Identity:YouCanNotUseAnotherUsersEmailAsYourUsername", "user1@volosoft.com"]);
+        identityResult.Errors.First().Description.ShouldBe(Localizer["InvalidUserName", "user1@volosoft.com"]);
     }
 }
