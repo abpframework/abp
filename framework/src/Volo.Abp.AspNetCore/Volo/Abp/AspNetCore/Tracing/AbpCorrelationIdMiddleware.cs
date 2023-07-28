@@ -21,15 +21,8 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var correlationId = _correlationIdProvider.Get();
-
-        try
-        {
-            await next(context);
-        }
-        finally
-        {
-            CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
-        }
+        CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
+        await next(context);
     }
 
     protected virtual void CheckAndSetCorrelationIdOnResponse(
@@ -37,21 +30,14 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
         AbpCorrelationIdOptions options,
         string correlationId)
     {
-        if (httpContext.Response.HasStarted)
+        httpContext.Response.OnStarting(() =>
         {
-            return;
-        }
+            if (options.SetResponseHeader &&!httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
+            {
+                httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
+            }
 
-        if (!options.SetResponseHeader)
-        {
-            return;
-        }
-
-        if (httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
-        {
-            return;
-        }
-
-        httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
+            return Task.CompletedTask;
+        });
     }
 }
