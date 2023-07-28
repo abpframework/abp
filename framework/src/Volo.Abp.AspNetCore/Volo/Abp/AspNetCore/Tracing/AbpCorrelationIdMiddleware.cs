@@ -21,53 +21,24 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var correlationId = GetCorrelationIdFromRequest(context);
-
-        using (_correlationIdProvider.Change(correlationId))
-        {
-            try
-            {
-                await next(context);
-            }
-            finally
-            {
-                CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
-            }
-        }
-    }
-
-    protected virtual string GetCorrelationIdFromRequest(HttpContext context)
-    {
-        string? correlationId = context.Request.Headers[_options.HttpHeaderName];
-        if (correlationId.IsNullOrEmpty())
-        {
-            correlationId = Guid.NewGuid().ToString("N");
-            context.Request.Headers[_options.HttpHeaderName] = correlationId;
-        }
-
-        return correlationId!;
+        var correlationId = _correlationIdProvider.Get();
+        CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
+        await next(context);
     }
 
     protected virtual void CheckAndSetCorrelationIdOnResponse(
         HttpContext httpContext,
         AbpCorrelationIdOptions options,
-        string correlationId)
+        string? correlationId)
     {
-        if (httpContext.Response.HasStarted)
+        httpContext.Response.OnStarting(() =>
         {
-            return;
-        }
+            if (options.SetResponseHeader && !httpContext.Response.Headers.ContainsKey(options.HttpHeaderName) && !string.IsNullOrWhiteSpace(correlationId))
+            {
+                httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
+            }
 
-        if (!options.SetResponseHeader)
-        {
-            return;
-        }
-
-        if (httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
-        {
-            return;
-        }
-
-        httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
+            return Task.CompletedTask;
+        });
     }
 }
