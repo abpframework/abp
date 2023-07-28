@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Имя роли '{0}' недопустимо.",
     "Volo.Abp.Identity:InvalidToken": "Недопустимый маркер.",
     "Volo.Abp.Identity:InvalidUserName": "Имя пользователя '{0}' недопустимо и может содержать только буквы или цифры.",
+    "Volo.Abp.Identity:YouCanNotUseAnotherUsersEmailAsYourUsername": "Имя пользователя '{0}' недопустимо Вы не можете использовать электронную почту другого пользователя в качестве своего имени пользователя.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Пользователь с таким логином уже существует.",
     "Volo.Abp.Identity:PasswordMismatch": "Неверный пароль.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Пароль должен содержать по крайней мере одну цифру.",
