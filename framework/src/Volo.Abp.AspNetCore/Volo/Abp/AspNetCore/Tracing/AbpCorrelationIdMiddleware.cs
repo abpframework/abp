@@ -21,9 +21,12 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var correlationId = _correlationIdProvider.Get();
-        CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
-        await next(context);
+        var correlationId = GetCorrelationIdFromRequest(context);
+        using (_correlationIdProvider.Change(correlationId))
+        {
+            CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
+            await next(context);
+        }
     }
 
     protected virtual void CheckAndSetCorrelationIdOnResponse(
