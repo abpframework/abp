@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
@@ -29,9 +30,9 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
         }
     }
 
-    protected virtual string GetCorrelationIdFromRequest(HttpContext context)
+    protected virtual string? GetCorrelationIdFromRequest(HttpContext context)
     {
-        string correlationId = context.Request.Headers[_options.HttpHeaderName];
+        var correlationId = context.Request.Headers[_options.HttpHeaderName];
         if (correlationId.IsNullOrEmpty())
         {
             correlationId = Guid.NewGuid().ToString("N");
