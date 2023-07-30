@@ -39,7 +39,7 @@ describe('ShowPasswordDirective',()=>{
     bareInput = fixture.debugElement.query(By.css('input:not([abpShowPassword])'));
     })
 
-    // color tests
+    // tests
     it('should have three input has ShowPasswordDirective elements', () => {
       expect(des.length).toBe(3);
     });
