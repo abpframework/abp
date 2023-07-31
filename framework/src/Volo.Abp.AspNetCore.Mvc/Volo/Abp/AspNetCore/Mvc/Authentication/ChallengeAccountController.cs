@@ -76,4 +76,11 @@ public abstract class ChallengeAccountController : AbpController
                 : ForbidSchemes
         ));
     }
+
+    [HttpGet]
+    public virtual async Task<ActionResult> Challenge(string returnUrl = "", string returnUrlHash = "")
+    {
+        await HttpContext.SignOutAsync();
+        return Challenge(new AuthenticationProperties { RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
+    }
 }
