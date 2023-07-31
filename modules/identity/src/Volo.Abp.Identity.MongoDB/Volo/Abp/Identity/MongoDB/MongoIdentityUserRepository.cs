@@ -324,4 +324,40 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .Where(x => ids.Contains(x.Id))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
+
+    public virtual async Task UpdateRoleAsync(Guid sourceRoleId, Guid? targetRoleId, CancellationToken cancellationToken = default)
+    {
+        var users = await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => x.Roles.Any(r => r.RoleId == sourceRoleId))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        foreach (var user in users)
+        {
+            user.RemoveRole(sourceRoleId);
+            if (targetRoleId.HasValue)
+            {
+                user.AddRole(targetRoleId.Value);
+            }
+        }
+
+        await UpdateManyAsync(users, cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task UpdateOrganizationAsync(Guid sourceOrganizationId, Guid? targetOrganizationId, CancellationToken cancellationToken = default)
+    {
+        var users = await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => x.OrganizationUnits.Any(r => r.OrganizationUnitId == sourceOrganizationId))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        foreach (var user in users)
+        {
+            user.RemoveOrganizationUnit(sourceOrganizationId);
+            if (targetOrganizationId.HasValue)
+            {
+                user.AddOrganizationUnit(targetOrganizationId.Value);
+            }
+        }
+
+        await UpdateManyAsync(users, cancellationToken: cancellationToken);
+    }
 }
