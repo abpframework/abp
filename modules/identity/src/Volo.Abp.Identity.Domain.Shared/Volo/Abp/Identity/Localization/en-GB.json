@@ -47,6 +47,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Role name '{0}' is invalid.",
     "Volo.Abp.Identity:InvalidToken": "Invalid token.",
     "Volo.Abp.Identity:InvalidUserName": "Username '{0}' is invalid, it should only contain letters or digits.",
+    "InvalidUserName": "Username '{0}' is invalid.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "A user with this login already exists.",
     "Volo.Abp.Identity:PasswordMismatch": "Incorrect password.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Passwords must have at least one digit ('0'-'9').",

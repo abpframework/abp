@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Le nom de rôle '{0}' n’est pas valide.",
     "Volo.Abp.Identity:InvalidToken": "Jeton non valide.",
     "Volo.Abp.Identity:InvalidUserName": "Le nom d’utilisateur '{0}' n’est pas valide, ne peut contenir que des lettres ou des chiffres.",
+    "InvalidUserName": "Le nom d’utilisateur '{0}' n’est pas valide.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Un utilisateur avec cette connexion existe déjà.",
     "Volo.Abp.Identity:PasswordMismatch": "Mot de passe incorrect.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Les mots de passe doivent avoir au moins un chiffre ('0'-'9').",

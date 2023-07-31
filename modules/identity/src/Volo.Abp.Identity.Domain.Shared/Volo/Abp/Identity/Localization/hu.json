@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "'{0}' szerepkör név érvénytelen.",
     "Volo.Abp.Identity:InvalidToken": "Érvénytelen token.",
     "Volo.Abp.Identity:InvalidUserName": "'{0}' felhasználónév érvénytelen, csak betűket és számokat tartalmazhat.",
+    "InvalidUserName": "'{0}' felhasználónév érvénytelen.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Az ilyen bejelentkezéssel rendelkező felhasználó már létezik.",
     "Volo.Abp.Identity:PasswordMismatch": "Érvénytelen jelszó.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "A jelszavaknak legalább egy számjegyet kell rendelkezniük ('0'-'9').",
