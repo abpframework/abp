@@ -437,25 +437,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Compone
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Ldap.Abstractions", "src\Volo.Abp.Ldap.Abstractions\Volo.Abp.Ldap.Abstractions.csproj", "{0F80E95C-41E6-4F23-94FF-FC9D0B8D5D71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Ddd.Domain.Shared", "src\Volo.Abp.Ddd.Domain.Shared\Volo.Abp.Ddd.Domain.Shared.csproj", "{0858571B-CE73-4AD6-BD06-EC9F0714D8E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Ddd.Domain.Shared", "src\Volo.Abp.Ddd.Domain.Shared\Volo.Abp.Ddd.Domain.Shared.csproj", "{0858571B-CE73-4AD6-BD06-EC9F0714D8E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MultiTenancy.Abstractions", "src\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj", "{86F3684C-A0A5-4943-8CFA-AE79E8E3E315}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.Abstractions", "src\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj", "{86F3684C-A0A5-4943-8CFA-AE79E8E3E315}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.Abstractions", "src\Volo.Abp.Imaging.Abstractions\Volo.Abp.Imaging.Abstractions.csproj", "{32F3E84B-D02E-42BD-BC5C-0D211564EF30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.Abstractions", "src\Volo.Abp.Imaging.Abstractions\Volo.Abp.Imaging.Abstractions.csproj", "{32F3E84B-D02E-42BD-BC5C-0D211564EF30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.AspNetCore", "src\Volo.Abp.Imaging.AspNetCore\Volo.Abp.Imaging.AspNetCore.csproj", "{78340A37-219E-4F2D-9AC6-40A7B467EEEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.AspNetCore", "src\Volo.Abp.Imaging.AspNetCore\Volo.Abp.Imaging.AspNetCore.csproj", "{78340A37-219E-4F2D-9AC6-40A7B467EEEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.ImageSharp", "src\Volo.Abp.Imaging.ImageSharp\Volo.Abp.Imaging.ImageSharp.csproj", "{44467427-E0BE-492C-B9B4-82B362C183C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.ImageSharp", "src\Volo.Abp.Imaging.ImageSharp\Volo.Abp.Imaging.ImageSharp.csproj", "{44467427-E0BE-492C-B9B4-82B362C183C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.MagickNet", "src\Volo.Abp.Imaging.MagickNet\Volo.Abp.Imaging.MagickNet.csproj", "{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.MagickNet", "src\Volo.Abp.Imaging.MagickNet\Volo.Abp.Imaging.MagickNet.csproj", "{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.Abstractions.Tests", "test\Volo.Abp.Imaging.Abstractions.Tests\Volo.Abp.Imaging.Abstractions.Tests.csproj", "{2BE6BDC7-A9A3-4E30-9099-A9EF4813F6FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.Abstractions.Tests", "test\Volo.Abp.Imaging.Abstractions.Tests\Volo.Abp.Imaging.Abstractions.Tests.csproj", "{2BE6BDC7-A9A3-4E30-9099-A9EF4813F6FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.ImageSharp.Tests", "test\Volo.Abp.Imaging.ImageSharp.Tests\Volo.Abp.Imaging.ImageSharp.Tests.csproj", "{1E161A34-10C1-46FA-9EFD-10DD0858A8F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.ImageSharp.Tests", "test\Volo.Abp.Imaging.ImageSharp.Tests\Volo.Abp.Imaging.ImageSharp.Tests.csproj", "{1E161A34-10C1-46FA-9EFD-10DD0858A8F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.MagickNet.Tests", "test\Volo.Abp.Imaging.MagickNet.Tests\Volo.Abp.Imaging.MagickNet.Tests.csproj", "{62B2B8C9-8F24-4D31-894F-C1F0728D32AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.MagickNet.Tests", "test\Volo.Abp.Imaging.MagickNet.Tests\Volo.Abp.Imaging.MagickNet.Tests.csproj", "{62B2B8C9-8F24-4D31-894F-C1F0728D32AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.AspNetCore.Tests", "test\Volo.Abp.Imaging.AspNetCore.Tests\Volo.Abp.Imaging.AspNetCore.Tests.csproj", "{983B0136-384B-4439-B374-31111FFAA286}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.AspNetCore.Tests", "test\Volo.Abp.Imaging.AspNetCore.Tests\Volo.Abp.Imaging.AspNetCore.Tests.csproj", "{983B0136-384B-4439-B374-31111FFAA286}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Maui.Client", "src\Volo.Abp.Maui.Client\Volo.Abp.Maui.Client.csproj", "{F19A6E0C-F719-4ED9-A024-14E4B8D40883}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1363,6 +1365,10 @@ Global
 		{983B0136-384B-4439-B374-31111FFAA286}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{983B0136-384B-4439-B374-31111FFAA286}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{983B0136-384B-4439-B374-31111FFAA286}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F19A6E0C-F719-4ED9-A024-14E4B8D40883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F19A6E0C-F719-4ED9-A024-14E4B8D40883}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F19A6E0C-F719-4ED9-A024-14E4B8D40883}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F19A6E0C-F719-4ED9-A024-14E4B8D40883}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1586,13 +1592,14 @@ Global
 		{0858571B-CE73-4AD6-BD06-EC9F0714D8E9} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{86F3684C-A0A5-4943-8CFA-AE79E8E3E315} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{32F3E84B-D02E-42BD-BC5C-0D211564EF30} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{78340A37-219E-4F2D-9AC6-40A7B467EEEC} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{44467427-E0BE-492C-B9B4-82B362C183C3} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{F701EDA5-D7EA-4AA7-9C57-83ED50CE72EC} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
-		{78340A37-219E-4F2D-9AC6-40A7B467EEEC} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{2BE6BDC7-A9A3-4E30-9099-A9EF4813F6FF} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{1E161A34-10C1-46FA-9EFD-10DD0858A8F5} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{62B2B8C9-8F24-4D31-894F-C1F0728D32AB} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{983B0136-384B-4439-B374-31111FFAA286} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{F19A6E0C-F719-4ED9-A024-14E4B8D40883} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
