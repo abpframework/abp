@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending.TestObjects;
@@ -63,5 +65,20 @@ public class AbpAutoMapperExtensibleDtoExtensions_Tests : AbpIntegratedTest<Auto
         //Should not clear existing values
         personDto.HasProperty("IsActive").ShouldBe(false);
         personDto.IsActive.ShouldBe(true);
+    }
+
+    [Fact]
+    public void MapExtraPropertiesTo_Should_Ignored_If_ExtraProperties_Is_Null()
+    {
+        var person = new ExtensibleTestPerson();
+        person.SetExtraPropertiesAsNull();
+
+        var personDto = new ExtensibleTestPersonDto();
+        personDto.SetExtraPropertiesAsNull();
+
+        Should.NotThrow(() => _objectMapper.Map(person, personDto));
+
+        person.ExtraProperties.ShouldBe(null);
+        personDto.ExtraProperties.ShouldBeEmpty();
     }
 }
