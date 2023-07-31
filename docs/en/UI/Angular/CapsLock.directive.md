@@ -5,15 +5,17 @@ In password inputs,You may want to show if Caps Lock is on. To make this even ea
 
 ## Getting Started
 
-In order to use the `TrackCapsLockDirective` in an HTML template, the **`CoreModule`** should be imported into your module like this:
+`TrackCapsLockDirective` is standalone. In order to use the `TrackCapsLockDirective` in an HTML template, import it to related module or your standalone component:
 
 ```ts
-// ...
-import { CoreModule } from '@abp/ng.core';
+import { TrackCapsLockDirective } from '@abp/ng.core';
 
 @NgModule({
   //...
-  imports: [..., CoreModule],
+  imports: [
+   ...,
+   TrackCapsLockDirective
+  ],
 })
 export class MyFeatureModule {}
 ```
@@ -25,6 +27,8 @@ The `TrackCapsLockDirective` is very easy to use. The directive's selector is **
 See an example usage:
 
 ```ts
+import { TrackCapsLockDirective } from '@abp/ng.core'
+
 @Component({
   selector: 'test-component',
   standalone: true,
@@ -34,7 +38,8 @@ See an example usage:
       <input (abpCapsLock)="capsLock = $event"/>
       <i *ngIf='capsLock'>icon</i>
     </div>
-  `
+  `,
+  imports: [ TrackCapsLockDirective ]
 })
 export class TestComponent{
   capsLock = false;
