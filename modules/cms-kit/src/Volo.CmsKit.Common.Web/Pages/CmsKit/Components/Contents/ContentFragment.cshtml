@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Mvc.ViewComponents
 @using Volo.Abp.Data
 @using Volo.Abp.Reflection
+@using Volo.CmsKit.Contents
 @using Volo.CmsKit.Web.Renderers;
 @using Volo.CmsKit.Web.Pages.CmsKit.Components.Contents;
 
@@ -11,11 +12,11 @@
 
 @foreach (var contentFragment in Model.ContentDto.ContentFragments)
 {
-    if (contentFragment.Type == "Markdown")
+    if (contentFragment.Type == ContentConsts.Markdown)
     {
         @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
     }
-    else if (contentFragment.Type == "Widget")
+    else if (contentFragment.Type == ContentConsts.Widget)
     {
         var componentName = contentFragment.GetProperty<string>("Type");
         var descriptor = ViewComponentSelector.SelectComponent(componentName);
