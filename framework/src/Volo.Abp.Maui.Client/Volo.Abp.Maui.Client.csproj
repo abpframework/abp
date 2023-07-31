@@ -7,8 +7,8 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
-        <AssemblyName>Volo.Abp.MailKit</AssemblyName>
-        <PackageId>Volo.Abp.MailKit</PackageId>
+        <AssemblyName>Volo.Abp.Maui.Client</AssemblyName>
+        <PackageId>Volo.Abp.Maui.Client</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
