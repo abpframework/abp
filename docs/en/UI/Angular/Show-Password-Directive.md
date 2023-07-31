@@ -4,16 +4,17 @@ In password input, text can be shown easily via changing input type attribute to
 
 
 ## Getting Started
-
-In order to use the `ShowPasswordDirective` in an HTML template, the **`CoreModule`** should be imported into your module like this:
+`ShowPasswordDirective` is standalone. In order to use the `ShowPasswordDirective` in an HTML template, import it to related module or your standalone component:
 
 ```ts
-// ...
-import { CoreModule } from '@abp/ng.core';
+import { ShowPasswordDirective } from '@abp/ng.core';
 
 @NgModule({
   //...
-  imports: [..., CoreModule],
+  imports: [
+   ...,
+   ShowPasswordDirective
+  ],
 })
 export class MyFeatureModule {}
 ```
@@ -25,6 +26,7 @@ The `ShowPasswordDirective` is very easy to use. The directive's selector is **`
 See an example usage:
 
 ```ts
+import { ShowPasswordDirective } from '@abp/ng.core';
 @Component({
   selector: 'test-component',
   standalone: true,
@@ -34,7 +36,8 @@ See an example usage:
       <input [abpShowPassword]="showPassword"/>
       <i (click)="showPassword = !showPassword">icon</i>
     </div>
-  `
+  `,
+  imports: [ShowPasswordDirective]
 })
 export class TestComponent{
   showPassword = false;
