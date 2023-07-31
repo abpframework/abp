@@ -1,6 +1,6 @@
-# Show Password Directive
+# Caps Lock Directive
 
-In password inputs,You may want to show if Caps Lock is on. To make this even easier, you can use the `TrackCapsLockDirective` which has been exposed by the `@abp/ng.core` package.
+In password inputs, You may want to show if Caps Lock is on. To make this even easier, you can use the `TrackCapsLockDirective` which has been exposed by the `@abp/ng.core` package.
 
 
 ## Getting Started
