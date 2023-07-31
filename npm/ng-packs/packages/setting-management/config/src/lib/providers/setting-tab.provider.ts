@@ -17,7 +17,7 @@ export function configureSettingTabs(settingTabs: SettingTabsService) {
     settingTabs.add([
       {
         name: eSettingManamagementSettingTabNames.EmailSettingGroup,
-        order: 110,
+        order: 100,
         requiredPolicy: 'SettingManagement.Emailing',
         component: EmailSettingGroupComponent,
       },
