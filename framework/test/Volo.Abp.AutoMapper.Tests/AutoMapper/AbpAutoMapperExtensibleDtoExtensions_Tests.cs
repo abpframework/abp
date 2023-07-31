@@ -79,6 +79,6 @@ public class AbpAutoMapperExtensibleDtoExtensions_Tests : AbpIntegratedTest<Auto
         Should.NotThrow(() => _objectMapper.Map(person, personDto));
 
         person.ExtraProperties.ShouldBe(null);
-        personDto.ExtraProperties.ShouldBe(null);
+        personDto.ExtraProperties.ShouldBeEmpty();
     }
 }
