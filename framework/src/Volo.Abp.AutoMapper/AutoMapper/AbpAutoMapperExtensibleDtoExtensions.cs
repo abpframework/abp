@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
@@ -24,6 +25,11 @@ public static class AbpAutoMapperExtensibleDtoExtensions
                         var result = extraProps.IsNullOrEmpty()
                             ? new Dictionary<string, object>()
                             : new Dictionary<string, object>(extraProps);
+
+                        if (source.ExtraProperties == null || destination.ExtraProperties == null)
+                        {
+                            return result;
+                        }
 
                         ExtensibleObjectMapper
                             .MapExtraPropertiesTo<TSource, TDestination>(
