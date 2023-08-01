@@ -1,8 +1,6 @@
 ﻿@page
 
-@using Volo.Abp.Data
 @using Volo.Abp.Users;
-@using Volo.CmsKit.Public.Blogs
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
 @using Volo.CmsKit.Public.Web.Pages
 @using Volo.Abp.GlobalFeatures
@@ -10,16 +8,15 @@
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
-@using Volo.CmsKit.Web.Renderers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
 @using Volo.CmsKit.Contents
+@using Volo.CmsKit.Web.Pages.CmsKit.Components.Contents
 
 @inherits CmsKitPublicPageBase
 
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs.BlogPostModel
 
 @inject ICurrentUser CurrentUser
-@inject IMarkdownToHtmlRenderer MarkdownRenderer
 
 @{
     string dummyImageSource = "https://dummyimage.com/1280x720/a3a3a3/fff.png?text=" + Model.ViewModel.Title;
@@ -70,17 +67,10 @@
                                 </a>
                                 <small style="opacity:.65;">@Model.ViewModel.CreationTime</small>
                             </p>
-                            @foreach (var contentFragment in Model.ViewModel.ContentFragments)
+                            @(await Component.InvokeAsync(typeof(ContentFragmentViewComponent), new DefaultContentDto
                             {
-                                if (contentFragment.Type == ContentConsts.Markdown)
-                                {
-                                    @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content"), allowHtmlTags: true, preventXSS: true))
-                                }
-                                else if (contentFragment.Type == ContentConsts.Widget)
-                                {
-                                    @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
-                                }
-                            }
+                                ContentFragments = Model.ViewModel.ContentFragments
+                            }))
                             <p class="mb-3">
                                 @if (Model.ViewModel.LastModificationTime != null)
                                 {

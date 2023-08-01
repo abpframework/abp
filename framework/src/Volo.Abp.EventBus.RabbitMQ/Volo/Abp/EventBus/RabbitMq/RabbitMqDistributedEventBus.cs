@@ -350,7 +350,10 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
 
         try
         {
-            channel.ExchangeDeclarePassive(AbpRabbitMqEventBusOptions.ExchangeName);
+            using (var temporaryChannel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
+            {
+                temporaryChannel.ExchangeDeclarePassive(AbpRabbitMqEventBusOptions.ExchangeName);
+            }
         }
         catch (Exception)
         {

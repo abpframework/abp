@@ -182,6 +182,14 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
 
                     var versionAttribute = package.Attributes["Version"];
                     var currentVersion = versionAttribute.Value;
+                    
+                    var isLeptonXPackage = packageId.Contains("LeptonX");
+                    if(isLeptonXPackage)
+                    {
+                        //'SemanticVersion.TryParse' can not parse the version if the version contains floating version resolution, such as '*-*'
+                        currentVersion = currentVersion.Replace("*-*", "0").Replace("*", "0");
+                    }
+
                     var isVersionParsed = SemanticVersion.TryParse(currentVersion, out var currentSemanticVersion);
                     if (!isVersionParsed)
                     {
@@ -189,14 +197,13 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                         continue;
                     }
 
-                    var isLeptonXPackage = packageId.Contains("LeptonX");
-
                     Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, currentSemanticVersion);
 
                     if (!specifiedVersion.IsNullOrWhiteSpace())
                     {
                         if (isLeptonXPackage)
                         {
+                            Logger.LogWarning("Package: {0} could not be updated. Please manually update the package version yourself to prevent version mismatches.", packageId);
                             continue;
                         }
 
@@ -224,6 +231,11 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                         {
                             var latestVersion = latestMyGetVersion == null || isLeptonXPackage ?
                                 await GetLatestVersionFromMyGet(packageId) : latestMyGetVersion;
+
+                            if(latestVersion == null && isLeptonXPackage) //leptonx-pro package
+                            {
+                                latestVersion = await GetLatestVersionFromMyGet("Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme", isNightly: includeNightlyPreviews);
+                            }
 
                             if (currentVersion != latestVersion)
                             {
@@ -276,10 +288,10 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
         return await Task.FromResult(content);
     }
 
-    private async Task<string> GetLatestVersionFromMyGet(string packageId)
+    private async Task<string> GetLatestVersionFromMyGet(string packageId, bool isNightly = false)
     {
         var myGetPack = await _myGetPackageListFinder.GetPackagesAsync();
 
-        return myGetPack.Packages.FirstOrDefault(p => p.Id == packageId)?.Versions.LastOrDefault();
+        return myGetPack.Packages.FirstOrDefault(p => p.Id == packageId)?.Versions.LastOrDefault(x => isNightly ? x.Contains("-preview") : true);
     }
 }
