@@ -121,12 +121,15 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
   }
 
   private resetPageWhenUnchanged() {
+    console.log('this.page',this._page);
+    console.log('this._maxResultCount',this._maxResultCount);
+    console.log('this._skipCount',this._skipCount);
     const skipCount = this._page * this._maxResultCount;
-
-    if (skipCount === this._skipCount) {
-      this._page = 0;
-      this._skipCount = 0;
-    } else this._skipCount = skipCount;
+    console.log({skipCount});
+    this._skipCount = skipCount;
+    console.log('this.page',this._page);
+    console.log('this._maxResultCount',this._maxResultCount);
+    console.log('this._skipCount',this._skipCount);
   }
 
   private next() {
