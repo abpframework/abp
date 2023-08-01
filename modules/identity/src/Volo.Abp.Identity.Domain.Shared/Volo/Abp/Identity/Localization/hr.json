@@ -48,6 +48,7 @@
         "Volo.Abp.Identity:InvalidRoleName": "Naziv uloge '{0}' nije valjan.",
         "Volo.Abp.Identity:InvalidToken": "Pogrešan token.",
         "Volo.Abp.Identity:InvalidUserName": "Korisničko ime '{0}' nije važeće, može sadržavati samo slova ili znamenke.",
+        "InvalidUserName": "Korisničko ime '{0}' nije važeće.",
         "Volo.Abp.Identity:LoginAlreadyAssociated": "Korisnik s ovom prijavom već postoji.",
         "Volo.Abp.Identity:PasswordMismatch": "Netočna lozinka.",
         "Volo.Abp.Identity:PasswordRequiresDigit": "Lozinke moraju imati najmanje jednu znamenku ('0'-'9').",

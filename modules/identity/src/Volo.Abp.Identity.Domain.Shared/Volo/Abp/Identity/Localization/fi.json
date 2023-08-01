@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Roolin nimi {0} on virheellinen.",
     "Volo.Abp.Identity:InvalidToken": "Virheellinen tunnus.",
     "Volo.Abp.Identity:InvalidUserName": "Käyttäjätunnus {0} on virheellinen, voi sisältää vain kirjaimia tai numeroita.",
+    "InvalidUserName": "Käyttäjätunnus {0} on virheellinen.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Käyttäjä, jolla on tämä sisäänkirjautuminen, on jo olemassa.",
     "Volo.Abp.Identity:PasswordMismatch": "Väärä salasana.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Salasanoissa on oltava vähintään yksi numero ('0'-'9').",

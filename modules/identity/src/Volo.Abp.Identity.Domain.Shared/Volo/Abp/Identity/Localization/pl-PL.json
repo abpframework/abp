@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Rola '{0}' jest niepoprawna.",
     "Volo.Abp.Identity:InvalidToken": "Niepoprawny token.",
     "Volo.Abp.Identity:InvalidUserName": "Nazwa użytkownika '{0}' jest niepoprawna, może zawierać tylko litery i cyfry.",
+    "InvalidUserName": "Nazwa użytkownika '{0}' jest niepoprawna.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Użytkownik o tym loginie już istnieje.",
     "Volo.Abp.Identity:PasswordMismatch": "Niepoprawne hasło.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Hasło musi zawierać przynajmniej jedną cyfrę ('0'-'9').",

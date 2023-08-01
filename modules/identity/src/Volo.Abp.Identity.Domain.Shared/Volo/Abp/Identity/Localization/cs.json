@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Role '{0}' je neplatná.",
     "Volo.Abp.Identity:InvalidToken": "Neplatný token.",
     "Volo.Abp.Identity:InvalidUserName": "Uživatelské jméno '{0}' je neplatné, může obsahovat pouze písmena a číslice.",
+    "InvalidUserName": "Uživatelské jméno '{0}' je neplatné.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Uživatel s tímto přihlášením již existuje.",
     "Volo.Abp.Identity:PasswordMismatch": "Chybné heslo.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Hesla musí obsahovat alespoň jednu číslici ('0'-'9').",

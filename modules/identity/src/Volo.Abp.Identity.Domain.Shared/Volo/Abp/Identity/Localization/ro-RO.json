@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Numele de rol '{0}' este invalid.",
     "Volo.Abp.Identity:InvalidToken": "Invalid token.",
     "Volo.Abp.Identity:InvalidUserName": "Numele de utilizator '{0}' este invalid, poate conţine doar litere şi cifre.",
+    "InvalidUserName": "Numele de utilizator '{0}' este invalid.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Un utilizator cu această autentificare există deja.",
     "Volo.Abp.Identity:PasswordMismatch": "Parolă incorectă.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Parolele trebuie să conţină cel puţin o cifră ('0'-'9').",
