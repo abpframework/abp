@@ -164,6 +164,10 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
   readonly parentId = 'parentName';
   readonly hide = (item: T) => item.invisible || !this.isGranted(item);
   readonly sort = (a: T, b: T) => {
+    return this.compareFunc(a,b)
+  };
+
+  readonly compareFunc = (a: T, b: T) => {
     const aName = this.localizationService.instant(a.name);
     const bName = this.localizationService.instant(b.name);
     const aNumber = a.order;
@@ -179,7 +183,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
     if ( aName < bName ) return -1;
 
     return 0
-  };
+  }
 
   constructor(protected injector: Injector) {
     super();
