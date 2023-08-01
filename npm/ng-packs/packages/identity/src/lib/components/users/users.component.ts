@@ -184,7 +184,10 @@ export class UsersComponent implements OnInit {
   }
 
   private hookToQuery() {
-    this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => (this.data = res));
+    this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => {
+      (this.data = res)
+      console.log(this.data);
+    });
   }
 
   openPermissionsModal(providerKey: string, entityDisplayName?: string) {
