@@ -185,8 +185,8 @@ export class UsersComponent implements OnInit {
 
   private hookToQuery() {
     this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => {
-      (this.data = res)
-      console.log(this.data);
+      this.data = res;
+      this.list.totalCount = res.totalCount
     });
   }
 
