@@ -12,7 +12,7 @@ import {
 } from '../utils/tree-utils';
 import { ConfigStateService } from './config-state.service';
 import { PermissionService } from './permission.service';
-import { LocalizationService } from './localization.service';
+import { SORT_COMPARE_FUNC } from '../tokens/compare-func.token';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export abstract class AbstractTreeService<T extends { [key: string | number | symbol]: any }> {
@@ -159,31 +159,13 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 {
   private subscription: Subscription;
   private permissionService: PermissionService;
-  private localizationService: LocalizationService
+  private compareFunc;
   readonly id = 'name';
   readonly parentId = 'parentName';
   readonly hide = (item: T) => item.invisible || !this.isGranted(item);
   readonly sort = (a: T, b: T) => {
     return this.compareFunc(a,b)
   };
-
-  readonly compareFunc = (a: T, b: T) => {
-    const aName = this.localizationService.instant(a.name);
-    const bName = this.localizationService.instant(b.name);
-    const aNumber = a.order;
-    const bNumber = b.order;
-    
-    if (!Number.isInteger(aNumber)) return 1;
-    if (!Number.isInteger(bNumber)) return -1;
-
-    if (aNumber > bNumber) return 1
-    if (aNumber < bNumber) return -1
-    
-    if ( aName > bName ) return 1;
-    if ( aName < bName ) return -1;
-
-    return 0
-  }
 
   constructor(protected injector: Injector) {
     super();
@@ -192,8 +174,8 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
       .createOnUpdateStream(state => state)
       .subscribe(() => this.refresh());
     this.permissionService = injector.get(PermissionService);
-    this.localizationService = injector.get(LocalizationService);
     this.othersGroup = injector.get(OTHERS_GROUP);
+    this.compareFunc = injector.get(SORT_COMPARE_FUNC);
   }
 
   protected isGranted({ requiredPolicy }: T): boolean {
