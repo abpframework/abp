@@ -52,15 +52,14 @@ export class IdentityUserService {
     },
     { apiName: this.apiName });
 
-  getList = (input: GetIdentityUsersInput) => {
-    console.log({input});
-    return this.restService.request<any, PagedResultDto<IdentityUserDto>>({
+  getList = (input: GetIdentityUsersInput) => 
+    this.restService.request<any, PagedResultDto<IdentityUserDto>>({
       method: 'GET',
       url: '/api/identity/users',
       params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
-  }
+  
 
 
   getRoles = (id: string) =>
