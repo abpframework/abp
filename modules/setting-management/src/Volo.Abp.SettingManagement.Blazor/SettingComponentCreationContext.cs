@@ -25,7 +25,7 @@ public class SettingComponentCreationContext : IServiceProviderAccessor
 
     private void Order()
     {
-        var orderedItems = Groups.OrderBy(item => item.Order).ToArray();
+        var orderedItems = Groups.OrderBy(item => item.Order).ThenBy(item => item.DisplayName).ToArray();
         Groups.Clear();
         Groups.AddRange(orderedItems);
     }

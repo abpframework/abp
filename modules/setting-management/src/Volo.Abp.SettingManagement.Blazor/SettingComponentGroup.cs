@@ -5,7 +5,7 @@ namespace Volo.Abp.SettingManagement.Blazor;
 
 public class SettingComponentGroup
 {
-    public const int DefaultOrder = 1000;
+    public const int DefaultOrder = 1;
     
     public string Id {
         get => _id;

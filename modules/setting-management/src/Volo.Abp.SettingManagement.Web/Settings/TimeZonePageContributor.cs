@@ -25,8 +25,7 @@ public class TimeZonePageContributor : SettingPageContributorBase
                 new SettingPageGroup(
                     "Volo.Abp.TimeZone",
                     l["Menu:TimeZone"],
-                    typeof(TimeZoneSettingGroupViewComponent),
-                    order : 4
+                    typeof(TimeZoneSettingGroupViewComponent)
                 )
             );
         }

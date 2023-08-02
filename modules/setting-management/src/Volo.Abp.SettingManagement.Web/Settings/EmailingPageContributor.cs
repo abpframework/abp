@@ -23,8 +23,7 @@ public class EmailingPageContributor : SettingPageContributorBase
             new SettingPageGroup(
                 "Volo.Abp.EmailSetting",
                 l["Menu:Emailing"],
-                typeof(EmailSettingGroupViewComponent),
-                order : 3
+                typeof(EmailSettingGroupViewComponent)
             )
         );
         return Task.CompletedTask;
