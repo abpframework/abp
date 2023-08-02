@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "اسم الدور '{0}' غير صالح.",
     "Volo.Abp.Identity:InvalidToken": "غير صالح token.",
     "Volo.Abp.Identity:InvalidUserName": "اسم المستخدم '{0}' غير صالح ، يمكن أن يحتوي على أحرف أو أرقام فقط.",
+    "InvalidUserName": "لااسم المستخدم '{0}' غير صالح .",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "يوجد مستخدم لديه معلومات تسجيل الدخول هذه بالفعل.",
     "Volo.Abp.Identity:PasswordMismatch": "كلمة مرور غير صحيحة.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "يجب أن تحتوي كلمات المرور على رقم واحد على الأقل ('0' - '9').",

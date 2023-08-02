@@ -47,6 +47,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Το όνομα ρόλου '{0}' δεν είναι έγκυρο.",
     "Volo.Abp.Identity:InvalidToken": "Μη έγκυρο διακριτικό.",
     "Volo.Abp.Identity:InvalidUserName": "Το όνομα χρήστη '{0}' δεν είναι έγκυρο, μπορεί να περιέχει μόνο γράμματα ή ψηφία.",
+    "InvalidUserName": "Το όνομα χρήστη '{0}' δεν είναι έγκυρο.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Ένας χρήστης με αυτήν τη σύνδεση υπάρχει ήδη.",
     "Volo.Abp.Identity:PasswordMismatch": "Λάθος κωδικός.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Οι κωδικοί πρόσβασης πρέπει να έχουν τουλάχιστον ένα ψηφίο ('0'-'9').",

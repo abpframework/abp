@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using IdentityModel.Client;
-using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.IdentityModel;
@@ -12,22 +9,21 @@ namespace Volo.Abp.Http.Client.IdentityModel.MauiBlazor;
 [Dependency(ReplaceServices = true)]
 public class MauiBlazorIdentityModelRemoteServiceHttpClientAuthenticator : IdentityModelRemoteServiceHttpClientAuthenticator
 {
-    [CanBeNull]
-    protected IAbpMauiAccessTokenProvider AbpMauiAccessTokenProvider { get; }
+    protected IAbpAccessTokenProvider AccessTokenProvider { get; }
 
     public MauiBlazorIdentityModelRemoteServiceHttpClientAuthenticator(
         IIdentityModelAuthenticationService identityModelAuthenticationService,
-        IServiceProvider serviceProvider)
+        IAbpAccessTokenProvider abpAccessTokenProvider)
         : base(identityModelAuthenticationService)
     {
-        AbpMauiAccessTokenProvider = serviceProvider.GetService<IAbpMauiAccessTokenProvider>();
+        AccessTokenProvider = abpAccessTokenProvider;
     }
 
     public async override Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
     {
         if (context.RemoteService.GetUseCurrentAccessToken() != false)
         {
-            var accessToken = await GetAccessTokenFromAccessTokenProviderOrNullAsync();
+            var accessToken = await AccessTokenProvider.GetTokenAsync();
             if (accessToken != null)
             {
                 context.Request.SetBearerToken(accessToken);
@@ -36,15 +32,5 @@ public class MauiBlazorIdentityModelRemoteServiceHttpClientAuthenticator : Ident
         }
 
         await base.Authenticate(context);
-    }
-
-    protected virtual async Task<string> GetAccessTokenFromAccessTokenProviderOrNullAsync()
-    {
-        if (AbpMauiAccessTokenProvider == null)
-        {
-            return null;
-        }
-
-        return await AbpMauiAccessTokenProvider.GetAccessTokenAsync();
     }
 }

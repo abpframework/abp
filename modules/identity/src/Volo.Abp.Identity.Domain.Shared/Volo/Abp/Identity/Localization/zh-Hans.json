@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "角色名 '{0}' 无效.",
     "Volo.Abp.Identity:InvalidToken": "token无效.",
     "Volo.Abp.Identity:InvalidUserName": "用户名 '{0}' 无效, 只能包含字母或数字.",
+    "InvalidUserName": "用户名 '{0}' 无效.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "此登录名的用户已存在.",
     "Volo.Abp.Identity:PasswordMismatch": "密码错误.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "密码至少包含一位数字 ('0'-'9').",

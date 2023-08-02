@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Naziv vloge '{0}' ni veljaven.",
     "Volo.Abp.Identity:InvalidToken": "Neveljaven žeton.",
     "Volo.Abp.Identity:InvalidUserName": "Uporabniško ime '{0}' ni veljavno, vsebuje lahko le črke in številke.",
+    "InvalidUserName": "Uporabniško ime '{0}' ni veljavno.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Uporabnik s to prijavo že obstaja.",
     "Volo.Abp.Identity:PasswordMismatch": "Nepravilno geslo.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Gesla morajo imeti vsaj eno številko ('0'-'9').",
