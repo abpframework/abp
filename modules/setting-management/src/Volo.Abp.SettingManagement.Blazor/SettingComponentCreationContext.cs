@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.SettingManagement.Blazor;
@@ -15,5 +16,17 @@ public class SettingComponentCreationContext : IServiceProviderAccessor
         ServiceProvider = serviceProvider;
 
         Groups = new List<SettingComponentGroup>();
+    }
+    
+    public void Normalize()
+    {
+        Order();
+    }
+
+    private void Order()
+    {
+        var orderedItems = Groups.OrderBy(item => item.Order).ToArray();
+        Groups.Clear();
+        Groups.AddRange(orderedItems);
     }
 }

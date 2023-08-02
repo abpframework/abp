@@ -23,7 +23,8 @@ public class EmailingPageContributor : ISettingComponentContributor
             new SettingComponentGroup(
                 "Volo.Abp.SettingManagement",
                 l["Menu:Emailing"],
-                typeof(EmailSettingGroupViewComponent)
+                typeof(EmailSettingGroupViewComponent),
+                order : 3
             )
         );
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
@@ -15,5 +16,17 @@ public class SettingPageCreationContext : IServiceProviderAccessor
         ServiceProvider = serviceProvider;
 
         Groups = new List<SettingPageGroup>();
+    }
+    
+    public void Normalize()
+    {
+        Order();
+    }
+
+    private void Order()
+    {
+        var orderedItems = Groups.OrderBy(item => item.Order).ToArray();
+        Groups.Clear();
+        Groups.AddRange(orderedItems);
     }
 }
