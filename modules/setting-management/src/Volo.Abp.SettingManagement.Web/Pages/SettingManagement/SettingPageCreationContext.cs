@@ -9,7 +9,7 @@ public class SettingPageCreationContext : IServiceProviderAccessor
 {
     public IServiceProvider ServiceProvider { get; }
 
-    public List<SettingPageGroup> Groups { get; }
+    public List<SettingPageGroup> Groups { get; private set; }
 
     public SettingPageCreationContext(IServiceProvider serviceProvider)
     {
@@ -25,8 +25,6 @@ public class SettingPageCreationContext : IServiceProviderAccessor
 
     private void Order()
     {
-        var orderedItems = Groups.OrderBy(item => item.Order).ThenBy(item => item.DisplayName).ToArray();
-        Groups.Clear();
-        Groups.AddRange(orderedItems);
+        Groups = Groups.OrderBy(item => item.Order).ThenBy(item => item.DisplayName).ToList();
     }
 }

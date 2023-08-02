@@ -9,7 +9,7 @@ public class SettingComponentCreationContext : IServiceProviderAccessor
 {
     public IServiceProvider ServiceProvider { get; }
 
-    public List<SettingComponentGroup> Groups { get; }
+    public List<SettingComponentGroup> Groups { get; private set; }
 
     public SettingComponentCreationContext(IServiceProvider serviceProvider)
     {
@@ -25,8 +25,6 @@ public class SettingComponentCreationContext : IServiceProviderAccessor
 
     private void Order()
     {
-        var orderedItems = Groups.OrderBy(item => item.Order).ThenBy(item => item.DisplayName).ToArray();
-        Groups.Clear();
-        Groups.AddRange(orderedItems);
+        Groups = Groups.OrderBy(item => item.Order).ThenBy(item => item.DisplayName).ToList();
     }
 }
