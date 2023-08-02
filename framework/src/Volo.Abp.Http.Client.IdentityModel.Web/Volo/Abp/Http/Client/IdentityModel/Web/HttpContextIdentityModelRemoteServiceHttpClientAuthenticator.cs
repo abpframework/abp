@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.IdentityModel;
@@ -11,19 +9,21 @@ namespace Volo.Abp.Http.Client.IdentityModel.Web;
 [Dependency(ReplaceServices = true)]
 public class HttpContextIdentityModelRemoteServiceHttpClientAuthenticator : IdentityModelRemoteServiceHttpClientAuthenticator
 {
-    public IHttpContextAccessor HttpContextAccessor { get; set; }
+    protected IAbpAccessTokenProvider AccessTokenProvider { get; }
 
     public HttpContextIdentityModelRemoteServiceHttpClientAuthenticator(
-        IIdentityModelAuthenticationService identityModelAuthenticationService)
+        IIdentityModelAuthenticationService identityModelAuthenticationService,
+        IAbpAccessTokenProvider accessTokenProvider)
         : base(identityModelAuthenticationService)
     {
+        AccessTokenProvider = accessTokenProvider;
     }
 
-    public override async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
+    public async override Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
     {
         if (context.RemoteService.GetUseCurrentAccessToken() != false)
         {
-            var accessToken = await GetAccessTokenFromHttpContextOrNullAsync();
+            var accessToken = await AccessTokenProvider.GetTokenAsync();
             if (accessToken != null)
             {
                 context.Request.SetBearerToken(accessToken);
@@ -32,16 +32,5 @@ public class HttpContextIdentityModelRemoteServiceHttpClientAuthenticator : Iden
         }
 
         await base.Authenticate(context);
-    }
-
-    protected virtual async Task<string> GetAccessTokenFromHttpContextOrNullAsync()
-    {
-        var httpContext = HttpContextAccessor?.HttpContext;
-        if (httpContext == null)
-        {
-            return null;
-        }
-
-        return await httpContext.GetTokenAsync("access_token");
     }
 }
