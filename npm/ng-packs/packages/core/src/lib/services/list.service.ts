@@ -132,15 +132,16 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
   }
 
   private resetPageWhenUnchanged() {
-    const skipCount = this._page * this._maxResultCount; // 10
+    const maxPage = Number(Number(this._totalCount / this._maxResultCount).toFixed()) // 2
+    const skipCount = this._page * this._maxResultCount; // 20
     if(skipCount === this._totalCount){
-      if(this.page > 0){
+      if(this.page === maxPage && this.page > 0){
+        this._skipCount = skipCount - this._maxResultCount
         this.page = this.page - 1;
       }
     }else{
       this._skipCount = skipCount;
     }
-
   }
 
   private next() {
