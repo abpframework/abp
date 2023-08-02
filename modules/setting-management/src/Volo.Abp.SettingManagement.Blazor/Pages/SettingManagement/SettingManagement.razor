@@ -13,7 +13,7 @@
     <CardBody>
         <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Start" Pills="true" RenderMode="TabsRenderMode.LazyReload" VerticalItemsColumnSize="ColumnSize.Is3">
             <Items>
-                @foreach (var group in SettingComponentCreationContext.Groups)
+                @foreach (var group in SettingComponentGroups)
                 {
                     <Tab Name="@GetNormalizedString(group.Id)">
                         @group.DisplayName
@@ -21,7 +21,7 @@
                 }
             </Items>
             <Content>
-                @foreach (var group in SettingComponentCreationContext.Groups)
+                @foreach (var group in SettingComponentGroups)
                 {
                     <TabPanel Name="@GetNormalizedString(group.Id)" class="abp-md-form">
                         <h2>@group.DisplayName</h2>

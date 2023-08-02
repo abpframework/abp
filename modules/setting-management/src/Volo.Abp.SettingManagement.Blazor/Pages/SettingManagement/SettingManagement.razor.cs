@@ -17,6 +17,8 @@ public partial class SettingManagement
 
     protected SettingComponentCreationContext SettingComponentCreationContext { get; set; }
 
+    protected List<SettingComponentGroup> SettingComponentGroups { get; set; } = new List<SettingComponentGroup>();
+
     [Inject]
     protected IOptions<SettingManagementComponentOptions> _options { get; set; }
     [Inject]
@@ -40,6 +42,7 @@ public partial class SettingManagement
             await contributor.ConfigureAsync(SettingComponentCreationContext);
         }
 
+        SettingComponentGroups = SettingComponentCreationContext.Groups.OrderBy(x => x.DisplayName).ToList();
         SettingItemRenders.Clear();
 
         SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
