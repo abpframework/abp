@@ -66,7 +66,7 @@ public class PageAdminController : CmsKitAdminController, IPageAdminAppService
     [HttpPut]
     [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
     [Route("setashomepage/{id}")]
-    public virtual Task SetAsHomePageAsync([FromRoute] Guid id)
+    public virtual Task SetAsHomePageAsync(Guid id)
     {
         return PageAdminAppService.SetAsHomePageAsync(id);
     }
