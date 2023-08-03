@@ -28,7 +28,6 @@ describe('TrackCapsLockDirective',()=>{
     des = fixture.debugElement.queryAll(By.directive(TrackCapsLockDirective));
   });
 
-    // tests
     test.each(['keydown','keyup'])('is %p works when press capslock and is emit status', (eventName) => {
       const event = new KeyboardEvent(eventName, {
         key: 'CapsLock',

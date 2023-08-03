@@ -27,19 +27,15 @@ describe('ShowPasswordDirective',()=>{
       imports: [ TestComponent ]
     }).createComponent(TestComponent)
 
-    fixture.detectChanges(); // initial binding
+    fixture.detectChanges();
 
-    // all elements with an attached HighlightDirective
     des = fixture.debugElement.queryAll(By.directive(ShowPasswordDirective));
 
-    // all inputs includes nondirective
     desAll = fixture.debugElement.queryAll(By.all());
     
-    // the input without the ShowPasswordDirective
     bareInput = fixture.debugElement.query(By.css('input:not([abpShowPassword])'));
     })
 
-    // tests
     it('should have three input has ShowPasswordDirective elements', () => {
       expect(des.length).toBe(3);
     });
