@@ -39,7 +39,7 @@ See an example usage:
     <div class="d-flex flex-column">
       <label>Password</label>
       <input (abpCapsLock)="capsLock = $event"/>
-      <i *ngIf='capsLock'>icon</i>
+      <i *ngIf="capsLock">icon</i>
     </div>
   `
 })
@@ -59,10 +59,10 @@ import { TrackCapsLockDirective } from '@abp/ng.core'
     <div class="d-flex flex-column">
       <label>Password</label>
       <input (abpCapsLock)="capsLock = $event"/>
-      <i *ngIf='capsLock'>icon</i>
+      <i *ngIf="capsLock">icon</i>
     </div>
   `,
-  imports: [ TrackCapsLockDirective ]
+  imports: [TrackCapsLockDirective]
 })
 export class StandaloneComponent{
   capsLock = false;
