@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
@@ -155,4 +156,18 @@ public class ExposeServiceDerivedController : BaseController
 [ExposeServices(typeof(BaseController), IncludeSelf = true)]
 public class ExposeServiceIncludeSelfDerivedController : BaseController
 {
+}
+
+[RemoteService(Name = "test")]
+[Area("test")]
+[ControllerName("test")]
+[Route("api/identity/roles")]
+public class TestHttpApiController : AbpControllerBase, IApplicationService
+{
+    [HttpDelete]
+    [Route("{id}/assign/{assignToId?}")]
+    public virtual Task DeleteAsync(Guid id, Guid? assignToId)
+    {
+        return Task.CompletedTask;
+    }
 }
