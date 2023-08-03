@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Shouldly;
 using System;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Modeling;
+using Volo.Abp.Http.ProxyScripting.Generators;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions;
@@ -120,6 +123,19 @@ public class AbpServiceConvention_Tests : AspNetCoreMvcTestBase
         // Assert
         applicationModel.Controllers.ShouldContain(baseControllerModel);
         applicationModel.Controllers.ShouldNotContain(derivedControllerModel);
+    }
+
+    [Fact]
+    public async Task Parameters_Should_Binding_From_Path()
+    {
+        var model = await GetResponseAsObjectAsync<ApplicationApiDescriptionModel>("/api/abp/api-definition");
+        model.ShouldNotBeNull();
+
+        var parameters = model.Modules["test"].Controllers.First().Value.Actions.First().Value.Parameters;
+        parameters.Count.ShouldBe(2);
+        parameters.ShouldContain(x => x.Name == "id");
+        parameters.ShouldContain(x => x.Name == "assignToId" && x.IsOptional);
+        parameters.All(x => x.BindingSourceId == ParameterBindingSources.Path).ShouldBeTrue();
     }
 }
 

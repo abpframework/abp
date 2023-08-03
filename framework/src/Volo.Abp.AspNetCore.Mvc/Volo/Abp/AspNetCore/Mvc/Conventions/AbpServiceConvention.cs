@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -79,7 +80,7 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
         {
             return;
         }
-        
+
         var integrationControllers = GetControllers(application)
             .Where(c => IntegrationServiceAttribute.IsDefinedOrInherited(c.ControllerType))
             .ToArray();
@@ -212,6 +213,8 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
                 }
             }
         }
+
+        InferPathParameterBindingSources(controller);
     }
 
     protected virtual bool CanUseFormBodyBinding(ActionModel action, ParameterModel parameter)
@@ -252,6 +255,34 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
         }
 
         return true;
+    }
+
+    protected virtual void InferPathParameterBindingSources(ControllerModel controller)
+    {
+        if (controller.ControllerType.GetBaseClasses().All(x => x != typeof(AbpControllerBase)) ||
+            !typeof(IApplicationService).IsAssignableFrom(controller.ControllerType))
+        {
+            return;
+        }
+
+        foreach (var action in controller.Actions)
+        {
+            foreach (var parameter in action.Parameters.Where(x => x.BindingInfo?.BindingSource == null))
+            {
+                var routeAttribute = action.Attributes.OfType<RouteAttribute>().FirstOrDefault();
+                if (routeAttribute == null)
+                {
+                    continue;
+                }
+
+                var parsedTemplate = TemplateParser.Parse(routeAttribute.Template);
+                if (parsedTemplate.GetParameter(parameter.ParameterName) != null)
+                {
+                    parameter.BindingInfo ??= new BindingInfo();
+                    parameter.BindingInfo.BindingSource = BindingSource.Path;
+                }
+            }
+        }
     }
 
     protected virtual void ConfigureApiExplorer(ControllerModel controller)
