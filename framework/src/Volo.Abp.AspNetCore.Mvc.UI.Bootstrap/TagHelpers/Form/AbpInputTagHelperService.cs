@@ -229,9 +229,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         if (attribute != null || TagHelper.FloatingLabel)
         {
-            var placeholderLocalized = _tagHelperLocalizer.GetLocalizedText(attribute?.Value ?? string.Empty, TagHelper.AspFor.ModelExplorer);
-            if (string.IsNullOrWhiteSpace(placeholderLocalized))
-                placeholderLocalized = TagHelper.AspFor.Name;
+            var placeholderLocalized = _tagHelperLocalizer.GetLocalizedText(attribute?.Value ?? TagHelper.AspFor.Name, TagHelper.AspFor.ModelExplorer);
             inputTagHelperOutput.Attributes.Add("placeholder", placeholderLocalized);
         }
     }
