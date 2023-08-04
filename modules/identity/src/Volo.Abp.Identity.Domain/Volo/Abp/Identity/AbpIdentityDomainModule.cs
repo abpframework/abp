@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Authorization;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.Identity.Permissions;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -19,7 +22,8 @@ namespace Volo.Abp.Identity;
     typeof(AbpDddDomainModule),
     typeof(AbpIdentityDomainSharedModule),
     typeof(AbpUsersDomainModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpAutoMapperModule),
+    typeof(AbpAuthorizationModule)
     )]
 public class AbpIdentityDomainModule : AbpModule
 {
@@ -62,6 +66,15 @@ public class AbpIdentityDomainModule : AbpModule
         });
 
         context.Services.AddAbpDynamicOptions<IdentityOptions, AbpIdentityOptionsManager>();
+
+        Configure<AbpPermissionOptions>(options =>
+        {
+            //User - Role - UserRole - Client
+            options.ValueProviders.InsertAfter(
+                r => r == typeof(RolePermissionValueProvider),
+                typeof(UserRolePermissionValueProvider)
+            );
+        });
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
