@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Der Rollenname '{0}' ist ungültig.",
     "Volo.Abp.Identity:InvalidToken": "Ungültiger Token.",
     "Volo.Abp.Identity:InvalidUserName": "Der Benutzername '{0}' ist ungültig und darf nur Buchstaben oder Ziffern enthalten.",
+    "InvalidUserName": "Der Benutzername '{0}' ist ungültig.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Ein Benutzer mit diesem Login existiert bereits.",
     "Volo.Abp.Identity:PasswordMismatch": "Falsches Passwort.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Passwörter müssen mindestens eine Ziffer haben ('0' - '9').",

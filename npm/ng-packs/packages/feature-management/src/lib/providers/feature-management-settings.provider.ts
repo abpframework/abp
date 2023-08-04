@@ -17,7 +17,7 @@ export function configureSettingTabs(settingtabs: SettingTabsService) {
     settingtabs.add([
       {
         name: eFeatureManagementTabNames.FeatureManagement,
-        order: 104,
+        order: 100,
         requiredPolicy: 'FeatureManagement.ManageHostFeatures',
         component: FeatureManagementTabComponent,
       },

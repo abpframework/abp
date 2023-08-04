@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "El nombre de rol '{0}' no es válido.",
     "Volo.Abp.Identity:InvalidToken": "token no válido",
     "Volo.Abp.Identity:InvalidUserName": "Nombre de usuario '{0}' no es válido. Sólo puede contener letras o dígitos",
+    "InvalidUserName": "Nombre de usuario '{0}' no es válido.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Usuario con este inicio de sesión en uso.",
     "Volo.Abp.Identity:PasswordMismatch": "Contraseña incorrecta.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Contraseñas deben tener al menos un dígito ('0'-'9').",

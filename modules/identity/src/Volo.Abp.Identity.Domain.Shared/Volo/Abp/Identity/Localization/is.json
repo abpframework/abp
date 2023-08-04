@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Hlutverkanafnið '{0}' er ógilt.",
     "Volo.Abp.Identity:InvalidToken": "Ógilt token.",
     "Volo.Abp.Identity:InvalidUserName": "Notandanafnið '{0}' er ógilt, getur aðeins innihaldið bókstafi eða tölustafi.",
+    "InvalidUserName": "Notandanafnið '{0}' er ógilt.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Notandi með þessa innskráningu er þegar til.",
     "Volo.Abp.Identity:PasswordMismatch": "Rangt lykilorð.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Lykilorð verða að hafa að minnsta kosti einn staf ('0'-'9').",
