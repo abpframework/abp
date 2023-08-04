@@ -14,14 +14,14 @@ When you inject InternetConnectionService you can get the current internet statu
 
 **You can get via signal**
 ```ts
-class someComponent{
+class SomeComponent{
  internetConnectionService = inject(InternetConnectionService);
  isOnline = this.internetConnectionService.networkStatus
 }
 ```
 **or you can get as observable**
 ```ts
-class someComponent{
+class SomeComponent{
  internetConnectionService = inject(InternetConnectionService);
  isOnline = this.internetConnectionService.networkStatus$
 }
