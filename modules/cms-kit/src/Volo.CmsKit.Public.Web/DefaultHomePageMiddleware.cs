@@ -16,23 +16,20 @@ public class DefaultHomePageMiddleware : IMiddleware, ITransientDependency
     {
         var featureChecker = context.RequestServices.GetRequiredService<IFeatureChecker>();
 
-        if (!await featureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable))
+        if (await featureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable))
         {
-            return;
+            if (context.Request.Path.Value == "/")
+            {
+                var pagePublicAppService = context.RequestServices.GetRequiredService<IPagePublicAppService>();
+
+                var page = await pagePublicAppService.FindDefaultHomePageAsync();
+                if (page != null)
+                {
+                    context.Request.Path = $"{PageConsts.UrlPrefix}{page.Slug}";
+                }
+            }
         }
 
-        if (context.Request.Path.Value == "/")
-        {
-            var pagePublicAppService = context.RequestServices.GetRequiredService<IPagePublicAppService>();
-            
-            var page = await pagePublicAppService.FindDefaultHomePageAsync();
-            if (page != null)
-            {
-                context.Request.Path = $"{PageConsts.UrlPrefix}{page.Slug}";
-            }
-            
-        }
-        
         await next(context);
     }
 }
