@@ -22,4 +22,12 @@ The `dev-app` project is the same as the Angular UI template project. `dev-app` 
 For more information, see the [docs.abp.io](https://docs.abp.io)
 
 If would you like contribute, see the [contribution guideline](./CONTRIBUTING.md).
+
+### Git Hooks
+ There is a pre-defined git hook for Angular project. This hook is `pre-commit`. The hook run prettier for staged files. If you want to use this hook.  (This steps tested for  linux and Mac os)  
+
+ - Go to `npm/ng-packs`
+ - Run `chmod +x ./pre-commit` in terminal
+ - Run `git config core.hooksPath npm/ng-packs` in terminal
+ and now, when you create a git commit, git hook execute prettier for staged files.
  

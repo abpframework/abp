@@ -10,7 +10,6 @@
     "ConnectionStrings": "کانکشن استرینگها",
     "DisplayName:DefaultConnectionString": "کانکشن استرینگ پیش فرض",
     "DisplayName:UseSharedDatabase": "استفاده از پایگاه داده مشترک",
-    "ManageHostFeatures": "مدیریت ویژگی های میزبان",
     "Permission:TenantManagement": "مدیریت تننت",
     "Permission:Create": "ایجاد",
     "Permission:Edit": "ویرایش",

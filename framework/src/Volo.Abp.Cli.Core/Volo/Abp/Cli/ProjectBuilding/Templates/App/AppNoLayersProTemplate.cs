@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
+﻿using Volo.Abp.Cli.ProjectBuilding.Building;
+
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 public class AppNoLayersProTemplate : AppNoLayersTemplateBase
 {
@@ -6,6 +8,8 @@ public class AppNoLayersProTemplate : AppNoLayersTemplateBase
     /// "app-nolayers-pro".
     /// </summary>
     public const string TemplateName = "app-nolayers-pro";
+    
+    public const Theme DefaultTheme = Theme.LeptonX;
 
     public AppNoLayersProTemplate()
         : base(TemplateName)

@@ -3,8 +3,131 @@ $(function () {
     var service = window.volo.docs.admin.documentsAdmin;
 
     var getFormattedDate = function ($datePicker) {
-        return $datePicker.data().datepicker.getFormattedDate('yyyy-mm-dd');
+        return $datePicker.data('date');
     };
+
+	moment.localeData().preparse = (s)=>s;
+    moment.localeData().postformat = (s)=>s;
+	
+    $('.singledatepicker').daterangepicker({
+        "singleDatePicker": true,
+        "showDropdowns": true,
+        "autoUpdateInput": false,
+        "autoApply": true,
+        "opens": "center",
+        "drops": "auto",
+        "minYear": 1901,
+        "maxYear": 2199,
+    });
+
+    $('.singledatepicker').attr('autocomplete', 'off');
+
+    $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('l'));
+        $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
+    });
+
+
+    var comboboxItems = [];
+    
+    service.getFilterItems()
+        .then(function (result) {
+            comboboxItems = result;
+            fillOptions();
+        }).catch(function (error) {
+        abp.message.error(error);
+    });
+
+
+    var $projectId = $('#ProjectId');
+
+    $projectId.on('change', function () {
+        fillOptions();
+    });
+    
+    var comboboxs = {
+        version: $('#Version'),
+        languageCode: $('#LanguageCode'),
+        format: $('#Format')
+    };
+    
+    for (var key in comboboxs) {
+        comboboxs[key].on('change', function () {
+            fillOptions();
+        });
+    }
+
+
+    var selectedItem = getSelectedItem();
+
+    function emptyComboboxs() {
+        for (var key in comboboxs) {
+            comboboxs[key].empty();
+        }
+    }
+    
+    function getSelectedItem() {
+        var item = {};
+        for (var key in comboboxs) {
+            item[key] = comboboxs[key].val();
+        }
+        return item;
+    }
+    
+    function SetComboboxsValues(item) {
+        for (var key in comboboxs) {
+            comboboxs[key].val(item[key]);
+        }
+    }
+    
+    function addComboboxsEmptyItem() {
+        for (var key in comboboxs) {
+            comboboxs[key].append($('<option/>').val('').text(''));
+        }
+    }
+
+    function fillOptions() {
+        
+        selectedItem = getSelectedItem();
+        
+        var selectedProjectId = $projectId.val();
+
+        emptyComboboxs();
+        
+        addComboboxsEmptyItem();
+
+        var selectedProjectItems = comboboxItems.filter((item) => !selectedProjectId || item.projectId === selectedProjectId);
+        
+        for (var key in selectedItem) {
+            var item = selectedProjectItems.find((item) => item[key] === selectedItem[key]);
+            if (item) {
+                selectedItem[key] = item[key];
+            }else {
+                selectedItem[key] = '';
+            }
+        }
+        
+
+        selectedProjectItems.forEach(function (item) {
+            for (var key in comboboxs) {
+                appendComboboxItem(comboboxs[key], item, key);
+            }
+        });
+        
+        SetComboboxsValues(selectedItem);
+    }
+    function appendComboboxItem($combobox, item , key) {
+        $.each(item, function (index, value) {
+            if(index !== key) {
+                if(selectedItem[index] && selectedItem[index] !== value) {
+                    return ;
+                }}
+        });
+        if($combobox.find('option[value="' + item[key] + '"]').length === 0){
+            $combobox.append($('<option/>').val(item[key]).text(item[key]));
+        }
+    }
+
 
     var getFilter = function () {
         return {
@@ -12,7 +135,6 @@ $(function () {
             name: $('#Name').val(),
             version: $('#Version').val(),
             languageCode: $('#LanguageCode').val(),
-            fileName: $('#FileName').val(),
             format: $('#Format').val(),
             creationTimeMin: getFormattedDate($('#CreationTimeMin')),
             creationTimeMax: getFormattedDate($('#CreationTimeMax')),
@@ -51,12 +173,16 @@ $(function () {
                                 visible: abp.auth.isGranted(
                                     'Docs.Admin.Documents'
                                 ),
+                                confirmMessage: function (data) {
+                                    return l('RemoveCacheAndReIndexConfirmation',
+                                        data.record.name);
+                                },
                                 action: function (data) {
                                     service
                                         .removeFromCache(data.record.id)
                                         .then(function () {
                                             abp.notify.success(l('RemovedFromCache'));
-                                            dataTable.ajax.reload();
+                                            dataTable.ajax.reloadEx();
                                         });
                                 },
                             },
@@ -66,14 +192,15 @@ $(function () {
                                     'Docs.Admin.Documents'
                                 ),
                                 confirmMessage: function (data) {
-                                    return l('ReIndexDocumentConfirmation');
+                                    return l('ReIndexDocumentConfirmation',
+                                        data.record.name);
                                 },
                                 action: function (data) {
                                     service
                                         .reindex(data.record.id)
                                         .then(function () {
                                             abp.message.success(l('ReindexCompleted'));
-                                            dataTable.ajax.reload();
+                                            dataTable.ajax.reloadEx();
                                         });
                                 },
                             }
@@ -82,26 +209,30 @@ $(function () {
                 },
                 {
                     target: 1,
-                    data: 'name',
+                    data: 'projectName',
                 },
                 {
                     target: 2,
-                    data: 'version',
+                    data: 'name',
                 },
                 {
                     target: 3,
-                    data: 'languageCode',
+                    data: 'version',
                 },
                 {
                     target: 4,
-                    data: 'fileName',
+                    data: 'languageCode',
                 },
                 {
                     target: 5,
-                    data: 'format',
+                    data: 'fileName',
                 },
                 {
                     target: 6,
+                    data: 'format',
+                },
+                {
+                    target: 7,
                     data: 'creationTime',
                     render: function (creationTime) {
                         if (!creationTime) {
@@ -112,7 +243,7 @@ $(function () {
                     },
                 },
                 {
-                    target: 7,
+                    target: 8,
                     data: 'lastUpdatedTime',
                     render: function (lastUpdatedTime) {
                         if (!lastUpdatedTime) {
@@ -123,7 +254,7 @@ $(function () {
                     },
                 },
                 {
-                    target: 8,
+                    target: 9,
                     data: 'lastSignificantUpdateTime',
                     render: function (lastSignificantUpdateTime) {
                         if (!lastSignificantUpdateTime) {
@@ -134,7 +265,7 @@ $(function () {
                     },
                 },
                 {
-                    target: 9,
+                    target: 10,
                     data: 'lastCachedTime',
                     render: function (lastCachedTime) {
                         if (!lastCachedTime) {
@@ -150,12 +281,16 @@ $(function () {
 
     $("#FilterForm input[type='text']").keypress(function (e) {
         if (e.which === 13) {
-            dataTable.ajax.reload();
+            dataTable.ajax.reloadEx();
         }
     });
 
     $('#SearchButton').click(function (e) {
         e.preventDefault();
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
+    });
+
+    $("#AdvancedFilterSectionToggler").click(function (e) {
+        $("#AdvancedFilterSection").toggle();
     });
 });

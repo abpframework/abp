@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.Cli;
 
@@ -7,6 +8,8 @@ public static class CliUrls
     public const string WwwAbpIo = WwwAbpIoProduction;
     public const string AccountAbpIo = AccountAbpIoProduction;
     public const string NuGetRootPath = NuGetRootPathProduction;
+    public const string LatestVersionCheckFullPath =
+        "https://raw.githubusercontent.com/abpframework/abp/dev/latest-versions.json";
 
     public const string WwwAbpIoProduction = "https://abp.io/";
     public const string AccountAbpIoProduction = "https://account.abp.io/";
@@ -26,9 +29,14 @@ public static class CliUrls
         return $"{NuGetRootPath}{apiKey}/v3/package/{packageId}/index.json";
     }
 
-    public static string GetApiDefinitionUrl(string url)
+    public static string GetNuGetPackageSearchUrl(string apiKey, string packageId)
+    {
+        return $"{NuGetRootPath}{apiKey}/v3/search?q={packageId}";
+    }
+
+    public static string GetApiDefinitionUrl(string url, ApplicationApiDescriptionModelRequestDto model = null)
     {
         url = url.EnsureEndsWith('/');
-        return $"{url}api/abp/api-definition";
+        return $"{url}api/abp/api-definition{(model != null ? model.IncludeTypes ? "?includeTypes=true" : string.Empty : string.Empty)}";
     }
 }

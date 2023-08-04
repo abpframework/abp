@@ -25,7 +25,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
     [Obsolete("Use GetCollectionAsync method.")]
     public virtual IMemoryDatabaseCollection<TEntity> Collection => Database.Collection<TEntity>();
 
-    public async Task<IMemoryDatabaseCollection<TEntity>> GetCollectionAsync()
+    public virtual async Task<IMemoryDatabaseCollection<TEntity>> GetCollectionAsync()
     {
         return (await GetDatabaseAsync()).Collection<TEntity>();
     }
@@ -157,21 +157,23 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         AuditPropertySetter.SetDeletionProperties(entity);
     }
 
+    protected virtual void IncrementEntityVersionProperty(TEntity entity)
+    {
+        AuditPropertySetter.IncrementEntityVersionProperty(entity);
+    }
+
     protected virtual void TriggerEntityCreateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityCreatingEvent(entity);
         EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
     }
 
     protected virtual void TriggerEntityUpdateEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityUpdatingEvent(entity);
         EntityChangeEventHelper.PublishEntityUpdatedEvent(entity);
     }
 
     protected virtual void TriggerEntityDeleteEvents(TEntity entity)
     {
-        EntityChangeEventHelper.PublishEntityDeletingEvent(entity);
         EntityChangeEventHelper.PublishEntityDeletedEvent(entity);
     }
 
@@ -208,6 +210,11 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         await DeleteManyAsync(entities, autoSave, cancellationToken);
     }
 
+    public override async Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        await DeleteAsync(predicate, true, cancellationToken);
+    }
+
     public override async Task<TEntity> InsertAsync(
         TEntity entity,
         bool autoSave = false,
@@ -225,6 +232,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
         bool autoSave = false,
         CancellationToken cancellationToken = default)
     {
+        IncrementEntityVersionProperty(entity);
         SetModificationAuditProperties(entity);
 
         if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
@@ -253,7 +261,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
 
         if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
         {
-            softDeleteEntity.IsDeleted = true;
+            ObjectHelper.TrySetProperty(softDeleteEntity, x => x.IsDeleted, () => true);
             (await GetCollectionAsync()).Update(entity);
         }
         else

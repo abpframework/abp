@@ -1,0 +1,11 @@
+{
+  "name": "@<%= kebab(libraryName) %>/<%= kebab(libraryName) %>",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@abp/ng.core": "<%= abpVersion %>",
+    "@abp/ng.theme.shared": "<%= abpVersion %>"
+  },
+  "dependencies": {
+    "tslib": "^2.1.0"
+  }
+}

@@ -13,6 +13,15 @@ You can learn more on [prismjs.com](https://prismjs.com/).
 
 ## Contribute to Prism!
 
+### **Important Notice**
+
+We are currently working on [Prism v2](https://github.com/PrismJS/prism/discussions/3531) and will only accept security-relevant PRs for the time being.
+
+Once work on Prism v2 is sufficiently advanced, we will accept PRs again. This will be announced on our [Discussion](https://github.com/PrismJS/prism/discussions) page and mentioned in the [roadmap discussion](https://github.com/PrismJS/prism/discussions/3531).
+
+<details>
+<summary>Prism v1 contributing notes</summary>
+
 Prism depends on community contributions to expand and cover a wider array of use cases. If you like it, consider giving back by sending a pull request. Here are a few tips:
 
 - Read the [documentation](https://prismjs.com/extending.html). Prism was designed to be extensible.
@@ -34,6 +43,8 @@ Prism will run on [almost any browser](https://prismjs.com/#features-full) and N
 
 - Node.js >= 10.x
 - npm >= 6.x
+
+</details>
 
 ## Translations
 

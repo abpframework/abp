@@ -19,8 +19,7 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
     {
     }
 
-    public async Task DeleteManyByApplicationIdAsync(Guid applicationId, bool autoSave = false,
-        CancellationToken cancellationToken = default)
+    public virtual async Task DeleteManyByApplicationIdAsync(Guid applicationId, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         var tokens = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.ApplicationId == applicationId)
@@ -29,11 +28,20 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
         await DeleteManyAsync(tokens, autoSave, cancellationToken);
     }
 
-    public async Task DeleteManyByAuthorizationIdAsync(Guid authorizationId, bool autoSave = false,
+    public virtual async Task DeleteManyByAuthorizationIdAsync(Guid authorizationId, bool autoSave = false,
         CancellationToken cancellationToken = default)
     {
         var tokens = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
-            .Where(x => x.ApplicationId == authorizationId)
+            .Where(x => x.AuthorizationId == authorizationId)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task DeleteManyByAuthorizationIdsAsync(Guid[] authorizationIds, bool autoSave = false, CancellationToken cancellationToken = default)
+    {
+        var tokens = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+            .Where(x => x.AuthorizationId != null && authorizationIds.Contains(x.AuthorizationId.Value))
             .ToListAsync(GetCancellationToken(cancellationToken));
 
         await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));
@@ -100,18 +108,22 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<OpenIddictToken>> GetPruneListAsync(DateTime date, int count, CancellationToken cancellationToken = default)
+    public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
-        return await (from token in await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))
-            join authorization in (await GetMongoQueryableAsync<OpenIddictAuthorization>(cancellationToken))
-                on token.AuthorizationId equals authorization.Id into ta
-            from a in ta
-            where token.CreationDate < date
-            where (token.Status != OpenIddictConstants.Statuses.Inactive &&
-                   token.Status != OpenIddictConstants.Statuses.Valid) ||
-                  (a != null && a.Status != OpenIddictConstants.Statuses.Valid) ||
-                  token.ExpirationDate < DateTime.UtcNow
-            orderby token.Id
-            select token).Take(count).ToListAsync(GetCancellationToken(cancellationToken));
+        var authorizationIds = await (await GetMongoQueryableAsync<OpenIddictAuthorization>(cancellationToken))
+            .Where(x => x.Status != OpenIddictConstants.Statuses.Valid)
+            .Select(x => x.Id)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        var tokens = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+            .Where(x => x.CreationDate < date)
+            .Where(x => (x.Status != OpenIddictConstants.Statuses.Inactive &&
+                         x.Status != OpenIddictConstants.Statuses.Valid) ||
+                        authorizationIds.Contains(x.Id) ||
+                        x.ExpirationDate < DateTime.UtcNow)
+            .OrderBy(x => x.Id)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        await DeleteManyAsync(tokens, cancellationToken: cancellationToken);
     }
 }

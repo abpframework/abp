@@ -18,8 +18,8 @@ public class GlobalFeatureInterceptor : AbpInterceptor, ITransientDependency
         if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(invocation.TargetObject.GetType(), out var attribute))
         {
             throw new AbpGlobalFeatureNotEnabledException(code: AbpGlobalFeatureErrorCodes.GlobalFeatureIsNotEnabled)
-                .WithData("ServiceName", invocation.TargetObject.GetType().FullName)
-                .WithData("GlobalFeatureName", attribute.Name);
+                .WithData("ServiceName", invocation.TargetObject.GetType().FullName!)
+                .WithData("GlobalFeatureName", attribute!.Name!);
         }
 
         await invocation.ProceedAsync();

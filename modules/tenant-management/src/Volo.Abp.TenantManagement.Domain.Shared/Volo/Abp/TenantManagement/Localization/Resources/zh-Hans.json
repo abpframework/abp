@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "租户名称已存在: {Name}",
     "Menu:TenantManagement": "租户管理",
     "Tenants": "租户",
     "NewTenant": "新租户",
@@ -10,7 +11,6 @@
     "ConnectionStrings": "连接字符串",
     "DisplayName:DefaultConnectionString": "默认连接字符串",
     "DisplayName:UseSharedDatabase": "使用共享数据库",
-    "ManageHostFeatures": "管理Host特性",
     "Permission:TenantManagement": "租户管理",
     "Permission:Create": "创建",
     "Permission:Edit": "编辑",

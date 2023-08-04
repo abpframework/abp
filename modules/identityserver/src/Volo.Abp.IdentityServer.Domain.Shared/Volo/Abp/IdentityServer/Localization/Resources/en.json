@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.",
     "InvalidUsername": "Invalid username or password!",
     "InvalidAuthenticatorCode": "Invalid authenticator code!",
+    "InvalidRecoveryCode": "Invalid recovery code!",
     "TheTargetUserIsNotLinkedToYou": "The target user is not linked to you!"
   }
 }

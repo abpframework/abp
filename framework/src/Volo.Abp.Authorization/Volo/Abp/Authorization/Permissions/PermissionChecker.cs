@@ -38,13 +38,17 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
     }
 
     public virtual async Task<bool> IsGrantedAsync(
-        ClaimsPrincipal claimsPrincipal,
+        ClaimsPrincipal? claimsPrincipal,
         string name)
     {
         Check.NotNull(name, nameof(name));
 
-        var permission = PermissionDefinitionManager.Get(name);
-
+        var permission = await PermissionDefinitionManager.GetOrNullAsync(name);
+        if (permission == null)
+        {
+            return false;
+        }
+    
         if (!permission.IsEnabled)
         {
             return false;
@@ -93,11 +97,9 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
         return await IsGrantedAsync(PrincipalAccessor.Principal, names);
     }
 
-    public async Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string[] names)
+    public async Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, string[] names)
     {
         Check.NotNull(names, nameof(names));
-
-        var multiTenancySide = claimsPrincipal?.GetMultiTenancySide() ?? CurrentTenant.GetMultiTenancySide();
 
         var result = new MultiplePermissionGrantResult();
         if (!names.Any())
@@ -105,10 +107,18 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
             return result;
         }
 
+        var multiTenancySide = claimsPrincipal?.GetMultiTenancySide() ??
+                               CurrentTenant.GetMultiTenancySide();
+
         var permissionDefinitions = new List<PermissionDefinition>();
         foreach (var name in names)
         {
-            var permission = PermissionDefinitionManager.Get(name);
+            var permission = await PermissionDefinitionManager.GetOrNullAsync(name);
+            if (permission == null)
+            {
+                result.Result.Add(name, PermissionGrantResult.Prohibited);
+                continue;
+            }
 
             result.Result.Add(name, PermissionGrantResult.Undefined);
 

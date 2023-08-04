@@ -24,7 +24,7 @@ export class HttpWaitService {
   });
 
   private delay: number;
-  private destroy$ = new Subject();
+  private destroy$ = new Subject<void>();
 
   constructor(injector: Injector) {
     this.delay = injector.get(LOADER_DELAY, 500);
@@ -86,7 +86,10 @@ export class HttpWaitService {
     this.store.patch({ filteredRequests });
   }
 
-  private applyFilter(requests: HttpRequest<any>[]) {
+  private applyFilter(requests: HttpRequest<any>[] | undefined) {
+    if (!requests) {
+      return [];
+    }
     const { filteredRequests } = this.store.state;
     return requests.filter(
       ({ method, url }) =>

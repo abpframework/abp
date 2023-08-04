@@ -14,7 +14,7 @@ namespace Volo.Abp.Identity;
 /// <summary>
 /// Represents a role in the identity system
 /// </summary>
-public class IdentityRole : AggregateRoot<Guid>, IMultiTenant
+public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
 {
     public virtual Guid? TenantId { get; protected set; }
 
@@ -50,6 +50,11 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant
     public virtual bool IsPublic { get; set; }
 
     /// <summary>
+    /// A version value that is increased whenever the entity is changed.
+    /// </summary>
+    public virtual int EntityVersion { get; protected set; }
+
+    /// <summary>
     /// Initializes a new instance of <see cref="IdentityRole"/>.
     /// </summary>
     protected IdentityRole() { }
@@ -62,7 +67,7 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant
         Name = name;
         TenantId = tenantId;
         NormalizedName = name.ToUpperInvariant();
-        ConcurrencyStamp = Guid.NewGuid().ToString();
+        ConcurrencyStamp = Guid.NewGuid().ToString("N");
 
         Claims = new Collection<IdentityRoleClaim>();
     }

@@ -4,6 +4,7 @@
 @using Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 @using Volo.Blogging
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Blogging.Localization
 @inherits Volo.Blogging.Admin.Pages.Blogging.BloggingAdminPage
 @model IndexModel
@@ -11,6 +12,11 @@
 @inject IAuthorizationService Authorization
 @{
     ViewBag.PageTitle = "Blogs";
+}
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["Blogs"].Value;
+    PageLayout.Content.MenuItemName = BloggingAdminMenuNames.Blogs;
 }
 
 @section scripts {

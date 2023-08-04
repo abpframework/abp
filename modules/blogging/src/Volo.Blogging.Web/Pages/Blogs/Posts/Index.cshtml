@@ -1,5 +1,6 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authorization
+@using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.OwlCarousel
 @using Volo.Blogging
 @inject IAuthorizationService Authorization
@@ -39,7 +40,7 @@
                             <div class="hero-articles">
                                 <div class="img-container">
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                        <img src="@post.CoverImage" class="hero-article-img">
+                                        <img src="@post.CoverImage" class="hero-article-img" alt="@post.Title cover image">
                                     </a>
                                 </div>
                                 <div class="hero-content pt-3">
@@ -59,11 +60,18 @@
                                             <div class="user-card">
                                                 <div class="row">
                                                     <div class="col-auto pe-1">
-                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                        <a href="/Members/@post.Writer.UserName">
+                                                            <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
+                                                        </a>
                                                     </div>
                                                     <div class="col ps-1">
-                                                        <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
-                                                        <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
+                                                        <h5 class="mt-2 mb-1">
+                                                            <a href="/Members/@post.Writer.UserName">
+                                                                @post.Writer.UserName
+                                                            </a>
+                                                            <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
+                                                        </h5>
+                                                        <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                         @*<span class="vs-seperator">|</span>
                                                         <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]*@
                                                     </div>
@@ -102,7 +110,7 @@
                                         <div class="col-4">
                                             <div class="img-container">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                    <img src="@post.CoverImage" class="box-article-img">
+                                                    <img src="@post.CoverImage" class="box-article-img" alt="@post.Title cover image">
                                                 </a>
                                             </div>
                                         </div>
@@ -118,7 +126,12 @@
                                                         <div class="user-card">
                                                             @if (post.Writer != null)
                                                             {
-                                                                <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
+                                                                <h5 class="mt-2 mb-1">
+                                                                    <a href="/Members/@post.Writer.UserName">
+                                                                        @post.Writer.UserName
+                                                                    </a>    
+                                                                    <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
+                                                                </h5>
                                                             }
                                                             <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
                                                             @*<span class="vs-seperator">|</span>
@@ -157,7 +170,7 @@
                                         <div class="col-md-4">
                                             <div class="img-container">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                    <img src="@post.CoverImage" class="box-article-img">
+                                                    <img src="@post.CoverImage" class="box-article-img" alt="@post.Title cover image">
                                                 </a>
                                             </div>
                                         </div>
@@ -177,10 +190,17 @@
                                                         <div class="user-card">
                                                             <div class="row">
                                                                 <div class="col-auto pe-1">
-                                                                    <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                                    <a href="/Members/@post.Writer.UserName">
+                                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
+                                                                    </a>
                                                                 </div>
                                                                 <div class="col ps-1">
-                                                                    <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
+                                                                    <h5 class="mt-2 mb-1">
+                                                                        <a href="/Members/@post.Writer.UserName">
+                                                                            @post.Writer.UserName
+                                                                        </a>
+                                                                        <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
+                                                                    </h5>
                                                                     <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                                     @*<span class="vs-seperator">|</span>
                                                                     <i class="fa fa-comment"></i> @L["CommentWithCount", post.CommentCount]*@

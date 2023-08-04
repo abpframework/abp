@@ -68,6 +68,20 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>, IBasicRepo
         bool autoSave = false,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>
+    /// Deletes all entities those fit to the given predicate.
+    /// It directly deletes entities from database, without fetching them.
+    /// Some features (like soft-delete, multi-tenancy and audit logging) won't work, so use this method carefully when you need it.
+    /// Use the DeleteAsync method if you need to these features.
+    /// </summary>
+    /// <param name="predicate">A condition to filter entities</param>
+    /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+    /// <returns></returns>
+    Task DeleteDirectAsync(
+        [NotNull] Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default
+    );
 }
 
 public interface IRepository<TEntity, TKey> : IRepository<TEntity>, IReadOnlyRepository<TEntity, TKey>, IBasicRepository<TEntity, TKey>

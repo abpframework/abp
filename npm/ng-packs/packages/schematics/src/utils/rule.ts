@@ -9,11 +9,15 @@ import {
   Source,
   Tree,
 } from '@angular-devkit/schematics';
+import { RuleReturn } from '../models/rule';
 
 export function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
   return (tree: Tree, _context: SchematicContext) => {
-    const rule = mergeWith(apply(source, [...rules, overwriteFileIfExists(tree)]));
-
+    const mapped = rules.map<Rule>(r => {
+      return ((_tree: Tree, _ctx: SchematicContext) =>
+        new Promise<RuleReturn>(res => res(r(_tree, _ctx)))) as Rule;
+    });
+    const rule = mergeWith(apply(source, [...mapped, overwriteFileIfExists(tree)]));
     return rule(tree, _context);
   };
 }
@@ -21,6 +25,10 @@ export function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
 export function mergeAndAllowDelete(host: Tree, rule: Rule) {
   return async (tree: Tree, context: SchematicContext) => {
     const nextTree = await callRule(rule, tree, context).toPromise();
+    if(!nextTree) {
+      return;
+    }
+    
     host.merge(nextTree, MergeStrategy.AllowDeleteConflict);
   };
 }

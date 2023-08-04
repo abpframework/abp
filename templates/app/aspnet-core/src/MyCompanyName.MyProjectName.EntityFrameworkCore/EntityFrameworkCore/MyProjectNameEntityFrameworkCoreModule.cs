@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Uow;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -53,5 +54,12 @@ public class MyProjectNameEntityFrameworkCoreModule : AbpModule
                  * See also MyProjectNameMigrationsDbContextFactory for EF Core tooling. */
             options.UseSqlServer();
         });
+
+        //<TEMPLATE-REMOVE IF-NOT='dbms:SQLite'>
+        Configure<AbpUnitOfWorkDefaultOptions>(options =>
+        {
+            options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+        });
+        //</TEMPLATE-REMOVE>
     }
 }

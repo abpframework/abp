@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DynamicProxy;
@@ -33,25 +35,82 @@ public static class AbpStringLocalizerExtensions
             throw new AbpException($"Could not find the _localizer field inside the {typeof(StringLocalizer<>).FullName} class. Probably its name has changed. Please report this issue to the ABP framework.");
         }
 
-        return localizerField.GetValue(stringLocalizer) as IStringLocalizer;
+        return (localizerField.GetValue(stringLocalizer) as IStringLocalizer)!;
     }
 
     public static IEnumerable<LocalizedString> GetAllStrings(
         this IStringLocalizer stringLocalizer,
         bool includeParentCultures,
-        bool includeBaseLocalizers)
+        bool includeBaseLocalizers,
+        bool includeDynamicContributors)
     {
-        var internalLocalizer = (ProxyHelper.UnProxy(stringLocalizer) as IStringLocalizer).GetInternalLocalizer();
-        if (internalLocalizer is IStringLocalizerSupportsInheritance stringLocalizerSupportsInheritance)
+        var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(stringLocalizer)).GetInternalLocalizer();
+        if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
         {
-            return stringLocalizerSupportsInheritance.GetAllStrings(
+            return abpStringLocalizer.GetAllStrings(
                 includeParentCultures,
-                includeBaseLocalizers
+                includeBaseLocalizers,
+                includeDynamicContributors
             );
         }
 
         return stringLocalizer.GetAllStrings(
             includeParentCultures
+        );
+    }
+    
+    public static async Task<IEnumerable<LocalizedString>> GetAllStringsAsync(
+        this IStringLocalizer stringLocalizer,
+        bool includeParentCultures,
+        bool includeBaseLocalizers,
+        bool includeDynamicContributors)
+    {
+        var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(stringLocalizer)).GetInternalLocalizer();
+        if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
+        {
+            return await abpStringLocalizer.GetAllStringsAsync(
+                includeParentCultures,
+                includeBaseLocalizers,
+                includeDynamicContributors
+            );
+        }
+
+        return stringLocalizer.GetAllStrings(
+            includeParentCultures
+        );
+    }
+
+    public static async Task<IEnumerable<string>> GetSupportedCulturesAsync(this IStringLocalizer localizer)
+    {
+        var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(localizer)).GetInternalLocalizer();
+        if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
+        {
+            return await abpStringLocalizer.GetSupportedCulturesAsync();
+        }
+
+        return Array.Empty<string>();
+    }
+    
+    public static Task<IEnumerable<LocalizedString>> GetAllStringsAsync(
+        this IStringLocalizer localizer)
+    {
+        return localizer.GetAllStringsAsync(includeParentCultures: true);
+    }
+    
+    public static Task<IEnumerable<LocalizedString>> GetAllStringsAsync(
+        this IStringLocalizer localizer,
+        bool includeParentCultures)
+    {
+        Check.NotNull(localizer, nameof(localizer));
+        
+        var internalLocalizer = ((IStringLocalizer)ProxyHelper.UnProxy(localizer)).GetInternalLocalizer();
+        if (internalLocalizer is IAbpStringLocalizer abpStringLocalizer)
+        {
+            return abpStringLocalizer.GetAllStringsAsync(includeParentCultures: includeParentCultures);
+        }
+
+        return Task.FromResult(
+            localizer.GetAllStrings(includeParentCultures: true)
         );
     }
 }

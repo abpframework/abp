@@ -1,0 +1,73 @@
+{
+  "name": "Volo.Abp.AutoMapper",
+  "hash": "",
+  "contents": [
+    {
+      "namespace": "Volo.Abp.AutoMapper",
+      "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.ObjectMapping",
+          "namespace": "Volo.Abp.ObjectMapping",
+          "name": "AbpObjectMappingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.ObjectExtending",
+          "namespace": "Volo.Abp.ObjectExtending",
+          "name": "AbpObjectExtendingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Auditing",
+          "namespace": "Volo.Abp.Auditing",
+          "name": "AbpAuditingModule"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IAbpModule",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IAbpModule"
+        },
+        {
+          "name": "IOnPreApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPreApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationInitialization",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationInitialization"
+        },
+        {
+          "name": "IOnPostApplicationInitialization",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IOnPostApplicationInitialization"
+        },
+        {
+          "name": "IOnApplicationShutdown",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IOnApplicationShutdown"
+        },
+        {
+          "name": "IPreConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPreConfigureServices"
+        },
+        {
+          "name": "IPostConfigureServices",
+          "namespace": "Volo.Abp.Modularity",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Modularity.IPostConfigureServices"
+        }
+      ],
+      "contentType": "abpModule",
+      "name": "AbpAutoMapperModule",
+      "summary": null
+    }
+  ]
+}

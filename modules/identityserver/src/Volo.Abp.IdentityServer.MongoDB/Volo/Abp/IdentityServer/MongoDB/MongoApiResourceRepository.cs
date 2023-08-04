@@ -18,14 +18,14 @@ public class MongoApiResourceRepository : MongoDbRepository<IAbpIdentityServerMo
     {
     }
 
-    public async Task<ApiResource> FindByNameAsync(string apiResourceName, bool includeDetails = true, CancellationToken cancellationToken = default)
+    public virtual async Task<ApiResource> FindByNameAsync(string apiResourceName, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .OrderBy(ar => ar.Id)
             .FirstOrDefaultAsync(ar => ar.Name == apiResourceName, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,
+    public virtual async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
@@ -55,7 +55,7 @@ public class MongoApiResourceRepository : MongoDbRepository<IAbpIdentityServerMo
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<ApiResource, IMongoQueryable<ApiResource>>(!filter.IsNullOrWhiteSpace(),

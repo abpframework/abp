@@ -117,12 +117,13 @@ public class ProjectReferenceReplaceStep : ProjectBuildPipelineStep
                 var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                 // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                if (oldNodeIncludeValue.Contains(_projectName))
+                if (oldNodeIncludeValue.Contains(_projectName) && _isMicroserviceServiceTemplate)
                 {
-                    if (_isMicroserviceServiceTemplate || _entries.Any(e => e.Name.EndsWith(GetProjectNameWithExtensionFromProjectReference(oldNodeIncludeValue))))
-                    {
-                        continue;
-                    }
+                    continue;
+                }
+                if(_entries.Any(e => e.Name.EndsWith(GetProjectNameWithExtensionFromProjectReference(oldNodeIncludeValue))))
+                {
+                    continue;
                 }
 
                 XmlNode newNode = GetNewReferenceNode(doc, oldNodeIncludeValue);

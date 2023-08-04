@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29001.49
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Domain.Shared", "src\Volo.CmsKit.Domain.Shared\Volo.CmsKit.Domain.Shared.csproj", "{D64C1577-4929-4B60-939E-96DE1534891A}"
 EndProject
@@ -57,37 +57,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "public", "public", "{3C74B8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{E737206B-FA99-4460-861D-82902ECE93DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Admin.Application", "src\Volo.CmsKit.Admin.Application\Volo.CmsKit.Admin.Application.csproj", "{A5363215-BF61-467F-80D0-40D93590F509}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Admin.Application", "src\Volo.CmsKit.Admin.Application\Volo.CmsKit.Admin.Application.csproj", "{A5363215-BF61-467F-80D0-40D93590F509}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Admin.Application.Contracts", "src\Volo.CmsKit.Admin.Application.Contracts\Volo.CmsKit.Admin.Application.Contracts.csproj", "{AE000591-86E3-4AD4-AA86-C47FED4A3ACB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Admin.Application.Contracts", "src\Volo.CmsKit.Admin.Application.Contracts\Volo.CmsKit.Admin.Application.Contracts.csproj", "{AE000591-86E3-4AD4-AA86-C47FED4A3ACB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Admin.HttpApi", "src\Volo.CmsKit.Admin.HttpApi\Volo.CmsKit.Admin.HttpApi.csproj", "{A402371A-B714-4BBC-AC22-9C0BD7679F25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Admin.HttpApi", "src\Volo.CmsKit.Admin.HttpApi\Volo.CmsKit.Admin.HttpApi.csproj", "{A402371A-B714-4BBC-AC22-9C0BD7679F25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Admin.HttpApi.Client", "src\Volo.CmsKit.Admin.HttpApi.Client\Volo.CmsKit.Admin.HttpApi.Client.csproj", "{97D7BB7A-1D45-4E54-B327-3718F62E8A86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Admin.HttpApi.Client", "src\Volo.CmsKit.Admin.HttpApi.Client\Volo.CmsKit.Admin.HttpApi.Client.csproj", "{97D7BB7A-1D45-4E54-B327-3718F62E8A86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Admin.Web", "src\Volo.CmsKit.Admin.Web\Volo.CmsKit.Admin.Web.csproj", "{CA6A7FAF-0EF9-42D9-B7A3-5CA690687045}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Admin.Web", "src\Volo.CmsKit.Admin.Web\Volo.CmsKit.Admin.Web.csproj", "{CA6A7FAF-0EF9-42D9-B7A3-5CA690687045}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Public.Application", "src\Volo.CmsKit.Public.Application\Volo.CmsKit.Public.Application.csproj", "{E3963E05-9645-4AFD-AC99-C5E9F9153B61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Public.Application", "src\Volo.CmsKit.Public.Application\Volo.CmsKit.Public.Application.csproj", "{E3963E05-9645-4AFD-AC99-C5E9F9153B61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Public.Application.Contracts", "src\Volo.CmsKit.Public.Application.Contracts\Volo.CmsKit.Public.Application.Contracts.csproj", "{50147423-F37D-46D3-A25D-C51CD48A7DA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Public.Application.Contracts", "src\Volo.CmsKit.Public.Application.Contracts\Volo.CmsKit.Public.Application.Contracts.csproj", "{50147423-F37D-46D3-A25D-C51CD48A7DA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Public.HttpApi", "src\Volo.CmsKit.Public.HttpApi\Volo.CmsKit.Public.HttpApi.csproj", "{37C03B72-5FD8-4B67-8090-8A20CD8095A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Public.HttpApi", "src\Volo.CmsKit.Public.HttpApi\Volo.CmsKit.Public.HttpApi.csproj", "{37C03B72-5FD8-4B67-8090-8A20CD8095A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Public.HttpApi.Client", "src\Volo.CmsKit.Public.HttpApi.Client\Volo.CmsKit.Public.HttpApi.Client.csproj", "{E790C2C6-39AC-4068-AA7D-309DC9AA1437}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Public.HttpApi.Client", "src\Volo.CmsKit.Public.HttpApi.Client\Volo.CmsKit.Public.HttpApi.Client.csproj", "{E790C2C6-39AC-4068-AA7D-309DC9AA1437}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Public.Web", "src\Volo.CmsKit.Public.Web\Volo.CmsKit.Public.Web.csproj", "{BE2572ED-F505-435D-9A90-30DBC6C2DC1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Public.Web", "src\Volo.CmsKit.Public.Web\Volo.CmsKit.Public.Web.csproj", "{BE2572ED-F505-435D-9A90-30DBC6C2DC1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.Web", "src\Volo.CmsKit.Common.Web\Volo.CmsKit.Common.Web.csproj", "{4B2C2431-7351-41F0-B5E1-F8A9859FA838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Common.Web", "src\Volo.CmsKit.Common.Web\Volo.CmsKit.Common.Web.csproj", "{4B2C2431-7351-41F0-B5E1-F8A9859FA838}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.Application.Contracts", "src\Volo.CmsKit.Common.Application.Contracts\Volo.CmsKit.Common.Application.Contracts.csproj", "{A0D38C5B-047F-49C1-9A6D-B41E4FB9B323}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Common.Application.Contracts", "src\Volo.CmsKit.Common.Application.Contracts\Volo.CmsKit.Common.Application.Contracts.csproj", "{A0D38C5B-047F-49C1-9A6D-B41E4FB9B323}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.Application", "src\Volo.CmsKit.Common.Application\Volo.CmsKit.Common.Application.csproj", "{5D9BD65D-353E-4618-BE49-E1DF4CFF2393}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Common.Application", "src\Volo.CmsKit.Common.Application\Volo.CmsKit.Common.Application.csproj", "{5D9BD65D-353E-4618-BE49-E1DF4CFF2393}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.HttpApi", "src\Volo.CmsKit.Common.HttpApi\Volo.CmsKit.Common.HttpApi.csproj", "{E8CC280A-D049-4564-9C71-2F5657C17937}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Common.HttpApi", "src\Volo.CmsKit.Common.HttpApi\Volo.CmsKit.Common.HttpApi.csproj", "{E8CC280A-D049-4564-9C71-2F5657C17937}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.HttpApi.Client", "src\Volo.CmsKit.Common.HttpApi.Client\Volo.CmsKit.Common.HttpApi.Client.csproj", "{EC98F006-2002-4CE2-AA62-5EBB589ACD79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Common.HttpApi.Client", "src\Volo.CmsKit.Common.HttpApi.Client\Volo.CmsKit.Common.HttpApi.Client.csproj", "{EC98F006-2002-4CE2-AA62-5EBB589ACD79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Installer", "src\Volo.CmsKit.Installer\Volo.CmsKit.Installer.csproj", "{908C157E-2352-4373-BF5D-E5DA19913390}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.CmsKit.Installer", "src\Volo.CmsKit.Installer\Volo.CmsKit.Installer.csproj", "{908C157E-2352-4373-BF5D-E5DA19913390}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -244,28 +244,28 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{D64C1577-4929-4B60-939E-96DE1534891A} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
+		{F2840BC7-0188-4606-9126-DADD0F5ABF7A} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
+		{BD65D04F-08D5-40C1-8C24-77CA0BACB877} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
+		{78040F9E-3501-4A40-82DF-00A597710F35} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
+		{F1C58097-4C08-4D88-8976-6B3389391481} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
+		{077AA5F8-8B61-420C-A6B5-0150A66FDB34} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
+		{36E2735F-CEAB-44C8-A6D1-2CDAFF399751} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
 		{C5BB573D-3030-4BCB-88B7-F6A85C32766C} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{527F645C-C1FC-406E-8479-81386C8ECF13} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{D0AD9179-125C-40B2-A8EE-CD4C1EE24BB6} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{E60895E5-79C4-447D-88B7-85CB5BA336A4} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{90CB5DC4-C040-45C7-8900-9688B26405BC} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{37B135B0-DAFE-4616-B25C-1BDF32FC44A2} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{3B7B6317-1B85-4164-8E11-75574F80AE17} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
 		{1EDCD6D4-DF3A-4E3B-ABB6-C0D0B373EAB8} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{73513786-B6C6-4A21-89C5-0FBDD0A46107} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{690203F4-3CD5-4569-88D9-EE831EEA5F5F} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{F6AC8D4A-EDD7-4514-8E8A-5BCB019864DB} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{3D872C41-E226-45C8-89C1-9D3DBD7C73F2} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
-		{F2840BC7-0188-4606-9126-DADD0F5ABF7A} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
-		{D64C1577-4929-4B60-939E-96DE1534891A} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
-		{F1C58097-4C08-4D88-8976-6B3389391481} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
-		{0CE86223-D31D-4315-A1F5-87BA3EE1B844} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
 		{963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
-		{78040F9E-3501-4A40-82DF-00A597710F35} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
-		{BD65D04F-08D5-40C1-8C24-77CA0BACB877} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
-		{077AA5F8-8B61-420C-A6B5-0150A66FDB34} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
-		{36E2735F-CEAB-44C8-A6D1-2CDAFF399751} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
-		{3B7B6317-1B85-4164-8E11-75574F80AE17} = {963FBC0A-1FBA-47DA-8A61-8F57D3EC8D49}
 		{3C74B8E8-CB34-49C8-B02A-05E959601FEE} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 		{E737206B-FA99-4460-861D-82902ECE93DB} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 		{A5363215-BF61-467F-80D0-40D93590F509} = {E737206B-FA99-4460-861D-82902ECE93DB}

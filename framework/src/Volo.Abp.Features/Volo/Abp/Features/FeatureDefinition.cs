@@ -7,7 +7,7 @@ using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.Features;
 
-public class FeatureDefinition
+public class FeatureDefinition : ICanCreateChildFeature
 {
     /// <summary>
     /// Unique name of the feature.
@@ -20,17 +20,15 @@ public class FeatureDefinition
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
 
-    [CanBeNull]
-    public ILocalizableString Description { get; set; }
+    public ILocalizableString? Description { get; set; }
 
     /// <summary>
     /// Parent of this feature, if one exists.
     /// If set, this feature can be enabled only if the parent is enabled.
     /// </summary>
-    [CanBeNull]
-    public FeatureDefinition Parent { get; private set; }
+    public FeatureDefinition? Parent { get; private set; }
 
     /// <summary>
     /// List of child features.
@@ -41,8 +39,7 @@ public class FeatureDefinition
     /// <summary>
     /// Default value of the feature.
     /// </summary>
-    [CanBeNull]
-    public string DefaultValue { get; set; }
+    public string? DefaultValue { get; set; }
 
     /// <summary>
     /// Can clients see this feature and it's value.
@@ -71,8 +68,7 @@ public class FeatureDefinition
     /// Returns the value in the <see cref="Properties"/> dictionary by given <paramref name="name"/>.
     /// Returns null if given <paramref name="name"/> is not present in the <see cref="Properties"/> dictionary.
     /// </returns>
-    [CanBeNull]
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
@@ -81,34 +77,33 @@ public class FeatureDefinition
     /// Can be used to get/set custom properties for this feature.
     /// </summary>
     [NotNull]
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
     /// <summary>
     /// Input type.
     /// This can be used to prepare an input for changing this feature's value.
     /// Default: <see cref="ToggleStringValueType"/>.
     /// </summary>
-    [CanBeNull]
-    public IStringValueType ValueType { get; set; }
+    public IStringValueType? ValueType { get; set; }
 
     public FeatureDefinition(
         string name,
-        string defaultValue = null,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
-        IStringValueType valueType = null,
+        string? defaultValue = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
+        IStringValueType? valueType = null,
         bool isVisibleToClients = true,
         bool isAvailableToHost = true)
     {
-        Name = name;
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name));
         DefaultValue = defaultValue;
         DisplayName = displayName ?? new FixedLocalizableString(name);
         Description = description;
-        ValueType = valueType;
+        ValueType = valueType ?? new ToggleStringValueType();
         IsVisibleToClients = isVisibleToClients;
         IsAvailableToHost = isAvailableToHost;
 
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
         AllowedProviders = new List<string>();
         _children = new List<FeatureDefinition>();
     }
@@ -124,7 +119,7 @@ public class FeatureDefinition
     }
 
     /// <summary>
-    /// Sets a property in the <see cref="Properties"/> dictionary.
+    /// Adds one or more providers to the <see cref="AllowedProviders"/> list.
     /// This is a shortcut for nested calls on this object.
     /// </summary>
     public virtual FeatureDefinition WithProviders(params string[] providers)
@@ -143,10 +138,10 @@ public class FeatureDefinition
     /// <returns>Returns a newly created child feature</returns>
     public FeatureDefinition CreateChild(
         string name,
-        string defaultValue = null,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
-        IStringValueType valueType = null,
+        string? defaultValue = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
+        IStringValueType? valueType = null,
         bool isVisibleToClients = true,
         bool isAvailableToHost = true)
     {
@@ -176,6 +171,17 @@ public class FeatureDefinition
 
         featureToRemove.Parent = null;
         _children.Remove(featureToRemove);
+    }
+
+    public FeatureDefinition CreateChildFeature(string name,
+        string? defaultValue = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
+        IStringValueType? valueType = null,
+        bool isVisibleToClients = true,
+        bool isAvailableToHost = true)
+    {
+        return this.CreateChild(name, defaultValue, displayName, description, valueType, isVisibleToClients, isAvailableToHost);
     }
 
     public override string ToString()

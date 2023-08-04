@@ -6,9 +6,9 @@ namespace Volo.Abp.GlobalFeatures;
 [AttributeUsage(AttributeTargets.Class)]
 public class RequiresGlobalFeatureAttribute : Attribute
 {
-    public Type Type { get; }
+    public Type? Type { get; }
 
-    public string Name { get; }
+    public string? Name { get; }
 
     public RequiresGlobalFeatureAttribute([NotNull] Type type)
     {
@@ -22,6 +22,6 @@ public class RequiresGlobalFeatureAttribute : Attribute
 
     public virtual string GetFeatureName()
     {
-        return Name ?? GlobalFeatureNameAttribute.GetName(Type);
+        return Name ?? GlobalFeatureNameAttribute.GetName(Type!);
     }
 }

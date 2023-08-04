@@ -256,7 +256,7 @@
     "Surname": "姓",
     "CompanyName": "公司名",
     "DoYouAgreePrivacyPolicy": "我同意<a href=\"https://account.abp.io/Account/TermsConditions\">條款和條件</a>和<a href=\"https://account.abp.io/Account/Privacy \">隱私政策</a>。",
-    "Free": "自由",
+    "Free": "免費",
     "DDDEBook": "DDD電子書",
     "PracticalGuideForImplementingDDD": "本書是使用 ABP 框架實現領域驅動設計的實用指南。",
     "IntroducingDDD": "介紹領域驅動設計",
@@ -273,6 +273,9 @@
     "SubscribeToNewsletter": "訂閱時事通訊以獲取有關 ABP.IO 平台中發生的事件的信息，例如新版本、文章、優惠等。",
     "FirstEdition": "第一版",
     "ThankYou": "謝謝！",
-    "CheckboxMandatory": "你需要檢查這個才能繼續！"
+    "CheckboxMandatory": "你需要檢查這個才能繼續！",
+    "SelectUITheme": "選擇 UI 主題",
+    "CreateSolutionFolder": "創建解決方案文件夾",
+    "CreateSolutionFolderOption": "指定項目是位於輸出文件夾中的新文件夾中，還是直接位於輸出文件夾中。"
   }
 }

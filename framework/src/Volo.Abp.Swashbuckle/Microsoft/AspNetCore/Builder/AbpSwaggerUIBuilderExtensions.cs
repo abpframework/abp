@@ -9,7 +9,7 @@ public static class AbpSwaggerUIBuilderExtensions
 {
     public static IApplicationBuilder UseAbpSwaggerUI(
         this IApplicationBuilder app,
-        Action<SwaggerUIOptions> setupAction = null)
+        Action<SwaggerUIOptions>? setupAction = null)
     {
         var resolver = app.ApplicationServices.GetService<ISwaggerHtmlResolver>();
 
@@ -17,7 +17,7 @@ public static class AbpSwaggerUIBuilderExtensions
         {
             options.InjectJavascript("ui/abp.js");
             options.InjectJavascript("ui/abp.swagger.js");
-            options.IndexStream = () => resolver.Resolver();
+            options.IndexStream = () => resolver?.Resolver();
 
             setupAction?.Invoke(options);
         });

@@ -155,6 +155,11 @@ ngb-typeahead-window, ngb-typeahead-window.dropdown-menu {
   z-index: 1050;
 }
 
+.abp-modal-header {
+  word-break: break-word;
+}
+
+
 @keyframes fadeInTop {
   from {
     transform: translateY(-5px);

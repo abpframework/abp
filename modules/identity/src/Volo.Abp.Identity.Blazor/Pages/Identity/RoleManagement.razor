@@ -47,14 +47,14 @@
                     <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                                <FieldLabel>@L["DisplayName:RoleName"] *</FieldLabel>
                                 <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
                                 </TextEdit>
                             </Field>
-                            <ExtensionProperties TEntityType="IdentityRoleCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH"/>
+                            <ExtensionProperties TEntityType="IdentityRoleCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH" ModalType="ExtensionPropertyModalType.CreateModal" />
                         </Validation>
                         <Field>
                             <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
@@ -85,14 +85,14 @@
                         <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp"/>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                                <FieldLabel>@L["DisplayName:RoleName"] *</FieldLabel>
                                 <TextEdit @bind-Text="EditingEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
                                 </TextEdit>
                             </Field>
-                            <ExtensionProperties TEntityType="IdentityRoleUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH"/>
+                            <ExtensionProperties TEntityType="IdentityRoleUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH"  ModalType="ExtensionPropertyModalType.EditModal" />
                         </Validation>
                         <Field>
                             <Check TValue="bool" @bind-Checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>

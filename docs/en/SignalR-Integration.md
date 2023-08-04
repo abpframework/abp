@@ -18,6 +18,8 @@ abp add-package Volo.Abp.AspNetCore.SignalR
 
 > You typically want to add this package to the web or API layer of your application, depending on your architecture.
 
+> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.SignalR).
+
 #### Manual Installation
 
 If you want to manually install;
@@ -235,4 +237,4 @@ Refer to the Microsoft's documentation to [host and scale](https://docs.microsof
 ## See Also
 
 - [Microsoft SignalR documentation](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction)
-- [Real-Time Messaging In A Distributed Architecture Using ABP, SingalR & RabbitMQ](https://volosoft.com/blog/RealTime-Messaging-Distributed-Architecture-Abp-SingalR-RabbitMQ)
+- [Real-Time Messaging In A Distributed Architecture Using ABP, SignalR & RabbitMQ](https://volosoft.com/blog/RealTime-Messaging-Distributed-Architecture-Abp-SingalR-RabbitMQ)

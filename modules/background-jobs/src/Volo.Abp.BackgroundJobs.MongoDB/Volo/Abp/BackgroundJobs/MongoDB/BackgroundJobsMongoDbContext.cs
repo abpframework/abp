@@ -6,7 +6,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.BackgroundJobs.MongoDB;
 
 [IgnoreMultiTenancy]
-[ConnectionStringName(BackgroundJobsDbProperties.ConnectionStringName)]
+[ConnectionStringName(AbpBackgroundJobsDbProperties.ConnectionStringName)]
 public class BackgroundJobsMongoDbContext : AbpMongoDbContext, IBackgroundJobsMongoDbContext
 {
     public IMongoCollection<BackgroundJobRecord> BackgroundJobs { get; set; }

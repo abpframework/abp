@@ -120,10 +120,10 @@ Please refer to `ApplicationConfigurationDto` type for all the properties you ca
 You can get the application configuration response and set the `ConfigStateService` state value as shown below:
 
 ```js
-import {ApplicationConfigurationService, ConfigStateService} from '@abp/ng.core';
+import {AbpApplicationConfigurationService, ConfigStateService} from '@abp/ng.core';
 
-constructor(private applicationConfigurationService: ApplicationConfigurationService, private config: ConfigStateService) {
-  this.applicationConfigurationService.getConfiguration().subscribe(config => {
+constructor(private abpApplicationConfigurationService: AbpApplicationConfigurationService, private config: ConfigStateService) {
+  this.abpApplicationConfigurationService.get().subscribe(config => {
     this.config.setState(config);
   })
 }

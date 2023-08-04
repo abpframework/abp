@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Public.Tags;
 
+[RequiresFeature(CmsKitFeatures.TagEnable)]
 [RequiresGlobalFeature(typeof(TagsFeature))]
 [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
 [Area(CmsKitPublicRemoteServiceConsts.ModuleName)]
@@ -26,5 +29,12 @@ public class TagPublicController : CmsKitPublicControllerBase, ITagAppService
     public Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
     {
         return TagAppService.GetAllRelatedTagsAsync(entityType, entityId);
+    }
+
+    [HttpGet]
+    [Route("popular/{entityType}/{maxCount:int}")]
+    public Task<List<PopularTagDto>> GetPopularTagsAsync(string entityType, int maxCount)
+    {
+        return TagAppService.GetPopularTagsAsync(entityType, maxCount);
     }
 }

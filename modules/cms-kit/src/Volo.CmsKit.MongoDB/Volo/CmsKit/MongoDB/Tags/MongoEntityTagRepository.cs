@@ -1,10 +1,10 @@
-﻿using JetBrains.Annotations;
-using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using MongoDB.Driver;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
@@ -19,12 +19,19 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
     {
     }
 
-    public virtual async Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default)
+    public virtual async Task DeleteManyAsync(Guid[] tagIds, string entityId, CancellationToken cancellationToken = default)
     {
         var token = GetCancellationToken(cancellationToken);
 
         var collection = await GetCollectionAsync(token);
-        await collection.DeleteManyAsync(Builders<EntityTag>.Filter.In(x => x.TagId, tagIds), token);
+
+        var builder = Builders<EntityTag>.Filter;
+        var filter = builder.And(
+                builder.In(x => x.TagId, tagIds),
+                builder.Eq(x => x.EntityId, entityId)
+           );
+
+        await collection.DeleteManyAsync(filter, token);
     }
 
     public virtual Task<EntityTag> FindAsync(
@@ -51,5 +58,31 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
             .Select(q => q.EntityId);
 
         return await AsyncExecuter.ToListAsync(blogPostQueryable, GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
+        [NotNull] string tagName,
+        [NotNull] string entityType,
+        [CanBeNull] Guid? tenantId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+        var entityTagQueryable = await GetMongoQueryableAsync(GetCancellationToken(cancellationToken));
+        var tagQueryable = dbContext.Tags.AsQueryable();
+
+        var resultQueryable = entityTagQueryable
+                                .Join(
+                                    tagQueryable,
+                                    o => o.TagId,
+                                    i => i.Id,
+                                    (entityTag, tag) => new { entityTag, tag })
+                                .Where(x => x.tag.EntityType == entityType
+                                    && x.entityTag.TenantId == tenantId
+                                    && x.tag.TenantId == tenantId
+                                    && x.tag.IsDeleted == false
+                                )
+                                .Select(s => s.entityTag.EntityId);
+
+        return await AsyncExecuter.ToListAsync(resultQueryable, GetCancellationToken(cancellationToken));
     }
 }

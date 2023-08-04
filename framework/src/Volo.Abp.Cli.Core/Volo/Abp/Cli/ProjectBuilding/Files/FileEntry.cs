@@ -33,8 +33,13 @@ public class FileEntry
         IsDirectory = isDirectory;
 
         Encoding = CalculateEncoding();
-        Content = Encoding.GetString(bytes);
+        Content = GetContent();
         IsBinaryFile = CalculateIsBinaryFile();
+    }
+
+    private string GetContent()
+    {
+        return Bytes == null ? null : Encoding.GetString(Bytes);
     }
 
     public void SetContent(string fileContent)

@@ -1,30 +1,68 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
-import { ApplicationConfigurationDto, ApplicationGlobalFeatureConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
+import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
+import {
+  ApplicationConfigurationDto,
+  ApplicationGlobalFeatureConfigurationDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
+import { INCUDE_LOCALIZATION_RESOURCES_TOKEN } from '../tokens/include-localization-resources.token';
 import { InternalStore } from '../utils/internal-store-utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigStateService {
+  private updateSubject = new Subject<void>();
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
+
+  setState(config: ApplicationConfigurationDto) {
+    this.store.set(config);
+  }
 
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
   }
-
-  private updateSubject = new Subject();
-
-  constructor(private abpConfigService: AbpApplicationConfigurationService) {
+  constructor(
+    private abpConfigService: AbpApplicationConfigurationService,
+    private abpApplicationLocalizationService: AbpApplicationLocalizationService,
+    @Optional()
+    @Inject(INCUDE_LOCALIZATION_RESOURCES_TOKEN)
+    private readonly includeLocalizationResources: boolean | null,
+  ) {
     this.initUpdateStream();
   }
 
   private initUpdateStream() {
     this.updateSubject
-      .pipe(switchMap(() => this.abpConfigService.get()))
+      .pipe(
+        switchMap(() =>
+          this.abpConfigService.get({
+            includeLocalizationResources: !!this.includeLocalizationResources,
+          }),
+        ),
+      )
+      .pipe(switchMap(appState => this.getLocalizationAndCombineWithAppState(appState)))
       .subscribe(res => this.store.set(res));
+  }
+
+  private getLocalizationAndCombineWithAppState(
+    appState: ApplicationConfigurationDto,
+  ): Observable<ApplicationConfigurationDto> {
+    if (!appState.localization.currentCulture.cultureName) {
+      throw new Error('culture name should defined');
+    }
+    return this.getlocalizationResource(appState.localization.currentCulture.cultureName).pipe(
+      map(result => ({ ...appState, localization: { ...appState.localization, ...result } })),
+    );
+  }
+
+  private getlocalizationResource(cultureName: string) {
+    return this.abpApplicationLocalizationService.get({
+      cultureName: cultureName,
+      onlyDynamics: false,
+    });
   }
 
   refreshAppState() {
@@ -32,11 +70,25 @@ export class ConfigStateService {
     return this.createOnUpdateStream(state => state).pipe(take(1));
   }
 
-  getOne$(key: string) {
+  refreshLocalization(lang: string): Observable<null> {
+    if (this.includeLocalizationResources) {
+      return this.refreshAppState().pipe(map(() => null));
+    } else {
+      return this.getlocalizationResource(lang)
+        .pipe(
+          tap(result =>
+            this.store.patch({ localization: { ...this.store.state.localization, ...result } }),
+          ),
+        )
+        .pipe(map(() => null));
+    }
+  }
+
+  getOne$<K extends keyof ApplicationConfigurationDto>(key: K) {
     return this.store.sliceState(state => state[key]);
   }
 
-  getOne(key: string) {
+  getOne<K extends keyof ApplicationConfigurationDto>(key: K) {
     return this.store.state[key];
   }
 
@@ -93,7 +145,7 @@ export class ConfigStateService {
     return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
   }
 
-  getFeatures$(keys: string[]) {
+  getFeatures$(keys: string[]): Observable<{ [key: string]: string } | undefined> {
     return this.store.sliceState(({ features }) => {
       if (!features?.values) return;
 
@@ -119,7 +171,7 @@ export class ConfigStateService {
     return keysFound.reduce((acc, key) => {
       acc[key] = settings[key];
       return acc;
-    }, {});
+    }, {} as Record<string, string>);
   }
 
   getSettings$(keyword?: string) {
@@ -134,7 +186,7 @@ export class ConfigStateService {
           return keysFound.reduce((acc, key) => {
             acc[key] = settings[key];
             return acc;
-          }, {});
+          }, {} as Record<string, string>);
         }),
       );
   }
@@ -147,8 +199,11 @@ export class ConfigStateService {
     return this.store.sliceState(state => state.globalFeatures);
   }
 
-  private isGlobalFeatureEnabled(key: string, globalFeatures: ApplicationGlobalFeatureConfigurationDto) {
-    const features = globalFeatures.enabledFeatures || []
+  private isGlobalFeatureEnabled(
+    key: string,
+    globalFeatures: ApplicationGlobalFeatureConfigurationDto,
+  ) {
+    const features = globalFeatures.enabledFeatures || [];
     return features.some(f => key === f);
   }
 
@@ -159,9 +214,6 @@ export class ConfigStateService {
   getGlobalFeatureIsEnabled$(key: string) {
     return this.store.sliceState(state => this.isGlobalFeatureEnabled(key, state.globalFeatures));
   }
-
-
-
 }
 
 function splitKeys(keys: string[] | string): string[] {

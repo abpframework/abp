@@ -35,6 +35,8 @@ public class CmsKitAdminPermissionDefinitionProvider : PermissionDefinitionProvi
             .RequireGlobalFeatures(typeof(PagesFeature));
         pageManagement.AddChild(CmsKitAdminPermissions.Pages.Delete, L("Permission:PageManagement:Delete"))
             .RequireGlobalFeatures(typeof(PagesFeature));
+        pageManagement.AddChild(CmsKitAdminPermissions.Pages.SetAsHomePage, L("Permission:PageManagement:SetAsHomePage"))
+           .RequireGlobalFeatures(typeof(PagesFeature));
 
         var blogManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.Blogs.Default, L("Permission:BlogManagement"))
             .RequireGlobalFeatures(typeof(BlogsFeature));

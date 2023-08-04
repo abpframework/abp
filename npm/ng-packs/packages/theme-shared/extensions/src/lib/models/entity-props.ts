@@ -27,27 +27,36 @@ export class EntityProp<R = any> extends Prop<R> {
   readonly columnWidth: number | undefined;
   readonly sortable: boolean;
   readonly valueResolver: PropCallback<R, Observable<any>>;
-  readonly action: ActionCallback<R>;
-  readonly component: Type<any>;
-  readonly enumList: Array<ABP.Option<any>>;
+  readonly action?: ActionCallback<R>;
+  readonly component?: Type<any>;
+  readonly enumList?: Array<ABP.Option<any>>;
+  readonly tooltip?: string;
 
   constructor(options: EntityPropOptions<R>) {
     super(
       options.type,
       options.name,
-      options.displayName,
-      options.permission,
+      options.displayName || '',
+      options.permission || '',
       options.visible,
       options.isExtra,
     );
-
+    
     this.columnWidth = options.columnWidth;
     this.sortable = options.sortable || false;
     this.valueResolver =
-      options.valueResolver || (data => of(escapeHtmlChars(data.record[this.name])));
-    this.action = options.action;
-    this.component = options.component;
-    this.enumList = options.enumList;
+      options.valueResolver ||
+      (data => of(escapeHtmlChars((data.record as PropDataObject)[this.name])));
+    if (options.action) {
+      this.action = options.action;
+    }
+    if (options.component) {
+      this.component = options.component;
+    }
+    if (options.enumList) {
+      this.enumList = options.enumList;
+    }
+    this.tooltip = options.tooltip;
   }
 
   static create<R = any>(options: EntityPropOptions<R>) {
@@ -76,3 +85,4 @@ export type EntityPropOptions<R = any> = O.Optional<
 export type EntityPropDefaults<R = any> = Record<string, EntityProp<R>[]>;
 export type EntityPropContributorCallback<R = any> = PropContributorCallback<EntityPropList<R>>;
 export type EntityPropContributorCallbacks<R = any> = PropContributorCallbacks<EntityPropList<R>>;
+type PropDataObject = { [key: string]: any };

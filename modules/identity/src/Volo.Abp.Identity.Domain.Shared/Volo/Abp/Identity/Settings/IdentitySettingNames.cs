@@ -14,6 +14,8 @@ public static class IdentitySettingNames
         public const string RequireLowercase = PasswordPrefix + ".RequireLowercase";
         public const string RequireUppercase = PasswordPrefix + ".RequireUppercase";
         public const string RequireDigit = PasswordPrefix + ".RequireDigit";
+        public const string ForceUsersToPeriodicallyChangePassword = PasswordPrefix + ".ForceUsersToPeriodicallyChangePassword";
+        public const string PasswordChangePeriodDays = PasswordPrefix + ".PasswordChangePeriodDays";
     }
 
     public static class Lockout

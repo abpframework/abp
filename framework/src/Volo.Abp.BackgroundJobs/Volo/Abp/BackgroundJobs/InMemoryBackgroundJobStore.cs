@@ -25,14 +25,14 @@ public class InMemoryBackgroundJobStore : IBackgroundJobStore, ISingletonDepende
 
     public virtual Task<BackgroundJobInfo> FindAsync(Guid jobId)
     {
-        return Task.FromResult(_jobs.GetOrDefault(jobId));
+        return Task.FromResult(_jobs.GetOrDefault(jobId))!;
     }
 
     public virtual Task InsertAsync(BackgroundJobInfo jobInfo)
     {
         _jobs[jobInfo.Id] = jobInfo;
 
-        return Task.FromResult(0);
+        return Task.CompletedTask;
     }
 
     public virtual Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(int maxResultCount)
@@ -53,7 +53,7 @@ public class InMemoryBackgroundJobStore : IBackgroundJobStore, ISingletonDepende
     {
         _jobs.TryRemove(jobId, out _);
 
-        return Task.FromResult(0);
+        return Task.CompletedTask;
     }
 
     public virtual Task UpdateAsync(BackgroundJobInfo jobInfo)
@@ -63,6 +63,6 @@ public class InMemoryBackgroundJobStore : IBackgroundJobStore, ISingletonDepende
             return DeleteAsync(jobInfo.Id);
         }
 
-        return Task.FromResult(0);
+        return Task.CompletedTask;
     }
 }

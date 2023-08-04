@@ -1,6 +1,6 @@
 ﻿namespace Volo.CmsKit.GlobalResources;
 
-public class GlobalResourceConsts
+public static class GlobalResourceConsts
 {
     public const string GlobalStyleName = "GlobalStyle";
     

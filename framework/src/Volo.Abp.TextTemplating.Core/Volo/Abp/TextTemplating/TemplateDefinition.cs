@@ -28,7 +28,7 @@ public class TemplateDefinition : IHasNameWithLocalizableDisplayName
     public string Layout { get; set; }
 
     [CanBeNull]
-    public Type LocalizationResource { get; set; }
+    public string LocalizationResourceName { get; set; }
 
     public bool IsInlineLocalized { get; set; }
 
@@ -60,14 +60,26 @@ public class TemplateDefinition : IHasNameWithLocalizableDisplayName
 
     public TemplateDefinition(
         [NotNull] string name,
-        [CanBeNull] Type localizationResource = null,
+        [NotNull] Type localizationResource,
+        [CanBeNull] ILocalizableString displayName = null,
+        bool isLayout = false,
+        string layout = null,
+        string defaultCultureName = null)
+    : this(name, LocalizationResourceNameAttribute.GetName(localizationResource), displayName, isLayout, layout, defaultCultureName)
+    {
+
+    }
+
+    public TemplateDefinition(
+        [NotNull] string name,
+        [CanBeNull] string localizationResourceName = null,
         [CanBeNull] ILocalizableString displayName = null,
         bool isLayout = false,
         string layout = null,
         string defaultCultureName = null)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), MaxNameLength);
-        LocalizationResource = localizationResource;
+        LocalizationResourceName = localizationResourceName;
         DisplayName = displayName ?? new FixedLocalizableString(Name);
         IsLayout = isLayout;
         Layout = layout;

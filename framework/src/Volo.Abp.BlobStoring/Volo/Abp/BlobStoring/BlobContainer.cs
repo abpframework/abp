@@ -10,11 +10,11 @@ namespace Volo.Abp.BlobStoring;
 public class BlobContainer<TContainer> : IBlobContainer<TContainer>
     where TContainer : class
 {
-    private readonly IBlobContainer _container;
+    protected readonly IBlobContainer Container;
 
     public BlobContainer(IBlobContainerFactory blobContainerFactory)
     {
-        _container = blobContainerFactory.Create<TContainer>();
+        Container = blobContainerFactory.Create<TContainer>();
     }
 
     public Task SaveAsync(
@@ -23,7 +23,7 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         bool overrideExisting = false,
         CancellationToken cancellationToken = default)
     {
-        return _container.SaveAsync(
+        return Container.SaveAsync(
             name,
             stream,
             overrideExisting,
@@ -35,7 +35,7 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         string name,
         CancellationToken cancellationToken = default)
     {
-        return _container.DeleteAsync(
+        return Container.DeleteAsync(
             name,
             cancellationToken
         );
@@ -45,7 +45,7 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         string name,
         CancellationToken cancellationToken = default)
     {
-        return _container.ExistsAsync(
+        return Container.ExistsAsync(
             name,
             cancellationToken
         );
@@ -55,17 +55,17 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         string name,
         CancellationToken cancellationToken = default)
     {
-        return _container.GetAsync(
+        return Container.GetAsync(
             name,
             cancellationToken
         );
     }
 
-    public Task<Stream> GetOrNullAsync(
+    public Task<Stream?> GetOrNullAsync(
         string name,
         CancellationToken cancellationToken = default)
     {
-        return _container.GetOrNullAsync(
+        return Container.GetOrNullAsync(
             name,
             cancellationToken
         );
@@ -118,9 +118,9 @@ public class BlobContainer : IBlobContainer
 
             await Provider.SaveAsync(
                 new BlobProviderSaveArgs(
-                    blobNormalizeNaming.ContainerName,
+                    blobNormalizeNaming.ContainerName!,
                     Configuration,
-                    blobNormalizeNaming.BlobName,
+                    blobNormalizeNaming.BlobName!,
                     stream,
                     overrideExisting,
                     CancellationTokenProvider.FallbackToProvider(cancellationToken)
@@ -140,9 +140,9 @@ public class BlobContainer : IBlobContainer
 
             return await Provider.DeleteAsync(
                 new BlobProviderDeleteArgs(
-                    blobNormalizeNaming.ContainerName,
+                    blobNormalizeNaming.ContainerName!,
                     Configuration,
-                    blobNormalizeNaming.BlobName,
+                    blobNormalizeNaming.BlobName!,
                     CancellationTokenProvider.FallbackToProvider(cancellationToken)
                 )
             );
@@ -160,9 +160,9 @@ public class BlobContainer : IBlobContainer
 
             return await Provider.ExistsAsync(
                 new BlobProviderExistsArgs(
-                    blobNormalizeNaming.ContainerName,
+                    blobNormalizeNaming.ContainerName!,
                     Configuration,
-                    blobNormalizeNaming.BlobName,
+                    blobNormalizeNaming.BlobName!,
                     CancellationTokenProvider.FallbackToProvider(cancellationToken)
                 )
             );
@@ -185,7 +185,7 @@ public class BlobContainer : IBlobContainer
         return stream;
     }
 
-    public virtual async Task<Stream> GetOrNullAsync(
+    public virtual async Task<Stream?> GetOrNullAsync(
         string name,
         CancellationToken cancellationToken = default)
     {
@@ -196,9 +196,9 @@ public class BlobContainer : IBlobContainer
 
             return await Provider.GetOrNullAsync(
                 new BlobProviderGetArgs(
-                    blobNormalizeNaming.ContainerName,
+                    blobNormalizeNaming.ContainerName!,
                     Configuration,
-                    blobNormalizeNaming.BlobName,
+                    blobNormalizeNaming.BlobName!,
                     CancellationTokenProvider.FallbackToProvider(cancellationToken)
                 )
             );

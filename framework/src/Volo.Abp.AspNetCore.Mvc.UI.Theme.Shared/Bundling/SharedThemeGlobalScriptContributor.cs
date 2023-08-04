@@ -1,6 +1,7 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDaterangepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs5;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm;
@@ -29,10 +30,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
     typeof(MalihuCustomScrollbarPluginScriptBundleContributor),
     typeof(LuxonScriptContributor),
     typeof(TimeagoScriptContributor),
-    typeof(BootstrapDatepickerScriptContributor)
+    typeof(BootstrapDatepickerScriptContributor),
+    typeof(BootstrapDaterangepickerScriptContributor)
     )]
 public class SharedThemeGlobalScriptContributor : BundleContributor
 {
+    
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
         context.Files.AddRange(new[]
@@ -46,6 +49,6 @@ public class SharedThemeGlobalScriptContributor : BundleContributor
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert2/abp-sweetalert2.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js"
-            });
+        });
     }
 }

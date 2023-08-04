@@ -14,7 +14,7 @@ public class BundleContext
     }
 
     public void Add(string source, bool excludeFromBundle = false,
-        Dictionary<string, string> additionalProperties = null)
+        Dictionary<string, string>? additionalProperties = null)
     {
         var bundleDefinition = new BundleDefinition
         {

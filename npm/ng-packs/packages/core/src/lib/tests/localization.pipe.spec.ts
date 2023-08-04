@@ -1,6 +1,6 @@
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { LocalizationPipe } from '../pipes';
-import { LocalizationService } from '../services';
+import { LocalizationPipe } from '../pipes/localization.pipe';
+import { LocalizationService } from '../services/localization.service';
 
 describe('LocalizationPipe', () => {
   let spectator: SpectatorService<LocalizationPipe>;

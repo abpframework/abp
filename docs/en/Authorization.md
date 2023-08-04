@@ -459,6 +459,15 @@ public static class CurrentUserExtensions
 }
 ```
 
+> If you use Identity Server please add your claims to `RequestedClaims` of `AbpClaimsServiceOptions`.
+
+```csharp
+Configure<AbpClaimsServiceOptions>(options =>
+{
+    options.RequestedClaims.AddRange(new[]{ "SocialSecurityNumber" });
+});
+```
+
 ## See Also
 
 * [Permission Management Module](Modules/Permission-Management.md)

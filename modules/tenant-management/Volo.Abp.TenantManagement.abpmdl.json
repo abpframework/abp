@@ -6,24 +6,20 @@
     }
   },
   "packages": {
-    "Volo.Abp.TenantManagement.Domain.Shared": {
-      "path": "src/Volo.Abp.TenantManagement.Domain.Shared/Volo.Abp.TenantManagement.Domain.Shared.abppkg.json",
+    "Volo.Abp.TenantManagement.Web": {
+      "path": "src/Volo.Abp.TenantManagement.Web/Volo.Abp.TenantManagement.Web.abppkg.json",
       "folder": "src"
     },
-    "Volo.Abp.TenantManagement.Domain": {
-      "path": "src/Volo.Abp.TenantManagement.Domain/Volo.Abp.TenantManagement.Domain.abppkg.json",
+    "Volo.Abp.TenantManagement.Blazor": {
+      "path": "src/Volo.Abp.TenantManagement.Blazor/Volo.Abp.TenantManagement.Blazor.abppkg.json",
       "folder": "src"
     },
-    "Volo.Abp.TenantManagement.Application.Contracts": {
-      "path": "src/Volo.Abp.TenantManagement.Application.Contracts/Volo.Abp.TenantManagement.Application.Contracts.abppkg.json",
+    "Volo.Abp.TenantManagement.Blazor.WebAssembly": {
+      "path": "src/Volo.Abp.TenantManagement.Blazor.WebAssembly/Volo.Abp.TenantManagement.Blazor.WebAssembly.abppkg.json",
       "folder": "src"
     },
-    "Volo.Abp.TenantManagement.Application": {
-      "path": "src/Volo.Abp.TenantManagement.Application/Volo.Abp.TenantManagement.Application.abppkg.json",
-      "folder": "src"
-    },
-    "Volo.Abp.TenantManagement.EntityFrameworkCore": {
-      "path": "src/Volo.Abp.TenantManagement.EntityFrameworkCore/Volo.Abp.TenantManagement.EntityFrameworkCore.abppkg.json",
+    "Volo.Abp.TenantManagement.Blazor.Server": {
+      "path": "src/Volo.Abp.TenantManagement.Blazor.Server/Volo.Abp.TenantManagement.Blazor.Server.abppkg.json",
       "folder": "src"
     },
     "Volo.Abp.TenantManagement.HttpApi": {
@@ -34,8 +30,24 @@
       "path": "src/Volo.Abp.TenantManagement.HttpApi.Client/Volo.Abp.TenantManagement.HttpApi.Client.abppkg.json",
       "folder": "src"
     },
-    "Volo.Abp.TenantManagement.Web": {
-      "path": "src/Volo.Abp.TenantManagement.Web/Volo.Abp.TenantManagement.Web.abppkg.json",
+    "Volo.Abp.TenantManagement.Application": {
+      "path": "src/Volo.Abp.TenantManagement.Application/Volo.Abp.TenantManagement.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Application.Contracts": {
+      "path": "src/Volo.Abp.TenantManagement.Application.Contracts/Volo.Abp.TenantManagement.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Domain": {
+      "path": "src/Volo.Abp.TenantManagement.Domain/Volo.Abp.TenantManagement.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Domain.Shared": {
+      "path": "src/Volo.Abp.TenantManagement.Domain.Shared/Volo.Abp.TenantManagement.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.TenantManagement.EntityFrameworkCore/Volo.Abp.TenantManagement.EntityFrameworkCore.abppkg.json",
       "folder": "src"
     },
     "Volo.Abp.TenantManagement.Application.Tests": {
@@ -61,22 +73,6 @@
     "Volo.Abp.TenantManagement.Domain.Tests": {
       "path": "test/Volo.Abp.TenantManagement.Domain.Tests/Volo.Abp.TenantManagement.Domain.Tests.abppkg.json",
       "folder": "test"
-    },
-    "Volo.Abp.TenantManagement.Blazor": {
-      "path": "src/Volo.Abp.TenantManagement.Blazor/Volo.Abp.TenantManagement.Blazor.abppkg.json",
-      "folder": "src"
-    },
-    "Volo.Abp.TenantManagement.Blazor.WebAssembly": {
-      "path": "src/Volo.Abp.TenantManagement.Blazor.WebAssembly/Volo.Abp.TenantManagement.Blazor.WebAssembly.abppkg.json",
-      "folder": "src"
-    },
-    "Volo.Abp.TenantManagement.Blazor.Server": {
-      "path": "src/Volo.Abp.TenantManagement.Blazor.Server/Volo.Abp.TenantManagement.Blazor.Server.abppkg.json",
-      "folder": "src"
-    },
-    "Volo.Abp.TenantManagement.Installer": {
-      "path": "src/Volo.Abp.TenantManagement.Installer/Volo.Abp.TenantManagement.Installer.abppkg.json",
-      "folder": "src"
     }
   }
 }

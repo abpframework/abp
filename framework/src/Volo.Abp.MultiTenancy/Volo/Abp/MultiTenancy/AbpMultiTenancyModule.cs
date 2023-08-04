@@ -1,18 +1,20 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus.Abstractions;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Volo.Abp.Security;
+using Volo.Abp.Settings;
 
 namespace Volo.Abp.MultiTenancy;
-
-//TODO: Create a Volo.Abp.MultiTenancy.Abstractions package?
 
 [DependsOn(
     typeof(AbpDataModule),
     typeof(AbpSecurityModule),
-    typeof(AbpEventBusAbstractionsModule)
+    typeof(AbpSettingsModule),
+    typeof(AbpEventBusAbstractionsModule),
+    typeof(AbpMultiTenancyAbstractionsModule)
     )]
 public class AbpMultiTenancyModule : AbpModule
 {
@@ -22,5 +24,15 @@ public class AbpMultiTenancyModule : AbpModule
 
         var configuration = context.Services.GetConfiguration();
         Configure<AbpDefaultTenantStoreOptions>(configuration);
+
+        Configure<AbpSettingOptions>(options =>
+        {
+            options.ValueProviders.InsertAfter(t => t == typeof(GlobalSettingValueProvider), typeof(TenantSettingValueProvider));
+        });
+
+        Configure<AbpTenantResolveOptions>(options =>
+        {
+            options.TenantResolvers.Insert(0, new CurrentUserTenantResolveContributor());
+        });
     }
 }

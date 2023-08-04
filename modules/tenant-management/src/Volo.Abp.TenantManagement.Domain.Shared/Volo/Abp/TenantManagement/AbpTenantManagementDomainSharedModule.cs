@@ -1,6 +1,7 @@
 ﻿using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
@@ -24,6 +25,11 @@ public class AbpTenantManagementDomainSharedModule : AbpModule
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
                 ).AddVirtualJson("/Volo/Abp/TenantManagement/Localization/Resources");
+        });
+
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace("Volo.Abp.TenantManagement", typeof(AbpTenantManagementResource));
         });
     }
 }

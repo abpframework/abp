@@ -15,7 +15,7 @@ public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
     /// <summary>
     /// An event raised after the message is received. Used to notify the message dialog.
     /// </summary>
-    public event EventHandler<UiMessageEventArgs> MessageReceived;
+    public event EventHandler<UiMessageEventArgs>? MessageReceived ;
 
     private readonly IStringLocalizer<AbpUiResource> localizer;
 
@@ -29,7 +29,7 @@ public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
         Logger = NullLogger<BlazoriseUiMessageService>.Instance;
     }
 
-    public Task Info(string message, string title = null, Action<UiMessageOptions> options = null)
+    public Task Info(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         var uiMessageOptions = CreateDefaultOptions();
         options?.Invoke(uiMessageOptions);
@@ -39,7 +39,7 @@ public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
         return Task.CompletedTask;
     }
 
-    public Task Success(string message, string title = null, Action<UiMessageOptions> options = null)
+    public Task Success(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         var uiMessageOptions = CreateDefaultOptions();
         options?.Invoke(uiMessageOptions);
@@ -49,7 +49,7 @@ public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
         return Task.CompletedTask;
     }
 
-    public Task Warn(string message, string title = null, Action<UiMessageOptions> options = null)
+    public Task Warn(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         var uiMessageOptions = CreateDefaultOptions();
         options?.Invoke(uiMessageOptions);
@@ -59,7 +59,7 @@ public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
         return Task.CompletedTask;
     }
 
-    public Task Error(string message, string title = null, Action<UiMessageOptions> options = null)
+    public Task Error(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         var uiMessageOptions = CreateDefaultOptions();
         options?.Invoke(uiMessageOptions);
@@ -69,7 +69,7 @@ public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
         return Task.CompletedTask;
     }
 
-    public Task<bool> Confirm(string message, string title = null, Action<UiMessageOptions> options = null)
+    public Task<bool> Confirm(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         var uiMessageOptions = CreateDefaultOptions();
         options?.Invoke(uiMessageOptions);

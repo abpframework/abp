@@ -1,27 +1,12 @@
 (function ($) {
-    $(function () {
+    $(function () {        
         var initNavigationFilter = function (navigationContainerId) {
             var $navigation = $('#' + navigationContainerId);
 
-            var getShownDocumentLinks = function () {
-                return $navigation
-                    .find('.mCSB_container > li a:visible')
-                    .not('.tree-toggle');
-            };
-
-            var gotoFilteredDocumentIfThereIsOnlyOne = function () {
-                var $links = getShownDocumentLinks();
-                if ($links.length === 1) {
-                    var url = $links.first().attr('href');
-                    if (url === 'javascript:;') {
-                        return;
-                    }
-
-                    window.location = url;
-                }
-            };
+            var $searchAllDocument = $('#search-all-document');
 
             var filterDocumentItems = function (filterText) {
+                
                 $navigation
                     .find('.mCSB_container .opened')
                     .removeClass('opened');
@@ -34,6 +19,7 @@
                     $navigation
                         .find('.mCSB_container .selected-tree > ul')
                         .show();
+                    $searchAllDocument.hide();
                     return;
                 }
 
@@ -69,7 +55,13 @@
                         hasParent = $parent.length > 0;
                     }
                 });
+                
+                $searchAllDocument.show();
             };
+
+            $searchAllDocument.click(function () {
+                fullSearch($('#filter').val());
+            });
 
             $('#filter').on('input', (e) => {
                 filterDocumentItems(e.target.value);
@@ -77,16 +69,20 @@
 
             $('#filter').keyup(function (e) {
                 if (e.key === 'Enter') {
-                    gotoFilteredDocumentIfThereIsOnlyOne();
+                    fullSearch($('#filter').val());
                 }
             });
+            
+            function fullSearch(filterText){
+                window.open($('#fullsearch').data('fullsearch-url') + "?keyword=" + encodeURIComponent(filterText));
+            }
 
             $('#fullsearch').keyup(function (e) {
                 if (e.key === 'Enter') {
-                    window.open($(this).data('fullsearch-url') + "?keyword=" + encodeURIComponent(this.value));
+                    fullSearch(e.target.value);
                 }
             });
-        };
+        };  
 
         var initAnchorTags = function (container) {
             anchors.options = {
@@ -254,6 +250,25 @@
             setQueryString();
         };
 
+        var initDocumentNodeBreadcrumb = function (){
+            var selectedTreeRoot = $("li.nav-header.selected-tree")[0];
+            if(selectedTreeRoot)
+            {
+                var $selectedTreeRoot = $(selectedTreeRoot);
+                var firstAnchor = $selectedTreeRoot.find("a");
+
+                var documentNodeNames = $("#document-node-wrapper");
+                documentNodeNames.append('<li class="breadcrumb-item"><a href="' + firstAnchor.attr("href") + '">' + firstAnchor.html() + '</a></li>');
+
+                var selectedTreeItems = $selectedTreeRoot.find("ul.nav-list > li.selected-tree");
+                for (let i = 0; i < selectedTreeItems.length; i++)
+                {
+                    var anchorItem = $(selectedTreeItems[i]).find("a");
+                    documentNodeNames.append('<li class="breadcrumb-item ' + (i === selectedTreeItems.length - 1 ? "active": "") + '"><a href="' + anchorItem.attr("href") + '">' + anchorItem.html() + '</a></li>');
+                }
+            }
+        };
+        
         initNavigationFilter('sidebar-scroll');
 
         initAnchorTags('.docs-page .docs-body');
@@ -261,5 +276,7 @@
         initSocialShareLinks();
 
         initSections();
+
+        initDocumentNodeBreadcrumb();
     });
 })(jQuery);

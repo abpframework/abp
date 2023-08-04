@@ -12,7 +12,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity;
 
-public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
+public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVersion
 {
     public virtual Guid? TenantId { get; protected set; }
 
@@ -112,6 +112,21 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
     /// </summary>
     public virtual int AccessFailedCount { get; protected internal set; }
 
+    /// <summary>
+    /// Should change password on next login.
+    /// </summary>
+    public virtual bool ShouldChangePasswordOnNextLogin { get; protected internal set; }
+
+    /// <summary>
+    /// A version value that is increased whenever the entity is changed.
+    /// </summary>
+    public virtual int EntityVersion { get; protected set; }
+
+    /// <summary>
+    /// Gets or sets the last password change time for the user.
+    /// </summary>
+    public virtual DateTimeOffset? LastPasswordChangeTime { get; protected set; }
+
     //TODO: Can we make collections readonly collection, which will provide encapsulation. But... can work for all ORMs?
 
     /// <summary>
@@ -158,7 +173,7 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
         NormalizedUserName = userName.ToUpperInvariant();
         Email = email;
         NormalizedEmail = email.ToUpperInvariant();
-        ConcurrencyStamp = Guid.NewGuid().ToString();
+        ConcurrencyStamp = Guid.NewGuid().ToString("N");
         SecurityStamp = Guid.NewGuid().ToString();
         IsActive = true;
 
@@ -361,6 +376,16 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
     public virtual void SetIsActive(bool isActive)
     {
         IsActive = isActive;
+    }
+
+    public virtual void SetShouldChangePasswordOnNextLogin(bool shouldChangePasswordOnNextLogin)
+    {
+        ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
+    }
+
+    public virtual void SetLastPasswordChangeTime(DateTimeOffset? lastPasswordChangeTime)
+    {
+        LastPasswordChangeTime = lastPasswordChangeTime;
     }
 
     public override string ToString()

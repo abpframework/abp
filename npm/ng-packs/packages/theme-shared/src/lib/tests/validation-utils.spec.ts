@@ -4,10 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Injector } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { validatePassword } from '@ngx-validate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
-import { getPasswordValidators } from '../utils';
+import { getPasswordValidators, validatePassword } from '../utils';
+import { PasswordRule } from '../models/validation';
+
 @Component({ template: '', selector: 'abp-dummy' })
 class DummyComponent {}
 
@@ -47,8 +48,11 @@ describe('ValidationUtils', () => {
       configState.refreshAppState();
 
       const validators = getPasswordValidators(spectator.inject(Injector));
+      const passwordValidators = ['number', 'small', 'capital', 'special'].map(
+        (rule: PasswordRule) => validatePassword(rule),
+      );
       const expectedValidators = [
-        validatePassword(['number', 'small', 'capital', 'special']),
+        ...passwordValidators,
         Validators.minLength(6),
         Validators.maxLength(128),
       ];

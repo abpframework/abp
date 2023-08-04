@@ -273,6 +273,9 @@
     "SubscribeToNewsletter": "Zapisz się do newslettera, aby otrzymywać informacje o wydarzeniach na platformie ABP.IO, takie jak nowości, artykuły, oferty i nie tylko.",
     "FirstEdition": "Pierwsza edycja",
     "ThankYou": "Dziękuję Ci!",
-    "CheckboxMandatory": "Musisz to sprawdzić, aby kontynuować!"
+    "CheckboxMandatory": "Musisz to sprawdzić, aby kontynuować!",
+    "SelectUITheme": "Wybierz motyw interfejsu",
+    "CreateSolutionFolder": "Utwórz folder rozwiązania",
+    "CreateSolutionFolderOption": "Określa, czy projekt znajdzie się w nowym folderze w folderze wyjściowym, czy bezpośrednio w folderze wyjściowym."
   }
 }

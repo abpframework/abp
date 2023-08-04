@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -19,7 +20,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
     {
     }
 
-    public async Task<bool> AnyAsync(
+    public virtual async Task<bool> AnyAsync(
         [NotNull] string entityType,
         [NotNull] string name,
         CancellationToken cancellationToken = default)
@@ -81,13 +82,37 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
         return result;
     }
 
+    
+    public virtual async Task<List<PopularTag>> GetPopularTagsAsync(string entityType, int maxCount, CancellationToken cancellationToken = default)
+    {
+        var tags = await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => x.EntityType == entityType)
+            .Select(x => new { x.Id, x.Name })
+            .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
-    public async Task<List<Tag>> GetListAsync(string filter, CancellationToken cancellationToken = default)
+        var tagIds = tags.Select(x => x.Id);
+
+        var entityTagCounts = await (await GetMongoQueryableAsync<EntityTag>(cancellationToken))
+            .Where(q => tagIds.Contains(q.TagId))
+            .GroupBy(q => q.TagId)
+            .Select(q => new { TagId = q.Key, Count = q.Count() })
+            .OrderByDescending(q => q.Count)
+            .Take(maxCount)
+            .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+
+        return (from entityTagId in entityTagCounts
+            let tag = tags.FirstOrDefault(x => x.Id == entityTagId.TagId)
+            where tag != null
+            select new PopularTag(tag.Id, tag.Name, entityTagId.Count)).ToList();
+    }
+
+
+    public virtual async Task<List<Tag>> GetListAsync(string filter, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableByFilterAsync(filter, cancellationToken)).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<int> GetCountAsync(string filter, CancellationToken cancellationToken = default)
+    public virtual async Task<int> GetCountAsync(string filter, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableByFilterAsync(filter, cancellationToken)).CountAsync(GetCancellationToken(cancellationToken));
     }
@@ -99,7 +124,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
         if (!filter.IsNullOrWhiteSpace())
         {
             mongoQueryable = mongoQueryable.Where(x =>
-                    x.Name.ToLower().Contains(filter) ||
+                    x.Name.ToLower().Contains(filter.ToLower()) ||
                     x.EntityType.ToLower().Contains(filter));
         }
 

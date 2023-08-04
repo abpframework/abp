@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
     <AssemblyName>Volo.Abp.Json</AssemblyName>
     <PackageId>Volo.Abp.Json</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -15,9 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp.ObjectExtending\Volo.Abp.ObjectExtending.csproj" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <ProjectReference Include="..\Volo.Abp.Json.SystemTextJson\Volo.Abp.Json.SystemTextJson.csproj" />
   </ItemGroup>
 
 </Project>

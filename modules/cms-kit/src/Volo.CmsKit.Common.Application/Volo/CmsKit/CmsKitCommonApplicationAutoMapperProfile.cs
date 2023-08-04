@@ -9,12 +9,17 @@ public class CmsKitCommonApplicationAutoMapperProfile : Profile
 {
     public CmsKitCommonApplicationAutoMapperProfile()
     {
-        CreateMap<Tag, TagDto>();
+        CreateMap<Tag, TagDto>().MapExtraProperties();
 
-        CreateMap<CmsUser, CmsUserDto>();
+        CreateMap<PopularTag, PopularTagDto>();
 
-        CreateMap<BlogFeature, BlogFeatureCacheItem>();
-        CreateMap<BlogFeature, BlogFeatureDto>();
-        CreateMap<BlogFeatureCacheItem, BlogFeatureDto>().ReverseMap();
+        CreateMap<CmsUser, CmsUserDto>().MapExtraProperties();
+
+        CreateMap<BlogFeature, BlogFeatureCacheItem>().MapExtraProperties();
+        CreateMap<BlogFeature, BlogFeatureDto>().MapExtraProperties();
+        CreateMap<BlogFeatureCacheItem, BlogFeatureDto>()
+            .MapExtraProperties()
+            .ReverseMap()
+            .MapExtraProperties();
     }
 }

@@ -4,7 +4,7 @@
 
 Please follow the steps below to prepare your development environment for Angular.
 
-1. **Install Node.js:** Please visit [Node.js downloads page](https://nodejs.org/en/download/) and download proper Node.js v12 or v14 installer for your OS. An alternative is to install [NVM](https://github.com/nvm-sh/nvm) and use it to have multiple versions of Node.js in your operating system.
+1. **Install Node.js:** Please visit [Node.js downloads page](https://nodejs.org/en/download/) and download proper Node.js v16 or v18 installer for your OS. An alternative is to install [NVM](https://github.com/nvm-sh/nvm) and use it to have multiple versions of Node.js in your operating system.
 2. **[Optional] Install Yarn:** You may install Yarn v1 (not v2) following the instructions on [the installation page](https://classic.yarnpkg.com/en/docs/install). Yarn v1 delivers an arguably better developer experience compared to npm v6 and below. You may skip this step and work with npm, which is built-in in Node.js, instead.
 3. **[Optional] Install VS Code:** [VS Code](https://code.visualstudio.com/) is a free, open-source IDE which works seamlessly with TypeScript. Although you can use any IDE including Visual Studio or Rider, VS Code will most likely deliver the best developer experience when it comes to Angular projects. ABP project templates even contain plugin recommendations for VS Code users, which VS Code will ask you to install when you open the Angular project folder. Here is a list of recommended extensions:
    - [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=angular.ng-template)
@@ -37,19 +37,9 @@ This command will prepare a solution with an Angular and a .NET Core project in 
 
 To continue reading without checking other methods, visit [Angular project structure section](#angular-project-structure).
 
-### 2. Direct Download
+### 2. Generating a CLI Command from Get Started Page
 
-You may [download a solution scaffold directly on ABP.io](https://abp.io/get-started) if you are more comfortable with GUI or simply want to try ABP without installing the CLI.
-
-Please do the following:
-
-1. Click on the "DIRECT DOWNLOAD" tab.
-2. Fill out the short form about your project.
-3. Click on the "Create now" button.
-
-...and a customized download will start in a few seconds.
-
-To avoid IDE warnings, run `yarn` or `npm install` in the Angular root folder before you continue to the next section. It is not imperative but recommended.
+You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](../../Startup-Templates/Index.md).
 
 ## Angular Project Structure
 
@@ -189,7 +179,7 @@ This command will download and start a simple static server, a browser window at
 
 Of course, you need your application to run on an optimized web server and become available to everyone. This is quite straight-forward:
 
-1. Create a new static web server instance. You can use a service like [Azure App Service](https://azure.microsoft.com/tr-tr/services/app-service/web/), [Firebase](https://firebase.google.com/docs/hosting), [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), or even [GitHub Pages](https://angular.io/guide/deployment#deploy-to-github-pages). Another option is maintaining own web server with [NGINX](https://www.nginx.com/), [IIS](https://www.iis.net/), [Apache HTTP Server](https://httpd.apache.org/), or equivalent.
+1. Create a new static web server instance. You can use a service like [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/web/), [Firebase](https://firebase.google.com/docs/hosting), [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), or even [GitHub Pages](https://angular.io/guide/deployment#deploy-to-github-pages). Another option is maintaining own web server with [NGINX](https://www.nginx.com/), [IIS](https://www.iis.net/), [Apache HTTP Server](https://httpd.apache.org/), or equivalent.
 2. Copy the files from `dist/MyProjectName` <sup id="a-dist-folder-name">[1](#f-dist-folder-name)</sup> to a publicly served destination on the server via CLI of the service provider, SSH, or FTP (whichever is available). This step would be defined as a job if you have a CI/CD flow.
 3. [Configure the server](https://angular.io/guide/deployment#server-configuration) to redirect all requests to the _index.html_ file. Some services do that automatically. Others require you [to add a file to the bundle via assets](https://angular.io/guide/workspace-config#assets-configuration) which describes the server how to do the redirections. Occasionally, you may need to do manual configuration.
 

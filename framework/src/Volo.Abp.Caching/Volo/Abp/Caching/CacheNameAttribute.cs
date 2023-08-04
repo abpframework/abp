@@ -16,6 +16,11 @@ public class CacheNameAttribute : Attribute
         Name = name;
     }
 
+    public static string GetCacheName<TCacheItem>()
+    {
+        return GetCacheName(typeof(TCacheItem));
+    }
+    
     public static string GetCacheName(Type cacheItemType)
     {
         var cacheNameAttribute = cacheItemType
@@ -28,6 +33,6 @@ public class CacheNameAttribute : Attribute
             return cacheNameAttribute.Name;
         }
 
-        return cacheItemType.FullName.RemovePostFix("CacheItem");
+        return cacheItemType.FullName!.RemovePostFix("CacheItem")!;
     }
 }

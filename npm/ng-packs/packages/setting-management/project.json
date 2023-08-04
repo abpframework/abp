@@ -1,0 +1,47 @@
+{
+  "name": "setting-management",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/setting-management/src",
+  "prefix": "abp",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/setting-management"],
+      "options": {
+        "project": "packages/setting-management/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/setting-management/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/setting-management/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/packages/setting-management"],
+      "options": {
+        "jestConfig": "packages/setting-management/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/setting-management/src/**/*.ts",
+          "packages/setting-management/src/**/*.html",
+          "packages/setting-management/proxy/**/*.ts",
+          "packages/setting-management/proxy/**/*.html"
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared", "components"]
+}

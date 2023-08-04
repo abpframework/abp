@@ -12,7 +12,7 @@ public partial class SubmitButton : ComponentBase
     protected bool Submiting { get; set; }
 
     [Parameter]
-    public string Form { get; set; }
+    public string Form { get; set; } = default!;
 
     [Parameter]
     public ButtonType Type { get; set; } = ButtonType.Submit;
@@ -36,10 +36,10 @@ public partial class SubmitButton : ComponentBase
     public EventCallback Clicked { get; set; }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
     [Inject]
-    protected IStringLocalizer<AbpUiResource> StringLocalizer { get; set; }
+    protected IStringLocalizer<AbpUiResource> StringLocalizer { get; set; } = default!;
 
     protected bool IsDisabled
         => Disabled == true || Submiting;

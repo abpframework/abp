@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Volo.Abp.Reflection;
@@ -16,7 +17,7 @@ public class ConventionalControllerSetting
     public Assembly Assembly { get; }
 
     [NotNull]
-    public HashSet<Type> ControllerTypes { get; } //TODO: Internal?
+    internal HashSet<Type> ControllerTypes { get; }
 
     /// <summary>
     /// Set true to use the old style URL path style.
@@ -32,7 +33,7 @@ public class ConventionalControllerSetting
             _rootPath = value;
         }
     }
-    private string _rootPath;
+    private string _rootPath = default!;
 
     [NotNull]
     public string RemoteServiceName {
@@ -42,23 +43,24 @@ public class ConventionalControllerSetting
             _remoteServiceName = value;
         }
     }
-    private string _remoteServiceName;
+    private string _remoteServiceName = default!;
 
-    [CanBeNull]
-    public Func<Type, bool> TypePredicate { get; set; }
+    public Func<Type, bool>? TypePredicate { get; set; }
 
-    [CanBeNull]
-    public Action<ControllerModel> ControllerModelConfigurer { get; set; }
+    /// <summary>
+    /// Default value: All.
+    /// </summary>
+    public ApplicationServiceTypes ApplicationServiceTypes { get; set; } = ApplicationServiceTypes.All;
 
-    [CanBeNull]
-    public Func<UrlControllerNameNormalizerContext, string> UrlControllerNameNormalizer { get; set; }
+    public Action<ControllerModel>? ControllerModelConfigurer { get; set; }
 
-    [CanBeNull]
-    public Func<UrlActionNameNormalizerContext, string> UrlActionNameNormalizer { get; set; }
+    public Func<UrlControllerNameNormalizerContext, string>? UrlControllerNameNormalizer { get; set; }
+
+    public Func<UrlActionNameNormalizerContext, string>? UrlActionNameNormalizer { get; set; }
 
     public List<ApiVersion> ApiVersions { get; }
 
-    public Action<ApiVersioningOptions> ApiVersionConfigurer { get; set; }
+    public Action<ApiVersioningOptions>? ApiVersionConfigurer { get; set; }
 
     public ConventionalControllerSetting(
         [NotNull] Assembly assembly,
@@ -77,12 +79,18 @@ public class ConventionalControllerSetting
     {
         var types = Assembly.GetTypes()
             .Where(IsRemoteService)
-            .WhereIf(TypePredicate != null, TypePredicate);
+            .Where(IsPreferredApplicationServiceType)
+            .WhereIf(TypePredicate != null, TypePredicate!);
 
         foreach (var type in types)
         {
             ControllerTypes.Add(type);
         }
+    }
+    
+    public IReadOnlyList<Type> GetControllerTypes()
+    {
+        return ControllerTypes.ToImmutableList();
     }
 
     private static bool IsRemoteService(Type type)
@@ -104,5 +112,20 @@ public class ConventionalControllerSetting
         }
 
         return false;
+    }
+    
+    private bool IsPreferredApplicationServiceType(Type type)
+    {
+        if (ApplicationServiceTypes == ApplicationServiceTypes.ApplicationServices)
+        {
+            return !IntegrationServiceAttribute.IsDefinedOrInherited(type);
+        }
+        
+        if (ApplicationServiceTypes == ApplicationServiceTypes.IntegrationServices)
+        {
+            return IntegrationServiceAttribute.IsDefinedOrInherited(type);
+        }
+
+        return true;
     }
 }

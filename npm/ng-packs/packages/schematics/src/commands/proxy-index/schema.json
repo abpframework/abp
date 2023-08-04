@@ -12,6 +12,15 @@
         "index": 0
       },
       "x-prompt": "Please enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
+    },
+    "entryPoint": {
+      "description": "Target Angular project to place the generated code",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 5
+      },
+      "x-prompt": "Please enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
     }
   },
   "required": []

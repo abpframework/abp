@@ -19,6 +19,8 @@ public class SolutionName
 
     public static SolutionName Parse(string fullName, string microserviceName)
     {
+        microserviceName = microserviceName.Replace(".", string.Empty);
+        
         return new SolutionName(fullName + "." + microserviceName, fullName, microserviceName);
     }
 

@@ -128,7 +128,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         return await queryable.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
     }
 
-    public async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
+    public virtual async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
     {
         var queryable = (await CreateAuthorsQueryableAsync(cancellationToken))
                         .Skip(skipCount)
@@ -139,14 +139,14 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         return await AsyncExecuter.ToListAsync(queryable, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default)
+    public virtual async Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default)
     {
         return await AsyncExecuter.CountAsync(
             (await CreateAuthorsQueryableAsync(cancellationToken))
                 .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower())));
     }
 
-    public async Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await AsyncExecuter.FirstOrDefaultAsync(await CreateAuthorsQueryableAsync(cancellationToken), x => x.Id == id)
             ?? throw new EntityNotFoundException(typeof(CmsUser), id);

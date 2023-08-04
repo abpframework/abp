@@ -35,24 +35,28 @@ public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
 
                 if (result.Exception != null && !result.ExceptionHandled)
                 {
-                    auditLog.Exceptions.Add(result.Exception);
+                    auditLog!.Exceptions.Add(result.Exception);
                 }
             }
             catch (Exception ex)
             {
-                auditLog.Exceptions.Add(ex);
+                auditLog!.Exceptions.Add(ex);
                 throw;
             }
             finally
             {
                 stopwatch.Stop();
-                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                auditLog.Actions.Add(auditLogAction);
+
+                if (auditLogAction != null)
+                {
+                    auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                    auditLog!.Actions.Add(auditLogAction);
+                }
             }
         }
     }
 
-    private bool ShouldSaveAudit(PageHandlerExecutingContext context, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
+    private bool ShouldSaveAudit(PageHandlerExecutingContext context, out AuditLogInfo? auditLog, out AuditLogActionInfo? auditLogAction)
     {
         auditLog = null;
         auditLogAction = null;
@@ -75,18 +79,22 @@ public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
         }
 
         var auditingHelper = context.GetRequiredService<IAuditingHelper>();
-        if (!auditingHelper.ShouldSaveAudit(context.HandlerMethod.MethodInfo, true))
+        if (!auditingHelper.ShouldSaveAudit(context.HandlerMethod!.MethodInfo, defaultValue: true))
         {
             return false;
         }
 
         auditLog = auditLogScope.Log;
-        auditLogAction = auditingHelper.CreateAuditLogAction(
-            auditLog,
-            context.HandlerMethod.MethodInfo.DeclaringType,
-            context.HandlerMethod.MethodInfo,
-            context.HandlerArguments
-        );
+
+        if (!options.DisableLogActionInfo)
+        {
+            auditLogAction = auditingHelper.CreateAuditLogAction(
+                auditLog,
+                context.HandlerMethod.MethodInfo.DeclaringType,
+                context.HandlerMethod.MethodInfo,
+                context.HandlerArguments
+            );
+        }
 
         return true;
     }

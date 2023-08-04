@@ -12,19 +12,19 @@ public partial class EntityActions<TItem> : ComponentBase
 {
     protected readonly List<EntityAction<TItem>> Actions = new List<EntityAction<TItem>>();
     protected bool HasPrimaryAction => Actions.Any(t => t.Primary);
-    protected EntityAction<TItem> PrimaryAction => Actions.FirstOrDefault(t => t.Primary);
+    protected EntityAction<TItem>? PrimaryAction => Actions.FirstOrDefault(t => t.Primary);
 
     [Parameter]
     public Color ToggleColor { get; set; } = Color.Primary;
 
     [Parameter]
-    public string ToggleText { get; set; }
+    public string? ToggleText { get; set; }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
-    public DataGridEntityActionsColumn<TItem> EntityActionsColumn { get; set; }
+    public DataGridEntityActionsColumn<TItem> EntityActionsColumn { get; set; } = default!;
 
     [Parameter]
     public ActionType Type { get; set; } = ActionType.Dropdown;
@@ -33,10 +33,10 @@ public partial class EntityActions<TItem> : ComponentBase
     public bool Disabled { get; set; } = false;
 
     [CascadingParameter]
-    public DataGridEntityActionsColumn<TItem> ParentEntityActionsColumn { get; set; }
+    public DataGridEntityActionsColumn<TItem>? ParentEntityActionsColumn { get; set; }
 
     [Inject]
-    public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
+    public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; } = default!;
 
     internal void AddAction(EntityAction<TItem> action)
     {

@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
         <AssemblyName>Volo.Abp.DistributedLocking.Abstractions</AssemblyName>
         <PackageId>Volo.Abp.DistributedLocking.Abstractions</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -16,6 +16,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+        <PackageReference Include="AsyncKeyedLock" Version="6.2.1" />
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MicrosoftPackageVersion)" />
     </ItemGroup>
 
 </Project>

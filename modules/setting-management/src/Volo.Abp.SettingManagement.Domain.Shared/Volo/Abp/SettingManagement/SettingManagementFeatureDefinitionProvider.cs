@@ -17,12 +17,13 @@ public class SettingManagementFeatureDefinitionProvider : FeatureDefinitionProvi
             "true",
             L("Feature:SettingManagementEnable"),
             L("Feature:SettingManagementEnableDescription"),
-            new ToggleStringValueType());
+            new ToggleStringValueType(),
+            isAvailableToHost: false);
 
         settingEnableFeature.CreateChild(
-            SettingManagementFeatures.AllowTenantsToChangeEmailSettings,
+            SettingManagementFeatures.AllowChangingEmailSettings,
             "false",
-            L("Feature:AllowTenantsToChangeEmailSettings"),
+            L("Feature:AllowChangingEmailSettings"),
             null,
             new ToggleStringValueType(),
             isAvailableToHost: false);

@@ -16,7 +16,7 @@ namespace Volo.Blogging.Comments
         {
         }
 
-        public async Task<List<Comment>> GetListOfPostAsync(Guid postId, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Comment>> GetListOfPostAsync(Guid postId, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(a => a.PostId == postId)
@@ -24,19 +24,19 @@ namespace Volo.Blogging.Comments
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<int> GetCommentCountOfPostAsync(Guid postId, CancellationToken cancellationToken = default)
+        public virtual async Task<int> GetCommentCountOfPostAsync(Guid postId, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
                 .CountAsync(a => a.PostId == postId, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<Comment>> GetRepliesOfComment(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Comment>> GetRepliesOfComment(Guid id, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(a => a.RepliedCommentId == id).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task DeleteOfPost(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteOfPost(Guid id, CancellationToken cancellationToken = default)
         {
             var recordsToDelete = (await GetMongoQueryableAsync(cancellationToken)).Where(pt => pt.PostId == id);
 

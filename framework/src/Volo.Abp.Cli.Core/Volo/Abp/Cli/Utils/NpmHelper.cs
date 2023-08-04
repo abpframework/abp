@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Linq;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Versioning;
 using Volo.Abp.DependencyInjection;
@@ -19,15 +21,30 @@ public class NpmHelper : ITransientDependency
     public bool IsNpmInstalled()
     {
         var output = CmdHelper.RunCmdAndGetOutput("npm -v").Trim();
-        return SemanticVersion.TryParse(output, out _);
+        var outputLines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+        return outputLines.Any(ol => SemanticVersion.TryParse(ol, out _));
     }
 
     public bool IsYarnAvailable()
     {
         var output = CmdHelper.RunCmdAndGetOutput("yarn -v").Trim();
-        if (!SemanticVersion.TryParse(output, out var version)){
+        var outputLines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        SemanticVersion version = null;
+
+        foreach (var outputLine in outputLines)
+        {
+            if (SemanticVersion.TryParse(outputLine, out version))
+            {
+                break;
+            }
+        }
+
+        if (version == null)
+        {
             return false;
         }
+        
         return version > SemanticVersion.Parse("1.20.0");
     }
 

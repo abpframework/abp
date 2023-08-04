@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Get ég breytt skráðum forriturum fyrirtækisins míns í framtíðinni?",
     "ChangingDevelopersExplanation": "Til viðbótar við að bæta nýjum verktaka við leyfi þitt geturðu einnig breytt núverandi forriturum (þú getur fjarlægt verktaka og bætt nýjum við) án aukakostnaðar.",
     "WhenShouldIRenewMyLicense": "Hvenær ætti ég að endurnýja leyfið mitt?",
-    "WhenShouldIRenewMyLicenseExplanation": "Ef þú endurnýjar leyfið þitt innan <strong>eins mánaðar</strong> eftir að leyfið þitt rennur út verða eftirfarandi afslættir notaðir: Team Leyfi {0}% afsláttur, Business License {1}% afsláttur, Enterprise License {2}% afsláttur . Ef þú endurnýjar leyfið þitt <strong>1 mánuði</strong> eftir að leyfið rennur út, verður endurnýjunarverðið það sama og kaupverð leyfisins og enginn afsláttur af endurnýjun þinni.",
+    "WhenShouldIRenewMyLicenseExplanation": "Ef þú endurnýjar leyfið þitt innan <strong>{3} dagar</strong> eftir að leyfið þitt rennur út verða eftirfarandi afslættir notaðir: Team Leyfi {0}% afsláttur, Business License {1}% afsláttur, Enterprise License {2}% afsláttur . Ef þú endurnýjar leyfið þitt <strong>{3} dagar</strong> eftir að leyfið rennur út, verður endurnýjunarverðið það sama og kaupverð leyfisins og enginn afsláttur af endurnýjun þinni.",
     "TrialPlan": "Ertu með prufuáætlun?",
     "DoYouAcceptBankWireTransfer": "Samþykki þið bankamillifærslu?",
     "DoYouAcceptBankWireTransferExplanation": "Já, við tökum við bankamillifærslu.<br />Eftir að hafa sent leyfisgjaldið með millifærslu skaltu senda okkur tölvupóst á accounting@abp.io kvittun þína og tegund leyfis sem óskað er eftir. Upplýsingar um alþjóðlega bankareikninginn okkar:",
@@ -360,7 +360,7 @@
     "Next": "Næsta",
     "StartTrial": "Byrjaðu ókeypis prufuáskriftina mína",
     "ContactUsIssues": "Hafðu samband við okkur ef þú hefur einhver vandamál",
-    "TrialActivatedWarning": "Kæri {0}, notandi á rétt á aðeins 1 ókeypis prufutíma. Þú hefur þegar notað prufutíma þinn.",
+    "TrialActivatedWarning": "Notandi á aðeins rétt á að fá 1 ókeypis prufutímabil. Þú hefur þegar notað prufutímabilið þitt.",
     "SaveAndDownload": "Vista og hala niður",
     "CompanyNameValidationMessage": "Nafn fyrirtækis er of langt!",
     "AddressValidationMessage": "Heimilisfang er of langt!",
@@ -373,11 +373,12 @@
     "TrialLicenseModelInvalidErrorMessage": "Einn af eftirfarandi reitum er ógildur: heiti lands, stærð fyrirtækis, iðnaður eða tilgangur notkunar.",
     "Trial": "Prufu aðgangur",
     "Purchased": "Keypt",
-    "PurchaseLicense": "Keypt leyfi",
+    "PurchaseLicense": "Kaupa {0} leyfi",
     "PurchaseTrialLicenseMessage": "Gildistími leyfis þíns er {0}. <br> Ef þú vilt halda áfram að nota verkefnin sem þú bjóst til á ókeypis prufutímabilinu þarftu að breyta leyfislyklunum í <code> appsettings.secrets.json </code> skránni þinn. Hér er leyfislykillinn þinn:",
     "TrialLicenseExpireMessage": "Þú ert að nota prufuleyfið og prufuleyfið rennur út {0}.",
     "TryForFree": "Prófaðu ókeypis",
     "TrialLicenseExpiredInfo": "Prófunartímabil þitt er útrunnið!",
-    "CommercialNewsletterConfirmationMessage": "Ég samþykki <a href=\"https://commercial.abp.io/TermsConditions\">skilmálana</a> og <a href=\"https://commercial.abp.io/Privacy\">persónuverndarstefnuna </a>."
+    "CommercialNewsletterConfirmationMessage": "Ég samþykki <a href=\"https://commercial.abp.io/TermsConditions\">skilmálana</a> og <a href=\"https://commercial.abp.io/Privacy\">persónuverndarstefnuna </a>.",
+    "BlackFridayDiscount": "Black Friday afsláttur"
   }
 }

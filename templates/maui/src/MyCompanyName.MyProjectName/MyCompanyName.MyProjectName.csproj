@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\common.props" />
-	
+
 	<PropertyGroup>
-		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
+		<Nullable>enable</Nullable>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -34,7 +35,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-	    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
+	    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -54,7 +55,7 @@
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 	  <None Remove="appsettings.json" />
 	  <EmbeddedResource Include="appsettings.json" />

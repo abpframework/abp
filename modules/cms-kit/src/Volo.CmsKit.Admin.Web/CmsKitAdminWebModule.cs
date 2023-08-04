@@ -1,19 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.CmsKit.Admin.Web.Menus;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation;
-using Volo.Abp.VirtualFileSystem;
-using Volo.CmsKit.Localization;
-using Volo.CmsKit.Web;
-using Volo.CmsKit.Permissions;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
-using Volo.Abp.Localization;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
+using Volo.Abp.Localization;
+using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.Threading;
+using Volo.Abp.UI.Navigation;
+using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.MediaDescriptors;
+using Volo.CmsKit.Admin.Web.Menus;
+using Volo.CmsKit.Localization;
+using Volo.CmsKit.Permissions;
+using Volo.CmsKit.Web;
 
 namespace Volo.CmsKit.Admin.Web;
 
@@ -23,6 +26,8 @@ namespace Volo.CmsKit.Admin.Web;
     )]
 public class CmsKitAdminWebModule : AbpModule
 {
+    private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
+    
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
@@ -64,6 +69,7 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AuthorizeFolder("/CmsKit/Pages", CmsKitAdminPermissions.Pages.Default);
             options.Conventions.AuthorizeFolder("/CmsKit/Pages/Create", CmsKitAdminPermissions.Pages.Create);
             options.Conventions.AuthorizeFolder("/CmsKit/Pages/Update", CmsKitAdminPermissions.Pages.Update);
+            options.Conventions.AuthorizeFolder("/CmsKit/Pages/SetAsHomePage", CmsKitAdminPermissions.Pages.SetAsHomePage);
             options.Conventions.AuthorizeFolder("/CmsKit/Blogs", CmsKitAdminPermissions.Blogs.Default);
             options.Conventions.AuthorizeFolder("/CmsKit/Blogs/Create", CmsKitAdminPermissions.Blogs.Create);
             options.Conventions.AuthorizeFolder("/CmsKit/Blogs/Update", CmsKitAdminPermissions.Blogs.Update);
@@ -98,7 +104,7 @@ public class CmsKitAdminWebModule : AbpModule
         Configure<AbpPageToolbarOptions>(options =>
         {
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.IndexModel>(
+            options.Configure<Pages.CmsKit.Tags.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(
@@ -110,7 +116,7 @@ public class CmsKitAdminWebModule : AbpModule
                 }
             );
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.IndexModel>(
+            options.Configure<Pages.CmsKit.Pages.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(
@@ -121,7 +127,7 @@ public class CmsKitAdminWebModule : AbpModule
                     );
                 });
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs.IndexModel>(
+            options.Configure<Pages.CmsKit.Blogs.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(
@@ -133,7 +139,7 @@ public class CmsKitAdminWebModule : AbpModule
                         );
                 });
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts.IndexModel>(
+            options.Configure<Pages.CmsKit.BlogPosts.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(
@@ -145,7 +151,7 @@ public class CmsKitAdminWebModule : AbpModule
                         );
                 });
 
-            options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.IndexModel>(
+            options.Configure<Pages.CmsKit.Menus.MenuItems.IndexModel>(
                 toolbar =>
                 {
                     toolbar.AddButton(
@@ -166,6 +172,53 @@ public class CmsKitAdminWebModule : AbpModule
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMediaInputWithStream));
+        });
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        OneTimeRunner.Run(() =>
+        {
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.Blog,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs.CreateModalModel.CreateBlogViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs.UpdateModalModel.UpdateBlogViewModel) }
+                );
+            
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.BlogPost,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts.CreateModel.CreateBlogPostViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts.UpdateModel.UpdateBlogPostViewModel) }
+                );
+            
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.MenuItem,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.CreateModalModel.MenuItemCreateViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.UpdateModalModel.MenuItemUpdateViewModel) }
+                );
+            
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.Page,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.CreateModel.CreatePageViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.UpdateModel.UpdatePageViewModel) }
+                );
+            
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    CmsKitModuleExtensionConsts.ModuleName,
+                    CmsKitModuleExtensionConsts.EntityNames.Tag,
+                    createFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.CreateModalModel.TagCreateViewModel) },
+                    editFormTypes: new[] { typeof(Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.EditModalModel.TagEditViewModel) }
+                );
+
         });
     }
 }

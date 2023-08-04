@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
@@ -10,46 +10,57 @@ import { JsonValue } from '@angular-devkit/core';
 import { Tree } from '@angular-devkit/schematics';
 import {
   Node,
+  ParseError,
   applyEdits,
   findNodeAtLocation,
   getNodeValue,
   modify,
   parseTree,
+  printParseErrorCode,
 } from 'jsonc-parser';
 
+export type InsertionIndex = (properties: string[]) => number;
 export type JSONPath = (string | number)[];
 
 /** @internal */
 export class JSONFile {
-  private content: string;
-  error: undefined | Error;
+  content: string;
 
   constructor(private readonly host: Tree, private readonly path: string) {
-    const buffer = this.host.read(this.path);
-    if (buffer) {
-      this.content = buffer.toString();
-    } else {
-      this.error = new Error(`Could not read ${path}.`);
-    }
+    this.content = this.host.readText(this.path);
   }
 
   private _jsonAst: Node | undefined;
-  private get JsonAst(): Node {
+  private get JsonAst(): Node | undefined {
     if (this._jsonAst) {
       return this._jsonAst;
     }
 
-    this._jsonAst = parseTree(this.content);
+    const errors: ParseError[] = [];
+    this._jsonAst = parseTree(this.content, errors, { allowTrailingComma: true });
+    if (errors.length) {
+      const { error, offset } = errors[0];
+      throw new Error(
+        `Failed to parse "${this.path}" as JSON AST Object. ${printParseErrorCode(
+          error,
+        )} at location: ${offset}.`,
+      );
+    }
 
     return this._jsonAst;
   }
 
   get(jsonPath: JSONPath): unknown {
-    if (jsonPath.length === 0) {
-      return getNodeValue(this.JsonAst);
+    const jsonAstNode = this.JsonAst;
+    if (!jsonAstNode) {
+      return undefined;
     }
 
-    const node = findNodeAtLocation(this.JsonAst, jsonPath);
+    if (jsonPath.length === 0) {
+      return getNodeValue(jsonAstNode);
+    }
+
+    const node = findNodeAtLocation(jsonAstNode, jsonPath);
 
     return node === undefined ? undefined : getNodeValue(node);
   }
@@ -57,12 +68,15 @@ export class JSONFile {
   modify(
     jsonPath: JSONPath,
     value: JsonValue | undefined,
-    getInsertionIndex?: (properties: string[]) => number,
+    insertInOrder?: InsertionIndex | false,
   ): void {
-    if (!getInsertionIndex) {
+    let getInsertionIndex: InsertionIndex | undefined;
+    if (insertInOrder === undefined) {
       const property = jsonPath.slice(-1)[0];
-      getInsertionIndex = properties =>
-        [...properties, property].sort().findIndex(p => p === property);
+      getInsertionIndex = (properties) =>
+        [...properties, property].sort().findIndex((p) => p === property);
+    } else if (insertInOrder !== false) {
+      getInsertionIndex = insertInOrder;
     }
 
     const edits = modify(this.content, jsonPath, value, {

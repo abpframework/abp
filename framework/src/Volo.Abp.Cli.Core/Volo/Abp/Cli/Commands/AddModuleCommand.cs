@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectModification;
@@ -14,6 +15,7 @@ namespace Volo.Abp.Cli.Commands;
 
 public class AddModuleCommand : IConsoleCommand, ITransientDependency
 {
+    private readonly AbpCliOptions _options;
     public const string Name = "add-module";
     
     private AddModuleInfoOutput _lastAddedModuleInfo;
@@ -33,8 +35,12 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         }
     }
 
-    public AddModuleCommand(SolutionModuleAdder solutionModuleAdder, SolutionPackageVersionFinder solutionPackageVersionFinder)
+    public AddModuleCommand(
+        SolutionModuleAdder solutionModuleAdder,
+        SolutionPackageVersionFinder solutionPackageVersionFinder,
+        IOptions<AbpCliOptions> options)
     {
+        _options = options.Value;
         SolutionModuleAdder = solutionModuleAdder;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         Logger = NullLogger<AddModuleCommand>.Instance;
@@ -50,6 +56,13 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
                 GetUsageInfo()
             );
         }
+        
+        if (_options.DisabledModulesToAddToSolution.Contains(commandLineArgs.Target))
+        {
+            throw new CliUsageException(
+                $"{commandLineArgs.Target} Module is not available for this command! You can check the module's documentation for more info."
+            );   
+        }
 
         var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
         var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
@@ -62,7 +75,19 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
         if (version == null)
         {
-            version = SolutionPackageVersionFinder.Find(solutionFile);
+            if (commandLineArgs.Target.Contains("LeptonX"))
+            {
+                version = SolutionPackageVersionFinder.FindByCsprojVersion(solutionFile, excludedKeywords: null, includedKeyword: "LeptonX");
+
+                if (version.Contains("*"))
+                {
+                    version = SolutionPackageVersionFinder.FindByDllVersion(solutionFile, "Volo.Abp.*LeptonX*");
+                }
+            }
+            else
+            {
+                version = SolutionPackageVersionFinder.FindByCsprojVersion(solutionFile);
+            }
         }
 
         var moduleInfo = await SolutionModuleAdder.AddAsync(

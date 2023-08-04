@@ -6,26 +6,20 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions;
 
-public class PermissionGroupDefinition //TODO: Consider to make possible a group have sub groups
+public class PermissionGroupDefinition : ICanAddChildPermission
 {
     /// <summary>
     /// Unique name of the group.
     /// </summary>
     public string Name { get; }
 
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
     public ILocalizableString DisplayName {
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
-
-    /// <summary>
-    /// MultiTenancy side.
-    /// Default: <see cref="MultiTenancySides.Both"/>
-    /// </summary>
-    public MultiTenancySides MultiTenancySide { get; set; }
+    private ILocalizableString _displayName = default!;
 
     public IReadOnlyList<PermissionDefinition> Permissions => _permissions.ToImmutableList();
     private readonly List<PermissionDefinition> _permissions;
@@ -38,27 +32,25 @@ public class PermissionGroupDefinition //TODO: Consider to make possible a group
     /// Returns the value in the <see cref="Properties"/> dictionary by given <paramref name="name"/>.
     /// Returns null if given <paramref name="name"/> is not present in the <see cref="Properties"/> dictionary.
     /// </returns>
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
 
     protected internal PermissionGroupDefinition(
         string name,
-        ILocalizableString displayName = null,
-        MultiTenancySides multiTenancySide = MultiTenancySides.Both)
+        ILocalizableString? displayName = null)
     {
         Name = name;
         DisplayName = displayName ?? new FixedLocalizableString(Name);
-        MultiTenancySide = multiTenancySide;
 
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
         _permissions = new List<PermissionDefinition>();
     }
 
     public virtual PermissionDefinition AddPermission(
-        string name,
-        ILocalizableString displayName = null,
+        [NotNull] string name,
+        ILocalizableString? displayName = null,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both,
         bool isEnabled = true)
     {
@@ -101,15 +93,14 @@ public class PermissionGroupDefinition //TODO: Consider to make possible a group
         return $"[{nameof(PermissionGroupDefinition)} {Name}]";
     }
 
-    [CanBeNull]
-    public PermissionDefinition GetPermissionOrNull([NotNull] string name)
+    public PermissionDefinition? GetPermissionOrNull([NotNull] string name)
     {
         Check.NotNull(name, nameof(name));
 
         return GetPermissionOrNullRecursively(Permissions, name);
     }
 
-    private PermissionDefinition GetPermissionOrNullRecursively(
+    private PermissionDefinition? GetPermissionOrNullRecursively(
         IReadOnlyList<PermissionDefinition> permissions, string name)
     {
         foreach (var permission in permissions)

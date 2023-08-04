@@ -11,9 +11,9 @@ public class AbpLinkButtonTagHelper : AbpTagHelper<AbpLinkButtonTagHelper, AbpLi
 
     public AbpButtonSize Size { get; set; } = AbpButtonSize.Default;
 
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 
     public bool? Disabled { get; set; }
 

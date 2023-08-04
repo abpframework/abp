@@ -5,20 +5,20 @@ using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.Features;
 
-public class FeatureGroupDefinition
+public class FeatureGroupDefinition : ICanCreateChildFeature
 {
     /// <summary>
     /// Unique name of the group.
     /// </summary>
     public string Name { get; }
 
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
     public ILocalizableString DisplayName {
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
 
     public IReadOnlyList<FeatureDefinition> Features => _features.ToImmutableList();
     private readonly List<FeatureDefinition> _features;
@@ -31,29 +31,30 @@ public class FeatureGroupDefinition
     /// Returns the value in the <see cref="Properties"/> dictionary by given <paramref name="name"/>.
     /// Returns null if given <paramref name="name"/> is not present in the <see cref="Properties"/> dictionary.
     /// </returns>
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
 
     protected internal FeatureGroupDefinition(
         string name,
-        ILocalizableString displayName = null)
+        ILocalizableString? displayName = null)
     {
         Name = name;
         DisplayName = displayName ?? new FixedLocalizableString(Name);
 
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
         _features = new List<FeatureDefinition>();
     }
 
     public virtual FeatureDefinition AddFeature(
         string name,
-        string defaultValue = null,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
-        IStringValueType valueType = null,
-        bool isVisibleToClients = true)
+        string? defaultValue = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
+        IStringValueType? valueType = null,
+        bool isVisibleToClients = true,
+        bool isAvailableToHost = true)
     {
         var feature = new FeatureDefinition(
             name,
@@ -61,7 +62,8 @@ public class FeatureGroupDefinition
             displayName,
             description,
             valueType,
-            isVisibleToClients
+            isVisibleToClients,
+            isAvailableToHost
         );
 
         _features.Add(feature);
@@ -69,6 +71,16 @@ public class FeatureGroupDefinition
         return feature;
     }
 
+    public FeatureDefinition CreateChildFeature(string name,
+        string? defaultValue = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
+        IStringValueType? valueType = null,
+        bool isVisibleToClients = true,
+        bool isAvailableToHost = true)
+    {
+        return AddFeature(name, defaultValue, displayName, description, valueType, isVisibleToClients, isAvailableToHost);
+    }
     public virtual List<FeatureDefinition> GetFeaturesWithChildren()
     {
         var features = new List<FeatureDefinition>();

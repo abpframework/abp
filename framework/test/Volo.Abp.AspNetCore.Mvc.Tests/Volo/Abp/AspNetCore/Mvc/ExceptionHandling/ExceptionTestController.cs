@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Authorization;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
@@ -25,5 +26,12 @@ public class ExceptionTestController : AbpController
     public void AbpAuthorizationException()
     {
         throw new AbpAuthorizationException("This is a sample exception!");
+    }
+
+    [HttpGet]
+    [Route("ExceptionOnUowSaveChange")]
+    public Task<string> ExceptionOnUowSaveChangeAsync()
+    {
+        return Task.FromResult("OK");
     }
 }

@@ -16,18 +16,18 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs;
 
-public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPost, Guid>, IBlogPostRepository
+public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogPost, Guid>, IBlogPostRepository
 {
     private EntityTagManager _entityTagManager;
 
     public EfCoreBlogPostRepository(
-        IDbContextProvider<CmsKitDbContext> dbContextProvider,
+        IDbContextProvider<ICmsKitDbContext> dbContextProvider,
         EntityTagManager entityTagManager) : base(dbContextProvider)
     {
         _entityTagManager = entityTagManager;
     }
 
-    public async Task<BlogPost> GetBySlugAsync(
+    public virtual async Task<BlogPost> GetBySlugAsync(
         Guid blogId,
         [NotNull] string slug,
         CancellationToken cancellationToken = default)
@@ -118,7 +118,7 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
         }).ToList();
     }
 
-    public async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
+    public virtual async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrEmpty(slug, nameof(slug));
@@ -127,7 +127,7 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
             GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
+    public virtual async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
     {
         return await (await CreateAuthorsQueryableAsync())
             .Skip(skipCount)
@@ -137,14 +137,14 @@ public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPo
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default)
+    public virtual async Task<int> GetAuthorsHasBlogPostsCountAsync(string filter, CancellationToken cancellationToken = default)
     {
         return await (await CreateAuthorsQueryableAsync())
             .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()))
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await (await CreateAuthorsQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken))
             ?? throw new EntityNotFoundException(typeof(CmsUser), id);

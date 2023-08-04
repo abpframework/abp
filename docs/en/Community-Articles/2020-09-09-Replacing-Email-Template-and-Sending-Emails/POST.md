@@ -335,7 +335,7 @@ After sending the email we should see the template like below.
                                     </div>
                                     <div style="color:#ffffff;font-family:Poppins, Arial, Helvetica, sans-serif;line-height:1.8;padding-top:10px;padding-right:50px;padding-bottom:10px;padding-left:50px;">
                                        <div style="line-height: 1.8; font-size: 12px; color: #ffffff; font-family: Poppins, Arial, Helvetica, sans-serif; mso-line-height-alt: 22px;">
-                                          <p style="line-height: 1.8; word-break: break-word; font-size: 14px; mso-line-height-alt: 25px; margin: 0;"><span style="font-size: 14px;">Share your experiences with the ABP Framework!</span><br/><span style="font-size: 14px;">ABP is an open source and community driven project. This guide is aims to help anyone wants to contribute to the project.</span></p>
+                                          <p style="line-height: 1.8; word-break: break-word; font-size: 14px; mso-line-height-alt: 25px; margin: 0;"><span style="font-size: 14px;">Share your experiences with the ABP Framework!</span><br/><span style="font-size: 14px;">ABP is an open source and community driven project. This guide is aimed to help anyone who wants to contribute to the project.</span></p>
                                           <p style="line-height: 1.8; word-break: break-word; font-size: 14px; mso-line-height-alt: 25px; margin: 0;"><span style="font-size: 14px;">If you want to write articles or "how to" guides related to the ABP Framework and ASP.NET Core, please submit your article to the community.abp.io web site.</span></p>
                                        </div>
                                     </div>

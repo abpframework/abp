@@ -10,5 +10,5 @@ public class ApplyDatabaseMigrationsEto : EtoBase
 {
     public Guid? TenantId { get; set; }
 
-    public string DatabaseName { get; set; }
+    public string DatabaseName { get; set; } = default!;
 }

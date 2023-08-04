@@ -57,7 +57,7 @@ You can add the `abp-modal` to your component very quickly. See an example:
 
 @Component(/* component metadata */)
 export class SampleComponent {
-    isModelOpen = false
+    isModalOpen = false
 }
 ```
 

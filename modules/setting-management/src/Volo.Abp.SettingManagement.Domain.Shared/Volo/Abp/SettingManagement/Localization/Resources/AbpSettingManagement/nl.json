@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Instellingsbeheer",
     "Feature:SettingManagementEnable": "Instellingenbeheer inschakelen",
     "Feature:SettingManagementEnableDescription": "Schakel het instellingsbeheersysteem in de toepassing in.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Sta huurders toe om e-mailinstellingen te wijzigen.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Sta huurders toe om e-mailinstellingen te wijzigen."
+    "Feature:AllowChangingEmailSettings": "Toestaan om e-mailinstellingen te wijzigen.",
+    "Feature:AllowChangingEmailSettingsDescription": "Toestaan om e-mailinstellingen te wijzigen."
   }
 }

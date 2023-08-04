@@ -25,7 +25,7 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
     protected IOpenIddictAuthorizationManager AuthorizationManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictAuthorizationManager>();
     protected IOpenIddictScopeManager ScopeManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictScopeManager>();
     protected IOpenIddictTokenManager TokenManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictTokenManager>();
-    protected AbpOpenIddictClaimDestinationsManager OpenIddictClaimDestinationsManager => LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimDestinationsManager>();
+    protected AbpOpenIddictClaimsPrincipalManager OpenIddictClaimsPrincipalManager => LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimsPrincipalManager>();
 
     protected AbpOpenIdDictControllerBase()
     {
@@ -55,11 +55,6 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
         return resources;
     }
 
-    protected virtual async Task SetClaimsDestinationsAsync(ClaimsPrincipal principal)
-    {
-        await OpenIddictClaimDestinationsManager.SetAsync(principal);
-    }
-
     protected virtual async Task<bool> HasFormValueAsync(string name)
     {
         if (Request.HasFormContentType)
@@ -72,5 +67,25 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
         }
 
         return false;
+    }
+
+    protected virtual async Task<bool> PreSignInCheckAsync(IdentityUser user)
+    {
+        if (!user.IsActive)
+        {
+            return false;
+        }
+
+        if (!await SignInManager.CanSignInAsync(user))
+        {
+            return false;
+        }
+
+        if (await UserManager.IsLockedOutAsync(user))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -23,7 +23,7 @@ export class ReplaceableComponentsService {
   }
 
   constructor(private ngZone: NgZone, private router: Router) {
-    this.store = new InternalStore([]);
+    this.store = new InternalStore([] as ReplaceableComponents.ReplaceableComponent[]);
   }
 
   add(replaceableComponent: ReplaceableComponents.ReplaceableComponent, reload?: boolean): void {
@@ -44,11 +44,11 @@ export class ReplaceableComponentsService {
     if (reload) reloadRoute(this.router, this.ngZone);
   }
 
-  get(replaceableComponentKey: string): ReplaceableComponents.ReplaceableComponent {
+  get(replaceableComponentKey: string): ReplaceableComponents.ReplaceableComponent | undefined {
     return this.replaceableComponents.find(component => component.key === replaceableComponentKey);
   }
 
-  get$(replaceableComponentKey: string): Observable<ReplaceableComponents.ReplaceableComponent> {
+  get$(replaceableComponentKey: string): Observable<ReplaceableComponents.ReplaceableComponent | undefined> {
     return this.replaceableComponents$.pipe(
       map(components => components.find(component => component.key === replaceableComponentKey)),
     );

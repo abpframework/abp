@@ -1,17 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit.Public.Reactions;
 
+[RequiresFeature(CmsKitFeatures.ReactionEnable)]
 [RequiresGlobalFeature(typeof(ReactionsFeature))]
 public class ReactionPublicAppService : CmsKitPublicAppServiceBase, IReactionPublicAppService
 {

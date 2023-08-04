@@ -1,7 +1,12 @@
 name: cancel-workflow
 on: [push]
+permissions:
+  contents: read
+
 jobs:
   cancel:
+    permissions:
+      actions: write  # for styfle/cancel-workflow-action to cancel/stop running workflows
     name: 'Cancel Previous Runs'
     runs-on: ubuntu-latest
     timeout-minutes: 3

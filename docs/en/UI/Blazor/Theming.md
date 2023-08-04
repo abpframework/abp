@@ -27,7 +27,7 @@ Currently, three themes are **officially provided**:
 
 * The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
-* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has a [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/commercial/blazor) and a [lite](../../Themes/LeptonXLite/blazor.md) version. 
+* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has a [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/commercial/blazor) and a [lite](../../Themes/LeptonXLite/Blazor.md) version. 
 
 ## Overall
 
@@ -48,7 +48,7 @@ All the themes must depend on the [Volo.Abp.AspNetCore.Components.Server.Theming
 * [Twitter Bootstrap](https://getbootstrap.com/) as the fundamental HTML/CSS framework.
 * [Blazorise](https://github.com/stsrki/Blazorise) as a component library that supports the Bootstrap and adds extra components like Data Grid and Tree.
 * [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
-* [Flag Icon](https://github.com/lipis/flag-icon-css) as a library to show flags of countries.
+* [Flag Icon](https://github.com/lipis/flag-icons) as a library to show flags of countries.
 
 These libraries are selected as the base libraries and available to the applications and modules.
 

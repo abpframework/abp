@@ -21,6 +21,10 @@ public class AbpApplicationCreationOptions
 
     public bool SkipConfigureServices { get; set; }
 
+    public string? ApplicationName { get; set; }
+
+    public string? Environment { get; set; }
+
     public AbpApplicationCreationOptions([NotNull] IServiceCollection services)
     {
         Services = Check.NotNull(services, nameof(services));

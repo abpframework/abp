@@ -7,6 +7,7 @@ using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.Client;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -18,11 +19,17 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly;
     typeof(AbpAspNetCoreMvcClientCommonModule),
     typeof(AbpUiModule),
     typeof(AbpAspNetCoreComponentsWebModule)
-    )]
+)]
 public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var abpHostEnvironment = context.Services.GetSingletonInstance<IAbpHostEnvironment>();
+        if (abpHostEnvironment.EnvironmentName.IsNullOrWhiteSpace())
+        {
+            abpHostEnvironment.EnvironmentName = context.Services.GetWebAssemblyHostEnvironment().Environment;
+        }
+
         PreConfigure<AbpHttpClientBuilderOptions>(options =>
         {
             options.ProxyClientBuildActions.Add((_, builder) =>
@@ -34,6 +41,7 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddHttpClient();
         context.Services
             .GetHostBuilder().Logging
             .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
@@ -46,8 +54,8 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
 
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        await context.ServiceProvider.GetRequiredService<WebAssemblyCachedApplicationConfigurationClient>().InitializeAsync();
-        await context.ServiceProvider.GetRequiredService<AbpComponentsClaimsCache>().InitializeAsync();
+        await context.ServiceProvider.GetRequiredService<IClientScopeServiceProviderAccessor>().ServiceProvider.GetRequiredService<WebAssemblyCachedApplicationConfigurationClient>().InitializeAsync();
+        await context.ServiceProvider.GetRequiredService<IClientScopeServiceProviderAccessor>().ServiceProvider.GetRequiredService<AbpComponentsClaimsCache>().InitializeAsync();
         await SetCurrentLanguageAsync(context.ServiceProvider);
     }
 
@@ -59,7 +67,7 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
         var cultureName = configuration.Localization?.CurrentCulture?.CultureName;
         if (!cultureName.IsNullOrEmpty())
         {
-            var culture = new CultureInfo(cultureName);
+            var culture = new CultureInfo(cultureName!);
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
         }

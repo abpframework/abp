@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIddict.Demo.Client.Blaz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.Domain.OpenIddict", "src\Volo.Abp.PermissionManagement.Domain.OpenIddict\Volo.Abp.PermissionManagement.Domain.OpenIddict.csproj", "{674D0A62-4F7B-436C-83A9-AA8FE03F3A11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.OpenIddict.Installer", "src\Volo.Abp.OpenIddict.Installer\Volo.Abp.OpenIddict.Installer.csproj", "{B748241A-E782-493D-8905-0C27033AB519}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{674D0A62-4F7B-436C-83A9-AA8FE03F3A11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{674D0A62-4F7B-436C-83A9-AA8FE03F3A11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{674D0A62-4F7B-436C-83A9-AA8FE03F3A11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B748241A-E782-493D-8905-0C27033AB519}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B748241A-E782-493D-8905-0C27033AB519}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B748241A-E782-493D-8905-0C27033AB519}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B748241A-E782-493D-8905-0C27033AB519}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +131,7 @@ Global
 		{70FD6E90-BBE8-4DA1-AE07-55064803225B} = {2B5CD179-FF7B-428F-98F6-2ADBB9538D18}
 		{F3853F2B-72D4-496C-B59C-87E2759AD79B} = {2B5CD179-FF7B-428F-98F6-2ADBB9538D18}
 		{674D0A62-4F7B-436C-83A9-AA8FE03F3A11} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{B748241A-E782-493D-8905-0C27033AB519} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C09128AF-C73F-ED7D-33F5-69BF7D934D50}

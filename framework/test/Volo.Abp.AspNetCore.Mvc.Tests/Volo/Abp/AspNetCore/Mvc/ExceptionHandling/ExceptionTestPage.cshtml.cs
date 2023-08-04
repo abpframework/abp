@@ -36,4 +36,9 @@ public class ExceptionTestPage : AbpPageModel
     {
         throw new AbpAuthorizationException("This is a sample exception!");
     }
+
+    public Task<JsonResult> OnGetExceptionOnUowSaveChangeAsync()
+    {
+        return Task.FromResult(new JsonResult("OK"));
+    }
 }

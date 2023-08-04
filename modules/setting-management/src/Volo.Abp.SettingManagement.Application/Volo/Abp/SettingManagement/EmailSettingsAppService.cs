@@ -76,7 +76,7 @@ public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSe
         await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.Enable);
         if (CurrentTenant.IsAvailable)
         {
-            await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+            await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.AllowChangingEmailSettings);
         }
     }
 }

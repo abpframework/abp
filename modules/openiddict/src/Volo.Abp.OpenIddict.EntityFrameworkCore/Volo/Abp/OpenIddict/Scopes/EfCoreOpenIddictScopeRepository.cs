@@ -19,24 +19,26 @@ public class EfCoreOpenIddictScopeRepository : EfCoreRepository<IOpenIddictDbCon
 
     }
 
-    public async Task<List<OpenIddictScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
+    public virtual async Task<List<OpenIddictScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.DisplayName.Contains(filter))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Description.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => 
+                x.Name.Contains(filter) ||
+                x.DisplayName.Contains(filter) ||
+                x.Description.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictScope.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.DisplayName.Contains(filter))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Description.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => 
+                x.Name.Contains(filter) ||
+                x.DisplayName.Contains(filter) ||
+                x.Description.Contains(filter))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
     

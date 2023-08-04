@@ -16,6 +16,8 @@ Once you add the `PageHeader` component to your page, you can control the relate
 ## Breadcrumb
 
 > **The [Basic Theme](Basic-Theme.md) currently doesn't implement the breadcrumbs.**
+> 
+> The [LeptonX Lite Theme](../../Themes/LeptonXLite/Blazor.md) supports breadcrumbs.
 
 Breadcrumbs can be added using the `BreadcrumbItems` property.
 

@@ -9,6 +9,7 @@ import {
   PropContributorCallback,
   PropContributorCallbacks,
   PropData,
+  PropDisplayTextResolver,
   PropList,
   PropPredicate,
   Props,
@@ -17,8 +18,36 @@ import {
 
 export class FormPropList<R = any> extends PropList<R, FormProp<R>> {}
 
-export class FormProps<R = any> extends Props<FormPropList<R>> {
+export class FormProps<R = any> extends Props<PropList<R, FormProp<R>>> {
   protected _ctor: Type<FormPropList<R>> = FormPropList;
+}
+
+export interface FormPropGroup {
+  name: string;
+  className?: string;
+}
+
+export class GroupedFormPropList<R = any> {
+  public readonly items: GroupedFormPropItem[] = [];
+  addItem(item: FormProp<R>) {
+    const groupName = item.group?.name;
+    let group = this.items.find(i => i.group?.name === groupName);
+    if (group) {
+      group.formPropList.addTail(item);
+    } else {
+      group = {
+        formPropList: new FormPropList(),
+        group: item.group,
+      };
+      group.formPropList.addHead(item);
+      this.items.push(group);
+    }
+  }
+}
+
+export interface GroupedFormPropItem {
+  group?: FormPropGroup;
+  formPropList: FormPropList;
 }
 
 export class CreateFormPropsFactory<R = any> extends PropsFactory<FormProps<R>> {
@@ -38,17 +67,27 @@ export class FormProp<R = any> extends Prop<R> {
   readonly defaultValue: boolean | number | string | Date;
   readonly options: PropCallback<R, Observable<ABP.Option<any>[]>> | undefined;
   readonly id: string | undefined;
+  readonly template?: Type<any>;
+  readonly className?: string;
+  readonly group?: FormPropGroup | undefined;
+  readonly displayTextResolver?: PropDisplayTextResolver<R>;
+  readonly formText?: string;
 
   constructor(options: FormPropOptions<R>) {
     super(
       options.type,
       options.name,
-      options.displayName,
-      options.permission,
+      options.displayName || '',
+      options.permission || '',
       options.visible,
       options.isExtra,
+      options.template,
+      options.className,
+      options.formText,
     );
-
+    this.group = options.group;
+    this.className = options.className;
+    this.formText = options.formText;
     this.asyncValidators = options.asyncValidators || (_ => []);
     this.validators = options.validators || (_ => []);
     this.disabled = options.disabled || (_ => false);
@@ -57,7 +96,8 @@ export class FormProp<R = any> extends Prop<R> {
     this.options = options.options;
     this.id = options.id || options.name;
     const defaultValue = options.defaultValue;
-    this.defaultValue = isFalsyValue(defaultValue) ? defaultValue : defaultValue || null;
+    this.defaultValue = isFalsyValue(defaultValue) ? (defaultValue as number) : defaultValue || '';
+    this.displayTextResolver = options.displayTextResolver;
   }
 
   static create<R = any>(options: FormPropOptions<R>) {
@@ -93,6 +133,8 @@ export type FormPropOptions<R = any> = O.Optional<
   | 'defaultValue'
   | 'options'
   | 'id'
+  | 'displayTextResolver'
+  | 'formText'
 >;
 
 export type CreateFormPropDefaults<R = any> = Record<string, FormProp<R>[]>;
@@ -102,6 +144,6 @@ export type EditFormPropDefaults<R = any> = Record<string, FormProp<R>[]>;
 export type EditFormPropContributorCallback<R = any> = PropContributorCallback<FormPropList<R>>;
 export type EditFormPropContributorCallbacks<R = any> = PropContributorCallbacks<FormPropList<R>>;
 
-function isFalsyValue(defaultValue: FormProp['defaultValue']): boolean {
+function isFalsyValue(defaultValue?: FormProp['defaultValue']): boolean {
   return [0, '', false].indexOf(defaultValue as any) > -1;
 }

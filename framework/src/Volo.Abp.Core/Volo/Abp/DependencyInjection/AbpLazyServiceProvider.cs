@@ -1,21 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.DependencyInjection;
 
-public class AbpLazyServiceProvider : IAbpLazyServiceProvider, ITransientDependency
+/// <summary>
+/// This class is equivalent of the <see cref="TransientCachedServiceProvider"/>.
+/// Use <see cref="TransientCachedServiceProvider"/> instead of this class, for new projects. 
+/// </summary>
+[ExposeServices(typeof(IAbpLazyServiceProvider))]
+public class AbpLazyServiceProvider :
+    CachedServiceProviderBase,
+    IAbpLazyServiceProvider,
+    ITransientDependency
 {
-    protected IDictionary<Type, object> CachedServices { get; set; }
-
-    protected IServiceProvider ServiceProvider { get; set; }
-
     public AbpLazyServiceProvider(IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
-        ServiceProvider = serviceProvider;
-        CachedServices = new Dictionary<Type, object>();
     }
-
+    
     public virtual T LazyGetRequiredService<T>()
     {
         return (T)LazyGetRequiredService(typeof(T));
@@ -23,36 +25,36 @@ public class AbpLazyServiceProvider : IAbpLazyServiceProvider, ITransientDepende
 
     public virtual object LazyGetRequiredService(Type serviceType)
     {
-        return CachedServices.GetOrAdd(serviceType, () => ServiceProvider.GetRequiredService(serviceType));
+        return this.GetRequiredService(serviceType);
     }
 
-    public virtual T LazyGetService<T>()
+    public virtual T? LazyGetService<T>()
     {
-        return (T)LazyGetService(typeof(T));
+        return (T?)LazyGetService(typeof(T));
     }
 
-    public virtual object LazyGetService(Type serviceType)
+    public virtual object? LazyGetService(Type serviceType)
     {
-        return CachedServices.GetOrAdd(serviceType, () => ServiceProvider.GetService(serviceType));
+        return GetService(serviceType);
     }
 
     public virtual T LazyGetService<T>(T defaultValue)
     {
-        return (T)LazyGetService(typeof(T), defaultValue);
+        return GetService(defaultValue);
     }
 
     public virtual object LazyGetService(Type serviceType, object defaultValue)
     {
-        return LazyGetService(serviceType) ?? defaultValue;
+        return GetService(serviceType, defaultValue);
     }
 
     public virtual T LazyGetService<T>(Func<IServiceProvider, object> factory)
     {
-        return (T)LazyGetService(typeof(T), factory);
+        return GetService<T>(factory);
     }
 
     public virtual object LazyGetService(Type serviceType, Func<IServiceProvider, object> factory)
     {
-        return CachedServices.GetOrAdd(serviceType, () => factory(ServiceProvider));
+        return GetService(serviceType, factory);
     }
 }

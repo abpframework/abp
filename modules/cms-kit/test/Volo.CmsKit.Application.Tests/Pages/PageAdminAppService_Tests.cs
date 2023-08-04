@@ -130,4 +130,17 @@ public class PageAdminAppService_Tests : CmsKitApplicationTestBase
 
         await Should.ThrowAsync<Exception>(async () => await _pageRepository.GetAsync(_data.Page_1_Id));
     }
+
+    [Fact]
+    public async Task ShouldSetAsHomePageAsync()
+    {
+        await _pageAdminAppService.SetAsHomePageAsync(_data.Page_1_Id);
+
+        var setAsHomePage = await _pageAdminAppService.GetAsync(_data.Page_1_Id);
+        var setAsHomePageAsFalse = await _pageAdminAppService.GetAsync(_data.Page_2_Id);
+
+        setAsHomePage.IsHomePage.ShouldBeTrue();
+        setAsHomePageAsFalse.IsHomePage.ShouldBeFalse();
+
+    }
 }

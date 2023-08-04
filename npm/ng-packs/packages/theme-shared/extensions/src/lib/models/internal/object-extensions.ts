@@ -6,7 +6,7 @@ import { PropContributorCallbacks } from '../props';
 export type DisplayNameGeneratorFn = (
   displayName: LocalizableStringDto,
   fallback: LocalizableStringDto,
-) => string;
+) => string | undefined;
 
 export type EntityExtensions = Record<string, EntityExtensionDto>;
 
@@ -60,6 +60,7 @@ export interface ExtensionPropertyDto {
   attributes: ExtensionPropertyAttributeDto[];
   configuration: Record<string, any>;
   defaultValue: any;
+  formText?: string;
 }
 
 export interface ExtensionPropertyUiDto {

@@ -24,6 +24,7 @@ public class AbpColumnTagHelperService : AbpTagHelperService<AbpColumnTagHelper>
         ProcessSizeClass(context, output, TagHelper.SizeMd, "-md");
         ProcessSizeClass(context, output, TagHelper.SizeLg, "-lg");
         ProcessSizeClass(context, output, TagHelper.SizeXl, "-xl");
+        ProcessSizeClass(context, output, TagHelper.SizeXxl, "-xxl");
     }
 
     protected virtual void ProcessOffsetClasses(TagHelperContext context, TagHelperOutput output)
@@ -33,6 +34,7 @@ public class AbpColumnTagHelperService : AbpTagHelperService<AbpColumnTagHelper>
         ProcessOffsetClass(context, output, TagHelper.OffsetMd, "-md");
         ProcessOffsetClass(context, output, TagHelper.OffsetLg, "-lg");
         ProcessOffsetClass(context, output, TagHelper.OffsetXl, "-xl");
+        ProcessOffsetClass(context, output, TagHelper.OffsetXxl, "-xxl");
     }
 
     protected virtual void ProcessSizeClass(TagHelperContext context, TagHelperOutput output, ColumnSize size, string breakpoint)

@@ -348,6 +348,11 @@
     "Volo.AbpIo.Commercial:030008": "Datum nakupa je mogoče nastaviti samo, če je status Kupljeno!",
     "Volo.AbpIo.Commercial:030009": "Uporabnik ni najden!",
     "Volo.AbpIo.Commercial:030010": "Za nakup preizkusne licence morate najprej aktivirati preizkusno licenco!",
-    "Volo.AbpIo.Commercial:030011": "Preskusne licence ne morete izbrisati, ko je kupljena!"
+    "Volo.AbpIo.Commercial:030011": "Preskusne licence ne morete izbrisati, ko je kupljena!",
+    "MoveWaitList": "Presuňte sa na zoznam čakateľov",
+    "CommunityLinkTitle": "Otvorte na webovej stránke komunity",
+    "CommunityLink": "Odkaz na komunitu",
+    "ReloadFromSource": "Znovu načítať zo zdroja",
+    "ReloadFromSourceConfirmationMessage": "Tento príspevok bude obnovený z „{0}“. Chceš pokračovať?"
   }
 }

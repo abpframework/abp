@@ -3,6 +3,6 @@ import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenan
 export namespace Session {
   export interface State {
     language: string;
-    tenant: CurrentTenantDto;
+    tenant: CurrentTenantDto | null;
   }
 }

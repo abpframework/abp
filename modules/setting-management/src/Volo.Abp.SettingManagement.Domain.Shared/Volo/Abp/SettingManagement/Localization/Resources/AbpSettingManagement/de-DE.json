@@ -5,7 +5,20 @@
     "SuccessfullySaved": "Erfolgreich gespeichert",
     "Permission:SettingManagement": "Einstellungen-Verwaltung",
     "Permission:Emailing": "E-Mail",
+    "Permission:EmailingTest": "Test E-Mails",
+    "Permission:TimeZone": "Zeitzone",
+    "SendTestEmail": "Test E-Mail senden",
+    "SenderEmailAddress": "Absender-Adresse",
+    "TargetEmailAddress": "Empfänger-Adresse",
+    "Subject": "Betreff",
+    "Body": "Nachricht",
+    "TestEmailSubject": "Test E-Mail {0}",
+    "TestEmailBody": "Test E-Mail Nachricht hier eingeben",
+    "SuccessfullySent": "Erfolgreich gesendet",
+    "Send": "Senden",
     "Menu:Emailing": "E-Mail",
+    "Menu:TimeZone": "Zeitzone",
+    "DisplayName:Timezone": "Zeitzone",
     "SmtpHost": "Host",
     "SmtpPort": "Port",
     "SmtpUserName": "Benutzername",
@@ -18,7 +31,7 @@
     "Feature:SettingManagementGroup": "Einstellungsverwaltung",
     "Feature:SettingManagementEnable": "Einstellungsverwaltung aktivieren",
     "Feature:SettingManagementEnableDescription": "Aktivieren Sie das Einstellungsverwaltungssystem in der Anwendung.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Erlauben Sie Mietern, E-Mail-Einstellungen zu ändern.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Erlauben Sie Mietern, E-Mail-Einstellungen zu ändern."
+    "Feature:AllowChangingEmailSettings": "Änderung der E-Mail-Einstellungen zulassen.",
+    "Feature:AllowChangingEmailSettingsDescription": "Änderung der E-Mail-Einstellungen zulassen."
   }
 }

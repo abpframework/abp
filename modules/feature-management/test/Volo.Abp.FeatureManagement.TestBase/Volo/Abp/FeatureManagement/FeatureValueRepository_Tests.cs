@@ -1,7 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp.Features;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.FeatureManagement;
@@ -72,4 +75,31 @@ public abstract class FeatureValueRepository_Tests<TStartupModule> : FeatureMana
                   fv.Value == "3"
         );
     }
+
+    [Fact]
+    public async Task DeleteAsync()
+    {
+        var exception = await Record.ExceptionAsync(async () =>
+            await Repository.DeleteAsync(TestFeatureDefinitionProvider.SocialLogins, "true"));
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public async Task DeleteForProviderNameAndKey()
+    {
+		using (var scope = ServiceProvider.CreateScope())
+		{
+			var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+            using (var uow = uowManager.Begin(new AbpUnitOfWorkOptions()))
+            {
+		        await Repository.DeleteAsync(TestFeatureDefinitionProvider.SocialLogins, "true");
+
+				await uow.CompleteAsync();
+            }
+		}
+
+		var features = await Repository.GetListAsync(TestFeatureDefinitionProvider.SocialLogins, "true");
+        features.ShouldBeEmpty();
+	}
 }

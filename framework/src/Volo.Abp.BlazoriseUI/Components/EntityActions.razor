@@ -6,7 +6,7 @@
             @if ( HasPrimaryAction )
             {
                 <Button Block="true"
-                        Color="@PrimaryAction.Color"
+                        Color="@PrimaryAction!.Color"
                         Clicked="async ()=> await PrimaryAction.ActionClickedAsync()"
                         Disabled=@PrimaryAction.Disabled>
                     @PrimaryAction.Text

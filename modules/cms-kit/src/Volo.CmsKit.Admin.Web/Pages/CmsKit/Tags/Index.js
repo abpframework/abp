@@ -63,7 +63,7 @@ $(function () {
 
     $('#CmsKitTagsWrapper form.page-search-form').on('submit', function (e) {
         e.preventDefault();
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
     });
 
     $('#AbpContentToolbar button[name=NewButton]').on('click', function (e) {
@@ -72,10 +72,10 @@ $(function () {
     });
 
     createModal.onResult(function () {
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
     });
 
     updateModal.onResult(function () {
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
     });
 });

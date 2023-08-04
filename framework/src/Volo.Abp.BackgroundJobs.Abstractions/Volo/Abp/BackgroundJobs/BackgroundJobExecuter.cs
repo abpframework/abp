@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs;
 
@@ -14,9 +16,12 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
     public ILogger<BackgroundJobExecuter> Logger { protected get; set; }
 
     protected AbpBackgroundJobOptions Options { get; }
+    
+    protected ICurrentTenant CurrentTenant { get; }
 
-    public BackgroundJobExecuter(IOptions<AbpBackgroundJobOptions> options)
+    public BackgroundJobExecuter(IOptions<AbpBackgroundJobOptions> options, ICurrentTenant currentTenant)
     {
+        CurrentTenant = currentTenant;
         Options = options.Value;
 
         Logger = NullLogger<BackgroundJobExecuter>.Instance;
@@ -40,14 +45,24 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
 
         try
         {
-            if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
+            using(CurrentTenant.Change(GetJobArgsTenantId(context.JobArgs)))
             {
-                await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs }));
+                var cancellationTokenProvider =
+                    context.ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
+
+                using (cancellationTokenProvider.Use(context.CancellationToken))
+                {
+                    if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
+                    {
+                        await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs })!);
+                    }
+                    else
+                    {
+                        jobExecuteMethod.Invoke(job, new[] { context.JobArgs });
+                    }
+                }
             }
-            else
-            {
-                jobExecuteMethod.Invoke(job, new[] { context.JobArgs });
-            }
+           
         }
         catch (Exception ex)
         {
@@ -59,9 +74,18 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
 
             throw new BackgroundJobExecutionException("A background job execution is failed. See inner exception for details.", ex)
             {
-                JobType = context.JobType.AssemblyQualifiedName,
+                JobType = context.JobType.AssemblyQualifiedName!,
                 JobArgs = context.JobArgs
             };
         }
+    }
+    
+    protected virtual Guid? GetJobArgsTenantId(object jobArgs)
+    {
+        return jobArgs switch
+        {
+            IMultiTenant multiTenantJobArgs => multiTenantJobArgs.TenantId,
+            _ => CurrentTenant.Id
+        };
     }
 }

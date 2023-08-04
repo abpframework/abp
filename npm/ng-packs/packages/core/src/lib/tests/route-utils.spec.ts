@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-import { RouterOutletComponent } from '../components';
+import { RouterOutletComponent } from '../components/router-outlet.component';
 import { RoutesService } from '../services/routes.service';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 

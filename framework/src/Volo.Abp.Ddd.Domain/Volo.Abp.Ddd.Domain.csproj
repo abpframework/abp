@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
     <AssemblyName>Volo.Abp.Ddd.Domain</AssemblyName>
     <PackageId>Volo.Abp.Ddd.Domain</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -15,17 +15,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.Ddd.Domain.Shared\Volo.Abp.Ddd.Domain.Shared.csproj" />
     <ProjectReference Include="..\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
     <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
     <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
     <ProjectReference Include="..\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj" />
     <ProjectReference Include="..\Volo.Abp.Guids\Volo.Abp.Guids.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
     <ProjectReference Include="..\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
     <ProjectReference Include="..\Volo.Abp.Specifications\Volo.Abp.Specifications.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
     <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Uow\Volo.Abp.Uow.csproj" />
   </ItemGroup>
 
 </Project>

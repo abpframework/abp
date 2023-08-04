@@ -7,6 +7,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.TestApp.Testing;
 
 namespace Volo.Abp.TestApp.EntityFrameworkCore;
 
@@ -28,6 +29,10 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
     public DbSet<Author> Author { get; set; }
 
     public DbSet<FourthDbContextDummyEntity> FourthDummyEntities { get; set; }
+
+    public DbSet<Product> Products { get; set; }
+
+    public DbSet<Category> Categories { get; set; }
 
     public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
         : base(options)
@@ -57,6 +62,7 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         modelBuilder.Entity<Person>(b =>
         {
             b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
+            b.Property(x => x.HasDefaultValue).HasDefaultValue(DateTime.Now);
         });
 
         modelBuilder
@@ -77,6 +83,13 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
             });
 
             b.ApplyObjectExtensionMappings();
+        });
+
+        modelBuilder.Entity<Product>();
+
+        modelBuilder.Entity<Category>(b =>
+        {
+            b.HasAbpQueryFilter(e => e.Name.StartsWith("abp"));
         });
 
         modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();

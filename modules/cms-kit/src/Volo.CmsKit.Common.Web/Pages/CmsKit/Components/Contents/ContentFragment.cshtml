@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Mvc.ViewComponents
+@using Volo.Abp.Data
+@using Volo.Abp.Reflection
+@using Volo.CmsKit.Contents
+@using Volo.CmsKit.Web.Renderers;
+@using Volo.CmsKit.Web.Pages.CmsKit.Components.Contents;
+
+@model ContentFragmentViewComponent
+
+@inject IMarkdownToHtmlRenderer MarkdownRenderer
+@inject IViewComponentSelector ViewComponentSelector
+
+@foreach (var contentFragment in Model.ContentDto.ContentFragments)
+{
+    if (contentFragment.Type == ContentConsts.Markdown)
+    {
+        @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+    }
+    else if (contentFragment.Type == ContentConsts.Widget)
+    {
+        var componentName = contentFragment.GetProperty<string>("Type");
+        var descriptor = ViewComponentSelector.SelectComponent(componentName);
+        var componentParameters = descriptor.Parameters;
+        var parameters = new Dictionary<string, object>(contentFragment.ExtraProperties);
+
+        foreach (var componentParameter in componentParameters)
+        {
+            if (string.IsNullOrWhiteSpace(componentParameter.Name))
+            {
+                continue;
+            }
+            if(parameters.TryGetValue(componentParameter.Name, out var value))
+            {
+                parameters[componentParameter.Name] = TypeHelper.ConvertFrom(componentParameter.ParameterType, value);
+            }
+        }
+
+        @await Component.InvokeAsync(componentName, parameters)
+    }
+}

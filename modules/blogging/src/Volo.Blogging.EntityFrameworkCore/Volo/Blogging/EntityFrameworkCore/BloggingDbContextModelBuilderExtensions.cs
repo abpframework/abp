@@ -25,9 +25,17 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<BlogUser>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Users", BloggingDbProperties.DbSchema);
-
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Users", AbpBloggingDbProperties.DbSchema);
                 b.ConfigureByConvention();
+                
+                b.Property<string>(nameof(BlogUser.Biography)).HasMaxLength(UserConsts.MaxBiographyLength).HasColumnName(nameof(BlogUser.Biography));
+                b.Property<string>(nameof(BlogUser.WebSite)).HasMaxLength(UserConsts.MaxWebSiteLength).HasColumnName(nameof(BlogUser.WebSite));
+                b.Property<string>(nameof(BlogUser.Twitter)).HasMaxLength(UserConsts.MaxTwitterLength).HasColumnName(nameof(BlogUser.Twitter));
+                b.Property<string>(nameof(BlogUser.Github)).HasMaxLength(UserConsts.MaxGithubLength).HasColumnName(nameof(BlogUser.Github));
+                b.Property<string>(nameof(BlogUser.Linkedin)).HasMaxLength(UserConsts.MaxLinkedinLength).HasColumnName(nameof(BlogUser.Linkedin));
+                b.Property<string>(nameof(BlogUser.Company)).HasMaxLength(UserConsts.MaxCompanyLength).HasColumnName(nameof(BlogUser.Company));
+                b.Property<string>(nameof(BlogUser.JobTitle)).HasMaxLength(UserConsts.MaxJobTitleLength).HasColumnName(nameof(BlogUser.JobTitle));
+                
                 b.ConfigureAbpUser();
 
                 b.ApplyObjectExtensionMappings();
@@ -35,7 +43,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Blog>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Blogs", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Blogs", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -48,7 +56,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Post>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Posts", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Posts", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -68,7 +76,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Comment>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Comments", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Comments", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -84,7 +92,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<Tag>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "Tags", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "Tags", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -99,7 +107,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             builder.Entity<PostTag>(b =>
             {
-                b.ToTable(BloggingDbProperties.DbTablePrefix + "PostTags", BloggingDbProperties.DbSchema);
+                b.ToTable(AbpBloggingDbProperties.DbTablePrefix + "PostTags", AbpBloggingDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 

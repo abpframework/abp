@@ -2,7 +2,7 @@
 
 public class MinioBlobProviderConfiguration
 {
-    public string BucketName {
+    public string? BucketName {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(MinioBlobProviderConfigurationNames.BucketName);
         set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.BucketName, value);
     }

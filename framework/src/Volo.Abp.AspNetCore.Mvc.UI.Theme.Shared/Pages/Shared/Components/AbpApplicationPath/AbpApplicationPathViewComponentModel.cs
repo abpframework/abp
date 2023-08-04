@@ -2,5 +2,5 @@
 
 public class AbpApplicationPathViewComponentModel
 {
-    public string ApplicationPath { get; set; }
+    public string ApplicationPath { get; set; } = default!;
 }

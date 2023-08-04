@@ -62,7 +62,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static string NotNullOrWhiteSpace(
-        string value,
+        string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength = int.MaxValue,
         int minLength = 0)
@@ -72,7 +72,7 @@ public static class Check
             throw new ArgumentException($"{parameterName} can not be null, empty or white space!", parameterName);
         }
 
-        if (value.Length > maxLength)
+        if (value!.Length > maxLength)
         {
             throw new ArgumentException($"{parameterName} length must be equal to or lower than {maxLength}!", parameterName);
         }
@@ -87,7 +87,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static string NotNullOrEmpty(
-        string value,
+        string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength = int.MaxValue,
         int minLength = 0)
@@ -97,7 +97,7 @@ public static class Check
             throw new ArgumentException($"{parameterName} can not be null or empty!", parameterName);
         }
 
-        if (value.Length > maxLength)
+        if (value!.Length > maxLength)
         {
             throw new ArgumentException($"{parameterName} length must be equal to or lower than {maxLength}!", parameterName);
         }
@@ -136,8 +136,8 @@ public static class Check
         return type;
     }
 
-    public static string Length(
-        [CanBeNull] string value,
+    public static string? Length(
+        string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength,
         int minLength = 0)
@@ -149,7 +149,7 @@ public static class Check
                 throw new ArgumentException(parameterName + " can not be null or empty!", parameterName);
             }
 
-            if (value.Length < minLength)
+            if (value!.Length < minLength)
             {
                 throw new ArgumentException($"{parameterName} length must be equal to or bigger than {minLength}!", parameterName);
             }

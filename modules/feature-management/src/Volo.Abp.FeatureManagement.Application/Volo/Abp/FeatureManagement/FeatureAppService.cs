@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Features;
 
 namespace Volo.Abp.FeatureManagement;
@@ -35,14 +34,9 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
             Groups = new List<FeatureGroupDto>()
         };
 
-        foreach (var group in FeatureDefinitionManager.GetGroups())
+        foreach (var group in await FeatureDefinitionManager.GetGroupsAsync())
         {
-            var groupDto = new FeatureGroupDto
-            {
-                Name = group.Name,
-                DisplayName = group.DisplayName.Localize(StringLocalizerFactory),
-                Features = new List<FeatureDto>()
-            };
+            var groupDto = CreateFeatureGroupDto(group);
 
             foreach (var featureDefinition in group.GetFeaturesWithChildren())
             {
@@ -55,20 +49,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
                 }
 
                 var feature = await FeatureManager.GetOrNullWithProviderAsync(featureDefinition.Name, providerName, providerKey);
-                groupDto.Features.Add(new FeatureDto
-                {
-                    Name = featureDefinition.Name,
-                    DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
-                    ValueType = featureDefinition.ValueType,
-                    Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
-                    ParentName = featureDefinition.Parent?.Name,
-                    Value = feature.Value,
-                    Provider = new FeatureProviderDto
-                    {
-                        Name = feature.Provider?.Name,
-                        Key = feature.Provider?.Key
-                    }
-                });
+                groupDto.Features.Add(CreateFeatureDto(feature, featureDefinition));
             }
 
             SetFeatureDepth(groupDto.Features, providerName, providerKey);
@@ -80,6 +61,36 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         }
 
         return result;
+    }
+
+    private FeatureGroupDto CreateFeatureGroupDto(FeatureGroupDefinition groupDefinition)
+    {
+        return new FeatureGroupDto
+        {
+            Name = groupDefinition.Name,
+            DisplayName = groupDefinition.DisplayName?.Localize(StringLocalizerFactory),
+            Features = new List<FeatureDto>()
+        };
+    }
+
+    private FeatureDto CreateFeatureDto(FeatureNameValueWithGrantedProvider featureNameValueWithGrantedProvider, FeatureDefinition featureDefinition)
+    {
+        return new FeatureDto
+        {
+            Name = featureDefinition.Name,
+            DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
+            Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
+
+            ValueType = featureDefinition.ValueType,
+
+            ParentName = featureDefinition.Parent?.Name,
+            Value = featureNameValueWithGrantedProvider.Value,
+            Provider = new FeatureProviderDto
+            {
+                Name = featureNameValueWithGrantedProvider.Provider?.Name,
+                Key = featureNameValueWithGrantedProvider.Provider?.Key
+            }
+        };
     }
 
     public virtual async Task UpdateAsync([NotNull] string providerName, string providerKey, UpdateFeaturesDto input)
@@ -110,7 +121,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         string policyName;
         if (providerName == TenantFeatureValueProvider.ProviderName && CurrentTenant.Id == null && providerKey == null)
         {
-            policyName = "FeatureManagement.ManageHostFeatures";
+            policyName = FeatureManagementPermissions.ManageHostFeatures;
         }
         else
         {
@@ -122,5 +133,10 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         }
 
         await AuthorizationService.CheckAsync(policyName);
+    }
+
+    public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey)
+    {
+        await FeatureManager.DeleteAsync(providerName, providerKey);
     }
 }

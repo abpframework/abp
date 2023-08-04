@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using Volo.CmsKit.Users;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Admin.Comments;
 
 [Serializable]
-public class CommentWithAuthorDto
+public class CommentWithAuthorDto : ExtensibleObject
 {
     public Guid Id { get; set; }
 
@@ -22,4 +21,6 @@ public class CommentWithAuthorDto
     public DateTime CreationTime { get; set; }
 
     public CmsUserDto Author { get; set; }
+    
+    public string Url { get; set; }
 }

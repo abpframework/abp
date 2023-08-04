@@ -2,7 +2,7 @@
 
 namespace Volo.CmsKit.Pages;
 
-public class PageConsts
+public static class PageConsts
 {
     public const string EntityType = "Page";
 
@@ -15,8 +15,10 @@ public class PageConsts
     public static int MaxScriptLength { get; set; } = int.MaxValue;
 
     public static int MaxStyleLength { get; set; } = int.MaxValue;
+    
+    public static string DefaultHomePageCacheKey { get; set; } = "DefaultHomePage";
 
-    private static string _urlPrefix = "/pages/";
+    private static string _urlPrefix = "/";
     public static string UrlPrefix {
         get => _urlPrefix;
         set => _urlPrefix = value.EnsureEndsWith('/').EnsureStartsWith('/');

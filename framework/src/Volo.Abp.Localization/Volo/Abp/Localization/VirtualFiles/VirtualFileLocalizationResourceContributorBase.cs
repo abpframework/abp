@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
@@ -11,11 +13,14 @@ namespace Volo.Abp.Localization.VirtualFiles;
 
 public abstract class VirtualFileLocalizationResourceContributorBase : ILocalizationResourceContributor
 {
+    public bool IsDynamic => false;
+
     private readonly string _virtualPath;
-    private IVirtualFileProvider _virtualFileProvider;
-    private Dictionary<string, ILocalizationDictionary> _dictionaries;
+    private IVirtualFileProvider _virtualFileProvider = default!;
+    private Dictionary<string, ILocalizationDictionary>? _dictionaries;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
+    private LocalizationResourceBase _resource = default!;
 
     protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
     {
@@ -24,10 +29,11 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public virtual void Initialize(LocalizationResourceInitializationContext context)
     {
+        _resource = context.Resource;
         _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
     }
 
-    public virtual LocalizedString GetOrNull(string cultureName, string name)
+    public virtual LocalizedString? GetOrNull(string cultureName, string name)
     {
         return GetDictionaries().GetOrDefault(cultureName)?.GetOrNull(name);
     }
@@ -35,6 +41,17 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
     {
         GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
+    }
+
+    public Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary)
+    {
+        Fill(cultureName, dictionary);
+        return Task.CompletedTask;
+    }
+
+    public Task<IEnumerable<string>> GetSupportedCulturesAsync()
+    {
+        return Task.FromResult((IEnumerable<string>)GetDictionaries().Keys);
     }
 
     private Dictionary<string, ILocalizationDictionary> GetDictionaries()
@@ -82,9 +99,15 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
             }
 
             var dictionary = CreateDictionaryFromFile(file);
+
+            if (dictionary == null)
+            {
+                continue;
+            }
+            
             if (dictionaries.ContainsKey(dictionary.CultureName))
             {
-                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
+                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined! Localization resource: {_resource.ResourceName}");
             }
 
             dictionaries[dictionary.CultureName] = dictionary;
@@ -95,7 +118,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     protected abstract bool CanParseFile(IFileInfo file);
 
-    protected virtual ILocalizationDictionary CreateDictionaryFromFile(IFileInfo file)
+    protected virtual ILocalizationDictionary? CreateDictionaryFromFile(IFileInfo file)
     {
         using (var stream = file.CreateReadStream())
         {
@@ -103,5 +126,5 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
         }
     }
 
-    protected abstract ILocalizationDictionary CreateDictionaryFromFileContent(string fileContent);
+    protected abstract ILocalizationDictionary? CreateDictionaryFromFileContent(string fileContent);
 }

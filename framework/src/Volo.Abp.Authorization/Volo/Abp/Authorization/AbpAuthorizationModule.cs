@@ -8,6 +8,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security;
 using Volo.Abp.VirtualFileSystem;
 
@@ -16,13 +17,14 @@ namespace Volo.Abp.Authorization;
 [DependsOn(
     typeof(AbpAuthorizationAbstractionsModule),
     typeof(AbpSecurityModule),
-    typeof(AbpLocalizationModule)
+    typeof(AbpLocalizationModule),
+    typeof(AbpMultiTenancyModule)
 )]
 public class AbpAuthorizationModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
+        context.Services.OnRegistered(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
         AutoAddDefinitionProviders(context.Services);
     }
 
@@ -64,7 +66,7 @@ public class AbpAuthorizationModule : AbpModule
     {
         var definitionProviders = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IPermissionDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {

@@ -70,7 +70,7 @@ public class AliyunBlobProviderConfiguration
     /// The name must also be between 3 and 63 characters long.
     /// If this parameter is not specified, the ContainerName of the <see cref="BlobProviderArgs"/> will be used.
     /// </summary>
-    public string ContainerName {
+    public string? ContainerName {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AliyunBlobProviderConfigurationNames.ContainerName);
         set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.ContainerName, value);
     }
@@ -84,7 +84,7 @@ public class AliyunBlobProviderConfiguration
     }
 
     private readonly string _temporaryCredentialsCacheKey;
-    public string TemporaryCredentialsCacheKey {
+    public string? TemporaryCredentialsCacheKey {
         get => _containerConfiguration.GetConfigurationOrDefault(AliyunBlobProviderConfigurationNames.TemporaryCredentialsCacheKey, _temporaryCredentialsCacheKey);
         set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.TemporaryCredentialsCacheKey, value);
     }

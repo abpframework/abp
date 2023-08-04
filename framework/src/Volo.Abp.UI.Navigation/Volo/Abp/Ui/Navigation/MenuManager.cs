@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
@@ -13,11 +14,11 @@ namespace Volo.Abp.UI.Navigation;
 public class MenuManager : IMenuManager, ITransientDependency
 {
     protected AbpNavigationOptions Options { get; }
-    protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected ISimpleStateCheckerManager<ApplicationMenuItem> SimpleStateCheckerManager { get; }
     public MenuManager(
         IOptions<AbpNavigationOptions> options,
-        IHybridServiceScopeFactory serviceScopeFactory,
+        IServiceScopeFactory serviceScopeFactory,
         ISimpleStateCheckerManager<ApplicationMenuItem> simpleStateCheckerManager)
     {
         Options = options.Value;
@@ -95,6 +96,7 @@ public class MenuManager : IMenuManager, ITransientDependency
         }
 
         NormalizeMenu(menu);
+        NormalizeMenuGroup(menu);
 
         return menu;
     }
@@ -108,7 +110,7 @@ public class MenuManager : IMenuManager, ITransientDependency
         {
             if (!item.RequiredPermissionName.IsNullOrWhiteSpace())
             {
-                item.RequirePermissions(item.RequiredPermissionName);
+                item.RequirePermissions(item.RequiredPermissionName!);
             }
         }
 
@@ -157,5 +159,24 @@ public class MenuManager : IMenuManager, ITransientDependency
         }
 
         menuWithItems.Items.Normalize();
+    }
+
+    protected virtual void NormalizeMenuGroup(ApplicationMenu applicationMenu)
+    {
+        foreach (var menuGroup in applicationMenu.Items.Where(x => !x.GroupName.IsNullOrWhiteSpace()).GroupBy(x => x.GroupName))
+        {
+            var group = applicationMenu.GetMenuGroupOrNull(menuGroup.First().GroupName!);
+            if (group != null)
+            {
+                continue;
+            }
+
+            foreach (var menuItem in menuGroup)
+            {
+                menuItem.GroupName = null;
+            }
+        }
+
+        applicationMenu.Groups.Normalize();
     }
 }

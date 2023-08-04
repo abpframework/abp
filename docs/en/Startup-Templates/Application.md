@@ -11,7 +11,7 @@ This document explains **the solution structure** and projects in details. If yo
 
 ## How to Start With?
 
-You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can directly create & download from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
+You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
 
 First, install the ABP CLI if you haven't installed it before:
 
@@ -78,7 +78,7 @@ Based on the options you've specified, you will get a slightly different solutio
 
 If you don't specify any additional options, you will have a solution as shown below:
 
-![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-v3.png)
+![bookstore-rider-solution-v6](../images/solution-structure-solution-explorer-rider.png)
 
 Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../Domain-Driven-Design.md) principles as mentioned before.
 
@@ -225,7 +225,7 @@ So, the resulting solution allows a 4-tiered deployment, by comparing to 3-tiere
 
 The solution structure is shown below:
 
-![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-tiered.png)
+![bookstore-rider-solution-v6](../images/bookstore-rider-solution-tiered.png)
 
 As different from the default structure, two new projects come into play: `.AuthServer` & `.HttpApi.Host`.
 
@@ -233,9 +233,9 @@ As different from the default structure, two new projects come into play: `.Auth
 
 This project is used as an authentication server for other projects. `.Web` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the AuthServer. Then uses the access token to call the HTTP API server. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
 
-![tiered-solution-applications](../images/tiered-solution-applications.png)
+![tiered-solution-applications](../images/tiered-solution-applications-authserver.png)
 
-ABP uses the open source [OpenIddcit](https://github.com/openiddict/openiddict-core) framework for the authentication between applications. See [OpenIddcit documentation](https://documentation.openiddict.com/) for details about the OpenIddict and OpenID Connect protocol.
+ABP uses the [OpenIddict Module](../Modules/OpenIddict.md) that uses the open-source [OpenIddict-core](https://github.com/openiddict/openiddict-core) library for the authentication between applications. See [OpenIddict documentation](https://documentation.openiddict.com/) for details about the OpenIddict and OpenID Connect protocol.
 
 It has its own `appsettings.json` that contains database connection and other configurations.
 
@@ -260,6 +260,19 @@ You should run the application with the given order:
 * First, run the `.AuthServer` since other applications depend on it.
 * Then run the `.HttpApi.Host` since it is used by the `.Web` application.
 * Finally, you can run the `.Web` project and login to the application (using `admin` as the username and `1q2w3E*` as the password).
+
+### Blazor UI
+If you choose `Blazor` as the UI Framework (using the `-u blazor` or `-u blazor-server` option), the solution will have a project named `.Blazor`. This project contains the Blazor UI application. According to your choice, it will be a Blazor WebAssembly or Blazor Server application. If Blazor WebAssembly is selected, the solution will also have a `.HttpApi.Host`. This project is an ASP.NET Core application that hosts the backend application for the Blazor single page application.
+
+#### .Blazor Project (Server)
+The Blazor Server project is similar to the ASP.NET Core MVC project. It replaces `.Web` project with `.Blazor` in the solution structure above. It has the same folder structure and the same application flow. Since it's an ASP.NET Core application, it can contain **.cshtml** files and **.razor** components at the same time. If routing matches a razor component, the Blazor UI will be used. Otherwise, the request will be handled by the MVC framework.
+
+![abp solution structure blazor server](../images/layered-project-dependencies-blazor-server.png)
+
+#### .Blazor Project (WebAssembly)
+The Blazor WebAssembly project is a single page application that runs on the browser. You'll see it as `.Blazor` project in the solution. It uses the `.HttpApi.Host` project to communicate with the backend. It can't be used without the backend application. It contains only **.razor** components. It's a pure client-side application. It doesn't have any server-side code. Everything in this layer will be for the client side.
+
+![abp solution structure blazor wasm](../images/layered-project-dependencies-blazor-wasm.png)
 
 ### Angular UI
 

@@ -44,6 +44,10 @@ public class ProjectBuildArgs
 
     public Theme? Theme { get; set; }
 
+    public ThemeStyle? ThemeStyle { get; set; }
+
+    public bool SkipCache { get; set; }
+
     [NotNull]
     public Dictionary<string, string> ExtraProperties { get; set; }
 
@@ -63,7 +67,9 @@ public class ProjectBuildArgs
         Dictionary<string, string> extraProperties = null,
         [CanBeNull] string connectionString = null,
         bool pwa = false,
-        Theme? theme = null)
+        Theme? theme = null,
+        ThemeStyle? themeStyle = null,
+        bool skipCache = false)
     {
         SolutionName = Check.NotNull(solutionName, nameof(solutionName));
         TemplateName = templateName;
@@ -81,5 +87,7 @@ public class ProjectBuildArgs
         ConnectionString = connectionString;
         Pwa = pwa;
         Theme = theme;
+        ThemeStyle = themeStyle;
+        SkipCache = skipCache;
     }
 }

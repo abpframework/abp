@@ -20,7 +20,7 @@ namespace Volo.Docs.Projects
         {
         }
 
-        public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount, CancellationToken cancellationToken = default)
         {
             var projects = await (await GetMongoQueryableAsync(cancellationToken)).OrderBy(sorting.IsNullOrEmpty() ? "Id desc" : sorting).As<IMongoQueryable<Project>>()
                 .PageBy<Project, IMongoQueryable<Project>>(skipCount, maxResultCount)
@@ -29,7 +29,18 @@ namespace Volo.Docs.Projects
             return projects;
         }
 
-        public async Task<Project> GetByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
+        public virtual async Task<List<ProjectWithoutDetails>> GetListWithoutDetailsAsync(CancellationToken cancellationToken = default)
+        {
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Select(x=> new ProjectWithoutDetails {
+                    Id = x.Id,
+                    Name = x.Name,
+                })
+                .OrderBy(x=>x.Name)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<Project> GetByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
         {
             var normalizeShortName = NormalizeShortName(shortName);
 
@@ -43,7 +54,7 @@ namespace Volo.Docs.Projects
             return project;
         }
 
-        public async Task<bool> ShortNameExistsAsync(string shortName, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ShortNameExistsAsync(string shortName, CancellationToken cancellationToken = default)
         {
             var normalizeShortName = NormalizeShortName(shortName);
 

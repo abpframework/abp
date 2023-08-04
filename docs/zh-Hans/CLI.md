@@ -42,7 +42,9 @@ dotnet tool update -g Volo.Abp.Cli
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
 * **`login-info`**: 展示当前登录用户信息.
 * **`logout`**: 在你的计算机注销认证.
+* **`bundle`**: 为 ABP Blazor 和 MAUI Blazor 项目生成引用的脚本和样式. 
 * **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
+* **`clear-download-cache`** 删除下载的模版缓存.
 
 ### help
 
@@ -109,11 +111,11 @@ abp new Acme.BookStore
       * `mvc`: ASP.NET Core MVC.此模板的其他选项:
         * `--tiered`: 创建分层解决方案,Web和Http Api层在物理上是分开的.如果未指定会创建一个分层的解决方案,此解决方案没有那么复杂,适合大多数场景.
       * `angular`: Angular. 这个模板还有一些额外的选项:
-        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Auth Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `blazor`: Blazor. 这个模板还有一些额外的选项:
-        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Auth Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `none`: 无UI. 这个模板还有一些额外的选项:
-        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Auth Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
     * `--mobile` 或者 `-m`: 指定移动应用程序框架. 如果未指定,则不会创建任何移动应用程序,其他选项:
       * `none`: 不包含移动应用程序.
       * `react-native`: React Native.
@@ -123,10 +125,12 @@ abp new Acme.BookStore
   * `module`: [Module template](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI.仅创建服务模块(也称为微服务 - 没有UI).
   * **`console`**: [Console template](Startup-Templates/Console.md).
+  * **`maui`**: [Maui template](Startup-Templates/MAUI.md).
   * **`app-nolayers`**: 应用程序单层模板
   * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项:
     * `mvc`: ASP.NET Core MVC.
     * `angular`: Angular.
+    * `blazor`: Blazor UI.
     * `blazor-server`: Blazor Server.
     * `none`: 不包含UI.
   * `--database-provider` 或 `-d`: 或者 `-d`: 指定数据库提供程序.默认是 `ef`.其他选项:
@@ -139,6 +143,7 @@ abp new Acme.BookStore
 * `--create-solution-folder` 或者 `-csf`: 指定项目是在输出文件夹中的新文件夹中还是直接在输出文件夹中.
 * `--connection-string` 或者 `-cs`:  重写所有 `appsettings.json` 文件的默认连接字符串. 默认连接字符串是 `Server=localhost;Database=MyProjectName;Trusted_Connection=True`. 默认的数据库提供程序是 `SQL Server`. 如果你使用EF Core但需要更改DBMS,可以按[这里所述](Entity-Framework-Core-Other-DBMS.md)进行更改(创建解决方案之后).
 * `--local-framework-ref --abp-path`: 使用对项目的本地引用,而不是替换为NuGet包引用.
+* `--skip-cache` or `-sc`: 从服务器下载最新的模版并更新本地模版缓存.
 
 ### update
 
@@ -257,6 +262,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
 
 * `--type` 或 `-t`: 客户端类型的名称. 可用的客户端有:
   * `csharp`: C#, 工作在 `*.HttpApi.Client` 项目目录. 此客户端有一些可选选项:
+    * `--without-contracts`: 取消生成应用程序服务接口,类,枚举和DTO.
     * `--folder`: 放置生成的 CSharp 代码的文件夹名称. 默认值: `ClientProxies`.
   * `ng`: Angular. 此客户端有一些可选选项:
     * `--api-name` 或 `-a`: 在 `/src/environments/environment.ts` 中定义的API端点名称。. 默认值: `default`.
@@ -372,7 +378,7 @@ abp translate -c <culture> [options]
 示例:
 
 ````bash
-abp translate -c de-DE
+abp translate -c de
 ````
 
 该命令为 `de-DE` (德语)文化创建了统一的翻译文件.
@@ -408,6 +414,7 @@ abp login <username>                                  # Allows you to enter your
 abp login <username> -p <password>                    # Specify the password as a parameter (password is visible)
 abp login <username> --organization <organization>    # If you have multiple organizations, you need set your active organization
 abp login <username> -p <password> -o <organization>  # You can enter both your password and organization in the same command
+abp login <username> --device                         # Use device login flow
 ```
 
 > 当使用-p参数,请注意,因为你的密码是可见的. 它对于CI / CD自动化管道很有用.
@@ -429,6 +436,26 @@ abp login-info
 ```
 abp logout
 ```
+
+### bundle
+
+这个命令为ABP Blazor WebAssembly 和 MAUI Blazor 项目生成引用的脚本和样式并且更新 **index.html** 文件, 它帮助开发者轻松的管理ABP模块的依赖. 为了使 ```bundle``` 命令工作, 它的**执行目录**或者传递 ```--working-directory``` 参数的目录必须包含Blazor或MAUI Blazor项目文件(*.csproj)
+
+用法:
+
+````bash
+abp bundle [options]
+````
+
+#### Options
+
+* ```--working-directory``` 或 ```-wd```: 指定当前执行目录, 这个命令在当前目录不包含项目文件时非常有用.
+* ```--force``` 或 ```-f```: 在生成引用之前强制构建项目.
+* ```--project-type``` 或 ```-t```: 指定项目类型. 默认类型是 `webassembly`. 可用的类型有:
+  * `webassembly`
+  * `maui-blazor`
+
+`bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
 
 ### install-libs
 

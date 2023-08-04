@@ -112,7 +112,7 @@ public class IdentityUserStore_Tests : AbpIdentityDomainTestBase
 
         (await _identityUserStore.UpdateAsync(user)).Succeeded.ShouldBeTrue();
 
-        user.ConcurrencyStamp = Guid.NewGuid().ToString();
+        user.ConcurrencyStamp = Guid.NewGuid().ToString("N");
         var identityResult = await _identityUserStore.UpdateAsync(user);
 
         identityResult.Succeeded.ShouldBeFalse();

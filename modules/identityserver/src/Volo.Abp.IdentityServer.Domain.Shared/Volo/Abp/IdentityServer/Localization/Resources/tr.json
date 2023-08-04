@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "Giriş yapmanıza izin verilmiyor! Hesabınız etkin değil veya e-postanızı/telefon numaranızı onaylamanız gerekiyor.",
     "InvalidUsername": "Kullanıcı adı ya da şifre geçersiz!",
     "InvalidAuthenticatorCode": "Geçersiz kimlik doğrulama kodu!",
+    "InvalidRecoveryCode": "Geçersiz kurtarma kodu!",
     "TheTargetUserIsNotLinkedToYou": "Hedef kullanıcı sizinle bağlantılı değil!"
   }
 }

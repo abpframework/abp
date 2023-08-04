@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore;
 
@@ -15,14 +18,14 @@ public class AbpDbContextOptions
 
     internal Dictionary<Type, object> ConfigureActions { get; }
 
-    internal Dictionary<Type, Type> DbContextReplacements { get; }
+    internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
 
     public AbpDbContextOptions()
     {
         DefaultPreConfigureActions = new List<Action<AbpDbContextConfigurationContext>>();
         PreConfigureActions = new Dictionary<Type, List<object>>();
         ConfigureActions = new Dictionary<Type, object>();
-        DbContextReplacements = new Dictionary<Type, Type>();
+        DbContextReplacements = new Dictionary<MultiTenantDbContextType, Type>();
     }
 
     public void PreConfigure([NotNull] Action<AbpDbContextConfigurationContext> action)
@@ -76,22 +79,22 @@ public class AbpDbContextOptions
         return ConfigureActions.ContainsKey(dbContextType);
     }
 
-    internal Type GetReplacedTypeOrSelf(Type dbContextType)
+    internal Type GetReplacedTypeOrSelf(Type dbContextType, MultiTenancySides multiTenancySides = MultiTenancySides.Both)
     {
         var replacementType = dbContextType;
         while (true)
         {
-            if (DbContextReplacements.TryGetValue(replacementType, out var foundType))
+            var foundType = DbContextReplacements.LastOrDefault(x => x.Key.Type == replacementType && x.Key.MultiTenancySide.HasFlag(multiTenancySides));
+            if (!foundType.Equals(default(KeyValuePair<MultiTenantDbContextType, Type>)))
             {
-                if (foundType == dbContextType)
+                if (foundType.Value == dbContextType)
                 {
                     throw new AbpException(
                         "Circular DbContext replacement found for " +
                         dbContextType.AssemblyQualifiedName
                     );
                 }
-
-                replacementType = foundType;
+                replacementType = foundType.Value;
             }
             else
             {

@@ -73,7 +73,7 @@ public class AbpUowPageFilter : IAsyncPageFilter, ITransientDependency
         }
     }
 
-    private AbpUnitOfWorkOptions CreateOptions(PageHandlerExecutingContext context, UnitOfWorkAttribute unitOfWorkAttribute)
+    private AbpUnitOfWorkOptions CreateOptions(PageHandlerExecutingContext context, UnitOfWorkAttribute? unitOfWorkAttribute)
     {
         var options = new AbpUnitOfWorkOptions();
 
@@ -104,7 +104,15 @@ public class AbpUowPageFilter : IAsyncPageFilter, ITransientDependency
         var currentUow = unitOfWorkManager.Current;
         if (currentUow != null)
         {
-            await currentUow.SaveChangesAsync(context.HttpContext.RequestAborted);
+            try
+            {
+                await currentUow.SaveChangesAsync(context.HttpContext.RequestAborted);
+            }
+            catch (Exception e)
+            {
+                await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
+                throw;
+            }
         }
     }
 

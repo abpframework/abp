@@ -40,7 +40,7 @@ public class IdentityUserLookupAppService : IdentityAppServiceBase, IIdentityUse
         return new UserData(userData);
     }
 
-    public async Task<ListResultDto<UserData>> SearchAsync(UserLookupSearchInputDto input)
+    public virtual async Task<ListResultDto<UserData>> SearchAsync(UserLookupSearchInputDto input)
     {
         var users = await UserLookupServiceProvider.SearchAsync(
             input.Sorting,
@@ -56,7 +56,7 @@ public class IdentityUserLookupAppService : IdentityAppServiceBase, IIdentityUse
         );
     }
 
-    public async Task<long> GetCountAsync(UserLookupCountInputDto input)
+    public virtual async Task<long> GetCountAsync(UserLookupCountInputDto input)
     {
         return await UserLookupServiceProvider.GetCountAsync(input.Filter);
     }

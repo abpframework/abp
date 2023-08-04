@@ -23,7 +23,7 @@ public class AbpAspNetCoreSignalRModule : AbpModule
 {
     private static readonly MethodInfo MapHubGenericMethodInfo =
         typeof(AbpAspNetCoreSignalRModule)
-            .GetMethod("MapHub", BindingFlags.Static | BindingFlags.NonPublic);
+            .GetMethod("MapHub", BindingFlags.Static | BindingFlags.NonPublic)!;
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -91,7 +91,7 @@ public class AbpAspNetCoreSignalRModule : AbpModule
     {
         var hubTypes = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (IsHubClass(context) && !IsDisabledForAutoMap(context))
             {

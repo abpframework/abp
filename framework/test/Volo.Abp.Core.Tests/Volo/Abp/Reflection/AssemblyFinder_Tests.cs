@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NSubstitute;
 using Shouldly;
 using Volo.Abp.Modularity;
@@ -50,6 +51,7 @@ public class AssemblyFinder_Tests
     {
         var moduleDescriptor = Substitute.For<IAbpModuleDescriptor>();
         moduleDescriptor.Type.Returns(moduleType);
+        moduleDescriptor.AllAssemblies.Returns(new [] { moduleType.Assembly });
         return moduleDescriptor;
     }
 }

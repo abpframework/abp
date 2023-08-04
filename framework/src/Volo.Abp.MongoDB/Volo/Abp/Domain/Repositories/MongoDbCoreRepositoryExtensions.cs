@@ -43,16 +43,16 @@ public static class MongoDbCoreRepositoryExtensions
         return repository.ToMongoDbRepository().GetMongoQueryable();
     }
 
-    public static Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository, CancellationToken cancellationToken = default)
+    public static Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository, CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
         where TEntity : class, IEntity
     {
-        return repository.ToMongoDbRepository().GetMongoQueryableAsync(cancellationToken);
+        return repository.ToMongoDbRepository().GetMongoQueryableAsync(cancellationToken, aggregateOptions);
     }
 
-    public static Task<IAggregateFluent<TEntity>> GetAggregateAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository, CancellationToken cancellationToken = default)
+    public static Task<IAggregateFluent<TEntity>> GetAggregateAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository, CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
         where TEntity : class, IEntity
     {
-        return repository.ToMongoDbRepository().GetAggregateAsync(cancellationToken);
+        return repository.ToMongoDbRepository().GetAggregateAsync(cancellationToken, aggregateOptions);
     }
 
     public static IMongoDbRepository<TEntity> ToMongoDbRepository<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)

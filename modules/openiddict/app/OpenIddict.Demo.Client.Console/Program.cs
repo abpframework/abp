@@ -134,7 +134,7 @@ tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCreden
     ClientId = clientId,
     ClientSecret = clientSecret,
 
-    Scope = "AbpAPI profile roles email phone offline_access",
+    Scope = "AbpAPI offline_access",
 });
 
 if (tokenResponse.IsError)

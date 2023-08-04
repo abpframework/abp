@@ -33,7 +33,7 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         Logger = NullLogger<AppUrlProvider>.Instance;
     }
 
-    public virtual async Task<string> GetUrlAsync(string appName, string urlName = null)
+    public virtual async Task<string> GetUrlAsync(string appName, string? urlName = null)
     {
         return await ReplacePlaceHoldersAsync(
             await GetConfiguredUrl(
@@ -53,12 +53,12 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         return allow;
     }
 
-    protected virtual async Task<string> GetConfiguredUrl(string appName, string urlName)
+    protected virtual async Task<string> GetConfiguredUrl(string appName, string? urlName)
     {
         var url = await GetUrlOrNullAsync(appName, urlName);
         if (!url.IsNullOrEmpty())
         {
-            return url;
+            return url!;
         }
 
         if (!urlName.IsNullOrEmpty())
@@ -112,13 +112,13 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         if (CurrentTenant.Id.HasValue && CurrentTenant.Name.IsNullOrEmpty())
         {
             var tenantConfiguration = await TenantStore.FindAsync(CurrentTenant.Id.Value);
-            return tenantConfiguration.Name;
+            return tenantConfiguration!.Name;
         }
 
-        return CurrentTenant.Name;
+        return CurrentTenant.Name!;
     }
 
-    public Task<string> GetUrlOrNullAsync([NotNull] string appName, [CanBeNull] string urlName = null)
+    public Task<string?> GetUrlOrNullAsync([NotNull] string appName, string? urlName = null)
     {
         var app = Options.Applications[appName];
 
@@ -127,13 +127,13 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
             return Task.FromResult(app.RootUrl);
         }
 
-        var url = app.Urls.GetOrDefault(urlName);
+        var url = app.Urls.GetOrDefault(urlName!);
 
         if (app.RootUrl == null)
         {
             return Task.FromResult(url);
         }
 
-        return Task.FromResult(app.RootUrl.EnsureEndsWith('/') + url);
+        return Task.FromResult<string?>(app.RootUrl.EnsureEndsWith('/') + url);
     }
 }

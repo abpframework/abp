@@ -1,7 +1,10 @@
 ﻿namespace Volo.Abp.Cli.ProjectBuilding.Building;
 
-public enum Theme
+public enum Theme : byte
 {
-    LeptonXLite = 0,
-    Basic = 1    
+    NotSpecified = 0,
+    Basic = 1,
+    Lepton = 2,
+    LeptonXLite = 3,
+    LeptonX = 4
 }

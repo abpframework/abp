@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.Web.Configuration;
+using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement.Localization;
 
 namespace Volo.Abp.PermissionManagement.Blazor.Components;
@@ -14,6 +16,8 @@ public partial class PermissionManagementModal
     [Inject] protected IPermissionAppService PermissionAppService { get; set; }
     [Inject] protected ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
+    [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
+    
     protected Modal _modal;
 
     protected string _providerName;
@@ -28,6 +32,8 @@ public partial class PermissionManagementModal
 
     protected int _grantedPermissionCount = 0;
     protected int _notGrantedPermissionCount = 0;
+
+    protected bool _selectAllDisabled;
 
     protected bool GrantAll {
         get {
@@ -82,6 +88,8 @@ public partial class PermissionManagementModal
 
             _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
             _groups = result.Groups;
+
+            _selectAllDisabled = _groups.All(IsPermissionGroupDisabled);
 
             _grantedPermissionCount = 0;
             _notGrantedPermissionCount = 0;
@@ -245,5 +253,13 @@ public partial class PermissionManagementModal
     {
         eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         return Task.CompletedTask;
+    }
+
+    protected virtual bool IsPermissionGroupDisabled(PermissionGroupDto group)
+    {
+        var permissions = group.Permissions;
+        var grantedProviders = permissions.SelectMany(x => x.GrantedProviders);
+
+        return permissions.All(x => x.IsGranted) && grantedProviders.Any(p => p.ProviderName != _providerName);
     }
 }

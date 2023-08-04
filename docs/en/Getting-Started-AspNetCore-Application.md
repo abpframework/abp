@@ -1,4 +1,4 @@
-# Getting Started With an ABP and AspNet Core MVC Web Application
+# Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application
 
 This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](Getting-Started-AspNetCore-MVC-Template.md)**.
 
@@ -18,11 +18,13 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 ## Install Volo.Abp.AspNetCore.Mvc Package
 
-Volo.Abp.AspNetCore.Mvc is the AspNet Core MVC integration package for ABP. So, install it on your project:
+You can use the [ABP CLI](CLI.md) to install the Volo.Abp.AspNetCore.Mvc package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
 
+````bash
+abp add-package Volo.Abp.AspNetCore.Mvc
 ````
-Install-Package Volo.Abp.AspNetCore.Mvc
-````
+
+> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc).
 
 ## Create the First ABP Module
 
@@ -77,7 +79,7 @@ using BasicAspNetCoreApplication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-await builder.Services.AddApplicationAsync<AppModule>();
+await builder.AddApplicationAsync<AppModule>();
 
 var app = builder.Build();
 
@@ -85,7 +87,7 @@ await app.InitializeApplicationAsync();
 await app.RunAsync();
 ````
 
-``builder.Services.AddApplicationAsync<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
+``builder.AddApplicationAsync<AppModule>();`` adds all services defined in all modules starting from the ``AppModule``.
 
 ``app.InitializeApplicationAsync()`` initializes and starts the application.
 
@@ -125,7 +127,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseAutofac();  //Add this line
 
-await builder.Services.AddApplicationAsync<AppModule>();
+await builder.AddApplicationAsync<AppModule>();
 
 var app = builder.Build();
 

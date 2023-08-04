@@ -4,7 +4,7 @@ namespace Volo.Abp.TextTemplating;
 
 public interface ITemplateDefinitionContext
 {
-    IReadOnlyList<TemplateDefinition> GetAll(string name);
+    IReadOnlyList<TemplateDefinition> GetAll();
 
     TemplateDefinition GetOrNull(string name);
 

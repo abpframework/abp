@@ -83,6 +83,6 @@ public static class DirectoryHelper
 
         Directory.SetCurrentDirectory(targetDirectory);
 
-        return new DisposeAction(() => { Directory.SetCurrentDirectory(currentDirectory); });
+        return new DisposeAction<string>(Directory.SetCurrentDirectory, currentDirectory);
     }
 }

@@ -1,5 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -8,6 +10,7 @@ using Volo.Abp.Features;
 
 namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 
+[Authorize]
 [RequiresFeature(SettingManagementFeatures.Enable)]
 public class IndexModel : AbpPageModel
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using JetBrains.Annotations;
+using Volo.Abp.Domain.Values;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 
@@ -120,6 +121,19 @@ public static class EntityHelper
     {
         Check.NotNull(type, nameof(type));
         return typeof(IEntity).IsAssignableFrom(type);
+    }
+
+    public static Func<Type, bool> IsValueObjectPredicate = type => typeof(ValueObject).IsAssignableFrom(type);
+
+    public static bool IsValueObject([NotNull] Type type)
+    {
+        Check.NotNull(type, nameof(type));
+        return IsValueObjectPredicate(type);
+    }
+
+    public static bool IsValueObject(object obj)
+    {
+        return obj != null && IsValueObject(obj.GetType());
     }
 
     public static void CheckEntity([NotNull] Type type)

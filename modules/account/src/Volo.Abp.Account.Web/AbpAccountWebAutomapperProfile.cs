@@ -9,6 +9,7 @@ public class AbpAccountWebAutoMapperProfile : Profile
 {
     public AbpAccountWebAutoMapperProfile()
     {
-        CreateMap<ProfileDto, AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel>();
+        CreateMap<ProfileDto, AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel>()
+            .MapExtraProperties();
     }
 }

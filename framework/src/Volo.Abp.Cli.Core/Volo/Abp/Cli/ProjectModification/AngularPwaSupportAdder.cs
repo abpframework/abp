@@ -30,6 +30,6 @@ public class AngularPwaSupportAdder : ITransientDependency
     {
         var directory = Path.GetDirectoryName(filePath).EnsureEndsWith(Path.DirectorySeparatorChar);
 
-        CmdHelper.RunCmd("ng add @angular/pwa --skip-confirmation", workingDirectory: directory);
+        CmdHelper.RunCmd("ng add @angular/pwa@13 --skip-confirmation", workingDirectory: directory);
     }
 }

@@ -22,11 +22,11 @@ public class BackgroundJobNameAttribute : Attribute, IBackgroundJobNameProvider
     {
         Check.NotNull(jobArgsType, nameof(jobArgsType));
 
-        return jobArgsType
-                   .GetCustomAttributes(true)
-                   .OfType<IBackgroundJobNameProvider>()
-                   .FirstOrDefault()
-                   ?.Name
-               ?? jobArgsType.FullName;
+        return (jobArgsType
+                    .GetCustomAttributes(true)
+                    .OfType<IBackgroundJobNameProvider>()
+                    .FirstOrDefault()
+                    ?.Name
+                ?? jobArgsType.FullName)!;
     }
 }

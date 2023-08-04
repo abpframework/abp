@@ -15,7 +15,7 @@ The Basic Theme is a theme implementation for the Blazor UI. It is a minimalist 
 
 ## Installation
 
-**This theme is already installed** when you create a new solution using the [startup templates](../../Startup-Templates/Index.md). If you need to manually install it, follow the steps below:
+If you need to manually this theme, follow the steps below:
 
 {{if UI == "Blazor"}}
 
@@ -84,6 +84,27 @@ You can simply override the styles in the Global Styles file of your application
 #### Override the Components
 
 See the [Customization / Overriding Components](Customization-Overriding-Components.md) to learn how you can replace components, customize and extend the user interface.
+
+### Overriding the Menu Item
+Basic theme supports overriding a single menu item with a custom component. You can create a custom component and call `UseComponent` extension method of Basic Theme in the **MenuContributor**.
+
+```csharp
+using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Navigation;
+
+//...
+
+context.Menu.Items.Add(
+  new ApplicationMenuItem("Custom.1", "My Custom Menu", "#")
+    .UseComponent(typeof(MyMenuItemComponent)));
+```
+
+```html
+<li class="nav-item">
+    <a href="#" class="nav-link">
+        My Custom Menu
+    </a>
+</li>
+```
 
 ### Copy & Customize
 

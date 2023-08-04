@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters;
 
 public class AbpRemoteStreamContentModelBinderProvider : IModelBinderProvider
 {
-    public IModelBinder GetBinder(ModelBinderProviderContext context)
+    public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
         if (context == null)
         {

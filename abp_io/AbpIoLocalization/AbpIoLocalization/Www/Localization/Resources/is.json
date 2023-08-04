@@ -273,6 +273,9 @@
     "SubscribeToNewsletter": "Gerast áskrifandi að fréttabréfinu til að fá upplýsingar um atburði í ABP.IO pallinum, eins og nýjar útgáfur, greinar, tilboð og fleira.",
     "FirstEdition": "Fyrsta útgáfa",
     "ThankYou": "Þakka þér!",
-    "CheckboxMandatory": "Þú þarft að smella hér til að halda áfram!"
+    "CheckboxMandatory": "Þú þarft að smella hér til að halda áfram!",
+    "SelectUITheme": "Veldu UI þema",
+    "CreateSolutionFolder": "Búðu til lausnarmöppu",
+    "CreateSolutionFolderOption": "Tilgreinir hvort verkefnið verður í nýrri möppu í úttaksmöppunni eða beint í framleiðslumöppunni."
   }
 }

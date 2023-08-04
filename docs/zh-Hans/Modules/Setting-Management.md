@@ -87,7 +87,13 @@ namespace Demo
 
 ## Setting Management UI.
 
-设置管理模块默认提供了邮件设置页面并且它是可扩展的; 你可以为你的应用程序设置添加设置标签到设置页面.
+设置管理模块默认提供了邮件设置页面.
+
+![EmailSettingUi](../images/setting-management-email-ui.png)
+
+> 你可以点击发送测试邮件按钮发送一封测试邮件来检查你的邮件设置.
+
+设置UI是可扩展的; 你可以为你的应用程序设置添加设置标签到设置页面.
 
 ### MVC UI
 
@@ -140,7 +146,8 @@ public class BookStoreSettingPageContributor : ISettingPageContributor
             new SettingPageGroup(
                 "Volo.Abp.MySettingGroup",
                 "MySettingGroup",
-                typeof(MySettingGroupViewComponent)
+                typeof(MySettingGroupViewComponent),
+                order : 1
             )
         );
 
@@ -203,7 +210,8 @@ public class BookStoreSettingComponentContributor : ISettingComponentContributor
             new SettingComponentGroup(
                 "Volo.Abp.MySettingGroup",
                 "MySettingGroup",
-                typeof(MySettingGroupComponent)
+                typeof(MySettingGroupComponent),
+                order : 1
             )
         );
 

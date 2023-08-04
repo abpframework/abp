@@ -6,7 +6,7 @@ Module entity extension system is a **high level** extension system that allows 
 
 ## Quick Example
 
-Open the *YourProjectNameModuleExtensionConfigurator* class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties`method  as shown below to add a `SocialSecurityNumber` property to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md).
+Open the `YourProjectNameModuleExtensionConfigurator` class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties`method  as shown below to add a `SocialSecurityNumber` property to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md).
 
 ````csharp
 public static void ConfigureExtraProperties()
@@ -255,6 +255,20 @@ property =>
 
 Use `property.UI.OnCreateForm` and `property.UI.OnEditForm` to control forms too. If a property is required, but not added to the create form, you definitely get a validation exception, so use this option carefully. But a required property may not be in the edit form if that's your requirement.
 
+### UI Order
+
+When you define a property, it appears on the data table, create and edit forms on the related UI page. However, you can control its order. Example:
+
+````csharp
+property =>
+{
+    property.UI.Order = 1;
+    //...other configurations
+}
+````
+
+Use `property.UI.OnCreateForm` and `property.UI.OnEditForm` to control forms too. If a property is required, but not added to the create form, you definitely get a validation exception, so use this option carefully. But a required property may not be in the edit form if that's your requirement.
+
 ### HTTP API Availability
 
 Even if you disable a property on UI, it can be still available through the HTTP API. By default, a property is available on all APIs.
@@ -312,12 +326,14 @@ An enum properties is shown as combobox (select) in the create/edit forms:
 Enum member name is shown on the table and forms by default. If you want to localize it, just create a new entry on your [localization](https://docs.abp.io/en/abp/latest/Localization) file:
 
 ````json
-"UserType.SuperUser": "Super user" 
+"Enum:UserType.0": "Super user" 
 ````
 
 One of the following names can be used as the localization key:
 
+* `Enum:UserType.0`
 * `Enum:UserType.SuperUser`
+* `UserType.0`
 * `UserType.SuperUser`
 * `SuperUser`
 

@@ -12,5 +12,5 @@ namespace Volo.Abp.OpenIddict;
     )]
 public class OpenIddictDomainTestModule : AbpModule
 {
-
+    
 }

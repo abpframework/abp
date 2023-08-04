@@ -16,7 +16,7 @@ public class PageItem
         IsGap = isGap;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (!(obj is PageItem item))
         {

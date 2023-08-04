@@ -1,6 +1,6 @@
 # ABP CLI - New Solution Sample Commands 
 
-The `abp new` command creates an ABP solution or other artifacts based on an ABP template. [ABP CLI](CLI.md) has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the only available mobile project is a `React Native` mobile app. Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
+The `abp new` command creates an ABP solution or other artifacts based on an ABP template. [ABP CLI](CLI.md) has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the available mobile projects are `React Native` and `MAUI` mobile app. Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
 
 ## Angular
 
@@ -12,7 +12,7 @@ The following commands are for creating Angular UI projects:
   abp new Acme.BookStore -u angular --mobile none --database-provider ef -csf
   ````
   
-* **Entity Framework Core**, default app template, **separate Identity Server**, creates the project in a new folder:
+* **Entity Framework Core**, default app template, **separate Auth Server**, creates the project in a new folder:
 
   ```bash
   abp new Acme.BookStore -t app -u angular -m none --separate-auth-server --database-provider ef -csf
@@ -30,7 +30,7 @@ The following commands are for creating Angular UI projects:
   abp new Acme.BookStore -u angular --database-provider mongodb --output-folder C:\MyProjects\Acme.BookStore
   ```
 
-* **MongoDB**, default app template, no mobile app, **separate Identity Server**, creates the project in a new folder:
+* **MongoDB**, default app template, no mobile app, **separate Auth Server**, creates the project in a new folder:
 
   ```bash
   abp new Acme.BookStore -t app -u angular -m none --separate-auth-server --database-provider mongodb -csf
@@ -64,10 +64,18 @@ The following commands are for creating MVC UI projects:
   abp new Acme.BookStore -u mvc --tiered --database-provider mongodb -csf
   ```
 
+* **Public Website**, Entity Framework Core, no mobile app, creates the project in a new folder:
+  
+  ```bash
+  abp new Acme.BookStore -t app -u mvc --mobile none --database-provider ef -csf --with-public-website
+  ```
+  
+  _Note that Public Website is only included in PRO templates._
+  
 
-## Blazor
+## Blazor WebAssembly
 
-The following commands are for creating Blazor projects:
+The following commands are for creating Blazor WASM projects:
 
 * **Entity Framework Core**, no mobile app:
 
@@ -75,7 +83,7 @@ The following commands are for creating Blazor projects:
   abp new Acme.BookStore -t app -u blazor --mobile none
   ```
 
-* **Entity Framework Core**, **separate Identity Server**, mobile app included:
+* **Entity Framework Core**, **separate Auth Server**, mobile app included:
   
   ```bash
   abp new Acme.BookStore -u blazor --separate-auth-server
@@ -97,7 +105,7 @@ The following commands are for creating Blazor projects:
   abp new Acme.BookStore -t app -u blazor-server --mobile none
   ```
 
-* **Entity Framework Core**, **separate Identity Server**, **separate API Host**, mobile app included:
+* **Entity Framework Core**, **separate Auth Server**, **separate API Host**, mobile app included:
   
   ```bash
   abp new Acme.BookStore -u blazor-server --tiered
@@ -113,7 +121,7 @@ The following commands are for creating Blazor projects:
 
 In the default app template, there is always a frontend project. In this option there is no frontend project. It has a `HttpApi.Host` project to serve your HTTP WebAPIs. It's appropriate if you want to create a WebAPI service.
 
-* **Entity Framework Core**, separate Identity Server, creates the project in a new folder:
+* **Entity Framework Core**, separate Auth Server, creates the project in a new folder:
 
     ```bash
     abp new Acme.BookStore -u none --separate-auth-server -csf

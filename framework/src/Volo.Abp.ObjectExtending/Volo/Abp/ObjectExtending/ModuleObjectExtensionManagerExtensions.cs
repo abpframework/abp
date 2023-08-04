@@ -12,9 +12,9 @@ public static class ModuleObjectExtensionManagerExtensions
     {
         Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
 
-        return objectExtensionManager.Configuration.GetOrAdd(
+        return (objectExtensionManager.Configuration.GetOrAdd(
             ObjectExtensionManagerConfigurationKey,
             _ => new ModuleExtensionConfigurationDictionary()
-        ) as ModuleExtensionConfigurationDictionary;
+        ) as ModuleExtensionConfigurationDictionary)!;
     }
 }

@@ -7,7 +7,7 @@ using Volo.CmsKit.Blogs;
 namespace Volo.CmsKit.Admin.Blogs;
 
 [Serializable]
-public class BlogPostDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTime, IHasConcurrencyStamp
+public class BlogPostDto : ExtensibleEntityDto<Guid>, IHasCreationTime, IHasModificationTime, IHasConcurrencyStamp
 {
     public Guid BlogId { get; set; }
 
@@ -26,6 +26,6 @@ public class BlogPostDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTi
     public DateTime? LastModificationTime { get; set; }
 
     public string ConcurrencyStamp { get; set; }
-    
+
     public BlogPostStatus Status { get; set; }
 }

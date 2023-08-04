@@ -39,7 +39,48 @@
         "index": 3
       },
       "x-prompt": "Please enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
+    },
+    "entryPoint": {
+      "description": "Target Angular project to place the generated code",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 4
+      },
+      "x-prompt": "Please enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
+    },
+    "serviceType": {
+      "description": "Service type to the generated code",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 5
+      },
+      "enum": [
+        "application",
+        "integration",
+        "all"
+      ],
+      "x-prompt": {
+        "message": "Specifies the service type to generate. `application`, `integration` and `all`, Default value: `application`",
+        "type": "list",
+        "items": [
+          {
+            "value": "all",
+            "label": "All"
+          },
+          {
+            "value": "application",
+            "label": "Application"
+          },
+          {
+            "value": "integration",
+            "label": "Integration"
+          }
+        ]
+      }
     }
+
   },
   "required": []
 }

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Domain.Entities;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Pages.Blogs.Shared.Helpers;
@@ -43,7 +45,15 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 return NotFound();
             }
 
-            Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
+            try
+            {
+                Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
+            }
+            catch (EntityNotFoundException)
+            { 
+                return RedirectToPage("/Blogs/Index");
+            }
+            
             Posts = (await _postAppService.GetListByBlogIdAndTagNameAsync(Blog.Id, TagName)).Items;
             PopularTags = (await _tagAppService.GetPopularTagsAsync(Blog.Id, new GetPopularTagsInput {ResultCount = 10, MinimumPostCount = 2}));
 

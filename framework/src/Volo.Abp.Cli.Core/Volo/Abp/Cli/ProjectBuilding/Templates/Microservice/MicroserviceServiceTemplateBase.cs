@@ -38,7 +38,9 @@ public abstract class MicroserviceServiceTemplateBase : TemplateInfo
         DeleteUnrelatedUiProject(context, steps);
         SetRandomPortForHostProject(context, steps);
         RandomizeStringEncryption(context, steps);
-
+        RandomizeAuthServerPassPhrase(context, steps);
+        ChangeConnectionString(context, steps);
+        
         return steps;
     }
 
@@ -68,5 +70,15 @@ public abstract class MicroserviceServiceTemplateBase : TemplateInfo
     private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new MicroserviceServiceStringEncryptionStep());
+    }
+
+    private static void RandomizeAuthServerPassPhrase(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new RandomizeAuthServerPassPhraseStep());
+    }
+
+    private static void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new ConnectionStringRenameStep());
     }
 }

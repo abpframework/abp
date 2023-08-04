@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -8,16 +9,16 @@ using Volo.Abp.AspNetCore.TestBase;
 
 namespace MyCompanyName.MyProjectName;
 
-public abstract class MyProjectNameWebTestBase : AbpAspNetCoreIntegratedTestBase<MyProjectNameWebTestStartup>
+public abstract class MyProjectNameWebTestBase : AbpAspNetCoreIntegratedTestBase<MyProjectNameWebTestModule>
 {
     protected override IHostBuilder CreateHostBuilder()
     {
         return base
             .CreateHostBuilder()
-            .UseContentRoot(WebContentDirectoryFinder.CalculateContentRootFolder());
+            .UseContentRoot(WebContentDirectoryFinder.CalculateContentRootFolder() ?? throw new InvalidOperationException());
     }
 
-    protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+    protected virtual async Task<T?> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
     {
         var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
         return JsonSerializer.Deserialize<T>(strResponse, new JsonSerializerOptions(JsonSerializerDefaults.Web));

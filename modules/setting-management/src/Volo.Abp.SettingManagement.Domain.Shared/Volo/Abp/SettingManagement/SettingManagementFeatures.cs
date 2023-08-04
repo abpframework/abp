@@ -6,5 +6,5 @@ public class SettingManagementFeatures
 
     public const string Enable = GroupName + ".Enable";
 
-    public const string AllowTenantsToChangeEmailSettings = GroupName + ".AllowTenantsToChangeEmailSettings";
+    public const string AllowChangingEmailSettings = GroupName + ".AllowChangingEmailSettings";
 }

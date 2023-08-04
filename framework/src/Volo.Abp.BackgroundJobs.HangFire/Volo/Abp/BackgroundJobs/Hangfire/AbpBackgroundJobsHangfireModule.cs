@@ -30,7 +30,7 @@ public class AbpBackgroundJobsHangfireModule : AbpModule
         }
     }
 
-    private BackgroundJobServer CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
+    private BackgroundJobServer? CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
     {
         serviceProvider.GetRequiredService<JobStorage>();
         return null;

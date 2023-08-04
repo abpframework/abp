@@ -13,6 +13,7 @@ public class DeveloperApiKeyResult
     public string ErrorMessage { get; set; }
     public LicenseErrorType? ErrorType { get; set; }
     public LicenseType LicenseType { get; set; }
+    public bool IsTrialLicense { get; set; }
 
     public enum LicenseErrorType
     {

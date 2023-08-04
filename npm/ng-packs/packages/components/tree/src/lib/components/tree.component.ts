@@ -1,33 +1,48 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   EventEmitter,
+  Inject,
   Input,
+  OnInit,
+  Optional,
   Output,
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { NzFormatEmitEvent, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
+import { NzFormatBeforeDropEvent, NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { LazyLoadService, LOADING_STRATEGY, SubscriptionService } from '@abp/ng.core';
+import { DISABLE_TREE_STYLE_LOADING_TOKEN } from '../disable-tree-style-loading.token';
 
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 
 @Component({
   selector: 'abp-tree',
   templateUrl: 'tree.component.html',
-  styleUrls: [
-    '../../../../../../node_modules/ng-zorro-antd/tree/style/index.min.css',
-    'tree.component.scss',
-  ],
+  styleUrls: ['tree.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [SubscriptionService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TreeComponent {
+export class TreeComponent implements OnInit {
   dropPosition: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
+
+  constructor(
+    private lazyLoadService: LazyLoadService,
+    private subscriptionService: SubscriptionService,
+    @Optional()
+    @Inject(DISABLE_TREE_STYLE_LOADING_TOKEN)
+    private disableTreeStyleLoading: boolean | undefined,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   @ContentChild('menu') menu: TemplateRef<any>;
   @ContentChild(TreeNodeTemplateDirective) customNodeTemplate: TreeNodeTemplateDirective;
@@ -36,6 +51,7 @@ export class TreeComponent {
   @Output() readonly expandedKeysChange = new EventEmitter<string[]>();
   @Output() readonly selectedNodeChange = new EventEmitter();
   @Output() readonly dropOver = new EventEmitter<DropEvent>();
+  @Output() readonly nzExpandChange = new EventEmitter<NzFormatEmitEvent>();
   @Input() noAnimation = true;
   @Input() draggable: boolean;
   @Input() checkable: boolean;
@@ -44,15 +60,57 @@ export class TreeComponent {
   @Input() nodes = [];
   @Input() expandedKeys: string[] = [];
   @Input() selectedNode: any;
+  @Input() changeCheckboxWithNode: boolean;
   @Input() isNodeSelected = node => this.selectedNode?.id === node.key;
   @Input() beforeDrop = (event: NzFormatBeforeDropEvent) => {
     this.dropPosition = event.pos;
     return of(false);
   };
 
-  onSelectedNodeChange(node) {
+  ngOnInit() {
+    this.loadStyle();
+  }
+
+  private loadStyle() {
+    if (this.disableTreeStyleLoading) {
+      return;
+    }
+    const loaded$ = this.lazyLoadService.load(
+      LOADING_STRATEGY.AppendAnonymousStyleToHead('ng-zorro-antd-tree.css'),
+    );
+    this.subscriptionService.addOne(loaded$);
+  }
+
+  private findNode(target: any, nodes: any[]) {
+    for (const node of nodes) {
+      if (node.key === target.id) {
+        return node;
+      }
+      if (node.children) {
+        let res = this.findNode(target, node.children);
+        if (res) {
+          return res;
+        }
+      }
+    }
+    return null;
+  }
+
+  onSelectedNodeChange(node: NzTreeNode) {
     this.selectedNode = node.origin.entity;
-    this.selectedNodeChange.emit(node.origin.entity);
+    if (this.changeCheckboxWithNode) {
+      let newVal;
+      if (node.isChecked) {
+        newVal = this.checkedKeys.filter(x => x !== node.key);
+      } else {
+        newVal = [...this.checkedKeys, node.key];
+      }
+      this.selectedNodeChange.emit(node);
+      this.checkedKeys = newVal;
+      this.checkedKeysChange.emit(newVal);
+    } else {
+      this.selectedNodeChange.emit(node.origin.entity);
+    }
   }
 
   onCheckboxChange(event) {
@@ -63,6 +121,7 @@ export class TreeComponent {
   onExpandedKeysChange(event) {
     this.expandedKeys = [...event.keys];
     this.expandedKeysChange.emit(event.keys);
+    this.nzExpandChange.emit(event);
   }
 
   onDrop(event: DropEvent) {
@@ -75,5 +134,11 @@ export class TreeComponent {
 
   initDropdown(key: string, dropdown: NgbDropdown) {
     this.dropdowns[key] = dropdown;
+  }
+
+  setSelectedNode(node: any) {
+    let newSelectedNode = this.findNode(node, this.nodes);
+    this.selectedNode = { ...newSelectedNode };
+    this.cdr.markForCheck();
   }
 }

@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Upravljanje nastavitev",
     "Feature:SettingManagementEnable": "Omogoči upravljanje nastavitev",
     "Feature:SettingManagementEnableDescription": "Omogočite nastavitev sistema upravljanja v aplikaciji.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Dovoli najemnikom, da spremenijo nastavitve e-pošte.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Dovoli najemnikom, da spremenijo nastavitve e-pošte."
+    "Feature:AllowChangingEmailSettings": "Dovoli spreminjanje e-poštnih nastavitev.",
+    "Feature:AllowChangingEmailSettingsDescription": "Dovoli spreminjanje e-poštnih nastavitev."
   }
 }

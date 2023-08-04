@@ -1,4 +1,4 @@
-import { Component, Injector, isDevMode, Optional, SkipSelf, Type } from '@angular/core';
+import { Component, Injector, isDevMode, OnInit, Optional, SkipSelf, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
@@ -16,9 +16,9 @@ import { TreeNode } from '../utils/tree-utils';
   template: ` <ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container> `,
   providers: [SubscriptionService],
 })
-export class DynamicLayoutComponent {
-  layout: Type<any>;
-  layoutKey: eLayoutType;
+export class DynamicLayoutComponent implements OnInit {
+  layout?: Type<any>;
+  layoutKey?: eLayoutType;
 
   // TODO: Consider a shared enum (eThemeSharedComponents) for known layouts
   readonly layouts = new Map([
@@ -29,9 +29,9 @@ export class DynamicLayoutComponent {
 
   isLayoutVisible = true;
 
-  private router: Router;
-  private route: ActivatedRoute;
-  private routes: RoutesService;
+  private router!: Router;
+  private route!: ActivatedRoute;
+  private routes!: RoutesService;
 
   constructor(
     injector: Injector,
@@ -42,7 +42,7 @@ export class DynamicLayoutComponent {
     @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
   ) {
     if (dynamicLayoutComponent) {
-      if (isDevMode) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
+      if (isDevMode()) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
       return;
     }
     this.route = injector.get(ActivatedRoute);
@@ -51,6 +51,13 @@ export class DynamicLayoutComponent {
 
     this.checkLayoutOnNavigationEnd();
     this.listenToLanguageChange();
+  }
+
+  ngOnInit(): void {
+    if(this.layout){
+      return;
+    }
+    this.getLayout()
   }
 
   private checkLayoutOnNavigationEnd() {
@@ -80,9 +87,23 @@ export class DynamicLayoutComponent {
     if (this.layoutKey === expectedLayout) return;
 
     const key = this.layouts.get(expectedLayout);
-    this.layout = this.getComponent(key)?.component;
-    this.layoutKey = expectedLayout;
+    if (key) {
+      this.layout = this.getComponent(key)?.component;
+      this.layoutKey = expectedLayout;
+    }
+    if(!this.layout){
+      this.showLayoutNotFoundError(expectedLayout);
+    }
   }
+
+  showLayoutNotFoundError(layoutName: string) {
+    let message = `Layout ${layoutName} not found.`;
+    if(layoutName === 'account'){
+      message = 'Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "AccountLayoutModule.forRoot()" to your app.module configuration.';
+    }
+    console.warn(message);
+  }
+
 
   private listenToLanguageChange() {
     this.subscription.addOne(this.localizationService.languageChange$, () => {
@@ -91,7 +112,7 @@ export class DynamicLayoutComponent {
     });
   }
 
-  private getComponent(key: string): ReplaceableComponents.ReplaceableComponent {
+  private getComponent(key: string): ReplaceableComponents.ReplaceableComponent | undefined {
     return this.replaceableComponents.get(key);
   }
 }

@@ -273,6 +273,9 @@
     "SubscribeToNewsletter": "Sottiscrivi la nostra newsletter per ricevere informazione su cosa accade nella Piattaforma ABP.IO, come nuove versioni, articoli, offerte ed altro ancora.",
     "FirstEdition": "Prima Edizione",
     "ThankYou": "Grazie!",
-    "CheckboxMandatory": "Devi mettere la spunta su questo per procedere!"
+    "CheckboxMandatory": "Devi mettere la spunta su questo per procedere!",
+    "SelectUITheme": "Seleziona Tema dell'interfaccia utente",
+    "CreateSolutionFolder": "Crea cartella della soluzione",
+    "CreateSolutionFolderOption": "Specifica se il progetto si troverà in una nuova cartella nella cartella di output o direttamente nella cartella di output."
   }
 }

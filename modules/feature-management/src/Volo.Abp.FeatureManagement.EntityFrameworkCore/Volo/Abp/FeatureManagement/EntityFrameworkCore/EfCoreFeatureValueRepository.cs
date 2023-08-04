@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Polly;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -27,7 +28,7 @@ public class EfCoreFeatureValueRepository : EfCoreRepository<IFeatureManagementD
             .FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<FeatureValue>> FindAllAsync(
+    public virtual async Task<List<FeatureValue>> FindAllAsync(
         string name,
         string providerName,
         string providerKey,
@@ -48,5 +49,13 @@ public class EfCoreFeatureValueRepository : EfCoreRepository<IFeatureManagementD
             .Where(
                 s => s.ProviderName == providerName && s.ProviderKey == providerKey
             ).ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task DeleteAsync(
+        string providerName,
+        string providerKey,
+        CancellationToken cancellationToken = default)
+    {
+        await DeleteAsync(s => s.ProviderName == providerName && s.ProviderKey == providerKey, cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

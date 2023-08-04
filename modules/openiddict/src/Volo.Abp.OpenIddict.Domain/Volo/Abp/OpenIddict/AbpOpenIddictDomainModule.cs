@@ -71,6 +71,9 @@ public class AbpOpenIddictDomainModule : AbpModule
                     .AddTokenStore<AbpOpenIddictTokenStore>();
 
                 builder.ReplaceApplicationManager(typeof(AbpApplicationManager));
+                builder.ReplaceAuthorizationManager(typeof(AbpAuthorizationManager));
+                builder.ReplaceScopeManager(typeof(AbpScopeManager));
+                builder.ReplaceTokenManager(typeof(AbpTokenManager));
 
                 builder.Services.TryAddScoped(provider => (IAbpApplicationManager)provider.GetRequiredService<IOpenIddictApplicationManager>());
 
@@ -92,8 +95,20 @@ public class AbpOpenIddictDomainModule : AbpModule
 
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
                 OpenIddictModuleExtensionConsts.ModuleName,
+                OpenIddictModuleExtensionConsts.EntityNames.Application,
+                typeof(OpenIddictApplicationModel)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                OpenIddictModuleExtensionConsts.ModuleName,
                 OpenIddictModuleExtensionConsts.EntityNames.Authorization,
                 typeof(OpenIddictAuthorization)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                OpenIddictModuleExtensionConsts.ModuleName,
+                OpenIddictModuleExtensionConsts.EntityNames.Authorization,
+                typeof(OpenIddictAuthorizationModel)
             );
 
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
@@ -104,8 +119,20 @@ public class AbpOpenIddictDomainModule : AbpModule
 
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
                 OpenIddictModuleExtensionConsts.ModuleName,
+                OpenIddictModuleExtensionConsts.EntityNames.Scope,
+                typeof(OpenIddictScopeModel)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                OpenIddictModuleExtensionConsts.ModuleName,
                 OpenIddictModuleExtensionConsts.EntityNames.Token,
                 typeof(OpenIddictToken)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                OpenIddictModuleExtensionConsts.ModuleName,
+                OpenIddictModuleExtensionConsts.EntityNames.Token,
+                typeof(OpenIddictTokenModel)
             );
         });
     }

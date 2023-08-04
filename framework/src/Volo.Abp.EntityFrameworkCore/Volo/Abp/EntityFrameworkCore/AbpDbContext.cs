@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -181,6 +182,20 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
         catch (DbUpdateConcurrencyException ex)
         {
+            if (ex.Entries.Count > 0)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine(ex.Entries.Count > 1
+                    ? "There are some entries which are not saved due to concurrency exception:"
+                    : "There is an entry which is not saved due to concurrency exception:");
+                foreach (var entry in ex.Entries)
+                {
+                    sb.AppendLine(entry.ToString());
+                }
+
+                Logger.LogWarning(sb.ToString());
+            }
+
             throw new AbpDbConcurrencyException(ex.Message, ex);
         }
         finally
@@ -227,6 +242,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         ChangeTracker.Tracked += ChangeTracker_Tracked;
         ChangeTracker.StateChanged += ChangeTracker_StateChanged;
+
+        if (UnitOfWorkManager is AlwaysDisableTransactionsUnitOfWorkManager)
+        {
+            Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
+        }
     }
 
     protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
@@ -292,7 +312,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         {
             case EntityState.Added:
                 ApplyAbpConceptsForAddedEntity(entry);
-                EntityChangeEventHelper.PublishEntityCreatingEvent(entry.Entity);
                 EntityChangeEventHelper.PublishEntityCreatedEvent(entry.Entity);
                 break;
             case EntityState.Modified:
@@ -301,12 +320,10 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 {
                     if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                     {
-                        EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
                         EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                     }
                     else
                     {
-                        EntityChangeEventHelper.PublishEntityUpdatingEvent(entry.Entity);
                         EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
                     }
                 }
@@ -314,7 +331,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 break;
             case EntityState.Deleted:
                 ApplyAbpConceptsForDeletedEntity(entry);
-                EntityChangeEventHelper.PublishEntityDeletingEvent(entry.Entity);
                 EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                 break;
         }
@@ -461,8 +477,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry)
     {
-        if (entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
+        if (entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
         {
+            IncrementEntityVersionProperty(entry);
             SetModificationAuditProperties(entry);
 
             if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
@@ -485,7 +502,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         entry.Reload();
-        entry.Entity.As<ISoftDelete>().IsDeleted = true;
+        ObjectHelper.TrySetProperty(entry.Entity.As<ISoftDelete>(), x => x.IsDeleted, () => true);
         SetDeletionAuditProperties(entry);
     }
 
@@ -578,6 +595,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         AuditPropertySetter?.SetDeletionProperties(entry.Entity);
     }
 
+    protected virtual void IncrementEntityVersionProperty(EntityEntry entry)
+    {
+        AuditPropertySetter?.IncrementEntityVersionProperty(entry.Entity);
+    }
+
     protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
         where TEntity : class
     {
@@ -604,7 +626,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             var filterExpression = CreateFilterExpression<TEntity>();
             if (filterExpression != null)
             {
-                modelBuilder.Entity<TEntity>().HasQueryFilter(filterExpression);
+                modelBuilder.Entity<TEntity>().HasAbpQueryFilter(filterExpression);
             }
         }
     }
@@ -622,23 +644,19 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 return;
             }
 
-            var dateTimeValueConverter = new AbpDateTimeValueConverter(Clock);
-
-            var dateTimePropertyInfos = typeof(TEntity).GetProperties()
-                .Where(property =>
-                    (property.PropertyType == typeof(DateTime) ||
-                     property.PropertyType == typeof(DateTime?)) &&
-                    property.CanWrite &&
-                    ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property) == null
-                ).ToList();
-
-            dateTimePropertyInfos.ForEach(property =>
+            foreach (var property in mutableEntityType.GetProperties().
+                         Where(property => property.PropertyInfo != null &&
+                                           (property.PropertyInfo.PropertyType == typeof(DateTime) || property.PropertyInfo.PropertyType == typeof(DateTime?)) &&
+                                           property.PropertyInfo.CanWrite &&
+                                           ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property.PropertyInfo) == null))
             {
-                modelBuilder
+				modelBuilder
                     .Entity<TEntity>()
                     .Property(property.Name)
-                    .HasConversion(dateTimeValueConverter);
-            });
+                    .HasConversion(property.ClrType == typeof(DateTime)
+                        ? new AbpDateTimeValueConverter(Clock)
+                        : new AbpNullableDateTimeValueConverter(Clock));
+            }
         }
     }
 
@@ -687,44 +705,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
         {
             Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
-            expression = expression == null ? multiTenantFilter : CombineExpressions(expression, multiTenantFilter);
+            expression = expression == null ? multiTenantFilter : QueryFilterExpressionHelper.CombineExpressions(expression, multiTenantFilter);
         }
 
         return expression;
-    }
-
-    protected virtual Expression<Func<T, bool>> CombineExpressions<T>(Expression<Func<T, bool>> expression1, Expression<Func<T, bool>> expression2)
-    {
-        var parameter = Expression.Parameter(typeof(T));
-
-        var leftVisitor = new ReplaceExpressionVisitor(expression1.Parameters[0], parameter);
-        var left = leftVisitor.Visit(expression1.Body);
-
-        var rightVisitor = new ReplaceExpressionVisitor(expression2.Parameters[0], parameter);
-        var right = rightVisitor.Visit(expression2.Body);
-
-        return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left, right), parameter);
-    }
-
-    class ReplaceExpressionVisitor : ExpressionVisitor
-    {
-        private readonly Expression _oldValue;
-        private readonly Expression _newValue;
-
-        public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
-        {
-            _oldValue = oldValue;
-            _newValue = newValue;
-        }
-
-        public override Expression Visit(Expression node)
-        {
-            if (node == _oldValue)
-            {
-                return _newValue;
-            }
-
-            return base.Visit(node);
-        }
     }
 }

@@ -22,8 +22,20 @@ $(document).ready(function () {
             };
         }
 
+        function isDoubleClicked(element) {
+            if (element.data("isclicked")) return true;
+
+            element.data("isclicked", true);
+            setTimeout(function () {
+                element.removeData("isclicked");
+            }, 500);
+        }
+
         function registerClickOfReactionIcons($container) {
             $container.find('.cms-reaction-icon').each(function () {
+
+                if (isDoubleClicked($(this))) return;
+
                 var $icon = $(this);
                 var reactionName = $icon.attr('data-reaction-name');
                 if ($icon.attr('data-click-action') === 'false') {
@@ -48,7 +60,7 @@ $(document).ready(function () {
             $selectIcon.popover({
                 placement: 'left',
                 html: true,
-                trigger: 'focus',
+                trigger: 'click',
                 title: l('PickYourReaction'),
                 content: $popoverContent.html()
             }).on('shown.bs.popover', function () {

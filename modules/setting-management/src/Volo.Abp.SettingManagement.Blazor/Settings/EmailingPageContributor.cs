@@ -56,7 +56,7 @@ public class EmailingPageContributor : ISettingComponentContributor
 
         var featureCheck = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
 
-        return await featureCheck.IsEnabledAsync(SettingManagementFeatures.AllowTenantsToChangeEmailSettings);
+        return await featureCheck.IsEnabledAsync(SettingManagementFeatures.AllowChangingEmailSettings);
 
     }
 }

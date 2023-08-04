@@ -20,8 +20,7 @@ $solutionPaths = @(
 		"../modules/background-jobs",
 		"../modules/account",
 		"../modules/cms-kit",
-		"../modules/blob-storing-database",
-		"../studio"
+		"../modules/blob-storing-database"
 	)
 
 if ($full -eq "-f")
@@ -37,7 +36,8 @@ if ($full -eq "-f")
 		"../templates/console",
 		"../templates/wpf",
 		"../templates/app-nolayers/aspnet-core",
-		"../abp_io/AbpIoLocalization"
+		"../abp_io/AbpIoLocalization",
+		"../source-code"
 	) 
 }else{ 
 	Write-host ""

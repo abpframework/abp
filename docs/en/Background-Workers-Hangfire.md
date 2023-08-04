@@ -40,6 +40,50 @@ public class YourModule : AbpModule
 
 > Hangfire background worker integration provides an adapter `HangfirePeriodicBackgroundWorkerAdapter` to automatically load any `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived classes as `IHangfireBackgroundWorker` instances. This allows you to still to easily switch over to use Hangfire as the background manager even you have existing background workers that are based on the [default background workers implementation](Background-Workers.md).
 
+## Configuration
+
+You can install any storage for Hangfire. The most common one is SQL Server (see the [Hangfire.SqlServer](https://www.nuget.org/packages/Hangfire.SqlServer) NuGet package).
+
+After you have installed these NuGet packages, you need to configure your project to use Hangfire.
+
+1.First, we change the `Module` class (example: `<YourProjectName>HttpApiHostModule`) to add Hangfire configuration of the storage and connection string in the `ConfigureServices` method:
+
+````csharp
+  public override void ConfigureServices(ServiceConfigurationContext context)
+  {
+      var configuration = context.Services.GetConfiguration();
+      var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+      //... other configarations.
+
+      ConfigureHangfire(context, configuration);
+  }
+
+  private void ConfigureHangfire(ServiceConfigurationContext context, IConfiguration configuration)
+  {
+      context.Services.AddHangfire(config =>
+      {
+          config.UseSqlServerStorage(configuration.GetConnectionString("Default"));
+      });
+  }
+````
+
+> You have to configure a storage for Hangfire.
+
+2. If you want to use hangfire's dashboard, you can add `UseHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class
+
+````csharp
+ public override void OnApplicationInitialization(ApplicationInitializationContext context)
+ {
+    var app = context.GetApplicationBuilder();
+            
+    // ... others
+    
+    app.UseHangfireDashboard(); //should add to the request pipeline before the app.UseConfiguredEndpoints()
+    app.UseConfiguredEndpoints();
+ }
+````
+
 ## Create a Background Worker
 
 `HangfireBackgroundWorkerBase` is an easy way to create a background worker.
@@ -53,7 +97,7 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
         CronExpression = Cron.Daily();
     }
 
-    public override Task DoWorkAsync()
+    public override Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
         Logger.LogInformation("Executed MyLogWorker..!");
         return Task.CompletedTask;
@@ -68,14 +112,7 @@ public class MyLogWorker : HangfireBackgroundWorkerBase
 
 ### UnitOfWork
 
-For use with `UnitOfWorkAttribute`, you need to define an interface for worker:
-
 ```csharp
-public interface IMyLogWorker : IHangfireBackgroundWorker
-{
-}
-
-[ExposeServices(typeof(IMyLogWorker))]
 public class MyLogWorker : HangfireBackgroundWorkerBase, IMyLogWorker
 {
     public MyLogWorker()
@@ -84,11 +121,13 @@ public class MyLogWorker : HangfireBackgroundWorkerBase, IMyLogWorker
         CronExpression = Cron.Daily();
     }
 
-    [UnitOfWork]
-    public override Task DoWorkAsync()
+    public override Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
-        Logger.LogInformation("Executed MyLogWorker..!");
-        return Task.CompletedTask;
+        using (var uow = LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            Logger.LogInformation("Executed MyLogWorker..!");
+            return Task.CompletedTask;
+        }
     }
 }
 ```
@@ -105,9 +144,6 @@ public class MyModule : AbpModule
         ApplicationInitializationContext context)
     {
         await context.AddBackgroundWorkerAsync<MyLogWorker>();
-
-        //If the interface is defined
-        //await context.AddBackgroundWorkerAsync<IMyLogWorker>(); 
     }
 }
 ````

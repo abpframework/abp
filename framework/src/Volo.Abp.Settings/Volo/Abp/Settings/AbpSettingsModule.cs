@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.Settings;
 
 [DependsOn(
     typeof(AbpLocalizationAbstractionsModule),
     typeof(AbpSecurityModule),
-    typeof(AbpMultiTenancyModule)
-    )]
+    typeof(AbpDataModule)
+)]
 public class AbpSettingsModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -27,7 +27,6 @@ public class AbpSettingsModule : AbpModule
             options.ValueProviders.Add<DefaultValueSettingValueProvider>();
             options.ValueProviders.Add<ConfigurationSettingValueProvider>();
             options.ValueProviders.Add<GlobalSettingValueProvider>();
-            options.ValueProviders.Add<TenantSettingValueProvider>();
             options.ValueProviders.Add<UserSettingValueProvider>();
         });
     }
@@ -36,7 +35,7 @@ public class AbpSettingsModule : AbpModule
     {
         var definitionProviders = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(ISettingDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {

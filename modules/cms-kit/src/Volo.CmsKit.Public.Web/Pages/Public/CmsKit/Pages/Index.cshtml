@@ -1,46 +1,30 @@
 ﻿@page
 @addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 @using Volo.CmsKit.Contents
-@using System.Dynamic
-@using Volo.CmsKit.Public.Web.Renderers
-@using Volo.Abp.Data
-@using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
-@using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-
-@inject IMarkdownToHtmlRenderer MarkdownRenderer
-
-
+@using Volo.CmsKit.Web.Pages.CmsKit.Components.Contents
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages.IndexModel
-
 
 @section styles{
     
     <abp-style src="/Pages/Public/CmsKit/Pages/index.css" />
 
     <style>
-        @Html.Raw(Model.PageDto.Style)
+        @Html.Raw(Model.ViewModel.Style)
     </style>
 }
 
 @section scripts{
     <script>
-        @Html.Raw(Model.PageDto.Script)
+        @Html.Raw(Model.ViewModel.Script)
     </script>
 }
 
 <abp-card>
     <abp-card-body>
-        @foreach (ContentFragment contentFragment in Model.PageDto.ContentFragments)
+        @(await Component.InvokeAsync(typeof(ContentFragmentViewComponent), new DefaultContentDto
         {
-            if (contentFragment.Type == ContentConsts.Markdown)
-            {
-                @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
-            }
-            else if (contentFragment.Type == ContentConsts.Widget)
-            {
-                @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
-            }
-        }
+            ContentFragments = Model.ViewModel.ContentFragments
+        }))
     </abp-card-body>
 </abp-card>
 

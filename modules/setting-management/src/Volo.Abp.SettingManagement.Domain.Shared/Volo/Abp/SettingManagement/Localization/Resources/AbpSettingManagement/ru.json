@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Управление настройками",
     "Feature:SettingManagementEnable": "Включить управление настройками",
     "Feature:SettingManagementEnableDescription": "Включите систему управления настройками в приложении.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Разрешить арендаторам изменять настройки электронной почты.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Разрешить арендаторам изменять настройки электронной почты."
+    "Feature:AllowChangingEmailSettings": "Разрешить изменение настроек электронной почты.",
+    "Feature:AllowChangingEmailSettingsDescription": "Разрешить изменение настроек электронной почты."
   }
 }

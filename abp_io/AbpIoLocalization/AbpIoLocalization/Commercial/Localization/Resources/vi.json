@@ -190,7 +190,7 @@
     "ChangingDevelopers": "Tôi có thể thay đổi các nhà phát triển đã đăng ký của tổ chức của mình trong tương lai không?",
     "ChangingDevelopersExplanation": "Ngoài việc thêm các nhà phát triển mới vào giấy phép của mình, bạn cũng có thể thay đổi các nhà phát triển hiện có (bạn có thể xóa một nhà phát triển và thêm một nhà phát triển mới vào cùng một chỗ ngồi) mà không phải trả thêm bất kỳ chi phí nào.",
     "WhenShouldIRenewMyLicense": "Khi nào tôi nên gia hạn giấy phép của mình?",
-    "WhenShouldIRenewMyLicenseExplanation": "Nếu bạn gia hạn giấy phép của mình trong vòng <strong> 1 tháng </strong> sau khi giấy phép của bạn hết hạn, các chiết khấu sau sẽ được áp dụng: Giảm giá {0}% cho Giấy phép Nhóm, Giảm giá {1}% Giấy phép Kinh doanh, Giảm giá {2}% Giấy phép Doanh nghiệp . Nếu bạn gia hạn giấy phép <strong> 1 tháng </strong> sau ngày giấy phép hết hạn, giá gia hạn sẽ giống như giá mua giấy phép và sẽ không có chiết khấu khi gia hạn của bạn.",
+    "WhenShouldIRenewMyLicenseExplanation": "Nếu bạn gia hạn giấy phép của mình trong vòng <strong> {3} ngày </strong> sau khi giấy phép của bạn hết hạn, các chiết khấu sau sẽ được áp dụng: Giảm giá {0}% cho Giấy phép Nhóm, Giảm giá {1}% Giấy phép Kinh doanh, Giảm giá {2}% Giấy phép Doanh nghiệp . Nếu bạn gia hạn giấy phép <strong> {3} ngày </strong> sau ngày giấy phép hết hạn, giá gia hạn sẽ giống như giá mua giấy phép và sẽ không có chiết khấu khi gia hạn của bạn.",
     "TrialPlan": "Bạn có kế hoạch dùng thử không?",
     "DoYouAcceptBankWireTransfer": "Bạn có chấp nhận chuyển khoản ngân hàng không?",
     "DoYouAcceptBankWireTransferExplanation": "Có, chúng tôi chấp nhận chuyển khoản ngân hàng. <br /> Sau khi gửi phí cấp phép qua chuyển khoản ngân hàng, hãy gửi email cho chúng tôi theo địa chỉ accounting@abp.io biên lai của bạn và loại giấy phép được yêu cầu. Thông tin tài khoản ngân hàng quốc tế của chúng tôi:",
@@ -360,7 +360,7 @@
     "Next": "Kế tiếp",
     "StartTrial": "Bắt đầu bản dùng thử miễn phí của tôi",
     "ContactUsIssues": "Liên hệ với chúng tôi nếu bạn có bất kỳ vấn đề nào",
-    "TrialActivatedWarning": "Kính gửi {0}, người dùng chỉ được phép có 1 thời gian dùng thử miễn phí. Bạn đã sử dụng thời gian dùng thử của mình.",
+    "TrialActivatedWarning": "Người dùng chỉ có quyền có 1 thời gian dùng thử miễn phí. Bạn đã sử dụng thời gian dùng thử của mình.",
     "SaveAndDownload": "Lưu và tải xuống",
     "CompanyNameValidationMessage": "Tên công ty quá dài!",
     "AddressValidationMessage": "Địa chỉ quá dài!",
@@ -373,11 +373,12 @@
     "TrialLicenseModelInvalidErrorMessage": "Một trong các trường sau không hợp lệ: Tên quốc gia, Quy mô công ty, Ngành hoặc Mục đích sử dụng.",
     "Trial": "Sự thử nghiệm",
     "Purchased": "Đã mua",
-    "PurchaseLicense": "Giấy phép mua bán",
+    "PurchaseLicense": "Mua {0} giấy phép",
     "PurchaseTrialLicenseMessage": "Ngày hết hạn giấy phép của bạn là {0}. <br> Nếu bạn muốn tiếp tục sử dụng các dự án bạn đã tạo trong thời gian dùng thử miễn phí, bạn cần thay đổi khóa cấp phép trong các tệp <code> appsettings.secrets.json </code> của mình. Đây là khóa cấp phép của bạn:",
     "TrialLicenseExpireMessage": "Bạn đang sử dụng giấy phép dùng thử và giấy phép dùng thử của bạn sẽ hết hạn vào {0}.",
     "TryForFree": "Thử miễn phí",
     "TrialLicenseExpiredInfo": "Thời gian cấp phép dùng thử của bạn đã hết hạn!",
-    "CommercialNewsletterConfirmationMessage": "Tôi đồng ý với <a href=\"https://commercial.abp.io/TermsConditions\"> Điều khoản & điều kiện </a> và <a href=\"https://commercial.abp.io/Privacy\"> Chính sách quyền riêng tư </a>."
+    "CommercialNewsletterConfirmationMessage": "Tôi đồng ý với <a href=\"https://commercial.abp.io/TermsConditions\"> Điều khoản & điều kiện </a> và <a href=\"https://commercial.abp.io/Privacy\"> Chính sách quyền riêng tư </a>.",
+    "BlackFridayDiscount": "Giảm giá Black Friday"
   }
 }

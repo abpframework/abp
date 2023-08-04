@@ -13,21 +13,21 @@ public class RemoteStreamContentOutputFormatter : OutputFormatter
         SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("*/*"));
     }
 
-    protected override bool CanWriteType(Type type)
+    protected override bool CanWriteType(Type? type)
     {
         return typeof(IRemoteStreamContent).IsAssignableFrom(type);
     }
 
     public async override Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
     {
-        var remoteStream = (IRemoteStreamContent)context.Object;
+        var remoteStream = (IRemoteStreamContent?)context.Object;
 
         if (remoteStream != null)
         {
             context.HttpContext.Response.ContentType = remoteStream.ContentType;
             context.HttpContext.Response.ContentLength = remoteStream.ContentLength;
 
-            if (!remoteStream.FileName.IsNullOrWhiteSpace())
+            if (!remoteStream.FileName.IsNullOrWhiteSpace() && !context.HttpContext.Response.Headers.ContainsKey(HeaderNames.ContentDisposition))
             {
                 var contentDisposition = new ContentDispositionHeaderValue("attachment");
                 contentDisposition.SetHttpFileName(remoteStream.FileName);

@@ -7,7 +7,9 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions;
 
-public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition>
+public class PermissionDefinition : 
+    IHasSimpleStateCheckers<PermissionDefinition>,
+    ICanAddChildPermission
 {
     /// <summary>
     /// Unique name of the permission.
@@ -18,7 +20,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     /// Parent of this permission if one exists.
     /// If set, this permission can be granted only if parent is granted.
     /// </summary>
-    public PermissionDefinition Parent { get; private set; }
+    public PermissionDefinition? Parent { get; private set; }
 
     /// <summary>
     /// MultiTenancy side.
@@ -30,7 +32,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     /// A list of allowed providers to get/set value of this permission.
     /// An empty list indicates that all providers are allowed.
     /// </summary>
-    public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
+    public List<string> Providers { get; }
 
     public List<ISimpleStateChecker<PermissionDefinition>> StateCheckers { get; }
 
@@ -38,7 +40,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
 
     public IReadOnlyList<PermissionDefinition> Children => _children.ToImmutableList();
     private readonly List<PermissionDefinition> _children;
@@ -46,7 +48,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     /// <summary>
     /// Can be used to get/set custom properties for this permission definition.
     /// </summary>
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
     /// <summary>
     /// Indicates whether this permission is enabled or disabled.
@@ -69,14 +71,14 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     /// Returns the value in the <see cref="Properties"/> dictionary by given <paramref name="name"/>.
     /// Returns null if given <paramref name="name"/> is not present in the <see cref="Properties"/> dictionary.
     /// </returns>
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
 
     protected internal PermissionDefinition(
         [NotNull] string name,
-        ILocalizableString displayName = null,
+        ILocalizableString? displayName = null,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both,
         bool isEnabled = true)
     {
@@ -85,7 +87,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
         MultiTenancySide = multiTenancySide;
         IsEnabled = isEnabled;
 
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
         Providers = new List<string>();
         StateCheckers = new List<ISimpleStateChecker<PermissionDefinition>>();
         _children = new List<PermissionDefinition>();
@@ -93,7 +95,7 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
 
     public virtual PermissionDefinition AddChild(
         [NotNull] string name,
-        ILocalizableString displayName = null,
+        ILocalizableString? displayName = null,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both,
         bool isEnabled = true)
     {
@@ -110,6 +112,16 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
 
         return child;
     }
+    
+    PermissionDefinition ICanAddChildPermission.AddPermission(
+        string name,
+        ILocalizableString? displayName = null,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+        bool isEnabled = true)
+    {
+        return this.AddChild(name, displayName, multiTenancySide, isEnabled);
+    }
+
 
     /// <summary>
     /// Sets a property in the <see cref="Properties"/> dictionary.
@@ -122,14 +134,14 @@ public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition
     }
 
     /// <summary>
-    /// Set the <see cref="StateProviders"/> property.
+    /// Adds one or more providers to the <see cref="Providers"/> list.
     /// This is a shortcut for nested calls on this object.
     /// </summary>
     public virtual PermissionDefinition WithProviders(params string[] providers)
     {
         if (!providers.IsNullOrEmpty())
         {
-            Providers.AddRange(providers);
+            Providers.AddIfNotContains(providers);
         }
 
         return this;

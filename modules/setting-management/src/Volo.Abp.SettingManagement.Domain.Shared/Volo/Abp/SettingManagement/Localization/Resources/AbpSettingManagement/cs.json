@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Správa nastavení",
     "Feature:SettingManagementEnable": "Povolit správu nastavení",
     "Feature:SettingManagementEnableDescription": "Povolit systém správy nastavení v aplikaci.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Povolit nájemcům měnit nastavení e-mailu.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Povolit nájemcům měnit nastavení e-mailu."
+    "Feature:AllowChangingEmailSettings": "Povolit změnu nastavení e-mailu.",
+    "Feature:AllowChangingEmailSettingsDescription": "Povolit změnu nastavení e-mailu."
   }
 }

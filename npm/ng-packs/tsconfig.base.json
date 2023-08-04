@@ -8,7 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2020",
     "module": "esnext",
     "lib": ["es2017", "dom"],
     "baseUrl": "./",
@@ -30,12 +30,14 @@
       "@abp/ng.identity": ["packages/identity/src/public-api.ts"],
       "@abp/ng.identity/config": ["packages/identity/config/src/public-api.ts"],
       "@abp/ng.identity/proxy": ["packages/identity/proxy/src/public-api.ts"],
+      "@abp/ng.oauth": ["packages/oauth/src/public-api.ts"],
       "@abp/ng.permission-management": ["packages/permission-management/src/public-api.ts"],
       "@abp/ng.permission-management/proxy": [
         "packages/permission-management/proxy/src/public-api.ts"
       ],
       "@abp/ng.setting-management": ["packages/setting-management/src/public-api.ts"],
       "@abp/ng.setting-management/config": ["packages/setting-management/config/src/public-api.ts"],
+      "@abp/ng.setting-management/proxy": ["packages/setting-management/proxy/src/public-api.ts"],
       "@abp/ng.tenant-management": ["packages/tenant-management/src/public-api.ts"],
       "@abp/ng.tenant-management/config": ["packages/tenant-management/config/src/public-api.ts"],
       "@abp/ng.tenant-management/proxy": ["packages/tenant-management/proxy/src/public-api.ts"],
@@ -43,7 +45,8 @@
       "@abp/ng.theme.basic/testing": ["packages/theme-basic/testing/src/public-api.ts"],
       "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
       "@abp/ng.theme.shared/extensions": ["packages/theme-shared/extensions/src/public-api.ts"],
-      "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"]
+      "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"],
+      "@abp/nx.generators": ["packages/generators/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

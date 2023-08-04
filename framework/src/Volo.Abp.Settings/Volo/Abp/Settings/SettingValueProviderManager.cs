@@ -24,7 +24,7 @@ public class SettingValueProviderManager : ISettingValueProviderManager, ISingle
             () => Options
                 .ValueProviders
                 .Select(type => serviceProvider.GetRequiredService(type) as ISettingValueProvider)
-                .ToList(),
+                .ToList()!,
             true
         );
     }

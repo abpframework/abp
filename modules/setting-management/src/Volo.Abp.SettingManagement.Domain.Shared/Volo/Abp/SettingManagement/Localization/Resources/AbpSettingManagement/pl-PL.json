@@ -18,7 +18,7 @@
     "Feature:SettingManagementGroup": "Zarządzanie ustawieniami",
     "Feature:SettingManagementEnable": "Włącz zarządzanie ustawieniami",
     "Feature:SettingManagementEnableDescription": "Włącz system zarządzania ustawieniami w aplikacji.",
-    "Feature:AllowTenantsToChangeEmailSettings": "Zezwalaj najemcom na zmianę ustawień poczty e-mail.",
-    "Feature:AllowTenantsToChangeEmailSettingsDescription": "Zezwalaj najemcom na zmianę ustawień poczty e-mail."
+    "Feature:AllowChangingEmailSettings": "Zezwól na zmianę ustawień poczty e-mail.",
+    "Feature:AllowChangingEmailSettingsDescription": "Zezwól na zmianę ustawień poczty e-mail."
   }
 }

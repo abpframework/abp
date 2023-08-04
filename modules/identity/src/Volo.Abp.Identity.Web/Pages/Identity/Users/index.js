@@ -96,7 +96,7 @@
                             _identityUserAppService
                                 .delete(data.record.id)
                                 .then(function () {
-                                    _dataTable.ajax.reload();
+                                    _dataTable.ajax.reloadEx();
                                     abp.notify.success(l('SuccessfullyDeleted'));
                                 });
                         },
@@ -163,14 +163,14 @@
         );
 
         _createModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _dataTable.ajax.reloadEx();
         });
 
         _editModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _dataTable.ajax.reloadEx();
         });
 
-        _$wrapper.find('button[name=CreateUser]').click(function (e) {
+        $('#AbpContentToolbar button[name=CreateUser]').click(function (e) {
             e.preventDefault();
             _createModal.open();
         });

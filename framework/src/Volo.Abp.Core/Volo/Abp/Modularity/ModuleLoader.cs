@@ -85,7 +85,7 @@ public class ModuleLoader : IModuleLoader
 
     protected virtual IAbpModule CreateAndRegisterModule(IServiceCollection services, Type moduleType)
     {
-        var module = (IAbpModule)Activator.CreateInstance(moduleType);
+        var module = (IAbpModule)Activator.CreateInstance(moduleType)!;
         services.AddSingleton(moduleType, module);
         return module;
     }

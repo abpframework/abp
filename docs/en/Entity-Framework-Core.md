@@ -7,24 +7,11 @@ This document explains how to integrate EF Core as an ORM provider to ABP based 
 `Volo.Abp.EntityFrameworkCore` is the main NuGet package for the EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
 
 ```` shell
-Install-Package Volo.Abp.EntityFrameworkCore
+abp add-package Volo.Abp.EntityFrameworkCore
 ````
 
-Then add `AbpEntityFrameworkCoreModule` module dependency (`DependsOn` attribute) to your [module](Module-Development-Basics.md):
-
-````c#
-using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Modularity;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
+> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.EntityFrameworkCore).
+>
 
 > Note: Instead, you can directly download a [startup template](https://abp.io/Templates) with EF Core pre-installed.
 
@@ -834,7 +821,7 @@ One advantage of using an interface for a DbContext is then it will be replaceab
 
 Once you properly define and use an interface for DbContext, then any other implementation can use the following ways to replace it:
 
-**ReplaceDbContextAttribute**
+#### ReplaceDbContext Attribute
 
 ```csharp
 [ReplaceDbContext(typeof(IBookStoreDbContext))]
@@ -844,7 +831,7 @@ public class OtherDbContext : AbpDbContext<OtherDbContext>, IBookStoreDbContext
 }
 ```
 
-**ReplaceDbContext option**
+#### ReplaceDbContext Option
 
 ````csharp
 context.Services.AddAbpDbContext<OtherDbContext>(options =>
@@ -855,6 +842,22 @@ context.Services.AddAbpDbContext<OtherDbContext>(options =>
 ````
 
 In this example, `OtherDbContext` implements `IBookStoreDbContext`. This feature allows you to have multiple DbContext (one per module) on development, but single DbContext (implements all interfaces of all DbContexts) on runtime.
+
+#### Replacing with Multi-Tenancy
+
+It is also possible to replace a DbContext based on the [multi-tenancy](Multi-Tenancy.md) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
+
+**Example:** Replace DbContext only for tenants, using the `ReplaceDbContext` attribute
+
+````csharp
+[ReplaceDbContext(typeof(IBookStoreDbContext), MultiTenancySides.Tenant)]
+````
+
+**Example:** Replace DbContext only for the host side, using the `ReplaceDbContext` method
+
+````csharp
+options.ReplaceDbContext<IBookStoreDbContext>(MultiTenancySides.Host);
+````
 
 ### Split Queries
 

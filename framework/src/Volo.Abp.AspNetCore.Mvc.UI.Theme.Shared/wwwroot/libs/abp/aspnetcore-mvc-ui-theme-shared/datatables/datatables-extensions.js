@@ -33,10 +33,10 @@ var abp = abp || {};
 
         var _createDropdownItem = function (record, fieldItem, tableInstance) {
             var $li = $('<li/>');
-            var $a = $('<a/>');
+            var $a = $('<a/>').addClass('dropdown-item');
 
             if (fieldItem.displayNameHtml) {
-                $a.html(fieldItem.text);
+                $a.html(abp.utils.isFunction(fieldItem.text) ? fieldItem.text(record, tableInstance) : fieldItem.text);
             } else {
 
                 if (fieldItem.icon !== undefined && fieldItem.icon) {
@@ -45,7 +45,7 @@ var abp = abp || {};
                     $a.append($("<i>").addClass(fieldItem.iconClass + " me-1"));
                 }
 
-                $a.append(htmlEncode(fieldItem.text));
+                $a.append(htmlEncode(abp.utils.isFunction(fieldItem.text) ? fieldItem.text(record, tableInstance) : fieldItem.text));
             }
 
             if (fieldItem.action) {
@@ -72,7 +72,7 @@ var abp = abp || {};
         };
 
         var _createButtonDropdown = function (record, field, tableInstance) {
-            if(field.items.length === 1) {
+            if (field.items.length === 1) {
                 var firstItem = field.items[0];
                 if (!getVisibilityValue(firstItem.visible, record, tableInstance)) {
                     return "";
@@ -81,14 +81,14 @@ var abp = abp || {};
                 var $button = $('<button type="button" class="btn btn-primary abp-action-button"></button>');
 
                 if (firstItem.displayNameHtml) {
-                    $button.html(firstItem.text);
+                    $button.html(abp.utils.isFunction(firstItem.text) ? firstItem.text(record, tableInstance) : firstItem.text);
                 } else {
                     if (firstItem.icon !== undefined && firstItem.icon) {
                         $button.append($("<i>").addClass("fa fa-" + firstItem.icon + " me-1"));
                     } else if (firstItem.iconClass) {
                         $button.append($("<i>").addClass(firstItem.iconClass + " me-1"));
                     }
-                    $button.append(htmlEncode(firstItem.text));
+                    $button.append(htmlEncode(abp.utils.isFunction(firstItem.text) ? firstItem.text(record, tableInstance) : firstItem.text));
                 }
 
                 if (firstItem.enabled && !firstItem.enabled({ record: record, table: tableInstance })) {
@@ -132,7 +132,7 @@ var abp = abp || {};
             }
 
             if (field.text) {
-                $dropdownButton.append(htmlEncode(field.text));
+                $dropdownButton.append(htmlEncode(abp.utils.isFunction(field.text) ? field.text(record, tableInstance) : field.text));
             } else {
                 $dropdownButton.append(htmlEncode(localize("DatatableActionDropdownDefaultText")));
             }
@@ -173,6 +173,15 @@ var abp = abp || {};
             }
 
             $dropdownButton.prependTo($container);
+
+            if (bootstrap) {
+                new bootstrap.Dropdown($dropdownButton, {
+                    popperConfig(defaultBsPopperConfig) {
+                        defaultBsPopperConfig.strategy = "fixed";
+                        return defaultBsPopperConfig;
+                    }
+                })
+            }
 
             return $container;
         };
@@ -272,7 +281,7 @@ var abp = abp || {};
                 }
             });
 
-       //Delay for processing indicator
+        //Delay for processing indicator
         var defaultDelayForProcessingIndicator = 500;
         var _existingDefaultFnPreDrawCallback = $.fn.dataTable.defaults.fnPreDrawCallback;
         $.extend(true,
@@ -320,6 +329,19 @@ var abp = abp || {};
                 }
             });
 
+        $.fn.dataTable.Api.register('ajax.reloadEx()', function (callback, resetPaging) {
+            var table = this;
+            if (callback || resetPaging) {
+                table.ajax.reload(callback, resetPaging);
+                return;
+            }
+            table.ajax.reload(function (data) {
+                if (data.data.length <= 0 && table.page.info().pages > 0) {
+                    table.page(table.page.info().pages - 1).draw(false);
+                }
+            }, false);
+        });
+
     })();
 
     /************************************************************************
@@ -327,7 +349,7 @@ var abp = abp || {};
      *************************************************************************/
     (function () {
         datatables.createAjax = function (serverMethod, inputAction, responseCallback, cancelPreviousRequest) {
-            responseCallback = responseCallback || function(result) {
+            responseCallback = responseCallback || function (result) {
                 return {
                     recordsTotal: result.totalCount,
                     recordsFiltered: result.totalCount,
@@ -365,7 +387,7 @@ var abp = abp || {};
                 }
 
                 //Text filter
-                if(settings.oInit.searching !== false){
+                if (settings.oInit.searching !== false) {
                     if (requestData.search && requestData.search.value !== "") {
                         input.filter = requestData.search.value;
                     } else {
@@ -374,7 +396,7 @@ var abp = abp || {};
                 }
 
                 if (callback) {
-                    if(cancelPreviousRequest && promise && promise.jqXHR) {
+                    if (cancelPreviousRequest && promise && promise.jqXHR) {
                         promise.jqXHR.abort();
                     }
                     promise = serverMethod(input);
@@ -431,7 +453,7 @@ var abp = abp || {};
 
             configuration.language = datatables.defaultConfigurations.language();
 
-            if(!configuration.dom){
+            if (!configuration.dom) {
                 configuration.dom = datatables.defaultConfigurations.dom;
             }
 
@@ -445,7 +467,7 @@ var abp = abp || {};
 
     datatables.defaultRenderers = datatables.defaultRenderers || {};
 
-    datatables.defaultRenderers['boolean'] = function(value) {
+    datatables.defaultRenderers['boolean'] = function (value) {
         if (value) {
             return '<i class="fa fa-check"></i>';
         } else {
@@ -454,7 +476,7 @@ var abp = abp || {};
     };
 
     var ISOStringToDateTimeLocaleString = function (format) {
-        return function(data) {
+        return function (data) {
             var date = luxon
                 .DateTime
                 .fromISO(data, {
@@ -465,7 +487,7 @@ var abp = abp || {};
     };
 
     datatables.defaultRenderers['date'] = function (value) {
-        if(!value) {
+        if (!value) {
             return value;
         } else {
             return (ISOStringToDateTimeLocaleString())(value);
@@ -473,7 +495,7 @@ var abp = abp || {};
     };
 
     datatables.defaultRenderers['datetime'] = function (value) {
-        if(!value) {
+        if (!value) {
             return value;
         } else {
             return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);

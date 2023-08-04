@@ -18,4 +18,6 @@ public interface IIdentityDbContext : IEfCoreDbContext
     DbSet<IdentitySecurityLog> SecurityLogs { get; }
 
     DbSet<IdentityLinkUser> LinkUsers { get; }
+
+    DbSet<IdentityUserDelegation> UserDelegations { get; }
 }

@@ -17,16 +17,14 @@ public class SettingDefinition
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
 
-    [CanBeNull]
-    public ILocalizableString Description { get; set; }
+    public ILocalizableString? Description { get; set; }
 
     /// <summary>
     /// Default value of the setting.
     /// </summary>
-    [CanBeNull]
-    public string DefaultValue { get; set; }
+    public string? DefaultValue { get; set; }
 
     /// <summary>
     /// Can clients see this setting and it's value.
@@ -39,7 +37,7 @@ public class SettingDefinition
     /// A list of allowed providers to get/set value of this setting.
     /// An empty list indicates that all providers are allowed.
     /// </summary>
-    public List<string> Providers { get; } //TODO: Rename to AllowedProviders
+    public List<string> Providers { get; }
 
     /// <summary>
     /// Is this setting inherited from parent scopes.
@@ -61,9 +59,9 @@ public class SettingDefinition
 
     public SettingDefinition(
         string name,
-        string defaultValue = null,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
+        string? defaultValue = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
         bool isVisibleToClients = false,
         bool isInherited = true,
         bool isEncrypted = false)
@@ -91,14 +89,14 @@ public class SettingDefinition
     }
 
     /// <summary>
-    /// Sets a property in the <see cref="Properties"/> dictionary.
+    /// Adds one or more providers to the <see cref="Providers"/> list.
     /// This is a shortcut for nested calls on this object.
     /// </summary>
     public virtual SettingDefinition WithProviders(params string[] providers)
     {
         if (!providers.IsNullOrEmpty())
         {
-            Providers.AddRange(providers);
+            Providers.AddIfNotContains(providers);
         }
 
         return this;

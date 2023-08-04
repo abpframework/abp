@@ -27,7 +27,7 @@
   <ng-container *ngIf="action.visible(data)">
     <button
       ngbDropdownItem
-      *abpPermission="action.permission"
+      *abpPermission="action.permission; runChangeDetection: false"
       (click)="action.action(data)"
       type="button"
     >
@@ -49,7 +49,7 @@
 <ng-template #btnTmp let-action>
   <ng-container *ngIf="action.visible(data)">
     <button
-      *abpPermission="action.permission"
+      *abpPermission="action.permission; runChangeDetection: false"
       (click)="action.action(data)"
       type="button"
       class="btn btn-primary text-center"
