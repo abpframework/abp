@@ -77,6 +77,8 @@
             
             <abp-input asp-for="ViewModel.ShortDescription" />
 
+            <abp-input asp-for="ViewModel.Content" type="hidden" />
+
             <div class="content-editor cms-kit-editor"
                  id="ContentEditor"
                  data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
