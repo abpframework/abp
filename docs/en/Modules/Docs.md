@@ -22,21 +22,15 @@ When you use GitHub to store your docs, Docs Module supports versioning. If you 
 
 ## Installation
 
-### 1- Download
+This document covers `Entity Framework Core` provider but you can also select `MongoDB` as your database provider.
 
-If you do not have an existing ABP project, this step shows you how to create a new project from [abp.io](https://abp.io) to add the Docs Module. If you already have an ABP project, you can skip this step.
+### 1- Creating an application
 
-It is recommended to use ABP CLI to create new projects. Use the following command:
+If you do not have an existing ABP project, you can either [generate a CLI command from the get started page of the abp.io website](https://abp.io/get-started) and runs it or run the command below:
 
 ```bash
 abp new Acme.MyProject
 ```
-
-You can also generate a CLI command from [get started page](https://abp.io/get-started). Enter your project name as `Acme.MyProject`, other use default options.
-
-Note that this document covers `Entity Framework Core` provider but you can also select `MongoDB` as your database provider.
-
-![Create new project](../images/docs-module_download-new-abp-project.png)
 
 ### 2- Running The Empty Application
 
