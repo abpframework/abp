@@ -74,7 +74,8 @@
 
         <form asp-page="/CmsKit/BlogPosts/Update" id="form-blog-post-update">
             <abp-input asp-for="Id" />
-            <abp-input asp-for="ViewModel.ConcurrencyStamp" hidden />
+            <abp-input asp-for="ViewModel.ConcurrencyStamp"  type="hidden" />
+            <abp-input asp-for="ViewModel.CoverImageMediaId" type="hidden" />
             
             <abp-input asp-for="ViewModel.Title" />
 
