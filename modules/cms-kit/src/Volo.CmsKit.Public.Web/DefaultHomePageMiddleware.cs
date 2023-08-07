@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
@@ -16,9 +15,9 @@ public class DefaultHomePageMiddleware : IMiddleware, ITransientDependency
     {
         var featureChecker = context.RequestServices.GetRequiredService<IFeatureChecker>();
 
-        if (await featureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable))
+        if (context.Request.Path.Value == "/")
         {
-            if (context.Request.Path.Value == "/")
+            if (await featureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable))
             {
                 var pagePublicAppService = context.RequestServices.GetRequiredService<IPagePublicAppService>();
 
