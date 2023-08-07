@@ -1,18 +1,18 @@
 # Adding Dark Mode Support to the Basic Theme
-Basic Theme uses plain bootstrap and does not have any custom colors & styles. This article will show you how to add dark mode support to the Basic Theme.
+Basic Theme uses plain bootstrap and does not have any custom colors & styles. This article will show you how to add dark mode support to the [Basic Theme](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme).
 
-Bootstrap brings [Color Modes](https://getbootstrap.com/docs/5.3/customize/color-modes/#dark-mode) feature with the version **5.3**. This feature allows you to add dark mode support to your website with a single line of code. Adding `data-bs-theme="dark"` attribute, changes the color mode of the element to dark mode.
+Bootstrap brings [Color Modes](https://getbootstrap.com/docs/5.3/customize/color-modes/#dark-mode) feature with the version **5.3**. This feature allows you to add dark mode support to your website with a single line of code. Adding the `data-bs-theme="dark"` attribute changes the color mode of the element to dark mode.
 
 ## Instructions
 
-1. Create a new project
+1. Create a new project with the following command:
     ```bash
     abp new BasicThemeDarkMode -t app --theme basic
     ```
 
 2. Create a component that toggles the color mode.
 
-   - Create a new file named `Components/ChangeTheme/Default.cshtml`
+   - Create a new file named `Components/ChangeTheme/Default.cshtml`:
         ```html
         <div class="text-light mt-1">    
             <button class="btn text-light" href="#" id="ToolbarChangeTheme">
@@ -21,7 +21,7 @@ Bootstrap brings [Color Modes](https://getbootstrap.com/docs/5.3/customize/color
         </div>
         ```
 
-   - Create a new file named `Components/ChangeTheme/ChangeThemeViewComponent.cs`
+   - Create a new file named `Components/ChangeTheme/ChangeThemeViewComponent.cs`:
         ```csharp
         using Microsoft.AspNetCore.Mvc;
         using Volo.Abp.AspNetCore.Mvc;
@@ -38,9 +38,9 @@ Bootstrap brings [Color Modes](https://getbootstrap.com/docs/5.3/customize/color
         }
         ```
 
-   - Create a JavaScript that manages last selected theme and toggles the color mode. It stores the last selected theme in the local storage. So, you don't need to store it in the database.
+   - Create a JavaScript that manages the last selected theme and toggles the color mode. It stores the last selected theme in the *local storage*. So, you don't need to store it in the database.
 
-     - Create a new file named `Components/ChangeTheme/ChangeTheme.js`
+     - Create a new file named `Components/ChangeTheme/ChangeTheme.js`:
         ```js
         $(function () {
             function changeTheme(theme) {
@@ -71,9 +71,9 @@ Bootstrap brings [Color Modes](https://getbootstrap.com/docs/5.3/customize/color
         });
         ```
 
-3. Create a new Toolbar Contributor and add newly created view component to the application toolbar.
+3. Create a new [Toolbar Contributor](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Toolbars) and add a newly created view component to the application toolbar.
 
-    - Create a new class named `BasicThemeDarkModeToolbarContributor.cs`
+    - Create a new class named `BasicThemeDarkModeToolbarContributor.cs`:
         ```csharp
         using BasicThemeDarkMode.Web.Components.ChangeTheme;
         using System.Threading.Tasks;
@@ -96,7 +96,7 @@ Bootstrap brings [Color Modes](https://getbootstrap.com/docs/5.3/customize/color
         }
         ```
 
-    - Configure [Toolbar Options](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Toolbars) and add newly created contributor.
+    - Configure [Toolbar Options](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Toolbars) and add newly created contributor:
         ```csharp
         Configure<AbpToolbarOptions>(options =>
         {
@@ -104,7 +104,7 @@ Bootstrap brings [Color Modes](https://getbootstrap.com/docs/5.3/customize/color
         });
         ```
 
-That's it! Now, you can toggle the color mode by clicking the sun icon in the toolbar.
+That's it! Now, you can toggle the color mode by clicking the sun icon in the toolbar:
 
 ![Dark Mode](basictheme-toggle-demo.gif)
 
@@ -122,4 +122,4 @@ That's it! Now, you can toggle the color mode by clicking the sun icon in the to
 
 ## Conclusion
 
-The theme is stored in **local storage** and it's initialized in the client-side. You can use **Cookies** to render the page in the last selected theme on **server-side** to prevent the flash effect while navigating pages. This documents show the concept of adding dark mode support of bootstrap to the Basic Theme.
+The theme is stored in **local storage** and it's initialized on the client-side. You can use **Cookies** to render the page in the last selected theme on **server-side** to prevent the flash effect while navigating pages. This document shows the concept of adding dark mode support of bootstrap to the Basic Theme.
