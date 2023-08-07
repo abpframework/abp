@@ -21,7 +21,7 @@ public class EntityToEtoMapper : IEntityToEtoMapper, ITransientDependency
         Options = options.Value;
     }
 
-    public object Map(object entityObj)
+    public object? Map(object entityObj)
     {
         Check.NotNull(entityObj, nameof(entityObj));
 
