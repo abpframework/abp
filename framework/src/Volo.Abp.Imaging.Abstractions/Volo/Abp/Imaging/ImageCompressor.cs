@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -16,7 +17,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
     
     public ImageCompressor(IEnumerable<IImageCompressorContributor> imageCompressorContributors, ICancellationTokenProvider cancellationTokenProvider)
     {
-        ImageCompressorContributors = imageCompressorContributors;
+        ImageCompressorContributors = imageCompressorContributors.Reverse();
         CancellationTokenProvider = cancellationTokenProvider;
     }
 

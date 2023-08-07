@@ -5,7 +5,7 @@ namespace Volo.Abp.Authorization.Permissions;
 
 public interface IDynamicPermissionDefinitionStore
 {
-    Task<PermissionDefinition> GetOrNullAsync(string name);
+    Task<PermissionDefinition?> GetOrNullAsync(string name);
 
     Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync();
     

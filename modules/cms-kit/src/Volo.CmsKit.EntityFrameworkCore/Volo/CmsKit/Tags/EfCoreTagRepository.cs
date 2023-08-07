@@ -79,7 +79,23 @@ public class EfCoreTagRepository : EfCoreRepository<ICmsKitDbContext, Tag, Guid>
 
         return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
-
+    
+    public virtual async Task<List<PopularTag>> GetPopularTagsAsync(
+        [NotNull] string entityType, 
+        int maxCount, 
+        CancellationToken cancellationToken = default)
+    {
+        return await (from tag in await GetDbSetAsync()
+                join entityTag in (await GetDbContextAsync()).Set<EntityTag>() on tag.Id equals entityTag.TagId
+                where tag.EntityType == entityType
+                group tag by tag.Id
+                into g
+                orderby g.Count() descending
+                select new PopularTag(g.Key, g.First().Name, g.Count()))
+            .Take(maxCount)
+            .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+    }
+    
     public virtual async Task<List<Tag>> GetListAsync(string filter, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableByFilterAsync(filter)).ToListAsync(GetCancellationToken(cancellationToken));

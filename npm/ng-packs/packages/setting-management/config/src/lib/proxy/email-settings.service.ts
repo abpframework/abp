@@ -2,6 +2,9 @@ import type { EmailSettingsDto, SendTestEmailInput, UpdateEmailSettingsDto } fro
 import { RestService } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 
+/**
+@deprecated This method is deprecated, use it from @abp/ng.setting-management/proxy
+*/
 @Injectable({
   providedIn: 'root',
 })

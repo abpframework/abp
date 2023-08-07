@@ -14,7 +14,7 @@ public class ContentFragmentViewComponent : AbpViewComponent
 {
     public IContent ContentDto { get; set; }
 
-    public virtual async Task<IViewComponentResult> InvokeAsync(IContent contentDto)
+    public virtual IViewComponentResult Invoke(IContent contentDto)
     {
         return View("~/Pages/CmsKit/Components/Contents/ContentFragment.cshtml", new ContentFragmentViewComponent() { ContentDto = contentDto });
     }

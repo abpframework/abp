@@ -14,9 +14,9 @@ public class RemoteLocalizationContributor : ILocalizationResourceContributor
 {
     public bool IsDynamic => true;
 
-    private LocalizationResourceBase _resource;
-    private ICachedApplicationConfigurationClient _applicationConfigurationClient;
-    private ILogger<RemoteLocalizationContributor> _logger;
+    private LocalizationResourceBase _resource = default!;
+    private ICachedApplicationConfigurationClient _applicationConfigurationClient = default!;
+    private ILogger<RemoteLocalizationContributor> _logger = default!;
 
     public void Initialize(LocalizationResourceInitializationContext context)
     {
@@ -26,7 +26,7 @@ public class RemoteLocalizationContributor : ILocalizationResourceContributor
                   ?? NullLogger<RemoteLocalizationContributor>.Instance;
     }
 
-    public virtual LocalizedString GetOrNull(string cultureName, string name)
+    public virtual LocalizedString? GetOrNull(string cultureName, string name)
     {
         /* cultureName is not used because remote localization can only
          * be done in the current culture. */
@@ -34,7 +34,7 @@ public class RemoteLocalizationContributor : ILocalizationResourceContributor
         return GetOrNullInternal(_resource.ResourceName, name);
     }
     
-    protected virtual LocalizedString GetOrNullInternal(string resourceName, string name)
+    protected virtual LocalizedString? GetOrNullInternal(string resourceName, string name)
     {
         var resource = GetResourceOrNull(resourceName);
         if (resource == null)
@@ -50,7 +50,7 @@ public class RemoteLocalizationContributor : ILocalizationResourceContributor
 
         foreach (var baseResource in resource.BaseResources)
         {
-            value = GetOrNullInternal(baseResource, name);
+            value = GetOrNullInternal(baseResource, name)?.ToString();
             if (value != null)
             {
                 return new LocalizedString(name, value);
@@ -121,19 +121,19 @@ public class RemoteLocalizationContributor : ILocalizationResourceContributor
         return Task.FromResult((IEnumerable<string>)Array.Empty<string>());
     }
 
-    protected virtual ApplicationLocalizationResourceDto GetResourceOrNull(string resourceName)
+    protected virtual ApplicationLocalizationResourceDto? GetResourceOrNull(string resourceName)
     {
         var applicationConfigurationDto = _applicationConfigurationClient.Get();
         return GetResourceOrNull(applicationConfigurationDto, resourceName);
     }
     
-    protected virtual async Task<ApplicationLocalizationResourceDto> GetResourceOrNullAsync(string resourceName)
+    protected virtual async Task<ApplicationLocalizationResourceDto?> GetResourceOrNullAsync(string resourceName)
     {
         var applicationConfigurationDto = await _applicationConfigurationClient.GetAsync();
         return GetResourceOrNull(applicationConfigurationDto, resourceName);
     }
 
-    protected virtual ApplicationLocalizationResourceDto GetResourceOrNull(
+    protected virtual ApplicationLocalizationResourceDto? GetResourceOrNull(
         ApplicationConfigurationDto applicationConfigurationDto,
         string resourceName)
     {

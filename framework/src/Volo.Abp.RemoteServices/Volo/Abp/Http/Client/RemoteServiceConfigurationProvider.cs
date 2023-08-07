@@ -18,7 +18,7 @@ public class RemoteServiceConfigurationProvider : IRemoteServiceConfigurationPro
         return Task.FromResult(Options.RemoteServices.GetConfigurationOrDefault(name));
     }
 
-    public Task<RemoteServiceConfiguration> GetConfigurationOrDefaultOrNullAsync(string name)
+    public Task<RemoteServiceConfiguration?> GetConfigurationOrDefaultOrNullAsync(string name)
     {
         return Task.FromResult(Options.RemoteServices.GetConfigurationOrDefaultOrNull(name));
     }

@@ -2,7 +2,7 @@
 
 public interface IWebClientInfoProvider
 {
-    string BrowserInfo { get; }
+    string? BrowserInfo { get; }
 
-    string ClientIpAddress { get; }
+    string? ClientIpAddress { get; }
 }

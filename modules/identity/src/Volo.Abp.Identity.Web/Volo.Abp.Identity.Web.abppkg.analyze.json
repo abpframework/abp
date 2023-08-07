@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.Web",
-  "hash": "b84ebef06353989f91edbffe534bc291",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.Web",
@@ -72,6 +72,48 @@
       ],
       "contentType": "abpModule",
       "name": "AbpIdentityWebModule",
+      "summary": null
+    },
+    {
+      "apis": [],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Users",
+      "contentType": "webPage",
+      "name": "CreateModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Users",
+      "contentType": "webPage",
+      "name": "EditModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Users",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Roles",
+      "contentType": "webPage",
+      "name": "CreateModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Roles",
+      "contentType": "webPage",
+      "name": "EditModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Roles",
+      "contentType": "webPage",
+      "name": "IndexModel",
       "summary": null
     }
   ]

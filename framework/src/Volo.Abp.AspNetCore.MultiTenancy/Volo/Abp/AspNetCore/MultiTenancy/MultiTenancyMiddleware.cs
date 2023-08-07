@@ -40,7 +40,7 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        TenantConfiguration tenant = null;
+        TenantConfiguration? tenant = null;
         try
         {
             tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
@@ -86,7 +86,7 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
         }
     }
 
-    private async Task<RequestCulture> TryGetRequestCultureAsync(HttpContext httpContext)
+    private async Task<RequestCulture?> TryGetRequestCultureAsync(HttpContext httpContext)
     {
         var requestCultureFeature = httpContext.Features.Get<IRequestCultureFeature>();
 
@@ -114,7 +114,7 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
         string culture;
         string uiCulture;
 
-        if (defaultLanguage.Contains(';'))
+        if (defaultLanguage!.Contains(';'))
         {
             var splitted = defaultLanguage.Split(';');
             culture = splitted[0];

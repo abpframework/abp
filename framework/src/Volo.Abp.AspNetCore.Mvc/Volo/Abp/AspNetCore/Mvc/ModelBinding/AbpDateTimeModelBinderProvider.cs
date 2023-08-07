@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding;
 
 public class AbpDateTimeModelBinderProvider : IModelBinderProvider
 {
-    public IModelBinder GetBinder(ModelBinderProviderContext context)
+    public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
         var modelType = context.Metadata.UnderlyingOrModelType;
         if (modelType == typeof(DateTime))
@@ -31,7 +31,7 @@ public class AbpDateTimeModelBinderProvider : IModelBinderProvider
                     context.Metadata.ContainerType.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
 
                 var dateNormalizationDisabledForProperty = context.Metadata.ContainerType
-                    .GetProperty(context.Metadata.PropertyName)
+                    .GetProperty(context.Metadata.PropertyName!)
                     ?.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
 
                 if (!dateNormalizationDisabledForClass &&

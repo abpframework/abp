@@ -20,9 +20,9 @@ public class AzureServiceBusMessageConsumer : IAzureServiceBusMessageConsumer, I
     private readonly IExceptionNotifier _exceptionNotifier;
     private readonly IProcessorPool _processorPool;
     private readonly ConcurrentBag<Func<ServiceBusReceivedMessage, Task>> _callbacks;
-    private string _connectionName;
-    private string _subscriptionName;
-    private string _topicName;
+    private string _connectionName = default!;
+    private string _subscriptionName = default!;
+    private string _topicName = default!;
 
     public AzureServiceBusMessageConsumer(
         IExceptionNotifier exceptionNotifier,
@@ -37,7 +37,7 @@ public class AzureServiceBusMessageConsumer : IAzureServiceBusMessageConsumer, I
     public virtual void Initialize(
         [NotNull] string topicName,
         [NotNull] string subscriptionName,
-        string connectionName)
+        string? connectionName)
     {
         Check.NotNull(topicName, nameof(topicName));
         Check.NotNull(subscriptionName, nameof(subscriptionName));

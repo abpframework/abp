@@ -9,7 +9,7 @@ using Volo.Abp.AspNetCore.TestBase;
 
 namespace MyCompanyName.MyProjectName;
 
-public abstract class MyProjectNameWebTestBase : AbpAspNetCoreIntegratedTestBase<MyProjectNameWebTestStartup>
+public abstract class MyProjectNameWebTestBase : AbpAspNetCoreIntegratedTestBase<MyProjectNameWebTestModule>
 {
     protected override IHostBuilder CreateHostBuilder()
     {

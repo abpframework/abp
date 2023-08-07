@@ -69,7 +69,7 @@
                                                             <a href="/Members/@post.Writer.UserName">
                                                                 @post.Writer.UserName
                                                             </a>
-                                                            <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                            <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
                                                         </h5>
                                                         <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                         @*<span class="vs-seperator">|</span>
@@ -130,7 +130,7 @@
                                                                     <a href="/Members/@post.Writer.UserName">
                                                                         @post.Writer.UserName
                                                                     </a>    
-                                                                    <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                                    <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
                                                                 </h5>
                                                             }
                                                             <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
@@ -199,7 +199,7 @@
                                                                         <a href="/Members/@post.Writer.UserName">
                                                                             @post.Writer.UserName
                                                                         </a>
-                                                                        <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                                        <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
                                                                     </h5>
                                                                     <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                                     @*<span class="vs-seperator">|</span>

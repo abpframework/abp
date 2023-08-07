@@ -4,7 +4,7 @@ namespace Volo.Abp.Settings;
 
 public interface ISettingDefinitionContext
 {
-    SettingDefinition GetOrNull(string name);
+    SettingDefinition? GetOrNull(string name);
 
     IReadOnlyList<SettingDefinition> GetAll();
 

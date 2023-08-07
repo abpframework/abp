@@ -21,7 +21,7 @@ public class ConnectionPool : IConnectionPool, ISingletonDependency
         Connections = new ConcurrentDictionary<string, Lazy<IConnection>>();
     }
 
-    public virtual IConnection Get(string connectionName = null)
+    public virtual IConnection Get(string? connectionName = null)
     {
         connectionName ??= RabbitMqConnections.DefaultConnectionName;
 

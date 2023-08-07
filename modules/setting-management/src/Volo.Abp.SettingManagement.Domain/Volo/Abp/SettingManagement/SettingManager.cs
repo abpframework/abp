@@ -50,7 +50,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
     {
         Check.NotNull(providerName, nameof(providerName));
 
-        var settingDefinitions = SettingDefinitionManager.GetAll();
+        var settingDefinitions = await SettingDefinitionManager.GetAllAsync();
         var providers = Enumerable.Reverse(Providers)
             .SkipWhile(c => c.Name != providerName);
 
@@ -113,7 +113,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
         Check.NotNull(name, nameof(name));
         Check.NotNull(providerName, nameof(providerName));
 
-        var setting = SettingDefinitionManager.Get(name);
+        var setting = await SettingDefinitionManager.GetAsync(name);
 
         var providers = Enumerable
             .Reverse(Providers)
@@ -162,7 +162,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
 
     protected virtual async Task<string> GetOrNullInternalAsync(string name, string providerName, string providerKey, bool fallback = true)
     {
-        var setting = SettingDefinitionManager.Get(name);
+        var setting = await SettingDefinitionManager.GetAsync(name);
         var providers = Enumerable
             .Reverse(Providers);
 

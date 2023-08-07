@@ -6,9 +6,9 @@ namespace Volo.Abp.BackgroundJobs;
 [Serializable]
 public class BackgroundJobExecutionException : AbpException
 {
-    public string JobType { get; set; }
+    public string JobType { get; set; } = default!;
 
-    public object JobArgs { get; set; }
+    public object JobArgs { get; set; } = default!;
 
     public BackgroundJobExecutionException()
     {

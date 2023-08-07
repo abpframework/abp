@@ -56,7 +56,7 @@ public class ToolbarManager : IToolbarManager, ITransientDependency
     {
         foreach (var item in toolbar.Items.Where(x => !x.RequiredPermissionName.IsNullOrWhiteSpace()))
         {
-            item.RequirePermissions(item.RequiredPermissionName);
+            item.RequirePermissions(item.RequiredPermissionName!);
         }
 
         var checkPermissionsToolbarItems = toolbar.Items.Where(x => x.StateCheckers.Any()).ToArray();

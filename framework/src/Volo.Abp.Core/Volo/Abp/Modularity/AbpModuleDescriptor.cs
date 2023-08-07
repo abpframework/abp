@@ -11,6 +11,8 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
     public Type Type { get; }
 
     public Assembly Assembly { get; }
+    
+    public Assembly[] AllAssemblies { get; }
 
     public IAbpModule Instance { get; }
 
@@ -26,6 +28,7 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
     {
         Check.NotNull(type, nameof(type));
         Check.NotNull(instance, nameof(instance));
+        AbpModule.CheckAbpModuleType(type);
 
         if (!type.GetTypeInfo().IsAssignableFrom(instance.GetType()))
         {
@@ -34,6 +37,7 @@ public class AbpModuleDescriptor : IAbpModuleDescriptor
 
         Type = type;
         Assembly = type.Assembly;
+        AllAssemblies = AbpModuleHelper.GetAllAssemblies(type);
         Instance = instance;
         IsLoadedAsPlugIn = isLoadedAsPlugIn;
 

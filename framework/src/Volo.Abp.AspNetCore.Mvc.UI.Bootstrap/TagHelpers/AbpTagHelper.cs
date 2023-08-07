@@ -23,7 +23,7 @@ public abstract class AbpTagHelper<TTagHelper, TService> : AbpTagHelper
 
     [HtmlAttributeNotBound]
     [ViewContext]
-    public ViewContext ViewContext { get; set; }
+    public ViewContext ViewContext { get; set; } = default!;
 
     protected AbpTagHelper(TService service)
     {

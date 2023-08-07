@@ -25,7 +25,7 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
 
     protected override string TagName { get; set; } = "abp-date-range-picker";
 
-    protected override T GetAttributeAndModelExpression<T>(out ModelExpression modelExpression)
+    protected override T? GetAttributeAndModelExpression<T>(out ModelExpression? modelExpression) where T : class
     {
         modelExpression = new[] { TagHelper.AspForStart, TagHelper.AspForEnd }.FirstOrDefault(x => x?.ModelExplorer?.GetAttribute<T>() != null);
         return modelExpression?.ModelExplorer.GetAttribute<T>();
@@ -62,19 +62,15 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
         await base.ProcessAsync(context, output);
     }
 
-    protected override TagHelperOutput TagHelperOutput { get; set; }
+    protected override TagHelperOutput TagHelperOutput { get; set; } = default!;
 
-    [CanBeNull]
-    protected virtual InputTagHelper StartDateTagHelper { get; set; }
+    protected virtual InputTagHelper? StartDateTagHelper { get; set; }
 
-    [CanBeNull]
-    protected virtual TagHelperOutput StartDateTagHelperOutput { get; set; }
+    protected virtual TagHelperOutput? StartDateTagHelperOutput { get; set; }
 
-    [CanBeNull]
-    protected virtual InputTagHelper EndDateTagHelper { get; set; }
+    protected virtual InputTagHelper? EndDateTagHelper { get; set; }
 
-    [CanBeNull]
-    protected virtual TagHelperOutput EndDateTagHelperOutput { get; set; }
+    protected virtual TagHelperOutput? EndDateTagHelperOutput { get; set; }
 
     protected override string GetPropertyName()
     {
@@ -108,7 +104,7 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
         return StartDateTagHelperOutput?.Render(Encoder) + EndDateTagHelperOutput?.Render(Encoder);
     }
 
-    protected override ModelExpression GetModelExpression()
+    protected override ModelExpression? GetModelExpression()
     {
         return TagHelper.AspForStart;
     }

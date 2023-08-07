@@ -71,7 +71,7 @@ public class ExtensionPropertyAttributeDtoFactory : IExtensionPropertyAttributeD
         return false;
     }
 
-    protected virtual object GetPropertyValue(Attribute attribute, PropertyInfo property)
+    protected virtual object? GetPropertyValue(Attribute attribute, PropertyInfo property)
     {
         var value = property.GetValue(attribute);
         if (value == null)

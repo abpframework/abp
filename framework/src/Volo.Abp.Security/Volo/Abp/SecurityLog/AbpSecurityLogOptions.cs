@@ -11,7 +11,7 @@ public class AbpSecurityLogOptions
     /// The name of the application or service writing security log.
     /// Default: null.
     /// </summary>
-    public string ApplicationName { get; set; }
+    public string? ApplicationName { get; set; }
 
     public AbpSecurityLogOptions()
     {
