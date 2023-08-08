@@ -14,9 +14,9 @@
     requirements: RegexRequirementsModel = {
       minLengthRegex: /(?=.{6,})/,                                        // Default min length 6
       numberRegex: /(?=.*[0-9])/,                                         // Default isContain number
-      lowercaseRegex: /(?=.*[a-z])/,                                      // Default isContainLowercase
+      lowercaseRegex: /(?=.*[a-z ])/,                                     // Default isContainLowercase
       uppercaseRegex: /(?=.*[A-Z])/,                                      // Default isContainUppercase
-      specialCharacterRegex: /^(?=.*[!@#$%^&*()\-_=+[\]{};:'"<>/?])\S+$/, // Default isContainSpecialCharacter
+      specialCharacterRegex: /[^a-zA-Z0-9 ]+/,                            // Default isContainSpecialCharacter
     };
     ```
 - Make sure that the lengths of these values are equal (In our service we have **5** tests/colors/texts).
