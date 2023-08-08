@@ -600,7 +600,7 @@
     "TotalDeveloperPrice": "Total Developer Price",
     "Purchase_PricePerDeveloper": "<span>{0} {1}</span> per developer",
     "Purchase_IncludedDeveloperInfo": "{0} {1} included.",
-    "Purchase_LicenseExtraDeveloperPurchaseMessage": "The <span class=\"fw-6\">{0} license</span> contains {1} developer(s). You can add additional developers now or later.",
+    "Purchase_LicenseExtraDeveloperPurchaseMessage": "The <span class=\"fw-bold\">{0} License</span>  includes {1} developers. You can add additional developers.",
     "StartupTemplates_Page_Title": "ABP Startup Templates",
     "StartupTemplates_Page_Description": "ABP Commercial allows you to build solutions with any level of complexity. It provides two main pre-built startup solutions. You can select the one close to your requirements and build your own custom solution on top of it.",
     "MicroserviceStartupSolutionForDotnet": "Microservice Startup Solution for .NET",
@@ -967,6 +967,22 @@
     "OneCodeBaseMultipleDevices": "One Code-Base Multiple Devices",
     "OneCodeBaseMultipleDevices_Description": "ABP Mobile applications are cross-platform. They are ready to be installed and run on iOS and Android devices, and they adapt to different form-factors using a single code base. Developers only need to create the UI and front-end code once, there is no need to adapt the code for each device you want to support.",
     "ComesWithTheSourceCode": "Comes with the Source-Code",
-    "ComesWithTheSourceCode_Description": "The mobile apps are provided with the source-code. Easily customize the UX/UI of your apps to meet branding guidelines."
+    "ComesWithTheSourceCode_Description": "The mobile apps are provided with the source-code. Easily customize the UX/UI of your apps to meet branding guidelines.",
+    "Purchase_OneYearPrice": "1 Year Price",
+    "Purchase_DeveloperSeatCount": "Developer Seat Count",
+    "Purchase_DevelopersAlreadyIncluded": "{0} developers already included",
+    "1Year": "1 year",
+    "{0}Years": "{0} years",
+    "1YearLicense": "1 year license",
+    "{0}YearsLicense": "{0} years license",
+    "1AdditionalDeveloper": "1 additional developer",
+    "{0}AdditionalDevelopers": "{0} additional developers",
+    "Discount": "Discount ({0}%)",
+    "Summary": "Summary",
+    "TrainingPack": "Training pack",
+    "TrainingPackDiscount": "Training pack discount",
+    "Purchase_OnboardingTraining_Description": "This live training package is discounted when purchase with the new license. This discounted price is valid only for new license purchases. <a href=\"{0}\" class=\"text-white\">Learn more <i class=\"fa fa-external-link ms-1\"></i></a>",
+    "Purchase_Save": "{0}% <span class=\"save ms-1\">Save {1} {2}</span>",
+    "RemoveBasket": "Remove from basket"
   }
 }
