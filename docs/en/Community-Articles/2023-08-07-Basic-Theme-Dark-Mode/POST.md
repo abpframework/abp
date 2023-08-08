@@ -1,7 +1,7 @@
 # Adding Dark Mode Support to the Basic Theme
 Basic Theme uses plain bootstrap and does not have any custom colors & styles. This article will show you how to add dark mode support to the [Basic Theme](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme).
 
-Bootstrap brings [Color Modes](https://getbootstrap.com/docs/5.3/customize/color-modes/#dark-mode) feature with the version **5.3**. This feature allows you to add dark mode support to your website with a single line of code. Adding the `data-bs-theme="dark"` attribute changes the color mode of the element to dark mode.
+Bootstrap brings the [Color Modes](https://getbootstrap.com/docs/5.3/customize/color-modes/#dark-mode) feature with version **5.3**. This feature allows you to add dark mode support to your website with a single line of code. Adding the `data-bs-theme="dark"` attribute changes the color mode of the element to dark mode.
 
 ## Instructions
 
@@ -96,7 +96,7 @@ Bootstrap brings [Color Modes](https://getbootstrap.com/docs/5.3/customize/color
         }
         ```
 
-    - Configure [Toolbar Options](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Toolbars) and add newly created contributor:
+    - Configure [Toolbar Options](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Toolbars) and add a newly created contributor:
         ```csharp
         Configure<AbpToolbarOptions>(options =>
         {
