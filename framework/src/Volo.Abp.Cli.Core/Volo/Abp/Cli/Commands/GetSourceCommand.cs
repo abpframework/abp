@@ -2,8 +2,10 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -14,7 +16,7 @@ namespace Volo.Abp.Cli.Commands;
 public class GetSourceCommand : IConsoleCommand, ITransientDependency
 {
     public const string Name = "get-source";
-    
+
     private readonly SourceCodeDownloadService _sourceCodeDownloadService;
     public ModuleProjectBuilder ModuleProjectBuilder { get; }
 
@@ -56,8 +58,35 @@ public class GetSourceCommand : IConsoleCommand, ITransientDependency
 
         commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
 
-        await _sourceCodeDownloadService.DownloadModuleAsync(
-            commandLineArgs.Target, outputFolder, version, gitHubAbpLocalRepositoryPath, gitHubVoloLocalRepositoryPath, commandLineArgs.Options);
+        var package = commandLineArgs.Options.ContainsKey(Options.Package.Short) || commandLineArgs.Options.ContainsKey(Options.Package.Long);
+
+        if (!package)
+        {
+            await _sourceCodeDownloadService.DownloadModuleAsync(
+                commandLineArgs.Target, outputFolder, version, gitHubAbpLocalRepositoryPath, gitHubVoloLocalRepositoryPath, commandLineArgs.Options);
+        }
+        else
+        {
+            var isAngularPackage = false;
+            var isNugetPackage = true;
+
+            if (commandLineArgs.Target.StartsWith("@"))
+            {
+                isAngularPackage = true;
+                isNugetPackage = false;
+            }
+
+            if (isNugetPackage)
+            {
+                await _sourceCodeDownloadService.DownloadNugetPackageAsync(
+                    commandLineArgs.Target, outputFolder, version);
+            }
+            else if (isAngularPackage)
+            {
+                await _sourceCodeDownloadService.DownloadNpmPackageAsync(
+                    commandLineArgs.Target, outputFolder, version);
+            }
+        }
     }
 
     private static string GetOutPutFolder(CommandLineArgs commandLineArgs)
@@ -93,6 +122,7 @@ public class GetSourceCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
         sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
         sb.AppendLine("-v|--version <version>                      (default: latest version)");
+        sb.AppendLine("-p|--package <boolean>                      Downloads the source code of the NPM/NuGet package");
         sb.AppendLine("--preview                                   (Use latest pre-release version if there is at least one pre-release after latest stable version)");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
@@ -137,6 +167,12 @@ public class GetSourceCommand : IConsoleCommand, ITransientDependency
         public static class Preview
         {
             public const string Long = "preview";
+        }
+
+        public static class Package
+        {
+            public const string Short = "p";
+            public const string Long = "package";
         }
     }
 }
