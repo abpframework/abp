@@ -120,6 +120,7 @@ public class CmsKitWebUnifiedModule : AbpModule
         ConfigureCmsKit();
 
 #if EntityFrameworkCore
+        context.Services.AddDbContext<UnifiedDbContext>();
         Configure<AbpDbContextOptions>(options =>
         {
             options.UseSqlServer();

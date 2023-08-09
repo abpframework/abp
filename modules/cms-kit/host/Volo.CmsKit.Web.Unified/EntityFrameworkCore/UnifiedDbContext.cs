@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -11,7 +12,6 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace Volo.CmsKit.EntityFrameworkCore;
 
-[ConnectionStringName("SqlServerDefault")]
 public class UnifiedDbContext : AbpDbContext<UnifiedDbContext>
 {
     public UnifiedDbContext(DbContextOptions<UnifiedDbContext> options)
