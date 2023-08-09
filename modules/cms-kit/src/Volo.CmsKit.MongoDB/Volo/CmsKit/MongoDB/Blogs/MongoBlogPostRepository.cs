@@ -123,9 +123,9 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
             
         foreach (var entityId in entityIds)
         {
-            if (Guid.TryParse(entityId, out var guid))
+            if (Guid.TryParse(entityId, out var parsedEntityId))
             {
-                entityIdFilters.Add(guid);
+                entityIdFilters.Add(parsedEntityId);
             }
         }
 
