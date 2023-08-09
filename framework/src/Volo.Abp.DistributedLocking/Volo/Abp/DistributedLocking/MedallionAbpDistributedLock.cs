@@ -25,7 +25,7 @@ public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDepend
         DistributedLockKeyNormalizer = distributedLockKeyNormalizer;
     }
 
-    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
+    public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)

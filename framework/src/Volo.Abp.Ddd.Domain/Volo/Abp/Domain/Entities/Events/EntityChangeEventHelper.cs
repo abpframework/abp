@@ -133,7 +133,7 @@ public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDepen
     {
         var entityType = ProxyHelper.UnProxy(entityOrEto).GetType();
         var eventType = genericEventType.MakeGenericType(entityType);
-        var eventData = Activator.CreateInstance(eventType, entityOrEto);
+        var eventData = Activator.CreateInstance(eventType, entityOrEto)!;
         var currentUow = UnitOfWorkManager.Current;
 
         if (currentUow == null)

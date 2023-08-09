@@ -139,12 +139,12 @@ public interface IAsyncQueryableProvider
 
     #region Min
 
-    Task<T?> MinAsync<T>(
+    Task<T> MinAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
 
-    Task<TResult?> MinAsync<T, TResult>(
+    Task<TResult> MinAsync<T, TResult>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, TResult>> selector,
         CancellationToken cancellationToken = default);
@@ -153,12 +153,12 @@ public interface IAsyncQueryableProvider
 
     #region Max
 
-    Task<T?> MaxAsync<T>(
+    Task<T> MaxAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
 
-    Task<TResult?> MaxAsync<T, TResult>(
+    Task<TResult> MaxAsync<T, TResult>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, TResult>> selector,
         CancellationToken cancellationToken = default);
