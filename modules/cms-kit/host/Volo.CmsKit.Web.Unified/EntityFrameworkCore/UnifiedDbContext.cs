@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#if EntityFrameworkCore
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace Volo.CmsKit.EntityFrameworkCore;
 
+[ConnectionStringName("SqlServerDefault")]
 public class UnifiedDbContext : AbpDbContext<UnifiedDbContext>
 {
     public UnifiedDbContext(DbContextOptions<UnifiedDbContext> options)
@@ -32,3 +34,4 @@ public class UnifiedDbContext : AbpDbContext<UnifiedDbContext>
         modelBuilder.ConfigureBlobStoring();
     }
 }
+#endif
