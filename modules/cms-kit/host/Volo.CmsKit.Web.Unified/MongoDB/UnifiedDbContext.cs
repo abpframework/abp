@@ -1,7 +1,6 @@
 ﻿#if MongoDB
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.BlobStoring.Database.MongoDB;
-using Volo.Abp.Data;
 using Volo.Abp.FeatureManagement.MongoDB;
 using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.MongoDB;
@@ -11,7 +10,6 @@ using Volo.Abp.TenantManagement.MongoDB;
 
 namespace Volo.CmsKit.MongoDB;
 
-[ConnectionStringName("MongoDBDefault")]
 public class UnifiedDbContext : AbpMongoDbContext
 {
     protected override void CreateModel(IMongoModelBuilder modelBuilder)
