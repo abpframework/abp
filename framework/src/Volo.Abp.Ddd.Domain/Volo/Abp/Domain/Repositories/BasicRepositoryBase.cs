@@ -20,9 +20,9 @@ public abstract class BasicRepositoryBase<TEntity> :
     IUnitOfWorkEnabled
     where TEntity : class, IEntity
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
     public IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
 
@@ -123,7 +123,7 @@ public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<T
         return entity;
     }
 
-    public abstract Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+    public abstract Task<TEntity?> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
 
     public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
     {

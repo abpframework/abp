@@ -8,7 +8,7 @@ namespace Volo.Abp.Application.Dtos;
 [Serializable]
 public class PagedAndSortedResultRequestDto : PagedResultRequestDto, IPagedAndSortedResultRequest
 {
-    public virtual string Sorting { get; set; }
+    public virtual string? Sorting { get; set; }
 }
 
 /// <summary>
@@ -17,5 +17,5 @@ public class PagedAndSortedResultRequestDto : PagedResultRequestDto, IPagedAndSo
 [Serializable]
 public class ExtensiblePagedAndSortedResultRequestDto : ExtensiblePagedResultRequestDto, IPagedAndSortedResultRequest
 {
-    public virtual string Sorting { get; set; }
+    public virtual string? Sorting { get; set; }
 }

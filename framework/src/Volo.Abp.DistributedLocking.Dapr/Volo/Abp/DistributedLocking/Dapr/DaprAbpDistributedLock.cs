@@ -24,7 +24,7 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
         DistributedLockDaprOptions = distributedLockDaprOptions.Value;
     }
 
-    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
+    public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)

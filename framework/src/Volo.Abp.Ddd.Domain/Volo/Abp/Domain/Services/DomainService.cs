@@ -11,10 +11,10 @@ namespace Volo.Abp.Domain.Services;
 
 public abstract class DomainService : IDomainService
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
     [Obsolete("Use LazyServiceProvider instead.")]
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
     protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
 
@@ -26,5 +26,5 @@ public abstract class DomainService : IDomainService
 
     protected IAsyncQueryableExecuter AsyncExecuter => LazyServiceProvider.LazyGetRequiredService<IAsyncQueryableExecuter>();
 
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 }

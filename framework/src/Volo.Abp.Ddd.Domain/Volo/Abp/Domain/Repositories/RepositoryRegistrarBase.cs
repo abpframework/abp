@@ -75,12 +75,12 @@ public abstract class RepositoryRegistrarBase<TOptions>
         if (primaryKeyType == null)
         {
             return Options.SpecifiedDefaultRepositoryTypes
-                ? Options.DefaultRepositoryImplementationTypeWithoutKey.MakeGenericType(entityType)
+                ? Options.DefaultRepositoryImplementationTypeWithoutKey!.MakeGenericType(entityType)
                 : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType);
         }
 
         return Options.SpecifiedDefaultRepositoryTypes
-            ? Options.DefaultRepositoryImplementationType.MakeGenericType(entityType, primaryKeyType)
+            ? Options.DefaultRepositoryImplementationType!.MakeGenericType(entityType, primaryKeyType)
             : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType, primaryKeyType);
     }
 
