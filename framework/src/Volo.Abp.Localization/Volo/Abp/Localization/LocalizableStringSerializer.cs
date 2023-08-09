@@ -13,7 +13,7 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
         LocalizationOptions = localizationOptions.Value;
     }
 
-    public virtual string Serialize(ILocalizableString localizableString)
+    public virtual string? Serialize(ILocalizableString? localizableString)
     {
         if (localizableString == null)
         {

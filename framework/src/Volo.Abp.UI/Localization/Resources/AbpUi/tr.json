@@ -52,6 +52,10 @@
     "OthersGroup": "Diğer",
     "Today": "Bugün",
     "Apply": "Uygula",
-    "CopiedToTheClipboard": "Panoya kopyalandı"
+    "InternetConnectionInfo": "İşlem gerçekleştirilemedi. İnternet bağlantısı mevcut değil.",
+    "CopiedToTheClipboard": "Panoya kopyalandı",
+    "AddNew": "Yeni ekle",
+    "ProfilePicture": "Profil resmi",
+    "Theme": "Tema"
   }
 }

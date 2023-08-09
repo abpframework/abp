@@ -9,9 +9,9 @@ public class TenantConfiguration
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public ConnectionStrings ConnectionStrings { get; set; }
+    public ConnectionStrings? ConnectionStrings { get; set; }
 
     public bool IsActive { get; set; }
 

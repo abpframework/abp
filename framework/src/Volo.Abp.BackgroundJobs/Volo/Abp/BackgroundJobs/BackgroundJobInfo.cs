@@ -12,12 +12,12 @@ public class BackgroundJobInfo
     /// <summary>
     /// Name of the job.
     /// </summary>
-    public virtual string JobName { get; set; }
+    public virtual string JobName { get; set; } = default!;
 
     /// <summary>
     /// Job arguments as serialized to string.
     /// </summary>
-    public virtual string JobArgs { get; set; }
+    public virtual string JobArgs { get; set; } = default!;
 
     /// <summary>
     /// Try count of this job.

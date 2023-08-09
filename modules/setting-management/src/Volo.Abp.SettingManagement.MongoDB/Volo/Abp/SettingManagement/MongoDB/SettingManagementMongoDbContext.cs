@@ -10,6 +10,7 @@ namespace Volo.Abp.SettingManagement.MongoDB;
 public class SettingManagementMongoDbContext : AbpMongoDbContext, ISettingManagementMongoDbContext
 {
     public IMongoCollection<Setting> Settings => Collection<Setting>();
+    public IMongoCollection<SettingDefinitionRecord> SettingDefinitionRecords => Collection<SettingDefinitionRecord>();
 
     protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {

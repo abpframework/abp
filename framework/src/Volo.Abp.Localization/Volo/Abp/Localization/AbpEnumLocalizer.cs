@@ -19,14 +19,14 @@ public class AbpEnumLocalizer : IAbpEnumLocalizer, ITransientDependency
         return GetStringInternal(enumType, enumValue, StringLocalizerFactory.CreateDefaultOrNull());
     }
 
-    public virtual string GetString(Type enumType, object enumValue, params IStringLocalizer[] specifyLocalizers)
+    public virtual string GetString(Type enumType, object enumValue, params IStringLocalizer?[] specifyLocalizers)
     {
         return GetStringInternal(enumType, enumValue, specifyLocalizers);
     }
 
-    protected virtual string GetStringInternal(Type enumType, object enumValue, params IStringLocalizer[] specifyLocalizers)
+    protected virtual string GetStringInternal(Type enumType, object enumValue, params IStringLocalizer?[] specifyLocalizers)
     {
-        var memberName = enumType.GetEnumName(enumValue);
+        var memberName = enumType.GetEnumName(enumValue)!;
         var localizedString = GetStringOrNull(
             specifyLocalizers,
             new[]
@@ -42,7 +42,7 @@ public class AbpEnumLocalizer : IAbpEnumLocalizer, ITransientDependency
         return localizedString ?? memberName;
     }
 
-    protected virtual string GetStringOrNull(IStringLocalizer[] localizers, IEnumerable<string> keys)
+    protected virtual string? GetStringOrNull(IStringLocalizer?[] localizers, IEnumerable<string> keys)
     {
         foreach (var key in keys)
         {

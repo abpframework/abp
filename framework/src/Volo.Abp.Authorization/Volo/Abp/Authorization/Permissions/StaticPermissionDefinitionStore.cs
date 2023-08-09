@@ -79,7 +79,7 @@ public class StaticPermissionDefinitionStore : IStaticPermissionDefinitionStore,
 
             var providers = Options
                 .DefinitionProviders
-                .Select(p => scope.ServiceProvider.GetRequiredService(p) as IPermissionDefinitionProvider)
+                .Select(p => (scope.ServiceProvider.GetRequiredService(p) as IPermissionDefinitionProvider)!)
                 .ToList();
 
             foreach (var provider in providers)
@@ -101,7 +101,7 @@ public class StaticPermissionDefinitionStore : IStaticPermissionDefinitionStore,
         }
     }
 
-    public Task<PermissionDefinition> GetOrNullAsync(string name)
+    public Task<PermissionDefinition?> GetOrNullAsync(string name)
     {
         return Task.FromResult(PermissionDefinitions.GetOrDefault(name));
     }

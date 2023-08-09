@@ -15,7 +15,7 @@ public class AbpDbConnectionOptions
         Databases = new AbpDatabaseInfoDictionary();
     }
 
-    public string GetConnectionStringOrNull(
+    public string? GetConnectionStringOrNull(
         string connectionStringName,
         bool fallbackToDatabaseMappings = true,
         bool fallbackToDefault = true)

@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -15,6 +16,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.RabbitMq;
@@ -49,7 +51,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         IGuidGenerator guidGenerator,
         IClock clock,
         IEventHandlerInvoker eventHandlerInvoker,
-        ILocalEventBus localEventBus)
+        ILocalEventBus localEventBus,
+        ICorrelationIdProvider correlationIdProvider)
         : base(
             serviceScopeFactory,
             currentTenant,
@@ -58,7 +61,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
             guidGenerator,
             clock,
             eventHandlerInvoker,
-            localEventBus)
+            localEventBus,
+            correlationIdProvider)
     {
         ConnectionPool = connectionPool;
         Serializer = serializer;
@@ -103,12 +107,16 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
 
         var eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
 
-        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventData))
+        var correlationId = ea.BasicProperties.CorrelationId;
+        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventData, correlationId))
         {
             return;
         }
 
-        await TriggerHandlersDirectAsync(eventType, eventData);
+        using (CorrelationIdProvider.Change(correlationId))
+        {
+            await TriggerHandlersDirectAsync(eventType, eventData);
+        }
     }
 
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
@@ -186,7 +194,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await PublishAsync(eventType, eventData, null);
+        await PublishAsync(eventType, eventData, correlationId: CorrelationIdProvider.Get());
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -194,18 +202,21 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 
-    public override async Task PublishFromOutboxAsync(
+    public async override Task PublishFromOutboxAsync(
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
-        await TriggerDistributedEventSentAsync(new DistributedEventSent()
+        using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
         {
-            Source = DistributedEventSource.Outbox,
-            EventName = outgoingEvent.EventName,
-            EventData = outgoingEvent.EventData
-        });
+            await TriggerDistributedEventSentAsync(new DistributedEventSent()
+            {
+                Source = DistributedEventSource.Outbox,
+                EventName = outgoingEvent.EventName,
+                EventData = outgoingEvent.EventData
+            });
+        }
 
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, null, eventId: outgoingEvent.Id);
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, eventId: outgoingEvent.Id, correlationId: outgoingEvent.GetCorrelationId());
     }
 
     public async override Task PublishManyFromOutboxAsync(
@@ -219,19 +230,22 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
 
             foreach (var outgoingEvent in outgoingEventArray)
             {
-                await TriggerDistributedEventSentAsync(new DistributedEventSent()
+                using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
                 {
-                    Source = DistributedEventSource.Outbox,
-                    EventName = outgoingEvent.EventName,
-                    EventData = outgoingEvent.EventData
-                });
+                    await TriggerDistributedEventSentAsync(new DistributedEventSent()
+                    {
+                        Source = DistributedEventSource.Outbox,
+                        EventName = outgoingEvent.EventName,
+                        EventData = outgoingEvent.EventData
+                    });
+                }
 
                 await PublishAsync(
                     channel,
                     outgoingEvent.EventName,
                     outgoingEvent.EventData,
-                    properties: null,
-                    eventId: outgoingEvent.Id);
+                    eventId: outgoingEvent.Id,
+                    correlationId: outgoingEvent.GetCorrelationId());
             }
 
             channel.WaitForConfirmsOrDie();
@@ -250,7 +264,10 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
 
         var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
-        await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+        using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
+        {
+            await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+        }
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);
@@ -262,28 +279,29 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         return Serializer.Serialize(eventData);
     }
 
-    public Task PublishAsync(
+    public virtual Task PublishAsync(
         Type eventType,
         object eventData,
-        IBasicProperties properties,
-        Dictionary<string, object> headersArguments = null)
+        Dictionary<string, object> headersArguments = null,
+        Guid? eventId = null,
+        [CanBeNull] string correlationId = null)
     {
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
         var body = Serializer.Serialize(eventData);
 
-        return PublishAsync(eventName, body, properties, headersArguments);
+        return PublishAsync( eventName, body, headersArguments, eventId, correlationId);
     }
 
     protected virtual Task PublishAsync(
         string eventName,
         byte[] body,
-        IBasicProperties properties,
         Dictionary<string, object> headersArguments = null,
-        Guid? eventId = null)
+        Guid? eventId = null,
+        [CanBeNull] string correlationId = null)
     {
         using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
         {
-            return PublishAsync(channel, eventName, body, properties, headersArguments, eventId);
+            return PublishAsync(channel, eventName, body, headersArguments, eventId, correlationId);
         }
     }
 
@@ -291,21 +309,23 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         IModel channel,
         string eventName,
         byte[] body,
-        IBasicProperties properties,
         Dictionary<string, object> headersArguments = null,
-        Guid? eventId = null)
+        Guid? eventId = null,
+        [CanBeNull] string correlationId = null)
     {
         EnsureExchangeExists(channel);
 
-        if (properties == null)
-        {
-            properties = channel.CreateBasicProperties();
-            properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
-        }
+        var properties = channel.CreateBasicProperties();
+        properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
 
         if (properties.MessageId.IsNullOrEmpty())
         {
             properties.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
+        }
+
+        if (correlationId != null)
+        {
+            properties.CorrelationId = correlationId;
         }
 
         SetEventMessageHeaders(properties, headersArguments);

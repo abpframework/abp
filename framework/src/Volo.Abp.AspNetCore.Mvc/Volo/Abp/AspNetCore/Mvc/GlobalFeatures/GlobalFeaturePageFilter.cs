@@ -28,8 +28,8 @@ public class GlobalFeaturePageFilter : IAsyncPageFilter, ITransientDependency
 
         if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.HandlerInstance.GetType(), out var attribute))
         {
-            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
-            logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute.Name}' feature.");
+            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance)!;
+            logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute!.Name}' feature.");
             context.Result = new NotFoundResult();
             return;
         }

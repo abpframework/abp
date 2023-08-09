@@ -7,7 +7,7 @@ namespace Volo.Abp.Minify.NUglify;
 
 public class NUglifyException : AbpException
 {
-    public List<UglifyError> Errors { get; set; }
+    public List<UglifyError>? Errors { get; set; }
 
     public NUglifyException(string message, List<UglifyError> errors)
         : base(message)

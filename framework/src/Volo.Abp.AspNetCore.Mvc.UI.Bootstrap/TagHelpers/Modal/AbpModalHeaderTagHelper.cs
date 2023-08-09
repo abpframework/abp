@@ -2,7 +2,7 @@
 
 public class AbpModalHeaderTagHelper : AbpTagHelper<AbpModalHeaderTagHelper, AbpModalHeaderTagHelperService>
 {
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
 
     public AbpModalHeaderTagHelper(AbpModalHeaderTagHelperService tagHelperService)
         : base(tagHelperService)

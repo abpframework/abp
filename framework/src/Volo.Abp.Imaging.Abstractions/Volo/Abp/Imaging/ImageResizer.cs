@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -22,7 +23,7 @@ public class ImageResizer : IImageResizer, ITransientDependency
         IOptions<ImageResizeOptions> imageResizeOptions, 
         ICancellationTokenProvider cancellationTokenProvider)
     {
-        ImageResizerContributors = imageResizerContributors;
+        ImageResizerContributors = imageResizerContributors.Reverse();
         CancellationTokenProvider = cancellationTokenProvider;
         ImageResizeOptions = imageResizeOptions.Value;
     }

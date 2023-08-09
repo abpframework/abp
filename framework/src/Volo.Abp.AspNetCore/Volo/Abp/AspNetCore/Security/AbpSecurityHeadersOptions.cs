@@ -11,7 +11,7 @@ public class AbpSecurityHeadersOptions
     
     public bool UseContentSecurityPolicyScriptNonce { get; set; }
     
-    public string ContentSecurityPolicyValue { get; set; }
+    public string? ContentSecurityPolicyValue { get; set; }
 
     public Dictionary<string, string> Headers { get; }
     

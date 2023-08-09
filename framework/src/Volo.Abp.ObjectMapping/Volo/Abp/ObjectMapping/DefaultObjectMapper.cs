@@ -36,7 +36,7 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
     {
         if (source == null)
         {
-            return default;
+            return default!;
         }
 
         using (var scope = ServiceProvider.CreateScope())
@@ -60,7 +60,7 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
                 //TODO: Check if TDestination has a proper constructor which takes TSource
                 //TODO: Check if TDestination has an empty constructor (in this case, use MapFrom)
 
-                return (TDestination)Activator.CreateInstance(typeof(TDestination), source);
+                return (TDestination)Activator.CreateInstance(typeof(TDestination), source)!;
             }
             catch
             {
@@ -75,7 +75,7 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
     {
         if (source == null)
         {
-            return default;
+            return default!;
         }
 
         using (var scope = ServiceProvider.CreateScope())

@@ -1,18 +1,15 @@
 ﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.BlockquotesModel
 @{
     ViewData["Title"] = "Badges";
 }
 
-@section styles {
-    <abp-style-bundle>
-        <abp-style src="/css/demo.css" />
-    </abp-style-bundle>
-}
-
 <h2>Blockquotes</h2>
 
-<p>Based on <a href="http://getbootstrap.com/docs/4.1/content/typography/#blockquotes" target="_blank"> Bootstrap Blockquotes</a>.</p>
+<p>Based on <a href="@BootstrapUrlHelper.GetDocUrl("content/typography/#blockquotes")" target="_blank"> Bootstrap Blockquotes</a>.</p>
 
 <h4># Blockquote Examples</h4>
 

@@ -4,8 +4,8 @@ ABP is a **modular application framework** which consists of dozens of **NuGet &
 
 There are **two types of modules.** They don't have any structural difference but are categorized by functionality and purpose:
 
-* [**Framework modules**](https://github.com/abpframework/abp/tree/master/framework/src): These are **core modules of the framework** like caching, emailing, theming, security, serialization, validation, EF Core integration, MongoDB integration... etc. They do not have application/business functionalities but makes your daily development easier by providing common infrastructure, integration and abstractions.
-* [**Application modules**](https://github.com/abpframework/abp/tree/master/modules): These modules implement specific application/business functionalities like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components.
+* [**Framework modules**](https://github.com/abpframework/abp/tree/dev/framework/src): These are **core modules of the framework** like caching, emailing, theming, security, serialization, validation, EF Core integration, MongoDB integration... etc. They do not have application/business functionalities but makes your daily development easier by providing common infrastructure, integration and abstractions.
+* [**Application modules**](https://github.com/abpframework/abp/tree/dev/modules): These modules implement specific application/business functionalities like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components.
 
 ## Open Source Application Modules
 

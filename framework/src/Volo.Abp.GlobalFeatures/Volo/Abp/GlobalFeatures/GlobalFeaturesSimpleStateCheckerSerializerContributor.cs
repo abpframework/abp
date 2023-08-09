@@ -11,7 +11,7 @@ public class GlobalFeaturesSimpleStateCheckerSerializerContributor :
 {
     public const string CheckerShortName = "G";
 
-    public string SerializeToJson<TState>(ISimpleStateChecker<TState> checker)
+    public string? SerializeToJson<TState>(ISimpleStateChecker<TState> checker)
         where TState : IHasSimpleStateCheckers<TState>
     {
         if (checker is not RequireGlobalFeaturesSimpleStateChecker<TState> globalFeaturesSimpleStateChecker)
@@ -34,7 +34,7 @@ public class GlobalFeaturesSimpleStateCheckerSerializerContributor :
         return jsonObject.ToJsonString();
     }
 
-    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject, TState state)
+    public ISimpleStateChecker<TState>? Deserialize<TState>(JsonObject jsonObject, TState state)
         where TState : IHasSimpleStateCheckers<TState>
     {
         if (jsonObject["T"]?.ToString() != CheckerShortName)
@@ -50,7 +50,7 @@ public class GlobalFeaturesSimpleStateCheckerSerializerContributor :
 
         return new RequireGlobalFeaturesSimpleStateChecker<TState>(
             (bool?)jsonObject["A"] ?? false,
-            nameArray.Select(x => x.ToString()).ToArray()
+            nameArray.Select(x => x!.ToString()).ToArray()
         );
     }
 }

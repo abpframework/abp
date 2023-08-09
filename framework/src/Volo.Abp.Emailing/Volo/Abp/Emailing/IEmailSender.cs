@@ -13,8 +13,8 @@ public interface IEmailSender
     /// </summary>
     Task SendAsync(
         string to,
-        string subject,
-        string body,
+        string? subject,
+        string? body,
         bool isBodyHtml = true
     );
 
@@ -24,8 +24,8 @@ public interface IEmailSender
     Task SendAsync(
         string from,
         string to,
-        string subject,
-        string body,
+        string? subject,
+        string? body,
         bool isBodyHtml = true
     );
 

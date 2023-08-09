@@ -127,7 +127,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         return new CurrentTenantDto()
         {
             Id = CurrentTenant.Id,
-            Name = CurrentTenant.Name,
+            Name = CurrentTenant.Name!,
             IsAvailable = CurrentTenant.IsAvailable
         };
     }
@@ -286,10 +286,10 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     {
         var result = new ApplicationSettingConfigurationDto
         {
-            Values = new Dictionary<string, string>()
+            Values = new Dictionary<string, string?>()
         };
 
-        var settingDefinitions = _settingDefinitionManager.GetAll().Where(x => x.IsVisibleToClients);
+        var settingDefinitions = (await _settingDefinitionManager.GetAllAsync()).Where(x => x.IsVisibleToClients);
 
         var settingValues = await _settingProvider.GetAllAsync(settingDefinitions.Select(x => x.Name).ToArray());
 
@@ -346,7 +346,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
                 {
                     TimeZoneName = windowsTimeZoneId.IsNullOrWhiteSpace()
                         ? null
-                        : _timezoneProvider.WindowsToIana(windowsTimeZoneId)
+                        : _timezoneProvider.WindowsToIana(windowsTimeZoneId!)
                 }
             }
         };
@@ -356,7 +356,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     {
         return new ClockDto
         {
-            Kind = Enum.GetName(typeof(DateTimeKind), _abpClockOptions.Kind)
+            Kind = Enum.GetName(typeof(DateTimeKind), _abpClockOptions.Kind)!
         };
     }
 }
