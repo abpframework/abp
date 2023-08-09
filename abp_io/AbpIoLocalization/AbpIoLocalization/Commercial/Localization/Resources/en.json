@@ -825,7 +825,7 @@
     "ExpirationDate": "Expiration Date",
     "SpringCampaignDiscount": "Spring Campaign Discount",
     "WhyUseAbpIoPlatform": "Why should I use the ABP.IO Platform instead of creating a new solution from scratch?",
-    "WhyUseAbpIoPlatformFaqExplanation": "See <a href=\"https://docs.abp.io/en/commercial/latest/why-abp-io-platform \"> that document </a> for a detailed explanation of why using ABP.IO Platform has a significant advantage over doing everything yourself.",
+    "WhyUseAbpIoPlatformFaqExplanation": "See <a href=\"/why-abp-io \"> that page </a> for a detailed explanation of why using ABP.IO Platform has a significant advantage over doing everything yourself.",
     "EulaPageTitle": "End User License Agreement (EULA)",
     "PrivacyPolicyPageTitle": "Privacy Policy - Cookie Policy",
     "TermsConditionsPageTitle": "Terms and Conditions",
