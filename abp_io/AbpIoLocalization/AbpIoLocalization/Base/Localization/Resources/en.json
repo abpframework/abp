@@ -213,13 +213,13 @@
     "SpringCampaign": "Welcome <br>Spring Sale!",
     "SpringCampaign2": "<span>Limited <br> Time Offer!</span>",
     "AboutUs": "About Us",
-    "HowItWorks": "How it works?",
+    "HowItWorks": "How it Works?",
     "ReleaseNotes": "Release Notes",
     "DetailedChangeNotes" : "Detailed Change Notes",
     "SeeTrainings": "See Trainings",
     "NoContent": "No content",
     "More": "More",
-    "WhyABPIOPlatform": "Why ABP.IO Platform",
+    "WhyABPIOPlatform": "Why ABP.IO Platform?",
     "AbpStudio": "ABP Studio"
   }
 }
