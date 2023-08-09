@@ -1,5 +1,4 @@
 ﻿#if MongoDB
-using System.Reflection.Emit;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.BlobStoring.Database.MongoDB;
 using Volo.Abp.Data;
@@ -9,9 +8,8 @@ using Volo.Abp.MongoDB;
 using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.TenantManagement.MongoDB;
-using Volo.CmsKit.MongoDB;
 
-namespace Volo.CmsKit.MonbgoDB;
+namespace Volo.CmsKit.MongoDB;
 
 [ConnectionStringName("MongoDBDefault")]
 public class UnifiedDbContext : AbpMongoDbContext
