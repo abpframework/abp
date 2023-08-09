@@ -218,7 +218,8 @@
     "DetailedChangeNotes" : "Detailed Change Notes",
     "SeeTrainings": "See Trainings",
     "NoContent": "No content",
-    "ABPStudioBeta": "ABP Studio <span class=\"badge border rounded fw--5\" style=\"border-color: #B84297 !important;\">BETA</span>",
-    "More": "More"
+    "More": "More",
+    "WhyABPIOPlatform": "Why ABP.IO Platform",
+    "AbpStudio": "ABP Studio"
   }
 }

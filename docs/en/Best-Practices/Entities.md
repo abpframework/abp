@@ -28,6 +28,7 @@ Every aggregate root is also an entity. So, these rules are valid for aggregate 
 - **Do** keep the entity as always **valid** and **consistent** within its own boundary.
   - **Do** define properties with `private`, `protected`, `internal ` or `protected internal` setter where it is needed to protect the entity consistency and validity.
   - **Do** define `public `, `internal` or `protected internal` (virtual) **methods** to change the properties (with non-public setters) if necessary.
+  - **Do** return the entity object (`this`) from the setter methods.
 
 ### Aggregate Roots
 
@@ -86,15 +87,16 @@ public class Issue : FullAuditedAggregateRoot<Guid> //Using Guid as the key/iden
         Labels = new Collection<IssueLabel>(); //Always initialize the collection
     }
 
-    public virtual void SetTitle([NotNull] string title)
+    public virtual Issue SetTitle([NotNull] string title)
     {
         Title = Check.NotNullOrWhiteSpace(title, nameof(title)); //Validate
+        return this;
     }
     
     /* AddLabel & RemoveLabel methods manages the Labels collection
      * in a safe way (prevents adding the same label twice) */
 
-    public virtual void AddLabel(Guid labelId)
+    public virtual Issue AddLabel(Guid labelId)
     {
         if (Labels.Any(l => l.LabelId == labelId))
         {
@@ -102,11 +104,13 @@ public class Issue : FullAuditedAggregateRoot<Guid> //Using Guid as the key/iden
         }
 
         Labels.Add(new IssueLabel(Id, labelId));
+        return this;
     }
     
-    public virtual void RemoveLabel(Guid labelId)
+    public virtual Issue RemoveLabel(Guid labelId)
     {
         Labels.RemoveAll(l => l.LabelId == labelId);
+        return this;
     }
 
     /* Close & ReOpen methods protect the consistency

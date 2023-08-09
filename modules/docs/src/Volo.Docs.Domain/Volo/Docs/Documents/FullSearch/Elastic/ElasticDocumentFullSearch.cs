@@ -204,11 +204,18 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             foreach (var hit in response.Hits)
             {
                 var doc = hit.Source;
+                if(docs.Any(x => x.Id == doc.Id))
+                {
+                    continue;
+                }
+
+
                 if (hit.Highlight.ContainsKey("content"))
                 {
                     doc.Highlight = new List<string>();
                     doc.Highlight.AddRange(hit.Highlight["content"]);
                 }
+
                 docs.Add(doc);
             }
 

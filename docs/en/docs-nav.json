@@ -1523,6 +1523,10 @@
       ]
     },
     {
+      "text": "API Documentation",
+      "path": "{ApiDocumentationUrl}"
+    },
+    {
       "text": "Contribution Guide",
       "path": "Contribution/Index.md"
     }
