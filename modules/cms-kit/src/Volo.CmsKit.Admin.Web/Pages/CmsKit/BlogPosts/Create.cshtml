@@ -70,12 +70,16 @@
                 <select asp-for="ViewModel.BlogId" id="BlogSelectionSelect" class="form-control"></select>
                 <span asp-validation-for="ViewModel.BlogId"></span>
             </div>
+            
+            <abp-input asp-for="ViewModel.CoverImageMediaId" type="hidden" />
 
             <abp-input asp-for="ViewModel.Title" />
 
             <abp-input asp-for="ViewModel.Slug" />
             
             <abp-input asp-for="ViewModel.ShortDescription" />
+
+            <abp-input asp-for="ViewModel.Content" type="hidden" />
 
             <div class="content-editor cms-kit-editor"
                  id="ContentEditor"

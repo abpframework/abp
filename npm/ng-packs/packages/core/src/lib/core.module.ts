@@ -38,6 +38,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
+import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
 
 /**
  * BaseCoreModule is the module that holds
@@ -175,6 +176,10 @@ export class CoreModule {
           multi: true,
           useValue: localizationContributor(options.localizations),
           deps: [LocalizationService],
+        },
+        {
+          provide: SORT_COMPARE_FUNC,
+          useFactory: compareFuncFactory
         },
         {
           provide: QUEUE_MANAGER,

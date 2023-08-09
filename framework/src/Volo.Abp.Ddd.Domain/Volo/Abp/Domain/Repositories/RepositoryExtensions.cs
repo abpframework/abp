@@ -54,7 +54,7 @@ public static class RepositoryExtensions
     )
        where TEntity : class, IEntity<TKey>
     {
-        if (!await repository.AnyAsync(x => x.Id.Equals(id), cancellationToken))
+        if (!await repository.AnyAsync(x => x.Id!.Equals(id), cancellationToken))
         {
             throw new EntityNotFoundException(typeof(TEntity), id);
         }
@@ -87,7 +87,7 @@ public static class RepositoryExtensions
         {
             using (var uow = uowManager.Begin())
             {
-                await HardDeleteWithUnitOfWorkAsync(repository, predicate, autoSave, cancellationToken, uowManager.Current);
+                await HardDeleteWithUnitOfWorkAsync(repository, predicate, autoSave, cancellationToken, uowManager.Current!);
                 await uow.CompleteAsync(cancellationToken);
             }
         }
@@ -111,7 +111,7 @@ public static class RepositoryExtensions
         {
             using (var uow = uowManager.Begin())
             {
-                await HardDeleteWithUnitOfWorkAsync(repository, entities, autoSave, cancellationToken, uowManager.Current);
+                await HardDeleteWithUnitOfWorkAsync(repository, entities, autoSave, cancellationToken, uowManager.Current!);
                 await uow.CompleteAsync(cancellationToken);
             }
         }
@@ -135,7 +135,7 @@ public static class RepositoryExtensions
         {
             using (var uow = uowManager.Begin())
             {
-                await HardDeleteWithUnitOfWorkAsync(repository, entity, autoSave, cancellationToken, uowManager.Current);
+                await HardDeleteWithUnitOfWorkAsync(repository, entity, autoSave, cancellationToken, uowManager.Current!);
                 await uow.CompleteAsync(cancellationToken);
             }
         }

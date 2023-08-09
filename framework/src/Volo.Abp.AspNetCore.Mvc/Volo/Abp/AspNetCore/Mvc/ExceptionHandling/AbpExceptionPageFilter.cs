@@ -83,7 +83,7 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, ITransientDependency
         remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
         remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
 
-        var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance)!;
+        var logger = context.GetService<ILogger<AbpExceptionPageFilter>>(NullLogger<AbpExceptionPageFilter>.Instance)!;
         logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
 
         logger.LogException(context.Exception!, logLevel);
