@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.PermissionManagement.Integration;
+namespace Volo.Abp.PermissionManagement;
 
-public class PermissionGrantOutput
+public class IsGrantedResponse
 {
     public Guid UserId { get; set; }
 

@@ -231,16 +231,16 @@
                   "parametersOnMethod": [
                     {
                       "name": "input",
-                      "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.Integration.PermissionGrantInput, Volo.Abp.PermissionManagement.Application.Contracts, Version=7.4.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
-                      "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.Integration.PermissionGrantInput>",
-                      "typeSimple": "[Volo.Abp.PermissionManagement.Integration.PermissionGrantInput]",
+                      "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.IsGrantedRequest, Volo.Abp.PermissionManagement.Domain.Shared, Version=7.4.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
+                      "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.IsGrantedRequest>",
+                      "typeSimple": "[Volo.Abp.PermissionManagement.IsGrantedRequest]",
                       "isOptional": false,
                       "defaultValue": null
                     }
                   ],
                   "returnValue": {
-                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>",
-                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>"
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.IsGrantedResponse>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.IsGrantedResponse>"
                   }
                 }
               ]
@@ -256,9 +256,9 @@
               "parametersOnMethod": [
                 {
                   "name": "input",
-                  "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.Integration.PermissionGrantInput, Volo.Abp.PermissionManagement.Application.Contracts, Version=7.4.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
-                  "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.Integration.PermissionGrantInput>",
-                  "typeSimple": "[Volo.Abp.PermissionManagement.Integration.PermissionGrantInput]",
+                  "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.IsGrantedRequest, Volo.Abp.PermissionManagement.Domain.Shared, Version=7.4.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
+                  "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.IsGrantedRequest>",
+                  "typeSimple": "[Volo.Abp.PermissionManagement.IsGrantedRequest]",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -268,8 +268,8 @@
                   "nameOnMethod": "input",
                   "name": "input",
                   "jsonName": null,
-                  "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.Integration.PermissionGrantInput>",
-                  "typeSimple": "[Volo.Abp.PermissionManagement.Integration.PermissionGrantInput]",
+                  "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.IsGrantedRequest>",
+                  "typeSimple": "[Volo.Abp.PermissionManagement.IsGrantedRequest]",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -278,8 +278,8 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>",
-                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>"
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.IsGrantedResponse>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.IsGrantedResponse>"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.PermissionManagement.Integration.IPermissionIntegrationService"

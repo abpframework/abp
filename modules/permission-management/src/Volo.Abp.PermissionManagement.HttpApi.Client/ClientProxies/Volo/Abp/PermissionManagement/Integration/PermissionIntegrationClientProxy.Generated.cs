@@ -8,6 +8,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.Integration;
 
 // ReSharper disable once CheckNamespace
@@ -18,11 +19,11 @@ namespace Volo.Abp.PermissionManagement.Integration;
 [IntegrationService]
 public partial class PermissionIntegrationClientProxy : ClientProxyBase<IPermissionIntegrationService>, IPermissionIntegrationService
 {
-    public virtual async Task<ListResultDto<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
+    public virtual async Task<ListResultDto<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> input)
     {
-        return await RequestAsync<ListResultDto<PermissionGrantOutput>>(nameof(IsGrantedAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<ListResultDto<IsGrantedResponse>>(nameof(IsGrantedAsync), new ClientProxyRequestTypeValue
         {
-            { typeof(List<PermissionGrantInput>), input }
+            { typeof(List<IsGrantedRequest>), input }
         });
     }
 }

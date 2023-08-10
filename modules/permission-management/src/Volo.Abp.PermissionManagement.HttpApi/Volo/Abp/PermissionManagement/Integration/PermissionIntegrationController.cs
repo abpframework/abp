@@ -21,7 +21,7 @@ public class PermissionIntegrationController: AbpControllerBase, IPermissionInte
 
     [HttpGet]
     [Route("is-granted")]
-    public virtual Task<ListResultDto<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
+    public virtual Task<ListResultDto<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> input)
     {
         return PermissionIntegrationService.IsGrantedAsync(input);
     }
