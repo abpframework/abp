@@ -5,5 +5,5 @@ namespace Volo.Abp.PermissionManagement;
 
 public interface IPermissionFinder
 {
-    Task<List<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> input);
+    Task<List<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> requests);
 }

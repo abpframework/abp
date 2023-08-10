@@ -15,10 +15,10 @@ public class PermissionFinder : IPermissionFinder, ITransientDependency
         PermissionManager = permissionManager;
     }
 
-    public virtual async Task<List<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> input)
+    public virtual async Task<List<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> requests)
     {
         var result = new List<IsGrantedResponse>();
-        foreach (var item in input)
+        foreach (var item in requests)
         {
             result.Add(new IsGrantedResponse
             {

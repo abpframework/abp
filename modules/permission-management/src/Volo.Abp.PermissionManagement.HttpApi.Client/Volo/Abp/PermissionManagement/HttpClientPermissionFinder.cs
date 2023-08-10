@@ -16,8 +16,8 @@ public class HttpClientPermissionFinder : IPermissionFinder, ITransientDependenc
         PermissionIntegrationService = permissionIntegrationService;
     }
 
-    public virtual async Task<List<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> input)
+    public virtual async Task<List<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> requests)
     {
-        return (await PermissionIntegrationService.IsGrantedAsync(input)).Items.ToList();
+        return (await PermissionIntegrationService.IsGrantedAsync(requests)).Items.ToList();
     }
 }
