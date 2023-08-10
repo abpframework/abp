@@ -8,5 +8,5 @@ namespace Volo.Abp.PermissionManagement.Integration;
 [IntegrationService]
 public interface IPermissionIntegrationService : IApplicationService
 {
-    Task<ListResultDto<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input);
+    Task<ListResultDto<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> input);
 }

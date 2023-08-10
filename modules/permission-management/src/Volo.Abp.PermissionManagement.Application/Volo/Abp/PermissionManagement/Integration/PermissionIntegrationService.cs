@@ -1,35 +1,22 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Authorization.Permissions;
 
 namespace Volo.Abp.PermissionManagement.Integration;
 
 [IntegrationService]
 public class PermissionIntegrationService : ApplicationService, IPermissionIntegrationService
 {
-    protected IPermissionManager PermissionManager { get; }
+    protected IPermissionFinder PermissionFinder { get; }
 
-    public PermissionIntegrationService(IPermissionManager permissionManager)
+    public PermissionIntegrationService(IPermissionFinder permissionFinder)
     {
-        PermissionManager = permissionManager;
+        PermissionFinder = permissionFinder;
     }
 
-    public virtual async Task<ListResultDto<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
+    public virtual async Task<ListResultDto<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> input)
     {
-        var result = new List<PermissionGrantOutput>();
-        foreach (var item in input)
-        {
-            result.Add(new PermissionGrantOutput
-            {
-                UserId = item.UserId,
-                Permissions = (await PermissionManager.GetAsync(item.PermissionNames, UserPermissionValueProvider.ProviderName, item.UserId.ToString())).Result
-                    .ToDictionary(x => x.Name, x => x.IsGranted)
-            });
-        }
-
-        return new ListResultDto<PermissionGrantOutput>(result);
+        return new ListResultDto<IsGrantedResponse>(await PermissionFinder.IsGrantedAsync(input));
     }
 }

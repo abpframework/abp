@@ -1,8 +1,8 @@
 using System;
 
-namespace Volo.Abp.PermissionManagement.Integration;
+namespace Volo.Abp.PermissionManagement;
 
-public class PermissionGrantInput
+public class IsGrantedRequest
 {
     public Guid UserId { get; set; }
 
