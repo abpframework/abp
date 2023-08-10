@@ -5,6 +5,7 @@
 export * from './lib/animations';
 export * from './lib/components';
 export * from './lib/constants/validation';
+export * from './lib/constants/default-errors';
 export * from './lib/directives';
 export * from './lib/enums';
 export * from './lib/handlers';
