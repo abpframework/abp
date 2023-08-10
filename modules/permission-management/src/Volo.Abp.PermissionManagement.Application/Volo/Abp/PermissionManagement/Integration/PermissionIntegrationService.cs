@@ -24,6 +24,7 @@ public class PermissionIntegrationService : ApplicationService, IPermissionInteg
         {
             result.Add(new PermissionGrantOutput
             {
+                UserId = item.UserId,
                 Permissions = (await PermissionManager.GetAsync(item.PermissionNames, UserPermissionValueProvider.ProviderName, item.UserId.ToString())).Result
                     .ToDictionary(x => x.Name, x => x.IsGranted)
             });
