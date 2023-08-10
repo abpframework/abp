@@ -10,7 +10,7 @@ In this version, the `AddGlobalFilters<>` method is renamed as `FilterQueryable<
 
 ## Exposing Integration Services
 
-[Integration Services](../Integration-Services.md) are now not being exposed by default. In a monolith application, integration services don't need to be exposed outside since the modules probably would be in-process communication with each other. Therefore, from this version on, the integration services will not be exposed as endpoints by default.
+[Integration Services](../Integration-Services.md) are now not being exposed by default. In a monolith application, integration services don't need to be exposed outside since the modules probably would be in-process communication with each other. Therefore, they don't need to be exposed for most of the time.
 
 If you build a microservice solution, or you need to access an integration service via a network call from any other application, you probably will need to expose the integration services, so the other applications can consume them.
 
