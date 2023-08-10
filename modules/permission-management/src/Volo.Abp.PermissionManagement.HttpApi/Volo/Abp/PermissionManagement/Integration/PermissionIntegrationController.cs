@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +20,7 @@ public class PermissionIntegrationController: AbpControllerBase, IPermissionInte
 
     [HttpPost]
     [Route("is-granted")]
-    public virtual Task<IsGrantedOutput> IsGrantedAsync(IsGrantedInput input)
-    {
-        return PermissionIntegrationService.IsGrantedAsync(input);
-    }
-
-    [HttpPost]
-    [Route("is-granted/multiple")]
-    public virtual Task<List<IsGrantedOutput>> IsGrantedAsync(List<IsGrantedInput> input)
+    public virtual Task<List<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
     {
         return PermissionIntegrationService.IsGrantedAsync(input);
     }

@@ -18,19 +18,11 @@ namespace Volo.Abp.PermissionManagement.Integration;
 [IntegrationService]
 public partial class PermissionIntegrationClientProxy : ClientProxyBase<IPermissionIntegrationService>, IPermissionIntegrationService
 {
-    public virtual async Task<IsGrantedOutput> IsGrantedAsync(IsGrantedInput input)
+    public virtual async Task<List<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
     {
-        return await RequestAsync<IsGrantedOutput>(nameof(IsGrantedAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<List<PermissionGrantOutput>>(nameof(IsGrantedAsync), new ClientProxyRequestTypeValue
         {
-            { typeof(IsGrantedInput), input }
-        });
-    }
-
-    public async Task<List<IsGrantedOutput>> IsGrantedAsync(List<IsGrantedInput> input)
-    {
-        return await RequestAsync<List<IsGrantedOutput>>(nameof(IsGrantedAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(IsGrantedInput), input }
+            { typeof(List<PermissionGrantInput>), input }
         });
     }
 }

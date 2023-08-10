@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,24 +16,15 @@ public class PermissionIntegrationService : ApplicationService, IPermissionInteg
         PermissionManager = permissionManager;
     }
 
-    public virtual async Task<IsGrantedOutput> IsGrantedAsync(IsGrantedInput input)
+    public virtual async Task<List<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
     {
-        return new IsGrantedOutput
-        {
-            UserId = input.UserId,
-            GrantedPermissionNames = (await PermissionManager.GetAsync(input.PermissionNames, UserPermissionValueProvider.ProviderName, input.UserId.ToString())).Result.Where(x => x.IsGranted).Select(x => x.Name).ToList()
-        };
-    }
-
-    public virtual async Task<List<IsGrantedOutput>> IsGrantedAsync(List<IsGrantedInput> input)
-    {
-        var result = new List<IsGrantedOutput>();
+        var result = new List<PermissionGrantOutput>();
         foreach (var item in input)
         {
-            result.Add(new IsGrantedOutput
-            {
+            result.Add(new PermissionGrantOutput {
                 UserId = item.UserId,
-                GrantedPermissionNames = (await PermissionManager.GetAsync(item.PermissionNames, UserPermissionValueProvider.ProviderName, item.UserId.ToString())).Result.Where(x => x.IsGranted).Select(x => x.Name).ToList()
+                Permissions = (await PermissionManager.GetAsync(item.PermissionNames, UserPermissionValueProvider.ProviderName, item.UserId.ToString())).Result
+                    .ToDictionary(x => x.Name, x => x.IsGranted)
             });
         }
 
