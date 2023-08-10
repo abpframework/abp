@@ -80,21 +80,11 @@ public class PackageVersionCheckerService : ITransientDependency
             return null;
         }
 
-        List<SemanticVersion> versions;
-        
-        if (!includeNightly && includeReleaseCandidates)
-        {
-            versions = versionList
-                .Where(v => !v.Contains("-preview"))
-                .Select(SemanticVersion.Parse)
-                .OrderByDescending(v => v, new VersionComparer()).ToList();
-        }
-        else
-        {
-            versions = versionList
-                .Select(SemanticVersion.Parse)
-                .OrderByDescending(v => v, new VersionComparer()).ToList();
-        }
+        List<SemanticVersion> versions = versionList
+            .WhereIf(!includeNightly, v => !v.Contains("-preview"))
+            .WhereIf(!includeReleaseCandidates, v => !v.Contains("rc"))
+            .Select(SemanticVersion.Parse)
+            .OrderByDescending(v => v, new VersionComparer()).ToList();
 
         return versions.Any() 
             ? new LatestVersionInfo(versions.Max()) 
