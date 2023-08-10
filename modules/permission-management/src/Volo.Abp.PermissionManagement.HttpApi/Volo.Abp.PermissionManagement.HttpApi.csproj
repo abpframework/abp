@@ -19,5 +19,4 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
   </ItemGroup>
 
-
 </Project>
