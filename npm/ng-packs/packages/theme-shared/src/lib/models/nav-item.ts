@@ -18,6 +18,7 @@ export class NavItem {
   order?: number;
   requiredPolicy?: string;
   visible?: NavBarPropPredicate<NavItem>;
+  icon?: string;
   constructor(props: Partial<NavItem>) {
     Object.assign(this, props);
   }
