@@ -239,8 +239,8 @@
                     }
                   ],
                   "returnValue": {
-                    "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>",
-                    "typeSimple": "[Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput]"
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>"
                   }
                 }
               ]
@@ -250,7 +250,7 @@
             "IsGrantedAsyncByInput": {
               "uniqueName": "IsGrantedAsyncByInput",
               "name": "IsGrantedAsync",
-              "httpMethod": "POST",
+              "httpMethod": "GET",
               "url": "integration-api/permission-management/permissions/is-granted",
               "supportedVersions": [],
               "parametersOnMethod": [
@@ -273,13 +273,13 @@
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
-                  "bindingSourceId": "Body",
+                  "bindingSourceId": "ModelBinding",
                   "descriptorName": ""
                 }
               ],
               "returnValue": {
-                "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>",
-                "typeSimple": "[Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput]"
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.Integration.PermissionGrantOutput>"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.PermissionManagement.Integration.IPermissionIntegrationService"

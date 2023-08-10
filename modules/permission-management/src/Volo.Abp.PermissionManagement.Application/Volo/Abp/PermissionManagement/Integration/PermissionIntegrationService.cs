@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 
@@ -16,18 +17,18 @@ public class PermissionIntegrationService : ApplicationService, IPermissionInteg
         PermissionManager = permissionManager;
     }
 
-    public virtual async Task<List<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
+    public virtual async Task<ListResultDto<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
     {
         var result = new List<PermissionGrantOutput>();
         foreach (var item in input)
         {
-            result.Add(new PermissionGrantOutput {
-                UserId = item.UserId,
+            result.Add(new PermissionGrantOutput
+            {
                 Permissions = (await PermissionManager.GetAsync(item.PermissionNames, UserPermissionValueProvider.ProviderName, item.UserId.ToString())).Result
                     .ToDictionary(x => x.Name, x => x.IsGranted)
             });
         }
 
-        return result;
+        return new ListResultDto<PermissionGrantOutput>(result);
     }
 }

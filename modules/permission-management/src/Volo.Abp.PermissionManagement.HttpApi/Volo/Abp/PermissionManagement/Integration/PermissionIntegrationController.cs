@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.PermissionManagement.Integration;
@@ -18,9 +19,9 @@ public class PermissionIntegrationController: AbpControllerBase, IPermissionInte
         PermissionIntegrationService = permissionIntegrationService;
     }
 
-    [HttpPost]
+    [HttpGet]
     [Route("is-granted")]
-    public virtual Task<List<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
+    public virtual Task<ListResultDto<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input)
     {
         return PermissionIntegrationService.IsGrantedAsync(input);
     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.PermissionManagement.Integration;
@@ -7,5 +8,5 @@ namespace Volo.Abp.PermissionManagement.Integration;
 [IntegrationService]
 public interface IPermissionIntegrationService : IApplicationService
 {
-    Task<List<PermissionGrantOutput> > IsGrantedAsync(List<PermissionGrantInput> input);
+    Task<ListResultDto<PermissionGrantOutput>> IsGrantedAsync(List<PermissionGrantInput> input);
 }
