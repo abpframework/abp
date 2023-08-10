@@ -29,7 +29,7 @@ export class EntityAction<R = any> extends Action<R> {
     super(options.permission || '', options.visible, options.action);
     this.text = options.text;
     this.icon = options.icon || '';
-    this.btnClass = options.btnClass || 'btn-primary';
+    this.btnClass = options.btnClass || 'btn btn-primary text-center';
     this.btnStyle = options.btnStyle;
   }
 
