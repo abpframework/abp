@@ -501,6 +501,7 @@
     "DoYouNeedTraining": "Do you need {0} training?",
     "GetInTouchUs": "Get in touch with us",
     "ForMoreInformationClickHere": "For more information, click <a href='{0}'>here.</a>",
+    "ForMoreInformationClickHereByClass": "<span class=\"{1}\">For more information, click</span> <a href='{0}'>here.</a>",
     "IsGetOnboardingTraining": "Would you like to get onboarding & web application development training?",
     "OnboardingWebApplicationDevelopmentTrainingMessage": "To schedule your training calendar, please contact {0} after creating the organization",
     "CustomPurchaseMessage": "For the next step, click {0} to contact us.",
@@ -1041,7 +1042,7 @@
     "EnterpriseApplicationRequirements_THEPROBLEM_Description6": "Enqueuing and executing background jobs.",
     "EnterpriseApplicationRequirements_THEPROBLEM_Description7": "Handling multiple time zones in a global system.",
     "EnterpriseApplicationRequirements_THEPROBLEM_Description8": "Sharing validation, localization, authorization logic between server and client.",
-    "EnterpriseApplicationRequirements_ABPSOLUTION_Description": "There is much more. ABP provides infrastructure to implement such requirements easily. Again, you don't spend your valuable time to re-implement all these again and again.",
+    "EnterpriseApplicationRequirements_ABPSOLUTION_Description": "ABP provides infrastructure to implement such requirements easily. Again, you don't spend your valuable time to re-implement all these again and again.",
     "GeneratingInitialCode&Tooling": "Generating Initial Code & Tooling",
     "GeneratingInitialCode&Tooling_THEPROBLEM_Description": "You will build many similar pages in a typical web application. Most of them will perform similar CRUD operations. It is very tedious and also error prone to repeatedly create such pages.",
     "GeneratingInitialCode&Tooling_ABPSOLUTION_Description": "<a href=\"/tools/suite\">ABP Suite</a> can generate a full-stack CRUD page for your entities in seconds. The generated code is layered and clean. All the standard validation and authorization requirements are implemented. Plus, unit test classes are generated. Once you get a fully running page, you can modify it according to your business requirements.",
@@ -1071,7 +1072,7 @@
     "ABPCommunity_Description": "Finally, Being in a big community where everyone follows similar coding styles and principles and shares a common infrastructure brings power when you have troubles or need help with design decisions. Since we write code similarly, we can help each other much better. ABP is a community-backed project with more then 10K stars on GitHub.",
     "ABPCommunity_Description2": "It is easy to share code or even re-usable libraries between ABP developers. A code snippet that works for you will also work for others. There are a lot of samples and tutorials that you can directly implement for your application.",
     "ABPCommunity_Description3": "When you hire a developer who worked before with the ABP architecture will immediately understand your solution and start development in a very short time.",
-    "WhyAbpIo_Page_Title": "Why ABP Framework?",
+    "WhyAbpIo_Page_Title": "Why ABP.IO Platform?",
     "AbpStudio_Page_Title": "ABP Studio"
   }
 }
