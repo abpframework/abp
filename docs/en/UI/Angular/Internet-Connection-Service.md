@@ -1,16 +1,16 @@
 # Internet Connection Service
-`InternetConnectionService` is a service which is exposed by `@abp/ng.core` package. **If you want to detect whether you are connected to the internet or not, you can use this service.**
+`InternetConnectionService` is a service which is exposed by the `@abp/ng.core` package. **You can use this service in order to check your internet connection**
 
 ## Getting Started
-When you inject InternetConnectionService you can get the current internet status also if status changes you can catch them immediately.
+When you inject the InternetConnectionService you can get the current internet status, and it gets immediately updated if the status changes.
 
-`InternetConnectionService` is providing 2 alternatives for catching network status;
+`InternetConnectionService` provides two choices to catch the network status:
 1. Signal (readonly)
 2. Observable
 
 
 # How To Use
-İt's easy just inject the service and get network status.
+İt's easy, just inject the service and get the network status.
 
 **You can get via signal**
 ```ts
@@ -19,7 +19,7 @@ class SomeComponent{
  isOnline = this.internetConnectionService.networkStatus
 }
 ```
-**or you can get as observable**
+**or you can get the observable**
 ```ts
 class SomeComponent{
  internetConnectionService = inject(InternetConnectionService);
@@ -27,4 +27,4 @@ class SomeComponent{
 }
 ```
 
-To see how we implement to template, check `InternetConnectionStatusComponent`
+To see how we implement to the template, check the `InternetConnectionStatusComponent`
