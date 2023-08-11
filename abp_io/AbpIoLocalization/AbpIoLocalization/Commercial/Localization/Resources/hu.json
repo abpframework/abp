@@ -642,7 +642,7 @@
     "TrialLicensePaymentInfoSection_Description": "<strong>Licensz vásárlása: licensz</strong> megvásárlásával továbbra is <a href=\"{0}\" target=\"_blank\" rel=\"noopener\">prémium támogatást</a> kap . Emellett kisebb-nagyobb frissítéseket is kaphat a modulokhoz és témákhoz. Folytathatja új projektek létrehozását. És továbbra is használhatja az <a href=\"{1}\" target=\"_blank\" rel=\"noopener\">ABP Suite</a> -ot, amely felgyorsítja a fejlesztést.<br> Tekintse meg a <a href=\"{2}\" target=\"_blank\" rel=\"noopener\">licensz-összehasonlító táblázatot</a> a licensztípusok közötti különbségek ellenőrzéséhez.",
     "SelectTargetLicense": "Válassza a Target License lehetőséget",
     "UpgradePaymentInfoSection_ExtendMyLicenseForOneYear": "Igen, meghosszabbítom az engedélyem lejárati dátumát 1 évvel.",
-    "UpgradePaymentInfoSection_WantToExtendLicense": "Szeretné meghosszabbítani licenszét további {0} évre?",
+    "UpgradePaymentInfoSection_WantToExtendLicense": "Szeretné meghosszabbítani licenszét további 1 évre?",
     "UpgradePaymentInfoSection_UpgradingWillNotExtendLicense": "A frissítés nem hosszabbítja meg a licensz lejárati dátumát!",
     "UpgradePaymentInfoSection_LicenseUpgradeDescription": "Licenszének frissítésével magasabb licensztípusra lép, amely további előnyökhöz juttatja Önt. Tekintse meg a <a href=\"/Pricing\" target=\"_blank\">licensz-összehasonlító táblázatot</a> a licensztípusok közötti különbségek ellenőrzéséhez.",
     "Landing_Page_CustomerStories": "Ügyféltörténetek",

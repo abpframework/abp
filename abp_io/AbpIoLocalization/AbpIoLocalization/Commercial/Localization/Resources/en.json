@@ -644,7 +644,7 @@
     "TrialLicensePaymentInfoSection_Description": "<strong>Purchase license:</strong> By purchasing a license, you will continue to get <a href=\"{0}\" target=\"_blank\" rel=\"noopener\">premium support</a>. You will also be able to get major or minor updates for modules and themes. You will be able to continue creating new projects. And you will still be able to use <a href=\"{1}\" target=\"_blank\" rel=\"noopener\">ABP Suite</a> which speeds up your development.<br>See the <a href=\"{2}\" target=\"_blank\" rel=\"noopener\">license comparison table</a> to check the differences between the license types.",
     "SelectTargetLicense": "Select Target License",
     "UpgradePaymentInfoSection_ExtendMyLicenseForOneYear": "Yes, extend my license expiration date for 1 year.",
-    "UpgradePaymentInfoSection_WantToExtendLicense": "Do you want to extend your license for {0} more year(s)?",
+    "UpgradePaymentInfoSection_WantToExtendLicense": "Do you want to extend your license for 1 more year?",
     "UpgradePaymentInfoSection_UpgradingWillNotExtendLicense": "Upgrading will not extend your license expiration date!",
     "UpgradePaymentInfoSection_LicenseUpgradeDescription": "By upgrading your license, you will promote to a higher license type which will allow you to get additional benefits. See the <a href=\"/Pricing\" target=\"_blank\">license comparison table</a> to check the differences between the license types.",
     "Landing_Page_CustomerStories": "Customer Stories",

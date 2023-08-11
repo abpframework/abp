@@ -651,7 +651,7 @@
     "TrialLicensePaymentInfoSection_Description": "<strong>Lisans satın alma:</strong> Bir lisans satın alarak <a href=\"{0}\" target=\"_blank\" rel=\"noopener\">premium destek</a> almaya devam edeceksiniz. Ayrıca modüller ve temalar için büyük veya küçük güncellemeler alabileceksiniz. Yeni projeler oluşturmaya devam edebileceksiniz. Ve gelişiminizi hızlandıran <a href=\"{1}\" target=\"_blank\" rel=\"noopener\">ABP Suite</a>'i kullanmaya devam edebileceksiniz. Lisans türleri arasındaki farkları kontrol etmek için  <a href=\"{2}\" target=\"_blank\" rel=\"noopener\">lisans karşılaştırma tablosu</a>na bakın.",
     "SelectTargetLicense": "Hedef Lisansı Seçin",
     "UpgradePaymentInfoSection_ExtendMyLicenseForOneYear": "Evet, lisansımın geçerlilik süresini 1 yıl uzatın.",
-    "UpgradePaymentInfoSection_WantToExtendLicense": "Lisansınızı {0} yıl daha uzatmak istiyor musunuz?",
+    "UpgradePaymentInfoSection_WantToExtendLicense": "Lisansınızı 1 yıl daha uzatmak istiyor musunuz?",
     "UpgradePaymentInfoSection_UpgradingWillNotExtendLicense": "Yükseltme işlemi lisansınızın son kullanma tarihini uzatmayacaktır!",
     "UpgradePaymentInfoSection_LicenseUpgradeDescription": "Lisansınızı yükselterek, ek avantajlar elde etmenizi sağlayacak daha yüksek bir lisans türüne terfi edeceksiniz. Lisans türleri arasındaki farkları kontrol etmek için <a href=\"/Pricing\" target=\"_blank\">lisans karşılaştırma tablosuna</a> bakın.",
     "Landing_Page_CustomerStories": "Müşteri Hikayeleri",
