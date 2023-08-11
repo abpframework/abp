@@ -1,13 +1,13 @@
 # Sorting Navigation Elements
-This documentation is describing how navigation elements sorted and how you can change this default behaviour.
+This documentation describes how the navigation elements are sorted and how to change this default behaviour.
 
-When you want to add `Navigation Element` you can use `RoutesService`. For more info [click here](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu#how-to-add-a-navigation-element).
-However, in this documentation, we will talk more about how to sort navigation elements via the `Routes Service` `order` attribute.
+When you want to add the `Navigation Element` you can use the `RoutesService`. For more details, see the [document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu#how-to-add-a-navigation-element).
+However, in this documentation, we will talk more about how to sort the navigation elements with the `order` attribute from the `Routes Service`.
 
 
 ### Order Property
-- This parameter is optional and used for sorting purposes.
-- If you define this property it will be sorted by default sorting function.
+- This parameter is optional and is used for sorting purposes.
+- If you define this property it will be sorted by the default sorting function.
 - You can edit this function.
 
 **Default Compare Function;**
@@ -38,9 +38,9 @@ export function compareFuncFactory() {
   return  fn;
 }
 ```
-**What this function do?**
-- if order property defined, then it will be sorted by order value.
-- if both navigation element has same order value then it will be sorted by name.
-- If order property is not defined, it will be last element and sort by name between unordered navs.
+**What does this function do?**
+- if the order property is defined, then it will be sorted by the order value.
+- if both of the navigation elements have the same order value then it will be sorted by the name.
+- If the order property is not defined, it will be the last element and the unordered navs will be sorted by name.
 
 You can edit this sorting function behaviour as you wish. 
