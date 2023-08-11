@@ -150,7 +150,11 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   ngOnChanges({ data }: SimpleChanges) {
     if (!data?.currentValue) return;
-    this.list.totalCount = this.recordsTotal
+    
+    if (data.currentValue.length < 1) {
+      this.list.totalCount = this.recordsTotal
+    }
+
     this.data = data.currentValue.map((record: any, index: number) => {
       this.propList.forEach(prop => {
         const propData = { getInjected: this.getInjected, record, index } as any;
