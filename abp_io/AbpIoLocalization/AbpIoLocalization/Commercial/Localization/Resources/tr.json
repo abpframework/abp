@@ -511,6 +511,7 @@
     "DoYouNeedTraining": "{0} eğitimine ihtiyacınız var mı?",
     "GetInTouchUs": "Bize Ulaşın",
     "ForMoreInformationClickHere": "Daha fazla bilgi için <a href='{0}'>buraya tıklayın.</a>",
+    "ForMoreInformationClickHereByClass": "<span class=\"{1}\">Daha fazla bilgi için</span> <a href='{0}'>buraya tıklayın.</a>",
     "IsGetOnboardingTraining": "İşe alım ve web uygulaması geliştirme eğitimi almak ister misiniz?",
     "OnboardingWebApplicationDevelopmentTrainingMessage": "Eğitim takviminizi planlamak için lütfen organizasyonu oluşturduktan sonra {0} ile iletişime geçin",
     "CustomPurchaseMessage": "Bir sonraki adım için, bizimle iletişime geçmek üzere {0}'a tıklayın.",
