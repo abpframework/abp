@@ -1,10 +1,10 @@
 # ABP Commercial - GDPR Module Overview
 
-In this article, I will highlight the ABP Commercial's [GDPR Module](https://commercial.abp.io/modules/Volo.Gdpr) and show you how to provide personal data to the GDPR Module that collected by your application and make it aligned with personal data download result.
+In this article, I will highlight ABP Commercial's [GDPR Module](https://commercial.abp.io/modules/Volo.Gdpr) and show you how to provide personal data to the GDPR Module that is collected by your application and make it aligned with personal data download results.
 
 ## GDPR Module
 
-[GDPR Module](https://docs.abp.io/en/commercial/latest/modules/gdpr) allows users to download and delete their data collected by the application. It's used for Personal Data Management obligating by the GDPR regulation and provides the following features:
+[GDPR Module](https://docs.abp.io/en/commercial/latest/modules/gdpr) allows users to download and delete the data collected by the application. It's used for Personal Data Management obligating by the GDPR regulation and provides the following features:
 
 * Allows users to request their personal data.
 * Lists the personal data requests and users can download their personal data by the listed request times.
@@ -24,23 +24,23 @@ After the application is created, we can run the application and login to the ap
 
 ![](./gdpr-personal-data-menu.png)
 
-We can click this menu item to see the "Personal Data Management" page:
+We can click this menu item to navigate to the "Personal Data Management" page:
 
 ![](./gdpr-personal-data-page.png)
 
-This page is used to manage personal data requests. You can view the past requests, current status of the latest request, create a new personal data download request, download the prepared personal data or delete all your personal data (makes the data anonymized) and account from the application.
+This page is used to manage personal data requests. You can view past requests, the current status of the latest request, create a new personal data download request, download the prepared personal data or delete all your personal data (makes the data anonymized) and account from the application.
 
 ### Downloading Personal Data
 
 After a quick overview of the GDPR module, now we can deep dive into the Personal Data Download process.
 
-The GDPR module requests the information from the other modules that reference the `Volo.Abp.Gdpr.Abstractions` package and merges the response data into a single JSON file and the personal data can be downloaded later by the user from the "Personal Data Management" page when it's prepared (when the specified preperation time has been passed). 
+The GDPR module requests information from the other modules that reference the `Volo.Abp.Gdpr.Abstractions` package and merges the response data into a single JSON file and the personal data can be downloaded later by the user from the "Personal Data Management" page when it's prepared (when the specified preparation time has been passed). 
 
-Currently, only the [Identity Pro module](https://docs.abp.io/en/commercial/latest/modules/identity) provides some personal data to the GDPR Module because it's the only module that can be considered as collecting personal data, such as user's name, surname, email address and so on. Therefore, ABP makes the everything that needed such as getting all data collecting that when the personal data download request has been made or delete/anonymize the personal data when the personal data delete request has been made.
+Currently, only the [Identity Pro module](https://docs.abp.io/en/commercial/latest/modules/identity) provides some personal data to the GDPR Module because it's the only module that can be considered as collecting personal data, such as the user's name, surname, email address, and so on. Therefore, ABP makes everything that is needed such as getting all data collected when the personal data download request has been made or deleting/anonymizing the personal data when the personal data delete request has been made.
 
 This might be enough for some of your applications and you would not need to collect any other sensitive data from a user. However, most of the time you would probably need to collect some personal data from users for certain reasons. 
 
-In that case, you should provide the personal data that you collected for a certain user in your application/module or provider to the GPDR module. So, when the personal data download request has been made, the GDPR module can request the information from the different part of your application and merges the response data into a single JSON file to be downloaded. In other word, the data that provided by you will be considered as personal data and whenever a user request his/her personal data, it'll be included in the result.
+In that case, you should provide the personal data that you collected for a certain user in your application/module or provider to the GPDR module. So, when the personal data download request has been made, the GDPR module can request the information from the different part of your application and merges the response data into a single JSON file to be downloaded. In other words, the data provided by you will be considered as personal data and whenever a user requests his/her personal data, it'll be included in the result.
 
 In the next section, we will see how to provide personal data from a different module/provider. 
 
@@ -48,15 +48,15 @@ In the next section, we will see how to provide personal data from a different m
 
 Let's assume that we have an e-commerce application and we need to get the address from a user to send their order. Address information is considered as personal data according to GDPR regulations. Therefore, we need to provide the address information to the GDPR Module.
 
-For this purpose, we need subscribe to the `GdprUserDataDeletionRequestedEto` and `GdprUserDataRequestEto` distributed events. These ETOs (event transfer objects) come from the `Volo.Abp.Gdpr.Abstractions` package, which are used to start deleting/anonymizing and download personal data requests. `Volo.Abp.Gdpr.Domain` package is pre-installed in the domain layer and has reference to that package, so most of the time you don't need to reference to the `Volo.Abp.Gdpr.Abstractions` package.
+For this purpose, we need to subscribe to the `GdprUserDataDeletionRequestedEto` and `GdprUserDataRequestEto` distributed events. These ETOs (event transfer objects) come from the `Volo.Abp.Gdpr.Abstractions` package, which is used to start deleting/anonymizing and downloading personal data requests. `Volo.Abp.Gdpr.Domain` package is pre-installed in the domain layer and has reference to that package, so most of the time you don't need to reference to the `Volo.Abp.Gdpr.Abstractions` package.
 
-But, if you want to use these ETOs in a different project, you should add the the `Volo.Abp.Gdpr.Abstractions` package. You can use the following command to add it yo your project:
+But, if you want to use these ETOs in a different project, you should add the `Volo.Abp.Gdpr.Abstractions` package. You can use the following command to add it to your project:
 
 ```bash
 abp add-package Volo.Abp.Gdpr.Abstractions
 ```
 
-After, we have ensured that we have reference to the package, then we can create a new event handler class named `AddressGdprEventHandler` and subscribe to the `GdprUserDataDeletionRequestedEto` and `GdprUserDataRequestEto` distributed events:
+After we have ensured that we have reference to the package, then we can create a new event handler class named `AddressGdprEventHandler` and subscribe to the `GdprUserDataDeletionRequestedEto` and `GdprUserDataRequestEto` distributed events:
 
 ```csharp
 public class AddressGdprEventHandler :
@@ -109,12 +109,12 @@ public class AddressGdprEventHandler :
 ```
 
 * Here, we have subscribed to the `GdprUserDataDeletionRequestedEto` and `GdprUserDataRequestEto` distributed events.
-* When a user made a personal data preperation request, then the `GdprUserDataRequestEto` published by GDPR module and the data preparation process starts. Modules/providers provide sensitive personal data by subscribing to this event and publishing a `GdprUserDataPreparedEto` distributed event, with the data and the provider information. Thanks to this, you can distinguish the personal data by the collected provider/module.
-* Then, the GDPR module subscribes to the `GdprUserDataPreparedEto` distributed events that published by multiple modules/providers, and merges the response data into a single JSON file and the personal data can be downloaded later by the user, when the data preperation is done.
-* On the other hand, when a user made a request to delete his/her personal data from the application, the `GdprUserDataDeletionRequestedEto` being publish, so we can subscribe to the event and anonymize the personal data in our application.
-* Also, the Identity Pro module, delete the user's account permenantly.
+* When a user made a personal data preparation request, then the `GdprUserDataRequestEto` is published by th GDPR module and the data preparation process starts. Modules/providers provide sensitive personal data by subscribing to this event and publishing a `GdprUserDataPreparedEto` distributed event, with the data and the provider information. Thanks to this, you can distinguish the personal data by the collected provider/module.
+* Then, the GDPR module subscribes to the `GdprUserDataPreparedEto` distributed events that are published by multiple modules/providers and merge the response data into a single JSON file, and the personal data can be downloaded later by the user when the data preparation is done.
+* On the other hand, when a user made a request to delete his/her personal data from the application, the `GdprUserDataDeletionRequestedEto` is published, so we can subscribe to the event and anonymize the personal data in our application.
+* Also, the Identity Pro module deletes the user's account permanently.
 
-Now, let's run the application once again and make a personal data download request. But before that we can configure the `AbpGdprOptions` as follows to not wait for long and show our personal data result:
+Now, let's run the application once again and make a personal data download request. But before that, we can configure the `AbpGdprOptions` as follows to not wait for long and show our personal data result:
 
 ```csharp
 Configure<AbpGdprOptions>(options =>
@@ -123,11 +123,13 @@ Configure<AbpGdprOptions>(options =>
 });
 ```
 
-After, we have made a personal data preperation request, we need to wait for 5 minutes to personal data to be collected and then we can download it. After 5 minutes have passed, we can see the "Download" action button for the request in the "Personal Data Management" page:
+After we have made a personal data preparation request, we need to wait for 5 minutes for personal data to be collected and then we can download it. After 5 minutes have passed, we can see the "Download" action button for the request on the "Personal Data Management" page:
 
 ![](./personal-data-download.png)
 
-Then, we can click the download button and a zip file will be downloaded. We can unzip the file and examine the JSON files that contains our personal data. If you follow and apply the steps from now, you should be seeing two JSON files. One of them for user specific information provided by Identity Pro module and the other one is the address information provided by us (our application specific personal data).
+Then, when we clicked the download button, a zip file will be downloaded. We can unzip the file and examine the JSON files that contain our personal data. If you have followed and applied the steps from now, you should be seeing two JSON files. One of them is for user-specific information provided by the Identity Pro module and the other one is the address information provided by us (our application-specific personal data).
+
+![](./personal-data-files.png)
 
 *Basic information for the user:*
 
@@ -143,4 +145,4 @@ Then, we can click the download button and a zip file will be downloaded. We can
 
 ## Conclusion
 
-In this article, I've explained the GDPR Module's data collection system and give you a brief overview about the module. GDPR Module allows you to request to download personal data, delete/anonymize your own personal data and delete your account permenantly. It's pre-installed in the Application and Application(single layer) Pro Startup templates, but you can easily configure it to your existing application.
+In this article, I've explained the GDPR Module's data collection system and given you a brief overview of the module. GDPR Module allows you to request to download personal data, delete/anonymize your own personal data and delete your account permanently. It's pre-installed in the Application and Application(single layer) Pro Startup templates, but you can easily configure it to your existing application.
