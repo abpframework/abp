@@ -109,7 +109,7 @@ public class AddressGdprEventHandler :
 ```
 
 * Here, we have subscribed to the `GdprUserDataDeletionRequestedEto` and `GdprUserDataRequestEto` distributed events.
-* When a user made a personal data preparation request, then the `GdprUserDataRequestEto` is published by th GDPR module and the data preparation process starts. Modules/providers provide sensitive personal data by subscribing to this event and publishing a `GdprUserDataPreparedEto` distributed event, with the data and the provider information. Thanks to this, you can distinguish the personal data by the collected provider/module.
+* When a user made a personal data preparation request, then the `GdprUserDataRequestEto` is published by the GDPR module and the data preparation process starts. Modules/providers provide sensitive personal data by subscribing to this event and publishing a `GdprUserDataPreparedEto` distributed event, with the data and the provider information. Thanks to this, you can distinguish the personal data by the collected provider/module.
 * Then, the GDPR module subscribes to the `GdprUserDataPreparedEto` distributed events that are published by multiple modules/providers and merge the response data into a single JSON file, and the personal data can be downloaded later by the user when the data preparation is done.
 * On the other hand, when a user made a request to delete his/her personal data from the application, the `GdprUserDataDeletionRequestedEto` is published, so we can subscribe to the event and anonymize the personal data in our application.
 * Also, the Identity Pro module deletes the user's account permanently.
