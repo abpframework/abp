@@ -641,7 +641,7 @@
     "TrialLicensePaymentInfoSection_Description": "<strong>购买许可证：</strong>通过购买许可证，您将继续获得<a href=\"{0}\" target=\"_blank\" rel=\"noopener\">高级支持</a>。 您还将能够获得模块和主题的重大更新。 您将能够继续创建新项目。 而且您仍然可以使用 <a href=\"{1}\" target=\"_blank\" rel=\"noopener\">ABP 套件</a> 加速您的开发。<br>请参阅 <a href=\"{2}\" target=\"_blank\" rel=\"noopener\">许可证比较表</a>来查看许可证类型之间的差异。",
     "SelectTargetLicense": "选择目标许可证",
     "UpgradePaymentInfoSection_ExtendMyLicenseForOneYear": "是的，将我的许可证到期日期延长 1 年。",
-    "UpgradePaymentInfoSection_WantToExtendLicense": "您想将许可证再延长 {0} 年吗？",
+    "UpgradePaymentInfoSection_WantToExtendLicense": "您想将许可证再延长 1 年吗？",
     "UpgradePaymentInfoSection_UpgradingWillNotExtendLicense": "升级不会延长您的许可证到期日期！",
     "UpgradePaymentInfoSection_LicenseUpgradeDescription": "通过升级您的许可证，您将升级到更高的许可证类型，这将使您获得额外的好处。 请参阅<a href=\"/Pricing\" target=\"_blank\">许可证比较表</a>以查看许可证类型之间的差异。",
     "Landing_Page_CustomerStories": "客户故事",

@@ -618,7 +618,7 @@
     "TrialLicensePaymentInfoSection_Description": "<strong>شراء رخصة:</strong> بشراء رخصة، ستستمر في الحصول على <a href=\"{0}\" target=\"_blank\" rel=\"noopener\">الدعم المتميز</a>. ستتمكن أيضًا من الحصول على تحديثات رئيسية أو ثانوية للوحدات والسمات. ستتمكن من الاستمرار في إنشاء مشاريع جديدة. وستظل قادرًا على استخدام  <a href=\"{1}\" target=\"_blank\" rel=\"noopener\">ABP Suite</a> مما يسرع من تطويرك.<br> راجع <a href=\"{2}\" target=\"_blank\" rel=\"noopener\">جدول مقارنة الرخصة</a> للتحقق من الاختلافات بين أنواع الرخص.",
     "SelectTargetLicense": "حدد الرخصة المرادة",
     "UpgradePaymentInfoSection_ExtendMyLicenseForOneYear": "نعم، قم بتمديد تاريخ انتهاء رخصتي لمدة عام واحد.",
-    "UpgradePaymentInfoSection_WantToExtendLicense": "هل تريد تمديد ترخيصك لمدة {0} سنة (سنوات) أخرى؟",
+    "UpgradePaymentInfoSection_WantToExtendLicense": "هل تريد تمديد ترخيصك لمدة 1 سنة (سنوات) أخرى؟",
     "UpgradePaymentInfoSection_UpgradingWillNotExtendLicense": "لن تؤدي الترقية إلى تمديد تاريخ انتهاء رخصتك!",
     "UpgradePaymentInfoSection_LicenseUpgradeDescription": "من خلال ترقية رخصتك، ستقوم بالترقية إلى نوع رخصة أعلى مما سيتيح لك الحصول على مزايا إضافية. راجع <a href=\"/Pricing\" target=\"_blank\">جدول مقارنة الرخص</a> للتحقق من الاختلافات بين أنواع الرخص.",
     "Landing_Page_CustomerStories": "قصص العملاء",
