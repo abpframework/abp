@@ -96,6 +96,14 @@ public partial class TokenController
                 var result = await SignInManager.CheckPasswordSignInAsync(user, request.Password, true);
                 if (!result.Succeeded)
                 {
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+                    {
+                        Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                        Action = result.ToIdentitySecurityLogAction(),
+                        UserName = request.Username,
+                        ClientId = request.ClientId
+                    });
+
                     string errorDescription;
                     if (result.IsLockedOut)
                     {
@@ -137,14 +145,6 @@ public partial class TokenController
                 {
                     return await HandleTwoFactorLoginAsync(request, user);
                 }
-
-                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
-                {
-                    Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
-                    Action = result.ToIdentitySecurityLogAction(),
-                    UserName = request.Username,
-                    ClientId = request.ClientId
-                });
 
                 return await SetSuccessResultAsync(request, user);
             }
