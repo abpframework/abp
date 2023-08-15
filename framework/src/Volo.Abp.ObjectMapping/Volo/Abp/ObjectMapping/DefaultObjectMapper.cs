@@ -1,6 +1,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectMapping;
 
@@ -19,6 +26,8 @@ public class DefaultObjectMapper<TContext> : DefaultObjectMapper, IObjectMapper<
 
 public class DefaultObjectMapper : IObjectMapper, ITransientDependency
 {
+    protected static ConcurrentDictionary<string, MethodInfo> MethodInfoCache { get; } = new ConcurrentDictionary<string, MethodInfo>();
+
     public IAutoObjectMappingProvider AutoObjectMappingProvider { get; }
     protected IServiceProvider ServiceProvider { get; }
 
@@ -45,6 +54,12 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
             if (specificMapper != null)
             {
                 return specificMapper.Map(source);
+            }
+
+            var result = TryToMapCollection<TSource, TDestination>(scope, source, default);
+            if (result != null)
+            {
+                return result;
             }
         }
 
@@ -85,6 +100,12 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
             {
                 return specificMapper.Map(source, destination);
             }
+
+            var result = TryToMapCollection(scope, source, destination);
+            if (result != null)
+            {
+                return result;
+            }
         }
 
         if (source is IMapTo<TDestination> mapperSource)
@@ -100,6 +121,37 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
         }
 
         return AutoMap(source, destination);
+    }
+
+    protected virtual TDestination? TryToMapCollection<TSource, TDestination>(IServiceScope serviceScope, TSource source, TDestination? destination)
+    {
+        if (!typeof(TSource).IsGenericType || typeof(TSource).GetGenericTypeDefinition() != typeof(ICollection<>) ||
+            !typeof(TDestination).IsGenericType || typeof(TDestination).GetGenericTypeDefinition() != typeof(ICollection<>))
+        {
+            //skip, not a collection
+            return default;
+        }
+
+        var sourceGenericTypeDefinition = typeof(TSource).GenericTypeArguments[0];
+        var destinationGenericTypeDefinition = typeof(TDestination).GenericTypeArguments[0];
+        var specificGenericTypeDefinitionMapper = serviceScope.ServiceProvider.GetService(typeof(IObjectMapper<,>).MakeGenericType(sourceGenericTypeDefinition, destinationGenericTypeDefinition));
+        if (specificGenericTypeDefinitionMapper == null)
+        {
+            //skip, no specific mapper
+            return default;
+        }
+
+        var cacheKey = $"{specificGenericTypeDefinitionMapper.GetType().FullName}-{(destination == null ? "MapMethodWithSingleParameter" : "MapMethodWithDoubleParameters")}";
+        var method = MethodInfoCache.GetOrAdd(cacheKey, x => specificGenericTypeDefinitionMapper.GetType().GetMethods().First(m => m.Name == nameof(IObjectMapper<object, object>.Map) && m.GetParameters().Length == (destination == null ? 1 : 2)));
+        var result = Activator.CreateInstance(typeof(Collection<>).MakeGenericType(destinationGenericTypeDefinition))!.As<IList>();
+        foreach (var sourceItem in (IEnumerable)source!)
+        {
+            result.Add(destination == null
+                ? method.Invoke(specificGenericTypeDefinitionMapper, new [] {sourceItem})!
+                : method.Invoke(specificGenericTypeDefinitionMapper, new [] {sourceItem, Activator.CreateInstance(destinationGenericTypeDefinition)!})!);
+        }
+
+        return (TDestination)result!;
     }
 
     protected virtual TDestination AutoMap<TSource, TDestination>(object source)

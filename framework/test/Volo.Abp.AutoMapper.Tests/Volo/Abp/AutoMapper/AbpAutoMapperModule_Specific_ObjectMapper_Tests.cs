@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.AutoMapper.SampleClasses;
@@ -22,6 +24,25 @@ public class AbpAutoMapperModule_Specific_ObjectMapper_Tests : AbpIntegratedTest
     {
         var dto = _objectMapper.Map<MyEntity, MyEntityDto2>(new MyEntity { Number = 42 });
         dto.Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+    }
+
+    [Fact]
+    public void Specific_Object_Mapper_Should_Be_Used_For_Collections_If_Registered()
+    {
+        var dtos = _objectMapper.Map<ICollection<MyEntity>, ICollection<MyEntityDto2>>(new List<MyEntity>()
+        {
+            new MyEntity { Number = 42 }
+        });
+        dtos.First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+
+        dtos = _objectMapper.Map<ICollection<MyEntity>, ICollection<MyEntityDto2>>(new List<MyEntity>()
+        {
+            new MyEntity { Number = 42 }
+        }, new List<MyEntityDto2>() //When mapping to an existing collection, the destination collection is cleared first
+        {
+            new MyEntityDto2 { Number = 44 }
+        });
+        dtos.First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
     }
 
     [Fact]
