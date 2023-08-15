@@ -642,7 +642,7 @@
     "TrialLicensePaymentInfoSection_Description": "<strong>Osta käyttölupa:</strong> Ostamalla lisenssin saat edelleen <a href=\"{0}\" target=\"_blank\" rel=\"noopener\">premium-tuen</a>. Voit myös saada suurempia tai pieniä päivityksiä moduuleille ja teemoille. Voit jatkaa uusien projektien luomista. Voit edelleen käyttää <a href=\"{1}\" target=\"_blank\" rel=\"noopener\">ABP Suitea</a>, joka nopeuttaa kehitystäsi.<br>Katso <a href=\" {2}\" target=\"_blank\" rel=\"noopener\">käyttölupien vertailutaulukko</a>, jolla voit tarkistaa lisenssityyppien väliset erot.",
     "SelectTargetLicense": "Valitse kohdelisenssi",
     "UpgradePaymentInfoSection_ExtendMyLicenseForOneYear": "Kyllä, jatka lisenssini voimassaolopäivää 1 vuodella.",
-    "UpgradePaymentInfoSection_WantToExtendLicense": "Haluatko jatkaa lisenssiäsi vielä {0} vuodella?",
+    "UpgradePaymentInfoSection_WantToExtendLicense": "Haluatko jatkaa lisenssiäsi vielä 1 vuodella?",
     "UpgradePaymentInfoSection_UpgradingWillNotExtendLicense": "Päivitys ei pidennä lisenssisi vanhenemispäivää!",
     "UpgradePaymentInfoSection_LicenseUpgradeDescription": "Päivittämällä lisenssisi ylennät korkeampaan lisenssityyppiin, mikä antaa sinulle lisäetuja. Katso lisenssityyppien väliset erot <a href=\"/Pricing\" target=\"_blank\">lisenssivertailutaulukosta</a>.",
     "Landing_Page_CustomerStories": "Asiakkaiden tarinoita",

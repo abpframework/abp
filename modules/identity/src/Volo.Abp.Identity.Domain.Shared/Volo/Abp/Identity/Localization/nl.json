@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Rol naam '{0}' is ongeldig.",
     "Volo.Abp.Identity:InvalidToken": "Ongeldig token.",
     "Volo.Abp.Identity:InvalidUserName": "Gebruikersnaam '{0}' is ongeldig, mag alleen letters of cijfers bevatten.",
+    "InvalidUserName": "Gebruikersnaam '{0}' is ongeldig.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Er bestaat al een gebruiker met deze login.",
     "Volo.Abp.Identity:PasswordMismatch": "Incorrect wachtwoord.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Wachtwoorden moeten minimaal één cijfer bevatten ('0' - '9').",

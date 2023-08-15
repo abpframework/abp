@@ -47,6 +47,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "عنوان نقش/وظیفه {0} نامعتبر است.",
     "Volo.Abp.Identity:InvalidToken": "گذرواژه وارد شده معتبر نیست.",
     "Volo.Abp.Identity:InvalidUserName": "نام کاربری '{0}' نامعتبر است، نام کاربری فقط می تواند شامل حروف یا ارقام باشد.",
+    "InvalidUserName": "ام کاربری '{0}' نامعتبر است",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "یک کاربر با این نام کاربری از قبل موجود می باشد.",
     "Volo.Abp.Identity:PasswordMismatch": "گذرواژه اشتباه است.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "گذرواژه ها باید حداقل یک رقم داشته باشند ('0'-'9').",

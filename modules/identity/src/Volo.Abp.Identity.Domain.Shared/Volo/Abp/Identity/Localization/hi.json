@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "भूमिका नाम '{0}' अमान्य है।",
     "Volo.Abp.Identity:InvalidToken": "अमान्य टोकन।",
     "Volo.Abp.Identity:InvalidUserName": "उपयोगकर्ता नाम '{0}' अमान्य है, इसमें केवल अक्षर या अंक हो सकते हैं।",
+    "InvalidUserName": "उपयोगकर्ता नाम '{0}' अमान्य है",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "इस लॉगिन वाला उपयोगकर्ता पहले से मौजूद है।",
     "Volo.Abp.Identity:PasswordMismatch": "गलत पासवर्ड।",
     "Volo.Abp.Identity:PasswordRequiresDigit": "पासवर्ड में कम से कम एक अंक ('0'-'9') होना चाहिए।",

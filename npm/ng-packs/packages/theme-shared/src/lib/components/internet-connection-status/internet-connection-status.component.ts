@@ -1,14 +1,13 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common'
-import { map } from 'rxjs';
-import { InternetConnectionService, LocalizationModule } from '@abp/ng.core';
+import { Component, computed, inject  } from '@angular/core';
+import { NgIf } from '@angular/common'
+import { InternetConnectionService , LocalizationModule } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-internet-status',
   standalone: true,
-  imports:[CommonModule,LocalizationModule],
+  imports:[NgIf, LocalizationModule],
   template: `
-    <div class="status-icon" *ngIf="isOffline$ | async">
+    <div class="status-icon" *ngIf="!isOnline()">
       <i data-toggle="tooltip" title="{{ 'AbpUi::InternetConnectionInfo' | abpLocalization }}" data-placement="left" class="fa fa-circle text-blinking blink">
       </i>
     </div>
@@ -42,7 +41,7 @@ import { InternetConnectionService, LocalizationModule } from '@abp/ng.core';
     }
   `]
 })
-export class  InternetConnectionStatusComponent{
-  internetConnectionService = inject(InternetConnectionService)
-  isOffline$ = this.internetConnectionService.networkStatus$.pipe(map((val) => !val));
+export class InternetConnectionStatusComponent{
+  internetConnectionService = inject(InternetConnectionService);
+  isOnline = this.internetConnectionService.networkStatus
 }

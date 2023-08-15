@@ -5,15 +5,15 @@ namespace Volo.Abp.Identity.Integration;
 
 public class IdentityUserIntegrationService : IdentityAppServiceBase, IIdentityUserIntegrationService
 {
-    protected IIdentityUserRepository UserRepository { get; }
+    protected IUserRoleFinder UserRoleFinder { get; }
 
-    public IdentityUserIntegrationService(IIdentityUserRepository userRepository)
+    public IdentityUserIntegrationService(IUserRoleFinder userRoleFinder)
     {
-        UserRepository = userRepository;
+        UserRoleFinder = userRoleFinder;
     }
 
-    public async Task<string[]> GetRoleNamesAsync(Guid id)
+    public virtual async Task<string[]> GetRoleNamesAsync(Guid id)
     {
-        return (await UserRepository.GetRoleNamesAsync(id)).ToArray();
+        return await UserRoleFinder.GetRoleNamesAsync(id);
     }
 }

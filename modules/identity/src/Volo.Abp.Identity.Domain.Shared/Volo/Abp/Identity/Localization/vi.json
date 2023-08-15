@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Tên người dùng '{0}' Không hợp lệ.",
     "Volo.Abp.Identity:InvalidToken": "Token không hợp lệ.",
     "Volo.Abp.Identity:InvalidUserName": "Tên người dùng '{0}' không hợp lệ, chỉ có thể chứa chữ cái hoặc chữ số.",
+    "InvalidUserName": "Tên người dùng '{0}' không hợp lệ.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Một người dùng có thông tin đăng nhập này đã tồn tại.",
     "Volo.Abp.Identity:PasswordMismatch": "Mật khẩu không đúng.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "Mật khẩu phải có ít nhất một chữ số ('0'-'9').",

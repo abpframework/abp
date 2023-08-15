@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:InvalidRoleName": "Il nome del ruolo '{0}' non è valido.",
     "Volo.Abp.Identity:InvalidToken": "Token non valido.",
     "Volo.Abp.Identity:InvalidUserName": "Il nome utente '{0}' non è valido, può contenere solo lettere o cifre.",
+    "InvalidUserName": "Il nome utente '{0}' non è valido.",
     "Volo.Abp.Identity:LoginAlreadyAssociated": "Esiste già un utente con questo account.",
     "Volo.Abp.Identity:PasswordMismatch": "Password errata.",
     "Volo.Abp.Identity:PasswordRequiresDigit": "La password deve contenere almeno una cifra ('0'-'9').",

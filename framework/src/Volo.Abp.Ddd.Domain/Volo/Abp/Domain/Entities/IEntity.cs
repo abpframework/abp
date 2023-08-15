@@ -10,7 +10,7 @@ public interface IEntity
     /// Returns an array of ordered keys for this entity.
     /// </summary>
     /// <returns></returns>
-    object[] GetKeys();
+    object?[] GetKeys();
 }
 
 /// <summary>

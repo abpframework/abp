@@ -40,9 +40,9 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
 {
     protected IReadOnlyRepository<TEntity> ReadOnlyRepository { get; }
 
-    protected virtual string GetPolicyName { get; set; }
+    protected virtual string? GetPolicyName { get; set; }
 
-    protected virtual string GetListPolicyName { get; set; }
+    protected virtual string? GetListPolicyName { get; set; }
 
     protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
     {
@@ -107,7 +107,7 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
         {
             if (!sortInput.Sorting.IsNullOrWhiteSpace())
             {
-                return query.OrderBy(sortInput.Sorting);
+                return query.OrderBy(sortInput.Sorting!);
             }
         }
 

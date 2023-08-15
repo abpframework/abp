@@ -53,7 +53,7 @@ public class AccountEmailer : IAccountEmailer, ITransientDependency
 
         if (!returnUrl.IsNullOrEmpty())
         {
-            link += "&returnUrl=" + UrlEncoder.Default.Encode(NormalizeReturnUrl(returnUrl));
+            link += "&returnUrl=" + NormalizeReturnUrl(returnUrl);
         }
 
         if (!returnUrlHash.IsNullOrEmpty())
@@ -99,6 +99,11 @@ public class AccountEmailer : IAccountEmailer, ITransientDependency
                     }
                 }
             }
+        }
+
+        if (returnUrl.StartsWith("/connect/authorize?", StringComparison.OrdinalIgnoreCase))
+        {
+            return HttpUtility.UrlEncode(returnUrl);
         }
 
         return returnUrl;
