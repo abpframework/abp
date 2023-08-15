@@ -44,22 +44,47 @@ Please see the following migration documents, if you are upgrading from v7.3:
 In this section, I will introduce some major features released in this version. Here is a brief list of the titles that will be explained in the next sections:
 
 * Dynamic Setting Store
-* Introducing the `AdditionalModuleAssemblyAttribute`
+* Introducing the `AdditionalAssemblyAttribute`
 * `CorrelationId` Support on Distributed Events
 * Dynamic Database Migrations
 * Other News
 
 ### Dynamic Setting Store
 
-//TODO:...
+Prior to this version, it was hard to define settings in different microservices and centrally manage all setting definitions in a single admin application. To make that possible, we were adding project references for all the microservices' service contract packages from a single microservice, so it can know all the setting definitions and manage them. 
 
-### Introducing the `AdditionalModuleAssemblyAttribute`
+In this version, ABP Framework introduces the Dynamic Setting Store, which is an important feature that allows you to collect and get all setting definitions from a single point and overcome the setting management problems on microservices.
 
-//TODO:...
+> *Note*: If you are upgrading from an earlier version and using the Setting Management module, you need to create a new migration and apply it to your database because a new database table has been added for this feature.
+
+### Introducing the `AdditionalAssemblyAttribute`
+
+In this version, we have introduced the `AdditionalAssemblyAttribute` to define additional assemblies to be part of a module. ABP Framework automatically registers all the services of your module to the [Dependency Injection System](https://docs.abp.io/en/abp/latest/Dependency-Injection). It finds the service types by scanning types in the assembly that defines your module class. Typically, every assembly contains a separate module class definition and modules are depend on each other using the `DependsOn` attribute.
+
+In some rare cases, your module may consist of multiple assemblies, and only one of them define a module class, and you want to make the other assemblies parts of your module. This is especially useful, if you dont't want to depend on that module's dependencies.
+
+In that case, you can use the `AdditionalAssembly` attribute as shown below:
+
+```csharp
+[DependsOn(...)] // Your module dependencies as you normally would do
+[AdditionalAssembly(typeof(IdentityServiceModule))] // A type in the target assembly (in another assembly)
+public class IdentityServiceTestModule : AbpModule
+{
+    ...
+}
+```
+
+With the `AdditonalAssembly` attribute definition, ABP loads the assembly containing the `IdentityServiceModule` class as a part of the blog module. Notice that, in this case, none of the module dependencies of the `IdentityServiceModule` are loaded. Because, we are not depending on the `IdentityServiceModule`, instead we are just adding its assembly as a part of the `IdentityServiceTestModule`.
+
+> You can check the [Module Development Basics](https://docs.abp.io/en/abp/7.4/Module-Development-Basics) documentation to learn more.
 
 ### `CorrelationId` Support on Distributed Events
 
-//TODO: ...
+In this version, `CorrelationId` (a unique key that is used in distributed applications to trace requests accross multiple services/operations) is being attached to the distributed events, so you can relate events with HTTP requests and can trace all the related activities.
+
+ABP Framework generates a `correlationId` for the first time when an operation is started and then attachs the current `correlationId` to distributed events as an additional property. For example, if you are using the [transactional outbox or inbox pattern provided by ABP Framework](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#outbox-inbox-for-transactional-events), you can see the `correlationId` in the extra properties of the `IncomingEventInfo` or `OutgoingEventInfo` classes with the standard `X-Correlation-Id` key.
+
+> You can check [this issue](https://github.com/abpframework/abp/issues/16773) for more information.
 
 ### Dynamic Database Migrations 
 
