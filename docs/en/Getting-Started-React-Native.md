@@ -1,11 +1,10 @@
-# Getting Started with the React Native
-
-```json
+````json
 //[doc-params]
 {
 	"Tiered": ["No", "Yes"]
 }
-```
+````
+# Getting Started with the React Native
 
 ABP platform provide basic [React Native](https://reactnative.dev/) startup template to develop mobile applications **integrated to your ABP based backends**.
 
