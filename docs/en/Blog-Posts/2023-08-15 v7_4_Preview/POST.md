@@ -46,7 +46,7 @@ In this section, I will introduce some major features released in this version. 
 * Dynamic Setting Store
 * Introducing the `AdditionalAssemblyAttribute`
 * `CorrelationId` Support on Distributed Events
-* Dynamic Database Migrations
+* Database Migration System for EF Core
 * Other News
 
 ### Dynamic Setting Store
@@ -86,9 +86,16 @@ ABP Framework generates a `correlationId` for the first time when an operation i
 
 > You can check [this issue](https://github.com/abpframework/abp/issues/16773) for more information.
 
-### Dynamic Database Migrations 
+### Database Migration System for EF Core
 
-//TODO: ...
+In this version, ABP Framework provides base classes and events to migrate the database schema and seed the database on application startup. This system works compatible with multi-tenancy and whenever a new tenant created or a tenant's database connection string has updated, it checks and applies database migrations for the new tenant state.
+
+This system especially useful to migrate database for microservices. In this way, when you deploy a new version of a microservice, you don't need to manually migrate its database.
+
+You need to take the following actions to use the database migration system:
+
+* Create a class that derives from `EfCoreRuntimeDatabaseMigratorBase` class, override and implement it's `SeedAsync` method. Lastly, execute the `CheckAndApplyDatabaseMigrationsAsync` method of your class in the `OnPostApplicationInitializationAsync` method of your module class.
+* Create a class that derives from `DatabaseMigrationEventHandlerBase` class, override and implement it's `SeedAsync` method. Then, whenever a new tenant created or a tenant's connection string is changed then the `SeedAsync` method will be executed.
 
 ### Other News
 
@@ -100,7 +107,96 @@ ABP Framework generates a `correlationId` for the first time when an operation i
 
 We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce new features coming with ABP Commercial 7.4.
 
-//TODO:
+### Dynamic Text Template Store
+
+Prior to this version, it was hard to create text templates in different microservices and centrally manage them in a single admin application. For example, if you would define text template in your ordering microservice, then those text templates could not be seen on the administration microservice because the administration microservice would not any knowledge about that text templates (because it's hard-coded in the ordering microservice).
+
+In this version, the Dynamic Text Template Store has been introduced to make the [Text Template Management module](https://docs.abp.io/en/commercial/latest/modules/text-template-management) compatible with microservices and distributed systems. It allows you to store and get all text templates from a single point. Thanks to that, you can centrally manage the text templates in your admin application.
+
+> *Note*: If you are upgrading from an earlier version and using the Text Template Manamgement module, you need to create a new migration and apply it to your database.
+
+We will update the [Text Template Management module](https://docs.abp.io/en/commercial/latest/modules/text-template-management) in next days to state the configurations, while it mostly works automatically. You just need to configure the `TextTemplateManagementOptions` and set the `IsDynamicTemplateStoreEnabled` as true in you module class:
+
+```csharp
+Configure<TextTemplateManagementOptions>(options =>
+{
+    options.IsDynamicTemplateStoreEnabled = true;
+});
+```
+
+### Suite: Custom Code Support
+
+In this version, we have implemented the custom code support in Suite. This allows you to customize the generated code-blocks and preserve your custom code changes in the next CRUD Page Generation in Suite. ABP Suite specifies hook-points to allow adding custom code blocks. Then, the code that you written to these hook points will be respected and will not be overridden in the next entity generation.
+
+![](suite-custom-code.png)
+
+To enable custom code support, you should check the *Customizable code* in the crud page generation page. When you enable the custom code support, you will be seeing some hook-points in your application. 
+
+For example, in the C# side, you'll be seeing some abstract classes and classes that derive from them (for entities, application services, interfaces, domain services and so on...). You can write your custom code in those classes (`*.Extended.cs`) and in the next time when you need to re-generate the entity, your custom code will not be overriden (only the base abstract classes will be re-generated and your changes on the Suite will be reflected to these base classes):
+
+Folder structure             |  Book.Extended.cs
+:-------------------------:|:-------------------------:
+![](suite-custom-code-backend.png)  |  ![](book-extended-cs.png)
+
+> *Note*: If you want to override the entity and add custom code, please do not touch the code between `<suite-custom-code-autogenerated>...</suite-custom-code-autogenerated>` placeholders, because the constructor of the entity should be always re-generated incase of a new property added.
+
+On the UI side, you can see *comment placeholders* in the pages for MVC & Blazor applications. These are hook-points provided by the ABP Suite and you can write your custom code between these comment sections:
+
+Folder structure             |  Books/Index.cshtml
+:-------------------------:|:-------------------------:
+![](suite-custom-code-ui.png)  |  ![](book-extended-cshtml.png)
+
+### MAUI & React Native UI Revisions
+
+In this version, we have revised MAUI & React Native mobile applications and added new pages, functionalities and make improvements on the UI side.
+
+![](maui.png)
+
+For example, in the MAUI application, we have implemented the following functionalities and change the UI completely:
+
+* **User Management Page**: Management page for your application users. You can search, add, update, or delete users of your application.
+* **Tenants**: Management page for your tenants. 
+* **Settings**: Management page for your application settings. On this page, you can change **the current language**, **the profile picture**, **the current password**, or/and **the current theme**.
+
+Also, we have aligned the features on both of these mobile options (MAUI & React Native) and showed in the ["ABP Community Talks 2023.5: Exploring the Options for Mobile Development with the ABP Framework"](https://community.abp.io/events/mobile-development-with-the-abp-framework-ogtwaz5l).
+
+> If you have missed the event, you can watch from 👉 [here](https://www.youtube.com/watch?v=-wrdngeKgZw).
+
+### Check & Move Related Entities on Deletion/Demand
+
+In application modules, there are some entities those have complete relationship with each other such as role-user relation. Such cases, it's a typical requirement to check & move related entities that who have relation with the other entity that is about to be deleted.
+
+For example, if you need to delete an editon from your system, you would typically want to move the tenant that are associated to that edition. For this purpose, in this version, ABP Commercial allows you to move related entities on deletion/demand.
+
+![](editions.png)
+
+Currently, this feature is implemented for SaaS and Identity Pro modules and for the following relations:
+
+* Edition - Tenant
+* Role - User
+* Organization Unit - User
+
+Also, it's possible to move the related associated-records before deleting the record. For example, you can move all tenants from an edition as shown in the figure below:
+
+"Move all tenants" action  |  "Move all tenants" modal
+:-------------------------:|:-------------------------:
+![](move-all-tenants.png)  |  ![](move-tenants.png)
+
+### CMS Kit Pro: Page Feedback
+
+In this version, **Page Feedback** feature has been added to the [CMS Kit Pro](https://docs.abp.io/en/commercial/latest/modules/cms-kit/index) module. This feature allows you to get feedback from a page in your application. This is especially useful, if you have content that need feedback from users. For example if you have a documentation, or blog website, it's a common requirement to assess the quality of the articles and get feedback from users. In that case, you can use the **Page Feedback** feature.
+
+![](page-feedback.png)
+
+### Chat Module: Deleting Messages & Conversations
+
+In this version, the [Chat Module](https://docs.abp.io/en/commercial/latest/modules/chat) allows you to delete individiual messages or a complete conversation. 
+
+You can enable or disable the message/conversation deletion globally on your application:
+
+![](settings.png)
+
+> **Note**: The Angular UI hasn't been completed yet. We aim to complete it asap and include it in the next release. 
 
 ## Community News
 
