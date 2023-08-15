@@ -59,9 +59,9 @@ In this version, ABP Framework introduces the Dynamic Setting Store, which is an
 
 ### Introducing the `AdditionalAssemblyAttribute`
 
-In this version, we have introduced the `AdditionalAssemblyAttribute` to define additional assemblies to be part of a module. ABP Framework automatically registers all the services of your module to the [Dependency Injection System](https://docs.abp.io/en/abp/latest/Dependency-Injection). It finds the service types by scanning types in the assembly that defines your module class. Typically, every assembly contains a separate module class definition and modules are depend on each other using the `DependsOn` attribute.
+In this version, we have introduced the `AdditionalAssemblyAttribute` to define additional assemblies to be part of a module. ABP Framework automatically registers all the services of your module to the [Dependency Injection System](https://docs.abp.io/en/abp/latest/Dependency-Injection). It finds the service types by scanning types in the assembly that defines your module class. Typically, every assembly contains a separate module class definition and modules depend on each other using the `DependsOn` attribute.
 
-In some rare cases, your module may consist of multiple assemblies, and only one of them define a module class, and you want to make the other assemblies parts of your module. This is especially useful, if you dont't want to depend on that module's dependencies.
+In some rare cases, your module may consist of multiple assemblies and only one of them defines a module class, and you want to make the other assemblies parts of your module. This is especially useful if you don't want to depend on that module's dependencies.
 
 In that case, you can use the `AdditionalAssembly` attribute as shown below:
 
@@ -74,34 +74,34 @@ public class IdentityServiceTestModule : AbpModule
 }
 ```
 
-With the `AdditonalAssembly` attribute definition, ABP loads the assembly containing the `IdentityServiceModule` class as a part of the blog module. Notice that, in this case, none of the module dependencies of the `IdentityServiceModule` are loaded. Because, we are not depending on the `IdentityServiceModule`, instead we are just adding its assembly as a part of the `IdentityServiceTestModule`.
+With the `AdditonalAssembly` attribute definition, ABP loads the assembly containing the `IdentityServiceModule` class as a part of the identity service module. Notice that, in this case, none of the module dependencies of the `IdentityServiceModule` are loaded. Because we are not depending on the `IdentityServiceModule`, instead we are just adding its assembly as a part of the `IdentityServiceTestModule`.
 
 > You can check the [Module Development Basics](https://docs.abp.io/en/abp/7.4/Module-Development-Basics) documentation to learn more.
 
 ### `CorrelationId` Support on Distributed Events
 
-In this version, `CorrelationId` (a unique key that is used in distributed applications to trace requests accross multiple services/operations) is being attached to the distributed events, so you can relate events with HTTP requests and can trace all the related activities.
+In this version, `CorrelationId` (a unique key that is used in distributed applications to trace requests across multiple services/operations) is attached to the distributed events, so you can relate events with HTTP requests and can trace all the related activities.
 
-ABP Framework generates a `correlationId` for the first time when an operation is started and then attachs the current `correlationId` to distributed events as an additional property. For example, if you are using the [transactional outbox or inbox pattern provided by ABP Framework](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#outbox-inbox-for-transactional-events), you can see the `correlationId` in the extra properties of the `IncomingEventInfo` or `OutgoingEventInfo` classes with the standard `X-Correlation-Id` key.
+ABP Framework generates a `correlationId` for the first time when an operation is started and then attaches the current `correlationId` to distributed events as an additional property. For example, if you are using the [transactional outbox or inbox pattern provided by ABP Framework](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#outbox-inbox-for-transactional-events), you can see the `correlationId` in the extra properties of the `IncomingEventInfo` or `OutgoingEventInfo` classes with the standard `X-Correlation-Id` key.
 
 > You can check [this issue](https://github.com/abpframework/abp/issues/16773) for more information.
 
 ### Database Migration System for EF Core
 
-In this version, ABP Framework provides base classes and events to migrate the database schema and seed the database on application startup. This system works compatible with multi-tenancy and whenever a new tenant created or a tenant's database connection string has updated, it checks and applies database migrations for the new tenant state.
+In this version, ABP Framework provides base classes and events to migrate the database schema and seed the database on application startup. This system works compatible with multi-tenancy and whenever a new tenant is created or a tenant's database connection string has been updated, it checks and applies database migrations for the new tenant state.
 
-This system especially useful to migrate database for microservices. In this way, when you deploy a new version of a microservice, you don't need to manually migrate its database.
+This system is especially useful to migrate databases for microservices. In this way, when you deploy a new version of a microservice, you don't need to manually migrate its database.
 
 You need to take the following actions to use the database migration system:
 
-* Create a class that derives from `EfCoreRuntimeDatabaseMigratorBase` class, override and implement it's `SeedAsync` method. Lastly, execute the `CheckAndApplyDatabaseMigrationsAsync` method of your class in the `OnPostApplicationInitializationAsync` method of your module class.
-* Create a class that derives from `DatabaseMigrationEventHandlerBase` class, override and implement it's `SeedAsync` method. Then, whenever a new tenant created or a tenant's connection string is changed then the `SeedAsync` method will be executed.
+* Create a class that derives from `EfCoreRuntimeDatabaseMigratorBase` class, override and implement its `SeedAsync` method. Lastly, execute the `CheckAndApplyDatabaseMigrationsAsync` method of your class in the `OnPostApplicationInitializationAsync` method of your module class.
+* Create a class that derives from `DatabaseMigrationEventHandlerBase` class, override and implement its `SeedAsync` method. Then, whenever a new tenant is created or a tenant's connection string is changed then the `SeedAsync` method will be executed.
 
 ### Other News
 
 * [OpenIddict](https://github.com/openiddict/openiddict-core/tree/4.7.0) library has been upgraded to **v4.7.0**. See [#17334](https://github.com/abpframework/abp/pull/17334) for more info.
 * ABP v7.4 introduces the `Volo.Abp.Maui.Client` package, which is used by the MAUI mobile application in ABP Commercial. See [#17201](https://github.com/abpframework/abp/pull/17201) for more info.
-* In this version, the `AbpAspNetCoreIntegratedTestBase` class gets a generic type parameter, which expect either a startup class or an ABP module class. This allows us to use configurations from an ABP module or old-style ASP.NET Core Startup class in a test application class and this simplifies the test application project. See [#17039](https://github.com/abpframework/abp/pull/17039) for more info.
+* In this version, the `AbpAspNetCoreIntegratedTestBase` class gets a generic type parameter, which expects either a startup class or an ABP module class. This allows us to use configurations from an ABP module or old-style ASP.NET Core Startup class in a test application class and this simplifies the test application project. See [#17039](https://github.com/abpframework/abp/pull/17039) for more info.
 
 ## What's New with ABP Commercial 7.4?
 
@@ -109,13 +109,15 @@ We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the f
 
 ### Dynamic Text Template Store
 
-Prior to this version, it was hard to create text templates in different microservices and centrally manage them in a single admin application. For example, if you would define text template in your ordering microservice, then those text templates could not be seen on the administration microservice because the administration microservice would not any knowledge about that text templates (because it's hard-coded in the ordering microservice).
+Prior to this version, it was hard to create text templates in different microservices and centrally manage them in a single admin application. For example, if you would define a text template in your ordering microservice, then those text templates could not be seen on the administration microservice because the administration microservice would not have any knowledge about that text template (because it's hard-coded in the ordering microservice).
 
-In this version, the Dynamic Text Template Store has been introduced to make the [Text Template Management module](https://docs.abp.io/en/commercial/latest/modules/text-template-management) compatible with microservices and distributed systems. It allows you to store and get all text templates from a single point. Thanks to that, you can centrally manage the text templates in your admin application.
+For this reason, in this version, the Dynamic Text Template Store has been introduced to make the [Text Template Management module](https://docs.abp.io/en/commercial/latest/modules/text-template-management) compatible with microservices and distributed systems. It allows you to store and get all text templates from a single point. Thanks to that, you can centrally manage the text templates in your admin application.
 
-> *Note*: If you are upgrading from an earlier version and using the Text Template Manamgement module, you need to create a new migration and apply it to your database.
+> *Note*: If you are upgrading from an earlier version and using the Text Template Management module, you need to create a new migration and apply it to your database.
 
-We will update the [Text Template Management module](https://docs.abp.io/en/commercial/latest/modules/text-template-management) in next days to state the configurations, while it mostly works automatically. You just need to configure the `TextTemplateManagementOptions` and set the `IsDynamicTemplateStoreEnabled` as true in you module class:
+We will update the [Text Template Management module](https://docs.abp.io/en/commercial/latest/modules/text-template-management) in the next few days to state the configurations, while it mostly works automatically. 
+
+To enable the dynamic template store, you just need to configure the `TextTemplateManagementOptions` and set the `IsDynamicTemplateStoreEnabled` as true in you module class:
 
 ```csharp
 Configure<TextTemplateManagementOptions>(options =>
@@ -126,21 +128,21 @@ Configure<TextTemplateManagementOptions>(options =>
 
 ### Suite: Custom Code Support
 
-In this version, we have implemented the custom code support in Suite. This allows you to customize the generated code-blocks and preserve your custom code changes in the next CRUD Page Generation in Suite. ABP Suite specifies hook-points to allow adding custom code blocks. Then, the code that you written to these hook points will be respected and will not be overridden in the next entity generation.
+In this version, we have implemented the custom code support in Suite. This allows you to customize the generated code-blocks and preserve your custom code changes in the next CRUD Page Generation in Suite. ABP Suite specifies hook-points to allow adding custom code blocks. Then, the code that you wrote to these hook points will be respected and will not be overridden in the next entity generation.
 
 ![](suite-custom-code.png)
 
 To enable custom code support, you should check the *Customizable code* in the crud page generation page. When you enable the custom code support, you will be seeing some hook-points in your application. 
 
-For example, in the C# side, you'll be seeing some abstract classes and classes that derive from them (for entities, application services, interfaces, domain services and so on...). You can write your custom code in those classes (`*.Extended.cs`) and in the next time when you need to re-generate the entity, your custom code will not be overriden (only the base abstract classes will be re-generated and your changes on the Suite will be reflected to these base classes):
+For example, on the C# side, you'll be seeing some abstract classes and classes that derive from them (for entities, application services, interfaces, domain services, and so on...). You can write your custom code in those classes (`*.Extended.cs`) and the next time when you need to re-generate the entity, your custom code will not be overridden (only the base abstract classes will be re-generated and your changes on the Suite will be respected):
 
 Folder structure             |  Book.Extended.cs
 :-------------------------:|:-------------------------:
 ![](suite-custom-code-backend.png)  |  ![](book-extended-cs.png)
 
-> *Note*: If you want to override the entity and add custom code, please do not touch the code between `<suite-custom-code-autogenerated>...</suite-custom-code-autogenerated>` placeholders, because the constructor of the entity should be always re-generated incase of a new property added.
+> *Note*: If you want to override the entity and add custom code, please do not touch the code between `<suite-custom-code-autogenerated>...</suite-custom-code-autogenerated>` placeholders, because the constructor of the entity should be always re-generated in case of a new property added.
 
-On the UI side, you can see *comment placeholders* in the pages for MVC & Blazor applications. These are hook-points provided by the ABP Suite and you can write your custom code between these comment sections:
+On the UI side, you can see *comment placeholders* on the pages for MVC & Blazor applications. These are hook-points provided by the ABP Suite and you can write your custom code between these comment sections:
 
 Folder structure             |  Books/Index.cshtml
 :-------------------------:|:-------------------------:
@@ -148,25 +150,25 @@ Folder structure             |  Books/Index.cshtml
 
 ### MAUI & React Native UI Revisions
 
-In this version, we have revised MAUI & React Native mobile applications and added new pages, functionalities and make improvements on the UI side.
+In this version, we have revised MAUI & React Native mobile applications and added new pages, functionalities and made improvements on the UI side.
 
 ![](maui.png)
 
-For example, in the MAUI application, we have implemented the following functionalities and change the UI completely:
+For example, in the MAUI application, we have implemented the following functionalities and changed the UI completely:
 
 * **User Management Page**: Management page for your application users. You can search, add, update, or delete users of your application.
 * **Tenants**: Management page for your tenants. 
 * **Settings**: Management page for your application settings. On this page, you can change **the current language**, **the profile picture**, **the current password**, or/and **the current theme**.
 
-Also, we have aligned the features on both of these mobile options (MAUI & React Native) and showed in the ["ABP Community Talks 2023.5: Exploring the Options for Mobile Development with the ABP Framework"](https://community.abp.io/events/mobile-development-with-the-abp-framework-ogtwaz5l).
+Also, we have aligned the features on both of these mobile options (MAUI & React Native) and showed them in the ["ABP Community Talks 2023.5: Exploring the Options for Mobile Development with the ABP Framework"](https://community.abp.io/events/mobile-development-with-the-abp-framework-ogtwaz5l).
 
 > If you have missed the event, you can watch from 👉 [here](https://www.youtube.com/watch?v=-wrdngeKgZw).
 
 ### Check & Move Related Entities on Deletion/Demand
 
-In application modules, there are some entities those have complete relationship with each other such as role-user relation. Such cases, it's a typical requirement to check & move related entities that who have relation with the other entity that is about to be deleted.
+In application modules, there are some entities that have complete relationships with each other such as role-user relations. In such cases, it's a typical requirement to check & move related entities that have a relation with the other entity that is about to be deleted.
 
-For example, if you need to delete an editon from your system, you would typically want to move the tenant that are associated to that edition. For this purpose, in this version, ABP Commercial allows you to move related entities on deletion/demand.
+For example, if you need to delete an edition from your system, you would typically want to move the tenant that is associated with that edition. For this purpose, in this version, ABP Commercial allows you to move related entities on deletion/demand.
 
 ![](editions.png)
 
@@ -184,13 +186,15 @@ Also, it's possible to move the related associated-records before deleting the r
 
 ### CMS Kit Pro: Page Feedback
 
-In this version, **Page Feedback** feature has been added to the [CMS Kit Pro](https://docs.abp.io/en/commercial/latest/modules/cms-kit/index) module. This feature allows you to get feedback from a page in your application. This is especially useful, if you have content that need feedback from users. For example if you have a documentation, or blog website, it's a common requirement to assess the quality of the articles and get feedback from users. In that case, you can use the **Page Feedback** feature.
+In this version, the **Page Feedback** feature has been added to the [CMS Kit Pro](https://docs.abp.io/en/commercial/latest/modules/cms-kit/index) module. This feature allows you to get feedback from a page in your application. 
+
+This is especially useful if you have content that needs feedback from users. For example, if you have documentation or a blog website, it's a common requirement to assess the quality of the articles and get feedback from users. In that case, you can use this feature:
 
 ![](page-feedback.png)
 
 ### Chat Module: Deleting Messages & Conversations
 
-In this version, the [Chat Module](https://docs.abp.io/en/commercial/latest/modules/chat) allows you to delete individiual messages or a complete conversation. 
+In this version, the [Chat Module](https://docs.abp.io/en/commercial/latest/modules/chat) allows you to delete individual messages or a complete conversation. 
 
 You can enable or disable the message/conversation deletion globally on your application:
 
@@ -204,7 +208,7 @@ You can enable or disable the message/conversation deletion globally on your app
 
 ![](developersummit.jpg)
 
-We are thrilled to announce that the co-founder of [Volosoft](https://volosoft.com/) and Lead Developer of the ABP Framework, Halil Ibrahim Kalkan will give a speech about "Building a Kubernetes Integrated Local Development Environment" in the [DevNot's Developer Summit 2023 event](https://summit.devnot.com/) on the 7th of October.
+We are thrilled to announce that the co-founder of [Volosoft](https://volosoft.com/) and Lead Developer of the ABP Framework, Halil Ibrahim Kalkan will give a speech about "Building a Kubernetes Integrated Local Development Environment" in the [Developer Summit 2023 event](https://summit.devnot.com/) on the 7th of October.
 
 ### New ABP Community Posts
 
