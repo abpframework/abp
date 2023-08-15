@@ -35,7 +35,7 @@ You can use any IDE that supports .NET 7.x, like [Visual Studio 2022](https://vi
 ## Migration Guides
 
 There are a few breaking changes in this version that may affect your application.
-Please see the following migration documents, if you are upgrading from v7.2:
+Please see the following migration documents, if you are upgrading from v7.3:
 
 * [ABP Framework 7.3 to 7.4 Migration Guide](https://docs.abp.io/en/abp/7.4/Migration-Guides/Abp-7_4)
 
@@ -43,23 +43,47 @@ Please see the following migration documents, if you are upgrading from v7.2:
 
 In this section, I will introduce some major features released in this version. Here is a brief list of the titles that will be explained in the next sections:
 
-//TODO:
+* Dynamic Setting Store
+* Introducing the `AdditionalModuleAssemblyAttribute`
+* `CorrelationId` Support on Distributed Events
+* Dynamic Database Migrations
+* Other News
+
+### Dynamic Setting Store
+
+//TODO:...
+
+### Introducing the `AdditionalModuleAssemblyAttribute`
+
+//TODO:...
+
+### `CorrelationId` Support on Distributed Events
+
+//TODO: ...
+
+### Dynamic Database Migrations 
+
+//TODO: ...
+
+### Other News
+
+* [OpenIddict](https://github.com/openiddict/openiddict-core/tree/4.7.0) library has been upgraded to **v4.7.0**. See [#17334](https://github.com/abpframework/abp/pull/17334) for more info.
+* ABP v7.4 introduces the `Volo.Abp.Maui.Client` package, which is used by the MAUI mobile application in ABP Commercial. See [#17201](https://github.com/abpframework/abp/pull/17201) for more info.
+* In this version, the `AbpAspNetCoreIntegratedTestBase` class gets a generic type parameter, which expect either a startup class or an ABP module class. This allows us to use configurations from an ABP module or old-style ASP.NET Core Startup class in a test application class and this simplifies the test application project. See [#17039](https://github.com/abpframework/abp/pull/17039) for more info.
 
 ## What's New with ABP Commercial 7.4?
 
-We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 7.4.
+We've also worked on [ABP Commercial](https://commercial.abp.io/) to align the features and changes made in the ABP Framework. The following sections introduce new features coming with ABP Commercial 7.4.
 
 //TODO:
 
 ## Community News
 
-### Community Talks 2023.6: Live Community Question Session
-
-//TODO: mention about the talk and add a cover image!!!
-
 ### Volosoft Will Attend to DevNot Developer Summit 2023
 
-//TODO: mention about the event!!!
+![](developersummit.jpg)
+
+We are thrilled to announce that the co-founder of [Volosoft](https://volosoft.com/) and Lead Developer of the ABP Framework, Halil Ibrahim Kalkan will give a speech about "Building a Kubernetes Integrated Local Development Environment" in the [DevNot's Developer Summit 2023 event](https://summit.devnot.com/) on the 7th of October.
 
 ### New ABP Community Posts
 
