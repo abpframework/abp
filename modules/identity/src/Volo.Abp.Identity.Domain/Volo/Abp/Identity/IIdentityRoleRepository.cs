@@ -14,6 +14,15 @@ public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
         CancellationToken cancellationToken = default
     );
 
+    Task<List<IdentityRoleWithUserCount>> GetListWithUserCountAsync(
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        string filter = null,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+    
     Task<List<IdentityRole>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
