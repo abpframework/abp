@@ -28,6 +28,48 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
     }
 
+    public async Task<List<RoleWithUserCount>> GetAllListWithUserCountAsync(CancellationToken cancellationToken = default)
+    {
+        var roles = await GetListInternalAsync(cancellationToken : cancellationToken);
+        var roleIds = roles.Select(x => x.Id).ToList();
+        var userCount = await (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+            .Where(user => user.Roles.Any(role => roleIds.Contains(role.RoleId)))
+            .SelectMany(user => user.Roles)
+            .GroupBy(userRole => userRole.RoleId)
+            .Select(x => new  
+            {
+                RoleId = x.Key,
+                Count = x.Count()
+            })
+            .ToListAsync(GetCancellationToken(cancellationToken));
+        
+        return roles.Select(role => new RoleWithUserCount(role, userCount.FirstOrDefault(x => x.RoleId == role.Id)?.Count ?? 0)).ToList();
+    }
+
+    public async Task<List<RoleWithUserCount>> GetListWithUserCountAsync(
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        string filter = null,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var roles = await GetListInternalAsync(sorting, maxResultCount, skipCount, filter, includeDetails, cancellationToken: cancellationToken);
+        var roleIds = roles.Select(x => x.Id).ToList();
+        var userCount = await (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+            .Where(user => user.Roles.Any(role => roleIds.Contains(role.RoleId)))
+            .SelectMany(user => user.Roles)
+            .GroupBy(userRole => userRole.RoleId)
+            .Select(x => new  
+            {
+                RoleId = x.Key,
+                Count = x.Count()
+            })
+            .ToListAsync(GetCancellationToken(cancellationToken));
+        
+        return roles.Select(role => new RoleWithUserCount(role, userCount.FirstOrDefault(x => x.RoleId == role.Id)?.Count ?? 0)).ToList();
+    }
+
     public virtual async Task<List<IdentityRole>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
@@ -36,14 +78,13 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf(!filter.IsNullOrWhiteSpace(),
-                    x => x.Name.Contains(filter) ||
-                    x.NormalizedName.Contains(filter))
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.Name) : sorting)
-            .As<IMongoQueryable<IdentityRole>>()
-            .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
-            .ToListAsync(GetCancellationToken(cancellationToken));
+        return await GetListInternalAsync(
+            sorting,
+            maxResultCount,
+            skipCount,
+            filter,
+            includeDetails,
+            cancellationToken);
     }
 
     public virtual async Task<List<IdentityRole>> GetListAsync(
@@ -74,5 +115,23 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
                      x.NormalizedName.Contains(filter))
             .As<IMongoQueryable<IdentityRole>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
+    }
+
+    protected virtual async Task<List<IdentityRole>> GetListInternalAsync(
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        string filter = null,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .WhereIf(!filter.IsNullOrWhiteSpace(),
+                x => x.Name.Contains(filter) ||
+                     x.NormalizedName.Contains(filter))
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.Name) : sorting)
+            .As<IMongoQueryable<IdentityRole>>()
+            .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

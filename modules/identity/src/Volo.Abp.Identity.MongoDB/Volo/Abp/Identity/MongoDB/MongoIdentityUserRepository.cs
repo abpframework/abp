@@ -268,26 +268,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
-
-    public async Task<List<RoleWithUserCount>> GetCountAsync(Guid[] roleIds, CancellationToken cancellationToken = default)
-    {
-        var users = await (await GetMongoQueryableAsync(cancellationToken))
-            .Where(user => user.Roles.Any(role => roleIds.Contains(role.RoleId)))
-            .ToListAsync(GetCancellationToken(cancellationToken));
-            
-        var result = new List<RoleWithUserCount>();
-        foreach (var roleId in roleIds)
-        {
-            result.Add(new RoleWithUserCount
-            {
-                RoleId = roleId,
-                UserCount = users.Count(t => t.Roles.Any(role => role.RoleId == roleId))
-            });
-        }
-        
-        return result;
-    }
-
+    
     public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
         Guid organizationUnitId,
         CancellationToken cancellationToken = default)
@@ -318,7 +299,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .Where(ou => ou.Code.StartsWith(code))
             .Select(ou => ou.Id)
             .ToListAsync(cancellationToken);
-
+ 
         return await (await GetMongoQueryableAsync(cancellationToken))
                  .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
                  .ToListAsync(cancellationToken);

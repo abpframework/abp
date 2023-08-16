@@ -263,25 +263,6 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<RoleWithUserCount>> GetCountAsync(Guid[] roleIds, CancellationToken cancellationToken = default)
-    {
-        var users = await (await GetDbSetAsync())
-            .AsNoTracking()
-            .Where(user => user.Roles.Any(role => roleIds.Contains(role.RoleId))).IncludeDetails().ToListAsync(GetCancellationToken(cancellationToken));
-        
-        var result = new List<RoleWithUserCount>();
-        foreach (var roleId in roleIds)
-        {
-            result.Add(new RoleWithUserCount
-            {
-                RoleId = roleId,
-                UserCount = users.Count(t => t.Roles.Any(role => role.RoleId == roleId))
-            });
-        }
-        
-        return result;
-    }
-
     public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
         Guid id,
         bool includeDetails = false,
