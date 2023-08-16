@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -29,20 +30,47 @@ public class AbpAutoMapperModule_Specific_ObjectMapper_Tests : AbpIntegratedTest
     [Fact]
     public void Specific_Object_Mapper_Should_Be_Used_For_Collections_If_Registered()
     {
-        var dtos = _objectMapper.Map<ICollection<MyEntity>, ICollection<MyEntityDto2>>(new List<MyEntity>()
+        _objectMapper.Map<IEnumerable<MyEntity>, IEnumerable<MyEntityDto2>>(new List<MyEntity>()
         {
             new MyEntity { Number = 42 }
-        });
-        dtos.First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+        }).First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
 
-        dtos = _objectMapper.Map<ICollection<MyEntity>, ICollection<MyEntityDto2>>(new List<MyEntity>()
+        _objectMapper.Map<ICollection<MyEntity>, ICollection<MyEntityDto2>>(new List<MyEntity>()
+        {
+            new MyEntity { Number = 42 }
+        }).First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+
+        _objectMapper.Map<Collection<MyEntity>, Collection<MyEntityDto2>>(new Collection<MyEntity>()
+        {
+            new MyEntity { Number = 42 }
+        }, new Collection<MyEntityDto2>() //When mapping to an existing collection, the destination collection is cleared first
+        {
+            new MyEntityDto2 { Number = 44 }
+        }).First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+
+        _objectMapper.Map<IList<MyEntity>, IList<MyEntityDto2>>(new List<MyEntity>()
+        {
+            new MyEntity { Number = 42 }
+        }, new Collection<MyEntityDto2>() //When mapping to an existing collection, the destination collection is cleared first
+        {
+            new MyEntityDto2 { Number = 44 }
+        }).First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+
+        _objectMapper.Map<List<MyEntity>, List<MyEntityDto2>>(new List<MyEntity>()
         {
             new MyEntity { Number = 42 }
         }, new List<MyEntityDto2>() //When mapping to an existing collection, the destination collection is cleared first
         {
             new MyEntityDto2 { Number = 44 }
-        });
-        dtos.First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+        }).First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+
+        _objectMapper.Map<MyEntity[], MyEntityDto2[]>(new MyEntity[]
+        {
+            new MyEntity { Number = 42 }
+        }, new MyEntityDto2[] //When mapping to an existing collection, the destination collection is cleared first
+        {
+            new MyEntityDto2 { Number = 44 }
+        }).First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
     }
 
     [Fact]
