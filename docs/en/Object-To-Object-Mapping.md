@@ -335,12 +335,12 @@ For example, we might have a simple source and destination type:
 ````csharp
 public class Source
 {
-	public int Value { get; set; }
+    public int Value { get; set; }
 }
 
 public class Destination
 {
-	public int Value { get; set; }
+    public int Value { get; set; }
 }
 ````
 
