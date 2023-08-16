@@ -28,7 +28,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<IdentityRoleWithUserCount>> GetListWithUserCountAsync(
+    public virtual async Task<List<IdentityRoleWithUserCount>> GetListWithUserCountAsync(
         string sorting = null, 
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
