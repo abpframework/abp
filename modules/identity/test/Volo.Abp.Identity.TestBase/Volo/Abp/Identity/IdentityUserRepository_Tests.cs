@@ -135,6 +135,16 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         (await UserRepository.GetCountAsync("n")).ShouldBeGreaterThan(1);
         (await UserRepository.GetCountAsync("undefined-username")).ShouldBe(0);
     }
+    
+    [Fact]
+    public async Task GetCountAsync_With_RoleIds()
+    {
+        var roleWithUserCounts = await UserRepository.GetCountAsync(roleIds: new []{ TestData.RoleModeratorId, TestData.RoleSupporterId });
+
+        roleWithUserCounts.Count.ShouldBe(2);
+        roleWithUserCounts.ShouldContain(e => e.RoleId == TestData.RoleModeratorId && e.UserCount == 1);
+        roleWithUserCounts.ShouldContain(e => e.RoleId == TestData.RoleSupporterId && e.UserCount == 2);
+    }
 
     [Fact]
     public async Task GetUsersInOrganizationUnitAsync()

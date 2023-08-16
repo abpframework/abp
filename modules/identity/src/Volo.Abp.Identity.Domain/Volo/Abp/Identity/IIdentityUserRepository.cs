@@ -119,6 +119,11 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         CancellationToken cancellationToken = default
     );
 
+    Task<List<RoleWithUserCount>> GetCountAsync(
+        Guid[] roleIds, 
+        CancellationToken cancellationToken = default
+    );
+
     Task<IdentityUser> FindByTenantIdAndUserNameAsync(
         [NotNull] string userName,
         Guid? tenantId,

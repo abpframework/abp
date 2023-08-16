@@ -80,7 +80,7 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         _moderatorRole.AddClaim(_guidGenerator, new Claim("test-claim", "test-value"));
         await _roleRepository.InsertAsync(_moderatorRole);
 
-        _supporterRole = new IdentityRole(_guidGenerator.Create(), "supporter");
+        _supporterRole = new IdentityRole(_testData.RoleSupporterId, "supporter");
         await _roleRepository.InsertAsync(_supporterRole);
 
         _managerRole = new IdentityRole(_guidGenerator.Create(), "manager");
