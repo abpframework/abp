@@ -149,6 +149,12 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
             ? Activator.CreateInstance(definitionGenericType.MakeGenericType(destinationArgumentType))!.As<IList>()
             : Array.CreateInstance(destinationArgumentType, sourceList.Count);
 
+        if (destination != null && !destination.GetType().IsArray)
+        {
+            //Clear destination collection if destination not an array, We won't change array just same behavior as AutoMapper.
+            destination.As<IList>().Clear();
+        }
+
         for (var i = 0; i < sourceList.Count; i++)
         {
             var invokeResult = destination == null
@@ -158,6 +164,7 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
             if (definitionGenericType.IsGenericType)
             {
                 result.Add(invokeResult);
+                destination?.As<IList>().Add(invokeResult);
             }
             else
             {
@@ -165,7 +172,14 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
             }
         }
 
-        return (TDestination)result!;
+        if (destination != null && destination.GetType().IsArray)
+        {
+            //Return the new collection if destination is an array,  We won't change array just same behavior as AutoMapper.
+            return (TDestination)result;
+        }
+
+        //Return the destination if destination exists. The parameter reference equals with return object.
+        return destination ?? (TDestination)result;
     }
 
     protected virtual bool IsCollectionGenericType<TSource, TDestination>(out Type sourceArgumentType, out Type destinationArgumentType, out Type definitionGenericType)
