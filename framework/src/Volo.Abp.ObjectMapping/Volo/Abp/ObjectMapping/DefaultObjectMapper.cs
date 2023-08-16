@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectMapping;
 
@@ -134,21 +133,27 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
 
         var sourceGenericTypeDefinition = typeof(TSource).GenericTypeArguments[0];
         var destinationGenericTypeDefinition = typeof(TDestination).GenericTypeArguments[0];
-        var specificGenericTypeDefinitionMapper = serviceScope.ServiceProvider.GetService(typeof(IObjectMapper<,>).MakeGenericType(sourceGenericTypeDefinition, destinationGenericTypeDefinition));
-        if (specificGenericTypeDefinitionMapper == null)
+        var mapperType = typeof(IObjectMapper<,>).MakeGenericType(sourceGenericTypeDefinition, destinationGenericTypeDefinition);
+        var specificMapper = serviceScope.ServiceProvider.GetService(mapperType);
+        if (specificMapper == null)
         {
             //skip, no specific mapper
             return default;
         }
 
-        var cacheKey = $"{specificGenericTypeDefinitionMapper.GetType().FullName}-{(destination == null ? "MapMethodWithSingleParameter" : "MapMethodWithDoubleParameters")}";
-        var method = MethodInfoCache.GetOrAdd(cacheKey, x => specificGenericTypeDefinitionMapper.GetType().GetMethods().First(m => m.Name == nameof(IObjectMapper<object, object>.Map) && m.GetParameters().Length == (destination == null ? 1 : 2)));
+        var cacheKey = $"{mapperType.FullName}{(destination == null ? "MapMethodWithSingleParameter" : "MapMethodWithDoubleParameters")}";
+        var method = MethodInfoCache.GetOrAdd(cacheKey, _ =>
+        {
+            return specificMapper.GetType().GetMethods().First(x => x.Name == nameof(IObjectMapper<object, object>.Map) &&
+                                                                    x.GetParameters().Length == (destination == null ? 1 : 2));
+        });
+
         var result = Activator.CreateInstance(typeof(Collection<>).MakeGenericType(destinationGenericTypeDefinition))!.As<IList>();
         foreach (var sourceItem in (IEnumerable)source!)
         {
             result.Add(destination == null
-                ? method.Invoke(specificGenericTypeDefinitionMapper, new [] {sourceItem})!
-                : method.Invoke(specificGenericTypeDefinitionMapper, new [] {sourceItem, Activator.CreateInstance(destinationGenericTypeDefinition)!})!);
+                ? method.Invoke(specificMapper, new [] { sourceItem })!
+                : method.Invoke(specificMapper, new [] { sourceItem, Activator.CreateInstance(destinationGenericTypeDefinition)! })!);
         }
 
         return (TDestination)result!;
