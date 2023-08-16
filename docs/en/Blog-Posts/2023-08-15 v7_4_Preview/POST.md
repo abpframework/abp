@@ -51,7 +51,7 @@ In this section, I will introduce some major features released in this version. 
 
 ### Dynamic Setting Store
 
-Prior to this version, it was hard to define settings in different microservices and centrally manage all setting definitions in a single admin application. To make that possible, we were adding project references for all the microservices' service contract packages from a single microservice, so it can know all the setting definitions and manage them. 
+Prior to this version, it was hard to define settings in different microservices and centrally manage all setting definitions in a single admin application. To make that possible, we used to add project references for all the microservices' service contract packages from a single microservice, so it can know all the setting definitions and manage them. 
 
 In this version, ABP Framework introduces the Dynamic Setting Store, which is an important feature that allows you to collect and get all setting definitions from a single point and overcome the setting management problems on microservices.
 
@@ -59,7 +59,7 @@ In this version, ABP Framework introduces the Dynamic Setting Store, which is an
 
 ### Introducing the `AdditionalAssemblyAttribute`
 
-In this version, we have introduced the `AdditionalAssemblyAttribute` to define additional assemblies to be part of a module. ABP Framework automatically registers all the services of your module to the [Dependency Injection System](https://docs.abp.io/en/abp/latest/Dependency-Injection). It finds the service types by scanning types in the assembly that defines your module class. Typically, every assembly contains a separate module class definition and modules depend on each other using the `DependsOn` attribute.
+In this version, we have introduced the `AdditionalAssemblyAttribute` to define additional assemblies to be part of a module. ABP Framework automatically registers all the services of your module to the [Dependency Injection System](https://docs.abp.io/en/abp/latest/Dependency-Injection). It finds the service types by scanning types in the assembly that define your module class. Typically, every assembly contains a separate module class definition and modules depend on each other using the `DependsOn` attribute.
 
 In some rare cases, your module may consist of multiple assemblies and only one of them defines a module class, and you want to make the other assemblies parts of your module. This is especially useful if you don't want to depend on that module's dependencies.
 
@@ -74,7 +74,7 @@ public class IdentityServiceTestModule : AbpModule
 }
 ```
 
-With the `AdditonalAssembly` attribute definition, ABP loads the assembly containing the `IdentityServiceModule` class as a part of the identity service module. Notice that, in this case, none of the module dependencies of the `IdentityServiceModule` are loaded. Because we are not depending on the `IdentityServiceModule`, instead we are just adding its assembly as a part of the `IdentityServiceTestModule`.
+With the `AdditonalAssembly` attribute definition, ABP loads the assembly containing the `IdentityServiceModule` class as a part of the identity service module. Notice that in this case, none of the module dependencies of the `IdentityServiceModule` are loaded. Because we are not depending on the `IdentityServiceModule`, instead we are just adding its assembly as a part of the `IdentityServiceTestModule`.
 
 > You can check the [Module Development Basics](https://docs.abp.io/en/abp/7.4/Module-Development-Basics) documentation to learn more.
 
@@ -88,13 +88,13 @@ ABP Framework generates a `correlationId` for the first time when an operation i
 
 ### Database Migration System for EF Core
 
-In this version, ABP Framework provides base classes and events to migrate the database schema and seed the database on application startup. This system works compatible with multi-tenancy and whenever a new tenant is created or a tenant's database connection string has been updated, it checks and applies database migrations for the new tenant state.
+In this version, ABP Framework provides base classes and events to migrate the database schema and seed the database on application startup. This system works compatibly with multi-tenancy and whenever a new tenant is created or a tenant's database connection string has been updated, it checks and applies database migrations for the new tenant state.
 
 This system is especially useful to migrate databases for microservices. In this way, when you deploy a new version of a microservice, you don't need to manually migrate its database.
 
 You need to take the following actions to use the database migration system:
 
-* Create a class that derives from `EfCoreRuntimeDatabaseMigratorBase` class, override and implement its `SeedAsync` method. Lastly, execute the `CheckAndApplyDatabaseMigrationsAsync` method of your class in the `OnPostApplicationInitializationAsync` method of your module class.
+* Create a class that derives from `EfCoreRuntimeDatabaseMigratorBase` class, override and implement its `SeedAsync` method. And lastly, execute the `CheckAndApplyDatabaseMigrationsAsync` method of your class in the `OnPostApplicationInitializationAsync` method of your module class.
 * Create a class that derives from `DatabaseMigrationEventHandlerBase` class, override and implement its `SeedAsync` method. Then, whenever a new tenant is created or a tenant's connection string is changed then the `SeedAsync` method will be executed.
 
 ### Other News
@@ -113,11 +113,11 @@ Prior to this version, it was hard to create text templates in different microse
 
 For this reason, in this version, the Dynamic Text Template Store has been introduced to make the [Text Template Management module](https://docs.abp.io/en/commercial/latest/modules/text-template-management) compatible with microservices and distributed systems. It allows you to store and get all text templates from a single point. Thanks to that, you can centrally manage the text templates in your admin application.
 
-> *Note*: If you are upgrading from an earlier version and using the Text Template Management module, you need to create a new migration and apply it to your database.
+> *Note*: If you are upgrading from an earlier version and are using the Text Template Management module, you need to create a new migration and apply it to your database.
 
 We will update the [Text Template Management module](https://docs.abp.io/en/commercial/latest/modules/text-template-management) in the next few days to state the configurations, while it mostly works automatically. 
 
-To enable the dynamic template store, you just need to configure the `TextTemplateManagementOptions` and set the `IsDynamicTemplateStoreEnabled` as true in you module class:
+To enable the dynamic template store, you just need to configure the `TextTemplateManagementOptions` and set the `IsDynamicTemplateStoreEnabled` as true in your module class:
 
 ```csharp
 Configure<TextTemplateManagementOptions>(options =>
@@ -132,9 +132,9 @@ In this version, we have implemented the custom code support in Suite. This allo
 
 ![](suite-custom-code.png)
 
-To enable custom code support, you should check the *Customizable code* in the crud page generation page. When you enable the custom code support, you will be seeing some hook-points in your application. 
+To enable custom code support, you should check the *Customizable code* option in the crud page generation page. When you enable the custom code support, you will be seeing some hook-points in your application. 
 
-For example, on the C# side, you'll be seeing some abstract classes and classes that derive from them (for entities, application services, interfaces, domain services, and so on...). You can write your custom code in those classes (`*.Extended.cs`) and the next time when you need to re-generate the entity, your custom code will not be overridden (only the base abstract classes will be re-generated and your changes on the Suite will be respected):
+For example, on the C# side, you'll be seeing some abstract classes and classes that derive from them (for entities, application services, interfaces, domain services, and so on...). You can write your custom code in those classes (`*.Extended.cs`) and the next time when you need to re-generate the entity, your custom code will not be overridden (only the base abstract classes will be re-generated and your changes on Suite will be respected):
 
 Folder structure             |  Book.Extended.cs
 :-------------------------:|:-------------------------:
@@ -142,7 +142,7 @@ Folder structure             |  Book.Extended.cs
 
 > *Note*: If you want to override the entity and add custom code, please do not touch the code between `<suite-custom-code-autogenerated>...</suite-custom-code-autogenerated>` placeholders, because the constructor of the entity should be always re-generated in case of a new property added.
 
-On the UI side, you can see *comment placeholders* on the pages for MVC & Blazor applications. These are hook-points provided by the ABP Suite and you can write your custom code between these comment sections:
+On the UI side, you can see the *comment placeholders* on the pages for MVC & Blazor applications. These are hook-points provided by ABP Suite and you can write your custom code between these comment sections:
 
 Folder structure             |  Books/Index.cshtml
 :-------------------------:|:-------------------------:
@@ -200,11 +200,11 @@ You can enable or disable the message/conversation deletion globally on your app
 
 ![](settings.png)
 
-> **Note**: The Angular UI hasn't been completed yet. We aim to complete it asap and include it in the next release. 
+> **Note**: The Angular UI hasn't been completed yet. We aim to complete it as soon as possible and include it in the next release. 
 
 ## Community News
 
-### Volosoft Will Attend to DevNot Developer Summit 2023
+### Volosoft Will Attend DevNot Developer Summit 2023
 
 ![](developersummit.jpg)
 
