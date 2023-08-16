@@ -68,23 +68,14 @@ public abstract class IdentityRoleRepository_Tests<TStartupModule> : AbpIdentity
     }
     
     [Fact]
-    public async Task GetAllListWithUserCountAsync()
+    public async Task GetListWithUserCountAsync()
     {
-        var roles = await RoleRepository.GetAllListWithUserCountAsync();
+        var roles = await RoleRepository.GetListWithUserCountAsync();
 
         roles.Count.ShouldBe(4);
         roles.ShouldContain(r => r.Role.Name == "admin" && r.UserCount == 2);
         roles.ShouldContain(r => r.Role.Name == "moderator" && r.UserCount == 1);
         roles.ShouldContain(r => r.Role.Name == "supporter" && r.UserCount == 2);
         roles.ShouldContain(r => r.Role.Name == "manager" && r.UserCount == 1);
-    }
-    
-    [Fact]
-    public async Task GetListWithUserCountAsync()
-    {
-        var roles = await RoleRepository.GetListWithUserCountAsync(filter: "admin");
-
-        roles.Count.ShouldBe(1);
-        roles.ShouldContain(r => r.Role.Name == "admin" && r.UserCount == 2);
     }
 }

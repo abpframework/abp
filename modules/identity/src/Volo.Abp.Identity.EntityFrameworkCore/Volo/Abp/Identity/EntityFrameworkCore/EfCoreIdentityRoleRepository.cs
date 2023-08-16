@@ -28,23 +28,6 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<RoleWithUserCount>> GetAllListWithUserCountAsync(CancellationToken cancellationToken = default)
-    {
-        var roles = await GetListInternalAsync(cancellationToken: cancellationToken);
-        var roleIds = roles.Select(x => x.Id).ToList();
-        var userCount = await (await GetDbContextAsync()).Set<IdentityUserRole>()
-            .Where(userRole => roleIds.Contains(userRole.RoleId))
-            .GroupBy(userRole => userRole.RoleId)
-            .Select(x => new  
-            {
-                RoleId = x.Key,
-                Count = x.Count()
-            })
-            .ToListAsync(GetCancellationToken(cancellationToken));
-        
-        return roles.Select(role => new RoleWithUserCount(role, userCount.FirstOrDefault(x => x.RoleId == role.Id)?.Count ?? 0)).ToList();
-    }
-
     public async Task<List<RoleWithUserCount>> GetListWithUserCountAsync(
         string sorting = null, 
         int maxResultCount = int.MaxValue,
