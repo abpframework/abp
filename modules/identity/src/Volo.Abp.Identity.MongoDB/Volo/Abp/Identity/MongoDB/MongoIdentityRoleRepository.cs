@@ -28,7 +28,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<RoleWithUserCount>> GetListWithUserCountAsync(
+    public async Task<List<IdentityRoleWithUserCount>> GetListWithUserCountAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
@@ -49,7 +49,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
             })
             .ToListAsync(GetCancellationToken(cancellationToken));
         
-        return roles.Select(role => new RoleWithUserCount(role, userCount.FirstOrDefault(x => x.RoleId == role.Id)?.Count ?? 0)).ToList();
+        return roles.Select(role => new IdentityRoleWithUserCount(role, userCount.FirstOrDefault(x => x.RoleId == role.Id)?.Count ?? 0)).ToList();
     }
 
     public virtual async Task<List<IdentityRole>> GetListAsync(
