@@ -35,7 +35,7 @@ You can use any IDE that supports .NET 7.x, like [Visual Studio 2022](https://vi
 ## Migration Guides
 
 There are a few breaking changes in this version that may affect your application.
-Please see the following migration documents, if you are upgrading from v7.3:
+Please see the following migration documents, if you are upgrading from v7.3 or earlier:
 
 * [ABP Framework 7.3 to 7.4 Migration Guide](https://docs.abp.io/en/abp/7.4/Migration-Guides/Abp-7_4)
 
@@ -61,7 +61,7 @@ In this version, ABP Framework introduces the Dynamic Setting Store, which is an
 
 In this version, we have introduced the `AdditionalAssemblyAttribute` to define additional assemblies to be part of a module. ABP Framework automatically registers all the services of your module to the [Dependency Injection System](https://docs.abp.io/en/abp/latest/Dependency-Injection). It finds the service types by scanning types in the assembly that define your module class. Typically, every assembly contains a separate module class definition and modules depend on each other using the `DependsOn` attribute.
 
-In some rare cases, your module may consist of multiple assemblies and only one of them defines a module class, and you want to make the other assemblies parts of your module. This is especially useful if you don't want to depend on that module's dependencies.
+In some rare cases, your module may consist of multiple assemblies and only one of them defines a module class, and you want to make the other assemblies parts of your module. This is especially useful if you can't define a module class in the target assembly or you don't want to depend on that module's dependencies.
 
 In that case, you can use the `AdditionalAssembly` attribute as shown below:
 
@@ -74,7 +74,7 @@ public class IdentityServiceTestModule : AbpModule
 }
 ```
 
-With the `AdditonalAssembly` attribute definition, ABP loads the assembly containing the `IdentityServiceModule` class as a part of the identity service module. Notice that in this case, none of the module dependencies of the `IdentityServiceModule` are loaded. Because we are not depending on the `IdentityServiceModule`, instead we are just adding its assembly as a part of the `IdentityServiceTestModule`.
+With the `AdditionalAssembly` attribute definition, ABP loads the assembly containing the `IdentityServiceModule` class as a part of the identity service module. Notice that in this case, none of the module dependencies of the `IdentityServiceModule` are loaded. Because we are not depending on the `IdentityServiceModule`, instead we are just adding its assembly as a part of the `IdentityServiceTestModule`.
 
 > You can check the [Module Development Basics](https://docs.abp.io/en/abp/7.4/Module-Development-Basics) documentation to learn more.
 
@@ -115,8 +115,6 @@ For this reason, in this version, the Dynamic Text Template Store has been intro
 
 > *Note*: If you are upgrading from an earlier version and are using the Text Template Management module, you need to create a new migration and apply it to your database.
 
-We will update the [Text Template Management module](https://docs.abp.io/en/commercial/latest/modules/text-template-management) in the next few days to state the configurations, while it mostly works automatically. 
-
 To enable the dynamic template store, you just need to configure the `TextTemplateManagementOptions` and set the `IsDynamicTemplateStoreEnabled` as true in your module class:
 
 ```csharp
@@ -125,6 +123,8 @@ Configure<TextTemplateManagementOptions>(options =>
     options.IsDynamicTemplateStoreEnabled = true;
 });
 ```
+
+Notice this is only needed in the microservice where you centrally manage your text template contents. So, typically you would use the configuration above in your administration microservice. Other microservices automatically save their text template contents to the central database.
 
 ### Suite: Custom Code Support
 
@@ -204,7 +204,7 @@ You can enable or disable the message/conversation deletion globally on your app
 
 ## Community News
 
-### Volosoft Will Attend DevNot Developer Summit 2023
+### DevNot Developer Summit 2023
 
 ![](developersummit.jpg)
 
