@@ -164,6 +164,53 @@ Also, we have aligned the features on both of these mobile options (MAUI & React
 
 > If you have missed the event, you can watch from 👉 [here](https://www.youtube.com/watch?v=-wrdngeKgZw).
 
+### New LeptonX Theme Features
+
+In the new version of LeptonX Theme, which is v2.4.0-rc.1, there are some new features that we want to mention.
+
+#### Mobile Toolbars
+
+The [Toolbar System](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Toolbars) is used to define *toolbars* on the user interface. Modules (or your application) can add items to a toolbar, then the UI themes can render the toolbar on the layout.
+
+LeptonX Theme extends this system even further and introduces mobile toolbars with this version. You can create a component and add it as a mobile toolbar as below:
+
+```csharp
+public class MyToolbarContributor : IToolbarContributor
+{
+    public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
+    {
+        if (context.Toolbar.Name == LeptonXToolbars.MainMobile)
+        {
+            context.Toolbar.Items.Add(new ToolbarItem(typeof(ShoppingCardToolbarComponent)));
+        
+            //other mobile toolbars...
+        }
+
+        return Task.CompletedTask;
+    }
+}
+```
+
+Then, the LeptonX Theme will render these mobile toolbars like in the figure below:
+
+![](mobile-toolbars.png)
+
+> **Note**: The Angular UI hasn't been completed yet. We aim to complete it as soon as possible and include it in the next release. 
+
+#### New Error Page Designs
+
+In this version, we have implemented new error pages. Encounter a fresh look during error situations with the 'New Error Page Designs,' providing informative and visually appealing error displays that enhance user experience:
+
+![](error-page.png)
+
+#### Fluid Layout
+
+In this version, LeptonX Theme introduces the fresh-looking **Fluid Layout**, which is a layout that lets you align elements so that they automatically adjust their alignment and proportions for different page sizes and orientations.
+
+![](fluid-layout.png)
+
+> You can visit [the live demo of LeptonX Theme](https://x.leptontheme.com/side-menu) and try the Fluid Layout now!
+
 ### Check & Move Related Entities on Deletion/Demand
 
 In application modules, there are some entities that have complete relationships with each other such as role-user relations. In such cases, it's a typical requirement to check & move related entities that have a relation with the other entity that is about to be deleted.
@@ -201,6 +248,16 @@ You can enable or disable the message/conversation deletion globally on your app
 ![](settings.png)
 
 > **Note**: The Angular UI hasn't been completed yet. We aim to complete it as soon as possible and include it in the next release. 
+
+### Password Complexity Indicators
+
+In this version, ABP Framework introduces an innovative ["Password Complexity Indicator"](https://docs.abp.io/en/commercial/7.4/ui/angular/password-complexity-indicator-component) feature, designed to enhance security and user experience. This feature dynamically evaluates and rates the strength of user-generated passwords, providing real-time feedback to users as they create or update their passwords. By visually indicating the complexity level, users are guided toward crafting stronger passwords that meet modern security standards.
+
+![](password-complexity.png)
+
+You can check the [Password Complexity Indicator Angular documentation](https://docs.abp.io/en/commercial/7.4/ui/angular/password-complexity-indicator-component) to learn more.
+
+> **Note**: Currently, this feature is only available for the Angular UI, but we will be implemented for other UIs in the next version.
 
 ## Community News
 
