@@ -10,6 +10,8 @@ public class AbpRabbitMqEventBusOptions
 
     public string ClientName { get; set; }
 
+    public string QueueType { get; set; }
+
     public string ExchangeName { get; set; }
 
     public string ExchangeType { get; set; }
