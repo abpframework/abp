@@ -55,7 +55,11 @@ public class RegisterModel : AccountPageModel
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
-        await CheckSelfRegistrationAsync();
+        if (!IsExternalLogin)
+        {
+            await CheckSelfRegistrationAsync();
+        }
+        
         await TrySetEmailAsync();
         ExternalProviders = await GetExternalProviders();
         return Page();
@@ -92,7 +96,11 @@ public class RegisterModel : AccountPageModel
     {
         try
         {
-            await CheckSelfRegistrationAsync();
+            if (!IsExternalLogin)
+            {
+                await CheckSelfRegistrationAsync();
+            }
+            
             ExternalProviders = await GetExternalProviders();
 
             if (IsExternalLogin)
