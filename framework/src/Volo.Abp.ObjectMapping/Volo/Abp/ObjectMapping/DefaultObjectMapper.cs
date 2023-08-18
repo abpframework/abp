@@ -137,12 +137,20 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
             return default;
         }
 
-        var cacheKey = $"{mapperType.FullName}{(destination == null ? "MapMethodWithSingleParameter" : "MapMethodWithDoubleParameters")}";
-        var method = MethodInfoCache.GetOrAdd(cacheKey, _ =>
-        {
-            return specificMapper.GetType().GetMethods().First(x => x.Name == nameof(IObjectMapper<object, object>.Map) &&
-                                                                    x.GetParameters().Length == (destination == null ? 1 : 2));
-        });
+        var cacheKey = $"{mapperType.FullName}_{(destination == null ? "MapMethodWithSingleParameter" : "MapMethodWithDoubleParameters")}";
+        var method = MethodInfoCache.GetOrAdd(
+            cacheKey,
+            _ =>
+            {
+                return specificMapper
+                    .GetType()
+                    .GetMethods()
+                    .First(x =>
+                        x.Name == nameof(IObjectMapper<object, object>.Map) &&
+                        x.GetParameters().Length == (destination == null ? 1 : 2)
+                    );
+            }
+        );
 
         var sourceList = source!.As<IList>();
         var result = definitionGenericType.IsGenericType
