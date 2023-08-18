@@ -10,8 +10,6 @@ public class AbpRabbitMqEventBusOptions
 
     public string ClientName { get; set; }
 
-    public string QueueType { get; set; }
-
     public bool QueueDurable { get; set; }
 
     public bool QueueExclusive { get; set; } = true;
