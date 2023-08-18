@@ -12,9 +12,23 @@ public class AbpRabbitMqEventBusOptions
 
     public string QueueType { get; set; }
 
+    public bool QueueDurable { get; set; }
+
+    public bool QueueExclusive { get; set; } = true;
+    
+    public bool QueueAutoDelete { get; set; } = true;
+    
+    public IDictionary<string, object> QueueArguments { get; set; }
+
     public string ExchangeName { get; set; }
 
     public string ExchangeType { get; set; }
+
+    public bool ExchangeDurable { get; set; }
+
+    public bool ExchangeAutoDelete { get; set; }
+    
+    public IDictionary<string, object> ExchangeArguments { get; set; }
     
     public ushort? PrefetchCount { get; set; }
 
