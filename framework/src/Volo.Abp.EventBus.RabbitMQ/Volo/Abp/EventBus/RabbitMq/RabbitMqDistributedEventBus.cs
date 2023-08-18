@@ -86,7 +86,16 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
-                prefetchCount: AbpRabbitMqEventBusOptions.PrefetchCount
+                prefetchCount: AbpRabbitMqEventBusOptions.PrefetchCount,
+                arguments: new Dictionary<string, object>
+                {
+                    {
+                        "x-queue-type",
+                        AbpRabbitMqEventBusOptions.QueueType.IsNullOrWhiteSpace()
+                            ? "classic"
+                            : AbpRabbitMqEventBusOptions.QueueType
+                    }
+                }
             ),
             AbpRabbitMqEventBusOptions.ConnectionName
         );
