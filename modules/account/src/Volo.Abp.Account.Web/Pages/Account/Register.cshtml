@@ -27,5 +27,19 @@
                 <abp-button button-type="Primary" type="submit" class="btn-lg mt-4">@L["Register"]</abp-button>
             </div>
         </form>
+        
+        @if (!Model.IsExternalLogin && Model.VisibleExternalProviders.Any())
+        {
+            <div class="mt-2">
+                <h5>@L["OrRegisterWith"]</h5>
+                <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                    @foreach (var provider in Model.VisibleExternalProviders)
+                    {
+                        <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["RegisterUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                    }
+                </form>
+            </div>
+        }
+        
     </div>
 </div>
