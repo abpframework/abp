@@ -62,7 +62,7 @@ public class RegisterModel : AccountPageModel
 
         if (!await CheckSelfRegistrationAsync())
         {
-            if (!IsExternalLogin && IsExternalLoginOnly)
+            if (IsExternalLoginOnly)
             {
                 return await OnPostExternalLogin(ExternalLoginScheme);
             }
