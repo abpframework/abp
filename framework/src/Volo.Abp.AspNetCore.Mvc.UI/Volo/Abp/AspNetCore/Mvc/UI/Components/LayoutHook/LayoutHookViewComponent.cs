@@ -18,9 +18,9 @@ public class LayoutHookViewComponent : AbpViewComponent
 
     public virtual IViewComponentResult Invoke(string name, string layout)
     {
-        var hooks = Options.Hooks.GetOrDefault(name)?.Where(IsViewComponent).ToArray()
-                          ?? Array.Empty<LayoutHookInfo>();
-        
+        var hooks = Options.Hooks.GetOrDefault(name)?.Where(x => x.Layout == layout && IsViewComponent(x)).ToArray()
+                    ?? Array.Empty<LayoutHookInfo>();
+
         return View(
             "~/Volo/Abp/AspNetCore/Mvc/UI/Components/LayoutHook/Default.cshtml",
             new LayoutHookViewModel(hooks, layout)
