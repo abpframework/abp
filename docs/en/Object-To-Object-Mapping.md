@@ -320,57 +320,22 @@ public class MyCustomUserMapper : IObjectMapper<User, UserDto>, ITransientDepend
 }
 ````
 
-ABP automatically discovers and registers the `MyCustomUserMapper` and it is automatically used whenever you use the `IObjectMapper` to map `User` to `UserDto`.
-
-A single class may implement more than one `IObjectMapper<TSource, TDestination>` each for a different object pairs.
+ABP automatically discovers and registers the `MyCustomUserMapper` and it is automatically used whenever you use the `IObjectMapper` to map `User` to `UserDto`. A single class may implement more than one `IObjectMapper<TSource, TDestination>` each for a different object pairs.
 
 > This approach is powerful since `MyCustomUserMapper` can inject any other service and use in the `Map` methods.
 
-#### Collection Mapping
-
-You only requires configuration of element types, not of any array or list type that might be used. 
-
-For example, we might have a simple source and destination type:
-
-````csharp
-public class Source
-{
-    public int Value { get; set; }
-}
-
-public class Destination
-{
-    public int Value { get; set; }
-}
-````
-
-All the basic generic collection types are supported:
-
-````csharp
-IObjectMapper _objectMapper //inject it.
-
-var sources = new[]
-{
-    new Source { Value = 5 },
-    new Source { Value = 6 },
-    new Source { Value = 7 }
-};
-
-IEnumerable<Destination> ienumerableDest = _objectMapper.Map<Source[], IEnumerable<Destination>>(sources);
-ICollection<Destination> icollectionDest = _objectMapper.Map<Source[], ICollection<Destination>>(sources);
-ICollection<Destination> collectionDest = _objectMapper.Map<Source[], Collection<Destination>>(sources);
-IList<Destination> ilistDest = _objectMapper.Map<Source[], IList<Destination>>(sources);
-List<Destination> listDest = _objectMapper.Map<Source[], List<Destination>>(sources);
-Destination[] arrayDest = _objectMapper.Map<Source[], Destination[]>(sources);
-````
-
-To be specific, the source collection types supported include:
+Once you implement `IObjectMapper<User, UserDto>`, ABP can automatically convert a collection of `User` objects to a collection of `UserDto` objects. The following generic collection types are supported:
 
 * `IEnumerable<T>`
 * `ICollection<T>`
 * `Collection<T>`
 * `IList<T>`
 * `List<T>`
-* `T[]`
+* `T[]` (array)
 
-> When mapping to an existing collection, the destination collection is cleared first.
+**Example:**
+
+````csharp
+var users = await _userRepository.GetListAsync(); // returns List<User>
+var dtos = ObjectMapper.Map<List<User>, List<UserDto>>(users); // creates List<UserDto>
+````
