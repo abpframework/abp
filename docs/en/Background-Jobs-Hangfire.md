@@ -128,10 +128,9 @@ You can integrate the Hangfire dashboard to [ABP authorization system](Authoriza
 class. This class is defined in the `Volo.Abp.Hangfire` package. The following example, checks if the current user is logged in to the application:
 
 ```csharp
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
-{
-    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() }
-});
+var dashboardOptions = app.ApplicationServices.GetRequiredService<DashboardOptions>();
+dashboardOptions.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() };
+app.UseHangfireDashboard("/hangfire", dashboardOptions);
 ```
 
 * `AbpHangfireAuthorizationFilter` is an implementation of an authorization filter.
@@ -146,10 +145,9 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 If you want to require an additional permission, you can pass it into the constructor as below:
 
 ```csharp
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
-{
-    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") }
-});
+var dashboardOptions = app.ApplicationServices.GetRequiredService<DashboardOptions>();
+dashboardOptions.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") };
+app.UseHangfireDashboard("/hangfire", dashboardOptions);
 ```
 
 **Important**: `UseHangfireDashboard` should be called after the authentication and authorization middlewares in your `Startup` class (probably at the last line). Otherwise,
