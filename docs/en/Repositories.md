@@ -217,6 +217,12 @@ They can all be seen as below:
 
 ![generic-repositories](images/generic-repositories.png)
 
+#### Read Only Repositories behavior in EF Core
+
+EF Core will use No-tracking queries for read-only repositories. This means that the entities returned from the repository will not be tracked by the EF Core's change tracker. This is a performance optimization.
+
+However, if you need to track the entities, You can still add [AsTracking](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.entityframeworkqueryableextensions.astracking) to make specific queries tracking.
+
 ### Generic Repository without a Primary Key
 
 If your entity does not have an Id primary key (it may have a composite primary key for instance) then you cannot use the `IRepository<TEntity, TKey>` (or basic/readonly versions) defined above. In that case, you can inject and use `IRepository<TEntity>` for your entity.
