@@ -40,7 +40,7 @@ type PermissionWithGroupName = PermissionGrantInfoDto & {
         max-height: 70vh;
         overflow-y: scroll;
       }
-      .permission-scrollbar {
+      .scroll-in-modal {
         overflow:auto;
         max-height: calc(100vh - 15rem)
       }
