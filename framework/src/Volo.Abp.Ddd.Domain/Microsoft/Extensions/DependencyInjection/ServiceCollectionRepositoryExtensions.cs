@@ -82,11 +82,11 @@ public static class ServiceCollectionRepositoryExtensions
         Type serviceType,
         Type implementationType,
         bool replaceExisting,
-        bool isReadOnly = false)
+        bool isReadOnlyRepository = false)
     {
         var descriptor = ServiceDescriptor.Transient(serviceType, implementationType);
 
-        if (isReadOnly)
+        if (isReadOnlyRepository)
         {
             services.AddTransient(implementationType);
             descriptor = ServiceDescriptor.Transient(serviceType, provider =>
