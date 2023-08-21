@@ -1,4 +1,4 @@
-<abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
+<abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' ,scrollable:false }">
   <ng-container *ngIf="data.entityDisplayName || entityDisplayName">
     <ng-template #abpHeader>
       <h4>
@@ -8,7 +8,7 @@
     </ng-template>
     <ng-template #abpBody>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 scroll-in-modal">
           <div class="form-check mb-2">
             <input
               #selectAllInAllTabsRef
@@ -44,8 +44,9 @@
               </li>
             </ul>
           </div>
-        </div>
-        <div class="col-md-8 overflow-auto">
+         </div>
+
+        <div class="col-md-8 scroll-in-modal">
           <div class="ps-1">
             <div class="form-check mb-2">
               <input
