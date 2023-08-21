@@ -452,7 +452,14 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     {
         if (IsReadOnly)
         {
-            throw new AbpRepositoryIsReadOnlyException($"Can not call {nameof(InsertAsync)}, {nameof(UpdateAsync)}, {nameof(DeleteAsync)}, {nameof(DeleteManyAsync)} methods on a read-only repository!");
+            throw new AbpRepositoryIsReadOnlyException($"Can not call " +
+                                                       $"{nameof(InsertAsync)}, " +
+                                                       $"{nameof(InsertManyAsync)}, " +
+                                                       $"{nameof(UpdateAsync)}, " +
+                                                       $"{nameof(UpdateManyAsync)}, " +
+                                                       $"{nameof(DeleteAsync)}, " +
+                                                       $"{nameof(DeleteManyAsync)}, " +
+                                                       $"{nameof(DeleteDirectAsync)} methods on a read-only repository!");
         }
     }
 }
