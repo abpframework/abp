@@ -70,7 +70,7 @@ After you have installed these NuGet packages, you need to configure your projec
 
 > You have to configure a storage for Hangfire.
 
-2. If you want to use hangfire's dashboard, you can add `UseHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class:
+2. If you want to use hangfire's dashboard, you can add `UseAbpHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class:
 
 ````csharp
  public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -79,7 +79,7 @@ After you have installed these NuGet packages, you need to configure your projec
             
     // ... others
     
-    app.UseHangfireDashboard(); //should add to the request pipeline before the app.UseConfiguredEndpoints()
+    app.UseAbpHangfireDashboard(); //should add to the request pipeline before the app.UseConfiguredEndpoints()
     app.UseConfiguredEndpoints();
  }
 ````
@@ -128,9 +128,10 @@ You can integrate the Hangfire dashboard to [ABP authorization system](Authoriza
 class. This class is defined in the `Volo.Abp.Hangfire` package. The following example, checks if the current user is logged in to the application:
 
 ```csharp
-var dashboardOptions = app.ApplicationServices.GetRequiredService<DashboardOptions>();
-dashboardOptions.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() };
-app.UseHangfireDashboard("/hangfire", dashboardOptions);
+app.UseAbpHangfireDashboard("/hangfire", options =>
+{
+    options.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() };
+});
 ```
 
 * `AbpHangfireAuthorizationFilter` is an implementation of an authorization filter.
@@ -145,10 +146,11 @@ app.UseHangfireDashboard("/hangfire", dashboardOptions);
 If you want to require an additional permission, you can pass it into the constructor as below:
 
 ```csharp
-var dashboardOptions = app.ApplicationServices.GetRequiredService<DashboardOptions>();
-dashboardOptions.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") };
-app.UseHangfireDashboard("/hangfire", dashboardOptions);
+app.UseAbpHangfireDashboard("/hangfire", options =>
+{
+    options.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") };
+});
 ```
 
-**Important**: `UseHangfireDashboard` should be called after the authentication and authorization middlewares in your `Startup` class (probably at the last line). Otherwise,
+**Important**: `UseAbpHangfireDashboard` should be called after the authentication and authorization middlewares in your `Startup` class (probably at the last line). Otherwise,
 authorization will always fail!
