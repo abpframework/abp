@@ -204,7 +204,7 @@ public class MyApplicationConfigurationDto : ApplicationConfigurationDto
 }
 ````
 
-### Remove contoller
+### Remove controller
 
 Configure `ControllersToRemove` of `AbpAspNetCoreMvcOptions` to remove the controllers.
 
