@@ -16,7 +16,7 @@ public class QueueDeclareConfiguration
     
     public ushort? PrefetchCount { get; set; } 
 
-    public IDictionary<string, object> Arguments { get; }
+    public IDictionary<string, object>? Arguments { get; }
 
     public QueueDeclareConfiguration(
         [NotNull] string queueName,
@@ -24,7 +24,7 @@ public class QueueDeclareConfiguration
         bool exclusive = false,
         bool autoDelete = false,
         ushort? prefetchCount = null,
-        IDictionary<string, object> arguments = default)
+        Dictionary<string, object>? arguments = default)
     {
         QueueName = queueName;
         Durable = durable;

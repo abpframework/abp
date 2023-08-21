@@ -36,9 +36,8 @@ public class JobQueueConfiguration : QueueDeclareConfiguration
 
     public virtual QueueDeclareOk DeclareDelayed(IModel channel)
     {
-        var delayedArguments = new Dictionary<string, object>(Arguments)
-        {
-            ["x-dead-letter-routing-key"] = QueueName,
+        var delayedArguments = new Dictionary<string, object>(Arguments ?? new Dictionary<string, object>()) {
+            ["x-dead-letter-routing-key"] = QueueName, 
             ["x-dead-letter-exchange"] = string.Empty
         };
 
