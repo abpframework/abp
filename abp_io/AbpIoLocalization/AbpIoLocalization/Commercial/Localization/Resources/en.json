@@ -567,7 +567,7 @@
     "TotalPrice": "Total Price",
     "ThereIsNoInvoice": "There is no invoice",
     "MyOrganizations_Detail_PaymentProviderInfo": "If you have purchased your license through <i>{0}</i> gateway, it sends the PDF invoice to your email address, see <a href=\"{1}\" target=\"_blank\">{0} invoicing.</a>",
-    "MyOrganizations_Detail_PayUInfo": "If you have purchased through the <i>PayU</i> gateway, click the \"Request Invoice\" button and fill in the billing information.",
+    "MyOrganizations_Detail_PayUInfo": "If you have purchased through the <i>Iyzico</i> gateway, click the \"Request Invoice\" button and fill in the billing information.",
     "MyOrganizations_Detail_ConclusionInfo": "Your invoice request will be concluded within {0} business days.",
     "ExtendYourLicense": "Extend your <span class=\"text-primary\">{0}</span> license",
     "Continue": "Continue",
