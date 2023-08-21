@@ -471,7 +471,24 @@ In **Blazor wasm** applications, add `options.ProviderOptions.DefaultScopes.Add(
 
 In **Angular** applications, add `offline_access` to **oAuthConfig**  scopes in *environment.ts* file. (Angular applications already have this configuration).
 
+## About localization
 
+We don't localize any error messages in the OpenIddict module, Because the OAuth 2.0 specification restricts the charset you're allowed to use for the error and error_description parameters:
+
+> A.7. "error" Syntax
+> The "error" element is defined in Sections 4.1.2.1, 4.2.2.1, 5.2, 7.2, and 8.5:
+
+```
+error = 1*NQSCHAR
+```
+
+> A.8. "error_description" Syntax
+>T he "error_description" element is defined in Sections 4.1.2.1, 4.2.2.1, 5.2, and 7.2:
+
+```
+error-description = 1*NQSCHAR
+NQSCHAR = %x20-21 / %x23-5B / %x5D-7E
+```
 
 ## Demo projects
 
