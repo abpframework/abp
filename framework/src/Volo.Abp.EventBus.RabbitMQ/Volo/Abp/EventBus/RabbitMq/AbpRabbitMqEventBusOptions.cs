@@ -16,7 +16,7 @@ public class AbpRabbitMqEventBusOptions
     
     public bool QueueAutoDelete { get; set; } = true;
     
-    public IDictionary<string, object> QueueArguments { get; set; }
+    public OptionalArguments QueueArguments { get; set; }
 
     public string ExchangeName { get; set; }
 
@@ -26,7 +26,7 @@ public class AbpRabbitMqEventBusOptions
 
     public bool ExchangeAutoDelete { get; set; }
     
-    public IDictionary<string, object> ExchangeArguments { get; set; }
+    public OptionalArguments ExchangeArguments { get; set; }
     
     public ushort? PrefetchCount { get; set; }
 
