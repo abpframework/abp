@@ -16,11 +16,5 @@ public static class AbpHangfireApplicationBuilderExtensions
         var options = app.ApplicationServices.GetRequiredService<AbpDashboardOptionsProvider>().Get();
         configure?.Invoke(options);
         return app.UseHangfireDashboard(pathMatch, options, storage);
-
-
-        app.UseAbpHangfireDashboard("/hangfire", options =>
-        {
-            options.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() };
-        });
     }
 }
