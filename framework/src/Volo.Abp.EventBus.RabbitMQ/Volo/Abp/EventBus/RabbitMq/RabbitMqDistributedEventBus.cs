@@ -27,7 +27,7 @@ namespace Volo.Abp.EventBus.RabbitMq;
 [ExposeServices(typeof(IDistributedEventBus), typeof(RabbitMqDistributedEventBus))]
 public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDependency
 {
-    protected AbpRabbitMqEventBusOptions AbpRabbitMqEventBusOptions { get; }
+    protected AbpRabbitMqExchangeAndQueueOptions AbpRabbitMqEventBusOptions { get; }
     protected IConnectionPool ConnectionPool { get; }
     protected IRabbitMqSerializer Serializer { get; }
 
@@ -40,7 +40,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
     private bool _exchangeCreated;
 
     public RabbitMqDistributedEventBus(
-        IOptions<AbpRabbitMqEventBusOptions> options,
+        IOptions<AbpRabbitMqExchangeAndQueueOptions> options,
         IConnectionPool connectionPool,
         IRabbitMqSerializer serializer,
         IServiceScopeFactory serviceScopeFactory,
@@ -81,7 +81,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         Consumer = MessageConsumerFactory.Create(
             new ExchangeDeclareConfiguration(
                 AbpRabbitMqEventBusOptions.ExchangeName,
-                type: AbpRabbitMqEventBusOptions.GetExchangeTypeOrDefault(),
+                type: AbpRabbitMqEventBusOptions.ExchangeType,
                 durable: AbpRabbitMqEventBusOptions.ExchangeDurable,
                 autoDelete: AbpRabbitMqEventBusOptions.ExchangeAutoDelete,
                 arguments: exchangeArguments
@@ -365,7 +365,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         {
             channel.ExchangeDeclare(
                 AbpRabbitMqEventBusOptions.ExchangeName,
-                AbpRabbitMqEventBusOptions.GetExchangeTypeOrDefault(),
+                AbpRabbitMqEventBusOptions.ExchangeType,
                 durable: true
             );
         }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.Abp.EventBus.RabbitMq;
+namespace Volo.Abp.RabbitMQ;
 
 public class OptionalArguments
 {
@@ -10,7 +10,7 @@ public class OptionalArguments
     ///     Set the queue in classic or quorum or stream
     ///     (Sets the "x-queue-type" argument.)
     /// </summary>
-    public string QueueType { get; set; }
+    public string? QueueType { get; set; }
 
     /// <summary>
     ///     How long a queue can be unused for before it is automatically deleted (milliseconds).
@@ -30,7 +30,7 @@ public class OptionalArguments
     ///     drop-head and reject-publish.
     ///     (Sets the "x-overflow" argument.)
     /// </summary>
-    public string Overflow { get; set; }
+    public string? Overflow { get; set; }
 
     /// <summary>
     ///     If set, makes sure only one consumer at a time consumes from the queue and fails over to another registered
@@ -43,14 +43,14 @@ public class OptionalArguments
     ///     Optional name of an exchange to which messages will be republished if they are rejected or expire.
     ///     (Sets the "x-dead-letter-exchange" argument.)
     /// </summary>
-    public string DeadLetterExchange { get; set; }
+    public string? DeadLetterExchange { get; set; }
 
     /// <summary>
     ///     Optional replacement routing key to use when a message is dead-lettered. If this is not set, the message's original
     ///     routing key will be used.
     ///     (Sets the "x-dead-letter-routing-key" argument.)
     /// </summary>
-    public string DeadLetterRoutingKey { get; set; }
+    public string? DeadLetterRoutingKey { get; set; }
 
     /// <summary>
     ///     How many (ready) messages a queue can contain before it starts to drop them from its head.
@@ -85,7 +85,7 @@ public class OptionalArguments
     ///     a cluster of nodes.
     ///     (Sets the "x-queue-master-locator" argument.)
     /// </summary>
-    public string QueueMasterLocator { get; set; }
+    public string? QueueMasterLocator { get; set; }
 
     /// <summary>
     ///     The number of allowed unsuccessful delivery attempts. Once a message has been delivered unsuccessfully more than
@@ -106,14 +106,14 @@ public class OptionalArguments
     ///     strategy will fall back to at-most-once.
     ///     (Sets the "x-dead-letter-strategy" argument.)
     /// </summary>
-    public string DeadLetterStrategy { get; set; }
+    public string? DeadLetterStrategy { get; set; }
 
     /// <summary>
     ///     Set the rule by which the queue leader is located when declared on a cluster of nodes. Valid values are
     ///     client-local (default) and balanced.
     ///     (Sets the "x-queue-leader-locator" argument.)
     /// </summary>
-    public string QueueLeaderLocator { get; set; }
+    public string? QueueLeaderLocator { get; set; }
 
     /// <summary>
     ///     Sets the data retention for stream queues in time units
@@ -121,7 +121,7 @@ public class OptionalArguments
     ///     E.g. "1h" configures the stream to only keep the last 1 hour of received messages.
     ///     (Sets the x-max-age argument.)
     /// </summary>
-    public string MaxAge { get; set; }
+    public string? MaxAge { get; set; }
 
     /// <summary>
     ///     Total segment size for stream segments on disk.
@@ -139,36 +139,34 @@ public class OptionalArguments
     ///     If messages to this exchange cannot otherwise be routed, send them to the alternate exchange named here.
     ///     (Sets the "alternate-exchange" argument.)
     /// </summary>
-    public string AlternateExchange { get; set; }
+    public string? AlternateExchange { get; set; }
 
-    public static implicit operator Dictionary<string, object>(OptionalArguments args)
+    public static implicit operator Dictionary<string, object>?(OptionalArguments? args)
     {
         if (args is null) return null;
 
-        var items = new Dictionary<string, object>
-        {
-            {"x-queue-type", args.QueueType},
-            {"x-expires", args.Expires},
-            {"x-message-ttl", args.MessageTtl},
-            {"x-overflow", args.Overflow},
-            {"x-single-active-consumer", args.SingleActiveConsumer},
-            {"x-dead-letter-exchange", args.DeadLetterExchange},
-            {"x-dead-letter-routing-key", args.DeadLetterRoutingKey},
-            {"x-max-length", args.MaxLength},
-            {"x-max-length-bytes", args.MaxLengthBytes},
-            {"x-max-priority", args.MaxPriority},
-            {"x-queue-version", args.QueueVersion},
-            {"x-queue-master-locator", args.QueueMasterLocator},
-            {"x-delivery-limit", args.DeliveryLimit},
-            {"x-quorum-initial-group-size", args.QuorumInitialGroupSize},
-            {"x-dead-letter-strategy", args.DeadLetterStrategy},
-            {"x-queue-leader-locator", args.QueueLeaderLocator},
-            {"x-max-age", args.MaxAge},
-            {"x-stream-max-segment-size-bytes", args.StreamMaxSegmentSizeInBytes},
-            {"x-initial-cluster-size", args.InitialClusterSize},
-            {"alternate-exchange", args.AlternateExchange}
-        };
-        return items.Where(x => x.Value != null && !x.Value.ToString().IsNullOrWhiteSpace())
-            .ToDictionary(x => x.Key, x => x.Value);
+        var items = new Dictionary<string, object>();
+        if (!args.QueueType.IsNullOrWhiteSpace()) items.Add("x-queue-type", args.QueueType!);
+        if (args.Expires.HasValue) items.Add("x-expires", args.Expires.Value);
+        if (args.MessageTtl.HasValue) items.Add("x-message-ttl", args.MessageTtl.Value);
+        if (!args.Overflow.IsNullOrWhiteSpace()) items.Add("x-overflow", args.Overflow!);
+        if (args.SingleActiveConsumer.HasValue) items.Add("x-single-active-consumer", args.SingleActiveConsumer.Value);
+        if (!args.DeadLetterExchange.IsNullOrWhiteSpace()) items.Add("x-dead-letter-exchange", args.DeadLetterExchange!);
+        if (!args.DeadLetterRoutingKey.IsNullOrWhiteSpace()) items.Add("x-dead-letter-routing-key", args.DeadLetterRoutingKey!);
+        if (args.MaxLength.HasValue) items.Add("x-max-length", args.MaxLength.Value);
+        if (args.MaxLengthBytes.HasValue) items.Add("x-max-length-bytes", args.MaxLengthBytes.Value);
+        if (args.MaxPriority.HasValue) items.Add("x-max-priority", args.MaxPriority.Value);
+        if (args.QueueVersion.HasValue) items.Add("x-queue-version", args.QueueVersion.Value);
+        if (!args.QueueMasterLocator.IsNullOrWhiteSpace()) items.Add("x-queue-master-locator", args.QueueMasterLocator!);
+        if (args.DeliveryLimit.HasValue) items.Add("x-delivery-limit", args.DeliveryLimit.Value);
+        if (args.QuorumInitialGroupSize.HasValue) items.Add("x-quorum-initial-group-size", args.QuorumInitialGroupSize.Value);
+        if (!args.DeadLetterStrategy.IsNullOrWhiteSpace()) items.Add("x-dead-letter-strategy", args.DeadLetterStrategy!);
+        if (!args.QueueLeaderLocator.IsNullOrWhiteSpace()) items.Add("x-queue-leader-locator", args.QueueLeaderLocator!);
+        if (!args.MaxAge.IsNullOrWhiteSpace()) items.Add("x-max-age", args.MaxAge!);
+        if (args.StreamMaxSegmentSizeInBytes.HasValue) items.Add("x-stream-max-segment-size-bytes", args.StreamMaxSegmentSizeInBytes.Value);
+        if (args.InitialClusterSize.HasValue) items.Add("x-initial-cluster-size", args.InitialClusterSize.Value);
+        if (!args.AlternateExchange.IsNullOrWhiteSpace()) items.Add("alternate-exchange", args.AlternateExchange!);
+
+        return items.Count > 0 ? items : null;
     }
 }
