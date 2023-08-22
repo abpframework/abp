@@ -26,7 +26,7 @@ public partial class LayoutHook : ComponentBase
         {
             layoutHooks = layoutHooks
                 .Where(IsComponentBase)
-                .WhereIf(string.IsNullOrWhiteSpace(Layout), x => x.Layout == Layout)
+                .WhereIf(!string.IsNullOrWhiteSpace(Layout), x => x.Layout == Layout)
                 .ToList();
         }
 

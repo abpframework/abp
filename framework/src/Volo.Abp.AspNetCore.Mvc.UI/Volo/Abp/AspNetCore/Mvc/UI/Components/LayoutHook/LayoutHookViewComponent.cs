@@ -16,10 +16,12 @@ public class LayoutHookViewComponent : AbpViewComponent
         Options = options.Value;
     }
 
-    public virtual IViewComponentResult Invoke(string name, string layout)
+    public virtual IViewComponentResult Invoke(string name, string? layout)
     {
-        var hooks = Options.Hooks.GetOrDefault(name)?.Where(x => x.Layout == layout && IsViewComponent(x)).ToArray()
-                    ?? Array.Empty<LayoutHookInfo>();
+        var hooks = Options.Hooks.GetOrDefault(name)?
+            .Where(IsViewComponent)
+            .WhereIf(!string.IsNullOrWhiteSpace(layout), x => x.Layout == layout)
+            .ToArray() ?? Array.Empty<LayoutHookInfo>();
 
         return View(
             "~/Volo/Abp/AspNetCore/Mvc/UI/Components/LayoutHook/Default.cshtml",
