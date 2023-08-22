@@ -16,7 +16,7 @@ public class LayoutHookViewComponent : AbpViewComponent
         Options = options.Value;
     }
 
-    public virtual IViewComponentResult Invoke(string name, string layout)
+    public virtual IViewComponentResult Invoke(string name, string? layout)
     {
         var hooks = Options.Hooks.GetOrDefault(name)?
             .Where(IsViewComponent)
