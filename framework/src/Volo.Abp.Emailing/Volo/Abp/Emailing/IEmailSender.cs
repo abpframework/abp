@@ -1,5 +1,7 @@
-﻿using System.Net.Mail;
+﻿using System.Collections.Generic;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.Emailing;
 
@@ -15,7 +17,9 @@ public interface IEmailSender
         string to,
         string? subject,
         string? body,
-        bool isBodyHtml = true
+        bool isBodyHtml = true,
+        List<EmailAttachment>? attachments = null,
+        ExtraPropertyDictionary? extraProperties = null
     );
 
     /// <summary>
@@ -26,7 +30,9 @@ public interface IEmailSender
         string to,
         string? subject,
         string? body,
-        bool isBodyHtml = true
+        bool isBodyHtml = true,
+        List<EmailAttachment>? attachments = null,
+        ExtraPropertyDictionary? extraProperties = null
     );
 
     /// <summary>
@@ -49,7 +55,9 @@ public interface IEmailSender
         string to,
         string subject,
         string body,
-        bool isBodyHtml = true
+        bool isBodyHtml = true,
+        List<EmailAttachment>? attachments = null,
+        ExtraPropertyDictionary? extraProperties = null
     );
 
     /// <summary>
@@ -60,7 +68,9 @@ public interface IEmailSender
         string to,
         string subject,
         string body,
-        bool isBodyHtml = true
+        bool isBodyHtml = true,
+        List<EmailAttachment>? attachments = null,
+        ExtraPropertyDictionary? extraProperties = null
     );
 
     //TODO: Add other Queue methods too. Problem: MailMessage is not serializable so can not be used in background jobs.
