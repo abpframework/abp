@@ -89,11 +89,11 @@ export class ErrorHandler {
 
   protected filterRestErrors = ({ status }: HttpErrorResponse): boolean => {
     if (typeof status !== 'number') return false;
-    if(!this.httpErrorConfig.skipHandledErrorCodes){
+
+    if (!this.httpErrorConfig.skipHandledErrorCodes) {
       return true;
     }
-    return (
-      this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === status) < 0
-    );
+
+    return this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === status) < 0;
   };
 }
