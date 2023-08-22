@@ -9,7 +9,7 @@ public static class ViewComponentHelperLayoutHookExtensions
     public static Task<IHtmlContent> InvokeLayoutHookAsync(
         this IViewComponentHelper componentHelper,
         string name,
-        string? layout = null)
+        string layout)
     {
         return componentHelper.InvokeAsync(
             typeof(LayoutHookViewComponent),

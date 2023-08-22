@@ -19,8 +19,7 @@ public class LayoutHookViewComponent : AbpViewComponent
     public virtual IViewComponentResult Invoke(string name, string? layout)
     {
         var hooks = Options.Hooks.GetOrDefault(name)?
-            .Where(IsViewComponent)
-            .WhereIf(!string.IsNullOrWhiteSpace(layout), x => x.Layout == layout)
+            .Where(x => IsViewComponent(x) && (string.IsNullOrWhiteSpace(x.Layout) || x.Layout == layout))
             .ToArray() ?? Array.Empty<LayoutHookInfo>();
 
         return View(
