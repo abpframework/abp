@@ -72,6 +72,4 @@ public interface IEmailSender
         List<EmailAttachment>? attachments = null,
         ExtraPropertyDictionary? extraProperties = null
     );
-
-    //TODO: Add other Queue methods too. Problem: MailMessage is not serializable so can not be used in background jobs.
 }
