@@ -7,6 +7,13 @@ public class OutboxConfig
 {
     [NotNull]
     public string Name { get; }
+    
+    [NotNull]
+    public string DatabaseName {
+        get => _databaseName;
+        set => _databaseName = Check.NotNullOrWhiteSpace(value, nameof(DatabaseName));
+    }
+    [NotNull] private string _databaseName;
 
     public Type ImplementationType { get; set; }
 
