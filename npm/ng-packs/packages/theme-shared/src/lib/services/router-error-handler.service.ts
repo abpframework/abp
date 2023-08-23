@@ -20,9 +20,12 @@ export class RouterErrorHandlerService {
   }
 
   protected filterRouteErrors = (navigationError: NavigationError): boolean => {
+    if (!this.httpErrorConfig.skipHandledErrorCodes) {
+      return true;
+    }
+    
     return (
       navigationError.error?.message?.indexOf('Cannot match') > -1 &&
-      !!this.httpErrorConfig.skipHandledErrorCodes &&
       this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === 404) < 0
     );
   };

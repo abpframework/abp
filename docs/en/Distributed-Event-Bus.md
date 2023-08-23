@@ -469,6 +469,8 @@ Configure<AbpDistributedEventBusOptions>(options =>
 });
 ````
 
+> **IMPORTANT**: Outbox sending service uses distributed locks to ensure only a single instance of your application consumes the outbox queue concurrently. Distributed locking key should be unique per database. The `config` object (in the preceding code example) has a `DatabaseName` property, which is used in the distributed lock key to ensure the uniqueness. `DatabaseName` is automatically set by the `UseDbContext` method, getting the database name from the `ConnectionStringName` attribute of the `YourDbContext` class. So, if you have multiple databases in your system, ensure that you use the same connection string name for the same database, but different connection string names for different databases. If you can't ensure that, you can manually set `config.DatabaseName` (after the `UseDbContext` line) to ensure that uniqueness.
+
 ### Enabling event inbox
 
 Open your `DbContext` class (EF Core or MongoDB), implement the `IHasEventInbox` interface. You should end up by adding a `DbSet` property into your `DbContext` class:
@@ -502,6 +504,8 @@ Configure<AbpDistributedEventBusOptions>(options =>
 });
 ````
 
+**IMPORTANT**: Inbox processing service uses distributed locks to ensure only a single instance of your application consumes the inbox queue concurrently. Distributed locking key should be unique per database. The `config` object (in the preceding code example) has a `DatabaseName` property, which is used in the distributed lock key to ensure the uniqueness. `DatabaseName` is automatically set by the `UseDbContext` method, getting the database name from the `ConnectionStringName` attribute of the `YourDbContext` class. So, if you have multiple databases in your system, ensure that you use the same connection string name for the same database, but different connection string names for different databases. If you can't ensure that, you can manually set `config.DatabaseName` (after the `UseDbContext` line) to ensure that uniqueness.
+
 ### Additional Configuration
 
 > The default configuration will be enough for most cases. However, there are some options you may want to set for outbox and inbox.
@@ -525,6 +529,7 @@ Here, the following properties are available on the `config` object:
 * `IsSendingEnabled` (default: `true`): You can set to `false` to disable sending outbox events to the actual event bus. If you disable this, events can still be added to outbox, but not sent. This can be helpful if you have multiple applications (or application instances) writing to outbox, but use one of them to send the events.
 * `Selector`: A predicate to filter the event (ETO) types to be used for this configuration. Should return `true` to select the event. It selects all the events by default. This is especially useful if you want to ignore some ETO types from the outbox, or want to define named outbox configurations and group events within these configurations. See the *Named Configurations* section.
 * `ImplementationType`: Type of the class that implements the database operations for the outbox. This is normally set when you call `UseDbContext` as shown before. See *Implementing a Custom Outbox/Inbox Database Provider* section for advanced usages.
+* `DatabaseName`: Unique database name for the database that is used for this outbox configuration. See the **IMPORTANT** paragraph at the end of the *Enabling event outbox* section.
 
 #### Inbox configuration
 
@@ -546,6 +551,7 @@ Here, the following properties are available on the `config` object:
 * `EventSelector`: A predicate to filter the event (ETO) types to be used for this configuration. This is especially useful if you want to ignore some ETO types from the inbox, or want to define named inbox configurations and group events within these configurations. See the *Named Configurations* section.
 * `HandlerSelector`: A predicate to filter the event handled types (classes implementing the `IDistributedEventHandler<TEvent>` interface) to be used for this configuration. This is especially useful if you want to ignore some event handler types from inbox processing, or want to define named inbox configurations and group event handlers within these configurations. See the *Named Configurations* section.
 * `ImplementationType`: Type of the class that implements the database operations for the inbox. This is normally set when you call `UseDbContext` as shown before. See *Implementing a Custom Outbox/Inbox Database Provider* section for advanced usages.
+* `DatabaseName`: Unique database name for the database that is used for this outbox configuration. See the **IMPORTANT** paragraph at the end of the *Enabling event inbox* section.
 
 #### AbpEventBusBoxesOptions
 

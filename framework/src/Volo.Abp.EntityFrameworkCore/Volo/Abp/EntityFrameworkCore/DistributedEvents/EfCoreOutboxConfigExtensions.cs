@@ -1,4 +1,5 @@
-﻿using Volo.Abp.EventBus.Distributed;
+﻿using Volo.Abp.Data;
+using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
 
@@ -8,5 +9,6 @@ public static class EfCoreOutboxConfigExtensions
         where TDbContext : IHasEventOutbox
     {
         outboxConfig.ImplementationType = typeof(IDbContextEventOutbox<TDbContext>);
+        outboxConfig.DatabaseName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
     }
 }

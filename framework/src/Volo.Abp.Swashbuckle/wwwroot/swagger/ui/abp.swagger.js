@@ -28,7 +28,16 @@ var abp = abp || {};
             }
             // Intercept .well-known request when the discoveryEndpoint is provided
             if (!firstRequest && oidcDiscoveryEndpoint.length !== 0 && request.url.includes(".well-known/openid-configuration")) {
-                request.url = oidcDiscoveryEndpoint;
+                if (oidcDiscoveryEndpoint.endsWith(".well-known/openid-configuration")) {
+                    request.url = oidcDiscoveryEndpoint;
+                    console.log(request.url);
+                    return;
+                }
+                if (!oidcDiscoveryEndpoint.endsWith("/")) {
+                    oidcDiscoveryEndpoint += "/"
+                }
+                request.url = oidcDiscoveryEndpoint + ".well-known/openid-configuration";
+                console.log(request.url);
             }
 
             var antiForgeryToken = abp.security.antiForgery.getToken();
