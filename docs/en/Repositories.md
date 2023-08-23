@@ -205,8 +205,6 @@ Methods:
 - `WithDetails()` 1 overload
 - `WithDetailsAsync()` 1 overload
 
-
-
 Where as the `IReadOnlyBasicRepository<Tentity, TKey>` provides the following methods:
 
 - `GetCountAsync()`
@@ -217,11 +215,11 @@ They can all be seen as below:
 
 ![generic-repositories](images/generic-repositories.png)
 
-#### Read Only Repositories behavior in EF Core
+#### Read Only Repositories behavior in Entity Framework Core
 
-EF Core will use No-tracking queries for read-only repositories. This means that the entities returned from the repository will not be tracked by the EF Core's change tracker. This is a performance optimization.
+Entity Framework Core read-only repository implementation uses [EF Core's No-Tracking feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries). That means the entities returned from the repository will not be tracked by the EF Core [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/), because it is expected that you won't update entities queried from a read-only repository. If you need to track the entities, you can still uses [AsTracking()](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.entityframeworkqueryableextensions.astracking) extension method.
 
-However, if you need to track the entities, You can still add [AsTracking](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.entityframeworkqueryableextensions.astracking) to make specific queries tracking.
+> This behavior works only if the repository object is injected with one of the read-only repository interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`). It won't work if you have injected a standard repository (e.g. `IRepository<...>`) then casted it to a read-only repository interface.
 
 ### Generic Repository without a Primary Key
 
