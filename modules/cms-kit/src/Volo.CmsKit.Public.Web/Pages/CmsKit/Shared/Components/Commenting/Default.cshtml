@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="mt-0">
-                    <small class="text-muted float-start float-end">@L["MarkdownSupported"]</small>
+                    <small class="text-muted float-end">@L["MarkdownSupported"]</small>
                 </div>
 
                 @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
@@ -127,14 +127,8 @@
                             <input name="commentConcurrencyStamp" value="@concurrencyStamp" type="hidden" />
                         </div>
                     </div>
-                    <div class="col-auto">
-                        <div class="text-end">
-                            <abp-button type="submit" button-type="Primary" size="Block"> @L["Update"] </abp-button>
-                            <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times me-1"></i>  @L["Cancel"] </abp-button>
-                        </div>
-                    </div>
                     <div class="mt-0">
-                        <small class="text-muted float-start" >@L["MarkdownSupported"]</small>
+                        <small class="text-muted float-end" >@L["MarkdownSupported"]</small>
                     </div>
 
                     @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
@@ -153,7 +147,12 @@
                             </div>
                         </div>
                     }
-                    
+                    <div class="col-auto">
+                        <div class="text-end">
+                            <abp-button type="submit" button-type="Primary" size="Block"> @L["Update"] </abp-button>
+                            <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times me-1"></i>  @L["Cancel"] </abp-button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
