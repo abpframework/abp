@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -38,5 +39,16 @@ public class CmsKitPublicCommentsController : AbpController
 
         var dto = ObjectMapper.Map<CreateCommentWithParametersInput, CreateCommentInput> (input);
         await CommentPublicAppService.CreateAsync(input.EntityType, input.EntityId, dto);
+    }
+    
+    [HttpPost]
+    public virtual async Task UpdateAsync(Guid id, [FromBody] UpdateCommentInput input)
+    {
+        if (CmsKitCommentOptions.IsRecaptchaEnabled && input.CaptchaToken.HasValue)
+        {
+            SimpleMathsCaptchaGenerator.Validate(input.CaptchaToken.Value, input.CaptchaAnswer);
+        }
+        
+        await CommentPublicAppService.UpdateAsync(id, input);
     }
 }

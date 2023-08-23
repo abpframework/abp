@@ -136,6 +136,24 @@
                     <div class="mt-0">
                         <small class="text-muted float-start" >@L["MarkdownSupported"]</small>
                     </div>
+
+                    @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
+                    {
+                        var output = Model.GetCaptcha();
+                        <div class="volo-captcha">
+                            <label class="form-label" for="Input_Captcha_@output.Id">@L["CaptchaCode"]</label>
+                            <div class="d-flex">
+                                <div class="bd-highlight">
+                                    <img src="@Model.GetCaptchaImageBase64(output.ImageBytes)"/>
+                                </div>
+                                <div class="flex-grow-1 bd-highlight">
+                                    <abp-input id="Input_Captcha_@output.Id" type="number" asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off"/>
+                                </div>
+                                <abp-input asp-for="@Model.CaptchaId" value="@output.Id"/>
+                            </div>
+                        </div>
+                    }
+                    
                 </div>
             </form>
         </div>
