@@ -127,13 +127,6 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
 
                 await OnAddToOutboxAsync(eventName, eventType, eventData);
 
-                await TriggerDistributedEventSentAsync(new DistributedEventSent()
-                {
-                    Source = DistributedEventSource.Direct,
-                    EventName = eventName,
-                    EventData = eventData
-                });
-
                 var outgoingEventInfo = new OutgoingEventInfo(
                     GuidGenerator.Create(),
                     eventName,
@@ -181,16 +174,6 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                         {
                             continue;
                         }
-                    }
-
-                    using (CorrelationIdProvider.Change(correlationId))
-                    {
-                        await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
-                        {
-                            Source = DistributedEventSource.Direct,
-                            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-                            EventData = eventData
-                        });
                     }
 
                     var incomingEventInfo = new IncomingEventInfo(
