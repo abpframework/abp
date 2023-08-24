@@ -35,50 +35,30 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     [Obsolete("Use GetDbContextAsync() method.")]
     private TDbContext GetDbContext()
     {
-        TDbContext dbContext;
         // Multi-tenancy unaware entities should always use the host connection string
         if (!EntityHelper.IsMultiTenant<TEntity>())
         {
             using (CurrentTenant.Change(null))
             {
-                dbContext = _dbContextProvider.GetDbContext();
+                return _dbContextProvider.GetDbContext();
             }
         }
-        else
-        {
-            dbContext = _dbContextProvider.GetDbContext();
-        }
 
-        if (IsReadOnly)
-        {
-            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        }
-
-        return dbContext;
+        return _dbContextProvider.GetDbContext();
     }
 
-    protected virtual async Task<TDbContext> GetDbContextAsync()
+    protected virtual Task<TDbContext> GetDbContextAsync()
     {
-        TDbContext dbContext;
         // Multi-tenancy unaware entities should always use the host connection string
         if (!EntityHelper.IsMultiTenant<TEntity>())
         {
             using (CurrentTenant.Change(null))
             {
-                dbContext = await _dbContextProvider.GetDbContextAsync();
+                return _dbContextProvider.GetDbContextAsync();
             }
         }
-        else
-        {
-            dbContext = await _dbContextProvider.GetDbContextAsync();
-        }
 
-        if (IsReadOnly)
-        {
-            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        }
-
-        return dbContext;
+        return _dbContextProvider.GetDbContextAsync();
     }
 
     [Obsolete("Use GetDbSetAsync() method.")]
@@ -261,19 +241,19 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     {
         return includeDetails
             ? await (await WithDetailsAsync()).ToListAsync(GetCancellationToken(cancellationToken))
-            : await (await GetDbSetAsync()).ToListAsync(GetCancellationToken(cancellationToken));
+            : await (await GetQueryableAsync()).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async override Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return includeDetails
             ? await (await WithDetailsAsync()).Where(predicate).ToListAsync(GetCancellationToken(cancellationToken))
-            : await (await GetDbSetAsync()).Where(predicate).ToListAsync(GetCancellationToken(cancellationToken));
+            : await (await GetQueryableAsync()).Where(predicate).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync()).LongCountAsync(GetCancellationToken(cancellationToken));
+        return await (await GetQueryableAsync()).LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async override Task<List<TEntity>> GetPagedListAsync(
@@ -285,7 +265,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     {
         var queryable = includeDetails
             ? await WithDetailsAsync()
-            : await GetDbSetAsync();
+            : await GetQueryableAsync();
 
         return await queryable
             .OrderByIf<TEntity, IQueryable<TEntity>>(!sorting.IsNullOrWhiteSpace(), sorting)
@@ -296,12 +276,12 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     [Obsolete("Use GetQueryableAsync method.")]
     protected override IQueryable<TEntity> GetQueryable()
     {
-        return DbSet.AsQueryable();
+        return DbSet.AsQueryable().AsNoTrackingIf(IsReadOnly);
     }
 
     public async override Task<IQueryable<TEntity>> GetQueryableAsync()
     {
-        return (await GetDbSetAsync()).AsQueryable();
+        return (await GetDbSetAsync()).AsQueryable().AsNoTrackingIf(IsReadOnly);
     }
 
     protected async override Task SaveChangesAsync(CancellationToken cancellationToken)
@@ -318,7 +298,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
             ? await (await WithDetailsAsync())
                 .Where(predicate)
                 .SingleOrDefaultAsync(GetCancellationToken(cancellationToken))
-            : await (await GetDbSetAsync())
+            : await (await GetQueryableAsync())
                 .Where(predicate)
                 .SingleOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
@@ -493,7 +473,9 @@ public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbC
     {
         return includeDetails
             ? await (await WithDetailsAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
-            : await (await GetDbSetAsync()).FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
+            : IsReadOnly
+                ? await (await GetQueryableAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
+                : await (await GetDbSetAsync()).FindAsync(new object[] {id}, GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
