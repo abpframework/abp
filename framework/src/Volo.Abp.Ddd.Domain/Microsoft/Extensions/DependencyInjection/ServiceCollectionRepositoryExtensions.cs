@@ -84,17 +84,21 @@ public static class ServiceCollectionRepositoryExtensions
         bool replaceExisting,
         bool isReadOnlyRepository = false)
     {
-        var descriptor = ServiceDescriptor.Transient(serviceType, implementationType);
+        ServiceDescriptor descriptor;
 
         if (isReadOnlyRepository)
         {
-            services.AddTransient(implementationType);
+            services.TryAddTransient(implementationType);
             descriptor = ServiceDescriptor.Transient(serviceType, provider =>
             {
                 var repository = provider.GetRequiredService(implementationType);
                 ObjectHelper.TrySetProperty(repository.As<IRepository>(), x => x.IsReadOnly, _ => true);
                 return repository;
             });
+        }
+        else
+        {
+            descriptor = ServiceDescriptor.Transient(serviceType, implementationType);
         }
 
         if (replaceExisting)

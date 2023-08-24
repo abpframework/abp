@@ -34,8 +34,7 @@ public abstract class BasicRepositoryBase<TEntity> :
 
     public ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
 
-
-    public bool IsReadOnly { get; set; } = false;
+    public bool IsReadOnly { get; protected set; }
 
     protected BasicRepositoryBase()
     {
