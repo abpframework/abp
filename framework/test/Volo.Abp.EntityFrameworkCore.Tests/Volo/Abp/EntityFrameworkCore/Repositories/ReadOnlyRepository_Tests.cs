@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
@@ -9,6 +10,7 @@ using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.EntityFrameworkCore;
 using Volo.Abp.TestApp.Testing;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.EntityFrameworkCore.Repositories;
@@ -70,6 +72,41 @@ public class ReadOnlyRepository_Tests : TestAppTestBase<AbpEntityFrameworkCoreTe
                 var readonlyRepository = GetRequiredService<IReadOnlyRepository<Person, Guid>>();
                 await readonlyRepository.ToEfCoreRepository().As<EfCoreRepository<TestAppDbContext, Person, Guid>>().InsertAsync(new Person(Guid.NewGuid(), "test readonly", 18));
             });
+        });
+    }
+
+    [Fact]
+    public async Task ReadOnlyRepository_Should_NoTracking_In_UOW()
+    {
+        var repository = GetRequiredService<IRepository<Person, Guid>>();
+        var readonlyRepository = GetRequiredService<IReadOnlyRepository<Person, Guid>>();
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await repository.InsertAsync(new Person(Guid.NewGuid(), "people1", 18));
+            await repository.InsertAsync(new Person(Guid.NewGuid(), "people2", 19));
+        });
+
+        using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            var p1 = await repository.FirstOrDefaultAsync(x => x.Name == "people1");
+            p1.ShouldNotBeNull();
+            p1.ChangeName("people1-updated");
+
+            var p2 = await readonlyRepository.FirstOrDefaultAsync(x => x.Name == "people2");
+            p2.ShouldNotBeNull();
+            p2.ChangeName("people2-updated");
+
+            await uow.CompleteAsync();
+        }
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            (await repository.FirstOrDefaultAsync(x => x.Name == "people1")).ShouldBeNull();
+            (await repository.FirstOrDefaultAsync(x => x.Name == "people1-updated")).ShouldNotBeNull();
+
+            (await readonlyRepository.FirstOrDefaultAsync(x => x.Name == "people2")).ShouldNotBeNull();
+            (await readonlyRepository.FirstOrDefaultAsync(x => x.Name == "people2-updated")).ShouldBeNull();
         });
     }
 }
