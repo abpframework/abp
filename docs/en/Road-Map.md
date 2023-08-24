@@ -4,23 +4,28 @@ This document provides a road map, release schedule and planned features for the
 
 ## Next Versions
 
-### v7.4
+### v8.0
 
-The next version will be 7.4 and planned to release the stable 7.4 version in September, 2023. In the version 7.4, we will mostly focus on stabilizing and enhancing existing features, improving the developer experience, as well as adding relatively minor new features.
+The next version will be 8.0 and planned to release the stable 8.0 version in December, 2023. We will be mostly working on the following topics:
 
-See the [7.4 milestone](https://github.com/abpframework/abp/milestone/85) for all the issues we've planned to work on.
+* Enabling nullable annotations for all projects ([#16610](https://github.com/abpframework/abp/issues/16610))
+* Upgrade to .NET 8.0 ([#17355](https://github.com/abpframework/abp/issues/17355))
+* Use NoTracking for readonly repositories for EF Core ([#597](https://github.com/abpframework/abp/issues/597))
+* Support mapping collection of objects for custom object mappers ([#94](https://github.com/abpframework/abp/issues/94))
+* Improvements on the existing features and provide more guides.
+
+See the [8.0 milestone](https://github.com/abpframework/abp/milestone/88) for all the issues we've planned to work on.
 
 ## Backlog Items
 
 The *Next Versions* section above shows the main focus of the planned versions. However, in each release we add new features to the core framework and the [application modules](Modules/Index.md).
 
-Here, a list of major items in the backlog we are considering to work on in the next versions.
+Here is a list of major items in the backlog we are considering working on in the next versions.
 
 * [#6655](https://github.com/abpframework/abp/pull/6655) / Use Typescript for the MVC UI
 * [#236](https://github.com/abpframework/abp/issues/236) / Resource based authorization system
 * [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](https://docs.abp.io/en/abp/latest/Modules/Index))
 * [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
-* [#336](https://github.com/abpframework/abp/issues/336) / Health Check abstractions
 * [#2532](https://github.com/abpframework/abp/issues/2532) / CosmosDB integration with EF Core and MongoDB API
 * [#4223](https://github.com/abpframework/abp/issues/4223) / WebHook system
 * [#162](https://github.com/abpframework/abp/issues/162) / Azure ElasticDB Integration for multitenancy
