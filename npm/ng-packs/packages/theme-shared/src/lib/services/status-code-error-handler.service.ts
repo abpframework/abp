@@ -54,7 +54,7 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
       delete instance.details;
     }
 
-    this.errorComponentService.execute(instance);
+    this.createErrorComponentService.execute(instance);
   }
 
   canHandle({ status }): boolean {
