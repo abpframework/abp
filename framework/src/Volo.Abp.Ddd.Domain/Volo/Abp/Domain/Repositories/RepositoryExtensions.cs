@@ -145,6 +145,26 @@ public static class RepositoryExtensions
         }
     }
 
+    public static IDisposable DisableTracking(this IRepository repository)
+    {
+        return Tracking(repository, false);
+    }
+
+    public static IDisposable EnableTracking(this IRepository repository)
+    {
+        return Tracking(repository, true);
+    }
+
+    private static IDisposable Tracking(this IRepository repository, bool enabled)
+    {
+        var previous = repository.IsChangeTrackingEnabled;
+        ObjectHelper.TrySetProperty(ProxyHelper.UnProxy(repository).As<IRepository>(), x => x.IsChangeTrackingEnabled, _ => enabled);
+        return new DisposeAction<IRepository>(_ =>
+        {
+            ObjectHelper.TrySetProperty(ProxyHelper.UnProxy(repository).As<IRepository>(), x => x.IsChangeTrackingEnabled, _ => previous);
+        }, repository);
+    }
+
     private static IUnitOfWorkManager GetUnitOfWorkManager<TEntity>(
         this IBasicRepository<TEntity> repository,
         [CallerMemberName] string callingMethodName = nameof(GetUnitOfWorkManager)
