@@ -30,5 +30,6 @@ public class AbpDddDomainModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddConventionalRegistrar(new AbpRepositoryConventionalRegistrar());
+        context.Services.OnRegistered(RepositoryInterceptorRegistrar.RegisterIfNeeded);
     }
 }

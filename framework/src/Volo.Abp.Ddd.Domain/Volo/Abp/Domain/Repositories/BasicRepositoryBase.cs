@@ -40,7 +40,9 @@ public abstract class BasicRepositoryBase<TEntity> :
 
     public ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
-    public bool IsChangeTrackingEnabled { get; protected set; } = true;
+    public IEntityChangeTrackingProvider EntityChangeTrackingProvider => LazyServiceProvider.LazyGetRequiredService<IEntityChangeTrackingProvider>();
+
+    public bool? IsChangeTrackingEnabled { get; protected set; }
 
     protected BasicRepositoryBase()
     {
@@ -113,6 +115,24 @@ public abstract class BasicRepositoryBase<TEntity> :
     protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
     {
         return CancellationTokenProvider.FallbackToProvider(preferredValue);
+    }
+
+    protected virtual bool ShouldTrackingEntityChange()
+    {
+        // If IsChangeTrackingEnabled is set, it has the highest priority. This generally means the repository is read-only.
+        if (IsChangeTrackingEnabled.HasValue)
+        {
+            return IsChangeTrackingEnabled.Value;
+        }
+
+        // If Interface/Class/Method has Enable/DisableEntityChangeTrackingAttribute, it has the second highest priority.
+        if (EntityChangeTrackingProvider.Enabled.HasValue)
+        {
+            return EntityChangeTrackingProvider.Enabled.Value;
+        }
+
+        // Default behavior is tracking entity change.
+        return true;
     }
 }
 

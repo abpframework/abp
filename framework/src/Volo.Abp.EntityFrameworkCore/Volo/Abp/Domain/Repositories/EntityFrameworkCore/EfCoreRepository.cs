@@ -277,12 +277,12 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     [Obsolete("Use GetQueryableAsync method.")]
     protected override IQueryable<TEntity> GetQueryable()
     {
-        return DbSet.AsQueryable().AsNoTrackingIf(!IsChangeTrackingEnabled);
+        return DbSet.AsQueryable().AsNoTrackingIf(!ShouldTrackingEntityChange());
     }
 
     public async override Task<IQueryable<TEntity>> GetQueryableAsync()
     {
-        return (await GetDbSetAsync()).AsQueryable().AsNoTrackingIf(!IsChangeTrackingEnabled);
+        return (await GetDbSetAsync()).AsQueryable().AsNoTrackingIf(!ShouldTrackingEntityChange());
     }
 
     protected async override Task SaveChangesAsync(CancellationToken cancellationToken)
@@ -431,7 +431,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     protected virtual void CheckChangeTracking()
     {
-        if (!IsChangeTrackingEnabled)
+        if (!ShouldTrackingEntityChange())
         {
             Logger.LogWarning("This repository has disabled change tracking. Your changes may not be saved!");
         }
@@ -467,7 +467,7 @@ public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbC
     {
         return includeDetails
             ? await (await WithDetailsAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
-            : !IsChangeTrackingEnabled
+            : !ShouldTrackingEntityChange()
                 ? await (await GetQueryableAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
                 : await (await GetDbSetAsync()).FindAsync(new object[] {id}, GetCancellationToken(cancellationToken));
     }
