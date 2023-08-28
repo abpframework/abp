@@ -49,6 +49,7 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} will be deleted!",
     "ItemWillBeDeletedMessage": "This item will be deleted!",
     "ManageYourAccount": "Manage your account",
-    "OthersGroup": "Other"
+    "OthersGroup": "Other",
+    "NotAssigned": "Not Assigned"
   }
 }
