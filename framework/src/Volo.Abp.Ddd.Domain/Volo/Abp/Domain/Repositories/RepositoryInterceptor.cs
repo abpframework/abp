@@ -21,7 +21,7 @@ public class RepositoryInterceptor : AbpInterceptor, ITransientDependency
             return;
         }
 
-        using (_entityChangeTrackingProvider.Change(changeTrackingAttribute?.Enabled))
+        using (_entityChangeTrackingProvider.Change(changeTrackingAttribute?.IsEnabled))
         {
             await invocation.ProceedAsync();
         }
