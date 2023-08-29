@@ -1,25 +1,30 @@
-import { HttpErrorReporterService } from '@abp/ng.core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, Injector } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, filter, switchMap } from 'rxjs/operators';
+
+import { HttpErrorReporterService } from '@abp/ng.core';
+
 import { CustomHttpErrorHandlerService } from '../models/common';
 import { Confirmation } from '../models/confirmation';
-import { ConfirmationService } from '../services/confirmation.service';
+
 import { CUSTOM_ERROR_HANDLERS, HTTP_ERROR_HANDLER } from '../tokens/http-error.token';
-import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/default-errors';
-import { RouterErrorHandlerService } from '../services/router-error-handler.service';
 import { HTTP_ERROR_CONFIG } from '../tokens/http-error.token';
+import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/default-errors';
+
+import { ConfirmationService } from '../services/confirmation.service';
+import { RouterErrorHandlerService } from '../services/router-error-handler.service';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorHandler {
-  private httpErrorReporter = inject(HttpErrorReporterService);
-  private confirmationService = inject(ConfirmationService);
-  private routerErrorHandlerService = inject(RouterErrorHandlerService);
-  protected httpErrorConfig = inject(HTTP_ERROR_CONFIG);
-  private customErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
-  private defaultHttpErrorHandler = (_, err: HttpErrorResponse) => throwError(() => err);
-  private httpErrorHandler =
+  protected readonly httpErrorReporter = inject(HttpErrorReporterService);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly routerErrorHandlerService = inject(RouterErrorHandlerService);
+  protected readonly httpErrorConfig = inject(HTTP_ERROR_CONFIG);
+  protected readonly customErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
+
+  protected readonly defaultHttpErrorHandler = (_, err: HttpErrorResponse) => throwError(() => err);
+  protected readonly httpErrorHandler =
     inject(HTTP_ERROR_HANDLER, { optional: true }) || this.defaultHttpErrorHandler;
 
   constructor(protected injector: Injector) {
@@ -34,17 +39,14 @@ export class ErrorHandler {
   protected listenToRestError() {
     this.httpErrorReporter.reporter$
       .pipe(filter(this.filterRestErrors), switchMap(this.executeErrorHandler))
-      .subscribe(err => {
-        this.handleError(err);
-      });
+      .subscribe(err => this.handleError(err));
   }
 
-  private executeErrorHandler = (error: HttpErrorResponse) => {
+  protected executeErrorHandler = (error: HttpErrorResponse) => {
     const errHandler = this.httpErrorHandler(this.injector, error);
     const isObservable = errHandler instanceof Observable;
-    const response = isObservable ? errHandler : of(null);
 
-    return response.pipe(
+    return (isObservable ? errHandler : of(null)).pipe(
       catchError(err => {
         this.handleError(err);
         return of(null);
@@ -59,16 +61,18 @@ export class ErrorHandler {
     return (b.priority || 0) - (a.priority || 0);
   }
 
-  private handleError(err: unknown) {
+  protected handleError(err: unknown) {
     if (this.customErrorHandlers && this.customErrorHandlers.length) {
       const canHandleService = this.customErrorHandlers
         .sort(this.sortHttpErrorHandlers)
         .find(service => service.canHandle(err));
+
       if (canHandleService) {
         canHandleService.execute();
         return;
       }
     }
+
     this.showError().subscribe();
   }
 
@@ -90,10 +94,10 @@ export class ErrorHandler {
   protected filterRestErrors = ({ status }: HttpErrorResponse): boolean => {
     if (typeof status !== 'number') return false;
 
-    if (!this.httpErrorConfig.skipHandledErrorCodes) {
+    if (!this.httpErrorConfig || !this.httpErrorConfig.skipHandledErrorCodes) {
       return true;
     }
 
-    return this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === status) < 0;
+    return this.httpErrorConfig.skipHandledErrorCodes?.findIndex(code => code === status) < 0;
   };
 }
