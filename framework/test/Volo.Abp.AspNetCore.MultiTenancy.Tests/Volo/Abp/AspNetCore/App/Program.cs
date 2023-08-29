@@ -1,0 +1,10 @@
+﻿using Microsoft.AspNetCore.Builder;
+using Volo.Abp.AspNetCore;
+using Volo.Abp.AspNetCore.App;
+
+var builder = WebApplication.CreateBuilder();
+await builder.RunAbpModuleAsync<AppModule>();
+
+public partial class Program
+{
+}

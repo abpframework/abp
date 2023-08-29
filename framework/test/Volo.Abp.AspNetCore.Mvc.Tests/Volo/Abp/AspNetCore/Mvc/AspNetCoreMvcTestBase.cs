@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Volo.Abp.AspNetCore.Mvc;
 
-public abstract class AspNetCoreMvcTestBase : AbpAspNetCoreTestBase<Startup>
+public abstract class AspNetCoreMvcTestBase : AbpAspNetCoreTestBase<Program>
 {
     protected override IHostBuilder CreateHostBuilder()
     {
@@ -17,8 +17,7 @@ public abstract class AspNetCoreMvcTestBase : AbpAspNetCoreTestBase<Startup>
             )
         );
 
-        return base.CreateHostBuilder()
-            .UseContentRoot(contentRootPath);
+        return base.CreateHostBuilder()?.UseContentRoot(contentRootPath);
     }
 
     private static string CalculateContentRootPath(string projectFileName, string contentPath)

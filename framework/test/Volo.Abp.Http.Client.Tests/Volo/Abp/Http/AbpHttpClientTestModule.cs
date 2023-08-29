@@ -21,6 +21,14 @@ namespace Volo.Abp.Http;
     )]
 public class AbpHttpClientTestModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        {
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpHttpClientTestModule).Assembly);
+        });
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClientProxies(typeof(TestAppModule).Assembly);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +38,12 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        {
+            mvcBuilder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpAspNetCoreMvcTestModule).Assembly));
+            mvcBuilder.PartManager.ApplicationParts.Add(new CompiledRazorAssemblyPart(typeof(AbpAspNetCoreMvcTestModule).Assembly));
+        });
+
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
             options.AddAssemblyResource(

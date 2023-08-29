@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shouldly;
@@ -9,20 +7,12 @@ using Xunit;
 
 namespace Volo.Abp.AspNetCore;
 
-public class AbpHostEnvironment_Tests : AbpAspNetCoreTestBase<Startup>
+public class AbpHostEnvironment_Tests : AbpAspNetCoreTestBase<Program>
 {
-    protected override IHostBuilder CreateHostBuilder()
+    protected override IHost CreateHost(IHostBuilder builder)
     {
-        var builder = base.CreateHostBuilder();
-        builder.ConfigureHostConfiguration(x => x.Sources.Insert(0,
-            new MemoryConfigurationSource()
-            {
-                InitialData = new List<KeyValuePair<string, string>>
-                {
-                    new(HostDefaults.EnvironmentKey, Environments.Staging),
-                }
-            }));
-        return builder;
+        builder.UseEnvironment("test");
+        return base.CreateHost(builder);
     }
 
     [Fact]
