@@ -9,12 +9,6 @@ namespace Volo.Abp.AspNetCore;
 
 public class AbpHostEnvironment_Tests : AbpAspNetCoreTestBase<Program>
 {
-    protected override IHost CreateHost(IHostBuilder builder)
-    {
-        builder.UseEnvironment("test");
-        return base.CreateHost(builder);
-    }
-
     [Fact]
     public void Should_Set_Environment_From_IWebHostEnvironment()
     {

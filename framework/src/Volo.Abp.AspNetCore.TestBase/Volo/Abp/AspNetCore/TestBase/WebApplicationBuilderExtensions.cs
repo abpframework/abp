@@ -5,11 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore;
+namespace Volo.Abp.AspNetCore.TestBase;
 
 public static class WebApplicationBuilderExtensions
 {
-    public async static Task RunAbpModuleAsync<TModule>(this WebApplicationBuilder builder,  Action<AbpApplicationCreationOptions> optionsAction = null)
+    public async static Task RunAbpModuleAsync<TModule>(this WebApplicationBuilder builder,  Action<AbpApplicationCreationOptions>? optionsAction = null)
         where TModule : IAbpModule
     {
         builder.Host.UseAutofac();

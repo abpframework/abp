@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Builder;
-using Volo.Abp.AspNetCore;
-using Volo.Abp.AspNetCore.App;
+using MyCompanyName.MyProjectName;
 using Volo.Abp.AspNetCore.TestBase;
 
 var builder = WebApplication.CreateBuilder();
-await builder.RunAbpModuleAsync<AbpSerilogTestModule>();
+await builder.RunAbpModuleAsync<MyProjectNameWebTestModule>();
 
 public partial class Program
 {
