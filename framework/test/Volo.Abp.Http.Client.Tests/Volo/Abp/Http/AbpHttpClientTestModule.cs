@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.DynamicProxying;
@@ -21,14 +20,6 @@ namespace Volo.Abp.Http;
     )]
 public class AbpHttpClientTestModule : AbpModule
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
-    {
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
-        {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpHttpClientTestModule).Assembly);
-        });
-    }
-
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClientProxies(typeof(TestAppModule).Assembly);

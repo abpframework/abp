@@ -12,6 +12,12 @@ public static class WebApplicationBuilderExtensions
     public async static Task RunAbpModuleAsync<TModule>(this WebApplicationBuilder builder,  Action<AbpApplicationCreationOptions>? optionsAction = null)
         where TModule : IAbpModule
     {
+        var assemblyName = typeof(TModule).Assembly.GetName()?.Name;
+        if (!assemblyName.IsNullOrWhiteSpace())
+        {
+            // Set the application name as the assembly name of the module will automatically add assembly to the ApplicationParts of MVC application.
+            builder.Environment.ApplicationName = assemblyName!;
+        }
         builder.Host.UseAutofac();
         await builder.AddApplicationAsync<TModule>(optionsAction);
         var app = builder.Build();
