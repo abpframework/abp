@@ -45,8 +45,8 @@ public static class RepositoryHelper
             .Any(HasEntityChangeTrackingAttribute);
     }
 
-    private static bool HasEntityChangeTrackingAttribute(MemberInfo methodInfo)
+    private static bool HasEntityChangeTrackingAttribute(MemberInfo memberInfo)
     {
-        return methodInfo.IsDefined(typeof(EntityChangeTrackingAttribute), true);
+        return memberInfo.IsDefined(typeof(EntityChangeTrackingAttribute), true);
     }
 }
