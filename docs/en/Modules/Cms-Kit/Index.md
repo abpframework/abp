@@ -33,7 +33,7 @@ All features are individually usable. If you disable a feature, it completely di
 [ABP CLI](../../CLI.md) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:
 
 ```bash
-abp add-module Volo.CmsKit
+abp add-module Volo.CmsKit --skip-db-migrations
 ```
 
 > By default, Cms-Kit is disabled by `GlobalFeature`. Because of that the initial migration will be empty. So you can skip the migration by adding `--skip-db-migrations` to command when installing if you are using Entity Framework Core. After enabling Cms-Kit global feture, please add new migration.
