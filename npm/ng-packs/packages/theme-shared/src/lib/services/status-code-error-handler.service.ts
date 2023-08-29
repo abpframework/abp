@@ -12,19 +12,57 @@ import { CreateErrorComponentService } from './create-error-component.service';
 
 @Injectable({ providedIn: 'root' })
 export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerService {
-  private readonly confirmationService = inject(ConfirmationService);
-  private readonly createErrorComponentService = inject(CreateErrorComponentService);
-  private readonly authService = inject(AuthService);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly createErrorComponentService = inject(CreateErrorComponentService);
+  protected readonly authService = inject(AuthService);
+
+  protected readonly handledStatusCodes = [401, 403, 404, 500] as const;
+  protected status: typeof this.handledStatusCodes[number];
+
   readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.normal;
-  private status: typeof this.handledStatusCodes[number];
-  private readonly handledStatusCodes = [401, 403, 404, 500] as const;
+
+  protected navigateToLogin(): void {
+    this.authService.navigateToLogin();
+  }
+
+  protected showConfirmation(
+    message: LocalizationParam,
+    title: LocalizationParam,
+  ): Observable<Confirmation.Status> {
+    return this.confirmationService.error(message, title, {
+      hideCancelBtn: true,
+      yesText: 'AbpAccount::Close',
+    });
+  }
+
+  protected showPage(): void {
+    const key = `defaultError${this.status}`;
+    const shouldRemoveDetail = [401, 404].indexOf(this.status) > -1;
+    const instance = {
+      title: {
+        key: DEFAULT_ERROR_LOCALIZATIONS[key]?.title,
+        defaultValue: DEFAULT_ERROR_MESSAGES[key]?.title,
+      },
+      details: {
+        key: DEFAULT_ERROR_LOCALIZATIONS[key]?.details,
+        defaultValue: DEFAULT_ERROR_MESSAGES[key]?.details,
+      },
+      status: this.status,
+    };
+
+    if (shouldRemoveDetail) {
+      delete instance.details;
+    }
+
+    this.createErrorComponentService.execute(instance);
+  }
 
   canHandle({ status }): boolean {
-    this.status = status;
+    this.status = status || 0;
     return this.handledStatusCodes.indexOf(status) > -1;
   }
 
-  execute() {
+  execute(): void {
     const key = `defaultError${this.status}`;
     const title = {
       key: DEFAULT_ERROR_LOCALIZATIONS[key]?.title,
@@ -36,6 +74,7 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
     };
 
     const canCreateCustomError = this.createErrorComponentService.canCreateCustomError(this.status);
+
     switch (this.status) {
       case 401:
       case 404:
@@ -55,40 +94,5 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
         this.showPage();
         break;
     }
-  }
-
-  private navigateToLogin() {
-    this.authService.navigateToLogin();
-  }
-
-  protected showConfirmation(
-    message: LocalizationParam,
-    title: LocalizationParam,
-  ): Observable<Confirmation.Status> {
-    return this.confirmationService.error(message, title, {
-      hideCancelBtn: true,
-      yesText: 'AbpAccount::Close',
-    });
-  }
-
-  protected showPage() {
-    const key = `defaultError${this.status}`;
-
-    const instance = {
-      title: {
-        key: DEFAULT_ERROR_LOCALIZATIONS[key]?.title,
-        defaultValue: DEFAULT_ERROR_MESSAGES[key]?.title,
-      },
-      details: {
-        key: DEFAULT_ERROR_LOCALIZATIONS[key]?.details,
-        defaultValue: DEFAULT_ERROR_MESSAGES[key]?.details,
-      },
-      status: this.status,
-    };
-    const shouldRemoveDetail = [401, 404].indexOf(this.status) > -1;
-    if (shouldRemoveDetail) {
-      delete instance.details;
-    }
-    this.createErrorComponentService.execute(instance);
   }
 }
