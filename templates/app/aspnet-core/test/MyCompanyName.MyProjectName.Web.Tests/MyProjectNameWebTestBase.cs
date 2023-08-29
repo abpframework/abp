@@ -3,11 +3,12 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.AspNetCore;
 using Volo.Abp.AspNetCore.TestBase;
 
 namespace MyCompanyName.MyProjectName;
 
-public abstract class MyProjectNameWebTestBase : AbpAspNetCoreWebApplicationFactoryIntegratedTestBase<Program>
+public abstract class MyProjectNameWebTestBase : AbpWebApplicationFactoryIntegratedTest<Program>
 {
     protected virtual async Task<T?> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
     {

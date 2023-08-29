@@ -9,14 +9,14 @@ using Microsoft.Extensions.Hosting;
 
 namespace Volo.Abp.AspNetCore.TestBase;
 
-public abstract class AbpAspNetCoreWebApplicationFactoryIntegratedTestBase<TProgram> : WebApplicationFactory<TProgram>
+public abstract class AbpWebApplicationFactoryIntegratedTest<TProgram> : WebApplicationFactory<TProgram>
     where TProgram : class
 {
     protected HttpClient Client { get; set; }
 
-    public IServiceProvider ServiceProvider => Services;
+    protected IServiceProvider ServiceProvider => Services;
 
-    protected AbpAspNetCoreWebApplicationFactoryIntegratedTestBase()
+    protected AbpWebApplicationFactoryIntegratedTest()
     {
         Client = CreateClient(new WebApplicationFactoryClientOptions
         {
@@ -31,14 +31,14 @@ public abstract class AbpAspNetCoreWebApplicationFactoryIntegratedTestBase<TProg
         return base.CreateHost(builder);
     }
 
-    public virtual T? GetService<T>()
+    protected virtual T? GetService<T>()
     {
-        return ServiceProvider!.GetService<T>();
+        return Services.GetService<T>();
     }
 
-    public virtual T GetRequiredService<T>() where T : notnull
+    protected virtual T GetRequiredService<T>() where T : notnull
     {
-        return ServiceProvider!.GetRequiredService<T>();
+        return Services.GetRequiredService<T>();
     }
 
     protected virtual void ConfigureServices(IServiceCollection services)

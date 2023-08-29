@@ -13,7 +13,7 @@ public class AbpAspNetCoreTestBase : AbpAspNetCoreTestBase<Program>
 {
 }
 
-public abstract class AbpAspNetCoreTestBase<TProgram> : AbpAspNetCoreWebApplicationFactoryIntegratedTestBase<TProgram>
+public abstract class AbpAspNetCoreTestBase<TProgram> : AbpWebApplicationFactoryIntegratedTest<TProgram>
     where TProgram : class
 {
     protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
