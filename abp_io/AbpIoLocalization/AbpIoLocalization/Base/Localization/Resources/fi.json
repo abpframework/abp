@@ -170,7 +170,7 @@
     "ABPDiscordServer": "ABP Discord-palvelin",
     "ABPCommunityTalks": "ABP Community Talks",
     "ABPCommunityPosts": "ABP-yhteisön viestit",
-    "BuyAndGetMonths": "OSTA 12 KUUKAUTA, <span class=\"text-info\">SAAT 14 KUUKAUTA!</span>",
+    "BuyAndGetMonths": "OSTA 12 KUUKAUTA, <span>SAAT 14 KUUKAUTA!</span>",
     "GetYourDeal": "Hanki tarjouksesi",
     "BuyOrRenewLicense": "Osta tai uusi lisenssi nyt ja saat 2 lisäkuukautta!",
     "BuyOrRenewLicenseToGetExtra2Months": "Osta tai uusi lisenssi nyt ja saat 2 lisäkuukautta! KIIREHDI! ⏰ Viimeinen päivä: {0}",

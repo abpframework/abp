@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.Emailing;
 
@@ -24,20 +28,33 @@ public abstract class EmailSenderBase : IEmailSender
         BackgroundJobManager = backgroundJobManager;
     }
 
-    public virtual async Task SendAsync(string to, string? subject, string? body, bool isBodyHtml = true)
+    public virtual async Task SendAsync(string to, string? subject, string? body, bool isBodyHtml = true, List<EmailAttachment>? attachments = null, ExtraPropertyDictionary? extraProperties = null)
     {
-        await SendAsync(new MailMessage
-        {
-            To = { to },
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = isBodyHtml
-        });
+        await SendAsync(BuildMailMessage(null, to, subject, body, isBodyHtml, attachments, extraProperties));
     }
 
-    public virtual async Task SendAsync(string from, string to, string? subject, string? body, bool isBodyHtml = true)
+    public virtual async Task SendAsync(string from, string to, string? subject, string? body, bool isBodyHtml = true, List<EmailAttachment>? attachments = null, ExtraPropertyDictionary? extraProperties = null)
     {
-        await SendAsync(new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml });
+        await SendAsync(BuildMailMessage(from, to, subject, body, isBodyHtml, attachments, extraProperties));
+    }
+
+    protected virtual MailMessage BuildMailMessage(string? from, string to, string? subject, string? body, bool isBodyHtml = true, List<EmailAttachment>? attachments = null, ExtraPropertyDictionary? extraProperties = null)
+    {
+        var message = from == null
+            ? new MailMessage { To = { to }, Subject = subject, Body = body, IsBodyHtml = isBodyHtml }
+            : new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml };
+
+        if (attachments != null)
+        {
+            foreach (var attachment in attachments.Where(x => x.File != null))
+            {
+                var fileStream = new MemoryStream(attachment.File!);
+                fileStream.Seek(0, SeekOrigin.Begin);
+                message.Attachments.Add(new Attachment(fileStream, attachment.Name));
+            }
+        }
+
+        return message;
     }
 
     public virtual async Task SendAsync(MailMessage mail, bool normalize = true)
@@ -50,11 +67,11 @@ public abstract class EmailSenderBase : IEmailSender
         await SendEmailAsync(mail);
     }
 
-    public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true)
+    public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, List<EmailAttachment>? attachments = null, ExtraPropertyDictionary? extraProperties = null)
     {
         if (!BackgroundJobManager.IsAvailable())
         {
-            await SendAsync(to, subject, body, isBodyHtml);
+            await SendAsync(to, subject, body, isBodyHtml, attachments, extraProperties);
             return;
         }
 
@@ -64,16 +81,18 @@ public abstract class EmailSenderBase : IEmailSender
                 To = to,
                 Subject = subject,
                 Body = body,
-                IsBodyHtml = isBodyHtml
+                IsBodyHtml = isBodyHtml,
+                Attachments = attachments,
+                ExtraProperties = extraProperties
             }
         );
     }
 
-    public virtual async Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true)
+    public virtual async Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true, List<EmailAttachment>? attachments = null, ExtraPropertyDictionary? extraProperties = null)
     {
         if (!BackgroundJobManager.IsAvailable())
         {
-            await SendAsync(from, to, subject, body, isBodyHtml);
+            await SendAsync(from, to, subject, body, isBodyHtml, attachments, extraProperties);
             return;
         }
 
@@ -84,7 +103,9 @@ public abstract class EmailSenderBase : IEmailSender
                 To = to,
                 Subject = subject,
                 Body = body,
-                IsBodyHtml = isBodyHtml
+                IsBodyHtml = isBodyHtml,
+                Attachments = attachments,
+                ExtraProperties = extraProperties
             }
         );
     }

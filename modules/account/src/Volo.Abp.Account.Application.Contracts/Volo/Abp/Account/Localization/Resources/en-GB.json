@@ -61,6 +61,8 @@
     "Volo.Account:InvalidEmailAddress": "Cannot find the given email address: {0}",
     "PasswordReset": "Password reset",
     "PasswordResetInfoInEmail": "We received an account recovery request! If you initiated this request, click the following link to reset your password.",
-    "ResetMyPassword": "Reset my password"
+    "ResetMyPassword": "Reset my password",
+    "OrRegisterWith": "Or register with",
+    "RegisterUsingYourProviderAccount": "Register using your {0} account"
   }
 }
