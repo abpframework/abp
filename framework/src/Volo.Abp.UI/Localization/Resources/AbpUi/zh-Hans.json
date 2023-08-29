@@ -50,6 +50,7 @@
     "ItemWillBeDeletedMessage": "此项将被删除!",
     "ManageYourAccount": "管理你的账户",
     "OthersGroup": "其他",
-    "CopiedToTheClipboard": "已复制到剪贴板"
+    "CopiedToTheClipboard": "已复制到剪贴板",
+    "NotAssigned": "未分配"
   }
 }
