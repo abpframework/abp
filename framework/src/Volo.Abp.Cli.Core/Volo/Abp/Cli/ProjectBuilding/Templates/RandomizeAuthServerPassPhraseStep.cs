@@ -15,6 +15,14 @@ public class RandomizeAuthServerPassPhraseStep : ProjectBuildPipelineStep
     {
         var files = context.Files
             .Where(x => !x.IsDirectory)
+            .Where(x => x.Name.EndsWith(".cs") ||
+                        x.Name.EndsWith(".json") ||
+                        x.Name.EndsWith(".yml") ||
+                        x.Name.EndsWith(".yaml") ||
+                        x.Name.EndsWith(".md") ||
+                        x.Name.EndsWith(".ps1") ||
+                        x.Name.EndsWith(".sh") ||
+                        x.Name.Contains("Dockerfile"))
             .Where(x => x.Content.IndexOf(DefaultPassPhrase, StringComparison.InvariantCultureIgnoreCase) >= 0)
             .ToList();
 
