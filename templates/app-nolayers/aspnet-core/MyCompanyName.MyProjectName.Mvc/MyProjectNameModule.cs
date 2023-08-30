@@ -108,6 +108,9 @@ public class MyProjectNameModule : AbpModule
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
             options.AddAssemblyResource(
@@ -115,15 +118,23 @@ public class MyProjectNameModule : AbpModule
             );
         });
 
-		PreConfigure<OpenIddictBuilder>(builder =>
-		{
-			builder.AddValidation(options =>
-			{
-				options.AddAudiences("MyProjectName");
-				options.UseLocalServer();
-				options.UseAspNetCore();
-			});
-		});
+        PreConfigure<OpenIddictBuilder>(builder =>
+        {
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("MyProjectName");
+                options.UseLocalServer();
+                options.UseAspNetCore();
+            });
+
+            if (!hostingEnvironment.IsDevelopment())
+            {
+                PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+                {
+                    serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
+                });
+            }
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

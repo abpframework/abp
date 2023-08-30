@@ -86,6 +86,10 @@
     <ProjectReference Include="..\Shared\MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="Exists('./openiddict.pfx')">
+    <None Remove="openiddict.pfx" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="Logs\**" />
     <Content Remove="Logs\**" />

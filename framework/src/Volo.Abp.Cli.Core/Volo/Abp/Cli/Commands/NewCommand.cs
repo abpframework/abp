@@ -98,6 +98,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
         ConfigureNpmPackagesForTheme(projectArgs);
+        await CreateOpenIddictPfxFilesAsync(projectArgs);
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
 
