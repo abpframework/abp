@@ -63,15 +63,15 @@ public class MyProjectNameAuthServerModule : AbpModule
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
-
-            if (!hostingEnvironment.IsDevelopment())
-            {
-                PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
-                {
-                    serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
-                });
-            }
         });
+
+        if (!hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+            {
+                serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
+            });
+        }
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
