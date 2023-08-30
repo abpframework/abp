@@ -135,7 +135,7 @@ When you extract the `VoloDocs.*.zip` file, you will see a `Web` folder and a `M
 
    * **Latest version branch name**: leave empty ()
 
-   * **GitHub root URL**: `https://github.com/abpframework/abp/tree/{version}/docs/en/`
+   * **GitHub root URL**: `https://github.com/abpframework/abp/tree/{version}/docs/`
 
    * **GitHub access token**: [see how to retrieve GitHub access token](#retrieving-github-access-token)
 
