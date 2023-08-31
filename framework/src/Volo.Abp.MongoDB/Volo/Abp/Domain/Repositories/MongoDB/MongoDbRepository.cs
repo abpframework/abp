@@ -137,9 +137,13 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     public async override Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        cancellationToken = GetCancellationToken(cancellationToken);
-
         var entityArray = entities.ToArray();
+        if (entityArray.IsNullOrEmpty())
+        {
+            return;
+        }
+
+        cancellationToken = GetCancellationToken(cancellationToken);
 
         foreach (var entity in entityArray)
         {
@@ -226,6 +230,10 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     public async override Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         var entityArray = entities.ToArray();
+        if (entityArray.IsNullOrEmpty())
+        {
+            return;
+        }
 
         foreach (var entity in entityArray)
         {
@@ -356,12 +364,18 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
        bool autoSave = false,
        CancellationToken cancellationToken = default)
     {
+        var entityArray = entities.ToArray();
+        if (entityArray.IsNullOrEmpty())
+        {
+            return;
+        }
+
         cancellationToken = GetCancellationToken(cancellationToken);
 
         var softDeletedEntities = new Dictionary<TEntity, string>();
         var hardDeletedEntities = new List<TEntity>();
 
-        foreach (var entity in entities)
+        foreach (var entity in entityArray)
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
             {
@@ -381,7 +395,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
         if (BulkOperationProvider != null)
         {
-            await BulkOperationProvider.DeleteManyAsync(this, entities, dbContext.SessionHandle, autoSave, cancellationToken);
+            await BulkOperationProvider.DeleteManyAsync(this, entityArray, dbContext.SessionHandle, autoSave, cancellationToken);
             return;
         }
 
