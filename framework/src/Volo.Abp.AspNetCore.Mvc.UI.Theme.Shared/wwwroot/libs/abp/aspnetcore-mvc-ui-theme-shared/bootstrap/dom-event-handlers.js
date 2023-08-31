@@ -335,6 +335,29 @@
                     todayLabel: abp.localization.localize('Today', 'AbpUi'),
                     clearLabel: abp.localization.localize('Clear', 'AbpUi'),
                     applyLabel: abp.localization.localize('Apply', 'AbpUi'),
+                    daysOfWeek: [
+                        abp.localization.localize('Su', 'AbpUi'),
+                        abp.localization.localize('Mo', 'AbpUi'),
+                        abp.localization.localize('Tu', 'AbpUi'),
+                        abp.localization.localize('We', 'AbpUi'),
+                        abp.localization.localize('Th', 'AbpUi'),
+                        abp.localization.localize('Fr', 'AbpUi'),
+                        abp.localization.localize('Sa', 'AbpUi'),
+                    ],
+                    monthNames: [
+                        abp.localization.localize('Jan', 'AbpUi'),
+                        abp.localization.localize('Feb', 'AbpUi'),
+                        abp.localization.localize('Mar', 'AbpUi'),
+                        abp.localization.localize('Apr', 'AbpUi'),
+                        abp.localization.localize('May', 'AbpUi'),
+                        abp.localization.localize('Jun', 'AbpUi'),
+                        abp.localization.localize('Jul', 'AbpUi'),
+                        abp.localization.localize('Aug', 'AbpUi'),
+                        abp.localization.localize('Sep', 'AbpUi'),
+                        abp.localization.localize('Oct', 'AbpUi'),
+                        abp.localization.localize('Nov', 'AbpUi'),
+                        abp.localization.localize('Dec', 'AbpUi'),
+                    ]
                 },
                 singleOpenAndClearButton: true
             };
