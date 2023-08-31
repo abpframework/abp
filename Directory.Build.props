@@ -2,10 +2,10 @@
   <PropertyGroup>
     
     <!-- All Microsoft AspNetCore packages -->
-    <MicrosoftAspNetCorePackageVersion>7.0.0</MicrosoftAspNetCorePackageVersion>
+    <MicrosoftAspNetCorePackageVersion>7.0.10</MicrosoftAspNetCorePackageVersion>
     
     <!-- All Microsoft EntityFrameworkCore packages -->
-    <MicrosoftEntityFrameworkCorePackageVersion>7.0.1</MicrosoftEntityFrameworkCorePackageVersion>
+    <MicrosoftEntityFrameworkCorePackageVersion>7.0.10</MicrosoftEntityFrameworkCorePackageVersion>
     
     <!-- All Microsoft packages -->
     <MicrosoftPackageVersion>7.0.0</MicrosoftPackageVersion>
