@@ -22,6 +22,8 @@ public class EditModalModel : IdentityPageModel
 
     protected IIdentityUserAppService IdentityUserAppService { get; }
 
+    public bool IsEditCurrentUser { get; set; }
+
     public EditModalModel(IIdentityUserAppService identityUserAppService)
     {
         IdentityUserAppService = identityUserAppService;
@@ -30,7 +32,7 @@ public class EditModalModel : IdentityPageModel
     public virtual async Task<IActionResult> OnGetAsync(Guid id)
     {
         UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await IdentityUserAppService.GetAsync(id));
-
+        IsEditCurrentUser = CurrentUser.Id == id;
         Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityUserAppService.GetAssignableRolesAsync()).Items);
 
         var userRoleNames = (await IdentityUserAppService.GetRolesAsync(UserInfo.Id)).Items.Select(r => r.Name).ToList();

@@ -39,8 +39,10 @@
                         <abp-input asp-for="UserInfo.Email" />
                         <abp-input asp-for="UserInfo.PhoneNumber" />
                         <abp-input asp-for="UserInfo.IsActive" />
-                        <abp-input asp-for="UserInfo.LockoutEnabled" />
-
+                        @if (!Model.IsEditCurrentUser)
+                        {
+                            <abp-input asp-for="UserInfo.LockoutEnabled" />
+                        }
                         @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.UserInfoViewModel>())
                         {
                             if (!propertyInfo.Name.EndsWith("_Text"))
