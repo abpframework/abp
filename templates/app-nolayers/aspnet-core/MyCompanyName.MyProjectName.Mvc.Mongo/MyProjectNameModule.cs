@@ -42,6 +42,7 @@ using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.MongoDB;
 using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;

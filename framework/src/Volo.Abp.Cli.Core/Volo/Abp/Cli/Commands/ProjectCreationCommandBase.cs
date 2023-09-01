@@ -484,29 +484,31 @@ public abstract class ProjectCreationCommandBase
 
     protected Task CreateOpenIddictPfxFilesAsync(ProjectBuildArgs projectArgs)
     {
-        var modules = projectArgs.ExtraProperties[nameof(RandomizeAuthServerPassPhraseStep)].Split(Environment.NewLine);
-        foreach (var module in modules.Where(x => !string.IsNullOrWhiteSpace(x)))
+        var module = projectArgs.ExtraProperties[nameof(RandomizeAuthServerPassPhraseStep)];
+        if (string.IsNullOrWhiteSpace(module))
         {
-            var moduleDirectory = projectArgs.OutputFolder + module;
-            if (projectArgs.UiFramework != UiFramework.Angular)
-            {
-                moduleDirectory = moduleDirectory.Replace("/aspnet-core/", "/");
-            }
-
-            moduleDirectory = Path.GetDirectoryName(projectArgs.SolutionName.CompanyName == null
-                ? moduleDirectory.Replace("MyCompanyName.MyProjectName", projectArgs.SolutionName.ProjectName)
-                : moduleDirectory.Replace("MyCompanyName", projectArgs.SolutionName.CompanyName).Replace("MyProjectName", projectArgs.SolutionName.ProjectName));
-
-            if (Directory.Exists(moduleDirectory))
-            {
-                CmdHelper.RunCmd($"dotnet dev-certs https -v -ep openiddict.pfx -p {RandomizeAuthServerPassPhraseStep.RandomPassPhrase}", moduleDirectory);
-            }
-            else
-            {
-                Logger.LogWarning($"Couldn't find the module directory to create openiddict.pfx file: {moduleDirectory}");
-            }
+            return Task.CompletedTask;
         }
 
+        var moduleDirectory = projectArgs.OutputFolder + module;
+        if (projectArgs.UiFramework != UiFramework.Angular)
+        {
+            moduleDirectory = moduleDirectory.Replace("/aspnet-core/", "/");
+        }
+
+        moduleDirectory = Path.GetDirectoryName(projectArgs.SolutionName.CompanyName == null
+            ? moduleDirectory.Replace("MyCompanyName.MyProjectName", projectArgs.SolutionName.ProjectName)
+            : moduleDirectory.Replace("MyCompanyName", projectArgs.SolutionName.CompanyName).Replace("MyProjectName", projectArgs.SolutionName.ProjectName));
+
+        if (Directory.Exists(moduleDirectory))
+        {
+            Logger.LogInformation($"Creating openiddict.pfx file on {moduleDirectory}");
+            CmdHelper.RunCmd($"dotnet dev-certs https -ep openiddict.pfx -p {RandomizeAuthServerPassPhraseStep.RandomOpenIddictPassword}", moduleDirectory);
+        }
+        else
+        {
+            Logger.LogWarning($"Couldn't find the module directory to create openiddict.pfx file: {moduleDirectory}");
+        }
         return Task.CompletedTask;
     }
 
