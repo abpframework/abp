@@ -126,6 +126,11 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     {
         CheckReadOnly();
         var entityArray = entities.ToArray();
+        if (entityArray.IsNullOrEmpty())
+        {
+            return;
+        }
+
         var dbContext = await GetDbContextAsync();
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -172,14 +177,21 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public async override Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
     {
+        var entityArray = entities.ToArray();
+        if (entityArray.IsNullOrEmpty())
+        {
+            return;
+        }
+
         CheckReadOnly();
+
         cancellationToken = GetCancellationToken(cancellationToken);
 
         if (BulkOperationProvider != null)
         {
             await BulkOperationProvider.UpdateManyAsync<TDbContext, TEntity>(
                 this,
-                entities,
+                entityArray,
                 autoSave,
                 GetCancellationToken(cancellationToken)
                 );
@@ -189,7 +201,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
         var dbContext = await GetDbContextAsync();
 
-        dbContext.Set<TEntity>().UpdateRange(entities);
+        dbContext.Set<TEntity>().UpdateRange(entityArray);
 
         if (autoSave)
         {
@@ -212,6 +224,12 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public async override Task DeleteManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
     {
+        var entityArray = entities.ToArray();
+        if (entityArray.IsNullOrEmpty())
+        {
+            return;
+        }
+
         CheckReadOnly();
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -219,7 +237,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
         {
             await BulkOperationProvider.DeleteManyAsync<TDbContext, TEntity>(
                 this,
-                entities,
+                entityArray,
                 autoSave,
                 cancellationToken
             );
@@ -229,7 +247,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
         var dbContext = await GetDbContextAsync();
 
-        dbContext.RemoveRange(entities);
+        dbContext.RemoveRange(entityArray.Select(x => x));
 
         if (autoSave)
         {
