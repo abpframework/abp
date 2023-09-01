@@ -13,6 +13,10 @@ public class BlogFeature : FullAuditedAggregateRoot<Guid>
 
     public bool IsEnabled { get; protected internal set; }
 
+    protected BlogFeature()
+    {
+    }
+
     public BlogFeature(Guid blogId, [NotNull] string featureName, bool isEnabled = true)
     {
         BlogId = blogId;
