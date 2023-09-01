@@ -76,8 +76,8 @@ export const DEFAULT_USERS_EDIT_FORM_PROPS = DEFAULT_USERS_CREATE_FORM_PROPS.map
       ...prop,
       visible: data => {
         const configState = data.getInjected(ConfigStateService);
-        const currentUser = configState.getOne('currentUser') as CurrentUserDto;
-        return currentUser.id !== data.record.id;
+        const currentUserId = configState.getDeep('currentUser.id');
+        return currentUserId !== data.record.id;
       },
     };
   }
