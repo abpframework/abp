@@ -340,7 +340,10 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             }
         }
 
-        await UpdateManyAsync(users, cancellationToken: cancellationToken);
+        if (users.Any())
+        {
+            await UpdateManyAsync(users, cancellationToken: cancellationToken);
+        }
     }
 
     public virtual async Task UpdateOrganizationAsync(Guid sourceOrganizationId, Guid? targetOrganizationId, CancellationToken cancellationToken = default)
@@ -358,6 +361,9 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             }
         }
 
-        await UpdateManyAsync(users, cancellationToken: cancellationToken);
+        if (users.Any())
+        {
+            await UpdateManyAsync(users, cancellationToken: cancellationToken);
+        }
     }
 }
