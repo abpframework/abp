@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -32,16 +35,43 @@ public class RegisterModel : AccountPageModel
 
     [BindProperty(SupportsGet = true)]
     public string ExternalLoginAuthSchema { get; set; }
+    
+    public IEnumerable<ExternalProviderModel> ExternalProviders { get; set; }
+    public IEnumerable<ExternalProviderModel> VisibleExternalProviders => ExternalProviders.Where(x => !string.IsNullOrWhiteSpace(x.DisplayName));
+    public bool EnableLocalRegister { get; set; }
+    public bool IsExternalLoginOnly => EnableLocalRegister == false && ExternalProviders?.Count() == 1;
+    public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
+    
+    protected IAuthenticationSchemeProvider SchemeProvider { get; }
+    
+    protected AbpAccountOptions AccountOptions { get; }
 
-    public RegisterModel(IAccountAppService accountAppService)
+    public RegisterModel(
+        IAccountAppService accountAppService, 
+        IAuthenticationSchemeProvider schemeProvider,
+        IOptions<AbpAccountOptions> accountOptions)
     {
+        SchemeProvider = schemeProvider;
         AccountAppService = accountAppService;
+        AccountOptions = accountOptions.Value;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
-        await CheckSelfRegistrationAsync();
+        ExternalProviders = await GetExternalProviders();
+
+        if (!await CheckSelfRegistrationAsync())
+        {
+            if (IsExternalLoginOnly)
+            {
+                return await OnPostExternalLogin(ExternalLoginScheme);
+            }
+            
+            Alerts.Warning(L["SelfRegistrationDisabledMessage"]);
+        }
+        
         await TrySetEmailAsync();
+        
         return Page();
     }
 
@@ -76,7 +106,12 @@ public class RegisterModel : AccountPageModel
     {
         try
         {
-            await CheckSelfRegistrationAsync();
+            ExternalProviders = await GetExternalProviders();
+
+            if (!await CheckSelfRegistrationAsync())
+            {
+                throw new UserFriendlyException(L["SelfRegistrationDisabledMessage"]);
+            }
 
             if (IsExternalLogin)
             {
@@ -147,13 +182,46 @@ public class RegisterModel : AccountPageModel
         await SignInManager.SignInAsync(user, isPersistent: true, ExternalLoginAuthSchema);
     }
 
-    protected virtual async Task CheckSelfRegistrationAsync()
+    protected virtual async Task<bool> CheckSelfRegistrationAsync()
     {
-        if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled) ||
-            !await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
+        EnableLocalRegister = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin) &&
+                              await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled);
+
+        if (IsExternalLogin)
         {
-            throw new UserFriendlyException(L["SelfRegistrationDisabledMessage"]);
+            return true;
         }
+        
+        if (!EnableLocalRegister)
+        {
+            return false;
+        }
+
+        return true;
+    }
+    
+    protected virtual async Task<List<ExternalProviderModel>> GetExternalProviders()
+    {
+        
+        var schemes = await SchemeProvider.GetAllSchemesAsync();
+
+        return schemes
+            .Where(x => x.DisplayName != null || x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
+            .Select(x => new ExternalProviderModel
+            {
+                DisplayName = x.DisplayName,
+                AuthenticationScheme = x.Name
+            })
+            .ToList();
+    }
+    
+    protected virtual async Task<IActionResult> OnPostExternalLogin(string provider)
+    {
+        var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash });
+        var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        properties.Items["scheme"] = provider;
+
+        return await Task.FromResult(Challenge(properties, provider));
     }
 
     public class PostInput
@@ -172,5 +240,11 @@ public class RegisterModel : AccountPageModel
         [DataType(DataType.Password)]
         [DisableAuditing]
         public string Password { get; set; }
+    }
+    
+    public class ExternalProviderModel
+    {
+        public string DisplayName { get; set; }
+        public string AuthenticationScheme { get; set; }
     }
 }

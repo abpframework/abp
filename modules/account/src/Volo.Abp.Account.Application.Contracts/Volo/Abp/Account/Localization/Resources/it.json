@@ -64,6 +64,8 @@
     "PasswordResetInfoInEmail": "Abbiamo ricevuto una richiesta di recupero dell'account! Se hai fatto tu questa richiesta fai clic sul seguente collegamento per reimpostare la password.",
     "ResetMyPassword": "Reimposta la mia password",
     "AccessDenied": "Accesso negato!",
-    "AccessDeniedMessage": "Non hai accesso a questa risorsa."
+    "AccessDeniedMessage": "Non hai accesso a questa risorsa.",
+    "OrRegisterWith": "Oppure registrati con:",
+    "RegisterUsingYourProviderAccount": "Registrati utilizzando il tuo account {0}"
   }
 }

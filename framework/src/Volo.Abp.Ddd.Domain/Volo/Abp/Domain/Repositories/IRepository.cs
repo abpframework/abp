@@ -12,7 +12,7 @@ namespace Volo.Abp.Domain.Repositories;
 /// </summary>
 public interface IRepository
 {
-
+    bool IsReadOnly { get; }
 }
 
 public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>, IBasicRepository<TEntity>
