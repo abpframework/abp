@@ -22,7 +22,6 @@ export class ErrorHandler {
   protected readonly routerErrorHandlerService = inject(RouterErrorHandlerService);
   protected readonly httpErrorConfig = inject(HTTP_ERROR_CONFIG);
   protected readonly customErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
-
   protected readonly defaultHttpErrorHandler = (_, err: HttpErrorResponse) => throwError(() => err);
   protected readonly httpErrorHandler =
     inject(HTTP_ERROR_HANDLER, { optional: true }) || this.defaultHttpErrorHandler;
