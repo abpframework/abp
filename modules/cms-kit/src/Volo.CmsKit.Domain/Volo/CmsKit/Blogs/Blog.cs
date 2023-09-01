@@ -16,6 +16,10 @@ public class Blog : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     public virtual Guid? TenantId { get; protected set; }
 
+    protected Blog()
+    {
+    }
+
     protected internal Blog(
         Guid id,
         [NotNull] string name,
