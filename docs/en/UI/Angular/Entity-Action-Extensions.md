@@ -312,6 +312,8 @@ type EntityActionOptions<R = any> = {
   icon?: string,
   permission?: string,
   visible?: ActionPredicate<R>,
+  btnClass?: string,
+  btnStyle?: string,
 };
 ```
 
@@ -322,6 +324,8 @@ As you see, passing `action` and `text` is enough to create an entity action. He
 - **icon** is the classes that define an icon to be placed before the text. (_default:_ `''`)
 - **permission** is the permission context which will be used to decide if this type of grid action should be displayed to the user or not. (_default:_ `undefined`)
 - **visible** is a predicate that will be used to decide if the current record should have this grid action or not. (_default:_ `() => true`)
+- **btnClass** is the classes that will be applied to the button. (_default:_ `'btn btn-primary text-center'`)
+- **btnStyle** is the styles that will be applied to the button. (_default:_ `''`)
 
 You may find a full example below.
 
@@ -339,6 +343,8 @@ const options: EntityActionOptions<IdentityUserDto> = {
   icon: 'fa fa-unlock',
   permission: 'AbpIdentity.Users.Update',
   visible: data => data.record.isLockedOut,
+  btnClass:'btn btn-warning text-center',
+  btnStyle: '', //Adds inline style
 };
 
 const action = new EntityAction(options);

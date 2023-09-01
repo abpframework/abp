@@ -16,6 +16,7 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+      - 'Directory.Build.props'
 
   pull_request:
     paths:
@@ -31,6 +32,7 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+      - 'Directory.Build.props'
     types:
       - opened
       - synchronize

@@ -7,10 +7,74 @@
         "Volo.Abp.PermissionManagement.PermissionsController": {
           "controllerName": "Permissions",
           "controllerGroupName": "Permissions",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
           "type": "Volo.Abp.PermissionManagement.PermissionsController",
           "interfaces": [
             {
-              "type": "Volo.Abp.PermissionManagement.IPermissionAppService"
+              "type": "Volo.Abp.PermissionManagement.IPermissionAppService",
+              "name": "IPermissionAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "providerName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "providerKey",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.PermissionManagement.GetPermissionListResultDto",
+                    "typeSimple": "Volo.Abp.PermissionManagement.GetPermissionListResultDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "providerName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "providerKey",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.PermissionManagement.UpdatePermissionsDto, Volo.Abp.PermissionManagement.Application.Contracts",
+                      "type": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
+                      "typeSimple": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -147,6 +211,78 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.PermissionManagement.IPermissionAppService"
+            }
+          }
+        },
+        "Volo.Abp.PermissionManagement.Integration.PermissionIntegrationController": {
+          "controllerName": "PermissionIntegration",
+          "controllerGroupName": "PermissionIntegration",
+          "isRemoteService": true,
+          "isIntegrationService": true,
+          "apiVersion": null,
+          "type": "Volo.Abp.PermissionManagement.Integration.PermissionIntegrationController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.PermissionManagement.Integration.IPermissionIntegrationService",
+              "name": "IPermissionIntegrationService",
+              "methods": [
+                {
+                  "name": "IsGrantedAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.IsGrantedRequest, Volo.Abp.PermissionManagement.Domain.Shared, Version=7.4.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
+                      "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.IsGrantedRequest>",
+                      "typeSimple": "[Volo.Abp.PermissionManagement.IsGrantedRequest]",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.IsGrantedResponse>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.IsGrantedResponse>"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "IsGrantedAsyncByInput": {
+              "uniqueName": "IsGrantedAsyncByInput",
+              "name": "IsGrantedAsync",
+              "httpMethod": "GET",
+              "url": "integration-api/permission-management/permissions/is-granted",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.IsGrantedRequest, Volo.Abp.PermissionManagement.Domain.Shared, Version=7.4.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
+                  "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.IsGrantedRequest>",
+                  "typeSimple": "[Volo.Abp.PermissionManagement.IsGrantedRequest]",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.IsGrantedRequest>",
+                  "typeSimple": "[Volo.Abp.PermissionManagement.IsGrantedRequest]",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.IsGrantedResponse>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.PermissionManagement.IsGrantedResponse>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.PermissionManagement.Integration.IPermissionIntegrationService"
             }
           }
         }

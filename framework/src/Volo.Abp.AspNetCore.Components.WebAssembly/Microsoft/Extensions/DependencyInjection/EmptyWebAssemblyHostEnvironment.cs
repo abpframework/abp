@@ -4,7 +4,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public class EmptyWebAssemblyHostEnvironment : IWebAssemblyHostEnvironment
 {
-    public string Environment { get; set; }
+    public string Environment { get; set; } = default!;
 
-    public string BaseAddress { get; set; }
+    public string BaseAddress { get; set; } = default!;
 }

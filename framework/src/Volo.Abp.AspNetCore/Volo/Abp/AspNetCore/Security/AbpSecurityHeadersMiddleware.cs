@@ -32,7 +32,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         AddHeader(context, "X-Frame-Options", "SAMEORIGIN");
 
         var requestAcceptTypeHtml = context.Request.Headers["Accept"].Any(x =>
-            x.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
+            x!.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
             
         var endpoint = context.GetEndpoint();
 
@@ -109,7 +109,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 
     protected virtual string BuildContentSecurityPolicyValue(HttpContext context)
     {
-        var cspValue = Options.Value.ContentSecurityPolicyValue.IsNullOrWhiteSpace() ? DefaultValue : Options.Value.ContentSecurityPolicyValue;
+        var cspValue = Options.Value.ContentSecurityPolicyValue.IsNullOrWhiteSpace() ? DefaultValue : Options.Value.ContentSecurityPolicyValue!;
         if (!(Options.Value.UseContentSecurityPolicyScriptNonce &&
               context.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) &&
               nonce is string nonceValue && !string.IsNullOrEmpty(nonceValue)))
@@ -128,7 +128,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         }
 
         var newScriptSrcValue = scriptSrcValue + nonceStr;
-        return Options.Value.ContentSecurityPolicyValue.Replace(scriptSrcValue, newScriptSrcValue);
+        return Options.Value.ContentSecurityPolicyValue!.Replace(scriptSrcValue!, newScriptSrcValue);
     }
     
 

@@ -7,7 +7,7 @@ namespace Volo.Abp.Localization;
 
 public class LocalizationResourceContributorList : List<ILocalizationResourceContributor>
 {
-    public LocalizedString GetOrNull(
+    public LocalizedString? GetOrNull(
         string cultureName,
         string name,
         bool includeDynamicContributors = true)

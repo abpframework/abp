@@ -9,11 +9,11 @@ public class AbpButtonTagHelper : AbpTagHelper<AbpButtonTagHelper, AbpButtonTagH
 
     public AbpButtonSize Size { get; set; } = AbpButtonSize.Default;
 
-    public string BusyText { get; set; }
+    public string? BusyText { get; set; }
 
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 
     public bool? Disabled { get; set; }
 

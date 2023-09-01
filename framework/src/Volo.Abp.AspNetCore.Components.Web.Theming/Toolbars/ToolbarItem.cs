@@ -9,7 +9,7 @@ public class ToolbarItem
         get => _componentType;
         set => _componentType = Check.NotNull(value, nameof(value));
     }
-    private Type _componentType;
+    private Type _componentType = default!;
 
     public int Order { get; set; }
 

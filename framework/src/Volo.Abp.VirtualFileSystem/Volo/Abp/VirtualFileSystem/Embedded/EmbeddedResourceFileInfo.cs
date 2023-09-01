@@ -18,7 +18,7 @@ public class EmbeddedResourceFileInfo : IFileInfo
             {
                 using (var stream = _assembly.GetManifestResourceStream(_resourcePath))
                 {
-                    _length = stream.Length;
+                    _length = stream!.Length;
                 }
             }
 
@@ -27,7 +27,7 @@ public class EmbeddedResourceFileInfo : IFileInfo
     }
     private long? _length;
 
-    public string PhysicalPath => null;
+    public string? PhysicalPath => null;
 
     public string VirtualPath { get; }
 
@@ -68,7 +68,7 @@ public class EmbeddedResourceFileInfo : IFileInfo
             _length = stream.Length;
         }
 
-        return stream;
+        return stream!;
     }
 
     public override string ToString()

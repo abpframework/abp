@@ -35,6 +35,10 @@ public class AbpIdentityWebAutoMapperProfile : Profile
 
         CreateMap<IdentityRoleDto, EditUserModalModel.AssignedRoleViewModel>()
             .ForMember(dest => dest.IsAssigned, opt => opt.Ignore());
+
+        CreateMap<IdentityUserDto, EditUserModalModel.DetailViewModel>()
+            .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+            .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore());
     }
 
     protected virtual void CreateRoleMappings()

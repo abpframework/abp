@@ -38,7 +38,7 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
     }
 
     public virtual async Task<bool> IsGrantedAsync(
-        ClaimsPrincipal claimsPrincipal,
+        ClaimsPrincipal? claimsPrincipal,
         string name)
     {
         Check.NotNull(name, nameof(name));
@@ -97,7 +97,7 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
         return await IsGrantedAsync(PrincipalAccessor.Principal, names);
     }
 
-    public async Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string[] names)
+    public async Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, string[] names)
     {
         Check.NotNull(names, nameof(names));
 

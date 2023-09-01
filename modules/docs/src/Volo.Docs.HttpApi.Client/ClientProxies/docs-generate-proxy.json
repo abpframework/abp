@@ -8,11 +8,107 @@
           "controllerName": "DocsProject",
           "controllerGroupName": "Project",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.Docs.Projects.DocsProjectController",
           "interfaces": [
             {
-              "type": "Volo.Docs.Projects.IProjectAppService"
+              "type": "Volo.Docs.Projects.IProjectAppService",
+              "name": "IProjectAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Docs.Projects.ProjectDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Docs.Projects.ProjectDto>"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "shortName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Projects.ProjectDto",
+                    "typeSimple": "Volo.Docs.Projects.ProjectDto"
+                  }
+                },
+                {
+                  "name": "GetVersionsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "shortName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Docs.Projects.VersionInfoDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Docs.Projects.VersionInfoDto>"
+                  }
+                },
+                {
+                  "name": "GetDefaultLanguageCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "shortName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "version",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "GetLanguageListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "shortName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "version",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Documents.LanguageConfig",
+                    "typeSimple": "Volo.Docs.Documents.LanguageConfig"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -225,11 +321,142 @@
           "controllerName": "DocsDocument",
           "controllerGroupName": "Document",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.Docs.Documents.DocsDocumentController",
           "interfaces": [
             {
-              "type": "Volo.Docs.Documents.IDocumentAppService"
+              "type": "Volo.Docs.Documents.IDocumentAppService",
+              "name": "IDocumentAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Documents.GetDocumentInput, Volo.Docs.Application.Contracts",
+                      "type": "Volo.Docs.Documents.GetDocumentInput",
+                      "typeSimple": "Volo.Docs.Documents.GetDocumentInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Documents.DocumentWithDetailsDto",
+                    "typeSimple": "Volo.Docs.Documents.DocumentWithDetailsDto"
+                  }
+                },
+                {
+                  "name": "GetDefaultAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Documents.GetDefaultDocumentInput, Volo.Docs.Application.Contracts",
+                      "type": "Volo.Docs.Documents.GetDefaultDocumentInput",
+                      "typeSimple": "Volo.Docs.Documents.GetDefaultDocumentInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Documents.DocumentWithDetailsDto",
+                    "typeSimple": "Volo.Docs.Documents.DocumentWithDetailsDto"
+                  }
+                },
+                {
+                  "name": "GetNavigationAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Documents.GetNavigationDocumentInput, Volo.Docs.Application.Contracts",
+                      "type": "Volo.Docs.Documents.GetNavigationDocumentInput",
+                      "typeSimple": "Volo.Docs.Documents.GetNavigationDocumentInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Documents.NavigationNode",
+                    "typeSimple": "Volo.Docs.Documents.NavigationNode"
+                  }
+                },
+                {
+                  "name": "GetParametersAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Documents.GetParametersDocumentInput, Volo.Docs.Application.Contracts",
+                      "type": "Volo.Docs.Documents.GetParametersDocumentInput",
+                      "typeSimple": "Volo.Docs.Documents.GetParametersDocumentInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Documents.DocumentParametersDto",
+                    "typeSimple": "Volo.Docs.Documents.DocumentParametersDto"
+                  }
+                },
+                {
+                  "name": "GetResourceAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Documents.GetDocumentResourceInput, Volo.Docs.Application.Contracts",
+                      "type": "Volo.Docs.Documents.GetDocumentResourceInput",
+                      "typeSimple": "Volo.Docs.Documents.GetDocumentResourceInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Documents.DocumentResourceDto",
+                    "typeSimple": "Volo.Docs.Documents.DocumentResourceDto"
+                  }
+                },
+                {
+                  "name": "SearchAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Documents.DocumentSearchInput, Volo.Docs.Application.Contracts",
+                      "type": "Volo.Docs.Documents.DocumentSearchInput",
+                      "typeSimple": "Volo.Docs.Documents.DocumentSearchInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Documents.DocumentSearchOutput>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Documents.DocumentSearchOutput>"
+                  }
+                },
+                {
+                  "name": "FullSearchEnabledAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                },
+                {
+                  "name": "GetUrlsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "prefix",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<System.String>",
+                    "typeSimple": "[string]"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -532,8 +759,8 @@
                 }
               ],
               "returnValue": {
-                "type": "System.Collections.Generic.List<Volo.Docs.Documents.DocumentSearchOutput>",
-                "typeSimple": "[Volo.Docs.Documents.DocumentSearchOutput]"
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Documents.DocumentSearchOutput>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Documents.DocumentSearchOutput>"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
@@ -650,89 +877,6 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Docs.Documents.IDocumentAppService"
-            }
-          }
-        },
-        "Volo.Docs.Areas.Documents.DocumentResourceController": {
-          "controllerName": "DocumentResource",
-          "controllerGroupName": "DocumentResource",
-          "isRemoteService": true,
-          "apiVersion": null,
-          "type": "Volo.Docs.Areas.Documents.DocumentResourceController",
-          "interfaces": [],
-          "actions": {
-            "GetResourceByInput": {
-              "uniqueName": "GetResourceByInput",
-              "name": "GetResource",
-              "httpMethod": "GET",
-              "url": "document-resources",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "input",
-                  "typeAsString": "Volo.Docs.Documents.GetDocumentResourceInput, Volo.Docs.Application.Contracts",
-                  "type": "Volo.Docs.Documents.GetDocumentResourceInput",
-                  "typeSimple": "Volo.Docs.Documents.GetDocumentResourceInput",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "input",
-                  "name": "ProjectId",
-                  "jsonName": null,
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "Name",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "Version",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "LanguageCode",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                }
-              ],
-              "returnValue": {
-                "type": "Microsoft.AspNetCore.Mvc.FileResult",
-                "typeSimple": "Microsoft.AspNetCore.Mvc.FileResult"
-              },
-              "allowAnonymous": null,
-              "implementFrom": "Volo.Docs.Areas.Documents.DocumentResourceController"
             }
           }
         }

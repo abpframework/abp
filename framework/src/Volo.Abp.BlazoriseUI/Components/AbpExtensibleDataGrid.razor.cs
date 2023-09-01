@@ -18,7 +18,7 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
 
     protected Regex ExtensionPropertiesRegex = new Regex(@"ExtraProperties\[(.*?)\]");
 
-    [Parameter] public IEnumerable<TItem> Data { get; set; }
+    [Parameter] public IEnumerable<TItem> Data { get; set; } = default!;
 
     [Parameter] public EventCallback<DataGridReadDataEventArgs<TItem>> ReadData { get; set; }
 
@@ -28,16 +28,16 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
 
     [Parameter] public int PageSize { get; set; }
 
-    [Parameter] public IEnumerable<TableColumn> Columns { get; set; }
+    [Parameter] public IEnumerable<TableColumn> Columns { get; set; } = default!;
 
     [Parameter] public int CurrentPage { get; set; } = 1;
 
-    [Parameter] public string Class { get; set; }
+    [Parameter] public string? Class { get; set; }
 
     [Parameter] public bool Responsive { get; set; }
 
     [Inject]
-    public IStringLocalizerFactory StringLocalizerFactory { get; set; }
+    public IStringLocalizerFactory StringLocalizerFactory { get; set; } = default!;
 
     protected virtual RenderFragment RenderCustomTableColumnComponent(Type type, object data)
     {
@@ -51,10 +51,10 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
 
     protected virtual string GetConvertedFieldValue(TItem item, TableColumn columnDefinition)
     {
-        var convertedValue = columnDefinition.ValueConverter.Invoke(item);
+        var convertedValue = columnDefinition.ValueConverter!.Invoke(item!);
         if (!columnDefinition.DisplayFormat.IsNullOrEmpty())
         {
-            return string.Format(columnDefinition.DisplayFormatProvider, columnDefinition.DisplayFormat,
+            return string.Format(columnDefinition.DisplayFormatProvider, columnDefinition.DisplayFormat!,
                 convertedValue);
         }
 

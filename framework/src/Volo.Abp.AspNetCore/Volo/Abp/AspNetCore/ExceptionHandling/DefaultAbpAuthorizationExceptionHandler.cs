@@ -17,11 +17,11 @@ public class DefaultAbpAuthorizationExceptionHandler : IAbpAuthorizationExceptio
         var isAuthenticated = httpContext.User.Identity?.IsAuthenticated ?? false;
         var authenticationSchemeProvider = httpContext.RequestServices.GetRequiredService<IAuthenticationSchemeProvider>();
 
-        AuthenticationScheme scheme = null;
+        AuthenticationScheme? scheme = null;
 
         if (!handlerOptions.AuthenticationScheme.IsNullOrWhiteSpace())
         {
-            scheme = await authenticationSchemeProvider.GetSchemeAsync(handlerOptions.AuthenticationScheme);
+            scheme = await authenticationSchemeProvider.GetSchemeAsync(handlerOptions.AuthenticationScheme!);
             if (scheme == null)
             {
                 throw new AbpException($"No authentication scheme named {handlerOptions.AuthenticationScheme} was found.");

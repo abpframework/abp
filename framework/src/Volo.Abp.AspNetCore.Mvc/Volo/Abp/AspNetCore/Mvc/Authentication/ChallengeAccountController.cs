@@ -14,7 +14,7 @@ public abstract class ChallengeAccountController : AbpController
     protected string AuthenticationType { get; }
     protected string[] ForbidSchemes { get; }
 
-    protected ChallengeAccountController(string[] challengeAuthenticationSchemas = null)
+    protected ChallengeAccountController(string[]? challengeAuthenticationSchemas = null)
     {
         ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[] { "oidc" };
         AuthenticationType = "Identity.Application";
@@ -68,12 +68,12 @@ public abstract class ChallengeAccountController : AbpController
             {
                 RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)
             },
-            ForbidSchemes.IsNullOrEmpty()
+            (ForbidSchemes.IsNullOrEmpty()
                 ? new[]
                 {
                     HttpContext.RequestServices.GetRequiredService<IOptions<AuthenticationOptions>>().Value.DefaultForbidScheme
                 }
-                : ForbidSchemes
+                : ForbidSchemes)!
         ));
     }
 

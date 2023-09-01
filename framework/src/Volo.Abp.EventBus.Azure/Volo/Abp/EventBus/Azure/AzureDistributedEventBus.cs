@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -14,6 +15,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Azure;
@@ -42,7 +44,8 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IAzureServiceBusMessageConsumerFactory messageConsumerFactory,
         IPublisherPool publisherPool,
         IEventHandlerInvoker eventHandlerInvoker,
-        ILocalEventBus localEventBus)
+        ILocalEventBus localEventBus,
+        ICorrelationIdProvider correlationIdProvider)
         : base(serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
@@ -50,7 +53,8 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             guidGenerator,
             clock,
             eventHandlerInvoker,
-            localEventBus)
+            localEventBus,
+            correlationIdProvider)
     {
         Options = abpAzureEventBusOptions.Value;
         Serializer = serializer;
@@ -86,24 +90,30 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         var eventData = Serializer.Deserialize(message.Body.ToArray(), eventType);
 
-        if (await AddToInboxAsync(message.MessageId, eventName, eventType, eventData))
+        if (await AddToInboxAsync(message.MessageId, eventName, eventType, eventData, message.CorrelationId))
         {
             return;
         }
 
-        await TriggerHandlersDirectAsync(eventType, eventData);
+        using (CorrelationIdProvider.Change(message.CorrelationId))
+        {
+            await TriggerHandlersDirectAsync(eventType, eventData);
+        }
     }
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        await TriggerDistributedEventSentAsync(new DistributedEventSent()
+        using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
         {
-            Source = DistributedEventSource.Outbox,
-            EventName = outgoingEvent.EventName,
-            EventData = outgoingEvent.EventData
-        });
+            await TriggerDistributedEventSentAsync(new DistributedEventSent()
+            {
+                Source = DistributedEventSource.Outbox,
+                EventName = outgoingEvent.EventName,
+                EventData = outgoingEvent.EventData
+            });
+        }
 
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id);
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.GetCorrelationId(), outgoingEvent.Id);
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -125,18 +135,23 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 message.MessageId = outgoingEvent.Id.ToString();
             }
 
+            message.CorrelationId = outgoingEvent.GetCorrelationId();
+
             if (!messageBatch.TryAddMessage(message))
             {
                 throw new AbpException(
                     "The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
             }
 
-            await TriggerDistributedEventSentAsync(new DistributedEventSent()
+            using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
             {
-                Source = DistributedEventSource.Outbox,
-                EventName = outgoingEvent.EventName,
-                EventData = outgoingEvent.EventData
-            });
+                await TriggerDistributedEventSentAsync(new DistributedEventSent()
+                {
+                    Source = DistributedEventSource.Outbox,
+                    EventName = outgoingEvent.EventName,
+                    EventData = outgoingEvent.EventData
+                });
+            }
         }
 
         await publisher.SendMessagesAsync(messageBatch);
@@ -152,7 +167,10 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
-        await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+        using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
+        {
+            await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+        }
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);
@@ -244,12 +262,13 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var body = Serializer.Serialize(eventData);
 
-        return PublishAsync(eventName, body, null);
+        return PublishAsync(eventName, body, CorrelationIdProvider.Get(), null);
     }
 
     protected virtual async Task PublishAsync(
         string eventName,
         byte[] body,
+        [CanBeNull] string correlationId,
         Guid? eventId)
     {
         var message = new ServiceBusMessage(body)
@@ -261,6 +280,8 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             message.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
         }
+
+        message.CorrelationId = correlationId;
 
         var publisher = await PublisherPool.GetAsync(
             Options.TopicName,

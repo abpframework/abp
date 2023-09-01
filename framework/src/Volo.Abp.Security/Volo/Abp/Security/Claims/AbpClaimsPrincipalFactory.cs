@@ -21,7 +21,7 @@ public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientD
         Options = abpClaimOptions.Value;
     }
 
-    public virtual async Task<ClaimsPrincipal> CreateAsync(ClaimsPrincipal existsClaimsPrincipal = null)
+    public virtual async Task<ClaimsPrincipal> CreateAsync(ClaimsPrincipal? existsClaimsPrincipal = null)
     {
         using (var scope = ServiceScopeFactory.CreateScope())
         {

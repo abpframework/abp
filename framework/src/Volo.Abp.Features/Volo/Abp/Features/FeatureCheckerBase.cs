@@ -6,7 +6,7 @@ namespace Volo.Abp.Features;
 
 public abstract class FeatureCheckerBase : IFeatureChecker, ITransientDependency
 {
-    public abstract Task<string> GetOrNullAsync(string name);
+    public abstract Task<string?> GetOrNullAsync(string name);
 
     public virtual async Task<bool> IsEnabledAsync(string name)
     {
@@ -18,7 +18,7 @@ public abstract class FeatureCheckerBase : IFeatureChecker, ITransientDependency
 
         try
         {
-            return bool.Parse(value);
+            return bool.Parse(value!);
         }
         catch (Exception ex)
         {

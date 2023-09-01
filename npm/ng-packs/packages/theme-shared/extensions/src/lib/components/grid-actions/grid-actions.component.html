@@ -52,7 +52,8 @@
       *abpPermission="action.permission; runChangeDetection: false"
       (click)="action.action(data)"
       type="button"
-      class="btn btn-primary text-center"
+      [class]="action.btnClass"
+      [style]="action.btnStyle"
     >
       <ng-container
         *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"

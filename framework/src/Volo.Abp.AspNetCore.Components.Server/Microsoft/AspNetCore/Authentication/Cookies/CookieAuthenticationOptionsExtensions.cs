@@ -33,7 +33,7 @@ public static class CookieAuthenticationOptionsExtensions
                 var openIdConnectOptions = await GetOpenIdConnectOptions(principalContext, oidcAuthenticationScheme);
                 var response = await openIdConnectOptions.Backchannel.IntrospectTokenAsync(new TokenIntrospectionRequest
                 {
-                    Address = openIdConnectOptions.Configuration?.IntrospectionEndpoint ?? openIdConnectOptions.Authority.EnsureEndsWith('/') + "connect/introspect",
+                    Address = openIdConnectOptions.Configuration?.IntrospectionEndpoint ?? openIdConnectOptions.Authority!.EnsureEndsWith('/') + "connect/introspect",
                     ClientId = openIdConnectOptions.ClientId,
                     ClientSecret = openIdConnectOptions.ClientSecret,
                     Token = accessToken

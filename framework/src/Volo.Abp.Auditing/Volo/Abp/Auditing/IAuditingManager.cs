@@ -4,8 +4,7 @@ namespace Volo.Abp.Auditing;
 
 public interface IAuditingManager
 {
-    [CanBeNull]
-    IAuditLogScope Current { get; }
+    IAuditLogScope? Current { get; }
 
     IAuditLogSaveHandle BeginScope();
 }

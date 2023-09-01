@@ -13,6 +13,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Dapr;
@@ -39,8 +40,17 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         IDaprSerializer serializer,
         IOptions<AbpDaprEventBusOptions> daprEventBusOptions,
         IAbpDaprClientFactory daprClientFactory,
-        ILocalEventBus localEventBus)
-        : base(serviceScopeFactory, currentTenant, unitOfWorkManager, abpDistributedEventBusOptions, guidGenerator, clock, eventHandlerInvoker, localEventBus)
+        ILocalEventBus localEventBus,
+        ICorrelationIdProvider correlationIdProvider)
+        : base(serviceScopeFactory,
+            currentTenant,
+            unitOfWorkManager,
+            abpDistributedEventBusOptions,
+            guidGenerator,
+            clock,
+            eventHandlerInvoker,
+            localEventBus,
+            correlationIdProvider)
     {
         Serializer = serializer;
         DaprEventBusOptions = daprEventBusOptions.Value;
@@ -119,9 +129,9 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
     }
 
-    protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await PublishToDaprAsync(eventType, eventData);
+        await PublishToDaprAsync(eventType, eventData, null, CorrelationIdProvider.Get());
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -141,23 +151,9 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         return handlerFactoryList.ToArray();
     }
 
-    public override async Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
+    public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        await TriggerDistributedEventSentAsync(new DistributedEventSent()
-        {
-            Source = DistributedEventSource.Outbox,
-            EventName = outgoingEvent.EventName,
-            EventData = outgoingEvent.EventData
-        });
-
-        await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
-    }
-
-    public override async Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
-    {
-        var outgoingEventArray = outgoingEvents.ToArray();
-
-        foreach (var outgoingEvent in outgoingEventArray)
+        using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
         {
             await TriggerDistributedEventSentAsync(new DistributedEventSent()
             {
@@ -165,19 +161,42 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
                 EventName = outgoingEvent.EventName,
                 EventData = outgoingEvent.EventData
             });
+        }
 
-            await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)));
+        await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.Id, outgoingEvent.GetCorrelationId());
+    }
+
+    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    {
+        var outgoingEventArray = outgoingEvents.ToArray();
+
+        foreach (var outgoingEvent in outgoingEventArray)
+        {
+            using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
+            {
+                await TriggerDistributedEventSentAsync(new DistributedEventSent()
+                {
+                    Source = DistributedEventSource.Outbox,
+                    EventName = outgoingEvent.EventName,
+                    EventData = outgoingEvent.EventData
+                });
+            }
+
+            await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.Id, outgoingEvent.GetCorrelationId());
         }
     }
 
-    public virtual async Task TriggerHandlersAsync(string messageId, Type eventType, object eventData)
+    public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, string messageId = null, string correlationId = null)
     {
-        if (await AddToInboxAsync(messageId, EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData))
+        if (await AddToInboxAsync(messageId, EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, correlationId))
         {
             return;
         }
 
-        await TriggerHandlersDirectAsync(eventType, eventData);
+        using (CorrelationIdProvider.Change(correlationId))
+        {
+            await TriggerHandlersDirectAsync(eventType, eventData);
+        }
     }
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
@@ -190,7 +209,10 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
         var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
-        await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+        using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
+        {
+            await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+        }
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);
@@ -226,15 +248,16 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         return EventTypes.GetOrDefault(eventName);
     }
 
-    protected virtual async Task PublishToDaprAsync(Type eventType, object eventData)
+    protected virtual async Task PublishToDaprAsync(Type eventType, object eventData, Guid? messageId = null, string correlationId = null)
     {
-        await PublishToDaprAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData);
+        await PublishToDaprAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData, messageId, correlationId);
     }
 
-    protected virtual async Task PublishToDaprAsync(string eventName, object eventData)
+    protected virtual async Task PublishToDaprAsync(string eventName, object eventData, Guid? messageId = null, string correlationId = null)
     {
         var client = DaprClientFactory.Create();
-        await client.PublishEventAsync(pubsubName: DaprEventBusOptions.PubSubName, topicName: eventName, data: eventData);
+        var data = new AbpDaprEventData(DaprEventBusOptions.PubSubName, eventName, (messageId ?? GuidGenerator.Create()).ToString("N"), Serializer.SerializeToString(eventData), correlationId);
+        await client.PublishEventAsync(pubsubName: DaprEventBusOptions.PubSubName, topicName: eventName, data: data);
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

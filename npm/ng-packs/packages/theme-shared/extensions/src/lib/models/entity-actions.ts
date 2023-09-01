@@ -22,11 +22,15 @@ export class EntityActionsFactory<R = any> extends ActionsFactory<EntityActions<
 export class EntityAction<R = any> extends Action<R> {
   readonly text: string;
   readonly icon: string;
+  readonly btnClass?: string;
+  readonly btnStyle?: string;
 
   constructor(options: EntityActionOptions<R>) {
     super(options.permission || '', options.visible, options.action);
     this.text = options.text;
     this.icon = options.icon || '';
+    this.btnClass = options.btnClass || 'btn btn-primary text-center';
+    this.btnStyle = options.btnStyle;
   }
 
   static create<R = any>(options: EntityActionOptions<R>) {

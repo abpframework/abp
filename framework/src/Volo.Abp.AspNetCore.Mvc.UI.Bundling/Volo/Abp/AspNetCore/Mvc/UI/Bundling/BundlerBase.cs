@@ -146,7 +146,7 @@ public abstract class BundlerBase : IBundler, ITransientDependency
         return false;
     }
 
-    protected virtual IFileInfo GetMinFileInfoOrNull(string file)
+    protected virtual IFileInfo? GetMinFileInfoOrNull(string file)
     {
         foreach (var suffix in _minFileSuffixes)
         {

@@ -29,13 +29,13 @@ public class FeatureChecker : FeatureCheckerBase
         _providers = new Lazy<List<IFeatureValueProvider>>(
             () => Options
                 .ValueProviders
-                .Select(type => ServiceProvider.GetRequiredService(type) as IFeatureValueProvider)
+                .Select(type => (ServiceProvider.GetRequiredService(type) as IFeatureValueProvider)!)
                 .ToList(),
             true
         );
     }
 
-    public override async Task<string> GetOrNullAsync(string name)
+    public override async Task<string?> GetOrNullAsync(string name)
     {
         var featureDefinition = await FeatureDefinitionManager.GetAsync(name);
         var providers = Enumerable
@@ -49,7 +49,7 @@ public class FeatureChecker : FeatureCheckerBase
         return await GetOrNullValueFromProvidersAsync(providers, featureDefinition);
     }
 
-    protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
+    protected virtual async Task<string?> GetOrNullValueFromProvidersAsync(
         IEnumerable<IFeatureValueProvider> providers,
         FeatureDefinition feature)
     {

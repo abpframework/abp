@@ -19,7 +19,7 @@ public class StringEncryptionService : IStringEncryptionService, ITransientDepen
         Options = options.Value;
     }
 
-    public virtual string Encrypt(string plainText, string passPhrase = null, byte[] salt = null)
+    public virtual string? Encrypt(string? plainText, string? passPhrase = null, byte[]? salt = null)
     {
         if (plainText == null)
         {
@@ -60,7 +60,7 @@ public class StringEncryptionService : IStringEncryptionService, ITransientDepen
         }
     }
 
-    public virtual string Decrypt(string cipherText, string passPhrase = null, byte[] salt = null)
+    public virtual string? Decrypt(string? cipherText, string? passPhrase = null, byte[]? salt = null)
     {
         if (string.IsNullOrEmpty(cipherText))
         {

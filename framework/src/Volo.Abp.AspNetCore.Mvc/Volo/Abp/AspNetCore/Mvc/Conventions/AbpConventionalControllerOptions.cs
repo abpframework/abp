@@ -33,7 +33,7 @@ public class AbpConventionalControllerOptions
 
     public AbpConventionalControllerOptions Create(
         Assembly assembly,
-        [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
+        Action<ConventionalControllerSetting>? optionsAction = null)
     {
         var setting = new ConventionalControllerSetting(
             assembly,

@@ -14,7 +14,7 @@ public class DynamicStringLengthAttributeAdapter : AttributeAdapterBase<DynamicS
 
     public DynamicStringLengthAttributeAdapter(
         DynamicStringLengthAttribute attribute,
-        IStringLocalizer stringLocalizer)
+        IStringLocalizer? stringLocalizer)
         : base(attribute, stringLocalizer)
     {
         _max = Attribute.MaximumLength.ToString(CultureInfo.InvariantCulture);

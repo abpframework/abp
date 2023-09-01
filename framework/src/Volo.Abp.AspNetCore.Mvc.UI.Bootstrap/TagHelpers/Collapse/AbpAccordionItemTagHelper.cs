@@ -2,9 +2,9 @@
 
 public class AbpAccordionItemTagHelper : AbpTagHelper<AbpAccordionItemTagHelper, AbpAccordionItemTagHelperService>
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
 
     public bool? Active { get; set; }
 

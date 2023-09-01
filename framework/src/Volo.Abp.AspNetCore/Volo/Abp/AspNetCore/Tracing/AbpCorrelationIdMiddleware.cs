@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -20,19 +22,34 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var correlationId = _correlationIdProvider.Get();
-        CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
-        await next(context);
+        var correlationId = GetCorrelationIdFromRequest(context);
+        using (_correlationIdProvider.Change(correlationId))
+        {
+            CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
+            await next(context);
+        }
+    }
+
+    protected virtual string? GetCorrelationIdFromRequest(HttpContext context)
+    {
+        var correlationId = context.Request.Headers[_options.HttpHeaderName];
+        if (correlationId.IsNullOrEmpty())
+        {
+            correlationId = Guid.NewGuid().ToString("N");
+            context.Request.Headers[_options.HttpHeaderName] = correlationId;
+        }
+
+        return correlationId;
     }
 
     protected virtual void CheckAndSetCorrelationIdOnResponse(
         HttpContext httpContext,
         AbpCorrelationIdOptions options,
-        string correlationId)
+        string? correlationId)
     {
         httpContext.Response.OnStarting(() =>
         {
-            if (options.SetResponseHeader &&!httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
+            if (options.SetResponseHeader && !httpContext.Response.Headers.ContainsKey(options.HttpHeaderName) && !string.IsNullOrWhiteSpace(correlationId))
             {
                 httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
             }

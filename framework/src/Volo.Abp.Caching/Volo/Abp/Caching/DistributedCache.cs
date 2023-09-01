@@ -861,8 +861,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 uowCache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(() =>
+            UnitOfWorkManager.Current?.OnCompleted(() =>
             {
                 SetRealCache();
                 return Task.CompletedTask;
@@ -928,8 +927,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 uowCache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(SetRealCache);
+            UnitOfWorkManager.Current?.OnCompleted(SetRealCache);
         }
         else
         {
@@ -997,8 +995,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 }
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(() =>
+            UnitOfWorkManager.Current?.OnCompleted(() =>
             {
                 SetRealCache();
                 return Task.CompletedTask;
@@ -1106,8 +1103,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 }
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(SetRealCache);
+            UnitOfWorkManager.Current?.OnCompleted(SetRealCache);
         }
         else
         {
@@ -1311,8 +1307,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 uowCache[key].RemoveValue();
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(() =>
+            UnitOfWorkManager.Current?.OnCompleted(() =>
             {
                 RemoveRealCache();
                 return Task.CompletedTask;
@@ -1366,8 +1361,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 uowCache[key].RemoveValue();
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(RemoveRealCache);
+            UnitOfWorkManager.Current?.OnCompleted(RemoveRealCache);
         }
         else
         {
@@ -1418,8 +1412,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                     }
                 }
 
-                // ReSharper disable once PossibleNullReferenceException
-                UnitOfWorkManager.Current.OnCompleted(() =>
+                UnitOfWorkManager.Current?.OnCompleted(() =>
                 {
                     RemoveRealCache();
                     return Task.CompletedTask;
@@ -1482,8 +1475,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                     }
                 }
 
-                // ReSharper disable once PossibleNullReferenceException
-                UnitOfWorkManager.Current.OnCompleted(RemoveRealCache);
+                UnitOfWorkManager.Current?.OnCompleted(RemoveRealCache);
             }
             else
             {

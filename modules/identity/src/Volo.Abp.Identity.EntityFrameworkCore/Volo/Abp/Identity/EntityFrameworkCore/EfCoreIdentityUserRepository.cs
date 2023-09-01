@@ -356,4 +356,32 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .Where(x => ids.Contains(x.Id))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
+
+    public virtual async Task UpdateRoleAsync(Guid sourceRoleId, Guid? targetRoleId, CancellationToken cancellationToken = default)
+    {
+        if (targetRoleId != null)
+        {
+            var users = await (await GetDbContextAsync()).Set<IdentityUserRole>().Where(x => x.RoleId == targetRoleId).Select(x => x.UserId).ToArrayAsync(cancellationToken: cancellationToken);
+            await (await GetDbContextAsync()).Set<IdentityUserRole>().Where(x => x.RoleId == sourceRoleId && !users.Contains(x.UserId)).ExecuteUpdateAsync(t => t.SetProperty(e => e.RoleId, targetRoleId), GetCancellationToken(cancellationToken));
+            await (await GetDbContextAsync()).Set<IdentityUserRole>().Where(x => x.RoleId == sourceRoleId).ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
+        }
+        else
+        {
+            await (await GetDbContextAsync()).Set<IdentityUserRole>().Where(x => x.RoleId == sourceRoleId).ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
+        }
+    }
+
+    public virtual async Task UpdateOrganizationAsync(Guid sourceOrganizationId, Guid? targetOrganizationId, CancellationToken cancellationToken = default)
+    {
+        if (targetOrganizationId != null)
+        {
+            var users = await (await GetDbContextAsync()).Set<IdentityUserOrganizationUnit>().Where(x => x.OrganizationUnitId == targetOrganizationId).Select(x => x.UserId).ToArrayAsync(cancellationToken: cancellationToken);
+            await (await GetDbContextAsync()).Set<IdentityUserOrganizationUnit>().Where(x => x.OrganizationUnitId == sourceOrganizationId && !users.Contains(x.UserId)).ExecuteUpdateAsync(t => t.SetProperty(e => e.OrganizationUnitId, targetOrganizationId), GetCancellationToken(cancellationToken));
+            await (await GetDbContextAsync()).Set<IdentityUserOrganizationUnit>().Where(x => x.OrganizationUnitId == sourceOrganizationId).ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
+        }
+        else
+        {
+            await (await GetDbContextAsync()).Set<IdentityUserOrganizationUnit>().Where(x => x.OrganizationUnitId == sourceOrganizationId).ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
+        }
+    }
 }

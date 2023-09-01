@@ -32,8 +32,8 @@ public class DynamicFileProvider : DictionaryBasedFileProvider, IDynamicFileProv
     public void AddOrUpdate(IFileInfo fileInfo)
     {
         var filePath = fileInfo.GetVirtualOrPhysicalPathOrNull();
-        DynamicFiles.AddOrUpdate(filePath, fileInfo, (key, value) => fileInfo);
-        ReportChange(filePath);
+        DynamicFiles.AddOrUpdate(filePath!, fileInfo, (key, value) => fileInfo);
+        ReportChange(filePath!);
     }
 
     public bool Delete(string filePath)

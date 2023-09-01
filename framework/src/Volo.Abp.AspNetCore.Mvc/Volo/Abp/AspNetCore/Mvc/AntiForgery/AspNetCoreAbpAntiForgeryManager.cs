@@ -9,7 +9,7 @@ public class AspNetCoreAbpAntiForgeryManager : IAbpAntiForgeryManager, ITransien
 {
     protected AbpAntiForgeryOptions Options { get; }
 
-    protected HttpContext HttpContext => _httpContextAccessor.HttpContext;
+    protected HttpContext HttpContext => _httpContextAccessor.HttpContext!;
 
     private readonly IAntiforgery _antiforgery;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -27,7 +27,7 @@ public class AspNetCoreAbpAntiForgeryManager : IAbpAntiForgeryManager, ITransien
     public virtual void SetCookie()
     {
         HttpContext.Response.Cookies.Append(
-            Options.TokenCookie.Name,
+            Options.TokenCookie.Name!,
             GenerateToken(),
             Options.TokenCookie.Build(HttpContext)
         );
@@ -35,6 +35,6 @@ public class AspNetCoreAbpAntiForgeryManager : IAbpAntiForgeryManager, ITransien
 
     public virtual string GenerateToken()
     {
-        return _antiforgery.GetAndStoreTokens(_httpContextAccessor.HttpContext).RequestToken;
+        return _antiforgery.GetAndStoreTokens(_httpContextAccessor.HttpContext!).RequestToken!;
     }
 }

@@ -12,7 +12,7 @@ public class FormTenantResolveContributor : HttpTenantResolveContributorBase
 
     public override string Name => ContributorName;
 
-    protected override async Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
+    protected override async Task<string?> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
     {
         if (!httpContext.Request.HasFormContentType)
         {

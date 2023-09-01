@@ -26,7 +26,7 @@ public class AbpAuditingOptions
     /// The name of the application or service writing audit logs.
     /// Default: null.
     /// </summary>
-    public string ApplicationName { get; set; }
+    public string? ApplicationName { get; set; }
 
     /// <summary>
     /// Default: true.
