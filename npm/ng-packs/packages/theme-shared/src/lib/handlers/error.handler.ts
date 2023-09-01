@@ -1,4 +1,4 @@
- import {
+import {
   AuthService,
   HttpErrorReporterService,
   LocalizationParam,
@@ -86,7 +86,6 @@ export class ErrorHandler {
   protected httpErrorConfig: HttpErrorConfig;
   protected sessionStateService: SessionStateService;
   private authService: AuthService;
-  
 
   constructor(protected injector: Injector) {
     this.httpErrorReporter = injector.get(HttpErrorReporterService);
@@ -146,7 +145,7 @@ export class ErrorHandler {
     };
 
     if (err instanceof HttpErrorResponse && err.headers.get('Abp-Tenant-Resolve-Error')) {
-      this.sessionStateService.setTenant(null)
+      this.sessionStateService.setTenant(null);
       this.authService.logout().subscribe();
       return;
     }
@@ -162,18 +161,11 @@ export class ErrorHandler {
     } else {
       switch (err.status) {
         case 401:
-          this.canCreateCustomError(401)
-            ? this.show401Page()
-            : this.showError(
-                {
-                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.title,
-                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
-                },
-                {
-                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.details,
-                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
-                },
-              ).subscribe(() => this.navigateToLogin());
+          if (this.canCreateCustomError(401)) {
+            this.show401Page();
+          }
+
+          this.navigateToLogin();
           break;
         case 403:
           this.createErrorComponent({
