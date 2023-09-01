@@ -11,6 +11,10 @@ public class DatabaseBlobContainer : AggregateRoot<Guid>, IMultiTenant
 
     public virtual string Name { get; protected set; }
 
+    protected DatabaseBlobContainer()
+    {
+    }
+
     public DatabaseBlobContainer(Guid id, [NotNull] string name, Guid? tenantId = null)
         : base(id)
     {
