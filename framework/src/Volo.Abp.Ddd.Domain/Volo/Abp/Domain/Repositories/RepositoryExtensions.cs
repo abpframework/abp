@@ -145,11 +145,25 @@ public static class RepositoryExtensions
         }
     }
 
+    /// <summary>
+    /// Disables change tracking mechanism for the given repository. 
+    /// </summary>
+    /// <param name="repository">A repository object</param>
+    /// <returns>
+    /// A disposable object. Dispose it to restore change tracking mechanism back to its previous state.
+    /// </returns>
     public static IDisposable DisableTracking(this IRepository repository)
     {
         return Tracking(repository, false);
     }
 
+    /// <summary>
+    /// Enables change tracking mechanism for the given repository.
+    /// </summary>
+    /// <param name="repository">A repository object</param>
+    /// <returns>
+    /// A disposable object. Dispose it to restore change tracking mechanism back to its previous state.
+    /// </returns>
     public static IDisposable EnableTracking(this IRepository repository)
     {
         return Tracking(repository, true);
