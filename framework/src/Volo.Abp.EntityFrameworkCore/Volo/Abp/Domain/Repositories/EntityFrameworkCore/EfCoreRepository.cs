@@ -108,7 +108,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public async override Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        CheckChangeTracking();
         CheckAndSetId(entity);
 
         var dbContext = await GetDbContextAsync();
@@ -125,7 +124,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public async override Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        CheckChangeTracking();
         var entityArray = entities.ToArray();
         if (entityArray.IsNullOrEmpty())
         {
@@ -161,7 +159,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public async override Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        CheckChangeTracking();
         var dbContext = await GetDbContextAsync();
 
         dbContext.Attach(entity);
@@ -183,8 +180,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
         {
             return;
         }
-
-        CheckChangeTracking();
 
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -212,7 +207,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public async override Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        CheckChangeTracking();
         var dbContext = await GetDbContextAsync();
 
         dbContext.Set<TEntity>().Remove(entity);
@@ -230,8 +224,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
         {
             return;
         }
-
-        CheckChangeTracking();
 
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -325,7 +317,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public async override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        CheckChangeTracking();
         var dbContext = await GetDbContextAsync();
         var dbSet = dbContext.Set<TEntity>();
 
@@ -445,15 +436,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
             () => GuidGenerator.Create(),
             true
         );
-    }
-
-
-    protected virtual void CheckChangeTracking()
-    {
-        if (!ShouldTrackingEntityChange())
-        {
-            Logger.LogWarning("This repository has disabled change tracking. Your changes may not be saved!");
-        }
     }
 }
 
