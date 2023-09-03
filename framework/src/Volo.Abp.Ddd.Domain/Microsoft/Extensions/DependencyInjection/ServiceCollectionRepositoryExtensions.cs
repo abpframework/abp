@@ -92,7 +92,7 @@ public static class ServiceCollectionRepositoryExtensions
             descriptor = ServiceDescriptor.Transient(serviceType, provider =>
             {
                 var repository = provider.GetRequiredService(implementationType);
-                ObjectHelper.TrySetProperty(repository.As<IRepository>(), x => x.IsReadOnly, _ => true);
+                ObjectHelper.TrySetProperty(repository.As<IRepository>(), x => x.IsChangeTrackingEnabled, _ => false);
                 return repository;
             });
         }
