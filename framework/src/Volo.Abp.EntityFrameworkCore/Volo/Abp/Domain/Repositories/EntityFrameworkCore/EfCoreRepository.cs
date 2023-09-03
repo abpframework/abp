@@ -464,7 +464,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
 public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbContext, TEntity>,
     IEfCoreRepository<TEntity, TKey>,
-    ISupportsExplicitLoading<TEntity, TKey>
+    ISupportsExplicitLoading<TEntity>
 
     where TDbContext : IEfCoreDbContext
     where TEntity : class, IEntity<TKey>
