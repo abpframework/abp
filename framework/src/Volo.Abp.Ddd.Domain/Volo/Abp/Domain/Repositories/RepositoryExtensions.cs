@@ -15,16 +15,16 @@ namespace Volo.Abp.Domain.Repositories;
 
 public static class RepositoryExtensions
 {
-    public async static Task EnsureCollectionLoadedAsync<TEntity, TKey, TProperty>(
-        this IBasicRepository<TEntity, TKey> repository,
+    public async static Task EnsureCollectionLoadedAsync<TEntity, TProperty>(
+        this IBasicRepository<TEntity> repository,
         TEntity entity,
         Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
         CancellationToken cancellationToken = default
     )
-        where TEntity : class, IEntity<TKey>
+        where TEntity : class, IEntity
         where TProperty : class
     {
-        var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity, TKey>;
+        var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity>;
         if (repo != null)
         {
             await repo.EnsureCollectionLoadedAsync(entity, propertyExpression, cancellationToken);
@@ -40,7 +40,7 @@ public static class RepositoryExtensions
         where TEntity : class, IEntity<TKey>
         where TProperty : class
     {
-        var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity, TKey>;
+        var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity>;
         if (repo != null)
         {
             await repo.EnsurePropertyLoadedAsync(entity, propertyExpression, cancellationToken);
@@ -60,12 +60,12 @@ public static class RepositoryExtensions
         }
     }
 
-    public async static Task EnsureExistsAsync<TEntity, TKey>(
-        this IRepository<TEntity, TKey> repository,
+    public async static Task EnsureExistsAsync<TEntity>(
+        this IRepository<TEntity> repository,
         Expression<Func<TEntity, bool>> expression,
         CancellationToken cancellationToken = default
     )
-        where TEntity : class, IEntity<TKey>
+        where TEntity : class, IEntity
     {
         if (!await repository.AnyAsync(expression, cancellationToken))
         {

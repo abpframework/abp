@@ -7,8 +7,8 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories;
 
-public interface ISupportsExplicitLoading<TEntity, TKey>
-    where TEntity : class, IEntity<TKey>
+public interface ISupportsExplicitLoading<TEntity>
+    where TEntity : class, IEntity
 {
     Task EnsureCollectionLoadedAsync<TProperty>(
         TEntity entity,
