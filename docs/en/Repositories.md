@@ -245,6 +245,8 @@ ABP uses dynamic proxying to make these attributes working. There are some rules
 * If you are **not injecting** the service over an interface (like `IPersonAppService`), then the methods of the service must be `virtual`. Otherwise, [dynamic proxy / interception](Dynamic-Proxying-Interceptors.md) system can not work.
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted.
 
+> Change tracking behavior doesn't affect tracking entity objects returned from `InsertAsync` and `UpdateAsync` methods. The objects returned from these methods are always tracked (if the underlying provider has the change tracking feature) and any change you made to these objects are saved into the database.
+
 ## Other Generic Repository Types
 
 Standard `IRepository<TEntity, TKey>` interface exposes the standard `IQueryable<TEntity>` and you can freely query using the standard LINQ methods. This is fine for most of the applications. However, some ORM providers or database systems may not support standard `IQueryable` interface. If you want to use such providers, you can't rely on the `IQueryable`.
