@@ -1,8 +1,8 @@
 using System;
 
-namespace Volo.Abp.Domain.Repositories;
+namespace Volo.Abp.Domain.ChangeTracking;
 
-[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Interface)]
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 public abstract class EntityChangeTrackingAttribute : Attribute
 {
     public virtual bool IsEnabled { get; set; }

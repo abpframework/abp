@@ -1,10 +1,11 @@
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
+using Volo.Abp.Domain.Repositories;
 
-namespace Volo.Abp.Domain.Repositories;
+namespace Volo.Abp.Domain.ChangeTracking;
 
-public static class RepositoryHelper
+public static class ChangeTrackingHelper
 {
     public static bool IsEntityChangeTrackingType(TypeInfo implementationType)
     {
