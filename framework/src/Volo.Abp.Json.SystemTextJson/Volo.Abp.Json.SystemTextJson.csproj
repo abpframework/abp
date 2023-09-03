@@ -20,7 +20,7 @@
         <ProjectReference Include="..\Volo.Abp.Json.Abstractions\Volo.Abp.Json.Abstractions.csproj" />
         <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
         <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
-        <PackageReference Include="System.Text.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
+        <PackageReference Include="System.Text.Json" Version="$(MicrosoftPackageVersion)" />
     </ItemGroup>
 
 </Project>

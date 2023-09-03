@@ -8,8 +8,9 @@ import {
   Injector,
   RendererFactory2,
 } from '@angular/core';
-import { Subject } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 import { ResolveEnd } from '@angular/router';
+import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { RouterEvents } from '@abp/ng.core';
 import { HTTP_ERROR_CONFIG } from '../tokens/http-error.token';
@@ -18,31 +19,20 @@ import { ErrorScreenErrorCodes } from '../models/common';
 
 @Injectable({ providedIn: 'root' })
 export class CreateErrorComponentService {
-  protected rendererFactory = inject(RendererFactory2);
-  protected cfRes = inject(ComponentFactoryResolver);
-  private routerEvents = inject(RouterEvents);
-  private injector = inject(Injector);
-  private httpErrorConfig = inject(HTTP_ERROR_CONFIG);
+  protected readonly document = inject(DOCUMENT);
+  protected readonly rendererFactory = inject(RendererFactory2);
+  protected readonly cfRes = inject(ComponentFactoryResolver);
+  protected readonly routerEvents = inject(RouterEvents);
+  protected readonly injector = inject(Injector);
+  protected readonly httpErrorConfig = inject(HTTP_ERROR_CONFIG);
 
   componentRef: ComponentRef<HttpErrorWrapperComponent> | null = null;
-
-  private getErrorHostElement() {
-    return document.body;
-  }
-
-  public canCreateCustomError(status: ErrorScreenErrorCodes) {
-    return !!(
-      this.httpErrorConfig?.errorScreen?.component &&
-      this.httpErrorConfig?.errorScreen?.forWhichErrors &&
-      this.httpErrorConfig?.errorScreen?.forWhichErrors.indexOf(status) > -1
-    );
-  }
 
   constructor() {
     this.listenToRouterDataResolved();
   }
 
-  protected listenToRouterDataResolved() {
+  protected listenToRouterDataResolved(): void {
     this.routerEvents
       .getEvents(ResolveEnd)
       .pipe(filter(() => !!this.componentRef))
@@ -52,11 +42,25 @@ export class CreateErrorComponentService {
       });
   }
 
-  private isCloseIconHidden() {
-    return !!this.httpErrorConfig.errorScreen?.hideCloseIcon;
+  protected getErrorHostElement(): HTMLElement {
+    return this.document.body;
   }
 
-  execute(instance: Partial<HttpErrorWrapperComponent>) {
+  protected isCloseIconHidden(): boolean {
+    return !!this.httpErrorConfig?.errorScreen?.hideCloseIcon;
+  }
+
+  canCreateCustomError(status: ErrorScreenErrorCodes) {
+    const { component, forWhichErrors } = this.httpErrorConfig?.errorScreen || {};
+
+    if (!component || !forWhichErrors) {
+      return false;
+    }
+
+    return forWhichErrors.indexOf(status) > -1;
+  }
+
+  execute(instance: Partial<HttpErrorWrapperComponent>): void {
     const renderer = this.rendererFactory.createRenderer(null, null);
     const hostElement = this.getErrorHostElement();
     const host = renderer.selectRootElement(hostElement, true);
