@@ -12,14 +12,14 @@ public class AbpModelBuilderConfigurationOptions
             _tablePrefix = value;
         }
     }
-    private string _tablePrefix;
 
-    [CanBeNull]
-    public string Schema { get; set; }
+    private string _tablePrefix = default!;
+
+    public string? Schema { get; set; }
 
     public AbpModelBuilderConfigurationOptions(
         [NotNull] string tablePrefix = "",
-        [CanBeNull] string schema = null)
+        string? schema = null)
     {
         Check.NotNull(tablePrefix, nameof(tablePrefix));
 

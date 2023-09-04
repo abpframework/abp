@@ -18,7 +18,7 @@ public interface ISupportsExplicitLoading<TEntity>
 
     Task EnsurePropertyLoadedAsync<TProperty>(
         TEntity entity,
-        Expression<Func<TEntity, TProperty>> propertyExpression,
+        Expression<Func<TEntity, TProperty?>> propertyExpression,
         CancellationToken cancellationToken)
         where TProperty : class;
 }

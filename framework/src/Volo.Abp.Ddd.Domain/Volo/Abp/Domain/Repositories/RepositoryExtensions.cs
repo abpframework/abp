@@ -34,7 +34,7 @@ public static class RepositoryExtensions
     public async static Task EnsurePropertyLoadedAsync<TEntity, TKey, TProperty>(
         this IBasicRepository<TEntity, TKey> repository,
         TEntity entity,
-        Expression<Func<TEntity, TProperty>> propertyExpression,
+        Expression<Func<TEntity, TProperty?>> propertyExpression,
         CancellationToken cancellationToken = default
     )
         where TEntity : class, IEntity<TKey>
