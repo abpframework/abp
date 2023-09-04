@@ -2,13 +2,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.TestApp.Domain;
-using Volo.Abp.TestApp.EntityFrameworkCore;
 using Volo.Abp.TestApp.Testing;
 using Volo.Abp.Uow;
 using Xunit;
@@ -55,23 +51,42 @@ public class ReadOnlyRepository_Tests : TestAppTestBase<AbpEntityFrameworkCoreTe
     }
 
     [Fact]
-    public async Task ReadOnlyRepository_Should_Throw_AbpRepositoryIsReadOnlyException_When_Write_Method_Call()
+    public async Task Repository_Should_Support_Tracking_Or_NoTracking()
     {
+        var repository = GetRequiredService<IRepository<Person, Guid>>();
+
         await WithUnitOfWorkAsync(async () =>
         {
-            var repository = GetRequiredService<IRepository<Person, Guid>>();
-            await repository.ToEfCoreRepository().InsertAsync(new Person(Guid.NewGuid(), "test", 18));
-            var person = await repository.ToEfCoreRepository().FirstOrDefaultAsync();
-            person.ShouldNotBeNull();
+            await repository.InsertAsync(new Person(Guid.NewGuid(), "people1", 18));
+            await repository.InsertAsync(new Person(Guid.NewGuid(), "people2", 19));
+            await repository.InsertAsync(new Person(Guid.NewGuid(), "people3", 20));
+            await repository.InsertAsync(new Person(Guid.NewGuid(), "people4", 21));
         });
 
         await WithUnitOfWorkAsync(async () =>
         {
-            await Assert.ThrowsAsync<AbpRepositoryIsReadOnlyException>(async () =>
+            var db = await repository.GetDbContextAsync();
+            db.ChangeTracker.Entries().Count().ShouldBe(0);
+            using (repository.DisableTracking())
             {
-                var readonlyRepository = GetRequiredService<IReadOnlyRepository<Person, Guid>>();
-                await readonlyRepository.ToEfCoreRepository().As<EfCoreRepository<TestAppDbContext, Person, Guid>>().InsertAsync(new Person(Guid.NewGuid(), "test readonly", 18));
-            });
+                var p1 = await repository.FindAsync(x => x.Name == "people1");
+                p1.ShouldNotBeNull();
+                db.ChangeTracker.Entries().Count().ShouldBe(0);
+            }
+
+            var p2 = await repository.FindAsync(x => x.Name == "people2");
+            p2.ShouldNotBeNull();
+            db.ChangeTracker.Entries().Count().ShouldBe(1);
+
+            repository.DisableTracking();
+            var p3 = await repository.FindAsync(x => x.Name == "people3");
+            p3.ShouldNotBeNull();
+            db.ChangeTracker.Entries().Count().ShouldBe(1);
+
+            repository.EnableTracking();
+            var p4 = await repository.FindAsync(x => x.Name == "people4");
+            p4.ShouldNotBeNull();
+            db.ChangeTracker.Entries().Count().ShouldBe(2);
         });
     }
 

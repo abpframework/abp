@@ -407,7 +407,7 @@ public class RepositoryRegistration_Tests
 
     public class MyTestAggregateRootWithDefaultPkEmptyRepository : IMyTestAggregateRootWithDefaultPkEmptyRepository
     {
-        public bool IsReadOnly { get; set; }
+        public bool? IsChangeTrackingEnabled { get; set; }
     }
 
     public class TestDbContextRegistrationOptions : AbpCommonDbContextRegistrationOptions
