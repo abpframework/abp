@@ -131,7 +131,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         var client = CreateMongoClient(mongoUrl);
         var database = client.GetDatabase(databaseName);
 
-        if (unitOfWork.Options.IsTransactional)
+        if (unitOfWork.Options!.IsTransactional)
         {
             return CreateDbContextWithTransaction(unitOfWork, mongoUrl, client, database);
         }
@@ -151,7 +151,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         var client = CreateMongoClient(mongoUrl);
         var database = client.GetDatabase(databaseName);
 
-        if (unitOfWork.Options.IsTransactional)
+        if (unitOfWork.Options!.IsTransactional)
         {
             return await CreateDbContextWithTransactionAsync(
                 unitOfWork,
@@ -183,7 +183,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         {
             var session = client.StartSession();
 
-            if (unitOfWork.Options.Timeout.HasValue)
+            if (unitOfWork.Options!.Timeout.HasValue)
             {
                 session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
             }
@@ -233,7 +233,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         {
             var session = await client.StartSessionAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
-            if (unitOfWork.Options.Timeout.HasValue)
+            if (unitOfWork.Options!.Timeout.HasValue)
             {
                 session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
             }

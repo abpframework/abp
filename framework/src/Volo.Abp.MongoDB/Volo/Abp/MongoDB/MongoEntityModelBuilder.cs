@@ -11,7 +11,7 @@ public class MongoEntityModelBuilder<TEntity> :
 {
     public Type EntityType { get; }
 
-    public string CollectionName { get; set; }
+    public string CollectionName { get; set; } = default!;
 
     BsonClassMap IMongoEntityModelBuilder.BsonMap => _bsonClassMap;
     BsonClassMap<TEntity> IMongoEntityModelBuilder<TEntity>.BsonMap => _bsonClassMap;
