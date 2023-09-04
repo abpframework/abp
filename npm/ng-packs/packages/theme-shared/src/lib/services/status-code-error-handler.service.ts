@@ -77,13 +77,17 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
 
     switch (this.status) {
       case 401:
-        this.authService.navigateToLogin();
-        break;
       case 404:
         if (canCreateCustomError) {
           this.showPage();
           break;
         }
+
+        if (this.status === 401) {
+          this.authService.navigateToLogin();
+          break;
+        }
+
         this.showConfirmation(title, message).subscribe();
         break;
 
