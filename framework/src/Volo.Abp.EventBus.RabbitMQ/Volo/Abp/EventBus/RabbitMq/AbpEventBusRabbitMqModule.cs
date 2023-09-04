@@ -13,7 +13,7 @@ public class AbpEventBusRabbitMqModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        Configure<AbpRabbitMqExchangeAndQueueOptions>(configuration.GetSection("RabbitMQ:EventBus"));
+        Configure<AbpRabbitMqEventBusOptions>(configuration.GetSection("RabbitMQ:EventBus"));
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

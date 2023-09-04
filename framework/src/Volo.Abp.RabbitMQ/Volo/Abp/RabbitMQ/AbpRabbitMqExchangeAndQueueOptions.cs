@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.RabbitMQ;
 
-public class AbpRabbitMqExchangeAndQueueOptions
+public abstract class AbpRabbitMqExchangeAndQueueBaseOptions
 {
     public string? ConnectionName { get; set; }
 
@@ -18,14 +18,14 @@ public class AbpRabbitMqExchangeAndQueueOptions
 
     public string? ExchangeName { get; set; }
 
-    private string? exchangeType;
+    private string? _exchangeType;
 
-    public string? ExchangeType {
+    public string ExchangeType {
         get {
-            return exchangeType.IsNullOrWhiteSpace() ? RabbitMqConsts.ExchangeTypes.Direct : exchangeType;
+            return _exchangeType.IsNullOrWhiteSpace() ? RabbitMqConsts.ExchangeTypes.Direct : _exchangeType!;
         }
         set {
-            exchangeType = value;
+            _exchangeType = value;
         }
     }
 

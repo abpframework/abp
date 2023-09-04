@@ -27,7 +27,7 @@ namespace Volo.Abp.EventBus.RabbitMq;
 [ExposeServices(typeof(IDistributedEventBus), typeof(RabbitMqDistributedEventBus))]
 public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDependency
 {
-    protected AbpRabbitMqExchangeAndQueueOptions AbpRabbitMqEventBusOptions { get; }
+    protected AbpRabbitMqEventBusOptions AbpRabbitMqEventBusOptions { get; }
     protected IConnectionPool ConnectionPool { get; }
     protected IRabbitMqSerializer Serializer { get; }
 
@@ -40,7 +40,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
     private bool _exchangeCreated;
 
     public RabbitMqDistributedEventBus(
-        IOptions<AbpRabbitMqExchangeAndQueueOptions> options,
+        IOptions<AbpRabbitMqEventBusOptions> options,
         IConnectionPool connectionPool,
         IRabbitMqSerializer serializer,
         IServiceScopeFactory serviceScopeFactory,
