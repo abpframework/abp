@@ -82,11 +82,13 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
           this.showPage();
           break;
         }
-        this.showConfirmation(title, message).subscribe(() => {
-          if (this.status === 401) {
-            this.navigateToLogin();
-          }
-        });
+
+        if (this.status === 401) {
+          this.authService.navigateToLogin();
+          break;
+        }
+
+        this.showConfirmation(title, message).subscribe();
         break;
 
       case 403:
