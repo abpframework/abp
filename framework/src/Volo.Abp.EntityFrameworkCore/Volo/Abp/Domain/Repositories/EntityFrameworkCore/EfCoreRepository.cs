@@ -26,11 +26,11 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     protected virtual TDbContext DbContext => GetDbContext();
 
     [Obsolete("Use GetDbContextAsync() method.")]
-    DbContext IEfCoreRepository<TEntity>.DbContext => GetDbContext() as DbContext;
+    DbContext IEfCoreRepository<TEntity>.DbContext => (GetDbContext() as DbContext)!;
 
     async Task<DbContext> IEfCoreRepository<TEntity>.GetDbContextAsync()
     {
-        return await GetDbContextAsync() as DbContext;
+        return (await GetDbContextAsync() as DbContext)!;
     }
 
     [Obsolete("Use GetDbContextAsync() method.")]
@@ -80,7 +80,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
         return (await GetDbContextAsync()).Database.GetDbConnection();
     }
 
-    protected async Task<IDbTransaction> GetDbTransactionAsync()
+    protected async Task<IDbTransaction?> GetDbTransactionAsync()
     {
         return (await GetDbContextAsync()).Database.CurrentTransaction?.GetDbTransaction();
     }
@@ -92,7 +92,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public virtual IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
-    public IEfCoreBulkOperationProvider BulkOperationProvider => LazyServiceProvider.LazyGetService<IEfCoreBulkOperationProvider>();
+    public IEfCoreBulkOperationProvider? BulkOperationProvider => LazyServiceProvider.LazyGetService<IEfCoreBulkOperationProvider>();
 
     public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
     {
@@ -301,7 +301,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
         await (await GetDbContextAsync()).SaveChangesAsync(cancellationToken);
     }
 
-    public async override Task<TEntity> FindAsync(
+    public async override Task<TEntity?> FindAsync(
         Expression<Func<TEntity, bool>> predicate,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -353,7 +353,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public virtual async Task EnsurePropertyLoadedAsync<TProperty>(
         TEntity entity,
-        Expression<Func<TEntity, TProperty>> propertyExpression,
+        Expression<Func<TEntity, TProperty?>> propertyExpression,
         CancellationToken cancellationToken = default)
         where TProperty : class
     {
@@ -464,13 +464,13 @@ public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbC
         return entity;
     }
 
-    public virtual async Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return includeDetails
-            ? await (await WithDetailsAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
+            ? await (await WithDetailsAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id!.Equals(id), GetCancellationToken(cancellationToken))
             : !ShouldTrackingEntityChange()
-                ? await (await GetQueryableAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
-                : await (await GetDbSetAsync()).FindAsync(new object[] {id}, GetCancellationToken(cancellationToken));
+                ? await (await GetQueryableAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id!.Equals(id), GetCancellationToken(cancellationToken))
+                : await (await GetDbSetAsync()).FindAsync(new object[] {id!}, GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
