@@ -21,20 +21,17 @@ public class CliAnalyticsCollect : ICliAnalyticsCollect, ITransientDependency
     private readonly ILogger<CliAnalyticsCollect> _logger;
     private readonly IRemoteServiceExceptionHandler _remoteServiceExceptionHandler;
     private readonly CliHttpClientFactory _cliHttpClientFactory;
-    private readonly IAuthService _authService;
 
     public CliAnalyticsCollect(
         ICancellationTokenProvider cancellationTokenProvider,
         IJsonSerializer jsonSerializer,
         IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-        CliHttpClientFactory cliHttpClientFactory,
-        IAuthService authService)
+        CliHttpClientFactory cliHttpClientFactory)
     {
         _cancellationTokenProvider = cancellationTokenProvider;
         _jsonSerializer = jsonSerializer;
         _remoteServiceExceptionHandler = remoteServiceExceptionHandler;
         _cliHttpClientFactory = cliHttpClientFactory;
-        _authService = authService;
         _logger = NullLogger<CliAnalyticsCollect>.Instance;
     }
 
