@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
@@ -19,22 +21,39 @@ public class CliAnalyticsCollect : ICliAnalyticsCollect, ITransientDependency
     private readonly ILogger<CliAnalyticsCollect> _logger;
     private readonly IRemoteServiceExceptionHandler _remoteServiceExceptionHandler;
     private readonly CliHttpClientFactory _cliHttpClientFactory;
+    private readonly IAuthService _authService;
 
     public CliAnalyticsCollect(
         ICancellationTokenProvider cancellationTokenProvider,
         IJsonSerializer jsonSerializer,
         IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-        CliHttpClientFactory cliHttpClientFactory)
+        CliHttpClientFactory cliHttpClientFactory,
+        IAuthService authService)
     {
         _cancellationTokenProvider = cancellationTokenProvider;
         _jsonSerializer = jsonSerializer;
         _remoteServiceExceptionHandler = remoteServiceExceptionHandler;
         _cliHttpClientFactory = cliHttpClientFactory;
+        _authService = authService;
         _logger = NullLogger<CliAnalyticsCollect>.Instance;
     }
 
     public async Task CollectAsync(CliAnalyticsCollectInputDto input)
     {
+        if (input.RandomComputerId.IsNullOrWhiteSpace())
+        {
+            if (!File.Exists(CliPaths.RandomComputerId))
+            {
+                var randomComputerId = Guid.NewGuid().ToString("D");
+                input.RandomComputerId = randomComputerId;
+                File.WriteAllText(CliPaths.RandomComputerId, randomComputerId, Encoding.UTF8);
+            }
+            else
+            {
+                input.RandomComputerId = File.ReadAllText(CliPaths.RandomComputerId, Encoding.UTF8);
+            }
+        }
+
         var postData = _jsonSerializer.Serialize(input);
         var url = $"{CliUrls.WwwAbpIo}api/clianalytics/collect";
 
