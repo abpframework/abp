@@ -28,7 +28,7 @@ public class CompressImageAttribute : ActionFilterAttribute
 
         foreach (var (key, value) in parameters)
         {
-            object compressedValue = value switch {
+            object? compressedValue = value switch {
                 IFormFile file => await CompressImageAsync(file, imageCompressor),
                 IRemoteStreamContent remoteStreamContent => await CompressImageAsync(remoteStreamContent, imageCompressor),
                 Stream stream => await CompressImageAsync(stream, imageCompressor),
