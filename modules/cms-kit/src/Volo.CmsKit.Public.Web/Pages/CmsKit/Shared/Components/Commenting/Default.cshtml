@@ -133,7 +133,8 @@
 
                     @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
                     {
-                        var output = Model.GetCaptcha();
+                        var output = await Model.GenerateCaptchaAsync();
+
                         <div class="volo-captcha">
                             <label class="form-label" for="Input_Captcha_@output.Id">@L["CaptchaCode"]</label>
                             <div class="d-flex">

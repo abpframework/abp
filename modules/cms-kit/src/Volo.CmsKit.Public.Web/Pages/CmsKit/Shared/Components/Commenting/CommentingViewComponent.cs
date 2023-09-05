@@ -76,26 +76,30 @@ public class CommentingViewComponent : AbpViewComponent
             LoginUrl = loginUrl,
             Comments = comments.OrderByDescending(i => i.CreationTime).ToList()
         };
+
         await ConvertMarkdownTextsToHtml(viewModel);
 
         if (CmsKitCommentOptions.IsRecaptchaEnabled)
         {
-            CaptchaOutput = GetCaptcha();
+            CaptchaOutput = await GenerateCaptchaAsync();
 
             viewModel.CaptchaImageBase64 = GetCaptchaImageBase64(CaptchaOutput.ImageBytes);
         }
+
         this.Input = viewModel;
         return View("~/Pages/CmsKit/Shared/Components/Commenting/Default.cshtml", this);
     }
 
-    public CaptchaOutput GetCaptcha()
+    public async Task<CaptchaOutput> GenerateCaptchaAsync()
     {
-        return SimpleMathsCaptchaGenerator.Generate(new CaptchaOptions(
+        return await SimpleMathsCaptchaGenerator.GenerateAsync(
+            new CaptchaOptions(
                 number1MinValue: 1,
                 number1MaxValue: 10,
                 number2MinValue: 5,
-                number2MaxValue: 15)
-            );
+                number2MaxValue: 15
+            )
+        );
     }
     
     public string GetCaptchaImageBase64(byte[] bytes)
