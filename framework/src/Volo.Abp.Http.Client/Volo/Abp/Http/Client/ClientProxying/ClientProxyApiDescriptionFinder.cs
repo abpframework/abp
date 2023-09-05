@@ -17,7 +17,7 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
     protected IVirtualFileProvider VirtualFileProvider { get; }
     protected IJsonSerializer JsonSerializer { get; }
     protected Dictionary<string, ActionApiDescriptionModel> ActionApiDescriptionModels { get; }
-    protected ApplicationApiDescriptionModel ApplicationApiDescriptionModel { get; set; }
+    protected ApplicationApiDescriptionModel ApplicationApiDescriptionModel { get; set; } = default!;
 
     public ClientProxyApiDescriptionFinder(
         IVirtualFileProvider virtualFileProvider,
@@ -30,7 +30,7 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
         Initialize();
     }
 
-    public ActionApiDescriptionModel FindAction(string methodName)
+    public ActionApiDescriptionModel? FindAction(string methodName)
     {
         return ActionApiDescriptionModels.ContainsKey(methodName) ? ActionApiDescriptionModels[methodName] : null;
     }
@@ -113,7 +113,7 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
             return rootPath + physicalDirectoryInfo.Name.EnsureStartsWith('/');
         }
 
-        return fileInfo.PhysicalPath;
+        return fileInfo.PhysicalPath!;
     }
     
     private string GetProxyFileInfoPath(string rootPath, IFileInfo fileInfo)
@@ -123,6 +123,6 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
             return rootPath + physicalFileInfo.Name.EnsureStartsWith('/');
         }
 
-        return fileInfo.GetVirtualOrPhysicalPathOrNull();
+        return fileInfo.GetVirtualOrPhysicalPathOrNull()!;
     }
 }
