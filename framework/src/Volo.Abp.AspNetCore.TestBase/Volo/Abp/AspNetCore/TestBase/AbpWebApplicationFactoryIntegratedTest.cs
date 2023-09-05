@@ -1,65 +1,47 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.TestBase;
 
-/// <typeparam name="TStartupModule">
-/// Can be a module type or old-style ASP.NET Core Startup class.
-/// </typeparam>
-[Obsolete("Use AbpWebApplicationFactoryIntegratedTest instead.")]
-public abstract class AbpAspNetCoreIntegratedTestBase<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
-    where TStartupModule : class
+public abstract class AbpWebApplicationFactoryIntegratedTest<TProgram> : WebApplicationFactory<TProgram>
+    where TProgram : class
 {
-    protected TestServer Server { get; }
+    protected HttpClient Client { get; set; }
 
-    protected HttpClient Client { get; }
+    protected IServiceProvider ServiceProvider => Services;
 
-    private readonly IHost _host;
-
-    protected AbpAspNetCoreIntegratedTestBase()
+    protected AbpWebApplicationFactoryIntegratedTest()
     {
-        var builder = CreateHostBuilder();
-
-        _host = builder.Build();
-        _host.Start();
-
-        Server = _host.GetTestServer();
-        Client = _host.GetTestClient();
-
-        ServiceProvider = Server.Services;
-
+        Client = CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
         ServiceProvider.GetRequiredService<ITestServerAccessor>().Server = Server;
     }
 
-    protected virtual IHostBuilder CreateHostBuilder()
+    protected override IHost CreateHost(IHostBuilder builder)
     {
-        return Host.CreateDefaultBuilder()
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                if (typeof(TStartupModule).IsAssignableTo<IAbpModule>())
-                {
-                    webBuilder.UseStartup<TestStartup<TStartupModule>>();
-                }
-                else
-                {
-                    webBuilder.UseStartup<TStartupModule>();
-                }
-
-                webBuilder.UseAbpTestServer();
-            })
-            .UseAutofac()
-            .ConfigureServices(ConfigureServices);
+        builder.ConfigureServices(ConfigureServices);
+        return base.CreateHost(builder);
     }
 
-    protected virtual void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected virtual T? GetService<T>()
+    {
+        return Services.GetService<T>();
+    }
+
+    protected virtual T GetRequiredService<T>() where T : notnull
+    {
+        return Services.GetRequiredService<T>();
+    }
+
+    protected virtual void ConfigureServices(IServiceCollection services)
     {
 
     }
@@ -102,9 +84,4 @@ public abstract class AbpAspNetCoreIntegratedTestBase<TStartupModule> : AbpTestB
     }
 
     #endregion
-
-    public void Dispose()
-    {
-        _host?.Dispose();
-    }
 }
