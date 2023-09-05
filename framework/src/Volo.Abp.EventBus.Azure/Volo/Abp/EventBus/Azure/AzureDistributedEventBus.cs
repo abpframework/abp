@@ -30,7 +30,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected IAzureServiceBusSerializer Serializer { get; }
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes  { get; }
-    protected IAzureServiceBusMessageConsumer Consumer  { get; private set; }
+    protected IAzureServiceBusMessageConsumer Consumer { get; private set; } = default!;
 
     public AzureDistributedEventBus(
         IServiceScopeFactory serviceScopeFactory,
@@ -268,7 +268,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected virtual async Task PublishAsync(
         string eventName,
         byte[] body,
-        [CanBeNull] string correlationId,
+        string? correlationId,
         Guid? eventId)
     {
         var message = new ServiceBusMessage(body)
