@@ -122,7 +122,7 @@ public class NpmPackagesUpdater : ITransientDependency
     {
         var fileName = Path.Combine(directoryName, ".npmrc");
         var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
-        var voloRegistry = "@volo:registry=https://www.myget.org/F/abp-nightly/npm";
+        var voloRegistry = "@volo:registry=https://www.myget.org/F/abp-commercial-npm-nightly/npm";
 
         if (await NpmrcFileExistAsync(directoryName))
         {
