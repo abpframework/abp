@@ -52,6 +52,7 @@ export class TreeComponent implements OnInit {
   @Output() readonly selectedNodeChange = new EventEmitter();
   @Output() readonly dropOver = new EventEmitter<DropEvent>();
   @Output() readonly nzExpandChange = new EventEmitter<NzFormatEmitEvent>();
+  @Output() readonly dragEnter = new EventEmitter<NzFormatEmitEvent>();
   @Input() noAnimation = true;
   @Input() draggable: boolean;
   @Input() checkable: boolean;
@@ -140,5 +141,9 @@ export class TreeComponent implements OnInit {
     let newSelectedNode = this.findNode(node, this.nodes);
     this.selectedNode = { ...newSelectedNode };
     this.cdr.markForCheck();
+  }
+
+  onDragEnter(event){
+    this.dragEnter.emit(event);
   }
 }

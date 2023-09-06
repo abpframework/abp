@@ -13,6 +13,7 @@
   (nzOnDrop)="onDrop($event)"
   [nzNoAnimation]="noAnimation"
   (nzContextMenu)="dropdowns[$event.node?.key]?.toggle()"
+  (nzOnDragEnter)="onDragEnter($event)"
 ></nz-tree>
 <ng-template #treeTemplate let-node>
   <div
