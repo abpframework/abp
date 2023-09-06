@@ -8,6 +8,7 @@ import { FindTenantResultDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-te
 import { EnvironmentService } from '../services/environment.service';
 import { MultiTenancyService } from '../services/multi-tenancy.service';
 import { createTokenParser } from './string-utils';
+import { firstValueFrom } from 'rxjs';
 
 const tenancyPlaceholder = '{0}';
 
@@ -23,6 +24,7 @@ function getCurrentTenancyNameFromUrl(tenantKey: string) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(tenantKey);
 }
+
 
 export async function parseTenantFromUrl(injector: Injector) {
   const environmentService = injector.get(EnvironmentService);
@@ -49,16 +51,26 @@ export async function parseTenantFromUrl(injector: Injector) {
   };
 
   if (tenancyName) {
+    debugger
     /**
      * We have to replace tenant name within the urls from environment,
      * because the code below will make a http request to find information about the domain tenant.
      * Before this request takes place, we need to replace placeholders aka "{0}".
      */
     replaceTenantNameWithinEnvironment(injector, tenancyName);
-    return multiTenancyService
-      .setTenantByName(tenancyName)
-      .pipe(tap(setEnvironmentWithDomainTenant))
-      .toPromise();
+    
+    const tenant$ =  multiTenancyService
+    .setTenantByName(tenancyName)
+    .pipe(tap(setEnvironmentWithDomainTenant))
+    try {
+      const result =  await  firstValueFrom(tenant$)
+      return result;
+    } 
+    catch (error) {
+      
+        console.log(error)
+        debugger
+    }
   } else {
     /**
      * If there is no tenant, we still have to clean up {0}. from baseUrl to avoid incorrect http requests.
