@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Volo.BookStore</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain.Shared" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain.Shared" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="7.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\BookStore\*.json" />
+    <Content Remove="Localization\BookStore\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
+  </ItemGroup>
+
+</Project>

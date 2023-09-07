@@ -1,0 +1,30 @@
+<abp-modal
+  [visible]="modalVisible"
+  [busy]="modalBusy"
+  (visibleChange)="modalVisibleChange.next($event)"
+>
+  <ng-template #abpHeader>
+    <h3>{{ 'BookStore::RentABook' | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <ng-template #loaderRef>
+      <div class="text-center">
+        <i class="fa fa-pulse fa-spinner" aria-hidden="true"></i>
+      </div>
+    </ng-template>
+
+    <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button abpClose type="button" class="btn btn-secondary">
+      {{ 'AbpIdentity::Cancel' | abpLocalization }}
+    </button>
+    <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">
+      {{ 'AbpIdentity::Save' | abpLocalization }}
+    </abp-button>
+  </ng-template>
+</abp-modal>

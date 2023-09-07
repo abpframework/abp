@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Volo.BookStore</RootNamespace>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <UserSecretsId>Volo.BookStore-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.Account.Web.OpenIddict" Version="7.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="2.3.*-*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.BookStore.Application\Volo.BookStore.Application.csproj" />
+    <ProjectReference Include="..\Volo.BookStore.MongoDB\Volo.BookStore.MongoDB.csproj" />
+    <ProjectReference Include="..\Volo.BookStore.HttpApi\Volo.BookStore.HttpApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+</Project>

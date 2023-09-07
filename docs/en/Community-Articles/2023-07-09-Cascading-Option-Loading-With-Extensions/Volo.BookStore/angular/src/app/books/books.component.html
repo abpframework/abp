@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="card-body p-2">
+    <div class="d-flex align-items-center justify-content-between">
+      <h3 class="content-header-title m-0 mb-1">
+        {{ 'BookStore::RentedBooks' | abpLocalization }}
+      </h3>
+
+      <button class="btn btn-sm btn-primary mb-2" (click)="modalVisible = true">
+        <i class="fa fa-plus"></i> {{ 'BookStore::RentABook' | abpLocalization }}
+      </button>
+    </div>
+
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>Book Name</th>
+          <th>Author</th>
+          <th>Genre</th>
+          <th>Return Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of booksService.rentedBooks()">
+          <td>{{ book.name }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.genre }}</td>
+          <td>{{ book.returnDate | date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-rent-book *abpVisible="modalVisible" (modalVisibleChange)="modalVisible = $event" />

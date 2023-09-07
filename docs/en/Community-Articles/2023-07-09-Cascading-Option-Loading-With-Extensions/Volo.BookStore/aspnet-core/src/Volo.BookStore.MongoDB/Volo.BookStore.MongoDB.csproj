@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Volo.BookStore</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.BookStore.Domain\Volo.BookStore.Domain.csproj" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.MongoDB" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.SettingManagement.MongoDB" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.Identity.MongoDB" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.MongoDB" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.AuditLogging.MongoDB" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.TenantManagement.MongoDB" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.MongoDB" Version="7.3.2" />
+    <PackageReference Include="Volo.Abp.OpenIddict.MongoDB" Version="7.3.2" />
+  </ItemGroup>
+
+</Project>
