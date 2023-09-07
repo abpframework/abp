@@ -1,8 +1,0 @@
-{
-    "culture": "zh-Hant",
-    "texts": {
-      "Menu:Home": "首頁",
-      "Welcome": "歡迎",
-      "LongWelcomeMessage": "歡迎來到此應用程式. 這是一個基於ABP框架的起始專案. 有關更多訊息, 請瀏覽 abp.io."
-    }
-  }

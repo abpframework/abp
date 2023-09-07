@@ -1,8 +1,0 @@
-{
-  "culture": "ro-RO",
-  "texts": {
-    "Menu:Home": "Acasă",
-    "Welcome": "Bun venit",
-    "LongWelcomeMessage": "Bun venit la aplicaţie. Acesta este un proiect de pornire bazat pe framework-ul ABP. Pentru mai multe informaţii, vizitaţi, visit abp.io."
-  }
-}
