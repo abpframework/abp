@@ -114,7 +114,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
                 factories.RemoveAll(
                     factory =>
                         factory is SingleInstanceHandlerFactory &&
-                        (factory as SingleInstanceHandlerFactory).HandlerInstance == handler
+                        (factory as SingleInstanceHandlerFactory)!.HandlerInstance == handler
                 );
             });
     }
@@ -186,7 +186,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         }
     }
 
-    public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, string messageId = null, string correlationId = null)
+    public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, string? messageId = null, string? correlationId = null)
     {
         if (await AddToInboxAsync(messageId, EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, correlationId))
         {
@@ -245,15 +245,15 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     public Type GetEventType(string eventName)
     {
-        return EventTypes.GetOrDefault(eventName);
+        return EventTypes.GetOrDefault(eventName)!;
     }
 
-    protected virtual async Task PublishToDaprAsync(Type eventType, object eventData, Guid? messageId = null, string correlationId = null)
+    protected virtual async Task PublishToDaprAsync(Type eventType, object eventData, Guid? messageId = null, string? correlationId = null)
     {
         await PublishToDaprAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData, messageId, correlationId);
     }
 
-    protected virtual async Task PublishToDaprAsync(string eventName, object eventData, Guid? messageId = null, string correlationId = null)
+    protected virtual async Task PublishToDaprAsync(string eventName, object eventData, Guid? messageId = null, string? correlationId = null)
     {
         var client = DaprClientFactory.Create();
         var data = new AbpDaprEventData(DaprEventBusOptions.PubSubName, eventName, (messageId ?? GuidGenerator.Create()).ToString("N"), Serializer.SerializeToString(eventData), correlationId);

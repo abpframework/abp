@@ -80,12 +80,7 @@ public class CommentingViewComponent : AbpViewComponent
 
         if (CmsKitCommentOptions.IsRecaptchaEnabled)
         {
-            CaptchaOutput = SimpleMathsCaptchaGenerator.Generate(new CaptchaOptions(
-                    number1MinValue: 1,
-                    number1MaxValue: 10,
-                    number2MinValue: 5,
-                    number2MaxValue: 15)
-                );
+            CaptchaOutput = GetCaptcha();
 
             viewModel.CaptchaImageBase64 = GetCaptchaImageBase64(CaptchaOutput.ImageBytes);
         }
@@ -93,7 +88,17 @@ public class CommentingViewComponent : AbpViewComponent
         return View("~/Pages/CmsKit/Shared/Components/Commenting/Default.cshtml", this);
     }
 
-    private string GetCaptchaImageBase64(byte[] bytes)
+    public CaptchaOutput GetCaptcha()
+    {
+        return SimpleMathsCaptchaGenerator.Generate(new CaptchaOptions(
+                number1MinValue: 1,
+                number1MaxValue: 10,
+                number2MinValue: 5,
+                number2MaxValue: 15)
+            );
+    }
+    
+    public string GetCaptchaImageBase64(byte[] bytes)
     {
         return $"data:image/jpg;base64,{Convert.ToBase64String(bytes)}";
     }

@@ -9,30 +9,30 @@ namespace Volo.Abp.TextTemplating.Razor;
 
 public abstract class RazorTemplatePageBase<TModel> : RazorTemplatePageBase, IRazorTemplatePage<TModel>
 {
-    public TModel Model { get; set; }
+    public TModel? Model { get; set; }
 }
 
 public abstract class RazorTemplatePageBase : IRazorTemplatePage
 {
-    public Dictionary<string, object> GlobalContext { get; set; }
+    public Dictionary<string, object> GlobalContext { get; set; } = default!;
 
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
-    public IStringLocalizer Localizer { get; set; }
+    public IStringLocalizer? Localizer { get; set; }
 
-    public HtmlEncoder HtmlEncoder { get; set; }
+    public HtmlEncoder? HtmlEncoder { get; set; }
 
-    public JavaScriptEncoder JavaScriptEncoder { get; set; }
+    public JavaScriptEncoder? JavaScriptEncoder { get; set; }
 
-    public UrlEncoder UrlEncoder { get; set; }
+    public UrlEncoder? UrlEncoder { get; set; }
 
-    public string Body { get; set; }
+    public string? Body { get; set; }
 
     private readonly StringBuilder _stringBuilder = new StringBuilder();
 
     private AttributeInfo _attributeInfo;
 
-    public virtual void WriteLiteral(string literal = null)
+    public virtual void WriteLiteral(string? literal = null)
     {
         if (!literal.IsNullOrEmpty())
         {
@@ -40,7 +40,7 @@ public abstract class RazorTemplatePageBase : IRazorTemplatePage
         }
     }
 
-    public virtual void Write(object value = null)
+    public virtual void Write(object? value = null)
     {
         if (value is null)
         {

@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Volo.Abp;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
 
 namespace AutoMapper;
 
-public static class AbpAutoMapperExtensibleDtoExtensions
+public static class AbpAutoMapperExtensibleObjectExtensions
 {
     public static IMappingExpression<TSource, TDestination> MapExtraProperties<TSource, TDestination>(
         this IMappingExpression<TSource, TDestination> mappingExpression,

@@ -111,14 +111,23 @@
                 $form.submit(function (e) {
                     e.preventDefault();
                     let formAsObject = $form.serializeFormToObject();
-                    volo.cmsKit.public.comments.commentPublic.update(
-                        formAsObject.id,
-                        {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CmsKitPublicComments/Update/' + formAsObject.id,
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify({
                             text: formAsObject.commentText,
-                            concurrencyStamp: formAsObject.commentConcurrencyStamp
+                            concurrencyStamp: formAsObject.commentConcurrencyStamp,
+                            captchaToken: formAsObject.captchaId,
+                            captchaAnswer: formAsObject.input?.captcha
+                        }),
+                        success: function () {
+                            widgetManager.refresh($widget);
+                        },
+                        error: function (data) {
+                            abp.message.error(data.responseJSON.error.message);
                         }
-                    ).then(function () {
-                        widgetManager.refresh($widget);
                     });
                 });
             });

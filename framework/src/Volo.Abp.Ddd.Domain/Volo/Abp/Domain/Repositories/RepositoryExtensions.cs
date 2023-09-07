@@ -15,16 +15,16 @@ namespace Volo.Abp.Domain.Repositories;
 
 public static class RepositoryExtensions
 {
-    public async static Task EnsureCollectionLoadedAsync<TEntity, TKey, TProperty>(
-        this IBasicRepository<TEntity, TKey> repository,
+    public async static Task EnsureCollectionLoadedAsync<TEntity, TProperty>(
+        this IBasicRepository<TEntity> repository,
         TEntity entity,
         Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
         CancellationToken cancellationToken = default
     )
-        where TEntity : class, IEntity<TKey>
+        where TEntity : class, IEntity
         where TProperty : class
     {
-        var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity, TKey>;
+        var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity>;
         if (repo != null)
         {
             await repo.EnsureCollectionLoadedAsync(entity, propertyExpression, cancellationToken);
@@ -34,13 +34,13 @@ public static class RepositoryExtensions
     public async static Task EnsurePropertyLoadedAsync<TEntity, TKey, TProperty>(
         this IBasicRepository<TEntity, TKey> repository,
         TEntity entity,
-        Expression<Func<TEntity, TProperty>> propertyExpression,
+        Expression<Func<TEntity, TProperty?>> propertyExpression,
         CancellationToken cancellationToken = default
     )
         where TEntity : class, IEntity<TKey>
         where TProperty : class
     {
-        var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity, TKey>;
+        var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity>;
         if (repo != null)
         {
             await repo.EnsurePropertyLoadedAsync(entity, propertyExpression, cancellationToken);
@@ -60,12 +60,12 @@ public static class RepositoryExtensions
         }
     }
 
-    public async static Task EnsureExistsAsync<TEntity, TKey>(
-        this IRepository<TEntity, TKey> repository,
+    public async static Task EnsureExistsAsync<TEntity>(
+        this IRepository<TEntity> repository,
         Expression<Func<TEntity, bool>> expression,
         CancellationToken cancellationToken = default
     )
-        where TEntity : class, IEntity<TKey>
+        where TEntity : class, IEntity
     {
         if (!await repository.AnyAsync(expression, cancellationToken))
         {
@@ -143,6 +143,40 @@ public static class RepositoryExtensions
         {
             await HardDeleteWithUnitOfWorkAsync(repository, entity, autoSave, cancellationToken, uowManager.Current);
         }
+    }
+
+    /// <summary>
+    /// Disables change tracking mechanism for the given repository. 
+    /// </summary>
+    /// <param name="repository">A repository object</param>
+    /// <returns>
+    /// A disposable object. Dispose it to restore change tracking mechanism back to its previous state.
+    /// </returns>
+    public static IDisposable DisableTracking(this IRepository repository)
+    {
+        return Tracking(repository, false);
+    }
+
+    /// <summary>
+    /// Enables change tracking mechanism for the given repository.
+    /// </summary>
+    /// <param name="repository">A repository object</param>
+    /// <returns>
+    /// A disposable object. Dispose it to restore change tracking mechanism back to its previous state.
+    /// </returns>
+    public static IDisposable EnableTracking(this IRepository repository)
+    {
+        return Tracking(repository, true);
+    }
+
+    private static IDisposable Tracking(this IRepository repository, bool enabled)
+    {
+        var previous = repository.IsChangeTrackingEnabled;
+        ObjectHelper.TrySetProperty(ProxyHelper.UnProxy(repository).As<IRepository>(), x => x.IsChangeTrackingEnabled, _ => enabled);
+        return new DisposeAction<IRepository>(_ =>
+        {
+            ObjectHelper.TrySetProperty(ProxyHelper.UnProxy(repository).As<IRepository>(), x => x.IsChangeTrackingEnabled, _ => previous);
+        }, repository);
     }
 
     private static IUnitOfWorkManager GetUnitOfWorkManager<TEntity>(
