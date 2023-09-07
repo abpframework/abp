@@ -24,23 +24,22 @@ public class AspNetCoreMultiTenancy_WithDomainResolver_Tests : AspNetCoreMultiTe
         _options = ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
     }
 
-    protected override IHostBuilder CreateHostBuilder()
+    protected override void ConfigureServices(IServiceCollection services)
     {
-        return base.CreateHostBuilder().ConfigureServices(services =>
+        services.Configure<AbpDefaultTenantStoreOptions>(options =>
         {
-            services.Configure<AbpDefaultTenantStoreOptions>(options =>
+            options.Tenants = new[]
             {
-                options.Tenants = new[]
-                {
-                        new TenantConfiguration(_testTenantId, _testTenantName)
-                };
-            });
-
-            services.Configure<AbpTenantResolveOptions>(options =>
-            {
-                options.AddDomainTenantResolver("{0}.abp.io:8080");
-            });
+                new TenantConfiguration(_testTenantId, _testTenantName)
+            };
         });
+
+        services.Configure<AbpTenantResolveOptions>(options =>
+        {
+            options.AddDomainTenantResolver("{0}.abp.io:8080");
+        });
+
+        base.ConfigureServices(services);
     }
 
     [Fact]

@@ -66,6 +66,8 @@
     "PasswordResetInfoInEmail": "Şifrenizi sıfırlamanız için bir talep aldık! Eğer bu talebi siz gerçekleştirmişseniz, şifrenizi sıfırlamak için bağlantıya tıklayın.",
     "ResetMyPassword": "Şifremi sıfırla",
     "AccessDenied": "Erişim reddedildi!",
-    "AccessDeniedMessage": "Bu kaynağa erişiminiz yok."
+    "AccessDeniedMessage": "Bu kaynağa erişiminiz yok.",
+    "OrRegisterWith": "Veya bunlarla kayıt ol:",
+    "RegisterUsingYourProviderAccount": "{0} hesabınızla kayıt olun."
   }
 }

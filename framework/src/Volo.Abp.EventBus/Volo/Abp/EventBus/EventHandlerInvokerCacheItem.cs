@@ -2,7 +2,7 @@
 
 public class EventHandlerInvokerCacheItem
 {
-    public IEventHandlerMethodExecutor Local { get; set; }
+    public IEventHandlerMethodExecutor? Local { get; set; }
 
-    public IEventHandlerMethodExecutor Distributed { get; set; }
+    public IEventHandlerMethodExecutor? Distributed { get; set; }
 }

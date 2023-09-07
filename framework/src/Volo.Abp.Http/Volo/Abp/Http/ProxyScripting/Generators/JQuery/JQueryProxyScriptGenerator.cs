@@ -135,16 +135,16 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
     private static string FindBestApiVersion(ActionApiDescriptionModel action)
     {
         //var configuredVersion = GetConfiguredApiVersion(); //TODO: Implement
-        string configuredVersion = null;
+        string? configuredVersion = null;
 
         if (action.SupportedVersions.IsNullOrEmpty())
         {
             return configuredVersion ?? "1.0";
         }
 
-        if (action.SupportedVersions.Contains(configuredVersion))
+        if (action.SupportedVersions!.Contains(configuredVersion!))
         {
-            return configuredVersion;
+            return configuredVersion!;
         }
 
         return action.SupportedVersions.Last(); //TODO: Ensure to get the latest version!

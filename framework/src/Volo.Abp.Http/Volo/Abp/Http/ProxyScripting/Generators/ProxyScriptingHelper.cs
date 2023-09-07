@@ -25,7 +25,7 @@ internal static class ProxyScriptingHelper
         }
     }
 
-    public static string GenerateHeaders(ActionApiDescriptionModel action, int indent = 0)
+    public static string? GenerateHeaders(ActionApiDescriptionModel action, int indent = 0)
     {
         var parameters = action
             .Parameters
@@ -40,7 +40,7 @@ internal static class ProxyScriptingHelper
         return ProxyScriptingJsFuncHelper.CreateJsObjectLiteral(parameters, indent);
     }
 
-    public static string GenerateBody(ActionApiDescriptionModel action)
+    public static string? GenerateBody(ActionApiDescriptionModel action)
     {
         var parameters = action
             .Parameters
@@ -62,7 +62,7 @@ internal static class ProxyScriptingHelper
         return ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(parameters[0]);
     }
 
-    public static string GenerateFormPostData(ActionApiDescriptionModel action, int indent = 0)
+    public static string? GenerateFormPostData(ActionApiDescriptionModel action, int indent = 0)
     {
         var parameters = action
             .Parameters

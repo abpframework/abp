@@ -31,6 +31,13 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup Condition="Exists('./openiddict.pfx')">
+    <None Remove="openiddict.pfx" />
+    <EmbeddedResource Include="openiddict.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />

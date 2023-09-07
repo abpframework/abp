@@ -118,7 +118,7 @@ public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
 
         var content = await response.Content.ReadAsStringAsync();
 
-        var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, DeserializeOptions);
+        var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, DeserializeOptions)!;
 
         return result;
     }

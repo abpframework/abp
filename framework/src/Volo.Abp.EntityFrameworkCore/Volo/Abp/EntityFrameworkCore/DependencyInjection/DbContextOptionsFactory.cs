@@ -43,7 +43,7 @@ public static class DbContextOptionsFactory
         var preConfigureActions = options.PreConfigureActions.GetOrDefault(typeof(TDbContext));
         if (!preConfigureActions.IsNullOrEmpty())
         {
-            foreach (var preConfigureAction in preConfigureActions)
+            foreach (var preConfigureAction in preConfigureActions!)
             {
                 ((Action<AbpDbContextConfigurationContext<TDbContext>>)preConfigureAction).Invoke(context);
             }

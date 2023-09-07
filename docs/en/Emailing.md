@@ -58,7 +58,12 @@ namespace MyProject
 `SendAsync` method has overloads to supply more parameters like;
 
 * **from**: You can set this as the first argument to set a sender email address. If not provided, the default sender address is used (see the email settings below).
+* **to**: You can set the target email address.
+* **subject**: You can set the email subject.
+* **body**: You can set the email body.
 * **isBodyHtml**: Indicates whether the email body may contain HTML tags. **Default: true**.
+* **attachments**: You can pass a list of `EmailAttachment` to add attachments to the email.
+* **extraProperties**: You can pass extra properties and use these properties in your own `IEmailSender` implementation to implement more mail sending features.
 
 > `IEmailSender` is the suggested way to send emails, since it makes your code provider independent.
 
