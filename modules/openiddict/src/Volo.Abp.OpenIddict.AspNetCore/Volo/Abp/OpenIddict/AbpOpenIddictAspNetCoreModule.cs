@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 using Volo.Abp.AspNetCore.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.WildcardDomains;
@@ -12,7 +12,7 @@ using Volo.Abp.Security.Claims;
 namespace Volo.Abp.OpenIddict;
 
 [DependsOn(
-    typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+    typeof(AbpAspNetCoreMvcUiModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpOpenIddictDomainModule)
 )]
