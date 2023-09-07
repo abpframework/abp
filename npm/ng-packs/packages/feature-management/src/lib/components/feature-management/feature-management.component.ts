@@ -55,11 +55,19 @@ export class FeatureManagementComponent
   }
 
   set visible(value: boolean) {
-    if (this._visible === value) return;
+    if (this._visible === value) {
+      return;
+    }
 
     this._visible = value;
     this.visibleChange.emit(value);
-    if (value) this.openModal();
+
+    if (value) {
+      this.openModal();
+      return;
+    }
+
+    this.selectedGroupDisplayName = undefined;
   }
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
