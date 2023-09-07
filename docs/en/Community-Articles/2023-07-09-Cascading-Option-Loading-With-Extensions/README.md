@@ -447,4 +447,4 @@ Finally, we've added a new property to our module, and it'll be loaded after `Ge
 
 Thanks for reading, I hope it was helpful. If you have any questions, please let me know in the comments section. 👋👋
 
-> You can find the source code of this article on [Github](https://github.com/abpframework/abp/tree/dev/docs/Community-Articles/2023-07-09-Cascading-Option-Loading-With-Extensions/Volo.BookStore)
+> You can find the source code of this article on [Github](https://github.com/abpframework/abp-samples/tree/master/AngularCascadingOptionLoading/Volo.BookStore)
