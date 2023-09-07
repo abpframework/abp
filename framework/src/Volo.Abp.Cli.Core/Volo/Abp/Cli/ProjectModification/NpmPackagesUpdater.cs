@@ -122,6 +122,7 @@ public class NpmPackagesUpdater : ITransientDependency
     {
         var fileName = Path.Combine(directoryName, ".npmrc");
         var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
+        var voloRegistry = "@volo:registry=https://www.myget.org/F/abp-commercial-npm-nightly/npm";
 
         if (await NpmrcFileExistAsync(directoryName))
         {
@@ -132,16 +133,20 @@ public class NpmPackagesUpdater : ITransientDependency
                 fileContent += Environment.NewLine + abpRegistry;
             }
 
+            if(!fileContent.Contains(voloRegistry))
+            {
+                fileContent += Environment.NewLine + voloRegistry;
+            }
+
             File.WriteAllText(fileName, fileContent);
 
             return;
         }
 
-        using var fs = File.Create(fileName);
+        using var sw = File.CreateText(fileName);
 
-        var content = new UTF8Encoding(true)
-            .GetBytes(abpRegistry);
-        fs.Write(content, 0, content.Length);
+        sw.WriteLine(abpRegistry);
+        sw.WriteLine(voloRegistry);
     }
 
     private static bool IsAngularProject(string fileDirectory)
@@ -217,7 +222,7 @@ public class NpmPackagesUpdater : ITransientDependency
                  (!switchToStable && (currentVersion != null && currentVersion.Contains("-preview")))) &&
                 !includeReleaseCandidates)
             {
-                version = "preview";
+                version = await GetLatestVersion(package, includePreviews: includePreviews, workingDirectory: filePath.RemovePostFix("package.json"));
             }
             else
             {
@@ -231,7 +236,6 @@ public class NpmPackagesUpdater : ITransientDependency
                 }
             }
         }
-
 
         if (string.IsNullOrEmpty(version) || version == currentVersion)
         {
@@ -255,28 +259,39 @@ public class NpmPackagesUpdater : ITransientDependency
         return version.Split("-", StringSplitOptions.RemoveEmptyEntries).Length > 1;
     }
 
-    protected virtual async Task<string> GetLatestVersion(JProperty package, bool includeReleaseCandidates = false)
+    protected virtual async Task<string> GetLatestVersion(JProperty package, bool includeReleaseCandidates = false, bool includePreviews = false, string workingDirectory = null)
     {
-        if (_fileVersionStorage.ContainsKey(package.Name))
+        var key = package.Name + (includePreviews ? "(preview)" : string.Empty);
+
+        if (_fileVersionStorage.ContainsKey(key))
         {
-            return await Task.FromResult(_fileVersionStorage[package.Name]);
+            return await Task.FromResult(_fileVersionStorage[key]);
         }
 
-        var versionList = GetPackageVersionList(package);
+        var versionList = GetPackageVersionList(package, workingDirectory);
 
-        var newVersion = includeReleaseCandidates
-            ? versionList.First()
-            : versionList.FirstOrDefault(v => !SemanticVersion.Parse(v).IsPrerelease);
+        string newVersion = string.Empty;
+
+        if (includePreviews)
+        {
+            newVersion = versionList.FirstOrDefault(v => v.Contains("-preview"));
+        }
+        else
+        {
+            newVersion = includeReleaseCandidates
+                ? versionList.First()
+                : versionList.FirstOrDefault(v => !SemanticVersion.Parse(v).IsPrerelease);
+        }
 
         if (string.IsNullOrEmpty(newVersion))
         {
-            _fileVersionStorage[package.Name] = newVersion;
+            _fileVersionStorage[key] = newVersion;
             return await Task.FromResult(newVersion);
         }
 
         var newVersionWithPrefix = $"~{newVersion}";
 
-        _fileVersionStorage[package.Name] = newVersionWithPrefix;
+        _fileVersionStorage[key] = newVersionWithPrefix;
 
         return await Task.FromResult(newVersionWithPrefix);
     }
@@ -323,9 +338,9 @@ public class NpmPackagesUpdater : ITransientDependency
         CmdHelper.RunCmd($"npm install", fileDirectory);
     }
 
-    protected virtual List<string> GetPackageVersionList(JProperty package)
+    protected virtual List<string> GetPackageVersionList(JProperty package, string workingDirectory = null)
     {
-        var output = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions --json");
+        var output = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions --json", workingDirectory);
 
         var versionListAsJson = ExtractVersions(output);
 
