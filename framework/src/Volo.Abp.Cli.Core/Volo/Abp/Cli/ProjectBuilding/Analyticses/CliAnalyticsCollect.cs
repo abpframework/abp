@@ -39,15 +39,15 @@ public class CliAnalyticsCollect : ICliAnalyticsCollect, ITransientDependency
     {
         if (input.RandomComputerId.IsNullOrWhiteSpace())
         {
-            if (!File.Exists(CliPaths.RandomComputerId))
+            if (!File.Exists(CliPaths.ComputerId))
             {
                 var randomComputerId = Guid.NewGuid().ToString("D");
                 input.RandomComputerId = randomComputerId;
-                File.WriteAllText(CliPaths.RandomComputerId, randomComputerId, Encoding.UTF8);
+                File.WriteAllText(CliPaths.ComputerId, randomComputerId, Encoding.UTF8);
             }
             else
             {
-                input.RandomComputerId = File.ReadAllText(CliPaths.RandomComputerId, Encoding.UTF8);
+                input.RandomComputerId = File.ReadAllText(CliPaths.ComputerId, Encoding.UTF8);
             }
         }
 
