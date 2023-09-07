@@ -90,8 +90,6 @@ public class AuthService : IAuthService, ITransientDependency
         var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration);
 
         File.WriteAllText(CliPaths.AccessToken, accessToken, Encoding.UTF8);
-
-        await WriteRandomComputerIdAsync();
     }
 
     public async Task DeviceLoginAsync()
@@ -107,8 +105,6 @@ public class AuthService : IAuthService, ITransientDependency
         var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration);
 
         File.WriteAllText(CliPaths.AccessToken, accessToken, Encoding.UTF8);
-
-        await WriteRandomComputerIdAsync();
     }
 
     public async Task LogoutAsync()
@@ -129,8 +125,6 @@ public class AuthService : IAuthService, ITransientDependency
 
             File.Delete(CliPaths.Lic);
         }
-
-        await WriteRandomComputerIdAsync();
     }
 
     public async Task<bool> CheckMultipleOrganizationsAsync(string username)
@@ -182,18 +176,5 @@ public class AuthService : IAuthService, ITransientDependency
     public static bool IsLoggedIn()
     {
         return File.Exists(CliPaths.AccessToken);
-    }
-
-    private async Task WriteRandomComputerIdAsync()
-    {
-        var loginInfo = await GetLoginInfoAsync();
-        if (loginInfo != null && loginInfo.Id.HasValue)
-        {
-            File.WriteAllText(CliPaths.RandomComputerId, loginInfo.Id.Value.ToString("D"), Encoding.UTF8);
-        }
-        else
-        {
-            File.WriteAllText(CliPaths.RandomComputerId, Guid.NewGuid().ToString("D"), Encoding.UTF8);
-        }
     }
 }
