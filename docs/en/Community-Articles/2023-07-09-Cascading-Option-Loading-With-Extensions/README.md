@@ -1,6 +1,6 @@
 # Cascading Option Loading with Extensions System in ABP Angular
 
-In this article, we'll see how to load cascading options with an extensions system in ABP Angular. For this example, we'll simulate renting a book process. Besides our default form properties, we'll contribute `Name` property to our `Rent Form Modal` in the Books module. This property will be loaded after `Genre` is selected.
+This article will show how to load cascading options with an extensions system in ABP Angular. For this example, we'll simulate renting a book process. Besides our default form properties, we'll contribute `Name` property to our `Rent Form Modal` in the Books module. This property will be loaded after `Genre` is selected.
 
 > Before starting this article, I suggest you read the [ABP Angular Dynamic Form Extensions](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions)
 
@@ -27,13 +27,13 @@ The books module is not a library; for this demo, it'll placed in the applicatio
 
 ![Cascading Loading Demo](assets/gif/cascading-loading-demo.gif)
 
-### What is an extension system?
+### What is the Extension system?
 
 ![Extensions System Document](./assets/img/extensions-system-document.png)
 
 # Reviewing the code step by step
 
-**1.Create default form properties for `Rent Form` in the `Books` module**
+**1. Create default form properties for `Rent Form` in the `Books` module**
 
 - `getInjected` function is the key point of the cascading loading
 - We can reach and track any value from `Service` or `Component`
@@ -102,7 +102,7 @@ export const DEFAULT_RENT_FORM_PROPS = FormProp.createMany<BookDto>([
 ]);
 ```
 
-**2.Configure tokens and config options**
+**2. Configure tokens and config options**
 
 The documentation explains these steps; that's why I won't explain it again. If documents or samples are not enough, please let me know in the comments 🙂
 
@@ -153,7 +153,7 @@ export interface BooksConfigOptions {
 }
 ```
 
-**3.Extensions Guard**
+**3. Extensions Guard**
 
 It'll to collect all contributors from [ExtensionsService](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/theme-shared/extensions/src/lib/services/extensions.service.ts)
 
@@ -204,7 +204,7 @@ export class BooksExtensionsGuard implements IAbpGuard {
 
 Yes, I'm still using class-based guard 🙂 much more flexible...
 
-**4.RentBookComponent**
+**4. RentBookComponent**
 
 - Our trackable variable is defined here `(form:FormGroup)`, which means We'll track this variable in `options` property at defaults || contributors files.
 - Providing `AuthorService`, also `EXTENSIONS_IDENTIFIER` for the reach dynamic properties
