@@ -19,11 +19,11 @@ public class BackgroundEmailSendingJob : AsyncBackgroundJob<BackgroundEmailSendi
     {
         if (args.From.IsNullOrWhiteSpace())
         {
-            await EmailSender.SendAsync(args.To, args.Subject, args.Body, args.IsBodyHtml, args.Attachments, args.ExtraProperties);
+            await EmailSender.SendAsync(args.To, args.Subject, args.Body, args.IsBodyHtml, args.AdditionalEmailSendingArgs);
         }
         else
         {
-            await EmailSender.SendAsync(args.From!, args.To, args.Subject, args.Body, args.IsBodyHtml, args.Attachments, args.ExtraProperties);
+            await EmailSender.SendAsync(args.From!, args.To, args.Subject, args.Body, args.IsBodyHtml, args.AdditionalEmailSendingArgs);
         }
     }
 }

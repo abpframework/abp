@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using System.Threading.Tasks;
-using Volo.Abp.Data;
 
 namespace Volo.Abp.Emailing;
 
@@ -18,8 +16,7 @@ public interface IEmailSender
         string? subject,
         string? body,
         bool isBodyHtml = true,
-        List<EmailAttachment>? attachments = null,
-        ExtraPropertyDictionary? extraProperties = null
+        AdditionalEmailSendingArgs? additionalEmailSendingArgs = null
     );
 
     /// <summary>
@@ -31,8 +28,7 @@ public interface IEmailSender
         string? subject,
         string? body,
         bool isBodyHtml = true,
-        List<EmailAttachment>? attachments = null,
-        ExtraPropertyDictionary? extraProperties = null
+        AdditionalEmailSendingArgs? additionalEmailSendingArgs = null
     );
 
     /// <summary>
@@ -56,8 +52,7 @@ public interface IEmailSender
         string subject,
         string body,
         bool isBodyHtml = true,
-        List<EmailAttachment>? attachments = null,
-        ExtraPropertyDictionary? extraProperties = null
+        AdditionalEmailSendingArgs? additionalEmailSendingArgs = null
     );
 
     /// <summary>
@@ -69,7 +64,6 @@ public interface IEmailSender
         string subject,
         string body,
         bool isBodyHtml = true,
-        List<EmailAttachment>? attachments = null,
-        ExtraPropertyDictionary? extraProperties = null
+        AdditionalEmailSendingArgs? additionalEmailSendingArgs = null
     );
 }

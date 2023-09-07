@@ -20,7 +20,5 @@ public class BackgroundEmailSendingJobArgs
     /// </summary>
     public bool IsBodyHtml { get; set; } = true;
 
-    public List<EmailAttachment>? Attachments { get; set; }
-
-    public ExtraPropertyDictionary? ExtraProperties { get; set; }
+    public AdditionalEmailSendingArgs? AdditionalEmailSendingArgs { get; set; }
 }
