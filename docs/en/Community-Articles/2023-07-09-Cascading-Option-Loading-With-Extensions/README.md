@@ -1,8 +1,8 @@
 # Cascading Option Loading with Extensions System in ABP Angular
 
-In this article we'll see how to loading cascading options with extensions system in ABP Angular. For this example we'll simulate renting a book process. Beside our default form properties we'll contribute `Name` property to our `Rent Form Modal` in Books module. This property will be loaded after `Genre` selected.
+In this article, we'll see how to load cascading options with an extensions system in ABP Angular. For this example, we'll simulate renting a book process. Besides our default form properties, we'll contribute `Name` property to our `Rent Form Modal` in the Books module. This property will be loaded after `Genre` is selected.
 
-> Before starting this article, I suggest you to read the [ABP Angular Dynamic Form Extensions](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions)
+> Before starting this article, I suggest you read the [ABP Angular Dynamic Form Extensions](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions)
 
 ### Environment
 
@@ -12,14 +12,14 @@ In this article we'll see how to loading cascading options with extensions syste
 
 ### Project structure
 
-Books module is not a library, for this demo it'll placed in application itself
+The books module is not a library; for this demo, it'll placed in the application itself.
 
 ![Folder structure](./assets/img/folder-structure.png)
 
-- **books folder:** Contains default form properties, tokens, models, etc. It's smilar abp module structure.
+- **books folder:** Contains default form properties, tokens, models, etc. It's similar to the ABP module structure.
 - Also I've used **standalone** and **signals** feature in this demo.
-- **books-extended folder:** Contains only `Name` property for the contribute `Rent Form Modal` inside Books module.
-- **For more readibility, I've used TS path aliases in this demo. Don't forget to export files in `index.ts` file 🙂**
+- **books-extended folder:** Contains only `Name` property for the contribute `Rent Form Modal` inside the Books module.
+- **For more readability, I've used TS path aliases in this demo. Don't forget to export files in `index.ts` file 🙂**
 
 ![tsconfig.json file](./assets/img/ts-config-file.png)
 
@@ -27,7 +27,7 @@ Books module is not a library, for this demo it'll placed in application itself
 
 ![Cascading Loading Demo](assets/gif/cascading-loading-demo.gif)
 
-### What is extensions system?
+### What is an extension system?
 
 ![Extensions System Document](./assets/img/extensions-system-document.png)
 
@@ -104,7 +104,7 @@ export const DEFAULT_RENT_FORM_PROPS = FormProp.createMany<BookDto>([
 
 **2.Configure tokens and config options**
 
-This steps explained in documentation, that's why I won't explain it again. If document or samples not enough please let me know 🙂
+The documentation explains these steps; that's why I won't explain it again. If documents or samples are not enough, please let me know in the comments 🙂
 
 **Extensions Token**
 
@@ -202,11 +202,11 @@ export class BooksExtensionsGuard implements IAbpGuard {
 }
 ```
 
-Yes I'm still using class based guard 🙂 much flexible...
+Yes, I'm still using class-based guard 🙂 much more flexible...
 
 **4.RentBookComponent**
 
-- Our trackable variable defined here `(form:FormGroup)`, which means We'll track this variable in `options` property at defaults || contributors files.
+- Our trackable variable is defined here `(form:FormGroup)`, which means We'll track this variable in `options` property at defaults || contributors files.
 - Providing `AuthorService`, also `EXTENSIONS_IDENTIFIER` for the reach dynamic properties
 
 ```ts
@@ -345,9 +345,9 @@ export class RentBookComponent {
 </abp-modal>
 ```
 
-Up to the present we constructed our module's default form properties.
+Up to now, we have constructed our module's default form properties.
 
-- As you can see there is no book names we'll add it via contributors
+- As you can see, there are no book names we'll add them via contributors
 
 ![Rent Form Without Contribution](./assets/img/rent-form-without-contribution.png)
 
@@ -409,7 +409,7 @@ export const bookStoreRentFormPropContributors: BookStoreRentFormPropContributor
   };
 ```
 
-- Load new contribution via routing & forLazy method
+- Load new contributions via routing & forLazy method
 
 ```ts
 // ~/app-routing.module.ts
@@ -435,16 +435,16 @@ const routes: Routes = [
 export class AppRoutingModule {}
 ```
 
-Finally.. We've added new property to our module, and it'll be loaded after `Genre` selected.
+Finally, we've added a new property to our module, and it'll be loaded after `Genre` is selected.
 
 ## Conclusion
 
 ![Cascading Loading Demo](assets/gif/cascading-loading-demo.gif)
 
-- In ABP Angular, we can create form properties and load dropdown options dynamically via Extensions System
+- In ABP Angular, we can create form properties and load dropdown options dynamically via the Extensions System
 - We can reach and track any value from `Service` or `Component`
-- We can create our custom library or module and contribute it to any module in application
+- We can create our custom library or module and contribute it to any module in the application
 
 Thanks for reading, I hope it was helpful. If you have any questions, please let me know in the comments section. 👋👋
 
-> You can find the source code of this article on [Github]()
+> You can find the source code of this article on [Github](https://github.com/abpframework/abp/tree/dev/docs/Community-Articles/2023-07-09-Cascading-Option-Loading-With-Extensions/Volo.BookStore)
