@@ -66,8 +66,6 @@ export class FeatureManagementComponent
       this.openModal();
       return;
     }
-
-    this.selectedGroupDisplayName = undefined;
   }
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
