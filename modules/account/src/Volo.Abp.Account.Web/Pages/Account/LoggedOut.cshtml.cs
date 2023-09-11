@@ -19,11 +19,17 @@ public class LoggedOutModel : AccountPageModel
 
     public virtual Task<IActionResult> OnGetAsync()
     {
+        PostLogoutRedirectUri = GetRedirectUrl(PostLogoutRedirectUri);
+        SignOutIframeUrl = GetRedirectUrl(SignOutIframeUrl);
+        
         return Task.FromResult<IActionResult>(Page());
     }
 
     public virtual Task<IActionResult> OnPostAsync()
     {
+        PostLogoutRedirectUri = GetRedirectUrl(PostLogoutRedirectUri);
+        SignOutIframeUrl = GetRedirectUrl(SignOutIframeUrl);
+        
         return Task.FromResult<IActionResult>(Page());
     }
 }
