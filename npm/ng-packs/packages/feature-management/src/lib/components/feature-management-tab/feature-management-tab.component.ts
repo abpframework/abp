@@ -9,9 +9,7 @@ export class FeatureManagementTabComponent {
   providerKey: string;
 
   openFeaturesModal() {
-    setTimeout(() => {
-      this.visibleFeatures = true;
-    }, 0);
+    this.visibleFeatures = true;
   }
 
   onVisibleFeaturesChange = (value: boolean) => {
