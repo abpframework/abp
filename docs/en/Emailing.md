@@ -62,8 +62,7 @@ namespace MyProject
 * **subject**: You can set the email subject.
 * **body**: You can set the email body.
 * **isBodyHtml**: Indicates whether the email body may contain HTML tags. **Default: true**.
-* **attachments**: You can pass a list of `EmailAttachment` to add attachments to the email.
-* **extraProperties**: You can pass extra properties and use these properties in your own `IEmailSender` implementation to implement more mail sending features.
+* **additionalEmailSendingArgs**: This parameter is used to pass additional arguments to the `IEmailSender` implementation. Include: CC(Carbon copy), a list of `EmailAttachment` and an extra properties.
 
 > `IEmailSender` is the suggested way to send emails, since it makes your code provider independent.
 
