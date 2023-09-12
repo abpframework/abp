@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
@@ -47,7 +48,7 @@ public static class AbpStringExtensions
     /// Indicates whether this string is null or an System.String.Empty string.
     /// </summary>
     [ContractAnnotation("str:null => true")]
-    public static bool IsNullOrEmpty(this string? str)
+    public static bool IsNullOrEmpty([NotNullWhen(false)]this string? str)
     {
         return string.IsNullOrEmpty(str);
     }
@@ -56,7 +57,7 @@ public static class AbpStringExtensions
     /// indicates whether this string is null, empty, or consists only of white-space characters.
     /// </summary>
     [ContractAnnotation("str:null => true")]
-    public static bool IsNullOrWhiteSpace(this string? str)
+    public static bool IsNullOrWhiteSpace([NotNullWhen(false)]this string? str)
     {
         return string.IsNullOrWhiteSpace(str);
     }
