@@ -37,7 +37,7 @@ public class CmsKitPublicCommentsController : CmsKitPublicControllerBase
         {
             CheckCaptchaTokenNullity(input.CaptchaToken);
 
-            SimpleMathsCaptchaGenerator.Validate(input.CaptchaToken.Value, input.CaptchaAnswer);
+            await SimpleMathsCaptchaGenerator.ValidateAsync(input.CaptchaToken.Value, input.CaptchaAnswer);
         }
 
         var dto = ObjectMapper.Map<CreateCommentWithParametersInput, CreateCommentInput> (input);
@@ -51,7 +51,7 @@ public class CmsKitPublicCommentsController : CmsKitPublicControllerBase
         {
             CheckCaptchaTokenNullity(input.CaptchaToken);
 
-            SimpleMathsCaptchaGenerator.Validate(input.CaptchaToken.Value, input.CaptchaAnswer);
+            await SimpleMathsCaptchaGenerator.ValidateAsync(input.CaptchaToken.Value, input.CaptchaAnswer);
         }
         
         await CommentPublicAppService.UpdateAsync(id, input);
