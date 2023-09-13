@@ -53,6 +53,26 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         roles.ShouldContain("supporter");
         roles.ShouldContain("manager");
     }
+    
+    [Fact]
+    public async Task GetRoleNames_By_UserIds_Async()
+    {
+        var userRoleNames = await UserRepository.GetRoleNamesAsync(new [] {
+            TestData.UserBobId,
+            TestData.UserJohnId,
+            TestData.UserNeoId,
+            TestData.UserDavidId
+        });
+       
+        userRoleNames[TestData.UserBobId].Count.ShouldBe(1);
+        userRoleNames[TestData.UserBobId][0].ShouldBe("manager");
+        userRoleNames[TestData.UserJohnId].Count.ShouldBe(2);
+        userRoleNames[TestData.UserJohnId].ShouldContain("moderator");
+        userRoleNames[TestData.UserJohnId].ShouldContain("supporter");
+        userRoleNames[TestData.UserNeoId].Count.ShouldBe(1);
+        userRoleNames[TestData.UserNeoId][0].ShouldBe("supporter");
+        userRoleNames.ShouldNotContainKey(TestData.UserDavidId);
+    }
 
     [Fact]
     public async Task FindByLoginAsync()

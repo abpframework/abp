@@ -56,6 +56,27 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<Dictionary<Guid, List<string>>> GetRoleNamesAsync(
+        IEnumerable<Guid> userIds, 
+        CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+        var query = from userRole in dbContext.Set<IdentityUserRole>()
+            join role in dbContext.Roles on userRole.RoleId equals role.Id
+            where userIds.Contains(userRole.UserId)
+                select new
+                {
+                    userRole.UserId,
+                    role.Name
+                };
+        
+        var result = await query
+            .GroupBy(x => x.UserId)
+            .ToDictionaryAsync(x => x.Key, x => x.Select(r => r.Name).ToList(), cancellationToken: cancellationToken);
+
+        return result;
+    }
+
     public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
         Guid id,
         CancellationToken cancellationToken = default)
