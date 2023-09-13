@@ -24,7 +24,7 @@ public class PublisherPool : IPublisherPool, ISingletonDependency
         Logger = new NullLogger<PublisherPool>();
     }
 
-    public async Task<ServiceBusSender> GetAsync(string topicName, string connectionName)
+    public async Task<ServiceBusSender> GetAsync(string topicName, string? connectionName)
     {
         var admin = _connectionPool.GetAdministrationClient(connectionName);
         await admin.SetupTopicAsync(topicName);

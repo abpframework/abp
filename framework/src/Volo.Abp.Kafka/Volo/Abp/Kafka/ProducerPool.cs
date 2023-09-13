@@ -32,7 +32,7 @@ public class ProducerPool : IProducerPool, ISingletonDependency
         Logger = new NullLogger<ProducerPool>();
     }
 
-    public virtual IProducer<string, byte[]> Get(string connectionName = null)
+    public virtual IProducer<string, byte[]> Get(string? connectionName = null)
     {
         connectionName ??= KafkaConnections.DefaultConnectionName;
 

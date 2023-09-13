@@ -14,6 +14,7 @@ namespace Volo.Abp.AspNetCore.TestBase;
 /// <typeparam name="TStartupModule">
 /// Can be a module type or old-style ASP.NET Core Startup class.
 /// </typeparam>
+[Obsolete("Use AbpWebApplicationFactoryIntegratedTest instead.")]
 public abstract class AbpAspNetCoreIntegratedTestBase<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
     where TStartupModule : class
 {
@@ -51,7 +52,7 @@ public abstract class AbpAspNetCoreIntegratedTestBase<TStartupModule> : AbpTestB
                 {
                     webBuilder.UseStartup<TStartupModule>();
                 }
-                
+
                 webBuilder.UseAbpTestServer();
             })
             .UseAutofac()

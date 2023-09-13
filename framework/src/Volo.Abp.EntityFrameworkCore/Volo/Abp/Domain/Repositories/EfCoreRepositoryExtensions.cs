@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
@@ -43,5 +44,11 @@ public static class EfCoreRepositoryExtensions
         }
 
         throw new ArgumentException("Given repository does not implement " + typeof(IEfCoreRepository<TEntity>).AssemblyQualifiedName, nameof(repository));
+    }
+
+    public static IQueryable<TEntity> AsNoTrackingIf<TEntity>(this IQueryable<TEntity> queryable, bool condition)
+        where TEntity : class, IEntity
+    {
+        return condition ? queryable.AsNoTracking() : queryable;
     }
 }

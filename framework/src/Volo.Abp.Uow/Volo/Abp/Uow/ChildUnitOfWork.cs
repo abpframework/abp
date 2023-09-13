@@ -10,7 +10,7 @@ internal class ChildUnitOfWork : IUnitOfWork
 {
     public Guid Id => _parent.Id;
 
-    public IAbpUnitOfWorkOptions? Options => _parent.Options;
+    public IAbpUnitOfWorkOptions Options => _parent.Options;
 
     public IUnitOfWork? Outer => _parent.Outer;
 

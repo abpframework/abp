@@ -21,7 +21,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
 
     public Guid Id { get; } = Guid.NewGuid();
 
-    public IAbpUnitOfWorkOptions? Options { get; private set; }
+    public IAbpUnitOfWorkOptions Options { get; private set; } = default!;
 
     public IUnitOfWork? Outer { get; private set; }
 

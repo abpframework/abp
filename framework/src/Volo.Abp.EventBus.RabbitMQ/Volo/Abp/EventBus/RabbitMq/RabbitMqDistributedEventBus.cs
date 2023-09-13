@@ -35,7 +35,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
     protected IRabbitMqMessageConsumerFactory MessageConsumerFactory { get; }
-    protected IRabbitMqMessageConsumer Consumer { get; private set; }
+    protected IRabbitMqMessageConsumer Consumer { get; private set; } = default!;
 
     private bool _exchangeCreated;
 
@@ -175,7 +175,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
                 factories.RemoveAll(
                     factory =>
                         factory is SingleInstanceHandlerFactory &&
-                        (factory as SingleInstanceHandlerFactory).HandlerInstance == handler
+                        (factory as SingleInstanceHandlerFactory)!.HandlerInstance == handler
                 );
             });
     }
@@ -282,9 +282,9 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
     public virtual Task PublishAsync(
         Type eventType,
         object eventData,
-        Dictionary<string, object> headersArguments = null,
+        Dictionary<string, object>? headersArguments = null,
         Guid? eventId = null,
-        [CanBeNull] string correlationId = null)
+        string? correlationId = null)
     {
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
         var body = Serializer.Serialize(eventData);
@@ -295,9 +295,9 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
     protected virtual Task PublishAsync(
         string eventName,
         byte[] body,
-        Dictionary<string, object> headersArguments = null,
+        Dictionary<string, object>? headersArguments = null,
         Guid? eventId = null,
-        [CanBeNull] string correlationId = null)
+        string? correlationId = null)
     {
         using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
         {
@@ -309,9 +309,9 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         IModel channel,
         string eventName,
         byte[] body,
-        Dictionary<string, object> headersArguments = null,
+        Dictionary<string, object>? headersArguments = null,
         Guid? eventId = null,
-        [CanBeNull] string correlationId = null)
+        string? correlationId = null)
     {
         EnsureExchangeExists(channel);
 
@@ -366,7 +366,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         _exchangeCreated = true;
     }
 
-    private void SetEventMessageHeaders(IBasicProperties properties, Dictionary<string, object> headersArguments)
+    private void SetEventMessageHeaders(IBasicProperties properties, Dictionary<string, object>? headersArguments)
     {
         if (headersArguments == null)
         {

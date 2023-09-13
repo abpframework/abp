@@ -37,6 +37,7 @@
     "ThisExtensionIsNotAllowed": "This extension is not allowed.",
     "TheFileIsTooLarge": "The file is too large.",
     "GoToThePost": "Go to the Post",
+    "GoToTheVideo": "Go to the Video",
     "Contribute": "Contribute",
     "OverallProgress": "Overall Progress",
     "Done": "Done",
@@ -189,6 +190,7 @@
     "SeeMoreVideos": "See more videos",
     "DiscordPageTitle": "ABP Discord Community",
     "ViewVideo": "View Video",
-    "AbpCommunityTitleContent": "ABP Community - Open Source ABP Framework"
+    "AbpCommunityTitleContent": "ABP Community - Open Source ABP Framework",
+    "CommunitySlogan": "A unique community platform for <span class=\"d-inline-block d-md-block gradient-community\">ABP Lovers</span>"
   }
 }
