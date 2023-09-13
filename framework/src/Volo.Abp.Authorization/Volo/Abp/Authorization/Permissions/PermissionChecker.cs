@@ -138,7 +138,7 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
 
             if (permissions.IsNullOrEmpty())
             {
-                break;
+                continue;
             }
 
             var context = new PermissionValuesCheckContext(
