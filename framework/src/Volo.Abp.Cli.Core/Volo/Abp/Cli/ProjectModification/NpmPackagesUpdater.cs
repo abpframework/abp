@@ -64,6 +64,18 @@ public class NpmPackagesUpdater : ITransientDependency
 
         _npmGlobalPackagesChecker.Check();
 
+        foreach (var file in fileList)
+        {
+            if (includePreviews)
+            {
+                await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
+            }
+            else if (switchToStable)
+            {
+                await DeleteNpmrcFileAsync(Path.GetDirectoryName(file));
+            }
+        }
+
         var packagesUpdated = new ConcurrentDictionary<string, bool>();
 
         async Task UpdateAsync(string file)
@@ -79,15 +91,6 @@ public class NpmPackagesUpdater : ITransientDependency
         foreach (var file in packagesUpdated.Where(x => x.Value))
         {
             var fileDirectory = Path.GetDirectoryName(file.Key).EnsureEndsWith(Path.DirectorySeparatorChar);
-
-            if (includePreviews)
-            {
-                await CreateNpmrcFileAsync(Path.GetDirectoryName(file.Key));
-            }
-            else if (switchToStable)
-            {
-                await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
-            }
 
             if (await NpmrcFileExistAsync(fileDirectory))
             {
