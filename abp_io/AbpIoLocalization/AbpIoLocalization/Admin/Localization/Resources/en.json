@@ -493,6 +493,27 @@
     "QuotationTemplate.Tax/VAT:": "Tax / Vat (%{0}) :",
     "QuotationTemplate.TotalDiscount:": "Total Discount :",
     "QuotationTemplate.TOTALDUE:": "TOTAL DUE :", 
-    "QuotationTemplate.BankAccount": "Our bank account information can be found at {0}"
+    "QuotationTemplate.BankAccount": "Our bank account information can be found at {0}",
+    "Permission:Raffles": "Raffle",
+    "Permission:Draw": "Draw",
+    "Menu:Raffles": "Raffles",
+    "RaffleIsNotDrawable": "Raffle is not drawable",
+    "WinnerCountMustBeGreaterThanZero": "Winner count must be greater than zero",
+    "FullDescription": "Full Description",
+    "VisibilityStartDate": "Visibility Start Date",
+    "VisibilityEndDate": "Visibility End Date",
+    "RaffleDate": "Raffle Date",
+    "SubscriptionCode": "Subscription Code",
+    "GroupCode": "Group Code",
+    "MaxWinnerCount": "Max Winner Count",
+    "ReDraw": "Re-Draw",
+    "EditRaffle": "Edit Raffle",
+    "Raffles": "Raffles",
+    "CreateARaffle": "Create a raffle",
+    "Draw": "Draw",
+    "Enum:RaffleState:0": "Active",
+    "Enum:RaffleState:1": "Next",
+    "Enum:RaffleState:2": "Past",
+    "DrawDone": "Draw Done"
   }
 }
