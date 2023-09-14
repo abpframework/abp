@@ -79,6 +79,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
         var configurationSection = _configuration.GetSection("OpenIddict:Applications");
 
+        //<TEMPLATE-REMOVE IF-NOT='ui:mvc'>
         //Web Client
         var webClientId = configurationSection["MyProjectName_Web:ClientId"];
         if (!webClientId.IsNullOrWhiteSpace())
@@ -103,7 +104,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
             );
         }
+        //</TEMPLATE-REMOVE>
 
+        //<TEMPLATE-REMOVE IF-NOT='ui:angular'>
         //Console Test / Angular Client
         var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
         if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
@@ -127,7 +130,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 postLogoutRedirectUri: consoleAndAngularClientRootUrl
             );
         }
+        //</TEMPLATE-REMOVE>
 
+        //<TEMPLATE-REMOVE IF-NOT='ui:blazor'>
         // Blazor Client
         var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
         if (!blazorClientId.IsNullOrWhiteSpace())
@@ -147,7 +152,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
             );
         }
+        //</TEMPLATE-REMOVE>
 
+        //<TEMPLATE-REMOVE IF-NOT='ui:blazor-server&&TIERED'>
         // Blazor Server Tiered Client
         var blazorServerTieredClientId = configurationSection["MyProjectName_BlazorServerTiered:ClientId"];
         if (!blazorServerTieredClientId.IsNullOrWhiteSpace())
@@ -170,7 +177,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 postLogoutRedirectUri: $"{blazorServerTieredRootUrl}signout-callback-oidc"
             );
         }
+        //</TEMPLATE-REMOVE>
 
+        //<TEMPLATE-REMOVE IF-NOT='HostWithIds'>
         // Swagger Client
         var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
         if (!swaggerClientId.IsNullOrWhiteSpace())
@@ -189,6 +198,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 clientUri: swaggerRootUrl
             );
         }
+        //</TEMPLATE-REMOVE>
     }
 
     private async Task CreateApplicationAsync(
