@@ -57,24 +57,23 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     }
 
     public virtual async Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
-        IEnumerable<Guid> userIds, 
+        IEnumerable<Guid> userIds,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
-        var query = from userRole in dbContext.Set<IdentityUserRole>()
+        return await (from userRole in dbContext.Set<IdentityUserRole>()
             join role in dbContext.Roles on userRole.RoleId equals role.Id
             where userIds.Contains(userRole.UserId)
-                select new
-                {
-                    userRole.UserId,
-                    role.Name
-                };
-        
-        var result = await query
-            .GroupBy(x => x.UserId)
-            .ToDictionaryAsync(x => x.Key, x => x.Select(r => r.Name).ToArray(), cancellationToken: cancellationToken);
-
-        return result.Select(x => new IdentityUserIdWithRoleNames() { Id = x.Key, RoleNames = x.Value }).ToList();
+            group new
+            {
+                userRole.UserId,
+                role.Name
+            } by userRole.UserId
+            into gp
+            select new IdentityUserIdWithRoleNames
+            {
+                Id = gp.Key, RoleNames = gp.Select(x => x.Name).ToArray()
+            }).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
