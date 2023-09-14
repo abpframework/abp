@@ -56,7 +56,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<Dictionary<Guid, List<string>>> GetRoleNamesAsync(
+    public virtual async Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
         IEnumerable<Guid> userIds, 
         CancellationToken cancellationToken = default)
     {
@@ -72,9 +72,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         
         var result = await query
             .GroupBy(x => x.UserId)
-            .ToDictionaryAsync(x => x.Key, x => x.Select(r => r.Name).ToList(), cancellationToken: cancellationToken);
+            .ToDictionaryAsync(x => x.Key, x => x.Select(r => r.Name).ToArray(), cancellationToken: cancellationToken);
 
-        return result;
+        return result.Select(x => new IdentityUserIdWithRoleNames() { Id = x.Key, RoleNames = x.Value }).ToList();
     }
 
     public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(

@@ -144,7 +144,7 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         CancellationToken cancellationToken = default
     );
 
-    Task<Dictionary<Guid, List<string>>> GetRoleNamesAsync(
+    Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
         IEnumerable<Guid> userIds,
         CancellationToken cancellationToken = default);
 }

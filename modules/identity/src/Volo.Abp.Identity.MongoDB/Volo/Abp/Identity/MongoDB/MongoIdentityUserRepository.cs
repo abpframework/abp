@@ -361,7 +361,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         await UpdateManyAsync(users, cancellationToken: cancellationToken);
     }
 
-    public virtual async Task<Dictionary<Guid, List<string>>> GetRoleNamesAsync(
+    public virtual async Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
         IEnumerable<Guid> userIds, 
         CancellationToken cancellationToken = default)
     {
@@ -383,6 +383,8 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             r.Name
         }).ToListAsync(cancellationToken);
   
-        return userAndRoleIds.ToDictionary(x => x.Key, x => roles.Where(r => x.Value.Contains(r.Id)).Select(r => r.Name).ToList());
+        var result = userAndRoleIds.ToDictionary(x => x.Key, x => roles.Where(r => x.Value.Contains(r.Id)).Select(r => r.Name).ToArray());
+            
+        return result.Select(x => new IdentityUserIdWithRoleNames() { Id = x.Key, RoleNames = x.Value }).ToList();
     }
 }

@@ -64,14 +64,22 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
             TestData.UserDavidId
         });
        
-        userRoleNames[TestData.UserBobId].Count.ShouldBe(1);
-        userRoleNames[TestData.UserBobId][0].ShouldBe("manager");
-        userRoleNames[TestData.UserJohnId].Count.ShouldBe(2);
-        userRoleNames[TestData.UserJohnId].ShouldContain("moderator");
-        userRoleNames[TestData.UserJohnId].ShouldContain("supporter");
-        userRoleNames[TestData.UserNeoId].Count.ShouldBe(1);
-        userRoleNames[TestData.UserNeoId][0].ShouldBe("supporter");
-        userRoleNames.ShouldNotContainKey(TestData.UserDavidId);
+        userRoleNames.Count.ShouldBe(3);
+        
+        var userBob = userRoleNames.First(x => x.Id == TestData.UserBobId);
+        userBob.RoleNames.Length.ShouldBe(1);
+        userBob.RoleNames[0].ShouldBe("manager");
+        
+        var userJohn = userRoleNames.First(x => x.Id == TestData.UserJohnId);
+        userJohn.RoleNames.Length.ShouldBe(2);
+        userJohn.RoleNames.ShouldContain("moderator");
+        userJohn.RoleNames.ShouldContain("supporter");
+        
+        var userNeo = userRoleNames.First(x => x.Id == TestData.UserNeoId);
+        userNeo.RoleNames.Length.ShouldBe(1);
+        userNeo.RoleNames[0].ShouldBe("supporter");
+
+        userRoleNames.ShouldNotContain(x => x.Id == TestData.UserDavidId);
     }
 
     [Fact]
