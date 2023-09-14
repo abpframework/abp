@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -48,11 +50,15 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
             options.IgnoredUrls.AddIfNotContains("/_blazor");
         });
 
+        var preConfigureActions = context.Services.GetPreConfigureActions<HttpConnectionDispatcherOptions>();
         Configure<AbpEndpointRouterOptions>(options =>
         {
             options.EndpointConfigureActions.Add(endpointContext =>
             {
-                endpointContext.Endpoints.MapBlazorHub();
+                endpointContext.Endpoints.MapBlazorHub(httpConnectionDispatcherOptions =>
+                {
+                    preConfigureActions.Configure(httpConnectionDispatcherOptions);
+                });
                 endpointContext.Endpoints.MapFallbackToPage("/_Host");
             });
         });
