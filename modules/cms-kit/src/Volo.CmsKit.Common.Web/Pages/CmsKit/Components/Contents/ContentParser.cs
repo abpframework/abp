@@ -40,7 +40,7 @@ public class ContentParser : ITransientDependency
 
     protected virtual void ParseContent(string content, List<string> parsedList)
     {
-        var replacedText = Regex.Replace(content, @"\[Widget.*?\]", Delimeter);
+        var replacedText = Regex.Replace(content, @"\[Widget Type=.*?\]", Delimeter);
         if (!replacedText.Contains(Delimeter))
         {
             parsedList.Add(replacedText);
