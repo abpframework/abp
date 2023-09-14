@@ -120,7 +120,7 @@ public class CmsKitPublicWebModule : AbpModule
         
         if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
         {
-            app.UseHomePageDefaultMiddleware();
+            app.UseCmsKitHomePageMiddleware();
             app.UseCmsKitPagesMiddleware();
         }
     }

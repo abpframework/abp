@@ -6,7 +6,7 @@ namespace Volo.CmsKit.Public.Web;
 
 public static class CmsKitPagesMiddlewareExtensions
 {
-    public static IApplicationBuilder UseHomePageDefaultMiddleware(this IApplicationBuilder builder)
+    public static IApplicationBuilder UseCmsKitHomePageMiddleware(this IApplicationBuilder builder)
     {
         return builder.UseMiddleware<DefaultHomePageMiddleware>();
     }
