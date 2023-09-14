@@ -62,7 +62,7 @@ Configure<AbpAuditingOptions>(options =>
 });
 ````
 
-`options.EntityHistorySelectors` actually a list of type predicate. You can write a lambda expression to define your filter.
+`options.EntityHistorySelectors` is actually a list of type predicate. You can write a lambda expression to define your filter.
 
 The example selector below does the same of the `AddAllEntities()` extension method defined above:
 
