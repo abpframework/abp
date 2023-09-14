@@ -13,10 +13,9 @@ public class DefaultHomePageMiddleware : IMiddleware, ITransientDependency
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var featureChecker = context.RequestServices.GetRequiredService<IFeatureChecker>();
-
         if (context.Request.Path.Value == "/")
         {
+            var featureChecker = context.RequestServices.GetRequiredService<IFeatureChecker>();
             if (await featureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable))
             {
                 var pagePublicAppService = context.RequestServices.GetRequiredService<IPagePublicAppService>();
@@ -24,7 +23,7 @@ public class DefaultHomePageMiddleware : IMiddleware, ITransientDependency
                 var page = await pagePublicAppService.FindDefaultHomePageAsync();
                 if (page != null)
                 {
-                    context.Request.Path = $"{PageConsts.UrlPrefix}{page.Slug}";
+                    context.Request.Path = $"/pages/{page.Slug}";
                 }
             }
         }
