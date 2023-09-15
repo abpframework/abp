@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
 using Volo.Abp.Features;
@@ -56,5 +57,10 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
         }
 
         return ObjectMapper.Map<PageCacheItem, PageDto>(pageCacheItem);
+    }
+
+    public Task<bool> DoesSlugExistAsync([NotNull] string slug)
+    {
+        return PageRepository.ExistsAsync(slug);
     }
 }

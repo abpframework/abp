@@ -830,6 +830,23 @@
                   }
                 },
                 {
+                  "name": "DoesSlugExistAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "slug",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                },
+                {
                   "name": "FindDefaultHomePageAsync",
                   "parametersOnMethod": [],
                   "returnValue": {
@@ -889,6 +906,43 @@
               "returnValue": {
                 "type": "Volo.CmsKit.Contents.PageDto",
                 "typeSimple": "Volo.CmsKit.Contents.PageDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.CmsKit.Public.Pages.IPagePublicAppService"
+            },
+            "DoesSlugExistAsyncBySlug": {
+              "uniqueName": "DoesSlugExistAsyncBySlug",
+              "name": "DoesSlugExistAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-public/pages/{slug}/exist",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "slug",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "slug",
+                  "name": "slug",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Pages.IPagePublicAppService"

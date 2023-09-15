@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Features;
@@ -34,5 +35,12 @@ public class PagesPublicController : CmsKitPublicControllerBase, IPagePublicAppS
     public Task<PageDto> FindDefaultHomePageAsync()
     {
         return PageAppService.FindDefaultHomePageAsync();
+    }
+
+    [HttpGet]
+    [Route("{slug}/exist")]
+    public Task<bool> DoesSlugExistAsync([NotNull] string slug)
+    {
+        return PageAppService.DoesSlugExistAsync(slug);
     }
 }

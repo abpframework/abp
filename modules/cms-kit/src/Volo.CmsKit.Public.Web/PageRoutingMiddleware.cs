@@ -25,12 +25,12 @@ public class PageRoutingMiddleware : IMiddleware, ITransientDependency
 
             var pagePublicAppService = context.RequestServices.GetRequiredService<IPagePublicAppService>();
 
-            var page = await pagePublicAppService.FindBySlugAsync(
-                context.Request.Path.ToString().TrimStart('/'));
+            var slug = context.Request.Path.ToString().TrimStart('/');
+            var exist = await pagePublicAppService.DoesSlugExistAsync(slug);
 
-            if (page is not null)
+            if (exist)
             {
-                context.Request.Path = $"/pages/{page.Slug}";
+                context.Request.Path = $"/pages/{slug}";
 
                 await next(context);
             }
