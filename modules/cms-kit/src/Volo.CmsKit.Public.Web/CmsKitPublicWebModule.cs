@@ -90,7 +90,7 @@ public class CmsKitPublicWebModule : AbpModule
         {
             Configure<RazorPagesOptions>(options =>
             {
-                /* Keep '/pages/{slug}' route for a while for backward compatibility. '/{slug}' is works at the same time by Middleware. */
+                /* Keep the '/pages/{slug}' route for a while for backward compatibility. '/{slug}' route convention still works by the PageRoutingMiddleware. */
                 options.Conventions.AddPageRoute("/Public/CmsKit/Pages/Index", "/pages/{slug:minlength(1)}");
                 options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/Index", @"/blogs/{blogSlug:minlength(1)}");
                 options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/BlogPost", @"/blogs/{blogSlug}/{blogPostSlug:minlength(1)}");
