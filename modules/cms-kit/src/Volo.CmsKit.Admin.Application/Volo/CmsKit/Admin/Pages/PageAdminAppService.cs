@@ -24,12 +24,12 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
 
     protected PageManager PageManager { get; }
     
-    protected IDistributedCache<PageCacheItem> PageCache { get; }
+    protected IDistributedCache<PageCacheItem, PageCacheKey> PageCache { get; }
 
     public PageAdminAppService(
         IPageRepository pageRepository,
         PageManager pageManager, 
-        IDistributedCache<PageCacheItem> pageCache)
+        IDistributedCache<PageCacheItem, PageCacheKey> pageCache)
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
@@ -115,6 +115,6 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
 
     protected virtual async Task InvalidateDefaultHomePageCacheAsync(bool considerUow = false)
     {
-        await PageCache.RemoveAsync(PageConsts.DefaultHomePageCacheKey, considerUow: considerUow);
+        await PageCache.RemoveAsync(new PageCacheKey(PageConsts.DefaultHomePageCacheKey), considerUow: considerUow);
     }
 }
