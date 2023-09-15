@@ -35,7 +35,7 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
     {
         var pageCacheItem = await PageCache.GetOrAddAsync(new PageCacheKey(slug), async () =>
         {
-            var page = await PageRepository.GetBySlugAsync(slug);
+            var page = await PageRepository.FindBySlugAsync(slug);
             if (page is null)
             {
                 return null;
