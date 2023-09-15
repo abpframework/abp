@@ -19,9 +19,12 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
     protected IPageRepository PageRepository { get; }
     protected PageManager PageManager { get; }
 
-    protected IDistributedCache<PageCacheItem> PageCache { get; }
+    protected IDistributedCache<PageCacheItem, PageCacheKey> PageCache { get; }
 
-    public PagePublicAppService(IPageRepository pageRepository, PageManager pageManager, IDistributedCache<PageCacheItem> pageCache)
+    public PagePublicAppService(
+        IPageRepository pageRepository,
+        PageManager pageManager,
+        IDistributedCache<PageCacheItem, PageCacheKey> pageCache)
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
@@ -30,7 +33,7 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
     public virtual async Task<PageDto> FindBySlugAsync(string slug)
     {
-        var pageCacheItem = await PageCache.GetOrAddAsync(CalculatePageCacheKey(slug), async () =>
+        var pageCacheItem = await PageCache.GetOrAddAsync(new PageCacheKey(slug), async () =>
         {
             var page = await PageRepository.GetBySlugAsync(slug);
             if (page is null)
@@ -51,7 +54,7 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
     public virtual async Task<PageDto> FindDefaultHomePageAsync()
     {
-        var pageCacheItem = await PageCache.GetAsync(PageConsts.DefaultHomePageCacheKey);
+        var pageCacheItem = await PageCache.GetAsync(new PageCacheKey(PageConsts.DefaultHomePageCacheKey));
         if (pageCacheItem is null)
         {
             var page = await PageManager.GetHomePageAsync();
@@ -62,7 +65,7 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
             pageCacheItem = ObjectMapper.Map<Page, PageCacheItem>(page);
 
-            await PageCache.SetAsync(PageConsts.DefaultHomePageCacheKey, pageCacheItem,
+            await PageCache.SetAsync(new PageCacheKey(PageConsts.DefaultHomePageCacheKey), pageCacheItem,
                 new DistributedCacheEntryOptions { AbsoluteExpiration = DateTimeOffset.Now.AddHours(1) });
         }
 
@@ -71,17 +74,12 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
     public async Task<bool> DoesSlugExistAsync([NotNull] string slug)
     {
-        var cached = await PageCache.GetAsync(CalculatePageCacheKey(slug));
+        var cached = await PageCache.GetAsync(new PageCacheKey(slug));
         if (cached is not null)
         {
             return true;
         }
 
         return await PageRepository.ExistsAsync(slug);
-    }
-
-    protected virtual string CalculatePageCacheKey([NotNull] string slug)
-    {
-        return $"Page_{slug}";
     }
 }
