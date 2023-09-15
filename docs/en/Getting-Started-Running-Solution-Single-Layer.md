@@ -20,7 +20,7 @@ Check the **connection string** in the `appsettings.json` file under the `YourPr
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=(LocalDb)\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True"
+  "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True"
 }
 ````
 

@@ -54,7 +54,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
 
     public async Task<bool> TryAuthenticateAsync(
         [NotNull] HttpClient client,
-        string identityClientName = null)
+        string? identityClientName = null)
     {
         var accessToken = await GetAccessTokenOrNullAsync(identityClientName);
         if (accessToken == null)
@@ -66,7 +66,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
         return true;
     }
 
-    protected virtual async Task<string> GetAccessTokenOrNullAsync(string identityClientName)
+    protected virtual async Task<string?> GetAccessTokenOrNullAsync(string? identityClientName)
     {
         var configuration = ClientOptions.GetClientConfiguration(CurrentTenant, identityClientName);
         if (configuration == null)
