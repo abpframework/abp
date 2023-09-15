@@ -16,5 +16,5 @@ public static class PageConsts
 
     public static int MaxStyleLength { get; set; } = int.MaxValue;
     
-    public static string DefaultHomePageCacheKey { get; set; } = "CmsKit_DefaultHomePage";
+    public static string DefaultHomePageCacheKey { get; set; } = "__DefaultHomePage";
 }

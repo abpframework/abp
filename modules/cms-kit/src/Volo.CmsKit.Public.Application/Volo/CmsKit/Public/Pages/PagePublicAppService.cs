@@ -17,7 +17,7 @@ namespace Volo.CmsKit.Public.Pages;
 public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
 {
     protected IPageRepository PageRepository { get; }
-	protected PageManager PageManager { get; }
+    protected PageManager PageManager { get; }
 
     protected IDistributedCache<PageCacheItem> PageCache { get; }
 
@@ -25,18 +25,28 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
-		PageCache = pageCache;
+        PageCache = pageCache;
     }
 
     public virtual async Task<PageDto> FindBySlugAsync(string slug)
     {
-        var page = await PageRepository.FindBySlugAsync(slug);
-        if (page == null)
+        var pageCacheItem = await PageCache.GetOrAddAsync(CalculatePageCacheKey(slug), async () =>
+        {
+            var page = await PageRepository.GetBySlugAsync(slug);
+            if (page is null)
+            {
+                return null;
+            }
+
+            return ObjectMapper.Map<Page, PageCacheItem>(page);
+        });
+
+        if (pageCacheItem is null)
         {
             return null;
         }
 
-        return ObjectMapper.Map<Page, PageDto>(page);
+        return ObjectMapper.Map<PageCacheItem, PageDto>(pageCacheItem);
     }
 
     public virtual async Task<PageDto> FindDefaultHomePageAsync()
@@ -59,8 +69,19 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
         return ObjectMapper.Map<PageCacheItem, PageDto>(pageCacheItem);
     }
 
-    public Task<bool> DoesSlugExistAsync([NotNull] string slug)
+    public async Task<bool> DoesSlugExistAsync([NotNull] string slug)
     {
-        return PageRepository.ExistsAsync(slug);
+        var cached = await PageCache.GetAsync(CalculatePageCacheKey(slug));
+        if (cached is not null)
+        {
+            return true;
+        }
+
+        return await PageRepository.ExistsAsync(slug);
+    }
+
+    protected virtual string CalculatePageCacheKey([NotNull] string slug)
+    {
+        return $"Page_{slug}";
     }
 }
