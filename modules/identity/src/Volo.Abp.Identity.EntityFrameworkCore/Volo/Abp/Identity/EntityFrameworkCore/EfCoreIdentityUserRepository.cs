@@ -99,11 +99,10 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
-            .IncludeDetails(includeDetails)
-            .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
-            .OrderBy(x => x.Id)
-            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        return await (await GetDbContextAsync()).Set<IdentityUserLogin>()
+            .Where(x => x.ProviderKey == providerKey && x.LoginProvider == loginProvider)
+            .Join((await GetDbSetAsync()).IncludeDetails(includeDetails), userLogin => userLogin.UserId, user => user.Id, (userLogin, user) => user)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 
     public virtual async Task<IdentityUser> FindByNormalizedEmailAsync(
