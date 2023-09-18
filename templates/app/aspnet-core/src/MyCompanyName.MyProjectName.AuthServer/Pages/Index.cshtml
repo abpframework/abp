@@ -85,11 +85,11 @@
                                 <hr class="m-2" />
 
                                 <abp-row class="mt-3">
-                                    
-                                        <ul class="list-group">
-                                            @foreach (var application in Model.Applications)
-                                            {
-                                                <li class="list-group-item">
+                                    @foreach (var application in Model.Applications)
+                                    {
+                                        <abp-column size-md="@Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid.ColumnSize._4" class="mb-2">
+                                            <abp-card>
+                                                <abp-card-body>
                                                     @if (!application.LogoUri.IsNullOrEmpty())
                                                     {
                                                         <div class="mx-auto">
@@ -98,10 +98,11 @@
                                                     }
 
                                                     <h4>@application.DisplayName</h4>
-                                                    <a href="@application.ClientUri" class="text-muted">@application.ClientUri</a>
-                                                </li>
-                                            }
-                                        </ul>
+                                                    <a href="@application.ClientUri" class="text-muted stretched-link">@application.ClientUri</a>
+                                                </abp-card-body>
+                                            </abp-card>
+                                        </abp-column>
+                                    }
                                 </abp-row>
                             }
                         </div>
