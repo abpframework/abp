@@ -174,6 +174,7 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             steps.Add(new MauiChangeApplicationIdGuidStep());
             steps.Add(new MauiChangePortStep());
+            context.Symbols.Add("mobile:maui");
         }
         else
         {
@@ -192,10 +193,12 @@ public abstract class AppTemplateBase : TemplateInfo
                 context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Public"));
+                context.Symbols.Add("ui:mvc-public-host");
             }
             else
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Public.Host"));
+                context.Symbols.Add("ui:mvc-public");
             }
         }
     }
