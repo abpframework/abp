@@ -216,6 +216,8 @@
     "GoodJob!": "Good Job!",
     "RaffleJoinSuccessMessage": "You are successfully registered tor the raffle. You will be informed via email if you win the prize!",
     "RaffleLoginAndRegisterMessage": "You should sign in to join a raffle. You can create an account for free if you haven't registered yet.",
-    "Ok": "Ok"
+    "Ok": "Ok",
+    "SeeDetails": "See Details",
+    "WaitingForDraw": "Waiting for draw"
   }
 }

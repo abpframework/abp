@@ -511,9 +511,24 @@
     "Raffles": "Raffles",
     "CreateARaffle": "Create a raffle",
     "Draw": "Draw",
-    "Enum:RaffleState:0": "Active",
-    "Enum:RaffleState:1": "Next",
-    "Enum:RaffleState:2": "Past",
-    "DrawDone": "Draw Done"
+    "Enum:RaffleStatus:0": "Active",
+    "Enum:RaffleStatus:1": "Next",
+    "Enum:RaffleStatus:2": "Past",
+    "DrawDone": "Draw Done",
+    "HomePageShowType": "Home Page Show Type",
+    "None": "None",
+    "Card": "Card",
+    "Horizontal": "Horizontal",
+    "Winners": "Winners",
+    "StartDateMustBeLessThanEndDate": "Start date must be less than end date",
+    "VisibilityStartDateMustBeLessThanVisibilityEndDate": "Visibility start date must be less than visibility end date",
+    "StartDateMustBeGreaterThanVisibilityStartDate": "Start date must be greater than visibility start date",
+    "EndDateMustBeLessThanVisibilityEndDate": "End date must be less than visibility end date",
+    "DrawnDone": "Drawn Done",
+    "AddColor": "Add Color",
+    "Colors": "Colors",
+    "RemoveColor": "Remove Color",
+    "MaxColorCountWarning": "You can add up to {0} colors",
+    "MinColorCountWarning": "You must add at least {0} colors"
   }
 }
