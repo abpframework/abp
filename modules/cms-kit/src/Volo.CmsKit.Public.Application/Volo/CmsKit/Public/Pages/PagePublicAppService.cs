@@ -72,7 +72,7 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
         return ObjectMapper.Map<PageCacheItem, PageDto>(pageCacheItem);
     }
 
-    public async Task<bool> DoesSlugExistAsync([NotNull] string slug)
+    public virtual async Task<bool> DoesSlugExistAsync([NotNull] string slug)
     {
         var cached = await PageCache.GetAsync(new PageCacheKey(slug));
         if (cached is not null)
