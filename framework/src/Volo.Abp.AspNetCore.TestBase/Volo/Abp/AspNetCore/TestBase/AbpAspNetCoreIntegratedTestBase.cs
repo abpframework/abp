@@ -42,6 +42,7 @@ public abstract class AbpAspNetCoreIntegratedTestBase<TStartupModule> : AbpTestB
     protected virtual IHostBuilder CreateHostBuilder()
     {
         return Host.CreateDefaultBuilder()
+            .AddAppSettingsSecretsJson()
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 if (typeof(TStartupModule).IsAssignableTo<IAbpModule>())

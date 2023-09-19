@@ -27,7 +27,9 @@ public abstract class AbpWebApplicationFactoryIntegratedTest<TProgram> : WebAppl
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        builder.ConfigureServices(ConfigureServices);
+        builder
+            .AddAppSettingsSecretsJson()
+            .ConfigureServices(ConfigureServices);
         return base.CreateHost(builder);
     }
 
