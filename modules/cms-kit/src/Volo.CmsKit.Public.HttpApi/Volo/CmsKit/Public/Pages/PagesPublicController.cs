@@ -32,14 +32,14 @@ public class PagesPublicController : CmsKitPublicControllerBase, IPagePublicAppS
     }
 
     [HttpGet]
-    public Task<PageDto> FindDefaultHomePageAsync()
+    public virtual Task<PageDto> FindDefaultHomePageAsync()
     {
         return PageAppService.FindDefaultHomePageAsync();
     }
 
     [HttpGet]
     [Route("{slug}/exist")]
-    public Task<bool> DoesSlugExistAsync([NotNull] string slug)
+    public virtual Task<bool> DoesSlugExistAsync([NotNull] string slug)
     {
         return PageAppService.DoesSlugExistAsync(slug);
     }

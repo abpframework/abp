@@ -11,7 +11,7 @@ namespace Volo.CmsKit.Public.Web;
 
 public class PageRoutingMiddleware : IMiddleware, ITransientDependency
 {
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public virtual async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         await next(context);
 
