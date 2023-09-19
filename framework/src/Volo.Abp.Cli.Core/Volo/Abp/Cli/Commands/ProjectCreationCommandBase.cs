@@ -484,6 +484,11 @@ public abstract class ProjectCreationCommandBase
 
     protected Task CreateOpenIddictPfxFilesAsync(ProjectBuildArgs projectArgs)
     {
+        if (!projectArgs.ExtraProperties.ContainsKey(nameof(RandomizeAuthServerPassPhraseStep)))
+        {
+            return Task.CompletedTask;
+        }
+
         var module = projectArgs.ExtraProperties[nameof(RandomizeAuthServerPassPhraseStep)];
         if (string.IsNullOrWhiteSpace(module))
         {
