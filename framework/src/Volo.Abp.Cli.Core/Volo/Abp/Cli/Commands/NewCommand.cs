@@ -158,7 +158,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         if (errors.Any())
         {
-            Logger.LogWarning("NOTICE: The following tools is required to run your solution.");
+            Logger.LogWarning("NOTICE: The following tools are required to run your solution.");
             foreach (var error in errors)
             {
                 Logger.LogWarning(error);
