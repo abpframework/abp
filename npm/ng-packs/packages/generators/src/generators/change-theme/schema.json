@@ -31,6 +31,10 @@
         "$source": "argv",
         "index": 1
       }
+    },
+    "localPath": {
+      "description": "If set value schematics will work on given path",
+      "type": "string"
     }
   },
   "required": ["name", "targetProject"]
