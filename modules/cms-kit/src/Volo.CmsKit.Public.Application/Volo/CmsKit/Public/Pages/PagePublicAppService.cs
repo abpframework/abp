@@ -74,12 +74,8 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
     public virtual async Task<bool> DoesSlugExistAsync([NotNull] string slug)
     {
-        var cached = await PageCache.GetAsync(new PageCacheKey(slug));
-        if (cached is not null)
-        {
-            return true;
-        }
+        var cached = await FindBySlugAsync(slug);
 
-        return await PageRepository.ExistsAsync(slug);
+        return cached is not null;
     }
 }
