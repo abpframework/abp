@@ -5,6 +5,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Web.Icons;
+using Markdig;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.CmsKit.Web;
 
@@ -32,6 +34,14 @@ public class CmsKitCommonWebModule : AbpModule
             options.ReactionIcons[StandardReactions.Victory] = new LocalizableIconDictionary("fas fa-hand-peace text-warning");
             options.ReactionIcons[StandardReactions.Rock] = new LocalizableIconDictionary("fas fa-hand-rock text-warning");
         });
+        
+        context.Services
+                    .AddSingleton(_ => new MarkdownPipelineBuilder()
+                        .UseAutoLinks()
+                        .UseBootstrap()
+                        .UseGridTables()
+                        .UsePipeTables()
+                        .Build());
 
         Configure<AbpVirtualFileSystemOptions>(options =>
         {

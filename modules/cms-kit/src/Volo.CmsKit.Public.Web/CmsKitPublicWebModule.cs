@@ -1,5 +1,4 @@
-﻿using Markdig;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -64,14 +63,6 @@ public class CmsKitPublicWebModule : AbpModule
         {
             options.AddMaps<CmsKitPublicWebModule>(validate: true);
         });
-
-        context.Services
-            .AddSingleton(_ => new MarkdownPipelineBuilder()
-                .UseAutoLinks()
-                .UseBootstrap()
-                .UseGridTables()
-                .UsePipeTables()
-                .Build());
 
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {

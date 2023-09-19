@@ -800,7 +800,9 @@ public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
-        return await ApplyDataFilters(await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id!.Equals(id)).FirstOrDefaultAsync(cancellationToken);
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => x.Id!.Equals(id))
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public virtual Task DeleteAsync(
