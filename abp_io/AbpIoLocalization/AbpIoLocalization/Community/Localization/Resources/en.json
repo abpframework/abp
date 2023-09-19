@@ -205,7 +205,7 @@
     "min": "min",
     "sec": "sec",
     "Winners:": "Winners:",
-    "To{0}LuckyWinners": "to {0} lucky winners",
+    "To{0}LuckyWinners": "to {0} lucky winner(s)",
     "ActiveRaffles": "Active <span class=\"gradient-community\">Raffles</span>",
     "UpcomingRaffles": "Upcoming <span class=\"gradient-community\">Raffles</span>",
     "CompletedRaffles": "Completed <span class=\"gradient-community\">Raffles</span>",
