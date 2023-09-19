@@ -28,7 +28,7 @@ public abstract class AppTemplateBase : TemplateInfo
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        var steps = new List<ProjectBuildPipelineStep>();
+        var steps = base.GetCustomSteps(context).ToList();
 
         ConfigureTenantSchema(context, steps);
         SwitchDatabaseProvider(context, steps);
