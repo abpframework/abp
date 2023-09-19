@@ -43,7 +43,7 @@ public class PagePublicAppService_Tests : CmsKitApplicationTestBase
     }
 
     [Fact]
-    public async Task DoesSlugExistAsync_ShouldReturnFalse_WhenDoesntExist()
+    public async Task DoesSlugExistAsync_ShouldReturnFalse_WhenDoesNotExist()
     {
         var result = await _pageAppService.DoesSlugExistAsync("not-exist-url");
 
