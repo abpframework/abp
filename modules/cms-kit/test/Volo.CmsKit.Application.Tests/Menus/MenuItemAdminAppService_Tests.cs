@@ -70,7 +70,6 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
             });
         });
 
-
         var menu = await MenuRepository.FindAsync(TestData.MenuItem_1_Id);
 
         menu.ShouldNotBeNull();
@@ -82,7 +81,6 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
     public async Task DeleteAsync_ShouldWorkProperly_WithExistingId()
     {
         await MenuAdminAppService.DeleteAsync(TestData.MenuItem_1_Id);
-
 
         var menu = await MenuRepository.FindAsync(TestData.MenuItem_1_Id);
 
