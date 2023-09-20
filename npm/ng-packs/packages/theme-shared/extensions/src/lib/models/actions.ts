@@ -29,6 +29,8 @@ export abstract class Action<R = any> {
     public readonly permission: string,
     public readonly visible: ActionPredicate<R> = () => true,
     public readonly action: ActionCallback<R> = () => {},
+    public readonly btnClass?: string,
+    public readonly btnStyle?: string,
   ) {}
 }
 

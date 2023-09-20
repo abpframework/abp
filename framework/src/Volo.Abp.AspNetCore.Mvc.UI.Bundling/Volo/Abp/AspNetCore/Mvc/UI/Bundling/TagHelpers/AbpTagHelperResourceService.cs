@@ -39,7 +39,7 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
         [NotNull] TagHelperContext context,
         [NotNull] TagHelperOutput output,
         [NotNull] List<BundleTagHelperItem> bundleItems,
-        [CanBeNull] string bundleName = null)
+        string? bundleName = null)
     {
         Check.NotNull(viewContext, nameof(viewContext));
         Check.NotNull(context, nameof(context));
@@ -55,9 +55,9 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
             bundleName = GenerateBundleName(bundleItems);
         }
 
-        CreateBundle(bundleName, bundleItems);
+        CreateBundle(bundleName!, bundleItems);
 
-        var bundleFiles = await GetBundleFilesAsync(bundleName);
+        var bundleFiles = await GetBundleFilesAsync(bundleName!);
 
         output.Content.Clear();
 
@@ -68,7 +68,7 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
             if (file == null || !file.Exists)
             {
                 Logger.LogError($"Could not find the bundle file '{bundleFile}' for the bundle '{bundleName}'!");
-                AddErrorScript(viewContext, tagHelper, context, output, bundleFile, bundleName);
+                AddErrorScript(viewContext, tagHelper, context, output, bundleFile, bundleName!);
                 continue;
             }
 

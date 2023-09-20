@@ -215,9 +215,14 @@
     "DeleteBlogPostMessage": "The blog will be deleted. Are you sure?",
     "CaptchaCode": "Captcha code",
     "CommentTextRequired": "Comment is required",
-    "CaptchaCodeErrorMessage" : "The answer you entered for the CAPTCHA was not correct. Please try again",
+    "CaptchaCodeErrorMessage": "The answer you entered for the CAPTCHA was not correct. Please try again",
     "CaptchaCodeMissingMessage": "The captcha code is missing!",
     "UnAllowedExternalUrlMessage": "You included an unallowed external URL. Please try again without the external URL.",
-    "URL": "URL"
+    "URL": "URL",
+    "PopularTags": "Popular Tags",
+    "RemoveCoverImageConfirmationMessage": "Are you sure you want to remove the cover image?",
+    "RemoveCoverImage": "Remove cover image",
+    "CssClass": "CSS Class",
+    "TagsHelpText": "Tags should be comma-separated (e.g.: tag1, tag2, tag3)"
   }
 }

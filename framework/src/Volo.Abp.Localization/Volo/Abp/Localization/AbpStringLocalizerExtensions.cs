@@ -35,7 +35,7 @@ public static class AbpStringLocalizerExtensions
             throw new AbpException($"Could not find the _localizer field inside the {typeof(StringLocalizer<>).FullName} class. Probably its name has changed. Please report this issue to the ABP framework.");
         }
 
-        return localizerField.GetValue(stringLocalizer) as IStringLocalizer;
+        return (localizerField.GetValue(stringLocalizer) as IStringLocalizer)!;
     }
 
     public static IEnumerable<LocalizedString> GetAllStrings(

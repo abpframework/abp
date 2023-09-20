@@ -8,11 +8,66 @@
           "controllerName": "EntityTagAdmin",
           "controllerGroupName": "EntityTagAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Tags.EntityTagAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.Tags.IEntityTagAdminAppService"
+              "type": "Volo.CmsKit.Admin.Tags.IEntityTagAdminAppService",
+              "name": "IEntityTagAdminAppService",
+              "methods": [
+                {
+                  "name": "AddTagToEntityAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Tags.EntityTagCreateDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Tags.EntityTagCreateDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Tags.EntityTagCreateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "RemoveTagFromEntityAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Tags.EntityTagRemoveDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Tags.EntityTagRemoveDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Tags.EntityTagRemoveDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "SetEntityTagsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Tags.EntityTagSetDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Tags.EntityTagSetDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Tags.EntityTagSetDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -157,11 +212,116 @@
           "controllerName": "TagAdmin",
           "controllerGroupName": "TagAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Tags.TagAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.Tags.ITagAdminAppService"
+              "type": "Volo.CmsKit.Admin.Tags.ITagAdminAppService",
+              "name": "ITagAdminAppService",
+              "methods": [
+                {
+                  "name": "GetTagDefinitionsAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.CmsKit.Admin.Tags.TagDefinitionDto>",
+                    "typeSimple": "[Volo.CmsKit.Admin.Tags.TagDefinitionDto]"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Tags.TagDto",
+                    "typeSimple": "Volo.CmsKit.Tags.TagDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Tags.TagGetListInput, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Tags.TagGetListInput",
+                      "typeSimple": "Volo.CmsKit.Admin.Tags.TagGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Tags.TagDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Tags.TagDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Tags.TagCreateDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Tags.TagCreateDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Tags.TagCreateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Tags.TagDto",
+                    "typeSimple": "Volo.CmsKit.Tags.TagDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Tags.TagUpdateDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Tags.TagUpdateDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Tags.TagUpdateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Tags.TagDto",
+                    "typeSimple": "Volo.CmsKit.Tags.TagDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -427,11 +587,125 @@
           "controllerName": "PageAdmin",
           "controllerGroupName": "PageAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Pages.PageAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.Pages.IPageAdminAppService"
+              "type": "Volo.CmsKit.Admin.Pages.IPageAdminAppService",
+              "name": "IPageAdminAppService",
+              "methods": [
+                {
+                  "name": "SetAsHomePageAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Pages.PageDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Pages.PageDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Pages.GetPagesInputDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Pages.GetPagesInputDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Pages.GetPagesInputDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Pages.PageDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Pages.PageDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Pages.CreatePageInputDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Pages.CreatePageInputDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Pages.CreatePageInputDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Pages.PageDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Pages.PageDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Pages.UpdatePageInputDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Pages.UpdatePageInputDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Pages.UpdatePageInputDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Pages.PageDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Pages.PageDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -719,11 +993,141 @@
           "controllerName": "MenuItemAdmin",
           "controllerGroupName": "MenuItemAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Menus.MenuItemAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.Menus.IMenuItemAdminAppService"
+              "type": "Volo.CmsKit.Admin.Menus.IMenuItemAdminAppService",
+              "name": "IMenuItemAdminAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Menus.MenuItemDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Menus.MenuItemDto>"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Menus.MenuItemDto",
+                    "typeSimple": "Volo.CmsKit.Menus.MenuItemDto"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Menus.MenuItemCreateInput, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Menus.MenuItemCreateInput",
+                      "typeSimple": "Volo.CmsKit.Admin.Menus.MenuItemCreateInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Menus.MenuItemDto",
+                    "typeSimple": "Volo.CmsKit.Menus.MenuItemDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Menus.MenuItemUpdateInput, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Menus.MenuItemUpdateInput",
+                      "typeSimple": "Volo.CmsKit.Admin.Menus.MenuItemUpdateInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Menus.MenuItemDto",
+                    "typeSimple": "Volo.CmsKit.Menus.MenuItemDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "MoveMenuItemAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Menus.MenuItemMoveInput, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Menus.MenuItemMoveInput",
+                      "typeSimple": "Volo.CmsKit.Admin.Menus.MenuItemMoveInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetPageLookupAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Menus.PageLookupInputDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Menus.PageLookupInputDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Menus.PageLookupInputDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Menus.PageLookupDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Menus.PageLookupDto>"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -1046,11 +1450,57 @@
           "controllerName": "MediaDescriptorAdmin",
           "controllerGroupName": "MediaDescriptorAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.MediaDescriptors.MediaDescriptorAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.MediaDescriptors.IMediaDescriptorAdminAppService"
+              "type": "Volo.CmsKit.Admin.MediaDescriptors.IMediaDescriptorAdminAppService",
+              "name": "IMediaDescriptorAdminAppService",
+              "methods": [
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "entityType",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "inputStream",
+                      "typeAsString": "Volo.CmsKit.Admin.MediaDescriptors.CreateMediaInputWithStream, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.MediaDescriptors.CreateMediaInputWithStream",
+                      "typeSimple": "Volo.CmsKit.Admin.MediaDescriptors.CreateMediaInputWithStream",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.MediaDescriptors.MediaDescriptorDto",
+                    "typeSimple": "Volo.CmsKit.Admin.MediaDescriptors.MediaDescriptorDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -1166,11 +1616,40 @@
           "controllerName": "GlobalResourceAdmin",
           "controllerGroupName": "GlobalResourceAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourceAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService"
+              "type": "Volo.CmsKit.Admin.GlobalResources.IGlobalResourceAdminAppService",
+              "name": "IGlobalResourceAdminAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesDto",
+                    "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesDto"
+                  }
+                },
+                {
+                  "name": "SetGlobalResourcesAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesUpdateDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesUpdateDto",
+                      "typeSimple": "Volo.CmsKit.Admin.GlobalResources.GlobalResourcesUpdateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -1232,11 +1711,66 @@
           "controllerName": "CommentAdmin",
           "controllerGroupName": "CommentAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Comments.CommentAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"
+              "type": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService",
+              "name": "ICommentAdminAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Comments.CommentGetListInput, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Comments.CommentGetListInput",
+                      "typeSimple": "Volo.CmsKit.Admin.Comments.CommentGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Comments.CommentWithAuthorDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Comments.CommentWithAuthorDto>"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Comments.CommentWithAuthorDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Comments.CommentWithAuthorDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -1453,11 +1987,108 @@
           "controllerName": "BlogAdmin",
           "controllerGroupName": "BlogAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Blogs.BlogAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.Blogs.IBlogAdminAppService"
+              "type": "Volo.CmsKit.Admin.Blogs.IBlogAdminAppService",
+              "name": "IBlogAdminAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Blogs.BlogDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Blogs.BlogGetListInput, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Blogs.BlogGetListInput",
+                      "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Blogs.BlogDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Blogs.BlogDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Blogs.CreateBlogDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Blogs.CreateBlogDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Blogs.CreateBlogDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Blogs.BlogDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Blogs.UpdateBlogDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Blogs.UpdateBlogDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Blogs.UpdateBlogDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Blogs.BlogDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -1708,11 +2339,57 @@
           "controllerName": "BlogFeatureAdmin",
           "controllerGroupName": "BlogFeatureAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Blogs.BlogFeatureAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.Blogs.IBlogFeatureAdminAppService"
+              "type": "Volo.CmsKit.Admin.Blogs.IBlogFeatureAdminAppService",
+              "name": "IBlogFeatureAdminAppService",
+              "methods": [
+                {
+                  "name": "SetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "blogId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "dto",
+                      "typeAsString": "Volo.CmsKit.Admin.Blogs.BlogFeatureInputDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Blogs.BlogFeatureInputDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogFeatureInputDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "blogId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.CmsKit.Blogs.BlogFeatureDto>",
+                    "typeSimple": "[Volo.CmsKit.Blogs.BlogFeatureDto]"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -1816,11 +2493,201 @@
           "controllerName": "BlogPostAdmin",
           "controllerGroupName": "BlogPostAdmin",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Admin.Blogs.BlogPostAdminController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Admin.Blogs.IBlogPostAdminAppService"
+              "type": "Volo.CmsKit.Admin.Blogs.IBlogPostAdminAppService",
+              "name": "IBlogPostAdminAppService",
+              "methods": [
+                {
+                  "name": "PublishAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DraftAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "CreateAndPublishAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Blogs.CreateBlogPostDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Blogs.CreateBlogPostDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Blogs.BlogPostDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogPostDto"
+                  }
+                },
+                {
+                  "name": "SendToReviewAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "CreateAndSendToReviewAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Blogs.CreateBlogPostDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Blogs.CreateBlogPostDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Blogs.BlogPostDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogPostDto"
+                  }
+                },
+                {
+                  "name": "HasBlogPostWaitingForReviewAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Blogs.BlogPostDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogPostDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Blogs.BlogPostGetListInput, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Blogs.BlogPostGetListInput",
+                      "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogPostGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Blogs.BlogPostListDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Blogs.BlogPostListDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Blogs.CreateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Blogs.CreateBlogPostDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Blogs.CreateBlogPostDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Blogs.BlogPostDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogPostDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Blogs.UpdateBlogPostDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.Blogs.BlogPostDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Blogs.BlogPostDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {

@@ -27,7 +27,7 @@ public class DefaultThemeManager : IThemeManager, IScopedDependency, IServicePro
 
     protected virtual ITheme GetCurrentTheme()
     {
-        var preSelectedTheme = HttpContextAccessor.HttpContext.Items[CurrentThemeHttpContextKey] as ITheme;
+        var preSelectedTheme = HttpContextAccessor.HttpContext!.Items[CurrentThemeHttpContextKey] as ITheme;
 
         if (preSelectedTheme == null)
         {

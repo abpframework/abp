@@ -90,5 +90,5 @@ public interface IAbpCommonDbContextRegistrationOptionsBuilder
     /// <param name="otherDbContextType">The DbContext type to be replaced</param>
     /// <param name="targetDbContextType">The target DbContext type (optional, used this DbContext type if not provided)</param>
     /// <param name="multiTenancySides">MultiTenancy side</param>
-    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null, MultiTenancySides multiTenancySides = MultiTenancySides.Both);
+    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type? targetDbContextType = null, MultiTenancySides multiTenancySides = MultiTenancySides.Both);
 }

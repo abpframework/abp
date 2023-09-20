@@ -17,7 +17,7 @@ public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDepende
         Providers = providers;
     }
 
-    protected virtual IAsyncQueryableProvider FindProvider<T>(IQueryable<T> queryable)
+    protected virtual IAsyncQueryableProvider? FindProvider<T>(IQueryable<T> queryable)
     {
         return Providers.FirstOrDefault(p => p.CanExecute(queryable));
     }
@@ -102,21 +102,29 @@ public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDepende
             : Task.FromResult(queryable.First(predicate));
     }
 
-    public Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.FirstOrDefaultAsync(queryable, cancellationToken)
-            : Task.FromResult(queryable.FirstOrDefault());
+        
+        if (provider != null)
+        {
+            return provider.FirstOrDefaultAsync(queryable, cancellationToken);
+        }
+
+        return Task.FromResult(queryable.FirstOrDefault())!;
     }
 
-    public Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+    public Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.FirstOrDefaultAsync(queryable, predicate, cancellationToken)
-            : Task.FromResult(queryable.FirstOrDefault(predicate));
+
+        if (provider != null)
+        {
+            return provider.FirstOrDefaultAsync(queryable, predicate, cancellationToken);
+        }
+        
+        return Task.FromResult(queryable.FirstOrDefault(predicate))!;
     }
 
     public Task<T> LastAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
@@ -135,21 +143,29 @@ public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDepende
             : Task.FromResult(queryable.Last(predicate));
     }
 
-    public Task<T> LastOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T?> LastOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.LastOrDefaultAsync(queryable, cancellationToken)
-            : Task.FromResult(queryable.LastOrDefault());
+
+        if (provider != null)
+        {
+            return provider.LastOrDefaultAsync(queryable, cancellationToken);
+        }
+        
+        return Task.FromResult(queryable.LastOrDefault())!;
     }
 
-    public Task<T> LastOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+    public Task<T?> LastOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.LastOrDefaultAsync(queryable, predicate, cancellationToken)
-            : Task.FromResult(queryable.LastOrDefault(predicate));
+        
+        if (provider != null)
+        {
+            return provider.LastOrDefaultAsync(queryable, predicate, cancellationToken);
+        }
+        
+        return Task.FromResult(queryable.LastOrDefault(predicate))!;
     }
 
     public Task<T> SingleAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
@@ -168,53 +184,77 @@ public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDepende
             : Task.FromResult(queryable.Single(predicate));
     }
 
-    public Task<T> SingleOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.SingleOrDefaultAsync(queryable, cancellationToken)
-            : Task.FromResult(queryable.SingleOrDefault());
+
+        if (provider != null)
+        {
+            return provider.SingleOrDefaultAsync(queryable, cancellationToken);
+        }
+
+        return Task.FromResult(queryable.SingleOrDefault())!;
     }
 
-    public Task<T> SingleOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+    public Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.SingleOrDefaultAsync(queryable, predicate, cancellationToken)
-            : Task.FromResult(queryable.SingleOrDefault(predicate));
+        
+        if (provider != null)
+        {
+            return provider.SingleOrDefaultAsync(queryable, predicate, cancellationToken);
+        }
+
+        return Task.FromResult(queryable.SingleOrDefault(predicate))!;
     }
 
     public Task<T> MinAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.MinAsync(queryable, cancellationToken)
-            : Task.FromResult(queryable.Min());
+        
+        if(provider != null)
+        {
+            return provider.MinAsync(queryable, cancellationToken);
+        }
+        
+        return Task.FromResult(queryable.Min())!;
     }
 
     public Task<TResult> MinAsync<T, TResult>(IQueryable<T> queryable, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.MinAsync(queryable, selector, cancellationToken)
-            : Task.FromResult(queryable.Min(selector));
+        
+        if(provider != null)
+        {
+            return provider.MinAsync(queryable, selector, cancellationToken);
+        }
+        
+        return Task.FromResult(queryable.Min(selector))!;
     }
 
     public Task<T> MaxAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.MaxAsync(queryable, cancellationToken)
-            : Task.FromResult(queryable.Max());
+        
+        if(provider != null)
+        {
+            return provider.MaxAsync(queryable, cancellationToken);
+        }
+        
+        return Task.FromResult(queryable.Max())!;
     }
 
     public Task<TResult> MaxAsync<T, TResult>(IQueryable<T> queryable, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
-        return provider != null
-            ? provider.MaxAsync(queryable, selector, cancellationToken)
-            : Task.FromResult(queryable.Max(selector));
+        
+        if(provider != null)
+        {
+            return provider.MaxAsync(queryable, selector, cancellationToken);
+        }
+        
+        return Task.FromResult(queryable.Max(selector))!;
     }
 
     public Task<decimal> SumAsync(IQueryable<decimal> queryable, CancellationToken cancellationToken = default)

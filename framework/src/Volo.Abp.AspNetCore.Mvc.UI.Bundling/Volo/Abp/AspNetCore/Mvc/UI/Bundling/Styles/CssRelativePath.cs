@@ -20,7 +20,7 @@ internal static class CssRelativePath
             return cssFileContents;
         }
 
-        var cssDirectoryPath = Path.GetDirectoryName(absoluteInputFilePath);
+        var cssDirectoryPath = Path.GetDirectoryName(absoluteInputFilePath)!;
 
         foreach (Match match in matches)
         {

@@ -36,4 +36,9 @@ public interface ITagRepository : IBasicRepository<Tag, Guid>
         [NotNull] string entityType,
         [NotNull] string entityId,
         CancellationToken cancellationToken = default);
+    
+    Task<List<PopularTag>> GetPopularTagsAsync(
+        [NotNull] string entityType,
+        int maxCount,
+        CancellationToken cancellationToken = default);
 }

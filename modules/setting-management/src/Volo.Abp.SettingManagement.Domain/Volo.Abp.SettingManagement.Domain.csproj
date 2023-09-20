@@ -22,4 +22,8 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Polly" Version="$(PollyPackageVersion)" />
+  </ItemGroup>
+
 </Project>

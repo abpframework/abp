@@ -16,17 +16,17 @@ public class DefaultConnectionStringResolver : IConnectionStringResolver, ITrans
     }
 
     [Obsolete("Use ResolveAsync method.")]
-    public virtual string Resolve(string connectionStringName = null)
+    public virtual string Resolve(string? connectionStringName = null)
     {
-        return ResolveInternal(connectionStringName);
+        return ResolveInternal(connectionStringName)!;
     }
 
-    public virtual Task<string> ResolveAsync(string connectionStringName = null)
+    public virtual Task<string> ResolveAsync(string? connectionStringName = null)
     {
-        return Task.FromResult(ResolveInternal(connectionStringName));
+        return Task.FromResult(ResolveInternal(connectionStringName))!;
     }
 
-    private string ResolveInternal(string connectionStringName)
+    private string? ResolveInternal(string? connectionStringName)
     {
         if (connectionStringName == null)
         {

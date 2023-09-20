@@ -37,7 +37,7 @@ public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDepen
     {
         var jobDataMap = new JobDataMap
             {
-                {nameof(TArgs), JsonSerializer.Serialize(args)},
+                {nameof(TArgs), JsonSerializer.Serialize(args!)},
                 {JobDataPrefix+ nameof(Options.RetryCount), retryCount.ToString()},
                 {JobDataPrefix+ nameof(Options.RetryIntervalMillisecond), retryIntervalMillisecond.ToString()},
                 {JobDataPrefix+ RetryIndex, "0"}

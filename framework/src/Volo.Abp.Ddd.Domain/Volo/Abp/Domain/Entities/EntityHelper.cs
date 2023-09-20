@@ -25,7 +25,7 @@ public static class EntityHelper
         return typeof(IMultiTenant).IsAssignableFrom(type);
     }
 
-    public static bool EntityEquals(IEntity entity1, IEntity entity2)
+    public static bool EntityEquals(IEntity? entity1, IEntity? entity2)
     {
         if (entity1 == null || entity2 == null)
         {
@@ -131,7 +131,7 @@ public static class EntityHelper
         return IsValueObjectPredicate(type);
     }
 
-    public static bool IsValueObject(object obj)
+    public static bool IsValueObject(object? obj)
     {
         return obj != null && IsValueObject(obj.GetType());
     }
@@ -161,7 +161,7 @@ public static class EntityHelper
 
     public static bool HasDefaultId<TKey>(IEntity<TKey> entity)
     {
-        if (EqualityComparer<TKey>.Default.Equals(entity.Id, default))
+        if (EqualityComparer<TKey>.Default.Equals(entity.Id, default!))
         {
             return true;
         }
@@ -180,7 +180,7 @@ public static class EntityHelper
         return false;
     }
 
-    private static bool IsDefaultKeyValue(object value)
+    private static bool IsDefaultKeyValue(object? value)
     {
         if (value == null)
         {
@@ -222,8 +222,7 @@ public static class EntityHelper
     /// Tries to find the primary key type of the given entity type.
     /// May return null if given type does not implement <see cref="IEntity{TKey}"/>
     /// </summary>
-    [CanBeNull]
-    public static Type FindPrimaryKeyType<TEntity>()
+    public static Type? FindPrimaryKeyType<TEntity>()
         where TEntity : IEntity
     {
         return FindPrimaryKeyType(typeof(TEntity));
@@ -233,8 +232,7 @@ public static class EntityHelper
     /// Tries to find the primary key type of the given entity type.
     /// May return null if given type does not implement <see cref="IEntity{TKey}"/>
     /// </summary>
-    [CanBeNull]
-    public static Type FindPrimaryKeyType([NotNull] Type entityType)
+    public static Type? FindPrimaryKeyType([NotNull] Type entityType)
     {
         if (!typeof(IEntity).IsAssignableFrom(entityType))
         {
@@ -260,7 +258,7 @@ public static class EntityHelper
         var lambdaParam = Expression.Parameter(typeof(TEntity));
         var leftExpression = Expression.PropertyOrField(lambdaParam, "Id");
         var idValue = Convert.ChangeType(id, typeof(TKey));
-        Expression<Func<object>> closure = () => idValue;
+        Expression<Func<object?>> closure = () => idValue;
         var rightExpression = Expression.Convert(closure.Body, leftExpression.Type);
         var lambdaBody = Expression.Equal(leftExpression, rightExpression);
         return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);

@@ -2,7 +2,7 @@
 
 <hr class="my-3" />
 
-<form *ngIf="form" [formGroup]="form" (ngSubmit)="submit()" [validateOnSubmit]="true">
+<form *ngIf="form" [formGroup]="form" class="abp-md-form"  (ngSubmit)="submit()" [validateOnSubmit]="true">
   <div class="mb-3 form-group">
     <label class="form-label"
       >{{ 'AbpSettingManagement::DefaultFromDisplayName' | abpLocalization

@@ -47,7 +47,7 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, ITransientDependency
         //TODO: Create DontWrap attribute to control wrapping..?
 
         if (context.ActionDescriptor.IsPageAction() &&
-            ActionResultHelper.IsObjectResult(context.HandlerMethod.MethodInfo.ReturnType, typeof(void)))
+            ActionResultHelper.IsObjectResult(context.HandlerMethod!.MethodInfo.ReturnType, typeof(void)))
         {
             return true;
         }
@@ -71,24 +71,24 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, ITransientDependency
 
         var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
         var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
-        var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception, options =>
+        var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception!, options =>
        {
            options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
            options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
        });
 
-        var logLevel = context.Exception.GetLogLevel();
+        var logLevel = context.Exception!.GetLogLevel();
 
         var remoteServiceErrorInfoBuilder = new StringBuilder();
         remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
         remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
 
-        var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance);
+        var logger = context.GetService<ILogger<AbpExceptionPageFilter>>(NullLogger<AbpExceptionPageFilter>.Instance)!;
         logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
 
-        logger.LogException(context.Exception, logLevel);
+        logger.LogException(context.Exception!, logLevel);
 
-        await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception));
+        await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception!));
 
         if (context.Exception is AbpAuthorizationException)
         {
@@ -100,7 +100,7 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, ITransientDependency
             context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
             context.HttpContext.Response.StatusCode = (int)context
                 .GetRequiredService<IHttpExceptionStatusCodeFinder>()
-                .GetStatusCode(context.HttpContext, context.Exception);
+                .GetStatusCode(context.HttpContext, context.Exception!);
 
             context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
         }

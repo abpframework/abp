@@ -10,7 +10,7 @@ public static class Check
 {
     [ContractAnnotation("value:null => halt")]
     public static T NotNull<T>(
-        T value,
+        T? value,
         [InvokerParameterName][NotNull] string parameterName)
     {
         if (value == null)
@@ -23,7 +23,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static T NotNull<T>(
-        T value,
+        T? value,
         [InvokerParameterName][NotNull] string parameterName,
         string message)
     {
@@ -37,7 +37,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static string NotNull(
-        string value,
+        string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength = int.MaxValue,
         int minLength = 0)
@@ -62,7 +62,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static string NotNullOrWhiteSpace(
-        string value,
+        string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength = int.MaxValue,
         int minLength = 0)
@@ -72,12 +72,12 @@ public static class Check
             throw new ArgumentException($"{parameterName} can not be null, empty or white space!", parameterName);
         }
 
-        if (value.Length > maxLength)
+        if (value!.Length > maxLength)
         {
             throw new ArgumentException($"{parameterName} length must be equal to or lower than {maxLength}!", parameterName);
         }
 
-        if (minLength > 0 && value.Length < minLength)
+        if (minLength > 0 && value!.Length < minLength)
         {
             throw new ArgumentException($"{parameterName} length must be equal to or bigger than {minLength}!", parameterName);
         }
@@ -87,7 +87,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static string NotNullOrEmpty(
-        string value,
+        string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength = int.MaxValue,
         int minLength = 0)
@@ -97,12 +97,12 @@ public static class Check
             throw new ArgumentException($"{parameterName} can not be null or empty!", parameterName);
         }
 
-        if (value.Length > maxLength)
+        if (value!.Length > maxLength)
         {
             throw new ArgumentException($"{parameterName} length must be equal to or lower than {maxLength}!", parameterName);
         }
 
-        if (minLength > 0 && value.Length < minLength)
+        if (minLength > 0 && value!.Length < minLength)
         {
             throw new ArgumentException($"{parameterName} length must be equal to or bigger than {minLength}!", parameterName);
         }
@@ -111,9 +111,9 @@ public static class Check
     }
 
     [ContractAnnotation("value:null => halt")]
-    public static ICollection<T> NotNullOrEmpty<T>(ICollection<T> value, [InvokerParameterName][NotNull] string parameterName)
+    public static ICollection<T> NotNullOrEmpty<T>(ICollection<T>? value, [InvokerParameterName][NotNull] string parameterName)
     {
-        if (value.IsNullOrEmpty())
+        if (value == null || value.Count <= 0)
         {
             throw new ArgumentException(parameterName + " can not be null or empty!", parameterName);
         }
@@ -167,11 +167,11 @@ public static class Check
         Int16 value,
         [InvokerParameterName][NotNull] string parameterName)
     {
-        if(value == 0)
+        if (value == 0)
         {
             throw new ArgumentException($"{parameterName} is equal to zero");
         }
-        else if(value < 0)
+        else if (value < 0)
         {
             throw new ArgumentException($"{parameterName} is less than zero");
         }
@@ -259,7 +259,7 @@ public static class Check
         Int16 minimumValue,
         Int16 maximumValue = Int16.MaxValue)
     {
-        if(value < minimumValue || value > maximumValue)
+        if (value < minimumValue || value > maximumValue)
         {
             throw new ArgumentException($"{parameterName} is out of range min: {minimumValue} - max: {maximumValue}");
         }

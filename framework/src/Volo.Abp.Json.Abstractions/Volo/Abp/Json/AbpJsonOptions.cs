@@ -12,7 +12,7 @@ public class AbpJsonOptions
     /// <summary>
     /// Format of output json date, Null or empty string means default format.
     /// </summary>
-    public string OutputDateTimeFormat { get; set; }
+    public string? OutputDateTimeFormat { get; set; }
 
     public AbpJsonOptions()
     {

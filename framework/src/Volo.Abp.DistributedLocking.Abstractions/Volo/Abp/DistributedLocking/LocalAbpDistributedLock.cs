@@ -22,7 +22,7 @@ public class LocalAbpDistributedLock : IAbpDistributedLock, ISingletonDependency
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
+    public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)

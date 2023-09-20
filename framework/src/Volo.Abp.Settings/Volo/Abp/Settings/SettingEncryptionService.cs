@@ -17,7 +17,7 @@ public class SettingEncryptionService : ISettingEncryptionService, ITransientDep
         Logger = NullLogger<SettingEncryptionService>.Instance;
     }
 
-    public virtual string Encrypt(SettingDefinition settingDefinition, string plainValue)
+    public virtual string? Encrypt(SettingDefinition settingDefinition, string? plainValue)
     {
         if (plainValue.IsNullOrEmpty())
         {
@@ -27,7 +27,7 @@ public class SettingEncryptionService : ISettingEncryptionService, ITransientDep
         return StringEncryptionService.Encrypt(plainValue);
     }
 
-    public virtual string Decrypt(SettingDefinition settingDefinition, string encryptedValue)
+    public virtual string? Decrypt(SettingDefinition settingDefinition, string? encryptedValue)
     {
         if (encryptedValue.IsNullOrEmpty())
         {

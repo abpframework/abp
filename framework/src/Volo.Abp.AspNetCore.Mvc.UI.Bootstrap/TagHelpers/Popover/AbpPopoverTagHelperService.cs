@@ -124,15 +124,15 @@ public class AbpPopoverTagHelperService : AbpTagHelperService<AbpPopoverTagHelpe
         switch (GetDirectory())
         {
             case PopoverDirectory.Top:
-                return TagHelper.AbpPopoverTop;
+                return TagHelper.AbpPopoverTop!;
             case PopoverDirectory.Right:
-                return TagHelper.AbpPopoverRight;
+                return TagHelper.AbpPopoverRight!;
             case PopoverDirectory.Bottom:
-                return TagHelper.AbpPopoverBottom;
+                return TagHelper.AbpPopoverBottom!;
             case PopoverDirectory.Left:
-                return TagHelper.AbpPopoverLeft;
+                return TagHelper.AbpPopoverLeft!;
             default:
-                return TagHelper.AbpPopover;
+                return TagHelper.AbpPopover!;
         }
     }
 

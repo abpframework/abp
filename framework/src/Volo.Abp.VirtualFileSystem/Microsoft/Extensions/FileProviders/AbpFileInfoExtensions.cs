@@ -84,7 +84,7 @@ public static class AbpFileInfoExtensions
         }
     }
 
-    public static string GetVirtualOrPhysicalPathOrNull([NotNull] this IFileInfo fileInfo)
+    public static string? GetVirtualOrPhysicalPathOrNull([NotNull] this IFileInfo fileInfo)
     {
         Check.NotNull(fileInfo, nameof(fileInfo));
 

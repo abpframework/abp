@@ -23,4 +23,6 @@ public class CliAnalyticsCollectInputDto
     public string Language { get; set; }
 
     public string Ip { get; set; }
+
+    public string RandomComputerId { get; set; }
 }

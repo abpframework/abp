@@ -12,6 +12,7 @@ import {
 } from '../utils/tree-utils';
 import { ConfigStateService } from './config-state.service';
 import { PermissionService } from './permission.service';
+import { SORT_COMPARE_FUNC } from '../tokens/compare-func.token';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export abstract class AbstractTreeService<T extends { [key: string | number | symbol]: any }> {
@@ -158,14 +159,12 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 {
   private subscription: Subscription;
   private permissionService: PermissionService;
+  private compareFunc;
   readonly id = 'name';
   readonly parentId = 'parentName';
   readonly hide = (item: T) => item.invisible || !this.isGranted(item);
   readonly sort = (a: T, b: T) => {
-    if (!Number.isInteger(a.order)) return 1;
-    if (!Number.isInteger(b.order)) return -1;
-
-    return (a.order as number) - (b.order as number);
+    return this.compareFunc(a,b)
   };
 
   constructor(protected injector: Injector) {
@@ -176,6 +175,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
       .subscribe(() => this.refresh());
     this.permissionService = injector.get(PermissionService);
     this.othersGroup = injector.get(OTHERS_GROUP);
+    this.compareFunc = injector.get(SORT_COMPARE_FUNC);
   }
 
   protected isGranted({ requiredPolicy }: T): boolean {

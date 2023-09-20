@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.1.0" />
+        <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.2.0" />
     </ItemGroup>
 
 </Project>

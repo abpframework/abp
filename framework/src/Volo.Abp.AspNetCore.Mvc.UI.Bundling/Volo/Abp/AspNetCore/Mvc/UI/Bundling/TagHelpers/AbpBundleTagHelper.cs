@@ -6,7 +6,7 @@ public abstract class AbpBundleTagHelper<TTagHelper, TService> : AbpTagHelper<TT
     where TTagHelper : AbpTagHelper<TTagHelper, TService>
     where TService : class, IAbpTagHelperService<TTagHelper>
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     protected AbpBundleTagHelper(TService service)
         : base(service)
@@ -14,7 +14,7 @@ public abstract class AbpBundleTagHelper<TTagHelper, TService> : AbpTagHelper<TT
 
     }
 
-    public virtual string GetNameOrNull()
+    public virtual string? GetNameOrNull()
     {
         return Name;
     }

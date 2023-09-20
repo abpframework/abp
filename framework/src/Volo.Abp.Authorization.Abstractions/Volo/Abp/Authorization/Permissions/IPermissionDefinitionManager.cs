@@ -9,8 +9,7 @@ public interface IPermissionDefinitionManager
     [ItemNotNull]
     Task<PermissionDefinition> GetAsync([NotNull] string name);
 
-    [ItemCanBeNull]
-    Task<PermissionDefinition> GetOrNullAsync([NotNull] string name);
+    Task<PermissionDefinition?> GetOrNullAsync([NotNull] string name);
 
     Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync();
 

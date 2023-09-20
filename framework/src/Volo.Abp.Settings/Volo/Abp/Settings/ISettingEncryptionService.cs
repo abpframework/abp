@@ -4,9 +4,7 @@ namespace Volo.Abp.Settings;
 
 public interface ISettingEncryptionService
 {
-    [CanBeNull]
-    string Encrypt([NotNull] SettingDefinition settingDefinition, [CanBeNull] string plainValue);
+    string? Encrypt([NotNull] SettingDefinition settingDefinition, string? plainValue);
 
-    [CanBeNull]
-    string Decrypt([NotNull] SettingDefinition settingDefinition, [CanBeNull] string encryptedValue);
+    string? Decrypt([NotNull] SettingDefinition settingDefinition, string? encryptedValue);
 }

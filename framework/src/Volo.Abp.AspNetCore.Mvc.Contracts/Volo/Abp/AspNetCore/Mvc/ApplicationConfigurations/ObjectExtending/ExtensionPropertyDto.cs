@@ -7,12 +7,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 [Serializable]
 public class ExtensionPropertyDto
 {
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
 
-    public string TypeSimple { get; set; }
+    public string TypeSimple { get; set; } = default!;
 
-    [CanBeNull]
-    public LocalizableStringDto DisplayName { get; set; }
+    public LocalizableStringDto? DisplayName { get; set; }
 
     public ExtensionPropertyApiDto Api { get; set; }
 
@@ -22,5 +21,13 @@ public class ExtensionPropertyDto
 
     public Dictionary<string, object> Configuration { get; set; }
 
-    public object DefaultValue { get; set; }
+    public object? DefaultValue { get; set; }
+
+    public ExtensionPropertyDto()
+    {
+        Api = new ExtensionPropertyApiDto();
+        Ui = new ExtensionPropertyUiDto();
+        Attributes = new List<ExtensionPropertyAttributeDto>();
+        Configuration = new Dictionary<string, object>();
+    }
 }

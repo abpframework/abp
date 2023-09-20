@@ -17,6 +17,7 @@ public class AbpSettingManagementEntityFrameworkCoreModule : AbpModule
             options.AddDefaultRepositories<ISettingManagementDbContext>();
 
             options.AddRepository<Setting, EfCoreSettingRepository>();
+            options.AddRepository<SettingDefinitionRecord, EfCoreSettingDefinitionRecordRepository>();
         });
     }
 }

@@ -22,7 +22,7 @@ public class OutboxSender : IOutboxSender, ITransientDependency
     protected IEventOutbox Outbox { get; private set; }
     protected OutboxConfig OutboxConfig { get; private set; }
     protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
-    protected string DistributedLockName => "AbpOutbox_" + OutboxConfig.Name;
+    protected string DistributedLockName { get; private set; }
     public ILogger<OutboxSender> Logger { get; set; }
 
     protected CancellationTokenSource StoppingTokenSource { get; }
@@ -51,6 +51,7 @@ public class OutboxSender : IOutboxSender, ITransientDependency
     {
         OutboxConfig = outboxConfig;
         Outbox = (IEventOutbox)ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
+        DistributedLockName = $"AbpOutbox_{OutboxConfig.DatabaseName}";
         Timer.Start(cancellationToken);
         return Task.CompletedTask;
     }

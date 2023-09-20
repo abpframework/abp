@@ -32,6 +32,8 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
 
     public DbSet<Product> Products { get; set; }
 
+    public DbSet<Category> Categories { get; set; }
+
     public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
         : base(options)
     {
@@ -84,6 +86,11 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         });
 
         modelBuilder.Entity<Product>();
+
+        modelBuilder.Entity<Category>(b =>
+        {
+            b.HasAbpQueryFilter(e => e.Name.StartsWith("abp"));
+        });
 
         modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
     }

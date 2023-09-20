@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoService, ISingletonDependency
 {
     protected IExtensionPropertyAttributeDtoFactory ExtensionPropertyAttributeDtoFactory { get; }
-    protected volatile ObjectExtensionsDto CachedValue;
+    protected volatile ObjectExtensionsDto? CachedValue;
     protected readonly object SyncLock = new object();
 
     public CachedObjectExtensionsDtoService(IExtensionPropertyAttributeDtoFactory extensionPropertyAttributeDtoFactory)
@@ -193,7 +193,7 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
         return TypeHelper.GetSimplifiedName(propertyConfig.Type);
     }
 
-    protected virtual LocalizableStringDto CreateDisplayNameDto(ExtensionPropertyConfiguration propertyConfig)
+    protected virtual LocalizableStringDto? CreateDisplayNameDto(ExtensionPropertyConfiguration propertyConfig)
     {
         if (propertyConfig.DisplayName == null)
         {
@@ -231,7 +231,7 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
         foreach (var enumProperty in enumProperties)
         {
             // ReSharper disable once AssignNullToNotNullAttribute (enumProperty.Type.FullName can not be null for this case)
-            objectExtensionsDto.Enums[enumProperty.Type.FullName] = CreateExtensionEnumDto(enumProperty);
+            objectExtensionsDto.Enums[enumProperty.Type.FullName!] = CreateExtensionEnumDto(enumProperty);
         }
     }
 
@@ -248,7 +248,7 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
             extensionEnumDto.Fields.Add(
                 new ExtensionEnumFieldDto
                 {
-                    Name = enumProperty.Type.GetEnumName(enumValue),
+                    Name = enumProperty.Type.GetEnumName(enumValue)!,
                     Value = enumValue
                 }
             );

@@ -9,17 +9,17 @@ public class SimplePageToolbarContributor : IPageToolbarContributor
 {
     public Type ComponentType { get; }
 
-    public object Argument { get; set; }
+    public object? Argument { get; set; }
 
     public int Order { get; }
 
-    public string RequiredPolicyName { get; }
+    public string? RequiredPolicyName { get; }
 
     public SimplePageToolbarContributor(
         Type componentType,
-        object argument = null,
+        object? argument = null,
         int order = 0,
-        string requiredPolicyName = null)
+        string? requiredPolicyName = null)
     {
         ComponentType = componentType;
         Argument = argument;

@@ -132,6 +132,7 @@
     "Address": "Adres",
     "Homepage": "Anasayfa",
     "Year": "Yıl",
+    "Year_Plural": "Yıl",
     "Copyright": "Telif hakkı © <a href=\"{0}\" target=\"_blank\">{1}</a>",
     "DomainDrivenDesign": "Alan Odaklı Tasarım",
     "CrossCuttingConcerns": "Cross Cutting Concerns",
@@ -168,6 +169,7 @@
     "ExploreTheBook": "Kitabı Keşfedin",
     "ExploreTheEBook": "E-Kitabı Keşfedin",
     "LatestVideos": "Son Videolar",
-    "Videos": "Videolar"
+    "Videos": "Videolar",
+    "More": "Daha Fazla"
   }
 }

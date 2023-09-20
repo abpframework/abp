@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Localization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Localization;
@@ -38,7 +37,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         _abpEnumLocalizer = abpEnumLocalizer;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var childContent = await output.GetChildContentAsync();
 
@@ -74,7 +73,8 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         var validation = await GetValidationAsHtmlAsync(context, output, selectTag);
         var infoText = GetInfoAsHtml(context, output, selectTag);
 
-        return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
+        return TagHelper.FloatingLabel ? selectAsHtml + Environment.NewLine + label + Environment.NewLine + infoText + Environment.NewLine + validation :
+                                         label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
     }
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
@@ -156,23 +156,15 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         }
 
         var selectItemsAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<SelectItems>();
-        if (selectItemsAttribute != null)
-        {
-            return GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer);
-        }
-
-        throw new Exception("No items provided for select attribute.");
+        return selectItemsAttribute != null
+            ? GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer)
+            : throw new Exception("No items provided for select attribute.");
     }
 
     private bool IsEnum()
     {
         var value = TagHelper.AspFor.Model;
-        if (value != null && value.GetType().IsEnum)
-        {
-            return true;
-        }
-
-        return TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
+        return (value != null && value.GetType().IsEnum) || TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
@@ -266,7 +258,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         if (isNullableType)
         {
-            enumType = Nullable.GetUnderlyingType(explorer.ModelType);
+            enumType = Nullable.GetUnderlyingType(explorer.ModelType)!;
             selectItems.Add(new SelectListItem());
         }
 
@@ -279,7 +271,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
                 {
                     containerLocalizer,
                     _stringLocalizerFactory.CreateDefaultOrNull()
-                });
+                }!);
             selectItems.Add(new SelectListItem
             {
                 Value = enumValue.ToString(),
@@ -296,12 +288,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     {
         var selectItems = selectItemsAttribute.GetItems(explorer)?.ToList();
 
-        if (selectItems == null)
-        {
-            return new List<SelectListItem>();
-        }
-
-        return selectItems;
+        return selectItems ?? new List<SelectListItem>();
     }
 
     protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output)
@@ -337,17 +324,13 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             TagHelper.Size = attribute.Size;
         }
 
-        switch (TagHelper.Size)
+        return TagHelper.Size switch
         {
-            case AbpFormControlSize.Small:
-                return "form-select-sm";
-            case AbpFormControlSize.Medium:
-                return "form-select-md";
-            case AbpFormControlSize.Large:
-                return "form-select-lg";
-        }
-
-        return "";
+            AbpFormControlSize.Small => "form-select-sm",
+            AbpFormControlSize.Medium => "form-select-md",
+            AbpFormControlSize.Large => "form-select-lg",
+            _ => "",
+        };
     }
 
     protected virtual TagHelperAttributeList GetInputAttributes(TagHelperContext context, TagHelperOutput output)
@@ -376,7 +359,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         foreach (var tagHelperAttribute in tagHelperAttributes)
         {
-            var nameWithoutPrefix = tagHelperAttribute.Name.Substring(groupPrefix.Length);
+            var nameWithoutPrefix = tagHelperAttribute.Name[groupPrefix.Length..];
             var newAttritube = new TagHelperAttribute(nameWithoutPrefix, tagHelperAttribute.Value);
             output.Attributes.Add(newAttritube);
         }
@@ -386,7 +369,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     {
         var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
 
-        return idAttr != null ? idAttr.Value.ToString() : string.Empty;
+        return idAttr != null ? idAttr.Value.ToString()! : string.Empty;
     }
 
     protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)

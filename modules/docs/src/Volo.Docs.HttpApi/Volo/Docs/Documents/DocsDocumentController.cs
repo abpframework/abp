@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Docs.Documents
@@ -49,7 +50,7 @@ namespace Volo.Docs.Documents
 
         [HttpPost]
         [Route("search")]
-        public Task<List<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input)
+        public Task<PagedResultDto<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input)
         {
             return DocumentAppService.SearchAsync(input);
         }

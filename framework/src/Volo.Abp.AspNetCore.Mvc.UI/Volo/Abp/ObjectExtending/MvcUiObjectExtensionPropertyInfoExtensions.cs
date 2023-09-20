@@ -35,7 +35,7 @@ public static class MvcUiObjectExtensionPropertyInfoExtensions
             typeof(decimal?)
         };
 
-    public static string GetInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
+    public static string? GetInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
     {
         var formatString = property.GetDataFormatStringOrNull();
 
@@ -57,7 +57,7 @@ public static class MvcUiObjectExtensionPropertyInfoExtensions
         return null;
     }
 
-    public static string GetInputValueOrNull(this IBasicObjectExtensionPropertyInfo property, object value)
+    public static string? GetInputValueOrNull(this IBasicObjectExtensionPropertyInfo property, object? value)
     {
         if (value == null)
         {
@@ -88,7 +88,7 @@ public static class MvcUiObjectExtensionPropertyInfoExtensions
                ?? "text"; //default
     }
 
-    private static string GetInputTypeFromAttributeOrNull(Attribute attribute)
+    private static string? GetInputTypeFromAttributeOrNull(Attribute attribute)
     {
         if (attribute is EmailAddressAttribute)
         {
@@ -134,7 +134,7 @@ public static class MvcUiObjectExtensionPropertyInfoExtensions
         return null;
     }
 
-    private static string GetInputTypeFromTypeOrNull(Type type)
+    private static string? GetInputTypeFromTypeOrNull(Type type)
     {
         if (type == typeof(bool))
         {
