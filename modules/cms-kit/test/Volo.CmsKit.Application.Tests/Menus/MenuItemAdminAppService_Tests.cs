@@ -32,6 +32,7 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
         menu.ShouldNotBeNull();
     }
 
+    [Fact]
     public async Task GetListAsync_ShouldWorkProperly()
     {
         var result = await MenuAdminAppService.GetListAsync();
