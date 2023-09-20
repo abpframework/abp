@@ -204,7 +204,7 @@
                 {
                     @foreach (var reply in comment.Replies)
                     {
-                        <div class="bg-light card p-3 mx-0 mt-3">
+                        <div class="comment-container card p-3 mx-0 mt-3">
                             <div class="comment">
                                 <h5>
                                     @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)

@@ -28,7 +28,9 @@
     <abp-card-body>
         @(await Component.InvokeAsync(typeof(ContentFragmentViewComponent), new DefaultContentDto
         {
-            ContentFragments = Model.ViewModel.ContentFragments
+            ContentFragments = Model.ViewModel.ContentFragments,
+            PreventXSS = false,
+            AllowHtmlTags = true,
         }))
     </abp-card-body>
 </abp-card>
