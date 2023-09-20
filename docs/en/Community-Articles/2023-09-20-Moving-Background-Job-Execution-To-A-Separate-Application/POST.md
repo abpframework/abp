@@ -16,7 +16,7 @@ First, we need to create a new web application using the ABP CLI:
 abp new SeparateBackgroundJob -t app
 ```
 
-* Create a shared project named `SeparateBackgroundJob.Common.Shared` to share the `BackgroundJob` and `BackgroundJobArgs` classes between the web and console applications.
+* Create a shared project named `SeparateBackgroundJob.Common.Shared` to share the `BackgroundJob` and `BackgroundJobArgs` classes between the web and job executor applications.
 * Install the `Volo.Abp.BackgroundJobs.Abstractions` package to the `SeparateBackgroundJob.Common.Shared` project.
 
 Add `SeparateBackgroundJobCommonSharedModule` class to the `SeparateBackgroundJob.Common.Shared` project:
