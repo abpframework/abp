@@ -35,6 +35,7 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Account.Localization;
 
 namespace MyCompanyName.MyProjectName;
 
@@ -90,7 +91,8 @@ public class MyProjectNameAuthServerModule : AbpModule
             options.Resources
                 .Get<MyProjectNameResource>()
                 .AddBaseTypes(
-                    typeof(AbpUiResource)
+                    typeof(AbpUiResource),
+                    typeof(AccountResource)
                 );
         });
 
