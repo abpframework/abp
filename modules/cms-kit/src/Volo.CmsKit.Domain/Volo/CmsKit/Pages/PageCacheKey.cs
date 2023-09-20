@@ -10,6 +10,6 @@ public class PageCacheKey
 
     public override string ToString()
     {
-        return $"Page_{Slug}";
+        return $"CmsPage_{Slug}";
     }
 }

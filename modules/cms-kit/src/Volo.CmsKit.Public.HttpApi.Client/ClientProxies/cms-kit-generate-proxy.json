@@ -862,7 +862,7 @@
               "uniqueName": "FindBySlugAsyncBySlug",
               "name": "FindBySlugAsync",
               "httpMethod": "GET",
-              "url": "api/cms-kit-public/pages/{slug}",
+              "url": "api/cms-kit-public/pages/by-slug",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -883,8 +883,8 @@
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
                   "descriptorName": ""
                 }
               ],
@@ -899,7 +899,7 @@
               "uniqueName": "FindDefaultHomePageAsync",
               "name": "FindDefaultHomePageAsync",
               "httpMethod": "GET",
-              "url": "api/cms-kit-public/pages",
+              "url": "api/cms-kit-public/pages/home",
               "supportedVersions": [],
               "parametersOnMethod": [],
               "parameters": [],
@@ -914,7 +914,7 @@
               "uniqueName": "DoesSlugExistAsyncBySlug",
               "name": "DoesSlugExistAsync",
               "httpMethod": "GET",
-              "url": "api/cms-kit-public/pages/{slug}/exist",
+              "url": "api/cms-kit-public/pages/check",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -935,8 +935,8 @@
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
                   "descriptorName": ""
                 }
               ],

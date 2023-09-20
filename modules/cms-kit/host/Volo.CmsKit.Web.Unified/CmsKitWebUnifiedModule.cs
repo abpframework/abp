@@ -36,6 +36,11 @@ using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Web;
 using Volo.CmsKit.Web.Contents;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.Routing;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Volo.Abp.DependencyInjection;
 
 #if EntityFrameworkCore
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -54,7 +59,6 @@ using Volo.Abp.TenantManagement.MongoDB;
 using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.FeatureManagement.MongoDB;
-using Volo.Abp.MongoDB;
 using Volo.Abp.BlobStoring.Database.MongoDB;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.CmsKit.MongoDB;
@@ -247,6 +251,7 @@ public class CmsKitWebUnifiedModule : AbpModule
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
+        app.UseCmsKitPagesMiddleware();
         app.UseRouting();
         app.UseAuthentication();
 
@@ -266,6 +271,7 @@ public class CmsKitWebUnifiedModule : AbpModule
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
+
         app.UseConfiguredEndpoints();
 
         using (var scope = context.ServiceProvider.CreateScope())
@@ -277,5 +283,19 @@ public class CmsKitWebUnifiedModule : AbpModule
                     .SeedAsync();
             });
         }
+    }
+}
+
+public class CmsKitPageRouteValueTransformer : DynamicRouteValueTransformer, ITransientDependency
+{
+    public override ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
+    {
+        if (values.TryGetValue("slug", out var slug))
+        {
+            values["page"] = "/Pages/Public/CmsKit/Pages/Index";
+            values["slug"] = slug;
+        }
+
+        return new ValueTask<RouteValueDictionary>(values);
     }
 }

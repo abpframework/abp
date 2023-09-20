@@ -104,15 +104,4 @@ public class CmsKitPublicWebModule : AbpModule
         }
 
     }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var app = context.GetApplicationBuilder();
-        
-        if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
-        {
-            app.UseCmsKitHomePageMiddleware();
-            app.UseCmsKitPagesMiddleware();
-        }
-    }
 }
