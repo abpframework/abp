@@ -108,7 +108,9 @@ internal static class ProxyScriptingHelper
         }
 
         var qsBuilderParams = queryStringParameters
-            .Select(p => $"{{ name: '{p.Name.ToCamelCase()}', value: {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(p)} }}")
+            .Select(p => p.Name == "api-version"
+                    ? $"{{ name: '{p.Name.ToCamelCase()}', value: api_version }}"
+                    : $"{{ name: '{p.Name.ToCamelCase()}', value: {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(p)} }}")
             .JoinAsString(", ");
 
         return url + $"' + abp.utils.buildQueryString([{qsBuilderParams}]) + '";
