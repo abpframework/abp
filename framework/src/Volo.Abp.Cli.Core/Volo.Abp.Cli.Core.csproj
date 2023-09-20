@@ -23,6 +23,7 @@
     <PackageReference Include="Polly" />
     <PackageReference Include="Polly.Extensions.Http" />
     <PackageReference Include="LibGit2Sharp" />
+    <PackageReference Include="StackExchange.Redis" />
   </ItemGroup>
 
   <ItemGroup>
