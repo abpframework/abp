@@ -13,12 +13,7 @@ import {
   WorkspaceDefinition,
 } from '../../utils';
 import { ThemeOptionsEnum } from './theme-options.enum';
-import {
-  //@ts-ignore
-  findNodes,
-  getDecoratorMetadata,
-  getMetadataField,
-} from '../../utils/angular/ast-utils';
+import { findNodes, getDecoratorMetadata, getMetadataField } from '../../utils/angular/ast-utils';
 
 export default function (_options: ChangeThemeOptions): Rule {
   return async (host: Tree) => {
@@ -110,46 +105,26 @@ function updateAppModule(
   return host;
 }
 
-function insertImports(
-  selectedTheme: ImportDefinition[],
-  source: ts.SourceFile,
-  appModulePath: string,
-  recorder: UpdateRecorder,
-) {
-  const changes: Change[] = [];
-  selectedTheme.map(({ importName, path }) =>
-    changes.push(...addImportToModule(source, appModulePath, importName, path)),
-  );
-
-  if (changes?.length > 0) {
-    for (const change of changes) {
-      if (change instanceof InsertChange) {
-        recorder.insertLeft(change.pos, change.toAdd);
-      }
-    }
-  }
-}
-
 function removeImportPath(
   source: ts.SourceFile,
   recorder: UpdateRecorder,
   arr: ImportDefinition[],
 ) {
-  const node = findNodes(source, ts.isImportDeclaration);
-  for (const importMp of arr) {
-    const importPath = node.find(f => f.getFullText().match(importMp.path));
+  const nodes = findNodes(source, ts.isImportDeclaration);
+  const filteredNodes = nodes.filter(n => arr.some(f => n.getFullText().match(f.path)));
 
-    if (!importPath) {
-      continue;
-    }
+  if (!filteredNodes || filteredNodes.length < 1) {
+    return;
+  }
 
+  filteredNodes.map(importPath => {
     /**
      * We can add comment and sign as `removed` for the see what is removed
      *
      * recorder.insertLeft(importPath.getStart(), '//');
      */
     recorder.remove(importPath.getStart(), importPath.getWidth() + 1);
-  }
+  });
 }
 
 function removeImportFromNgModuleMetadata(
@@ -169,27 +144,51 @@ function removeImportFromNgModuleMetadata(
    * Select imports array in the @NgModule({...}) content
    */
   const matchingProperties = getMetadataField(node as ts.ObjectLiteralExpression, 'imports');
+
   const assignment = matchingProperties[0] as ts.PropertyAssignment;
   const assignmentInit = assignment.initializer as ts.ArrayLiteralExpression;
-  const elements = assignmentInit.elements;
 
-  if (elements?.length < 0) {
+  const elements = assignmentInit.elements;
+  if (!elements || elements.length < 1) {
     return;
   }
 
-  for (const importMp of arr) {
-    const willRemoveModule = elements.find(f => f.getText().includes(importMp.importName));
+  const filteredElements = elements.filter(f => arr.some(s => f.getText().match(s.importName)));
+  if (!filteredElements || filteredElements.length < 1) {
+    return;
+  }
 
-    if (!willRemoveModule) {
-      continue;
-    }
-
+  filteredElements.map(willRemoveModule => {
     /**
      * We can add comment and sign as `removed` for the see what is removed
      *
-     * recorder.insertLeft(foundModule.getStart(), '//');
+     * recorder.insertLeft(willRemoveModule.getStart(), '//');
      */
     recorder.remove(willRemoveModule.getStart(), willRemoveModule.getWidth() + 1);
+  });
+}
+
+/**
+ * Insert import paths & import names to the NgModule decorator
+ */
+function insertImports(
+  selectedTheme: ImportDefinition[],
+  source: ts.SourceFile,
+  appModulePath: string,
+  recorder: UpdateRecorder,
+) {
+  const changes: Change[] = [];
+  selectedTheme.map(({ importName, path }) => {
+    const importedModule = addImportToModule(source, appModulePath, importName, path);
+    changes.push(...importedModule);
+  });
+
+  if (changes.length > 0) {
+    for (const change of changes) {
+      if (change instanceof InsertChange) {
+        recorder.insertLeft(change.pos, change.toAdd);
+      }
+    }
   }
 }
 
