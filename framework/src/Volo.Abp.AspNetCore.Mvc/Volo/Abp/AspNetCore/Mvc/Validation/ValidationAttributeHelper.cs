@@ -6,10 +6,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation;
 public static class ValidationAttributeHelper
 {
     private static readonly PropertyInfo ValidationAttributeErrorMessageStringProperty = typeof(ValidationAttribute)
-        .GetProperty("ErrorMessageString", BindingFlags.Instance | BindingFlags.NonPublic);
+        .GetProperty("ErrorMessageString", BindingFlags.Instance | BindingFlags.NonPublic)!;
 
     private static readonly PropertyInfo ValidationAttributeCustomErrorMessageSetProperty = typeof(ValidationAttribute)
-        .GetProperty("CustomErrorMessageSet", BindingFlags.Instance | BindingFlags.NonPublic);
+        .GetProperty("CustomErrorMessageSet", BindingFlags.Instance | BindingFlags.NonPublic)!;
 
     public static void SetDefaultErrorMessage(ValidationAttribute validationAttribute)
     {

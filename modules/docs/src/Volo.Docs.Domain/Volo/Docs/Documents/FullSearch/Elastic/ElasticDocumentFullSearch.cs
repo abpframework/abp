@@ -138,7 +138,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 .DeleteByQueryAsync(request, cancellationToken));
         }
 
-        public virtual async Task<List<EsDocument>> SearchAsync(string context, Guid projectId, string languageCode,
+        public virtual async Task<EsDocumentResult> SearchAsync(string context, Guid projectId, string languageCode,
             string version, int? skipCount = null, int? maxResultCount = null,
             CancellationToken cancellationToken = default)
         {
@@ -204,15 +204,22 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             foreach (var hit in response.Hits)
             {
                 var doc = hit.Source;
+                if(docs.Any(x => x.Id == doc.Id))
+                {
+                    continue;
+                }
+
+
                 if (hit.Highlight.ContainsKey("content"))
                 {
                     doc.Highlight = new List<string>();
                     doc.Highlight.AddRange(hit.Highlight["content"]);
                 }
+
                 docs.Add(doc);
             }
 
-            return docs;
+            return new EsDocumentResult { EsDocuments = docs, TotalCount = response.Total };
         }
 
         protected virtual void HandleError(IElasticsearchResponse response)

@@ -41,6 +41,10 @@ public class MenuItem : AuditedAggregateRoot<Guid>, IMultiTenant
 
     public Guid? TenantId { get; protected set; }
 
+    protected MenuItem()
+    {
+    }
+
     public MenuItem(Guid id,
                     [NotNull] string displayName,
                     [NotNull] string url,

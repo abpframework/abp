@@ -12,13 +12,13 @@ public abstract class FullAuditedAggregateRootWithUser<TUser> : FullAuditedAggre
     where TUser : IEntity<Guid>
 {
     /// <inheritdoc />
-    public virtual TUser Deleter { get; set; }
+    public virtual TUser? Deleter { get; set; }
 
     /// <inheritdoc />
-    public virtual TUser Creator { get; protected set; }
+    public virtual TUser? Creator { get; protected set; }
 
     /// <inheritdoc />
-    public virtual TUser LastModifier { get; set; }
+    public virtual TUser? LastModifier { get; set; }
 }
 
 /// <summary>
@@ -31,13 +31,13 @@ public abstract class FullAuditedAggregateRootWithUser<TKey, TUser> : FullAudite
     where TUser : IEntity<Guid>
 {
     /// <inheritdoc />
-    public virtual TUser Deleter { get; set; }
+    public virtual TUser? Deleter { get; set; }
 
     /// <inheritdoc />
-    public virtual TUser Creator { get; protected set; }
+    public virtual TUser? Creator { get; protected set; }
 
     /// <inheritdoc />
-    public virtual TUser LastModifier { get; set; }
+    public virtual TUser? LastModifier { get; set; }
 
     protected FullAuditedAggregateRootWithUser()
     {

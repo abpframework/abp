@@ -21,12 +21,12 @@ public class AlwaysAllowAuthorizationService : IAbpAuthorizationService
         _currentPrincipalAccessor = currentPrincipalAccessor;
     }
 
-    public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)
+    public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, IEnumerable<IAuthorizationRequirement> requirements)
     {
         return Task.FromResult(AuthorizationResult.Success());
     }
 
-    public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object resource, string policyName)
+    public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, string policyName)
     {
         return Task.FromResult(AuthorizationResult.Success());
     }

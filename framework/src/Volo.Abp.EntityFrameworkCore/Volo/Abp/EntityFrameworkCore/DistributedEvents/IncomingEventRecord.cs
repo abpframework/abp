@@ -48,13 +48,20 @@ public class IncomingEventRecord :
 
     public IncomingEventInfo ToIncomingEventInfo()
     {
-        return new IncomingEventInfo(
+        var info = new IncomingEventInfo(
             Id,
             MessageId,
             EventName,
             EventData,
             CreationTime
         );
+
+        foreach (var property in ExtraProperties)
+        {
+            info.SetProperty(property.Key, property.Value);
+        }
+
+        return info;
     }
 
     public void MarkAsProcessed(DateTime processedTime)

@@ -5,6 +5,8 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.AspNetCore.TestBase</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.TestBase</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>

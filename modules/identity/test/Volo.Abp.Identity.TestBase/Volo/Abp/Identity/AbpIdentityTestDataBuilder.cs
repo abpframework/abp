@@ -80,7 +80,7 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         _moderatorRole.AddClaim(_guidGenerator, new Claim("test-claim", "test-value"));
         await _roleRepository.InsertAsync(_moderatorRole);
 
-        _supporterRole = new IdentityRole(_guidGenerator.Create(), "supporter");
+        _supporterRole = new IdentityRole(_testData.RoleSupporterId, "supporter");
         await _roleRepository.InsertAsync(_supporterRole);
 
         _managerRole = new IdentityRole(_guidGenerator.Create(), "manager");
@@ -147,6 +147,7 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
 
         var bob = new IdentityUser(_testData.UserBobId, "bob", "bob@abp.io");
         bob.SetIsActive(false);
+        bob.AddRole(_managerRole.Id);
         await _userManager.CreateAsync(bob, "1q2w3E*");
     }
 
@@ -205,24 +206,24 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
     private async Task AddUserDelegations()
     {
         await _identityUserDelegationRepository.InsertAsync(
-            new IdentityUserDelegation(_guidGenerator.Create(), 
+            new IdentityUserDelegation(_guidGenerator.Create(),
                 _testData.UserJohnId,
-                _testData.UserDavidId, 
-                DateTime.Now.AddDays(-2), 
+                _testData.UserDavidId,
+                DateTime.Now.AddDays(-2),
                 DateTime.Now.AddDays(-1)));
-        
+
         await _identityUserDelegationRepository.InsertAsync(
-            new IdentityUserDelegation(_guidGenerator.Create(), 
+            new IdentityUserDelegation(_guidGenerator.Create(),
                 _testData.UserJohnId,
-                _testData.UserDavidId, 
-                DateTime.Now.AddDays(-1), 
+                _testData.UserDavidId,
+                DateTime.Now.AddDays(-1),
                 DateTime.Now.AddDays(1)));
-        
+
         await _identityUserDelegationRepository.InsertAsync(
-            new IdentityUserDelegation(_guidGenerator.Create(), 
+            new IdentityUserDelegation(_guidGenerator.Create(),
                 _testData.UserNeoId,
-                _testData.UserDavidId, 
-                DateTime.Now.AddDays(-1), 
+                _testData.UserDavidId,
+                DateTime.Now.AddDays(-1),
                 DateTime.Now.AddDays(1)));
     }
 }

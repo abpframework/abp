@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using Volo.Abp.Domain.Entities;
@@ -8,6 +9,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB;
 public interface IMongoDbRepositoryFilterer<TEntity> where TEntity : class, IEntity
 {
     Task AddGlobalFiltersAsync(List<FilterDefinition<TEntity>> filters);
+
+    TQueryable FilterQueryable<TQueryable>(TQueryable query) where TQueryable : IQueryable<TEntity>;
 }
 
 public interface IMongoDbRepositoryFilterer<TEntity, TKey> : IMongoDbRepositoryFilterer<TEntity> where TEntity : class, IEntity<TKey>

@@ -40,7 +40,7 @@ public class ContentParser : ITransientDependency
 
     protected virtual void ParseContent(string content, List<string> parsedList)
     {
-        var replacedText = Regex.Replace(content, @"\[Widget.*?\]", Delimeter);
+        var replacedText = Regex.Replace(content, @"\[Widget.*.Type=.*?\]", Delimeter);
         if (!replacedText.Contains(Delimeter))
         {
             parsedList.Add(replacedText);
@@ -78,7 +78,7 @@ public class ContentParser : ITransientDependency
     {
         content = Regex.Replace(content, @"=\s*""", @"=""");
         content = Regex.Replace(content, @"""\s*=", @"""=");
-        var widgets = Regex.Matches(content, @"(?<=\[Widget)(.*?)(?=\])").Cast<Match>().Select(p => p.Value).ToList();
+        var widgets = Regex.Matches(content, @"(?<=\[Widget)(.*?)(?=\])").Select(p => p.Value).ToList();
         for (int i = 0, k = 0; i < parsedList.Count; i++)
         {
             if (parsedList[i] == Delimeter)
@@ -86,9 +86,9 @@ public class ContentParser : ITransientDependency
                 if (widgets.Count > k)
                 {
                     var preparedContent = string.Join("", widgets[k]);
-                    var keys = Regex.Matches(preparedContent, @"(?<=\s)(.*?)(?==\s*"")").Cast<Match>()
+                    var keys = Regex.Matches(preparedContent, @"(?<=\s)(.*?)(?==\s*"")")
                         .Select(p => p.Value).Where(p => p != string.Empty).ToList();
-                    var values = Regex.Matches(preparedContent, @"(?<=\s*[a-zA-Z]*=\s*"")(.*?)(?="")").Cast<Match>()
+                    var values = Regex.Matches(preparedContent, @"(?<=\s*[a-zA-Z]*=\s*"")(.*?)(?="")")
                         .Select(p => p.Value).ToList();
 
                     var widgetTypeIndex = keys.IndexOf("Type");
@@ -98,7 +98,7 @@ public class ContentParser : ITransientDependency
                         var name = _options.WidgetConfigs.Where(p => p.Key == widgetType).Select(p => p.Value.Name).FirstOrDefault();
                         if (name is not null && widgets.Count > k)
                         {
-                            values[0] = name;
+                            values[widgetTypeIndex] = name;
                             var contentFragment = new ContentFragment() { Type = Widget };
                             contentFragments.Add(contentFragment);
                             for (int kv = 0; kv < values.Count; kv++)

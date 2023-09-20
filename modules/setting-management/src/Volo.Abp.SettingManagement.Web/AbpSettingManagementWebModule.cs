@@ -45,6 +45,7 @@ public class AbpSettingManagementWebModule : AbpModule
         Configure<SettingManagementPageOptions>(options =>
         {
             options.Contributors.Add(new EmailingPageContributor());
+            options.Contributors.Add(new TimeZonePageContributor());
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>

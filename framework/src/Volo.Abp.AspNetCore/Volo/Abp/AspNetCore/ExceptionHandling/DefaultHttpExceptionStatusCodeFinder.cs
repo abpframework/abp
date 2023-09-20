@@ -32,7 +32,7 @@ public class DefaultHttpExceptionStatusCodeFinder : IHttpExceptionStatusCodeFind
         if (exception is IHasErrorCode exceptionWithErrorCode &&
             !exceptionWithErrorCode.Code.IsNullOrWhiteSpace())
         {
-            if (Options.ErrorCodeToHttpStatusCodeMappings.TryGetValue(exceptionWithErrorCode.Code, out var status))
+            if (Options.ErrorCodeToHttpStatusCodeMappings.TryGetValue(exceptionWithErrorCode.Code!, out var status))
             {
                 return status;
             }
@@ -40,7 +40,7 @@ public class DefaultHttpExceptionStatusCodeFinder : IHttpExceptionStatusCodeFind
 
         if (exception is AbpAuthorizationException)
         {
-            return httpContext.User.Identity.IsAuthenticated
+            return httpContext.User.Identity!.IsAuthenticated
                 ? HttpStatusCode.Forbidden
                 : HttpStatusCode.Unauthorized;
         }

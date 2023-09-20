@@ -39,7 +39,7 @@ public partial class SettingManagement
         {
             await contributor.ConfigureAsync(SettingComponentCreationContext);
         }
-
+        SettingComponentCreationContext.Normalize();
         SettingItemRenders.Clear();
 
         SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);

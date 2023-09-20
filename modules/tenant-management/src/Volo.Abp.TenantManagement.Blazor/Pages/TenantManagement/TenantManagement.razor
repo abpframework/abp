@@ -81,7 +81,7 @@
                             <ValidationError Style="display: block" />
                          </Field>
                         </Validation>
-                        <ExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" LH="@LH"/>
+                        <ExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" LH="@LH" ModalType="ExtensionPropertyModalType.CreateModal" />
                     </Validations>
                 </ModalBody>
                 <ModalFooter>
@@ -116,7 +116,7 @@
                             </Field>
                         </Validation>
                     </Validations>
-                    <ExtensionProperties TEntityType="TenantUpdateDto" TResourceType="AbpTenantManagementResource" Entity="@EditingEntity" LH="@LH"/>
+                    <ExtensionProperties TEntityType="TenantUpdateDto" TResourceType="AbpTenantManagementResource" Entity="@EditingEntity" LH="@LH" ModalType="ExtensionPropertyModalType.EditModal" />
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>

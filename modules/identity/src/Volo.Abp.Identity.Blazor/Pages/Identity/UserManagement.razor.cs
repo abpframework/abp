@@ -218,7 +218,7 @@ public partial class UserManagement
 
         UserManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
             IdentityModuleExtensionConsts.EntityNames.User));
-        return base.SetEntityActionsAsync();
+        return base.SetTableColumnsAsync();
     }
 
     protected override ValueTask SetToolbarItemsAsync()

@@ -197,7 +197,7 @@ public class MyProjectNameHostModule : AbpModule
         private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
         {
             services.AddAbpSwaggerGenWithOAuth(
-                configuration["AuthServer:Authority"],
+                configuration["AuthServer:Authority"]!,
                 new Dictionary<string, string>
                 {
                         {"MyProjectName", "MyProjectName API"}

@@ -6,7 +6,7 @@ namespace Volo.Abp.Validation.StringValues;
 [ValueValidator("NULL")]
 public class AlwaysValidValueValidator : ValueValidatorBase
 {
-    public override bool IsValid(object value)
+    public override bool IsValid(object? value)
     {
         return true;
     }

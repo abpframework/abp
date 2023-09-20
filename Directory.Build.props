@@ -2,10 +2,10 @@
   <PropertyGroup>
     
     <!-- All Microsoft AspNetCore packages -->
-    <MicrosoftAspNetCorePackageVersion>7.0.0</MicrosoftAspNetCorePackageVersion>
+    <MicrosoftAspNetCorePackageVersion>7.0.10</MicrosoftAspNetCorePackageVersion>
     
     <!-- All Microsoft EntityFrameworkCore packages -->
-    <MicrosoftEntityFrameworkCorePackageVersion>7.0.1</MicrosoftEntityFrameworkCorePackageVersion>
+    <MicrosoftEntityFrameworkCorePackageVersion>7.0.10</MicrosoftEntityFrameworkCorePackageVersion>
     
     <!-- All Microsoft packages -->
     <MicrosoftPackageVersion>7.0.0</MicrosoftPackageVersion>
@@ -41,6 +41,9 @@
     <PollyPackageVersion>7.2.3</PollyPackageVersion>
 
     <IsTestProject Condition="$(MSBuildProjectFullPath.Contains('test')) and ($(MSBuildProjectName.EndsWith('.Tests')) or $(MSBuildProjectName.EndsWith('.TestBase')))">true</IsTestProject>
+
+    <!-- OpenIddict https://www.nuget.org/packages/OpenIddict.Core -->
+    <OpenIddictPackageVersion>4.8.0</OpenIddictPackageVersion>
 
   </PropertyGroup>
 

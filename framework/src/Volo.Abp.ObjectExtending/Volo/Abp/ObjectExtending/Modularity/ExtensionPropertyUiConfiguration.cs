@@ -4,6 +4,8 @@ namespace Volo.Abp.ObjectExtending.Modularity;
 
 public class ExtensionPropertyUiConfiguration
 {
+    public const int DefaultOrder = 1000;
+    
     [NotNull]
     public ExtensionPropertyUiTableConfiguration OnTable { get; }
 
@@ -15,6 +17,8 @@ public class ExtensionPropertyUiConfiguration
 
     [NotNull]
     public ExtensionPropertyLookupConfiguration Lookup { get; set; }
+    
+    public int Order { get; set; }
 
     public ExtensionPropertyUiConfiguration()
     {
@@ -22,5 +26,6 @@ public class ExtensionPropertyUiConfiguration
         OnCreateForm = new ExtensionPropertyUiFormConfiguration();
         OnEditForm = new ExtensionPropertyUiFormConfiguration();
         Lookup = new ExtensionPropertyLookupConfiguration();
+        Order = DefaultOrder;
     }
 }

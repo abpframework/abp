@@ -10,7 +10,7 @@ public class AuthenticatedSimpleStateCheckerSerializerContributor :
 {
     public const string CheckerShortName = "A";
     
-    public string SerializeToJson<TState>(ISimpleStateChecker<TState> checker) 
+    public string? SerializeToJson<TState>(ISimpleStateChecker<TState> checker) 
         where TState : IHasSimpleStateCheckers<TState>
     {
         if (checker is not RequireAuthenticatedSimpleStateChecker<TState>)
@@ -25,7 +25,7 @@ public class AuthenticatedSimpleStateCheckerSerializerContributor :
         return jsonObject.ToJsonString();
     }
 
-    public ISimpleStateChecker<TState> Deserialize<TState>(JsonObject jsonObject, TState state)
+    public ISimpleStateChecker<TState>? Deserialize<TState>(JsonObject jsonObject, TState state)
         where TState : IHasSimpleStateCheckers<TState>
     {
         if (jsonObject["T"]?.ToString() != CheckerShortName)

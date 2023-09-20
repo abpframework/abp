@@ -140,6 +140,7 @@
     "Address": "地址",
     "Homepage": "主页",
     "Year": "年份",
+    "Year_Plural": "年份",
     "Copyright": "版权所有 © <a href=\"{0}\" target=\"_blank\">{1}</a>",
     "DomainDrivenDesign": "领域驱动设计",
     "CrossCuttingConcerns": "横切关注点",

@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
 public class BundleTagHelperContributorTypeItem : BundleTagHelperItem
 {
     [NotNull]
-    public Type Type { get; }
+    public Type Type { get; } = default!;
 
     public BundleTagHelperContributorTypeItem([NotNull] Type type)
     {
@@ -15,7 +15,7 @@ public class BundleTagHelperContributorTypeItem : BundleTagHelperItem
 
     public override string ToString()
     {
-        return Type.FullName;
+        return Type.FullName!;
     }
 
     public override void AddToConfiguration(BundleConfiguration configuration)

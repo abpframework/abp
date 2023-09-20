@@ -13,7 +13,7 @@ public class AbpQuartzOptions
     /// </summary>
     public NameValueCollection Properties { get; set; }
 
-    public Action<IServiceCollectionQuartzConfigurator> Configurator { get; set; }
+    public Action<IServiceCollectionQuartzConfigurator>? Configurator { get; set; }
 
     /// <summary>
     /// How long Quartz should wait before starting. Default: 0.

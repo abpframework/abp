@@ -25,7 +25,7 @@ export class PageComponent {
     return this._toolbarData;
   }
 
-  @Input() breadcrumb = true;
+  @Input() breadcrumb = false;
 
   pageParts = {
     title: PageParts.title,

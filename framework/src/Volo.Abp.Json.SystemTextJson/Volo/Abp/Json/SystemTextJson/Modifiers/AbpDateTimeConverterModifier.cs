@@ -10,7 +10,7 @@ namespace Volo.Abp.Json.SystemTextJson.Modifiers;
 
 public class AbpDateTimeConverterModifier
 {
-    private IServiceProvider _serviceProvider;
+    private IServiceProvider _serviceProvider = default!;
 
     public Action<JsonTypeInfo> CreateModifyAction(IServiceProvider serviceProvider)
     {
