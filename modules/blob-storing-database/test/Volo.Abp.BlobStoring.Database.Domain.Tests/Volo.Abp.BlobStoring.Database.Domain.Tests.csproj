@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <ProjectReference Include="..\Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests\Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests.csproj" />
   </ItemGroup>
 

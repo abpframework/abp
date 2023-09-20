@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUglify" Version="$(NUglifyPackageVersion)" />
+    <PackageReference Include="NUglify" />
   </ItemGroup>
 
 </Project>

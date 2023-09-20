@@ -13,7 +13,7 @@
         <ProjectReference Include="..\..\src\Volo.Abp.GlobalFeatures\Volo.Abp.GlobalFeatures.csproj" />
         <ProjectReference Include="..\..\src\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj" />
         <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
     </ItemGroup>
 
 </Project>

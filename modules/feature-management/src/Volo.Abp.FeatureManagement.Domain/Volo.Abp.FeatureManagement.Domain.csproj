@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Polly" Version="$(PollyPackageVersion)" />
+    <PackageReference Include="Polly" />
   </ItemGroup>
 
 </Project>

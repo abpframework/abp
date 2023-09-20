@@ -16,7 +16,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.TextTemplating.Tests\Volo.Abp.TextTemplating.Tests.csproj" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
     </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <ProjectReference Include="..\Volo.CmsKit.EntityFrameworkCore.Tests\Volo.CmsKit.EntityFrameworkCore.Tests.csproj" />
   </ItemGroup>
 
