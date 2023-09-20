@@ -7,16 +7,21 @@
 @section styles{
     
     <abp-style src="/Pages/Public/CmsKit/Pages/index.css" />
-
-    <style>
-        @Html.Raw(Model.ViewModel.Style)
-    </style>
+    @if (!Model.ViewModel.Style.IsNullOrEmpty())
+    {
+        <style>
+            @Html.Raw(Model.ViewModel.Style)
+        </style>
+    }
 }
 
 @section scripts{
-    <script>
-        @Html.Raw(Model.ViewModel.Script)
-    </script>
+    @if (!Model.ViewModel.Script.IsNullOrEmpty())
+    {
+        <script>
+            @Html.Raw(Model.ViewModel.Script)
+        </script>
+    }
 }
 
 <abp-card>
