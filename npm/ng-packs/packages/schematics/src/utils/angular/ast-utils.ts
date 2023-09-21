@@ -441,12 +441,11 @@ export function addSymbolToNgModuleMetadata(
     const text = expresssion.getFullText(source);
     const matches = text.match(/^(\r?\n)(\s*)/);
     if (matches) {
-      toInsert = `${matches[1]}${tags.indentBy(matches[2].length)`${symbolName},`}`;
+      toInsert = `,${matches[1]}${tags.indentBy(matches[2].length)`${symbolName}`}`;
     } else {
-      toInsert = `${symbolName},`;
+      toInsert = `, ${symbolName}`;
     }
   }
-
   if (importPath !== null) {
     return [
       new InsertChange(ngModulePath, position, toInsert),

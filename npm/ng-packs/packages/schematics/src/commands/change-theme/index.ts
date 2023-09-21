@@ -1,22 +1,20 @@
 import { JsonArray, JsonValue } from '@angular-devkit/core';
-import { Rule, SchematicsException, Tree, UpdateRecorder, chain } from '@angular-devkit/schematics';
+import { Rule, SchematicsException, Tree, chain } from '@angular-devkit/schematics';
 import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
 import * as ts from 'typescript';
-import { ImportDefinition, allStyles, importMap, styleMap } from './style-map';
+import { allStyles, importMap, styleMap } from './style-map';
 import { ChangeThemeOptions } from './model';
+import { Change, InsertChange, isLibrary, updateWorkspace, WorkspaceDefinition } from '../../utils';
+import { ThemeOptionsEnum } from './theme-options.enum';
 import {
   addImportToModule,
-  Change,
-  InsertChange,
-  isLibrary,
-  updateWorkspace,
-  WorkspaceDefinition,
-} from '../../utils';
-import { ThemeOptionsEnum } from './theme-options.enum';
-import { findNodes, getDecoratorMetadata, getMetadataField } from '../../utils/angular/ast-utils';
+  findNodes,
+  getDecoratorMetadata,
+  getMetadataField,
+} from '../../utils/angular/ast-utils';
 
 export default function (_options: ChangeThemeOptions): Rule {
-  return async (host: Tree) => {
+  return async () => {
     const targetThemeName = _options.name;
     const selectedProject = _options.targetProject;
     if (!targetThemeName) {
@@ -27,9 +25,7 @@ export default function (_options: ChangeThemeOptions): Rule {
       updateWorkspace(storedWorkspace => {
         updateProjectStyle(selectedProject, storedWorkspace, targetThemeName);
       }),
-      updateWorkspace(storedWorkspace => {
-        updateAppModule(host, selectedProject, storedWorkspace, targetThemeName);
-      }),
+      updateAppModule(selectedProject, targetThemeName),
     ]);
   };
 }
@@ -62,114 +58,136 @@ function updateProjectStyle(
   targetOption.styles = [...newStyles, ...sanitizedStyles] as JsonArray;
 }
 
-function updateAppModule(
-  host: Tree,
-  projectName: string,
-  workspace: WorkspaceDefinition,
-  targetThemeName: ThemeOptionsEnum,
-) {
-  const selectedTheme = importMap.get(targetThemeName);
-  if (!selectedTheme) {
-    throw new SchematicsException('The theme does not found');
-  }
+function updateAppModule(selectedProject: string, targetThemeName: ThemeOptionsEnum): Rule {
+  return (host: Tree) => {
+    const angularJSON = host.read('angular.json');
+    if (!angularJSON) {
+      throw new SchematicsException('The angular.json does not found');
+    }
 
-  const project = workspace.projects.get(projectName);
-  const appModulePath = `${project?.sourceRoot}/app/app.module.ts`;
+    const workspace = JSON.parse(angularJSON.toString());
+    const project = workspace.projects[selectedProject];
 
-  const text = host.read(appModulePath);
-  if (!text) {
-    throw new SchematicsException('The app module does not found');
-  }
+    if (!project || !project.sourceRoot) {
+      throw new SchematicsException('The target project does not found');
+    }
 
-  const sourceText = text.toString('utf-8');
-  const source = ts.createSourceFile(
-    appModulePath,
-    sourceText,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TS,
-  );
+    const appModulePath = project.sourceRoot + '/app/app.module.ts';
 
-  const recorder = host.beginUpdate(appModulePath);
-
-  const impMap = Array.from(importMap.values())
-    .filter(f => f !== importMap.get(targetThemeName))
-    .reduce((acc, val) => [...acc, ...val], []);
-
-  removeImportPath(source, recorder, impMap);
-  removeImportFromNgModuleMetadata(source, recorder, impMap);
-
-  insertImports(selectedTheme, source, appModulePath, recorder);
-
-  host.commitUpdate(recorder);
-  return host;
+    return chain([
+      removeImportPath(appModulePath, targetThemeName),
+      removeImportFromNgModuleMetadata(appModulePath, targetThemeName),
+      insertImports(appModulePath, targetThemeName),
+    ]);
+  };
 }
 
-function removeImportPath(
-  source: ts.SourceFile,
-  recorder: UpdateRecorder,
-  arr: ImportDefinition[],
-) {
-  const nodes = findNodes(source, ts.isImportDeclaration);
-  const filteredNodes = nodes.filter(n => arr.some(f => n.getFullText().match(f.path)));
+function removeImportPath(appModulePath: string, selectedTheme: ThemeOptionsEnum): Rule {
+  return (host: Tree) => {
+    const recorder = host.beginUpdate(appModulePath);
+    const sourceText = host.read(appModulePath)?.toString('utf-8');
+    const source = ts.createSourceFile(
+      appModulePath,
+      sourceText!,
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.TS,
+    );
+    const impMap = Array.from(importMap.values())
+      .filter(f => f !== importMap.get(selectedTheme))
+      .reduce((acc, val) => [...acc, ...val], []);
 
-  if (!filteredNodes || filteredNodes.length < 1) {
-    return;
-  }
+    const nodes = findNodes(source, ts.isImportDeclaration);
+    const filteredNodes = nodes.filter(n => impMap.some(f => n.getFullText().match(f.path)));
+    if (!filteredNodes || filteredNodes.length < 1) {
+      return;
+    }
 
-  filteredNodes.map(importPath =>
-    recorder.remove(importPath.getStart(), importPath.getWidth() + 1),
-  );
+    filteredNodes.map(importPath =>
+      recorder.remove(importPath.getStart(), importPath.getWidth() + 1),
+    );
+
+    host.commitUpdate(recorder);
+    return host;
+  };
 }
 
 function removeImportFromNgModuleMetadata(
-  source: ts.SourceFile,
-  recorder: UpdateRecorder,
-  arr: ImportDefinition[],
-) {
-  const node = getDecoratorMetadata(source, 'NgModule', '@angular/core')[0] || {};
-  if (!node) {
-    throw new SchematicsException('The app module does not found');
-  }
+  appModulePath: string,
+  selectedTheme: ThemeOptionsEnum,
+): Rule {
+  return (host: Tree) => {
+    const recorder = host.beginUpdate(appModulePath);
+    const sourceText = host.read(appModulePath)?.toString('utf-8');
+    const source = ts.createSourceFile(
+      appModulePath,
+      sourceText!,
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.TS,
+    );
+    const impMap = Array.from(importMap.values())
+      .filter(f => f !== importMap.get(selectedTheme))
+      .reduce((acc, val) => [...acc, ...val], []);
 
-  const matchingProperties = getMetadataField(node as ts.ObjectLiteralExpression, 'imports');
+    const node = getDecoratorMetadata(source, 'NgModule', '@angular/core')[0] || {};
+    if (!node) {
+      throw new SchematicsException('The app module does not found');
+    }
 
-  const assignment = matchingProperties[0] as ts.PropertyAssignment;
-  const assignmentInit = assignment.initializer as ts.ArrayLiteralExpression;
+    const matchingProperties = getMetadataField(node as ts.ObjectLiteralExpression, 'imports');
 
-  const elements = assignmentInit.elements;
-  if (!elements || elements.length < 1) {
-    return;
-  }
+    const assignment = matchingProperties[0] as ts.PropertyAssignment;
+    const assignmentInit = assignment.initializer as ts.ArrayLiteralExpression;
 
-  const filteredElements = elements.filter(f => arr.some(s => f.getText().match(s.importName)));
-  if (!filteredElements || filteredElements.length < 1) {
-    return;
-  }
+    const elements = assignmentInit.elements;
+    if (!elements || elements.length < 1) {
+      return;
+    }
 
-  filteredElements.map(willRemoveModule =>
-    recorder.remove(willRemoveModule.getStart(), willRemoveModule.getWidth() + 1),
-  );
+    const filteredElements = elements.filter(f =>
+      impMap.some(s => f.getText().match(s.importName)),
+    );
+    if (!filteredElements || filteredElements.length < 1) {
+      return;
+    }
+
+    filteredElements.map(willRemoveModule =>
+      recorder.remove(willRemoveModule.getStart(), willRemoveModule.getWidth() + 1),
+    );
+    host.commitUpdate(recorder);
+    return host;
+  };
 }
 
-function insertImports(
-  selectedTheme: ImportDefinition[],
-  source: ts.SourceFile,
-  appModulePath: string,
-  recorder: UpdateRecorder,
-) {
-  const changes: Change[] = [];
-  selectedTheme.map(({ importName, path }) =>
-    changes.push(...addImportToModule(source, appModulePath, importName, path)),
-  );
+function insertImports(appModulePath: string, selectedTheme: ThemeOptionsEnum): Rule {
+  return (host: Tree) => {
+    const recorder = host.beginUpdate(appModulePath);
+    const sourceText = host.read(appModulePath)?.toString('utf-8');
+    const source = ts.createSourceFile(
+      appModulePath,
+      sourceText!,
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.TS,
+    );
+    const selected = importMap.get(selectedTheme);
 
-  if (changes.length > 0) {
-    for (const change of changes) {
-      if (change instanceof InsertChange) {
-        recorder.insertLeft(change.pos, change.toAdd);
+    const changes: Change[] = [];
+    selected!.map(({ importName, path }) =>
+      changes.push(...addImportToModule(source, appModulePath, importName, path)),
+    );
+
+    if (changes.length > 0) {
+      for (const change of changes) {
+        if (change instanceof InsertChange) {
+          recorder.insertLeft(change.pos, change.toAdd);
+        }
       }
     }
-  }
+    host.commitUpdate(recorder);
+    return host;
+  };
 }
 
 export function getProjectTargetOptions(
