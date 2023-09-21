@@ -1,6 +1,16 @@
 # Moving Background Job Execution To A Separate Application
 
-In this article, I will show you how to move background job execution to a separate application. This is useful when you want to run background jobs in a separate process, for example, to reduce the load on the main application or to run background jobs on a different machine.
+In this article, I will show you how to move background job execution to a separate application.
+
+Here are some benefits of doing this:
+
+* if your background jobs consume high system resources (CPU, RAM or Disk), you can deploy that background application to a dedicated server and your background jobs don't affect your application's performance.
+* You can scale your background job application independently from your web application. For example, you can deploy multiple instances of your background job application to a Kubernetes cluster and scale it easily.
+
+Here are some disadvantages of doing this:
+ 
+* You need to deploy and maintain least two applications instead of one.
+* You need to implement a mechanism to share the common code between your applications. For example, you can create a shared project and add it to your applications as a project reference.
 
 ## Source code
 
