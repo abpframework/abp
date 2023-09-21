@@ -185,6 +185,7 @@
     "SelectAStatus": "Valitse tila",
     "Status": "Tila",
     "CmsKit.BlogPost.ScrollIndex": "Pikanavigointipalkki blogikirjoituksissa",
+    "CmsKit.BlogPost.PreventXssFeature": "Estä XSS",
     "Add": "Lisää",
     "AddWidget": "Lisää widget",
     "PleaseConfigureWidgets": "Määritä widgetit",
