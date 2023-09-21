@@ -3,14 +3,31 @@ import { take } from 'rxjs/operators';
 import { RoutesService } from '../services/routes.service';
 import { DummyInjector } from './utils/common.utils';
 import { mockPermissionService } from './utils/permission-service.spec.utils';
+import { compareFuncFactory } from '../tokens/compare-func.token';
 
 const updateStream$ = new Subject<void>();
-
 export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }) => {
   const injector = new DummyInjector({
     PermissionService: mockPermissionService(),
     ConfigStateService: { createOnUpdateStream: () => updateStream$ },
     OTHERS_GROUP: 'OthersGroup',
+    SORT_COMPARE_FUNC: (a, b) => {
+      const aName = a.name;
+      const bName = b.name;
+      const aNumber = a.order;
+      const bNumber = b.order;
+      
+      if (!Number.isInteger(aNumber)) return 1;
+      if (!Number.isInteger(bNumber)) return -1;
+    
+      if (aNumber > bNumber) return 1
+      if (aNumber < bNumber) return -1
+      
+      if ( aName > bName ) return 1;
+      if ( aName < bName ) return -1;
+    
+      return 0
+    },
     ...injectorPayload,
   });
   return new RoutesService(injector);
@@ -50,7 +67,6 @@ describe('Routes Service', () => {
       const flat = await lastValueFrom(service.flat$.pipe(take(1)));
       const tree = await lastValueFrom(service.tree$.pipe(take(1)));
       const visible = await lastValueFrom(service.visible$.pipe(take(1)));
-
       expect(flat.length).toBe(5);
       expect(flat[0].name).toBe('baz');
       expect(flat[1].name).toBe('qux');
