@@ -4,8 +4,10 @@ import { ChangeThemeGeneratorSchema } from './schema';
 import { ThemeOptionsEnum } from './theme-options.enum';
 
 export async function changeThemeGenerator(host: Tree, schema: ChangeThemeGeneratorSchema) {
+  const schematicPath = schema.localPath || '@abp/ng.schematics';
+
   const runAngularLibrarySchematic = wrapAngularDevkitSchematic(
-    '@abp/ng.schematics',
+    schema.localPath ? `${host.root}${schematicPath}` : schematicPath,
     'change-theme',
   );
 
@@ -14,8 +16,10 @@ export async function changeThemeGenerator(host: Tree, schema: ChangeThemeGenera
   });
 
   return () => {
-    const destTheme = Object.values(ThemeOptionsEnum).find((t, i) => i + 1 === schema.name);
-    console.log(`✅️ theme changed to ${destTheme}`);
+    const destTheme = Object.values(ThemeOptionsEnum).find(
+      (theme, index) => index + 1 === schema.name,
+    );
+    console.log(`✅️ Switched to Theme ${destTheme}`);
   };
 }
 
