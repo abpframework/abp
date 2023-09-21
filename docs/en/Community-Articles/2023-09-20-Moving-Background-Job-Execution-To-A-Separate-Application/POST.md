@@ -1,15 +1,15 @@
 # Moving Background Job Execution To A Separate Application
 
-In this article, I will show you how to move background job execution to a separate application.
+In this article, I will show you how to move the background job execution to a separate application.
 
 Here are some benefits of doing this:
 
-* if your background jobs consume high system resources (CPU, RAM or Disk), you can deploy that background application to a dedicated server and your background jobs don't affect your application's performance.
+* If your background jobs consume high system resources (CPU, RAM or Disk), then you can deploy that background application to a dedicated server  so it won't affect your application's performance.
 * You can scale your background job application independently from your web application. For example, you can deploy multiple instances of your background job application to a Kubernetes cluster and scale it easily.
 
 Here are some disadvantages of doing this:
  
-* You need to deploy and maintain least two applications instead of one.
+* You need to deploy and maintain at least two applications instead of one.
 * You need to implement a mechanism to share the common code between your applications. For example, you can create a shared project and add it to your applications as a project reference.
 
 ## Source code
@@ -29,7 +29,7 @@ abp new SeparateBackgroundJob -t app
 * Create a shared project named `SeparateBackgroundJob.Common.Shared` to share the `BackgroundJob` and `BackgroundJobArgs` classes between the web and job executor applications.
 * Install the `Volo.Abp.BackgroundJobs.Abstractions` package to the `SeparateBackgroundJob.Common.Shared` project.
 
-Add `SeparateBackgroundJobCommonSharedModule` class to the `SeparateBackgroundJob.Common.Shared` project:
+Add the `SeparateBackgroundJobCommonSharedModule` class to the `SeparateBackgroundJob.Common.Shared` project:
 
 ```csharp
 [DependsOn(typeof(AbpBackgroundJobsAbstractionsModule))]
@@ -38,7 +38,7 @@ public class SeparateBackgroundJobCommonSharedModule : AbpModule
 }
 ```
 
-Add `MyReportJob` and `MyReportJobArgs` classes to the `SeparateBackgroundJob.Common.Shared` project:
+Add the `MyReportJob` and `MyReportJobArgs` classes to the `SeparateBackgroundJob.Common.Shared` project:
 
 ```csharp
 public class MyReportJob : AsyncBackgroundJob<MyReportJobArgs>, ITransientDependency
@@ -56,7 +56,7 @@ public class MyReportJobArgs
 }
 ```
 
-Add `SeparateBackgroundJob.Common.Shared` project reference to the `SeparateBackgroundJob.Domain` project and add `SeparateBackgroundJobCommonSharedModule` to the `DependsOn` attribute of the `SeparateBackgroundJobDomainModule` class:
+Add the `SeparateBackgroundJob.Common.Shared` project reference to the `SeparateBackgroundJob.Domain` project and add `SeparateBackgroundJobCommonSharedModule` to the `DependsOn` attribute of the `SeparateBackgroundJobDomainModule` class:
 
 ```csharp
 [DependsOn(
@@ -188,8 +188,8 @@ public class SeparateBackgroundJobWebModule : AbpModule
 abp new BackgroundJobExecutor -t console
 ```
 
-* Add `BackgroundJobExecutor` project to the solution of the web application.
-* Add `SeparateBackgroundJob.Common.Shared` project reference to the `BackgroundJobExecutor` project.
+* Add the `BackgroundJobExecutor` project to the solution of the web application.
+* Add the `SeparateBackgroundJob.Common.Shared` project reference to the `BackgroundJobExecutor` project.
 * Install the `Volo.Abp.BackgroundJobs.EntityFrameworkCore` and `Volo.Abp.EntityFrameworkCore.SqlServer` packages to the `BackgroundJobExecutor` project.
 
 Update the `BackgroundJobExecutorModule` class as follows:
