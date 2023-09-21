@@ -10,9 +10,6 @@ namespace Volo.Blogging.Users
 {
     public class BlogUserSynchronizer : EntitySynchronizer<BlogUser, Guid, UserEto>
     {
-        protected IBlogUserRepository UserRepository { get; }
-        protected IBlogUserLookupService UserLookupService { get; }
-
         public BlogUserSynchronizer([NotNull] IObjectMapper objectMapper,
             [NotNull] IRepository<BlogUser, Guid> repository) : base(objectMapper, repository)
         {
