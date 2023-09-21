@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
-using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Users;
 
@@ -27,12 +25,13 @@ public class UserData : IUserData
     public string PhoneNumber { get; set; }
 
     public bool PhoneNumberConfirmed { get; set; }
-    
+
+    public int EntityVersion { get; set; }
+
     public ExtraPropertyDictionary ExtraProperties { get; }
 
     public UserData()
     {
-
     }
 
     public UserData(IUserData userData)
@@ -47,6 +46,7 @@ public class UserData : IUserData
         PhoneNumber = userData.PhoneNumber;
         PhoneNumberConfirmed = userData.PhoneNumberConfirmed;
         TenantId = userData.TenantId;
+        EntityVersion = userData.EntityVersion;
         ExtraProperties = userData.ExtraProperties;
     }
 
@@ -61,6 +61,7 @@ public class UserData : IUserData
         bool phoneNumberConfirmed = false,
         Guid? tenantId = null,
         bool isActive = true,
+        int entityVersion = 0,
         ExtraPropertyDictionary extraProperties = null)
     {
         Id = id;
@@ -73,6 +74,7 @@ public class UserData : IUserData
         PhoneNumber = phoneNumber;
         PhoneNumberConfirmed = phoneNumberConfirmed;
         TenantId = tenantId;
-        ExtraProperties = extraProperties;
+        EntityVersion = entityVersion;
+        ExtraProperties = extraProperties ?? new ExtraPropertyDictionary();
     }
 }

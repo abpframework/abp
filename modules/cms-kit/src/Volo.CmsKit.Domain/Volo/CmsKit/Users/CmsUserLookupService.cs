@@ -1,18 +1,11 @@
-﻿using Volo.Abp.Uow;
-using Volo.Abp.Users;
+﻿using Volo.Abp.Users;
 
 namespace Volo.CmsKit.Users;
 
 public class CmsUserLookupService : UserLookupService<CmsUser, ICmsUserRepository>, ICmsUserLookupService
 {
-    public CmsUserLookupService(
-        ICmsUserRepository userRepository,
-        IUnitOfWorkManager unitOfWorkManager)
-        : base(
-            userRepository,
-            unitOfWorkManager)
+    public CmsUserLookupService()
     {
-
     }
 
     protected override CmsUser CreateUser(IUserData externalUser)
