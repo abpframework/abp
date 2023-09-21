@@ -93,7 +93,7 @@ function updateAppModule(
   const recorder = host.beginUpdate(appModulePath);
 
   const impMap = Array.from(importMap.values())
-    ?.filter(f => f !== importMap.get(targetThemeName))
+    .filter(f => f !== importMap.get(targetThemeName))
     .reduce((acc, val) => [...acc, ...val], []);
 
   removeImportPath(source, recorder, impMap);
@@ -117,14 +117,9 @@ function removeImportPath(
     return;
   }
 
-  filteredNodes.map(importPath => {
-    /**
-     * We can add comment and sign as `removed` for the see what is removed
-     *
-     * recorder.insertLeft(importPath.getStart(), '//');
-     */
-    recorder.remove(importPath.getStart(), importPath.getWidth() + 1);
-  });
+  filteredNodes.map(importPath =>
+    recorder.remove(importPath.getStart(), importPath.getWidth() + 1),
+  );
 }
 
 function removeImportFromNgModuleMetadata(
@@ -132,17 +127,11 @@ function removeImportFromNgModuleMetadata(
   recorder: UpdateRecorder,
   arr: ImportDefinition[],
 ) {
-  /**
-   * Brings the @NgModule({...}) content
-   */
   const node = getDecoratorMetadata(source, 'NgModule', '@angular/core')[0] || {};
   if (!node) {
     throw new SchematicsException('The app module does not found');
   }
 
-  /**
-   * Select imports array in the @NgModule({...}) content
-   */
   const matchingProperties = getMetadataField(node as ts.ObjectLiteralExpression, 'imports');
 
   const assignment = matchingProperties[0] as ts.PropertyAssignment;
@@ -158,19 +147,11 @@ function removeImportFromNgModuleMetadata(
     return;
   }
 
-  filteredElements.map(willRemoveModule => {
-    /**
-     * We can add comment and sign as `removed` for the see what is removed
-     *
-     * recorder.insertLeft(willRemoveModule.getStart(), '//');
-     */
-    recorder.remove(willRemoveModule.getStart(), willRemoveModule.getWidth() + 1);
-  });
+  filteredElements.map(willRemoveModule =>
+    recorder.remove(willRemoveModule.getStart(), willRemoveModule.getWidth() + 1),
+  );
 }
 
-/**
- * Insert import paths & import names to the NgModule decorator
- */
 function insertImports(
   selectedTheme: ImportDefinition[],
   source: ts.SourceFile,
@@ -178,10 +159,9 @@ function insertImports(
   recorder: UpdateRecorder,
 ) {
   const changes: Change[] = [];
-  selectedTheme.map(({ importName, path }) => {
-    const importedModule = addImportToModule(source, appModulePath, importName, path);
-    changes.push(...importedModule);
-  });
+  selectedTheme.map(({ importName, path }) =>
+    changes.push(...addImportToModule(source, appModulePath, importName, path)),
+  );
 
   if (changes.length > 0) {
     for (const change of changes) {
