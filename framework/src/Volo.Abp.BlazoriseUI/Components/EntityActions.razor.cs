@@ -40,7 +40,12 @@ public partial class EntityActions<TItem> : ComponentBase
 
     internal void AddAction(EntityAction<TItem> action)
     {
-        Actions.Add(action);
+        if (action.Visible)
+        {
+            Actions.Add(action);
+        }
+
+        Type = Actions.Count > 1 ? ActionType.Dropdown : ActionType.Button;
     }
 
     protected override void OnInitialized()
