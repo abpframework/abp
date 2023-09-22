@@ -46,7 +46,7 @@ describe('Enum Utils', () => {
       {name:'foo', value: 'number', expected: 1},
       {name:'bar', value: 'number', expected: 2},
       {name:'baz', value: 'number', expected: 3}
-    ])('',({name, value, expected})=>{
+    ])('should create an enum that returns $expected when $name $value is accessed',({name, value, expected})=>{
       expect(enumFromFields[name][value]).toBe(expected);
     })
   });
