@@ -3,9 +3,6 @@ import { BehaviorSubject, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { PropData } from '../lib/models/props';
 import { createEnum, createEnumOptions, createEnumValueResolver } from '../lib/utils/enum.util';
-import { createSpyObject } from '@ngneat/spectator'
-import { AbpApplicationLocalizationService } from '@abp/ng.core';
-
 
 const mockSessionState = {
   languageChange$: new BehaviorSubject('tr'),
@@ -110,8 +107,8 @@ describe('Enum Utils', () => {
 
 function createMockLocalizationService() {
   const fakeAppConfigService = { get: () => of({ localization: mockL10n }) } as any;
-  let abpApplicationLocalizationService = createSpyObject<AbpApplicationLocalizationService>(AbpApplicationLocalizationService)
-  const configState = new ConfigStateService(fakeAppConfigService, abpApplicationLocalizationService, true);
+  const fakeLocalizationService = { get: () => of({ localization: mockL10n }) } as any;
+  const configState = new ConfigStateService(fakeAppConfigService, fakeLocalizationService, false);
   configState.refreshAppState();
 
   return new LocalizationService(mockSessionState, null, null, configState);

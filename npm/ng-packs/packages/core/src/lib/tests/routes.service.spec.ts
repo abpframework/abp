@@ -3,7 +3,6 @@ import { take } from 'rxjs/operators';
 import { RoutesService } from '../services/routes.service';
 import { DummyInjector } from './utils/common.utils';
 import { mockPermissionService } from './utils/permission-service.spec.utils';
-import { compareFuncFactory } from '../tokens/compare-func.token';
 
 const updateStream$ = new Subject<void>();
 export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }) => {
