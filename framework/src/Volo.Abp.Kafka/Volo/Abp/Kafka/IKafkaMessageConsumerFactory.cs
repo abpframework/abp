@@ -14,5 +14,5 @@ public interface IKafkaMessageConsumerFactory
     IKafkaMessageConsumer Create(
         string topicName,
         string groupId,
-        string connectionName = null);
+        string? connectionName = null);
 }

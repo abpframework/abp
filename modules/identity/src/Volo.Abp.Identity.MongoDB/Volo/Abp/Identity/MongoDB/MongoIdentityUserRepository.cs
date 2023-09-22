@@ -131,7 +131,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .Where(u => u.Roles.Any(r => r.RoleId == role.Id))
             .ToListAsync(cancellationToken);
     }
-
+    
     public virtual async Task<List<IdentityUser>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
@@ -359,5 +359,32 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         }
 
         await UpdateManyAsync(users, cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
+        IEnumerable<Guid> userIds, 
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+        
+        var userAndRoleIds = (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+            .Where(u => userIds.Contains(u.Id))
+            .SelectMany(u => u.Roles)
+            .Select(userRole => new 
+            {
+                userRole.UserId,
+                userRole.RoleId
+            }).GroupBy(x => x.UserId).ToDictionary(x => x.Key, x => x.Select(r => r.RoleId).ToList());
+
+        var roleIds = userAndRoleIds.SelectMany(x => x.Value);
+        var roles = await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken)).Where(r => roleIds.Contains(r.Id)).Select(r => new 
+        {
+            r.Id,
+            r.Name
+        }).ToListAsync(cancellationToken);
+  
+        var result = userAndRoleIds.ToDictionary(x => x.Key, x => roles.Where(r => x.Value.Contains(r.Id)).Select(r => r.Name).ToArray());
+            
+        return result.Select(x => new IdentityUserIdWithRoleNames() { Id = x.Key, RoleNames = x.Value }).ToList();
     }
 }

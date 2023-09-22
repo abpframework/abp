@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Evaluări",
     "CmsKit.Reactions": "Reacţii",
     "CmsKit.Tags": "Etichete",
+    "CmsKit.BlogPost.PreventXssFeature": "Prevenirea Xss",
     "CmsKit:0002": "Conţinutul există deja!",
     "CmsKit:0003": "Entitatea {0} nu este etichetabilă.",
     "CmsKit:Blog:0001": "Slugul ({Slug}) există deja!",

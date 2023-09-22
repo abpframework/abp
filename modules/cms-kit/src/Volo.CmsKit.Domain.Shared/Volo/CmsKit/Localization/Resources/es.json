@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Calificaciones",
     "CmsKit.Reactions": "Reacciones",
     "CmsKit.Tags": "Etiquetas",
+    "CmsKit.BlogPost.PreventXssFeature": "Prevenir ataques XSS",
     "CmsKit:0002": "¡El contenido ya existe!",
     "CmsKit:0003": "La entidad {0} no se puede etiquetar.",
     "CmsKit:Blog:0001": "¡La babosa dada ({Slug}) ya existe!",

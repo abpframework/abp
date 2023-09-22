@@ -12,7 +12,7 @@ public class AbpDbContextOptions
 {
     internal List<Action<AbpDbContextConfigurationContext>> DefaultPreConfigureActions { get; }
 
-    internal Action<AbpDbContextConfigurationContext> DefaultConfigureAction { get; set; }
+    internal Action<AbpDbContextConfigurationContext>? DefaultConfigureAction { get; set; }
 
     internal Dictionary<Type, List<object>> PreConfigureActions { get; }
 

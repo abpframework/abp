@@ -6,7 +6,7 @@ namespace Volo.Abp.AzureServiceBus;
 
 public interface IConnectionPool : IAsyncDisposable
 {
-    ServiceBusClient GetClient(string connectionName);
+    ServiceBusClient GetClient(string? connectionName);
 
-    ServiceBusAdministrationClient GetAdministrationClient(string connectionName);
+    ServiceBusAdministrationClient GetAdministrationClient(string? connectionName);
 }
