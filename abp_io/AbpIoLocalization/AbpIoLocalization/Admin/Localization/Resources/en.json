@@ -530,6 +530,7 @@
     "RemoveColor": "Remove Color",
     "MaxColorCountWarning": "You can add up to {0} colors",
     "MinColorCountWarning": "You must add at least {0} colors",
-    "RaffleDeletionConfirmationMessage": "Are you sure you want to delete this raffle?"
+    "RaffleDeletionConfirmationMessage": "Are you sure you want to delete this raffle?",
+    "CreateRaffle": "Create Raffle"
   }
 }

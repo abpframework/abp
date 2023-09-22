@@ -165,7 +165,11 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveFolderStep("/angular"));
         }
 
-        if (context.BuildArgs.MobileApp != MobileApp.ReactNative)
+        if(context.BuildArgs.MobileApp == MobileApp.ReactNative)
+        {
+            context.Symbols.Add("mobile:react-native");
+        }
+        else
         {
             steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName().EnsureStartsWith('/')));
         }
