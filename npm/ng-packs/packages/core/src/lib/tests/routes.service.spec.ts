@@ -3,6 +3,7 @@ import { take } from 'rxjs/operators';
 import { RoutesService } from '../services/routes.service';
 import { DummyInjector } from './utils/common.utils';
 import { mockPermissionService } from './utils/permission-service.spec.utils';
+import { mockCompareFunction } from './utils/mock-compare-function';
 
 const updateStream$ = new Subject<void>();
 export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }) => {
@@ -10,23 +11,7 @@ export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }
     PermissionService: mockPermissionService(),
     ConfigStateService: { createOnUpdateStream: () => updateStream$ },
     OTHERS_GROUP: 'OthersGroup',
-    SORT_COMPARE_FUNC: (a, b) => {
-      const aName = a.name;
-      const bName = b.name;
-      const aNumber = a.order;
-      const bNumber = b.order;
-      
-      if (!Number.isInteger(aNumber)) return 1;
-      if (!Number.isInteger(bNumber)) return -1;
-    
-      if (aNumber > bNumber) return 1
-      if (aNumber < bNumber) return -1
-      
-      if ( aName > bName ) return 1;
-      if ( aName < bName ) return -1;
-    
-      return 0
-    },
+    SORT_COMPARE_FUNC: mockCompareFunction,
     ...injectorPayload,
   });
   return new RoutesService(injector);
