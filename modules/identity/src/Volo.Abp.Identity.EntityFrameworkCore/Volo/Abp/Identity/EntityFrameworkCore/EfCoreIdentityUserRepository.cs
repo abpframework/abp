@@ -174,7 +174,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
-        var upperFilter = filter?.ToUpper();
+        var upperFilter = filter?.ToUpperInvariant();
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
             .WhereIf(
@@ -256,7 +256,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
-        var upperFilter = filter?.ToUpper();
+        var upperFilter = filter?.ToUpperInvariant();
         return await (await GetDbSetAsync())
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
