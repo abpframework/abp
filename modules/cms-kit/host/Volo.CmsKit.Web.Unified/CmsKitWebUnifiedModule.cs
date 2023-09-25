@@ -41,6 +41,8 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
+using Volo.CmsKit.Public.Pages;
+
 
 #if EntityFrameworkCore
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -251,7 +253,6 @@ public class CmsKitWebUnifiedModule : AbpModule
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
-        app.UseCmsKitPagesMiddleware();
         app.UseRouting();
         app.UseAuthentication();
 
@@ -272,7 +273,10 @@ public class CmsKitWebUnifiedModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
 
-        app.UseConfiguredEndpoints();
+        app.UseConfiguredEndpoints(builder =>
+        {
+            builder.MapCmsPageRoute();
+        });
 
         using (var scope = context.ServiceProvider.CreateScope())
         {
@@ -283,19 +287,5 @@ public class CmsKitWebUnifiedModule : AbpModule
                     .SeedAsync();
             });
         }
-    }
-}
-
-public class CmsKitPageRouteValueTransformer : DynamicRouteValueTransformer, ITransientDependency
-{
-    public override ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
-    {
-        if (values.TryGetValue("slug", out var slug))
-        {
-            values["page"] = "/Pages/Public/CmsKit/Pages/Index";
-            values["slug"] = slug;
-        }
-
-        return new ValueTask<RouteValueDictionary>(values);
     }
 }
