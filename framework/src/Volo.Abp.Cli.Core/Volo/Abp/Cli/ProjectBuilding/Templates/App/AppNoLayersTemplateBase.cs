@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
@@ -20,7 +21,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        var steps = new List<ProjectBuildPipelineStep>();
+        var steps = base.GetCustomSteps(context).ToList();
 
         switch (context.BuildArgs.DatabaseProvider)
         {

@@ -34,7 +34,7 @@
     "build:schematics": "cd scripts && yarn && yarn build:schematics && cd ..",
     "dev:schematics": "tsc -p packages/schematics/tsconfig.json -w",
     "mock:schematics": "cd scripts/mock-schematic && yarn && yarn start",
-    "debug:schematics": "./node_modules/.bin/ng g ./packages/schematics/src/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url https://localhost:44305 --serviceType application --entryPoint  __default ",
+    "debug:schematics": "./node_modules/.bin/nx g ./packages/schematics/src/collection.json:proxy-add --module identity --apiName __default --source __default --target __default --url https://localhost:44305 --serviceType application --entryPoint  __default ",
     "debug:schematics-dist": "./node_modules/.bin/ng g ./dist/packages/schematics/collection.json:proxy-add --module __default --apiName __default --source __default --target __default --url http://localhost:4300 --service-type application --entryPoint  __default",
     "ci": "yarn affected:lint && yarn affected:build && yarn affected:test",
     "lerna": "lerna",

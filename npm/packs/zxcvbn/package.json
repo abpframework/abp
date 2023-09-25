@@ -1,0 +1,32 @@
+{
+    "version": "7.4.0-rc.3",
+    "name": "@abp/zxcvbn",
+    "publishConfig": {
+      "access": "public"
+    },
+    "dependencies": {
+      "@abp/core": "~7.4.0-rc.3",
+      "zxcvbn" : "^4.4.2"
+    },
+    "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
+    "homepage": "https://abp.io",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/abpframework/abp.git"
+    },
+    "license": "LGPL-3.0",
+    "keywords": [
+      "aspnetcore",
+      "boilerplate",
+      "framework",
+      "web",
+      "best-practices",
+      "angular",
+      "maui",
+      "blazor",
+      "mvc",
+      "csharp",
+      "webapp"
+    ]
+  }
+  
