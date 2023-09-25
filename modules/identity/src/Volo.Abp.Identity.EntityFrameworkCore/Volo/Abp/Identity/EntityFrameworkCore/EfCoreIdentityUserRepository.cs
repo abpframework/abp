@@ -174,13 +174,14 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        var upperFilter = filter?.ToUpper();
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.NormalizedUserName.Contains(upperFilter) ||
+                    u.NormalizedEmail.Contains(upperFilter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
@@ -255,12 +256,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        var upperFilter = filter?.ToUpper();
         return await (await GetDbSetAsync())
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.NormalizedUserName.Contains(upperFilter) ||
+                    u.NormalizedEmail.Contains(upperFilter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
