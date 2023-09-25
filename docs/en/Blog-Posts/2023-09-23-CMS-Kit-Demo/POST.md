@@ -1,4 +1,4 @@
-# CMS Kit in Action: Unveiling ABP Framework's Content Management Module
+# Unleash the Power of ABP CMS Kit: A Dynamic Content Showcase
 
 We're excited to introduce to you [ABP](https://abp.io/)'s [CMS Kit Module](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index) – a versatile module that empowers you to build your own dynamic content website with ease. In this introductory blog post, we'll first take a look at the **CMS Kit Module** and then we'll take you on a journey through our **CMS Kit Demo Application**, showcasing the incredible capabilities of this feature-rich module.
 
@@ -24,7 +24,7 @@ The following features are currently available and ready to use:
 
 ### CMS Kit Pro: The Building Blocks (a.k.a Features)
 
-The following features are provided by the CMS Kit Pro Module: 
+CMS Kit Pro is a part of [ABP Commercial](https://commercial.abp.io/) and provides additional features. The following features are provided by the CMS Kit Pro Module: 
 
 * **Contact Form**: Easily add a «contact us» form to your website
 * **Newsletter**: Allow users to subscribe to your newsletter (with multiple categories)
@@ -89,3 +89,10 @@ After you have created the page, you can access it via `/{slug}` URL on the publ
 ## What's Next?
 
 Please try the CMS Kit Module now and provide [feedback](https://github.com/abpframework/abp) to help us to build a more effective content management kit!
+
+## Resources
+
+* [CMS Kit Demo: Source Code](https://github.com/abpframework/cms-kit-demo)
+* [cms-kit-demo.abp.io](https://cms-kit-demo.abp.io/)
+* [CMS Kit Module documentation](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index)
+* [CMS Kit Pro Module documentation](https://docs.abp.io/en/commercial/latest/modules/cms-kit/index)
