@@ -66,6 +66,8 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         input.MapExtraPropertiesTo(page);
         await PageRepository.InsertAsync(page);
 
+        await PageCache.RemoveAsync(new PageCacheKey(page.Slug));
+
         return ObjectMapper.Map<Page, PageDto>(page);
     }
 
@@ -77,6 +79,8 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         {
             await InvalidateDefaultHomePageCacheAsync(considerUow: true);
         }
+        
+        await PageCache.RemoveAsync(new PageCacheKey(page.Slug));
 
         await PageManager.SetSlugAsync(page, input.Slug);
 

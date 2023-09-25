@@ -15,6 +15,6 @@ public static class SlugNormalizer
 
     public static string Normalize(string value)
     {
-        return SlugHelper.GenerateSlug(value?.Unidecode());
+        return SlugHelper.GenerateSlug(value?.Unidecode()).Trim('/');
     }
 }
