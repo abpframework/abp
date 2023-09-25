@@ -1,10 +1,14 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Volo.Abp;
+using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName;
 
@@ -28,19 +32,27 @@ public class Program
         {
             Log.Information("Starting console host.");
 
-            var builder = Host.CreateDefaultBuilder(args);
+            var builder = Host.CreateApplicationBuilder(args);
 
-            builder.ConfigureServices(services =>
-            {
-                services.AddHostedService<MyProjectNameHostedService>();
-                services.AddApplicationAsync<MyProjectNameModule>(options =>
-                {
-                    options.Services.ReplaceConfiguration(services.GetConfiguration());
-                });
-            }).AddAppSettingsSecretsJson().UseSerilog().UseAutofac().UseConsoleLifetime();
+            builder.Configuration.AddAppSettingsSecretsJson();
+            builder.Logging.ClearProviders().AddSerilog();
+
+            builder.Services.AddAutofacServiceProviderFactory();
+
+            builder.Services.AddSingleton<IHostLifetime, ConsoleLifetime>();
+
+            builder.Services.AddHostedService<MyProjectNameHostedService>();
+            await builder.Services.AddApplicationAsync<MyProjectNameModule>();
 
             var host = builder.Build();
-            await host.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().InitializeAsync(host.Services);
+
+            var application = host.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
+            var applicationLifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
+
+            applicationLifetime.ApplicationStopping.Register(() => AsyncHelper.RunSync(() => application.ShutdownAsync()));
+            applicationLifetime.ApplicationStopped.Register(() => application.Dispose());
+
+            await application.InitializeAsync(host.Services);
 
             await host.RunAsync();
 
