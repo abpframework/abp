@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
@@ -27,7 +26,7 @@ public class CmsKitHomePageRouteValueTransformer : DynamicRouteValueTransformer,
         if (await FeatureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable))
         {
             var page = await PagePublicAppService.FindDefaultHomePageAsync();
-            if (page != null)
+            if (page is not null)
             {
                 values = new RouteValueDictionary();
 
