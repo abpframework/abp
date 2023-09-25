@@ -1,10 +1,10 @@
 # CMS Kit in Action: Unveiling ABP Framework's Content Management Module
 
-We're excited to introduce you to [ABP](https://abp.io/)'s [CMS Kit Module](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index) – a versatile module that empowers you to build your own dynamic content website with ease. In this introductory blog post, we'll first take a look at the **CMS Kit Module** and then we'll take you on a journey through our **CMS Kit Demo Application**, showcasing the incredible capabilities of this feature-rich module.
+We're excited to introduce to you [ABP](https://abp.io/)'s [CMS Kit Module](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index) – a versatile module that empowers you to build your own dynamic content website with ease. In this introductory blog post, we'll first take a look at the **CMS Kit Module** and then we'll take you on a journey through our **CMS Kit Demo Application**, showcasing the incredible capabilities of this feature-rich module.
 
 ## Overview of the CMS Kit Module
 
-At the heart of ABP's CMS Kit Module is a robust Content Management System (CMS) designed to simplify content creation and management. With CMS Kit, you have the tools to build your own dynamic content website, complete with a range of features tailored to your specific needs. It provides core **building blocks** and fully working sub-systems to create your own website with CMS features enabled or use the building blocks in your websites for any purpose.
+At the heart of ABP's CMS Kit Module is a robust Content Management System (CMS) designed to simplify content creation and management. With the CMS Kit, you have the tools to build your own dynamic content website, complete with a range of features tailored to your specific needs. It provides core **building blocks** and fully working sub-systems to create your own website with the CMS features or use the building blocks in your websites for any purpose.
 
 ### CMS Kit: The Building Blocks (a.k.a Features)
 
@@ -30,19 +30,19 @@ The following features are provided by the CMS Kit Pro Module:
 * **Newsletter**: Allow users to subscribe to your newsletter (with multiple categories)
 * **URL Forwarding**: Create short URLs or redirect users to other pages (for example: [abp.io/dapr](https://abp.io/dapr))
 * **Poll**: Create quick polls for your users
-* **Page Feedback**: Collect feedback/s from users for your content
+* **Page Feedback**: Collect feedbacks from users for your content
 
 > For more information, check the [CMS Kit Pro Module documentation](https://docs.abp.io/en/commercial/latest/modules/cms-kit/index).
 
 ## Explore the CMS Kit Demo Application
 
-As the core ABP development team, we've created a sample application to showcase the incredible capabilities of the ABP's CMS Kit Module. You can explore the source code of the application on our [GitHub repository](https://github.com/abpframework/cms-kit-demo) to get a deeper understanding of how CMS Kit works under the hood. While developing the application, we aimed to build a real-world application and use almost all of the CMS Kit Features.
+As the core ABP development team, we've created a sample application to showcase the incredible capabilities of the ABP's CMS Kit Module. You can explore the source code of the application on our [GitHub repository](https://github.com/abpframework/cms-kit-demo) to get a deeper understanding of how the CMS Kit works under the hood. While developing the application, we aimed to build a real-world application and use almost all of the CMS Kit Features.
 
 In the next sections, we will provide a detailed walkthrough of the application and highlight each CMS Kit feature that has been incorporated into it.
 
 ### Dynamic Menu Creation with CMS Kit's Menu System
 
-One of the standout features of the CMS Kit is its [Menu System](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Menus), which allows for the creation and dynamic ordering of application menu items. Say goodbye to static menus; with CMS Kit, you have the power to tailor your menu structure according to your evolving content needs.
+One of the standing out features of the CMS Kit is its [Menu System](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Menus), which allows for the creation and dynamic ordering of application menu items. Say goodbye to static menus; with CMS Kit, you have the power to tailor your menu structure according to your evolving content needs.
 
 You can see the homepage of the application in the following figure:
 
@@ -64,7 +64,7 @@ It's pretty easy to integrate CMS Kit Features such as Comments & Reactions into
 
 ### Robust Blogging Capabilities
 
-Blogging has never been easier! With CMS Kit's [Blogging Feature](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Blogging), you can effortlessly manage your blog content, complete with [Ratings](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Ratings), [Comments](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments), [Tags](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Tags), and [Reactions](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Reactions) features as enabled:
+Blogging has never been easier! With the CMS Kit's [Blogging Feature](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Blogging), you can effortlessly manage your blog content, complete with [Ratings](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Ratings), [Comments](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments), [Tags](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Tags), and [Reactions](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Reactions) features as enabled:
 
 | Blog | Blog Post  |
 |------------------------ |-----------------------|
@@ -76,7 +76,7 @@ You can enable/disable CMS Kit Features per blog on the admin side easily:
 
 ### Dynamic Pages with Style and Script Integration
 
-*Products* pages showcase the flexibility of CMS Kit's [Pages Feature](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Pages), allowing for dynamic content creation, style customization, and script integration. Your website can now truly reflect your unique brand and content style.
+*Products* pages showcase the flexibility of the CMS Kit's [Pages Feature](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Pages), allowing for dynamic content creation, style customization, and script integration. Your website can now truly reflect your unique brand and content style.
 
 You can create pages with dynamic URLs on the admin side:
 
