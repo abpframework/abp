@@ -41,14 +41,6 @@ public class CmsKitPublicWebModule : AbpModule
         {
             mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitPublicWebModule).Assembly);
         });
-
-        PreConfigure<AbpEndpointRouterOptions>(options =>
-        {
-            options.EndpointConfigureActions.Add(context =>
-            {
-                context.Endpoints.MapCmsPageRoute();
-            });
-        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -79,6 +71,14 @@ public class CmsKitPublicWebModule : AbpModule
         Configure<AbpDistributedCacheOptions>(options =>
         {
             options.KeyPrefix = "CmsKit:";
+        });
+
+        Configure<AbpEndpointRouterOptions>(options =>
+        {
+            options.EndpointConfigureActions.Add(context =>
+            {
+                context.Endpoints.MapCmsPageRoute();
+            });
         });
     }
 
