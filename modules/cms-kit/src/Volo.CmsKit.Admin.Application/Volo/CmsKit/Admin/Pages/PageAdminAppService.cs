@@ -24,12 +24,12 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
 
     protected PageManager PageManager { get; }
     
-    protected IDistributedCache<PageCacheItem, PageCacheKey> PageCache { get; }
+    protected IDistributedCache<PageCacheItem> PageCache { get; }
 
     public PageAdminAppService(
         IPageRepository pageRepository,
         PageManager pageManager, 
-        IDistributedCache<PageCacheItem, PageCacheKey> pageCache)
+        IDistributedCache<PageCacheItem> pageCache)
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
@@ -66,7 +66,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         input.MapExtraPropertiesTo(page);
         await PageRepository.InsertAsync(page);
 
-        await PageCache.RemoveAsync(new PageCacheKey(page.Slug));
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
 
         return ObjectMapper.Map<Page, PageDto>(page);
     }
@@ -80,7 +80,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
             await InvalidateDefaultHomePageCacheAsync(considerUow: true);
         }
         
-        await PageCache.RemoveAsync(new PageCacheKey(page.Slug));
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
 
         await PageManager.SetSlugAsync(page, input.Slug);
 
@@ -119,6 +119,6 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
 
     protected virtual async Task InvalidateDefaultHomePageCacheAsync(bool considerUow = false)
     {
-        await PageCache.RemoveAsync(new PageCacheKey(PageConsts.DefaultHomePageCacheKey), considerUow: considerUow);
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(PageConsts.DefaultHomePageCacheKey), considerUow: considerUow);
     }
 }
