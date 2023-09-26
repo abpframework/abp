@@ -155,12 +155,13 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        var upperFilter = filter?.ToUpperInvariant();
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.NormalizedUserName.Contains(upperFilter) ||
+                    u.NormalizedEmail.Contains(upperFilter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
@@ -240,12 +241,13 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        var upperFilter = filter?.ToUpperInvariant();
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.NormalizedUserName.Contains(upperFilter) ||
+                    u.NormalizedEmail.Contains(upperFilter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
