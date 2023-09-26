@@ -7,7 +7,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity;
 
-[Obsolete("Use IIdentityUserIntegrationService for module-to-module (or service-to-service) communication.")]
+[Obsolete("Use IdentityUserIntegrationService for module-to-module (or service-to-service) communication.")]
 [Authorize(IdentityPermissions.UserLookup.Default)]
 public class IdentityUserLookupAppService : IdentityAppServiceBase, IIdentityUserLookupAppService
 {
