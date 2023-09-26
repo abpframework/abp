@@ -1,1 +1,0 @@
-abp generate-proxy -t csharp -url https://localhost:44349 -m cms-kit --without-contracts

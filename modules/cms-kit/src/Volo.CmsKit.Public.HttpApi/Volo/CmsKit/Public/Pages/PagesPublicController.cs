@@ -39,7 +39,7 @@ public class PagesPublicController : CmsKitPublicControllerBase, IPagePublicAppS
     }
 
     [HttpGet]
-    [Route("check")]
+    [Route("exist")]
     public virtual Task<bool> DoesSlugExistAsync([NotNull][FromQuery] string slug)
     {
         return PageAppService.DoesSlugExistAsync(slug);

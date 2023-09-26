@@ -914,7 +914,7 @@
               "uniqueName": "DoesSlugExistAsyncBySlug",
               "name": "DoesSlugExistAsync",
               "httpMethod": "GET",
-              "url": "api/cms-kit-public/pages/check",
+              "url": "api/cms-kit-public/pages/exist",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
