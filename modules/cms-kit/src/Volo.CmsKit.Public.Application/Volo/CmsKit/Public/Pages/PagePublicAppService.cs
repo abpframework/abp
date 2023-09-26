@@ -33,23 +33,14 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
     public virtual async Task<PageDto> FindBySlugAsync(string slug)
     {
-        var pageCacheItem = await PageCache.GetOrAddAsync(PageCacheItem.GetKey(slug), async () =>
-        {
-            var page = await PageRepository.FindBySlugAsync(slug);
-            if (page is null)
-            {
-                return null;
-            }
+        var cachedPage = await FindAndCacheBySlugAsync(slug);
 
-            return ObjectMapper.Map<Page, PageCacheItem>(page);
-        });
-
-        if (pageCacheItem is null)
+        if (cachedPage == null)
         {
             return null;
         }
 
-        return ObjectMapper.Map<PageCacheItem, PageDto>(pageCacheItem);
+        return ObjectMapper.Map<PageCacheItem, PageDto>(cachedPage);
     }
 
     public virtual async Task<PageDto> FindDefaultHomePageAsync()
@@ -74,8 +65,25 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
     public virtual async Task<bool> DoesSlugExistAsync([NotNull] string slug)
     {
-        var cached = await FindBySlugAsync(slug);
+        var cached = await FindAndCacheBySlugAsync(slug);
 
-        return cached is not null;
+        return cached != null;
+    }
+
+    internal virtual async Task<PageCacheItem> FindAndCacheBySlugAsync(string slug)
+    {
+        var pageCacheItem = await PageCache.GetOrAddAsync(PageCacheItem.GetKey(slug), async () =>
+        {
+            var page = await PageRepository.FindBySlugAsync(slug);
+            // If page is not found, cache it as null to prevent further queries.
+            if (page is null)
+            {
+                return null;
+            }
+
+            return ObjectMapper.Map<Page, PageCacheItem>(page);
+        });
+
+        return pageCacheItem;
     }
 }
