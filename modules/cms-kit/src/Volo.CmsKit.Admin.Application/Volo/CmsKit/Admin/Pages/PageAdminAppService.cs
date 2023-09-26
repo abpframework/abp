@@ -106,6 +106,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         }
         
         await PageRepository.DeleteAsync(page);
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
     }
 
     [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
