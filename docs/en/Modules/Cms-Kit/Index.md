@@ -38,27 +38,24 @@ abp add-module Volo.CmsKit --skip-db-migrations
 
 > By default, Cms-Kit is disabled by `GlobalFeature`. Because of that the initial migration will be empty. So you can skip the migration by adding `--skip-db-migrations` to command when installing if you are using Entity Framework Core. After enabling Cms-Kit global feture, please add new migration.
 
-After the installation process;
+After the installation process, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project of your solution and place the following code into the `Configure` method to enable all the features in the CMS Kit module.
 
-- Open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project of your solution and place the following code into the `Configure` method to enable all the features in the CMS Kit module.
+```csharp
+GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
+{
+    cmsKit.EnableAll();
+});
+```
 
-    ```csharp
-    GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-    {
-        cmsKit.EnableAll();
-    });
-    ```
+Instead of enabling all, you may prefer to enable the features one by one. The following example enables only the [tags](Tags.md) and [comments](Comments.md) features:
 
-    - Instead of enabling all, you may prefer to enable the features one by one. The following example enables only the [tags](Tags.md) and [comments](Comments.md) features:
-        ```csharp
-        GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-        {
-            cmsKit.Tags.Enable();
-            cmsKit.Comments.Enable();
-        });
-        ```
-
-- Check the [Enabling Pages Feature](Pages.md#enabling-the-pages-feature) section of the [Pages](Pages.md) documentation to enable the pages feature properly.
+````csharp
+GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
+{
+    cmsKit.Tags.Enable();
+    cmsKit.Comments.Enable();
+});
+````
 
 > If you are using Entity Framework Core, do not forget to add a new migration and update your database.
 

@@ -8,17 +8,6 @@ By default, CMS Kit features are disabled. Therefore, you need to enable the fea
 
 > Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
-By default, CMS-Kit pages will be presented in the public web application at `/pages/{slug}` route. You can map **slugs** as route without **pages/** prefix. You need to add CMS Kit Page route mapping in your Public Web application. _(The project where the CMS Kit public packages are installed.)_
-    
-    ```csharp
-    app.UseConfiguredEndpoints(builder =>
-    {
-        builder.MapCmsPageRoute();
-    });
-    ```
-
-By doing this, you can access the pages at `/{slug}` route.
-
 ## The User Interface
 
 ### Menu items
