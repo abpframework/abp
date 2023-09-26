@@ -4,7 +4,14 @@ import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
 import * as ts from 'typescript';
 import { allStyles, importMap, styleMap } from './style-map';
 import { ChangeThemeOptions } from './model';
-import { Change, InsertChange, isLibrary, updateWorkspace, WorkspaceDefinition } from '../../utils';
+import {
+  Change,
+  createDefaultPath,
+  InsertChange,
+  isLibrary,
+  updateWorkspace,
+  WorkspaceDefinition,
+} from '../../utils';
 import { ThemeOptionsEnum } from './theme-options.enum';
 import {
   addImportToModule,
@@ -59,20 +66,8 @@ function updateProjectStyle(
 }
 
 function updateAppModule(selectedProject: string, targetThemeName: ThemeOptionsEnum): Rule {
-  return (host: Tree) => {
-    const angularJSON = host.read('angular.json');
-    if (!angularJSON) {
-      throw new SchematicsException('The angular.json does not found');
-    }
-
-    const workspace = JSON.parse(angularJSON.toString());
-    const project = workspace.projects[selectedProject];
-
-    if (!project || !project.sourceRoot) {
-      throw new SchematicsException('The target project does not found');
-    }
-
-    const appModulePath = project.sourceRoot + '/app/app.module.ts';
+  return async (host: Tree) => {
+    const appModulePath = (await createDefaultPath(host, selectedProject)) + '/app.module.ts';
 
     return chain([
       removeImportPath(appModulePath, targetThemeName),
@@ -82,24 +77,16 @@ function updateAppModule(selectedProject: string, targetThemeName: ThemeOptionsE
   };
 }
 
-function removeImportPath(appModulePath: string, selectedTheme: ThemeOptionsEnum): Rule {
+export function removeImportPath(appModulePath: string, selectedTheme: ThemeOptionsEnum): Rule {
   return (host: Tree) => {
     const recorder = host.beginUpdate(appModulePath);
-    const sourceText = host.read(appModulePath)?.toString('utf-8');
-    const source = ts.createSourceFile(
-      appModulePath,
-      sourceText!,
-      ts.ScriptTarget.Latest,
-      true,
-      ts.ScriptKind.TS,
-    );
-    const impMap = Array.from(importMap.values())
-      .filter(f => f !== importMap.get(selectedTheme))
-      .reduce((acc, val) => [...acc, ...val], []);
+    const source = createSourceFile(host, appModulePath);
+    const impMap = getImportPaths(selectedTheme);
 
     const nodes = findNodes(source, ts.isImportDeclaration);
+
     const filteredNodes = nodes.filter(n => impMap.some(f => n.getFullText().match(f.path)));
-    if (!filteredNodes || filteredNodes.length < 1) {
+    if (filteredNodes?.length < 1) {
       return;
     }
 
@@ -112,23 +99,14 @@ function removeImportPath(appModulePath: string, selectedTheme: ThemeOptionsEnum
   };
 }
 
-function removeImportFromNgModuleMetadata(
+export function removeImportFromNgModuleMetadata(
   appModulePath: string,
   selectedTheme: ThemeOptionsEnum,
 ): Rule {
   return (host: Tree) => {
     const recorder = host.beginUpdate(appModulePath);
-    const sourceText = host.read(appModulePath)?.toString('utf-8');
-    const source = ts.createSourceFile(
-      appModulePath,
-      sourceText!,
-      ts.ScriptTarget.Latest,
-      true,
-      ts.ScriptKind.TS,
-    );
-    const impMap = Array.from(importMap.values())
-      .filter(f => f !== importMap.get(selectedTheme))
-      .reduce((acc, val) => [...acc, ...val], []);
+    const source = createSourceFile(host, appModulePath);
+    const impMap = getImportPaths(selectedTheme);
 
     const node = getDecoratorMetadata(source, 'NgModule', '@angular/core')[0] || {};
     if (!node) {
@@ -136,18 +114,18 @@ function removeImportFromNgModuleMetadata(
     }
 
     const matchingProperties = getMetadataField(node as ts.ObjectLiteralExpression, 'imports');
-
     const assignment = matchingProperties[0] as ts.PropertyAssignment;
     const assignmentInit = assignment.initializer as ts.ArrayLiteralExpression;
 
     const elements = assignmentInit.elements;
     if (!elements || elements.length < 1) {
-      return;
+      throw new SchematicsException(`Elements could not found: ${elements}`);
     }
 
     const filteredElements = elements.filter(f =>
       impMap.some(s => f.getText().match(s.importName)),
     );
+
     if (!filteredElements || filteredElements.length < 1) {
       return;
     }
@@ -160,17 +138,10 @@ function removeImportFromNgModuleMetadata(
   };
 }
 
-function insertImports(appModulePath: string, selectedTheme: ThemeOptionsEnum): Rule {
+export function insertImports(appModulePath: string, selectedTheme: ThemeOptionsEnum): Rule {
   return (host: Tree) => {
     const recorder = host.beginUpdate(appModulePath);
-    const sourceText = host.read(appModulePath)?.toString('utf-8');
-    const source = ts.createSourceFile(
-      appModulePath,
-      sourceText!,
-      ts.ScriptTarget.Latest,
-      true,
-      ts.ScriptKind.TS,
-    );
+    const source = createSourceFile(host, appModulePath);
     const selected = importMap.get(selectedTheme);
 
     const changes: Change[] = [];
@@ -188,6 +159,30 @@ function insertImports(appModulePath: string, selectedTheme: ThemeOptionsEnum): 
     host.commitUpdate(recorder);
     return host;
   };
+}
+
+export function createSourceFile(host: Tree, appModulePath: string): ts.SourceFile {
+  const buffer = host.read(appModulePath);
+  if (!buffer || buffer.length === 0) {
+    throw new SchematicsException(`${appModulePath} file could not be read.`);
+  }
+
+  const sourceText = buffer.toString('utf-8');
+  const source = ts.createSourceFile(
+    appModulePath,
+    sourceText,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  );
+
+  return source;
+}
+
+export function getImportPaths(selectedTheme: ThemeOptionsEnum) {
+  return Array.from(importMap.values())
+    .filter(f => f !== importMap.get(selectedTheme))
+    .reduce((acc, val) => [...acc, ...val], []);
 }
 
 export function getProjectTargetOptions(
