@@ -273,10 +273,7 @@ public class CmsKitWebUnifiedModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
 
-        app.UseConfiguredEndpoints(builder =>
-        {
-            builder.MapCmsPageRoute();
-        });
+        app.UseConfiguredEndpoints();
 
         using (var scope = context.ServiceProvider.CreateScope())
         {

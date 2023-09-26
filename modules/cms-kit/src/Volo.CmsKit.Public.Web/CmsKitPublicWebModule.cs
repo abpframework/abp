@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
@@ -39,6 +40,14 @@ public class CmsKitPublicWebModule : AbpModule
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
             mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitPublicWebModule).Assembly);
+        });
+
+        PreConfigure<AbpEndpointRouterOptions>(options =>
+        {
+            options.EndpointConfigureActions.Add(context =>
+            {
+                context.Endpoints.MapCmsPageRoute();
+            });
         });
     }
 
