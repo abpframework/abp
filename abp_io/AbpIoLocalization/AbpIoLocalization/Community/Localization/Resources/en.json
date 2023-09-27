@@ -205,7 +205,7 @@
     "hrs": "hrs",
     "min": "min",
     "sec": "sec",
-    "Winners:": "Winners:",
+    "Winners": "Winners",
     "To{0}LuckyWinners": "to {0} lucky winner(s)",
     "ActiveRaffles": "Active <span class=\"gradient-community\">Raffles</span>",
     "UpcomingRaffles": "Upcoming <span class=\"gradient-community\">Raffles</span>",
@@ -219,6 +219,10 @@
     "RaffleLoginAndRegisterMessage": "You should sign in to join a raffle. You can create an account for free if you haven't registered yet.",
     "Ok": "Ok",
     "SeeDetails": "See Details",
-    "WaitingForDraw": "Waiting for draw"
+    "WaitingForTheDraw": "Waiting for the draw",
+    "AllAttendees": "All Attendees",
+    "SeeRaffleDetail": "See Raffle Detail",
+    "SeeRaffle": "See Raffle",
+    "ParticipationIsComplete!": "Participation is complete!"
   }
 }
