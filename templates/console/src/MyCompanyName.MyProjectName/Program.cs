@@ -3,12 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Volo.Abp;
-using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName;
 
@@ -37,22 +35,15 @@ public class Program
             builder.Configuration.AddAppSettingsSecretsJson();
             builder.Logging.ClearProviders().AddSerilog();
 
-            builder.Services.AddAutofacServiceProviderFactory();
-
-            builder.Services.AddSingleton<IHostLifetime, ConsoleLifetime>();
+            builder.ConfigureContainer(builder.Services.AddAutofacServiceProviderFactory());
 
             builder.Services.AddHostedService<MyProjectNameHostedService>();
+
             await builder.Services.AddApplicationAsync<MyProjectNameModule>();
 
             var host = builder.Build();
 
-            var application = host.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
-            var applicationLifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
-
-            applicationLifetime.ApplicationStopping.Register(() => AsyncHelper.RunSync(() => application.ShutdownAsync()));
-            applicationLifetime.ApplicationStopped.Register(() => application.Dispose());
-
-            await application.InitializeAsync(host.Services);
+            await host.InitializeAsync();
 
             await host.RunAsync();
 
