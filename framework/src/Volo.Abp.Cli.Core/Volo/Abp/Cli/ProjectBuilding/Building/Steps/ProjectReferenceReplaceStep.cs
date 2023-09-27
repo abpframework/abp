@@ -85,28 +85,45 @@ public class ProjectReferenceReplaceStep : ProjectBuildPipelineStep
 
         public void Run()
         {
-            foreach (var fileEntry in _entries)
+            //get Directory.Packages.props file
+            var cpmFile = _entries.Where(x => x.Name.EndsWith("Directory.Packages.props"))
+                .Select(x => new {FileEntry = x, Depth = x.Name.Split('/').Length}).OrderBy(x => x.Depth)
+                .Select(x => x.FileEntry).FirstOrDefault();
+
+            XmlDocument nugetCpmXmlDoc = null;
+            XmlNode nugetCpmXmlNode = null;
+            if (cpmFile != null && !cpmFile.Content.IsNullOrWhiteSpace())
             {
-                if (fileEntry.Name.EndsWith(".csproj"))
-                {
-                    fileEntry.SetContent(ProcessFileContent(fileEntry.Content));
-                }
+                using var stream = StreamHelper.GenerateStreamFromString(cpmFile.Content);
+                nugetCpmXmlDoc = new XmlDocument { PreserveWhitespace = true };
+                nugetCpmXmlDoc.Load(stream);
+                nugetCpmXmlNode = nugetCpmXmlDoc.SelectSingleNode("/Project/ItemGroup");
+            }
+
+            var csprojFiles = _entries.Where(fileEntry => fileEntry.Name.EndsWith(".csproj"));
+
+            foreach (var fileEntry in csprojFiles)
+            {
+                fileEntry.SetContent(ProcessFileContent(fileEntry.Content, nugetCpmXmlDoc, nugetCpmXmlNode));
+            }
+
+            if (nugetCpmXmlNode != null)
+            {
+                cpmFile.SetContent(nugetCpmXmlDoc.OuterXml);
             }
         }
 
-        private string ProcessFileContent(string content)
+        private string ProcessFileContent(string content, XmlDocument nugetCpmXmlDoc, XmlNode nugetCpmXmlNode)
         {
             Check.NotNull(content, nameof(content));
 
-            using (var stream = StreamHelper.GenerateStreamFromString(content))
-            {
-                var doc = new XmlDocument() { PreserveWhitespace = true };
-                doc.Load(stream);
-                return ProcessReferenceNodes(doc, content);
-            }
+            using var stream = StreamHelper.GenerateStreamFromString(content);
+            var doc = new XmlDocument { PreserveWhitespace = true };
+            doc.Load(stream);
+            return ProcessReferenceNodes(doc, content, nugetCpmXmlDoc, nugetCpmXmlNode);
         }
 
-        private string ProcessReferenceNodes(XmlDocument doc, string content)
+        private string ProcessReferenceNodes(XmlDocument doc, string content, XmlDocument nugetCpmXmlDoc, XmlNode nugetCpmXmlNode)
         {
             Check.NotNull(content, nameof(content));
 
@@ -126,7 +143,7 @@ public class ProjectReferenceReplaceStep : ProjectBuildPipelineStep
                     continue;
                 }
 
-                XmlNode newNode = GetNewReferenceNode(doc, oldNodeIncludeValue);
+                XmlNode newNode = GetNewReferenceNode(doc, oldNodeIncludeValue, nugetCpmXmlDoc, nugetCpmXmlNode);
 
                 oldNode.ParentNode.ReplaceChild(newNode, oldNode);
             }
@@ -144,7 +161,7 @@ public class ProjectReferenceReplaceStep : ProjectBuildPipelineStep
             return oldNodeIncludeValue.Split('\\', '/').Last();
         }
 
-        protected abstract XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue);
+        protected abstract XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue, XmlDocument nugetCpmXmlDoc, XmlNode nugetCpmXmlNode);
 
 
         public class NugetReferenceReplacer : ProjectReferenceReplacer
@@ -157,17 +174,39 @@ public class ProjectReferenceReplaceStep : ProjectBuildPipelineStep
                 _nugetPackageVersion = nugetPackageVersion;
             }
 
-            protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
+            protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue, XmlDocument nugetCpmXmlDoc, XmlNode nugetCpmXmlNode)
             {
                 var newNode = doc.CreateElement("PackageReference");
-
+                
                 var includeAttr = doc.CreateAttribute("Include");
                 includeAttr.Value = ConvertToNugetReference(oldNodeIncludeValue);
                 newNode.Attributes.Append(includeAttr);
 
-                var versionAttr = doc.CreateAttribute("Version");
-                versionAttr.Value = _nugetPackageVersion;
-                newNode.Attributes.Append(versionAttr);
+                if (nugetCpmXmlNode==null)
+                {
+                    var versionAttr = doc.CreateAttribute("Version");
+                    versionAttr.Value = _nugetPackageVersion;
+                    newNode.Attributes.Append(versionAttr);
+                }
+                else
+                {
+                    // use nuget CPM
+                    if (nugetCpmXmlDoc.SelectSingleNode($"/Project/ItemGroup/PackageVersion[@Include='{includeAttr.Value}']") == null)
+                    {
+                        var newPackageVersionNode = nugetCpmXmlDoc.CreateElement("PackageVersion");
+
+                        var newPackageVersionNodeIncludeAttr = nugetCpmXmlDoc.CreateAttribute("Include");
+                        newPackageVersionNodeIncludeAttr.Value = includeAttr.Value;
+                        newPackageVersionNode.Attributes.Append(newPackageVersionNodeIncludeAttr);
+
+                        var newPackageVersionNodeVersionAttr = nugetCpmXmlDoc.CreateAttribute("Version");
+                        newPackageVersionNodeVersionAttr.Value = _nugetPackageVersion;
+                        newPackageVersionNode.Attributes.Append(newPackageVersionNodeVersionAttr);
+
+                        nugetCpmXmlNode.AppendChild(newPackageVersionNode);
+                    }
+                }
+
                 return newNode;
             }
 
@@ -196,7 +235,7 @@ public class ProjectReferenceReplaceStep : ProjectBuildPipelineStep
                 _gitHubVoloLocalRepositoryPath = gitHubVoloLocalRepositoryPath;
             }
 
-            protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
+            protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue, XmlDocument nugetCpmXmlDoc, XmlNode nugetCpmXmlNode)
             {
                 var newNode = doc.CreateElement("ProjectReference");
 
