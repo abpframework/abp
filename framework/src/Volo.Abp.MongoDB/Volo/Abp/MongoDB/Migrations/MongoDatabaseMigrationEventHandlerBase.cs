@@ -4,9 +4,9 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.MongoDB;
+namespace Volo.Abp.MongoDB.Migrations;
 
-public abstract class MongoDbDatabaseEventHandlerBase<TDbContext> :
+public abstract class MongoDatabaseMigrationEventHandlerBase<TDbContext> :
     IDistributedEventHandler<TenantCreatedEto>,
     IDistributedEventHandler<TenantConnectionStringUpdatedEto>,
     ITransientDependency
@@ -15,7 +15,7 @@ public abstract class MongoDbDatabaseEventHandlerBase<TDbContext> :
     protected string DatabaseName { get; }
 
 
-    protected MongoDbDatabaseEventHandlerBase(string databaseName)
+    protected MongoDatabaseMigrationEventHandlerBase(string databaseName)
     {
         DatabaseName = databaseName;
     }
