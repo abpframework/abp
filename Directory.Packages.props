@@ -108,6 +108,7 @@
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
     <PackageVersion Include="Minio" Version="4.0.6" />
     <PackageVersion Include="MongoDB.Driver" Version="2.19.1" />
     <PackageVersion Include="NEST" Version="7.14.1" />
