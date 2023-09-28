@@ -2,7 +2,7 @@
 
 ## About This Solution
 
-This is a minimalist, non-layered startup solution with the ABP Framework. All the fundamental ABP modules are already installed.
+This is a layered startup solution based on [Domain Driven Design (DDD)](https://docs.abp.io/en/abp/latest/Domain-Driven-Design) practises. All the fundamental ABP modules are already installed. Check the [Application Startup Template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application) documentation for more info.
 
 ## Before Running the Solution
 
@@ -29,16 +29,6 @@ abp install-libs
 ```
 
 > This command installs all NPM packages for MVC/Razor Pages and Blazor Server UIs and this command is already run by the ABP CLI, so most of the time you don't need to run this command manually.
-
-## How to Run
-
-The application needs to connect to a database. Run the following command in the `MyCompanyName.MyProjectName` directory to migrate the database and seed the initial data:
-
-````bash
-dotnet run --migrate-database
-````
-
-This command will create and seed the initial database. Then you can run the application with any IDE that supports .NET.
 
 ## Deploying the Application
 
