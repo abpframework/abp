@@ -125,6 +125,37 @@ After this replacement, the app will use the following URLs:
 
 The app sends the `__tenant` header that contains the current tenant id on each request.
 
+### Handling Domain-based Tenant not found
+
+When the application is initiated and a domain-based tenant is active, it makes a request for validating tenant. If it cannot be located. The Angular application calls the function. The function displays an error message, but you can customize the functionality by injecting the 'TENANT_NOT_FOUND_BY_NAME' token into the function.
+
+Example:
+```ts
+import { TENANT_NOT_FOUND_BY_NAME } from '@abp/ng.core';
+
+@NgModule({
+  imports: [
+  // removed for clarity
+  ],
+  providers: [
+    // removed for clarity
+    {
+      provide: TENANT_NOT_FOUND_BY_NAME,
+      useFactory: function () {
+        return () => {
+          window.location.replace('https://abp.io');
+        };
+      },
+    },
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+
+``` 
+
 ## See Also
 
 - [Multi Tenancy in ABP](../../Multi-Tenancy.md)
+
