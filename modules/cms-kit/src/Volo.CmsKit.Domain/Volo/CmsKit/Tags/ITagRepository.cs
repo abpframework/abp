@@ -26,6 +26,9 @@ public interface ITagRepository : IBasicRepository<Tag, Guid>
 
     Task<List<Tag>> GetListAsync(
         string filter,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        string sorting = null,
         CancellationToken cancellationToken = default);
 
     Task<int> GetCountAsync(
