@@ -18,6 +18,10 @@ dotnet dev-certs https -v -ep openiddict.pfx -p 00000000-0000-0000-0000-00000000
 
 > `00000000-0000-0000-0000-000000000000` is the password of the certificate, you can change it to any password you want.
 
+> It is recommended to use **two** RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
+
+For more information, please refer to: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-certificate-recommended-for-production-ready-scenarios
+
 > See the [Configuring OpenIddict](https://docs.abp.io/en/abp/latest/Deployment/Configuring-OpenIddict#production-environment) documentation for more information.
 
 ### Install Client-Side Libraries
