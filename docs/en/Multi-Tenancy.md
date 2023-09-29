@@ -288,6 +288,17 @@ Configure<AbpTenantResolveOptions>(options =>
 * Add this code to the `ConfigureServices` method of your [module](Module-Development-Basics.md).
 * This should be done in the *Web/API Layer* since the URL is a web related stuff.
 
+Openiddict is default Auth Server in ABP (since v6.0).  When you use OpenIddict,  you must add the code  on PreConfigure section 
+```csharp
+// using Volo.Abp.OpenIddict.WildcardDomains
+
+PreConfigure<AbpOpenIddictWildcardDomainOptions>(options=>{
+    options.EnableWildcardDomainSupport = true;
+    options.WildcardDomainsFormat.Add("https://{0}.mydomain.com");
+    });
+```
+
+
 > There is an [example](https://github.com/abpframework/abp-samples/tree/master/DomainTenantResolver) that uses the subdomain to determining the current tenant. 
 
 ##### Custom Tenant Resolvers
