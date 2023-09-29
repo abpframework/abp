@@ -92,7 +92,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
     public virtual async Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
     {
-        var tags = await Repository.GetListAsync(input.Filter);
+        var tags = await Repository.GetListAsync(input.Filter, input.MaxResultCount, input.SkipCount, input.Sorting);
         var count = await Repository.GetCountAsync(input.Filter);
 
         return new PagedResultDto<TagDto>(
