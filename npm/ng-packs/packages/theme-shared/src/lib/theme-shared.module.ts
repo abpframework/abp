@@ -40,6 +40,7 @@ import { CardModule } from './components/card/card.module';
 import { AbpVisibleDirective } from './directives';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormCheckboxComponent } from './components/checkbox/checkbox.component';
+import { tenantNotFoundProvider } from './providers/tenant-not-found.provider';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -58,7 +59,7 @@ const declarationsWithExports = [
   ModalCloseDirective,
   AbpVisibleDirective,
   FormInputComponent,
-  FormCheckboxComponent
+  FormCheckboxComponent,
 ];
 
 @NgModule({
@@ -69,7 +70,6 @@ const declarationsWithExports = [
     NgbPaginationModule,
     EllipsisModule,
     CardModule,
-
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
   exports: [
@@ -77,11 +77,11 @@ const declarationsWithExports = [
     EllipsisModule,
     NgxValidateCoreModule,
     CardModule,
-    ...declarationsWithExports
+    ...declarationsWithExports,
   ],
   providers: [DatePipe],
 })
-export class BaseThemeSharedModule { }
+export class BaseThemeSharedModule {}
 
 @NgModule({
   imports: [BaseThemeSharedModule],
@@ -144,6 +144,7 @@ export class ThemeSharedModule {
             ...(confirmationIcons || {}),
           },
         },
+        tenantNotFoundProvider,
       ],
     };
   }
