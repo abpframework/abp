@@ -127,7 +127,7 @@ The app sends the `__tenant` header that contains the current tenant id on each 
 
 ### Handling Domain-based Tenant not found
 
-When the application is initiated and a domain-based tenant is active, it makes a request for validating tenant. If it cannot be located. The Angular application calls the function. The function displays an error message, but you can customize the functionality by injecting the 'TENANT_NOT_FOUND_BY_NAME' token into the function.
+When the application is initialized and a domain-based tenant is active, it makes a request for validating tenant. If it cannot be located, the Angular application calls the function. The function displays an error message, but you can customize the functionality by injecting the `TENANT_NOT_FOUND_BY_NAME` token into the function.
 
 Example:
 ```ts
