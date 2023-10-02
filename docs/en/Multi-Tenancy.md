@@ -273,7 +273,7 @@ Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 
 ##### Domain/Subdomain Tenant Resolver
 
-In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure the `AbpTenantResolveOptions` to add the domain tenant resolver.
+In a real application, most of times you will want to determine the current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure the `AbpTenantResolveOptions` to add the domain tenant resolver.
 
 **Example: Add a subdomain resolver**
 
@@ -284,11 +284,11 @@ Configure<AbpTenantResolveOptions>(options =>
 });
 ````
 
-* `{0}` is the placeholder to determine current tenant's unique name.
+* `{0}` is the placeholder to determine the current tenant's unique name.
 * Add this code to the `ConfigureServices` method of your [module](Module-Development-Basics.md).
 * This should be done in the *Web/API Layer* since the URL is a web related stuff.
 
-Openiddict is default Auth Server in ABP (since v6.0).  When you use OpenIddict,  you must add the code  on PreConfigure section.
+Openiddict is the default Auth Server in ABP (since v6.0). When you use OpenIddict, you must add this code to the `PreConfigure` method as well.
 ```csharp
 // using Volo.Abp.OpenIddict.WildcardDomains
 
@@ -298,7 +298,7 @@ PreConfigure<AbpOpenIddictWildcardDomainOptions>(options=>{
     });
 ```
 
-You must add the code on Configure section 
+You must add this code to the Configure method as well. 
 
 ```csharp
 // using Volo.Abp.MultiTenancy;
@@ -309,13 +309,13 @@ Configure<AbpTenantResolveOptions>(options=>{
 
 ```
 
-> There is an [example](https://github.com/abpframework/abp-samples/tree/master/DomainTenantResolver) that uses the subdomain to determining the current tenant. 
+> There is an [example](https://github.com/abpframework/abp-samples/tree/master/DomainTenantResolver) that uses the subdomain to determine the current tenant. 
 
-If you use sepereted Auth server, you must install `Owl.TokenWildcardIssuerValidator` on HTTPApi.Host project
+If you use a sepereted Auth server, you must install `Owl.TokenWildcardIssuerValidator` on the HTTPApi.Host project
 ```bash
 dotnet add package Owl.TokenWildcardIssuerValidator
 ```
-Then go to inside block of `.AddJwtBearer`   and add the code
+Then fix the options of the `.AddJwtBearer` block
 
 ```csharp
 // using using Owl.TokenWildcardIssuerValidator;
