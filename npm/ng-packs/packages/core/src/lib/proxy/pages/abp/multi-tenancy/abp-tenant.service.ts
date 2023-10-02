@@ -25,7 +25,7 @@ export class AbpTenantService {
         url: `/api/abp/multi-tenancy/tenants/by-name/${name}`,
       },
       { apiName: this.apiName },
-    ).pipe(tap((res) => console.log(res)));
+    );
 
   constructor(private restService: RestService) {}
 }
