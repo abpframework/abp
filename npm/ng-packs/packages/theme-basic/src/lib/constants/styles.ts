@@ -147,4 +147,8 @@ background-color: rgba(0, 0, 0, 0.6);
     background-color: transparent;
     padding: 0.27rem;
 }
+
+.abp-md-form {
+    max-width: 540px;
+  }
 `;

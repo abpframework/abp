@@ -32,24 +32,40 @@ Configure<CmsKitTagOptions>(options =>
 `TagEntityTypeDefiniton` properties:
 
 - `EntityType`: Name of the entity type.
-- `DisplayName`: Display name of the entity type. You can use a user friendly display name to show entity type definition on the admin website.
+- `DisplayName`: The display name of the entity type. You can use a user-friendly display name to show entity type definition on the admin website.
 - `CreatePolicies`: List of policy/permission names allowing users to create tags under the entity type.
 - `UpdatePolicies`: List of policy/permission names allowing users to update tags under the entity type.
 - `DeletePolicies`: List of policy/permission names allowing users to delete tags under the entity type.
 
 ## The Tag Widget
 
-The tag system provides a tag [widget](../../UI/AspNetCore/Widgets.md) to display associated tags of a resource that was configured for tagging. You can simply place the widget on a page like below:
+The tag system provides a tag [widget](../../UI/AspNetCore/Widgets.md) to display associated tags of a resource that was configured for tagging. You can simply place the widget on a page like the one below:
 
 ```csharp
 @await Component.InvokeAsync(typeof(TagViewComponent), new
 {
   entityType = "Product",
-  entityId = "..."
+  entityId = "...",
+  urlFormat = "/products?tagId={TagId}&tagName={TagName}"
 })
 ```
 
-`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here.
+`entityType` was explained in the previous section. In this example, the `entityId` should be the unique id of the product. If you have a `Product` entity, you can use its Id here. `urlFormat` is the string format of the URL which will be generated for each tag. You can use the `{TagId}` and `{TagName}` placeholders to populate the URL. For example, the above URL format will populate URLs like `/products?tagId=1&tagName=tag1`.
+
+## The Popular Tags Widget
+
+The tag system provides a popular tags [widget](../../UI/AspNetCore/Widgets.md) to display popular tags of a resource that was configured for tagging. You can simply place the widget on a page as below:
+
+```csharp
+@await Component.InvokeAsync(typeof(PopularTagsViewComponent), new
+{
+  entityType = "Product",
+  urlFormat = "/products?tagId={TagId}&tagName={TagName}",
+  maxCount = 10
+})
+```
+
+`entityType` was explained in the previous section. `urlFormat` was explained in the previous section. `maxCount` is the maximum number of tags to be displayed.
 
 ## User Interface
 
@@ -95,7 +111,7 @@ An entity tag represents a connection between the tag and the tagged entity.
 
 This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
 
-Following custom repositories are defined for this feature:
+The following custom repositories are defined for this feature:
 
 - `ITagRepository`
 - `IEntityTagRepository`
@@ -106,11 +122,11 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 
 ##### Tag Manager
 
-`TagManager` is used to perform some operations for the `Tag` aggregate root.
+`TagManager` performs some operations for the `Tag` aggregate root.
 
 ##### Entity Tag Manager
 
-`EntityTagManager` is used to perform some operations for the `EntityTag` entity.
+`EntityTagManager` performs some operations for the `EntityTag` entity.
 
 ### Application layer
 
@@ -124,7 +140,7 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 
 #### Common
 
-##### Table / collection prefix & schema
+##### Table / Collection prefix & schema
 
 All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 

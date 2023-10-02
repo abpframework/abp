@@ -48,7 +48,7 @@ public class AbpMauiBlazorClientHttpMessageHandler : DelegatingHandler, ITransie
         if (!selectedLanguage.IsNullOrWhiteSpace())
         {
             request.Headers.AcceptLanguage.Clear();
-            request.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(selectedLanguage));
+            request.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(selectedLanguage!));
         }
     }
 }

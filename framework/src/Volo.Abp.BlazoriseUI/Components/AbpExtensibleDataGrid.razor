@@ -121,7 +121,7 @@
                                     @{
                                         var entity = context as IHasExtraProperties;
                                         var propertyName = ExtensionPropertiesRegex.Match(column.Data).Groups[1].Value;
-                                        var propertyValue = entity.GetProperty(propertyName);
+                                        var propertyValue = entity?.GetProperty(propertyName);
                                         if (propertyValue != null && propertyValue.GetType() == typeof(bool))
                                         {
                                             if ((bool) propertyValue)

@@ -13,7 +13,7 @@ public static class EntityCacheServiceCollectionExtensions
 {
     public static IServiceCollection AddEntityCache<TEntity, TKey>(
         this IServiceCollection services,
-        [CanBeNull] DistributedCacheEntryOptions cacheOptions = null)
+        DistributedCacheEntryOptions? cacheOptions = null)
         where TEntity : Entity<TKey>
     {
         services
@@ -39,7 +39,7 @@ public static class EntityCacheServiceCollectionExtensions
 
     public static IServiceCollection AddEntityCache<TEntity, TEntityCacheItem, TKey>(
         this IServiceCollection services,
-        [CanBeNull] DistributedCacheEntryOptions cacheOptions = null)
+        DistributedCacheEntryOptions? cacheOptions = null)
         where TEntity : Entity<TKey>
         where TEntityCacheItem : class
     {
@@ -61,7 +61,7 @@ public static class EntityCacheServiceCollectionExtensions
 
     public static IServiceCollection AddEntityCache<TObjectMapperContext, TEntity, TEntityCacheItem, TKey>(
         this IServiceCollection services,
-        [CanBeNull] DistributedCacheEntryOptions cacheOptions = null)
+        DistributedCacheEntryOptions? cacheOptions = null)
         where TEntity : Entity<TKey>
         where TEntityCacheItem : class
     {

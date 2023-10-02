@@ -146,7 +146,8 @@ public class BookStoreSettingPageContributor : ISettingPageContributor
             new SettingPageGroup(
                 "Volo.Abp.MySettingGroup",
                 "MySettingGroup",
-                typeof(MySettingGroupViewComponent)
+                typeof(MySettingGroupViewComponent),
+                order : 1
             )
         );
 
@@ -209,7 +210,8 @@ public class BookStoreSettingComponentContributor : ISettingComponentContributor
             new SettingComponentGroup(
                 "Volo.Abp.MySettingGroup",
                 "MySettingGroup",
-                typeof(MySettingGroupComponent)
+                typeof(MySettingGroupComponent),
+                order : 1
             )
         );
 

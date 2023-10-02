@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.EventBus.Distributed;
@@ -39,5 +40,15 @@ public class IncomingEventInfo : IHasExtraProperties
         CreationTime = creationTime;
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
+    }
+
+    public void SetCorrelationId(string correlationId)
+    {
+        ExtraProperties[EventBusConsts.CorrelationIdHeaderName] = correlationId;
+    }
+
+    public string GetCorrelationId()
+    {
+        return ExtraProperties.GetOrDefault(EventBusConsts.CorrelationIdHeaderName)?.ToString();
     }
 }

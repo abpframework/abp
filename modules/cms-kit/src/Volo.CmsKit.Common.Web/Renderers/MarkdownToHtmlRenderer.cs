@@ -19,6 +19,9 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
     {
         MarkdownPipeline = markdownPipeline;
         _htmlSanitizer = new HtmlSanitizer();
+        _htmlSanitizer.AllowedAttributes.Add("class");
+        _htmlSanitizer.AllowedAttributes.Add("data-bs-toggle");
+        _htmlSanitizer.AllowedAttributes.Add("data-bs-target");
     }
 
     public Task<string> RenderAsync(string rawMarkdown, bool allowHtmlTags = true, bool preventXSS = true, string referralLinks = null)

@@ -13,7 +13,7 @@ public static class ExtensibleObjectValidator
     public static void CheckValue(
         [NotNull] IHasExtraProperties extensibleObject,
         [NotNull] string propertyName,
-        [CanBeNull] object value)
+        object? value)
     {
         var validationErrors = GetValidationErrors(
             extensibleObject,
@@ -29,7 +29,7 @@ public static class ExtensibleObjectValidator
 
     public static bool IsValid(
         [NotNull] IHasExtraProperties extensibleObject,
-        [CanBeNull] ValidationContext objectValidationContext = null)
+        ValidationContext? objectValidationContext = null)
     {
         return GetValidationErrors(
             extensibleObject,
@@ -40,8 +40,8 @@ public static class ExtensibleObjectValidator
     public static bool IsValid(
         [NotNull] IHasExtraProperties extensibleObject,
         [NotNull] string propertyName,
-        [CanBeNull] object value,
-        [CanBeNull] ValidationContext objectValidationContext = null)
+        object? value,
+        ValidationContext? objectValidationContext = null)
     {
         return GetValidationErrors(
             extensibleObject,
@@ -54,7 +54,7 @@ public static class ExtensibleObjectValidator
     [NotNull]
     public static List<ValidationResult> GetValidationErrors(
         [NotNull] IHasExtraProperties extensibleObject,
-        [CanBeNull] ValidationContext objectValidationContext = null)
+        ValidationContext? objectValidationContext = null)
     {
         var validationErrors = new List<ValidationResult>();
 
@@ -71,8 +71,8 @@ public static class ExtensibleObjectValidator
     public static List<ValidationResult> GetValidationErrors(
         [NotNull] IHasExtraProperties extensibleObject,
         [NotNull] string propertyName,
-        [CanBeNull] object value,
-        [CanBeNull] ValidationContext objectValidationContext = null)
+        object? value,
+        ValidationContext? objectValidationContext = null)
     {
         var validationErrors = new List<ValidationResult>();
 
@@ -90,7 +90,7 @@ public static class ExtensibleObjectValidator
     public static void AddValidationErrors(
         [NotNull] IHasExtraProperties extensibleObject,
         [NotNull] List<ValidationResult> validationErrors,
-        [CanBeNull] ValidationContext objectValidationContext = null)
+        ValidationContext? objectValidationContext = null)
     {
         Check.NotNull(extensibleObject, nameof(extensibleObject));
         Check.NotNull(validationErrors, nameof(validationErrors));
@@ -100,7 +100,7 @@ public static class ExtensibleObjectValidator
             objectValidationContext = new ValidationContext(
                 extensibleObject,
                 null,
-                new Dictionary<object, object>()
+                new Dictionary<object, object?>()
             );
         }
 
@@ -133,8 +133,8 @@ public static class ExtensibleObjectValidator
         [NotNull] IHasExtraProperties extensibleObject,
         [NotNull] List<ValidationResult> validationErrors,
         [NotNull] string propertyName,
-        [CanBeNull] object value,
-        [CanBeNull] ValidationContext objectValidationContext = null)
+        object? value,
+        ValidationContext? objectValidationContext = null)
     {
         Check.NotNull(extensibleObject, nameof(extensibleObject));
         Check.NotNull(validationErrors, nameof(validationErrors));
@@ -145,7 +145,7 @@ public static class ExtensibleObjectValidator
             objectValidationContext = new ValidationContext(
                 extensibleObject,
                 null,
-                new Dictionary<object, object>()
+                new Dictionary<object, object?>()
             );
         }
 
@@ -203,7 +203,7 @@ public static class ExtensibleObjectValidator
         List<ValidationResult> validationErrors,
         ValidationContext objectValidationContext,
         ObjectExtensionPropertyInfo property,
-        object value)
+        object? value)
     {
         AddPropertyValidationAttributeErrors(
             extensibleObject,
@@ -227,7 +227,7 @@ public static class ExtensibleObjectValidator
         List<ValidationResult> validationErrors,
         ValidationContext objectValidationContext,
         ObjectExtensionPropertyInfo property,
-        object value)
+        object? value)
     {
         var validationAttributes = property.GetValidationAttributes();
 
@@ -261,7 +261,7 @@ public static class ExtensibleObjectValidator
         List<ValidationResult> validationErrors,
         ValidationContext objectValidationContext,
         ObjectExtensionPropertyInfo property,
-        object value)
+        object? value)
     {
         if (!property.Validators.Any())
         {

@@ -11,7 +11,7 @@ public class ScriptNonceTagHelper : AbpTagHelper
 {
     [HtmlAttributeNotBound]
     [ViewContext]
-    public ViewContext ViewContext { get; set; }
+    public ViewContext ViewContext { get; set; } = default!;
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         if (ViewContext.HttpContext.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) && nonce is string nonceString && !string.IsNullOrEmpty(nonceString))

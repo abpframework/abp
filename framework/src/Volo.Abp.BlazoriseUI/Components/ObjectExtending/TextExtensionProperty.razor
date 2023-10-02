@@ -9,7 +9,7 @@
     <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
         <Field>
             <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
-            <TextEdit @bind-Text="@Value" Role="@PropertyInfo.GetTextRole()" InputMode="@PropertyInfo.GetTextInputMode()">
+            <TextEdit @bind-Text="@Value" Role="@PropertyInfo.GetTextRole()" InputMode="@PropertyInfo.GetTextInputMode()" Disabled="IsReadonlyField">
                  <Feedback>
                     <ValidationError/>
                 </Feedback>

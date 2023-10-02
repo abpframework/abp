@@ -17,7 +17,7 @@ public class AbpAntiForgeryCookieNameProvider : ITransientDependency
         _abpAntiForgeryOptions = abpAntiForgeryOptions.Value;
     }
 
-    public virtual string GetAuthCookieNameOrNull()
+    public virtual string? GetAuthCookieNameOrNull()
     {
         if (_abpAntiForgeryOptions.AuthCookieSchemaName == null)
         {
@@ -27,7 +27,7 @@ public class AbpAntiForgeryCookieNameProvider : ITransientDependency
         return _namedOptionsAccessor.Get(_abpAntiForgeryOptions.AuthCookieSchemaName)?.Cookie?.Name;
     }
 
-    public virtual string GetAntiForgeryCookieNameOrNull()
+    public virtual string? GetAntiForgeryCookieNameOrNull()
     {
         return _abpAntiForgeryOptions.TokenCookie.Name;
     }

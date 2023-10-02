@@ -19,8 +19,8 @@ public class DefaultAbpRequestLocalizationOptionsProvider : IAbpRequestLocalizat
 {
     private readonly IServiceScopeFactory _serviceProviderFactory;
     private readonly SemaphoreSlim _syncSemaphore;
-    private Action<RequestLocalizationOptions> _optionsAction;
-    private RequestLocalizationOptions _requestLocalizationOptions;
+    private Action<RequestLocalizationOptions>? _optionsAction;
+    private RequestLocalizationOptions? _requestLocalizationOptions;
 
     public DefaultAbpRequestLocalizationOptionsProvider(IServiceScopeFactory serviceProviderFactory)
     {
@@ -28,7 +28,7 @@ public class DefaultAbpRequestLocalizationOptionsProvider : IAbpRequestLocalizat
         _syncSemaphore = new SemaphoreSlim(1, 1);
     }
 
-    public void InitLocalizationOptions(Action<RequestLocalizationOptions> optionsAction = null)
+    public void InitLocalizationOptions(Action<RequestLocalizationOptions>? optionsAction = null)
     {
         _optionsAction = optionsAction;
     }
@@ -85,7 +85,7 @@ public class DefaultAbpRequestLocalizationOptionsProvider : IAbpRequestLocalizat
         return _requestLocalizationOptions;
     }
 
-    private static RequestCulture DefaultGetRequestCulture(string defaultLanguage, IReadOnlyList<LanguageInfo> languages)
+    private static RequestCulture DefaultGetRequestCulture(string? defaultLanguage, IReadOnlyList<LanguageInfo> languages)
     {
         if (defaultLanguage == null)
         {

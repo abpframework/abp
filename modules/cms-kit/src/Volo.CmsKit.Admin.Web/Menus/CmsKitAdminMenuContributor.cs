@@ -97,7 +97,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.GlobalResources.GlobalResourcesMenu,
                 l["GlobalResources"],
                 "/Cms/GlobalResources",
-                "bi bi-code-slash",
+                "fa fa-code",
                 order: 4)
             .RequireFeatures(CmsKitFeatures.GlobalResourceEnable)
             .RequireGlobalFeatures(typeof(GlobalResourcesFeature))

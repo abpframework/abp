@@ -7,10 +7,117 @@
         "Volo.Blogging.Admin.BlogManagementController": {
           "controllerName": "BlogManagement",
           "controllerGroupName": "BlogManagement",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
           "type": "Volo.Blogging.Admin.BlogManagementController",
           "interfaces": [
             {
-              "type": "Volo.Blogging.Admin.Blogs.IBlogManagementAppService"
+              "type": "Volo.Blogging.Admin.Blogs.IBlogManagementAppService",
+              "name": "IBlogManagementAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Blogs.Dtos.BlogDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Blogs.Dtos.BlogDto>"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                    "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Blogging.Admin.Blogs.CreateBlogDto, Volo.Blogging.Admin.Application.Contracts",
+                      "type": "Volo.Blogging.Admin.Blogs.CreateBlogDto",
+                      "typeSimple": "Volo.Blogging.Admin.Blogs.CreateBlogDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                    "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Blogging.Admin.Blogs.UpdateBlogDto, Volo.Blogging.Admin.Application.Contracts",
+                      "type": "Volo.Blogging.Admin.Blogs.UpdateBlogDto",
+                      "typeSimple": "Volo.Blogging.Admin.Blogs.UpdateBlogDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                    "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ClearCacheAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {

@@ -20,8 +20,7 @@ public interface IToolbarConfigurationContext : IServiceProviderAccessor
 
     Task<bool> IsGrantedAsync(string policyName);
 
-    [CanBeNull]
-    IStringLocalizer GetDefaultLocalizer();
+    IStringLocalizer? GetDefaultLocalizer();
 
     [NotNull]
     public IStringLocalizer GetLocalizer<T>();

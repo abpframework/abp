@@ -30,7 +30,7 @@ public class AbpSwashbuckleDocumentFilter : IDocumentFilter
             .RemoveAll(path => !actionUrls.Contains(path.Key));
     }
 
-    protected virtual string RemoveRouteParameterConstraints(ActionDescriptor actionDescriptor)
+    protected virtual string? RemoveRouteParameterConstraints(ActionDescriptor actionDescriptor)
     {
         var route = actionDescriptor.AttributeRouteInfo?.Template?.EnsureStartsWith('/').Replace("?", "");
         if (string.IsNullOrWhiteSpace(route))

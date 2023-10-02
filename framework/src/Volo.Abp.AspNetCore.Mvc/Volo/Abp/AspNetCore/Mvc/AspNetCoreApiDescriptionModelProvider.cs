@@ -162,7 +162,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
     }
 
     private static List<string> GetSupportedVersions(Type controllerType, MethodInfo method,
-        ConventionalControllerSetting setting)
+        ConventionalControllerSetting? setting)
     {
         var supportedVersions = new List<ApiVersion>();
 
@@ -196,7 +196,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
     }
 
     private static void AddCustomTypesToModel(ApplicationApiDescriptionModel applicationModel,
-        [CanBeNull] Type type)
+        Type? type)
     {
         if (type == null)
         {
@@ -275,7 +275,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             .Select(_ => "T" + i++)
             .JoinAsString(",");
 
-        return $"{type.FullName.Left(type.FullName.IndexOf('`'))}<{argumentList}>";
+        return $"{type.FullName!.Left(type.FullName!.IndexOf('`'))}<{argumentList}>";
     }
 
     private void AddParameterDescriptionsToModel(ActionApiDescriptionModel actionModel, MethodInfo method,
@@ -339,16 +339,16 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
 
         if (modelNameProvider == null)
         {
-            return parameterInfo.Name;
+            return parameterInfo.Name!;
         }
 
-        return modelNameProvider.Name ?? parameterInfo.Name;
+        return (modelNameProvider.Name ?? parameterInfo.Name)!;
     }
 
     private static string GetRootPath(
         [NotNull] Type controllerType,
         [NotNull] ActionDescriptor actionDescriptor,
-        [CanBeNull] ConventionalControllerSetting setting)
+        ConventionalControllerSetting? setting)
     {
         if (setting != null)
         {
@@ -364,7 +364,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         return ModuleApiDescriptionModel.DefaultRootPath;
     }
 
-    private string GetRemoteServiceName(Type controllerType, [CanBeNull] ConventionalControllerSetting setting)
+    private string GetRemoteServiceName(Type controllerType, ConventionalControllerSetting? setting)
     {
         if (setting != null)
         {
@@ -381,7 +381,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         return ModuleApiDescriptionModel.DefaultRemoteServiceName;
     }
 
-    private string FindGroupName(Type controllerType)
+    private string? FindGroupName(Type controllerType)
     {
         var controllerNameAttribute =
             controllerType.GetCustomAttributes().OfType<ControllerNameAttribute>().FirstOrDefault();
@@ -394,8 +394,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         return null;
     }
 
-    [CanBeNull]
-    private ConventionalControllerSetting FindSetting(Type controllerType)
+    private ConventionalControllerSetting? FindSetting(Type controllerType)
     {
         foreach (var controllerSetting in _abpAspNetCoreMvcOptions.ConventionalControllers.ConventionalControllerSettings)
         {

@@ -11,7 +11,7 @@ public static class TagHelperContextExtensions
     {
         if (!context.Items.ContainsKey(key))
         {
-            return default(T);
+            return default(T)!;
         }
 
         return (T)context.Items[key];

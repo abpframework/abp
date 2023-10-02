@@ -5,21 +5,6 @@
 
 (function(){
 
-  // controller volo.docs.areas.documents.documentResource
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.docs.areas.documents.documentResource');
-
-    volo.docs.areas.documents.documentResource.getResource = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'document-resources' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'name', value: input.name }, { name: 'version', value: input.version }, { name: 'languageCode', value: input.languageCode }]) + '',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-  })();
-
   // controller volo.docs.projects.docsProject
 
   (function(){

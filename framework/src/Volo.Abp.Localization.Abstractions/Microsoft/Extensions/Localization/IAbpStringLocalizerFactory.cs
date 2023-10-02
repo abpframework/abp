@@ -5,12 +5,9 @@ namespace Microsoft.Extensions.Localization;
 
 public interface IAbpStringLocalizerFactory
 {
-    [CanBeNull]
-    IStringLocalizer CreateDefaultOrNull();
+    IStringLocalizer? CreateDefaultOrNull();
 
-    [CanBeNull]
-    IStringLocalizer CreateByResourceNameOrNull([NotNull] string resourceName);
+    IStringLocalizer? CreateByResourceNameOrNull([NotNull] string resourceName);
     
-    [ItemCanBeNull]
-    Task<IStringLocalizer> CreateByResourceNameOrNullAsync([NotNull] string resourceName);
+    Task<IStringLocalizer?> CreateByResourceNameOrNullAsync([NotNull] string resourceName);
 }

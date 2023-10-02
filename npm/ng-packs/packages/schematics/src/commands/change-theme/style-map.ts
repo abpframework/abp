@@ -8,6 +8,11 @@ export type StyleDefinition =
     }
   | string;
 
+export type ImportDefinition = {
+  path: string;
+  importName: string;
+};
+
 export const styleMap = new Map<ThemeOptionsEnum, StyleDefinition[]>();
 
 styleMap.set(ThemeOptionsEnum.Basic, [
@@ -241,3 +246,49 @@ styleMap.set(ThemeOptionsEnum.LeptonXLite, [
 ]);
 // the code written by Github co-pilot. thank go-pilot. You are the best sidekick.
 export const allStyles = Array.from(styleMap.values()).reduce((acc, val) => [...acc, ...val], []);
+
+export const importMap = new Map<ThemeOptionsEnum, ImportDefinition[]>();
+
+importMap.set(ThemeOptionsEnum.Basic, [
+  {
+    path: '@abp/ng.theme.basic',
+    importName: 'ThemeBasicModule.forRoot()',
+  },
+]);
+
+importMap.set(ThemeOptionsEnum.Lepton, [
+  {
+    path: '@volo/abp.ng.theme.lepton',
+    importName: 'ThemeLeptonModule.forRoot()',
+  },
+]);
+
+importMap.set(ThemeOptionsEnum.LeptonXLite, [
+  {
+    path: '@abp/ng.theme.lepton-x',
+    importName: 'ThemeLeptonXModule.forRoot()',
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/layouts',
+    importName: 'SideMenuLayoutModule.forRoot()',
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/account',
+    importName: 'AccountLayoutModule.forRoot()',
+  },
+]);
+
+importMap.set(ThemeOptionsEnum.LeptonX, [
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x',
+    importName: 'ThemeLeptonXModule.forRoot()',
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x/layouts',
+    importName: 'SideMenuLayoutModule.forRoot()',
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x/account',
+    importName: 'AccountLayoutModule.forRoot()',
+  },
+]);

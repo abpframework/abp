@@ -25,7 +25,7 @@ public class InMemoryBackgroundJobStore : IBackgroundJobStore, ISingletonDepende
 
     public virtual Task<BackgroundJobInfo> FindAsync(Guid jobId)
     {
-        return Task.FromResult(_jobs.GetOrDefault(jobId));
+        return Task.FromResult(_jobs.GetOrDefault(jobId))!;
     }
 
     public virtual Task InsertAsync(BackgroundJobInfo jobInfo)

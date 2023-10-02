@@ -14,8 +14,8 @@ public class AbpComponentDemoSectionTagHelper : AbpTagHelper
     private const string DemoSectionOpeningTag = "<abp-component-demo-section";
     private const string DemoSectionClosingTag = "</abp-component-demo-section";
 
-    public string ViewPath { get; set; }
-    public string Title { get; set; }
+    public string ViewPath { get; set; } = default!;
+    public string? Title { get; set; }
 
     private readonly IVirtualFileProvider _virtualFileProvider;
     private readonly IGuidGenerator _guidGenerator;
@@ -101,7 +101,7 @@ public class AbpComponentDemoSectionTagHelper : AbpTagHelper
 
     private string GetRawDemoSource()
     {
-        StringBuilder sourceBuilder = null;
+        StringBuilder? sourceBuilder = null;
 
         var lines = GetFileContent().SplitToLines();
 

@@ -5,7 +5,7 @@ namespace Volo.Abp.AspNetCore.Components.Messages;
 
 public class UiMessageEventArgs : EventArgs
 {
-    public UiMessageEventArgs(UiMessageType messageType, string message, string title, UiMessageOptions options)
+    public UiMessageEventArgs(UiMessageType messageType, string message, string? title, UiMessageOptions options)
     {
         MessageType = messageType;
         Message = message;
@@ -13,7 +13,7 @@ public class UiMessageEventArgs : EventArgs
         Options = options;
     }
 
-    public UiMessageEventArgs(UiMessageType messageType, string message, string title, UiMessageOptions options, TaskCompletionSource<bool> callback)
+    public UiMessageEventArgs(UiMessageType messageType, string message, string? title, UiMessageOptions options, TaskCompletionSource<bool> callback)
     {
         MessageType = messageType;
         Message = message;
@@ -26,9 +26,9 @@ public class UiMessageEventArgs : EventArgs
 
     public string Message { get; }
 
-    public string Title { get; }
+    public string? Title { get; }
 
     public UiMessageOptions Options { get; }
 
-    public TaskCompletionSource<bool> Callback { get; }
+    public TaskCompletionSource<bool> Callback { get; } = default!;
 }

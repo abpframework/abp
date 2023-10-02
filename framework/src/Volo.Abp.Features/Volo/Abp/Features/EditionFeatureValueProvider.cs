@@ -18,7 +18,7 @@ public class EditionFeatureValueProvider : FeatureValueProvider
         PrincipalAccessor = principalAccessor;
     }
 
-    public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
+    public override async Task<string?> GetOrNullAsync(FeatureDefinition feature)
     {
         var editionId = PrincipalAccessor.Principal?.FindEditionId();
         if (editionId == null)

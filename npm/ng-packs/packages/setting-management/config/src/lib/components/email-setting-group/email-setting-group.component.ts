@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { SettingManagementPolicyNames } from '../../enums/policy-names';
-import { EmailSettingsService } from '../../proxy/email-settings.service';
+import { EmailSettingsService } from '@abp/ng.setting-management/proxy';
 import { EmailSettingsDto } from '../../proxy/models';
 
 @Component({

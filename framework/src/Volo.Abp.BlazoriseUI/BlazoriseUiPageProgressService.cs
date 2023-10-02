@@ -12,9 +12,9 @@ public class BlazoriseUiPageProgressService : IUiPageProgressService,
     /// <summary>
     /// An event raised after the notification is received.
     /// </summary>
-    public event EventHandler<UiPageProgressEventArgs> ProgressChanged;
+    public event EventHandler<UiPageProgressEventArgs>? ProgressChanged;
 
-    public Task Go(int? percentage, Action<UiPageProgressOptions> options = null)
+    public Task Go(int? percentage, Action<UiPageProgressOptions>? options = null)
     {
         var uiPageProgressOptions = CreateDefaultOptions();
         options?.Invoke(uiPageProgressOptions);

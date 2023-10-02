@@ -10,6 +10,7 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore;
 public class SettingManagementDbContext : AbpDbContext<SettingManagementDbContext>, ISettingManagementDbContext
 {
     public DbSet<Setting> Settings { get; set; }
+    public DbSet<SettingDefinitionRecord> SettingDefinitionRecords { get; set; }
 
     public SettingManagementDbContext(DbContextOptions<SettingManagementDbContext> options)
         : base(options)

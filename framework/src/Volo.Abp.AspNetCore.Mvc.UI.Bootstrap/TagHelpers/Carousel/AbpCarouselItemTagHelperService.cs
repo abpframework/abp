@@ -66,10 +66,10 @@ public class AbpCarouselItemTagHelperService : AbpTagHelperService<AbpCarouselIt
         }
 
         var title = new TagBuilder("h5");
-        title.InnerHtml.AppendHtml(TagHelper.CaptionTitle);
+        title.InnerHtml.AppendHtml(TagHelper.CaptionTitle!);
 
         var caption = new TagBuilder("p");
-        caption.InnerHtml.AppendHtml(TagHelper.Caption);
+        caption.InnerHtml.AppendHtml(TagHelper.Caption!);
 
         var wrapper = new TagBuilder("div");
         wrapper.AddCssClass("carousel-caption d-none d-md-block");

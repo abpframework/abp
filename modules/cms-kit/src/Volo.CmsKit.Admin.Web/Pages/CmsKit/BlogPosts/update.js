@@ -164,11 +164,14 @@ $(function () {
     initEditor();
 
     var editor;
+    var addWidgetButton;
     function initEditor() {
         var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
+
+        addWidgetButton = createAddWidgetButton();
 
         editor = new toastui.Editor({
             el: $editorContainer[0],
@@ -189,7 +192,7 @@ $(function () {
                 ['code', 'codeblock'],
                 // Using Option: Customize the last button
                 [{
-                    el: createAddWidgetButton(),
+                    el: addWidgetButton,
                     command: 'bold',
                     tooltip: 'Add Widget'
                 }]
@@ -255,20 +258,28 @@ $(function () {
         editor.insertText(txt);
     });
 
+    var $previewArea;
     $('.tab-item').on('click', function () {
         if ($(this).attr("aria-label") == 'Preview' && editor.isMarkdownMode()) {
 
+            if(!$previewArea){
+                $previewArea = $("#ContentEditor .toastui-editor-md-preview");
+                $previewArea.replaceWith("<iframe id='previewArea' style='height: 100%; width: 100%; border: 0px; display: inline;'></iframe>");
+            }
+
+            $previewArea.attr("srcdoc", '');
+
+            addWidgetButton.disabled = true;
             let content = editor.getMarkdown();
             localStorage.setItem('content', content);
 
             $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
-                editor.setHTML(result);
-
-                var highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
-                highllightedText.removeClass('toastui-editor-md-preview-highlight');
+                $previewArea = $("#previewArea");
+                $previewArea.attr("srcdoc", result);
             });
         }
         else if ($(this).attr("aria-label") == 'Write') {
+            addWidgetButton.disabled = false;
             var retrievedObject = localStorage.getItem('content');
             editor.setMarkdown(retrievedObject);
         }

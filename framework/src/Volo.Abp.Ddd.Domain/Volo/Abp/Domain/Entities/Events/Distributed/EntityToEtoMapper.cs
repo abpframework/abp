@@ -21,7 +21,7 @@ public class EntityToEtoMapper : IEntityToEtoMapper, ITransientDependency
         Options = options.Value;
     }
 
-    public object Map(object entityObj)
+    public object? Map(object entityObj)
     {
         Check.NotNull(entityObj, nameof(entityObj));
 
@@ -36,7 +36,7 @@ public class EntityToEtoMapper : IEntityToEtoMapper, ITransientDependency
         if (etoMappingItem == null)
         {
             var keys = entity.GetKeys().JoinAsString(",");
-            return new EntityEto(entityType.FullName, keys);
+            return new EntityEto(entityType.FullName!, keys);
         }
 
         using (var scope = HybridServiceScopeFactory.CreateScope())

@@ -29,7 +29,7 @@ import { NgxDatatableListDirective } from './directives/ngx-datatable-list.direc
 import { DocumentDirHandlerService } from './handlers/document-dir.handler';
 import { ErrorHandler } from './handlers/error.handler';
 import { RootParams } from './models/common';
-import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
+import { ERROR_HANDLERS_PROVIDERS, NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
@@ -145,6 +145,7 @@ export class ThemeSharedModule {
           },
         },
         tenantNotFoundProvider,
+        ERROR_HANDLERS_PROVIDERS,
       ],
     };
   }

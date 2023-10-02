@@ -27,7 +27,7 @@ public static class ExtensibleObjectMapper
         [NotNull] TSource source,
         [NotNull] TDestination destination,
         MappingPropertyDefinitionChecks? definitionChecks = null,
-        string[] ignoredProperties = null)
+        string[]? ignoredProperties = null)
         where TSource : IHasExtraProperties
         where TDestination : IHasExtraProperties
     {
@@ -75,10 +75,10 @@ public static class ExtensibleObjectMapper
     /// </param>
     /// <param name="ignoredProperties">Used to ignore some properties</param>
     public static void MapExtraPropertiesTo<TSource, TDestination>(
-        [NotNull] Dictionary<string, object> sourceDictionary,
-        [NotNull] Dictionary<string, object> destinationDictionary,
+        [NotNull] Dictionary<string, object?> sourceDictionary,
+        [NotNull] Dictionary<string, object?> destinationDictionary,
         MappingPropertyDefinitionChecks? definitionChecks = null,
-        string[] ignoredProperties = null)
+        string[]? ignoredProperties = null)
         where TSource : IHasExtraProperties
         where TDestination : IHasExtraProperties
     {
@@ -110,10 +110,10 @@ public static class ExtensibleObjectMapper
     public static void MapExtraPropertiesTo(
         [NotNull] Type sourceType,
         [NotNull] Type destinationType,
-        [NotNull] Dictionary<string, object> sourceDictionary,
-        [NotNull] Dictionary<string, object> destinationDictionary,
+        [NotNull] Dictionary<string, object?> sourceDictionary,
+        [NotNull] Dictionary<string, object?> destinationDictionary,
         MappingPropertyDefinitionChecks? definitionChecks = null,
-        string[] ignoredProperties = null)
+        string[]? ignoredProperties = null)
     {
         Check.AssignableTo<IHasExtraProperties>(sourceType, nameof(sourceType));
         Check.AssignableTo<IHasExtraProperties>(destinationType, nameof(destinationType));
@@ -140,7 +140,7 @@ public static class ExtensibleObjectMapper
     public static bool CanMapProperty<TSource, TDestination>(
         [NotNull] string propertyName,
         MappingPropertyDefinitionChecks? definitionChecks = null,
-        string[] ignoredProperties = null)
+        string[]? ignoredProperties = null)
     {
         return CanMapProperty(
             typeof(TSource),
@@ -156,7 +156,7 @@ public static class ExtensibleObjectMapper
         [NotNull] Type destinationType,
         [NotNull] string propertyName,
         MappingPropertyDefinitionChecks? definitionChecks = null,
-        string[] ignoredProperties = null)
+        string[]? ignoredProperties = null)
     {
         Check.AssignableTo<IHasExtraProperties>(sourceType, nameof(sourceType));
         Check.AssignableTo<IHasExtraProperties>(destinationType, nameof(destinationType));
@@ -175,10 +175,10 @@ public static class ExtensibleObjectMapper
 
     private static bool CanMapProperty(
         [NotNull] string propertyName,
-        [CanBeNull] ObjectExtensionInfo sourceObjectExtension,
-        [CanBeNull] ObjectExtensionInfo destinationObjectExtension,
+        ObjectExtensionInfo? sourceObjectExtension,
+        ObjectExtensionInfo? destinationObjectExtension,
         MappingPropertyDefinitionChecks? definitionChecks = null,
-        string[] ignoredProperties = null)
+        string[]? ignoredProperties = null)
     {
         Check.NotNull(propertyName, nameof(propertyName));
 

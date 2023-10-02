@@ -70,11 +70,11 @@ public abstract class AbstractKeyCrudAppService<TEntity, TGetOutputDto, TGetList
 {
     protected IRepository<TEntity> Repository { get; }
 
-    protected virtual string CreatePolicyName { get; set; }
+    protected virtual string? CreatePolicyName { get; set; }
 
-    protected virtual string UpdatePolicyName { get; set; }
+    protected virtual string? UpdatePolicyName { get; set; }
 
-    protected virtual string DeletePolicyName { get; set; }
+    protected virtual string? DeletePolicyName { get; set; }
 
     protected AbstractKeyCrudAppService(IRepository<TEntity> repository)
         : base(repository)

@@ -24,7 +24,7 @@ public class PermissionValueProviderManager : IPermissionValueProviderManager, I
             () => Options
                 .ValueProviders
                 .Select(c => serviceProvider.GetRequiredService(c) as IPermissionValueProvider)
-                .ToList(),
+                .ToList()!,
             true
         );
     }

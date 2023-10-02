@@ -36,6 +36,11 @@ public class MongoDbRepositoryFilterer<TEntity> : IMongoDbRepositoryFilterer<TEn
 
         return Task.CompletedTask;
     }
+
+    public virtual TQueryable FilterQueryable<TQueryable>(TQueryable query) where TQueryable : IQueryable<TEntity>
+    {
+        return query;
+    }
 }
 
 public class MongoDbRepositoryFilterer<TEntity, TKey> : MongoDbRepositoryFilterer<TEntity>,
@@ -98,5 +103,10 @@ public class MongoDbRepositoryFilterer<TEntity, TKey> : MongoDbRepositoryFiltere
         }
 
         return Builders<TEntity>.Filter.And(filters);
+    }
+
+    public virtual TQueryable FilterQueryable<TQueryable>(TQueryable query) where TQueryable : IQueryable<TEntity>
+    {
+        return query;
     }
 }
