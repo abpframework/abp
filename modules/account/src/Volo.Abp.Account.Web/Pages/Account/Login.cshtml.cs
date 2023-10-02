@@ -269,8 +269,9 @@ public class LoginModel : AccountPageModel
         await IdentityOptions.SetAsync();
 
         var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
+        var userName = await GetUserNameFromEmail(emailAddress);
 
-        var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
+        var user = new IdentityUser(GuidGenerator.Create(), userName, emailAddress, CurrentTenant.Id);
 
         CheckIdentityErrors(await UserManager.CreateAsync(user));
         CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));

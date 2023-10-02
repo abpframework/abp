@@ -1,4 +1,4 @@
-import { ConfigStateService, LocalizationService } from '@abp/ng.core';
+import { ConfigStateService, ExtensionEnumFieldDto, LocalizationService } from '@abp/ng.core';
 import { BehaviorSubject, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { PropData } from '../lib/models/props';
@@ -11,10 +11,10 @@ const mockSessionState = {
   onLanguageChange$: () => new BehaviorSubject('tr'),
 } as any;
 
-const fields = [
-  { name: 'foo', value: 1 },
-  { name: 'bar', value: 2 },
-  { name: 'baz', value: 3 },
+const fields: ExtensionEnumFieldDto[] = [
+  { name: 'foo', value: {number: 1} },
+  { name: 'bar', value: {number: 2} },
+  { name: 'baz', value: {number: 3} },
 ];
 
 class MockPropData<R = any> extends PropData<R> {
@@ -42,17 +42,13 @@ describe('Enum Utils', () => {
   describe('#createEnum', () => {
     const enumFromFields = createEnum(fields);
 
-    test.each`
-      key      | expected
-      ${'foo'} | ${1}
-      ${'bar'} | ${2}
-      ${'baz'} | ${3}
-      ${1}     | ${'foo'}
-      ${2}     | ${'bar'}
-      ${3}     | ${'baz'}
-    `('should create an enum that returns $expected when $key is accessed', ({ key, expected }) => {
-      expect(enumFromFields[key]).toBe(expected);
-    });
+    test.each([
+      {name:'foo', value: 'number', expected: 1},
+      {name:'bar', value: 'number', expected: 2},
+      {name:'baz', value: 'number', expected: 3}
+    ])('should create an enum that returns $expected when $name $value is accessed',({name, value, expected})=>{
+      expect(enumFromFields[name][value]).toBe(expected);
+    })
   });
 
   describe('#createEnumValueResolver', () => {
@@ -75,7 +71,7 @@ describe('Enum Utils', () => {
           'EnumProp',
         );
         const propData = new MockPropData({
-          extraProperties: { EnumProp: value },
+          extraProperties: { EnumProp: value }, 
         });
         propData.getInjected = () => service as any;
 
@@ -111,7 +107,8 @@ describe('Enum Utils', () => {
 
 function createMockLocalizationService() {
   const fakeAppConfigService = { get: () => of({ localization: mockL10n }) } as any;
-  const configState = new ConfigStateService(fakeAppConfigService);
+  const fakeLocalizationService = { get: () => of({ localization: mockL10n }) } as any;
+  const configState = new ConfigStateService(fakeAppConfigService, fakeLocalizationService, false);
   configState.refreshAppState();
 
   return new LocalizationService(mockSessionState, null, null, configState);

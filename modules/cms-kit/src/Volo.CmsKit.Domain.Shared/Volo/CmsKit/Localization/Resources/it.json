@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Valutazioni",
     "CmsKit.Reactions": "Reazioni",
     "CmsKit.Tags": "Tag",
+    "CmsKit.BlogPost.PreventXssFeature": "Prevenzione XSS",
     "CmsKit:0002": "Il contenuto esiste già!",
     "CmsKit:0003": "L'entità {0} non è codificabile.",
     "CmsKit:Blog:0001": "Lo slug specificato ({Slug}) esiste già!",

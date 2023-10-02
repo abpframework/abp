@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -15,27 +14,30 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 using Color = SixLabors.ImageSharp.Color;
 using PointF = SixLabors.ImageSharp.PointF;
+using Volo.Abp.Caching;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Volo.CmsKit.Public.Web.Security.Captcha;
 
-public class SimpleMathsCaptchaGenerator : ISingletonDependency
+public class SimpleMathsCaptchaGenerator : ITransientDependency
 {
-    private readonly IStringLocalizer<CmsKitResource> _localizer;
+    protected IStringLocalizer<CmsKitResource> Localizer { get; }
+    protected IDistributedCache<CaptchaOutput> Cache { get; }
 
-    public SimpleMathsCaptchaGenerator(IStringLocalizer<CmsKitResource> localizer)
+    public SimpleMathsCaptchaGenerator(IStringLocalizer<CmsKitResource> localizer, IDistributedCache<CaptchaOutput> cache)
     {
-        _localizer = localizer;
-    }
-    private static Dictionary<Guid, CaptchaRequest> Session { get; set; } = new Dictionary<Guid, CaptchaRequest>();
-
-    public CaptchaOutput Generate()
-    {
-        return Generate(options: null, number1: null, number2: null);
+        Localizer = localizer;
+        Cache = cache;
     }
 
-    public CaptchaOutput Generate(CaptchaOptions options)
+    public virtual Task<CaptchaOutput> GenerateAsync()
     {
-        return Generate(options, number1: null, number2: null);
+        return GenerateAsync(options: null, number1: null, number2: null);
+    }
+
+    public virtual Task<CaptchaOutput> GenerateAsync(CaptchaOptions options)
+    {
+        return GenerateAsync(options, number1: null, number2: null);
     }
 
     /// <summary>
@@ -45,7 +47,7 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
     /// <param name="number1">First number for maths operation</param>
     /// <param name="number2">Second number for maths operation</param>
     /// <returns></returns>
-    public CaptchaOutput Generate(CaptchaOptions options, int? number1, int? number2)
+    public virtual async Task<CaptchaOutput> GenerateAsync(CaptchaOptions options, int? number1, int? number2)
     {
         var random = new Random();
         options ??= new CaptchaOptions();
@@ -65,11 +67,15 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
             {
                 Text = text,
                 Result = Calculate(number1.Value, number2.Value),
-                ImageBytes =  GenerateInternal(text, options)
+                ImageBytes = GenerateInternal(text, options)
             }
         };
 
-        Session[request.Output.Id] = request;
+        await Cache.SetAsync(request.Output.Id.ToString("N"), request.Output, new DistributedCacheEntryOptions 
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.Add(options.DurationOfValidity)
+        });
+
         return request.Output;
     }
 
@@ -78,24 +84,25 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
         return number1 + number2;
     }
 
-    public void Validate(Guid requestId, int value)
+    public virtual async Task ValidateAsync(Guid requestId, int value)
     {
-        var request = Session[requestId];
-        if (request.Output.Result != value)
+        var request = await Cache.GetAsync(requestId.ToString("N"));
+        
+        if(request == null || request.Result != value) 
         {
-            throw new UserFriendlyException(_localizer["CaptchaCodeErrorMessage"]);
+            throw new UserFriendlyException(Localizer["CaptchaCodeErrorMessage"]);
         }
     }
 
-    public void Validate(Guid requestId, string value)
+    public virtual async Task ValidateAsync(Guid requestId, string value)
     {
         if (int.TryParse(value, out var captchaInput))
         {
-            Validate(requestId, captchaInput);
+            await ValidateAsync(requestId, captchaInput);
         }
         else
         {
-            throw new UserFriendlyException(_localizer["CaptchaCodeMissingMessage"]);
+            throw new UserFriendlyException(Localizer["CaptchaCodeMissingMessage"]);
         }
     }
 

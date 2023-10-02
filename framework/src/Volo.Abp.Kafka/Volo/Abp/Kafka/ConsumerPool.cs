@@ -30,7 +30,7 @@ public class ConsumerPool : IConsumerPool, ISingletonDependency
         Logger = new NullLogger<ConsumerPool>();
     }
 
-    public virtual IConsumer<string, byte[]> Get(string groupId, string connectionName = null)
+    public virtual IConsumer<string, byte[]> Get(string groupId, string? connectionName = null)
     {
         connectionName ??= KafkaConnections.DefaultConnectionName;
 

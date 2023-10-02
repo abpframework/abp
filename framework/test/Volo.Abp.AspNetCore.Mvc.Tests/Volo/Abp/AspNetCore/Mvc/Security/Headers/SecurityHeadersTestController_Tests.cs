@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Security.Headers;
 
 public class SecurityHeadersTestController_Tests : AspNetCoreMvcTestBase
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpSecurityHeadersOptions>(options =>
         {
@@ -18,7 +18,7 @@ public class SecurityHeadersTestController_Tests : AspNetCoreMvcTestBase
             options.Headers["Referrer-Policy"] = "no-referrer";
         });
 
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
 
     [Fact]

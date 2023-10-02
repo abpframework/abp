@@ -64,6 +64,8 @@
     "PasswordResetInfoInEmail": "ما درخواست بازیابی حساب دریافت کردیم! اگر این درخواست را آغاز کرده اید, برای بازنشانی گذرواژه خود روی پیوند زیر کلیک کنید.",
     "ResetMyPassword": "بازنشانی گذرواژه من",
     "AccessDenied": "دسترسی ممنوع!",
-    "AccessDeniedMessage": "شما به این منبع دسترسی ندارید."
+    "AccessDeniedMessage": "شما به این منبع دسترسی ندارید.",
+    "OrRegisterWith": "یا ثبت نام کنید با:",
+    "RegisterUsingYourProviderAccount": "با استفاده از حساب {0} خود ثبت نام کنید"
   }
 }

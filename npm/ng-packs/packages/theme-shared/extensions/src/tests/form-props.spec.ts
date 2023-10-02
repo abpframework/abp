@@ -127,14 +127,14 @@ describe('FormProp', () => {
     expect(prop.type).toBe(options.type);
     expect(prop.name).toBe(options.name);
     expect(prop.displayName).toBe(options.name);
-    expect(prop.permission).toBeUndefined();
+    expect(prop.permission).toBe('');
     expect(prop.visible()).toBe(true);
     expect(prop.asyncValidators(null)).toEqual([]);
     expect(prop.validators(null)).toEqual([]);
     expect(prop.disabled()).toBe(false);
     expect(prop.readonly()).toBe(false);
     expect(prop.autocomplete).toBe('off');
-    expect(prop.defaultValue).toBeNull();
+    expect(prop.defaultValue).toBe('');
     expect(prop.options).toBeUndefined();
     expect(prop.id).toBe(options.name);
   });
@@ -144,7 +144,7 @@ describe('FormProp', () => {
     ${0}         | ${0}
     ${''}        | ${''}
     ${false}     | ${false}
-    ${undefined} | ${null}
+    ${undefined} | ${''}
   `(
     'should set defaultValue as $expected when $defaultValue is given',
     ({ defaultValue, expected }) => {
