@@ -43,7 +43,7 @@ public static class EfCoreObjectExtensionPropertyInfoExtensions
     [NotNull]
     public static ObjectExtensionPropertyInfo MapEfCore(
         [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
-        [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
+        Action<EntityTypeBuilder, PropertyBuilder>? entityTypeAndPropertyBuildAction)
     {
         Check.NotNull(propertyExtension, nameof(propertyExtension));
 
@@ -56,8 +56,7 @@ public static class EfCoreObjectExtensionPropertyInfoExtensions
         return propertyExtension;
     }
 
-    [CanBeNull]
-    public static ObjectExtensionPropertyInfoEfCoreMappingOptions GetEfCoreMappingOrNull(
+    public static ObjectExtensionPropertyInfoEfCoreMappingOptions? GetEfCoreMappingOrNull(
         [NotNull] this ObjectExtensionPropertyInfo propertyExtension)
     {
         Check.NotNull(propertyExtension, nameof(propertyExtension));

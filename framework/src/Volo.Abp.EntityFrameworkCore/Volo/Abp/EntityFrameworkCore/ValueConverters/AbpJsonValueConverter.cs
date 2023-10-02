@@ -29,6 +29,6 @@ public class AbpJsonValueConverter<TPropertyType> : ValueConverter<TPropertyType
 
     private static TPropertyType DeserializeObject(string s)
     {
-        return JsonSerializer.Deserialize<TPropertyType>(s, DeserializeOptions);
+        return JsonSerializer.Deserialize<TPropertyType>(s, DeserializeOptions)!;
     }
 }

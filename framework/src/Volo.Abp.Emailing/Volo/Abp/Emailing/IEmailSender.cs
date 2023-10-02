@@ -15,7 +15,8 @@ public interface IEmailSender
         string to,
         string? subject,
         string? body,
-        bool isBodyHtml = true
+        bool isBodyHtml = true,
+        AdditionalEmailSendingArgs? additionalEmailSendingArgs = null
     );
 
     /// <summary>
@@ -26,7 +27,8 @@ public interface IEmailSender
         string to,
         string? subject,
         string? body,
-        bool isBodyHtml = true
+        bool isBodyHtml = true,
+        AdditionalEmailSendingArgs? additionalEmailSendingArgs = null
     );
 
     /// <summary>
@@ -49,7 +51,8 @@ public interface IEmailSender
         string to,
         string subject,
         string body,
-        bool isBodyHtml = true
+        bool isBodyHtml = true,
+        AdditionalEmailSendingArgs? additionalEmailSendingArgs = null
     );
 
     /// <summary>
@@ -60,8 +63,7 @@ public interface IEmailSender
         string to,
         string subject,
         string body,
-        bool isBodyHtml = true
+        bool isBodyHtml = true,
+        AdditionalEmailSendingArgs? additionalEmailSendingArgs = null
     );
-
-    //TODO: Add other Queue methods too. Problem: MailMessage is not serializable so can not be used in background jobs.
 }

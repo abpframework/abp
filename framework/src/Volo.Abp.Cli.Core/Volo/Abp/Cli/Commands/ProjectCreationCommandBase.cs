@@ -16,6 +16,7 @@ using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Events;
+using Volo.Abp.Cli.ProjectBuilding.Templates;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
@@ -479,6 +480,41 @@ public abstract class ProjectCreationCommandBase
         }, false);
 
         await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+    }
+
+    protected Task CreateOpenIddictPfxFilesAsync(ProjectBuildArgs projectArgs)
+    {
+        if (!projectArgs.ExtraProperties.ContainsKey(nameof(RandomizeAuthServerPassPhraseStep)))
+        {
+            return Task.CompletedTask;
+        }
+
+        var module = projectArgs.ExtraProperties[nameof(RandomizeAuthServerPassPhraseStep)];
+        if (string.IsNullOrWhiteSpace(module))
+        {
+            return Task.CompletedTask;
+        }
+
+        var moduleDirectory = projectArgs.OutputFolder + module;
+        if (projectArgs.UiFramework != UiFramework.Angular)
+        {
+            moduleDirectory = moduleDirectory.Replace("/aspnet-core/", "/");
+        }
+
+        moduleDirectory = Path.GetDirectoryName(projectArgs.SolutionName.CompanyName == null
+            ? moduleDirectory.Replace("MyCompanyName.MyProjectName", projectArgs.SolutionName.ProjectName)
+            : moduleDirectory.Replace("MyCompanyName", projectArgs.SolutionName.CompanyName).Replace("MyProjectName", projectArgs.SolutionName.ProjectName));
+
+        if (Directory.Exists(moduleDirectory))
+        {
+            Logger.LogInformation($"Creating openiddict.pfx file on {moduleDirectory}");
+            CmdHelper.RunCmd($"dotnet dev-certs https -ep openiddict.pfx -p {RandomizeAuthServerPassPhraseStep.RandomOpenIddictPassword}", moduleDirectory);
+        }
+        else
+        {
+            Logger.LogWarning($"Couldn't find the module directory to create openiddict.pfx file: {moduleDirectory}");
+        }
+        return Task.CompletedTask;
     }
 
     protected async Task ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)

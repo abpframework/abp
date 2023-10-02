@@ -9,7 +9,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles;
 
 public class VirtualFolderLocalizedTemplateContentReader : ILocalizedTemplateContentReader
 {
-    private Dictionary<string, TemplateContentFileInfo> _dictionary;
+    private Dictionary<string, TemplateContentFileInfo> _dictionary = default!;
     private readonly string[] _fileExtension;
 
     public VirtualFolderLocalizedTemplateContentReader(string[] fileExtension)
@@ -44,7 +44,7 @@ public class VirtualFolderLocalizedTemplateContentReader : ILocalizedTemplateCon
         }
     }
 
-    public string GetContentOrNull(string cultureName)
+    public string? GetContentOrNull(string? cultureName)
     {
         if (cultureName == null)
         {
