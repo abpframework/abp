@@ -288,7 +288,7 @@ Configure<AbpTenantResolveOptions>(options =>
 * Add this code to the `ConfigureServices` method of your [module](Module-Development-Basics.md).
 * This should be done in the *Web/API Layer* since the URL is a web related stuff.
 
-Openiddict is default Auth Server in ABP (since v6.0).  When you use OpenIddict,  you must add the code  on PreConfigure section 
+Openiddict is default Auth Server in ABP (since v6.0).  When you use OpenIddict,  you must add the code  on PreConfigure section.
 ```csharp
 // using Volo.Abp.OpenIddict.WildcardDomains
 
@@ -298,8 +298,50 @@ PreConfigure<AbpOpenIddictWildcardDomainOptions>(options=>{
     });
 ```
 
+You must add the code on Configure section 
+
+```csharp
+// using Volo.Abp.MultiTenancy;
+
+Configure<AbpTenantResolveOptions>(options=>{
+    options.AddDomainTenantResolver("{0}.mydomain.com");
+    });
+
+```
 
 > There is an [example](https://github.com/abpframework/abp-samples/tree/master/DomainTenantResolver) that uses the subdomain to determining the current tenant. 
+
+If you use sepereted Auth server, you must install `Owl.TokenWildcardIssuerValidator` on HTTPApi.Host project
+```bash
+dotnet add package Owl.TokenWildcardIssuerValidator
+```
+Then go to inside block of `.AddJwtBearer`   and add the code
+
+```csharp
+// using using Owl.TokenWildcardIssuerValidator;
+    {
+        context.Services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = configuration["AuthServer:Authority"];
+                options.RequireHttpsMetadata = Convert.ToBoolean(
+                    configuration["AuthServer:RequireHttpsMetadata"]
+                );
+                options.Audience = "ExampleProjectName";
+                
+                // start of added  block
+                options.TokenValidationParameters.IssuerValidator =
+                    TokenWildcardIssuerValidator.IssuerValidator;
+                options.TokenValidationParameters.ValidIssuers = new[]
+                {
+                    "https://{0}.mydomain.com:44349/" //the port may different
+                };
+                //  end of added  block
+            });
+    }
+
+```
 
 ##### Custom Tenant Resolvers
 
