@@ -298,7 +298,7 @@ PreConfigure<AbpOpenIddictWildcardDomainOptions>(options=>{
     });
 ```
 
-You must add this code to the Configure method as well. 
+You must add this code to the `Configure` method as well. 
 
 ```csharp
 // using Volo.Abp.MultiTenancy;
