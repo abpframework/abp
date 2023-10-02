@@ -36,6 +36,7 @@ public class RegisterModel : AccountPageModel
     [BindProperty(SupportsGet = true)]
     public string ExternalLoginAuthSchema { get; set; }
 
+    public bool UserNameExtracted { get; set; }
     public IEnumerable<ExternalProviderModel> ExternalProviders { get; set; }
     public IEnumerable<ExternalProviderModel> VisibleExternalProviders => ExternalProviders.Where(x => !string.IsNullOrWhiteSpace(x.DisplayName));
     public bool EnableLocalRegister { get; set; }
@@ -122,7 +123,11 @@ public class RegisterModel : AccountPageModel
                     Logger.LogWarning("External login info is not available");
                     return RedirectToPage("./Login");
                 }
-
+                if (Input.UserName.IsNullOrWhiteSpace())
+                {
+                    Input.UserName = await GetUserNameFromEmail(Input.EmailAddress);
+                }
+                UserNameExtracted = true;
                 await RegisterExternalUserAsync(externalLoginInfo, Input.UserName, Input.EmailAddress);
             }
             else
