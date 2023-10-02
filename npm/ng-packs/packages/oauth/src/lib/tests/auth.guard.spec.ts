@@ -7,8 +7,8 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 describe('AuthGuard', () => {
   let spectator: SpectatorService<AbpOAuthGuard>;
   let guard : AbpOAuthGuard;
-  let route = createSpyObject<ActivatedRouteSnapshot>(ActivatedRouteSnapshot)
-  let state = createSpyObject<RouterStateSnapshot>(RouterStateSnapshot)
+  const route = createSpyObject<ActivatedRouteSnapshot>(ActivatedRouteSnapshot)
+  const state = createSpyObject<RouterStateSnapshot>(RouterStateSnapshot)
 
   const createService = createServiceFactory({
     service: AbpOAuthGuard,

@@ -1,5 +1,6 @@
-import { ABP } from '@abp/ng.core';
+import { ABP } from "../../models";
 
+ 
 export const mockCompareFunction = (a: ABP.Route, b: ABP.Route) => {
   const aName = a.name;
   const bName = b.name;
