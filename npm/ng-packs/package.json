@@ -44,7 +44,7 @@
   },
   "private": true,
   "devDependencies": {
-    "@abp/utils": "~7.4.0-rc.4",
+    "@abp/utils": "~7.4.0-rc.5",
     "@angular-devkit/build-angular": "~16.0.0",
     "@angular-devkit/core": "~16.0.0",
     "@angular-devkit/schematics": "~16.0.0",
