@@ -107,7 +107,7 @@ describe('EntityAction', () => {
 
     expect(action.text).toBe(options.text);
     expect(action.action).toBe(options.action);
-    expect(action.permission).toBeUndefined();
+    expect(action.permission).toBe('');
     expect(action.visible(null)).toBe(true);
     expect(action.icon).toBe('');
   });

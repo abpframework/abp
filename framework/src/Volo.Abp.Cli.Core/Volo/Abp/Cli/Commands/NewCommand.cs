@@ -15,6 +15,7 @@ using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Events;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
@@ -133,7 +134,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
     private async Task CheckCreatedRequirements(ProjectBuildArgs projectArgs)
     {
-        var errors = new List<string>();
+        var requirementWarningMessages = new List<string>();
 
         if (projectArgs.ExtraProperties.ContainsKey("PreRequirements:Redis"))
         {
@@ -151,15 +152,21 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             {
                 if (!isConnected)
                 {
-                    errors.Add("\t* Redis is not installed or not running on your computer.");
+                    requirementWarningMessages.Add("\t* Redis is not installed or not running on your computer.");
                 }
             }
         }
 
-        if (errors.Any())
+        if (requirementWarningMessages.Any())
         {
-            Logger.LogWarning("NOTICE: The following tools are required to run your solution.");
-            foreach (var error in errors)
+            requirementWarningMessages.AddFirst("NOTICE: The following tools are required to run your solution:");
+
+            await EventBus.PublishAsync(new ProjectPostRequirementsCheckedEvent
+            { 
+                Message = requirementWarningMessages.JoinAsString(Environment.NewLine) 
+            }, false);
+
+            foreach (var error in requirementWarningMessages)
             {
                 Logger.LogWarning(error);
             }

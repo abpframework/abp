@@ -35,19 +35,20 @@ public class RegisterModel : AccountPageModel
 
     [BindProperty(SupportsGet = true)]
     public string ExternalLoginAuthSchema { get; set; }
-    
+
+    public bool UserNameExtracted { get; set; }
     public IEnumerable<ExternalProviderModel> ExternalProviders { get; set; }
     public IEnumerable<ExternalProviderModel> VisibleExternalProviders => ExternalProviders.Where(x => !string.IsNullOrWhiteSpace(x.DisplayName));
     public bool EnableLocalRegister { get; set; }
     public bool IsExternalLoginOnly => EnableLocalRegister == false && ExternalProviders?.Count() == 1;
     public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
-    
+
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
-    
+
     protected AbpAccountOptions AccountOptions { get; }
 
     public RegisterModel(
-        IAccountAppService accountAppService, 
+        IAccountAppService accountAppService,
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions)
     {
@@ -66,16 +67,16 @@ public class RegisterModel : AccountPageModel
             {
                 return await OnPostExternalLogin(ExternalLoginScheme);
             }
-            
+
             Alerts.Warning(L["SelfRegistrationDisabledMessage"]);
         }
-        
+
         await TrySetEmailAsync();
-        
+
         return Page();
     }
 
-    private async Task TrySetEmailAsync()
+    protected virtual async Task TrySetEmailAsync()
     {
         if (IsExternalLogin)
         {
@@ -98,7 +99,8 @@ public class RegisterModel : AccountPageModel
                 return;
             }
 
-            Input = new PostInput { EmailAddress = emailClaim.Value };
+            var userName = await GetUserNameFromEmail(emailClaim.Value);
+            Input = new PostInput { UserName = userName, EmailAddress = emailClaim.Value };
         }
     }
 
@@ -121,8 +123,12 @@ public class RegisterModel : AccountPageModel
                     Logger.LogWarning("External login info is not available");
                     return RedirectToPage("./Login");
                 }
-
-                await RegisterExternalUserAsync(externalLoginInfo, Input.EmailAddress);
+                if (Input.UserName.IsNullOrWhiteSpace())
+                {
+                    Input.UserName = await GetUserNameFromEmail(Input.EmailAddress);
+                }
+                UserNameExtracted = true;
+                await RegisterExternalUserAsync(externalLoginInfo, Input.UserName, Input.EmailAddress);
             }
             else
             {
@@ -156,11 +162,11 @@ public class RegisterModel : AccountPageModel
         await SignInManager.SignInAsync(user, isPersistent: true);
     }
 
-    protected virtual async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
+    protected virtual async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string userName, string emailAddress)
     {
         await IdentityOptions.SetAsync();
 
-        var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
+        var user = new IdentityUser(GuidGenerator.Create(), userName, emailAddress, CurrentTenant.Id);
 
         (await UserManager.CreateAsync(user)).CheckErrors();
         (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
@@ -191,7 +197,7 @@ public class RegisterModel : AccountPageModel
         {
             return true;
         }
-        
+
         if (!EnableLocalRegister)
         {
             return false;
@@ -199,10 +205,9 @@ public class RegisterModel : AccountPageModel
 
         return true;
     }
-    
+
     protected virtual async Task<List<ExternalProviderModel>> GetExternalProviders()
     {
-        
         var schemes = await SchemeProvider.GetAllSchemesAsync();
 
         return schemes
@@ -214,7 +219,7 @@ public class RegisterModel : AccountPageModel
             })
             .ToList();
     }
-    
+
     protected virtual async Task<IActionResult> OnPostExternalLogin(string provider)
     {
         var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash });
@@ -241,7 +246,7 @@ public class RegisterModel : AccountPageModel
         [DisableAuditing]
         public string Password { get; set; }
     }
-    
+
     public class ExternalProviderModel
     {
         public string DisplayName { get; set; }

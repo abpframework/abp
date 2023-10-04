@@ -40,7 +40,7 @@ public class EfCoreOrganizationUnitRepository
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
-            .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
+            .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 

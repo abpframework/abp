@@ -73,13 +73,16 @@ public class CmsKitPublicWebModule : AbpModule
             options.KeyPrefix = "CmsKit:";
         });
 
-        Configure<AbpEndpointRouterOptions>(options =>
+        if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
         {
-            options.EndpointConfigureActions.Add(context =>
+            Configure<AbpEndpointRouterOptions>(options =>
             {
-                context.Endpoints.MapCmsPageRoute();
+                options.EndpointConfigureActions.Add(context =>
+                {
+                    context.Endpoints.MapCmsPageRoute();
+                });
             });
-        });
+        }
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
