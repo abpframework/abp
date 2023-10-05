@@ -232,7 +232,14 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                             string latestVersion;
                             if(isLeptonXPackage)
                             {
-                                latestVersion = (await _packageVersionCheckerService.GetLatestVersionOrNullAsync(packageId, includeNightlyPreviews, includeReleaseCandidates))?.Version?.ToString();
+                                var leptonXPackageName = packageId;
+                                if(includeNightlyPreviews) 
+                                {
+                                    //use LeptonX Lite package as the package name to be able to get the package version from the 'abp-nightly' feed.
+                                    leptonXPackageName = "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite";
+                                }
+
+                                latestVersion = (await _packageVersionCheckerService.GetLatestVersionOrNullAsync(leptonXPackageName, includeNightlyPreviews, includeReleaseCandidates))?.Version?.ToString();
                             }
                             else
                             {
