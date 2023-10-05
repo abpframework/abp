@@ -29,7 +29,8 @@ public class SharedThemeGlobalStyleContributor : BundleContributor
     {
         context.Files.AddRange(new[]
         {
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css"
+                "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css",
+                "/libs/abp/aspnetcore-mvc-ui-theme-shared/date-range-picker/date-range-picker-styles.css"
             });
     }
 }
