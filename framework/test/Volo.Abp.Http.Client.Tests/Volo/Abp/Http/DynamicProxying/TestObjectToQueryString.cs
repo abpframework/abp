@@ -14,7 +14,7 @@ public class TestObjectToQueryString : IObjectToQueryString<List<GetParamsNameVa
     {
         if (values.IsNullOrEmpty())
         {
-            return null;
+            return Task.FromResult<string>(null);
         }
 
         var sb = new StringBuilder();
