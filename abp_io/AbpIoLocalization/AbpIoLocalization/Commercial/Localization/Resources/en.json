@@ -1079,6 +1079,7 @@
     "WhyAbpIo_Page_Title": "Why ABP.IO Platform?",
     "AbpStudio_Page_Title": "ABP Studio",
     "CampaignInfo": "Buy a new license or renew your existing license and <span class=\"text-white\">get an additional 2 months</span> at no additional cost! This offer is valid for all license plans. Ensure you take advantage of this limited-time promotion to expand your access to premium features and upgrades.",
-    "HurryUpLastDay": "Hurry Up! Last Day: {0}"
+    "HurryUpLastDay": "Hurry Up! Last Day: {0}",
+    "CreatingCRUDPagesWithABPSuite": "Creating CRUD pages with ABP Suite"
   }
 }
