@@ -124,6 +124,27 @@ public static class ProjectFinder
             .ToArray();
     }
 
+    public static (bool Exists, string Path) GetNearestNugetCpmFile(string path)
+    {
+        var folder = Path.GetDirectoryName(path);
+        while (true)
+        {
+            if (folder.IsNullOrEmpty())
+            {
+                return (false, null);
+            }
+
+            var cpmFile = Directory.GetFiles(folder, "Directory.Packages.props", SearchOption.TopDirectoryOnly);
+
+            if (cpmFile.Length == 1)
+            {
+                return (true, cpmFile[0]);
+            }
+
+            folder = Directory.GetParent(folder)?.FullName;
+        }
+    }
+
     public static string[] GetAssemblyNames(string[] projectFiles)
     {
         return projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath).ToArray();

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NuGet.Versioning;
 using System.IO;
 using System.Linq;
@@ -30,10 +29,18 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
     public async Task UpdateSolutionAsync(string solutionPath, bool includePreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, bool checkAll = false, string version = null)
     {
         var projectPaths = ProjectFinder.GetProjectFiles(solutionPath);
+        var cpmFile = ProjectFinder.GetNearestNugetCpmFile(solutionPath);
 
         if (checkAll && version.IsNullOrWhiteSpace())
         {
-            Task.WaitAll(projectPaths.Select(projectPath => UpdateInternalAsync(projectPath, includePreviews, includeReleaseCandidates, switchToStable)).ToArray());
+            if(cpmFile.Exists)
+            {
+                await UpdateInternalAsync(cpmFile.Path, includePreviews, includeReleaseCandidates, switchToStable, true);
+            }
+            else
+            {
+                Task.WaitAll(projectPaths.Select(projectPath => UpdateInternalAsync(projectPath, includePreviews, includeReleaseCandidates, switchToStable)).ToArray());
+            }
         }
         else
         {
@@ -43,41 +50,44 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
 
             async Task UpdateAsync(string filePath)
             {
-                using (var fs = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-                {
-                    using (var sr = new StreamReader(fs, Encoding.Default, true))
-                    {
-                        var fileContent = await sr.ReadToEndAsync();
+                using var fs = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                using var sr = new StreamReader(fs, Encoding.Default, true);
+                var fileContent = await sr.ReadToEndAsync();
 
-                        var updatedContent = await UpdateVoloPackagesAsync(fileContent,
-                            includePreviews,
-                            includeReleaseCandidates,
-                            switchToStable,
-                            latestVersionInfo.Version,
-                            latestReleaseCandidateVersionInfo.Version,
-                            latestVersionFromMyGet,
-                            version);
+                var updatedContent = await UpdateVoloPackagesAsync(fileContent,
+                    includePreviews,
+                    includeReleaseCandidates,
+                    switchToStable,
+                    latestVersionInfo.Version,
+                    latestReleaseCandidateVersionInfo.Version,
+                    latestVersionFromMyGet,
+                    version,
+                    cpmFile.Exists);
 
-                        fs.Seek(0, SeekOrigin.Begin);
-                        fs.SetLength(0);
-                        using (var sw = new StreamWriter(fs, DefaultEncoding))
-                        {
-                            await sw.WriteAsync(updatedContent);
-                            await sw.FlushAsync();
-                        }
-                    }
-                }
+                fs.Seek(0, SeekOrigin.Begin);
+                fs.SetLength(0);
+                using var sw = new StreamWriter(fs, DefaultEncoding);
+                await sw.WriteAsync(updatedContent);
+                await sw.FlushAsync();
             }
-
-            Task.WaitAll(projectPaths.Select(UpdateAsync).ToArray());
+            if(cpmFile.Exists)
+            {
+                await UpdateAsync(cpmFile.Path);
+            }
+            else
+            {
+                Task.WaitAll(projectPaths.Select(UpdateAsync).ToArray());
+            }
         }
     }
 
     public async Task UpdateProjectAsync(string projectPath, bool includeNightlyPreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, bool checkAll = false, string version = null)
     {
+        var cpmFile = ProjectFinder.GetNearestNugetCpmFile(projectPath);
+        projectPath = cpmFile.Exists ? cpmFile.Path : projectPath;
         if (checkAll && version.IsNullOrWhiteSpace())
         {
-            await UpdateInternalAsync(projectPath, includeNightlyPreviews, includeReleaseCandidates, switchToStable);
+            await UpdateInternalAsync(projectPath, includeNightlyPreviews, includeReleaseCandidates, switchToStable, cpmFile.Exists);
         }
         else
         {
@@ -85,54 +95,43 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
             var latestReleaseCandidateVersionInfo = await _packageVersionCheckerService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates: true);
             var latestVersionFromMyGet = await GetLatestVersionFromMyGet("Volo.Abp.Core");
 
-            using (var fs = File.Open(projectPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-            {
-                using (var sr = new StreamReader(fs, Encoding.Default, true))
-                {
-                    var fileContent = await sr.ReadToEndAsync();
+            using var fs = File.Open(projectPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            using var sr = new StreamReader(fs, Encoding.Default, true);
+            var fileContent = await sr.ReadToEndAsync();
 
-                    var updatedContent = await UpdateVoloPackagesAsync(fileContent,
-                        includeNightlyPreviews,
-                        includeReleaseCandidates,
-                        switchToStable,
-                        latestVersionInfo.Version,
-                        latestReleaseCandidateVersionInfo.Version,
-                        latestVersionFromMyGet,
-                        version);
+            var updatedContent = await UpdateVoloPackagesAsync(fileContent,
+                includeNightlyPreviews,
+                includeReleaseCandidates,
+                switchToStable,
+                latestVersionInfo.Version,
+                latestReleaseCandidateVersionInfo.Version,
+                latestVersionFromMyGet,
+                version,
+                cpmFile.Exists);
 
-                    fs.Seek(0, SeekOrigin.Begin);
-                    fs.SetLength(0);
+            fs.Seek(0, SeekOrigin.Begin);
+            fs.SetLength(0);
 
-                    using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
-                    {
-                        await sw.WriteAsync(updatedContent);
-                        await sw.FlushAsync();
-                    }
-                }
-            }
+            using var sw = new StreamWriter(fs, sr.CurrentEncoding);
+            await sw.WriteAsync(updatedContent);
+            await sw.FlushAsync();
         }
     }
 
-    protected virtual async Task UpdateInternalAsync(string projectPath, bool includeNightlyPreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false)
+    protected virtual async Task UpdateInternalAsync(string projectPath, bool includeNightlyPreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, bool isNugetCpm =false)
     {
-        using (var fs = File.Open(projectPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-        {
-            using (var sr = new StreamReader(fs, Encoding.Default, true))
-            {
-                var fileContent = await sr.ReadToEndAsync();
+        using var fs = File.Open(projectPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+        using var sr = new StreamReader(fs, Encoding.Default, true);
+        var fileContent = await sr.ReadToEndAsync();
 
-                var updatedContent = await UpdateVoloPackagesAsync(fileContent, includeNightlyPreviews, includeReleaseCandidates, switchToStable);
+        var updatedContent = await UpdateVoloPackagesAsync(fileContent, includeNightlyPreviews, includeReleaseCandidates, switchToStable, isNugetCpm:isNugetCpm);
 
-                fs.Seek(0, SeekOrigin.Begin);
-                fs.SetLength(0);
+        fs.Seek(0, SeekOrigin.Begin);
+        fs.SetLength(0);
 
-                using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
-                {
-                    await sw.WriteAsync(updatedContent);
-                    await sw.FlushAsync();
-                }
-            }
-        }
+        using var sw = new StreamWriter(fs, sr.CurrentEncoding);
+        await sw.WriteAsync(updatedContent);
+        await sw.FlushAsync();
     }
 
     protected virtual async Task<bool> SpecifiedVersionExists(string version, string packageId)
@@ -154,7 +153,8 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
         SemanticVersion latestNugetVersion = null,
         SemanticVersion latestNugetReleaseCandidateVersion = null,
         string latestMyGetVersion = null,
-        string specifiedVersion = null)
+        string specifiedVersion = null,
+        bool isNugetCpm =false)
     {
         string packageId = null;
 
@@ -166,8 +166,8 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
             };
 
             doc.LoadXml(content);
-
-            var packageNodeList = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.')]");
+            var xmlItemKey = isNugetCpm ? "PackageVersion" : "PackageReference";
+            var packageNodeList = doc.SelectNodes($"/Project/ItemGroup/{xmlItemKey}[starts-with(@Include, 'Volo.')]");
 
             if (packageNodeList != null)
             {
@@ -236,7 +236,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                             }
                             else
                             {
-                                latestVersion = latestMyGetVersion == null ? await GetLatestVersionFromMyGet(packageId) : latestMyGetVersion;
+                                latestVersion = latestMyGetVersion ?? await GetLatestVersionFromMyGet(packageId);
                             }
 
                             if(latestVersion == null)
