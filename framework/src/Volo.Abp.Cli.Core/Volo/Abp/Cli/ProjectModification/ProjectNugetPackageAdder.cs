@@ -259,11 +259,19 @@ public class ProjectNugetPackageAdder : ITransientDependency
 
             if (useDotnetCliToInstall)
             {
-                AddUsingDotnetCli(package, version);
+                await AddUsingDotnetCli(package, version);
             }
             else
             {
-                AddToCsprojManuallyAsync(projectFile, package, version);
+                if (await AddToCpmManuallyAsync(projectFile, package, version))
+                {
+                    await AddToCsprojManuallyAsync(projectFile, package);
+                }
+                else
+                {
+                    await AddToCsprojManuallyAsync(projectFile, package, version);
+                }
+                
             }
 
             var moduleFiles = ModuleClassFinder.Find(projectFile, "AbpModule");
@@ -307,6 +315,43 @@ public class ProjectNugetPackageAdder : ITransientDependency
         CmdHelper.Run("dotnet", $"add package {package.Name}{versionOption}");
 
         return Task.CompletedTask;
+    }
+
+    protected virtual Task<bool> AddToCpmManuallyAsync(string projectFile, NugetPackageInfo package, string version)
+    {
+        var nugetCpmFile = ProjectFinder.GetNearestNugetCpmFile(projectFile);
+        if (nugetCpmFile.Exists && version != null)
+        {
+            var nugetCpmContent = File.ReadAllText(nugetCpmFile.Path);
+            var doc = new XmlDocument {PreserveWhitespace = true};
+            using var stream = StreamHelper.GenerateStreamFromString(nugetCpmContent);
+            doc.Load(stream);
+
+            var packageVersion = doc.SelectSingleNode($"/Project/ItemGroup/PackageVersion[@Include='{package.Name}']");
+
+            if (packageVersion == null)
+            {
+                var newPackageVersionNode = doc.CreateElement("PackageVersion");
+
+                var newPackageVersionNodeIncludeAttr = doc.CreateAttribute("Include");
+                newPackageVersionNodeIncludeAttr.Value = doc.Value;
+                newPackageVersionNode.Attributes.Append(newPackageVersionNodeIncludeAttr);
+
+                var newPackageVersionNodeVersionAttr = doc.CreateAttribute("Version");
+                newPackageVersionNodeVersionAttr.Value = version;
+                newPackageVersionNode.Attributes.Append(newPackageVersionNodeVersionAttr);
+
+                doc.AppendChild(newPackageVersionNode);
+            }
+            else
+            {
+                packageVersion.Attributes["Version"].Value = version;
+            }
+
+            return Task.FromResult(true);
+        }
+
+        return Task.FromResult(false);
     }
 
     protected virtual Task AddToCsprojManuallyAsync(string projectFile, NugetPackageInfo package, string version = null)
