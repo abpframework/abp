@@ -182,6 +182,7 @@
     "SelectAStatus": "Válasszon állapotot",
     "Status": "Állapot",
     "CmsKit.BlogPost.ScrollIndex": "Gyors navigációs sáv a blogbejegyzésekben",
+    "CmsKit.BlogPost.PreventXssFeature": "XSS megelőzése",
     "Add": "Hozzáadás",
     "AddWidget": "Widget hozzáadása",
     "PleaseConfigureWidgets": "Kérjük, állítsa be a widgeteket",

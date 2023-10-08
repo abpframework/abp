@@ -200,11 +200,12 @@
     "Leave": "Leave",
     "LoginToJoin": "Login to join",
     "ToEnd:": "To end:",
+    "ToStart:": "To start:",
     "days": "days",
     "hrs": "hrs",
     "min": "min",
     "sec": "sec",
-    "Winners:": "Winners:",
+    "Winners": "Winners",
     "To{0}LuckyWinners": "to {0} lucky winner(s)",
     "ActiveRaffles": "Active <span class=\"gradient-community\">Raffles</span>",
     "UpcomingRaffles": "Upcoming <span class=\"gradient-community\">Raffles</span>",
@@ -214,10 +215,14 @@
     "RaffleSubscriptionCodeInputMessage": "This raffle requires a registration code. Please enter the registration code below:",
     "RaffleSubscriptionCodeInputErrorMessage": "The registration code is incorrect. Please try again.",
     "GoodJob!": "Good Job!",
-    "RaffleJoinSuccessMessage": "You are successfully registered tor the raffle. You will be informed via email if you win the prize!",
+    "RaffleJoinSuccessMessage": "You are successfully registered for the raffle. You will be informed via email if you win the prize!",
     "RaffleLoginAndRegisterMessage": "You should sign in to join a raffle. You can create an account for free if you haven't registered yet.",
     "Ok": "Ok",
     "SeeDetails": "See Details",
-    "WaitingForDraw": "Waiting for draw"
+    "WaitingForTheDraw": "Waiting for the draw",
+    "AllAttendees": "All Attendees",
+    "SeeRaffleDetail": "See Raffle Detail",
+    "SeeRaffle": "See Raffle",
+    "ParticipationIsComplete!": "Participation is complete!"
   }
 }

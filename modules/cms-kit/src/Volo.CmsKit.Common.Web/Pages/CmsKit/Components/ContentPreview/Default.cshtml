@@ -8,8 +8,5 @@
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
 }
 
-<abp-card>
-    <abp-card-body>
-         @await Component.InvokeAsync(typeof(ContentFragmentViewComponent), Model)
-    </abp-card-body>
-</abp-card>
+<div class="mt-3">@await Component.InvokeAsync(typeof(ContentFragmentViewComponent), Model)</div>
+         

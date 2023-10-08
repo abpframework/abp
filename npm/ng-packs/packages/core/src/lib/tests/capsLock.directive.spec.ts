@@ -11,7 +11,7 @@ import { By } from '@angular/platform-browser';
   imports:[TrackCapsLockDirective]
 })
 class TestComponent {
-  capsLock:boolean = false
+  capsLock = false
 }
 
 describe('TrackCapsLockDirective',()=>{
