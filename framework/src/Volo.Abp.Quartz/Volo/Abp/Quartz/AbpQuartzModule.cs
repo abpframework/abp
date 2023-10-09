@@ -21,7 +21,8 @@ public class AbpQuartzModule : AbpModule
             // these are the defaults
             if (options.Properties[StdSchedulerFactory.PropertySchedulerJobFactoryType] == null)
             {
-                build.UseMicrosoftDependencyInjectionScopedJobFactory();
+                //MicrosoftDependencyInjectionJobFactory is the default for DI configuration, this method will be removed later on
+                //build.UseMicrosoftDependencyInjectionScopedJobFactory();
             }
 
             if (options.Properties[StdSchedulerFactory.PropertySchedulerTypeLoadHelperType] == null)
