@@ -223,6 +223,16 @@
     "AllAttendees": "All Attendees",
     "SeeRaffleDetail": "See Raffle Detail",
     "SeeRaffle": "See Raffle",
-    "ParticipationIsComplete!": "Participation is complete!"
+    "ParticipationIsComplete!": "Participation is complete!",
+    "ABPCoreDevelopmentTeam": "ABP Core Development Team",
+    "RegisterTheEvent": "Register the Event",
+    "GoToConferencePage": "Go to Conference Page",
+    "BuyTicket": "Buy Ticket",
+    "SeeEvent": "See Event",
+    "PreviousEvents": "<span class=\"text-secondary\">Previous</span> Events",
+    "OtherLiveEvents": "Other Live Events",
+    "SponsoredConferences": "Sponsored Conferences",
+    "SponsoredConferencesDescription": "We are honoring to support .NET communities and events for software developers.",
+    "UpcomingEvents": "<span class=\"text-info\">Upcoming</span> Events"
   }
 }
