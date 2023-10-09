@@ -8,6 +8,9 @@
     <GlobalPackageReference Include="ConfigureAwait.Fody" Version="3.3.1" PrivateAssets="All" />
     <GlobalPackageReference Include="Fody" Version="6.6.1" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
   </ItemGroup>
+  <ItemGroup Condition="$(MSBuildProjectFullPath.Contains('test')) and ($(MSBuildProjectName.Contains('.Tests')) or $(MSBuildProjectName.EndsWith('TestBase')))">
+    <GlobalPackageReference Include="coverlet.collector" Version="3.1.2" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+  </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="2.0.24" />
     <PackageVersion Include="aliyun-net-sdk-sts" Version="3.1.0" />
@@ -32,7 +35,6 @@
     <PackageVersion Include="CommonMark.NET" Version="0.15.1" />
     <PackageVersion Include="ConfigureAwait.Fody" Version="3.3.1" />
     <PackageVersion Include="Confluent.Kafka" Version="1.8.2" />
-    <PackageVersion Include="coverlet.collector" Version="3.1.2" />
     <PackageVersion Include="Dapper" Version="2.0.123" />
     <PackageVersion Include="Dapr.AspNetCore" Version="1.9.0" />
     <PackageVersion Include="Dapr.Client" Version="1.9.0" />
