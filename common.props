@@ -17,12 +17,6 @@
   <ItemGroup>
     <None Include="..\..\NuGet.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
   <ItemGroup Condition="'$(UsingMicrosoftNETSdkWeb)' != 'true' AND '$(UsingMicrosoftNETSdkRazor)' != 'true'">
     <None Remove="*.abppkg.analyze.json" />
     <Content Include="*.abppkg.analyze.json">

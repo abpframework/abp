@@ -3,6 +3,11 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+    <GlobalPackageReference Include="ConfigureAwait.Fody" Version="3.3.1" PrivateAssets="All" />
+    <GlobalPackageReference Include="Fody" Version="6.6.1" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+  </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="2.0.24" />
     <PackageVersion Include="aliyun-net-sdk-sts" Version="3.1.0" />
@@ -108,7 +113,6 @@
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
     <PackageVersion Include="Minio" Version="4.0.6" />
     <PackageVersion Include="MongoDB.Driver" Version="2.19.1" />
     <PackageVersion Include="NEST" Version="7.14.1" />
@@ -168,18 +172,8 @@
     <PackageVersion Include="xunit" Version="2.4.1" />
     <PackageVersion Include="xunit.extensibility.execution" Version="2.4.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETStandard' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '2.1')) ">
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETStandard' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '2.0')) ">
     <PackageVersion Include="Nullable" Version="1.3.1" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageVersion Include="ConfigureAwait.Fody" Version="3.3.1" />
-    <PackageVersion Include="Fody" Version="6.6.1" />
-  </ItemGroup>
-  <ItemGroup Condition="$(DefineConstants.Contains('EntityFrameworkCore'))">
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.10" />
   </ItemGroup>
 </Project>
