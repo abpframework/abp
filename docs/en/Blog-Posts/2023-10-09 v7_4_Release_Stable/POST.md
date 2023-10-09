@@ -45,7 +45,7 @@ Run this command in the root folder of your solution.
 ## Migration Guides
 
 There are breaking changes in this version that may affect your application. 
-Please see the following migration documents, if you are upgrading from v7.2:
+Please see the following migration documents, if you are upgrading from v7.3:
 
 * [ABP Framework 7.3 to 7.4 Migration Guide](https://docs.abp.io/en/abp/7.4/Migration-Guides/Abp-7_4)
 
