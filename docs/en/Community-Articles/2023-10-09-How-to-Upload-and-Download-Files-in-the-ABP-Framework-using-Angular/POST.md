@@ -3,7 +3,7 @@ In this article, I will describe how to upload and download files in the ABP fra
 
 ### Creating App Service.
 
-An empty AppService that uses IRemoteStreamContent was created. What is  IRemoteStreamContent, ABP Documentation  described: `ABP Framework provides a special type, IRemoteStreamContent to be used to get or return streams in the application services.`  
+An empty AppService that uses IRemoteStreamContent was created. What is  IRemoteStreamContent, ABP Documentation described: `ABP Framework provides a special type, IRemoteStreamContent to be used to get or return streams in the application services.`  
 
 ```csharp
 public class StorageAppService: AbpFileUploadDownloadDemoAppService // <- a inherited from ApplicationService. `ProjectName`+'AppService'.
