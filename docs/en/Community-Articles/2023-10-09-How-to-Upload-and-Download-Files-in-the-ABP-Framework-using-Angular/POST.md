@@ -1,9 +1,9 @@
 # How to Upload and Download Files in the ABP Framework using Angular
-In this article, I will describe how to upload and download files in the ABP framework. While I will use Angular as the UI template option, most of the code is compatible with all template types. In the article I just gather the some information in one write. Nothing is new. I searched How manage files in Abp in Search engine and I didn't find. So I decided write a simple article. 
+In this article, I will describe how to upload and download files in the ABP framework. While I will use Angular as the UI template option, most of the code is compatible with all template types. In the article I just gather the some information in one post. Nothing is new. I searched How manage files in Abp in Search engine and I didn't find. So I decided write a simple article. 
 
 ### Creating App Service.
 
-An empty AppService that uses IRemoteStreamContent was created. What is the content of an IRemoteStream? Documentation from ABP entitled: `ABP Framework provides a special type, IRemoteStreamContent to be used to get or return streams in the application services.`  
+An empty AppService that uses IRemoteStreamContent was created. What is  IRemoteStreamContent, ABP Documentation  described: `ABP Framework provides a special type, IRemoteStreamContent to be used to get or return streams in the application services.`  
 
 ```csharp
 public class StorageAppService: AbpFileUploadDownloadDemoAppService // <- a inherited from ApplicationService. `ProjectName`+'AppService'.
@@ -52,7 +52,7 @@ ABP create proxy files `abp generate-proxy -t ng` command. let's check the code.
     { apiName: this.apiName,...config });
 
 ```
-Service name a little bit wierd but let's focus the first parameter. the type of The file param  is `FormData`. FormData is a native object in JavaSript. See the detail.  https://developer.mozilla.org/en-US/docs/Web/API/FormData . 
+Function name a little bit wierd but let's focus the first parameter. The type of file param is `FormData`. FormData is a native object in JavaSript Web API. See the detail.  https://developer.mozilla.org/en-US/docs/Web/API/FormData . 
 
 How to use `uploadFileByFile` function.
 
