@@ -1,6 +1,6 @@
 # MyCompanyName.MyProjectName
 
-## About This Solution
+## About this solution
 
 This is a layered startup solution based on [Domain Driven Design (DDD)](https://docs.abp.io/en/abp/latest/Domain-Driven-Design) practises. All the fundamental ABP modules are already installed. 
 
@@ -34,7 +34,7 @@ The solution comes with a default configuration that works out of the box. Howev
 </TEMPLATE-REMOVE>
 </TEMPLATE-REMOVE>
 
-### Preparings for the first run
+### Before running the application
 
 * Run `abp install-libs` command on your solution folder to install client-side package dependencies. This step is automatically done when you create a new solution with ABP CLI. However, you should run it yourself if you have first cloned this solution from your source control, or added a new client-side package dependency to your solution.
 * Run `MyCompanyName.MyProjectName.DbMigrator` to create the initial database. This should be done in the first run. It is also needed if a new database migration is added to the solution later.
@@ -77,7 +77,7 @@ This is a layered monolith application that consists of the following applicatio
 </TEMPLATE-REMOVE>
 </TEMPLATE-REMOVE>
 
-## Deploying the Application
+## Deploying the application
 
 Deploying an ABP application is not different than deploying any .NET or ASP.NET Core application. However, there are some topics that you should care about when you are deploying your applications. You can check ABP's [Deployment documentation](https://docs.abp.io/en/abp/latest/Deployment/Index) before deploying your application.
 
@@ -87,3 +87,35 @@ You can see the following resources to learn more about your solution and the AB
 
 * [Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1)
 * [Application Startup Template Structure](https://docs.abp.io/en/abp/latest/Startup-Templates/Application)
+<TEMPLATE-REMOVE IF-NOT='ui:mvc'>
+<TEMPLATE-REMOVE IF-NOT='BASIC'>
+* [ASP.NET Core MVC / Razor Pages: The Basic Theme](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme)
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
+* [LeptonX Lite MVC UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/AspNetCore)
+</TEMPLATE-REMOVE>
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='ui:blazor-server'>
+<TEMPLATE-REMOVE IF-NOT='BASIC'>
+* [Blazor UI: Basic Theme](https://docs.abp.io/en/abp/latest/UI/Blazor/Basic-Theme?UI=BlazorServer)
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
+* [LeptonX Lite Blazor UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/Blazor?UI=BlazorServer)
+</TEMPLATE-REMOVE>
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='ui:blazor'>
+<TEMPLATE-REMOVE IF-NOT='BASIC'>
+* [Blazor UI: Basic Theme](https://docs.abp.io/en/abp/latest/UI/Blazor/Basic-Theme?UI=Blazor)
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
+* [LeptonX Lite Blazor UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/Blazor?UI=Blazor)
+</TEMPLATE-REMOVE>
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='ui:angular'>
+<TEMPLATE-REMOVE IF-NOT='BASIC'>
+* [Angular UI: Basic Theme](https://docs.abp.io/en/abp/latest/UI/Angular/Basic-Theme)
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
+* [LeptonX Lite Angular UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/Angular)
+</TEMPLATE-REMOVE>
+</TEMPLATE-REMOVE>
