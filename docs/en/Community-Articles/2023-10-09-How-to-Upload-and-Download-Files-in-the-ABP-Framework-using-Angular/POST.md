@@ -61,7 +61,7 @@ How to use `uploadFileByFile` function.
 ```javascript
 const myFormData = new FormData();
 myFormData.append('file', inputFile); // file must match variable name in AppService
-storageService.uploadFileByFile(file).subscribe()
+storageService.uploadFileByFile(myFormData).subscribe()
 ```
  inputFile type is File. Most case it come from `<input type="File">` File is belong to Javacsript Web Api. see the detail https://developer.mozilla.org/en-US/docs/Web/API/File
 
