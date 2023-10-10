@@ -15,7 +15,7 @@ public class TestObjectToFormData : IObjectToFormData<List<GetParamsNameValue>>,
     {
         if (values.IsNullOrEmpty())
         {
-            return null;
+            return Task.FromResult<List<KeyValuePair<string, HttpContent>>>(null);
         }
 
         var formDataContents = new List<KeyValuePair<string, HttpContent>>();

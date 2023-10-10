@@ -29,6 +29,6 @@ public class WebAssemblyAbpAccessTokenProvider : IAbpAccessTokenProvider, ITrans
         }
 
         result.TryGetToken(out var token);
-        return token.Value;
+        return token?.Value;
     }
 }
