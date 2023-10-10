@@ -17,7 +17,7 @@ public interface IMongoDbRepositoryFilterer<TEntity, TKey> : IMongoDbRepositoryF
 {
     Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TKey id, bool applyFilters = false);
 
-    Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null);
+    Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string? concurrencyStamp = null);
 
     /// <summary>
     /// Creates filter for given entities.

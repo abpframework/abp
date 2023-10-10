@@ -11,7 +11,8 @@ import {
 } from '../lib/utils/state.util';
 
 const fakeAppConfigService = { get: () => of(createMockState()) } as any;
-const configState = new ConfigStateService(fakeAppConfigService);
+const fakeLocalizationService = { get: () => of(createMockState()) } as any;
+const configState = new ConfigStateService(fakeAppConfigService,fakeLocalizationService,false);
 configState.refreshAppState();
 
 describe('State Utils', () => {
@@ -30,7 +31,7 @@ describe('State Utils', () => {
     });
 
     it('should not emit when object extensions do not exist', done => {
-      const emptyConfigState = new ConfigStateService(null);
+      const emptyConfigState = new ConfigStateService(null,null,false);
       const emit = jest.fn();
 
       getObjectExtensionEntitiesFromStore(emptyConfigState, 'Identity').subscribe(emit);

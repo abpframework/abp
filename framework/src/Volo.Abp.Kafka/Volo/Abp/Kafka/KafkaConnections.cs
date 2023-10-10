@@ -21,8 +21,10 @@ public class KafkaConnections : Dictionary<string, ClientConfig>
         Default = new ClientConfig();
     }
 
-    public ClientConfig GetOrDefault(string connectionName)
+    public ClientConfig GetOrDefault(string? connectionName)
     {
+        connectionName ??= DefaultConnectionName;
+        
         if (TryGetValue(connectionName, out var connectionFactory))
         {
             return connectionFactory;

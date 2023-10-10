@@ -210,7 +210,7 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
                 else
                 {
                     var tenantConfiguration = await TenantStore.FindAsync(tenantId.Value);
-                    if (!tenantConfiguration.ConnectionStrings.Default.IsNullOrWhiteSpace() ||
+                    if (!tenantConfiguration!.ConnectionStrings!.Default.IsNullOrWhiteSpace() ||
                         !tenantConfiguration.ConnectionStrings.GetOrDefault(DatabaseName).IsNullOrWhiteSpace())
                     {
                         //Migrating the tenant database (only if tenant has a separate database)
@@ -301,7 +301,7 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
             return 0;
         }
 
-        return int.Parse(tryCountAsString);
+        return int.Parse(tryCountAsString!);
     }
 
     private static void SetEventTryCount(EtoBase eventData, int count)
