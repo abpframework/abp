@@ -1,9 +1,9 @@
 # How to Upload and Download Files in the ABP Framework using Angular
-In this article, I will describe how to upload and download files in the ABP framework. While I will use Angular as the UI template option, most of the code is compatible with all template types. In the article I just gather the some information in one post. Nothing is new. I searched How manage files in Abp in Search engine and I didn't find. So I decided write a simple article. 
+In this article, I will describe how to upload and download files with the ABP framework using Angular as the UI template, most of the code is compatible with all template types. In this article, I just gather some information in one post. Nothing is new. I Googled how to manage files in ABP and I didn't find anything. So I decided write a simple article as an answer to this question. 
 
 ### Creating App Service.
 
-An empty AppService that uses `IRemoteStreamContent` was created. What is  IRemoteStreamContent, ABP Documentation described:
+An empty AppService that uses `IRemoteStreamContent` was created. ABP describes the IRemoteStreamContent as:
 
 > ABP Framework provides a special type, IRemoteStreamContent to be used to get or return streams in the application services.
 
@@ -31,16 +31,16 @@ public class StorageAppService: AbpFileUploadDownloadDemoAppService // <- a inhe
 }
 ```
 
-When you want to upload a file, app service param must be IRemoteStreamContent or RemoteStreamContent. You be able to access a file data with getStream method in AppService. After that, There s no ABP spesific code. is a  c# spesific class. You can save a file system, move somewhere or serilize as base64 etc. 
+When you want to upload a file, app service param must be IRemoteStreamContent or RemoteStreamContent. You should be able to access a file data with the getStream method in the AppService. After that, There is no ABP spesific code. It's a c# spesific class. You can save a file system, move somewhere or serilize as base64 etc. 
 
-when you want to download file, A method should return IRemoteStreamContent or RemoteStreamContent. 
-RemoteStreamContent get a required parameter. The parameter type must be Stream. (FileStream,MemoryStream, Custom etc...)
+when you want to download a file, A method should return IRemoteStreamContent or RemoteStreamContent. 
+RemoteStreamContent gets a required parameter. The parameter type must be Stream. (FileStream, MemoryStream, Custom etc...)
 
-More information please read the topic in the Documentation:  https://docs.abp.io/en/abp/latest/Application-Services#working-with-streams
+For more information please read the topic in the Documentation: https://docs.abp.io/en/abp/latest/Application-Services#working-with-streams
 
 ### Creating Angular proxy services
 
-ABP create proxy files `abp generate-proxy -t ng` command. let's check the code.
+ABP creates proxy files with the `abp generate-proxy -t ng` command. let's check the code.
 
 ```javascript
 
@@ -54,16 +54,16 @@ ABP create proxy files `abp generate-proxy -t ng` command. let's check the code.
     { apiName: this.apiName,...config });
 
 ```
-Function name a little bit wierd but let's focus the first parameter. The type of file param is `FormData`. FormData is a native object in JavaSript Web API. See the detail.  https://developer.mozilla.org/en-US/docs/Web/API/FormData . 
+The function name is a little bit weird but let's focus the first parameter. The type of file param is `FormData`. FormData is a native object in JavaSript Web API. See the details. https://developer.mozilla.org/en-US/docs/Web/API/FormData . 
 
-How to use `uploadFileByFile` function.
+How to use the `uploadFileByFile` function.
 
 ```javascript
 const myFormData = new FormData();
 myFormData.append('file', inputFile); // file must match variable name in AppService
 storageService.uploadFileByFile(myFormData).subscribe()
 ```
- inputFile type is File. Most case it come from `<input type="File">` File is belong to Javacsript Web Api. see the detail https://developer.mozilla.org/en-US/docs/Web/API/File
+The inputFile type is File. In most cases it comes from the `<input type="File">`, File belongs to the Javacsript Web Api. see the details https://developer.mozilla.org/en-US/docs/Web/API/File
 
 
 Let's continue with "download"
@@ -81,9 +81,9 @@ Let's continue with "download"
 
 ```
 
-The return type of function is Blob. the Blob is another javacript object. See the detail: https://developer.mozilla.org/en-US/docs/Web/API/Blob.
+The return type of function is Blob. Blob is another javacript object. See the details: https://developer.mozilla.org/en-US/docs/Web/API/Blob.
 
-Now our code is not ABP Spesific. It is just javascript code. If you don't want to save blob, here I asked my best Ai friend ChatGPT. `Hello, chat! The programming lang is javascript. My variable type is Blob. How do I save file to client's machine?`   
+Now our code is not ABP Spesific. It is just javascript code. If you don't want to save the blob, here I asked my best AI friend ChatGPT. `Hello, chat! The programming lang is javascript. My variable type is Blob. How do I save file to client's machine?`   
 
 Our the gifted friend gives us the code
 ```javascript
