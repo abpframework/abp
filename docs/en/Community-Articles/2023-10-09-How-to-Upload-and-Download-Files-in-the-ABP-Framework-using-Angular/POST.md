@@ -66,7 +66,7 @@ storageService.uploadFileByFile(myFormData).subscribe()
  inputFile type is File. Most case it come from `<input type="File">` File is belong to Javacsript Web Api. see the detail https://developer.mozilla.org/en-US/docs/Web/API/File
 
 
-Let's contine with "download"
+Let's continue with "download"
 
 ```javascript
 
