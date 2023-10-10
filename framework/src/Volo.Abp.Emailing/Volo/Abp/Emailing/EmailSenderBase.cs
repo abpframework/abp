@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.BackgroundJobs;
 
 namespace Volo.Abp.Emailing;
@@ -13,6 +15,8 @@ namespace Volo.Abp.Emailing;
 /// </summary>
 public abstract class EmailSenderBase : IEmailSender
 {
+    public ILogger<EmailSenderBase> Logger { get; set; }
+
     protected IEmailSenderConfiguration Configuration { get; }
 
     protected IBackgroundJobManager BackgroundJobManager { get; }
@@ -22,6 +26,8 @@ public abstract class EmailSenderBase : IEmailSender
     /// </summary>
     protected EmailSenderBase(IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
     {
+        Logger = NullLogger<EmailSenderBase>.Instance;
+
         Configuration = configuration;
         BackgroundJobManager = backgroundJobManager;
     }

@@ -10,10 +10,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20230713030359_Initial")]
+    [Migration("20231003031450_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("ProductVersion", "8.0.0-rc.1.23419.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -65,6 +65,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -85,6 +86,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -419,6 +421,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -428,6 +431,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -493,6 +497,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -501,6 +506,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -593,6 +599,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -605,6 +612,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -654,6 +662,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -690,6 +699,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -974,6 +984,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1004,6 +1015,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -1082,6 +1094,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1113,6 +1126,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -1170,6 +1184,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1194,6 +1209,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -1244,6 +1260,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1277,6 +1294,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -1325,6 +1343,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1352,6 +1371,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -1610,6 +1630,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1634,6 +1655,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
