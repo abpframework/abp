@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
-    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
+    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
   </ItemGroup>
 
 </Project>
