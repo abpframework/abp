@@ -18,8 +18,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Octokit" Version="0.50.0" />
-    <PackageReference Include="NEST" Version="7.14.1" />
+    <PackageReference Include="Octokit" Version="8.0.1" />
+    <PackageReference Include="NEST" Version="7.17.5" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
