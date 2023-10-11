@@ -9,7 +9,7 @@ The following NuGet libraries have been upgraded:
 | Package             | Old Version | New Version |
 | ------------------- | ----------- | ----------- |
 | All Microsoft packages | 7.x       | 8.x       |
-| Microsoft.CodeAnalysis | 4.2.0       | 4.7.0      |
+| Microsoft.CodeAnalysis | 4.2.0       | 4.5.0      |
 | NUglify | 1.20.0       | 1.21.0       |
 | Polly | 7.2.3       | 8.0.0       |
 | aliyun-net-sdk-sts | 3.1.0       | 3.1.1       |
