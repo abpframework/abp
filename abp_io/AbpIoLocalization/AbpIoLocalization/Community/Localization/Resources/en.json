@@ -223,6 +223,18 @@
     "AllAttendees": "All Attendees",
     "SeeRaffleDetail": "See Raffle Detail",
     "SeeRaffle": "See Raffle",
-    "ParticipationIsComplete!": "Participation is complete!"
+    "ParticipationIsComplete!": "Participation is complete!",
+    "ABPCoreDevelopmentTeam": "ABP Core Development Team",
+    "RegisterTheEvent": "Register the Event",
+    "GoToConferencePage": "Go to Conference Page",
+    "BuyTicket": "Buy Ticket",
+    "SeeEvent": "See Event",
+    "PreviousEvents": "<span class=\"text-secondary\">Previous</span> Events",
+    "OtherLiveEvents": "Other Live Events",
+    "SponsoredConferences": "Sponsored Conferences",
+    "SponsoredConferencesDescription": "We are honoring to support .NET communities and events for software developers.",
+    "UpcomingEvents": "<span class=\"text-info\">Upcoming</span> Events",
+    "UpcomingCommunityTalkEventDescription": "The live shows, hosted by the ABP Team, are casual sessions full of community content, demos, Q&A, and discussions around what's happening in ABP.",
+    "UpcomingConferenceEventDescription": "ABP .NET Conference is a virtual event for the .NET Developer community to come together and listen to talks about the .NET world, common software development practices and the open source ABP Framework."
   }
 }
