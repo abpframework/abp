@@ -27,6 +27,7 @@ public abstract class ModuleTemplateBase : TemplateInfo
         DeleteUnrelatedProjects(context, steps);
         RandomizeSslPorts(context, steps);
         UpdateNuGetConfig(context, steps);
+        RemoveMigrations(context, steps);
         ChangeConnectionString(context, steps);
         CleanupFolderHierarchy(context, steps);
 
@@ -101,6 +102,17 @@ public abstract class ModuleTemplateBase : TemplateInfo
     {
         steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
         steps.Add(new UpdateNuGetConfigStep("/NuGet.Config"));
+    }
+
+    protected void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new RemoveFolderStep("/aspnet-core/host/MyCompanyName.MyProjectName.AuthServer/Migrations"));
+        steps.Add(new RemoveFolderStep("/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Server.Host/Migrations"));
+        steps.Add(new RemoveFolderStep("/aspnet-core/host/MyCompanyName.MyProjectName.Web.Unified/Migrations"));
+        if (context.BuildArgs.TemplateName == ModuleProTemplate.TemplateName)
+        {
+            steps.Add(new RemoveFolderStep("/aspnet-core/host/MyCompanyName.MyProjectName.HttpApi.Host/Migrations"));
+        }
     }
 
     private void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
