@@ -140,7 +140,7 @@
     "Footer_GithubStarCount": "Github'da {0} Yıldız",
     "Footer_NugetDownloadCount": "{0} NuGet indirme",
     "AbpDescription":  "ABP, AspNet Core tabanlı web uygulaması geliştirmeye odaklanan açık kaynaklı bir uygulama çerçevesidir. Kendinizi tekrar etmeyin, kendi iş kodunuza odaklanın.",
-    "Layout_AbpFramework_MetaTitle": "ABP Framework - Açık Kaynak Web Uygulama Çerçevesi",
+    "Layout_AbpFramework_MetaTitle": "ABP Framework | ASP.NET Core için açık kaynaklı web uygulama çerçevesi",
     "CommunityTalks_CountdownDays": "Gün",
     "CommunityTalks_CountdownHours": "Saat",
     "CommunityTalks_CountdownMinutes": "Dk",

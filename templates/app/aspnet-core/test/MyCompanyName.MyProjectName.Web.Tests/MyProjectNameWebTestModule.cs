@@ -11,6 +11,7 @@ using MyCompanyName.MyProjectName.Web.Menus;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Validation.Localization;
 
@@ -28,6 +29,12 @@ public class MyProjectNameWebTestModule : AbpModule
         context.Services.PreConfigure<IMvcBuilder>(builder =>
         {
             builder.PartManager.ApplicationParts.Add(new CompiledRazorAssemblyPart(typeof(MyProjectNameWebModule).Assembly));
+        });
+
+        context.Services.GetPreConfigureActions<OpenIddictServerBuilder>().Clear();
+        PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+        {
+            options.AddDevelopmentEncryptionAndSigningCertificate = true;
         });
     }
 

@@ -148,7 +148,7 @@
     "Footer_GithubStarCount": "{0} tähteä GitHubissa",
     "Footer_NugetDownloadCount": "{0} Lataukset NuGetissä",
     "AbpDescription": "ABP on avoimen lähdekoodin sovelluskehys, joka keskittyy AspNet Core -pohjaiseen verkkosovelluskehitykseen. Älä toista itseäsi, vaan keskity omaan yrityskoodiisi.",
-    "Layout_AbpFramework_MetaTitle": "ABP Framework - avoimen lähdekoodin verkkosovelluskehys",
+    "Layout_AbpFramework_MetaTitle": "ABP Framework | Avoimen lähdekoodin verkkosovelluskehys ASP.NET Corelle",
     "CommunityTalks_CountdownDays": "Pv",
     "CommunityTalks_CountdownHours": "T",
     "CommunityTalks_CountdownMinutes": "Min",
