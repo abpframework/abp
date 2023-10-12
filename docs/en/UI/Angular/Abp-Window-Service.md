@@ -6,7 +6,7 @@ AbpWindowService is an Angular service designed to provide utility methods relat
 
 ### Usage
 
-To make use of the FileUtilsService in your Angular application, follow the steps below:
+To make use of the `AbpWindowService` in your Angular application, follow the steps below:
 
 ### Injection
 Firstly, ensure that the service is injected into the component or any other Angular entity where you wish to use it.
@@ -38,3 +38,4 @@ Ensure that you have appropriate permissions and user interactions before trigge
 ### DOCUMENT Token in Service
 
 Angular, being a platform-agnostic framework, is designed to support not only browser-based applications but also other environments like server-side rendering (SSR) through Angular Universal. This design philosophy introduces challenges when accessing global browser-specific objects like window or document directly. To address this, Angular provides a DOCUMENT token that can be used to inject the document object into Angular entities like components and services.
+
