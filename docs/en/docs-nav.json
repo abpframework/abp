@@ -1155,8 +1155,8 @@
                   "path": "UI/Angular/Content-Security-Strategy.md"
                 },
                 {
-                  "text":"File Utils Service",
-                  "path":"UI/Angular/File-Utils-Service.md"
+                  "text":"Abp Window Service",
+                  "path":"UI/Angular/Abp-Window-Service.md"
                 }
               ]
             },

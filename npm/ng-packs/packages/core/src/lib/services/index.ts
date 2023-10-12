@@ -21,4 +21,3 @@ export * from './track-by.service';
 export * from './local-storage.service';
 export * from './window.service';
 export * from './internet-connection-service'
-export * from './file-utils.service'
