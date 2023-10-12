@@ -1,11 +1,11 @@
 # File Utils Service
 FileUtilsService is an Angular service designed to provide utility methods related to file operations. The service has a `downloadBlob` function, which is used for downloading blobs as files within the context of a web application.
 
-## Usage
+### Usage
 
 To make use of the FileUtilsService in your Angular application, follow the steps below:
 
-Injection:
+### Injection
 Firstly, ensure that the service is injected into the component or any other Angular entity where you wish to use it.
 
 ```js
@@ -16,7 +16,7 @@ constructor(private fileUtils: FileUtilsService) { }
 // private fileUtils   = inject(FileUtilsService)
 ```
 
-Downloading a Blob:
+### Downloading a Blob
 
 Once you have the service injected, you can use the downloadBlob method to initiate the download of blob data as a file. For instance:
 
@@ -27,7 +27,7 @@ someMethod() {
 }
 ```
 
-Permissions & Considerations:
+### Permissions & Considerations
 
 Ensure that you have appropriate permissions and user interactions before triggering a download. Since downloadBlob initiates a download programmatically, it's best to tie this action to direct user interactions, such as button clicks, to prevent unexpected behaviors or browser restrictions.
 
