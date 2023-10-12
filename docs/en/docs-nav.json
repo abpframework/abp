@@ -1153,6 +1153,10 @@
                 {
                   "text": "Content Security Strategy",
                   "path": "UI/Angular/Content-Security-Strategy.md"
+                },
+                {
+                  "text":"File Utils Service",
+                  "path":"UI/Angular/File-Utils-Service.md"
                 }
               ]
             },
