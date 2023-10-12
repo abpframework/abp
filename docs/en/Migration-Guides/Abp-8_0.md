@@ -16,6 +16,7 @@ The following NuGet libraries have been upgraded:
 | Autofac | 7.0.0       | 7.1.0       |
 | Autofac.Extras.DynamicProxy | 6.0.1       | 7.1.0       |
 | AutoMapper | 12.0.0       | 12.0.1       |
+| AsyncKeyedLock | 6.2.1       | 6.2.2       |
 | AWSSDK.S3 | 3.7.9.2       | 3.7.205.9       | 
 | AWSSDK.SecurityToken | 3.7.1.151       | 3.7.202.4       |
 | Azure.Storage.Blobs | 12.15.0       | 12.18.0       |
