@@ -14,7 +14,7 @@ public class LdapSettingProvider : ILdapSettingProvider, ITransientDependency
         SettingProvider = settingProvider;
     }
 
-    public virtual async Task<bool> IsLdaps()
+    public virtual async Task<bool> GetLdapOverSsl()
     {
         return (await SettingProvider.GetOrNullAsync(LdapSettingNames.Ldaps))?.To<bool>() ?? default;
     }
