@@ -25,7 +25,7 @@ public class CmsKitPublicMenuContributor : IMenuContributor
     private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
         var featureChecker = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
-        if (GlobalFeatureManager.Instance.IsEnabled<MenuFeature>() && featureChecker.IsEnabledAsync(CmsKitFeatures.MenuEnable))
+        if (GlobalFeatureManager.Instance.IsEnabled<MenuFeature>() && await featureChecker.IsEnabledAsync(CmsKitFeatures.MenuEnable))
         {
             var menuAppService = context.ServiceProvider.GetRequiredService<IMenuItemPublicAppService>();
 
