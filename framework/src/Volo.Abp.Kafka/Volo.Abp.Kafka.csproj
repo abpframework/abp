@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Confluent.Kafka" Version="2.2.0" />
+      <PackageReference Include="Confluent.Kafka" />
       <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
       <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
     </ItemGroup>

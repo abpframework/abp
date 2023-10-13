@@ -19,7 +19,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.Json.Abstractions\Volo.Abp.Json.Abstractions.csproj" />
         <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 
 </Project>

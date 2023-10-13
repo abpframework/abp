@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
+      <PackageReference Include="Dapr.AspNetCore" />
     </ItemGroup>
 
 </Project>
