@@ -8,13 +8,6 @@ In this version, the `Microsoft.Extensions.FileProviders.Embedded` (and other `M
 
 > You can check [this issue](https://github.com/abpframework/abp/pull/17516) to see the updated package versions.
 
-## Bumped the `Blazorise` dependencies to `1.3.1`
-In this version, the `Blazorise` dependencies are upgraded to `1.3.1` version. So, if your solution includes any **Blazor** project, then you should upgrade Blazorise packages to 1.3.1 in your `Blazor.csproj` file.
-The following packages are included in the templates by default:
-- `Blazorise.Bootstrap5`
-- `Blazorise.Icons.FontAwesome`
-> _If your project depends on more blazorise packages, then you should upgrade all of them._
-
 ## Renamed the `AddGlobalFilters<>` method as `FilterQueryable<>` in `IMongoDbRepositoryFilterer`
 
 ABP Framework provides services to automatically filter data on querying from a database. Prior to this version, creating a new class that derives from the `MongoDbRepositoryFilterer` and overriding its `AddGlobalFilters` method was needed for implementing a data filter for [MongoDB](../MongoDB.md).
@@ -105,3 +98,18 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
     options.ExposeIntegrationServices = true;
 });
 ```
+
+## Blazor UI
+If you use Blazor WASM or Blazor Server UI, you should follow this section.
+
+### Bumped the `Blazorise` dependencies to `1.3.1`
+In this version, the `Blazorise` dependencies are upgraded to `1.3.1` version. you should upgrade Blazorise packages to `1.3.1` in your `Blazor.csproj` file.
+The following packages are included in the templates by default:
+- `Blazorise.Bootstrap5`
+- `Blazorise.Icons.FontAwesome`
+- `Blazorise.Components`
+> _If your project depends on more blazorise packages, then you should upgrade all of them._
+> You should execute `dotnet build` & `abp bundle` commands in the Blazor project if you are using the Blazor WebAssembly.
+
+### Bumped the `Microsoft.AspNetCore.Components.*` dependency to `7.0.10`
+In this version, the `Microsoft.AspNetCore.Components.*` dependencies are upgraded to `7.0.10` version. you should upgrade `Microsoft.AspNetCore.Components.Web` and `Microsoft.AspNetCore.Components.WebAssembly` packages to `7.0.10` in your `Blazor.csproj` file.
