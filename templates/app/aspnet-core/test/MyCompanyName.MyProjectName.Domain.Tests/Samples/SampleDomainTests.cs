@@ -11,8 +11,7 @@ namespace MyCompanyName.MyProjectName.Samples;
  * (like IdentityUserManager here).
  * Only test your own domain services.
  */
-[Collection(MyProjectNameTestConsts.CollectionDefinitionName)]
-public abstract class SampleDomainTests<TStartupModule> : MyProjectNameTestBase<TStartupModule>
+public abstract class SampleDomainTests<TStartupModule> : MyProjectNameDomainTestBase<TStartupModule>
     where TStartupModule : IAbpModule
 {
     private readonly IIdentityUserRepository _identityUserRepository;
