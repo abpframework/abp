@@ -116,8 +116,8 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
         {
             var compiledViewProvider = scope.ServiceProvider.GetRequiredService<IAbpCompiledViewProvider>();
             var assembly = await compiledViewProvider.GetAssemblyAsync(templateDefinition);
-            var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName);
-            var template = (IRazorTemplatePage)Activator.CreateInstance(templateType);
+            var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName)!;
+            var template = (IRazorTemplatePage)Activator.CreateInstance(templateType)!;
 
             var modelType = templateType
                 .GetInterfaces()
