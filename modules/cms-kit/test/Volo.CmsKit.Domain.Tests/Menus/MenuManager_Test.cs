@@ -32,7 +32,7 @@ public class MenuManager_Test : CmsKitDomainTestBase
         menuManager.SetPageUrl(menuItem, page);
 
         menuItem.Url.ShouldNotBeNullOrEmpty();
-        menuItem.Url.ShouldBe(PageConsts.UrlPrefix + page.Slug);
+        menuItem.Url.ShouldBe(page.Slug.EnsureStartsWith('/'));
     }
 
     [Fact]

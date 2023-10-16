@@ -145,7 +145,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             ActionApiDescriptionModel.Create(
                 uniqueMethodName,
                 method,
-                apiDescription.RelativePath,
+                apiDescription.RelativePath!,
                 apiDescription.HttpMethod,
                 GetSupportedVersions(controllerType, method, setting),
                 allowAnonymous,

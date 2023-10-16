@@ -3,17 +3,20 @@ import { createDisplayNameLocalizationPipeKeyGenerator } from '../lib/utils/loca
 
 describe('Localization Utils', () => {
   describe('#createDisplayNameLocalizationPipeKeyGenerator', () => {
-    const generateDisplayName = createDisplayNameLocalizationPipeKeyGenerator({
-      values: {
+    const localization: ApplicationLocalizationConfigurationDto = {
+      values:{
         Foo: { Bar: 'Bar', 'DisplayName:Bar': 'Bar' },
         Default: { Bar: 'Bar', 'DisplayName:Bar': 'Bar' },
       },
       defaultResourceName: 'Default',
-      currentCulture: null,
+      resources: {},
       languages: [],
       languageFilesMap: null,
       languagesMap: null,
-    } as ApplicationLocalizationConfigurationDto);
+      currentCulture: null
+    }
+
+    const generateDisplayName = createDisplayNameLocalizationPipeKeyGenerator(localization);
 
     test.each`
       displayName                         | fallback                                | expected

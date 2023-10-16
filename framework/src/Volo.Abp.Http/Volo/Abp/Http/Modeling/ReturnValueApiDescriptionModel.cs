@@ -7,9 +7,9 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class ReturnValueApiDescriptionModel
 {
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
 
-    public string TypeSimple { get; set; }
+    public string TypeSimple { get; set; } = default!;
 
     public ReturnValueApiDescriptionModel()
     {

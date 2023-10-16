@@ -69,8 +69,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         return list;
     }
 
-    [CanBeNull]
-    protected virtual EntityChangeInfo CreateEntityChangeOrNull(EntityEntry entityEntry)
+    protected virtual EntityChangeInfo? CreateEntityChangeOrNull(EntityEntry entityEntry)
     {
         var entity = entityEntry.Entity;
 
@@ -138,7 +137,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         }
     }
 
-    protected virtual string GetEntityId(object entityAsObj)
+    protected virtual string? GetEntityId(object entityAsObj)
     {
         if ((entityAsObj is IEntity entity))
         {
@@ -370,10 +369,10 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
                             // Add foreign key
                             entityChange.PropertyChanges.Add(new EntityPropertyChangeInfo
                             {
-                                NewValue = JsonSerializer.Serialize(propertyEntry.CurrentValue),
-                                OriginalValue = JsonSerializer.Serialize(propertyEntry.OriginalValue),
+                                NewValue = JsonSerializer.Serialize(propertyEntry.CurrentValue!),
+                                OriginalValue = JsonSerializer.Serialize(propertyEntry.OriginalValue!),
                                 PropertyName = property.Name,
-                                PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName
+                                PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName!
                             });
                         }
 
@@ -382,7 +381,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
                     if (propertyChange.OriginalValue == propertyChange.NewValue)
                     {
-                        var newValue = JsonSerializer.Serialize(propertyEntry.CurrentValue);
+                        var newValue = JsonSerializer.Serialize(propertyEntry.CurrentValue!);
                         if (newValue == propertyChange.NewValue)
                         {
                             // No change

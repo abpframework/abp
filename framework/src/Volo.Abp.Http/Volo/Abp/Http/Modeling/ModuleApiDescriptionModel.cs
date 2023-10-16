@@ -18,11 +18,11 @@ public class ModuleApiDescriptionModel
     /// </summary>
     public const string DefaultRemoteServiceName = "Default";
 
-    public string RootPath { get; set; }
+    public string RootPath { get; set; } = default!;
 
-    public string RemoteServiceName { get; set; }
+    public string RemoteServiceName { get; set; } = default!;
 
-    public IDictionary<string, ControllerApiDescriptionModel> Controllers { get; set; }
+    public IDictionary<string, ControllerApiDescriptionModel> Controllers { get; set; } = default!;
 
     public ModuleApiDescriptionModel()
     {
@@ -49,13 +49,13 @@ public class ModuleApiDescriptionModel
         return Controllers[controller.Type] = controller;
     }
 
-    public ControllerApiDescriptionModel GetOrAddController(string name, string groupName, bool isRemoteService, bool isIntegrationService, string apiVersion, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+    public ControllerApiDescriptionModel GetOrAddController(string name, string? groupName, bool isRemoteService, bool isIntegrationService, string? apiVersion, Type type, HashSet<Type>? ignoredInterfaces = null)
     {
-        var key = apiVersion.IsNullOrWhiteSpace() ? type.FullName : $"{apiVersion + "."}{type.FullName}";
+        var key = (apiVersion.IsNullOrWhiteSpace() ? type.FullName : $"{apiVersion + "."}{type.FullName}")!;
         return Controllers.GetOrAdd(key, () => ControllerApiDescriptionModel.Create(name, groupName, isRemoteService, isIntegrationService, apiVersion, type, ignoredInterfaces));
     }
 
-    public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)
+    public ModuleApiDescriptionModel CreateSubModel(string[]? controllers, string[]? actions)
     {
         var subModel = Create(RootPath, RemoteServiceName);
 

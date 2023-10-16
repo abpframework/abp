@@ -6,7 +6,7 @@ namespace Volo.Abp.TextTemplating.Razor;
 
 internal class NotFoundProjectItem : RazorProjectItem
 {
-    public NotFoundProjectItem(string basePath, string path, string fileKind)
+    public NotFoundProjectItem(string basePath, string path, string? fileKind)
     {
         BasePath = basePath;
         FilePath = path;

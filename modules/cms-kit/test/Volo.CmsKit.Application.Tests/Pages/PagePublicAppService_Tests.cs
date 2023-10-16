@@ -33,4 +33,20 @@ public class PagePublicAppService_Tests : CmsKitApplicationTestBase
 
         page.ShouldBeNull();
     }
+
+    [Fact]
+    public async Task DoesSlugExistAsync_ShouldReturnTrue_WhenExists()
+    {
+        var result = await _pageAppService.DoesSlugExistAsync(_data.Page_1_Slug);
+
+        result.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task DoesSlugExistAsync_ShouldReturnFalse_WhenDoesNotExist()
+    {
+        var result = await _pageAppService.DoesSlugExistAsync("not-exist-url");
+
+        result.ShouldBeFalse();
+    }
 }
