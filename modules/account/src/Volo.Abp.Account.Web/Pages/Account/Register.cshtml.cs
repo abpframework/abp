@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -92,7 +93,7 @@ public class RegisterModel : AccountPageModel
             }
 
             var identity = externalLoginInfo.Principal.Identities.First();
-            var emailClaim = identity.FindFirst(ClaimTypes.Email);
+            var emailClaim = identity.FindFirst(AbpClaimTypes.Email) ?? identity.FindFirst(ClaimTypes.Email);
 
             if (emailClaim == null)
             {
