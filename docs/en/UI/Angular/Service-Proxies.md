@@ -18,7 +18,8 @@ Run the following command in the **root folder** of the angular application:
 abp generate-proxy -t ng
 ```
 
-The command without any parameters creates proxies only for your own application's services and places them in your default Angular application. There are several parameters you may use to modify this behavior. See the [CLI documentation](../../CLI) for details.
+Note: If you're utilizing NX, be aware that the Angular schematics-based ABP package may not work as expected. Instead, there's a specialized package for NX-based repositories named @abp/nx.generators. We recommend using this generator for your package. For detailed instructions and more information, refer to this section.
+The command without any parameters creates proxies only for your own application's services and places them in your default Angular application. There are several parameters you may use to modify this behavior. See the [Details](#abp-nx-proxy-generator).
 
 The generated files will be placed in a folder called `proxy` at the root of the target project.
 
@@ -139,6 +140,24 @@ export class BookComponent implements OnInit {
 ```
 
 > Please [see this article](https://github.com/abpframework/abp/blob/dev/docs/en/Blog-Posts/2020-09-07%20Angular-Service-Proxies/POST.md) to learn more about service proxies.
+
+
+### ABP NX Proxy Generator
+ For projects that utilize NX, the @abp/nx.generators package offers seamless integration. Essentially, this package serves as a wrapper specifically tailored for NX-based repositories
+ ** Installation **
+To incorporate this package into your project, run the following command:
+```bash
+yarn add @abp/nx.generators
+```
+** Usage ** 
+To use the generator, execute the following command:
+```bash
+nx generate @abp/nx.generators:generate-proxy
+// or nx g @abp/nx.generators:generate-proxy
+```
+
+Note: The parameters you'd use with this generator are consistent with the standard ABP proxy generator.
+
 
 ### Known Limitations
 
