@@ -47,8 +47,7 @@ export class ErrorHandler {
 
     return (isObservable ? errHandler : of(null)).pipe(
       catchError(err => {
-        this.handleError(err);
-        return of(null);
+        return of(err);
       }),
     );
   };
