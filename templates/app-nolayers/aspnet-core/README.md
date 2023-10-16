@@ -1,12 +1,23 @@
 # MyCompanyName.MyProjectName
 
-## About This Solution
+## About this solution
 
-This is a minimalist, non-layered startup solution with the ABP Framework. All the fundamental ABP modules are already installed.
+This is a minimalist, non-layered startup solution with the ABP Framework. All the fundamental ABP modules are already installed. 
 
-## Before Running the Solution
+### Pre-requirements
 
-### Generating a Signing Certificate
+* [.NET 7.0+ SDK](https://dotnet.microsoft.com/download/dotnet)
+* [Node v18 or 20](https://nodejs.org/en)
+
+### Configurations
+
+The solution comes with a default configuration that works out of the box. However, you may consider to change the following configuration before running your solution:
+
+* Check the `ConnectionStrings` in `appsettings.json` files under the `MyCompanyName.MyProjectName` project and change it if you need.
+
+### Before running the application
+
+#### Generating a Signing Certificate
 
 In the production environment, you need to use a production signing certificate. ABP Framework sets up signing and encryption certificates in your application and expects an `openiddict.pfx` file in your application.
 
@@ -24,7 +35,7 @@ For more information, please refer to: https://documentation.openiddict.com/conf
 
 > Also, see the [Configuring OpenIddict](https://docs.abp.io/en/abp/latest/Deployment/Configuring-OpenIddict#production-environment) documentation for more information.
 
-### Install Client-Side Libraries
+#### Install Client-Side Libraries
 
 Run the following command in the directory of your final application:
 
@@ -34,7 +45,7 @@ abp install-libs
 
 > This command installs all NPM packages for MVC/Razor Pages and Blazor Server UIs and this command is already run by the ABP CLI, so most of the time you don't need to run this command manually.
 
-## How to Run
+### How to Run
 
 The application needs to connect to a database. Run the following command in the `MyCompanyName.MyProjectName` directory to migrate the database and seed the initial data:
 
@@ -44,6 +55,44 @@ dotnet run --migrate-database
 
 This command will create and seed the initial database. Then you can run the application with any IDE that supports .NET.
 
-## Deploying the Application
+### Deploying the application
 
 Deploying an ABP application is not different than deploying any .NET or ASP.NET Core application. However, there are some topics that you should care about when you are deploying your applications. You can check ABP's [Deployment documentation](https://docs.abp.io/en/abp/latest/Deployment/Index) before deploying your application.
+
+### Additional resources
+
+You can see the following resources to learn more about your solution and the ABP Framework:
+
+* [Application (Single Layer) Startup Template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application-Single-Layer)
+<TEMPLATE-REMOVE IF-NOT='ui:mvc'>
+<TEMPLATE-REMOVE IF-NOT='BASIC'>
+* [ASP.NET Core MVC / Razor Pages: The Basic Theme](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme)
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
+* [LeptonX Lite MVC UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/AspNetCore)
+</TEMPLATE-REMOVE>
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='ui:blazor-server'>
+<TEMPLATE-REMOVE IF-NOT='BASIC'>
+* [Blazor UI: Basic Theme](https://docs.abp.io/en/abp/latest/UI/Blazor/Basic-Theme?UI=BlazorServer)
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
+* [LeptonX Lite Blazor UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/Blazor?UI=BlazorServer)
+</TEMPLATE-REMOVE>
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='ui:blazor'>
+<TEMPLATE-REMOVE IF-NOT='BASIC'>
+* [Blazor UI: Basic Theme](https://docs.abp.io/en/abp/latest/UI/Blazor/Basic-Theme?UI=Blazor)
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
+* [LeptonX Lite Blazor UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/Blazor?UI=Blazor)
+</TEMPLATE-REMOVE>
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='ui:angular'>
+<TEMPLATE-REMOVE IF-NOT='BASIC'>
+* [Angular UI: Basic Theme](https://docs.abp.io/en/abp/latest/UI/Angular/Basic-Theme)
+</TEMPLATE-REMOVE>
+<TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
+* [LeptonX Lite Angular UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/Angular)
+</TEMPLATE-REMOVE>
+</TEMPLATE-REMOVE>
