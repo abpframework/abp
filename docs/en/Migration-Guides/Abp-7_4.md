@@ -87,7 +87,7 @@ In this version, ABP Framework introduces the `IdentityUserIntegrationService`, 
 
 This is a breaking change for microservice solutions because of the following two reasons and it should be considered:
 
-* `IdentityUserIntegrationService` provides non-authorized services. This is not breaking the application, but should be taken care of. Since, everyone can use the service to retrieve some information for a certain user (for example, the role names of a user).
+* `IdentityUserIntegrationService` provides non-authorized services. This is not breaking the application but should be taken care of. Since, everyone can use the service to retrieve some information for a certain user (for example, the role names of a user).
 * Secondly, since integration services are not exposed by default anymore as explained in the *Exposing Integration Services* section above, you should explicitly enable exposing integration services. Otherwise, the operation will fail and you'll get a `404` error from the identity microservice.
 
 To expose integration services and controllers, you can configure the `AbpAspNetCoreMvcOptions` and set the `ExposeIntegrationServices` property as *true* in the `ConfigureServices` method of your [module class](../Module-Development-Basics.md):
@@ -103,7 +103,7 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 If you use Blazor WASM or Blazor Server UI, you should follow this section.
 
 ### Bumped the `Blazorise` dependencies to `1.3.1`
-In this version, the `Blazorise` dependencies are upgraded to `1.3.1` version. you should upgrade Blazorise packages to `1.3.1` in your `Blazor.csproj` file.
+In this version, the `Blazorise` dependencies are upgraded to the `1.3.1` version. you should upgrade Blazorise packages to `1.3.1` in your `Blazor.csproj` file.
 The following packages are included in the templates by default:
 - `Blazorise.Bootstrap5`
 - `Blazorise.Icons.FontAwesome`
@@ -112,4 +112,5 @@ The following packages are included in the templates by default:
 > You should execute `dotnet build` & `abp bundle` commands in the Blazor project if you are using the Blazor WebAssembly.
 
 ### Bumped the `Microsoft.AspNetCore.Components.*` dependency to `7.0.10`
-In this version, the `Microsoft.AspNetCore.Components.*` dependencies are upgraded to `7.0.10` version. you should upgrade `Microsoft.AspNetCore.Components.Web` and `Microsoft.AspNetCore.Components.WebAssembly` packages to `7.0.10` in your `Blazor.csproj` file.
+
+In this version, the `Microsoft.AspNetCore.Components.*` dependencies are upgraded to the `7.0.10` version. Therefore, you should upgrade the `Microsoft.AspNetCore.Components.Web` and `Microsoft.AspNetCore.Components.WebAssembly` packages to `7.0.10` in your `Blazor.csproj` file.
