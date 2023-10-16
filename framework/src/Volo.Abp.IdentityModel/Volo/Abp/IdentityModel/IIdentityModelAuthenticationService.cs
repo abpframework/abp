@@ -9,7 +9,7 @@ public interface IIdentityModelAuthenticationService
 {
     Task<bool> TryAuthenticateAsync(
         [NotNull] HttpClient client,
-        string identityClientName = null);
+        string? identityClientName = null);
 
     Task<string> GetAccessTokenAsync(
         IdentityClientConfiguration configuration);

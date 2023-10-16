@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Βαθμολογία",
     "CmsKit.Reactions": "Αντιδράσεις",
     "CmsKit.Tags": "Ετικέτες",
+    "CmsKit.BlogPost.PreventXssFeature": "Αποτροπή XSS",
     "CmsKit:0002": "Το περιεχόμενο υπάρχει ήδη!",
     "CmsKit:0003": "Η οντότητα {0} δεν μπορεί να επισημανθεί.",
     "CmsKit:Blog:0001": "Το δεδομένο slug ({Slug}) υπάρχει ήδη!",

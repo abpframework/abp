@@ -198,23 +198,10 @@ ABP框架不提供任何基础设施来测试JavaScript代码. 你可以使用�
 
 > Volo.Abp.AspNetCore.TestBase 已经安装在 `.Web.Tests` 项目中.
 
-此包提供的`AbpAspNetCoreIntegratedTestBase`作为派生测试类的基类. 上面使用的`MyProjectWebTestBase`继承自`AbpAspNetCoreIntegratedTestBase`, 因此我们间接继承了`AbpAspNetCoreIntegratedTestBase`.
-
-### 基本属性
-
-`AbpAspNetCoreIntegratedTestBase` 提供了测试中使用的以下基本属性:
-
-* `Server`: 在测试中托管web应用程序的`TestServer`实例.
-* `Client`: 为执行对测试服务器的请求配置`HttpClient`实例.
-* `ServiceProvider`: 可以在你需要时处理服务提供服务.
-
-### 基本方法
-
-`AbpAspNetCoreIntegratedTestBase` 提供了以下方法, 如果需要自定义测试服务器, 可以重写这些方法:
-
-* `ConfigureServices` 仅为派生测试类注册/替换服务时可以重写使用.
-* `CreateHostBuilder` 可用于自定义生成 `IHostBuilder`.
+此包提供的`AbpWebApplicationFactoryIntegratedTest`作为派生测试类的基类. 它继承自ASP.NET Core提供的[WebApplicationFactory](https://learn.microsoft.com/zh-cn/aspnet/core/test/integration-tests)类。
+上面使用的`MyProjectWebTestBase`继承自`AbpWebApplicationFactoryIntegratedTest`, 因此我们间接继承了`AbpWebApplicationFactoryIntegratedTest`.
 
 另请参阅
 
+* [ASP.NET Core 中的集成测试](https://learn.microsoft.com/zh-cn/aspnet/core/test/integration-tests)
 * [总览/服务器端测试](../../Testing.md)

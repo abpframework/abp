@@ -36,6 +36,13 @@ using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Web;
 using Volo.CmsKit.Web.Contents;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.Routing;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Volo.Abp.DependencyInjection;
+using Volo.CmsKit.Public.Pages;
+
 
 #if EntityFrameworkCore
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -54,7 +61,6 @@ using Volo.Abp.TenantManagement.MongoDB;
 using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.FeatureManagement.MongoDB;
-using Volo.Abp.MongoDB;
 using Volo.Abp.BlobStoring.Database.MongoDB;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.CmsKit.MongoDB;
@@ -266,6 +272,7 @@ public class CmsKitWebUnifiedModule : AbpModule
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
+
         app.UseConfiguredEndpoints();
 
         using (var scope = context.ServiceProvider.CreateScope())

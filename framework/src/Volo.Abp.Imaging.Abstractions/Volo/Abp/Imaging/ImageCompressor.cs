@@ -23,7 +23,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
 
     public virtual async Task<ImageCompressResult<Stream>> CompressAsync(
         [NotNull] Stream stream,
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         Check.NotNull(stream, nameof(stream));
@@ -45,7 +45,7 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
 
     public virtual async Task<ImageCompressResult<byte[]>> CompressAsync(
         [NotNull] byte[] bytes,
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         Check.NotNull(bytes, nameof(bytes));
