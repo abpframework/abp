@@ -1153,6 +1153,10 @@
                 {
                   "text": "Content Security Strategy",
                   "path": "UI/Angular/Content-Security-Strategy.md"
+                },
+                {
+                  "text":"Abp Window Service",
+                  "path":"UI/Angular/Abp-Window-Service.md"
                 }
               ]
             },
