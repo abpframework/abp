@@ -62,7 +62,7 @@
                                 
                                 @foreach (var permission in group.Permissions)
                                 {
-                                    <Field Margin="permission.ParentName != null ? Margin.Is3.OnAll : Margin.Is0.OnAll">
+                                    <Field Margin="permission.ParentName != null ? Margin.Is3.OnAll : Margin.Is3.OnY">
                                         <Check
                                             Disabled="@(IsDisabledPermission(permission))"
                                             Cursor="Cursor.Pointer"
