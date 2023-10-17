@@ -238,7 +238,7 @@ This will add a new migration class to the project:
 
 > It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../Data-Seeding.md) system of the ABP framework. You can skip this section if you don't want to create the data seeding, but it is suggested to follow along and learn this useful ABP Framework feature.
 
-Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project by copying the following code:
+Create a class that implements the `IDataSeedContributor` interface in the `*.Domain` project by copying the following code:
 
 ```csharp
 using System;
