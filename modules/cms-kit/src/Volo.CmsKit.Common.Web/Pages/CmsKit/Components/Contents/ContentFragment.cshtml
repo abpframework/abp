@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.ViewComponents
+@using Microsoft.Extensions.Logging
 @using Volo.Abp.Data
 @using Volo.Abp.Reflection
 @using Volo.CmsKit.Contents
@@ -9,6 +10,7 @@
 
 @inject IMarkdownToHtmlRenderer MarkdownRenderer
 @inject IViewComponentSelector ViewComponentSelector
+@inject ILogger<ContentFragmentViewComponent> Logger
 
 @foreach (var contentFragment in Model.ContentDto.ContentFragments)
 {
@@ -35,6 +37,18 @@
             }
         }
 
-        @await Component.InvokeAsync(componentName, parameters)
+        @try
+        {
+            await Component.InvokeAsync(componentName, parameters);
+        }
+        catch (Exception ex)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+                This part of content couldn't be loaded.
+            </div>
+
+            Logger.LogWarning(ex, $"Couldn't load the widget: {componentName}");
+        }
     }
 }
