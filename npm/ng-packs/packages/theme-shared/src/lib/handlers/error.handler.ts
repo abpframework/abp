@@ -45,12 +45,7 @@ export class ErrorHandler {
     const errHandler = this.httpErrorHandler(this.injector, error);
     const isObservable = errHandler instanceof Observable;
 
-    return (isObservable ? errHandler : of(null)).pipe(
-      catchError(err => {
-        this.handleError(err);
-        return of(null);
-      }),
-    );
+    return (isObservable ? errHandler : of(null)).pipe(catchError(err => of(err)));
   };
 
   protected sortHttpErrorHandlers(
