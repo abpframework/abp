@@ -205,6 +205,7 @@
     "Feature:ReactionEnable": "Engedélyezett reakció",
     "Feature:ReactionEnableDescription": "Reakció engedélyezése az alkalmazásban.",
     "Feature:TagEnable": "Címkézés engedélyezve",
-    "Feature:TagEnableDescription": "Engedélyezze a címkézést az alkalmazásban."
+    "Feature:TagEnableDescription": "Engedélyezze a címkézést az alkalmazásban.",
+    "ThisPartOfContentCouldntBeLoaded": "A tartalom ezen része nem tölthető be."
   }
 }

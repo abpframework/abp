@@ -205,6 +205,7 @@
     "Feature:ReactionEnable": "Reações habilitadas",
     "Feature:ReactionEnableDescription": "Reações habilitadas no aplicativo.",
     "Feature:TagEnable": "Habilitar tag",
-    "Feature:TagEnableDescription": "Habilitar tag no aplicativo."
+    "Feature:TagEnableDescription": "Habilitar tag no aplicativo.",
+    "ThisPartOfContentCouldntBeLoaded": "Esta parte do conteúdo não pôde ser carregada."
   }
 }

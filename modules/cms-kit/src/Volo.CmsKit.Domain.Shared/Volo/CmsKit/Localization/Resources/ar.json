@@ -159,6 +159,7 @@
     "YourEmailAddress": "عنوان بريدك الإلكتروني",
     "YourFullName": "اسمك الكامل",
     "YourMessage": "رسالتك",
-    "YourReply": "ردك"
+    "YourReply": "ردك",
+    "ThisPartOfContentCouldntBeLoaded": "لا يمكن تحميل هذا الجزء من المحتوى.",
   }
 }

@@ -216,6 +216,7 @@
     "DeleteBlogPostMessage": "Blog silinecek. Emin misiniz?",
     "CaptchaCode": "Captcha kodu",
     "CommentTextRequired": "Yorum zorunlu",
-    "PopularTags": "Popüler Etiketler"
+    "PopularTags": "Popüler Etiketler",
+    "ThisPartOfContentCouldntBeLoaded": "Bu içerik yüklenemedi"
   }
 }

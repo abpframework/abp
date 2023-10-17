@@ -159,6 +159,7 @@
     "YourEmailAddress": "Ваш адрес электронной почты",
     "YourFullName": "Ваше полное имя",
     "YourMessage": "Твое сообщение",
-    "YourReply": "Ваш ответ"
+    "YourReply": "Ваш ответ",
+    "ThisPartOfContentCouldntBeLoaded": "Эта часть содержимого не может быть загружена."
   }
 }
