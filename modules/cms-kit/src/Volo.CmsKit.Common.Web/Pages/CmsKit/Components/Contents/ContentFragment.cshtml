@@ -42,7 +42,7 @@
 
         @try
         {
-            await Component.InvokeAsync(componentName, parameters);
+            @await Component.InvokeAsync(componentName, parameters)
         }
         catch (Exception ex)
         {
@@ -50,7 +50,7 @@
                 @L["ThisPartOfContentCouldntBeLoaded"]
             </div>
 
-            Logger.LogWarning(ex, $"Couldn't load the widget: {componentName}");
+            Logger.LogError(ex, $"Couldn't load the widget: {componentName}");
         }
     }
 }
