@@ -55,7 +55,7 @@
     "@abp/ng.setting-management": "~7.4.0",
     "@abp/ng.tenant-management": "~7.4.0",
     "@abp/ng.theme.basic": "~7.4.0",
-    "@abp/ng.theme.lepton-x": "^2.4.0-rc.4",
+    "@abp/ng.theme.lepton-x": "~2.4.0",
     "@abp/ng.theme.shared": "~7.4.0",
     "@abp/utils": "~7.4.0",
     "@angular-devkit/build-angular": "~16.0.0",
