@@ -6,4 +6,8 @@ public static class BundleContributorCollectionExtensions
     {
         contributors.Add(new BundleFileContributor(files));
     }
+    public static void AddCdnFiles(this BundleContributorCollection contributors, params BundleFile[] files)
+    {
+        contributors.Add(new BundleFileContributor(files));
+    }
 }
