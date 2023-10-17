@@ -67,10 +67,9 @@ public class BundleManager : IBundleManager, ITransientDependency
 
     protected virtual async Task<IReadOnlyList<BundleFile>> GetBundleFilesAsync(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
     {
-        var result = new List<BundleFile>();
+        var files = new List<BundleFile>();
 
         var contributors = GetContributors(bundles, bundleName);
-
         var bundleFiles = RequestResources.TryAdd(await GetBundleFilesAsync(contributors));
         var dynamicResources = RequestResources.TryAdd(await GetDynamicResourcesAsync(contributors));
 
@@ -82,31 +81,28 @@ public class BundleManager : IBundleManager, ITransientDependency
         var localBundleFiles = new List<string>();
         foreach (var bundleFile in bundleFiles)
         {
-            if (bundleFile.IsCdn)
-            {
-                if (localBundleFiles.Any())
-                {
-                    var cacheItem = AddToBundleCache(bundleName, bundler, localBundleFiles);
-                    result.AddRange(cacheItem.Files);
-                    localBundleFiles.Clear();
-                }
-
-                result.Add(bundleFile);
-            }
-            else
+            if (!bundleFile.IsCdn)
             {
                 localBundleFiles.Add(bundleFile.File);
             }
+            else
+            {
+                if (localBundleFiles.Count != 0)
+                {
+                    files.AddRange(AddToBundleCache(bundleName, bundler, localBundleFiles).Files);
+                    localBundleFiles.Clear();
+                }
+
+                files.Add(bundleFile);
+            }
         }
 
-        if (localBundleFiles.Any())
+        if (localBundleFiles.Count != 0)
         {
-            var cacheItem = AddToBundleCache(bundleName, bundler, localBundleFiles);
-            result.AddRange(cacheItem.Files);
-            localBundleFiles.Clear();
+            files.AddRange(AddToBundleCache(bundleName, bundler, localBundleFiles).Files);
         }
 
-        return result.Union(dynamicResources).ToImmutableList();
+        return files.Union(dynamicResources).ToImmutableList();
     }
 
     private BundleCacheItem AddToBundleCache(string bundleName, IBundler bundler, List<string> bundleFiles)
