@@ -20,7 +20,7 @@ abp generate-proxy -t ng
 
 ### Note 
 - If you're utilizing NX, be aware that the Angular schematics-based ABP package may not work as expected. Instead, there's a specialized package for NX-based repositories named @abp/nx.generators. We recommend using this generator for your package. For detailed instructions and more information, refer to this section.
-- The command without any parameters creates proxies only for your own application's services and places them in your default Angular application. There are several parameters you may use to modify this behavior. See the [Details](#abp-nx-proxy-generator).
+- The command without any parameters creates proxies for your own application's services only and places them in your default Angular application. There are several parameters you may use to modify this behavior. See the [Details](#abp-nx-proxy-generator).
 
 The generated files will be placed in a folder called `proxy` at the root of the target project.
 
