@@ -116,6 +116,8 @@ public class CmsKitWebUnifiedModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        CmsBlogsWebConsts.BlogsRoutePrefix = "foo";
+
         FeatureConfigurer.Configure();
     }
 

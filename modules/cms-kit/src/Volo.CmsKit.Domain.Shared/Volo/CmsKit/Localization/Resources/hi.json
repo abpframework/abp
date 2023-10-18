@@ -77,6 +77,7 @@
     "PageId": "पृष्ठ",
     "Pages": "पृष्ठों",
     "PageSlugInformation": "स्लग का उपयोग url पर किया जाता है। आपका url '/{{slug}}' होगा।",
+    "BlogSlugInformation": "स्लग का उपयोग url पर किया जाता है। आपका url '/{0}/{{slug}}' होगा।",
     "Permission:BlogManagement": "ब्लॉग प्रबंधन",
     "Permission:BlogManagement.Create": "सृजन करना",
     "Permission:BlogManagement.Delete": "हटाएं",

@@ -77,6 +77,7 @@
     "PageId": "Trang",
     "Pages": "Các trang",
     "PageSlugInformation": "Slug được sử dụng trên url. Url của bạn sẽ là '/{{slug}}'.",
+    "BlogSlugInformation": "Slug được sử dụng trên url. Url của bạn sẽ là '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Quản lý blog",
     "Permission:BlogManagement.Create": "Tạo ra",
     "Permission:BlogManagement.Delete": "Xóa bỏ",
