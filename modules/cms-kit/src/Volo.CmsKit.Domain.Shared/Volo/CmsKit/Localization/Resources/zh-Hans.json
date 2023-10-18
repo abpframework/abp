@@ -217,6 +217,7 @@
     "CaptchaCode": "验证码",
     "CommentTextRequired": "请输入评论",
     "CaptchaCodeErrorMessage": "验证码错误，请重试",
-    "CaptchaCodeMissingMessage": "请输入验证码！"
+    "CaptchaCodeMissingMessage": "请输入验证码！",
+    "ThisPartOfContentCouldntBeLoaded": "无法加载此部分内容"
   }
 }

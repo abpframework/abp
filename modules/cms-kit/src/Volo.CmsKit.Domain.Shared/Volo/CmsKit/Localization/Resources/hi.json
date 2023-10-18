@@ -159,6 +159,7 @@
     "YourEmailAddress": "आपका ईमेल पता",
     "YourFullName": "आपका पूरा नाम",
     "YourMessage": "आपका संदेश",
-    "YourReply": "आपके उत्तर"
+    "YourReply": "आपके उत्तर",
+    "ThisPartOfContentCouldntBeLoaded": "यह भाग लोड नहीं किया जा सका।"
   }
 }

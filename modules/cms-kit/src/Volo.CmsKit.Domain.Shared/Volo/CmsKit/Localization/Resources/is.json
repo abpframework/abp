@@ -159,6 +159,7 @@
     "YourEmailAddress": "Netfangið þitt",
     "YourFullName": "Fullt nafn",
     "YourMessage": "Skilaboð þín",
-    "YourReply": "Svarið þitt"
+    "YourReply": "Svarið þitt",
+    "ThisPartOfContentCouldntBeLoaded": "Þessi hluti af efni gat ekki verið hlaðið inn."
   }
 }

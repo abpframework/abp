@@ -160,6 +160,7 @@
     "YourFullName": "你的全名",
     "YourMessage": "你的消息",
     "YourReply": "你的回覆",
-    "MarkdownSupported": "支援 <a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> ."
+    "MarkdownSupported": "支援 <a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> .",
+    "ThisPartOfContentCouldntBeLoaded": "這部分內容無法加載"
   }
 }

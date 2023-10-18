@@ -224,6 +224,7 @@
         "RemoveCoverImageConfirmationMessage": "Are you sure you want to remove the cover image?",
         "RemoveCoverImage": "Remove cover image",
         "CssClass": "CSS Class",
-        "TagsHelpText": "Tags should be comma-separated (e.g.: tag1, tag2, tag3)"
+        "TagsHelpText": "Tags should be comma-separated (e.g.: tag1, tag2, tag3)",
+        "ThisPartOfContentCouldntBeLoaded": "This part of content couldn't be loaded."
     }
 }
