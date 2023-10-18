@@ -138,7 +138,7 @@
     <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageVersion Include="SharpZipLib" Version="1.4.2" />
     <PackageVersion Include="Shouldly" Version="4.0.3" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="1.0.4" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.6" />
     <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
     <PackageVersion Include="Slugify.Core" Version="4.0.1" />
     <PackageVersion Include="Spectre.Console" Version="0.47.0" />
