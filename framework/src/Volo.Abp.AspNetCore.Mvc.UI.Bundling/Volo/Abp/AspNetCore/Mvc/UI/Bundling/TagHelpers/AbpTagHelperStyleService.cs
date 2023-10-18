@@ -51,8 +51,8 @@ public class AbpTagHelperStyleService : AbpTagHelperResourceService
             _ => false
         };
 
-        var href = file.IsCdn ? file.File : viewContext.GetUrlHelper().Content((file.File + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
-        if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.File.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+        var href = file.IsCdn ? file.FileName : viewContext.GetUrlHelper().Content((file.FileName + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
+        if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.FileName.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
         {
             output.Content.AppendHtml(SecurityHeadersOptions.UseContentSecurityPolicyScriptNonce
                 ? $"<link rel=\"preload\" href=\"{href}\" as=\"style\" abp-csp-style />{Environment.NewLine}"

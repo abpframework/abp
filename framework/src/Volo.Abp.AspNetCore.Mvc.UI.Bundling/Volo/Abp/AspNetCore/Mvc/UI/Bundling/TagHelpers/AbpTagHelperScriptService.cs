@@ -47,13 +47,13 @@ public class AbpTagHelperScriptService : AbpTagHelperResourceService
             _ => false
         };
 
-        var deferText = (defer || Options.DeferScriptsByDefault || Options.DeferScripts.Any(x => file.File.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+        var deferText = (defer || Options.DeferScriptsByDefault || Options.DeferScripts.Any(x => file.FileName.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
                 ? "defer "
                 : string.Empty;
         var nonceText = (viewContext.HttpContext.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) && nonce is string nonceString && !string.IsNullOrEmpty(nonceString))
             ? $"nonce=\"{nonceString}\" "
             : string.Empty;
-        var src = file.IsCdn ? file.File : viewContext.GetUrlHelper().Content((file.File + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
+        var src = file.IsCdn ? file.FileName : viewContext.GetUrlHelper().Content((file.FileName + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
         output.Content.AppendHtml($"<script {deferText}{nonceText}src=\"{src}\"></script>{Environment.NewLine}");
     }
 }

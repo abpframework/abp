@@ -24,7 +24,7 @@ public class BundleFileContributor : BundleContributor
     {
         foreach (var file in Files)
         {
-            context.Files.AddIfNotContains(x => x.File.Equals(file.File, StringComparison.OrdinalIgnoreCase), () => file);
+            context.Files.AddIfNotContains(x => x.FileName.Equals(file.FileName, StringComparison.OrdinalIgnoreCase), () => file);
         }
     }
 }

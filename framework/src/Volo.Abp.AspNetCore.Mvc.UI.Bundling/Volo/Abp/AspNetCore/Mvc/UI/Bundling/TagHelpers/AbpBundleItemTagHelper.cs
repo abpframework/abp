@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
@@ -16,6 +17,9 @@ public abstract class AbpBundleItemTagHelper<TTagHelper, TTagHelperService> : Ab
     /// A bundle contributor type.
     /// </summary>
     public Type? Type { get; set; }
+
+    [HtmlAttributeName("is-cdn")]
+    public bool IsCdn { get; set; }
 
     protected AbpBundleItemTagHelper(TTagHelperService service)
         : base(service)
@@ -49,7 +53,7 @@ public abstract class AbpBundleItemTagHelper<TTagHelper, TTagHelperService> : Ab
 
         if (Src != null)
         {
-            return new BundleTagHelperFileItem(Src);
+            return new BundleTagHelperFileItem(new BundleFile(Src, IsCdn));
         }
 
         throw new AbpException("abp-script tag helper requires to set either src or type!");

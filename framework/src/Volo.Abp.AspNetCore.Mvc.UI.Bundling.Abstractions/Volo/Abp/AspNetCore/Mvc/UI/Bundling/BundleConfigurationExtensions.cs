@@ -11,6 +11,12 @@ public static class BundleConfigurationExtensions
         return bundleConfiguration;
     }
 
+    public static BundleConfiguration AddFiles(this BundleConfiguration bundleConfiguration, params BundleFile[] files)
+    {
+        bundleConfiguration.Contributors.AddFiles(files);
+        return bundleConfiguration;
+    }
+
     public static BundleConfiguration AddCdnFiles(this BundleConfiguration bundleConfiguration, params string[] files)
     {
         bundleConfiguration.Contributors.AddCdnFiles(files.Select(x => new BundleFile(x, true)).ToArray());

@@ -83,7 +83,7 @@ public class BundleManager : IBundleManager, ITransientDependency
         {
             if (!bundleFile.IsCdn)
             {
-                localBundleFiles.Add(bundleFile.File);
+                localBundleFiles.Add(bundleFile.FileName);
             }
             else
             {

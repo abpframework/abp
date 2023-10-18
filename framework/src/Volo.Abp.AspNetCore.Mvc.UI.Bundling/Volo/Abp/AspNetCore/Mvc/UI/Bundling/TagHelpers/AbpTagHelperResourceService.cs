@@ -71,10 +71,10 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
             }
             else
             {
-                var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile.File);
+                var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile.FileName);
                 if (file == null || !file.Exists)
                 {
-                    Logger.LogError($"Could not find the bundle file '{bundleFile.File}' for the bundle '{bundleName}'!");
+                    Logger.LogError($"Could not find the bundle file '{bundleFile.FileName}' for the bundle '{bundleName}'!");
                     AddErrorScript(viewContext, tagHelper, context, output, bundleFile, bundleName!);
                     continue;
                 }
@@ -98,7 +98,7 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
 
     protected virtual void AddErrorScript(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, BundleFile file, string bundleName)
     {
-        output.Content.AppendHtml($"<script>console.log(\"%cCould not find the bundle file '{file.File}' for the bundle '{bundleName}'!\", 'background: yellow; font-size:20px;');</script>{Environment.NewLine}");
+        output.Content.AppendHtml($"<script>console.log(\"%cCould not find the bundle file '{file.FileName}' for the bundle '{bundleName}'!\", 'background: yellow; font-size:20px;');</script>{Environment.NewLine}");
     }
 
     protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)
