@@ -21,5 +21,6 @@ public class CreateCommentInput : ExtensibleObject
     
     public string Url { get; set; }
 
+    [Required]
     public string IdempotencyToken { get; set; }
 }

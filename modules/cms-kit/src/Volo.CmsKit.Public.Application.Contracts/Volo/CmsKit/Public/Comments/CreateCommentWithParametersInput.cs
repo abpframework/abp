@@ -26,5 +26,6 @@ public class CreateCommentWithParametersInput
 
     public string Url { get; set; }
 
+    [Required]
     public string IdempotencyToken { get; set; }
 }
