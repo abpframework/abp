@@ -141,6 +141,11 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         await DeleteAsync(comment, cancellationToken: GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<bool> ExistsAsync(string idempotencyToken, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync()).AnyAsync(x => x.IdempotencyToken == idempotencyToken, GetCancellationToken(cancellationToken));
+    }
+
     protected virtual async Task<IQueryable<CommentWithAuthorQueryResultItem>> GetListQueryAsync(
         string filter = null,
         string entityType = null,
