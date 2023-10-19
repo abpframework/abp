@@ -140,6 +140,7 @@
     <PackageVersion Include="Shouldly" Version="4.0.3" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.6" />
     <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
+    <PackageVersion Include="SkiaSharp" Version="2.88.6" />
     <PackageVersion Include="Slugify.Core" Version="4.0.1" />
     <PackageVersion Include="Spectre.Console" Version="0.47.0" />
     <PackageVersion Include="StackExchange.Redis" Version="2.6.122" />
