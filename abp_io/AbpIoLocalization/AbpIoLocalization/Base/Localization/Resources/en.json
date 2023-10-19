@@ -221,6 +221,8 @@
     "More": "More",
     "WhyABPIOPlatform": "Why ABP.IO Platform?",
     "AbpStudio": "ABP Studio",
-    "ExtraMonths": "{0}<span>EXTRA MONTHS</span>"
+    "ExtraMonths": "{0}<span>EXTRA MONTHS</span>",
+    "RSS": "RSS",
+    "RSSFeed": "RSS Feed"
   }
 }

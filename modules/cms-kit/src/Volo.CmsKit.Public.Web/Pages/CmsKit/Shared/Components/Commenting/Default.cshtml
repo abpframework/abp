@@ -31,6 +31,7 @@
               data-reply-id="@(repliedCommentId?.ToString() ?? "")"
               style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
         <form class="cms-comment-form">
+            <input hidden value="@(Guid.NewGuid().ToString("N"))" name="idempotencyToken" />
             <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId" />
             <div class="row">
                 <div class="col">

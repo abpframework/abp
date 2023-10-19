@@ -235,6 +235,13 @@
     "SponsoredConferencesDescription": "We are honoring to support .NET communities and events for software developers.",
     "UpcomingEvents": "<span class=\"text-info\">Upcoming</span> Events",
     "UpcomingCommunityTalkEventDescription": "The live shows, hosted by the ABP Team, are casual sessions full of community content, demos, Q&A, and discussions around what's happening in ABP.",
-    "UpcomingConferenceEventDescription": "ABP .NET Conference is a virtual event for the .NET Developer community to come together and listen to talks about the .NET world, common software development practices and the open source ABP Framework."
+    "UpcomingConferenceEventDescription": "ABP .NET Conference is a virtual event for the .NET Developer community to come together and listen to talks about the .NET world, common software development practices and the open source ABP Framework.",
+    "LastOneYear": "Last 1 Year",
+    "AllTimes": "All Times",
+    "TopContributors": "Top Contributors",
+    "{0}Posts": "{0} Posts",
+    "LATESTPOSTS": "LATEST POSTS",
+    "NoContributorsFound": "No contributors found!",
+    "LatestPost": "Latest post"
   }
 }
