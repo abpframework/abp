@@ -22,13 +22,13 @@ CMS Kit module admin side adds the following items to the main menu, under the *
 
 #### Page Management
 
-Pages page is used to manage dynamic pages in the system.
-
-![pages-page](../../images/cmskit-module-pages-page.png)
-
-You can create or edit an existing page on this page.
+**Pages** page is used to manage dynamic pages in the system. You can create/edit pages with dynamic routes and contents on this page:
 
 ![pages-edit](../../images/cmskit-module-pages-edit.png)
 
-When you create a page, you can access the created page via `/{slug}` URL.
+After you have created pages, you can set one of them as a *home page*. Then, whenever anyone navigates to your application's homepage, they see the dynamic content of the page that you have defined on this page.
+
+![pages-page](../../images/cmskit-module-pages-page.png)
+
+Also when you create a page, you can access the created page via `/{slug}` URL.
 
