@@ -107,6 +107,11 @@ public static class AbpApplicationBuilderExtensions
         return app.UseMiddleware<AbpClaimsMapMiddleware>();
     }
 
+    public static IApplicationBuilder UseAbpClaimsCheck(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<AbpClaimsCheckMiddleware>();
+    }
+
     public static IApplicationBuilder UseAbpSecurityHeaders(this IApplicationBuilder app)
     {
         return app.UseMiddleware<AbpSecurityHeadersMiddleware>();
