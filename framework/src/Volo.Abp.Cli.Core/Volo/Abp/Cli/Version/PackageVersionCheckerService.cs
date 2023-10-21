@@ -46,7 +46,7 @@ public class PackageVersionCheckerService : ITransientDependency
     {
         var versionList = await GetPackageVersionListAsync(packageId, false);
 
-        if (versionList == null)
+        if (!versionList.Any())
         {
             return false;
         }
@@ -121,10 +121,10 @@ public class PackageVersionCheckerService : ITransientDependency
         }
 
         var searchUrl = CliUrls.GetNuGetPackageSearchUrl(_apiKeyResult.ApiKey, packageId);
-        return await HasAnyPackageAsync(searchUrl);
+        return await HasAnyPackageAsync(searchUrl, packageId);
     }
 
-    private async Task<bool> HasAnyPackageAsync(string url)
+    private async Task<bool> HasAnyPackageAsync(string url, string packageId)
     {
         try
         {
@@ -139,8 +139,9 @@ public class PackageVersionCheckerService : ITransientDependency
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 var responseContent = await responseMessage.Content.ReadAsStringAsync();
-                
-                return JsonSerializer.Deserialize<NuGetSearchResultDto>(responseContent).TotalHits > 0;
+                var nugetSearchResult = JsonSerializer.Deserialize<NuGetSearchResultDto>(responseContent);
+
+                return nugetSearchResult.TotalHits > 0 && nugetSearchResult.Packages.Any(package => package.Id.ToLowerInvariant() == packageId.ToLowerInvariant());
             }
         }
         catch (Exception)
@@ -182,7 +183,7 @@ public class PackageVersionCheckerService : ITransientDependency
                 if (responseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     //the package doesn't exist...
-                    return null;
+                    return new List<string>();
                 }
                 
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
@@ -193,7 +194,7 @@ public class PackageVersionCheckerService : ITransientDependency
         }
         catch (Exception)
         {
-            return null;
+            return new List<string>();
         }
     }
 
@@ -238,6 +239,18 @@ public class PackageVersionCheckerService : ITransientDependency
     {
         [JsonProperty("totalHits")]
         public int TotalHits { get; set; }
+
+        [JsonProperty("data")]
+        public NuGetSearchResultPackagesDto[] Packages { get; set; }
+    }
+
+    public class NuGetSearchResultPackagesDto 
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("version")]
+        public string Version { get; set; }
     }
     
     public class NuGetVersionResultDto
