@@ -243,6 +243,11 @@
     "LATESTPOSTS": "LATEST POSTS",
     "NoContributorsFound": "No contributors found!",
     "LatestPost": "Latest post",
-    "MEMBERSINCE{0}": "MEMBER SINCE {0}"
+    "MEMBERSINCE{0}": "MEMBER SINCE {0}",
+    "CopyLink": "Copy Link",
+    "ShareOnTwitter": "Share on Twitter",
+    "ShareOnLinkedIn": "Share on LinkedIn",
+    "MoreFrom{0}": "More from {0}",
+    "SeeAllFrom{0}": "See all from {0}"
   }
 }
