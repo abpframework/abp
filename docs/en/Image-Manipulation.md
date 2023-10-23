@@ -88,7 +88,7 @@ var resizeResult = await _imageResizer.ResizeAsync(
 );
 ```
 
-> If `resizeResult.State` returns 'Done,' it means that the resize operation was successful. However, if it does not return 'Done,' the stream you're using might be corrupt. Therefore, you can perform a check like the one below and assign the correct stream to the main stream.
+> **Note:** If `resizeResult.State` returns 'Done', then it means that the resize operation was successful. However, if it returns any other state than 'Done', the stream you're using might be corrupted. Therefore, you can perform a check like the one below and assign the correct stream to the main stream:
 
 ```csharp
 if (resizeResult.Result is not null && imageStream != resizeResult.Result && resizeResult.Result.CanRead)
@@ -186,7 +186,7 @@ var compressResult = await _imageCompressor.CompressAsync(
 );
 ```
 
-> If `compressResult.State` returns 'Done,' it means that the compress operation was successful. However, if it does not return 'Done,' the stream you're using might be corrupt. Therefore, you can perform a check like the one below and assign the correct stream to the main stream.
+> **Note:** If `compressResult.State` returns 'Done', then it means that the compression operation was successful. However, if it returns any other state than 'Done', the stream you're using might be corrupted. Therefore, you can perform a check like the one below and assign the correct stream to the main stream:
 
 ```csharp
 
