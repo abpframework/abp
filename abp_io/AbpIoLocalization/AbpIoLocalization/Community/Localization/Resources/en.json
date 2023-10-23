@@ -242,6 +242,7 @@
     "{0}Posts": "{0} Posts",
     "LATESTPOSTS": "LATEST POSTS",
     "NoContributorsFound": "No contributors found!",
-    "LatestPost": "Latest post"
+    "LatestPost": "Latest post",
+    "MEMBERSINCE{0}": "MEMBER SINCE {0}"
   }
 }
