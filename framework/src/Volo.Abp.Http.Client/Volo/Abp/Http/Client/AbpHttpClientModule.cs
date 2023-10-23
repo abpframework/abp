@@ -1,11 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Castle;
+using Volo.Abp.Data;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Validation;
 using Volo.Abp.ExceptionHandling;
+using Volo.Abp.Http.Client.ClientProxying;
+using Volo.Abp.Http.Client.ClientProxying.ExtraPropertyDictionaryConverts;
 using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.RemoteServices;
 
@@ -27,5 +31,11 @@ public class AbpHttpClientModule : AbpModule
     {
         context.Services.AddHttpClient();
         context.Services.AddTransient(typeof(DynamicHttpProxyInterceptorClientProxy<>));
+
+        Configure<AbpHttpClientProxyingOptions>(options =>
+        {
+            options.QueryStringConverts.Add(typeof(ExtraPropertyDictionary), typeof(ExtraPropertyDictionaryToQueryString));
+            options.FormDataConverts.Add(typeof(ExtraPropertyDictionary), typeof(ExtraPropertyDictionaryToFormData));
+        });
     }
 }

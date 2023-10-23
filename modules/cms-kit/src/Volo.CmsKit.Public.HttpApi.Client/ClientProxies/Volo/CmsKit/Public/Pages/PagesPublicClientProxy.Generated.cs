@@ -30,4 +30,12 @@ public partial class PagesPublicClientProxy : ClientProxyBase<IPagePublicAppServ
     {
         return await RequestAsync<PageDto>(nameof(FindDefaultHomePageAsync));
     }
+
+    public virtual async Task<bool> DoesSlugExistAsync(string slug)
+    {
+        return await RequestAsync<bool>(nameof(DoesSlugExistAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), slug }
+        });
+    }
 }

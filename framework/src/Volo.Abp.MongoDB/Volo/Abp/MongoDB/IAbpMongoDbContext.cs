@@ -10,5 +10,5 @@ public interface IAbpMongoDbContext
 
     IMongoCollection<T> Collection<T>();
 
-    IClientSessionHandle SessionHandle { get; }
+    IClientSessionHandle? SessionHandle { get; }
 }

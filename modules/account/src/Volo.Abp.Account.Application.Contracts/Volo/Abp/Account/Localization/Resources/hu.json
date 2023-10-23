@@ -64,6 +64,8 @@
     "PasswordResetInfoInEmail": "Fiók-helyreállítási kérelmet kaptunk! Ha Ön kezdeményezte ezt a kérést, kattintson a következő hivatkozásra jelszava visszaállításához.",
     "ResetMyPassword": "Jelszavam visszaállítása",
     "AccessDenied": "Hozzáférés megtagadva!",
-    "AccessDeniedMessage": "Nincs hozzáférése ehhez az erőforráshoz."
+    "AccessDeniedMessage": "Nincs hozzáférése ehhez az erőforráshoz.",
+    "OrRegisterWith": "Vagy regisztráljon:",
+    "RegisterUsingYourProviderAccount": "Regisztráljon a(z) {0} fiókjával"
   }
 }

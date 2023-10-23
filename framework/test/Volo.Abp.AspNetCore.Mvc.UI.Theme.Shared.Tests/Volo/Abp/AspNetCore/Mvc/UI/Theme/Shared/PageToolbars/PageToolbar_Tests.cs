@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.Volo.Abp.AspNetCore.Mvc.
 
 public class PageToolbar_Tests : AbpAspNetCoreMvcUiThemeSharedTestBase
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpPageToolbarOptions>(options =>
         {
