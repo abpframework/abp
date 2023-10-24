@@ -69,7 +69,9 @@
                             </p>
                             @(await Component.InvokeAsync(typeof(ContentFragmentViewComponent), new DefaultContentDto
                             {
-                                ContentFragments = Model.ViewModel.ContentFragments
+                                ContentFragments = Model.ViewModel.ContentFragments,
+                                AllowHtmlTags = true,
+                                PreventXSS = Model.PreventXssFeature.IsEnabled,
                             }))
                             <p class="mb-3">
                                 @if (Model.ViewModel.LastModificationTime != null)
@@ -137,19 +139,19 @@
         }
         @if (isScrollIndexEnabled)
         {
-                <div id="scroll-index" class="docs-inner-anchors mt-2">
-                    <h5>@L["InThisDocument"]</h5>
-                    <nav id="blog-post-sticky-index" class="navbar index-scroll pt-0">
-                    </nav>
+            <div id="scroll-index" class="docs-inner-anchors mt-2">
+                <h5>@L["InThisDocument"]</h5>
+                <nav id="blog-post-sticky-index" class="navbar index-scroll pt-0">
+                </nav>
 
-                    <div class="row">
-                        <div class="col p-0 py-3">
-                            <a href="#" class="scroll-top-btn">
-                                <i class="fa fa-chevron-up"></i> @L["GoToTop"]
-                            </a>
-                        </div>
+                <div class="row">
+                    <div class="col p-0 py-3">
+                        <a href="#" class="scroll-top-btn">
+                            <i class="fa fa-chevron-up"></i> @L["GoToTop"]
+                        </a>
                     </div>
                 </div>
+            </div>
         }
     </div>
 

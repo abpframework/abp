@@ -40,11 +40,11 @@ public class AbpModelMetadataProvider : DefaultModelMetadataProvider
     {
         foreach (var validationAttribute in detail.ModelAttributes.Attributes.OfType<ValidationAttribute>())
         {
-            NormalizeValidationAttrbute(validationAttribute);
+            NormalizeValidationAttribute(validationAttribute);
         }
     }
 
-    protected virtual void NormalizeValidationAttrbute(ValidationAttribute validationAttribute)
+    protected virtual void NormalizeValidationAttribute(ValidationAttribute validationAttribute)
     {
         if (validationAttribute.ErrorMessage == null)
         {

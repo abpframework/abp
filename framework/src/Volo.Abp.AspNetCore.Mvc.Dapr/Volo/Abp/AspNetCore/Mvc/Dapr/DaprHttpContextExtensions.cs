@@ -22,7 +22,7 @@ public static class DaprHttpContextExtensions
             .IsValidDaprAppApiToken();
     }
 
-    public static string GetDaprAppApiTokenOrNull(HttpContext httpContext)
+    public static string? GetDaprAppApiTokenOrNull(HttpContext httpContext)
     {
         return httpContext
             .RequestServices

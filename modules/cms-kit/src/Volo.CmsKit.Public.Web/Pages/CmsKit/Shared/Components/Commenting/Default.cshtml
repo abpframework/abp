@@ -31,6 +31,7 @@
           data-reply-id="@(repliedCommentId?.ToString() ?? "")"
           style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
         <form class="cms-comment-form">
+            <input hidden value="@(Guid.NewGuid().ToString("N"))" name="idempotencyToken" />
             <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId" />
             <div class="row">
                 <div class="col">
@@ -39,7 +40,7 @@
                     </div>
                 </div>
                 <div class="mt-0">
-                    <small class="text-muted float-start float-end">@L["MarkdownSupported"]</small>
+                    <small class="text-muted float-end">@L["MarkdownSupported"]</small>
                 </div>
 
                 @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
@@ -127,14 +128,32 @@
                             <input name="commentConcurrencyStamp" value="@concurrencyStamp" type="hidden" />
                         </div>
                     </div>
+                    <div class="mt-0">
+                        <small class="text-muted float-end" >@L["MarkdownSupported"]</small>
+                    </div>
+
+                    @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
+                    {
+                        var output = await Model.GenerateCaptchaAsync();
+
+                        <div class="volo-captcha">
+                            <label class="form-label" for="Input_Captcha_@output.Id">@L["CaptchaCode"]</label>
+                            <div class="d-flex">
+                                <div class="bd-highlight">
+                                    <img src="@Model.GetCaptchaImageBase64(output.ImageBytes)"/>
+                                </div>
+                                <div class="flex-grow-1 bd-highlight">
+                                    <abp-input id="Input_Captcha_@output.Id" type="number" asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off"/>
+                                </div>
+                                <abp-input asp-for="@Model.CaptchaId" value="@output.Id"/>
+                            </div>
+                        </div>
+                    }
                     <div class="col-auto">
                         <div class="text-end">
                             <abp-button type="submit" button-type="Primary" size="Block"> @L["Update"] </abp-button>
                             <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times me-1"></i>  @L["Cancel"] </abp-button>
                         </div>
-                    </div>
-                    <div class="mt-0">
-                        <small class="text-muted float-start" >@L["MarkdownSupported"]</small>
                     </div>
                 </div>
             </form>
@@ -186,7 +205,7 @@
                 {
                     @foreach (var reply in comment.Replies)
                     {
-                        <div class="bg-light card p-3 mx-0 mt-3">
+                        <div class="comment-container card p-3 mx-0 mt-3">
                             <div class="comment">
                                 <h5>
                                     @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)

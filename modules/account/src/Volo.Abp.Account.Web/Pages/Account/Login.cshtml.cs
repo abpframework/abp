@@ -229,7 +229,7 @@ public class LoginModel : AccountPageModel
 
         //TODO: Handle other cases for result!
 
-        var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email);
+        var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email) ?? loginInfo.Principal.FindFirstValue(ClaimTypes.Email);
         if (email.IsNullOrWhiteSpace())
         {
             return RedirectToPage("./Register", new {
@@ -268,9 +268,10 @@ public class LoginModel : AccountPageModel
     {
         await IdentityOptions.SetAsync();
 
-        var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
+        var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email) ?? info.Principal.FindFirstValue(ClaimTypes.Email);
+        var userName = await GetUserNameFromEmail(emailAddress);
 
-        var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
+        var user = new IdentityUser(GuidGenerator.Create(), userName, emailAddress, CurrentTenant.Id);
 
         CheckIdentityErrors(await UserManager.CreateAsync(user));
         CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));

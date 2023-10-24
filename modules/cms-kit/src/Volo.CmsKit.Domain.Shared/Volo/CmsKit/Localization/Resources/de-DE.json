@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Bewertungen",
     "CmsKit.Reactions": "Reaktionen",
     "CmsKit.Tags": "Stichworte",
+    "CmsKit.BlogPost.PreventXssFeature": "XSS-Prävention",
     "CmsKit:0002": "Inhalt ist bereits vorhanden!",
     "CmsKit:0003": "Die Entität {0} kann nicht mit Tags versehen werden.",
     "CmsKit:Blog:0001": "Die angegebene Schnecke ({Slug}) existiert bereits!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "Ihre E-Mail-Adresse",
     "YourFullName": "Ihren vollständigen Namen",
     "YourMessage": "Ihre Nachricht",
-    "YourReply": "Ihre Antwort"
+    "YourReply": "Ihre Antwort",
+    "ThisPartOfContentCouldntBeLoaded": "Dieser Teil des Inhalts konnte nicht geladen werden."
   }
 }

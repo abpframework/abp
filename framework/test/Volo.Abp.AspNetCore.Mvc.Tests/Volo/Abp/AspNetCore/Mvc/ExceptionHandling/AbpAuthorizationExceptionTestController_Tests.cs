@@ -24,9 +24,9 @@ public class AbpAuthorizationExceptionTestController_Tests : AspNetCoreMvcTestBa
         FakeRequiredService = GetRequiredService<FakeUserClaims>();
     }
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
 
         FakeExceptionSubscriber = Substitute.For<IExceptionSubscriber>();
 

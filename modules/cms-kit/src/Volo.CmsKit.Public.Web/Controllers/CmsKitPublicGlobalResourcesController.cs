@@ -11,7 +11,7 @@ using Volo.CmsKit.Public.GlobalResources;
 namespace Volo.CmsKit.Public.Web.Controllers;
 
 [Route("cms-kit/global-resources")]
-public class CmsKitPublicGlobalResourcesController: AbpController
+public class CmsKitPublicGlobalResourcesController : CmsKitPublicControllerBase
 {
     private readonly IGlobalResourcePublicAppService _globalResourcePublicAppService;
     private readonly IDistributedCache<GlobalResourceDto> _resourceCache;
