@@ -17,7 +17,7 @@ public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, 
 
     event EventHandler<UnitOfWorkEventArgs> Disposed;
 
-    IAbpUnitOfWorkOptions? Options { get; }
+    IAbpUnitOfWorkOptions Options { get; }
 
     IUnitOfWork? Outer { get; }
 

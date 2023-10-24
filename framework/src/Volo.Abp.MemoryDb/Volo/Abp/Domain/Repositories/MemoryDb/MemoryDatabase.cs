@@ -25,9 +25,9 @@ public class MemoryDatabase : IMemoryDatabase, ITransientDependency
     public IMemoryDatabaseCollection<TEntity> Collection<TEntity>()
         where TEntity : class, IEntity
     {
-        return _sets.GetOrAdd(typeof(TEntity),
+        return (_sets.GetOrAdd(typeof(TEntity),
                 _ => _serviceProvider.GetRequiredService<IMemoryDatabaseCollection<TEntity>>()) as
-            IMemoryDatabaseCollection<TEntity>;
+            IMemoryDatabaseCollection<TEntity>)!;
     }
 
     public TKey GenerateNextId<TEntity, TKey>()

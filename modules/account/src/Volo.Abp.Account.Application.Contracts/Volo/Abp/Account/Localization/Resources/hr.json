@@ -66,6 +66,8 @@
         "PasswordResetInfoInEmail": "Primili smo zahtjev za oporavak računa! Ako ste vi pokrenuli ovaj zahtjev, kliknite na sljedeću poveznicu za ponovno postavljanje lozinke.",
         "ResetMyPassword": "Resetirati moju lozinku",
         "AccessDenied": "Pristup odbijen!",
-        "AccessDeniedMessage": "Nemate pristup ovom resursu."
+        "AccessDeniedMessage": "Nemate pristup ovom resursu.",
+        "OrRegisterWith": "Ili se registrirajte sa:",
+        "RegisterUsingYourProviderAccount": "Registrirajte se koristeći svoj {0} račun"
     }
 }

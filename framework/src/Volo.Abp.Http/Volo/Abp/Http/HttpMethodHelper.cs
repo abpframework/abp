@@ -43,12 +43,12 @@ public static class HttpMethodHelper
             return methodName;
         }
 
-        return methodName.RemovePreFix(prefixes);
+        return methodName.RemovePreFix(prefixes!);
     }
 
-    public static HttpMethod ConvertToHttpMethod(string httpMethod)
+    public static HttpMethod ConvertToHttpMethod(string? httpMethod)
     {
-        switch (httpMethod.ToUpperInvariant())
+        switch (httpMethod?.ToUpperInvariant())
         {
             case "GET":
                 return HttpMethod.Get;

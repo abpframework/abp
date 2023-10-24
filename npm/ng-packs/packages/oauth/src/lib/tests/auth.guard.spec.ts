@@ -1,11 +1,15 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService, createSpyObject } from '@ngneat/spectator/jest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { AbpOAuthGuard } from '../guards/oauth.guard';
 import { AuthService } from '@abp/ng.core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 describe('AuthGuard', () => {
   let spectator: SpectatorService<AbpOAuthGuard>;
-  let guard: AbpOAuthGuard;
+  let guard : AbpOAuthGuard;
+  const route = createSpyObject<ActivatedRouteSnapshot>(ActivatedRouteSnapshot)
+  const state = createSpyObject<RouterStateSnapshot>(RouterStateSnapshot)
+
   const createService = createServiceFactory({
     service: AbpOAuthGuard,
     mocks: [OAuthService, AuthService],
@@ -18,7 +22,7 @@ describe('AuthGuard', () => {
 
   it('should return true when user logged in', () => {
     spectator.inject(OAuthService).hasValidAccessToken.andReturn(true);
-    expect(guard.canActivate()).toBe(true);
+    expect(guard.canActivate(route, state)).toBe(true);
   });
 
   it('should execute the navigateToLogin method of the authService', () => {
@@ -26,7 +30,7 @@ describe('AuthGuard', () => {
     spectator.inject(OAuthService).hasValidAccessToken.andReturn(false);
     const navigateToLoginSpy = jest.spyOn(authService, 'navigateToLogin');
 
-    expect(guard.canActivate()).toBe(false);
+    expect(guard.canActivate(route, state)).toBe(false);
     expect(navigateToLoginSpy).toHaveBeenCalled();
   });
 });

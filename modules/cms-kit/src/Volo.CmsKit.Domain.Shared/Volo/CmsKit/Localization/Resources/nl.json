@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Beoordelingen",
     "CmsKit.Reactions": "Reacties",
     "CmsKit.Tags": "Tags",
+    "CmsKit.BlogPost.PreventXssFeature": "XSS-functie voorkomen",
     "CmsKit:0002": "Inhoud bestaat al!",
     "CmsKit:0003": "De entiteit {0} kan niet worden getagd.",
     "CmsKit:Blog:0001": "De opgegeven slug ({Slug}) bestaat al!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "Uw e-mailadres",
     "YourFullName": "Uw volledige naam",
     "YourMessage": "Uw bericht",
-    "YourReply": "Uw antwoord"
+    "YourReply": "Uw antwoord",
+    "ThisPartOfContentCouldntBeLoaded": "Dit deel van de inhoud kon niet worden geladen."
   }
 }

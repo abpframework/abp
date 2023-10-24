@@ -7,13 +7,11 @@ namespace MyCompanyName.MyProjectName;
 
 public class MyProjectNameHostedService : IHostedService
 {
-    private readonly IAbpApplicationWithExternalServiceProvider _abpApplication;
     private readonly HelloWorldService _helloWorldService;
 
-    public MyProjectNameHostedService(HelloWorldService helloWorldService, IAbpApplicationWithExternalServiceProvider abpApplication)
+    public MyProjectNameHostedService(HelloWorldService helloWorldService)
     {
         _helloWorldService = helloWorldService;
-        _abpApplication = abpApplication;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -21,8 +19,8 @@ public class MyProjectNameHostedService : IHostedService
         await _helloWorldService.SayHelloAsync();
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
-        await _abpApplication.ShutdownAsync();
+        return Task.CompletedTask;
     }
 }

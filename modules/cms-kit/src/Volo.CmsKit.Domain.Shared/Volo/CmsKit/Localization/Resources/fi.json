@@ -185,6 +185,7 @@
     "SelectAStatus": "Valitse tila",
     "Status": "Tila",
     "CmsKit.BlogPost.ScrollIndex": "Pikanavigointipalkki blogikirjoituksissa",
+    "CmsKit.BlogPost.PreventXssFeature": "Estä XSS",
     "Add": "Lisää",
     "AddWidget": "Lisää widget",
     "PleaseConfigureWidgets": "Määritä widgetit",
@@ -216,6 +217,7 @@
     "CaptchaCode": "Captcha-koodi",
     "CommentTextRequired": "Kommentti vaaditaan",
     "CaptchaCodeErrorMessage": "CAPTCHA:lle antamasi vastaus ei ollut oikea. Yritä uudelleen",
-    "CaptchaCodeMissingMessage": "Captcha-koodi puuttuu!"
+    "CaptchaCodeMissingMessage": "Captcha-koodi puuttuu!",
+    "ThisPartOfContentCouldntBeLoaded": "Tämä sisällön osa ei voitu ladata."
   }
 }
