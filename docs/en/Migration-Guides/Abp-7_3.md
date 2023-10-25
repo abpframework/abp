@@ -26,3 +26,6 @@ This feature comes with a small restriction. If you use any C# code used inside 
 For example, `<script @string.Empty></script>` will no longer work. However, you can use the C# code for an attribute of script tag, for example, `<script src="@string.Empty"></script>` is completely valid and won't cause any problem.
 
 > Note: You should not use any C# code used inside the script tag, even if you don't use this feature. Because it might cause errors.
+
+## Angular UI
+We would like  to inform you that ABP Framework version 7.3 uses Angular version 16. Please migrate your applications to Angular 16. [Update angular](https://update.angular.io/)
