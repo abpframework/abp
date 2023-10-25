@@ -136,6 +136,7 @@ export class AuditedEntityDto<TPrimaryKey = string> extends CreationAuditedEntit
   }
 }
 
+/** @deprecated the class signature will change in v8.0 */ 
 export class AuditedEntityWithUserDto<
   TUserDto,
   TPrimaryKey = string,
@@ -157,7 +158,7 @@ export class FullAuditedEntityDto<TPrimaryKey = string> extends AuditedEntityDto
     super(initialValues);
   }
 }
-
+/** @deprecated the class signature will change in v8.0 */ 
 export class FullAuditedEntityWithUserDto<
   TUserDto,
   TPrimaryKey = string,
