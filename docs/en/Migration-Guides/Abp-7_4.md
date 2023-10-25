@@ -114,3 +114,6 @@ The following packages are included in the templates by default:
 ### Bumped the `Microsoft.AspNetCore.Components.*` dependency to `7.0.10`
 
 In this version, the `Microsoft.AspNetCore.Components.*` dependencies are upgraded to the `7.0.10` version. Therefore, you should upgrade the `Microsoft.AspNetCore.Components.Web` and `Microsoft.AspNetCore.Components.WebAssembly` packages to `7.0.10` in your `Blazor.csproj` file.
+
+## Angular UI
+We would like to inform you that ABP Framework version 7.4 uses Angular version 16. Please migrate your applications to Angular 16. [Update angular](https://update.angular.io/)
