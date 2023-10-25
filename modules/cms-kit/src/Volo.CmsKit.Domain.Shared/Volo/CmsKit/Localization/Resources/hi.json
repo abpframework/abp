@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "रेटिंग्स",
     "CmsKit.Reactions": "प्रतिक्रियाओं",
     "CmsKit.Tags": "टैग",
+    "CmsKit.BlogPost.PreventXssFeature": "XSS रोकें",
     "CmsKit:0002": "सामग्री पहले से मौजूद है!",
     "CmsKit:0003": "इकाई {0} टैग करने योग्य नहीं है।",
     "CmsKit:Blog:0001": "दिया गया स्लग ({Slug}) पहले से मौजूद है!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "आपका ईमेल पता",
     "YourFullName": "आपका पूरा नाम",
     "YourMessage": "आपका संदेश",
-    "YourReply": "आपके उत्तर"
+    "YourReply": "आपके उत्तर",
+    "ThisPartOfContentCouldntBeLoaded": "यह भाग लोड नहीं किया जा सका।"
   }
 }

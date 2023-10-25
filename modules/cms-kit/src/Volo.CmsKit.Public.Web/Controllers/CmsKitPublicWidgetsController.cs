@@ -7,7 +7,7 @@ using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection;
 
 namespace Volo.CmsKit.Public.Web.Controllers;
 
-public class CmsKitPublicWidgetsController : AbpController
+public class CmsKitPublicWidgetsController : CmsKitPublicControllerBase
 {
     public Task<IActionResult> ReactionSelection(string entityType, string entityId)
     {

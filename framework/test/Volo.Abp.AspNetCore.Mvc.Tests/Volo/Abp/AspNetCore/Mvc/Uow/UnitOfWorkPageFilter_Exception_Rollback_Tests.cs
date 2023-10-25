@@ -14,7 +14,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow;
 
 public class UnitOfWorkPageFilter_Exception_Rollback_Tests : AspNetCoreMvcTestBase
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Replace(ServiceDescriptor.Transient<IUnitOfWork, TestUnitOfWork>());
     }

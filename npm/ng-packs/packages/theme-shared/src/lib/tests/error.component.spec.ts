@@ -1,5 +1,5 @@
 import { CORE_OPTIONS, LocalizationPipe } from '@abp/ng.core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ElementRef, Renderer2 } from '@angular/core';
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { Subject } from 'rxjs';
@@ -19,6 +19,7 @@ describe('ErrorComponent', () => {
         useValue: { nativeElement: document.createElement('div') },
       },
     ],
+    imports:[HttpClientModule]
   });
 
   beforeEach(() => {

@@ -12,6 +12,7 @@ using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.Content;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Http.Client;
 using Volo.Abp.TestApp.Application;
@@ -280,7 +281,7 @@ public class PersonAppServiceClientProxy_Tests : AbpHttpClientTestBase
     [Fact]
     public async Task GetParamsFromQueryAsync()
     {
-        var result = await _peopleAppService.GetParamsFromQueryAsync(new GetParamsInput()
+        var input = new GetParamsInput()
         {
             NameValues = new List<GetParamsNameValue>()
             {
@@ -300,34 +301,39 @@ public class PersonAppServiceClientProxy_Tests : AbpHttpClientTestBase
                 Name = "name3",
                 Value = "value3"
             }
-        });
-        result.ShouldBe("name1-value1:name2-value2:name3-value3");
+        };
+        input.SetProperty("TestProperty", "TestPropertyValue");
+        foreach (var nameValue in input.NameValues)
+        {
+            nameValue.SetProperty("TestPropertyInList", "TestPropertyValueInList");
+        }
+
+        var result = await _peopleAppService.GetParamsFromQueryAsync(input);
+        result.ShouldBe("name1-value1:TestPropertyValueInList:name2-value2:name3-value3:TestPropertyValue");
     }
 
     [Fact]
     public async Task GetParamsFromFormAsync()
     {
-        var result = await _peopleAppService.GetParamsFromFormAsync(new GetParamsInput()
+        var input = new GetParamsInput()
         {
             NameValues = new List<GetParamsNameValue>()
             {
-                new GetParamsNameValue()
-                {
-                    Name = "name1",
-                    Value = "value1"
-                },
-                new GetParamsNameValue()
-                {
-                    Name = "name2",
-                    Value = "value2"
-                }
+                new GetParamsNameValue() {Name = "name1", Value = "value1"},
+                new GetParamsNameValue() {Name = "name2", Value = "value2"}
             },
             NameValue = new GetParamsNameValue()
             {
-                Name = "name3",
-                Value = "value3"
+                Name = "name3", Value = "value3"
             }
-        });
-        result.ShouldBe("name1-value1:name2-value2:name3-value3");
+        };
+        input.SetProperty("TestProperty", "TestPropertyValue");
+        foreach (var nameValue in input.NameValues)
+        {
+            nameValue.SetProperty("TestPropertyInList", "TestPropertyValueInList");
+        }
+
+        var result = await _peopleAppService.GetParamsFromFormAsync(input);
+        result.ShouldBe("name1-value1:TestPropertyValueInList:name2-value2:name3-value3:TestPropertyValue");
     }
 }

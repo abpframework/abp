@@ -8,7 +8,7 @@ public static class AbpDbContextOptionsOracleExtensions
 {
     public static void UseOracle(
             [NotNull] this AbpDbContextOptions options,
-            [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null)
+            Action<OracleDbContextOptionsBuilder>? oracleOptionsAction = null)
     {
         options.Configure(context =>
         {
@@ -18,7 +18,7 @@ public static class AbpDbContextOptionsOracleExtensions
 
     public static void UseOracle<TDbContext>(
         [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null)
+        Action<OracleDbContextOptionsBuilder>? oracleOptionsAction = null)
         where TDbContext : AbpDbContext<TDbContext>
     {
         options.Configure<TDbContext>(context =>

@@ -143,4 +143,8 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         Guid? targetOrganizationId,
         CancellationToken cancellationToken = default
     );
+
+    Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
+        IEnumerable<Guid> userIds,
+        CancellationToken cancellationToken = default);
 }
