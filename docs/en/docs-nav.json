@@ -1364,6 +1364,10 @@
       "path": "Deployment/Index.md",
       "items": [
         {
+          "text": "Configuring SSL certificate(HTTPS)",
+          "path": "Deployment/SSL.md"
+        },
+        {
           "text": "Configuring OpenIddict",
           "path": "Deployment/Configuring-OpenIddict.md"
         },
