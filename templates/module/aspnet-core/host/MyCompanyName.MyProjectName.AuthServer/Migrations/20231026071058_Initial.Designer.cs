@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.Data;
+using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Host.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
-    [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20231003031446_Initial")]
+    [DbContext(typeof(AuthServerDbContext))]
+    [Migration("20231026071058_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "8.0.0-rc.1.23419.6")
+                .HasAnnotation("ProductVersion", "8.0.0-rc.2.23480.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -218,7 +218,6 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                         .HasColumnName("ChangeType");
 
                     b.Property<string>("EntityId")
-                        .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)")
                         .HasColumnName("EntityId");

@@ -404,7 +404,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     ChangeTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ChangeType = table.Column<byte>(type: "tinyint", nullable: false),
                     EntityTenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    EntityId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     EntityTypeFullName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
