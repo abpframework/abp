@@ -214,6 +214,8 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             type == typeof(void) ||
             type == typeof(Enum) ||
             type == typeof(ValueType) ||
+            type == typeof(DateOnly) ||
+            type == typeof(TimeOnly) ||
             TypeHelper.IsPrimitiveExtended(type))
         {
             return;

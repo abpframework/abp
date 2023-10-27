@@ -76,8 +76,8 @@ public interface IImageResizer
 **Example usage:**
 
 ```csharp
-var result = await _imageResizer.ResizeAsync(
-    stream, /* A stream object that represents an image */
+var resizeResult = await _imageResizer.ResizeAsync(
+    imageStream, /* A stream object that represents an image */
     new ImageResizeArgs
     {
         Width = 100,
@@ -86,6 +86,16 @@ var result = await _imageResizer.ResizeAsync(
     },
     mimeType: "image/jpeg"
 );
+```
+
+> **Note:** If `resizeResult.State` returns 'Done', then it means that the resize operation was successful. However, if it returns any other state than 'Done', the stream you're using might be corrupted. Therefore, you can perform a check like the one below and assign the correct stream to the main stream:
+
+```csharp
+if (resizeResult.Result is not null && imageStream != resizeResult.Result && resizeResult.Result.CanRead)
+{
+    await imageStream.DisposeAsync();
+    imageStream = resizeResult.Result;
+}
 ```
 
 > You can use `MimeTypes.Image.Jpeg` constant instead of the `image/jpeg` magic string used in that example.
@@ -170,10 +180,21 @@ public interface IImageCompressor
 **Example usage:**
 
 ```csharp
-var result = await _imageCompressor.CompressAsync(
-    stream, /* A stream object that represents an image */
+var compressResult = await _imageCompressor.CompressAsync(
+    imageStream, /* A stream object that represents an image */
     mimeType: "image/jpeg"
 );
+```
+
+> **Note:** If `compressResult.State` returns 'Done', then it means that the compression operation was successful. However, if it returns any other state than 'Done', the stream you're using might be corrupted. Therefore, you can perform a check like the one below and assign the correct stream to the main stream:
+
+```csharp
+
+if (compressResult.Result is not null && imageStream != compressResult.Result && compressResult.Result.CanRead)
+{
+    await imageStream.DisposeAsync();
+    imageStream = compressResult.Result;
+}
 ```
 
 ### ImageCompressResult

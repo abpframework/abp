@@ -6,6 +6,7 @@ However, there are some topics that you should care about when you are deploying
 
 ## Guides
 
+* [Configuring SSL certificate(HTTPS)](SSL.md): Explains how to configure SSL certificate(HTTPS) for your application.
 * [Configuring for OpenIddict](Configuring-OpenIddict.md): Notes for some essential configurations for OpenIddict.
 * [Configuring for Production](Configuring-Production.md): Notes for some essential configurations for production environments.
 * [Optimization for Production](Optimizing-Production.md): Tips and suggestions for optimizing your application on production environments.
