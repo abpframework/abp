@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { Params } from '@angular/router';
-import { from, Observable, lastValueFrom } from 'rxjs';
+import { from, Observable, lastValueFrom, EMPTY } from 'rxjs';
 import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { AbpAuthResponse, IAuthService, LoginParams } from '@abp/ng.core';
 import { AuthFlowStrategy } from '../strategies';
@@ -44,6 +44,10 @@ export class AbpOAuthService implements IAuthService {
   }
 
   logout(queryParams?: Params): Observable<any> {
+    
+    if(!this.strategy){
+      return EMPTY
+    }
     return this.strategy.logout(queryParams);
   }
 

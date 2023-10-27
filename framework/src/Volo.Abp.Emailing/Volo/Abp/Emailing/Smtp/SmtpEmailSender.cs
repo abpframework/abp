@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 
@@ -71,6 +72,10 @@ public class SmtpEmailSender : EmailSenderBase, ISmtpEmailSender, ITransientDepe
     {
         using (var smtpClient = await BuildClientAsync())
         {
+            Logger.LogWarning("We don't recommend that you use the SmtpClient class for new development because SmtpClient doesn't support many modern protocols. " +
+                               "Use MailKit(https://docs.abp.io/en/abp/latest/MailKit) or other libraries instead." +
+                               "For more information, see https://github.com/dotnet/platform-compat/blob/master/docs/DE0005.md");
+
             await smtpClient.SendMailAsync(mail);
         }
     }

@@ -28,9 +28,24 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
     {
         Check.NotNull(stream, nameof(stream));
         
+        if(!stream.CanRead)
+        {
+            return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
+        }
+        
+        if(!stream.CanSeek)
+        {
+            var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream, CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            SeekToBegin(memoryStream);
+            stream = memoryStream;
+        }
+
         foreach (var imageCompressorContributor in ImageCompressorContributors)
         {
             var result = await imageCompressorContributor.TryCompressAsync(stream, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            
+            SeekToBegin(stream);
             
             if (result.State == ImageProcessState.Unsupported)
             {
@@ -63,5 +78,13 @@ public class ImageCompressor : IImageCompressor, ITransientDependency
         }
         
         return new ImageCompressResult<byte[]>(bytes, ImageProcessState.Unsupported);
+    }
+    
+    protected virtual void SeekToBegin(Stream stream)
+    {
+        if (stream.CanSeek)
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+        }
     }
 }

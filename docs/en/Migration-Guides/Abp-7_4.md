@@ -2,6 +2,12 @@
 
 This document is a guide for upgrading ABP v7.3 solutions to ABP v7.4. There are a few changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.
 
+## Bumped the `Microsoft.Extensions.FileProviders.Embedded` Package Version To v7.0.10
+
+In this version, the `Microsoft.Extensions.FileProviders.Embedded` (and other `Microsoft.*` packages) upgraded to the latest version, which is v7.0.10. Therefore, in your solution, you should update the `Microsoft.Extensions.FileProviders.Embedded` package (and other `Microsoft.*` packages) version to v7.0.10. This package typically would be in your `Domain.Shared` project and other projects that have embedded resource(s). So, search this package through your solution and update it accordingly.
+
+> You can check [this issue](https://github.com/abpframework/abp/pull/17516) to see the updated package versions.
+
 ## Renamed the `AddGlobalFilters<>` method as `FilterQueryable<>` in `IMongoDbRepositoryFilterer`
 
 ABP Framework provides services to automatically filter data on querying from a database. Prior to this version, creating a new class that derives from the `MongoDbRepositoryFilterer` and overriding its `AddGlobalFilters` method was needed for implementing a data filter for [MongoDB](../MongoDB.md).
@@ -81,7 +87,7 @@ In this version, ABP Framework introduces the `IdentityUserIntegrationService`, 
 
 This is a breaking change for microservice solutions because of the following two reasons and it should be considered:
 
-* `IdentityUserIntegrationService` provides non-authorized services. This is not breaking the application, but should be taken care of. Since, everyone can use the service to retrieve some information for a certain user (for example, the role names of a user).
+* `IdentityUserIntegrationService` provides non-authorized services. This is not breaking the application but should be taken care of. Since, everyone can use the service to retrieve some information for a certain user (for example, the role names of a user).
 * Secondly, since integration services are not exposed by default anymore as explained in the *Exposing Integration Services* section above, you should explicitly enable exposing integration services. Otherwise, the operation will fail and you'll get a `404` error from the identity microservice.
 
 To expose integration services and controllers, you can configure the `AbpAspNetCoreMvcOptions` and set the `ExposeIntegrationServices` property as *true* in the `ConfigureServices` method of your [module class](../Module-Development-Basics.md):
@@ -92,3 +98,22 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
     options.ExposeIntegrationServices = true;
 });
 ```
+
+## Blazor UI
+If you use Blazor WASM or Blazor Server UI, you should follow this section.
+
+### Bumped the `Blazorise` dependencies to `1.3.1`
+In this version, the `Blazorise` dependencies are upgraded to the `1.3.1` version. you should upgrade Blazorise packages to `1.3.1` in your `Blazor.csproj` file.
+The following packages are included in the templates by default:
+- `Blazorise.Bootstrap5`
+- `Blazorise.Icons.FontAwesome`
+- `Blazorise.Components`
+> _If your project depends on more blazorise packages, then you should upgrade all of them._
+> You should execute `dotnet build` & `abp bundle` commands in the Blazor project if you are using the Blazor WebAssembly.
+
+### Bumped the `Microsoft.AspNetCore.Components.*` dependency to `7.0.10`
+
+In this version, the `Microsoft.AspNetCore.Components.*` dependencies are upgraded to the `7.0.10` version. Therefore, you should upgrade the `Microsoft.AspNetCore.Components.Web` and `Microsoft.AspNetCore.Components.WebAssembly` packages to `7.0.10` in your `Blazor.csproj` file.
+
+## Angular UI
+We would like to inform you that ABP Framework version 7.4 uses Angular version 16. Please migrate your applications to Angular 16. [Update angular](https://update.angular.io/)

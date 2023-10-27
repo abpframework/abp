@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Рейтинги",
     "CmsKit.Reactions": "Реакции",
     "CmsKit.Tags": "Теги",
+    "CmsKit.BlogPost.PreventXssFeature": "Защита от XSS",
     "CmsKit:0002": "Контент уже существует!",
     "CmsKit:0003": "Сущность {0} не может быть помечена.",
     "CmsKit:Blog:0001": "Указанный слаг ({Slug}) уже существует!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "Ваш адрес электронной почты",
     "YourFullName": "Ваше полное имя",
     "YourMessage": "Твое сообщение",
-    "YourReply": "Ваш ответ"
+    "YourReply": "Ваш ответ",
+    "ThisPartOfContentCouldntBeLoaded": "Эта часть содержимого не может быть загружена."
   }
 }

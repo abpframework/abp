@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Skor",
     "CmsKit.Reactions": "Viðbrögð",
     "CmsKit.Tags": "Tög",
+    "CmsKit.BlogPost.PreventXssFeature": "Fyrirbyggja XSS árásir",
     "CmsKit:0002": "Efni nú þegar til!",
     "CmsKit:0003": "Ekki hægt að tagga einingu {0}",
     "CmsKit:Blog:0001": "Uppgefin snigill ({Slug}) er þegar til!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "Netfangið þitt",
     "YourFullName": "Fullt nafn",
     "YourMessage": "Skilaboð þín",
-    "YourReply": "Svarið þitt"
+    "YourReply": "Svarið þitt",
+    "ThisPartOfContentCouldntBeLoaded": "Þessi hluti af efni gat ekki verið hlaðið inn."
   }
 }

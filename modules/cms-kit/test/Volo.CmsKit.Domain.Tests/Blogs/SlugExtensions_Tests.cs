@@ -129,4 +129,32 @@ public class SlugExtensions_Tests
         // Assert
         actual.ShouldBe(expected);
     }
+
+    [Fact]
+    public void NormalizeSlug_ShouldWorkProperly_WithMultipleLevel()
+    {
+        // Arrange
+        var name = "path/to/my/page";
+        var expected = "path/to/my/page";
+
+        // Act
+        var actual = SlugNormalizer.Normalize(name);
+
+        // Assert
+        actual.ShouldBe(expected);
+    }
+
+    [Fact]
+    public void NormalizeSlug_ShouldWorkProperly_WithMultipleLevelStartingSlash()
+    {
+        // Arrange
+        var name = "/path/to/my/page";
+        var expected = "path/to/my/page";
+
+        // Act
+        var actual = SlugNormalizer.Normalize(name);
+
+        // Assert
+        actual.ShouldBe(expected);
+    }
 }

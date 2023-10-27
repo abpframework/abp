@@ -450,7 +450,7 @@ public abstract class ProjectCreationCommandBase
 
         var efCoreProjectPath = string.Empty;
         bool isLayeredTemplate;
-
+        var isModuleTemplate = false;
         switch (projectArgs.TemplateName)
         {
             case AppTemplate.TemplateName:
@@ -464,11 +464,16 @@ public abstract class ProjectCreationCommandBase
                     ?? Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
                 isLayeredTemplate = false;
                 break;
+            case ModuleTemplate.TemplateName:
+            case ModuleProTemplate.TemplateName:
+                isModuleTemplate = true;
+                isLayeredTemplate = false;
+                break;
             default:
                 return;
         }
 
-        if (string.IsNullOrWhiteSpace(efCoreProjectPath))
+        if (string.IsNullOrWhiteSpace(efCoreProjectPath) && !isModuleTemplate)
         {
             Logger.LogWarning("Couldn't find the project to create initial migrations!");
             return;
@@ -479,7 +484,20 @@ public abstract class ProjectCreationCommandBase
             Message = "Creating the initial DB migration"
         }, false);
 
-        await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+        if (!isModuleTemplate)
+        {
+            await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+        }
+        else
+        {
+            var hostProjectsWithEfCore = Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories)
+                .Where(x => File.ReadAllText(x).Contains("Microsoft.EntityFrameworkCore.Tools"))
+                .ToList();
+            foreach (var project in hostProjectsWithEfCore)
+            {
+                await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(project));
+            }
+        }
     }
 
     protected Task CreateOpenIddictPfxFilesAsync(ProjectBuildArgs projectArgs)

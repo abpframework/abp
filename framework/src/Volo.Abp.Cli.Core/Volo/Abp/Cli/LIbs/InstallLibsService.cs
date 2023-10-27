@@ -120,7 +120,10 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
                     using (var reader = File.OpenText(file))
                     {
-                        return reader.ReadToEnd().Contains("Microsoft.NET.Sdk.Web");
+                        var fileTexts = reader.ReadToEnd();
+                        return fileTexts.Contains("Microsoft.NET.Sdk.Web") ||
+                               fileTexts.Contains("Microsoft.NET.Sdk.Razor") ||
+                               fileTexts.Contains("Microsoft.NET.Sdk.BlazorWebAssembly");
                     }
                 }
                 return true;

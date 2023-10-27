@@ -40,6 +40,7 @@ import { CardModule } from './components/card/card.module';
 import { AbpVisibleDirective } from './directives';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormCheckboxComponent } from './components/checkbox/checkbox.component';
+import { tenantNotFoundProvider } from './providers/tenant-not-found.provider';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -143,6 +144,7 @@ export class ThemeSharedModule {
             ...(confirmationIcons || {}),
           },
         },
+        tenantNotFoundProvider,
         ERROR_HANDLERS_PROVIDERS,
       ],
     };

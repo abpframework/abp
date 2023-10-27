@@ -1,5 +1,5 @@
 {
-  "version": "7.4.0-rc.3",
+  "version": "7.4.0",
   "name": "@abp/flag-icons",
   "publishConfig": {
     "access": "public"

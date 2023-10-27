@@ -18,18 +18,15 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
     public override string Name => EngineName;
 
     protected readonly IServiceScopeFactory ServiceScopeFactory;
-    protected readonly IAbpCompiledViewProvider AbpCompiledViewProvider;
 
     public RazorTemplateRenderingEngine(
         IServiceScopeFactory serviceScopeFactory,
-        IAbpCompiledViewProvider abpCompiledViewProvider,
         ITemplateDefinitionManager templateDefinitionManager,
         ITemplateContentProvider templateContentProvider,
         IStringLocalizerFactory stringLocalizerFactory)
         : base(templateDefinitionManager, templateContentProvider, stringLocalizerFactory)
     {
         ServiceScopeFactory = serviceScopeFactory;
-        AbpCompiledViewProvider = abpCompiledViewProvider;
     }
 
     public override async Task<string> RenderAsync(
@@ -115,12 +112,13 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
         Dictionary<string, object> globalContext,
         object? model = null)
     {
-        var assembly = await AbpCompiledViewProvider.GetAssemblyAsync(templateDefinition);
-        var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName)!;
-        var template = (IRazorTemplatePage)Activator.CreateInstance(templateType)!;
-
         using (var scope = ServiceScopeFactory.CreateScope())
         {
+            var compiledViewProvider = scope.ServiceProvider.GetRequiredService<IAbpCompiledViewProvider>();
+            var assembly = await compiledViewProvider.GetAssemblyAsync(templateDefinition);
+            var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName)!;
+            var template = (IRazorTemplatePage)Activator.CreateInstance(templateType)!;
+
             var modelType = templateType
                 .GetInterfaces()
                 .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRazorTemplatePage<>))
