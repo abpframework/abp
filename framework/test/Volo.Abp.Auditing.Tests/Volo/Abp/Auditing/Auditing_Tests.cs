@@ -409,16 +409,13 @@ public class Auditing_Tests : AbpAuditingTestBase
         }
 
 #pragma warning disable 4014
-        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 2 &&
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
                                                                      x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
-                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
-
-                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
-                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
-                                                                     x.EntityChanges[1].PropertyChanges.Count == 1 &&
-                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyName == nameof(AppEntityWithValueObjectAddress.Country) &&
-                                                                     x.EntityChanges[1].PropertyChanges[0].OriginalValue == "\"England\"" &&
-                                                                     x.EntityChanges[1].PropertyChanges[0].NewValue == "\"Germany\""));
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithValueObjectAddress.Country) &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].OriginalValue == "\"England\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].NewValue == "\"Germany\""));
 
 #pragma warning restore 4014
     }
