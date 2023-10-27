@@ -73,9 +73,8 @@ export const environment: Config.Environment = {
 
 > The destination the `proxy` folder is created and the paths above may change based on your project structure.
 
-### Parameters of generate-proxy
+## Parameters of generate-proxy
 
-Parameters:
 - **module or -m:** it is backend module name.  the default is `app`. the object key of modules defined in response of `api/abp/api-definition`.  For example, if you want to generate-proxy of PermissionManagement, you should pass `permissionManagement` as a value.
 - **apiName or -a:** it is Backend api name, a.k.a. remoteServiceName. it defined in  the selected module  (in  response of `api/abp/api-definition`). the property(key) name is `remoteServiceName`. for example for the PermissionManagement, you should pass `AbpPermissionManagement`
 - **source:** Source Angular project for API definition URL & root namespace resolution. 
