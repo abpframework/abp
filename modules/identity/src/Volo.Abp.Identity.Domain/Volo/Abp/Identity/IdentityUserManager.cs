@@ -297,15 +297,20 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         var result = await base.SetEmailAsync(user, email);
         
         result.CheckErrors();
-        
+
+        if (string.IsNullOrEmpty(oldMail) || oldMail.Equals(email, StringComparison.OrdinalIgnoreCase))
+        {
+            return result;
+        }
+
         await DistributedEventBus.PublishAsync(
-            new IdentityUserEmailChangedEto 
-            {
-                Id = user.Id,
-                TenantId = user.TenantId,
-                Email = email,
-                OldEmail = oldMail
-            });
+        new IdentityUserEmailChangedEto 
+        {
+            Id = user.Id,
+            TenantId = user.TenantId,
+            Email = email,
+            OldEmail = oldMail
+        });
 
         return result;
     }
@@ -317,6 +322,11 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         var result = await base.SetUserNameAsync(user, userName);
         
         result.CheckErrors();
+        
+        if (string.IsNullOrEmpty(oldUserName) || oldUserName == userName)
+        {
+            return result;
+        }
 
         await DistributedEventBus.PublishAsync(
             new IdentityUserUserNameChangedEto {
