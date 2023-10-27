@@ -18,8 +18,8 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="Markdig.Signed" Version="0.26.0" />
     <PackageReference Include="HtmlSanitizer" Version="5.0.331" />
-	<PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-	<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
+	<PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+	<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.0.0" />
 
   </ItemGroup>
 
