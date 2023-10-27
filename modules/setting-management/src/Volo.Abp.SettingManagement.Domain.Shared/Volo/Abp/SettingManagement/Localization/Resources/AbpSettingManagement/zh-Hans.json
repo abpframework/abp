@@ -25,7 +25,7 @@
     "SmtpPassword": "密码",
     "SmtpDomain": "域",
     "SmtpEnableSsl": "启用ssl",
-    "SmtpUseDefaultCredentials": "使用默认证书",
+    "SmtpUseDefaultCredentials": "使用默认凭据",
     "DefaultFromAddress": "默认发件人",
     "DefaultFromDisplayName": "默认显示名称",
     "Feature:SettingManagementGroup": "设置管理",
