@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import {
-  AuthGuard,
+  AuthGuardFn,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
@@ -14,9 +14,9 @@ import { ManageProfileComponent } from './components/manage-profile/manage-profi
 import { RegisterComponent } from './components/register/register.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { eAccountComponents } from './enums/components';
-import { AccountExtensionsGuard, AuthenticationFlowGuard } from './guards';
+import { AccountExtensionsGuardFn, AuthenticationFlowGuardFn } from './guards';
 
-const canActivate = mapToCanActivate([AuthenticationFlowGuard]);
+const canActivate = [AuthenticationFlowGuardFn];
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -73,7 +73,7 @@ const routes: Routes = [
       {
         path: 'manage',
         component: ReplaceableRouteContainerComponent,
-        canActivate: mapToCanActivate([AuthGuard, AccountExtensionsGuard]),
+        canActivate: [AuthGuardFn, AccountExtensionsGuardFn],
         data: {
           replaceableComponent: {
             key: eAccountComponents.ManageProfile,

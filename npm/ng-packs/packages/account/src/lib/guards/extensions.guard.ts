@@ -17,6 +17,9 @@ import {
 } from '../tokens/extensions.token';
 import { eAccountComponents } from '../enums/components';
 
+/**
+ * @deprecated Use `AccountExtensionsGuardFn` instead.
+ */
 @Injectable()
 export class AccountExtensionsGuard implements IAbpGuard {
   protected readonly configState = inject(ConfigStateService);
@@ -44,3 +47,28 @@ export class AccountExtensionsGuard implements IAbpGuard {
     );
   }
 }
+
+export const AccountExtensionsGuardFn = () => {
+  const configState = inject(ConfigStateService);
+  const extensions = inject(ExtensionsService);
+
+  const config = { optional: true };
+
+  const editFormContributors = inject(ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, config) || {};
+
+  return getObjectExtensionEntitiesFromStore(configState, 'Identity').pipe(
+    map(entities => ({
+      [eAccountComponents.PersonalSettings]: entities.User,
+    })),
+    mapEntitiesToContributors(configState, 'AbpIdentity'),
+    tap(objectExtensionContributors => {
+      mergeWithDefaultProps(
+        extensions.editFormProps,
+        DEFAULT_ACCOUNT_FORM_PROPS,
+        objectExtensionContributors.editForm,
+        editFormContributors,
+      );
+    }),
+    map(() => true),
+  );
+};

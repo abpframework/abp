@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import {
-  AuthGuard,
-  PermissionGuard,
+  AuthGuardFn,
+  PermissionGuardFn,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
@@ -12,14 +12,14 @@ import {
 import { RolesComponent } from './components/roles/roles.component';
 import { UsersComponent } from './components/users/users.component';
 import { eIdentityComponents } from './enums/components';
-import { IdentityExtensionsGuard } from './guards';
+import { IdentityExtensionsGuardFn } from './guards';
 
 const routes: Routes = [
   { path: '', redirectTo: 'roles', pathMatch: 'full' },
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: mapToCanActivate([AuthGuard, PermissionGuard, IdentityExtensionsGuard]),
+    canActivate: [AuthGuardFn, PermissionGuardFn, IdentityExtensionsGuardFn],
     children: [
       {
         path: 'roles',
