@@ -44,7 +44,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         ILogger<IdentityUserManager> logger,
         ICancellationTokenProvider cancellationTokenProvider,
         IOrganizationUnitRepository organizationUnitRepository,
-        ISettingProvider settingProvider, 
+        ISettingProvider settingProvider,
         IDistributedEventBus distributedEventBus)
         : base(
             store,
@@ -293,24 +293,22 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     public async override Task<IdentityResult> SetEmailAsync(IdentityUser user, string email)
     {
         var oldMail = user.Email;
-        
+
         var result = await base.SetEmailAsync(user, email);
-        
+
         result.CheckErrors();
 
-        if (string.IsNullOrEmpty(oldMail) || oldMail.Equals(email, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrEmpty(oldMail) && !oldMail.Equals(email, StringComparison.OrdinalIgnoreCase))
         {
-            return result;
+            await DistributedEventBus.PublishAsync(
+                new IdentityUserEmailChangedEto
+                {
+                    Id = user.Id,
+                    TenantId = user.TenantId,
+                    Email = email,
+                    OldEmail = oldMail
+                });
         }
-
-        await DistributedEventBus.PublishAsync(
-        new IdentityUserEmailChangedEto 
-        {
-            Id = user.Id,
-            TenantId = user.TenantId,
-            Email = email,
-            OldEmail = oldMail
-        });
 
         return result;
     }
@@ -318,24 +316,23 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string userName)
     {
         var oldUserName = user.UserName;
-        
+
         var result = await base.SetUserNameAsync(user, userName);
-        
+
         result.CheckErrors();
-        
-        if (string.IsNullOrEmpty(oldUserName) || oldUserName == userName)
+
+        if (!string.IsNullOrEmpty(oldUserName) && !oldUserName.Equals(userName, StringComparison.OrdinalIgnoreCase))
         {
-            return result;
+            await DistributedEventBus.PublishAsync(
+                new IdentityUserUserNameChangedEto
+                {
+                    Id = user.Id,
+                    TenantId = user.TenantId,
+                    UserName = userName,
+                    OldUserName = oldUserName
+                });
         }
 
-        await DistributedEventBus.PublishAsync(
-            new IdentityUserUserNameChangedEto {
-                Id = user.Id,
-                TenantId = user.TenantId,
-                UserName = userName,
-                OldUserName = oldUserName
-            });
-        
         return result;
     }
 }
