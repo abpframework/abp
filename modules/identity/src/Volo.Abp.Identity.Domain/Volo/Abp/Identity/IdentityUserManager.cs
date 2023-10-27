@@ -321,7 +321,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         result.CheckErrors();
 
-        if (!string.IsNullOrEmpty(oldUserName) && !oldUserName.Equals(userName, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrEmpty(oldUserName) && oldUserName != userName)
         {
             await DistributedEventBus.PublishAsync(
                 new IdentityUserUserNameChangedEto
