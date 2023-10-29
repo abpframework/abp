@@ -2,7 +2,7 @@
 
 In this article, I'll show you new built-in metrics of .NET 8, which are basically numerical measurements reported over time in your application and can be used to monitor the health of your application and generate reports according to those numerical values. We will see what the metrics are, why to use them, and how to use them in detail. So, let's dive in.
 
-## What Are Metrics?
+## What are Metrics?
 
 Metrics are numerical measurements reported over time. These measurements are crucial for monitoring the health of an application and generating alerts when necessary. In the context of a web service, various metrics can be tracked, such as:
 
@@ -10,7 +10,7 @@ Metrics are numerical measurements reported over time. These measurements are cr
 * Response time.
 * Status code counts etc...
 
-These metrics are not just collected; they are reported to a monitoring system at regular intervals. By doing so, the development and operations teams can visualize these metrics on dashboards (we will see it in the _[Creating Custom Metrics in ASP.NET Core Applications](#creating-custom-metrics-in-aspnet-core-applications)_ section). These dashboards provide a real-time overview of the application's performance and health.
+These metrics are not just collected; they are reported to a monitoring system at regular intervals. By doing so, the development and operations teams can visualize these metrics on dashboards. These dashboards provide a real-time overview of the application's performance and health.
 
 ## Pre-Built Metrics
 
@@ -90,7 +90,7 @@ dotnet tool update -g dotnet-counters
 After the tool is installed, you can run the application and by running the `dotnet-counters` tool in a terminal, you can monitor for the specific metrics:
 
 ```bash
-dotnet-counters monitor -n Acme.BookStore --counters Microsoft.AspNetCore.Hosting
+dotnet-counters monitor -n MetricsDemo --counters Microsoft.AspNetCore.Hosting
 ```
 
 When you run the command, it will print a message like in the below and will wait an initial request to your application:
@@ -107,14 +107,87 @@ If you send a request to your application, then the related built-in metrics tha
 Also, you can check for the other metric that we have used in the configuration, which is _Microsoft.AspNetCore.Server.Kestrel_ by setting it as a counter as in the command below, and when you send a request to your application, you will see different metrics:
 
 ```bash
-dotnet-counters monitor -n Acme.BookStore --counters Microsoft.AspNetCore.Server.Kestrel
+dotnet-counters monitor -n MetricsDemo --counters Microsoft.AspNetCore.Server.Kestrel
 ```
 
 ## Creating Custom Metrics in ASP.NET Core Applications
 
-So far, we have seen what metrics are, which built-in metrics are provided by ASP.NET Core and see a sample application with the built-in metrics and also run the `dotnet-counters` global tool to view metrics.
+So far, we have seen what metrics are, which built-in metrics are provided by ASP.NET Core and use the built-in metrics and run the `dotnet-counters` global tool to view these metrics. At this point, let's see how we can create custom metrics and view them via `dotnet-counters` tool. 
 
-//TODO: create custom metrics by using the `IMeterFactory` interface and see it in prometheus or grafana!!!
+`IMeterFactory` is the recommended service to create *Meter* instances. ASP.NET Core registers `IMeterFactory` in dependency injection (DI) by default. The meter factory integrates metrics with DI, making isolating and collecting metrics easy.
+
+Assume that, we want to create a metric that holds the sold products in our application. For that purpose, as a first step, we can create a metric class as follows:
+
+```csharp
+using System.Diagnostics.Metrics;
+
+namespace MetricsDemo;
+
+public class ProductMetrics
+{
+    private readonly Counter<int> _soldProductsCount;
+
+    public ProductMetrics(IMeterFactory meterFactory)
+    {
+        var meterInstance = meterFactory.Create("MetricsDemo.ProductStore");
+        _soldProductsCount = meterInstance.CreateCounter<int>("metricsdemo.productstore.sold_products_count");
+    }
+
+    public void IncreaseSoldProductCount(int quantity)
+    {
+        _soldProductsCount.Add(quantity);
+    }
+}
+```
+
+In this class, we are creating a counter and defining metrics that we want to collect and view. `MetricsDemo.ProductStore` is the **counter name** and `metricsdemo.productstore.sold_products_count` is the **metric**, in our example. We need to register this class with a `Singleton` lifetime, because we don't want to reset the counter and want to keep it during the application runtime. 
+
+> The [System.Diagnostics.Metrics.Meter](https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.metrics.meter) type is the entry point for a library to create a named group of instruments. Instruments record the numeric measurements that are needed to calculate metrics. Here we used [CreateCounter](https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.metrics.meter.createcounter) to create a Counter instrument named _metricsdemo.productstore.sold_products_count_.
+
+So, register the type with DI container in the `Program.cs` file (or you can implement the `ISingletonDependency` interface, if you are using an ABP based application):
+
+```csharp
+builder.Services.AddSingleton<ProductMetrics>();
+```
+
+Then, we can inject this class and increase sold product count whenever it's needed. Since, we have registered it in DI, we can use it in minimal APIs like in the following example:
+
+```csharp
+app.MapPost("/complete-sale", ([FromBody] ProductSoldModel model, ProductMetrics metrics) =>
+{
+    // ... business logic such as saving the product to the database etc... ...
+
+    metrics.IncreaseSoldProductCount(model.Quantity);
+});
+```
+
+Whenever a request made to this endpoint the metric that we defined (_metricsdemo.productstore.sold_products_count_) will be increased and we can see this metric via `dotnet-counters` global tool. You can run the following command to see the metrics:
+
+```bash
+dotnet-counters monitor -n MetricsDemo --counters MetricsDemo.ProductStore
+```
+
+Here is an example output that you would see if you have made a POST requests to the `/complete-sale` endpoint:
+
+```txt
+Press p to pause, r to resume, q to quit.
+    Status: Paused                                        
+
+[MetricsDemo.ProductStore]
+    metricsdemo.productstore.sold_products_count (Count / 1 sec)          20 
+```
+
+### Advanced: View Metrics in Prometheus & Grafana - Building Dashboards
+
+It's a common requirement to build a dashboard and monitor the metrics and check the health of your applications. In that point, you can expose the metrics and scrape them using the [Prometheus](https://learn.microsoft.com/en-us/aspnet/core/log-mon/metrics/metrics?view=aspnetcore-8.0#set-up-and-configure-prometheus) and build dashboard by using the [Grafana](https://learn.microsoft.com/en-us/aspnet/core/log-mon/metrics/metrics?view=aspnetcore-8.0#show-metrics-on-a-grafana-dashboard).
+
+If you want to build a dashboard, you can see [this documentation of Microsoft](https://learn.microsoft.com/en-us/aspnet/core/log-mon/metrics/metrics?view=aspnetcore-8.0#view-metrics-in-grafana-with-opentelemetry-and-prometheus), which shows how to set up the **Prometheus server** and show metrics on a **Grafana** dashboard.
+
+Also, you can check [this video](https://www.youtube.com/watch?v=A2pKhNQoQUU) if you want to see it in action.
+
+## Conclusion 
+
+In this article, I showed you the new built-in metrics of .NET8, describe what metrics are, which pre-built metrics are provided by ASP.NET Core, how to use & view these pre-built metrics and finally I have showed you how to create custom metrics and view it in a dashboard. If you want to learn more about the **Metrics System of .NET**, you can check out the references that I have shared below.
 
 ## References
 
