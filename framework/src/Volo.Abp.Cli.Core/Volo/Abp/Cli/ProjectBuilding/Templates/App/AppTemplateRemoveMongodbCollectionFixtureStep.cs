@@ -8,6 +8,11 @@ public class AppTemplateRemoveMongodbCollectionFixtureStep : ProjectBuildPipelin
 {
     public override void Execute(ProjectBuildContext context)
     {
+        if (context.Template.IsNoLayer())
+        {
+            return;
+        }
+        
         //MyCompanyName.MyProjectName.Application.Tests
         RemoveFile(context, "/aspnet-core/test/MyCompanyName.MyProjectName.Application.Tests/MyProjectNameApplicationCollection.cs");
         RemoveKeyword(context,

@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Slugify.Core" Version="4.0.1" />
-    <PackageReference Include="Unidecode.NET" Version="2.1.0" />
+    <PackageReference Include="Slugify.Core" />
+    <PackageReference Include="Unidecode.NET" />
   </ItemGroup>
 
   <ItemGroup>

@@ -217,6 +217,7 @@
     "CaptchaCode": "Captcha-koodi",
     "CommentTextRequired": "Kommentti vaaditaan",
     "CaptchaCodeErrorMessage": "CAPTCHA:lle antamasi vastaus ei ollut oikea. Yritä uudelleen",
-    "CaptchaCodeMissingMessage": "Captcha-koodi puuttuu!"
+    "CaptchaCodeMissingMessage": "Captcha-koodi puuttuu!",
+    "ThisPartOfContentCouldntBeLoaded": "Tämä sisällön osa ei voitu ladata."
   }
 }

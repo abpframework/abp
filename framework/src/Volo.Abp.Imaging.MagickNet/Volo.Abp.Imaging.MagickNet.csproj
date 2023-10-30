@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.3.0" />
+        <PackageReference Include="Magick.NET-Q16-AnyCPU" />
     </ItemGroup>
 
 </Project>

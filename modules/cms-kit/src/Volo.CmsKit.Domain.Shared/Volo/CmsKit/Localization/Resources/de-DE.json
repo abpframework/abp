@@ -159,6 +159,7 @@
     "YourEmailAddress": "Ihre E-Mail-Adresse",
     "YourFullName": "Ihren vollständigen Namen",
     "YourMessage": "Ihre Nachricht",
-    "YourReply": "Ihre Antwort"
+    "YourReply": "Ihre Antwort",
+    "ThisPartOfContentCouldntBeLoaded": "Dieser Teil des Inhalts konnte nicht geladen werden."
   }
 }

@@ -21,10 +21,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Rebus" Version="7.2.1" />
-      <PackageReference Include="Rebus.ServiceProvider" Version="9.1.0" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="$(MicrosoftPackageVersion)" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftPackageVersion)" />
+      <PackageReference Include="Rebus" />
+      <PackageReference Include="Rebus.ServiceProvider" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     </ItemGroup>
     
 </Project>

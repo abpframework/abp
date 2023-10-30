@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
+using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.Web;
 using MyCompanyName.MyProjectName.Web.Menus;
@@ -20,7 +21,8 @@ namespace MyCompanyName.MyProjectName;
 [DependsOn(
     typeof(AbpAspNetCoreTestBaseModule),
     typeof(MyProjectNameWebModule),
-    typeof(MyProjectNameApplicationTestModule)
+    typeof(MyProjectNameApplicationTestModule),
+    typeof(MyProjectNameEntityFrameworkCoreTestModule)
 )]
 public class MyProjectNameWebTestModule : AbpModule
 {

@@ -134,8 +134,15 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
                 _args = args || {};
 
+                var argsWithoutFunc = {};
+                for (a in _args) {
+                    if (_args.hasOwnProperty(a) && typeof _args[a] !== 'function') {
+                        argsWithoutFunc[a] = _args[a];
+                    }
+                }
+
                 _createContainer(_modalId)
-                    .load(options.viewUrl, $.param(_args), function (response, status, xhr) {
+                    .load(options.viewUrl, $.param(argsWithoutFunc), function (response, status, xhr) {
                         if (status === "error") {
                             //TODO: Handle!
                             return;

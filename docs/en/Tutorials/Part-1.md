@@ -36,6 +36,8 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 
 > If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
 
+> After downloading the source code, you might need to run some commands before running the application. See the _After Creating the Solution_ section below for more information.
+
 {{if UI == "MVC" && DB == "EF"}}
 
 ### Video Tutorial
@@ -47,6 +49,38 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 ## Creating the Solution
 
 Before starting the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../Getting-Started.md).
+
+## After Creating the Solution
+
+### Installing the Client-Side Packages
+
+[ABP CLI](../CLI.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+
+However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
+
+For such cases, run the `abp install-libs` command on the root directory of your solution to install all required NPM packages:
+
+```bash
+abp install-libs
+```
+
+> We suggest you install [Yarn](https://classic.yarnpkg.com/) to prevent possible package inconsistencies, if you haven't installed it yet.
+
+{{if UI=="Blazor" || UI=="BlazorServer"}}
+
+### Bundling and Minification
+
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../CLI.md).
+
+However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
+
+```bash
+abp bundle
+```
+
+> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../UI/Blazor/Global-Scripts-Styles.md).
+
+{{end}}
 
 ## Create the Book Entity
 
@@ -204,7 +238,7 @@ This will add a new migration class to the project:
 
 > It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../Data-Seeding.md) system of the ABP framework. You can skip this section if you don't want to create the data seeding, but it is suggested to follow along and learn this useful ABP Framework feature.
 
-Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project by copying the following code:
+Create a class that implements the `IDataSeedContributor` interface in the `*.Domain` project by copying the following code:
 
 ```csharp
 using System;

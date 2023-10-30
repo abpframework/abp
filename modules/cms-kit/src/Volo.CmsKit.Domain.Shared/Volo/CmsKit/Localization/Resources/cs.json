@@ -159,6 +159,7 @@
     "YourEmailAddress": "Vaše emailová adresa",
     "YourFullName": "Vaše celé jméno",
     "YourMessage": "Vaše zpráva",
-    "YourReply": "Vaše odpověď"
+    "YourReply": "Vaše odpověď",
+    "ThisPartOfContentCouldntBeLoaded": "Tato část obsahu nemohla být načtena."
   }
 }

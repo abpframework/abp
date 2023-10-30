@@ -182,6 +182,7 @@
     "SelectAStatus": "انتخاب وضعیت",
     "Status": "وضعیت",
     "CmsKit.BlogPost.ScrollIndex": "نوار پیمایش سریع در پست های وبلاگ",
-    "CmsKit.BlogPost.PreventXssFeature": "جلوگیری از XSS"
+    "CmsKit.BlogPost.PreventXssFeature": "جلوگیری از XSS",
+    "ThisPartOfContentCouldntBeLoaded": "این قسمت از محتوا قابل بارگیری نیست."
   }
 }

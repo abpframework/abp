@@ -159,6 +159,7 @@
     "YourEmailAddress": "Vaš email naslov",
     "YourFullName": "Tvoje polno ime",
     "YourMessage": "Tvoje sporočilo",
-    "YourReply": "Vaš odgovor"
+    "YourReply": "Vaš odgovor",
+    "ThisPartOfContentCouldntBeLoaded": "Ta del vsebine ni bil naložen."
   }
 }

@@ -15,8 +15,8 @@
   <ItemGroup>
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
   </ItemGroup>
 
 </Project>

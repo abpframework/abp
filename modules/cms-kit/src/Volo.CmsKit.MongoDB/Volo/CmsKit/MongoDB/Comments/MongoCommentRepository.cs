@@ -159,6 +159,12 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
         }
     }
 
+    public virtual async Task<bool> ExistsAsync(string idempotencyToken, CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .AnyAsync(x => x.IdempotencyToken == idempotencyToken, GetCancellationToken(cancellationToken));
+    }
+
     protected virtual async Task<IQueryable<Comment>> GetListQueryAsync(
         string filter = null,
         string entityType = null,

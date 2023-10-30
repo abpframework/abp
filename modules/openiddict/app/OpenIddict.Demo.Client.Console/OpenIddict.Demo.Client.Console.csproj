@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="IdentityModel" Version="6.2.0" />
+        <PackageReference Include="IdentityModel" />
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.Contracts\Volo.Abp.AspNetCore.Mvc.Contracts.csproj" />
     </ItemGroup>
 

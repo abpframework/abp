@@ -1,11 +1,11 @@
-﻿using MyCompanyName.MyProjectName.EntityFrameworkCore;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 
 namespace MyCompanyName.MyProjectName;
 
 [DependsOn(
-    typeof(MyProjectNameEntityFrameworkCoreTestModule)
-    )]
+    typeof(MyProjectNameDomainModule),
+    typeof(MyProjectNameTestBaseModule)
+)]
 public class MyProjectNameDomainTestModule : AbpModule
 {
 
