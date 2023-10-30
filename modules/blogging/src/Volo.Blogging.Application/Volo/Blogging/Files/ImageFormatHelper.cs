@@ -10,9 +10,9 @@ namespace Volo.Blogging.Areas.Blog.Helpers
     {
         public static IImageFormat GetImageRawFormat(Stream stream)
         {
-            using (var image = Image.Load(stream, out var imageFormat))
+            using (var image = Image.Load(stream))
             {
-                return imageFormat;
+                return image.Metadata.DecodedImageFormat;
             }
         }
 

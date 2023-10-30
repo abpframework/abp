@@ -34,14 +34,14 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
             return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
-        var (image, format) = await Image.LoadWithFormatAsync(stream, cancellationToken);
+        var image = await Image.LoadAsync(stream, cancellationToken);
 
-        if (!CanCompress(format.DefaultMimeType))
+        if (!CanCompress(image.Metadata.DecodedImageFormat!.DefaultMimeType))
         {
             return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
-        var memoryStream = await GetStreamFromImageAsync(image, format, cancellationToken);
+        var memoryStream = await GetStreamFromImageAsync(image, image.Metadata.DecodedImageFormat, cancellationToken);
 
         if (memoryStream.Length < stream.Length)
         {

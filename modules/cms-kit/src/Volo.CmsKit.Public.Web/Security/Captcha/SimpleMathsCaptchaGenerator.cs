@@ -116,9 +116,11 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
             var random = new Random();
             var startWith = (byte)random.Next(5, 10);
             image.Mutate(ctx => ctx.BackgroundColor(Color.Transparent));
+
             var fontFamily = SystemFonts.Families
                 .FirstOrDefault(x => x.GetAvailableStyles().Contains(options.FontStyle), SystemFonts.Families.First())
                 .Name;
+
             var font = SystemFonts.CreateFont(fontFamily, options.FontSize, options.FontStyle);
             
             foreach (var character in stringText)
@@ -127,7 +129,10 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
                 var color = options.TextColor[random.Next(0, options.TextColor.Length)];
                 var location = new PointF(startWith + position, random.Next(6, 13));
                 image.Mutate(ctx => ctx.DrawText(text, font, color, location));
-                position += TextMeasurer.MeasureSize(character.ToString(), new TextOptions(font)).Width;
+                position += TextMeasurer.MeasureSize(character.ToString(), new TextOptions (font)
+                {
+                    Origin = location
+                }).Width;
             }
 
             //add rotation
@@ -163,7 +168,7 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
                 img.Mutate(
                         ctx => ctx
                             .DrawLine(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)],
-                                RandomTextGenerator.GenerateNextFloat(0.5, 1.5), new (x0, y0), new (x0 + 0.01f, y0 + 0.01f))
+                            RandomTextGenerator.GenerateNextFloat(0.5, 1.5), new PointF[] { new Vector2(x0, y0), new Vector2(x0, y0) })
                     );
             });
 
