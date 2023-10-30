@@ -21,7 +21,7 @@ export class TrackCapsLockDirective {
     if (
       (s.toUpperCase() === s && s.toLowerCase() !== s && e.shiftKey) ||
       (s.toUpperCase() !== s && s.toLowerCase() === s && e.shiftKey) ||
-      e.getModifierState('CapsLock')
+      (e.getModifierState && e.getModifierState('CapsLock'))
     ) {
       return true;
     }

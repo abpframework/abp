@@ -4,7 +4,6 @@ using Xunit;
 
 namespace MyCompanyName.MyProjectName.Pages;
 
-[Collection(MyProjectNameTestConsts.CollectionDefinitionName)]
 public class Index_Tests : MyProjectNameWebTestBase
 {
     [Fact]

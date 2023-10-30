@@ -3,17 +3,18 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyCompanyName.MyProjectName.EntityFrameworkCore.Tests\MyCompanyName.MyProjectName.EntityFrameworkCore.Tests.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <ProjectReference Include="..\..\src\MyCompanyName.MyProjectName.Domain\MyCompanyName.MyProjectName.Domain.csproj" />
+    <ProjectReference Include="..\MyCompanyName.MyProjectName.TestBase\MyCompanyName.MyProjectName.TestBase.csproj" />
   </ItemGroup>
 
 </Project>

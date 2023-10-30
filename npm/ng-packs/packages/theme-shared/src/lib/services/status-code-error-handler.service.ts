@@ -57,9 +57,9 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
     this.createErrorComponentService.execute(instance);
   }
 
-  canHandle({ status }): boolean {
-    this.status = status || 0;
-    return this.handledStatusCodes.indexOf(status) > -1;
+  canHandle(error): boolean {
+    this.status = error?.status || 0;
+    return this.handledStatusCodes.indexOf(this.status) > -1;
   }
 
   execute(): void {

@@ -287,6 +287,7 @@ public class MyProjectNameHostModule : AbpModule
 
             if (env.IsDevelopment())
             {
+                app.UseWebAssemblyDebugging();
                 app.UseDeveloperExceptionPage();
             }
 

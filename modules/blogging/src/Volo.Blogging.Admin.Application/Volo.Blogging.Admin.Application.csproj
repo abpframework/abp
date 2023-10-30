@@ -4,14 +4,14 @@
     <Import Project="..\..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <AssemblyName>Volo.Blogging.Admin.Application</AssemblyName>
         <PackageId>Volo.Blogging.Admin.Application</PackageId>
         <RootNamespace />
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
+        <PackageReference Include="SixLabors.ImageSharp" />
     </ItemGroup>
     
     <ItemGroup>

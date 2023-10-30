@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Xếp hạng",
     "CmsKit.Reactions": "Phản ứng",
     "CmsKit.Tags": "Thẻ",
+    "CmsKit.BlogPost.PreventXssFeature": "Ngăn chặn XSS",
     "CmsKit:0002": "Nội dung đã tồn tại!",
     "CmsKit:0003": "Thực thể {0} không thể gắn thẻ.",
     "CmsKit:Blog:0001": "Sên đã cho ({Slug}) đã tồn tại!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "Địa chỉ email của bạn",
     "YourFullName": "Tên đầy đủ của bạn",
     "YourMessage": "Tin nhắn của bạn",
-    "YourReply": "Câu trả lời của bạn"
+    "YourReply": "Câu trả lời của bạn",
+    "ThisPartOfContentCouldntBeLoaded": "Phần này của nội dung không thể được tải."
   }
 }

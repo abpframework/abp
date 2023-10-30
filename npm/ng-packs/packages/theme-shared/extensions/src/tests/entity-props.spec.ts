@@ -111,13 +111,11 @@ describe('EntityProp', () => {
       type: ePropType.String,
       name: 'NAME',
     };
-
     const prop = new EntityProp(options);
-
     expect(prop.type).toBe(options.type);
     expect(prop.name).toBe(options.name);
     expect(prop.displayName).toBe(options.name);
-    expect(prop.permission).toBeUndefined();
+    expect(prop.permission).toBe('');
     expect(prop.visible()).toBe(true);
     expect(prop.sortable).toBe(false);
     expect(prop.columnWidth).toBeUndefined();

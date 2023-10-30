@@ -102,6 +102,7 @@ public abstract class AppTemplateBase : TemplateInfo
         else
         {
             context.Symbols.Add("EFCORE");
+            SetDbmsSymbols(context);
         }
 
         if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
@@ -165,7 +166,11 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveFolderStep("/angular"));
         }
 
-        if (context.BuildArgs.MobileApp != MobileApp.ReactNative)
+        if(context.BuildArgs.MobileApp == MobileApp.ReactNative)
+        {
+            context.Symbols.Add("mobile:react-native");
+        }
+        else
         {
             steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName().EnsureStartsWith('/')));
         }
@@ -229,6 +234,36 @@ public abstract class AppTemplateBase : TemplateInfo
 
         steps.Add(new ChangeThemeStep());
         RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework);
+    }
+    
+    protected void SetDbmsSymbols(ProjectBuildContext context)
+    {
+        switch (context.BuildArgs.DatabaseManagementSystem)
+        {
+            case DatabaseManagementSystem.NotSpecified:
+                context.Symbols.Add("SqlServer");
+                break;
+            case DatabaseManagementSystem.SQLServer:
+                context.Symbols.Add("SqlServer");
+                break;
+            case DatabaseManagementSystem.MySQL:
+                context.Symbols.Add("MySql");
+                break;
+            case DatabaseManagementSystem.PostgreSQL:
+                context.Symbols.Add("PostgreSql");
+                break;
+            case DatabaseManagementSystem.Oracle:
+                context.Symbols.Add("Oracle");
+                break;
+            case DatabaseManagementSystem.OracleDevart:
+                context.Symbols.Add("Oracle");
+                break;
+            case DatabaseManagementSystem.SQLite:
+                context.Symbols.Add("SqLite");
+                break;
+            default:
+                throw new AbpException("Unknown Dbms: " + context.BuildArgs.DatabaseManagementSystem);
+        }
     }
 
     private void RemoveThemeLogoFolders(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)

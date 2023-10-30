@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Évaluations",
     "CmsKit.Reactions": "Réactions",
     "CmsKit.Tags": "Mots clés",
+    "CmsKit.BlogPost.PreventXssFeature": "Empêcher les attaques XSS",
     "CmsKit:0002": "Le contenu existe déjà!",
     "CmsKit:0003": "L'entité {0} ne peut pas être taguée.",
     "CmsKit:Blog:0001": "Le slug donné ({Slug}) existe déjà!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "Votre adresse email",
     "YourFullName": "Ton nom complet",
     "YourMessage": "Votre message",
-    "YourReply": "Votre réponse"
+    "YourReply": "Votre réponse",
+    "ThisPartOfContentCouldntBeLoaded": "Cette partie du contenu n'a pas pu être chargée."
   }
 }

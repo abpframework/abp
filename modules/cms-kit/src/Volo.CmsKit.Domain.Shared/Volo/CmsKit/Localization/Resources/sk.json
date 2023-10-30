@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Hodnotenia",
     "CmsKit.Reactions": "Reakcie",
     "CmsKit.Tags": "Tagy",
+    "CmsKit.BlogPost.PreventXssFeature": "Zabraňte XSS",
     "CmsKit:0002": "Obsah už existuje!",
     "CmsKit:0003": "Entite {0} nie je možné priradiť tag.",
     "CmsKit:Blog:0001": "Zadaný slug ({Slug}) už existuje!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "Vaša emailová adresa",
     "YourFullName": "Vaše celé meno",
     "YourMessage": "Vaša správa",
-    "YourReply": "Vaša odpoveď"
+    "YourReply": "Vaša odpoveď",
+    "ThisPartOfContentCouldntBeLoaded": "Táto časť obsahu sa nedá načítať."
   }
 }

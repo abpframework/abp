@@ -10,10 +10,10 @@ using Volo.Abp.Uow;
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
 
 [DependsOn(
-    typeof(MyProjectNameTestBaseModule),
+    typeof(MyProjectNameApplicationTestModule),
     typeof(MyProjectNameEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreSqliteModule)
-    )]
+)]
 public class MyProjectNameEntityFrameworkCoreTestModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

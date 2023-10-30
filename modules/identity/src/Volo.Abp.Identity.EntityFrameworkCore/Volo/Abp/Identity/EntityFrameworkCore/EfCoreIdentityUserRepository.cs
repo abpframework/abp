@@ -174,24 +174,25 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        var upperFilter = filter?.ToUpperInvariant();
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.NormalizedUserName.Contains(upperFilter) ||
+                    u.NormalizedEmail.Contains(upperFilter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
             .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
-            .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
-            .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
-            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
-            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
+            .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName.Contains(userName))
+            .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber.Contains(phoneNumber))
+            .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email.Contains(emailAddress))
+            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name.Contains(name))
+            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname.Contains(surname))
             .WhereIf(isLockedOut.HasValue, x => (x.LockoutEnabled && x.LockoutEnd.HasValue && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0) == isLockedOut.Value)
             .WhereIf(notActive.HasValue, x => x.IsActive == !notActive.Value)
             .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed == emailConfirmed.Value)
@@ -255,12 +256,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        var upperFilter = filter?.ToUpperInvariant();
         return await (await GetDbSetAsync())
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.NormalizedUserName.Contains(upperFilter) ||
+                    u.NormalizedEmail.Contains(upperFilter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
