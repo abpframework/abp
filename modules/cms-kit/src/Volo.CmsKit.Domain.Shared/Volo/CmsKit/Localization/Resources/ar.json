@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "التقييمات",
     "CmsKit.Reactions": "تفاعلات",
     "CmsKit.Tags": "العلامات",
+    "CmsKit.BlogPost.PreventXssFeature": "منع XSS",
     "CmsKit:0002": "المحتوى موجود بالفعل!",
     "CmsKit:0003": "الكيان {0} غير قابل للعلامة.",
     "CmsKit:Blog:0001": "slug المحدد ({Slug}) موجود بالفعل!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "عنوان بريدك الإلكتروني",
     "YourFullName": "اسمك الكامل",
     "YourMessage": "رسالتك",
-    "YourReply": "ردك"
+    "YourReply": "ردك",
+    "ThisPartOfContentCouldntBeLoaded": "لا يمكن تحميل هذا الجزء من المحتوى.",
   }
 }

@@ -16,7 +16,7 @@
     "Tutorial": "Opetusohjelma",
     "UsingCLI": "CLI:n käyttö",
     "SeeDetails": "Katso yksityiskohdat",
-    "AbpShortDescription": "ABP Framework on täydellinen infrastruktuuri nykyaikaisten verkkosovellusten luomiseen noudattamalla ohjelmistokehityksen parhaita käytäntöjä ja käytäntöjä.",
+    "AbpShortDescription": "ABP Framework on täydellinen infrastruktuuri ohjelmistoratkaisujen luomiseen moderneilla arkkitehtuureilla, jotka perustuvat ASP.NET Core -alustaan.",
     "SourceCodeUpper": "LÄHDEKOODI",
     "LatestReleaseLogs": "Uusimmat julkaisulokit",
     "Infrastructure": "Infrastruktuuri",

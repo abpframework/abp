@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "評分",
     "CmsKit.Reactions": "反應",
     "CmsKit.Tags": "標籤",
+    "CmsKit.BlogPost.PreventXssFeature": "防止XSS攻擊",
     "CmsKit:0002": "內容已經存在!",
     "CmsKit:0003": "實體 {0} 不可標記.",
     "CmsKit:Blog:0001": "給定的slug ({Slug}) 已經存在!",
@@ -159,6 +160,7 @@
     "YourFullName": "你的全名",
     "YourMessage": "你的消息",
     "YourReply": "你的回覆",
-    "MarkdownSupported": "支援 <a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> ."
+    "MarkdownSupported": "支援 <a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> .",
+    "ThisPartOfContentCouldntBeLoaded": "這部分內容無法加載"
   }
 }

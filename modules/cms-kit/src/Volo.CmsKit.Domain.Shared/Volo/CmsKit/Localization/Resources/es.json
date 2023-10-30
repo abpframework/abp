@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Calificaciones",
     "CmsKit.Reactions": "Reacciones",
     "CmsKit.Tags": "Etiquetas",
+    "CmsKit.BlogPost.PreventXssFeature": "Prevenir ataques XSS",
     "CmsKit:0002": "¡El contenido ya existe!",
     "CmsKit:0003": "La entidad {0} no se puede etiquetar.",
     "CmsKit:Blog:0001": "¡La babosa dada ({Slug}) ya existe!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "Tu correo electrónico",
     "YourFullName": "Tu nombre completo",
     "YourMessage": "Tu mensaje",
-    "YourReply": "Tu respuesta"
+    "YourReply": "Tu respuesta",
+    "ThisPartOfContentCouldntBeLoaded": "Esta parte del contenido no se pudo cargar."
   }
 }

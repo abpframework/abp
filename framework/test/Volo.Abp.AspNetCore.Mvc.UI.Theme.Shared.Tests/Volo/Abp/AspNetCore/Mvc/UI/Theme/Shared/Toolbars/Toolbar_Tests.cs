@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.Volo.Abp.AspNetCore.Mvc.
 
 public class Toolbar_Tests : AbpAspNetCoreMvcUiThemeSharedTestBase
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpToolbarOptions>(options =>
         {
@@ -35,7 +35,7 @@ public class Toolbar_Tests : AbpAspNetCoreMvcUiThemeSharedTestBase
         var claimsPrincipal = new ClaimsPrincipal(identity);
         var principalAccessor = Substitute.For<ICurrentPrincipalAccessor>();
         principalAccessor.Principal.Returns(ci => claimsPrincipal);
-        Thread.CurrentPrincipal = claimsPrincipal;
+        services.Replace(ServiceDescriptor.Singleton<ICurrentPrincipalAccessor>(principalAccessor));
 
         var themeManager = Substitute.For<IThemeManager>();
         themeManager.CurrentTheme.Returns(x => null);

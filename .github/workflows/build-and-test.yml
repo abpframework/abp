@@ -17,6 +17,7 @@ on:
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
       - 'Directory.Build.props'
+      - 'Directory.Packages.props'
 
   pull_request:
     paths:
@@ -33,6 +34,7 @@ on:
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
       - 'Directory.Build.props'
+      - 'Directory.Packages.props'
     types:
       - opened
       - synchronize
@@ -49,7 +51,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-dotnet@master
       with:
-        dotnet-version: 7.0.100
+        dotnet-version: 8.0.100-rc.2.23502.2
 
     - name: chown
       run: |

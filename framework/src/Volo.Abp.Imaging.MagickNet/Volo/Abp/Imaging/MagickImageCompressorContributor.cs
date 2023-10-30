@@ -28,7 +28,7 @@ public class MagickImageCompressorContributor : IImageCompressorContributor, ITr
 
     public virtual async Task<ImageCompressResult<Stream>> TryCompressAsync(
         Stream stream, 
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
@@ -63,7 +63,7 @@ public class MagickImageCompressorContributor : IImageCompressorContributor, ITr
 
     public virtual async Task<ImageCompressResult<byte[]>> TryCompressAsync(
         byte[] bytes, 
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
@@ -86,7 +86,7 @@ public class MagickImageCompressorContributor : IImageCompressorContributor, ITr
         return new ImageCompressResult<byte[]>(newBytes, result.State);
     }
     
-    protected virtual bool CanCompress(string mimeType)
+    protected virtual bool CanCompress(string? mimeType)
     {
         return mimeType switch {
             MimeTypes.Image.Jpeg => true,
