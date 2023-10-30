@@ -223,6 +223,7 @@
     "AbpStudio": "ABP Studio",
     "ExtraMonths": "{0}<span>EXTRA MONTHS</span>",
     "RSS": "RSS",
-    "RSSFeed": "RSS Feed"
+    "RSSFeed": "RSS Feed",
+    "Articles": "Articles"
   }
 }
