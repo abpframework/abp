@@ -128,7 +128,7 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
                 var text = character.ToString();
                 var color = options.TextColor[random.Next(0, options.TextColor.Length)];
                 var location = new PointF(startWith + position, random.Next(6, 13));
-                image.Mutate(ctx => ctx.DrawText(text, font, color, location));D
+                image.Mutate(ctx => ctx.DrawText(text, font, color, location));
                 position += TextMeasurer.MeasureSize(character.ToString(), new TextOptions (font)
                 {
                     Origin = location
