@@ -224,6 +224,10 @@
     "ExtraMonths": "{0}<span>EXTRA MONTHS</span>",
     "RSS": "RSS",
     "RSSFeed": "RSS Feed",
-    "Articles": "Articles"
+    "Articles": "Articles",
+    "Organizations": "Organizations",
+    "ManageAccount": "Manage Account",
+    "ABPProfile": "ABP Profile",
+    "Tickets": "Tickets"
   }
 }
