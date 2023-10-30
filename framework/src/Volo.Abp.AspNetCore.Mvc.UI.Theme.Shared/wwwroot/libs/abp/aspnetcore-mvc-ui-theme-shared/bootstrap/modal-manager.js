@@ -135,7 +135,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _args = args || {};
 
                 var argsWithoutFunc = {};
-                for (a in _args) {
+                for (var a in _args) {
                     if (_args.hasOwnProperty(a) && typeof _args[a] !== 'function') {
                         argsWithoutFunc[a] = _args[a];
                     }
@@ -144,8 +144,12 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _createContainer(_modalId)
                     .load(options.viewUrl, $.param(argsWithoutFunc), function (response, status, xhr) {
                         if (status === "error") {
-                            //TODO: Handle!
-                            return;
+                            var error = JSON.parse(response)?.error;
+                            if (error.details) {
+                                return abp.message.error(error.details, error.message);
+                            } else {
+                                return abp.message.error(error.message || abp.ajax.defaultError.message);
+                            }
                         };
 
                         if (options.scriptUrl) {
