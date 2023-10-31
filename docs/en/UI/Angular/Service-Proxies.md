@@ -75,12 +75,12 @@ export const environment: Config.Environment = {
 
 ## Parameters of generate-proxy
 
-- **module or -m:** it is backend module name.  the default is `app`. the object key of modules defined in response of `api/abp/api-definition`.  For example, if you want to generate-proxy of PermissionManagement, you should pass `permissionManagement` as a value.
-- **apiName or -a:** it is Backend api name, a.k.a. remoteServiceName. it defined in  the selected module  (in  response of `api/abp/api-definition`). the property(key) name is `remoteServiceName`. for example for the PermissionManagement, you should pass `AbpPermissionManagement`
-- **source:** Source Angular project for API definition URL & root namespace resolution. 
-- **target:**  Target Angular project to place the generated code, for example, it is `permission-management`. (npm/ng-packs/packages/*permission-management*). it is folder name.
-- **entryPoint:**  Custom place to create generate proxy folder in the target. the place is `permission-management/proxy/src/lib/proxy`. `permission-management` is value of target. if you want to create proxy the place, there is a two option, one you should set value `proxy` as entryPoint. or go to project.json and change `sourceRoot` to `packages/permission-management/proxy/src` from `packages/permission-management/src`. with the property. No need to change sourceRoot of project. if you set empty, proxy generated into folder that defined in  sourceRoot property.
-- **serviceType:** the service type of will generate proxy. The options are `application`, `integration` and `all`, Default valueis  `application`.  A developer can mark a service "integration service". if you want to skip proxy generation for the service, the setting is for you. More info about [Integration Services](../../Integration-Services) 
+- **module or -m:** The backend module name. The default is `app`. The object key of the modules defined in response of `api/abp/api-definition`. For example, if you want to generate-proxy of PermissionManagement, you should pass `permissionManagement` as a value.
+- **apiName or -a:** The Backend api name, also known as remoteServiceName. It is defined in the selected module (in response of `api/abp/api-definition`). The property(key) name is `remoteServiceName`. For example for the PermissionManagement, you should pass `AbpPermissionManagement`
+- **source:** Source of the Angular project for the API definition URL & root namespace resolution. 
+- **target:** Target for the Angular project to place the generated code. For example, if it's `permission-management`, it'll look like this (npm/ng-packs/packages/*permission-management*).
+- **entryPoint:** To create the generated proxy folder in the target. The directory is `permission-management/proxy/src/lib/proxy` and the `permission-management` is the value of target. If you want to create a folder for the generated proxy, there are two options, you should either set the value `proxy` as the entryPoint or go to project.json and change the `sourceRoot` from `packages/permission-management/src` to `packages/permission-management/proxy/src`. No need to change the sourceRoot of project with the property. if you keep it empty, the proxy will be generated into the folder defined in the sourceRoot property.
+- **serviceType:** The service type of the generated proxy. The options are `application`, `integration` and `all`. The default value is `application`. A developer can mark a service "integration service". If you want to skip proxy generation for the service, then this is the correct setting. More info about [Integration Services](../../Integration-Services) 
 
 
 ### Services
