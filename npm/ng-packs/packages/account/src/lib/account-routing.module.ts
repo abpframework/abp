@@ -14,7 +14,8 @@ import { ManageProfileComponent } from './components/manage-profile/manage-profi
 import { RegisterComponent } from './components/register/register.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { eAccountComponents } from './enums/components';
-import { AccountExtensionsGuardFn, AuthenticationFlowGuardFn } from './guards';
+import { AuthenticationFlowGuardFn } from './guards';
+import { AccountExtensionsResolver } from './resolvers';
 
 const canActivate = [AuthenticationFlowGuardFn];
 
@@ -73,7 +74,8 @@ const routes: Routes = [
       {
         path: 'manage',
         component: ReplaceableRouteContainerComponent,
-        canActivate: [AuthGuardFn, AccountExtensionsGuardFn],
+        canActivate: [AuthGuardFn],
+        resolve: [AccountExtensionsResolver],
         data: {
           replaceableComponent: {
             key: eAccountComponents.ManageProfile,

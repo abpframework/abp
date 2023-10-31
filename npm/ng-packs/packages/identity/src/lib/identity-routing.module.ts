@@ -12,14 +12,15 @@ import {
 import { RolesComponent } from './components/roles/roles.component';
 import { UsersComponent } from './components/users/users.component';
 import { eIdentityComponents } from './enums/components';
-import { IdentityExtensionsGuardFn } from './guards';
+import { IdentityExtensionsResolver } from './resolvers';
 
 const routes: Routes = [
   { path: '', redirectTo: 'roles', pathMatch: 'full' },
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: [AuthGuardFn, PermissionGuardFn, IdentityExtensionsGuardFn],
+    canActivate: [AuthGuardFn, PermissionGuardFn],
+    resolve: [IdentityExtensionsResolver],
     children: [
       {
         path: 'roles',

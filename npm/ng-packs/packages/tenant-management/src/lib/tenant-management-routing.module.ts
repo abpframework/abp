@@ -11,14 +11,15 @@ import {
 
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { eTenantManagementComponents } from './enums/components';
-import { TenantManagementExtensionsGuardFn } from './guards';
+import { TenantManagementExtensionsResolver } from './resolvers';
 
 const routes: Routes = [
   { path: '', redirectTo: 'tenants', pathMatch: 'full' },
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: [AuthGuardFn, PermissionGuardFn, TenantManagementExtensionsGuardFn],
+    canActivate: [AuthGuardFn, PermissionGuardFn, ],
+    resolve: [TenantManagementExtensionsResolver],
     children: [
       {
         path: 'tenants',
