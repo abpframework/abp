@@ -5,11 +5,11 @@ What can we do when we want to store a list of primitive types? Before EF Core 8
 - Create a wrapper class and a related table, then add a foreign key linking each value to its owner of the collection.
 - Use [value converter](https://learn.microsoft.com/en-us/ef/core/modeling/value-conversions) to serialize-deserialize as JSON.
 
-The first option covers most scenarios if we need to add some additional properties to this type but let's say we never gonna need this type additionality. 
+The first option covers most scenarios if we need to add some additional properties to this type but let's say we're never gonna need this type additionality. 
 
-## Which collection types supported ?
+## Which collection types are supported ?
 
-EF Core has the capability to map `IEnumerable<T>` public properties that have both a getter and a setter, with `T` representing a primitive type
+EF Core has the capability to map the `IEnumerable<T>` public properties that have both a getter and a setter, with the `T` representing a primitive type
 
 ```csharp
 public class PrimitiveCollections
@@ -54,7 +54,7 @@ public class Car
 }
 ```
 
-When we want to list cars if they have any of the specific colors.
+When we want to list the cars if they have any of the specific colors.
 
 ```csharp
 var colors = new HashSet<Color> { Color.Blue, Color.White };
@@ -81,7 +81,7 @@ SELECT "c"."Id", "c"."Brand", "c"."Colors", "c"."Model"
 
 ```
 
-When we insert to car table.
+When we insert to the car table.
 
 ```csharp
 var car = new Car("Maserati", "GranTurismo")
@@ -110,7 +110,7 @@ The SQL statement looks like this, and as you can see, it automatically serializ
 ```
 ## Conclusion
 
-We don't need to do anything if we just use a collection of primitive types. It serializes and deserializes as JSON automatically. Additionally, it sends the primitive collection as a parameter to cache the query.
+We don't need to do anything if we just use a collection of primitive types. It serializes and deserializes them as JSON automatically. Additionally, it sends the primitive collection as a parameter to cache the query.
 
 ## References
 
