@@ -1,6 +1,6 @@
 # .NET 8 - ASP.NET Core Metrics
 
-In this article, I'll show you new built-in metrics of .NET 8, which are basically numerical measurements reported over time in your application and can be used to monitor the health of your application and generate reports according to those numerical values. We will see what the metrics are, why to use them, and how to use them in detail. So, let's dive in.
+In this article, I'll show you the new built-in metrics of .NET 8, which are basically numerical measurements reported over time in your application and can be used to monitor the health of your application and generate reports according to those numerical values. We will see what the metrics are, why to use them, and how to use them in detail. So, let's dive in.
 
 ## What are Metrics?
 
@@ -35,7 +35,7 @@ dotnet new web -o MetricsDemo
 cd MetricsDemo
 ```
 
-After that open the application in your favorite IDE and add the following service registration code to your application:
+After that, open the application in your favorite IDE and add the following service registration code to your application:
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -56,11 +56,11 @@ builder.Services.AddOpenTelemetry()
     });
 ```
 
-Here, we have done the following things:
+Here, we have done the following steps:
 
 * The `AddOpenTelemetry` method registers the required **OpenTelemetry** services into the DI container.
-* `WithMetrics` method, we add pre-built metrics to the `OpenTelemetryBuilder` in the `AddMeter` method (_Microsoft.AspNetCore.Hosting_ and _Microsoft.AspNetCore.Server.Kestrel_ are pre-built metrics provided by ASP.NET Core). 
-* Also, we have used the `AddView` method to customize the output of the metrics by the SDK. Also, it can be used to customize which [Instruments](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#instrument) are to be processed or ignored.
+* In the `WithMetrics` method, we add pre-built metrics to the `OpenTelemetryBuilder` in the `AddMeter` method (_Microsoft.AspNetCore.Hosting_ and _Microsoft.AspNetCore.Server.Kestrel_ are pre-built metrics provided by ASP.NET Core). 
+* We have also used the `AddView` method to customize the output of the metrics by the SDK. It can also be used to customize which [Instruments](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#instrument) are to be processed or ignored.
 
 After making the related configurations, let's add the middleware below and view the metrics: 
 
@@ -75,7 +75,7 @@ app.MapGet("/", () =>
 });
 ```
 
-* `MapPrometheusScrapingEndpoint`: Adds OpenTelemetry Prometheus scraping endpoint middleware to the pipeline and then we can see the all metrics by navigating to the **/metrics** endpoints (optional):
+* `MapPrometheusScrapingEndpoint`: Adds the OpenTelemetry Prometheus scraping endpoint middleware to the pipeline and then we can see the all metrics by navigating to the **/metrics** endpoints (optional):
 
 ![](metrics-endpoint.png)
 
@@ -93,7 +93,7 @@ After the tool is installed, you can run the application and by running the `dot
 dotnet-counters monitor -n MetricsDemo --counters Microsoft.AspNetCore.Hosting
 ```
 
-When you run the command, it will print a message like in the one below and will wait for an initial request to your application:
+When you run the command, it will print a message like the one below and will wait for an initial request to your application:
 
 ```txt
 Press p to pause, r to resume, q to quit. 
@@ -112,9 +112,9 @@ dotnet-counters monitor -n MetricsDemo --counters Microsoft.AspNetCore.Server.Ke
 
 ## Creating Custom Metrics in ASP.NET Core Applications
 
-So far, we have seen what metrics are, which built-in metrics are provided by ASP.NET Core and use the built-in metrics and run the `dotnet-counters` global tool to view these metrics. At this point, let's see how we can create custom metrics and view them via the `dotnet-counters` tool. 
+So far, we have seen what metrics are, which built-in metrics are provided by ASP.NET Core, the use of the built-in metrics and running the `dotnet-counters` global tool to view these metrics. At this point, let's see how we can create custom metrics and view them via the `dotnet-counters` tool. 
 
-`IMeterFactory` is the recommended service to create *Meter* instances. ASP.NET Core registers `IMeterFactory` in dependency injection (DI) by default. The meter factory integrates metrics with DI, making isolating and collecting metrics easy.
+`IMeterFactory` is the recommended service to create *Meter* instances. ASP.NET Core registers the `IMeterFactory` in dependency injection (DI) by default. The meter factory integrates metrics with DI, making isolating and collecting metrics easy.
 
 Assume that, we want to create a metric that holds the sold products in our application. For that purpose, as a first step, we can create a metric class as follows:
 
@@ -140,7 +140,7 @@ public class ProductMetrics
 }
 ```
 
-In this class, we are creating a counter and defining metrics that we want to collect and view. `MetricsDemo.ProductStore` is the **counter name** and `metricsdemo.productstore.sold_products_count` is the **metric**, in our example. We need to register this class with a `Singleton` lifetime because we don't want to reset the counter and want to keep it during the application runtime. 
+In this class, we are creating a counter and defining metrics that we want to collect and view. `MetricsDemo.ProductStore` is the **counter name** and `metricsdemo.productstore.sold_products_count` is the **metric**. In our example, we need to register this class with a `Singleton` lifetime because we don't want to reset the counter and want to keep it during the application runtime. 
 
 > The [System.Diagnostics.Metrics.Meter](https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.metrics.meter) type is the entry point for a library to create a named group of instruments. Instruments record the numeric measurements that are needed to calculate metrics. Here we used [CreateCounter](https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.metrics.meter.createcounter) to create a Counter instrument named _metricsdemo.productstore.sold_products_count_.
 
@@ -150,7 +150,7 @@ So, register the type with the DI container in the `Program.cs` file (or you can
 builder.Services.AddSingleton<ProductMetrics>();
 ```
 
-Then, we can inject this class and increase sold product count whenever it's needed. Since we have registered it in DI, we can use it in minimal APIs like in the following example:
+Then, we can inject this class and increase the sold product count whenever it's needed. Since we have registered it in DI, we can use it in minimal APIs as in the following example:
 
 ```csharp
 app.MapPost("/complete-sale", ([FromBody] ProductSoldModel model, ProductMetrics metrics) =>
@@ -161,7 +161,7 @@ app.MapPost("/complete-sale", ([FromBody] ProductSoldModel model, ProductMetrics
 });
 ```
 
-Whenever a request is made to this endpoint the metric that we defined (_metricsdemo.productstore.sold_products_count_) will be increased and we can see this metric via the `dotnet-counters` global tool. You can run the following command to see the metrics:
+Whenever a request is made to this endpoint the metric that we've defined (_metricsdemo.productstore.sold_products_count_) will be increased and we can see this metric via the `dotnet-counters` global tool. You can run the following command to see the metrics:
 
 ```bash
 dotnet-counters monitor -n MetricsDemo --counters MetricsDemo.ProductStore
@@ -187,7 +187,7 @@ Also, you can check [this video](https://www.youtube.com/watch?v=A2pKhNQoQUU) if
 
 ## Conclusion 
 
-In this article, I showed you the new built-in metrics of .NET8, describe what metrics are, which pre-built metrics are provided by ASP.NET Core, how to use & view these pre-built metrics and finally, I have shown you how to create custom metrics and view them in a dashboard. If you want to learn more about the **Metrics System of .NET**, you can check out the references that I have shared below.
+In this article, I've shown you the new built-in metrics of .NET8, described what metrics are, which pre-built metrics are provided by ASP.NET Core, how to use & view these pre-built metrics and finally, I have shown you how to create custom metrics and view them in a dashboard. If you want to learn more about the **Metrics System of .NET**, you can check out the references that I have shared below.
 
 ## References
 
