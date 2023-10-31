@@ -1,13 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
-import { OAuthService } from 'angular-oauth2-oidc';
-
-import { IAbpGuard } from '../abstracts';
+import { AuthService, IAbpGuard } from '../abstracts';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { RoutesService, PermissionService, HttpErrorReporterService } from '../services';
 
@@ -17,7 +13,7 @@ import { RoutesService, PermissionService, HttpErrorReporterService } from '../s
 export class PermissionGuard implements IAbpGuard {
   protected readonly router = inject(Router);
   protected readonly routesService = inject(RoutesService);
-  protected readonly oAuthService = inject(OAuthService);
+  protected readonly oAuthService = inject(AuthService);
   protected readonly permissionService = inject(PermissionService);
   protected readonly httpErrorReporter = inject(HttpErrorReporterService);
 
@@ -33,7 +29,7 @@ export class PermissionGuard implements IAbpGuard {
 
     return this.permissionService.getGrantedPolicy$(requiredPolicy).pipe(
       tap(access => {
-        if (!access && this.oAuthService.hasValidAccessToken()) {
+        if (!access && this.oAuthService.isAuthenticated) {
           this.httpErrorReporter.reportError({ status: 403 } as HttpErrorResponse);
         }
       }),
