@@ -135,7 +135,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _args = args || {};
 
                 var argsWithoutFunc = {};
-                for (a in _args) {
+                for (var a in _args) {
                     if (_args.hasOwnProperty(a) && typeof _args[a] !== 'function') {
                         argsWithoutFunc[a] = _args[a];
                     }
