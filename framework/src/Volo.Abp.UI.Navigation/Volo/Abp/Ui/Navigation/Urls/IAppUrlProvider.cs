@@ -10,4 +10,6 @@ public interface IAppUrlProvider
     Task<string?> GetUrlOrNullAsync([NotNull] string appName, string? urlName = null);
 
     bool IsRedirectAllowedUrl(string url);
+    
+    Task<string?> NormalizeUrlAsync(string? url);
 }
