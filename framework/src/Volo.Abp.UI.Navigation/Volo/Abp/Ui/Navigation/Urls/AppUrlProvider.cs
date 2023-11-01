@@ -60,7 +60,7 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
             return url;
         }
         
-        return await ReplacePlaceHoldersAsync(url);
+        return await ReplacePlaceHoldersAsync(url!);
     }
 
     protected virtual async Task<string> GetConfiguredUrl(string appName, string? urlName)
