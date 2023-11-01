@@ -5,7 +5,7 @@ import { IAbpGuard } from './abstract-guard';
 import { CanActivateFn } from '@angular/router';
 
 /**
- * @deprecated Use `AuthGuardFn` instead.
+ * @deprecated Use `authGuard` instead.
  */
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,7 @@ export class AuthGuard implements IAbpGuard {
   }
 }
 
-export const AuthGuardFn: CanActivateFn = () => {
+export const authGuard: CanActivateFn = () => {
   console.error('You should add @abp/ng-oauth packages or create your own auth packages.');
   return false;
 };

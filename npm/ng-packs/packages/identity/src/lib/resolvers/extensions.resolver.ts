@@ -22,7 +22,7 @@ import {
   DEFAULT_IDENTITY_EDIT_FORM_PROPS,
 } from '../tokens';
 
-export const IdentityExtensionsResolver = () => {
+export const identityExtensionsResolver = () => {
   const configState = inject(ConfigStateService);
   const extensions = inject(ExtensionsService);
 

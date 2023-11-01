@@ -7,7 +7,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthService, IAbpGuard } from '@abp/ng.core';
 
 /**
- * @deprecated Use `AbpOAuthGuardFn` instead.
+ * @deprecated Use `abpOAuthGuard` instead.
  */
 @Injectable({
   providedIn: 'root',
@@ -32,7 +32,7 @@ export class AbpOAuthGuard implements IAbpGuard {
 }
 
 
-export const AbpOAuthGuardFn: CanActivateFn = (
+export const abpOAuthGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ) => {

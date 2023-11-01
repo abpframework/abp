@@ -10,7 +10,7 @@ import {
 import { eAccountComponents } from '../enums';
 import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, DEFAULT_ACCOUNT_FORM_PROPS } from '../tokens';
 
-export const AccountExtensionsResolver = () => {
+export const accountExtensionsResolver = () => {
   const configState = inject(ConfigStateService);
   const extensions = inject(ExtensionsService);
 

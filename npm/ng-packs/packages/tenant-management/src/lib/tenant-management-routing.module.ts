@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import {
-  AuthGuardFn,
-  PermissionGuardFn,
+  authGuard,
+  permissionGuard,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
@@ -11,15 +11,15 @@ import {
 
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { eTenantManagementComponents } from './enums/components';
-import { TenantManagementExtensionsResolver } from './resolvers';
+import { tenantManagementExtensionsResolver } from './resolvers';
 
 const routes: Routes = [
   { path: '', redirectTo: 'tenants', pathMatch: 'full' },
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: [AuthGuardFn, PermissionGuardFn, ],
-    resolve: [TenantManagementExtensionsResolver],
+    canActivate: [authGuard, permissionGuard, ],
+    resolve: [tenantManagementExtensionsResolver],
     children: [
       {
         path: 'tenants',

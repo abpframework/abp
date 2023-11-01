@@ -25,10 +25,9 @@ import {
   TENANT_MANAGEMENT_ENTITY_PROP_CONTRIBUTORS,
   TENANT_MANAGEMENT_TOOLBAR_ACTION_CONTRIBUTORS,
 } from '../tokens/extensions.token';
-import { CanActivateFn } from '@angular/router';
 
 /**
- * @deprecated Use `TenantManagementExtensionsGuardFn` instead.
+ * @deprecated Use `tenantManagementExtensionsResolver` instead.
  */
 @Injectable()
 export class TenantManagementExtensionsGuard implements IAbpGuard {

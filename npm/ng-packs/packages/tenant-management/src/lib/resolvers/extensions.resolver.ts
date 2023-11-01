@@ -22,7 +22,7 @@ import {
   DEFAULT_TENANT_MANAGEMENT_EDIT_FORM_PROPS,
 } from '../tokens';
 
-export const TenantManagementExtensionsResolver = () => {
+export const tenantManagementExtensionsResolver = () => {
   const configState = inject(ConfigStateService);
   const extensions = inject(ExtensionsService);
 

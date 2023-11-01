@@ -12,7 +12,7 @@ import { findRoute, getRoutePath } from '../utils/route-utils';
 import { RoutesService, PermissionService, HttpErrorReporterService } from '../services';
 
 /**
- * @deprecated Use `PermissionGuardFn` instead.
+ * @deprecated Use `permissionGuard` instead.
  */
 @Injectable({
   providedIn: 'root',
@@ -44,7 +44,7 @@ export class PermissionGuard implements IAbpGuard {
   }
 }
 
-export const PermissionGuardFn: CanActivateFn =  (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+export const permissionGuard: CanActivateFn =  (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   const router = inject(Router);
   const routesService = inject(RoutesService);
   const oAuthService = inject(OAuthService);
