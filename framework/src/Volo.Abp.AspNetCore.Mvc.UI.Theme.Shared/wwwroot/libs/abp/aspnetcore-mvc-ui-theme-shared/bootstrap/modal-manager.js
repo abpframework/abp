@@ -144,12 +144,9 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _createContainer(_modalId)
                     .load(options.viewUrl, $.param(argsWithoutFunc), function (response, status, xhr) {
                         if (status === "error") {
-                            var error = JSON.parse(response)?.error;
-                            if (error.details) {
-                                return abp.message.error(error.details, error.message);
-                            } else {
-                                return abp.message.error(error.message || abp.ajax.defaultError.message);
-                            }
+                            var responseJSON = xhr.responseJSON ? xhr.responseJSON : JSON.parse(xhr.responseText);
+                            abp.ajax.showError(responseJSON.error ? responseJSON.error : abp.ajax.defaultError);
+                            return;
                         };
 
                         if (options.scriptUrl) {
