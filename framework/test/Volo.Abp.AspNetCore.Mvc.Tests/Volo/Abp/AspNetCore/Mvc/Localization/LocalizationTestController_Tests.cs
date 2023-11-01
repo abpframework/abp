@@ -21,7 +21,7 @@ public class LocalizationTestController_Tests : AspNetCoreMvcTestBase
         }
     }
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpRequestLocalizationOptions>(options =>
         {

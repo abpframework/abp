@@ -13,13 +13,13 @@ public class InboxConfig
         get => _databaseName;
         set => _databaseName = Check.NotNullOrWhiteSpace(value, nameof(DatabaseName));
     }
-    [NotNull] private string _databaseName;
+    [NotNull] private string _databaseName = default!;
 
-    public Type ImplementationType { get; set; }
+    public Type ImplementationType { get; set; } = default!;
 
-    public Func<Type, bool> EventSelector { get; set; }
+    public Func<Type, bool>? EventSelector { get; set; }
 
-    public Func<Type, bool> HandlerSelector { get; set; }
+    public Func<Type, bool>? HandlerSelector { get; set; }
 
     /// <summary>
     /// Used to enable/disable processing incoming events.

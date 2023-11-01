@@ -6,11 +6,11 @@ using Volo.Abp.AspNetCore.App;
 
 namespace Volo.Abp.AspNetCore.Serilog;
 
-public class AbpSerilogTestBase : AbpAspNetCoreTestBase<App.Startup>
+public class AbpSerilogTestBase : AbpAspNetCoreTestBase<Program>
 {
     protected readonly CollectingSink CollectingSink = new CollectingSink();
 
-    protected override IHostBuilder CreateHostBuilder()
+    protected override IHost CreateHost(IHostBuilder builder)
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
@@ -19,8 +19,8 @@ public class AbpSerilogTestBase : AbpAspNetCoreTestBase<App.Startup>
             .WriteTo.Sink(CollectingSink)
             .CreateLogger();
 
-        return base.CreateHostBuilder()
-            .UseSerilog();
+        builder.UseSerilog();
+        return base.CreateHost(builder);;
     }
 
     protected LogEvent GetLogEvent(string text)

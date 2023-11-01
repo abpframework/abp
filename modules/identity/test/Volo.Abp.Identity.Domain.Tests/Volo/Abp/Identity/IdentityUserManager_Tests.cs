@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using NSubstitute;
 using Shouldly;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity.Settings;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -20,7 +25,9 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
     private readonly ILookupNormalizer _lookupNormalizer;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
     private readonly IdentityTestData _testData;
+    private readonly ICurrentTenant _currentTenant;
     protected IOptions<IdentityOptions> _identityOptions { get; }
+    protected IDistributedEventBus DistributedEventBus { get; set; }
 
     public IdentityUserManager_Tests()
     {
@@ -31,7 +38,14 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         _lookupNormalizer = GetRequiredService<ILookupNormalizer>();
         _testData = GetRequiredService<IdentityTestData>();
         _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+        _currentTenant = GetRequiredService<ICurrentTenant>();
         _identityOptions = GetRequiredService<IOptions<IdentityOptions>>();
+    }
+
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        DistributedEventBus = Substitute.For<IDistributedEventBus>();
+        services.Replace(ServiceDescriptor.Singleton(DistributedEventBus));
     }
 
     [Fact]
@@ -247,6 +261,66 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         user.CreationTime = DateTime.Now.AddDays(-3);
         user.SetLastPasswordChangeTime(null);
         (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user)).ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task IdentityUserUserNameChangedEto_Test()
+    {
+        var user = CreateRandomUser();
+
+        (await _identityUserManager.CreateAsync(user)).CheckErrors();
+
+        await DistributedEventBus.DidNotReceive()
+            .PublishAsync(Arg.Any<IdentityUserUserNameChangedEto>(), Arg.Any<bool>(), Arg.Any<bool>());
+
+        var newUser = await _identityUserManager.FindByIdAsync(user.Id.ToString());
+        newUser.ShouldNotBeNull();
+
+        using (_currentTenant.Change(Guid.NewGuid()))
+        {
+            var oldUsername = newUser.UserName;
+            await _identityUserManager.SetUserNameAsync(newUser, "newUserName");
+            await DistributedEventBus.Received()
+                .PublishAsync(
+                    Arg.Is<IdentityUserUserNameChangedEto>(x =>
+                        x.Id == newUser.Id && x.TenantId == newUser.TenantId && x.OldUserName == oldUsername && x.UserName == "newUserName"),
+                    Arg.Any<bool>(), Arg.Any<bool>());
+        }
+
+        DistributedEventBus.ClearReceivedCalls();
+        await _identityUserManager.SetUserNameAsync(newUser, newUser.UserName);
+        await DistributedEventBus.DidNotReceive()
+            .PublishAsync(Arg.Any<IdentityUserUserNameChangedEto>(), Arg.Any<bool>(), Arg.Any<bool>());
+    }
+
+    [Fact]
+    public async Task IdentityUserEmailChangedEto_Test()
+    {
+        var user = CreateRandomUser();
+
+        (await _identityUserManager.CreateAsync(user)).CheckErrors();
+
+        await DistributedEventBus.DidNotReceive()
+            .PublishAsync(Arg.Any<IdentityUserEmailChangedEto>(), Arg.Any<bool>(), Arg.Any<bool>());
+
+        var newUser = await _identityUserManager.FindByIdAsync(user.Id.ToString());
+        newUser.ShouldNotBeNull();
+
+        using (_currentTenant.Change(Guid.NewGuid()))
+        {
+            var oldEmail = newUser.Email;
+            await _identityUserManager.SetEmailAsync(newUser, "newEmail@abp.io");
+            await DistributedEventBus.Received()
+                .PublishAsync(
+                    Arg.Is<IdentityUserEmailChangedEto>(x =>
+                        x.Id == newUser.Id && x.TenantId == newUser.TenantId && x.OldEmail == oldEmail && x.Email == "newEmail@abp.io"),
+                    Arg.Any<bool>(), Arg.Any<bool>());
+        }
+
+        DistributedEventBus.ClearReceivedCalls();
+        await _identityUserManager.SetEmailAsync(newUser, newUser.Email);
+        await DistributedEventBus.DidNotReceive()
+            .PublishAsync(Arg.Any<IdentityUserEmailChangedEto>(), Arg.Any<bool>(), Arg.Any<bool>());
     }
 
     private async Task CreateRandomDefaultRoleAsync()

@@ -5,7 +5,6 @@ import { eLayoutType } from '@abp/ng.core';
   selector: 'abp-layout-empty',
   template: `
     <router-outlet></router-outlet>
-    <abp-confirmation></abp-confirmation>
   `,
 })
 export class EmptyLayoutComponent {
