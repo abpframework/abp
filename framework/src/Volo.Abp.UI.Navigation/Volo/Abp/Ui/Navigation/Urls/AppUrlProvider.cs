@@ -53,6 +53,16 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         return allow;
     }
 
+    public virtual async Task<string?> NormalizeUrlAsync(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            return url;
+        }
+        
+        return await ReplacePlaceHoldersAsync(url!);
+    }
+
     protected virtual async Task<string> GetConfiguredUrl(string appName, string? urlName)
     {
         var url = await GetUrlOrNullAsync(appName, urlName);
