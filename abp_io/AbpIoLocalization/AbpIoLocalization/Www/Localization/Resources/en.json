@@ -16,7 +16,7 @@
     "Tutorial": "Tutorial",
     "UsingCLI": "Using CLI",
     "SeeDetails": "See Details",
-    "AbpShortDescription": "ABP Framework is a complete infrastructure to create modern web applications by following the best practices and conventions of software development.",
+    "AbpShortDescription": "ABP Framework is a complete infrastructure for creating software solutions with modern architectures based on the ASP.NET Core platform.",
     "SourceCodeUpper": "SOURCE CODE",
     "LatestReleaseLogs": "Latest release logs",
     "Infrastructure": "Infrastructure",
@@ -174,6 +174,7 @@
     "CreateProjectWizard": "This wizard creates a new project from the startup template which is properly configured to jump start your project.",
     "TieredOption": "Creates a tiered solution where Web and Http API layers are physically separated. If not checked, creates a layered solution which is less complex and suitable for most scenarios.",
     "SeparateIdentityServerOption": "Separates the server side into two applications: The first one is for the identity server and the second one is for your server side HTTP API.",
+    "SeparateAuthenticationServerOption": "Separates the server side into two applications: The first one is for the authentication server and the second one is for your server side HTTP API.",
     "ProgressiveWebApplicationOption": "Specifies the project as Progressive Web Application",
     "UseslatestPreVersion": "Uses the latest pre-release version",
     "ReadTheDocumentation": "Read The Documentation",
@@ -296,6 +297,7 @@
     "EnterYouEmailToGetNews": "Enter your email to get the latest news about the ABP Framework",
     "Tiered": "Tiered",
     "SeparateIdentityServer": "Separate Identity Server",
+    "SeparateAuthenticationServer": "Separate Authentication Server",
     "ProgressiveWebApplication": "Progressive Web Application",
     "Preview": "Preview",
     "CreateANewSolution": "Create a new solution",
@@ -430,6 +432,11 @@
     "PackageDetailPage_ManualInstallationDescription2": "Then add the <code>{0}</code> dependency to your <a href=\"https://docs.abp.io/en/abp/latest/Module-Development-Basics\">module class</a> as shown in the following example",
     "PackageDetailPage_SeeDocumentation": "<a href=\"{0}\">See the documentation</a> to learn how to use this package in your applications.",
     "PackageDetailPage_InstallingUsingPMC": "3: Installing with the Package Manager Console",
-    "PackageDetailPage_InstallingUsingPMCDescription1": "Open the <strong>Package Manager Console</strong> in Visual Studio (Tools -> Nuget Package Manager -> Package Manager Console) and execute the following command"
+    "PackageDetailPage_InstallingUsingPMCDescription1": "Open the <strong>Package Manager Console</strong> in Visual Studio (Tools -> Nuget Package Manager -> Package Manager Console) and execute the following command",
+    "UIOptions": "UI Options",
+    "Testimonials": "Testimonials",
+    "CoolestCompaniesUseABPFramework": "Coolest Companies Use <span class=\"fw-bold\">ABP Framework</span>",
+    "Index_Page_Testimonial_1": "ABP Framework is not just a tool but a catalyst that has accelerated my growth as a developer. It has made it possible for me to build new features faster than ever before, reminiscent of the experiences of other users. The unified coding pattern has streamlined my projects, giving me more time to focus on creating rather than troubleshooting.\nI would say the ABP Framework has been the cornerstone of my early professional journey. It has facilitated my transition from an aspiring developer to a confident professional ready to make a mark in the software world. I am looking forward to the exciting projects that await me, knowing that ABP will be there to guide me. It is more than just a product; it's a partner in success.",
+    "Index_Page_Testimonial_2": "ABP Framework is not only a framework, it is also a guidance for project development/management, because it provides DDD, GenericRepository, DI, Microservice, Modularity trainings. Even if you are not going to use framework itself, you can develop yourself with docs.abp.io which is well and professionally prepared. (OpenIddict, Redis, Quartz etc.)\nBecause many thing pre-built, it shortens project development time significantly. (Such as login page, exception handling, data filtering-seeding, audit logging, localization, auto api controller etc.)\nAs an example from our app, i have used Local Event Bus for stock control. So, I am able to manage order movements by writing stock handler.\nIt is wonderful not to lose time for CreationTime, CreatorId. They are filled automatically."
   }
 }

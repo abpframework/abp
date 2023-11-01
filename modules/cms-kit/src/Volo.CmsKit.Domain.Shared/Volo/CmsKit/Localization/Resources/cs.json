@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Hodnocení",
     "CmsKit.Reactions": "Reakce",
     "CmsKit.Tags": "Tagy",
+    "CmsKit.BlogPost.PreventXssFeature": "Zabraňte XSS",
     "CmsKit:0002": "Obsah již existuje!",
     "CmsKit:0003": "Entitu {0} nelze označit.",
     "CmsKit:Blog:0001": "Daný slimák ({Slug}) již existuje!",
@@ -158,6 +159,7 @@
     "YourEmailAddress": "Vaše emailová adresa",
     "YourFullName": "Vaše celé jméno",
     "YourMessage": "Vaše zpráva",
-    "YourReply": "Vaše odpověď"
+    "YourReply": "Vaše odpověď",
+    "ThisPartOfContentCouldntBeLoaded": "Tato část obsahu nemohla být načtena."
   }
 }

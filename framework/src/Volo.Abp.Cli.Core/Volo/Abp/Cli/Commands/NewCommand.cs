@@ -8,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using StackExchange.Redis;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Events;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -89,6 +92,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         var projectArgs = await GetProjectBuildArgsAsync(commandLineArgs, template, projectName);
 
+        await CheckCreatingRequirements(projectArgs);
+
         var result = await TemplateProjectBuilder.BuildAsync(
             projectArgs
         );
@@ -97,7 +102,10 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
+        await CheckCreatedRequirements(projectArgs);
+
         ConfigureNpmPackagesForTheme(projectArgs);
+        await CreateOpenIddictPfxFilesAsync(projectArgs);
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
 
@@ -117,6 +125,52 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         await ConfigurePwaSupportForAngular(projectArgs);
 
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
+    }
+
+    private Task CheckCreatingRequirements(ProjectBuildArgs projectArgs)
+    {
+        return Task.CompletedTask;
+    }
+
+    private async Task CheckCreatedRequirements(ProjectBuildArgs projectArgs)
+    {
+        var requirementWarningMessages = new List<string>();
+
+        if (projectArgs.ExtraProperties.ContainsKey("PreRequirements:Redis"))
+        {
+            var isConnected = false;
+            try
+            {
+                var redis = await ConnectionMultiplexer.ConnectAsync("127.0.0.1", options => options.ConnectTimeout = 3000);
+                isConnected = redis.IsConnected;
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
+            finally
+            {
+                if (!isConnected)
+                {
+                    requirementWarningMessages.Add("\t* Redis is not installed or not running on your computer.");
+                }
+            }
+        }
+
+        if (requirementWarningMessages.Any())
+        {
+            requirementWarningMessages.AddFirst("NOTICE: The following tools are required to run your solution:");
+
+            await EventBus.PublishAsync(new ProjectPostRequirementsCheckedEvent
+            { 
+                Message = requirementWarningMessages.JoinAsString(Environment.NewLine) 
+            }, false);
+
+            foreach (var error in requirementWarningMessages)
+            {
+                Logger.LogWarning(error);
+            }
+        }
     }
 
     public string GetUsageInfo()

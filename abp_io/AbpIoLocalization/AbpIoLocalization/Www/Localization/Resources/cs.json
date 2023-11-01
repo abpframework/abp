@@ -16,7 +16,7 @@
     "Tutorial": "Tutorial",
     "UsingCLI": "Pomocí CLI",
     "SeeDetails": "Zobrazit podrobnosti",
-    "AbpShortDescription": "ABP Framework je kompletní infrastruktura pro vytváření moderních webových aplikací podle osvědčených postupů a konvencí vývoje softwaru.",
+    "AbpShortDescription": "ABP Framework je kompletní infrastruktura pro vytváření softwarových řešení s moderními architekturami založenými na platformě ASP.NET Core.",
     "SourceCodeUpper": "ZDROJOVÝ KÓD",
     "LatestReleaseLogs": "Nejnovější protokoly vydání",
     "Infrastructure": "Infrastruktura",

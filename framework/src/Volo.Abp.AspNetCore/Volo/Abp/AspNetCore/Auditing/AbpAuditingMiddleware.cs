@@ -98,13 +98,13 @@ public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
         {
             return false;
         }
-        
-        if (!AuditingOptions.IsEnabledForIntegrationServices && 
+
+        if (!AuditingOptions.IsEnabledForIntegrationServices &&
             context.Request.Path.Value.StartsWith($"/{AbpAspNetCoreConsts.DefaultIntegrationServiceApiPrefix}/"))
         {
             return true;
         }
-        
+
         if (AspNetCoreAuditingOptions.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x)))
         {
             return true;
@@ -134,7 +134,8 @@ public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
         }
 
         if (!AuditingOptions.IsEnabledForGetRequests &&
-            string.Equals(httpContext.Request.Method, HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
+            (string.Equals(httpContext.Request.Method, HttpMethods.Get, StringComparison.OrdinalIgnoreCase) ||
+             string.Equals(httpContext.Request.Method, HttpMethods.Head, StringComparison.OrdinalIgnoreCase)))
         {
             return false;
         }

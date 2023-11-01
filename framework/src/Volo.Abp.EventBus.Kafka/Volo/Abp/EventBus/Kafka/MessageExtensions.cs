@@ -4,9 +4,9 @@ namespace Volo.Abp.EventBus.Kafka;
 
 public static class MessageExtensions
 {
-    public static string GetMessageId<TKey, TValue>(this Message<TKey, TValue> message)
+    public static string? GetMessageId<TKey, TValue>(this Message<TKey, TValue> message)
     {
-        string messageId = null;
+        string? messageId = null;
 
         if (message.Headers.TryGetLastBytes("messageId", out var messageIdBytes))
         {
@@ -16,9 +16,9 @@ public static class MessageExtensions
         return messageId;
     }
 
-    public static string GetCorrelationId<TKey, TValue>(this Message<TKey, TValue> message)
+    public static string? GetCorrelationId<TKey, TValue>(this Message<TKey, TValue> message)
     {
-        string correlationId = null;
+        string? correlationId = null;
 
         if (message.Headers.TryGetLastBytes(EventBusConsts.CorrelationIdHeaderName, out var correlationIdBytes))
         {

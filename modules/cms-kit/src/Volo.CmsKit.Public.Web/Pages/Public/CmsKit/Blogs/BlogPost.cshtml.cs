@@ -29,6 +29,8 @@ public class BlogPostModel : CmsKitPublicPageModelBase
 
     public BlogFeatureDto BlogPostScrollIndexFeature { get; private set; }
 
+    public BlogFeatureDto PreventXssFeature { get; private set; }
+
     protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
 
     protected IBlogFeatureAppService BlogFeatureAppService { get; }
@@ -80,6 +82,8 @@ public class BlogPostModel : CmsKitPublicPageModelBase
         {
             BlogPostScrollIndexFeature = await BlogFeatureAppService.GetOrDefaultAsync(ViewModel.BlogId, GlobalFeatures.BlogPostScrollIndexFeature.Name);
         }
+
+        PreventXssFeature = await BlogFeatureAppService.GetOrDefaultAsync(ViewModel.BlogId, BlogConsts.PreventXssFeatureName);
 
         return Page();
     }

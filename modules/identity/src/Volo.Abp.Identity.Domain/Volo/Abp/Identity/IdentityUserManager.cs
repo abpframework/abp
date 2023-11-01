@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
@@ -25,6 +26,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
     protected ISettingProvider SettingProvider { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    protected IDistributedEventBus DistributedEventBus { get; }
 
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
@@ -42,7 +44,8 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         ILogger<IdentityUserManager> logger,
         ICancellationTokenProvider cancellationTokenProvider,
         IOrganizationUnitRepository organizationUnitRepository,
-        ISettingProvider settingProvider)
+        ISettingProvider settingProvider,
+        IDistributedEventBus distributedEventBus)
         : base(
             store,
             optionsAccessor,
@@ -56,6 +59,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
         OrganizationUnitRepository = organizationUnitRepository;
         SettingProvider = settingProvider;
+        DistributedEventBus = distributedEventBus;
         RoleRepository = roleRepository;
         UserRepository = userRepository;
         CancellationTokenProvider = cancellationTokenProvider;
@@ -284,5 +288,51 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         await identityUserStore.SetTokenAsync(user, await identityUserStore.GetInternalLoginProviderAsync(), await identityUserStore.GetRecoveryCodeTokenNameAsync(), string.Empty, CancellationToken);
+    }
+
+    public async override Task<IdentityResult> SetEmailAsync(IdentityUser user, string email)
+    {
+        var oldMail = user.Email;
+
+        var result = await base.SetEmailAsync(user, email);
+
+        result.CheckErrors();
+
+        if (!string.IsNullOrEmpty(oldMail) && !oldMail.Equals(email, StringComparison.OrdinalIgnoreCase))
+        {
+            await DistributedEventBus.PublishAsync(
+                new IdentityUserEmailChangedEto
+                {
+                    Id = user.Id,
+                    TenantId = user.TenantId,
+                    Email = email,
+                    OldEmail = oldMail
+                });
+        }
+
+        return result;
+    }
+
+    public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string userName)
+    {
+        var oldUserName = user.UserName;
+
+        var result = await base.SetUserNameAsync(user, userName);
+
+        result.CheckErrors();
+
+        if (!string.IsNullOrEmpty(oldUserName) && oldUserName != userName)
+        {
+            await DistributedEventBus.PublishAsync(
+                new IdentityUserUserNameChangedEto
+                {
+                    Id = user.Id,
+                    TenantId = user.TenantId,
+                    UserName = userName,
+                    OldUserName = oldUserName
+                });
+        }
+
+        return result;
     }
 }

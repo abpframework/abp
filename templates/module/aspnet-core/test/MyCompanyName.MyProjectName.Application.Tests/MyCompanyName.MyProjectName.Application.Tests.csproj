@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
   </PropertyGroup>
@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\MyCompanyName.MyProjectName.Application\MyCompanyName.MyProjectName.Application.csproj" />
     <ProjectReference Include="..\MyCompanyName.MyProjectName.Domain.Tests\MyCompanyName.MyProjectName.Domain.Tests.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
   </ItemGroup>
 
 </Project>

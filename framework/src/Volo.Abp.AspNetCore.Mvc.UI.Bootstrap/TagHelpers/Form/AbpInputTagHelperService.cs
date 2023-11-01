@@ -58,7 +58,10 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             {
                 output.Attributes.AddClass("form-floating");
             }
-            output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
+            if (TagHelper.AddMarginBottomClass)
+            {
+                output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
+            }
             if (isCheckBox)
             {
                 output.Attributes.AddClass("custom-checkbox");
@@ -110,7 +113,8 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
     {
-        return "<div class=\"" + (isCheckbox ? "custom-checkbox custom-control mb-2 form-check" : "mb-3") + "\">" +
+        var mb = TagHelper.AddMarginBottomClass ? (isCheckbox ? "mb-2" : "mb-3") : string.Empty;
+        return "<div class=\"" + (isCheckbox ? $"custom-checkbox custom-control {mb} form-check" : $"{mb}") + "\">" +
                 Environment.NewLine + innerHtml + Environment.NewLine +
                 "</div>";
     }

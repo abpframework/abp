@@ -5,7 +5,7 @@ namespace Volo.Abp.Http.ProxyScripting.Configuration;
 
 public static class AbpApiProxyScriptingConfiguration
 {
-    public static Func<PropertyInfo, string> PropertyNameGenerator { get; set; }
+    public static Func<PropertyInfo, string?> PropertyNameGenerator { get; set; }
 
     static AbpApiProxyScriptingConfiguration()
     {

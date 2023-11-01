@@ -105,7 +105,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
                 factories.RemoveAll(
                     factory =>
                         factory is SingleInstanceHandlerFactory &&
-                        (factory as SingleInstanceHandlerFactory).HandlerInstance == handler
+                        ((factory as SingleInstanceHandlerFactory)!).HandlerInstance == handler
                 );
             });
     }
@@ -177,7 +177,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
     }
 
     // Internal for unit testing
-    internal Func<Type, object, Task> OnEventHandleInvoking { get; set; }
+    internal Func<Type, object, Task>? OnEventHandleInvoking { get; set; }
 
     // Internal for unit testing
     protected async override Task InvokeEventHandlerAsync(IEventHandler eventHandler, object eventData, Type eventType)
@@ -191,7 +191,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
     }
 
     // Internal for unit testing
-    internal Func<Type, object, Task> OnPublishing { get; set; }
+    internal Func<Type, object, Task>? OnPublishing { get; set; }
 
     // For unit testing
     public async override Task PublishAsync(
