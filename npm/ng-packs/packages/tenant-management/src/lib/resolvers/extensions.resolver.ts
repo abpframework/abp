@@ -1,12 +1,28 @@
-import { ConfigStateService } from "@abp/ng.core";
-import { ExtensionsService, getObjectExtensionEntitiesFromStore, mapEntitiesToContributors, mergeWithDefaultActions, mergeWithDefaultProps } from "@abp/ng.theme.shared/extensions";
-import { inject } from "@angular/core";
-import { CanActivateFn } from "@angular/router";
-import { map, tap } from "rxjs";
-import { eTenantManagementComponents } from "../enums";
-import { TENANT_MANAGEMENT_ENTITY_ACTION_CONTRIBUTORS, TENANT_MANAGEMENT_TOOLBAR_ACTION_CONTRIBUTORS, TENANT_MANAGEMENT_ENTITY_PROP_CONTRIBUTORS, TENANT_MANAGEMENT_CREATE_FORM_PROP_CONTRIBUTORS, TENANT_MANAGEMENT_EDIT_FORM_PROP_CONTRIBUTORS, DEFAULT_TENANT_MANAGEMENT_ENTITY_ACTIONS, DEFAULT_TENANT_MANAGEMENT_TOOLBAR_ACTIONS, DEFAULT_TENANT_MANAGEMENT_ENTITY_PROPS, DEFAULT_TENANT_MANAGEMENT_CREATE_FORM_PROPS, DEFAULT_TENANT_MANAGEMENT_EDIT_FORM_PROPS } from "../tokens";
+import { inject } from '@angular/core';
+import { map, tap } from 'rxjs';
+import { ConfigStateService } from '@abp/ng.core';
+import {
+  ExtensionsService,
+  getObjectExtensionEntitiesFromStore,
+  mapEntitiesToContributors,
+  mergeWithDefaultActions,
+  mergeWithDefaultProps,
+} from '@abp/ng.theme.shared/extensions';
+import { eTenantManagementComponents } from '../enums';
+import {
+  TENANT_MANAGEMENT_ENTITY_ACTION_CONTRIBUTORS,
+  TENANT_MANAGEMENT_TOOLBAR_ACTION_CONTRIBUTORS,
+  TENANT_MANAGEMENT_ENTITY_PROP_CONTRIBUTORS,
+  TENANT_MANAGEMENT_CREATE_FORM_PROP_CONTRIBUTORS,
+  TENANT_MANAGEMENT_EDIT_FORM_PROP_CONTRIBUTORS,
+  DEFAULT_TENANT_MANAGEMENT_ENTITY_ACTIONS,
+  DEFAULT_TENANT_MANAGEMENT_TOOLBAR_ACTIONS,
+  DEFAULT_TENANT_MANAGEMENT_ENTITY_PROPS,
+  DEFAULT_TENANT_MANAGEMENT_CREATE_FORM_PROPS,
+  DEFAULT_TENANT_MANAGEMENT_EDIT_FORM_PROPS,
+} from '../tokens';
 
-export const TenantManagementExtensionsResolver: CanActivateFn = () => {
+export const TenantManagementExtensionsResolver = () => {
   const configState = inject(ConfigStateService);
   const extensions = inject(ExtensionsService);
 

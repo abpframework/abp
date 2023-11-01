@@ -1,9 +1,14 @@
-import { ConfigStateService } from "@abp/ng.core";
-import { ExtensionsService, getObjectExtensionEntitiesFromStore, mapEntitiesToContributors, mergeWithDefaultProps } from "@abp/ng.theme.shared/extensions";
-import { inject } from "@angular/core";
-import { map, tap } from "rxjs";
-import { eAccountComponents } from "../enums";
-import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, DEFAULT_ACCOUNT_FORM_PROPS } from "../tokens";
+import { inject } from '@angular/core';
+import { ConfigStateService } from '@abp/ng.core';
+import { map, tap } from 'rxjs';
+import {
+  ExtensionsService,
+  getObjectExtensionEntitiesFromStore,
+  mapEntitiesToContributors,
+  mergeWithDefaultProps,
+} from '@abp/ng.theme.shared/extensions';
+import { eAccountComponents } from '../enums';
+import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, DEFAULT_ACCOUNT_FORM_PROPS } from '../tokens';
 
 export const AccountExtensionsResolver = () => {
   const configState = inject(ConfigStateService);
