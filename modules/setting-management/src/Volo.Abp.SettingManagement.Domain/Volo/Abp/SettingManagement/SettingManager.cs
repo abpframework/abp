@@ -13,6 +13,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
 {
     protected ISettingDefinitionManager SettingDefinitionManager { get; }
     protected ISettingEncryptionService SettingEncryptionService { get; }
+    protected ISettingManagementStore SettingManagementStore { get; }
     protected List<ISettingManagementProvider> Providers => _lazyProviders.Value;
     protected SettingManagementOptions Options { get; }
     private readonly Lazy<List<ISettingManagementProvider>> _lazyProviders;
@@ -21,10 +22,12 @@ public class SettingManager : ISettingManager, ISingletonDependency
         IOptions<SettingManagementOptions> options,
         IServiceProvider serviceProvider,
         ISettingDefinitionManager settingDefinitionManager,
-        ISettingEncryptionService settingEncryptionService)
+        ISettingEncryptionService settingEncryptionService,
+        ISettingManagementStore settingManagementStore)
     {
         SettingDefinitionManager = settingDefinitionManager;
         SettingEncryptionService = settingEncryptionService;
+        SettingManagementStore = settingManagementStore;
         Options = options.Value;
 
         //TODO: Instead, use IServiceScopeFactory and create a scope..?
@@ -157,6 +160,15 @@ public class SettingManager : ISettingManager, ISingletonDependency
             {
                 await provider.SetAsync(setting, value, providerKey);
             }
+        }
+    }
+
+    public virtual async Task DeleteAsync(string providerName, string providerKey)
+    {
+        var settings = await SettingManagementStore.GetListAsync(providerName, providerKey);
+        foreach (var setting in settings)
+        {
+            await SettingManagementStore.DeleteAsync(setting.Name, providerName, providerKey);
         }
     }
 

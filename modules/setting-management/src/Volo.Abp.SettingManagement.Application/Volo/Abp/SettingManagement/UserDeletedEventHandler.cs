@@ -5,21 +5,21 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.PermissionManagement.Identity;
+namespace Volo.Abp.SettingManagement;
 
 public class UserDeletedEventHandler :
     IDistributedEventHandler<EntityDeletedEto<UserEto>>,
     ITransientDependency
 {
-    protected IPermissionManager PermissionManager { get; }
+    protected ISettingManager SettingManager { get; }
 
-    public UserDeletedEventHandler(IPermissionManager permissionManager)
+    public UserDeletedEventHandler(ISettingManager settingManager)
     {
-        PermissionManager = permissionManager;
+        SettingManager = settingManager;
     }
 
     public async Task HandleEventAsync(EntityDeletedEto<UserEto> eventData)
     {
-        await PermissionManager.DeleteAsync(UserPermissionValueProvider.ProviderName, eventData.Entity.Id.ToString());
+        await SettingManager.DeleteAsync(UserPermissionValueProvider.ProviderName, eventData.Entity.Id.ToString());
     }
 }

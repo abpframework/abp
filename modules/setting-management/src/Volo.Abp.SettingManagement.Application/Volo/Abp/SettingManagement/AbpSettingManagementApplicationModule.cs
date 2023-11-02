@@ -2,6 +2,7 @@
 using Volo.Abp.Emailing;
 using Volo.Abp.Modularity;
 using Volo.Abp.Timing;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.SettingManagement;
 
@@ -10,7 +11,8 @@ namespace Volo.Abp.SettingManagement;
     typeof(AbpSettingManagementDomainModule),
     typeof(AbpSettingManagementApplicationContractsModule),
     typeof(AbpEmailingModule),
-    typeof(AbpTimingModule)
+    typeof(AbpTimingModule),
+    typeof(AbpUsersAbstractionModule)
 )]
 public class AbpSettingManagementApplicationModule : AbpModule
 {
