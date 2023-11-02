@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { map, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { ConfigStateService } from '@abp/ng.core';
 import {
   ExtensionsService,
@@ -21,8 +21,9 @@ import {
   DEFAULT_IDENTITY_CREATE_FORM_PROPS,
   DEFAULT_IDENTITY_EDIT_FORM_PROPS,
 } from '../tokens';
+import { ResolveFn } from '@angular/router';
 
-export const identityExtensionsResolver = () => {
+export const identityExtensionsResolver: ResolveFn<Observable<boolean>> = () => {
   const configState = inject(ConfigStateService);
   const extensions = inject(ExtensionsService);
 

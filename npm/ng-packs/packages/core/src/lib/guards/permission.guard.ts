@@ -1,5 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
@@ -44,7 +49,10 @@ export class PermissionGuard implements IAbpGuard {
   }
 }
 
-export const permissionGuard: CanActivateFn =  (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+export const permissionGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
   const router = inject(Router);
   const routesService = inject(RoutesService);
   const oAuthService = inject(OAuthService);
@@ -67,4 +75,4 @@ export const permissionGuard: CanActivateFn =  (route: ActivatedRouteSnapshot, s
       }
     }),
   );
-}
+};

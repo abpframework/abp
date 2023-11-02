@@ -1,5 +1,6 @@
 import { AuthService, IAbpGuard } from '@abp/ng.core';
 import { Injectable, inject } from '@angular/core';
+import { CanActivateFn } from '@angular/router';
 
 /**
  * @deprecated Use `authenticationFlowGuard` instead.
@@ -16,7 +17,7 @@ export class AuthenticationFlowGuard implements IAbpGuard {
   }
 }
 
-export const authenticationFlowGuard = () => {
+export const authenticationFlowGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
 
   if (authService.isInternalAuth) return true;

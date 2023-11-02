@@ -1,5 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { UrlTree, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateFn } from '@angular/router';
+import {
+  UrlTree,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  CanActivateFn,
+} from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -30,7 +35,6 @@ export class AbpOAuthGuard implements IAbpGuard {
     return false;
   }
 }
-
 
 export const abpOAuthGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,

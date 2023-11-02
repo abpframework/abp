@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { ConfigStateService } from '@abp/ng.core';
-import { map, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import {
   ExtensionsService,
   getObjectExtensionEntitiesFromStore,
@@ -9,8 +9,9 @@ import {
 } from '@abp/ng.theme.shared/extensions';
 import { eAccountComponents } from '../enums';
 import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, DEFAULT_ACCOUNT_FORM_PROPS } from '../tokens';
+import { ResolveFn } from '@angular/router';
 
-export const accountExtensionsResolver = () => {
+export const accountExtensionsResolver: ResolveFn<Observable<boolean>> = () => {
   const configState = inject(ConfigStateService);
   const extensions = inject(ExtensionsService);
 

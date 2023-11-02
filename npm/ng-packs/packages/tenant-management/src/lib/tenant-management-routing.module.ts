@@ -18,7 +18,7 @@ const routes: Routes = [
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: [authGuard, permissionGuard, ],
+    canActivate: [authGuard, permissionGuard],
     resolve: [tenantManagementExtensionsResolver],
     children: [
       {
