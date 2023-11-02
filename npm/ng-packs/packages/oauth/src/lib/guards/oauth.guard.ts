@@ -12,7 +12,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthService, IAbpGuard } from '@abp/ng.core';
 
 /**
- * @deprecated Use `abpOAuthGuard` instead.
+ * @deprecated Use `abpOAuthGuard` *function* instead.
  */
 @Injectable({
   providedIn: 'root',

@@ -18,7 +18,7 @@ import {
 import { eAccountComponents } from '../enums/components';
 
 /**
- * @deprecated Use `accountExtensionsResolver` instead.
+ * @deprecated Use `accountExtensionsResolver` *function* instead.
  */
 @Injectable()
 export class AccountExtensionsGuard implements IAbpGuard {

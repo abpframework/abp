@@ -27,7 +27,7 @@ import {
 } from '../tokens/extensions.token';
 
 /**
- * @deprecated Use `tenantManagementExtensionsResolver` instead.
+ * @deprecated Use `tenantManagementExtensionsResolver` *function* instead.
  */
 @Injectable()
 export class TenantManagementExtensionsGuard implements IAbpGuard {

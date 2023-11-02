@@ -17,7 +17,7 @@ import { findRoute, getRoutePath } from '../utils/route-utils';
 import { RoutesService, PermissionService, HttpErrorReporterService } from '../services';
 
 /**
- * @deprecated Use `permissionGuard` instead.
+ * @deprecated Use `permissionGuard` *function* instead.
  */
 @Injectable({
   providedIn: 'root',

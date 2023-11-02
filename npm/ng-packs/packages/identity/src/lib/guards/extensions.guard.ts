@@ -27,7 +27,7 @@ import {
 } from '../tokens/extensions.token';
 
 /**
- * @deprecated Use `identityExtensionsResolver` instead.
+ * @deprecated Use `identityExtensionsResolver` *function* instead.
  */
 @Injectable()
 export class IdentityExtensionsGuard implements IAbpGuard {

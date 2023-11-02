@@ -5,7 +5,7 @@ import { IAbpGuard } from './abstract-guard';
 import { CanActivateFn } from '@angular/router';
 
 /**
- * @deprecated Use `authGuard` instead.
+ * @deprecated Use `authGuard` *function* instead.
  */
 @Injectable({
   providedIn: 'root',

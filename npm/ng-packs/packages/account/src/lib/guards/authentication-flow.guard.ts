@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 
 /**
- * @deprecated Use `authenticationFlowGuard` instead.
+ * @deprecated Use `authenticationFlowGuard` *function* instead.
  */
 @Injectable()
 export class AuthenticationFlowGuard implements IAbpGuard {
