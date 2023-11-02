@@ -25,7 +25,7 @@ nav[data-toggle='toc'] .nav > li > a:focus {
 nav[data-toggle='toc'] .nav-link.active,
 nav[data-toggle='toc'] .nav-link.active:hover,
 nav[data-toggle='toc'] .nav-link.active:focus {
-    padding-left: 18px;
+    padding-left: 8px;
     font-weight: bold;
     color: #563d7c;
     background-color: transparent;
