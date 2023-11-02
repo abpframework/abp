@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.SettingManagement;
@@ -20,6 +20,6 @@ public class UserDeletedEventHandler :
 
     public async Task HandleEventAsync(EntityDeletedEto<UserEto> eventData)
     {
-        await SettingManager.DeleteAsync(UserPermissionValueProvider.ProviderName, eventData.Entity.Id.ToString());
+        await SettingManager.DeleteAsync(UserSettingValueProvider.ProviderName, eventData.Entity.Id.ToString());
     }
 }
