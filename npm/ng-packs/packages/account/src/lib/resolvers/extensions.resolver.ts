@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { ConfigStateService } from '@abp/ng.core';
-import { Observable, map, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import {
   ExtensionsService,
   getObjectExtensionEntitiesFromStore,
@@ -11,7 +11,7 @@ import { eAccountComponents } from '../enums';
 import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, DEFAULT_ACCOUNT_FORM_PROPS } from '../tokens';
 import { ResolveFn } from '@angular/router';
 
-export const accountExtensionsResolver: ResolveFn<Observable<boolean>> = () => {
+export const accountExtensionsResolver: ResolveFn<any> = () => {
   const configState = inject(ConfigStateService);
   const extensions = inject(ExtensionsService);
 
@@ -32,6 +32,5 @@ export const accountExtensionsResolver: ResolveFn<Observable<boolean>> = () => {
         editFormContributors,
       );
     }),
-    map(() => true),
   );
 };

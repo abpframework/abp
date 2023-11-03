@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { ConfigStateService } from '@abp/ng.core';
 import {
   ExtensionsService,
@@ -23,7 +23,7 @@ import {
 } from '../tokens';
 import { ResolveFn } from '@angular/router';
 
-export const tenantManagementExtensionsResolver: ResolveFn<Observable<boolean>> = () => {
+export const tenantManagementExtensionsResolver: ResolveFn<any> = () => {
   const configState = inject(ConfigStateService);
   const extensions = inject(ExtensionsService);
 
@@ -71,6 +71,5 @@ export const tenantManagementExtensionsResolver: ResolveFn<Observable<boolean>> 
         editFormContributors,
       );
     }),
-    map(() => true),
   );
 };
