@@ -74,8 +74,8 @@ app.MapGet("/", (ClaimsPrincipal user) => $"Hello {user.Identity!.Name}").Requir
   
 if (app.Environment.IsDevelopment())  
 {  
-app.UseSwagger();  
-app.UseSwaggerUI();  
+  app.UseSwagger();  
+  app.UseSwaggerUI();  
 }  
   
 app.Run();  
@@ -84,7 +84,7 @@ class MyCustomUser : IdentityUser { }
   
 class ApplicationDbContext : IdentityDbContext<MyCustomUser>  
 {  
-public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }  
+  public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }  
 }
 
 ```
@@ -129,7 +129,7 @@ See [here](https://gist.github.com/captainsafia/7c54e92d12df695ff0908e989fb8531
 
 ## Conclusion
 
-In this article, I showed the Identity APIs introduced with ASP.NET 8, why we need them and how we can add them to our application, and finally I explained how to define a custom authorization policy with fewer lines of code.
+In this article, I've shown you the Identity APIs introduced with ASP.NET 8, why we need them, and how we can add them to our application, and finally I explained how to define a custom authorization policy with fewer lines of code.
 
 ## References
 - https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-8.0?view=aspnetcore-8.0#authentication-and-authorization
