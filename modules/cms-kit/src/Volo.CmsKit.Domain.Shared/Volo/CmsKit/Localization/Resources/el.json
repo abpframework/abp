@@ -77,6 +77,7 @@
     "PageId": "Σελίδα",
     "Pages": "Σελίδες",
     "PageSlugInformation": "Το Slug χρησιμοποιείται στο url. Το url σας θα είναι '/{{slug}}'.",
+    "BlogSlugInformation": "Το Slug χρησιμοποιείται στο url. Το url σας θα είναι '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Διαχείριση ιστολογίου",
     "Permission:BlogManagement.Create": "Δημιουργώ",
     "Permission:BlogManagement.Delete": "Διαγράφω",

@@ -76,6 +76,7 @@
     "PageId": "Sayfa",
     "Pages": "Sayfalar",
     "PageSlugInformation": "Etiket URL'de kullanılır. Url şöyle görünür: '/{{slug}}'.",
+    "BlogSlugInformation": "Etiket URL'de kullanılır. Url şöyle görünür: '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Blog Yönetimi",
     "Permission:BlogManagement.Create": "Oluşturma",
     "Permission:BlogManagement.Delete": "Silme",

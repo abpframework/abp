@@ -77,6 +77,7 @@
     "PageId": "頁",
     "Pages": "頁面",
     "PageSlugInformation": "Slug用於網址. 你的網址將是 '/{{slug}}'.",
+    "BlogSlugInformation": "Slug用於網址. 你的網址將是 '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "部落格管理",
     "Permission:BlogManagement.Create": "創建",
     "Permission:BlogManagement.Delete": "刪除",

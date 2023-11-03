@@ -76,6 +76,7 @@
     "PageId": "oldal",
     "Pages": "Oldalak",
     "PageSlugInformation": "A Slug az url-en használatos. Az Ön URL-je a következő lesz: '/{{slug}}'.",
+    "BlogSlugInformation": "A Slug az url-en használatos. Az Ön URL-je a következő lesz: '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Blogkezelés",
     "Permission:BlogManagement.Create": "Teremt",
     "Permission:BlogManagement.Delete": "Töröl",

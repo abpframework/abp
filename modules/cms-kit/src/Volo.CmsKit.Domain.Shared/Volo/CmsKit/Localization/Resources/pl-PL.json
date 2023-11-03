@@ -77,6 +77,7 @@
     "PageId": "Strona",
     "Pages": "Strony",
     "PageSlugInformation": "Slug jest używany na adresie URL. Twój adres URL to „/{{slug}}”.",
+    "BlogSlugInformation": "Slug jest używany na adresie URL. Twój adres URL to „/{0}/{{slug}}”.",
     "Permission:BlogManagement": "Zarządzanie blogiem",
     "Permission:BlogManagement.Create": "Tworzyć",
     "Permission:BlogManagement.Delete": "Kasować",
