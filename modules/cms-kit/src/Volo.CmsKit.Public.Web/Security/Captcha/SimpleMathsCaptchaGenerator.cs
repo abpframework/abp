@@ -166,10 +166,11 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
                 var x0 = random.Next(0, img.Width - 1);
                 var y0 = random.Next(0, img.Height - 1);
                 img.Mutate(
-                        ctx => ctx
-                            .DrawLine(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)],
-                            RandomTextGenerator.GenerateNextFloat(0.5, 1.5), new PointF[] { new Vector2(x0, y0), new Vector2(x0, y0) })
-                    );
+                    ctx => ctx
+                        .DrawLine(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)],
+                            RandomTextGenerator.GenerateNextFloat(0.5, 1.5),
+                            new PointF[] { new Vector2(x0, y0), new Vector2(x0 + 0.005f, y0 + 0.005f) })
+                );
             });
 
             img.Mutate(x =>
