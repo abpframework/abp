@@ -2,12 +2,12 @@
 
 ## Introduction
 
-I would love to talk to you about the new feature in EF Core 8.0, specifically the `raw SQL queries for unmapped types`. 
+I would love to talk about the new feature in EF Core 8.0, specifically the `raw SQL queries for unmapped types`. 
 This feature was recently introduced by Microsoft and is aimed at providing more flexibility and customization in database queries.
 
-## What is the raw SQL queries for unmapped types feature?
+## What is the raw SQL queries for the unmapped types feature?
 
-To give you a better understanding, let's look at a sample repository method with abp framework. 
+To give you a better understanding, let's look at a sample repository method with the ABP framework. 
 Here is an example of a raw SQL query using the new feature:
 
 ````csharp
@@ -37,7 +37,7 @@ public class EfCoreAuthorRepository : EfCoreRepository<BookStoreDbContext, Autho
 }
 ````
 
-In this code, we can see that we are using the `SqlQuery` method to execute a raw SQL query on a custom type, in this case, `AuthorIdWithNames`. This allows us to retrieve data that may not be mapped to any of our entity classes in the context.
+In this code, we can see that we are using the `SqlQuery` method to execute a raw SQL query on a custom type, `AuthorIdWithNames` in this case. This allows us to retrieve data that may not be mapped to any of our entity classes in the context.
 
 ## In summary
 
