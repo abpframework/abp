@@ -4,7 +4,7 @@ This article will show you the new feature of containers with NET 8.0.
 
 ## Non-root user
 
-The `Non-root user` feature on net 8 is a security measure that allows users to have limited access to the system without having full administrative privileges. Hosting containers as `non-root` aligns with principle of least privilege. 
+The `Non-root user` feature on net 8 is a security measure that allows users to have limited access to the system without having full administrative privileges. Hosting containers as `non-root` aligns with the principle of least privilege. 
 It’s free security provided by the operating system. If you run your app as root, your app process can do anything in the container, like modify files, install packages, or run arbitrary executables. 
 That’s a concern if your app is ever attacked. If you run your app as non-root, your app process cannot do much, greatly limiting what a bad actor could accomplish.
 
@@ -20,7 +20,7 @@ If you want your application to continue using port 80, you can still specify it
 * Recommended: Explicitly set the `ASPNETCORE_HTTP_PORTS`, `ASPNETCORE_HTTPS_PORTS``, and `ASPNETCORE_URLS` environment variables to the desired port. Example: `docker run --rm -it -p 9999:80 -e ASPNETCORE_HTTP_PORTS=80 <my-app>``
 * Update existing commands and configuration that rely on the expected default port of port 80 to reference port 8080 instead. Example: `docker run --rm -it -p 9999:8080 <my-app>``
 
-> The `dockerfile` of abp templates has been updated to use port `80`.
+> The `dockerfile` of ABP templates has been updated to use port `80`.
 
 ## References
 
