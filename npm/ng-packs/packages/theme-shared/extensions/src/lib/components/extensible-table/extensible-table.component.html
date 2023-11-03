@@ -24,7 +24,7 @@
 
   <ng-container *ngFor="let prop of propList; let i = index; trackBy: trackByFn">
     <ngx-datatable-column
-      *ngIf="prop.columnVisible(getInjected)"
+      *abpVisible="prop.columnVisible(getInjected)"
       [width]="columnWidths[i + 1] || 200"
       [name]="prop.displayName | abpLocalization"
       [prop]="prop.name"
