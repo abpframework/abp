@@ -8,6 +8,10 @@ A [Value Object](https://docs.abp.io/en/abp/latest/Value-Objects) is a simple ob
 
 ## Creating an ABP Project
 
+> **WARNING**: ABP Framework has not a .NET 8.0 compatible version yet. It is planned to be released on November 15, 2023. I created this project with ABP 7.4.1 (based on .NET 7.0), then manually changed the `TargetFramework` (in the `csproj`) to `net8.0` and added the `Microsoft.EntityFrameworkCore.SqlServer` package with version `8.0.0-rc.2.23480.1`. After that, the project is being compiled, but some parts of this article may not work as expected until ABP Framework 8.0-RC.1 is released.
+>
+> **I will update the article once ABP Framework 8.0-RC.1 is released.**
+
 I will show code examples, so I am creating a new ABP project using the following [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) command:
 
 ````bash
@@ -29,23 +33,19 @@ dotnet run --project ComplexTypeDemo --migrate-database
 Assume that we have a `Customer` [entity](https://docs.abp.io/en/abp/latest/Entities) as shown below:
 
 ````csharp
-public class Customer : AggregateRoot<Guid>
+public class Customer : BasicAggregateRoot<Guid>
 {
-    public int Id { get; set; }
     public string Name { get; set; }
     public Address HomeAddress { get; set; }
     public Address BusinessAddress { get; set; }
 }
 ````
 
-
-
-Let's see the most popular example, an `Address` class:
+Here, we have two address properties, one for home and the other one for business. Since an address is a multi-values property, we can define it as a separate object:
 
 ````csharp
 public class Address
 {
-    public string Country { get; set; }
     public string City { get; set; }
     public string Line1 { get; set; }
     public string? Line2 { get; set; }
@@ -53,20 +53,109 @@ public class Address
 }
 ````
 
-Once we define such an `Address` class, we can use it as a part of a `Customer` object:
+`Address` is a typical complex object. It is actually a part of the `Customer` object, but we wanted to collect its parts into a dedicated class to make it a domain conceptual and easily manage its properties.
+
+## Configure EF Core Mappings
+
+We should set the `Address` class as a Complex Type in our EF Core mapping configuration. There are two ways of it.
+
+As the first way, we can add the `ComplexType` attribute on top of the `Address` class:
 
 ````csharp
-public class Order
+[ComplexType] // Added this line
+public class Address
 {
-    public int Id { get; set; }
-    public required string Contents { get; set; }
-    public required Address ShippingAddress { get; set; }
-    public required Address BillingAddress { get; set; }
-    public Customer Customer { get; set; } = null!;
+    ...
+}
+````
+
+As an alternative, we can configure the mapping using the fluent mapping API. You can write the following code into the `OnModelCreating` method of your `DbContext` class:
+
+````csharp
+builder.Entity<Customer>(b =>
+{
+    b.ToTable("Customers");
+    b.ComplexProperty(x => x.HomeAddress);     // Mapping a Complex Type
+    b.ComplexProperty(x => x.BusinessAddress); // Mapping another Complex Type
+    //... configure other properties
+});
+
+````
+
+You can further configure the properties of the `Address` class:
+
+````csharp
+b.ComplexProperty(x => x.HomeAddress, a =>
+{
+    a.Property(x => x.City).HasMaxLength(50).IsRequired();
+});
+````
+
+Once you configure the mappings, you can use the [EF Core command-line tool](https://learn.microsoft.com/en-us/ef/core/cli/dotnet) to create a database migration:
+
+````bash
+dotnet ef migrations add "Added_Customer_And_Address"
+````
+
+And update the database:
+
+````bash
+dotnet ef database update
+````
+
+If you check the fields of the `Customers` table in your dayabase, you will see the following fields:
+
+* `Id`
+* `Name`
+* `HomeAddress_City`
+* `HomeAddress_Line1`
+* `HomeAddress_Line2`
+* `HomeAddress_PostCode`
+* `BusinessAddress_City`
+* `BusinessAddress_Line1`
+* `BusinessAddress_Line2`
+* `BusinessAddress_PostCode`
+
+As you see, EF Core stores the `Address` properties as a part of your main entity.
+
+## Querying Objects
+
+You can query entities from database using the properties of a complex type as same as you query by the properties of the main entity.
+
+**Example: Find customers by `BusinessAddress.PostCode`:**
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IRepository<Customer, Guid> _customerRepository;
+
+    public MyService(IRepository<Customer, Guid> customerRepository)
+    {
+        _customerRepository = customerRepository;
+    }
+
+    public async Task DemoAsync()
+    {
+        var customers = await _customerRepository.GetListAsync(
+            c => c.BusinessAddress.PostCode == "12345"
+        );
+        
+        //...
+    }
 }
 ````
 
 
 
-d
+## Closing Notes
+
+* 
+
+## Source Code
+
+You can get the completed project here: https://github.com/hikalkan/samples/tree/master/EfCoreComplexTypeDemo
+
+## References
+
+* ...
 
