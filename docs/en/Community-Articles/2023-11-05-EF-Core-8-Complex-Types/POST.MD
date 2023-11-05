@@ -1,10 +1,12 @@
 # Using Complex Types as Value Objects with Entity Framework Core 8.0
 
-Entity Framework Core 8.0 is being shipped in a week as a part of .NET 8.0. In this article, I will introduce the new **[Complex Types](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/whatsnew#value-objects-using-complex-types)** feature of EF Core 8, and show some examples of how you can use it in your projects built with ABP Framework.
+Entity Framework Core 8.0 is being shipped in a week as a part of .NET 8.0. In this article, I will introduce the new **[Complex Types](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/whatsnew#value-objects-using-complex-types)** feature of EF Core 8 and show some examples of how you can use it in your projects built with ABP Framework.
 
 ## What is a Value Object?
 
-A [Value Object](https://docs.abp.io/en/abp/latest/Value-Objects) is a simple object that has no conceptual identity (Id). A Value Object is typically owned by a parent [Entity](https://docs.abp.io/en/abp/latest/Entities) object. Using [Complex Types](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/whatsnew#value-objects-using-complex-types) with EF Core 8 is the best way to create Value Objects that are stored as a part of your main entity.
+A [Value Object](https://docs.abp.io/en/abp/latest/Value-Objects) is a simple object that has no conceptual identity (Id). Instead, a Value Object is identified by its properties.
+
+A Value Object is typically owned by a parent [Entity](https://docs.abp.io/en/abp/latest/Entities) object. Using [Complex Types](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/whatsnew#value-objects-using-complex-types) with EF Core 8 is the best way to create Value Objects that are stored as a part of your main entity.
 
 ## Creating an ABP Project
 
@@ -53,7 +55,7 @@ public class Address
 }
 ````
 
-`Address` is a typical complex object. It is actually a part of the `Customer` object, but we wanted to collect its parts into a dedicated class to make it a domain conceptual and easily manage its properties.
+`Address` is a typical complex object. It is actually a part of the `Customer` object, but we wanted to collect its parts into a dedicated class to make it a domain concept and easily manage its properties together.
 
 ## Configure EF Core Mappings
 
@@ -172,9 +174,13 @@ There are more details about using Complex Types in your applications. I want to
 * You can manipulate mutable complex object properties just as another property in your entity. EF Core change tracking system will track them as you expect.
 * Currently, EF Core doesn't support to have a collection of complex objects in an entity. It works only for properties.
 
+For more details and examples, see the Microsoft's document in the *References* section.
+
 ## Source Code
 
-You can get the completed project here: https://github.com/hikalkan/samples/tree/master/EfCoreComplexTypeDemo
+You can find the sample project here:
+
+https://github.com/hikalkan/samples/tree/master/EfCoreComplexTypeDemo
 
 ## References
 
