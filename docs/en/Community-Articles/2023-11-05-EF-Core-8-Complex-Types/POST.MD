@@ -145,11 +145,32 @@ public class MyService : ITransientDependency
 }
 ````
 
+## Mutable vs Immutable
 
+Entity Framework Core Complex Types can work with mutable and immutable types. In the `Address` example above, I've shown a simple mutable class - that means you can change an individual property of an `Address` object after creating it (or after querying from database). However, designing Value Objects as immutable is a highly common approach.
 
-## Closing Notes
+For example, you can use C#'s `struct` type to define an immutable `Address` type:
 
-* 
+````csharp
+public readonly struct Address(string line1, string? line2, string city, string postCode)
+{
+    public string City { get; } = city;
+    public string Line1 { get; } = line1;
+    public string? Line2 { get; } = line2;
+    public string PostCode { get; } = postCode;
+}
+````
+
+See the [Microsoft's documentation](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/whatsnew#mutability) for more examples and different usages.
+
+## Final Notes
+
+There are more details about using Complex Types in your applications. I want to mention some of them here:
+
+* You can have nested complex types. For example, `Address` may have one or more `PhoneNumber` objects as its properties. Everything will work seamlessly.
+* A single instance of a Complex Type can be set to multiple properties (of the same or different entities). In that case, changing the Complex object's properties will affect all of the properties. However, try to avoid that since it may create unnecessary complexities in your code that is hard to understand.
+* You can manipulate mutable complex object properties just as another property in your entity. EF Core change tracking system will track them as you expect.
+* Currently, EF Core doesn't support to have a collection of complex objects in an entity. It works only for properties.
 
 ## Source Code
 
@@ -157,5 +178,6 @@ You can get the completed project here: https://github.com/hikalkan/samples/tree
 
 ## References
 
-* ...
+* [Value objects using Complex Types](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/whatsnew#value-objects-using-complex-types) in [What's new with EF Core 8.0](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/whatsnew) document by Microsoft.
+* [ABP Entity Framework Core integration document](https://docs.abp.io/en/abp/latest/Entity-Framework-Core)
 
