@@ -538,8 +538,11 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             usingNamespaceList?.AddIfNotContains($"using {GetTypeNamespace(typeName)};");
             return NormalizeTypeName(typeName.Split(".").Last());
         }
-        
-        AddGenericTypeUsingNamespace(typeName, usingNamespaceList);
+
+        if(usingNamespaceList != null)
+        {
+            AddGenericTypeUsingNamespace(typeName, usingNamespaceList);
+        }
         
         var type = new StringBuilder();
         var s1 = typeName.Split("<");
