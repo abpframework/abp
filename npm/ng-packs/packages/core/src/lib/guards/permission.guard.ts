@@ -1,5 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -7,6 +12,9 @@ import { AuthService, IAbpGuard } from '../abstracts';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { RoutesService, PermissionService, HttpErrorReporterService } from '../services';
 
+/**
+ * @deprecated Use `permissionGuard` *function* instead.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -36,3 +44,31 @@ export class PermissionGuard implements IAbpGuard {
     );
   }
 }
+
+export const permissionGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
+  const router = inject(Router);
+  const routesService = inject(RoutesService);
+  const oAuthService = inject(OAuthService);
+  const permissionService = inject(PermissionService);
+  const httpErrorReporter = inject(HttpErrorReporterService);
+
+  let { requiredPolicy } = route.data || {};
+
+  if (!requiredPolicy) {
+    const routeFound = findRoute(routesService, getRoutePath(router, state.url));
+    requiredPolicy = routeFound?.requiredPolicy;
+  }
+
+  if (!requiredPolicy) return of(true);
+
+  return permissionService.getGrantedPolicy$(requiredPolicy).pipe(
+    tap(access => {
+      if (!access && oAuthService.hasValidAccessToken()) {
+        httpErrorReporter.reportError({ status: 403 } as HttpErrorResponse);
+      }
+    }),
+  );
+};

@@ -26,6 +26,9 @@ import {
   IDENTITY_TOOLBAR_ACTION_CONTRIBUTORS,
 } from '../tokens/extensions.token';
 
+/**
+ * @deprecated Use `identityExtensionsResolver` *function* instead.
+ */
 @Injectable()
 export class IdentityExtensionsGuard implements IAbpGuard {
   protected readonly configState = inject(ConfigStateService);
