@@ -17,6 +17,9 @@ import {
 } from '../tokens/extensions.token';
 import { eAccountComponents } from '../enums/components';
 
+/**
+ * @deprecated Use `accountExtensionsResolver` *function* instead.
+ */
 @Injectable()
 export class AccountExtensionsGuard implements IAbpGuard {
   protected readonly configState = inject(ConfigStateService);

@@ -77,6 +77,7 @@
     "PageId": "stran",
     "Pages": "strani",
     "PageSlugInformation": "Slug se uporablja na url-ju. Vaš url bo '/{{slug}}'.",
+    "BlogSlugInformation": "Slug se uporablja na url-ju. Vaš url bo '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Upravljanje blogov",
     "Permission:BlogManagement.Create": "Ustvari",
     "Permission:BlogManagement.Delete": "Izbriši",

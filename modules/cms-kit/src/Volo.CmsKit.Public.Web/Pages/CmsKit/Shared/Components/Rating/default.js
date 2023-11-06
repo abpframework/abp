@@ -15,6 +15,7 @@
         function registerCreateOfNewRating() {
             $widget.find(".my-rating").each(function () {
                     var authenticated = $(this).attr("data-authenticated");
+                    var readonly = $(this).attr("data-readonly");
 
                     $(this).starRating({
                         initialRating: 0,
@@ -26,7 +27,7 @@
                         strokeWidth: 0,
                         disableAfterRate: true,
                         useFullStars: true,
-                        readOnly: authenticated === "True",
+                        readOnly: authenticated === "True" || readonly === "True",
                         onHover: function (currentIndex, currentRating, $el) {
                             $widget.find(".live-rating").text(currentIndex);
                         },

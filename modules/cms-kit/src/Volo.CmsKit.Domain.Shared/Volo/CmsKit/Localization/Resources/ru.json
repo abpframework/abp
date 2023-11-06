@@ -77,6 +77,7 @@
     "PageId": "Страница",
     "Pages": "Страницы",
     "PageSlugInformation": "Слаг используется для URL. Ваш URL-адрес будет '/{{slug}}'.",
+    "BlogSlugInformation": "Слаг используется для URL. Ваш URL-адрес будет '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Управление блогом",
     "Permission:BlogManagement.Create": "Создавать",
     "Permission:BlogManagement.Delete": "Удалить",

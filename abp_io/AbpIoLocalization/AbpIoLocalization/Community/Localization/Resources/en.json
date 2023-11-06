@@ -249,6 +249,9 @@
     "ShareOnLinkedIn": "Share on LinkedIn",
     "MoreFrom{0}": "More from {0}",
     "SeeAllFrom{0}": "See all from {0}",
-    "MostWatched": "Most Watched"
+    "MostWatched": "Most Watched",
+    "Articles({0})": "Articles ({0})",
+    "Videos({0})": "Videos ({0})",
+    "LatestArticles": "Latest Articles"
   }
 }
