@@ -11,8 +11,6 @@ import { tap } from 'rxjs/operators';
 import { AuthService, IAbpGuard } from '../abstracts';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { RoutesService, PermissionService, HttpErrorReporterService } from '../services';
-import { OAuthService } from 'angular-oauth2-oidc';
-
 /**
  * @deprecated Use `permissionGuard` *function* instead.
  */
@@ -52,7 +50,7 @@ export const permissionGuard: CanActivateFn = (
 ) => {
   const router = inject(Router);
   const routesService = inject(RoutesService);
-  const oAuthService = inject(OAuthService);
+  const oAuthService = inject(AuthService);
   const permissionService = inject(PermissionService);
   const httpErrorReporter = inject(HttpErrorReporterService);
 
@@ -67,7 +65,7 @@ export const permissionGuard: CanActivateFn = (
 
   return permissionService.getGrantedPolicy$(requiredPolicy).pipe(
     tap(access => {
-      if (!access && oAuthService.hasValidAccessToken()) {
+      if (!access && oAuthService.isAuthenticated) {
         httpErrorReporter.reportError({ status: 403 } as HttpErrorResponse);
       }
     }),
