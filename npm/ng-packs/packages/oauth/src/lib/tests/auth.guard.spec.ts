@@ -51,7 +51,7 @@ class DummyComponent {}
 describe('authGuard', () => {
   let oAuthService: SpyObject<OAuthService>; 
   let authService: SpyObject<AuthService>;
-  let routes: Route[] = [
+  const routes: Route[] = [
     {
       path: 'dummy',
       canActivate: [abpOAuthGuard],
