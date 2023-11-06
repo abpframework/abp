@@ -77,6 +77,7 @@
     "PageId": "Página",
     "Pages": "Paginas",
     "PageSlugInformation": "Slug se usa en la URL. Su URL será '/{{slug}}'.",
+    "BlogSlugInformation": "Slug se usa en la URL. Su URL será '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Gestión de blogs",
     "Permission:BlogManagement.Create": "Crear",
     "Permission:BlogManagement.Delete": "Borrar",

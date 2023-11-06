@@ -77,6 +77,7 @@
     "PageId": "Strana",
     "Pages": "stránky",
     "PageSlugInformation": "Na adrese URL je použit Slug. Vaše adresa URL bude '/{{slug}}'.",
+    "BlogSlugInformation": "Na adrese URL je použit Slug. Vaše adresa URL bude '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Správa blogu",
     "Permission:BlogManagement.Create": "Vytvořit",
     "Permission:BlogManagement.Delete": "Vymazat",

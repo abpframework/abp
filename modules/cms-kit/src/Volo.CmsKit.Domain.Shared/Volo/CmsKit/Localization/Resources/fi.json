@@ -76,6 +76,7 @@
     "PageId": "Sivu",
     "Pages": "Sivut",
     "PageSlugInformation": "Etanaa käytetään URL-osoitteessa. URL-osoitteesi on '/{{slug}}'.",
+    "BlogSlugInformation": "Etanaa käytetään URL-osoitteessa. URL-osoitteesi on '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Blogin hallinta",
     "Permission:BlogManagement.Create": "Luonti",
     "Permission:BlogManagement.Delete": "Poisto",
