@@ -27,9 +27,22 @@ public class AbpClaimsPrincipalFactory_Test : AbpIntegratedTest<AbpSecurityTestM
 
     protected override void AfterAddApplication(IServiceCollection services)
     {
+        services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.Contributors.Add<TestAbpClaimsPrincipalContributor>();
+            options.Contributors.Add<Test2AbpClaimsPrincipalContributor>();
+            options.Contributors.Add<Test3AbpClaimsPrincipalContributor>();
+
+            options.DynamicContributors.Add<TestAbpClaimsPrincipalContributor>();
+            options.DynamicContributors.Add<Test2AbpClaimsPrincipalContributor>();
+            options.DynamicContributors.Add<Test3AbpClaimsPrincipalContributor>();
+            options.DynamicContributors.Add<Test4AbpClaimsPrincipalContributor>();
+        });
+
         services.AddTransient<TestAbpClaimsPrincipalContributor>();
         services.AddTransient<Test2AbpClaimsPrincipalContributor>();
         services.AddTransient<Test3AbpClaimsPrincipalContributor>();
+        services.AddTransient<Test4AbpClaimsPrincipalContributor>();
     }
 
     [Fact]
@@ -51,6 +64,36 @@ public class AbpClaimsPrincipalFactory_Test : AbpIntegratedTest<AbpSecurityTestM
         await _abpClaimsPrincipalFactory.CreateAsync(claimsPrincipal);
         claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == "123");
         claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "admin");
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "admin2@abp.io");
+        claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Email && x.Value == "admin@abp.io");
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Version && x.Value == "2.0");
+    }
+
+    [Fact]
+    public async Task DynamicCreateAsync()
+    {
+        var claimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync();
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == "admin");
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "admin");
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "admin2@abp.io");
+        claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Email && x.Value == "admin@abp.io");
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Version && x.Value == "2.0");
+    }
+
+    [Fact]
+    public async Task DynamicCreate_With_Exists_ClaimsPrincipal()
+    {
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(TestAuthenticationType, ClaimTypes.Name, ClaimTypes.Role));
+        claimsPrincipal.Identities.First().AddClaim(new Claim(ClaimTypes.Name, "123"));
+        claimsPrincipal.Identities.First().AddClaim(new Claim(ClaimTypes.Role, "123"));
+
+        await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
+        claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Name && x.Value == "123");
+        claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Role && x.Value == "123");
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == "admin");
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "admin");
+        claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
         claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "admin2@abp.io");
         claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Email && x.Value == "admin@abp.io");
         claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Version && x.Value == "2.0");
@@ -94,6 +137,24 @@ public class AbpClaimsPrincipalFactory_Test : AbpIntegratedTest<AbpSecurityTestM
                                  ?? new ClaimsIdentity(TestAuthenticationType);
 
             claimsIdentity.AddOrReplace(new Claim(ClaimTypes.Version, "2.0"));
+
+            context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
+
+            return Task.CompletedTask;
+        }
+    }
+
+    class Test4AbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor
+    {
+        public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+        {
+            var claimsIdentity = context.ClaimsPrincipal.Identities.FirstOrDefault(x => x.AuthenticationType == TestAuthenticationType)
+                                 ?? new ClaimsIdentity(TestAuthenticationType);
+
+            claimsIdentity.AddOrReplace(new Claim(ClaimTypes.Name, "admin"));
+            claimsIdentity.RemoveAll(ClaimTypes.Role);
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "admin"));
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "manager"));
 
             context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
 

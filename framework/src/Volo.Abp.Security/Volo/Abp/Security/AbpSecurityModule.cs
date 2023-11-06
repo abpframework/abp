@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
-using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 using Volo.Abp.SecurityLog;
 
@@ -11,11 +9,6 @@ namespace Volo.Abp.Security;
 
 public class AbpSecurityModule : AbpModule
 {
-    public override void PostConfigureServices(ServiceConfigurationContext context)
-    {
-        AutoAddClaimsPrincipalContributors(context.Services);
-    }
-
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var applicationName = context.Services.GetApplicationName();
@@ -56,24 +49,6 @@ public class AbpSecurityModule : AbpModule
             {
                 options.DefaultSalt = Encoding.ASCII.GetBytes(defaultSalt!);
             }
-        });
-    }
-
-    private static void AutoAddClaimsPrincipalContributors(IServiceCollection services)
-    {
-        var contributorTypes = new List<Type>();
-
-        services.OnRegistered(context =>
-        {
-            if (typeof(IAbpClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
-            {
-                contributorTypes.Add(context.ImplementationType);
-            }
-        });
-
-        services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
-            options.Contributors.AddIfNotContains(contributorTypes);
         });
     }
 }
