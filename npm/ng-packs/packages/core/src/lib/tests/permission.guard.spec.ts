@@ -21,6 +21,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { OTHERS_GROUP } from '../tokens';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from '../tokens/compare-func.token';
 import { CoreModule } from '../core.module';
+import { AuthService } from '../abstracts';
 
 describe('PermissionGuard', () => {
   let spectator: SpectatorService<PermissionGuard>;
@@ -30,7 +31,7 @@ describe('PermissionGuard', () => {
   let permissionService: SpyObject<PermissionService>;
 
   const mockOAuthService = {
-    hasValidAccessToken: jest.fn().mockReturnValue(true),
+    isAuthenticated: true,
   };
 
   @Component({ template: '' })
@@ -57,7 +58,7 @@ describe('PermissionGuard', () => {
         provide: APP_BASE_HREF,
         useValue: '/',
       },
-      { provide: OAuthService, useValue: mockOAuthService },
+      { provide: AuthService, useValue: mockOAuthService },
       { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
       { provide: OTHERS_GROUP, useValue: 'AbpUi::OthersGroup' },
       { provide: SORT_COMPARE_FUNC, useValue: compareFuncFactory },
@@ -131,7 +132,7 @@ describe('authGuard', () => {
   let httpErrorReporter: SpyObject<HttpErrorReporterService>;
 
   const mockOAuthService = {
-    hasValidAccessToken: jest.fn().mockReturnValue(true),
+    isAuthenticated: true,
   };
 
   const routes: Route[] = [
@@ -157,7 +158,7 @@ describe('authGuard', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, CoreModule.forRoot()],
       providers: [
-        { provide: OAuthService, useValue: mockOAuthService },
+        { provide: AuthService, useValue: mockOAuthService },
         { provide: PermissionService, useValue: permissionService },
         { provide: HttpErrorReporterService, useValue: httpErrorReporter },
         provideRouter(routes),
