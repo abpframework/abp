@@ -134,7 +134,7 @@ describe('authGuard', () => {
     hasValidAccessToken: jest.fn().mockReturnValue(true),
   };
 
-  let routes: Route[] = [
+  const routes: Route[] = [
     {
       path: 'dummy',
       component: DummyComponent,
