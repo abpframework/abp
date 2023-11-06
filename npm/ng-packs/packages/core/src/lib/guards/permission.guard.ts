@@ -11,6 +11,7 @@ import { tap } from 'rxjs/operators';
 import { AuthService, IAbpGuard } from '../abstracts';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { RoutesService, PermissionService, HttpErrorReporterService } from '../services';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 /**
  * @deprecated Use `permissionGuard` *function* instead.
