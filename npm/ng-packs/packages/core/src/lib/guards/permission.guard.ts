@@ -11,7 +11,6 @@ import { tap } from 'rxjs/operators';
 import { AuthService, IAbpGuard } from '../abstracts';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { RoutesService, PermissionService, HttpErrorReporterService } from '../services';
-
 /**
  * @deprecated Use `permissionGuard` *function* instead.
  */
@@ -21,7 +20,7 @@ import { RoutesService, PermissionService, HttpErrorReporterService } from '../s
 export class PermissionGuard implements IAbpGuard {
   protected readonly router = inject(Router);
   protected readonly routesService = inject(RoutesService);
-  protected readonly oAuthService = inject(AuthService);
+  protected readonly authService = inject(AuthService);
   protected readonly permissionService = inject(PermissionService);
   protected readonly httpErrorReporter = inject(HttpErrorReporterService);
 
@@ -37,7 +36,7 @@ export class PermissionGuard implements IAbpGuard {
 
     return this.permissionService.getGrantedPolicy$(requiredPolicy).pipe(
       tap(access => {
-        if (!access && this.oAuthService.isAuthenticated) {
+        if (!access && this.authService.isAuthenticated) {
           this.httpErrorReporter.reportError({ status: 403 } as HttpErrorResponse);
         }
       }),
@@ -51,7 +50,7 @@ export const permissionGuard: CanActivateFn = (
 ) => {
   const router = inject(Router);
   const routesService = inject(RoutesService);
-  const oAuthService = inject(OAuthService);
+  const authService = inject(AuthService);
   const permissionService = inject(PermissionService);
   const httpErrorReporter = inject(HttpErrorReporterService);
 
@@ -66,7 +65,7 @@ export const permissionGuard: CanActivateFn = (
 
   return permissionService.getGrantedPolicy$(requiredPolicy).pipe(
     tap(access => {
-      if (!access && oAuthService.hasValidAccessToken()) {
+      if (!access && authService.isAuthenticated) {
         httpErrorReporter.reportError({ status: 403 } as HttpErrorResponse);
       }
     }),
