@@ -17,7 +17,6 @@ import { CORE_OPTIONS } from '../tokens/options.token';
 import { IncludeLocalizationResourcesProvider } from '../providers';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { OTHERS_GROUP } from '../tokens';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from '../tokens/compare-func.token';
 import { CoreModule } from '../core.module';
