@@ -41,7 +41,8 @@ I have created a simple console application to test the Native AOT Compilation. 
 |       | Size | Speed |
 | ---   | ---   | ---   |
 | Self-Contained, Single File   |  65938 kb     | 00.0051806  ~5ms   |
-| AOT (default)          |   1242 kb     | 00.0028638  ~2ms |
+| .NET 7 AOT (default)          |   4452 kb     | 00.0029823  ~2ms |
+| .NET 8 AOT (default)          |   1242 kb     | 00.0028638  ~2ms |
 | AOT (Speed)| 1280 kb | 00.0023838  ~2ms |
 | AOT (Size) | 1111 kb | 00.0025145  ~2ms |
 
