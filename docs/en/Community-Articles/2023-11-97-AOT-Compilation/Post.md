@@ -1,27 +1,27 @@
 # Native AOT Compilation in .NET 8
-Native AOT (Ahead-of-Time) compilation is a feature that allows developers to create a self-contained app compiled to native code that can run on machines without the .NET runtime installed. It results in benefits such as minimized disk footprint, reduced executable size, reduced startup time, and reduced memory demand
+Native AOT (Ahead-of-Time) compilation is a feature that allows developers to create a self-contained app compiled to native code that can run on machines without the .NET runtime installed. It results in benefits such as minimized disk footprint, reduced executable size, reduced startup time, and reduced memory demand.
 
 Native AOT compilation isn't a new feature in .NET 8. It's first introduced in .NET 7.
 
 
-Differences between .NET 7 and .NET 8 AOT Compilation are:
+Differences between the AOT Compilation of .NET 7 and .NET 8 are:
 
 
 - **System.Text.Json improvements**: .NET 8 adds support for more types, source generation, interface hierarchies, naming policies, read-only properties, and more.
-- **New types for performance**: .NET 8 introduces new types such as FrozenDictionary, FrozenSet, SearchValues, CompositeFormat, TimeProvider, and ITimer for improving app performance.
+- **New types for performance**: .NET 8 introduces new types such as FrozenDictionary, FrozenSet, SearchValues, CompositeFormat, TimeProvider, and ITimer to improve the app performance.
 - **System.Numerics and System.Runtime.Intrinsics enhancements**: .NET 8 adds support for Vector512, AVX-512, IUtf8SpanFormattable, Lerp, and more.
 - **System.ComponentModel.DataAnnotations additions**: .NET 8 adds new data validation attributes for cloud-native services and a new ValidateOptionsResultBuilder type.
 - **Hosted services lifecycle methods**: .NET 8 adds new methods such as StartAsync, StopAsync, StartBackgroundAsync, and StopBackgroundAsync for hosted services.
 
-It's important to note that not all features in ASP.NET Core are currently compatible with native AOT For more information, see [Native AOT deployment overview](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/).
+It's important to note that not all features in ASP.NET Core are currently compatible with native AOT. For more information, see [Native AOT deployment overview](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/).
 
 ## How to use Native AOT Compilation in .NET 8
 
-You can add `<PublishAot>true</PublishAot>` in your project file to enable Native AOT Compilation.
+You can add `<PublishAot>true</PublishAot>` in your project .csproj file to enable Native AOT Compilation.
 
-  - For the new projects you can creage with `--aot` parameter. Example: `dotnet new console --aot`.
+  - For the new projects, you can create them with the `--aot` parameter. Example: `dotnet new console --aot`.
 
-By default, compiler chooses a blended approach code optimization but you can specify an optimization preference inside your csproj file. You can choose **size** or **speed** according your requirements.
+By default, the compiler chooses a blended approach code optimization but you can specify an optimization preference inside your .csproj file. You can choose **size** or **speed** according your requirements.
 
 ```xml
 <OptimizationPreference>Size</OptimizationPreference>
@@ -46,10 +46,10 @@ I have created a simple console application to test the Native AOT Compilation. 
 | AOT (Speed)| 1280 kb | 00.0023838  ~2ms |
 | AOT (Size) | 1111 kb | 00.0025145  ~2ms |
 
-Most of existing libraries don't support AOT compiling yet, so I couldn't use [BenchmarkDotnet](https://github.com/dotnet/BenchmarkDotNet) to measure the performance. I have used [Stopwatch](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.stopwatch?view=net-8.0) to measure the performance. So performance results may not be accurate but gives insight about the performance difference.
+Most of existing libraries don't support AOT compilation yet, so I couldn't use [BenchmarkDotnet](https://github.com/dotnet/BenchmarkDotNet) to measure the performance. I have used [Stopwatch](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.stopwatch?view=net-8.0) to measure the performance. So the performance results may not be accurate but gives insight about the performance difference.
 
 ## AOT Support in MAUI
-You can now use Native AOT Compilation iOS-like target platforms in .NET MAUI. You can enable AOT compilation with exact same method by adding `<PublishAot>true</PublishAot>` to your project file. According to dotnet team, apps sizes reduced by 35% and startup times reduced by 28% with AOT compilation. And runtime performance is also improved by 50%.
+You can now use Native AOT Compilation on iOS-like target frameworks in .NET MAUI. You can enable AOT compilation with the exact same method by adding `<PublishAot>true</PublishAot>` to your project .csproj file. According to the dotnet team, apps sizes reduced by 35% and startup times reduced by 28% with AOT compilation. And runtime performance is also improved by 50%.
 
 But there are some limitations in MAUI AOT Compilation. A lot of libraries still don't support AOT compilation and some of platform-specific feaetures may not work at the moment.
 
