@@ -13,6 +13,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  inject,
   Inject,
   Injector,
   Input,
@@ -82,11 +83,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   @Output() tableActivate = new EventEmitter();
 
-  getInjected: typeof this.injector.get;
-
   hasAtLeastOnePermittedAction: boolean;
-
-  entityPropTypeClasses: EntityPropTypeClass;
 
   readonly columnWidths!: number[];
 
@@ -96,20 +93,20 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
 
-  constructor(
-    @Inject(LOCALE_ID) private locale: string,
-    private config: ConfigStateService,
-    private injector: Injector,
-  ) {
-    this.entityPropTypeClasses = injector.get(ENTITY_PROP_TYPE_CLASSES);
-    this.getInjected = injector.get.bind(injector);
-    const extensions = injector.get(ExtensionsService);
-    const name = injector.get(EXTENSIONS_IDENTIFIER);
+  locale = inject(LOCALE_ID);
+  private config = inject(ConfigStateService);
+  entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
+  #injector = inject(Injector);
+  getInjected = this.#injector.get.bind(this.#injector);
+
+  constructor() {
+    const extensions = this.#injector.get(ExtensionsService);
+    const name = this.#injector.get(EXTENSIONS_IDENTIFIER);
     this.propList = extensions.entityProps.get(name).props;
     this.actionList = extensions['entityActions'].get(name)
       .actions as unknown as EntityActionList<R>;
 
-    const permissionService = injector.get(PermissionService);
+    const permissionService = this.#injector.get(PermissionService);
     this.hasAtLeastOnePermittedAction =
       permissionService.filterItemsByPolicy(
         this.actionList.toArray().map(action => ({ requiredPolicy: action.permission })),
@@ -188,7 +185,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
                 useValue: value,
               },
             ],
-            parent: this.injector,
+            parent: this.#injector,
           });
           record[propKey].component = prop.value.component;
         }
