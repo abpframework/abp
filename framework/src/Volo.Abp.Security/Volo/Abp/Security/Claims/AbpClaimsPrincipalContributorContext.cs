@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.Security.Claims;
 
@@ -18,5 +19,12 @@ public class AbpClaimsPrincipalContributorContext
     {
         ClaimsPrincipal = claimsIdentity;
         ServiceProvider = serviceProvider;
+    }
+
+    public virtual T GetRequiredService<T>()
+        where T : notnull
+    {
+        Check.NotNull(ServiceProvider, nameof(ServiceProvider));
+        return ServiceProvider.GetRequiredService<T>();
     }
 }

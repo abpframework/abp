@@ -62,6 +62,11 @@ public class AbpIdentityDomainModule : AbpModule
         });
 
         context.Services.AddAbpDynamicOptions<IdentityOptions, AbpIdentityOptionsManager>();
+
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.DynamicContributors.Add<IdentityDynamicClaimsPrincipalContributor>();
+        });
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
