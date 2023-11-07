@@ -10,6 +10,7 @@ import {
 
 @Directive({
   selector: '[abpEllipsis]',
+  standalone:true
 })
 export class EllipsisDirective implements AfterViewInit {
   @Input('abpEllipsis')
@@ -44,9 +45,3 @@ export class EllipsisDirective implements AfterViewInit {
     this.cdRef.detectChanges();
   }
 }
-
-@NgModule({
-  exports: [EllipsisDirective],
-  declarations: [EllipsisDirective],
-})
-export class EllipsisModule {}

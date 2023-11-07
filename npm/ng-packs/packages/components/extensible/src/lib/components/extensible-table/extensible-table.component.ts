@@ -1,13 +1,14 @@
 import {
   ABP,
   ConfigStateService,
+  CoreModule,
   getShortDateFormat,
   getShortDateShortTimeFormat,
   getShortTimeFormat,
   ListService,
   PermissionService,
 } from '@abp/ng.core';
-import { formatDate } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -35,12 +36,26 @@ import {
   EXTENSIONS_IDENTIFIER,
   PROP_DATA_STREAM,
 } from '../../tokens/extensions.token';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { GridActionsComponent } from '../grid-actions/grid-actions.component';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgxDatatableDefaultDirective, NgxDatatableListDirective } from '@abp/ng.theme.shared';
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
- @Component({
+@Component({
   exportAs: 'abpExtensibleTable',
   selector: 'abp-extensible-table',
+  standalone: true,
+  imports: [
+    CommonModule,
+    CoreModule,
+    NgxDatatableModule,
+    GridActionsComponent,
+    NgbTooltip,
+    NgxDatatableDefaultDirective,
+    NgxDatatableListDirective,
+  ],
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,6 +65,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   set actionsText(value: string) {
     this._actionsText = value;
   }
+
   get actionsText(): string {
     return this._actionsText ?? (this.actionList.length > 1 ? 'AbpUi::Actions' : '');
   }
@@ -57,14 +73,16 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   @Input() data!: R[];
   @Input() list!: ListService;
   @Input() recordsTotal!: number;
+
   @Input() set actionsColumnWidth(width: number) {
     this.setColumnWidths(width ? Number(width) : undefined);
   }
+
   @Input() actionsTemplate?: TemplateRef<any>;
 
   @Output() tableActivate = new EventEmitter();
 
-  getInjected: typeof this.injector.get
+  getInjected: typeof this.injector.get;
 
   hasAtLeastOnePermittedAction: boolean;
 
@@ -149,7 +167,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     if (!data?.currentValue) return;
 
     if (data.currentValue.length < 1) {
-      this.list.totalCount = this.recordsTotal
+      this.list.totalCount = this.recordsTotal;
     }
 
     this.data = data.currentValue.map((record: any, index: number) => {
