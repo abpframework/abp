@@ -1,6 +1,6 @@
 # ASP.NET 8: What's New About Authentication and Authorization
 
-In ASP.NET 8, the landscape of authentication and authorization is undergoing a transformation. Specifically, ASP.NET Core Identity is transitioning from a focus on traditional web pages to a more API-driven approach. We will see what the Identity API endpoints are, why we need them, and how to use them in detail. So, let's dive in.
+In ASP.NET 8, the concept of authentication and authorization is undergoing a transformation. Specifically, ASP.NET Core Identity is transitioning from a focus on traditional web pages to a more API-driven approach. We will see what the Identity API endpoints are, why we need them, and how to use them in detail. So, let's dive in.
 
 ## What is ASP.NET Core Identity?
 
@@ -20,7 +20,7 @@ Let's delve into a common scenario:
 
 Imagine you have a straightforward application composed of an ASP.NET Core backend that exposes APIs. On the client side, you have a SPA application that communicates with these APIs. Now, you want to incorporate user accounts, complete with authentication and authorization, into your application.
 
-Before the advent of the identity endpoints, you can add ASP.NET Core Identity and the default Razor Pages UI to your app by adding a few packages, updating your database schema, and registering some services. However, this approach had some disadvantages. From a user experience perspective, the full-page refreshes of Razor Pages can be a major drawback especially compared to the fluidity of SPAs. On the other hand, from a developers' perspective, if you want the default pages to be compatible with the rest of your application, you may need to update more than 30 pages. Moreover, the default Razor Pages UI uses traditional cookie-based authentication, not bearer tokens.
+Before the advent of the identity endpoints, you could add ASP.NET Core Identity and the default Razor Pages UI to your app by adding a few packages, updating your database schema, and registering some services. However, this approach had some disadvantages. From a user experience perspective, the full-page refreshes of Razor Pages can be a major drawback especially compared to the fluidity of SPAs. On the other hand, from a developer's perspective, if you want the default pages to be compatible with the rest of your application, you may need to update more than 30 pages. Moreover, the default Razor Pages UI uses traditional cookie-based authentication, not bearer tokens.
 
 In ASP.NET 8, identity endpoints were introduced to simplify the process of adding user accounts to ASP.NET Core API apps used with SPAs or mobile. These endpoints streamline the user management process by providing an alternative to the traditional Razor Page Identity UI pages. Additionally, a new endpoint is included for retrieving bearer tokens, which can be used for authentication. These changes directly address the concerns mentioned earlier, making it easier to create a user-friendly and integrated experience within your app, with no full-page refreshes or styling conflicts.
 
@@ -44,7 +44,7 @@ After that, open the application in your favorite IDE and add the required packa
 
 **Note:** I used the `.NET 8.0.100-rc.2-**` SDK for everything in this post. 
 
-Then replace `Program.cs` like below:
+Then replace `Program.cs` as below:
 
 ```csharp
 using System.Security.Claims;  
@@ -89,7 +89,7 @@ class ApplicationDbContext : IdentityDbContext<MyCustomUser>
 
 ```
 
-When you run the application, you will see a result like the following:
+When you run the application, you will see a result as the following:
 
 ![](./new-identity-endpoints.png)
 
@@ -102,7 +102,7 @@ Prior to ASP.NET 8, adding a parameterized authorization policy to an endpoint r
 - Implementing an `AuthorizationRequirement` for the policy
 - Implementing an `AuthorizationHandler` for each requirement
 
-However, implementing the `IAuthorizationRequirementData` interface that comes with ASP.NET 8, your application code looks like this:
+However, implementing the `IAuthorizationRequirementData` interface that comes with ASP.NET 8, your application code should look like this:
 
 ```csharp
 class MinimumAgeAuthorizeAttribute : AuthorizeAttribute, IAuthorizationRequirement, IAuthorizationRequirementData
