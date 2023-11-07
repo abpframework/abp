@@ -14,13 +14,13 @@ import {
   NgbTimeAdapter,
   NgbTimepicker,
 } from '@ng-bootstrap/ng-bootstrap';
-import { DateTimeAdapter } from '../../adapters/date-time.adapter';
 import { FormProp } from '../../models/form-props';
 import { selfFactory } from '../../utils/factory.util';
+import { DateTimeAdapter } from '@abp/ng.theme.shared';
 
 @Component({
-  exportAs: 'abpDateTimePicker',
-  selector: 'abp-date-time-picker',
+  exportAs: 'abpExtensibleDateTimePicker',
+  selector: 'abp-extensible-date-time-picker',
   template: `
     <input
       [id]="prop.id"
@@ -57,7 +57,7 @@ import { selfFactory } from '../../utils/factory.util';
     },
   ],
 })
-export class DateTimePickerComponent {
+export class ExtensibleDateTimePickerComponent {
   @Input() prop!: FormProp;
   @Input() meridian = false;
 
@@ -66,11 +66,11 @@ export class DateTimePickerComponent {
 
   constructor(public readonly cdRef: ChangeDetectorRef) {}
 
-  setDate(datestr: string) {
-    this.date.writeValue(datestr);
+  setDate(dateStr: string) {
+    this.date.writeValue(dateStr);
   }
 
-  setTime(datestr: string) {
-    this.time.writeValue(datestr);
+  setTime(dateStr: string) {
+    this.time.writeValue(dateStr);
   }
 }

@@ -1,11 +1,10 @@
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { DateTimeAdapter } from '../adapters/date-time.adapter';
-import { DateAdapter } from '../adapters/date.adapter';
-import { TimeAdapter } from '../adapters/time.adapter';
+import { DateTimeAdapter,DateAdapter,TimeAdapter } from '@abp/ng.theme.shared';
+
 import { EXTRA_PROPERTIES_KEY } from '../constants/extra-properties';
 import { ePropType } from '../enums/props.enum';
-import { FormProp, FormPropList } from "../models/form-props";
-import { InferredProp, PropData } from "../models/props";
+import { FormPropList } from "../models/form-props";
+import { PropData } from "../models/props";
 import { ExtensionsService } from '../services/extensions.service';
 import { EXTENSIONS_IDENTIFIER } from '../tokens/extensions.token';
 

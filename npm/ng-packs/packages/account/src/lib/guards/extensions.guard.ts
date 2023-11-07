@@ -9,7 +9,7 @@ import {
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
   mergeWithDefaultProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 
 import {
   ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS,

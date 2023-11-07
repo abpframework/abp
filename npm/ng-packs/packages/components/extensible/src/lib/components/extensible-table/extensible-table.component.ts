@@ -13,8 +13,6 @@ import {
   Component,
   EventEmitter,
   Inject,
-  InjectFlags,
-  InjectionToken,
   Injector,
   Input,
   LOCALE_ID,
@@ -23,7 +21,6 @@ import {
   SimpleChanges,
   TemplateRef,
   TrackByFunction,
-  Type,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -41,7 +38,7 @@ import {
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
-@Component({
+ @Component({
   exportAs: 'abpExtensibleTable',
   selector: 'abp-extensible-table',
   templateUrl: './extensible-table.component.html',
@@ -67,7 +64,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   @Output() tableActivate = new EventEmitter();
 
-  getInjected: <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => T;
+  getInjected: typeof this.injector.get
 
   hasAtLeastOnePermittedAction: boolean;
 
@@ -150,7 +147,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   ngOnChanges({ data }: SimpleChanges) {
     if (!data?.currentValue) return;
-    
+
     if (data.currentValue.length < 1) {
       this.list.totalCount = this.recordsTotal
     }
@@ -166,7 +163,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
           value,
         };
         if (prop.value.component) {
-          const injector = Injector.create({
+          record[propKey].injector = Injector.create({
             providers: [
               {
                 provide: PROP_DATA_STREAM,
@@ -175,7 +172,6 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
             ],
             parent: this.injector,
           });
-          record[propKey].injector = injector;
           record[propKey].component = prop.value.component;
         }
       });
