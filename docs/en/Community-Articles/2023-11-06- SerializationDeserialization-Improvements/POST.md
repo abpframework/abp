@@ -1,10 +1,10 @@
 # .NET 8: Serialization Improvements
 
-The [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/api/system.text.json) namespace provides functionality for serializing to and deserializing from JSON. In .NET 8, there have been many improvements to System.Text.Json serialization and deserialization functionality.
+The [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/api/system.text.json) namespace provides functionality for serializing to and deserializing from JSON. In .NET 8, there have been many improvements to the System.Text.Json serialization and deserialization functionality.
 
 ## Source generator
 
-NET 8 includes enhancements of the System.Text.Json source generator that are aimed at making the Native AOT experience on par with the reflection-based serializer. This is important because, now you can select source generator for System.Text.Json. To see a comparison of Reflection versus source generation in System.Text.Json, check out comparison [documentation](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/reflection-vs-source-generation?pivots=dotnet-8-0#reflection).
+.NET 8 includes enhancements of the System.Text.Json source generator that are aimed at making the Native AOT experience on par with the reflection-based serializer. This is important because now you can select the source generator for System.Text.Json. To see a comparison of Reflection versus source generation in System.Text.Json, check out the comparison [documentation](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/reflection-vs-source-generation?pivots=dotnet-8-0#reflection).
 
 ## Interface hierarchies
 
@@ -33,7 +33,7 @@ public class MyCar : ICar
 
 ## Naming policies
 
-Two new naming policies `snake_case` and `kebab-case` have been added. You can use them as shown below;
+Two new naming policies `snake_case` and `kebab-case` have been added. You can use them as shown below:
 
 ```csharp
 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
@@ -42,7 +42,7 @@ JsonSerializer.Serialize(new { CreationTime = new DateTime(2023,11,6) }, options
 
 ## Read-only properties
 
-With .NET 8, you can deserialize onto read-only fields or properties. This feature can be globally enabled by setting `PreferredObjectCreationHandling` to `JsonObjectCreationHandling.Populate`. You can also enable this feature for a class or one of its members by adding `[JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]` attribute. Here is a sample;
+With .NET 8, you can deserialize onto read-only fields or properties. This feature can be globally enabled by setting `PreferredObjectCreationHandling` to `JsonObjectCreationHandling.Populate`. You can also enable this feature for a class or one of its members by adding the `[JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]` attribute. Here is a sample:
 
 ```csharp
 using System.Text.Json;
@@ -65,13 +65,13 @@ class Book
 }
 ```
 
-Before .NET 8, the output was like this;
+Before .NET 8, the output was like this:
 
 ```json
 {"Contributors":[],"Author":{"Name":"Undefined"}}
 ```
 
-With .NET 8, the output now looks like this;
+With .NET 8, the output now looks like this:
 
 ```json
 {"Contributors":["John Doe"],"Author":{"Name":"Sample Author"}}
@@ -97,4 +97,4 @@ await foreach (Tenant tenant in tenants)
 }
 ```
 
-I have mentioned some of the items for Serialization Improvements in .NET 8. If you want to check the full list, you can read it .NET 8's [What's new document](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#serialization).
+I have mentioned some of the items for Serialization Improvements in .NET 8. If you want to check the full list, you can read it in the .NET 8's [What's new document](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#serialization).
