@@ -16,7 +16,7 @@ options.UseSqlServer(
 
 ## Modeling Hierarchies
 
-The `HierarchyId` type can be used for properties of an entity type. For example, assume we want to model personnel in an organization. Each person has a name and a manager. The manager is also a person. We can model this using the following entity type:
+The `HierarchyId` type can be used for properties of an entity type. For example, assume we want to model the personnel in an organization. Each person has a name and a manager. The manager is also a person. We can model this using the following entity type:
 
 ```csharp
 public class Person
@@ -27,7 +27,7 @@ public class Person
 }
 ```
 
-Each person can be traced from the patriarch down the tree using its `Manager` property. SQL Server uses a compact binary format for these paths, but it is common to parse to and from a human-readable string representation when when working with code. In this representation, the position at each level is separated by a `/` character. 
+Each person can be traced from the patriarch down the tree using its `Manager` property. SQL Server uses a compact binary format for these paths, but it is common to parse to and from a human-readable string representation when working with code. In this representation, the position at each level is separated by a `/` character. 
 
 ![Hierarchy Tree](hierarchy-tree.png)
 
@@ -55,7 +55,7 @@ var generation = await context.Persons.Where(x => x.Manager.GetLevel() == level)
 var parent = await context.Persons.Where(x => x.Manager.GetAncestor(1) == manager).SingleAsync();
 ```
 
-For example, your company may want to change manager for an organizational unit. To do this, you can use the `GetReparentedValue` method to update the manager for all descendants of the organizational unit.
+For example, your company may want to change the manager of an organizational unit. To do this, you can use the `GetReparentedValue` method to update the manager for all descendants of the organizational unit.
 
 ```csharp
 var newManager = await context.Persons.SingleAsync(x => x.Id == newManagerId);
