@@ -6,7 +6,6 @@ import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { TenantsComponent } from './components/tenants/tenants.component';
-import { TenantManagementExtensionsGuard } from './guards/extensions.guard';
 import { TenantManagementConfigOptions } from './models/config-options';
 import { TenantManagementRoutingModule } from './tenant-management-routing.module';
 import {
@@ -59,7 +58,6 @@ export class TenantManagementModule {
           provide: TENANT_MANAGEMENT_EDIT_FORM_PROP_CONTRIBUTORS,
           useValue: options.editFormPropContributors,
         },
-        TenantManagementExtensionsGuard,
       ],
     };
   }
