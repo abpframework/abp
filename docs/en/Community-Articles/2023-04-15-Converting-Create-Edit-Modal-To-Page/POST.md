@@ -315,7 +315,7 @@ import { CreateBookComponent } from './create-book/create-book.component';
 import { EditBookComponent } from './edit-book/edit-book.component';
 
 const routes: Routes = [
-  { path: '', component: BookComponent, canActivate: [AuthGuard, PermissionGuard] },
+  { path: '', component: BookComponent, canActivate: [authGuard, permissionGuard] },
   { path: 'create', component: CreateBookComponent },
   { path: 'edit/:id', component: EditBookComponent },
 ];
