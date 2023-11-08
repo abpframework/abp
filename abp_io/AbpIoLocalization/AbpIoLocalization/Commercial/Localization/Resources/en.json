@@ -978,10 +978,10 @@
     "Purchase_DevelopersAlreadyIncluded": "{0} developers already included",
     "1Year": "1 year",
     "{0}Years": "{0} years",
-    "1YearLicense": "1 year license",
-    "{0}YearsLicense": "{0} years license",
-    "1AdditionalDeveloper": "1 additional developer",
-    "{0}AdditionalDevelopers": "{0} additional developers",
+    "1YearLicense": "1 Year License",
+    "{0}YearsLicense": "{0} Years License",
+    "1AdditionalDeveloper": "1 Additional Developer",
+    "{0}AdditionalDevelopers": "{0} Additional Developers",
     "Discount": "Discount ({0}%)",
     "Summary": "Summary",
     "TrainingPack": "Training pack",
@@ -1082,9 +1082,9 @@
     "HurryUpLastDay": "Hurry Up! Last Day: {0}",
     "CreatingCRUDPagesWithABPSuite": "Creating CRUD pages with ABP Suite",
     "Testimonials": "Testimonials",
-    "MultipleYearDiscount": "Multiple year discount",
-    "CampaignDiscountText": "Black friday discount",
-    "CampaignDiscountName": "Black friday",
-    "CampaignName:BlackFriday": "Black friday"
+    "MultipleYearDiscount": "Multiple Year Discount",
+    "CampaignDiscountText": "Black Friday Discount",
+    "CampaignDiscountName": "Black Friday",
+    "CampaignName:BlackFriday": "Black Friday"
   }
 }
