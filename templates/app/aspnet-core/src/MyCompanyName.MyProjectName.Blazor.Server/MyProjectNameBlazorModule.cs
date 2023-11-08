@@ -265,7 +265,7 @@ public class MyProjectNameBlazorModule : AbpModule
         {
             app.UseMultiTenancy();
         }
-
+        app.UseDynamicClaims();
         app.UseUnitOfWork();
         app.UseAuthorization();
         app.UseSwagger();

@@ -14,4 +14,11 @@ public class AbpClaimCacheItem
         Type = type;
         Value = value;
     }
+
+
+    public static string CalculateCacheKey(Guid userId, Guid? tenantId)
+    {
+        return $"{tenantId}-{userId}";
+    }
+
 }

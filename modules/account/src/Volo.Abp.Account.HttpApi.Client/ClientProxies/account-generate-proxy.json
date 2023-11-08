@@ -338,6 +338,47 @@
             }
           }
         },
+        "Volo.Abp.Account.DynamicClaimsController": {
+          "controllerName": "DynamicClaims",
+          "controllerGroupName": "DynamicClaims",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Account.DynamicClaimsController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Account.IDynamicClaimsAppService",
+              "name": "IDynamicClaimsAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.Abp.Account.DynamicClaimDto>",
+                    "typeSimple": "[Volo.Abp.Account.DynamicClaimDto]"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/account/dynamic-claims",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Abp.Account.DynamicClaimDto>",
+                "typeSimple": "[Volo.Abp.Account.DynamicClaimDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IDynamicClaimsAppService"
+            }
+          }
+        },
         "Volo.Abp.Account.ProfileController": {
           "controllerName": "Profile",
           "controllerGroupName": "Profile",

@@ -11,7 +11,7 @@ public class AbpClaimsPrincipalFactoryOptions
 
     public List<string> DynamicClaims { get; }
 
-    public string RemoteRefreshUrl { get; set; }
+    public string RemoteUrl { get; set; }
 
     public AbpClaimsPrincipalFactoryOptions()
     {
@@ -21,12 +21,15 @@ public class AbpClaimsPrincipalFactoryOptions
         DynamicClaims = new List<string>
         {
             AbpClaimTypes.UserName,
+            AbpClaimTypes.Name,
+            AbpClaimTypes.SurName,
             AbpClaimTypes.Role,
             AbpClaimTypes.Email,
             AbpClaimTypes.EmailVerified,
             AbpClaimTypes.PhoneNumber,
             AbpClaimTypes.PhoneNumberVerified
         };
-        RemoteRefreshUrl = "/api/account/refresh-dynamic-claims";
+
+        RemoteUrl = "/api/account/dynamic-claims";
     }
 }

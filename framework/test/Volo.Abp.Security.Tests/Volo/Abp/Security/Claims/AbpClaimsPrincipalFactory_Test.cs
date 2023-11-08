@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Testing;
 using Xunit;
 
@@ -23,26 +23,6 @@ public class AbpClaimsPrincipalFactory_Test : AbpIntegratedTest<AbpSecurityTestM
     protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
         options.UseAutofac();
-    }
-
-    protected override void AfterAddApplication(IServiceCollection services)
-    {
-        services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
-            options.Contributors.Add<TestAbpClaimsPrincipalContributor>();
-            options.Contributors.Add<Test2AbpClaimsPrincipalContributor>();
-            options.Contributors.Add<Test3AbpClaimsPrincipalContributor>();
-
-            options.DynamicContributors.Add<TestAbpClaimsPrincipalContributor>();
-            options.DynamicContributors.Add<Test2AbpClaimsPrincipalContributor>();
-            options.DynamicContributors.Add<Test3AbpClaimsPrincipalContributor>();
-            options.DynamicContributors.Add<Test4AbpClaimsPrincipalContributor>();
-        });
-
-        services.AddTransient<TestAbpClaimsPrincipalContributor>();
-        services.AddTransient<Test2AbpClaimsPrincipalContributor>();
-        services.AddTransient<Test3AbpClaimsPrincipalContributor>();
-        services.AddTransient<Test4AbpClaimsPrincipalContributor>();
     }
 
     [Fact]
@@ -99,7 +79,7 @@ public class AbpClaimsPrincipalFactory_Test : AbpIntegratedTest<AbpSecurityTestM
         claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Version && x.Value == "2.0");
     }
 
-    class TestAbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor
+    class TestAbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
     {
         public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
         {
@@ -114,7 +94,7 @@ public class AbpClaimsPrincipalFactory_Test : AbpIntegratedTest<AbpSecurityTestM
         }
     }
 
-    class Test2AbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor
+    class Test2AbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
     {
         public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
         {
@@ -129,7 +109,7 @@ public class AbpClaimsPrincipalFactory_Test : AbpIntegratedTest<AbpSecurityTestM
         }
     }
 
-    class Test3AbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor
+    class Test3AbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
     {
         public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
         {
@@ -144,7 +124,52 @@ public class AbpClaimsPrincipalFactory_Test : AbpIntegratedTest<AbpSecurityTestM
         }
     }
 
-    class Test4AbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor
+    class TestAbpDynamicClaimsPrincipalContributor : IAbpDynamicClaimsPrincipalContributor, ITransientDependency
+    {
+        public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+        {
+            var claimsIdentity = context.ClaimsPrincipal.Identities.FirstOrDefault(x => x.AuthenticationType == TestAuthenticationType)
+                                 ?? new ClaimsIdentity(TestAuthenticationType);
+
+            claimsIdentity.AddOrReplace(new Claim(ClaimTypes.Email, "admin@abp.io"));
+
+            context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
+
+            return Task.CompletedTask;
+        }
+    }
+
+    class Test2AbpDynamicClaimsPrincipalContributor : IAbpDynamicClaimsPrincipalContributor, ITransientDependency
+    {
+        public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+        {
+            var claimsIdentity = context.ClaimsPrincipal.Identities.FirstOrDefault(x => x.AuthenticationType == TestAuthenticationType)
+                                 ?? new ClaimsIdentity(TestAuthenticationType);
+
+            claimsIdentity.AddOrReplace(new Claim(ClaimTypes.Email, "admin2@abp.io"));
+
+            context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
+
+            return Task.CompletedTask;
+        }
+    }
+
+    class Test3AbpDynamicClaimsPrincipalContributor : IAbpDynamicClaimsPrincipalContributor, ITransientDependency
+    {
+        public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+        {
+            var claimsIdentity = context.ClaimsPrincipal.Identities.FirstOrDefault(x => x.AuthenticationType == TestAuthenticationType)
+                                 ?? new ClaimsIdentity(TestAuthenticationType);
+
+            claimsIdentity.AddOrReplace(new Claim(ClaimTypes.Version, "2.0"));
+
+            context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
+
+            return Task.CompletedTask;
+        }
+    }
+
+    class Test4AbpDynamicClaimsPrincipalContributor : IAbpDynamicClaimsPrincipalContributor, ITransientDependency
     {
         public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
         {
