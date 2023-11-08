@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} poistetaan!",
     "ItemWillBeDeletedMessage": "Tämä kohde poistetaan!",
     "ManageYourAccount": "Hallitse tiliäsi",
-    "OthersGroup": "Muut"
+    "OthersGroup": "Muut",
+    "Today": "Tänään",
+    "Apply": "Käytä"
   }
 }

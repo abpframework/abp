@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} حذف خواهد شد!",
     "ItemWillBeDeletedMessage": "این مورد حذف خواهد شد!",
     "ManageYourAccount": "حساب خود را مدیریت کنید",
-    "OthersGroup": "دیگر"
+    "OthersGroup": "دیگر",
+    "Today": "امروز",
+    "Apply": "درخواست دادن"
   }
 }
