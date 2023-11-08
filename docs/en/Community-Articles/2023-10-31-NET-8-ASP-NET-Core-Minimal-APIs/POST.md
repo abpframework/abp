@@ -32,7 +32,7 @@ app.MapPost("/books", async ([FromForm] string name,
 });
 ```
 
-Another way is to use the [AsParameters] attribute, the following code binds from form values to properties of the `NewBookRequest` record struct:
+Another way is using the [AsParameters] attribute, the following code binds from form values to properties of the `NewBookRequest` record struct:
 
 ```csharp
 public record NewBookRequest([FromForm] string Name, [FromForm] BookType BookType, IFormFile? Cover);
