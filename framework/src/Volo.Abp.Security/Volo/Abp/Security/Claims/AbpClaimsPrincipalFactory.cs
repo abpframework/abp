@@ -49,7 +49,7 @@ public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientD
                 await contributor.ContributeAsync(context);
             }
 
-            return claimsPrincipal;
+            return context.ClaimsPrincipal;
         }
     }
 }

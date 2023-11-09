@@ -250,6 +250,7 @@ public static class AbpClaimsIdentityExtensions
         return claimsIdentity;
     }
 
+
     public static ClaimsIdentity AddOrReplace(this ClaimsIdentity claimsIdentity, Claim claim)
     {
         Check.NotNull(claimsIdentity, nameof(claimsIdentity));
@@ -275,5 +276,4 @@ public static class AbpClaimsIdentityExtensions
 
         return principal;
     }
-
 }

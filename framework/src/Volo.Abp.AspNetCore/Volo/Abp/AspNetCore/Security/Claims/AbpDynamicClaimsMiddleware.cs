@@ -15,7 +15,7 @@ public class AbpDynamicClaimsMiddleware : IMiddleware, ITransientDependency
         if (currentUser.IsAuthenticated)
         {
             var abpClaimsPrincipalFactory = context.RequestServices.GetRequiredService<IAbpClaimsPrincipalFactory>();
-            await abpClaimsPrincipalFactory.CreateDynamicAsync(context.User);
+            context.User = await abpClaimsPrincipalFactory.CreateDynamicAsync(context.User);
         }
 
         await next(context);

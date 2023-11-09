@@ -8,7 +8,7 @@ namespace Volo.Abp.Security.Claims;
 public class AbpClaimsPrincipalContributorContext
 {
     [NotNull]
-    public ClaimsPrincipal ClaimsPrincipal { get; }
+    public ClaimsPrincipal ClaimsPrincipal { get; set; }
 
     [NotNull]
     public IServiceProvider ServiceProvider { get; }
