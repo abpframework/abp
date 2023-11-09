@@ -81,7 +81,7 @@ public class BundleManager : IBundleManager, ITransientDependency
         var localBundleFiles = new List<string>();
         foreach (var bundleFile in bundleFiles)
         {
-            if (!bundleFile.IsCdn)
+            if (!bundleFile.IsExternalFile)
             {
                 localBundleFiles.Add(bundleFile.FileName);
             }

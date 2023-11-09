@@ -51,7 +51,7 @@ public class AbpTagHelperStyleService : AbpTagHelperResourceService
             _ => false
         };
 
-        var href = file.IsCdn ? file.FileName : viewContext.GetUrlHelper().Content((file.FileName + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
+        var href = file.IsExternalFile ? file.FileName : viewContext.GetUrlHelper().Content((file.FileName + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
         if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.FileName.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
         {
             output.Content.AppendHtml(SecurityHeadersOptions.UseContentSecurityPolicyScriptNonce

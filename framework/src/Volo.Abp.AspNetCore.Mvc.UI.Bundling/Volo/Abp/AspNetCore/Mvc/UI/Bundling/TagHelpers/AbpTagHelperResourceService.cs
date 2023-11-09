@@ -65,7 +65,7 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
 
         foreach (var bundleFile in bundleFiles)
         {
-            if (bundleFile.IsCdn)
+            if (bundleFile.IsExternalFile)
             {
                 AddHtmlTag(viewContext, tagHelper, context, output, bundleFile, null);
             }

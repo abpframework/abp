@@ -53,7 +53,7 @@ public class AbpTagHelperScriptService : AbpTagHelperResourceService
         var nonceText = (viewContext.HttpContext.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) && nonce is string nonceString && !string.IsNullOrEmpty(nonceString))
             ? $"nonce=\"{nonceString}\" "
             : string.Empty;
-        var src = file.IsCdn ? file.FileName : viewContext.GetUrlHelper().Content((file.FileName + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
+        var src = file.IsExternalFile ? file.FileName : viewContext.GetUrlHelper().Content((file.FileName + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
         output.Content.AppendHtml($"<script {deferText}{nonceText}src=\"{src}\"></script>{Environment.NewLine}");
     }
 }

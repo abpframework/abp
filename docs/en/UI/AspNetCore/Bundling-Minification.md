@@ -382,11 +382,11 @@ Configure<AbpBundlingOptions>(options =>
 <script defer src="/libs/timeago/locales/jquery.timeago.en.js?_v=637674729040000000"></script>
 ````
 
-### CDN Support
+### External/CDN file Support
 
-You can configure `AbpBundlingOptions` or use `is-cdn` on `script/style` taghelper to load all or a single js/css file from CDN.
+The bundling system automatically recognizes the external/CDN files and adds them to the page without any change.
 
-#### Add CDN files in `AbpBundlingOptions`
+#### Using External/CDN files in `AbpBundlingOptions`
 
 ````csharp
 Configure<AbpBundlingOptions>(options =>
@@ -397,7 +397,7 @@ Configure<AbpBundlingOptions>(options =>
             configuration
                 .AddFiles("/styles/my-style1.css")
                 .AddFiles("/styles/my-style2.css")
-                .AddCdnFiles("https://cdn.abp.io/bootstrap.css")
+                .AddFiles("https://cdn.abp.io/bootstrap.css")
                 .AddFiles("/styles/my-style3.css")
                 .AddFiles("/styles/my-style4.css");
         });
@@ -408,7 +408,7 @@ Configure<AbpBundlingOptions>(options =>
             configuration
                 .AddFiles("/scripts/my-script1.js")
                 .AddFiles("/scripts/my-script2.js")
-                .AddCdnFiles("https://cdn.abp.io/bootstrap.js")
+                .AddFiles("https://cdn.abp.io/bootstrap.js")
                 .AddFiles("/scripts/my-script3.js")
                 .AddFiles("/scripts/my-script4.js");
         });
@@ -427,13 +427,13 @@ Configure<AbpBundlingOptions>(options =>
 <script src="/__bundles/MyScriptBundle.2E8D0FDC6334D2A6B847393A801525B7.js?_v=638331889644943970"></script>
 ````
 
-#### Add CDN files in Tag Helpers.
+#### Using External/CDN files in Tag Helpers.
 
 ````html
 <abp-style-bundle name="MyStyleBundle">
     <abp-style src="/styles/my-style1.css" />
     <abp-style src="/styles/my-style2.css" />
-    <abp-style src="https://cdn.abp.io/bootstrap.css" is-cdn="true" />
+    <abp-style src="https://cdn.abp.io/bootstrap.css" />
     <abp-style src="/styles/my-style3.css" />
     <abp-style src="/styles/my-style4.css" />
 </abp-style-bundle>
@@ -441,7 +441,7 @@ Configure<AbpBundlingOptions>(options =>
 <abp-script-bundle name="MyScriptBundle">
     <abp-script src="/scripts/my-script1.js" />
     <abp-script src="/scripts/my-script2.js" />
-    <abp-script src="https://cdn.abp.io/bootstrap.js" is-cdn="true" />
+    <abp-script src="https://cdn.abp.io/bootstrap.js" />
     <abp-script src="/scripts/my-script3.js" />
     <abp-script src="/scripts/my-script4.js" />
 </abp-script-bundle>

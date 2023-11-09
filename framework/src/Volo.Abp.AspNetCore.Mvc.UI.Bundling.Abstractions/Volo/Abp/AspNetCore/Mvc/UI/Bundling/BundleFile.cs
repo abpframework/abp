@@ -1,15 +1,24 @@
+using System;
+
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 public class BundleFile
 {
     public string FileName { get; set; }
 
-    public bool IsCdn { get; set; }
+    public bool IsExternalFile { get; set; }
 
-    public BundleFile(string fileName, bool isCdn = false)
+    public BundleFile(string fileName)
     {
         FileName = fileName;
-        IsCdn = isCdn;
+        IsExternalFile = fileName.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                fileName.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+    }
+
+    public BundleFile(string fileName, bool isExternalFile)
+    {
+        FileName = fileName;
+        IsExternalFile = isExternalFile;
     }
 
     /// <summary>

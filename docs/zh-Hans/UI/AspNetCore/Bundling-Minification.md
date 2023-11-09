@@ -353,11 +353,11 @@ services.Configure<AbpBundlingOptions>(options =>
 });
 ````
 
-### CDN 支持
+### 外部/CDN文件支持
 
-你可以配置`AbpBundlingOptions`或在`script/style` taghelper上使用`is-cdn`来从CDN加载js/css.
+捆绑系统会自动识别外部/CDN文件，并将其添加到页面中，无需进行任何更改。
 
-#### 在`AbpBundlingOptions`中添加CDN文件
+#### 在`AbpBundlingOptions`中添加外部/CDN文件
 
 ````csharp
 Configure<AbpBundlingOptions>(options =>
@@ -368,7 +368,7 @@ Configure<AbpBundlingOptions>(options =>
             configuration
                 .AddFiles("/styles/my-style1.css")
                 .AddFiles("/styles/my-style2.css")
-                .AddCdnFiles("https://cdn.abp.io/bootstrap.css")
+                .AddFiles("https://cdn.abp.io/bootstrap.css")
                 .AddFiles("/styles/my-style3.css")
                 .AddFiles("/styles/my-style4.css");
         });
@@ -379,7 +379,7 @@ Configure<AbpBundlingOptions>(options =>
             configuration
                 .AddFiles("/scripts/my-script1.js")
                 .AddFiles("/scripts/my-script2.js")
-                .AddCdnFiles("https://cdn.abp.io/bootstrap.js")
+                .AddFiles("https://cdn.abp.io/bootstrap.js")
                 .AddFiles("/scripts/my-script3.js")
                 .AddFiles("/scripts/my-script4.js");
         });
@@ -398,13 +398,13 @@ Configure<AbpBundlingOptions>(options =>
 <script src="/__bundles/MyScriptBundle.2E8D0FDC6334D2A6B847393A801525B7.js?_v=638331889644943970"></script>
 ````
 
-#### 在TagHelpers中添加CDN文件
+#### 在TagHelpers中添加外部/CDN文件
 
 ````html
 <abp-style-bundle name="MyStyleBundle">
     <abp-style src="/styles/my-style1.css" />
     <abp-style src="/styles/my-style2.css" />
-    <abp-style src="https://cdn.abp.io/bootstrap.css" is-cdn="true" />
+    <abp-style src="https://cdn.abp.io/bootstrap.css" />
     <abp-style src="/styles/my-style3.css" />
     <abp-style src="/styles/my-style4.css" />
 </abp-style-bundle>
@@ -412,7 +412,7 @@ Configure<AbpBundlingOptions>(options =>
 <abp-script-bundle name="MyScriptBundle">
     <abp-script src="/scripts/my-script1.js" />
     <abp-script src="/scripts/my-script2.js" />
-    <abp-script src="https://cdn.abp.io/bootstrap.js" is-cdn="true" />
+    <abp-script src="https://cdn.abp.io/bootstrap.js" />
     <abp-script src="/scripts/my-script3.js" />
     <abp-script src="/scripts/my-script4.js" />
 </abp-script-bundle>
@@ -429,7 +429,6 @@ Configure<AbpBundlingOptions>(options =>
 <script src="https://cdn.abp.io/bootstrap.js"></script>
 <script src="/__bundles/MyScriptBundle.191CB68AB4F41C8BF3A7AE422F19A3D2.js?_v=638331889645055490"></script>
 ````
-
 
 ### 主题
 

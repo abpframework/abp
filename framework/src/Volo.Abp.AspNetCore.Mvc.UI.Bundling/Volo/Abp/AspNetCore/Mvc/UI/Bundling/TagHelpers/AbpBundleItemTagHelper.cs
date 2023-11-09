@@ -18,9 +18,6 @@ public abstract class AbpBundleItemTagHelper<TTagHelper, TTagHelperService> : Ab
     /// </summary>
     public Type? Type { get; set; }
 
-    [HtmlAttributeName("is-cdn")]
-    public bool IsCdn { get; set; }
-
     protected AbpBundleItemTagHelper(TTagHelperService service)
         : base(service)
     {
@@ -53,7 +50,7 @@ public abstract class AbpBundleItemTagHelper<TTagHelper, TTagHelperService> : Ab
 
         if (Src != null)
         {
-            return new BundleTagHelperFileItem(new BundleFile(Src, IsCdn));
+            return new BundleTagHelperFileItem(new BundleFile(Src));
         }
 
         throw new AbpException("abp-script tag helper requires to set either src or type!");
