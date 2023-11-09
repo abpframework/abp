@@ -20,7 +20,7 @@ import { RE_LOGIN_CONFIRMATION_TOKEN } from './tokens';
 import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS } from './tokens/extensions.token';
 import { AccountExtensionsGuard } from './guards/extensions.guard';
 import { PersonalSettingsHalfRowComponent } from './components/personal-settings/personal-settings-half-row.component';
-import {ExtensibleModule} from "@abp/ng.components/extensible";
+import { ExtensibleModule } from "@abp/ng.components/extensible";
 
 const declarations = [
   LoginComponent,

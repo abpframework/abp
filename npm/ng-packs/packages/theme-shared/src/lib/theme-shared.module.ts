@@ -37,7 +37,7 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
 import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from './tokens/confirmation-icons.token';
 import { PasswordComponent } from './components/password/password.component';
 import { CardModule } from './components/card/card.module';
-import { AbpVisibleDirective } from './directives';
+import { AbpVisibleDirective, DisabledDirective } from './directives';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormCheckboxComponent } from './components/checkbox/checkbox.component';
 import { tenantNotFoundProvider } from './providers/tenant-not-found.provider';
@@ -70,6 +70,7 @@ const declarationsWithExports = [
     NgbPaginationModule,
     EllipsisModule,
     CardModule,
+    DisabledDirective
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
   exports: [
@@ -77,6 +78,9 @@ const declarationsWithExports = [
     EllipsisModule,
     NgxValidateCoreModule,
     CardModule,
+    DisabledDirective,
+    NgxDatatableListDirective,
+    NgxDatatableDefaultDirective,
     ...declarationsWithExports,
   ],
   providers: [DatePipe],
