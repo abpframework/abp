@@ -4,7 +4,9 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.UI.Navigation</AssemblyName>
     <PackageId>Volo.Abp.UI.Navigation</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -22,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
     <ProjectReference Include="..\Volo.Abp.UI\Volo.Abp.UI.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
   </ItemGroup>
 
 </Project>

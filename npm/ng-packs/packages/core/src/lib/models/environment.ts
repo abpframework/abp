@@ -7,19 +7,20 @@ export interface Environment {
   hmr?: boolean;
   test?: boolean;
   localization?: { defaultResourceName?: string };
-  oAuthConfig: AuthConfig;
+  oAuthConfig?: AuthConfig;
   production: boolean;
   remoteEnv?: RemoteEnv;
-  [key:string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 export interface ApplicationInfo {
   name: string;
   baseUrl?: string;
   logoUrl?: string;
 }
-
-export interface ApiConfig {
+export interface HasAdditional {
   [key: string]: string;
+}
+export interface ApiConfig extends Partial<HasAdditional>{
   url: string;
   rootNamespace?: string;
 }

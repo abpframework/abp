@@ -11,7 +11,7 @@ using Volo.CmsKit.Public.GlobalResources;
 namespace Volo.CmsKit.Public.Web.Controllers;
 
 [Route("cms-kit/global-resources")]
-public class CmsKitPublicGlobalResourcesController: AbpController
+public class CmsKitPublicGlobalResourcesController : CmsKitPublicControllerBase
 {
     private readonly IGlobalResourcePublicAppService _globalResourcePublicAppService;
     private readonly IDistributedCache<GlobalResourceDto> _resourceCache;
@@ -26,7 +26,7 @@ public class CmsKitPublicGlobalResourcesController: AbpController
     
     [HttpGet]
     [Route("style")]
-    public async Task<IActionResult> GetGlobalStyleAsync()
+    public virtual async Task<IActionResult> GetGlobalStyleAsync()
     {
         var style = await _resourceCache.GetOrAddAsync(
             GlobalResourceConsts.GlobalStyleName, //Cache key
@@ -44,7 +44,7 @@ public class CmsKitPublicGlobalResourcesController: AbpController
     
     [HttpGet]
     [Route("script")]
-    public async Task<IActionResult> GetGlobalScriptAsync()
+    public virtual async Task<IActionResult> GetGlobalScriptAsync()
     {
         var script = await _resourceCache.GetOrAddAsync(
             GlobalResourceConsts.GlobalScriptName, //Cache key

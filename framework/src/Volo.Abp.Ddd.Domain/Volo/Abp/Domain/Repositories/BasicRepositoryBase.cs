@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
@@ -20,9 +22,9 @@ public abstract class BasicRepositoryBase<TEntity> :
     IUnitOfWorkEnabled
     where TEntity : class, IEntity
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
     public IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
 
@@ -33,6 +35,14 @@ public abstract class BasicRepositoryBase<TEntity> :
     public IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 
     public ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
+
+    public ILoggerFactory? LoggerFactory => LazyServiceProvider.LazyGetService<ILoggerFactory>();
+
+    public ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
+
+    public IEntityChangeTrackingProvider EntityChangeTrackingProvider => LazyServiceProvider.LazyGetRequiredService<IEntityChangeTrackingProvider>();
+
+    public bool? IsChangeTrackingEnabled { get; protected set; }
 
     protected BasicRepositoryBase()
     {
@@ -106,6 +116,24 @@ public abstract class BasicRepositoryBase<TEntity> :
     {
         return CancellationTokenProvider.FallbackToProvider(preferredValue);
     }
+
+    protected virtual bool ShouldTrackingEntityChange()
+    {
+        // If IsChangeTrackingEnabled is set, it has the highest priority. This generally means the repository is read-only.
+        if (IsChangeTrackingEnabled.HasValue)
+        {
+            return IsChangeTrackingEnabled.Value;
+        }
+
+        // If Interface/Class/Method has Enable/DisableEntityChangeTrackingAttribute, it has the second highest priority.
+        if (EntityChangeTrackingProvider.Enabled.HasValue)
+        {
+            return EntityChangeTrackingProvider.Enabled.Value;
+        }
+
+        // Default behavior is tracking entity change.
+        return true;
+    }
 }
 
 public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<TEntity>, IBasicRepository<TEntity, TKey>
@@ -123,7 +151,7 @@ public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<T
         return entity;
     }
 
-    public abstract Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+    public abstract Task<TEntity?> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
 
     public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
     {

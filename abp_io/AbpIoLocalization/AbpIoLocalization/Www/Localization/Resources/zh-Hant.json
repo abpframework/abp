@@ -16,7 +16,7 @@
     "Tutorial": "教學",
     "UsingCLI": "使用CLI",
     "SeeDetails": "看詳細",
-    "AbpShortDescription": "ABP是用於建立現代Web應用程式的完整架構和強大的基礎設施! 遵循最佳實作和約定，為您提供SOLID開發經驗.",
+    "AbpShortDescription": "ABP Framework 是一個完整的基礎架構，用於建立基於 ASP.NET Core 平台的現代架構的軟體解決方案。",
     "SourceCodeUpper": "原始碼",
     "LatestReleaseLogs": "最新發佈日誌",
     "Infrastructure": "基礎設施",
@@ -274,7 +274,8 @@
     "FirstEdition": "第一版",
     "ThankYou": "謝謝！",
     "CheckboxMandatory": "你需要檢查這個才能繼續！",
-    "SelectUITheme": "選擇 UI 主題"
-
+    "SelectUITheme": "選擇 UI 主題",
+    "CreateSolutionFolder": "創建解決方案文件夾",
+    "CreateSolutionFolderOption": "指定項目是位於輸出文件夾中的新文件夾中，還是直接位於輸出文件夾中。"
   }
 }

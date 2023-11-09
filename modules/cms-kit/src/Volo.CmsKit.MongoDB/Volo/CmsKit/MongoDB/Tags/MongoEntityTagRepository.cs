@@ -60,7 +60,7 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
         return await AsyncExecuter.ToListAsync(blogPostQueryable, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
+    public virtual async Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
         [NotNull] string tagName,
         [NotNull] string entityType,
         [CanBeNull] Guid? tenantId = null,

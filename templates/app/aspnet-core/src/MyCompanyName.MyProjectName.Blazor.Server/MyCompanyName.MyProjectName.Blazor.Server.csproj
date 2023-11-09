@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
@@ -14,9 +14,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazorise.Bootstrap5" Version="1.1.4.1" />
-    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.1.4.1" />
-    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Blazorise.Bootstrap5" Version="1.3.1" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.3.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
   </ItemGroup>
 
@@ -28,8 +28,8 @@
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Server.Theming\Volo.Abp.AspNetCore.Components.Server.Theming.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.Theming\Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
     <!-- </TEMPLATE-REMOVE> -->
-    <PackageReference Include="Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme" Version="2.0.0-*" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="2.0.0-*" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme" Version="2.4.*-*" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="2.4.*-*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +43,13 @@
     <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.Blazor.Server\Volo.Abp.Identity.Blazor.Server.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.Blazor.Server\Volo.Abp.TenantManagement.Blazor.Server.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Blazor.Server\Volo.Abp.SettingManagement.Blazor.Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('./openiddict.pfx')">
+    <None Remove="openiddict.pfx" />
+    <EmbeddedResource Include="openiddict.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -11,22 +10,22 @@ namespace Volo.Abp.AspNetCore.Components.Web.Theming.Components.LayoutHooks;
 public partial class LayoutHook : ComponentBase
 {
     [Parameter]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     
     [Parameter]
-    public string Layout { get; set; }
+    public string? Layout { get; set; }
 
     [Inject]
-    protected IOptions<AbpLayoutHookOptions> LayoutHookOptions { get; set; }
+    protected IOptions<AbpLayoutHookOptions> LayoutHookOptions { get; set; } = default!;
 
-    protected LayoutHookViewModel LayoutHookViewModel { get; private set; }
+    protected LayoutHookViewModel LayoutHookViewModel { get; private set; } = default!;
 
     protected override Task OnInitializedAsync()
     {
         if (LayoutHookOptions.Value.Hooks.TryGetValue(Name, out var layoutHooks))
         {
             layoutHooks = layoutHooks
-                .WhereIf(string.IsNullOrWhiteSpace(Layout), x => x.Layout == Layout)
+                .Where(x => IsComponentBase(x) && (string.IsNullOrWhiteSpace(x.Layout) || x.Layout == Layout))
                 .ToList();
         }
 
@@ -35,5 +34,10 @@ public partial class LayoutHook : ComponentBase
         LayoutHookViewModel = new LayoutHookViewModel(layoutHooks.ToArray(), Layout);
         
         return Task.CompletedTask;
+    }
+
+    protected virtual bool IsComponentBase(LayoutHookInfo layoutHook)
+    {
+        return typeof(ComponentBase).IsAssignableFrom(layoutHook.ComponentType);
     }
 }

@@ -20,10 +20,10 @@ internal static class ExtensionPropertyHelper
         }
     }
 
-    public static object GetDefaultValue(
+    public static object? GetDefaultValue(
         Type propertyType,
-        Func<object> defaultValueFactory,
-        object defaultValue)
+        Func<object>? defaultValueFactory,
+        object? defaultValue)
     {
         if (defaultValueFactory != null)
         {

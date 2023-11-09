@@ -39,8 +39,10 @@
                         <abp-input asp-for="UserInfo.Email" />
                         <abp-input asp-for="UserInfo.PhoneNumber" />
                         <abp-input asp-for="UserInfo.IsActive" />
-                        <abp-input asp-for="UserInfo.LockoutEnabled" />
-
+                        @if (!Model.IsEditCurrentUser)
+                        {
+                            <abp-input asp-for="UserInfo.LockoutEnabled" />
+                        }
                         @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.UserInfoViewModel>())
                         {
                             if (!propertyInfo.Name.EndsWith("_Text"))
@@ -83,8 +85,54 @@
                         }
                     </div>
                 </abp-tab>
+                <abp-tab title="@L["Details"].Value">
+                    <div class="mt-3">
+                        <div class="mb-3">
+                            <span class="fw-bold">@L["CreatedBy"] :</span> @ConvertUserFriendlyFormat(Model.Detail.CreatedBy)
+                        </div>
+                        <div class="mb-3">
+                            <span class="fw-bold">@L["CreationTime"] :</span> @ConvertUserFriendlyFormat(Model.Detail.CreationTime)
+                        </div>
+                        <div class="mb-3">
+                            <span class="fw-bold">@L["ModifiedBy"] :</span> @ConvertUserFriendlyFormat(Model.Detail.ModifiedBy)
+                        </div>
+                        <div class="mb-3">
+                            <span class="fw-bold">@L["ModificationTime"] :</span> @ConvertUserFriendlyFormat(Model.Detail.LastModificationTime)
+                        </div>
+                        <div class="mb-3">
+                            <span class="fw-bold">@L["PasswordUpdateTime"] :</span> @ConvertUserFriendlyFormat(Model.Detail.LastPasswordChangeTime)
+                        </div>
+                        <div class="mb-3">
+                            <span class="fw-bold">@L["LockoutEndTime"] :</span> @ConvertUserFriendlyFormat(Model.Detail.LockoutEnd)
+                        </div>
+                        <div class="mb-3">
+                            <span class="fw-bold">@L["FailedAccessCount"] :</span> @Model.Detail.AccessFailedCount
+                        </div>
+                    </div>
+                </abp-tab>
             </abp-tabs>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
 </form>
+
+@functions
+{
+    const string DateTimeFormat = "MMMM dd, yyyy — HH:mm";
+    const string DefaultEmptyValue = "-";
+    
+    static string ConvertUserFriendlyFormat(DateTime? dateTime)
+    {
+        return dateTime == null ? DefaultEmptyValue : dateTime.Value.ToUniversalTime().ToString(DateTimeFormat);
+    }
+    
+    static string ConvertUserFriendlyFormat(DateTimeOffset? dateTime)
+    {
+        return dateTime == null ? DefaultEmptyValue : dateTime.Value.UtcDateTime.ToString(DateTimeFormat);
+    }
+    
+    static string ConvertUserFriendlyFormat(string value)
+    {
+        return value.IsNullOrWhiteSpace() ? DefaultEmptyValue : value;
+    }
+}

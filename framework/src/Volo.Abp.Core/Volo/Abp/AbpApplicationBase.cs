@@ -19,13 +19,13 @@ public abstract class AbpApplicationBase : IAbpApplication
     [NotNull]
     public Type StartupModuleType { get; }
 
-    public IServiceProvider ServiceProvider { get; private set; }
+    public IServiceProvider ServiceProvider { get; private set; } = default!;
 
     public IServiceCollection Services { get; }
 
     public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
 
-    public string ApplicationName { get; }
+    public string? ApplicationName { get; }
 
     public string InstanceId { get; } = Guid.NewGuid().ToString();
 
@@ -34,7 +34,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     internal AbpApplicationBase(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
-        [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
+        Action<AbpApplicationCreationOptions>? optionsAction)
     {
         Check.NotNull(startupModuleType, nameof(startupModuleType));
         Check.NotNull(services, nameof(services));
@@ -188,11 +188,13 @@ public abstract class AbpApplicationBase : IAbpApplication
             {
                 if (!abpModule.SkipAutoServiceRegistration)
                 {
-                    var assembly = module.Type.Assembly;
-                    if (!assemblies.Contains(assembly))
+                    foreach (var assembly in module.AllAssemblies)
                     {
-                        Services.AddAssembly(assembly);
-                        assemblies.Add(assembly);
+                        if (!assemblies.Contains(assembly))
+                        {
+                            Services.AddAssembly(assembly);
+                            assemblies.Add(assembly);
+                        }
                     }
                 }
             }
@@ -224,7 +226,7 @@ public abstract class AbpApplicationBase : IAbpApplication
         {
             if (module.Instance is AbpModule abpModule)
             {
-                abpModule.ServiceConfigurationContext = null;
+                abpModule.ServiceConfigurationContext = null!;
             }
         }
 
@@ -279,11 +281,13 @@ public abstract class AbpApplicationBase : IAbpApplication
             {
                 if (!abpModule.SkipAutoServiceRegistration)
                 {
-                    var assembly = module.Type.Assembly;
-                    if (!assemblies.Contains(assembly))
+                    foreach (var assembly in module.AllAssemblies)
                     {
-                        Services.AddAssembly(assembly);
-                        assemblies.Add(assembly);
+                        if (!assemblies.Contains(assembly))
+                        {
+                            Services.AddAssembly(assembly);
+                            assemblies.Add(assembly);
+                        }
                     }
                 }
             }
@@ -315,7 +319,7 @@ public abstract class AbpApplicationBase : IAbpApplication
         {
             if (module.Instance is AbpModule abpModule)
             {
-                abpModule.ServiceConfigurationContext = null;
+                abpModule.ServiceConfigurationContext = null!;
             }
         }
 
@@ -324,11 +328,11 @@ public abstract class AbpApplicationBase : IAbpApplication
         TryToSetEnvironment(Services);
     }
 
-    private static string GetApplicationName(AbpApplicationCreationOptions options)
+    private static string? GetApplicationName(AbpApplicationCreationOptions options)
     {
         if (!string.IsNullOrWhiteSpace(options.ApplicationName))
         {
-            return options.ApplicationName;
+            return options.ApplicationName!;
         }
 
         var configuration = options.Services.GetConfigurationOrNull();
@@ -337,7 +341,7 @@ public abstract class AbpApplicationBase : IAbpApplication
             var appNameConfig = configuration["ApplicationName"];
             if (!string.IsNullOrWhiteSpace(appNameConfig))
             {
-                return appNameConfig;
+                return appNameConfig!;
             }
         }
 

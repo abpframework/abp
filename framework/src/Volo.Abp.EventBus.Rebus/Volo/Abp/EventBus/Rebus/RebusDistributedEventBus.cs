@@ -11,10 +11,12 @@ using Rebus.Pipeline;
 using Rebus.Transport;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Rebus;
@@ -41,7 +43,9 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IRebusSerializer serializer,
         IGuidGenerator guidGenerator,
         IClock clock,
-        IEventHandlerInvoker eventHandlerInvoker) :
+        IEventHandlerInvoker eventHandlerInvoker,
+        ILocalEventBus localEventBus,
+        ICorrelationIdProvider correlationIdProvider) :
         base(
             serviceScopeFactory,
             currentTenant,
@@ -49,7 +53,9 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             abpDistributedEventBusOptions,
             guidGenerator,
             clock,
-            eventHandlerInvoker)
+            eventHandlerInvoker,
+            localEventBus,
+            correlationIdProvider)
     {
         Rebus = rebus;
         Serializer = serializer;
@@ -141,25 +147,34 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var messageId = MessageContext.Current.TransportMessage.GetMessageId();
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        var correlationId = MessageContext.Current.Headers.GetOrDefault(EventBusConsts.CorrelationIdHeaderName);
 
-        if (await AddToInboxAsync(messageId, eventName, eventType, MessageContext.Current.TransportMessage.Body))
+        if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId))
         {
             return;
         }
 
-        await TriggerHandlersAsync(eventType, eventData);
+        using (CorrelationIdProvider.Change(correlationId))
+        {
+            await TriggerHandlersDirectAsync(eventType, eventData);
+        }
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await PublishAsync(eventType, eventData);
+        var headers = new Dictionary<string, string>();
+        if (CorrelationIdProvider.Get() != null)
+        {
+            headers.Add(EventBusConsts.CorrelationIdHeaderName, CorrelationIdProvider.Get()!);
+        }
+        await PublishAsync(eventType, eventData, headersArguments: headers);
     }
 
     protected virtual async Task PublishAsync(
         Type eventType,
         object eventData,
         Guid? eventId = null,
-        Dictionary<string, string> headersArguments = null)
+        Dictionary<string, string>? headersArguments = null)
     {
         if (AbpRebusEventBusOptions.Publish != null)
         {
@@ -181,6 +196,12 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 
+    protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
+    {
+        EventTypes.GetOrAdd(eventName, eventType);
+        return base.OnAddToOutboxAsync(eventName, eventType, eventData);
+    }
+
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
     {
         return HandlerFactories.GetOrAdd(
@@ -188,7 +209,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             type =>
             {
                 var eventName = EventNameAttribute.GetNameOrDefault(type);
-                EventTypes[eventName] = type;
+                EventTypes.GetOrAdd(eventName, eventType);
                 return new List<IEventHandlerFactory>();
             }
         );
@@ -225,14 +246,29 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return false;
     }
 
-    public override Task PublishFromOutboxAsync(
+    public async override Task PublishFromOutboxAsync(
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
-        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
+        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName)!;
         var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
 
-        return PublishAsync(eventType, eventData, eventId: outgoingEvent.Id);
+        using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
+        {
+            await TriggerDistributedEventSentAsync(new DistributedEventSent() {
+                Source = DistributedEventSource.Outbox,
+                EventName = outgoingEvent.EventName,
+                EventData = outgoingEvent.EventData
+            });
+        }
+
+        var headers = new Dictionary<string, string>();
+        if (outgoingEvent.GetCorrelationId() != null)
+        {
+            headers.Add(EventBusConsts.CorrelationIdHeaderName, outgoingEvent.GetCorrelationId()!);
+        }
+
+        await PublishAsync(eventType, eventData, eventId: outgoingEvent.Id, headersArguments: headers);
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -243,9 +279,19 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             foreach (var outgoingEvent in outgoingEventArray)
             {
+                using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
+                {
+                    await TriggerDistributedEventSentAsync(new DistributedEventSent()
+                    {
+                        Source = DistributedEventSource.Outbox,
+                        EventName = outgoingEvent.EventName,
+                        EventData = outgoingEvent.EventData
+                    });
+                }
+
                 await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
             }
-            
+
             await scope.CompleteAsync();
         }
     }
@@ -262,7 +308,10 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
-        await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+        using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
+        {
+            await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+        }
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);

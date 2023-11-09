@@ -16,7 +16,7 @@
     "Tutorial": "Kennsla",
     "UsingCLI": "Nota CLI",
     "SeeDetails": "Sjá meira",
-    "AbpShortDescription": "ABP Framework hefur fullkomna innviði til að búa til nútímaleg vefforrit með því að fylgja bestu starfsháttum og venjum hugbúnaðarþróunar.",
+    "AbpShortDescription": "ABP Framework er fullkominn innviði til að búa til hugbúnaðarlausnir með nútíma arkitektúr sem byggir á ASP.NET Core pallinum.",
     "SourceCodeUpper": "FRUMKÓÐI",
     "LatestReleaseLogs": "Nýjustu útgáfuupplýsingar",
     "Infrastructure": "Innviðir",
@@ -274,7 +274,8 @@
     "FirstEdition": "Fyrsta útgáfa",
     "ThankYou": "Þakka þér!",
     "CheckboxMandatory": "Þú þarft að smella hér til að halda áfram!",
-    "SelectUITheme": "Veldu UI þema"
-
+    "SelectUITheme": "Veldu UI þema",
+    "CreateSolutionFolder": "Búðu til lausnarmöppu",
+    "CreateSolutionFolderOption": "Tilgreinir hvort verkefnið verður í nýrri möppu í úttaksmöppunni eða beint í framleiðslumöppunni."
   }
 }

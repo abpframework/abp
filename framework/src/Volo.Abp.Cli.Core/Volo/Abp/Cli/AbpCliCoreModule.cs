@@ -29,6 +29,11 @@ public class AbpCliCoreModule : AbpModule
         context.Services.AddHttpClient(CliConsts.HttpClientName)
             .ConfigurePrimaryHttpMessageHandler(() => new CliHttpClientHandler());
 
+        context.Services.AddHttpClient(CliConsts.GithubHttpClientName, client =>
+        {
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("MyAgent/1.0");
+        });
+
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
         Configure<AbpCliOptions>(options =>
@@ -51,6 +56,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[SwitchToPreviewCommand.Name] = typeof(SwitchToPreviewCommand);
             options.Commands[SwitchToStableCommand.Name] = typeof(SwitchToStableCommand);
             options.Commands[SwitchToNightlyCommand.Name] = typeof(SwitchToNightlyCommand);
+            options.Commands[SwitchToLocal.Name] = typeof(SwitchToLocal);
             options.Commands[TranslateCommand.Name] = typeof(TranslateCommand);
             options.Commands[BuildCommand.Name] = typeof(BuildCommand);
             options.Commands[BundleCommand.Name] = typeof(BundleCommand);
@@ -58,7 +64,8 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
             options.Commands[CliCommand.Name] = typeof(CliCommand);
-            
+            options.Commands[ClearDownloadCacheCommand.Name] = typeof(ClearDownloadCacheCommand);
+
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Pro");
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Lite");
         });

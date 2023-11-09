@@ -15,5 +15,5 @@ public class MultiLingualBook : IMultiLingualObject<MultiLingualBookTranslation>
 
     public decimal Price { get; set; }
 
-    public ICollection<MultiLingualBookTranslation> Translations { get; set; }
+    public ICollection<MultiLingualBookTranslation> Translations { get; set; } = new List<MultiLingualBookTranslation>();
 }

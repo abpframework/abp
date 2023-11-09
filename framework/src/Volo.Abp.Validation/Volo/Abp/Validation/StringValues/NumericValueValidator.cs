@@ -28,7 +28,7 @@ public class NumericValueValidator : ValueValidatorBase
         MaxValue = maxValue;
     }
 
-    public override bool IsValid(object value)
+    public override bool IsValid(object? value)
     {
         if (value == null)
         {

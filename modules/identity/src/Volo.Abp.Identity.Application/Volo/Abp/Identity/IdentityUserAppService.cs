@@ -173,7 +173,10 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
             (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
         }
 
-        (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
+        if (user.Id != CurrentUser.Id)
+        {
+            (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
+        }
 
         user.Name = input.Name;
         user.Surname = input.Surname;

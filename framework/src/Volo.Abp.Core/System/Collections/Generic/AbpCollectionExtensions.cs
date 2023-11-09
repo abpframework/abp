@@ -13,7 +13,7 @@ public static class AbpCollectionExtensions
     /// Checks whatever given collection object is null or has no item.
     /// </summary>
     [ContractAnnotation("source:null => true")]
-    public static bool IsNullOrEmpty<T>([CanBeNull] this ICollection<T> source)
+    public static bool IsNullOrEmpty<T>(this ICollection<T>? source)
     {
         return source == null || source.Count <= 0;
     }

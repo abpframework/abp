@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
@@ -10,6 +11,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Features;
+using Volo.Abp.Json.SystemTextJson.Modifiers;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
@@ -27,6 +29,8 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
     protected AbpFeatureOptions FeatureOptions { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
+    
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public StaticFeatureSaver(
         IStaticFeatureDefinitionStore staticStore,
@@ -38,7 +42,8 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
         IApplicationInfoAccessor applicationInfoAccessor,
         IAbpDistributedLock distributedLock,
         IOptions<AbpFeatureOptions> featureManagementOptions,
-        ICancellationTokenProvider cancellationTokenProvider)
+        ICancellationTokenProvider cancellationTokenProvider,
+        IUnitOfWorkManager unitOfWorkManager)
     {
         StaticStore = staticStore;
         FeatureGroupRepository = featureGroupRepository;
@@ -48,12 +53,12 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
         ApplicationInfoAccessor = applicationInfoAccessor;
         DistributedLock = distributedLock;
         CancellationTokenProvider = cancellationTokenProvider;
+        UnitOfWorkManager = unitOfWorkManager;
         FeatureOptions = featureManagementOptions.Value;
         CacheOptions = cacheOptions.Value;
     }
 
-    [UnitOfWork]
-    public virtual async Task SaveAsync()
+    public async Task SaveAsync()
     {
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
             GetApplicationDistributedLockKey()
@@ -99,19 +104,40 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
                 throw new AbpException("Could not acquire distributed lock for saving static features!");
             }
 
-            var hasChangesInGroups = await UpdateChangedFeatureGroupsAsync(featureGroupRecords);
-            var hasChangesInFeatures = await UpdateChangedFeaturesAsync(featureRecords);
-
-            if (hasChangesInGroups ||hasChangesInFeatures)
+            using (var unitOfWork = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true))
             {
-                await Cache.SetStringAsync(
-                    GetCommonStampCacheKey(),
-                    Guid.NewGuid().ToString(),
-                    new DistributedCacheEntryOptions {
-                        SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-                    },
-                    CancellationTokenProvider.Token
-                );
+                try
+                {
+                    var hasChangesInGroups = await UpdateChangedFeatureGroupsAsync(featureGroupRecords);
+                    var hasChangesInFeatures = await UpdateChangedFeaturesAsync(featureRecords);
+
+                    if (hasChangesInGroups ||hasChangesInFeatures)
+                    {
+                        await Cache.SetStringAsync(
+                            GetCommonStampCacheKey(),
+                            Guid.NewGuid().ToString(),
+                            new DistributedCacheEntryOptions {
+                                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
+                            },
+                            CancellationTokenProvider.Token
+                        );
+                    }
+                }
+                catch
+                {
+                    try
+                    {
+                        await unitOfWork.RollbackAsync();
+                    }
+                    catch
+                    {
+                        /* ignored */
+                    }
+                    
+                    throw;
+                }
+
+                await unitOfWork.CompleteAsync();
             }
         }
 
@@ -273,13 +299,25 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
         IEnumerable<string> deletedFeatureGroups,
         IEnumerable<string> deletedFeatures)
     {
+        var jsonSerializerOptions = new JsonSerializerOptions
+        {
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver
+            {
+                Modifiers =
+                {
+                    new AbpIgnorePropertiesModifiers<FeatureGroupDefinitionRecord, Guid>().CreateModifyAction(x => x.Id),
+                    new AbpIgnorePropertiesModifiers<FeatureDefinitionRecord, Guid>().CreateModifyAction(x => x.Id)
+                }
+            }
+        };
+
         var stringBuilder = new StringBuilder();
 
         stringBuilder.Append("FeatureGroupRecords:");
-        stringBuilder.AppendLine(JsonSerializer.Serialize(featureGroupRecords));
+        stringBuilder.AppendLine(JsonSerializer.Serialize(featureGroupRecords, jsonSerializerOptions));
 
         stringBuilder.Append("FeatureRecords:");
-        stringBuilder.AppendLine(JsonSerializer.Serialize(featureRecords));
+        stringBuilder.AppendLine(JsonSerializer.Serialize(featureRecords, jsonSerializerOptions));
 
         stringBuilder.Append("DeletedFeatureGroups:");
         stringBuilder.AppendLine(deletedFeatureGroups.JoinAsString(","));

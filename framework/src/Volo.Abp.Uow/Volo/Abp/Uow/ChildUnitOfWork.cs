@@ -12,7 +12,7 @@ internal class ChildUnitOfWork : IUnitOfWork
 
     public IAbpUnitOfWorkOptions Options => _parent.Options;
 
-    public IUnitOfWork Outer => _parent.Outer;
+    public IUnitOfWork? Outer => _parent.Outer;
 
     public bool IsReserved => _parent.IsReserved;
 
@@ -20,10 +20,10 @@ internal class ChildUnitOfWork : IUnitOfWork
 
     public bool IsCompleted => _parent.IsCompleted;
 
-    public string ReservationName => _parent.ReservationName;
+    public string? ReservationName => _parent.ReservationName;
 
-    public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
-    public event EventHandler<UnitOfWorkEventArgs> Disposed;
+    public event EventHandler<UnitOfWorkFailedEventArgs> Failed = default!;
+    public event EventHandler<UnitOfWorkEventArgs> Disposed = default!;
 
     public IServiceProvider ServiceProvider => _parent.ServiceProvider;
 
@@ -37,11 +37,11 @@ internal class ChildUnitOfWork : IUnitOfWork
 
         _parent = parent;
 
-        _parent.Failed += (sender, args) => { Failed.InvokeSafely(sender, args); };
-        _parent.Disposed += (sender, args) => { Disposed.InvokeSafely(sender, args); };
+        _parent.Failed += (sender, args) => { Failed.InvokeSafely(sender!, args); };
+        _parent.Disposed += (sender, args) => { Disposed.InvokeSafely(sender!, args); };
     }
 
-    public void SetOuter(IUnitOfWork outer)
+    public void SetOuter(IUnitOfWork? outer)
     {
         _parent.SetOuter(outer);
     }
@@ -78,19 +78,19 @@ internal class ChildUnitOfWork : IUnitOfWork
 
     public void AddOrReplaceLocalEvent(
         UnitOfWorkEventRecord eventRecord,
-        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        Predicate<UnitOfWorkEventRecord>? replacementSelector = null)
     {
         _parent.AddOrReplaceLocalEvent(eventRecord, replacementSelector);
     }
 
     public void AddOrReplaceDistributedEvent(
         UnitOfWorkEventRecord eventRecord,
-        Predicate<UnitOfWorkEventRecord> replacementSelector = null)
+        Predicate<UnitOfWorkEventRecord>? replacementSelector = null)
     {
         _parent.AddOrReplaceDistributedEvent(eventRecord, replacementSelector);
     }
 
-    public IDatabaseApi FindDatabaseApi(string key)
+    public IDatabaseApi? FindDatabaseApi(string key)
     {
         return _parent.FindDatabaseApi(key);
     }
@@ -105,7 +105,7 @@ internal class ChildUnitOfWork : IUnitOfWork
         return _parent.GetOrAddDatabaseApi(key, factory);
     }
 
-    public ITransactionApi FindTransactionApi(string key)
+    public ITransactionApi? FindTransactionApi(string key)
     {
         return _parent.FindTransactionApi(key);
     }

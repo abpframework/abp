@@ -1,6 +1,6 @@
 ﻿using MyCompanyName.MyProjectName.Blazor.Menus;
-using MyCompanyName.MyProjectName.Shared.Localization;
-using MyCompanyName.MyProjectName.Shared.MultiTenancy;
+using MyCompanyName.MyProjectName.Localization;
+using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Identity.Blazor;
@@ -8,7 +8,7 @@ using Volo.Abp.SettingManagement.Blazor.Menus;
 using Volo.Abp.TenantManagement.Blazor.Navigation;
 using Volo.Abp.UI.Navigation;
 
-namespace MyCompanyName.MyProjectName.Client.Menus;
+namespace MyCompanyName.MyProjectName.Menus;
 
 public class MyProjectNameMenuContributor : IMenuContributor
 {

@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.AzureServiceBus;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Azure;
@@ -21,13 +24,13 @@ namespace Volo.Abp.EventBus.Azure;
 [ExposeServices(typeof(IDistributedEventBus), typeof(AzureDistributedEventBus))]
 public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDependency
 {
-    private readonly AbpAzureEventBusOptions _options;
-    private readonly IAzureServiceBusMessageConsumerFactory _messageConsumerFactory;
-    private readonly IPublisherPool _publisherPool;
-    private readonly IAzureServiceBusSerializer _serializer;
-    private readonly ConcurrentDictionary<Type, List<IEventHandlerFactory>> _handlerFactories;
-    private readonly ConcurrentDictionary<string, Type> _eventTypes;
-    private IAzureServiceBusMessageConsumer _consumer;
+    protected AbpAzureEventBusOptions Options { get; }
+    protected IAzureServiceBusMessageConsumerFactory MessageConsumerFactory { get; }
+    protected IPublisherPool PublisherPool { get; }
+    protected IAzureServiceBusSerializer Serializer { get; }
+    protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
+    protected ConcurrentDictionary<string, Type> EventTypes  { get; }
+    protected IAzureServiceBusMessageConsumer Consumer { get; private set; } = default!;
 
     public AzureDistributedEventBus(
         IServiceScopeFactory serviceScopeFactory,
@@ -40,31 +43,35 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         IAzureServiceBusSerializer serializer,
         IAzureServiceBusMessageConsumerFactory messageConsumerFactory,
         IPublisherPool publisherPool,
-        IEventHandlerInvoker eventHandlerInvoker)
+        IEventHandlerInvoker eventHandlerInvoker,
+        ILocalEventBus localEventBus,
+        ICorrelationIdProvider correlationIdProvider)
         : base(serviceScopeFactory,
             currentTenant,
             unitOfWorkManager,
             abpDistributedEventBusOptions,
             guidGenerator,
             clock,
-            eventHandlerInvoker)
+            eventHandlerInvoker,
+            localEventBus,
+            correlationIdProvider)
     {
-        _options = abpAzureEventBusOptions.Value;
-        _serializer = serializer;
-        _messageConsumerFactory = messageConsumerFactory;
-        _publisherPool = publisherPool;
-        _handlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
-        _eventTypes = new ConcurrentDictionary<string, Type>();
+        Options = abpAzureEventBusOptions.Value;
+        Serializer = serializer;
+        MessageConsumerFactory = messageConsumerFactory;
+        PublisherPool = publisherPool;
+        HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+        EventTypes = new ConcurrentDictionary<string, Type>();
     }
 
     public void Initialize()
     {
-        _consumer = _messageConsumerFactory.CreateMessageConsumer(
-            _options.TopicName,
-            _options.SubscriberName,
-            _options.ConnectionName);
+        Consumer = MessageConsumerFactory.CreateMessageConsumer(
+            Options.TopicName,
+            Options.SubscriberName,
+            Options.ConnectionName);
 
-        _consumer.OnMessageReceived(ProcessEventAsync);
+        Consumer.OnMessageReceived(ProcessEventAsync);
         SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
     }
 
@@ -75,34 +82,47 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             return;
         }
-        var eventType = _eventTypes.GetOrDefault(eventName);
+        var eventType = EventTypes.GetOrDefault(eventName);
         if (eventType == null)
         {
             return;
         }
 
-        if (await AddToInboxAsync(message.MessageId, eventName, eventType, message.Body.ToArray()))
+        var eventData = Serializer.Deserialize(message.Body.ToArray(), eventType);
+
+        if (await AddToInboxAsync(message.MessageId, eventName, eventType, eventData, message.CorrelationId))
         {
             return;
         }
 
-        var eventData = _serializer.Deserialize(message.Body.ToArray(), eventType);
-
-        await TriggerHandlersAsync(eventType, eventData);
+        using (CorrelationIdProvider.Change(message.CorrelationId))
+        {
+            await TriggerHandlersDirectAsync(eventType, eventData);
+        }
     }
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id);
+        using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
+        {
+            await TriggerDistributedEventSentAsync(new DistributedEventSent()
+            {
+                Source = DistributedEventSource.Outbox,
+                EventName = outgoingEvent.EventName,
+                EventData = outgoingEvent.EventData
+            });
+        }
+
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.GetCorrelationId(), outgoingEvent.Id);
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
     {
         var outgoingEventArray =  outgoingEvents.ToArray();
 
-        var publisher = await _publisherPool.GetAsync(
-            _options.TopicName,
-            _options.ConnectionName);
+        var publisher = await PublisherPool.GetAsync(
+            Options.TopicName,
+            Options.ConnectionName);
 
         using var messageBatch = await publisher.CreateMessageBatchAsync();
 
@@ -115,10 +135,22 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 message.MessageId = outgoingEvent.Id.ToString();
             }
 
+            message.CorrelationId = outgoingEvent.GetCorrelationId();
+
             if (!messageBatch.TryAddMessage(message))
             {
                 throw new AbpException(
                     "The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
+            }
+
+            using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
+            {
+                await TriggerDistributedEventSentAsync(new DistributedEventSent()
+                {
+                    Source = DistributedEventSource.Outbox,
+                    EventName = outgoingEvent.EventName,
+                    EventData = outgoingEvent.EventData
+                });
             }
         }
 
@@ -127,15 +159,18 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
-        var eventType = _eventTypes.GetOrDefault(incomingEvent.EventName);
+        var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
         if (eventType == null)
         {
             return;
         }
 
-        var eventData = _serializer.Deserialize(incomingEvent.EventData, eventType);
+        var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
-        await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+        using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
+        {
+            await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+        }
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);
@@ -144,7 +179,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override byte[] Serialize(object eventData)
     {
-        return _serializer.Serialize(eventData);
+        return Serializer.Serialize(eventData);
     }
 
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
@@ -225,14 +260,15 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected virtual Task PublishAsync(string eventName, object eventData)
     {
-        var body = _serializer.Serialize(eventData);
+        var body = Serializer.Serialize(eventData);
 
-        return PublishAsync(eventName, body, null);
+        return PublishAsync(eventName, body, CorrelationIdProvider.Get(), null);
     }
 
     protected virtual async Task PublishAsync(
         string eventName,
         byte[] body,
+        string? correlationId,
         Guid? eventId)
     {
         var message = new ServiceBusMessage(body)
@@ -245,16 +281,18 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             message.MessageId = (eventId ?? GuidGenerator.Create()).ToString("N");
         }
 
-        var publisher = await _publisherPool.GetAsync(
-            _options.TopicName,
-            _options.ConnectionName);
+        message.CorrelationId = correlationId;
+
+        var publisher = await PublisherPool.GetAsync(
+            Options.TopicName,
+            Options.ConnectionName);
 
         await publisher.SendMessageAsync(message);
     }
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
-        return _handlerFactories
+        return HandlerFactories
             .Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key))
             .Select(handlerFactory =>
                 new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value))
@@ -266,14 +304,20 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return handlerEventType == targetEventType || handlerEventType.IsAssignableFrom(targetEventType);
     }
 
+    protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
+    {
+        EventTypes.GetOrAdd(eventName, eventType);
+        return base.OnAddToOutboxAsync(eventName, eventType, eventData);
+    }
+
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
     {
-        return _handlerFactories.GetOrAdd(
+        return HandlerFactories.GetOrAdd(
             eventType,
             type =>
             {
                 var eventName = EventNameAttribute.GetNameOrDefault(type);
-                _eventTypes[eventName] = type;
+                EventTypes.GetOrAdd(eventName, eventType);
                 return new List<IEventHandlerFactory>();
             }
         );

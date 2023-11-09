@@ -54,7 +54,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
 
     public async Task<bool> TryAuthenticateAsync(
         [NotNull] HttpClient client,
-        string identityClientName = null)
+        string? identityClientName = null)
     {
         var accessToken = await GetAccessTokenOrNullAsync(identityClientName);
         if (accessToken == null)
@@ -66,7 +66,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
         return true;
     }
 
-    protected virtual async Task<string> GetAccessTokenOrNullAsync(string identityClientName)
+    protected virtual async Task<string?> GetAccessTokenOrNullAsync(string? identityClientName)
     {
         var configuration = ClientOptions.GetClientConfiguration(CurrentTenant, identityClientName);
         if (configuration == null)
@@ -94,12 +94,12 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
                                            $"Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
                 }
 
-                var rawError = tokenResponse.Raw;
+                var rawError = tokenResponse.Raw!;
                 var withoutInnerException = rawError.Split(new string[] { "<eof/>" }, StringSplitOptions.RemoveEmptyEntries);
                 throw new AbpException(withoutInnerException[0]);
             }
 
-            tokenCacheItem = new IdentityModelTokenCacheItem(tokenResponse.AccessToken);
+            tokenCacheItem = new IdentityModelTokenCacheItem(tokenResponse.AccessToken!);
             await TokenCache.SetAsync(cacheKey, tokenCacheItem, new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = AbpHostEnvironment.IsDevelopment()
@@ -146,7 +146,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
                                        $"ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
             }
 
-            discoveryDocumentCacheItem = new IdentityModelDiscoveryDocumentCacheItem(discoveryResponse.TokenEndpoint, discoveryResponse.DeviceAuthorizationEndpoint);
+            discoveryDocumentCacheItem = new IdentityModelDiscoveryDocumentCacheItem(discoveryResponse.TokenEndpoint!, discoveryResponse.DeviceAuthorizationEndpoint!);
             await DiscoveryDocumentCache.SetAsync(tokenEndpointUrlCacheKey, discoveryDocumentCacheItem,
                 new DistributedCacheEntryOptions
                 {
@@ -196,7 +196,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
             Scope = configuration.Scope,
             ClientId = configuration.ClientId,
             ClientSecret = configuration.ClientSecret,
-            UserName = configuration.UserName,
+            UserName = configuration.UserName!,
             Password = configuration.UserPassword
         };
 
@@ -245,8 +245,9 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
             throw new AbpException(response.ErrorDescription);
         }
 
-        Logger.LogInformation($"First copy your one-time code: {response.UserCode}");
-        Logger.LogInformation($"Open {response.VerificationUri} in your browser...");
+        Logger.LogInformation($"Open your browser, go to: \"{response.VerificationUri}\"");
+        Logger.LogInformation($"and enter the following one-time code:");
+        Logger.LogInformation(response.UserCode);
 
         for (var i = 0; i < ((response.ExpiresIn ?? 300) / response.Interval + 1); i++)
         {
@@ -257,7 +258,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
                 Address = discoveryResponse.TokenEndpoint,
                 ClientId = configuration.ClientId,
                 ClientSecret = configuration.ClientSecret,
-                DeviceCode = response.DeviceCode
+                DeviceCode = response.DeviceCode!
             });
 
             if (tokenResponse.IsError)
@@ -290,7 +291,7 @@ public class IdentityModelAuthenticationService : IIdentityModelAuthenticationSe
     {
         foreach (var pair in configuration.Where(p => p.Key.StartsWith("[o]", StringComparison.OrdinalIgnoreCase)))
         {
-            request.Parameters.Add(pair);
+            request.Parameters.Add(pair.Key, pair.Value!);
         }
 
         return Task.CompletedTask;

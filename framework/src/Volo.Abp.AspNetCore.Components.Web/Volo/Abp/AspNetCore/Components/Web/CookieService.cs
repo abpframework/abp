@@ -14,7 +14,7 @@ public class CookieService : ICookieService, ITransientDependency
         JsRuntime = jsRuntime;
     }
 
-    public async ValueTask SetAsync(string key, string value, CookieOptions options)
+    public async ValueTask SetAsync(string key, string value, CookieOptions? options)
     {
         await JsRuntime.InvokeVoidAsync("abp.utils.setCookieValue", key, value, options?.ExpireDate?.ToString("r"), options?.Path, options?.Secure);
     }
@@ -24,7 +24,7 @@ public class CookieService : ICookieService, ITransientDependency
         return await JsRuntime.InvokeAsync<string>("abp.utils.getCookieValue", key);
     }
 
-    public async ValueTask DeleteAsync(string key, string path = null)
+    public async ValueTask DeleteAsync(string key, string? path = null)
     {
         await JsRuntime.InvokeVoidAsync("abp.utils.deleteCookie", key);
     }

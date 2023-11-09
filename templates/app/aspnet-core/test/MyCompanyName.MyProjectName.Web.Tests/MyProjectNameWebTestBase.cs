@@ -1,23 +1,15 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
 using Shouldly;
+using Volo.Abp.AspNetCore;
 using Volo.Abp.AspNetCore.TestBase;
 
 namespace MyCompanyName.MyProjectName;
 
-public abstract class MyProjectNameWebTestBase : AbpAspNetCoreIntegratedTestBase<MyProjectNameWebTestStartup>
+public abstract class MyProjectNameWebTestBase : AbpWebApplicationFactoryIntegratedTest<Program>
 {
-    protected override IHostBuilder CreateHostBuilder()
-    {
-        return base
-            .CreateHostBuilder()
-            .UseContentRoot(WebContentDirectoryFinder.CalculateContentRootFolder() ?? throw new InvalidOperationException());
-    }
-
     protected virtual async Task<T?> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
     {
         var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);

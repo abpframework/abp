@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "UpdateVersion",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "abpVersion": {
+      "type": "string",
+      "description": "",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What ABP version would you like to use?"
+    },
+    "leptonXVersion": {
+      "type": "string",
+      "description": ""
+     }
+  },
+  "required": ["abpVersion"]
+}

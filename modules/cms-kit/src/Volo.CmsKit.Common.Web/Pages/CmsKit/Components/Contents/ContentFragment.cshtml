@@ -1,20 +1,56 @@
-﻿@using System.Dynamic
+﻿@using Microsoft.AspNetCore.Mvc.ViewComponents
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
 @using Volo.Abp.Data
+@using Volo.Abp.Reflection
+@using Volo.CmsKit.Contents
+@using Volo.CmsKit.Localization
 @using Volo.CmsKit.Web.Renderers;
 @using Volo.CmsKit.Web.Pages.CmsKit.Components.Contents;
 
 @model ContentFragmentViewComponent
 
 @inject IMarkdownToHtmlRenderer MarkdownRenderer
+@inject IViewComponentSelector ViewComponentSelector
+@inject ILogger<ContentFragmentViewComponent> Logger
+@inject IStringLocalizer<CmsKitResource> L
 
 @foreach (var contentFragment in Model.ContentDto.ContentFragments)
 {
-    if (contentFragment.Type == "Markdown")
+    if (contentFragment.Type == ContentConsts.Markdown)
     {
-        @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+        @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content"), Model.ContentDto.AllowHtmlTags, Model.ContentDto.PreventXSS, Model.ContentDto.ReferralLink))
     }
-    else if (contentFragment.Type == "Widget")
+    else if (contentFragment.Type == ContentConsts.Widget)
     {
-        @await Component.InvokeAsync(contentFragment.GetProperty<string>("Type"), contentFragment.ExtraProperties.ConvertToDynamicObject())
+        var componentName = contentFragment.GetProperty<string>("Type");
+        var descriptor = ViewComponentSelector.SelectComponent(componentName);
+        var componentParameters = descriptor.Parameters;
+        var parameters = new Dictionary<string, object>(contentFragment.ExtraProperties);
+
+        foreach (var componentParameter in componentParameters)
+        {
+            if (string.IsNullOrWhiteSpace(componentParameter.Name))
+            {
+                continue;
+            }
+            if(parameters.TryGetValue(componentParameter.Name, out var value))
+            {
+                parameters[componentParameter.Name] = TypeHelper.ConvertFrom(componentParameter.ParameterType, value);
+            }
+        }
+
+        @try
+        {
+            @await Component.InvokeAsync(componentName, parameters)
+        }
+        catch (Exception ex)
+        {
+            <div class="alert alert-danger" role="alert">
+                @L["ThisPartOfContentCouldntBeLoaded"]
+            </div>
+
+            Logger.LogError(ex, $"Couldn't load the widget: {componentName}");
+        }
     }
 }

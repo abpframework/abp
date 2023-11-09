@@ -32,25 +32,6 @@ Configure<AbpMultiTenancyOptions>(options =>
 
 > Multi-Tenancy is disabled in the ABP Framework by default. However, it is **enabled by default** when you create a new solution using the [startup template](Startup-Templates/Application.md). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
 
-### AbpMultiTenancyOptions: Handle inactive and non-existent tenants.
-
-The `MultiTenancyMiddlewareErrorPageBuilder` of `AbpMultiTenancyOptions` is used to handle inactive and non-existent tenants.
-
-It will respond to an error page by default, you can change it if you want, eg: only output the error log and continue ASP NET Core's request pipeline.
-
-```csharp
-Configure<AbpMultiTenancyOptions>(options =>
-{
-    options.MultiTenancyMiddlewareErrorPageBuilder = async (context, exception) =>
-    {
-        // Handle the exception.
-
-        // Return true to stop the pipeline, false to continue.
-        return true;
-    };
-});
-```
-
 ### Database Architecture
 
 ABP Framework supports all the following approaches to store the tenant data in the database;
@@ -273,9 +254,26 @@ class SomeComponent {
 
 > However, we don't suggest to change this value since some clients may assume the the `__tenant` as the parameter name and they might need to manually configure then.
 
+The `MultiTenancyMiddlewareErrorPageBuilder` is used to handle inactive and non-existent tenants.
+
+It will respond to an error page by default, you can change it if you want, eg: only output the error log and continue ASP NET Core's request pipeline.
+
+```csharp
+Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
+{
+    options.MultiTenancyMiddlewareErrorPageBuilder = async (context, exception) =>
+    {
+        // Handle the exception.
+
+        // Return true to stop the pipeline, false to continue.
+        return true;
+    };
+});
+```
+
 ##### Domain/Subdomain Tenant Resolver
 
-In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure the `AbpTenantResolveOptions` to add the domain tenant resolver.
+In a real application, most of times you will want to determine the current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure the `AbpTenantResolveOptions` to add the domain tenant resolver.
 
 **Example: Add a subdomain resolver**
 
@@ -286,11 +284,65 @@ Configure<AbpTenantResolveOptions>(options =>
 });
 ````
 
-* `{0}` is the placeholder to determine current tenant's unique name.
+* `{0}` is the placeholder to determine the current tenant's unique name.
 * Add this code to the `ConfigureServices` method of your [module](Module-Development-Basics.md).
 * This should be done in the *Web/API Layer* since the URL is a web related stuff.
 
-> There is an [example](https://github.com/abpframework/abp-samples/tree/master/DomainTenantResolver) that uses the subdomain to determining the current tenant. 
+Openiddict is the default Auth Server in ABP (since v6.0). When you use OpenIddict, you must add this code to the `PreConfigure` method as well.
+
+```csharp
+// using Volo.Abp.OpenIddict.WildcardDomains
+
+PreConfigure<AbpOpenIddictWildcardDomainOptions>(options => 
+{
+    options.EnableWildcardDomainSupport = true;
+    options.WildcardDomainsFormat.Add("https://{0}.mydomain.com");
+});
+```
+
+You must add this code to the `Configure` method as well. 
+
+```csharp
+// using Volo.Abp.MultiTenancy;
+
+Configure<AbpTenantResolveOptions>(options =>
+{
+    options.AddDomainTenantResolver("{0}.mydomain.com");
+});
+
+```
+
+> There is an [example](https://github.com/abpframework/abp-samples/tree/master/DomainTenantResolver) that uses the subdomain to determine the current tenant. 
+
+If you use a sepereted Auth server, you must install `[Owl.TokenWildcardIssuerValidator](https://www.nuget.org/packages/Owl.TokenWildcardIssuerValidator)` on the `HTTPApi.Host` project
+
+```bash
+dotnet add package Owl.TokenWildcardIssuerValidator
+```
+
+Then fix the options of the `.AddJwtBearer` block
+
+```csharp
+// using using Owl.TokenWildcardIssuerValidator;
+
+context.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = configuration["AuthServer:Authority"];
+        options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+        options.Audience = "ExampleProjectName";
+        
+        // start of added  block
+        options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+        options.TokenValidationParameters.ValidIssuers = new[]
+        {
+            "https://{0}.mydomain.com:44349/" //the port may different
+        };
+        // end of added  block
+    });
+
+```
 
 ##### Custom Tenant Resolvers
 

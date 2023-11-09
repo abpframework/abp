@@ -18,25 +18,22 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
     public override string Name => EngineName;
 
     protected readonly IServiceScopeFactory ServiceScopeFactory;
-    protected readonly IAbpCompiledViewProvider AbpCompiledViewProvider;
 
     public RazorTemplateRenderingEngine(
         IServiceScopeFactory serviceScopeFactory,
-        IAbpCompiledViewProvider abpCompiledViewProvider,
         ITemplateDefinitionManager templateDefinitionManager,
         ITemplateContentProvider templateContentProvider,
         IStringLocalizerFactory stringLocalizerFactory)
         : base(templateDefinitionManager, templateContentProvider, stringLocalizerFactory)
     {
         ServiceScopeFactory = serviceScopeFactory;
-        AbpCompiledViewProvider = abpCompiledViewProvider;
     }
 
     public override async Task<string> RenderAsync(
         [NotNull] string templateName,
-        [CanBeNull] object model = null,
-        [CanBeNull] string cultureName = null,
-        [CanBeNull] Dictionary<string, object> globalContext = null)
+        object? model = null,
+        string? cultureName = null,
+        Dictionary<string, object>? globalContext = null)
     {
         Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
 
@@ -70,11 +67,11 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
 
     protected virtual async Task<string> RenderInternalAsync(
         string templateName,
-        string body,
+        string? body,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
-        var templateDefinition = TemplateDefinitionManager.Get(templateName);
+        var templateDefinition = await TemplateDefinitionManager.GetAsync(templateName);
 
         var renderedContent = await RenderSingleTemplateAsync(
             templateDefinition,
@@ -97,9 +94,9 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
 
     protected virtual async Task<string> RenderSingleTemplateAsync(
         TemplateDefinition templateDefinition,
-        string body,
+        string? body,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
         return await RenderTemplateContentWithRazorAsync(
             templateDefinition,
@@ -111,16 +108,17 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
 
     protected virtual async Task<string> RenderTemplateContentWithRazorAsync(
         TemplateDefinition templateDefinition,
-        string body,
+        string? body,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
-        var assembly = await AbpCompiledViewProvider.GetAssemblyAsync(templateDefinition);
-        var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName);
-        var template = (IRazorTemplatePage)Activator.CreateInstance(templateType);
-
         using (var scope = ServiceScopeFactory.CreateScope())
         {
+            var compiledViewProvider = scope.ServiceProvider.GetRequiredService<IAbpCompiledViewProvider>();
+            var assembly = await compiledViewProvider.GetAssemblyAsync(templateDefinition);
+            var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName)!;
+            var template = (IRazorTemplatePage)Activator.CreateInstance(templateType)!;
+
             var modelType = templateType
                 .GetInterfaces()
                 .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRazorTemplatePage<>))
@@ -147,11 +145,11 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
         }
     }
 
-    private void SetModel<TModel>(IRazorTemplatePage razorTemplatePage, object model = null)
+    private void SetModel<TModel>(IRazorTemplatePage razorTemplatePage, object? model = null)
     {
         if (razorTemplatePage is IRazorTemplatePage<TModel> razorTemplatePageWithModel)
         {
-            razorTemplatePageWithModel.Model = (TModel)model;
+            razorTemplatePageWithModel.Model = (TModel?)model;
         }
     }
 }

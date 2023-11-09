@@ -9,11 +9,11 @@ using Xunit;
 
 namespace Volo.Abp.Json;
 
-public abstract class AbpSystemTextJsonSerializerProvider_TestBase : AbpJsonTestBase
+public abstract class AbpSystemTextJsonSerializerProviderTestBase : AbpJsonSystemTextJsonTestBase
 {
     protected AbpSystemTextJsonSerializer JsonSerializer;
 
-    public AbpSystemTextJsonSerializerProvider_TestBase()
+    public AbpSystemTextJsonSerializerProviderTestBase()
     {
         JsonSerializer = GetRequiredService<AbpSystemTextJsonSerializer>();
     }
@@ -72,7 +72,7 @@ public abstract class AbpSystemTextJsonSerializerProvider_TestBase : AbpJsonTest
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_Tests : AbpSystemTextJsonSerializerProvider_TestBase
+public class AbpSystemTextJsonSerializerProviderTests : AbpSystemTextJsonSerializerProviderTestBase
 {
     [Fact]
     public void Serialize_Deserialize_With_Boolean()
@@ -214,7 +214,7 @@ public class AbpSystemTextJsonSerializerProvider_Tests : AbpSystemTextJsonSerial
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_DateTimeFormat_Tests : AbpSystemTextJsonSerializerProvider_TestBase
+public class AbpSystemTextJsonSerializerProviderDateTimeFormatTests : AbpSystemTextJsonSerializerProviderTestBase
 {
     protected override void AfterAddApplication(IServiceCollection services)
     {
@@ -270,7 +270,7 @@ public class AbpSystemTextJsonSerializerProvider_DateTimeFormat_Tests : AbpSyste
     }
 }
 
-public abstract class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests : AbpSystemTextJsonSerializerProvider_TestBase
+public abstract class AbpSystemTextJsonSerializerProviderDatetimeKindTests : AbpSystemTextJsonSerializerProviderTestBase
 {
     protected DateTimeKind Kind { get; set; } = DateTimeKind.Unspecified;
 
@@ -283,7 +283,7 @@ public abstract class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests : 
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_UTC_Tests : AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests
+public class AbpSystemTextJsonSerializerProviderDatetimeKindUtcTests : AbpSystemTextJsonSerializerProviderDatetimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)
     {
@@ -292,7 +292,7 @@ public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_UTC_Tests : AbpSy
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Local_Tests : AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests
+public class AbpSystemTextJsonSerializerProviderDatetimeKindLocalTests : AbpSystemTextJsonSerializerProviderDatetimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)
     {
@@ -301,7 +301,7 @@ public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Local_Tests : Abp
     }
 }
 
-public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Unspecified_Tests : AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests
+public class AbpSystemTextJsonSerializerProviderDatetimeKindUnspecifiedTests : AbpSystemTextJsonSerializerProviderDatetimeKindTests
 {
 
 }

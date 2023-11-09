@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -21,8 +21,8 @@ public class UserInfoController : AbpOpenIdDictControllerBase
     [Produces("application/json")]
     public virtual async Task<IActionResult> Userinfo()
     {
-        var user = await UserManager.GetUserAsync(User);
-        if (user == null)
+        var claims = await GetUserInfoClaims();
+        if(claims == null)
         {
             return Challenge(
                 authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
@@ -31,6 +31,17 @@ public class UserInfoController : AbpOpenIdDictControllerBase
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidToken,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The specified access token is bound to an account that no longer exists."
                 }));
+        }
+
+        return Ok(claims);
+    }
+
+    protected virtual async Task<Dictionary<string, object>> GetUserInfoClaims()
+    {
+        var user = await UserManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return null;
         }
 
         var claims = new Dictionary<string, object>(StringComparer.Ordinal)
@@ -67,6 +78,6 @@ public class UserInfoController : AbpOpenIdDictControllerBase
         // Note: the complete list of standard claims supported by the OpenID Connect specification
         // can be found here: http://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
 
-        return Ok(claims);
+        return claims;
     }
 }

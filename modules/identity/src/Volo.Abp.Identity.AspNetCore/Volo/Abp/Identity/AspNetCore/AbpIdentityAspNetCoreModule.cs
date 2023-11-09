@@ -16,7 +16,8 @@ public class AbpIdentityAspNetCoreModule : AbpModule
             builder
                 .AddDefaultTokenProviders()
                 .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
-                .AddSignInManager<AbpSignInManager>();
+                .AddSignInManager<AbpSignInManager>()
+                .AddUserValidator<AbpIdentityUserValidator>();
         });
     }
 

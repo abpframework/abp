@@ -113,12 +113,12 @@ public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTa
         var localizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer);
 
         var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
-            .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
+            .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : new List<SelectListItem>();
 
         return selectItems;
     }
 
-    protected virtual string GetLocalizedPropertyName(IStringLocalizer localizer, Type enumType, string propertyName)
+    protected virtual string GetLocalizedPropertyName(IStringLocalizer? localizer, Type enumType, string propertyName)
     {
         if (localizer == null)
         {
@@ -159,7 +159,7 @@ public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTa
         }
     }
 
-    protected virtual string GetSelectedValue(TagHelperContext context, TagHelperOutput output)
+    protected virtual string? GetSelectedValue(TagHelperContext context, TagHelperOutput output)
     {
         if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
         {

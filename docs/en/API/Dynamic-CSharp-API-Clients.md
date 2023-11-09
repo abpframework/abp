@@ -38,20 +38,15 @@ Implement this class in your service application. You can use [auto API controll
 
 ## Client Proxy Generation
 
-First, add [Volo.Abp.Http.Client](https://www.nuget.org/packages/Volo.Abp.Http.Client) nuget package to your client project:
+> The startup templates already comes pre-configured for the client proxy generation, in the `HttpApi.Client` project.
+
+If you're not using a startup template, then execute the following command in the folder that contains the .csproj file of your client project:
 
 ````
-Install-Package Volo.Abp.Http.Client
+abp add-package Volo.Abp.Http.Client
 ````
 
-Then add `AbpHttpClientModule` dependency to your module:
-
-````csharp
-[DependsOn(typeof(AbpHttpClientModule))] //add the dependency
-public class MyClientAppModule : AbpModule
-{
-}
-````
+> If you haven't done it yet, you first need to install the [ABP CLI](../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Http.Client).
 
 Now, it's ready to create the client proxies. Example:
 
@@ -73,8 +68,6 @@ public class MyClientAppModule : AbpModule
 ````
 
 `AddHttpClientProxies` method gets an assembly, finds all service interfaces in the given assembly, creates and registers proxy classes.
-
-> The startup templates already comes pre-configured for the client proxy generation, in the `HttpApi.Client` project.
 
 ### Endpoint Configuration
 

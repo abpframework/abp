@@ -12,13 +12,13 @@ ABP Framework offers an **opinionated architecture** to build enterprise softwar
 
 ABP Framework can work with any UI framework, while the following frameworks are supported out of the box:
 
-<img width="500" src="images/ui-options.png">
+<img width="500" height="56" src="images/ui-options.png" alt="ui options">
 
 ### Database Provider Options
 
 ABP Framework can work with any database provider, while the following providers are supported out of the box:
 
-<img width="500" src="images/db-options.png">
+<img width="500" height="56" src="images/db-options.png" alt="ABP Database Providers" />
 
 ## Exploring the Documentation
 
@@ -60,7 +60,7 @@ The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio 
 
 ### Mastering ABP Framework
 
-![abp-book](images/abp-book.png)
+<img width="302" height="372" src="images/abp-book.png" alt="Mastering ABP Framework - Halil İbrahim Kalkan" />
 
 *Mastering ABP Framework* is an ultimate guide to get started and expertise with the ABP Framework. It is authored by Halil İbrahim Kalkan, the creator and the lead developer of the ABP Framework.
 
@@ -68,7 +68,7 @@ The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio 
 
 ### Free E-Book: Implementing Domain Driven Design
 
-![Implementing Domain Driven Design](images/implementing-domain-driven-design-book.png)
+<img width="441" height="331" src="images/implementing-domain-driven-design-book.png" alt="Implementing Domain Driven Design">
 
 A **practical guide** for implementing Domain Driven Design (DDD). While the implementation details are **based on the ABP Framework** infrastructure, the basic concepts, principles and models can be applied to any solution, even if it is not a .NET solution.
 

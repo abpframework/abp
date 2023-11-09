@@ -48,6 +48,10 @@
     "Search": "Search",
     "ItemWillBeDeletedMessageWithFormat": "{0} will be deleted!",
     "ItemWillBeDeletedMessage": "This item will be deleted!",
-    "ManageYourAccount": "Manage your account"
+    "ManageYourAccount": "Manage your account",
+    "OthersGroup": "Other",
+    "NotAssigned": "Not Assigned",
+    "Today": "Today",
+    "Apply": "Apply"
   }
 }

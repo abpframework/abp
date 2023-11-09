@@ -16,6 +16,7 @@ using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Events;
+using Volo.Abp.Cli.ProjectBuilding.Templates;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
@@ -39,7 +40,7 @@ public abstract class ProjectCreationCommandBase
     public ILogger<NewCommand> Logger { get; set; }
 
     public ThemePackageAdder ThemePackageAdder { get; }
-    
+
     public AngularThemeConfigurer AngularThemeConfigurer { get; }
 
     public ProjectCreationCommandBase(
@@ -52,7 +53,7 @@ public abstract class ProjectCreationCommandBase
         InitialMigrationCreator initialMigrationCreator,
         ThemePackageAdder themePackageAdder,
         ILocalEventBus eventBus,
-        IBundlingService bundlingService, 
+        IBundlingService bundlingService,
         AngularThemeConfigurer angularThemeConfigurer)
     {
         _bundlingService = bundlingService;
@@ -195,7 +196,7 @@ public abstract class ProjectCreationCommandBase
 
             var microserviceSolutionName = Path.GetFileName(slnPath).RemovePostFix(".sln");
 
-            version ??= SolutionPackageVersionFinder.Find(slnPath);
+            version ??= SolutionPackageVersionFinder.FindByCsprojVersion(slnPath);
             solutionName = SolutionName.Parse(microserviceSolutionName, projectName);
             outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, solutionName.ProjectName);
             uiFramework = uiFramework == UiFramework.NotSpecified ? FindMicroserviceSolutionUiFramework(outputFolderRoot) : uiFramework;
@@ -221,9 +222,11 @@ public abstract class ProjectCreationCommandBase
         }
 
         commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
-        
+
         var theme = uiFramework == UiFramework.None ? (Theme?)null : GetThemeByTemplateOrNull(commandLineArgs, template);
         var themeStyle = theme.HasValue ? GetThemeStyleOrNull(commandLineArgs, theme.Value) : (ThemeStyle?)null;
+
+        var skipCache = commandLineArgs.Options.ContainsKey(Options.SkipCache.Long) || commandLineArgs.Options.ContainsKey(Options.SkipCache.Short);
 
         return new ProjectBuildArgs(
             solutionName,
@@ -242,7 +245,8 @@ public abstract class ProjectCreationCommandBase
             connectionString,
             pwa,
             theme,
-            themeStyle
+            themeStyle,
+            skipCache
         );
     }
 
@@ -417,7 +421,8 @@ public abstract class ProjectCreationCommandBase
 
     protected async Task RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(ProjectBuildArgs projectArgs)
     {
-        if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
+        if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
+            && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
         {
             var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
             var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
@@ -431,7 +436,7 @@ public abstract class ProjectCreationCommandBase
             var directory = Path.GetDirectoryName(
                 Directory.GetFiles(projectArgs.OutputFolder, isWebassembly? "*.Blazor.csproj" :"*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
                 );
-            
+
             await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
         }
     }
@@ -445,7 +450,7 @@ public abstract class ProjectCreationCommandBase
 
         var efCoreProjectPath = string.Empty;
         bool isLayeredTemplate;
-
+        var isModuleTemplate = false;
         switch (projectArgs.TemplateName)
         {
             case AppTemplate.TemplateName:
@@ -455,14 +460,20 @@ public abstract class ProjectCreationCommandBase
                 break;
             case AppNoLayersTemplate.TemplateName:
             case AppNoLayersProTemplate.TemplateName:
-                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
+                efCoreProjectPath = Directory.GetFiles(projectArgs.OutputFolder, "*.Host.csproj", SearchOption.AllDirectories).FirstOrDefault()
+                    ?? Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
+                isLayeredTemplate = false;
+                break;
+            case ModuleTemplate.TemplateName:
+            case ModuleProTemplate.TemplateName:
+                isModuleTemplate = true;
                 isLayeredTemplate = false;
                 break;
             default:
                 return;
         }
 
-        if (string.IsNullOrWhiteSpace(efCoreProjectPath))
+        if (string.IsNullOrWhiteSpace(efCoreProjectPath) && !isModuleTemplate)
         {
             Logger.LogWarning("Couldn't find the project to create initial migrations!");
             return;
@@ -473,7 +484,55 @@ public abstract class ProjectCreationCommandBase
             Message = "Creating the initial DB migration"
         }, false);
 
-        await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+        if (!isModuleTemplate)
+        {
+            await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+        }
+        else
+        {
+            var hostProjectsWithEfCore = Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories)
+                .Where(x => File.ReadAllText(x).Contains("Microsoft.EntityFrameworkCore.Tools"))
+                .ToList();
+            foreach (var project in hostProjectsWithEfCore)
+            {
+                await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(project));
+            }
+        }
+    }
+
+    protected Task CreateOpenIddictPfxFilesAsync(ProjectBuildArgs projectArgs)
+    {
+        if (!projectArgs.ExtraProperties.ContainsKey(nameof(RandomizeAuthServerPassPhraseStep)))
+        {
+            return Task.CompletedTask;
+        }
+
+        var module = projectArgs.ExtraProperties[nameof(RandomizeAuthServerPassPhraseStep)];
+        if (string.IsNullOrWhiteSpace(module))
+        {
+            return Task.CompletedTask;
+        }
+
+        var moduleDirectory = projectArgs.OutputFolder + module;
+        if (projectArgs.UiFramework != UiFramework.Angular)
+        {
+            moduleDirectory = moduleDirectory.Replace("/aspnet-core/", "/");
+        }
+
+        moduleDirectory = Path.GetDirectoryName(projectArgs.SolutionName.CompanyName == null
+            ? moduleDirectory.Replace("MyCompanyName.MyProjectName", projectArgs.SolutionName.ProjectName)
+            : moduleDirectory.Replace("MyCompanyName", projectArgs.SolutionName.CompanyName).Replace("MyProjectName", projectArgs.SolutionName.ProjectName));
+
+        if (Directory.Exists(moduleDirectory))
+        {
+            Logger.LogInformation($"Creating openiddict.pfx file on {moduleDirectory}");
+            CmdHelper.RunCmd($"dotnet dev-certs https -ep openiddict.pfx -p {RandomizeAuthServerPassPhraseStep.RandomOpenIddictPassword}", moduleDirectory);
+        }
+        else
+        {
+            Logger.LogWarning($"Couldn't find the module directory to create openiddict.pfx file: {moduleDirectory}");
+        }
+        return Task.CompletedTask;
     }
 
     protected async Task ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
@@ -582,10 +641,10 @@ public abstract class ProjectCreationCommandBase
             {
                 // null or "leptonx-lite" => Theme.LeptonXLite,
                 "basic" => Theme.Basic,
-                _ => Theme.LeptonXLite 
+                _ => Theme.LeptonXLite
             };
         }
-    
+
         Theme GetAppProTheme()
         {
             return theme switch
@@ -598,16 +657,16 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected virtual ThemeStyle? GetThemeStyleOrNull(CommandLineArgs commandLineArgs, Theme theme) 
+    protected virtual ThemeStyle? GetThemeStyleOrNull(CommandLineArgs commandLineArgs, Theme theme)
     {
-        if(theme != Theme.LeptonX) 
+        if(theme != Theme.LeptonX)
         {
             return null;
         }
 
         var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLower();
-        
-        return themeStyle switch 
+
+        return themeStyle switch
         {
             "system" or null => ThemeStyle.System,
             "dim" => ThemeStyle.Dim,
@@ -658,7 +717,7 @@ public abstract class ProjectCreationCommandBase
             ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
         }
     }
-    
+
     private void ConfigureNpmPackagesForLeptonTheme(ProjectBuildArgs projectArgs)
     {
         if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
@@ -684,7 +743,7 @@ public abstract class ProjectCreationCommandBase
         {
             return;
         }
-                
+
         if (projectArgs.Theme.HasValue && projectArgs.UiFramework == UiFramework.Angular)
         {
             var angularFolderPath = projectArgs.TemplateName == MicroserviceProTemplate.TemplateName
@@ -693,7 +752,7 @@ public abstract class ProjectCreationCommandBase
 
             AngularThemeConfigurer.Configure(new AngularThemeConfigurationArgs(
                 theme: projectArgs.Theme.Value,
-                projectName: projectArgs.SolutionName.FullName,
+                projectName: projectArgs.SolutionName.ProjectName,
                 angularFolderPath: angularFolderPath
             ));
         }
@@ -787,6 +846,13 @@ public abstract class ProjectCreationCommandBase
             public const string Short = "sb";
             public const string Long = "skip-bundling";
         }
+
+        public static class SkipCache
+        {
+            public const string Short = "sc";
+            public const string Long = "skip-cache";
+        }
+
 
         public static class Tiered
         {

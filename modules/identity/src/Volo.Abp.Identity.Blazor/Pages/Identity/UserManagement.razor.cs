@@ -41,6 +41,7 @@ public partial class UserManagement
 
     private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
     private TextRole _passwordTextRole = TextRole.Password;
+    public bool IsEditCurrentUser { get; set; }
 
     public UserManagement()
     {
@@ -119,7 +120,7 @@ public partial class UserManagement
         try
         {
             EditModalSelectedTab = DefaultSelectedTab;
-
+            IsEditCurrentUser = entity.Id == CurrentUser.Id;
             var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
 
             EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
@@ -217,7 +218,7 @@ public partial class UserManagement
 
         UserManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
             IdentityModuleExtensionConsts.EntityNames.User));
-        return base.SetEntityActionsAsync();
+        return base.SetTableColumnsAsync();
     }
 
     protected override ValueTask SetToolbarItemsAsync()

@@ -16,12 +16,16 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
     protected IIdentityUserRepository UserRepository { get; }
     protected ILookupNormalizer LookupNormalizer { get; }
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+    protected OrganizationUnitManager OrganizationUnitManager { get; }
+    protected IdentityTestData TestData { get; }
 
     protected IdentityUserRepository_Tests()
     {
-        UserRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
-        LookupNormalizer = ServiceProvider.GetRequiredService<ILookupNormalizer>();
-        OrganizationUnitRepository = ServiceProvider.GetRequiredService<IOrganizationUnitRepository>();
+        UserRepository = GetRequiredService<IIdentityUserRepository>();
+        LookupNormalizer = GetRequiredService<ILookupNormalizer>();
+        OrganizationUnitRepository = GetRequiredService<IOrganizationUnitRepository>();
+        OrganizationUnitManager = GetRequiredService<OrganizationUnitManager>();;
+        TestData = ServiceProvider.GetRequiredService<IdentityTestData>();
     }
 
     [Fact]
@@ -48,6 +52,34 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         roles.ShouldContain("moderator");
         roles.ShouldContain("supporter");
         roles.ShouldContain("manager");
+    }
+    
+    [Fact]
+    public async Task GetRoleNames_By_UserIds_Async()
+    {
+        var userRoleNames = await UserRepository.GetRoleNamesAsync(new [] {
+            TestData.UserBobId,
+            TestData.UserJohnId,
+            TestData.UserNeoId,
+            TestData.UserDavidId
+        });
+       
+        userRoleNames.Count.ShouldBe(3);
+        
+        var userBob = userRoleNames.First(x => x.Id == TestData.UserBobId);
+        userBob.RoleNames.Length.ShouldBe(1);
+        userBob.RoleNames[0].ShouldBe("manager");
+        
+        var userJohn = userRoleNames.First(x => x.Id == TestData.UserJohnId);
+        userJohn.RoleNames.Length.ShouldBe(2);
+        userJohn.RoleNames.ShouldContain("moderator");
+        userJohn.RoleNames.ShouldContain("supporter");
+        
+        var userNeo = userRoleNames.First(x => x.Id == TestData.UserNeoId);
+        userNeo.RoleNames.Length.ShouldBe(1);
+        userNeo.RoleNames[0].ShouldBe("supporter");
+
+        userRoleNames.ShouldNotContain(x => x.Id == TestData.UserDavidId);
     }
 
     [Fact]
@@ -174,5 +206,70 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         var organizationUnit = await OrganizationUnitRepository.GetAsync(diplayName);
         organizationUnit.ShouldNotBeNull();
         return organizationUnit;
+    }
+
+    [Fact]
+    public async Task UpdateRolesAsync()
+    {
+        var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
+        var roles = await UserRepository.GetRolesAsync(john.Id);
+        roles.Count.ShouldBe(3);
+        roles.ShouldContain(r => r.Name == "moderator");
+        roles.ShouldContain(r => r.Name == "supporter");
+        roles.ShouldContain(r => r.Name == "manager");
+
+        var supporter = roles.First(x => x.NormalizedName == LookupNormalizer.NormalizeName("supporter"));
+        var manager = roles.First(x => x.NormalizedName == LookupNormalizer.NormalizeName("manager"));
+
+        await UserRepository.UpdateRoleAsync(supporter.Id, null);
+
+        roles = await UserRepository.GetRolesAsync(john.Id);
+        roles.Count.ShouldBe(2);
+        roles.ShouldContain(r => r.Name == "moderator");
+        roles.ShouldContain(r => r.Name == "manager");
+
+        var bob = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("bob"));
+        roles = await UserRepository.GetRolesAsync(bob.Id);
+        roles.Count.ShouldBe(1);
+        roles.ShouldContain(r => r.Name == "manager");
+
+        await UserRepository.UpdateRoleAsync(manager.Id, supporter.Id);
+
+        roles = await UserRepository.GetRolesAsync(bob.Id);
+        roles.Count.ShouldBe(1);
+        roles.ShouldContain(r => r.Name == "supporter");
+    }
+
+    [Fact]
+    public async Task UpdateOrganizationAsync()
+    {
+        var david = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("david"));
+        var organizationUnits = await UserRepository.GetOrganizationUnitsAsync(david.Id);
+
+        var ou111 = await OrganizationUnitRepository.GetAsync("OU111");
+        var ou112 = await OrganizationUnitRepository.GetAsync("OU112");
+
+        organizationUnits.Count.ShouldBe(1);
+        organizationUnits.ShouldContain(r => r.Id == ou112.Id);
+
+        await UserRepository.UpdateOrganizationAsync(ou112.Id, null);
+
+        organizationUnits = await UserRepository.GetOrganizationUnitsAsync(david.Id);
+        organizationUnits.Count.ShouldBe(0);
+
+        var ou111Users = await UserRepository.GetUsersInOrganizationUnitAsync(ou111.Id);
+        ou111Users.Count.ShouldBe(2);
+        ou111Users.ShouldContain(x => x.UserName == "john.nash");
+        ou111Users.ShouldContain(x => x.UserName == "neo");
+
+        var ou112Users = await UserRepository.GetUsersInOrganizationUnitAsync(ou112.Id);
+        ou112Users.Count.ShouldBe(0);
+
+        await UserRepository.UpdateOrganizationAsync(ou111.Id, ou112.Id);
+
+        ou112Users = await UserRepository.GetUsersInOrganizationUnitAsync(ou112.Id);
+        ou112Users.Count.ShouldBe(2);
+        ou112Users.ShouldContain(x => x.UserName == "john.nash");
+        ou112Users.ShouldContain(x => x.UserName == "neo");
     }
 }

@@ -14,7 +14,7 @@ namespace Volo.Blogging.Blogs
         {
         }
 
-        public async Task<Blog> FindByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
+        public virtual async Task<Blog> FindByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(p => p.ShortName == shortName, GetCancellationToken(cancellationToken));
         }

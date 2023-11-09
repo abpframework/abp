@@ -4,7 +4,9 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
         <RootNamespace />
     </PropertyGroup>
 
@@ -13,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dapr.Client" Version="1.9.0" />
+      <PackageReference Include="Dapr.Client" />
     </ItemGroup>
 
 </Project>

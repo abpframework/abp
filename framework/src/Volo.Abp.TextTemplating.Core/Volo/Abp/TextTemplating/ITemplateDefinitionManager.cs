@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.TextTemplating;
 
 public interface ITemplateDefinitionManager
 {
-    [NotNull]
-    TemplateDefinition Get([NotNull] string name);
+    [ItemNotNull]
+    Task<TemplateDefinition> GetAsync([NotNull] string name);
 
-    [NotNull]
-    IReadOnlyList<TemplateDefinition> GetAll();
+    [ItemNotNull]
+    Task<IReadOnlyList<TemplateDefinition>> GetAllAsync();
 
-    [CanBeNull]
-    TemplateDefinition GetOrNull(string name);
+    Task<TemplateDefinition?> GetOrNullAsync(string name);
 }

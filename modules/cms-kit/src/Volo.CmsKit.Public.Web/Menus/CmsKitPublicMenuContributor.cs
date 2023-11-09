@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.UI.Navigation;
+using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Public.Menus;
@@ -22,7 +24,8 @@ public class CmsKitPublicMenuContributor : IMenuContributor
 
     private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
-        if (GlobalFeatureManager.Instance.IsEnabled<MenuFeature>())
+        var featureChecker = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
+        if (GlobalFeatureManager.Instance.IsEnabled<MenuFeature>() && await featureChecker.IsEnabledAsync(CmsKitFeatures.MenuEnable))
         {
             var menuAppService = context.ServiceProvider.GetRequiredService<IMenuItemPublicAppService>();
 
@@ -58,7 +61,6 @@ public class CmsKitPublicMenuContributor : IMenuContributor
             menuItem.Url,
             menuItem.Icon,
             menuItem.Order,
-            customData: null,
             menuItem.Target,
             menuItem.ElementId,
             menuItem.CssClass

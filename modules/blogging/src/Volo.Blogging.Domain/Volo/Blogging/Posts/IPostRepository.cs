@@ -15,5 +15,9 @@ namespace Volo.Blogging.Posts
         Task<Post> GetPostByUrl(Guid blogId, string url, CancellationToken cancellationToken = default);
 
         Task<List<Post>> GetOrderedList(Guid blogId,bool descending = false, CancellationToken cancellationToken = default);
+        
+        Task<List<Post>> GetListByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+        
+        Task<List<Post>> GetLatestBlogPostsAsync(Guid blogId, int count, CancellationToken cancellationToken = default);
     }
 }

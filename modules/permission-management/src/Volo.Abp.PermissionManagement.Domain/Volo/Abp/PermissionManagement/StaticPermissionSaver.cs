@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
@@ -10,6 +11,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
+using Volo.Abp.Json.SystemTextJson.Modifiers;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
@@ -28,6 +30,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
 
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
     public StaticPermissionSaver(
         IStaticPermissionDefinitionStore staticStore,
         IPermissionGroupDefinitionRecordRepository permissionGroupRepository,
@@ -38,8 +42,10 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         IApplicationInfoAccessor applicationInfoAccessor,
         IAbpDistributedLock distributedLock,
         IOptions<AbpPermissionOptions> permissionOptions,
-        ICancellationTokenProvider cancellationTokenProvider)
+        ICancellationTokenProvider cancellationTokenProvider,
+        IUnitOfWorkManager unitOfWorkManager)
     {
+        UnitOfWorkManager = unitOfWorkManager;
         StaticStore = staticStore;
         PermissionGroupRepository = permissionGroupRepository;
         PermissionRepository = permissionRepository;
@@ -52,8 +58,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         CacheOptions = cacheOptions.Value;
     }
 
-    [UnitOfWork]
-    public virtual async Task SaveAsync()
+    public async Task SaveAsync()
     {
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
             GetApplicationDistributedLockKey()
@@ -99,19 +104,40 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
                 throw new AbpException("Could not acquire distributed lock for saving static permissions!");
             }
 
-            var hasChangesInGroups = await UpdateChangedPermissionGroupsAsync(permissionGroupRecords);
-            var hasChangesInPermissions = await UpdateChangedPermissionsAsync(permissionRecords);
-
-            if (hasChangesInGroups ||hasChangesInPermissions)
+            using (var unitOfWork = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true))
             {
-                await Cache.SetStringAsync(
-                    GetCommonStampCacheKey(),
-                    Guid.NewGuid().ToString(),
-                    new DistributedCacheEntryOptions {
-                        SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-                    },
-                    CancellationTokenProvider.Token
-                );
+                try
+                {
+                    var hasChangesInGroups = await UpdateChangedPermissionGroupsAsync(permissionGroupRecords);
+                    var hasChangesInPermissions = await UpdateChangedPermissionsAsync(permissionRecords);
+
+                    if (hasChangesInGroups || hasChangesInPermissions)
+                    {
+                        await Cache.SetStringAsync(
+                            GetCommonStampCacheKey(),
+                            Guid.NewGuid().ToString(),
+                            new DistributedCacheEntryOptions {
+                                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
+                            },
+                            CancellationTokenProvider.Token
+                        );
+                    }
+                }
+                catch
+                {
+                    try
+                    {
+                        await unitOfWork.RollbackAsync();
+                    }
+                    catch
+                    {
+                        /* ignored */
+                    }
+                    
+                    throw;
+                }
+
+                await unitOfWork.CompleteAsync();
             }
         }
 
@@ -136,7 +162,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
         foreach (var permissionGroupRecord in permissionGroupRecords)
         {
-            var permissionGroupRecordInDatabase = permissionGroupRecordsInDatabase.GetOrDefault(permissionGroupRecord.Name);
+            var permissionGroupRecordInDatabase =
+                permissionGroupRecordsInDatabase.GetOrDefault(permissionGroupRecord.Name);
             if (permissionGroupRecordInDatabase == null)
             {
                 /* New group */
@@ -273,13 +300,25 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         IEnumerable<string> deletedPermissionGroups,
         IEnumerable<string> deletedPermissions)
     {
+        var jsonSerializerOptions = new JsonSerializerOptions
+        {
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver
+            {
+                Modifiers =
+                {
+                    new AbpIgnorePropertiesModifiers<PermissionGroupDefinitionRecord, Guid>().CreateModifyAction(x => x.Id),
+                    new AbpIgnorePropertiesModifiers<PermissionDefinitionRecord, Guid>().CreateModifyAction(x => x.Id)
+                }
+            }
+        };
+
         var stringBuilder = new StringBuilder();
 
         stringBuilder.Append("PermissionGroupRecords:");
-        stringBuilder.AppendLine(JsonSerializer.Serialize(permissionGroupRecords));
+        stringBuilder.AppendLine(JsonSerializer.Serialize(permissionGroupRecords, jsonSerializerOptions));
 
         stringBuilder.Append("PermissionRecords:");
-        stringBuilder.AppendLine(JsonSerializer.Serialize(permissionRecords));
+        stringBuilder.AppendLine(JsonSerializer.Serialize(permissionRecords, jsonSerializerOptions));
 
         stringBuilder.Append("DeletedPermissionGroups:");
         stringBuilder.AppendLine(deletedPermissionGroups.JoinAsString(","));

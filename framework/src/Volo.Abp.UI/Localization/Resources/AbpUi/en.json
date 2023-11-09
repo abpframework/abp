@@ -48,6 +48,15 @@
     "Search": "Search",
     "ItemWillBeDeletedMessageWithFormat": "{0} will be deleted!",
     "ItemWillBeDeletedMessage": "This item will be deleted!",
-    "ManageYourAccount": "Manage your account"
+    "ManageYourAccount": "Manage your account",
+    "OthersGroup": "Other",
+    "Today": "Today",
+    "Apply": "Apply",
+    "InternetConnectionInfo": "The operation could not be performed. Your internet connection is not available at the moment.",
+    "CopiedToTheClipboard": "Copied to the clipboard",
+    "AddNew": "Add new",
+    "ProfilePicture": "Profile picture",
+    "Theme": "Theme",
+    "NotAssigned": "Not Assigned"
   }
 }

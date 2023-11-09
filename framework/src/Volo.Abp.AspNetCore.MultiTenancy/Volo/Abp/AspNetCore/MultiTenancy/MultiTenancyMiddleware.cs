@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
@@ -15,6 +17,8 @@ namespace Volo.Abp.AspNetCore.MultiTenancy;
 
 public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
 {
+    public ILogger<MultiTenancyMiddleware> Logger { get; set; }
+
     private readonly ITenantConfigurationProvider _tenantConfigurationProvider;
     private readonly ICurrentTenant _currentTenant;
     private readonly AbpAspNetCoreMultiTenancyOptions _options;
@@ -26,6 +30,8 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
         IOptions<AbpAspNetCoreMultiTenancyOptions> options,
         ITenantResolveResultAccessor tenantResolveResultAccessor)
     {
+        Logger = NullLogger<MultiTenancyMiddleware>.Instance;
+
         _tenantConfigurationProvider = tenantConfigurationProvider;
         _currentTenant = currentTenant;
         _tenantResolveResultAccessor = tenantResolveResultAccessor;
@@ -34,13 +40,15 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        TenantConfiguration tenant = null;
+        TenantConfiguration? tenant = null;
         try
         {
             tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
         }
         catch (Exception e)
         {
+            Logger.LogException(e);
+
             if (await _options.MultiTenancyMiddlewareErrorPageBuilder(context, e))
             {
                 return;
@@ -78,7 +86,7 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
         }
     }
 
-    private async Task<RequestCulture> TryGetRequestCultureAsync(HttpContext httpContext)
+    private async Task<RequestCulture?> TryGetRequestCultureAsync(HttpContext httpContext)
     {
         var requestCultureFeature = httpContext.Features.Get<IRequestCultureFeature>();
 
@@ -106,7 +114,7 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
         string culture;
         string uiCulture;
 
-        if (defaultLanguage.Contains(';'))
+        if (defaultLanguage!.Contains(';'))
         {
             var splitted = defaultLanguage.Split(';');
             culture = splitted[0];

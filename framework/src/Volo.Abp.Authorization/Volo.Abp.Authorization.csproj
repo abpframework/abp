@@ -4,7 +4,9 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.Authorization</AssemblyName>
     <PackageId>Volo.Abp.Authorization</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -20,11 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
+
     <ProjectReference Include="..\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
   </ItemGroup>
 

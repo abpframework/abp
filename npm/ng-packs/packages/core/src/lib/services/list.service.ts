@@ -52,6 +52,17 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     return this._page;
   }
 
+  private _totalCount = 0
+  set totalCount(value: number) {
+    if (value === this._totalCount) return;
+
+    this._totalCount = value;
+    this.get();
+  }
+  get totalCount(): number {
+    return this._totalCount;
+  }
+
   private _sortKey = '';
   set sortKey(value: string) {
     this._sortKey = value;
@@ -121,12 +132,18 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
   }
 
   private resetPageWhenUnchanged() {
+    const maxPage = Number(Number(this.totalCount / this._maxResultCount).toFixed());
     const skipCount = this._page * this._maxResultCount;
 
-    if (skipCount === this._skipCount) {
-      this._page = 0;
-      this._skipCount = 0;
-    } else this._skipCount = skipCount;
+    if (skipCount !== this._totalCount) {
+      this._skipCount = skipCount;
+      return;
+    }
+
+    if (this.page === maxPage && this.page > 0) {
+      this._skipCount = skipCount - this._maxResultCount;
+      this.page = this.page - 1;
+    }
   }
 
   private next() {

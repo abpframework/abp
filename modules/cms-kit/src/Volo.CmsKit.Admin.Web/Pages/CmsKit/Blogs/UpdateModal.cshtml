@@ -1,8 +1,15 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 @using Volo.CmsKit.Admin.Web.Pages
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-
+@using Volo.Abp.Data
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+@using Volo.CmsKit.Web
+@inject IStringLocalizerFactory StringLocalizerFactory
 @inherits CmsKitAdminPageBase
 
 @model UpdateModalModel
@@ -11,13 +18,48 @@
     Layout = null;
 }
 
-<abp-dynamic-form abp-model="ViewModel" asp-page="/CmsKit/Blogs/UpdateModal">
+<form asp-page="/CmsKit/Blogs/UpdateModal">
     <abp-modal>
         <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
-            <abp-input asp-for="Id" />
-            <abp-form-content />
+            <abp-input asp-for="Id" hidden />
+            <abp-input asp-for="ViewModel.ConcurrencyStamp" hidden />
+
+            <abp-input asp-for="ViewModel.Name" />
+
+            <abp-input asp-for="ViewModel.Slug" label-tooltip-icon="fa fa-info-circle" label-tooltip="@L.GetString("BlogSlugInformation", CmsBlogsWebConsts.BlogsRoutePrefix)" />
+
+            @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<UpdateModalModel.UpdateBlogViewModel>())
+            {
+                if (!propertyInfo.Name.EndsWith("_Text"))
+                {
+                    if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                    {
+                        if (propertyInfo.Type.IsEnum)
+                        {
+                            Model.ViewModel.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
+                        }
+                        <abp-select asp-for="ViewModel.ExtraProperties[propertyInfo.Name]"
+                                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                    autocomplete-api-url="@propertyInfo.Lookup.Url"
+                                    autocomplete-selected-item-name="@Model.ViewModel.GetProperty(propertyInfo.Name+"_Text")"
+                                    autocomplete-selected-item-value="@Model.ViewModel.GetProperty(propertyInfo.Name)"
+                                    autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                                    autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                                    autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                                    autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></abp-select>
+                    }
+                    else
+                    {
+                        <abp-input type="@propertyInfo.GetInputType()"
+                                   asp-for="ViewModel.ExtraProperties[propertyInfo.Name]"
+                                   label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                   asp-format="@propertyInfo.GetInputFormatOrNull()"
+                                   value="@propertyInfo.GetInputValueOrNull(Model.ViewModel.GetProperty(propertyInfo.Name))" />
+                    }
+                }
+            }
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
-</abp-dynamic-form>
+</form>

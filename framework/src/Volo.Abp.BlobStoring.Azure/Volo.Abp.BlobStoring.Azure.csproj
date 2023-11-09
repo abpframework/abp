@@ -4,7 +4,9 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.BlobStoring.Azure</AssemblyName>
         <PackageId>Volo.Abp.BlobStoring.Azure</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -16,7 +18,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
-        <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
+        <PackageReference Include="Azure.Storage.Blobs" />
     </ItemGroup>
 
 </Project>

@@ -4,7 +4,9 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.MultiTenancy</AssemblyName>
     <PackageId>Volo.Abp.MultiTenancy</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -17,7 +19,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
     <ProjectReference Include="..\Volo.Abp.EventBus.Abstractions\Volo.Abp.EventBus.Abstractions.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
   </ItemGroup>
 
 </Project>

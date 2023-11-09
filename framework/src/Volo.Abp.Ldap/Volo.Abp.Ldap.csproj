@@ -4,7 +4,9 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.Ldap</AssemblyName>
     <PackageId>Volo.Abp.Ldap</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -15,19 +17,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LdapForNet" Version="2.7.15" />
+    <PackageReference Include="LdapForNet" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Volo\Abp\Ldap\Localization\*.json" />
-    <EmbeddedResource Include="Volo\Abp\Ldap\Localization\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Ldap.Abstractions\Volo.Abp.Ldap.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
-    <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
   </ItemGroup>
 
 </Project>

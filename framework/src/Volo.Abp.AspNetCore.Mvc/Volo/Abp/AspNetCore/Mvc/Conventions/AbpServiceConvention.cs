@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Controllers;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http;
@@ -44,6 +45,7 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
     protected virtual void ApplyForControllers(ApplicationModel application)
     {
         RemoveDuplicateControllers(application);
+        RemoveIntegrationControllersIfNotExposed(application);
 
         foreach (var controller in GetControllers(application))
         {
@@ -71,6 +73,20 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
         }
     }
 
+    protected virtual void RemoveIntegrationControllersIfNotExposed(ApplicationModel application)
+    {
+        if (Options.ExposeIntegrationServices)
+        {
+            return;
+        }
+        
+        var integrationControllers = GetControllers(application)
+            .Where(c => IntegrationServiceAttribute.IsDefinedOrInherited(c.ControllerType))
+            .ToArray();
+
+        application.Controllers.RemoveAll(integrationControllers);
+    }
+
     protected virtual IList<ControllerModel> GetControllers(ApplicationModel application)
     {
         return application.Controllers;
@@ -79,6 +95,36 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
     protected virtual void RemoveDuplicateControllers(ApplicationModel application)
     {
         var controllerModelsToRemove = new List<ControllerModel>();
+
+        if (Options.ControllersToRemove.Any())
+        {
+            var removeControllerModels = GetControllers(application)
+                .Where(cm => Options.ControllersToRemove.Contains(cm.ControllerType))
+                .ToArray();
+
+            if (removeControllerModels.Any())
+            {
+                controllerModelsToRemove.AddRange(removeControllerModels);
+                Logger.LogInformation($"Removing the controller{(removeControllerModels.Length > 1 ? "s" : "")} {removeControllerModels.Select(c => c.ControllerType.AssemblyQualifiedName)!.JoinAsString(", ")} from the application model");
+            }
+        }
+
+        foreach (var controllerModel in GetControllers(application))
+        {
+            var replaceControllersAttr = ReflectionHelper.GetSingleAttributeOrDefault<ReplaceControllersAttribute>(controllerModel.ControllerType);
+            if (replaceControllersAttr != default)
+            {
+                var replaceControllerModels = GetControllers(application)
+                    .Where(cm => replaceControllersAttr.ControllerTypes.Contains(cm.ControllerType))
+                    .ToArray();
+
+                if (replaceControllerModels.Any())
+                {
+                    controllerModelsToRemove.AddRange(replaceControllerModels);
+                    Logger.LogInformation($"Removing the controller{(replaceControllerModels.Length > 1 ? "s" : "")} {replaceControllersAttr.ControllerTypes.Select(c => c.AssemblyQualifiedName)!.JoinAsString(", ")} from the application model since {(replaceControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
+                }
+            }
+        }
 
         foreach (var controllerModel in GetControllers(application))
         {
@@ -93,14 +139,17 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
             }
 
             var exposeServicesAttr = ReflectionHelper.GetSingleAttributeOrDefault<ExposeServicesAttribute>(controllerModel.ControllerType);
-            if (exposeServicesAttr.IncludeSelf)
+            if (exposeServicesAttr!.IncludeSelf)
             {
                 var exposedControllerModels = GetControllers(application)
                     .Where(cm => exposeServicesAttr.ServiceTypes.Contains(cm.ControllerType))
                     .ToArray();
 
-                controllerModelsToRemove.AddRange(exposedControllerModels);
-                Logger.LogInformation($"Removing the controller{(exposedControllerModels.Length > 1 ? "s" : "")} {exposeServicesAttr.ServiceTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")} from the application model since {(exposedControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
+                if (exposedControllerModels.Any())
+                {
+                    controllerModelsToRemove.AddRange(exposedControllerModels);
+                    Logger.LogInformation($"Removing the controller{(exposedControllerModels.Length > 1 ? "s" : "")} {exposeServicesAttr.ServiceTypes.Select(c => c.AssemblyQualifiedName)!.JoinAsString(", ")} from the application model since {(exposedControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
+                }
                 continue;
             }
 
@@ -124,13 +173,13 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
             }
 
             controllerModelsToRemove.Add(controllerModel);
-            Logger.LogInformation($"Removing the controller {controllerModel.ControllerType.AssemblyQualifiedName} from the application model since it replaces the controller(s): {baseControllerTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")}");
+            Logger.LogInformation($"Removing the controller {controllerModel.ControllerType.AssemblyQualifiedName} from the application model since it replaces the controller(s): {baseControllerTypes.Select(c => c.AssemblyQualifiedName)!.JoinAsString(", ")}");
         }
 
         application.Controllers.RemoveAll(controllerModelsToRemove);
     }
 
-    protected virtual void ConfigureRemoteService(ControllerModel controller, [CanBeNull] ConventionalControllerSetting configuration)
+    protected virtual void ConfigureRemoteService(ControllerModel controller, ConventionalControllerSetting? configuration)
     {
         ConfigureApiExplorer(controller);
         ConfigureSelector(controller, configuration);
@@ -239,7 +288,7 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
         action.ApiExplorer.IsVisible = visible;
     }
 
-    protected virtual void ConfigureSelector(ControllerModel controller, [CanBeNull] ConventionalControllerSetting configuration)
+    protected virtual void ConfigureSelector(ControllerModel controller, ConventionalControllerSetting? configuration)
     {
         RemoveEmptySelectors(controller.Selectors);
 
@@ -263,7 +312,7 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
         }
     }
 
-    protected virtual void ConfigureSelector(string rootPath, string controllerName, ActionModel action, [CanBeNull] ConventionalControllerSetting configuration)
+    protected virtual void ConfigureSelector(string rootPath, string controllerName, ActionModel action, ConventionalControllerSetting? configuration)
     {
         RemoveEmptySelectors(action.Selectors);
 
@@ -283,7 +332,7 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
         }
     }
 
-    protected virtual void AddAbpServiceSelector(string rootPath, string controllerName, ActionModel action, [CanBeNull] ConventionalControllerSetting configuration)
+    protected virtual void AddAbpServiceSelector(string rootPath, string controllerName, ActionModel action, ConventionalControllerSetting? configuration)
     {
         var httpMethod = SelectHttpMethod(action, configuration);
 
@@ -296,12 +345,12 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
         action.Selectors.Add(abpServiceSelectorModel);
     }
 
-    protected virtual string SelectHttpMethod(ActionModel action, ConventionalControllerSetting configuration)
+    protected virtual string SelectHttpMethod(ActionModel action, ConventionalControllerSetting? configuration)
     {
         return HttpMethodHelper.GetConventionalVerbForMethodName(action.ActionName);
     }
 
-    protected virtual void NormalizeSelectorRoutes(string rootPath, string controllerName, ActionModel action, [CanBeNull] ConventionalControllerSetting configuration)
+    protected virtual void NormalizeSelectorRoutes(string rootPath, string controllerName, ActionModel action, ConventionalControllerSetting? configuration)
     {
         foreach (var selector in action.Selectors)
         {
@@ -345,13 +394,12 @@ public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
         return ModuleApiDescriptionModel.DefaultRootPath;
     }
 
-    [CanBeNull]
-    protected virtual ConventionalControllerSetting GetControllerSettingOrNull(Type controllerType)
+    protected virtual ConventionalControllerSetting? GetControllerSettingOrNull(Type controllerType)
     {
         return Options.ConventionalControllers.ConventionalControllerSettings.GetSettingOrNull(controllerType);
     }
 
-    protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
+    protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, ConventionalControllerSetting? configuration)
     {
         return new AttributeRouteModel(
             new RouteAttribute(

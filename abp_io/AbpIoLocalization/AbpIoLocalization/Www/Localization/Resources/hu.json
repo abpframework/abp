@@ -16,7 +16,7 @@
     "Tutorial": "Oktatóanyag",
     "UsingCLI": "CLI használata",
     "SeeDetails": "Lásd a részleteket",
-    "AbpShortDescription": "Az ABP Framework egy komplett infrastruktúra modern webalkalmazások létrehozásához, követve a szoftverfejlesztés legjobb gyakorlatait és konvencióit.",
+    "AbpShortDescription": "Az ABP Framework egy komplett infrastruktúra modern architektúrákkal rendelkező szoftvermegoldások létrehozásához, amelyek az ASP.NET Core platformon alapulnak.",
     "SourceCodeUpper": "FORRÁSKÓD",
     "LatestReleaseLogs": "Legújabb kiadási naplók",
     "Infrastructure": "Infrastruktúra",
@@ -392,6 +392,8 @@
     "LeptonXLiteThemeInfo": "Modern és stílusos Bootstrap UI téma. Ideális, ha gyártásra kész felhasználói felület témát szeretne. Ez a legújabb téma, és az alapértelmezett.",
     "BasicThemeInfo": "Minimalista felhasználói felület téma egyszerű Bootstrap színekkel és stílusokkal. Ideális, ha saját felhasználói felület témát készít.",
     "SeeDocumentation": "Lásd a <a href='{0}' target='_blank'>dokumentációt</a> .",
-    "SeeFullScreen": "<a href='{0}' target='_blank'>🖼️ Nézze meg a képernyőképet</a>"
+    "SeeFullScreen": "<a href='{0}' target='_blank'>🖼️ Nézze meg a képernyőképet</a>",
+    "CreateSolutionFolder": "Hozzon létre megoldási mappát",
+    "CreateSolutionFolderOption": "Meghatározza, hogy a projekt egy új mappában legyen-e a kimeneti mappában vagy közvetlenül a kimeneti mappában."
   }
 }

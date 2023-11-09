@@ -16,7 +16,7 @@
     "Tutorial": "Tutorial",
     "UsingCLI": "Utilizzo della CLI",
     "SeeDetails": "Vedi i dettagli",
-    "AbpShortDescription": "ABP Framework è un'infrastruttura completa per creare applicazioni Web moderne seguendo le migliori pratiche e convenzioni di sviluppo software.",
+    "AbpShortDescription": "ABP Framework è un'infrastruttura completa per la creazione di soluzioni software con architetture moderne basate sulla piattaforma ASP.NET Core.",
     "SourceCodeUpper": "CODICE SORGENTE",
     "LatestReleaseLogs": "Ultimi note di rilascio",
     "Infrastructure": "Infrastruttura",
@@ -274,7 +274,8 @@
     "FirstEdition": "Prima Edizione",
     "ThankYou": "Grazie!",
     "CheckboxMandatory": "Devi mettere la spunta su questo per procedere!",
-    "SelectUITheme": "Seleziona Tema dell'interfaccia utente"
-
+    "SelectUITheme": "Seleziona Tema dell'interfaccia utente",
+    "CreateSolutionFolder": "Crea cartella della soluzione",
+    "CreateSolutionFolderOption": "Specifica se il progetto si troverà in una nuova cartella nella cartella di output o direttamente nella cartella di output."
   }
 }

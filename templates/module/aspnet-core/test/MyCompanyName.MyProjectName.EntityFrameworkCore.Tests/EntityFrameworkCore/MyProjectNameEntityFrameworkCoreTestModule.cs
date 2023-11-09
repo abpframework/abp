@@ -5,18 +5,21 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
 
 [DependsOn(
-    typeof(MyProjectNameTestBaseModule),
+    typeof(MyProjectNameApplicationTestModule),
     typeof(MyProjectNameEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreSqliteModule)
-    )]
+)]
 public class MyProjectNameEntityFrameworkCoreTestModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddAlwaysDisableUnitOfWorkTransaction();
+
         var sqliteConnection = CreateDatabaseAndGetConnection();
 
         Configure<AbpDbContextOptions>(options =>

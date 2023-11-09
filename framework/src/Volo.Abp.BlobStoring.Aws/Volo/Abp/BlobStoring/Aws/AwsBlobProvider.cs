@@ -85,7 +85,7 @@ public class AwsBlobProvider : BlobProviderBase, ITransientDependency
         }
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public override async Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var blobName = AwsBlobNameCalculator.Calculate(args);
         var containerName = GetContainerName(args);
@@ -154,6 +154,6 @@ public class AwsBlobProvider : BlobProviderBase, ITransientDependency
         var configuration = args.Configuration.GetAwsConfiguration();
         return configuration.ContainerName.IsNullOrWhiteSpace()
             ? args.ContainerName
-            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
+            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName!);
     }
 }

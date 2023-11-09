@@ -152,6 +152,20 @@
       }, ajaxParams));
     };
 
+    volo.blogging.posts.getListByUserId = function(userId, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/blogging/posts/user/' + userId + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.blogging.posts.getLatestBlogPosts = function(blogId, count, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/blogging/posts/' + blogId + '/latest/' + count + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
     volo.blogging.posts['delete'] = function(id, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/blogging/posts/' + id + '',

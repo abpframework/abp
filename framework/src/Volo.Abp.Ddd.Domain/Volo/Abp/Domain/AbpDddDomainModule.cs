@@ -2,6 +2,7 @@
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus;
 using Volo.Abp.ExceptionHandling;
@@ -22,12 +23,14 @@ namespace Volo.Abp.Domain;
     typeof(AbpObjectMappingModule),
     typeof(AbpExceptionHandlingModule),
     typeof(AbpSpecificationsModule),
-    typeof(AbpCachingModule)
+    typeof(AbpCachingModule),
+    typeof(AbpDddDomainSharedModule)
     )]
 public class AbpDddDomainModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddConventionalRegistrar(new AbpRepositoryConventionalRegistrar());
+        context.Services.OnRegistered(ChangeTrackingInterceptorRegistrar.RegisterIfNeeded);
     }
 }

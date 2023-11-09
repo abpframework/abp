@@ -4,7 +4,7 @@ namespace Volo.Abp.ObjectExtending.Modularity;
 
 public class ExtensionPropertyLookupConfiguration
 {
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
 
     /// <summary>
     /// Default value: "items".

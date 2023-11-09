@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
 using Volo.Abp.Features;
@@ -16,33 +17,36 @@ namespace Volo.CmsKit.Public.Pages;
 public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
 {
     protected IPageRepository PageRepository { get; }
-	protected PageManager PageManager { get; }
+    protected PageManager PageManager { get; }
 
-    protected IDistributedCache<PageDto> PageCache { get; }
+    protected IDistributedCache<PageCacheItem> PageCache { get; }
 
-    public PagePublicAppService(IPageRepository pageRepository, PageManager pageManager, IDistributedCache<PageDto> pageCache)
+    public PagePublicAppService(
+        IPageRepository pageRepository,
+        PageManager pageManager,
+        IDistributedCache<PageCacheItem> pageCache)
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
-		PageCache = pageCache;
+        PageCache = pageCache;
     }
 
     public virtual async Task<PageDto> FindBySlugAsync(string slug)
     {
-        var page = await PageRepository.FindBySlugAsync(slug);
+        var cachedPage = await FindAndCacheBySlugAsync(slug);
 
-        if (page == null)
+        if (cachedPage == null)
         {
             return null;
         }
 
-        return ObjectMapper.Map<Page, PageDto>(page);
+        return ObjectMapper.Map<PageCacheItem, PageDto>(cachedPage);
     }
 
     public virtual async Task<PageDto> FindDefaultHomePageAsync()
     {
-        var pageDto = await PageCache.GetAsync("DefaultHomePage");
-        if (pageDto is null)
+        var pageCacheItem = await PageCache.GetAsync(PageCacheItem.GetKey(PageConsts.DefaultHomePageCacheKey));
+        if (pageCacheItem is null)
         {
             var page = await PageManager.GetHomePageAsync();
             if (page is null)
@@ -50,12 +54,36 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
                 return null;
             }
 
-            pageDto = ObjectMapper.Map<Page, PageDto>(page);
+            pageCacheItem = ObjectMapper.Map<Page, PageCacheItem>(page);
 
-            await PageCache.SetAsync("DefaultHomePage", pageDto,
+            await PageCache.SetAsync(PageCacheItem.GetKey(PageConsts.DefaultHomePageCacheKey), pageCacheItem,
                 new DistributedCacheEntryOptions { AbsoluteExpiration = DateTimeOffset.Now.AddHours(1) });
         }
 
-        return pageDto;
+        return ObjectMapper.Map<PageCacheItem, PageDto>(pageCacheItem);
+    }
+
+    public virtual async Task<bool> DoesSlugExistAsync([NotNull] string slug)
+    {
+        var cached = await FindAndCacheBySlugAsync(slug);
+
+        return cached != null;
+    }
+
+    internal virtual async Task<PageCacheItem> FindAndCacheBySlugAsync(string slug)
+    {
+        var pageCacheItem = await PageCache.GetOrAddAsync(PageCacheItem.GetKey(slug), async () =>
+        {
+            var page = await PageRepository.FindBySlugAsync(slug);
+            // If page is not found, cache it as null to prevent further queries.
+            if (page is null)
+            {
+                return null;
+            }
+
+            return ObjectMapper.Map<Page, PageCacheItem>(page);
+        });
+
+        return pageCacheItem;
     }
 }

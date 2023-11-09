@@ -10,6 +10,8 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
@@ -24,7 +26,8 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
     protected ISettingProvider SettingProvider { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
-
+    protected IDistributedEventBus DistributedEventBus { get; }
+    protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
     public IdentityUserManager(
@@ -41,7 +44,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         ILogger<IdentityUserManager> logger,
         ICancellationTokenProvider cancellationTokenProvider,
         IOrganizationUnitRepository organizationUnitRepository,
-        ISettingProvider settingProvider)
+        ISettingProvider settingProvider,
+        IDistributedEventBus distributedEventBus,
+        IIdentityLinkUserRepository identityLinkUserRepository)
         : base(
             store,
             optionsAccessor,
@@ -55,8 +60,10 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
         OrganizationUnitRepository = organizationUnitRepository;
         SettingProvider = settingProvider;
+        DistributedEventBus = distributedEventBus;
         RoleRepository = roleRepository;
         UserRepository = userRepository;
+        IdentityLinkUserRepository = identityLinkUserRepository;
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
@@ -69,6 +76,19 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         return await CreateAsync(user);
+    }
+
+    public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
+    {
+        user.Claims.Clear();
+        user.Roles.Clear();
+        user.Tokens.Clear();
+        user.Logins.Clear();
+        user.OrganizationUnits.Clear();
+        await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(user.Id, user.TenantId), CancellationToken);
+        await UpdateAsync(user);
+
+        return await base.DeleteAsync(user);
     }
 
     public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
@@ -252,5 +272,82 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         return await UpdateUserAsync(user);
+    }
+
+    public virtual async Task<bool> ShouldPeriodicallyChangePasswordAsync(IdentityUser user)
+    {
+        Check.NotNull(user, nameof(user));
+
+        if (user.PasswordHash.IsNullOrWhiteSpace())
+        {
+            return false;
+        }
+
+        var forceUsersToPeriodicallyChangePassword = await SettingProvider.GetAsync<bool>(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword);
+        if (!forceUsersToPeriodicallyChangePassword)
+        {
+            return false;
+        }
+
+        var lastPasswordChangeTime = user.LastPasswordChangeTime ?? DateTime.SpecifyKind(user.CreationTime, DateTimeKind.Utc);
+        var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
+
+        return passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < DateTime.UtcNow;
+    }
+
+    public virtual async Task ResetRecoveryCodesAsync(IdentityUser user)
+    {
+        if (!(Store is IdentityUserStore identityUserStore))
+        {
+            throw new AbpException($"Store is not an instance of {typeof(IdentityUserStore).AssemblyQualifiedName}");
+        }
+
+        await identityUserStore.SetTokenAsync(user, await identityUserStore.GetInternalLoginProviderAsync(), await identityUserStore.GetRecoveryCodeTokenNameAsync(), string.Empty, CancellationToken);
+    }
+
+    public async override Task<IdentityResult> SetEmailAsync(IdentityUser user, string email)
+    {
+        var oldMail = user.Email;
+
+        var result = await base.SetEmailAsync(user, email);
+
+        result.CheckErrors();
+
+        if (!string.IsNullOrEmpty(oldMail) && !oldMail.Equals(email, StringComparison.OrdinalIgnoreCase))
+        {
+            await DistributedEventBus.PublishAsync(
+                new IdentityUserEmailChangedEto
+                {
+                    Id = user.Id,
+                    TenantId = user.TenantId,
+                    Email = email,
+                    OldEmail = oldMail
+                });
+        }
+
+        return result;
+    }
+
+    public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string userName)
+    {
+        var oldUserName = user.UserName;
+
+        var result = await base.SetUserNameAsync(user, userName);
+
+        result.CheckErrors();
+
+        if (!string.IsNullOrEmpty(oldUserName) && oldUserName != userName)
+        {
+            await DistributedEventBus.PublishAsync(
+                new IdentityUserUserNameChangedEto
+                {
+                    Id = user.Id,
+                    TenantId = user.TenantId,
+                    UserName = userName,
+                    OldUserName = oldUserName
+                });
+        }
+
+        return result;
     }
 }

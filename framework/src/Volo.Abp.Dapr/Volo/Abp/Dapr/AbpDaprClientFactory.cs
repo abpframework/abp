@@ -36,7 +36,7 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
         JsonSerializerOptions = CreateJsonSerializerOptions(systemTextJsonSerializerOptions.Value);
     }
 
-    public virtual DaprClient Create(Action<DaprClientBuilder> builderAction = null)
+    public virtual DaprClient Create(Action<DaprClientBuilder>? builderAction = null)
     {
         var builder = new DaprClientBuilder()
             .UseJsonSerializationOptions(JsonSerializerOptions);
@@ -63,9 +63,9 @@ public class AbpDaprClientFactory : IAbpDaprClientFactory, ISingletonDependency
     }
 
     public virtual HttpClient CreateHttpClient(
-        string appId = null,
-        string daprEndpoint = null,
-        string daprApiToken = null)
+        string? appId = null,
+        string? daprEndpoint = null,
+        string? daprApiToken = null)
     {
         if(daprEndpoint.IsNullOrWhiteSpace() &&
            !DaprOptions.HttpEndpoint.IsNullOrWhiteSpace())

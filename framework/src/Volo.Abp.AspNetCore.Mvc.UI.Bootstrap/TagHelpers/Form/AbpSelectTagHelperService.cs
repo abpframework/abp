@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Localization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Localization;
@@ -22,20 +21,23 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     private readonly HtmlEncoder _encoder;
     private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
     private readonly IStringLocalizerFactory _stringLocalizerFactory;
+    private readonly IAbpEnumLocalizer _abpEnumLocalizer;
 
     public AbpSelectTagHelperService(
         IHtmlGenerator generator,
         HtmlEncoder encoder,
         IAbpTagHelperLocalizer tagHelperLocalizer,
-        IStringLocalizerFactory stringLocalizerFactory)
+        IStringLocalizerFactory stringLocalizerFactory,
+        IAbpEnumLocalizer abpEnumLocalizer)
     {
         _generator = generator;
         _encoder = encoder;
         _tagHelperLocalizer = tagHelperLocalizer;
         _stringLocalizerFactory = stringLocalizerFactory;
+        _abpEnumLocalizer = abpEnumLocalizer;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var childContent = await output.GetChildContentAsync();
 
@@ -53,7 +55,15 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         {
             output.TagName = "div";
             LeaveOnlyGroupAttributes(context, output);
-            output.Attributes.AddClass("mb-3");
+            if (TagHelper.FloatingLabel)
+            {
+                output.Attributes.AddClass("form-floating");
+            }
+
+            if (TagHelper.AddMarginBottomClass)
+            {
+                output.Attributes.AddClass("mb-3");
+            }
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Content.SetHtmlContent(innerHtml);
         }
@@ -67,12 +77,14 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         var validation = await GetValidationAsHtmlAsync(context, output, selectTag);
         var infoText = GetInfoAsHtml(context, output, selectTag);
 
-        return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
+        return TagHelper.FloatingLabel ? selectAsHtml + Environment.NewLine + label + Environment.NewLine + infoText + Environment.NewLine + validation :
+                                         label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
     }
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
     {
-        return "<div class=\"mb-3\">" + Environment.NewLine + innerHtml + Environment.NewLine + "</div>";
+        var mb3 = TagHelper.AddMarginBottomClass ? "mb-3" : string.Empty;
+        return $"<div class=\"{mb3}\">" + Environment.NewLine + innerHtml + Environment.NewLine + "</div>";
     }
 
     protected virtual async Task<TagHelperOutput> GetSelectTagAsync(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
@@ -122,6 +134,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             output.Attributes.Add("data-autocomplete-selected-item-value", TagHelper.AutocompleteSelectedItemValue);
             output.Attributes.Add("data-autocomplete-allow-clear", TagHelper.AllowClear);
             output.Attributes.Add("data-autocomplete-placeholder", TagHelper.Placeholder);
+            output.Attributes.Add("data-autocomplete-parent-selector", TagHelper.AutocompleteParentSelector);
         }
     }
 
@@ -148,23 +161,15 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         }
 
         var selectItemsAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<SelectItems>();
-        if (selectItemsAttribute != null)
-        {
-            return GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer);
-        }
-
-        throw new Exception("No items provided for select attribute.");
+        return selectItemsAttribute != null
+            ? GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer)
+            : throw new Exception("No items provided for select attribute.");
     }
 
     private bool IsEnum()
     {
         var value = TagHelper.AspFor.Model;
-        if (value != null && value.GetType().IsEnum)
-        {
-            return true;
-        }
-
-        return TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
+        return (value != null && value.GetType().IsEnum) || TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
@@ -179,7 +184,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             var label = new TagBuilder("label");
             label.AddCssClass("form-label");
             label.Attributes.Add("for", GetIdAttributeValue(selectTag));
-            label.InnerHtml.AppendHtml(TagHelper.Label);
+            label.InnerHtml.AppendHtml(_encoder.Encode(TagHelper.Label));
 
             return label.ToHtmlString() + GetRequiredSymbol(context, output);
         }
@@ -194,7 +199,9 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             return "";
         }
 
-        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>" : "";
+        var isHaveRequiredAttribute = context.AllAttributes.Any(a => a.Name == "required");
+
+        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null || isHaveRequiredAttribute ? "<span> * </span>" : "";
     }
 
     protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
@@ -256,30 +263,20 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         if (isNullableType)
         {
-            enumType = Nullable.GetUnderlyingType(explorer.ModelType);
+            enumType = Nullable.GetUnderlyingType(explorer.ModelType)!;
             selectItems.Add(new SelectListItem());
         }
 
         var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
 
-        foreach (var enumValue in enumType.GetEnumValues())
+        foreach (var enumValue in enumType.GetEnumValuesAsUnderlyingType())
         {
-            var memberName = enumType.GetEnumName(enumValue);
-            var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
+            var localizedMemberName = _abpEnumLocalizer.GetString(enumType, enumValue,
                 new[]
                 {
-                        containerLocalizer,
-                        _stringLocalizerFactory.CreateDefaultOrNull()
-                },
-                new[]
-                {
-                        $"Enum:{enumType.Name}.{memberName}",
-                        $"{enumType.Name}.{memberName}",
-                        memberName
-                },
-                memberName
-            );
-
+                    containerLocalizer,
+                    _stringLocalizerFactory.CreateDefaultOrNull()
+                }!);
             selectItems.Add(new SelectListItem
             {
                 Value = enumValue.ToString(),
@@ -296,12 +293,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     {
         var selectItems = selectItemsAttribute.GetItems(explorer)?.ToList();
 
-        if (selectItems == null)
-        {
-            return new List<SelectListItem>();
-        }
-
-        return selectItems;
+        return selectItems ?? new List<SelectListItem>();
     }
 
     protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output)
@@ -337,17 +329,13 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             TagHelper.Size = attribute.Size;
         }
 
-        switch (TagHelper.Size)
+        return TagHelper.Size switch
         {
-            case AbpFormControlSize.Small:
-                return "form-select-sm";
-            case AbpFormControlSize.Medium:
-                return "form-select-md";
-            case AbpFormControlSize.Large:
-                return "form-select-lg";
-        }
-
-        return "";
+            AbpFormControlSize.Small => "form-select-sm",
+            AbpFormControlSize.Medium => "form-select-md",
+            AbpFormControlSize.Large => "form-select-lg",
+            _ => "",
+        };
     }
 
     protected virtual TagHelperAttributeList GetInputAttributes(TagHelperContext context, TagHelperOutput output)
@@ -376,7 +364,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         foreach (var tagHelperAttribute in tagHelperAttributes)
         {
-            var nameWithoutPrefix = tagHelperAttribute.Name.Substring(groupPrefix.Length);
+            var nameWithoutPrefix = tagHelperAttribute.Name[groupPrefix.Length..];
             var newAttritube = new TagHelperAttribute(nameWithoutPrefix, tagHelperAttribute.Value);
             output.Attributes.Add(newAttritube);
         }
@@ -386,7 +374,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     {
         var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
 
-        return idAttr != null ? idAttr.Value.ToString() : string.Empty;
+        return idAttr != null ? idAttr.Value.ToString()! : string.Empty;
     }
 
     protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)

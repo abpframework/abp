@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
@@ -33,11 +34,13 @@ public abstract class MicroserviceServiceTemplateBase : TemplateInfo
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        var steps = new List<ProjectBuildPipelineStep>();
+        var steps = base.GetCustomSteps(context).ToList();
 
         DeleteUnrelatedUiProject(context, steps);
         SetRandomPortForHostProject(context, steps);
         RandomizeStringEncryption(context, steps);
+        RandomizeAuthServerPassPhrase(context, steps);
+        ChangeConnectionString(context, steps);
 
         return steps;
     }
@@ -68,5 +71,15 @@ public abstract class MicroserviceServiceTemplateBase : TemplateInfo
     private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new MicroserviceServiceStringEncryptionStep());
+    }
+
+    private static void RandomizeAuthServerPassPhrase(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new RandomizeAuthServerPassPhraseStep());
+    }
+
+    private static void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new ConnectionStringRenameStep());
     }
 }

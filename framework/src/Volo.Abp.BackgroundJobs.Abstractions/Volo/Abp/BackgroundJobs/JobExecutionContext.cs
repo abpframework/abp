@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundJobs;
@@ -11,10 +12,17 @@ public class JobExecutionContext : IServiceProviderAccessor
 
     public object JobArgs { get; }
 
-    public JobExecutionContext(IServiceProvider serviceProvider, Type jobType, object jobArgs)
+    public CancellationToken CancellationToken { get; }
+
+    public JobExecutionContext(
+        IServiceProvider serviceProvider,
+        Type jobType,
+        object jobArgs,
+        CancellationToken cancellationToken = default)
     {
         ServiceProvider = serviceProvider;
         JobType = jobType;
         JobArgs = jobArgs;
+        CancellationToken = cancellationToken;
     }
 }

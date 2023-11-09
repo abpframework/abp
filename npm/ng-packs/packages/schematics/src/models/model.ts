@@ -45,9 +45,13 @@ abstract class TypeRef {
   get default() {
     return this._default;
   }
-  set default(value: string) {
+  set default(value: any) {
     if (!value) return;
-    this._default = ` = ${value}`;
+    if (typeof value === 'string') {
+      this._default = ` = "${value}"`;
+    } else {
+      this._default = ` = ${value}`;
+    }
   }
 
   constructor(options: TypeRefOptions) {

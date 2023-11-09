@@ -16,6 +16,8 @@ Open a command line window in the folder of the project (.csproj file) and type 
 abp add-package Volo.Abp.BackgroundJobs.HangFire
 ````
 
+>  If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.BackgroundJobs.HangFire).
+
 ### Manual Installation
 
 If you want to manually install;
@@ -52,7 +54,7 @@ After you have installed these NuGet packages, you need to configure your projec
       var configuration = context.Services.GetConfiguration();
       var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-      //... other configarations.
+      //... other configurations.
 
       ConfigureHangfire(context, configuration);
   }
@@ -66,7 +68,9 @@ After you have installed these NuGet packages, you need to configure your projec
   }
 ````
 
-2. If you want to use hangfire's dashboard, you can add `UseHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class
+> You have to configure a storage for Hangfire.
+
+2. If you want to use hangfire's dashboard, you can add `UseAbpHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class:
 
 ````csharp
  public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -75,14 +79,14 @@ After you have installed these NuGet packages, you need to configure your projec
             
     // ... others
     
-    app.UseHangfireDashboard(); //should add to the request pipeline before the app.UseConfiguredEndpoints()
+    app.UseAbpHangfireDashboard(); //should add to the request pipeline before the app.UseConfiguredEndpoints()
     app.UseConfiguredEndpoints();
  }
 ````
 
 ### Specifying Queue
 
-You can use the [`QueueAttribute`](https://docs.hangfire.io/en/latest/background-processing/configuring-queues.html) to specify the queue.
+You can use the [`QueueAttribute`](https://docs.hangfire.io/en/latest/background-processing/configuring-queues.html) to specify the queue:
 
 ````csharp
 using System.Threading.Tasks;
@@ -124,9 +128,9 @@ You can integrate the Hangfire dashboard to [ABP authorization system](Authoriza
 class. This class is defined in the `Volo.Abp.Hangfire` package. The following example, checks if the current user is logged in to the application:
 
 ```csharp
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
+app.UseAbpHangfireDashboard("/hangfire", options =>
 {
-    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() }
+    options.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter() };
 });
 ```
 
@@ -142,11 +146,11 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 If you want to require an additional permission, you can pass it into the constructor as below:
 
 ```csharp
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
+app.UseAbpHangfireDashboard("/hangfire", options =>
 {
-    AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") }
+    options.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") };
 });
 ```
 
-**Important**: `UseHangfireDashboard` should be called after the authentication and authorization middlewares in your `Startup` class (probably at the last line). Otherwise,
+**Important**: `UseAbpHangfireDashboard` should be called after the authentication and authorization middlewares in your `Startup` class (probably at the last line). Otherwise,
 authorization will always fail!

@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Castle.Components.DictionaryAdapter;
-using Fody;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;

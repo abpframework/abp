@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -9,24 +8,36 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using Volo.Abp;
+using Volo.CmsKit.Localization;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 using Color = SixLabors.ImageSharp.Color;
 using PointF = SixLabors.ImageSharp.PointF;
+using Volo.Abp.Caching;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Volo.CmsKit.Public.Web.Security.Captcha;
 
-public class SimpleMathsCaptchaGenerator : ISingletonDependency
+public class SimpleMathsCaptchaGenerator : ITransientDependency
 {
-    private static Dictionary<Guid, CaptchaRequest> Session { get; set; } = new Dictionary<Guid, CaptchaRequest>();
+    protected IStringLocalizer<CmsKitResource> Localizer { get; }
+    protected IDistributedCache<CaptchaOutput> Cache { get; }
 
-    public CaptchaOutput Generate()
+    public SimpleMathsCaptchaGenerator(IStringLocalizer<CmsKitResource> localizer, IDistributedCache<CaptchaOutput> cache)
     {
-        return Generate(options: null, number1: null, number2: null);
+        Localizer = localizer;
+        Cache = cache;
     }
 
-    public CaptchaOutput Generate(CaptchaOptions options)
+    public virtual Task<CaptchaOutput> GenerateAsync()
     {
-        return Generate(options, number1: null, number2: null);
+        return GenerateAsync(options: null, number1: null, number2: null);
+    }
+
+    public virtual Task<CaptchaOutput> GenerateAsync(CaptchaOptions options)
+    {
+        return GenerateAsync(options, number1: null, number2: null);
     }
 
     /// <summary>
@@ -36,7 +47,7 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
     /// <param name="number1">First number for maths operation</param>
     /// <param name="number2">Second number for maths operation</param>
     /// <returns></returns>
-    public CaptchaOutput Generate(CaptchaOptions options, int? number1, int? number2)
+    public virtual async Task<CaptchaOutput> GenerateAsync(CaptchaOptions options, int? number1, int? number2)
     {
         var random = new Random();
         options ??= new CaptchaOptions();
@@ -56,11 +67,15 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
             {
                 Text = text,
                 Result = Calculate(number1.Value, number2.Value),
-                ImageBytes =  GenerateInternal(text, options)
+                ImageBytes = GenerateInternal(text, options)
             }
         };
 
-        Session[request.Output.Id] = request;
+        await Cache.SetAsync(request.Output.Id.ToString("N"), request.Output, new DistributedCacheEntryOptions 
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.Add(options.DurationOfValidity)
+        });
+
         return request.Output;
     }
 
@@ -69,24 +84,25 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
         return number1 + number2;
     }
 
-    public void Validate(Guid requestId, int value)
+    public virtual async Task ValidateAsync(Guid requestId, int value)
     {
-        var request = Session[requestId];
-        if (request.Output.Result != value)
+        var request = await Cache.GetAsync(requestId.ToString("N"));
+        
+        if(request == null || request.Result != value) 
         {
-            throw new CaptchaException("The captcha code doesn't match text on the picture! Please try again.");
+            throw new UserFriendlyException(Localizer["CaptchaCodeErrorMessage"]);
         }
     }
 
-    public void Validate(Guid requestId, string value)
+    public virtual async Task ValidateAsync(Guid requestId, string value)
     {
         if (int.TryParse(value, out var captchaInput))
         {
-            Validate(requestId, captchaInput);
+            await ValidateAsync(requestId, captchaInput);
         }
         else
         {
-            throw new CaptchaException("The captcha code is missing!");
+            throw new UserFriendlyException(Localizer["CaptchaCodeMissingMessage"]);
         }
     }
 
@@ -100,7 +116,11 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
             var random = new Random();
             var startWith = (byte)random.Next(5, 10);
             image.Mutate(ctx => ctx.BackgroundColor(Color.Transparent));
-            var fontFamily = SystemFonts.Families.FirstOrDefault(x => x.IsStyleAvailable(options.FontStyle))?.Name ?? SystemFonts.Families.First().Name;
+
+            var fontFamily = SystemFonts.Families
+                .FirstOrDefault(x => x.GetAvailableStyles().Contains(options.FontStyle), SystemFonts.Families.First())
+                .Name;
+
             var font = SystemFonts.CreateFont(fontFamily, options.FontSize, options.FontStyle);
             
             foreach (var character in stringText)
@@ -109,7 +129,10 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
                 var color = options.TextColor[random.Next(0, options.TextColor.Length)];
                 var location = new PointF(startWith + position, random.Next(6, 13));
                 image.Mutate(ctx => ctx.DrawText(text, font, color, location));
-                position += TextMeasurer.Measure(character.ToString(), new RendererOptions(font, location)).Width;
+                position += TextMeasurer.MeasureSize(character.ToString(), new TextOptions (font)
+                {
+                    Origin = location
+                }).Width;
             }
 
             //add rotation
@@ -117,7 +140,7 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
             image.Mutate(ctx => ctx.Transform(rotation));
 
             // add the dynamic image to original image
-            var size = (ushort)TextMeasurer.Measure(stringText, new RendererOptions(font)).Width;
+            var size = (ushort)TextMeasurer.MeasureSize(stringText, new TextOptions(font)).Width;
             var img = new Image<Rgba32>(size + 15, options.Height);
             img.Mutate(ctx => ctx.BackgroundColor(Color.White));
 
@@ -130,7 +153,7 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
                 var y1 = random.Next(0, img.Height);
 
                 img.Mutate(ctx =>
-                    ctx.DrawLines(options.TextColor[random.Next(0, options.TextColor.Length)],
+                    ctx.DrawLine(options.TextColor[random.Next(0, options.TextColor.Length)],
                                   RandomTextGenerator.GenerateNextFloat(options.MinLineThickness, options.MaxLineThickness),
                                   new PointF[] { new PointF(x0, y0), new PointF(x1, y1) })
                     );
@@ -138,15 +161,16 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
 
             img.Mutate(ctx => ctx.DrawImage(image, 0.80f));
 
-            Parallel.For(0, options.NoiseRate, i =>
+            Parallel.For(0, options.NoiseRate, _ =>
             {
-                var x0 = random.Next(0, img.Width);
-                var y0 = random.Next(0, img.Height);
+                var x0 = random.Next(0, img.Width - 1);
+                var y0 = random.Next(0, img.Height - 1);
                 img.Mutate(
-                        ctx => ctx
-                            .DrawLines(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)],
-                            RandomTextGenerator.GenerateNextFloat(0.5, 1.5), new PointF[] { new Vector2(x0, y0), new Vector2(x0, y0) })
-                    );
+                    ctx => ctx
+                        .DrawLine(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)],
+                            RandomTextGenerator.GenerateNextFloat(0.5, 1.5),
+                            new PointF[] { new Vector2(x0, y0), new Vector2(x0 + 0.005f, y0 + 0.005f) })
+                );
             });
 
             img.Mutate(x =>

@@ -10,12 +10,12 @@ namespace Volo.Abp.Json.Newtonsoft;
 [Dependency(ReplaceServices = true)]
 public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
 {
-    protected IServiceProvider ServiceProvider { get; }
+    protected IRootServiceProvider RootServiceProvider { get; }
     protected IOptions<AbpNewtonsoftJsonSerializerOptions> Options { get; }
 
-    public AbpNewtonsoftJsonSerializer(IServiceProvider serviceProvider, IOptions<AbpNewtonsoftJsonSerializerOptions> options)
+    public AbpNewtonsoftJsonSerializer(IRootServiceProvider rootServiceProvider, IOptions<AbpNewtonsoftJsonSerializerOptions> options)
     {
-        ServiceProvider = serviceProvider;
+        RootServiceProvider = rootServiceProvider;
         Options = options;
     }
 
@@ -26,15 +26,15 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
 
     public T Deserialize<T>(string jsonString, bool camelCase = true)
     {
-        return JsonConvert.DeserializeObject<T>(jsonString, CreateJsonSerializerOptions(camelCase));
+        return JsonConvert.DeserializeObject<T>(jsonString, CreateJsonSerializerOptions(camelCase))!;
     }
 
     public object Deserialize(Type type, string jsonString, bool camelCase = true)
     {
-        return JsonConvert.DeserializeObject(jsonString, type, CreateJsonSerializerOptions(camelCase));
+        return JsonConvert.DeserializeObject(jsonString, type, CreateJsonSerializerOptions(camelCase))!;
     }
 
-    private static readonly ConcurrentDictionary<object, JsonSerializerSettings> JsonSerializerOptionsCache =
+    private readonly static ConcurrentDictionary<object, JsonSerializerSettings> JsonSerializerOptionsCache =
         new ConcurrentDictionary<object, JsonSerializerSettings>();
 
     protected virtual JsonSerializerSettings CreateJsonSerializerOptions(bool camelCase = true, bool indented = false)
@@ -81,9 +81,11 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
                 TypeNameAssemblyFormatHandling = Options.Value.JsonSerializerSettings.TypeNameAssemblyFormatHandling
             };
 
-            settings.ContractResolver = camelCase
-                ? ServiceProvider.GetRequiredService<AbpCamelCasePropertyNamesContractResolver>()
-                : ServiceProvider.GetRequiredService<AbpDefaultContractResolver>();
+            if (!camelCase)
+            {
+                //Default contract resolver is AbpCamelCasePropertyNamesContractResolver}
+                settings.ContractResolver = new AbpDefaultContractResolver(RootServiceProvider.GetRequiredService<AbpDateTimeConverter>());
+            }
 
             if (indented)
             {

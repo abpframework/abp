@@ -12,7 +12,9 @@ using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -27,6 +29,8 @@ public partial class TokenController
     protected IOptions<AbpIdentityOptions> AbpIdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpIdentityOptions>>();
     protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
     protected IdentitySecurityLogManager IdentitySecurityLogManager => LazyServiceProvider.LazyGetRequiredService<IdentitySecurityLogManager>();
+
+    protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
 
     [UnitOfWork]
     protected virtual async Task<IActionResult> HandlePasswordAsync(OpenIddictRequest request)
@@ -92,6 +96,14 @@ public partial class TokenController
                 var result = await SignInManager.CheckPasswordSignInAsync(user, request.Password, true);
                 if (!result.Succeeded)
                 {
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+                    {
+                        Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                        Action = result.ToIdentitySecurityLogAction(),
+                        UserName = request.Username,
+                        ClientId = request.ClientId
+                    });
+
                     string errorDescription;
                     if (result.IsLockedOut)
                     {
@@ -101,6 +113,17 @@ public partial class TokenController
                     else if (result.IsNotAllowed)
                     {
                         Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
+
+                        if (user.ShouldChangePasswordOnNextLogin)
+                        {
+                            return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
+                        }
+
+                        if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                        {
+                            return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
+                        }
+
                         errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
                     }
                     else
@@ -122,14 +145,6 @@ public partial class TokenController
                 {
                     return await HandleTwoFactorLoginAsync(request, user);
                 }
-
-                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
-                {
-                    Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
-                    Action = result.ToIdentitySecurityLogAction(),
-                    UserName = request.Username,
-                    ClientId = request.ClientId
-                });
 
                 return await SetSuccessResultAsync(request, user);
             }
@@ -160,8 +175,26 @@ public partial class TokenController
 
     protected virtual async Task<IActionResult> HandleTwoFactorLoginAsync(OpenIddictRequest request, IdentityUser user)
     {
+        var recoveryCode = request.GetParameter("RecoveryCode")?.ToString();
+        if (!recoveryCode.IsNullOrWhiteSpace())
+        {
+            var result = await UserManager.RedeemTwoFactorRecoveryCodeAsync(user, recoveryCode);
+            if (result.Succeeded)
+            {
+                return await SetSuccessResultAsync(request, user);
+            }
+
+            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            {
+                [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid recovery code!"
+            });
+
+            return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
         var twoFactorProvider = request.GetParameter("TwoFactorProvider")?.ToString();
-        var twoFactorCode = request.GetParameter("TwoFactorCode")?.ToString();;
+        var twoFactorCode = request.GetParameter("TwoFactorCode")?.ToString();
         if (!twoFactorProvider.IsNullOrWhiteSpace() && !twoFactorCode.IsNullOrWhiteSpace())
         {
             var providers = await UserManager.GetValidTwoFactorProvidersAsync(user);
@@ -197,13 +230,102 @@ public partial class TokenController
                 items: new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                        nameof(SignInResult.RequiresTwoFactor),
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = nameof(SignInResult.RequiresTwoFactor)
                 },
                 parameters: new Dictionary<string, object>
                 {
                     ["userId"] = user.Id.ToString("N"),
                     ["twoFactorToken"] = twoFactorToken
+                });
+
+            return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+    }
+
+    protected virtual async Task<IActionResult> HandleShouldChangePasswordOnNextLoginAsync(OpenIddictRequest request, IdentityUser user, string currentPassword)
+    {
+        return await HandleChangePasswordAsync(request, user, currentPassword, ChangePasswordType.ShouldChangePasswordOnNextLogin);
+    }
+
+    protected virtual async Task<IActionResult> HandlePeriodicallyChangePasswordAsync(OpenIddictRequest request, IdentityUser user, string currentPassword)
+    {
+        return await HandleChangePasswordAsync(request, user, currentPassword, ChangePasswordType.PeriodicallyChangePassword);
+    }
+
+    protected virtual async Task<IActionResult> HandleChangePasswordAsync(OpenIddictRequest request, IdentityUser user, string currentPassword, ChangePasswordType changePasswordType)
+    {
+        var changePasswordToken = request.GetParameter("ChangePasswordToken")?.ToString();
+        var newPassword = request.GetParameter("NewPassword")?.ToString();
+        if (!changePasswordToken.IsNullOrWhiteSpace() && !currentPassword.IsNullOrWhiteSpace() && !newPassword.IsNullOrWhiteSpace())
+        {
+            if (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString(), changePasswordToken))
+            {
+                var changePasswordResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
+                if (changePasswordResult.Succeeded)
+                {
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+                    {
+                        Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                        Action = IdentitySecurityLogActionConsts.ChangePassword,
+                        UserName = request.Username,
+                        ClientId = request.ClientId
+                    });
+
+                    if (changePasswordType == ChangePasswordType.ShouldChangePasswordOnNextLogin)
+                    {
+                        user.SetShouldChangePasswordOnNextLogin(false);
+                    }
+
+                    await UserManager.UpdateAsync(user);
+                    return await SetSuccessResultAsync(request, user);
+                }
+                else
+                {
+                    Logger.LogInformation("ChangePassword failed for username: {username}, reason: {changePasswordResult}", request.Username, changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", "));
+
+                    var properties = new AuthenticationProperties(new Dictionary<string, string>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", ")
+                    });
+                    return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                }
+            }
+            else
+            {
+                Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", request.Username);
+
+                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid authenticator code!"
+                });
+
+                return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+            }
+        }
+        else
+        {
+            Logger.LogInformation($"Authentication failed for username: {{{request.Username}}}, reason: {{{changePasswordType.ToString()}}}");
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                Action = OpenIddictSecurityLogActionConsts.LoginNotAllowed,
+                UserName = request.Username,
+                ClientId = request.ClientId
+            });
+
+            var properties = new AuthenticationProperties(
+                items: new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = changePasswordType.ToString()
+                },
+                parameters: new Dictionary<string, object>
+                {
+                    ["userId"] = user.Id.ToString("N"),
+                    ["changePasswordToken"] = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString())
                 });
 
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
@@ -219,7 +341,7 @@ public partial class TokenController
         principal.SetScopes(request.GetScopes());
         principal.SetResources(await GetResourcesAsync(request.GetScopes()));
 
-        await SetClaimsDestinationsAsync(principal);
+        await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
         await IdentitySecurityLogManager.SaveAsync(
             new IdentitySecurityLogContext
@@ -239,5 +361,11 @@ public partial class TokenController
         return UserManager.SupportsUserTwoFactor &&
                await UserManager.GetTwoFactorEnabledAsync(user) &&
                (await UserManager.GetValidTwoFactorProvidersAsync(user)).Count > 0;
+    }
+
+    public enum ChangePasswordType
+    {
+        ShouldChangePasswordOnNextLogin,
+        PeriodicallyChangePassword
     }
 }

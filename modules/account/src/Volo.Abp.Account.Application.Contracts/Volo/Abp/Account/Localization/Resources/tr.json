@@ -53,7 +53,7 @@
     "SendPasswordResetLink_Information": "E-posta adresinize bir şifre sıfırlama bağlantısı gönderilecektir. Birkaç dakika içerisinde bir e-posta almazsanız lütfen tekrar deneyin.",
     "PasswordResetMailSentMessage": "E-posta adresinize bir şifre sıfırlama bağlantısı gönderilmiştir. Lütfen e-posta adresinizi kontrol ediniz. Eğer 15 dakika içinde, bu e-postayı gelen kutusunda bulamazsanız, gereksiz veya istenmeyen e-posta kutularına bakınız.",
     "ResetPassword": "Şifre Yenileme",
-    "ConfirmPassword": "Şifre (tekrar)",
+    "ConfirmPassword": "Şifre Onay",
     "ResetPassword_Information": "Lütfen yeni şifrenizi belirleyin.",
     "YourPasswordIsSuccessfullyReset": "Şifreniz başarıyla sıfırlandı.",
     "GoToTheApplication": "Uygulamaya git",
@@ -66,6 +66,8 @@
     "PasswordResetInfoInEmail": "Şifrenizi sıfırlamanız için bir talep aldık! Eğer bu talebi siz gerçekleştirmişseniz, şifrenizi sıfırlamak için bağlantıya tıklayın.",
     "ResetMyPassword": "Şifremi sıfırla",
     "AccessDenied": "Erişim reddedildi!",
-    "AccessDeniedMessage": "Bu kaynağa erişiminiz yok."
+    "AccessDeniedMessage": "Bu kaynağa erişiminiz yok.",
+    "OrRegisterWith": "Veya bunlarla kayıt ol:",
+    "RegisterUsingYourProviderAccount": "{0} hesabınızla kayıt olun."
   }
 }

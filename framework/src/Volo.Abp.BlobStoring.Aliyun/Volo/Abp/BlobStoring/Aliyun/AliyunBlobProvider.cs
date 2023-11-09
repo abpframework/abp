@@ -76,7 +76,7 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
         return Task.FromResult(BlobExists(ossClient, containerName, blobName));
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public override async Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var containerName = GetContainerName(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);
@@ -94,7 +94,7 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
         var configuration = args.Configuration.GetAliyunConfiguration();
         return configuration.ContainerName.IsNullOrWhiteSpace()
             ? args.ContainerName
-            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
+            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName!);
     }
 
     protected virtual bool BlobExists(IOss ossClient, string containerName, string blobName)

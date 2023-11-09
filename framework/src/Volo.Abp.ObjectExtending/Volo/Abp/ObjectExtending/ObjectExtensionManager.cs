@@ -24,7 +24,7 @@ public class ObjectExtensionManager
 
     [NotNull]
     public virtual ObjectExtensionManager AddOrUpdate<TObject>(
-        [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
+        Action<ObjectExtensionInfo>? configureAction = null)
     {
         return AddOrUpdate(typeof(TObject), configureAction);
     }
@@ -32,7 +32,7 @@ public class ObjectExtensionManager
     [NotNull]
     public virtual ObjectExtensionManager AddOrUpdate(
         [NotNull] Type[] types,
-        [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
+        Action<ObjectExtensionInfo>? configureAction = null)
     {
         Check.NotNull(types, nameof(types));
 
@@ -47,7 +47,7 @@ public class ObjectExtensionManager
     [NotNull]
     public virtual ObjectExtensionManager AddOrUpdate(
         [NotNull] Type type,
-        [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
+        Action<ObjectExtensionInfo>? configureAction = null)
     {
         var extensionInfo = ObjectsExtensions.GetOrAdd(
             type,
@@ -59,14 +59,12 @@ public class ObjectExtensionManager
         return this;
     }
 
-    [CanBeNull]
-    public virtual ObjectExtensionInfo GetOrNull<TObject>()
+    public virtual ObjectExtensionInfo? GetOrNull<TObject>()
     {
         return GetOrNull(typeof(TObject));
     }
 
-    [CanBeNull]
-    public virtual ObjectExtensionInfo GetOrNull([NotNull] Type type)
+    public virtual ObjectExtensionInfo? GetOrNull([NotNull] Type type)
     {
         return ObjectsExtensions.GetOrDefault(type);
     }

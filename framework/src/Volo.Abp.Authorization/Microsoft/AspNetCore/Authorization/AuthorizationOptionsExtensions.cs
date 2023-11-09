@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Microsoft.AspNetCore.Authorization;
 
 public static class AuthorizationOptionsExtensions
 {
     private static readonly PropertyInfo PolicyMapProperty = typeof(AuthorizationOptions)
-        .GetProperty("PolicyMap", BindingFlags.Instance | BindingFlags.NonPublic);
+        .GetProperty("PolicyMap", BindingFlags.Instance | BindingFlags.NonPublic)!;
 
     /// <summary>
     /// Gets all policies.
@@ -20,6 +21,6 @@ public static class AuthorizationOptionsExtensions
     /// <returns></returns>
     public static List<string> GetPoliciesNames(this AuthorizationOptions options)
     {
-        return ((IDictionary<string, AuthorizationPolicy>)PolicyMapProperty.GetValue(options)).Keys.ToList();
+        return ((IDictionary<string,  Task<AuthorizationPolicy>>)PolicyMapProperty.GetValue(options)!).Keys.ToList();
     }
 }

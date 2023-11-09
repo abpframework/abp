@@ -126,6 +126,13 @@ public class PermissionManagementModal : AbpPageModel
         {
             return Name.Replace(".", "_");
         }
+
+        public bool IsDisabled(string currentProviderName)
+        {
+            var grantedProviders = Permissions.SelectMany(x => x.GrantedProviders);
+         
+            return Permissions.All(x => x.IsGranted) && grantedProviders.All(p => p.ProviderName != currentProviderName);
+        }
     }
 
     public class PermissionGrantInfoViewModel : IFlatTreeItem
@@ -159,7 +166,7 @@ public class PermissionManagementModal : AbpPageModel
             }
 
             return string.Format(
-                "{0} <span class=\"text-muted\">({1})</span>",
+                "{0} ({1})",
                 DisplayName,
                 GrantedProviders
                     .Where(p => p.ProviderName != currentProviderName)

@@ -229,7 +229,7 @@ public class LoginModel : AccountPageModel
 
         //TODO: Handle other cases for result!
 
-        var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email);
+        var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email) ?? loginInfo.Principal.FindFirstValue(ClaimTypes.Email);
         if (email.IsNullOrWhiteSpace())
         {
             return RedirectToPage("./Register", new {
@@ -242,14 +242,16 @@ public class LoginModel : AccountPageModel
         var user = await UserManager.FindByEmailAsync(email);
         if (user == null)
         {
-            user = await CreateExternalUserAsync(loginInfo);
+            return RedirectToPage("./Register", new {
+                IsExternalLogin = true,
+                ExternalLoginAuthSchema = loginInfo.LoginProvider,
+                ReturnUrl = returnUrl
+            });
         }
-        else
+
+        if (await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey) == null)
         {
-            if (await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey) == null)
-            {
-                CheckIdentityErrors(await UserManager.AddLoginAsync(user, loginInfo));
-            }
+            CheckIdentityErrors(await UserManager.AddLoginAsync(user, loginInfo));
         }
 
         await SignInManager.SignInAsync(user, false);
@@ -262,34 +264,6 @@ public class LoginModel : AccountPageModel
         });
 
         return RedirectSafely(returnUrl, returnUrlHash);
-    }
-
-    protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
-    {
-        await IdentityOptions.SetAsync();
-
-        var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
-
-        var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
-
-        CheckIdentityErrors(await UserManager.CreateAsync(user));
-        CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
-        CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
-        CheckIdentityErrors(await UserManager.AddDefaultRolesAsync(user));
-
-        user.Name = info.Principal.FindFirstValue(AbpClaimTypes.Name);
-        user.Surname = info.Principal.FindFirstValue(AbpClaimTypes.SurName);
-
-        var phoneNumber = info.Principal.FindFirstValue(AbpClaimTypes.PhoneNumber);
-        if (!phoneNumber.IsNullOrWhiteSpace())
-        {
-            var phoneNumberConfirmed = string.Equals(info.Principal.FindFirstValue(AbpClaimTypes.PhoneNumberVerified), "true", StringComparison.InvariantCultureIgnoreCase);
-            user.SetPhoneNumber(phoneNumber, phoneNumberConfirmed);
-        }
-
-        await UserManager.UpdateAsync(user);
-
-        return user;
     }
 
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds()

@@ -7,7 +7,9 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using OpenIddict.Abstractions;
+using Volo.Abp.Data;
 using Volo.Abp.Guids;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Tokens;
@@ -25,8 +27,10 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         IUnitOfWorkManager unitOfWorkManager,
         IGuidGenerator guidGenerator,
         IOpenIddictApplicationRepository applicationRepository,
-        IOpenIddictTokenRepository tokenRepository)
-        : base(repository, unitOfWorkManager, guidGenerator)
+        IOpenIddictTokenRepository tokenRepository,
+        AbpOpenIddictIdentifierConverter identifierConverter,
+        IOpenIddictDbConcurrencyExceptionHandler concurrencyExceptionHandler)
+        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter, concurrencyExceptionHandler)
     {
         ApplicationRepository = applicationRepository;
         TokenRepository = tokenRepository;
@@ -47,7 +51,7 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         Check.NotNull(authorization, nameof(authorization));
 
         await Repository.InsertAsync(authorization.ToEntity(), autoSave: true, cancellationToken: cancellationToken);
-        
+
         authorization = (await Repository.FindAsync(authorization.Id, cancellationToken: cancellationToken)).ToModel();
     }
 
@@ -55,13 +59,22 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
     {
         Check.NotNull(authorization, nameof(authorization));
 
-        using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
+        try
         {
-            await TokenRepository.DeleteManyByAuthorizationIdAsync(authorization.Id, cancellationToken: cancellationToken);
+            using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
+            {
+                await TokenRepository.DeleteManyByAuthorizationIdAsync(authorization.Id, cancellationToken: cancellationToken);
 
-            await Repository.DeleteAsync(authorization.Id, cancellationToken: cancellationToken);
+                await Repository.DeleteAsync(authorization.Id, cancellationToken: cancellationToken);
 
-            await uow.CompleteAsync(cancellationToken);
+                await uow.CompleteAsync(cancellationToken);
+            }
+        }
+        catch (AbpDbConcurrencyException e)
+        {
+            Logger.LogException(e);
+            await ConcurrencyExceptionHandler.HandleAsync(e);
+            throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
         }
     }
 
@@ -276,23 +289,11 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
 
     public virtual async ValueTask PruneAsync(DateTimeOffset threshold, CancellationToken cancellationToken)
     {
-        for (var index = 0; index < 1_000; index++)
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
-            {
-                var date = threshold.UtcDateTime;
-
-                var authorizations = await Repository.GetPruneListAsync(date, 1_000, cancellationToken);
-                if (!authorizations.Any())
-                {
-                    break;
-                }
-
-                await Repository.DeleteManyAsync(authorizations, autoSave: true, cancellationToken: cancellationToken);
-                await uow.CompleteAsync(cancellationToken);
-            }
+            var date = threshold.UtcDateTime;
+            await Repository.PruneAsync(date, cancellationToken: cancellationToken);
+            await uow.CompleteAsync(cancellationToken);
         }
     }
 
@@ -398,8 +399,17 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
 
         var entity = await Repository.GetAsync(authorization.Id, cancellationToken: cancellationToken);
 
-        await Repository.UpdateAsync(authorization.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
-        
+        try
+        {
+            await Repository.UpdateAsync(authorization.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
+        }
+        catch (AbpDbConcurrencyException e)
+        {
+            Logger.LogException(e);
+            await ConcurrencyExceptionHandler.HandleAsync(e);
+            throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
+        }
+
         authorization = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
     }
 }

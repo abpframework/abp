@@ -26,19 +26,19 @@ public class TemplateContentProvider : ITemplateContentProvider, ITransientDepen
         _templateDefinitionManager = templateDefinitionManager;
     }
 
-    public virtual Task<string> GetContentOrNullAsync(
+    public virtual async Task<string?> GetContentOrNullAsync(
         [NotNull] string templateName,
-        [CanBeNull] string cultureName = null,
+        string? cultureName = null,
         bool tryDefaults = true,
         bool useCurrentCultureIfCultureNameIsNull = true)
     {
-        var template = _templateDefinitionManager.Get(templateName);
-        return GetContentOrNullAsync(template, cultureName);
+        var template = await _templateDefinitionManager.GetAsync(templateName);
+        return await GetContentOrNullAsync(template, cultureName);
     }
 
-    public virtual async Task<string> GetContentOrNullAsync(
+    public virtual async Task<string?> GetContentOrNullAsync(
         [NotNull] TemplateDefinition templateDefinition,
-        [CanBeNull] string cultureName = null,
+        string? cultureName = null,
         bool tryDefaults = true,
         bool useCurrentCultureIfCultureNameIsNull = true)
     {
@@ -53,7 +53,7 @@ public class TemplateContentProvider : ITemplateContentProvider, ITransientDepen
 
         using (var scope = ServiceScopeFactory.CreateScope())
         {
-            string templateString = null;
+            string? templateString = null;
 
             if (cultureName == null && useCurrentCultureIfCultureNameIsNull)
             {
@@ -151,7 +151,7 @@ public class TemplateContentProvider : ITemplateContentProvider, ITransientDepen
             .ToArray();
     }
 
-    protected virtual async Task<string> GetContentOrNullAsync(
+    protected virtual async Task<string?> GetContentOrNullAsync(
         ITemplateContentContributor[] contributors,
         TemplateContentContributorContext context)
     {

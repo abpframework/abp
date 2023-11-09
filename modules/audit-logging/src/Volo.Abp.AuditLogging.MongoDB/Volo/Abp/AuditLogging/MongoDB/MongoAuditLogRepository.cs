@@ -262,7 +262,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
                 .WhereIf(auditLogId.HasValue, e => e.Id == auditLogId)
                 .WhereIf(startTime.HasValue, e => e.ChangeTime >= startTime)
                 .WhereIf(endTime.HasValue, e => e.ChangeTime <= endTime)
-                .WhereIf(changeType.HasValue, e => e.ChangeType == changeType)
+                .WhereIf(changeType.HasValue, e => e.ChangeType == changeType.Value)
                 .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityId == entityId)
                 .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
                     e => e.EntityTypeFullName.Contains(entityTypeFullName));

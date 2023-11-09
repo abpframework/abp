@@ -2,6 +2,12 @@
 
 The blogging feature provides the necessary UI to manage and render blogs and blog posts.
 
+## Enabling the Blogging Feature
+
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+
+> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+
 ## User Interface
 
 ### Menu Items
@@ -23,7 +29,16 @@ A screenshot from the new blog creation modal:
 
 ![blogs-edit](../../images/cmskit-module-blogs-edit.png)
 
-**Slug** is the URL part of the blog. For this example, the root URL of the blog becomes *https://your-domain.com/blogs/technical-blog/*.
+**Slug** is the URL part of the blog. For this example, the root URL of the blog becomes `your-domain.com/blogs/technical-blog/`.
+
+- You can change the default slug by using `CmsBlogsWebConsts.BlogRoutePrefix` constant. For example, if you set it to `foo`, the root URL of the blog becomes `your-domain.com/foo/technical-blog/`.
+
+    ```csharp
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        CmsBlogsWebConsts.BlogsRoutePrefix = "foo";
+    }
+    ```
 
 #### Blog Features
 
@@ -113,3 +128,7 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 - CmsBlogs
 - CmsBlogPosts
 - CmsBlogFeatures
+
+## Entity Extensions
+
+Check the ["Entity Extensions" section of the CMS Kit Module documentation](Index.md#entity-extensions) to see how to extend entities of the Blogging Feature of the CMS Kit module.

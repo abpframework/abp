@@ -4,7 +4,9 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.Quartz</AssemblyName>
     <PackageId>Volo.Abp.Quartz</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -15,9 +17,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Quartz" Version="3.4.0" />
-    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.4.0" />
-    <PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.4.0" />
+    <PackageReference Include="Quartz" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" />
+    <PackageReference Include="Quartz.Plugins.TimeZoneConverter" />
   </ItemGroup>
 
   <ItemGroup>

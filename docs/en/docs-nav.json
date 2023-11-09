@@ -16,9 +16,10 @@
     },
     {
       "text": "Getting Started",
+      "path": "Getting-Started-Overall.md",
       "items": [
         {
-          "text": "Web Application",
+          "text": "Web Application - Layered Architecture",
           "path": "Getting-Started.md",
           "items": [
             {
@@ -32,6 +33,24 @@
             {
               "text": "3: Running the Solution",
               "path": "Getting-Started-Running-Solution.md"
+            }
+          ]
+        },
+        {
+          "text": "Web Application - Single-Layered Architecture",
+          "path": "Getting-Started-Single-Layered.md",
+          "items": [
+            {
+              "text": "1: Setup Your Development Environment",
+              "path": "Getting-Started-Setup-Environment-Single-Layer.md"
+            },
+            {
+              "text": "2: Creating a New Solution",
+              "path": "Getting-Started-Create-Solution-Single-Layer.md"
+            },
+            {
+              "text": "3: Running the Solution",
+              "path": "Getting-Started-Running-Solution-Single-Layer.md"
             }
           ]
         },
@@ -397,6 +416,10 @@
         {
           "text": "GUID Generation",
           "path": "Guid-Generation.md"
+        },
+        {
+          "text": "Image Manipulation",
+          "path": "Image-Manipulation.md"
         },
         {
           "text": "JSON",
@@ -826,6 +849,15 @@
                   "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
                 }
               ]
+            },
+            {
+              "text": "Security",
+              "items": [
+                {
+                  "text": "Security Headers",
+                  "path": "UI/AspNetCore/Security-Headers.md"
+                }
+              ]
             }
           ]
         },
@@ -1121,6 +1153,10 @@
                 {
                   "text": "Content Security Strategy",
                   "path": "UI/Angular/Content-Security-Strategy.md"
+                },
+                {
+                  "text":"Abp Window Service",
+                  "path":"UI/Angular/Abp-Window-Service.md"
                 }
               ]
             },
@@ -1139,6 +1175,10 @@
                       "path": "UI/Angular/Theming.md"
                     },
                     {
+                      "text": "Configuration",
+                      "path": "UI/Angular/Theme-Configurations.md"
+                    },
+                    {
                       "text": "The Basic Theme",
                       "path": "UI/Angular/Basic-Theme.md"
                     },
@@ -1151,6 +1191,10 @@
                 {
                   "text": "Modifying the Menu",
                   "path": "UI/Angular/Modifying-the-Menu.md"
+                },
+                {
+                  "text": "Sorting Navigation Elements",
+                  "path": "UI/Angular/Sorting-Navigation-Elements.md"
                 },
                 {
                   "text": "Component Replacement",
@@ -1197,6 +1241,10 @@
                 {
                   "text": "Chart",
                   "path": "UI/Angular/Chart-Component.md"
+                },
+                {
+                  "text": "Card",
+                  "path": "UI/Angular/Card-Component.md"
                 }
               ]
             }
@@ -1316,6 +1364,14 @@
       "path": "Deployment/Index.md",
       "items": [
         {
+          "text": "Configuring SSL certificate(HTTPS)",
+          "path": "Deployment/SSL.md"
+        },
+        {
+          "text": "Configuring OpenIddict",
+          "path": "Deployment/Configuring-OpenIddict.md"
+        },
+        {
           "text": "Configuring for Production",
           "path": "Deployment/Configuring-Production.md"
         },
@@ -1370,16 +1426,22 @@
         },
         {
           "text": "IdentityServer",
-          "path": "Modules/IdentityServer.md"
+          "path": "Modules/IdentityServer.md",
+          "items": [
+            {
+              "text": "IdentityServer Migration Guide",
+              "path": "Migration-Guides/IdentityServer4-Step-by-Step.md"
+            }
+          ]
         },
-		{
+        {
           "text": "OpenIddict",
-	  "items": [
-		{
-		 "text": "OpenIddict Migration Guide",
-		 "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
-		}
-	   ],
+          "items": [
+            {
+              "text": "OpenIddict Migration Guide",
+              "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
+            }
+          ],
           "path": "Modules/OpenIddict.md"
         },
         {
@@ -1397,6 +1459,15 @@
         {
           "text": "Virtual File Explorer",
           "path": "Modules/Virtual-File-Explorer.md"
+        },
+        {
+          "text": "Common",
+          "items": [
+            {
+              "text": "Database Tables",
+              "path": "Modules/Database-Tables.md"
+            }
+          ]
         }
       ]
     },
@@ -1462,6 +1533,10 @@
           "path": "Migration-Guides/Index.md"
         }
       ]
+    },
+    {
+      "text": "API Documentation",
+      "path": "{ApiDocumentationUrl}"
     },
     {
       "text": "Contribution Guide",

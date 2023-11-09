@@ -4,7 +4,7 @@ OpenIddict module provides an integration with the [OpenIddict](https://github.c
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages) when you [create a new solution](https://abp.io/get-started) with the ABP Framework. You can continue to use it as a package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as a package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
 
 ### The Source Code
 
@@ -108,7 +108,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 These services contain:
 
-- `AddAudiances()` for resource servers.
+- `AddAudiences()` for resource servers.
 - `SetIssuer()` URI that is used to determine the actual location of the OAuth 2.0/OpenID Connect configuration document when using provider discovery.
 - `SetConfiguration()` to configure `OpenIdConnectConfiguration`.
 - `UseIntrospection()` to use introspection instead of local/direct validation.
@@ -291,7 +291,7 @@ PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
 `AbpOpenIddictAspNetCoreOptions` properties:
 
 - `UpdateAbpClaimTypes(default: true)`:  Updates `AbpClaimTypes` to be compatible with the Openiddict claims.
-- `AddDevelopmentEncryptionAndSigningCertificate(default: true)`:  Registers (and generates if necessary) a user-specific development encryption/development signing certificate.
+- `AddDevelopmentEncryptionAndSigningCertificate(default: true)`:  Registers (and generates if necessary) a user-specific development encryption/development signing certificate. This is a certificate used for signing and encrypting the tokens and for **development environment only**. You must set it to **false** for non-development environments.
 
 > `AddDevelopmentEncryptionAndSigningCertificate` cannot be used in applications deployed on IIS or Azure App Service: trying to use them on IIS or Azure App Service will result in an exception being thrown at runtime (unless the application pool is configured to load a user profile). To avoid that, consider creating self-signed certificates and storing them in the X.509 certificates store of the host machine(s). Please refer to: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-development-certificate
 
@@ -299,12 +299,12 @@ PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
 
 The background task that automatically removes orphaned tokens/authorizations. This can be configured by `TokenCleanupOptions` to manage it.
 
-`TokenCleanupOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+`TokenCleanupOptions` can be configured in the `ConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
 
 Example:
 
 ```csharp
-PreConfigure<TokenCleanupOptions>(options =>
+Configure<TokenCleanupOptions>(options =>
 {
     //Set options here...	
 });
@@ -323,16 +323,16 @@ PreConfigure<TokenCleanupOptions>(options =>
 
 [Claims Principal Factory](https://docs.abp.io/en/abp/latest/Authorization#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
 
-The `AbpDefaultOpenIddictClaimDestinationsProvider` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
+The `AbpDefaultOpenIddictClaimsPrincipalHandler` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
 
-Create a service that inherits from `IAbpOpenIddictClaimDestinationsProvider` and add it to DI to fully control the destinations of claims.
+Create a service that inherits from `IAbpOpenIddictClaimsPrincipalHandler` and add it to DI to fully control the destinations of claims.
 
 ```cs
-public class MyClaimDestinationsProvider : IAbpOpenIddictClaimDestinationsProvider, ITransientDependency
+public class MyClaimDestinationsHandler : IAbpOpenIddictClaimsPrincipalHandler, ITransientDependency
 {
-    public virtual Task SetDestinationsAsync(AbpOpenIddictClaimDestinationsProviderContext context)
+    public virtual Task HandleAsync(AbpOpenIddictClaimsPrincipalHandlerContext context)
     {
-        foreach (var claim in context.Claims)
+        foreach (var claim in context.Principal.Claims)
         {
             if (claim.Type == MyClaims.MyClaimsType)
             {
@@ -351,7 +351,7 @@ public class MyClaimDestinationsProvider : IAbpOpenIddictClaimDestinationsProvid
 
 Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
 {
-    options.ClaimDestinationsProvider.Add<MyClaimDestinationsProvider>();
+    options.ClaimsPrincipalHandlers.Add<MyClaimDestinationsHandler>();
 });
 ```
 
@@ -413,6 +413,82 @@ https://documentation.openiddict.com/guides/index.html#events-model
 ### PKCE
 
 https://documentation.openiddict.com/configuration/proof-key-for-code-exchange.html
+
+### Setting Tokens Lifetime
+
+Update `PreConfigureServices` method of AuthServerModule (or HttpApiHostModule if you don't have tiered/separate-authserver) file:
+
+```csharp
+PreConfigure<OpenIddictServerBuilder>(builder =>
+{
+    builder.SetAuthorizationCodeLifetime(TimeSpan.FromMinutes(30));
+    builder.SetAccessTokenLifetime(TimeSpan.FromMinutes(30));
+    builder.SetIdentityTokenLifetime(TimeSpan.FromMinutes(30));
+    builder.SetRefreshTokenLifetime(TimeSpan.FromDays(14));
+});
+```
+
+### Refresh Token
+
+To use refresh token, it must be supported by OpenIddictServer and the `refresh_token` must be requested by the application.
+
+> **Note:** Angular application is already configured to use `refresh_token`.
+
+#### Configuring OpenIddictServer
+
+Update the **OpenIddictDataSeedContributor**, add `OpenIddictConstants.GrantTypes.RefreshToken` to grant types in `CreateApplicationAsync` method:
+
+```csharp
+await CreateApplicationAsync(
+    ...
+    grantTypes: new List<string> //Hybrid flow
+    {
+        OpenIddictConstants.GrantTypes.AuthorizationCode,
+        OpenIddictConstants.GrantTypes.Implicit,
+        OpenIddictConstants.GrantTypes.RefreshToken,
+    },
+    ...
+```
+
+> **Note:** You need to re-create this client if you have generated the database already.
+
+#### Configuring Application:
+
+You need to request the **offline_access scope** to be able to receive `refresh_token`. 
+
+In **Razor/MVC, Blazor-Server applications**, add `options.Scope.Add("offline_access");` to **OpenIdConnect** options. These application templates are using cookie authentication by default and has default cookie expire options set as:
+
+```csharp
+.AddCookie("Cookies", options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromDays(365);
+})
+```
+
+[Cookie ExpireTimeSpan will ignore access_token expiration](https://learn.microsoft.com/en-us/dotnet/api/Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions.ExpireTimeSpan?view=aspnetcore-7.0&viewFallbackFrom=net-7.0) and expired access_token will still be valid if it is set to higher value than the `refresh_token lifetime`. It is recommended to keep **Cookie ExpireTimeSpan** and the **Refresh Token lifetime** same, hence the new token will be persisted in the cookie.
+
+In **Blazor wasm** applications, add `options.ProviderOptions.DefaultScopes.Add("offline_access");` to **AddOidcAuthentication** options.
+
+In **Angular** applications, add `offline_access` to **oAuthConfig**  scopes in *environment.ts* file. (Angular applications already have this configuration).
+
+## About localization
+
+We don't localize any error messages in the OpenIddict module, Because the OAuth 2.0 specification restricts the charset you're allowed to use for the error and error_description parameters:
+
+> A.7. "error" Syntax
+> The "error" element is defined in Sections 4.1.2.1, 4.2.2.1, 5.2, 7.2, and 8.5:
+
+```
+error = 1*NQSCHAR
+```
+
+> A.8. "error_description" Syntax
+>T he "error_description" element is defined in Sections 4.1.2.1, 4.2.2.1, 5.2, and 7.2:
+
+```
+error-description = 1*NQSCHAR
+NQSCHAR = %x20-21 / %x23-5B / %x5D-7E
+```
 
 ## Demo projects
 

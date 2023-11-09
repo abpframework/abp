@@ -12,7 +12,7 @@ public static class JsonLocalizationDictionaryBuilder
     ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given file.
     /// </summary>
     /// <param name="filePath">Path of the file</param>
-    public static ILocalizationDictionary BuildFromFile(string filePath)
+    public static ILocalizationDictionary? BuildFromFile(string filePath)
     {
         try
         {
@@ -36,9 +36,9 @@ public static class JsonLocalizationDictionaryBuilder
     ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given json string.
     /// </summary>
     /// <param name="jsonString">Json string</param>
-    public static ILocalizationDictionary BuildFromJsonString(string jsonString)
+    public static ILocalizationDictionary? BuildFromJsonString(string jsonString)
     {
-        JsonLocalizationFile jsonFile;
+        JsonLocalizationFile? jsonFile;
         try
         {
             jsonFile = JsonSerializer.Deserialize<JsonLocalizationFile>(jsonString, DeserializeOptions);
@@ -48,10 +48,15 @@ public static class JsonLocalizationDictionaryBuilder
             throw new AbpException("Can not parse json string. " + ex.Message);
         }
 
+        if (jsonFile == null)
+        {
+            return null;
+        }
+        
         var cultureCode = jsonFile.Culture;
         if (string.IsNullOrEmpty(cultureCode))
         {
-            throw new AbpException("Culture is empty in language json file.");
+            return null;
         }
 
         var dictionary = new Dictionary<string, LocalizedString>();

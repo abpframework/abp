@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.ObjectExtending;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
@@ -21,13 +23,17 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     protected IPageRepository PageRepository { get; }
 
     protected PageManager PageManager { get; }
+    
+    protected IDistributedCache<PageCacheItem> PageCache { get; }
 
     public PageAdminAppService(
         IPageRepository pageRepository,
-        PageManager pageManager)
+        PageManager pageManager, 
+        IDistributedCache<PageCacheItem> pageCache)
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
+        PageCache = pageCache;
     }
 
     public virtual async Task<PageDto> GetAsync(Guid id)
@@ -57,8 +63,10 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
     {
         var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style);
-
+        input.MapExtraPropertiesTo(page);
         await PageRepository.InsertAsync(page);
+
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
 
         return ObjectMapper.Map<Page, PageDto>(page);
     }
@@ -67,6 +75,12 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     public virtual async Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
     {
         var page = await PageRepository.GetAsync(id);
+        if (page.IsHomePage)
+        {
+            await InvalidateDefaultHomePageCacheAsync(considerUow: true);
+        }
+        
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
 
         await PageManager.SetSlugAsync(page, input.Slug);
 
@@ -75,6 +89,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         page.SetScript(input.Script);
         page.SetStyle(input.Style);
         page.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        input.MapExtraPropertiesTo(page);
 
         await PageRepository.UpdateAsync(page);
 
@@ -84,7 +99,14 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     [Authorize(CmsKitAdminPermissions.Pages.Delete)]
     public virtual async Task DeleteAsync(Guid id)
     {
-        await PageRepository.DeleteAsync(id);
+        var page = await PageRepository.GetAsync(id);
+        if (page.IsHomePage)
+        {
+            await InvalidateDefaultHomePageCacheAsync(considerUow: true);
+        }
+        
+        await PageRepository.DeleteAsync(page);
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
     }
 
     [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
@@ -93,5 +115,11 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         var page = await PageRepository.GetAsync(id);
 
 		await PageManager.SetHomePageAsync(page);
+        await InvalidateDefaultHomePageCacheAsync();
+    }
+
+    protected virtual async Task InvalidateDefaultHomePageCacheAsync(bool considerUow = false)
+    {
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(PageConsts.DefaultHomePageCacheKey), considerUow: considerUow);
     }
 }

@@ -56,7 +56,7 @@ $(function () {
                                     volo.docs.admin.projectsAdmin
                                         .delete(data.record.id)
                                         .then(function () {
-                                            _dataTable.ajax.reload();
+                                            _dataTable.ajax.reloadEx();
                                             abp.notify.success(l('SuccessfullyDeleted'));
                                         });
                                 },
@@ -89,7 +89,7 @@ $(function () {
                                             projectId: data.record.id,
                                         })
                                         .then(function () {
-                                            _dataTable.ajax.reload();
+                                            _dataTable.ajax.reloadEx();
                                         });
                                 },
                             },
@@ -168,10 +168,10 @@ $(function () {
     });
 
     _createModal.onClose(function () {
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 
     _editModal.onResult(function () {
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 });

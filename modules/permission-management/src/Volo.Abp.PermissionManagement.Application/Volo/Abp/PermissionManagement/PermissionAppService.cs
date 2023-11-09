@@ -50,10 +50,12 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
 
             var neededCheckPermissions = new List<PermissionDefinition>();
 
-            foreach (var permission in group.GetPermissionsWithChildren()
-                                            .Where(x => x.IsEnabled)
-                                            .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName))
-                                            .Where(x => x.MultiTenancySide.HasFlag(multiTenancySide)))
+            var permissions = group.GetPermissionsWithChildren()
+                .Where(x => x.IsEnabled)
+                .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName))
+                .Where(x => x.MultiTenancySide.HasFlag(multiTenancySide));
+            
+            foreach (var permission in permissions)
             {
                 if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
                 {

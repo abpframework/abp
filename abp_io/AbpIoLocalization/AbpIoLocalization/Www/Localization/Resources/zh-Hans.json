@@ -16,7 +16,7 @@
     "Tutorial": "教程",
     "UsingCLI": "使用CLI",
     "SeeDetails": "见详细",
-    "AbpShortDescription": "ABP是用于创建现代Web应用程序的完整架构和强大的基础设施! 遵循最佳实践和约定，为你提供SOLID开发经验.",
+    "AbpShortDescription": "ABP Framework 是一个完整的基础架构，用于创建基于 ASP.NET Core 平台的现代架构的软件解决方案。",
     "SourceCodeUpper": "源代码",
     "LatestReleaseLogs": "最新发布日志",
     "Infrastructure": "基础设施",
@@ -408,6 +408,17 @@
     "ApplicationModule": "应用程序模块",
     "SeeTheScreenshot": "如截图所示",
     "ApplicationModuleExplanation1": "创建可重用的、完全分层的应用程序模块解决方案。",
-    "ApplicationModuleExplanation2": "您可以使用此选项为您的模块化应用程序创建模块。"  
+    "ApplicationModuleExplanation2": "您可以使用此选项为您的模块化应用程序创建模块。",
+    "Expert_": "专家",
+    "Partner_": "合作伙伴",
+    "WebSite": "网站",
+    "Expert_Year": "专业年限",
+    "CompanyInfo": "公司信息",
+    "Date": "日期",
+    "WhoWeAre_Partner": "关于我们",
+    "WhoWeAre_Expert": "关于我",
+    "CreateSolutionFolder": "创建解决方案文件夹",
+    "CreateSolutionFolderOption": "指定项目是位于输出文件夹中的新文件夹中，还是直接位于输出文件夹中。",
+    "BooksPageTitle": "ABP书籍"
   }
 }

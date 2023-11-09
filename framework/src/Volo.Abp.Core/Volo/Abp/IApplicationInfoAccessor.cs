@@ -9,8 +9,7 @@ public interface IApplicationInfoAccessor
     /// This is useful for systems with multiple applications, to distinguish
     /// resources of the applications located together.
     /// </summary>
-    [CanBeNull]
-    string ApplicationName { get; }
+    string? ApplicationName { get; }
     
     /// <summary>
     /// A unique identifier for this application instance.

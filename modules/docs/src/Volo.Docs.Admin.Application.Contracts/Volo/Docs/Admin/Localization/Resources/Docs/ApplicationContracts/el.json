@@ -37,12 +37,12 @@
     "DisplayName:LanguageCode": "Κωδικός γλώσσας",
     "DisplayName:Version": "Εκδοχή",
     "Documents": "Εγγραφα",
-    "RemoveFromCache": "Αφαίρεση από την προσωρινή μνήμη",
+    "RemoveFromCache": "Αφαίρεση από τη μνήμη cache και εκ νέου ευρετηρίαση",
     "Reindex": "Επανακαταγραφή",
     "ReindexCompleted": "Ολοκληρώθηκε η επανακαταγραφή",
-    "RemovedFromCache": "Καταργήθηκε από την προσωρινή μνήμη",
+    "RemovedFromCache": "πομακρύνεται από τη μνήμη cache και αναπροσαρμόζεται",
     "RemoveFromCacheConfirmation": "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε αυτό το στοιχείο από την προσωρινή μνήμη;",
-    "ReIndexDocumentConfirmation": "Είστε βέβαιοι ότι θέλετε να αναπροσαρμόσετε αυτό το στοιχείο;",
+    "ReIndexDocumentConfirmation": "Είστε σίγουροι ότι θέλετε να ξαναδείξετε το \"{0}\";",
     "DeleteFromDatabase": "Διαγραφή από τη βάση δεδομένων",
     "Deleted": "Διαγραφή",
     "Search": "Αναζήτηση",
@@ -55,6 +55,7 @@
     "LanguageCode": "Κωδικός γλώσσας",
     "FileName": "Όνομα αρχείου",
     "LastCachedTime": "Χρόνος προσωρινής αποθήκευσης",
-    "Project": "Εργο"
+    "Project": "Εργο",
+    "RemoveCacheAndReIndexConfirmation": "Το έγγραφο \"{0}\" θα αφαιρεθεί από την προσωρινή μνήμη και θα αναπροσαρμοστεί εκ νέου. Επιβεβαιώνετε;"
   }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,34 +10,24 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
-using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
-using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Data;
-using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
 using Volo.CmsKit.Comments;
-using Volo.CmsKit.EntityFrameworkCore;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.MultiTenancy;
 using Volo.CmsKit.Public.Web;
@@ -45,6 +36,35 @@ using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Web;
 using Volo.CmsKit.Web.Contents;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.Routing;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Volo.Abp.DependencyInjection;
+using Volo.CmsKit.Public.Pages;
+
+
+#if EntityFrameworkCore
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
+using Volo.CmsKit.EntityFrameworkCore;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
+#elif MongoDB
+using Volo.Abp.SettingManagement.MongoDB;
+using Volo.Abp.TenantManagement.MongoDB;
+using Volo.Abp.Identity.MongoDB;
+using Volo.Abp.PermissionManagement.MongoDB;
+using Volo.Abp.FeatureManagement.MongoDB;
+using Volo.Abp.BlobStoring.Database.MongoDB;
+using Volo.Abp.AuditLogging.MongoDB;
+using Volo.CmsKit.MongoDB;
+#endif
 
 namespace Volo.CmsKit;
 
@@ -52,33 +72,44 @@ namespace Volo.CmsKit;
     typeof(CmsKitWebModule),
     typeof(CmsKitApplicationModule),
     typeof(CmsKitHttpApiModule),
+#if EntityFrameworkCore
     typeof(CmsKitEntityFrameworkCoreModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreSqlServerModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
+#elif MongoDB
+    typeof(CmsKitMongoDbModule),
+    typeof(AbpAuditLoggingMongoDbModule),
+    typeof(AbpSettingManagementMongoDbModule),
+    typeof(AbpPermissionManagementMongoDbModule),
+    typeof(AbpIdentityMongoDbModule),
+    typeof(AbpFeatureManagementMongoDbModule),
+    typeof(AbpTenantManagementMongoDbModule),
+    typeof(BlobStoringDatabaseMongoDbModule),
+#endif
     typeof(AbpAutofacModule),
     typeof(AbpAccountWebModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
-    typeof(AbpEntityFrameworkCoreSqlServerModule),
-    typeof(AbpSettingManagementEntityFrameworkCoreModule),
-    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpIdentityWebModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
-    typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpFeatureManagementHttpApiModule),
-    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementWebModule),
     typeof(AbpTenantManagementWebModule),
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpTenantManagementHttpApiModule),
-    typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
     typeof(AbpSwashbuckleModule)
 )]
 public class CmsKitWebUnifiedModule : AbpModule
@@ -94,10 +125,13 @@ public class CmsKitWebUnifiedModule : AbpModule
 
         ConfigureCmsKit();
 
+#if EntityFrameworkCore
+        context.Services.AddDbContext<UnifiedDbContext>();
         Configure<AbpDbContextOptions>(options =>
         {
             options.UseSqlServer();
         });
+#endif
 
         if (hostingEnvironment.IsDevelopment())
         {
@@ -168,6 +202,16 @@ public class CmsKitWebUnifiedModule : AbpModule
         {
             options.EntityTypes.Add(new CommentEntityTypeDefinition("quote"));
             options.IsRecaptchaEnabled = true;
+            options.AllowedExternalUrls = new Dictionary<string, List<string>>
+            {
+                {
+                    "quote",
+                    new List<string>
+                    {
+                        "https://abp.io/"
+                    }
+                }
+            };
         });
 
         Configure<CmsKitMediaOptions>(options =>
@@ -228,6 +272,7 @@ public class CmsKitWebUnifiedModule : AbpModule
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
+
         app.UseConfiguredEndpoints();
 
         using (var scope = context.ServiceProvider.CreateScope())

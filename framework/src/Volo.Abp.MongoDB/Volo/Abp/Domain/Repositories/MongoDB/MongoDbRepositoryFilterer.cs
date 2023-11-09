@@ -36,6 +36,11 @@ public class MongoDbRepositoryFilterer<TEntity> : IMongoDbRepositoryFilterer<TEn
 
         return Task.CompletedTask;
     }
+
+    public virtual TQueryable FilterQueryable<TQueryable>(TQueryable query) where TQueryable : IQueryable<TEntity>
+    {
+        return query;
+    }
 }
 
 public class MongoDbRepositoryFilterer<TEntity, TKey> : MongoDbRepositoryFilterer<TEntity>,
@@ -62,7 +67,7 @@ public class MongoDbRepositoryFilterer<TEntity, TKey> : MongoDbRepositoryFiltere
         return Builders<TEntity>.Filter.And(filters);
     }
 
-    public virtual Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
+    public virtual Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string? concurrencyStamp = null)
     {
         if (!withConcurrencyStamp || !(entity is IHasConcurrencyStamp entityWithConcurrencyStamp))
         {
@@ -98,5 +103,10 @@ public class MongoDbRepositoryFilterer<TEntity, TKey> : MongoDbRepositoryFiltere
         }
 
         return Builders<TEntity>.Filter.And(filters);
+    }
+
+    public virtual TQueryable FilterQueryable<TQueryable>(TQueryable query) where TQueryable : IQueryable<TEntity>
+    {
+        return query;
     }
 }

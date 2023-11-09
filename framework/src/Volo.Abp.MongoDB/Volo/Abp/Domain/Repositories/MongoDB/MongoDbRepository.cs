@@ -4,7 +4,6 @@ using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +29,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     [Obsolete("Use GetCollectionAsync method.")]
     public virtual IMongoCollection<TEntity> Collection => DbContext.Collection<TEntity>();
 
-    public async Task<IMongoCollection<TEntity>> GetCollectionAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<IMongoCollection<TEntity>> GetCollectionAsync(CancellationToken cancellationToken = default)
     {
         return (await GetDbContextAsync(GetCancellationToken(cancellationToken))).Collection<TEntity>();
     }
@@ -38,15 +37,15 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     [Obsolete("Use GetDatabaseAsync method.")]
     public virtual IMongoDatabase Database => DbContext.Database;
 
-    public async Task<IMongoDatabase> GetDatabaseAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<IMongoDatabase> GetDatabaseAsync(CancellationToken cancellationToken = default)
     {
         return (await GetDbContextAsync(GetCancellationToken(cancellationToken))).Database;
     }
 
     [Obsolete("Use GetSessionHandleAsync method.")]
-    protected virtual IClientSessionHandle SessionHandle => DbContext.SessionHandle;
+    protected virtual IClientSessionHandle? SessionHandle => DbContext.SessionHandle;
 
-    protected async Task<IClientSessionHandle> GetSessionHandleAsync(CancellationToken cancellationToken = default)
+    protected async Task<IClientSessionHandle?> GetSessionHandleAsync(CancellationToken cancellationToken = default)
     {
         return (await GetDbContextAsync(GetCancellationToken(cancellationToken))).SessionHandle;
     }
@@ -97,7 +96,9 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     public IAuditPropertySetter AuditPropertySetter => LazyServiceProvider.LazyGetRequiredService<IAuditPropertySetter>();
 
-    public IMongoDbBulkOperationProvider BulkOperationProvider => LazyServiceProvider.LazyGetService<IMongoDbBulkOperationProvider>();
+    public IMongoDbBulkOperationProvider? BulkOperationProvider => LazyServiceProvider.LazyGetService<IMongoDbBulkOperationProvider>();
+
+    public IMongoDbRepositoryFilterer<TEntity> RepositoryFilterer => LazyServiceProvider.LazyGetService<IMongoDbRepositoryFilterer<TEntity>>()!;
 
     public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
     {
@@ -137,9 +138,13 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     public async override Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        cancellationToken = GetCancellationToken(cancellationToken);
-
         var entityArray = entities.ToArray();
+        if (entityArray.IsNullOrEmpty())
+        {
+            return;
+        }
+
+        cancellationToken = GetCancellationToken(cancellationToken);
 
         foreach (var entity in entityArray)
         {
@@ -227,6 +232,10 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     public async override Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         var entityArray = entities.ToArray();
+        if (entityArray.IsNullOrEmpty())
+        {
+            return;
+        }
 
         foreach (var entity in entityArray)
         {
@@ -357,17 +366,23 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
        bool autoSave = false,
        CancellationToken cancellationToken = default)
     {
+        var entityArray = entities.ToArray();
+        if (entityArray.IsNullOrEmpty())
+        {
+            return;
+        }
+
         cancellationToken = GetCancellationToken(cancellationToken);
 
         var softDeletedEntities = new Dictionary<TEntity, string>();
         var hardDeletedEntities = new List<TEntity>();
 
-        foreach (var entity in entities)
+        foreach (var entity in entityArray)
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
             {
                 ObjectHelper.TrySetProperty(((ISoftDelete)entity), x => x.IsDeleted, () => true);
-                softDeletedEntities.Add(entity, SetNewConcurrencyStamp(entity));
+                softDeletedEntities.Add(entity, SetNewConcurrencyStamp(entity)!);
             }
             else
             {
@@ -382,7 +397,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
         if (BulkOperationProvider != null)
         {
-            await BulkOperationProvider.DeleteManyAsync(this, entities, dbContext.SessionHandle, autoSave, cancellationToken);
+            await BulkOperationProvider.DeleteManyAsync(this, entityArray, dbContext.SessionHandle, autoSave, cancellationToken);
             return;
         }
 
@@ -510,7 +525,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         return await GetMongoQueryableAsync();
     }
 
-    public async override Task<TEntity> FindAsync(
+    public async override Task<TEntity?> FindAsync(
         Expression<Func<TEntity, bool>> predicate,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -532,12 +547,12 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         );
     }
 
-    public virtual Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
+    public virtual Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)
     {
         return GetMongoQueryableAsync<TEntity>(cancellationToken, aggregateOptions);
     }
 
-    protected virtual async Task<IMongoQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
+    protected virtual async Task<IMongoQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -551,7 +566,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         );
     }
 
-    public virtual async Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default, AggregateOptions aggregateOptions = null)
+    public virtual async Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -587,7 +602,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         return hardDeletedEntities.Contains(entity);
     }
 
-    protected virtual Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
+    protected virtual Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string? concurrencyStamp = null)
     {
         throw new NotImplementedException(
             $"{nameof(CreateEntityFilterAsync)} is not implemented for MongoDB by default. It should be overriden and implemented by the deriving class!"
@@ -610,7 +625,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         return Task.CompletedTask;
     }
 
-    private void TriggerEntityCreateEvents(TEntity entity)
+    protected virtual void TriggerEntityCreateEvents(TEntity entity)
     {
         EntityChangeEventHelper.PublishEntityCreatedEvent(entity);
     }
@@ -722,7 +737,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     /// if given entity implements <see cref="IHasConcurrencyStamp"/> interface.
     /// Returns the old <see cref="IHasConcurrencyStamp.ConcurrencyStamp"/> value.
     /// </summary>
-    protected virtual string SetNewConcurrencyStamp(TEntity entity)
+    protected virtual string? SetNewConcurrencyStamp(TEntity entity)
     {
         if (!(entity is IHasConcurrencyStamp concurrencyStampEntity))
         {
@@ -738,6 +753,15 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     {
         throw new AbpDbConcurrencyException("Database operation expected to affect 1 row but actually affected 0 row. Data may have been modified or deleted since entities were loaded. This exception has been thrown on optimistic concurrency check.");
     }
+
+    protected override TQueryable ApplyDataFilters<TQueryable, TOtherEntity>(TQueryable query)
+    {
+        if (typeof(TOtherEntity) == typeof(TEntity))
+        {
+            return base.ApplyDataFilters<TQueryable, TOtherEntity>((TQueryable)RepositoryFilterer.FilterQueryable(query.As<IQueryable<TEntity>>()));
+        }
+        return base.ApplyDataFilters<TQueryable, TOtherEntity>(query);
+    }
 }
 
 public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
@@ -746,7 +770,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
     where TMongoDbContext : IAbpMongoDbContext
     where TEntity : class, IEntity<TKey>
 {
-    public IMongoDbRepositoryFilterer<TEntity, TKey> RepositoryFilterer { get; set; }
+    public IMongoDbRepositoryFilterer<TEntity, TKey> RepositoryFiltererWithKey => LazyServiceProvider.LazyGetService<IMongoDbRepositoryFilterer<TEntity, TKey>>()!;
 
     public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
         : base(dbContextProvider)
@@ -769,14 +793,16 @@ public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
         return entity;
     }
 
-    public virtual async Task<TEntity> FindAsync(
+    public virtual async Task<TEntity?> FindAsync(
         TKey id,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
-        return await ApplyDataFilters(await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id.Equals(id)).FirstOrDefaultAsync(cancellationToken);
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => x.Id!.Equals(id))
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public virtual Task DeleteAsync(
@@ -784,7 +810,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
         bool autoSave = false,
         CancellationToken cancellationToken = default)
     {
-        return DeleteAsync(x => x.Id.Equals(id), autoSave, cancellationToken);
+        return DeleteAsync(x => x.Id!.Equals(id), autoSave, cancellationToken);
     }
 
     public virtual async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -798,13 +824,23 @@ public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
         await DeleteManyAsync(entities, autoSave, cancellationToken);
     }
 
-    protected async override Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
+    protected override TQueryable ApplyDataFilters<TQueryable, TOtherEntity>(TQueryable query)
     {
-        return await RepositoryFilterer.CreateEntityFilterAsync(entity, withConcurrencyStamp, concurrencyStamp);
+        if (typeof(TOtherEntity) == typeof(TEntity))
+        {
+            return base.ApplyDataFilters<TQueryable, TOtherEntity>((TQueryable)RepositoryFiltererWithKey.FilterQueryable(query.As<IQueryable<TEntity>>()));
+        }
+
+        return base.ApplyDataFilters<TQueryable, TOtherEntity>(query);
+    }
+
+    protected async override Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string? concurrencyStamp = null)
+    {
+        return await RepositoryFiltererWithKey.CreateEntityFilterAsync(entity, withConcurrencyStamp, concurrencyStamp);
     }
 
     protected async override Task<FilterDefinition<TEntity>> CreateEntitiesFilterAsync(IEnumerable<TEntity> entities, bool withConcurrencyStamp = false)
     {
-        return await RepositoryFilterer.CreateEntitiesFilterAsync(entities, withConcurrencyStamp);
+        return await RepositoryFiltererWithKey.CreateEntitiesFilterAsync(entities, withConcurrencyStamp);
     }
 }

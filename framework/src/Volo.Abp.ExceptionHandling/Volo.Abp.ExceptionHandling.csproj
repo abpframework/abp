@@ -4,13 +4,16 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
         <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
         <RootNamespace />
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -19,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
     </ItemGroup>
 
 </Project>

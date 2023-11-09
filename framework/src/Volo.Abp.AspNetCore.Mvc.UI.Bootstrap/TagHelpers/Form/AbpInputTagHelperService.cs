@@ -54,7 +54,14 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             LeaveOnlyGroupAttributes(context, output);
-            output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
+            if (TagHelper.FloatingLabel && !isCheckBox)
+            {
+                output.Attributes.AddClass("form-floating");
+            }
+            if (TagHelper.AddMarginBottomClass)
+            {
+                output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
+            }
             if (isCheckBox)
             {
                 output.Attributes.AddClass("custom-checkbox");
@@ -97,7 +104,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual string GetContent(TagHelperContext context, TagHelperOutput output, string label, string inputHtml, string validation, string infoHtml, bool isCheckbox)
     {
-        var innerContent = isCheckbox ?
+        var innerContent = isCheckbox || TagHelper.FloatingLabel ?
             inputHtml + label :
             label + inputHtml;
 
@@ -106,7 +113,8 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
     {
-        return "<div class=\"" + (isCheckbox ? "custom-checkbox custom-control mb-2 form-check" : "mb-3") + "\">" +
+        var mb = TagHelper.AddMarginBottomClass ? (isCheckbox ? "mb-2" : "mb-3") : string.Empty;
+        return "<div class=\"" + (isCheckbox ? $"custom-checkbox custom-control {mb} form-check" : $"{mb}") + "\">" +
                 Environment.NewLine + innerHtml + Environment.NewLine +
                 "</div>";
     }
@@ -223,10 +231,9 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<Placeholder>();
 
-        if (attribute != null)
+        if (attribute != null || TagHelper.FloatingLabel)
         {
-            var placeholderLocalized = _tagHelperLocalizer.GetLocalizedText(attribute.Value, TagHelper.AspFor.ModelExplorer);
-
+            var placeholderLocalized = _tagHelperLocalizer.GetLocalizedText(attribute?.Value ?? TagHelper.AspFor.Name, TagHelper.AspFor.ModelExplorer);
             inputTagHelperOutput.Attributes.Add("placeholder", placeholderLocalized);
         }
     }
@@ -269,7 +276,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         var label = new TagBuilder("label");
         label.Attributes.Add("for", GetIdAttributeValue(inputTag));
-        label.InnerHtml.AppendHtml(TagHelper.Label);
+        label.InnerHtml.AppendHtml(_encoder.Encode(TagHelper.Label));
 
         label.AddCssClass(isCheckbox ? "form-check-label" : "form-label");
 
@@ -295,7 +302,9 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             return "";
         }
 
-        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>" : "";
+        var isHaveRequiredAttribute = context.AllAttributes.Any(a => a.Name == "required");
+
+        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null || isHaveRequiredAttribute ? "<span> * </span>" : "";
     }
 
     protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
@@ -391,7 +400,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         }
     }
 
-    protected virtual TextArea TryGetTextAreaAttribute(TagHelperOutput output)
+    protected virtual TextArea? TryGetTextAreaAttribute(TagHelperOutput output)
     {
         var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
 
@@ -473,14 +482,14 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual bool IsOutputHidden(TagHelperOutput inputTag)
     {
-        return inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden");
+        return inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString()!.ToLowerInvariant() == "hidden");
     }
 
     protected virtual string GetIdAttributeValue(TagHelperOutput inputTag)
     {
         var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
 
-        return idAttr != null ? idAttr.Value.ToString() : string.Empty;
+        return idAttr != null ? idAttr.Value.ToString()! : string.Empty;
     }
 
     protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)

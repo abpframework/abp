@@ -18,8 +18,8 @@ public class AbpAspNetCoreMvcUiPackagesModule : AbpModule
     {
         Configure<AbpLocalizationOptions>(options =>
         {
-                //BootstrapDatepicker
-                options.AddLanguagesMapOrUpdate(BootstrapDatepickerScriptContributor.PackageName,
+            //BootstrapDatepicker
+            options.AddLanguagesMapOrUpdate(BootstrapDatepickerScriptContributor.PackageName,
                 new NameValue("zh-Hans", "zh-CN"),
                 new NameValue("zh-Hant", "zh-TW"));
 
@@ -29,20 +29,22 @@ public class AbpAspNetCoreMvcUiPackagesModule : AbpModule
             
             //moment
             options.AddLanguagesMapOrUpdate(MomentScriptContributor.PackageName,
-                new NameValue("zh-Hans", "zh-CN"),
-                new NameValue("zh-Hant", "zh-TW"));
+                new NameValue("zh-Hans", "zh-cn"),
+                new NameValue("zh-Hant", "zh-tw"),
+                new NameValue("de-DE", "de"));
 
             options.AddLanguageFilesMapOrUpdate(MomentScriptContributor.PackageName,
+                new NameValue("zh-Hans", "zh-cn"),
+                new NameValue("zh-Hant", "zh-tw"),
+                new NameValue("de-DE", "de"));
+
+            //Timeago
+            options.AddLanguageFilesMapOrUpdate(TimeagoScriptContributor.PackageName,
                 new NameValue("zh-Hans", "zh-CN"),
                 new NameValue("zh-Hant", "zh-TW"));
 
-                //Timeago
-                options.AddLanguageFilesMapOrUpdate(TimeagoScriptContributor.PackageName,
-                new NameValue("zh-Hans", "zh-CN"),
-                new NameValue("zh-Hant", "zh-TW"));
-
-                //JQueryValidation
-                options.AddLanguageFilesMapOrUpdate(JQueryValidationScriptContributor.PackageName,
+            //JQueryValidation
+            options.AddLanguageFilesMapOrUpdate(JQueryValidationScriptContributor.PackageName,
                 new NameValue("zh-Hans", "zh"),
                 new NameValue("zh-Hant", "zh_TW"));
         });

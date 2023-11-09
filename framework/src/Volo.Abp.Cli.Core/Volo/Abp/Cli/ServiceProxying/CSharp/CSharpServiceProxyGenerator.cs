@@ -82,6 +82,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         "using System;",
         "using System.Collections.Generic;",
         "using System.Threading.Tasks;",
+        "using Volo.Abp;",
         "using Volo.Abp.Application.Dtos;",
         "using Volo.Abp.Http.Client;",
         "using Volo.Abp.Http.Modeling;",
@@ -94,6 +95,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         "using System;",
         "using System.Collections.Generic;",
         "using System.Threading.Tasks;",
+        "using Volo.Abp;",
         "using Volo.Abp.Application.Dtos;",
         "using Volo.Abp.Application.Services;"
     };
@@ -102,6 +104,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
     {
         "using System;",
         "using System.Collections.Generic;",
+        "using Volo.Abp;",
         "using Volo.Abp.Application.Dtos;",
         "using Volo.Abp.ObjectExtending;",
     };
@@ -507,7 +510,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
     private static bool IsAppServiceInterface(string typeName)
     {
-        return typeName.StartsWith("I") && ServicePostfixes.Any(typeName.EndsWith);
+        return typeName.StartsWith("I") && ServicePostfixes.Any(typeName.Contains);
     }
 
     private static string GetTypeNamespace(string typeFullName)
@@ -536,6 +539,11 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             return NormalizeTypeName(typeName.Split(".").Last());
         }
 
+        if(usingNamespaceList != null)
+        {
+            AddGenericTypeUsingNamespace(typeName, usingNamespaceList);
+        }
+        
         var type = new StringBuilder();
         var s1 = typeName.Split("<");
         for (var i = 0; i < s1.Length; i++)
@@ -546,7 +554,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
                 for (var x = 0; x < s2.Length; x++)
                 {
                     type.Append(s2[x].Split(".").Last());
-                    if (x < s1.Length - 1)
+                    if (x < s2.Length - 1)
                     {
                         type.Append(", ");
                     }
@@ -563,6 +571,25 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         }
 
         return type.ToString();
+    }
+
+    private static void AddGenericTypeUsingNamespace(string typeFullName, List<string> usingNamespaceList)
+    {
+        if(!typeFullName.Contains("<"))
+        {
+            usingNamespaceList.AddIfNotContains($"using {GetTypeNamespace(typeFullName)};");
+        }
+
+        if (typeFullName.Contains("<") && typeFullName.Contains(">"))
+        {
+            var left = typeFullName.IndexOf("<", StringComparison.Ordinal);
+            var right = typeFullName.LastIndexOf(">", StringComparison.Ordinal);
+            var genericTypes = typeFullName.Substring(left + 1, right - left - 1);
+            foreach (var genericType in genericTypes.Split(",").Where(x => x.Contains(".")))
+            {
+                AddGenericTypeUsingNamespace(genericType, usingNamespaceList);
+            }
+        }
     }
 
     private static string NormalizeTypeName(string typeName)

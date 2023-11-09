@@ -55,4 +55,4 @@ Your backend should be running successfully
 
 There is a demo app. The path of the demo app is `npm\ng-packs\apps\dev-app`. The demo app is connected to the packages with local references. Open the terminal in `npm\ng-packs\apps\dev-app` and execute `yarn` or `npm i` in terminal. After the package installed run `npm start` or `yarn start`.
 
-The repo uses Nx and packages connected with `local references`. The packages path is `”npm\ng-packs\packages`
+The repo uses Nx and packages connected with `local references`. The packages path is `npm\ng-packs\packages`

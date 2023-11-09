@@ -14,32 +14,37 @@ public class LdapSettingProvider : ILdapSettingProvider, ITransientDependency
         SettingProvider = settingProvider;
     }
 
-    public async Task<string> GetServerHostAsync()
+    public virtual async Task<bool> GetLdapOverSsl()
+    {
+        return (await SettingProvider.GetOrNullAsync(LdapSettingNames.Ldaps))?.To<bool>() ?? default;
+    }
+
+    public virtual async Task<string?> GetServerHostAsync()
     {
         return await SettingProvider.GetOrNullAsync(LdapSettingNames.ServerHost);
     }
 
-    public async Task<int> GetServerPortAsync()
+    public virtual async Task<int> GetServerPortAsync()
     {
         return (await SettingProvider.GetOrNullAsync(LdapSettingNames.ServerPort))?.To<int>() ?? default;
     }
 
-    public async Task<string> GetBaseDcAsync()
+    public virtual async Task<string?> GetBaseDcAsync()
     {
         return await SettingProvider.GetOrNullAsync(LdapSettingNames.BaseDc);
     }
 
-    public async Task<string> GetDomainAsync()
+    public virtual async Task<string?> GetDomainAsync()
     {
         return await SettingProvider.GetOrNullAsync(LdapSettingNames.Domain);
     }
 
-    public async Task<string> GetUserNameAsync()
+    public virtual async Task<string?> GetUserNameAsync()
     {
         return await SettingProvider.GetOrNullAsync(LdapSettingNames.UserName);
     }
 
-    public async Task<string> GetPasswordAsync()
+    public virtual async Task<string?> GetPasswordAsync()
     {
         return await SettingProvider.GetOrNullAsync(LdapSettingNames.Password);
     }

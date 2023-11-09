@@ -17,6 +17,7 @@ public class AbpSettingManagementMongoDbModule : AbpModule
             options.AddDefaultRepositories<ISettingManagementMongoDbContext>();
 
             options.AddRepository<Setting, MongoSettingRepository>();
+            options.AddRepository<SettingDefinitionRecord, MongoSettingDefinitionRecordRepository>();
         });
     }
 }

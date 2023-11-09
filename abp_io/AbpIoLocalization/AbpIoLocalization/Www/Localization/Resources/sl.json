@@ -16,7 +16,7 @@
     "Tutorial": "Vadnica",
     "UsingCLI": "Uporaba CLI",
     "SeeDetails": "Glejte Podrobnosti",
-    "AbpShortDescription": "ABP Framework je popolna infrastruktura za ustvarjanje sodobnih spletnih aplikacij z upoštevanjem najboljših praks in konvencij pri razvoju programske opreme.",
+    "AbpShortDescription": "ABP Framework je celovita infrastruktura za ustvarjanje programskih rešitev s sodobnimi arhitekturami, ki temeljijo na platformi ASP.NET Core.",
     "SourceCodeUpper": "IZVORNA KODA",
     "LatestReleaseLogs": "Najnovejši dnevniki izdaje",
     "Infrastructure": "Infrastruktura",
@@ -274,7 +274,8 @@
     "FirstEdition": "Prva izdaja",
     "ThankYou": "Hvala vam!",
     "CheckboxMandatory": "Za nadaljevanje morate to preveriti!",
-    "SelectUITheme": "Izberite temo uporabniškega vmesnika"
-
+    "SelectUITheme": "Izberite temo uporabniškega vmesnika",
+    "CreateSolutionFolder": "Ustvarite mapo rešitev",
+    "CreateSolutionFolderOption": "Podaja, ali bo projekt v novi mapi v izhodni mapi ali neposredno v izhodni mapi."
   }
 }

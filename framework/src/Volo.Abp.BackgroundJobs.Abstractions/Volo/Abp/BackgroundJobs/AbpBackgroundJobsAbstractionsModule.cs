@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.BackgroundJobs;
 
 [DependsOn(
-    typeof(AbpJsonModule)
+    typeof(AbpJsonModule),
+    typeof(AbpMultiTenancyAbstractionsModule)
     )]
 public class AbpBackgroundJobsAbstractionsModule : AbpModule
 {
@@ -21,7 +23,7 @@ public class AbpBackgroundJobsAbstractionsModule : AbpModule
     {
         var jobTypes = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IBackgroundJob<>)) ||
                 ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IAsyncBackgroundJob<>)))

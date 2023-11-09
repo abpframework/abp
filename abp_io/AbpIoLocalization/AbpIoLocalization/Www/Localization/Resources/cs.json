@@ -16,7 +16,7 @@
     "Tutorial": "Tutorial",
     "UsingCLI": "Pomocí CLI",
     "SeeDetails": "Zobrazit podrobnosti",
-    "AbpShortDescription": "ABP Framework je kompletní infrastruktura pro vytváření moderních webových aplikací podle osvědčených postupů a konvencí vývoje softwaru.",
+    "AbpShortDescription": "ABP Framework je kompletní infrastruktura pro vytváření softwarových řešení s moderními architekturami založenými na platformě ASP.NET Core.",
     "SourceCodeUpper": "ZDROJOVÝ KÓD",
     "LatestReleaseLogs": "Nejnovější protokoly vydání",
     "Infrastructure": "Infrastruktura",
@@ -274,7 +274,8 @@
     "FirstEdition": "První vydání",
     "ThankYou": "Děkuji!",
     "CheckboxMandatory": "Chcete-li pokračovat, musíte toto zaškrtnout!",
-    "SelectUITheme": "Vyberte téma uživatelského rozhraní"
-
+    "SelectUITheme": "Vyberte téma uživatelského rozhraní",
+    "CreateSolutionFolder": "Vytvořit složku řešení",
+    "CreateSolutionFolderOption": "Určuje, zda bude projekt v nové složce ve výstupní složce nebo přímo výstupní složce."
   }
 }

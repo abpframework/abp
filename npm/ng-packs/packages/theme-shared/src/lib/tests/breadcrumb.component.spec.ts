@@ -5,10 +5,10 @@ import {
   RouterOutletComponent,
   RoutesService,
 } from '@abp/ng.core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { mockRoutesService } from '../../../../core/src/lib/tests/routes.service.spec';
 import { BreadcrumbComponent, BreadcrumbItemsComponent } from '../components';
 
@@ -34,7 +34,7 @@ describe('BreadcrumbComponent', () => {
       },
     ],
     declarations: [LocalizationPipe, BreadcrumbComponent, BreadcrumbItemsComponent],
-    imports: [RouterModule],
+    imports: [RouterModule,HttpClientModule],
     routes: [
       {
         path: '',
@@ -62,7 +62,6 @@ describe('BreadcrumbComponent', () => {
     routes.add(mockRoutes);
     await spectator.router.navigateByUrl('/identity/users');
     spectator.detectChanges();
-
     const elements = spectator.queryAll('li');
     expect(elements).toHaveLength(3);
     expect(elements[1]).toHaveText('Identity');

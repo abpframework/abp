@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Volo.Abp.Json;
 
-public class ExtensibleObjectModifiers_Tests : AbpJsonTestBase
+public class ExtensibleObjectModifiers_Tests : AbpJsonSystemTextJsonTestBase
 {
     [Fact]
     public void Should_Modify_Object()

@@ -25,11 +25,11 @@ public class AbpTemplateRenderer : ITemplateRenderer, ITransientDependency
 
     public virtual async Task<string> RenderAsync(
         string templateName,
-        object model = null,
-        string cultureName = null,
-        Dictionary<string, object> globalContext = null)
+        object? model = null,
+        string? cultureName = null,
+        Dictionary<string, object>? globalContext = null)
     {
-        var templateDefinition = TemplateDefinitionManager.Get(templateName);
+        var templateDefinition = await TemplateDefinitionManager.GetAsync(templateName);
 
         var renderEngine = templateDefinition.RenderEngine;
 
@@ -38,7 +38,7 @@ public class AbpTemplateRenderer : ITemplateRenderer, ITransientDependency
             renderEngine = Options.DefaultRenderingEngine;
         }
 
-        var providerType = Options.RenderingEngines.GetOrDefault(renderEngine);
+        var providerType = Options.RenderingEngines.GetOrDefault(renderEngine!);
 
         if (providerType != null && typeof(ITemplateRenderingEngine).IsAssignableFrom(providerType))
         {

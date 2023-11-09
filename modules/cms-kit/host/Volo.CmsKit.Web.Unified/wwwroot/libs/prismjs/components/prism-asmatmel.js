@@ -38,6 +38,6 @@ Prism.languages.asmatmel = {
 		pattern: /\b[acznvshtixy]\b/i,
 		alias: 'variable'
 	},
-	'operator': />>=?|<<=?|&&?|\|\|?|[-+*/%&|^!=<>?]=?/,
+	'operator': />>=?|<<=?|&[&=]?|\|[\|=]?|[-+*/%^!=<>?]=?/,
 	'punctuation': /[(),:]/
 };

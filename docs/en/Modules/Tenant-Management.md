@@ -48,6 +48,33 @@ The Features action opens a modal to enable/disable/set [features](../Features.m
 
 *Manage Host features* button is used  to set features for the host side, if you use the features of your application also in the host side.
 
+## Distributed Events
+
+This module defines the following ETOs (Event Transfer Objects) to allow you to subscribe to changes on the entities of the module;
+
+- `TenantEto` is published on changes done on an `Tenant` entity.
+
+**Example: Get notified when a new tenant has been created**
+
+```
+public class MyHandler :
+    IDistributedEventHandler<EntityCreatedEto<TenantEto>>,
+    ITransientDependency
+{
+    public async Task HandleEventAsync(EntityCreatedEto<TenantEto> eventData)
+    {
+        TenantEto tenant = eventData.Entity;
+        // TODO: ...
+    }
+}
+```
+
+
+
+`TenantEto` is configured to automatically publish the events. You should configure yourself for the others. See the [Distributed Event Bus document](https://github.com/abpframework/abp/blob/rel-7.3/docs/en/Distributed-Event-Bus.md) to learn details of the pre-defined events.
+
+> Subscribing to the distributed events is especially useful for distributed scenarios (like microservice architecture). If you are building a monolithic application, or listening events in the same process that runs the Tenant Management Module, then subscribing to the [local events](https://github.com/abpframework/abp/blob/rel-7.3/docs/en/Local-Event-Bus.md) can be more efficient and easier.
+
 ## Internals
 
 This section can be used as a reference if you want to [customize](../Customizing-Application-Modules-Guide.md) this module without changing [its source code](https://github.com/abpframework/abp/tree/dev/modules/tenant-management).

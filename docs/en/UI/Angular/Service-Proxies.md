@@ -18,7 +18,9 @@ Run the following command in the **root folder** of the angular application:
 abp generate-proxy -t ng
 ```
 
-The command without any parameters creates proxies only for your own application's services and places them in your default Angular application. There are several parameters you may use to modify this behavior. See the [CLI documentation](../../CLI) for details.
+### Note 
+- If you're utilizing NX, be aware that the Angular schematics-based ABP package may not work as expected. Instead, there's a specialized package for NX-based repositories named @abp/nx.generators. We recommend using this generator for your package. For detailed instructions and more information, refer to this section.
+- The command without any parameters creates proxies for your own application's services only and places them in your default Angular application. There are several parameters you may use to modify this behavior. See the [Details](#abp-nx-proxy-generator).
 
 The generated files will be placed in a folder called `proxy` at the root of the target project.
 
@@ -70,6 +72,16 @@ export const environment: Config.Environment = {
 ```
 
 > The destination the `proxy` folder is created and the paths above may change based on your project structure.
+
+## Parameters of generate-proxy
+
+- **module or -m:** The backend module name. The default is `app`. The object key of the modules defined in response of `api/abp/api-definition`. For example, if you want to generate-proxy of PermissionManagement, you should pass `permissionManagement` as a value.
+- **apiName or -a:** The Backend api name, also known as remoteServiceName. It is defined in the selected module (in response of `api/abp/api-definition`). The property(key) name is `remoteServiceName`. For example for the PermissionManagement, you should pass `AbpPermissionManagement`
+- **source:** Source of the Angular project for the API definition URL & root namespace resolution. 
+- **target:** Target for the Angular project to place the generated code. For example, if it's `permission-management`, it'll look like this (npm/ng-packs/packages/*permission-management*).
+- **entryPoint:** To create the generated proxy folder in the target. The directory is `permission-management/proxy/src/lib/proxy` and the `permission-management` is the value of target. If you want to create a folder for the generated proxy, there are two options, you should either set the value `proxy` as the entryPoint or go to project.json and change the `sourceRoot` from `packages/permission-management/src` to `packages/permission-management/proxy/src`. No need to change the sourceRoot of project with the property. if you keep it empty, the proxy will be generated into the folder defined in the sourceRoot property.
+- **serviceType:** The service type of the generated proxy. The options are `application`, `integration` and `all`. The default value is `application`. A developer can mark a service "integration service". If you want to skip proxy generation for the service, then this is the correct setting. More info about [Integration Services](../../Integration-Services) 
+
 
 ### Services
 
@@ -139,6 +151,26 @@ export class BookComponent implements OnInit {
 ```
 
 > Please [see this article](https://github.com/abpframework/abp/blob/dev/docs/en/Blog-Posts/2020-09-07%20Angular-Service-Proxies/POST.md) to learn more about service proxies.
+
+
+### ABP NX Proxy Generator
+ For projects that utilize NX, the @abp/nx.generators package offers seamless integration. Essentially, this package serves as a wrapper specifically tailored for NX-based repositories
+ **Installation**
+To incorporate this package into your project, run the following command:
+```bash
+yarn add @abp/nx.generators
+```
+### Usage
+To use the generator, execute the following command:
+
+```bash
+yarn nx generate @abp/nx.generators:generate-proxy
+// or
+yarn nx g @abp/nx.generators:generate-proxy
+```
+
+**Note:** The parameters you'd use with this generator are consistent with the standard ABP proxy generator.
+
 
 ### Known Limitations
 

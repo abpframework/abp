@@ -29,12 +29,12 @@ public class NameValue<T>
     /// <summary>
     /// Name.
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     /// <summary>
     /// Value.
     /// </summary>
-    public T Value { get; set; }
+    public T Value { get; set; } = default!;
 
     public NameValue()
     {

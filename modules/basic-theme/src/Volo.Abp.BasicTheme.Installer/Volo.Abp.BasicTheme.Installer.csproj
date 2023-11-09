@@ -4,7 +4,7 @@
     <Import Project="..\..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
         <RootNamespace />
     </PropertyGroup>
@@ -16,9 +16,15 @@
 
     <ItemGroup>
       <None Remove="..\..\Volo.Abp.BasicTheme.abpmdl.json" />
-      <EmbeddedResource Include="..\..\Volo.Abp.BasicTheme.abpmdl.json" />
+      <Content Include="..\..\Volo.Abp.BasicTheme.abpmdl.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
       <None Remove="..\..\**\*.abppkg*.json" />
-      <EmbeddedResource Include="..\..\**\*.abppkg*.json" />
+      <Content Include="..\..\**\*.abppkg*.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
     </ItemGroup>
 
 </Project>

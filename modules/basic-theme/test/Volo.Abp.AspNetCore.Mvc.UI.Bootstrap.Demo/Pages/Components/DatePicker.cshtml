@@ -1,0 +1,779 @@
+@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.DatePickerModel
+
+<h2>Date Picker & Date Range Picker</h2>
+
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-picker placeholder="New" single-open-and-clear-button="false" week-numbers="Iso" time-picker="true" required today-button-classes="btn-primary" picker-id="testPicker" asp-for="DateTime"></abp-date-picker>
+    </div>
+    <div class="code-area" id="test-picker">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+    [BindProperty]
+    public DateTime DateTime { get; set; }
+
+    public void OnGet()
+    {
+        DateTime = DateTime == default ? DateTime.Now : DateTime;
+    }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-picker placeholder="New" single-open-and-clear-button="false" week-numbers="Iso" time-picker="true" required today-button-classes="btn-primary" picker-id="testPicker" asp-for="DateTime"/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="DateTime"&gt;DateTime&lt;/label&gt;&lt;span&gt; * &lt;/span&gt;
+    &lt;abp-date-picker placeholder="New" required="" data-show-i-s-o-week-numbers="true" data-time-picker="true" data-today-button-classes="btn-primary" id="testPicker" data-single-open-and-clear-button="false" data-date="2023-04-12T17:56:33.1115260+03:00"&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input placeholder="New" required="" type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;button type="button" tabindex="-1" data-type="clear" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DateTime" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" data-val="true" data-val-required="The DateTime field is required." id="DateTime" name="DateTime" value="Wed Apr 12 2023 17:56:33 GMT+0300"&gt;
+    &lt;/abp-date-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        @section scripts {
+            <script>
+        var newPicker = abp.libs.bootstrapDateRangePicker.createDateRangePicker(
+            {
+                label: "New JavaScript Picker",
+                startDate: "2020-01-01",
+                endDate: "2020-01-02",
+                singleOpenAndClearButton: false,
+                placeholder: "New Picker",
+            });
+        newPicker.insertAfter($('#test-picker').parent());
+    </script>
+        }
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Javascript" active="true">
+                <pre><code>
+var newPicker = abp.libs.bootstrapDateRangePicker.createDateRangePicker(
+            {
+                label: "New JavaScript Picker",
+                startDate: "2020-01-01",
+                endDate: "2020-01-02",
+                singleOpenAndClearButton: false,
+                placeholder: "New Picker",
+            });
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label"&gt;New JavaScript Picker&lt;/label&gt;
+    &lt;abp-date-range-picker&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control" placeholder="New Picker"&gt;
+            &lt;button type="button" class="btn btn-outline-secondary" tabindex="-1" data-type="open"&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;button type="button" class="btn btn-outline-secondary" tabindex="-1" data-type="clear"&gt;
+                &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/abp-date-range-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-range-picker time-picker="true" asp-for-end="EndDate" asp-for-start="StartDate"></abp-date-range-picker>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+    [BindProperty]
+    public DateTime StartDate { get; set; }
+
+    [BindProperty]
+    public DateTime EndDate { get; set; }
+
+    public void OnGet()
+    {
+        EndDate = EndDate == default ? DateTime.Now : EndDate;
+        DateTime = DateTime == default ? DateTime.Now : DateTime;
+    }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-range-picker time-picker="true" asp-for-end="EndDate" asp-for-start="StartDate"/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="StartDate"&gt;StartDate&lt;/label&gt;
+    &lt;abp-date-range-picker data-time-picker="true" data-start-date="0001-01-01T00:00:00.0000000" data-end-date="2023-04-12T18:02:13.2033440+03:00"&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="StartDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="EndDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" data-val="true" data-val-required="The StartDate field is required." id="StartDate" name="StartDate" value="Mon Jan 01 0001 00:00:00 GMT+0155"&gt;&lt;input data-end-date="true" type="hidden" data-val="true" data-val-required="The EndDate field is required." id="EndDate" name="EndDate" value="Wed Apr 12 2023 18:02:13 GMT+0300"&gt;
+    &lt;/abp-date-range-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-picker today-button-classes="btn-primary" asp-for="NullableDateTime"></abp-date-picker>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+    [BindProperty]
+    public DateTime? NullableDateTime { get; set; }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-picker today-button-classes="btn-primary" asp-for="NullableDateTime"/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="NullableDateTime"&gt;NullableDateTime&lt;/label&gt;
+    &lt;abp-date-picker data-today-button-classes="btn-primary"&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary d-none" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;button type="button" tabindex="-1" data-type="clear" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="NullableDateTime" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" id="NullableDateTime" name="NullableDateTime" value="2023-04-12"&gt;
+    &lt;/abp-date-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-range-picker clear-button="false" asp-for-end="NullableEndDate" asp-for-start="NullableStartDate"></abp-date-range-picker>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+    [BindProperty]
+    public DateTime? NullableStartDate { get; set; }
+        
+    [BindProperty]
+    public DateTime? NullableEndDate { get; set; }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-picker today-button-classes="btn-primary" asp-for="NullableDateTime"/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="NullableStartDate"&gt;NullableStartDate&lt;/label&gt;
+    &lt;abp-date-range-picker&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="NullableStartDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="NullableEndDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" id="NullableStartDate" name="NullableStartDate" value=""&gt;&lt;input data-end-date="true" type="hidden" id="NullableEndDate" name="NullableEndDate" value=""&gt;
+    &lt;/abp-date-range-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-picker today-button-classes="btn-primary" asp-for="DateTimeDateTimeOffset"></abp-date-picker>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+    [BindProperty]
+    public DateTimeOffset DateTimeDateTimeOffset { get; set; }
+
+    public void OnGet()
+    {
+        DateTimeDateTimeOffset = DateTimeDateTimeOffset == default ? DateTimeOffset.Now : DateTimeDateTimeOffset;
+    }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-picker today-button-classes="btn-primary" asp-for="DateTimeDateTimeOffset"/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="DateTimeDateTimeOffset"&gt;DateTimeDateTimeOffset&lt;/label&gt;
+    &lt;abp-date-picker data-today-button-classes="btn-primary" data-date="2023-04-12T18:10:05.6171150+03:00"&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary d-none" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;button type="button" tabindex="-1" data-type="clear" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DateTimeDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" data-val="true" data-val-required="The DateTimeDateTimeOffset field is required." id="DateTimeDateTimeOffset" name="DateTimeDateTimeOffset" value="2023-04-12"&gt;
+    &lt;/abp-date-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-range-picker clear-button="false" asp-for-end="EndDateTimeOffset" asp-for-start="StartDateTimeOffset"></abp-date-range-picker>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+    [BindProperty]
+    public DateTimeOffset StartDateTimeOffset { get; set; }
+        
+    [BindProperty]
+    public DateTimeOffset EndDateTimeOffset { get; set; }
+
+    public void OnGet()
+    {
+        StartDateTimeOffset = StartDateTimeOffset == default ? DateTimeOffset.Now : StartDateTimeOffset;
+        EndDateTimeOffset = EndDateTimeOffset == default ? DateTimeOffset.Now : EndDateTimeOffset;
+    }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-range-picker clear-button="false" asp-for-end="EndDateTimeOffset" asp-for-start="StartDateTimeOffset"/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="StartDateTimeOffset"&gt;StartDateTimeOffset&lt;/label&gt;
+    &lt;abp-date-range-picker data-start-date="2023-04-12T18:11:50.9560980+03:00" data-end-date="2023-04-12T18:11:50.9560980+03:00"&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="StartDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="EndDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" data-val="true" data-val-required="The StartDateTimeOffset field is required." id="StartDateTimeOffset" name="StartDateTimeOffset" value="Wed Apr 12 2023 18:11:50 GMT+0300"&gt;&lt;input data-end-date="true" type="hidden" data-val="true" data-val-required="The EndDateTimeOffset field is required." id="EndDateTimeOffset" name="EndDateTimeOffset" value="Wed Apr 12 2023 18:11:50 GMT+0300"&gt;
+    &lt;/abp-date-range-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-picker today-button-classes="btn-primary" asp-for="NullableDateTimeDateTimeOffset"></abp-date-picker>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+    [BindProperty]
+    public DateTimeOffset DateTimeDateTimeOffset { get; set; }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-picker today-button-classes="btn-primary" asp-for="NullableDateTimeDateTimeOffset"/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="NullableDateTimeDateTimeOffset"&gt;NullableDateTimeDateTimeOffset&lt;/label&gt;
+    &lt;abp-date-picker data-today-button-classes="btn-primary"&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary d-none" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;button type="button" tabindex="-1" data-type="clear" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="NullableDateTimeDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" id="NullableDateTimeDateTimeOffset" name="NullableDateTimeDateTimeOffset" value="2023-04-12"&gt;
+    &lt;/abp-date-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-range-picker clear-button="false" asp-for-end="NullableEndDateTimeOffset" asp-for-start="NullableStartDateTimeOffset"></abp-date-range-picker>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+    [BindProperty]
+    public DateTimeOffset? NullableStartDateTimeOffset { get; set; }
+        
+    [BindProperty]
+    public DateTimeOffset? NullableEndDateTimeOffset { get; set; }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-range-picker clear-button="false" asp-for-end="NullableEndDateTimeOffset" asp-for-start="NullableStartDateTimeOffset"/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="NullableStartDateTimeOffset"&gt;NullableStartDateTimeOffset&lt;/label&gt;
+    &lt;abp-date-range-picker&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="NullableStartDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="NullableEndDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" id="NullableStartDateTimeOffset" name="NullableStartDateTimeOffset" value=""&gt;&lt;input data-end-date="true" type="hidden" id="NullableEndDateTimeOffset" name="NullableEndDateTimeOffset" value=""&gt;
+    &lt;/abp-date-range-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-picker today-button-classes="btn-primary" asp-for="StringDate"></abp-date-picker>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+    [BindProperty]
+    public string StringDate { get; set; }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-picker today-button-classes="btn-primary" asp-for="StringDate"/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="StringDate"&gt;StringDate&lt;/label&gt;
+    &lt;abp-date-picker data-today-button-classes="btn-primary"&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary d-none" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;button type="button" tabindex="-1" data-type="clear" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="StringDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" id="StringDate" name="StringDate" value="2023-04-12"&gt;
+    &lt;/abp-date-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-date-range-picker clear-button="false" asp-for-end="StringEndDate" asp-for-start="StringStartDate"></abp-date-range-picker>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+public class DatePickerModel : PageModel
+{
+   [BindProperty]
+    public string StringStartDate { get; set; }
+       
+    [BindProperty]
+    public string StringEndDate { get; set; }
+}
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-date-range-picker clear-button="false" asp-for-end="StringEndDate" asp-for-start="StringStartDate"&gt;&lt;/abp-date-range-picker&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class="mb-3"&gt;
+    &lt;label class="form-label" for="StringStartDate"&gt;StringStartDate&lt;/label&gt;
+    &lt;abp-date-range-picker&gt;
+        &lt;div class="input-group"&gt;
+            &lt;input type="text" autocomplete="off" class="form-control"&gt;
+            &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="Processing..."&gt;
+                &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="StringStartDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="StringEndDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" id="StringStartDate" name="StringStartDate" value=""&gt;&lt;input data-end-date="true" type="hidden" id="StringEndDate" name="StringEndDate" value=""&gt;
+    &lt;/abp-date-range-picker&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h2>Dynamic Form</h2>
+
+
+<div class="demo-with-code">
+<div class="demo-area">
+    <abp-dynamic-form abp-model="DynamicFormExample">
+    </abp-dynamic-form>
+</div>
+<div class="code-area">
+<abp-tabs>
+<abp-tab title="Modal Class">
+    <pre><code>
+public class DatePickerModel : PageModel
+{
+   public class DynamicForm
+   {
+       [BindProperty]
+       [DateRangePicker("MyPicker",true)]
+       public DateTime StartDate { get; set; }
+       
+       [BindProperty]
+       [DateRangePicker("MyPicker",false)]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       public DateTime EndDate { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       public DateTime DateTime { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       [DateRangePicker("MyPicker2",true)]
+       public DateTime? NullableStartDate { get; set; }
+       [BindProperty]
+       [DateRangePicker("MyPicker2")]
+       public DateTime? NullableEndDate { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       public DateTime? NullableDateTime { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       [DateRangePicker("MyPicker3",true)]
+       public DateTimeOffset StartDateTimeOffset { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       [DateRangePicker("MyPicker3")]
+       public DateTimeOffset EndDateTimeOffset { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       public DateTimeOffset DateTimeDateTimeOffset { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       [DateRangePicker("MyPicker4",true)]
+       public DateTimeOffset? NullableStartDateTimeOffset { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       [DateRangePicker("MyPicker4")]
+       public DateTimeOffset? NullableEndDateTimeOffset { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       public DateTimeOffset? NullableDateTimeDateTimeOffset { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       [DateRangePicker("MyPicker5",true)]
+       public string StringStartDate { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       [DateRangePicker("MyPicker5")]
+       public string StringEndDate { get; set; }
+       
+       [BindProperty]
+       [DatePickerOptions(nameof(DatePickerOptions))]
+       [DatePicker]
+       public string StringDate { get; set; }
+   }
+   
+   public AbpDatePickerOptions DatePickerOptions { get; set; }
+   
+   [BindProperty]
+   public DynamicForm DynamicFormExample { get; set; }
+
+   public void OnGet()
+   {
+       DynamicFormExample ??= new DynamicForm
+       {
+           StartDate = DateTime.Now,
+           EndDate = DateTime.Now,
+           DateTime = DateTime.Now,
+           
+           StartDateTimeOffset = DateTimeOffset.Now,
+           EndDateTimeOffset = DateTimeOffset.Now,
+           DateTimeDateTimeOffset = DateTimeOffset.Now,
+       };
+
+       DatePickerOptions = new AbpDatePickerOptions();
+       DatePickerOptions.LinkedCalendars = false;
+       DatePickerOptions.Ranges = new List&lt;AbpDatePickerRange&gt;();
+       DatePickerOptions.Ranges.Add(new AbpDatePickerRange("Today", DateTime.Now, DateTime.Now));
+   }
+   
+   public void OnPost()
+   {
+       return;
+   }
+}
+</code></pre>
+</abp-tab>
+<abp-tab title="Tag Helper" active="true">
+    <pre><code>
+&lt;abp-dynamic-form abp-model="DynamicFormExample"&gt;
+&lt;/abp-dynamic-form&gt;
+</code></pre>
+</abp-tab>
+<abp-tab title="Rendered">
+    <pre><code>
+&lt;form method="post" novalidate="novalidate"&gt;
+    &lt;div class="row"&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_StartDate"&gt;Start Date - End Date&lt;/label&gt;
+            &lt;abp-date-range-picker id="MyPicker" data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}" data-start-date="2023-04-17T15:21:46.6569460+03:00" data-end-date="2023-04-17T15:21:46.6570750+03:00"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;ti class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.StartDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.EndDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" data-val="true" data-val-required="The Start Date - End Date field is required." id="DynamicFormExample_StartDate" name="DynamicFormExample.StartDate" value="Mon Apr 17 2023 15:21:46 GMT+0300"&gt;&lt;input data-end-date="true" type="hidden" data-val="true" data-val-required="The EndDate field is required." id="DynamicFormExample_EndDate" name="DynamicFormExample.EndDate" value="Mon Apr 17 2023 15:21:46 GMT+0300"&gt;
+            &lt;/abp-date-range-picker&gt;
+        &lt;/div&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_NullableStartDate"&gt;Nullable Start Date - Nullable End Date&lt;/label&gt;
+            &lt;abp-date-range-picker id="MyPicker2" data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.NullableStartDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.NullableEndDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" id="DynamicFormExample_NullableStartDate" name="DynamicFormExample.NullableStartDate" value=""&gt;&lt;input data-end-date="true" type="hidden" id="DynamicFormExample_NullableEndDate" name="DynamicFormExample.NullableEndDate" value=""&gt;
+            &lt;/abp-date-range-picker&gt;
+        &lt;/div&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_StartDateTimeOffset"&gt;Start DateTime Offset - End DateTime Offset&lt;/label&gt;
+            &lt;abp-date-range-picker id="MyPicker3" data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}" data-start-date="2023-04-17T15:21:46.6573400+03:00" data-end-date="2023-04-17T15:21:46.6574650+03:00"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.StartDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.EndDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" data-val="true" data-val-required="The Start DateTime Offset - End DateTime Offset field is required." id="DynamicFormExample_StartDateTimeOffset" name="DynamicFormExample.StartDateTimeOffset" value="Mon Apr 17 2023 15:21:46 GMT+0300"&gt;&lt;input data-end-date="true" type="hidden" data-val="true" data-val-required="The EndDateTimeOffset field is required." id="DynamicFormExample_EndDateTimeOffset" name="DynamicFormExample.EndDateTimeOffset" value="Mon Apr 17 2023 15:21:46 GMT+0300"&gt;
+            &lt;/abp-date-range-picker&gt;
+        &lt;/div&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_NullableStartDateTimeOffset"&gt;Nullable Start DateTime Offset - Nullable End DateTime Offset&lt;/label&gt;
+            &lt;abp-date-range-picker id="MyPicker4" data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.NullableStartDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.NullableEndDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" id="DynamicFormExample_NullableStartDateTimeOffset" name="DynamicFormExample.NullableStartDateTimeOffset" value=""&gt;&lt;input data-end-date="true" type="hidden" id="DynamicFormExample_NullableEndDateTimeOffset" name="DynamicFormExample.NullableEndDateTimeOffset" value=""&gt;
+            &lt;/abp-date-range-picker&gt;
+        &lt;/div&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_StringStartDate"&gt;String Start Date - String End Date&lt;/label&gt;
+            &lt;abp-date-range-picker id="MyPicker5" data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.StringStartDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.StringEndDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-start-date="true" type="hidden" id="DynamicFormExample_StringStartDate" name="DynamicFormExample.StringStartDate" value=""&gt;&lt;input data-end-date="true" type="hidden" id="DynamicFormExample_StringEndDate" name="DynamicFormExample.StringEndDate" value=""&gt;
+            &lt;/abp-date-range-picker&gt;
+        &lt;/div&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_DateTime"&gt;DateTime&lt;/label&gt;
+            &lt;abp-date-picker data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}" data-date="2023-04-17T15:21:46.6572040+03:00"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.DateTime" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" data-val="true" data-val-required="The DateTime field is required." id="DynamicFormExample_DateTime" name="DynamicFormExample.DateTime" value="Mon Apr 17 2023 15:21:46 GMT+0300"&gt;
+            &lt;/abp-date-picker&gt;
+        &lt;/div&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_NullableDateTime"&gt;Nullable DateTime&lt;/label&gt;
+            &lt;abp-date-picker data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.NullableDateTime" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" id="DynamicFormExample_NullableDateTime" name="DynamicFormExample.NullableDateTime" value=""&gt;
+            &lt;/abp-date-picker&gt;
+        &lt;/div&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_DateTimeDateTimeOffset"&gt;DateTime DateTime Offset&lt;/label&gt;
+            &lt;abp-date-picker data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}" data-date="2023-04-17T15:21:46.6575990+03:00"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.DateTimeDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" data-val="true" data-val-required="The DateTime DateTime Offset field is required." id="DynamicFormExample_DateTimeDateTimeOffset" name="DynamicFormExample.DateTimeDateTimeOffset" value="Mon Apr 17 2023 15:21:46 GMT+0300"&gt;
+            &lt;/abp-date-picker&gt;
+        &lt;/div&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_NullableDateTimeDateTimeOffset"&gt;Nullable DateTime DateTime Offset&lt;/label&gt;
+            &lt;abp-date-picker data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.NullableDateTimeDateTimeOffset" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" id="DynamicFormExample_NullableDateTimeDateTimeOffset" name="DynamicFormExample.NullableDateTimeDateTimeOffset" value=""&gt;
+            &lt;/abp-date-picker&gt;
+        &lt;/div&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;label class="form-label" for="DynamicFormExample_StringDate"&gt;String Date&lt;/label&gt;
+            &lt;abp-date-picker data-linked-calendars="false" data-ranges="{&quot;Today&quot;:[&quot;2023-04-17T15:21:46.6586240+03:00&quot;,&quot;2023-04-17T15:21:46.6586240+03:00&quot;]}"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;input type="text" autocomplete="off" class="form-control"&gt;
+                    &lt;button type="button" tabindex="-1" data-type="clear" class="d-none btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button type="button" tabindex="-1" data-type="open" class="btn btn-outline-secondary" data-busy-text="İşleniyor..."&gt;
+                        &lt;i class="fa fa-calendar"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;&lt;span class="text-danger col-auto field-validation-valid" data-valmsg-for="DynamicFormExample.StringDate" data-valmsg-replace="true"&gt;&lt;/span&gt;&lt;input data-date="true" type="hidden" id="DynamicFormExample_StringDate" name="DynamicFormExample.StringDate" value=""&gt;
+            &lt;/abp-date-picker&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+</code></pre>
+</abp-tab>
+</abp-tabs>
+</div>
+</div>
+
+
+

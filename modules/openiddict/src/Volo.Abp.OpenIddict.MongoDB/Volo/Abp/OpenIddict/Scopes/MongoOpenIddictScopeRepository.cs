@@ -18,7 +18,7 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
     {
     }
     
-    public async Task<List<OpenIddictScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
+    public virtual async Task<List<OpenIddictScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
@@ -32,7 +32,7 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => 

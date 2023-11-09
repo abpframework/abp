@@ -29,8 +29,10 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
     public DbSet<Author> Author { get; set; }
 
     public DbSet<FourthDbContextDummyEntity> FourthDummyEntities { get; set; }
-    
+
     public DbSet<Product> Products { get; set; }
+
+    public DbSet<Category> Categories { get; set; }
 
     public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
         : base(options)
@@ -60,6 +62,7 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         modelBuilder.Entity<Person>(b =>
         {
             b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
+            b.Property(x => x.HasDefaultValue).HasDefaultValue(DateTime.Now);
         });
 
         modelBuilder
@@ -83,6 +86,11 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         });
 
         modelBuilder.Entity<Product>();
+
+        modelBuilder.Entity<Category>(b =>
+        {
+            b.HasAbpQueryFilter(e => e.Name.StartsWith("abp"));
+        });
 
         modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
     }

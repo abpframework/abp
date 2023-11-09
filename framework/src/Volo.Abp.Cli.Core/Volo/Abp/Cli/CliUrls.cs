@@ -8,6 +8,8 @@ public static class CliUrls
     public const string WwwAbpIo = WwwAbpIoProduction;
     public const string AccountAbpIo = AccountAbpIoProduction;
     public const string NuGetRootPath = NuGetRootPathProduction;
+    public const string LatestVersionCheckFullPath =
+        "https://raw.githubusercontent.com/abpframework/abp/dev/latest-versions.json";
 
     public const string WwwAbpIoProduction = "https://abp.io/";
     public const string AccountAbpIoProduction = "https://account.abp.io/";
@@ -25,6 +27,11 @@ public static class CliUrls
     public static string GetNuGetPackageInfoUrl(string apiKey, string packageId)
     {
         return $"{NuGetRootPath}{apiKey}/v3/package/{packageId}/index.json";
+    }
+
+    public static string GetNuGetPackageSearchUrl(string apiKey, string packageId)
+    {
+        return $"{NuGetRootPath}{apiKey}/v3/search?q={packageId}";
     }
 
     public static string GetApiDefinitionUrl(string url, ApplicationApiDescriptionModelRequestDto model = null)

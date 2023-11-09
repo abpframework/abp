@@ -1,12 +1,12 @@
 # Dependency Injection
 
-ABP's Dependency Injection system is developed based on Microsoft's [dependency injection extension](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96) library (Microsoft.Extensions.DependencyInjection nuget package). So, it's documentation is valid in ABP too.
+ABP's Dependency Injection system is developed based on Microsoft's [dependency injection extension](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96) library (Microsoft.Extensions.DependencyInjection nuget package). So, its documentation is valid in ABP too.
 
 > While ABP has no core dependency to any 3rd-party DI provider. However, it's required to use a provider that supports dynamic proxying and some other advanced features to make some ABP features properly work. Startup templates come with [Autofac](https://autofac.org/) installed. See [Autofac integration](Autofac-Integration.md) document for more information.
 
 ## Modularity
 
-Since ABP is a modular framework, every module defines it's own services and registers via dependency injection in it's own separate [module class](Module-Development-Basics.md). Example:
+Since ABP is a modular framework, every module defines its own services and registers via dependency injection in its own separate [module class](Module-Development-Basics.md). Example:
 
 ````C#
 public class BlogModule : AbpModule
@@ -210,7 +210,7 @@ public class TaxAppService : ApplicationService
 }
 ````
 
-``TaxAppService`` gets ``ITaxCalculator`` in it's constructor. The dependency injection system automatically provides the requested service at runtime.
+``TaxAppService`` gets ``ITaxCalculator`` in its constructor. The dependency injection system automatically provides the requested service at runtime.
 
 Constructor injection is preffered way of injecting dependencies to a class. In that way, the class can not be constructed unless all constructor-injected dependencies are provided. Thus, the class explicitly declares it's required services.
 
@@ -440,16 +440,16 @@ Use `ICachedServiceProvider` (instead of `ITransientCachedServiceProvider`) unle
 
 ## Advanced Features
 
-### IServiceCollection.OnRegistred Event
+### IServiceCollection.OnRegistered Event
 
-You may want to perform an action for every service registered to the dependency injection. In the `PreConfigureServices` method of your module, register a callback using the `OnRegistred` method as shown below:
+You may want to perform an action for every service registered to the dependency injection. In the `PreConfigureServices` method of your module, register a callback using the `OnRegistered` method as shown below:
 
 ````csharp
 public class AppModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(ctx =>
+        context.Services.OnRegistered(ctx =>
         {
             var type = ctx.ImplementationType;
             //...
@@ -465,7 +465,7 @@ public class AppModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(ctx =>
+        context.Services.OnRegistered(ctx =>
         {
             if (ctx.ImplementationType.IsDefined(typeof(MyLogAttribute), true))
             {
@@ -478,7 +478,7 @@ public class AppModule : AbpModule
 
 This example simply checks if the service class has `MyLogAttribute` attribute and adds `MyLogInterceptor` to the interceptor list if so.
 
-> Notice that `OnRegistred` callback might be called multiple times for the same service class if it exposes more than one service/interface. So, it's safe to use `Interceptors.TryAdd` method instead of `Interceptors.Add` method. See [the documentation](Dynamic-Proxying-Interceptors.md) of dynamic proxying / interceptors.
+> Notice that `OnRegistered` callback might be called multiple times for the same service class if it exposes more than one service/interface. So, it's safe to use `Interceptors.TryAdd` method instead of `Interceptors.Add` method. See [the documentation](Dynamic-Proxying-Interceptors.md) of dynamic proxying / interceptors.
 
 ## 3rd-Party Providers
 

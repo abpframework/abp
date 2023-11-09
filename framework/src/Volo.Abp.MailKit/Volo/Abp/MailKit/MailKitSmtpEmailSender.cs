@@ -29,13 +29,12 @@ public class MailKitSmtpEmailSender : EmailSenderBase, IMailKitSmtpEmailSender
         SmtpConfiguration = smtpConfiguration;
     }
 
-    protected override async Task SendEmailAsync(MailMessage mail)
+    protected async override Task SendEmailAsync(MailMessage mail)
     {
         using (var client = await BuildClientAsync())
         {
             var message = MimeMessage.CreateFromMailMessage(mail);
             message.MessageId = MimeUtils.GenerateMessageId();
-            message.Headers.Add(HeaderId.MessageId, message.MessageId);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
         }

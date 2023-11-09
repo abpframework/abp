@@ -32,7 +32,7 @@ public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator wher
     {
         Check.NotNull(args.Url, nameof(args.Url));
 
-        var client = CliHttpClientFactory.CreateClient();
+        var client = CliHttpClientFactory.CreateClient(needsAuthentication: false);
 
         var apiDefinitionResult = await client.GetStringAsync(CliUrls.GetApiDefinitionUrl(args.Url, requestDto));
         var apiDefinition = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(apiDefinitionResult);
@@ -47,7 +47,7 @@ public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator wher
         switch (serviceType)
         {
             case ServiceType.Application:
-                moduleDefinition.Controllers.RemoveAll(x => !x.Value.IsRemoteService);
+                moduleDefinition.Controllers.RemoveAll(x => x.Value.IsIntegrationService);
                 break;
             case ServiceType.Integration:
                 moduleDefinition.Controllers.RemoveAll(x => !x.Value.IsIntegrationService);

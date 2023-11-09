@@ -19,8 +19,12 @@ public class EditModalModel : IdentityPageModel
 
     [BindProperty]
     public AssignedRoleViewModel[] Roles { get; set; }
+    
+    public DetailViewModel Detail { get; set; }
 
     protected IIdentityUserAppService IdentityUserAppService { get; }
+
+    public bool IsEditCurrentUser { get; set; }
 
     public EditModalModel(IIdentityUserAppService identityUserAppService)
     {
@@ -29,9 +33,10 @@ public class EditModalModel : IdentityPageModel
 
     public virtual async Task<IActionResult> OnGetAsync(Guid id)
     {
-        UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await IdentityUserAppService.GetAsync(id));
-
+        var user = await IdentityUserAppService.GetAsync(id);
+        UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(user);
         Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityUserAppService.GetAssignableRolesAsync()).Items);
+        IsEditCurrentUser = CurrentUser.Id == id;
 
         var userRoleNames = (await IdentityUserAppService.GetRolesAsync(UserInfo.Id)).Items.Select(r => r.Name).ToList();
         foreach (var role in Roles)
@@ -41,8 +46,24 @@ public class EditModalModel : IdentityPageModel
                 role.IsAssigned = true;
             }
         }
+        
+        Detail = ObjectMapper.Map<IdentityUserDto, DetailViewModel>(user);
+        
+        Detail.CreatedBy = await GetUserNameOrNullAsync(user.CreatorId);
+        Detail.ModifiedBy = await GetUserNameOrNullAsync(user.LastModifierId);
 
         return Page();
+    }
+    
+    private async Task<string> GetUserNameOrNullAsync(Guid? userId)
+    {
+        if (!userId.HasValue)
+        {
+            return null;
+        }
+
+        var user = await IdentityUserAppService.GetAsync(userId.Value);
+        return user.UserName;
     }
 
     public virtual async Task<IActionResult> OnPostAsync()
@@ -99,5 +120,20 @@ public class EditModalModel : IdentityPageModel
         public string Name { get; set; }
 
         public bool IsAssigned { get; set; }
+    }
+
+    public class DetailViewModel
+    {
+        public string CreatedBy { get; set; }
+        public DateTime? CreationTime { get; set; }
+        
+        public string ModifiedBy { get; set; }
+        public DateTime? LastModificationTime { get; set; }
+        
+        public DateTimeOffset? LastPasswordChangeTime { get; set; }
+
+        public DateTimeOffset? LockoutEnd { get; set; }
+        
+        public int AccessFailedCount { get; set; }
     }
 }

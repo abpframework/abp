@@ -24,11 +24,12 @@ public class AbpFluentValidationConventionalRegistrar : DefaultConventionalRegis
     {
         return new List<Type>()
             {
-                typeof(IValidator<>).MakeGenericType(GetFirstGenericArgumentOrNull(type, 1))
+                type,
+                typeof(IValidator<>).MakeGenericType(GetFirstGenericArgumentOrNull(type, 1)!)
             };
     }
 
-    private static Type GetFirstGenericArgumentOrNull(Type type, int depth)
+    private static Type? GetFirstGenericArgumentOrNull(Type type, int depth)
     {
         const int maxFindDepth = 8;
 
@@ -42,6 +43,6 @@ public class AbpFluentValidationConventionalRegistrar : DefaultConventionalRegis
             return type.GetGenericArguments()[0];
         }
 
-        return GetFirstGenericArgumentOrNull(type.BaseType, depth + 1);
+        return GetFirstGenericArgumentOrNull(type.BaseType!, depth + 1);
     }
 }

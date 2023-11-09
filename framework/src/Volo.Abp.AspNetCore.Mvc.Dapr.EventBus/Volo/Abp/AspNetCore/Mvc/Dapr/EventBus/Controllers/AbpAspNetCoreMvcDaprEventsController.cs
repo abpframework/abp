@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -31,8 +32,31 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
         }
 
         var distributedEventBus = HttpContext.RequestServices.GetRequiredService<DaprDistributedEventBus>();
-        var eventData = daprSerializer.Deserialize(data, distributedEventBus.GetEventType(topic));
-        await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(topic), eventData);
+
+        if (IsAbpDaprEventData(data))
+        {
+            var daprEventData = daprSerializer.Deserialize(data, typeof(AbpDaprEventData)).As<AbpDaprEventData>();
+            var eventData = daprSerializer.Deserialize(daprEventData.JsonData, distributedEventBus.GetEventType(daprEventData.Topic));
+            await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(daprEventData.Topic), eventData, daprEventData.MessageId, daprEventData.CorrelationId);
+        }
+        else
+        {
+            var eventData = daprSerializer.Deserialize(data, distributedEventBus.GetEventType(topic!));
+            await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(topic!), eventData);
+        }
+
         return Ok();
+    }
+
+    protected  virtual bool IsAbpDaprEventData(string data)
+    {
+        var document = JsonDocument.Parse(data);
+        var objects = document.RootElement.EnumerateObject().ToList();
+        return objects.Count == 5 &&
+               objects.Any(x => x.Name.Equals("PubSubName", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("Topic", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("MessageId", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("JsonData", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("CorrelationId", StringComparison.CurrentCultureIgnoreCase));
     }
 }

@@ -23,9 +23,13 @@ public class Comment : AggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, 
 
     public virtual DateTime CreationTime { get; set; }
 
+    public virtual string Url { get; set; } 
+
+    public virtual string IdempotencyToken { get; set; }
+
     protected Comment()
     {
-
+        
     }
 
     internal Comment(
@@ -35,6 +39,7 @@ public class Comment : AggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, 
         [NotNull] string text,
         Guid? repliedCommentId,
         Guid creatorId,
+        [CanBeNull] string url = null,
         Guid? tenantId = null)
         : base(id)
     {
@@ -42,6 +47,7 @@ public class Comment : AggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, 
         EntityId = Check.NotNullOrWhiteSpace(entityId, nameof(entityId), CommentConsts.MaxEntityIdLength);
         RepliedCommentId = repliedCommentId;
         CreatorId = creatorId;
+        Url = url;
         TenantId = tenantId;
 
         SetTextInternal(text);

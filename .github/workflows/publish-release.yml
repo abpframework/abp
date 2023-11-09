@@ -1,0 +1,44 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag Name'     
+        required: true
+      prerelease:
+        description: 'Pre-release?'     
+        required: true
+      branchName:
+        description: 'Branch Name'     
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branchName }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.tag_name }}
+          release_name: ${{ github.event.inputs.tag_name }}
+          draft: false
+          prerelease: ${{ github.event.inputs.prerelease }}
+
+      - name: Checkout code at tag
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.tag_name }}
+
+      - name: Build Project
+        run: |
+          # add your build commands here, depending on your project's requirements.
+          echo "Build project here"

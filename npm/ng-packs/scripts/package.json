@@ -9,6 +9,7 @@
     "build:schematics": "ts-node -r tsconfig-paths/register build-schematics.ts",
     "publish-packages": "ts-node -r tsconfig-paths/register publish.ts",
     "replace-with-tilde": "ts-node -r tsconfig-paths/register replace-with-tilde.ts",
+    "remove-tilde-or-caret": "ts-node -r tsconfig-paths/register remove-tilde-or-caret.ts",
     "copy-to-templates": "ts-node -r tsconfig-paths/register copy-packages-to-templates.ts"
   },
   "author": "",
@@ -27,6 +28,6 @@
     "esm": "^3.2.25",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "4.7.4"
+    "typescript": "~4.8.4"
   }
 }

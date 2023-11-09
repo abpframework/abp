@@ -22,7 +22,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
     {
     }
 
-    public async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id,
+    public virtual async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
         var query = from comment in (await GetDbSetAsync())
@@ -44,7 +44,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         return commentWithAuthor;
     }
 
-    public async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
+    public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
         string filter = null,
         string entityType = null,
         Guid? repliedCommentId = null,
@@ -78,7 +78,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         return await query.ToListAsync(token);
     }
 
-    public async Task<long> GetCountAsync(
+    public virtual async Task<long> GetCountAsync(
         string text = null,
         string entityType = null,
         Guid? repliedCommentId = null,
@@ -101,7 +101,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         return await query.LongCountAsync(token);
     }
 
-    public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
+    public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
         string entityType,
         string entityId,
         CancellationToken cancellationToken = default)
@@ -122,7 +122,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task DeleteWithRepliesAsync(
+    public virtual async Task DeleteWithRepliesAsync(
         Comment comment,
         CancellationToken cancellationToken = default)
     {
@@ -139,6 +139,11 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         }
 
         await DeleteAsync(comment, cancellationToken: GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<bool> ExistsAsync(string idempotencyToken, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync()).AnyAsync(x => x.IdempotencyToken == idempotencyToken, GetCancellationToken(cancellationToken));
     }
 
     protected virtual async Task<IQueryable<CommentWithAuthorQueryResultItem>> GetListQueryAsync(

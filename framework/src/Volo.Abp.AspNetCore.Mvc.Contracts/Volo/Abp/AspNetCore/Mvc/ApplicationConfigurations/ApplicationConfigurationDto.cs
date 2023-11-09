@@ -31,4 +31,20 @@ public class ApplicationConfigurationDto : IHasExtraProperties
     public ObjectExtensionsDto ObjectExtensions { get; set; }
 
     public ExtraPropertyDictionary ExtraProperties { get; set; }
+
+    public ApplicationConfigurationDto()
+    {
+        Localization = new ApplicationLocalizationConfigurationDto();
+        Auth = new ApplicationAuthConfigurationDto();
+        Setting = new ApplicationSettingConfigurationDto();
+        CurrentUser = new CurrentUserDto();
+        Features = new ApplicationFeatureConfigurationDto();
+        GlobalFeatures = new ApplicationGlobalFeatureConfigurationDto();
+        MultiTenancy = new MultiTenancyInfoDto();
+        CurrentTenant = new CurrentTenantDto();
+        Timing = new TimingDto();
+        Clock = new ClockDto();
+        ObjectExtensions = new ObjectExtensionsDto();
+        ExtraProperties = new ExtraPropertyDictionary();
+    }
 }

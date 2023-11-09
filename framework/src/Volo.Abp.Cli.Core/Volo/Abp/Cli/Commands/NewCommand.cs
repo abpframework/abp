@@ -8,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using StackExchange.Redis;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Events;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -24,40 +27,40 @@ namespace Volo.Abp.Cli.Commands;
 public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransientDependency
 {
     public const string Name = "new";
-    
+
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
-    
+
     public NewCommand(
-        ConnectionStringProvider connectionStringProvider, 
+        ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
         ICmdHelper cmdHelper,
-        IInstallLibsService installLibsService, 
+        IInstallLibsService installLibsService,
         CliService cliService,
-        AngularPwaSupportAdder angularPwaSupportAdder, 
+        AngularPwaSupportAdder angularPwaSupportAdder,
         InitialMigrationCreator initialMigrationCreator,
-        ThemePackageAdder themePackageAdder, 
-        ILocalEventBus eventBus, 
+        ThemePackageAdder themePackageAdder,
+        ILocalEventBus eventBus,
         IBundlingService bundlingService,
-        ITemplateInfoProvider templateInfoProvider, 
+        ITemplateInfoProvider templateInfoProvider,
         TemplateProjectBuilder templateProjectBuilder,
         AngularThemeConfigurer angularThemeConfigurer) :
         base(connectionStringProvider,
-            solutionPackageVersionFinder, 
-            cmdHelper, 
-            installLibsService, 
-            cliService, 
+            solutionPackageVersionFinder,
+            cmdHelper,
+            installLibsService,
+            cliService,
             angularPwaSupportAdder,
             initialMigrationCreator,
-            themePackageAdder, 
-            eventBus, 
+            themePackageAdder,
+            eventBus,
             bundlingService,
             angularThemeConfigurer)
     {
         TemplateInfoProvider = templateInfoProvider;
         TemplateProjectBuilder = templateProjectBuilder;
     }
-    
+
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
         var projectName = NamespaceHelper.NormalizeNamespace(commandLineArgs.Target);
@@ -89,6 +92,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         var projectArgs = await GetProjectBuildArgsAsync(commandLineArgs, template, projectName);
 
+        await CheckCreatingRequirements(projectArgs);
+
         var result = await TemplateProjectBuilder.BuildAsync(
             projectArgs
         );
@@ -97,26 +102,75 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
-        ConfigureAngularJsonForThemeSelection(projectArgs);
+        await CheckCreatedRequirements(projectArgs);
+
         ConfigureNpmPackagesForTheme(projectArgs);
+        await CreateOpenIddictPfxFilesAsync(projectArgs);
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
-        
+
         var skipInstallLibs = commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Long) || commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Short);
         if (!skipInstallLibs)
         {
             await RunInstallLibsForWebTemplateAsync(projectArgs);
+            ConfigureAngularJsonForThemeSelection(projectArgs);
         }
-        
+
         var skipBundling = commandLineArgs.Options.ContainsKey(Options.SkipBundling.Long) || commandLineArgs.Options.ContainsKey(Options.SkipBundling.Short);
         if (!skipBundling)
         {
             await RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(projectArgs);
         }
-            
+
         await ConfigurePwaSupportForAngular(projectArgs);
 
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
+    }
+
+    private Task CheckCreatingRequirements(ProjectBuildArgs projectArgs)
+    {
+        return Task.CompletedTask;
+    }
+
+    private async Task CheckCreatedRequirements(ProjectBuildArgs projectArgs)
+    {
+        var requirementWarningMessages = new List<string>();
+
+        if (projectArgs.ExtraProperties.ContainsKey("PreRequirements:Redis"))
+        {
+            var isConnected = false;
+            try
+            {
+                var redis = await ConnectionMultiplexer.ConnectAsync("127.0.0.1", options => options.ConnectTimeout = 3000);
+                isConnected = redis.IsConnected;
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
+            finally
+            {
+                if (!isConnected)
+                {
+                    requirementWarningMessages.Add("\t* Redis is not installed or not running on your computer.");
+                }
+            }
+        }
+
+        if (requirementWarningMessages.Any())
+        {
+            requirementWarningMessages.AddFirst("NOTICE: The following tools are required to run your solution:");
+
+            await EventBus.PublishAsync(new ProjectPostRequirementsCheckedEvent
+            { 
+                Message = requirementWarningMessages.JoinAsString(Environment.NewLine) 
+            }, false);
+
+            foreach (var error in requirementWarningMessages)
+            {
+                Logger.LogWarning(error);
+            }
+        }
     }
 
     public string GetUsageInfo()
@@ -149,6 +203,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
         sb.AppendLine("-sib|--skip-installing-libs                      (Doesn't run `abp install-libs` command after project creation)");
         sb.AppendLine("-sb|--skip-bundling                             (Doesn't run `abp bundle` command after Blazor Wasm project creation)");
+        sb.AppendLine("-sc|--skip-cache                                (Always download the latest from our server and refresh their templates folder cache)");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
         sb.AppendLine("");

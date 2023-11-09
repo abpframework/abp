@@ -33,7 +33,7 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 
 {{ else }}
 
-* `--separate-auth-server` 参数用于将Identity Server应用程序与API主机应用程序分隔开. 如果未指定, 则服务器上将只有一个端点.
+* `--separate-auth-server` 参数用于将Auth Server应用程序与API主机应用程序分隔开. 如果未指定, 则服务器上将只有一个端点.
 
 {{ end }}
 

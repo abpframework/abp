@@ -82,7 +82,7 @@ $(function (){
                                 commentsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        _dataTable.ajax.reload();
+                                        _dataTable.ajax.reloadEx();
                                         abp.notify.success(l('SuccessfullyDeleted'));
                                     });
                             }
@@ -110,6 +110,16 @@ $(function (){
                 render: function (data) {
                     if (data !== null) {
                         return GetFilterableDatatableContent('#EntityType', $.fn.dataTable.render.text().display(data));
+                    }
+                    return "";
+                }
+            },
+            {
+                title: l("URL"),
+                data: "url",
+                render: function (data, type, row) {
+                    if (data !== null) {
+                        return '<a href="' + data + '#comment-'+ row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
                     }
                     return "";
                 }
@@ -157,11 +167,11 @@ $(function (){
         
         $(inputSelector).val(value);
         
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 
     filterForm.submit(function (e){
         e.preventDefault();
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 });

@@ -12,6 +12,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Values;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
@@ -68,8 +69,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         return list;
     }
 
-    [CanBeNull]
-    protected virtual EntityChangeInfo CreateEntityChangeOrNull(EntityEntry entityEntry)
+    protected virtual EntityChangeInfo? CreateEntityChangeOrNull(EntityEntry entityEntry)
     {
         var entity = entityEntry.Entity;
 
@@ -85,14 +85,16 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             case EntityState.Modified:
                 changeType = IsDeleted(entityEntry) ? EntityChangeType.Deleted : EntityChangeType.Updated;
                 break;
-            case EntityState.Detached:
             case EntityState.Unchanged:
+                changeType = EntityChangeType.Updated; // Navigation property changes.
+                break;
+            case EntityState.Detached:
             default:
                 return null;
         }
 
         var entityId = GetEntityId(entity);
-        if (entityId == null && changeType != EntityChangeType.Created)
+        if (entityId == null && changeType != EntityChangeType.Created && !EntityHelper.IsValueObject(entity))
         {
             return null;
         }
@@ -137,20 +139,26 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         }
     }
 
-    protected virtual string GetEntityId(object entityAsObj)
+    protected virtual string? GetEntityId(object entityAsObj)
     {
-        if (!(entityAsObj is IEntity entity))
+        if ((entityAsObj is IEntity entity))
         {
-            throw new AbpException($"Entities should implement the {typeof(IEntity).AssemblyQualifiedName} interface! Given entity does not implement it: {entityAsObj.GetType().AssemblyQualifiedName}");
+            var keys = entity.GetKeys();
+            if (keys.All(k => k == null))
+            {
+                return null;
+            }
+
+            return keys.JoinAsString(",");
         }
 
-        var keys = entity.GetKeys();
-        if (keys.All(k => k == null))
+        if (EntityHelper.IsValueObject(entityAsObj))
         {
             return null;
         }
 
-        return keys.JoinAsString(",");
+        throw new AbpException($"Entities should implement the {typeof(IEntity).AssemblyQualifiedName} interface or {typeof(ValueObject).AssemblyQualifiedName} class! " +
+                               $"Given entity does not implement it: {entityAsObj.GetType().AssemblyQualifiedName}");
     }
 
     /// <summary>
@@ -170,11 +178,26 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             {
                 propertyChanges.Add(new EntityPropertyChangeInfo
                 {
-                    NewValue = isDeleted ? null : JsonSerializer.Serialize(propertyEntry.CurrentValue).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
-                    OriginalValue = isCreated ? null : JsonSerializer.Serialize(propertyEntry.OriginalValue).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
+                    NewValue = isDeleted ? null : JsonSerializer.Serialize(propertyEntry.CurrentValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
+                    OriginalValue = isCreated ? null : JsonSerializer.Serialize(propertyEntry.OriginalValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
                     PropertyName = property.Name,
-                    PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName
+                    PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName!
                 });
+            }
+        }
+
+        if (entityEntry.State == EntityState.Unchanged)
+        {
+            foreach (var navigation in entityEntry.Navigations)
+            {
+                if (navigation.IsModified || (navigation is ReferenceEntry && navigation.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified))
+                {
+                    propertyChanges.Add(new EntityPropertyChangeInfo
+                    {
+                        PropertyName = navigation.Metadata.Name,
+                        PropertyTypeFullName = navigation.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!
+                    });
+                }
             }
         }
 
@@ -199,15 +222,29 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
     protected virtual bool ShouldSaveEntityHistory(EntityEntry entityEntry, bool defaultValue = false)
     {
-        if (entityEntry.State == EntityState.Detached ||
-            entityEntry.State == EntityState.Unchanged)
+        if (entityEntry.State == EntityState.Detached)
         {
+            return false;
+        }
+
+        if (entityEntry.State == EntityState.Unchanged)
+        {
+            if (entityEntry.Navigations.Any(navigationEntry => navigationEntry.IsModified))
+            {
+                return true;
+            }
+
+            if (entityEntry.Navigations.Where(x => x is ReferenceEntry).Cast<ReferenceEntry>().Any(x => x.TargetEntry != null && x.TargetEntry.State == EntityState.Modified))
+            {
+                return true;
+            }
+
             return false;
         }
 
         var entityType = entityEntry.Metadata.ClrType;
 
-        if (!EntityHelper.IsEntity(entityType))
+        if (!EntityHelper.IsEntity(entityType) && !EntityHelper.IsValueObject(entityType))
         {
             return false;
         }
@@ -363,10 +400,10 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
                             // Add foreign key
                             entityChange.PropertyChanges.Add(new EntityPropertyChangeInfo
                             {
-                                NewValue = JsonSerializer.Serialize(propertyEntry.CurrentValue),
-                                OriginalValue = JsonSerializer.Serialize(propertyEntry.OriginalValue),
+                                NewValue = JsonSerializer.Serialize(propertyEntry.CurrentValue!),
+                                OriginalValue = JsonSerializer.Serialize(propertyEntry.OriginalValue!),
                                 PropertyName = property.Name,
-                                PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName
+                                PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName!
                             });
                         }
 
@@ -375,7 +412,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
                     if (propertyChange.OriginalValue == propertyChange.NewValue)
                     {
-                        var newValue = JsonSerializer.Serialize(propertyEntry.CurrentValue);
+                        var newValue = JsonSerializer.Serialize(propertyEntry.CurrentValue!);
                         if (newValue == propertyChange.NewValue)
                         {
                             // No change

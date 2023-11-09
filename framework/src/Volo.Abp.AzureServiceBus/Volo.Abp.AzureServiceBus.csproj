@@ -4,7 +4,9 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.AzureServiceBus</AssemblyName>
         <PackageId>Volo.Abp.AzureServiceBus</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -15,7 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.8.1" />
+        <PackageReference Include="Azure.Messaging.ServiceBus" />
         <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
         <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
     </ItemGroup>

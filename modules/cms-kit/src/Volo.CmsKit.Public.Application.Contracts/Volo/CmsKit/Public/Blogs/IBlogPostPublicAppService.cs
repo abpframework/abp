@@ -17,5 +17,8 @@ public interface IBlogPostPublicAppService : IApplicationService
     Task<PagedResultDto<CmsUserDto>> GetAuthorsHasBlogPostsAsync(BlogPostFilteredPagedAndSortedResultRequestDto input);
 
     Task<CmsUserDto> GetAuthorHasBlogPostAsync(Guid id);
+
     Task DeleteAsync(Guid id);
+
+    Task<string> GetTagNameAsync([NotNull] Guid tagId);
 }

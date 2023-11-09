@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy.Localization;
 
 namespace Volo.Abp.MultiTenancy;
 
@@ -9,18 +11,21 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransi
     protected virtual ITenantResolver TenantResolver { get; }
     protected virtual ITenantStore TenantStore { get; }
     protected virtual ITenantResolveResultAccessor TenantResolveResultAccessor { get; }
+    protected virtual IStringLocalizer<AbpMultiTenancyResource> StringLocalizer { get; }
 
     public TenantConfigurationProvider(
         ITenantResolver tenantResolver,
         ITenantStore tenantStore,
-        ITenantResolveResultAccessor tenantResolveResultAccessor)
+        ITenantResolveResultAccessor tenantResolveResultAccessor,
+        IStringLocalizer<AbpMultiTenancyResource> stringLocalizer)
     {
         TenantResolver = tenantResolver;
         TenantStore = tenantStore;
         TenantResolveResultAccessor = tenantResolveResultAccessor;
+        StringLocalizer = stringLocalizer;
     }
 
-    public virtual async Task<TenantConfiguration> GetAsync(bool saveResolveResult = false)
+    public virtual async Task<TenantConfiguration?> GetAsync(bool saveResolveResult = false)
     {
         var resolveResult = await TenantResolver.ResolveTenantIdOrNameAsync();
 
@@ -29,7 +34,7 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransi
             TenantResolveResultAccessor.Result = resolveResult;
         }
 
-        TenantConfiguration tenant = null;
+        TenantConfiguration? tenant = null;
         if (resolveResult.TenantIdOrName != null)
         {
             tenant = await FindTenantAsync(resolveResult.TenantIdOrName);
@@ -38,8 +43,8 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransi
             {
                 throw new BusinessException(
                     code: "Volo.AbpIo.MultiTenancy:010001",
-                    message: "Tenant not found!",
-                    details: "There is no tenant with the tenant id or name: " + resolveResult.TenantIdOrName
+                    message: StringLocalizer["TenantNotFoundMessage"],
+                    details: StringLocalizer["TenantNotFoundDetails", resolveResult.TenantIdOrName]
                 );
             }
 
@@ -47,8 +52,8 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransi
             {
                 throw new BusinessException(
                     code: "Volo.AbpIo.MultiTenancy:010002",
-                    message: "Tenant not active!",
-                    details: "The tenant is no active with the tenant id or name: " + resolveResult.TenantIdOrName
+                    message: StringLocalizer["TenantNotActiveMessage"],
+                    details: StringLocalizer["TenantNotActiveDetails", resolveResult.TenantIdOrName]
                 );
             }
         }
@@ -56,7 +61,7 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransi
         return tenant;
     }
 
-    protected virtual async Task<TenantConfiguration> FindTenantAsync(string tenantIdOrName)
+    protected virtual async Task<TenantConfiguration?> FindTenantAsync(string tenantIdOrName)
     {
         if (Guid.TryParse(tenantIdOrName, out var parsedTenantId))
         {

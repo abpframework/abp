@@ -14,7 +14,7 @@ namespace Volo.Abp.Application.Dtos;
 [Serializable]
 public abstract class ExtensibleCreationAuditedEntityWithUserDto<TPrimaryKey, TUserDto> : ExtensibleCreationAuditedEntityDto<TPrimaryKey>, ICreationAuditedObject<TUserDto>
 {
-    public TUserDto Creator { get; set; }
+    public TUserDto? Creator { get; set; }
 
     protected ExtensibleCreationAuditedEntityWithUserDto()
         : this(true)
@@ -39,7 +39,7 @@ public abstract class ExtensibleCreationAuditedEntityWithUserDto<TPrimaryKey, TU
 public abstract class ExtensibleCreationAuditedEntityWithUserDto<TUserDto> : ExtensibleCreationAuditedEntityDto,
     ICreationAuditedObject<TUserDto>
 {
-    public TUserDto Creator { get; set; }
+    public TUserDto? Creator { get; set; }
 
     protected ExtensibleCreationAuditedEntityWithUserDto()
         : this(true)

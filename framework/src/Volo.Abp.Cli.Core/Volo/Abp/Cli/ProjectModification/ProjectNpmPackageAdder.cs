@@ -125,7 +125,6 @@ public class ProjectNpmPackageAdder : ITransientDependency
 
         Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
 
-
         if (version == null)
         {
             version = DetectAbpVersionOrNull(Path.Combine(directory, "package.json"));
@@ -171,7 +170,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
 
             foreach (var package in packages)
             {
-                if (package.Name.StartsWith("@abp/") || package.Name.StartsWith("@volo/"))
+                if ((package.Name.StartsWith("@abp/") || package.Name.StartsWith("@volo/")) && !package.Name.Contains("leptonx"))
                 {
                     return package.Value.ToString();
                 }

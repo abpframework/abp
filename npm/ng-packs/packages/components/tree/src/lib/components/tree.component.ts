@@ -1,16 +1,18 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   EventEmitter,
   Inject,
   Input,
+  OnInit,
   Optional,
   Output,
   TemplateRef,
   ViewEncapsulation,
-  OnInit,
 } from '@angular/core';
-import { NzFormatBeforeDropEvent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzFormatBeforeDropEvent, NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
@@ -26,6 +28,7 @@ export type DropEvent = NzFormatEmitEvent & { pos: number };
   styleUrls: ['tree.component.scss'],
   encapsulation: ViewEncapsulation.None,
   providers: [SubscriptionService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeComponent implements OnInit {
   dropPosition: number;
@@ -38,6 +41,7 @@ export class TreeComponent implements OnInit {
     @Optional()
     @Inject(DISABLE_TREE_STYLE_LOADING_TOKEN)
     private disableTreeStyleLoading: boolean | undefined,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   @ContentChild('menu') menu: TemplateRef<any>;
@@ -77,11 +81,31 @@ export class TreeComponent implements OnInit {
     this.subscriptionService.addOne(loaded$);
   }
 
-  onSelectedNodeChange(node) {
+  private findNode(target: any, nodes: any[]) {
+    for (const node of nodes) {
+      if (node.key === target.id) {
+        return node;
+      }
+      if (node.children) {
+        let res = this.findNode(target, node.children);
+        if (res) {
+          return res;
+        }
+      }
+    }
+    return null;
+  }
+
+  onSelectedNodeChange(node: NzTreeNode) {
     this.selectedNode = node.origin.entity;
     if (this.changeCheckboxWithNode) {
+      let newVal;
+      if (node.isChecked) {
+        newVal = this.checkedKeys.filter(x => x !== node.key);
+      } else {
+        newVal = [...this.checkedKeys, node.key];
+      }
       this.selectedNodeChange.emit(node);
-      const newVal = [...this.checkedKeys, node.key];
       this.checkedKeys = newVal;
       this.checkedKeysChange.emit(newVal);
     } else {
@@ -110,5 +134,11 @@ export class TreeComponent implements OnInit {
 
   initDropdown(key: string, dropdown: NgbDropdown) {
     this.dropdowns[key] = dropdown;
+  }
+
+  setSelectedNode(node: any) {
+    let newSelectedNode = this.findNode(node, this.nodes);
+    this.selectedNode = { ...newSelectedNode };
+    this.cdr.markForCheck();
   }
 }

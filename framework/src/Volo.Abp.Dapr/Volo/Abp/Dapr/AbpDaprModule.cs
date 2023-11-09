@@ -33,14 +33,14 @@ public class AbpDaprModule : AbpModule
                 var confEnv = configuration["DAPR_API_TOKEN"];
                 if (!confEnv.IsNullOrWhiteSpace())
                 {
-                    options.DaprApiToken = confEnv;
+                    options.DaprApiToken = confEnv!;
                 }
                 else
                 {
                     var env = Environment.GetEnvironmentVariable("DAPR_API_TOKEN");
                     if (!env.IsNullOrWhiteSpace())
                     {
-                        options.DaprApiToken = env;
+                        options.DaprApiToken = env!;
                     }
                 }
             }
@@ -50,14 +50,14 @@ public class AbpDaprModule : AbpModule
                 var confEnv = configuration["APP_API_TOKEN"];
                 if (!confEnv.IsNullOrWhiteSpace())
                 {
-                    options.AppApiToken = confEnv;
+                    options.AppApiToken = confEnv!;
                 }
                 else
                 {
                     var env = Environment.GetEnvironmentVariable("APP_API_TOKEN");
                     if (!env.IsNullOrWhiteSpace())
                     {
-                        options.AppApiToken = env;
+                        options.AppApiToken = env!;
                     }
                 }
             }

@@ -1,11 +1,11 @@
-import { ABP, LocalizationService } from '@abp/ng.core';
+import { ABP, ExtensionEnumFieldDto, LocalizationService } from '@abp/ng.core';
 import { merge, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EXTRA_PROPERTIES_KEY } from '../constants/extra-properties';
 import { ObjectExtensions } from '../models/object-extensions';
 import { PropCallback } from '../models/props';
 
-export function createEnum(members: ObjectExtensions.ExtensionEnumFieldDto[]) {
+export function createEnum(members: ExtensionEnumFieldDto[]) {
   const enumObject: any = {};
 
   members.forEach(({ name = '', value }) => {

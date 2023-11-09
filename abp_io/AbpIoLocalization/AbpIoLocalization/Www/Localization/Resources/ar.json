@@ -16,7 +16,7 @@
     "Tutorial": "الدورة التعليمية",
     "UsingCLI": "باستخدام واجهة الأوامر CLI",
     "SeeDetails": "انظر التفاصيل",
-    "AbpShortDescription": "إطار عمل ABP هو بنية أساسية كاملة لإنشاء تطبيقات ويب حديثة باتباع أفضل ممارسات واتفاقيات تطوير البرامج.",
+    "AbpShortDescription": "يعد ABP Framework بنية تحتية كاملة لإنشاء حلول برمجية ذات بنيات حديثة تعتمد على النظام الأساسي ASP.NET Core.",
     "SourceCodeUpper": "الكود الأصل",
     "LatestReleaseLogs": "أحدث سجلات الإصدار",
     "Infrastructure": "البنية التحتية",
@@ -404,6 +404,9 @@
     "SeeTheScreenshot": "انظر الى الصورة",
     "Details": "التفاصيل",
     "ApplicationModuleExplanation1": "إنشاء حل وحدة تطبيق ذات طبقات كاملة وقابلة لإعادة الاستخدام.",
-    "ApplicationModuleExplanation2": "يمكنك استخدام هذا الخيار لإنشاء وحدات نمطية لتطبيقك المعياري."
+    "ApplicationModuleExplanation2": "يمكنك استخدام هذا الخيار لإنشاء وحدات نمطية لتطبيقك المعياري.",
+    "CreateSolutionFolder": "إنشاء مجلد الحل",
+    "CreateSolutionFolderOption": "يحدد ما إذا كان المشروع سيكون في مجلد جديد في مجلد الإخراج أو مجلد الإخراج مباشرة.",
+    "BooksPageTitle": "كتب ABP"
   }
 }

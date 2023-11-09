@@ -15,11 +15,11 @@ public class IncomingEventRecord :
 
     public ExtraPropertyDictionary ExtraProperties { get; private set; }
 
-    public string MessageId { get; private set; }
+    public string MessageId { get; private set; } = default!;
 
-    public string EventName { get; private set; }
+    public string EventName { get; private set; } = default!;
 
-    public byte[] EventData { get; private set; }
+    public byte[] EventData { get; private set; } = default!;
 
     public DateTime CreationTime { get; private set; }
 
@@ -48,13 +48,20 @@ public class IncomingEventRecord :
 
     public IncomingEventInfo ToIncomingEventInfo()
     {
-        return new IncomingEventInfo(
+        var info = new IncomingEventInfo(
             Id,
             MessageId,
             EventName,
             EventData,
             CreationTime
         );
+
+        foreach (var property in ExtraProperties)
+        {
+            info.SetProperty(property.Key, property.Value);
+        }
+
+        return info;
     }
 
     public void MarkAsProcessed(DateTime processedTime)

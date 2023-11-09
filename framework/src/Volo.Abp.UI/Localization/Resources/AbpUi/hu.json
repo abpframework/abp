@@ -48,6 +48,9 @@
     "Search": "Keresés",
     "ItemWillBeDeletedMessageWithFormat": "{0} törlésre kerül!",
     "ItemWillBeDeletedMessage": "Ez az elem törlődik!",
-    "ManageYourAccount": "Kezelje fiókját"
+    "ManageYourAccount": "Kezelje fiókját",
+    "OthersGroup": "Egyéb",
+    "Today": "Ma",
+    "Apply": "Alkalmaz"
   }
 }

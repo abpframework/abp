@@ -4,7 +4,9 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.BackgroundJobs</AssemblyName>
     <PackageId>Volo.Abp.BackgroundJobs</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -19,6 +21,7 @@
     <ProjectReference Include="..\Volo.Abp.BackgroundWorkers\Volo.Abp.BackgroundWorkers.csproj" />
     <ProjectReference Include="..\Volo.Abp.DistributedLocking.Abstractions\Volo.Abp.DistributedLocking.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Guids\Volo.Abp.Guids.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
     <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
   </ItemGroup>
 

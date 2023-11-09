@@ -24,7 +24,7 @@ $.extend( $.validator.messages, {
 	creditcard: "Моля, въведете валиден номер на кредитна карта.",
 	equalTo: "Моля, въведете същата стойност отново.",
 	extension: "Моля, въведете стойност с валидно разширение.",
-	maxlength: $.validator.format( "Моля, въведете повече от {0} символа." ),
+	maxlength: $.validator.format( "Моля, въведете не повече от {0} символа." ),
 	minlength: $.validator.format( "Моля, въведете поне {0} символа." ),
 	rangelength: $.validator.format( "Моля, въведете стойност с дължина между {0} и {1} символа." ),
 	range: $.validator.format( "Моля, въведете стойност между {0} и {1}." ),

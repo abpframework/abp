@@ -23,14 +23,14 @@ namespace Volo.Abp.AspNetCore.Mvc;
 
 public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingConcerns
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
     [Obsolete("Use LazyServiceProvider instead.")]
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
     protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 
-    protected Type ObjectMapperContext { get; set; }
+    protected Type? ObjectMapperContext { get; set; }
     protected IObjectMapper ObjectMapper => LazyServiceProvider.LazyGetService<IObjectMapper>(provider =>
         ObjectMapperContext == null
             ? provider.GetRequiredService<IObjectMapper>()
@@ -40,7 +40,7 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
 
     protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
     protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ICurrentUser>();
 
@@ -48,7 +48,7 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
 
     protected IAuthorizationService AuthorizationService => LazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
 
-    protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
+    protected IUnitOfWork? CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
     protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
 
@@ -70,16 +70,16 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
             return _localizer;
         }
     }
-    private IStringLocalizer _localizer;
+    private IStringLocalizer? _localizer;
 
-    protected Type LocalizationResource {
+    protected Type? LocalizationResource {
         get => _localizationResource;
         set {
             _localizationResource = value;
             _localizer = null;
         }
     }
-    private Type _localizationResource = typeof(DefaultResource);
+    private Type? _localizationResource = typeof(DefaultResource);
 
     public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
 
@@ -104,12 +104,12 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
         return localizer;
     }
 
-    protected virtual RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+    protected virtual RedirectResult RedirectSafely(string returnUrl, string? returnUrlHash = null)
     {
         return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
     }
 
-    protected virtual string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
+    protected virtual string GetRedirectUrl(string returnUrl, string? returnUrlHash = null)
     {
         returnUrl = NormalizeReturnUrl(returnUrl);
 

@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization.Metadata;
 using Microsoft.Extensions.Options;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Json.SystemTextJson;
 
-public class AbpDefaultJsonTypeInfoResolver : DefaultJsonTypeInfoResolver, ITransientDependency
+public class AbpDefaultJsonTypeInfoResolver : DefaultJsonTypeInfoResolver
 {
     public AbpDefaultJsonTypeInfoResolver(IOptions<AbpSystemTextJsonSerializerModifiersOptions> options)
     {

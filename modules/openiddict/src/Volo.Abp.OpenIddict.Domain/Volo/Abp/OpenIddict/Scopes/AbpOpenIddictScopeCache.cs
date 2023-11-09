@@ -31,13 +31,13 @@ public class AbpOpenIddictScopeCache : AbpOpenIddictCacheBase<OpenIddictScope, O
         await Cache.SetAsync($"{nameof(FindByNameAsync)}_{await Store.GetNameAsync(scope, cancellationToken)}", scope, token: cancellationToken);
     }
 
-    public virtual async ValueTask<OpenIddictScopeModel> FindByIdAsync(string identifier, CancellationToken cancellationToken)
+    public virtual async ValueTask<OpenIddictScopeModel> FindByIdAsync(string id, CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(identifier, nameof(identifier));
+        Check.NotNullOrEmpty(id, nameof(id));
 
-        return await Cache.GetOrAddAsync($"{nameof(FindByIdAsync)}_{identifier}",  async () =>
+        return await Cache.GetOrAddAsync($"{nameof(FindByIdAsync)}_{id}",  async () =>
         {
-            var scope = await Store.FindByIdAsync(identifier, cancellationToken);
+            var scope = await Store.FindByIdAsync(id, cancellationToken);
             if (scope != null)
             {
                 await AddAsync(scope, cancellationToken);

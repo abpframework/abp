@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
@@ -108,6 +109,12 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
+            var displayUrl = Request.GetDisplayUrl();
+            var decodedUrl = HttpUtility.UrlDecode(displayUrl);
+            if (decodedUrl != displayUrl)
+            {
+                return Redirect(decodedUrl);
+            }
             try
             {
                 return await SetPageAsync();
@@ -327,6 +334,11 @@ namespace Volo.Docs.Pages.Documents.Project
                     $"{DocsAppConsts.Latest}",
                     DocsAppConsts.Latest,
                     true);
+                
+                if(string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
+                {
+                    Version = RemoveVersionPrefix(Project.LatestVersionBranchName);
+                }
             }
 
             VersionSelectItems = versions.Select(v => new SelectListItem

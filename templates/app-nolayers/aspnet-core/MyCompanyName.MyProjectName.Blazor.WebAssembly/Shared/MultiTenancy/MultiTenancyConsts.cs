@@ -1,4 +1,4 @@
-﻿namespace MyCompanyName.MyProjectName.Shared.MultiTenancy;
+﻿namespace MyCompanyName.MyProjectName.MultiTenancy;
 
 public static class MultiTenancyConsts
 {

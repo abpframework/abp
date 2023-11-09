@@ -78,7 +78,7 @@ export class ThemeBasicModule {
         },
         {
           provide: VALIDATION_TARGET_SELECTOR,
-          useValue: '*:has(> .form-control)',
+          useValue: '.form-group',
         },
         {
           provide: VALIDATION_INVALID_CLASSES,

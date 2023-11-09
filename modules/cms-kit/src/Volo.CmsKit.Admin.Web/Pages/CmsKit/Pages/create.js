@@ -92,12 +92,15 @@ $(function () {
     initEditor();
 
     var editor;
+    var addWidgetButton;
     function initEditor() {
         var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
+        addWidgetButton = createAddWidgetButton();
+        
         editor = new toastui.Editor({
             el: $editorContainer[0],
             usageStatistics: false,
@@ -117,7 +120,7 @@ $(function () {
                 ['code', 'codeblock'],
                 // Using Option: Customize the last button
                 [{
-                    el: createAddWidgetButton(),
+                    el: addWidgetButton,
                     command: 'bold',
                     tooltip: 'Add Widget'
                 }]
@@ -171,27 +174,48 @@ $(function () {
         editor.insertText(txt);
     });
 
+    var $previewArea;
     $('.tab-item').on('click', function () {
         if ($(this).attr("aria-label") == 'Preview' && editor.isMarkdownMode()) {
+            
+            if(!$previewArea){
+                $previewArea = $("#ContentEditor .toastui-editor-md-preview");
+                $previewArea.replaceWith("<iframe id='previewArea' style='height: 100%; width: 100%; border: 0px; display: inline;'></iframe>");
+            }
+            
+            $previewArea.attr("srcdoc", '');
 
             let content = editor.getMarkdown();
+            addWidgetButton.disabled = true;
             localStorage.setItem('content', content);
 
             $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
+                var style = styleEditor.getValue();
+                var script = scriptEditor.getValue();
 
-                let style = styleEditor.getValue();
-
-                $('#editor-preview-style').remove();
-
-                $('head').append('<style id="editor-preview-style">' + style + '</style>');
-
-                editor.setHTML(result);
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(result, 'text/html');
                 
-                var highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
-                highllightedText.removeClass('toastui-editor-md-preview-highlight');
+                var head = doc.querySelector('head');
+                var styleElement = doc.createElement('style');
+                styleElement.type = 'text/css';
+                styleElement.innerHTML = style;
+                head.append(styleElement);
+
+                var body = doc.querySelector('body');
+                var scriptElement = doc.createElement('script');
+                scriptElement.type = 'text/javascript';
+                scriptElement.innerHTML = script;
+                body.append(scriptElement);
+                
+                result = new XMLSerializer().serializeToString(doc);
+                
+                $previewArea = $("#previewArea");
+                $previewArea.attr("srcdoc", result);
             });
         }
         else if ($(this).attr("aria-label") == 'Write'){
+            addWidgetButton.disabled = false;
             var retrievedObject = localStorage.getItem('content');
             editor.setMarkdown(retrievedObject);
         }

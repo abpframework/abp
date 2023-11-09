@@ -5,11 +5,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
 public class WidgetResourceItem
 {
-    [CanBeNull]
-    public string Src { get; }
+    public string? Src { get; }
 
-    [CanBeNull]
-    public Type Type { get; }
+    public Type? Type { get; }
 
     public WidgetResourceItem([NotNull] string src)
     {

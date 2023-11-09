@@ -21,6 +21,8 @@ Open a command line window in the folder of the `Web` or `HttpApi.Host` project 
 abp add-package Volo.Abp.Swashbuckle
 ```
 
+> If you haven't done it yet, you first need to install the [ABP CLI](../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Swashbuckle).
+
 ### Manual Installation
 
 If you want to manually install;
@@ -43,7 +45,7 @@ If you want to manually install;
 
 ## Configuration
 
-First, we need to use `AddAbpSwaggerGen` extension to configure Swagger in `ConfigureServices` method of our module.
+First, we need to use `AddAbpSwaggerGen` extension to configure Swagger in `ConfigureServices` method of our module:
 
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -63,21 +65,21 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-Then we can use Swagger UI by calling `UseAbpSwaggerUI` method in the `OnApplicationInitialization` method of our module.
+Then we can use Swagger UI by calling `UseAbpSwaggerUI` method in the `OnApplicationInitialization` method of our module:
 
 ```csharp
 public override void OnApplicationInitialization(ApplicationInitializationContext context)
 {
     var app = context.GetApplicationBuilder();
 
-    //... other configarations.
+    //... other configurations.
 
     app.UseAbpSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API");
     });
     
-    //... other configarations.
+    //... other configurations.
 }
 ```
 
@@ -103,9 +105,7 @@ For non MVC/Tiered applications, we need to configure Swagger with OAUTH to hand
 
 > ABP Framework uses OpenIddict by default. To get more information about OpenIddict, check this [documentation](../Modules/OpenIddict.md). 
 
-
-
-To do that, we need to use `AddAbpSwaggerGenWithOAuth` extension to configure Swagger with OAuth issuer and scopes in `ConfigureServices` method of our module.
+To do that, we need to use `AddAbpSwaggerGenWithOAuth` extension to configure Swagger with OAuth issuer and scopes in `ConfigureServices` method of our module:
 
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -130,17 +130,14 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-Then we can use Swagger UI by calling `UseAbpSwaggerUI` method in the `OnApplicationInitialization` method of our module.
-
-> Do not forget to set `OAuthClientId` and `OAuthClientSecret`.
-
+Then we can use Swagger UI by calling `UseAbpSwaggerUI` method in the `OnApplicationInitialization` method of our module:
 
 ```csharp
 public override void OnApplicationInitialization(ApplicationInitializationContext context)
 {
     var app = context.GetApplicationBuilder();
 
-    //... other configarations.
+    //... other configurations.
 
     app.UseAbpSwaggerUI(options =>
     {
@@ -151,6 +148,43 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
         options.OAuthClientSecret("1q2w3e*");  // clientSecret
     });
     
-    //... other configarations.
+    //... other configurations.
 }
 ```
+
+> Do not forget to set `OAuthClientId` and `OAuthClientSecret`.
+
+## Using Swagger with OIDC
+
+You may also want to configure swagger using **OpenIdConnect** instead of OAUTH. This is especially useful when you need to configure different metadata address than the issuer in cases such as when you deploy your application to kubernetes cluster or docker. In these cases, metadata address will be used in sign-in process to reach the valid authentication server discovery endpoint over the internet and use the internal network to validate the obtained token.
+
+To do that, we need to use `AddAbpSwaggerGenWithOidc` extension to configure Swagger with OAuth issuer and scopes in `ConfigureServices` method of our module:
+
+```csharp
+context.Services.AddAbpSwaggerGenWithOidc(
+    configuration["AuthServer:Authority"],
+    scopes: new[] { "SwaggerDemo" },
+    // "authorization_code"
+    flows: new[] { AbpSwaggerOidcFlows.AuthorizationCode },
+    // When deployed on K8s, should be metadata URL of the reachable DNS over internet like https://myauthserver.company.com
+    discoveryEndpoint: configuration["AuthServer:Authority"],
+    options =>
+    {
+        options.SwaggerDoc("v1", new OpenApiInfo { Title = "SwaggerDemo API", Version = "v1" });
+        options.DocInclusionPredicate((docName, description) => true);
+        options.CustomSchemaIds(type => type.FullName);
+    });
+```
+
+The `flows` is a list of default oidc flows that is supported by the oidc-provider (authserver). You can see the default supported flows below:
+
+- `AbpSwaggerOidcFlows.AuthorizationCode`: The `"authorization_code"` flow is the **default and suggested** flow. **Doesn't require a client secret** when even there is a field for it.
+-  `AbpSwaggerOidcFlows.Implicit`: The deprecated `"implicit"` flow that was used for javascript applications.
+- `AbpSwaggerOidcFlows.Password`: The legacy `password` flow which is also known as Resource Ownder Password flow. You need to provide a user name, password and client secret for it.
+- `AbpSwaggerOidcFlows.ClientCredentials`: The `"client_credentials"` flow that is used for server to server interactions.
+
+You can define one or many flows which will be shown in the Authorize modal. You can set it **null which will use the default "authorization_code"** flow.
+
+The `discoveryEndpoint` is the reachable openid-provider endpoint for the `.well-known/openid-configuration`. You can set it to **null which will use default AuthServer:Authority** appsettings configuration. If you are deploying your applications to a kubernetes cluster or docker swarm, you should to set the `discoveryEndpoint` as real DNS that should be reachable over the internet. 
+
+> If are having problems with seeing the authorization modal, check the browser console logs and make sure you have a correct and reachable `discoveryEndpoint`

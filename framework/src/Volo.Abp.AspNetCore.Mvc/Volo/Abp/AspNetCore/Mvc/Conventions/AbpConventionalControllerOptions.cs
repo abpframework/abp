@@ -20,6 +20,8 @@ public class AbpConventionalControllerOptions
     /// </summary>
     public bool UseV3UrlStyle { get; set; }
 
+    public string[] IgnoredUrlSuffixesInControllerNames { get; set; } = new[] { "Integration" };
+
     public AbpConventionalControllerOptions()
     {
         ConventionalControllerSettings = new ConventionalControllerSettingList();
@@ -33,7 +35,7 @@ public class AbpConventionalControllerOptions
 
     public AbpConventionalControllerOptions Create(
         Assembly assembly,
-        [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
+        Action<ConventionalControllerSetting>? optionsAction = null)
     {
         var setting = new ConventionalControllerSetting(
             assembly,

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.SettingManagement.Localization;
@@ -11,7 +12,7 @@ public class EmailingPageContributor : SettingPageContributorBase
 {
     public EmailingPageContributor()
     {
-        RequiredFeatures(SettingManagementFeatures.Enable);
+        RequiredTenantSideFeatures(SettingManagementFeatures.Enable);
         RequiredTenantSideFeatures(SettingManagementFeatures.AllowChangingEmailSettings);
         RequiredPermissions(SettingManagementPermissions.Emailing);
     }

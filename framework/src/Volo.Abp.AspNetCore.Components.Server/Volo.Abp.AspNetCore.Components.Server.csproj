@@ -4,7 +4,9 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
         <IsPackable>true</IsPackable>
         <OutputType>Library</OutputType>
         <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
@@ -12,11 +14,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj" />
-      <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Contracts\Volo.Abp.AspNetCore.Mvc.Contracts.csproj" />
-      <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
-      <ProjectReference Include="..\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
-      <ProjectReference Include="..\Volo.Abp.AspNetCore.SignalR\Volo.Abp.AspNetCore.SignalR.csproj" />
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj" />
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Contracts\Volo.Abp.AspNetCore.Mvc.Contracts.csproj" />
+        <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.SignalR\Volo.Abp.AspNetCore.SignalR.csproj" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+        <PackageReference Include="IdentityModel" />
     </ItemGroup>
 
 </Project>

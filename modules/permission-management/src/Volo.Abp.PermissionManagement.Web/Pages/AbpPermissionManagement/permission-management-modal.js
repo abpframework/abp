@@ -234,6 +234,14 @@ var abp = abp || {};
                     $('.tab-pane input[type="checkbox"]')
                         .not(':disabled')
                         .prop('checked', true);
+
+                    $('input[name="SelectAllInThisTab"]').each(function () {
+                        var $this = $(this);
+                        if($this.is(':indeterminate') === true) {
+                            $this.prop('indeterminate', false);
+                            $this.prop('checked', true);
+                        }
+                    });
                 } else {
                     $('.tab-pane input[type="checkbox"]')
                         .not(':disabled')

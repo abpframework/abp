@@ -59,6 +59,7 @@ export class Body {
       case eBindingSourceId.Query:
         this.params.push(paramName === value ? value : `${getParamName(paramName)}: ${value}`);
         break;
+      case eBindingSourceId.FormFile:
       case eBindingSourceId.Body:
         this.body = value;
         break;
@@ -78,7 +79,7 @@ export class Body {
   }
 
   isBlobMethod() {
-    return this.responseTypeWithNamespace === VOLO_REMOTE_STREAM_CONTENT;
+    return VOLO_REMOTE_STREAM_CONTENT.some(x => x === this.responseTypeWithNamespace);
   }
 
   private setUrlQuotes() {

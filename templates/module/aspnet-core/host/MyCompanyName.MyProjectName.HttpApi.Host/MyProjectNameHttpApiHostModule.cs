@@ -81,7 +81,7 @@ public class MyProjectNameHttpApiHostModule : AbpModule
         }
 
         context.Services.AddAbpSwaggerGenWithOAuth(
-            configuration["AuthServer:Authority"],
+            configuration["AuthServer:Authority"]!,
             new Dictionary<string, string>
             {
                 {"MyProjectName", "MyProjectName API"}
@@ -121,7 +121,7 @@ public class MyProjectNameHttpApiHostModule : AbpModule
             .AddJwtBearer(options =>
             {
                 options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+                options.RequireHttpsMetadata = configuration.GetValue<bool>("AuthServer:RequireHttpsMetadata");
                 options.Audience = "MyProjectName";
             });
 
@@ -133,7 +133,7 @@ public class MyProjectNameHttpApiHostModule : AbpModule
         var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
         if (!hostingEnvironment.IsDevelopment())
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!);
             dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
         }
 

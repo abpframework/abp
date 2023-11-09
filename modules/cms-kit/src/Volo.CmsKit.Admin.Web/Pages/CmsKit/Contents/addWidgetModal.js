@@ -12,7 +12,11 @@ $(function () {
                 widgetType = $("#ViewModel_Widget").find(":selected").text();
 
                 $('.widget-detail').attr('hidden', 'true');
-
+                
+                if(activeEditor){
+                    activeEditor.attr('hidden', 'true');
+                }
+                
                 activeEditor = $('#editor-' + widgetName);
                 activeEditor.removeAttr('hidden');
 

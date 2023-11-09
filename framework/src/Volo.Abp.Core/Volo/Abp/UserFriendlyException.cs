@@ -12,9 +12,9 @@ public class UserFriendlyException : BusinessException, IUserFriendlyException
 {
     public UserFriendlyException(
         string message,
-        string code = null,
-        string details = null,
-        Exception innerException = null,
+        string? code = null,
+        string? details = null,
+        Exception? innerException = null,
         LogLevel logLevel = LogLevel.Warning)
         : base(
               code,

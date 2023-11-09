@@ -173,12 +173,16 @@ $(function () {
                                 visible: abp.auth.isGranted(
                                     'Docs.Admin.Documents'
                                 ),
+                                confirmMessage: function (data) {
+                                    return l('RemoveCacheAndReIndexConfirmation',
+                                        data.record.name);
+                                },
                                 action: function (data) {
                                     service
                                         .removeFromCache(data.record.id)
                                         .then(function () {
                                             abp.notify.success(l('RemovedFromCache'));
-                                            dataTable.ajax.reload();
+                                            dataTable.ajax.reloadEx();
                                         });
                                 },
                             },
@@ -188,14 +192,15 @@ $(function () {
                                     'Docs.Admin.Documents'
                                 ),
                                 confirmMessage: function (data) {
-                                    return l('ReIndexDocumentConfirmation');
+                                    return l('ReIndexDocumentConfirmation',
+                                        data.record.name);
                                 },
                                 action: function (data) {
                                     service
                                         .reindex(data.record.id)
                                         .then(function () {
                                             abp.message.success(l('ReindexCompleted'));
-                                            dataTable.ajax.reload();
+                                            dataTable.ajax.reloadEx();
                                         });
                                 },
                             }
@@ -203,31 +208,31 @@ $(function () {
                     },
                 },
                 {
-                    target: 0,
+                    target: 1,
                     data: 'projectName',
                 },
                 {
-                    target: 1,
+                    target: 2,
                     data: 'name',
                 },
                 {
-                    target: 2,
+                    target: 3,
                     data: 'version',
                 },
                 {
-                    target: 3,
+                    target: 4,
                     data: 'languageCode',
                 },
                 {
-                    target: 4,
+                    target: 5,
                     data: 'fileName',
                 },
                 {
-                    target: 5,
+                    target: 6,
                     data: 'format',
                 },
                 {
-                    target: 6,
+                    target: 7,
                     data: 'creationTime',
                     render: function (creationTime) {
                         if (!creationTime) {
@@ -238,7 +243,7 @@ $(function () {
                     },
                 },
                 {
-                    target: 7,
+                    target: 8,
                     data: 'lastUpdatedTime',
                     render: function (lastUpdatedTime) {
                         if (!lastUpdatedTime) {
@@ -249,7 +254,7 @@ $(function () {
                     },
                 },
                 {
-                    target: 8,
+                    target: 9,
                     data: 'lastSignificantUpdateTime',
                     render: function (lastSignificantUpdateTime) {
                         if (!lastSignificantUpdateTime) {
@@ -260,7 +265,7 @@ $(function () {
                     },
                 },
                 {
-                    target: 9,
+                    target: 10,
                     data: 'lastCachedTime',
                     render: function (lastCachedTime) {
                         if (!lastCachedTime) {
@@ -276,13 +281,13 @@ $(function () {
 
     $("#FilterForm input[type='text']").keypress(function (e) {
         if (e.which === 13) {
-            dataTable.ajax.reload();
+            dataTable.ajax.reloadEx();
         }
     });
 
     $('#SearchButton').click(function (e) {
         e.preventDefault();
-        dataTable.ajax.reload();
+        dataTable.ajax.reloadEx();
     });
 
     $("#AdvancedFilterSectionToggler").click(function (e) {

@@ -1,13 +1,21 @@
 import { Injectable, Injector, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, map } from 'rxjs';
 import { ABP } from '../models/common';
+import { OTHERS_GROUP } from '../tokens';
 import { pushValueTo } from '../utils/array-utils';
-import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils';
+import {
+  BaseTreeNode,
+  createTreeFromList,
+  TreeNode,
+  RouteGroup,
+  createGroupMap,
+} from '../utils/tree-utils';
 import { ConfigStateService } from './config-state.service';
 import { PermissionService } from './permission.service';
+import { SORT_COMPARE_FUNC } from '../tokens/compare-func.token';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export abstract class AbstractTreeService<T extends object> {
+export abstract class AbstractTreeService<T extends { [key: string | number | symbol]: any }> {
   abstract id: string;
   abstract parentId: string;
   abstract hide: (item: T) => boolean;
@@ -16,6 +24,8 @@ export abstract class AbstractTreeService<T extends object> {
   private _flat$ = new BehaviorSubject<T[]>([]);
   private _tree$ = new BehaviorSubject<TreeNode<T>[]>([]);
   private _visible$ = new BehaviorSubject<TreeNode<T>[]>([]);
+
+  protected othersGroup: string;
 
   get flat(): T[] {
     return this._flat$.value;
@@ -48,6 +58,15 @@ export abstract class AbstractTreeService<T extends object> {
       item => item[this.parentId],
       item => BaseTreeNode.create(item),
     );
+  }
+
+  protected createGroupedTree(list: TreeNode<T>[]): RouteGroup<T>[] | undefined {
+    const map = createGroupMap<T>(list, this.othersGroup);
+    if (!map) {
+      return undefined;
+    }
+
+    return Array.from(map, ([key, items]) => ({ group: key, items }));
   }
 
   private filterWith(setOrMap: Set<string> | Map<string, T>): T[] {
@@ -84,7 +103,7 @@ export abstract class AbstractTreeService<T extends object> {
   }
 
   find(predicate: (item: TreeNode<T>) => boolean, tree = this.tree): TreeNode<T> | null {
-    return tree.reduce(
+    return tree.reduce<TreeNode<T> | null>(
       (acc, node) => (acc ? acc : predicate(node) ? node : this.find(predicate, node.children)),
       null,
     );
@@ -119,9 +138,9 @@ export abstract class AbstractTreeService<T extends object> {
   }
 
   search(params: Partial<T>, tree = this.tree): TreeNode<T> | null {
-    const searchKeys = Object.keys(params);
+    const searchKeys = Object.keys(params) as Array<keyof Partial<T>>;
 
-    return tree.reduce(
+    return tree.reduce<TreeNode<T> | null>(
       (acc, node) =>
         acc
           ? acc
@@ -140,14 +159,12 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 {
   private subscription: Subscription;
   private permissionService: PermissionService;
+  private compareFunc;
   readonly id = 'name';
   readonly parentId = 'parentName';
   readonly hide = (item: T) => item.invisible || !this.isGranted(item);
   readonly sort = (a: T, b: T) => {
-    if (!Number.isInteger(a.order)) return 1;
-    if (!Number.isInteger(b.order)) return -1;
-
-    return a.order - b.order;
+    return this.compareFunc(a,b)
   };
 
   constructor(protected injector: Injector) {
@@ -157,6 +174,8 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
       .createOnUpdateStream(state => state)
       .subscribe(() => this.refresh());
     this.permissionService = injector.get(PermissionService);
+    this.othersGroup = injector.get(OTHERS_GROUP);
+    this.compareFunc = injector.get(SORT_COMPARE_FUNC);
   }
 
   protected isGranted({ requiredPolicy }: T): boolean {
@@ -170,7 +189,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 
   hasInvisibleChild(identifier: string): boolean {
     const node = this.find(item => item[this.id] === identifier);
-    return node?.children?.some(child => child.invisible);
+    return node?.children?.some(child => child.invisible) || false;
   }
 
   /* istanbul ignore next */
@@ -180,4 +199,19 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 }
 
 @Injectable({ providedIn: 'root' })
-export class RoutesService extends AbstractNavTreeService<ABP.Route> {}
+export class RoutesService extends AbstractNavTreeService<ABP.Route> {
+  private hasPathOrChild(item: TreeNode<ABP.Route>): boolean {
+    return Boolean(item.path) || this.hasChildren(item.name);
+  }
+
+  get groupedVisible(): RouteGroup<ABP.Route>[] | undefined {
+    return this.createGroupedTree(this.visible.filter(item => this.hasPathOrChild(item)));
+  }
+
+  get groupedVisible$(): Observable<RouteGroup<ABP.Route>[] | undefined> {
+    return this.visible$.pipe(
+      map(items => items.filter(item => this.hasPathOrChild(item))),
+      map(visible => this.createGroupedTree(visible)),
+    );
+  }
+}

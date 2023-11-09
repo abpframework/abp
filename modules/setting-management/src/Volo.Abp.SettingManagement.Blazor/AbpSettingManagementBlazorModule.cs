@@ -41,6 +41,7 @@ public class AbpSettingManagementBlazorModule : AbpModule
         Configure<SettingManagementComponentOptions>(options =>
         {
             options.Contributors.Add(new EmailingPageContributor());
+            options.Contributors.Add(new TimeZonePageContributor());
         });
         
         Configure<AbpLocalizationOptions>(options =>

@@ -25,9 +25,27 @@ public abstract class OpenIddictTokenRepository_Tests<TStartupModule> : OpenIddi
     {
         await _tokenRepository.DeleteManyByApplicationIdAsync(new Guid());
         (await _tokenRepository.GetCountAsync()).ShouldBe(2);
-        
+
         await _tokenRepository.DeleteManyByApplicationIdAsync(_testData.App1Id);
         (await _tokenRepository.GetCountAsync()).ShouldBe(1);
+    }
+
+    [Fact]
+    public async Task DeleteManyByAuthorizationIdsAsync()
+    {
+        await _tokenRepository.DeleteManyByAuthorizationIdsAsync(new Guid[]
+        {
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+        });
+        (await _tokenRepository.GetCountAsync()).ShouldBe(2);
+
+        await _tokenRepository.DeleteManyByAuthorizationIdsAsync(new Guid[]
+        {
+            _testData.Authorization1Id,
+            _testData.Authorization2Id
+        });
+        (await _tokenRepository.GetCountAsync()).ShouldBe(0);
     }
 
     [Fact]
@@ -35,9 +53,9 @@ public abstract class OpenIddictTokenRepository_Tests<TStartupModule> : OpenIddi
     {
         await _tokenRepository.DeleteManyByAuthorizationIdAsync(new Guid());
         (await _tokenRepository.GetCountAsync()).ShouldBe(2);
-        
+
         await _tokenRepository.DeleteManyByAuthorizationIdAsync(_testData.Authorization1Id);
-        (await _tokenRepository.GetCountAsync()).ShouldBe(1);
+        (await _tokenRepository.GetCountAsync()).ShouldBe(0);
     }
 
     [Fact]
@@ -60,7 +78,7 @@ public abstract class OpenIddictTokenRepository_Tests<TStartupModule> : OpenIddi
     [Fact]
     public async Task FindByAuthorizationIdAsync()
     {
-        (await _tokenRepository.FindByAuthorizationIdAsync(_testData.Authorization1Id)).Count.ShouldBe(1);
+        (await _tokenRepository.FindByAuthorizationIdAsync(_testData.Authorization1Id)).Count.ShouldBe(2);
     }
 
     [Fact]
@@ -87,7 +105,7 @@ public abstract class OpenIddictTokenRepository_Tests<TStartupModule> : OpenIddi
     {
         (await _tokenRepository.FindBySubjectAsync("TestSubject1")).Count.ShouldBe(1);
     }
-    
+
     [Fact]
     public async Task ListAsync()
     {
@@ -96,9 +114,12 @@ public abstract class OpenIddictTokenRepository_Tests<TStartupModule> : OpenIddi
     }
 
     [Fact]
-    public async Task GetPruneListAsync()
+    public async Task PruneAsync()
     {
-        var threshold = DateTime.UtcNow - TimeSpan.FromDays(14);
-        (await _tokenRepository.GetPruneListAsync(threshold, int.MaxValue)).Count.ShouldBe(1);
+        (await _tokenRepository.ListAsync(int.MaxValue, 0)).Count.ShouldBe(2);
+
+        await _tokenRepository.PruneAsync(DateTime.UtcNow - TimeSpan.FromDays(14));
+
+        (await _tokenRepository.ListAsync(int.MaxValue, 0)).Count.ShouldBe(1);
     }
 }

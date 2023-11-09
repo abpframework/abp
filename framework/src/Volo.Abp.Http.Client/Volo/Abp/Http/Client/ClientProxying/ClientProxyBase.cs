@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.Content;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
@@ -24,7 +25,7 @@ namespace Volo.Abp.Http.Client.ClientProxying;
 
 public class ClientProxyBase<TService> : ITransientDependency
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
     protected IClientProxyApiDescriptionFinder ClientProxyApiDescriptionFinder => LazyServiceProvider.LazyGetRequiredService<IClientProxyApiDescriptionFinder>();
     protected ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetRequiredService<ICancellationTokenProvider>();
@@ -39,18 +40,19 @@ public class ClientProxyBase<TService> : ITransientDependency
     protected ClientProxyRequestPayloadBuilder ClientProxyRequestPayloadBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyRequestPayloadBuilder>();
     protected ClientProxyUrlBuilder ClientProxyUrlBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
     protected ICurrentApiVersionInfo CurrentApiVersionInfo => LazyServiceProvider.LazyGetRequiredService<ICurrentApiVersionInfo>();
+    protected ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
 
-    protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue arguments = null)
+    protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue? arguments = null)
     {
         await RequestAsync(BuildHttpProxyClientProxyContext(methodName, arguments));
     }
 
-    protected virtual async Task<T> RequestAsync<T>(string methodName, ClientProxyRequestTypeValue arguments = null)
+    protected virtual async Task<T> RequestAsync<T>(string methodName, ClientProxyRequestTypeValue? arguments = null)
     {
         return await RequestAsync<T>(BuildHttpProxyClientProxyContext(methodName, arguments));
     }
 
-    protected virtual ClientProxyRequestContext BuildHttpProxyClientProxyContext(string methodName, ClientProxyRequestTypeValue arguments = null)
+    protected virtual ClientProxyRequestContext BuildHttpProxyClientProxyContext(string methodName, ClientProxyRequestTypeValue? arguments = null)
     {
         if (arguments == null)
         {
@@ -65,8 +67,8 @@ public class ClientProxyBase<TService> : ITransientDependency
         }
 
         var actionArguments = action.Parameters.GroupBy(x => x.NameOnMethod).ToList();
-        if (action.SupportedVersions.Any())
-        {   
+        if (action.SupportedVersions != null && action.SupportedVersions.Any())
+        {
             //TODO: make names configurable
             actionArguments.RemoveAll(x => x.Key == "api-version" || x.Key == "apiVersion");
         }
@@ -105,7 +107,7 @@ public class ClientProxyBase<TService> : ITransientDependency
 
         if (stringContent.IsNullOrWhiteSpace())
         {
-            return default;
+            return default!;
         }
 
         return JsonSerializer.Deserialize<T>(stringContent);
@@ -175,7 +177,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         var versionParam = requestContext.Action.Parameters.FirstOrDefault(p => p.Name == "apiVersion" && p.BindingSourceId == ParameterBindingSources.Path) ??
                            requestContext.Action.Parameters.FirstOrDefault(p => p.Name == "api-version" && p.BindingSourceId == ParameterBindingSources.Query);
 
-        return new ApiVersionInfo(versionParam?.BindingSourceId, apiVersion);
+        return new ApiVersionInfo(versionParam?.BindingSourceId!, apiVersion);
     }
 
     protected virtual async Task<string> GetUrlWithParametersAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
@@ -183,7 +185,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         return await ClientProxyUrlBuilder.GenerateUrlWithParametersAsync(requestContext.Action, requestContext.Arguments, apiVersion);
     }
 
-    protected virtual async Task<HttpContent> GetHttpContentAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
+    protected virtual async Task<HttpContent?> GetHttpContentAsync(ClientProxyRequestContext requestContext, ApiVersionInfo apiVersion)
     {
         return await ClientProxyRequestPayloadBuilder.BuildContentAsync(requestContext.Action, requestContext.Arguments, JsonSerializer, apiVersion);
     }
@@ -197,15 +199,15 @@ public class ClientProxyBase<TService> : ITransientDependency
             return configuredVersion ?? "1.0";
         }
 
-        if (requestContext.Action.SupportedVersions.Contains(configuredVersion))
+        if (requestContext.Action.SupportedVersions!.Contains(configuredVersion!))
         {
-            return configuredVersion;
+            return configuredVersion!;
         }
 
         return requestContext.Action.SupportedVersions.Last(); //TODO: Ensure to get the latest version!
     }
 
-    protected virtual async Task<string> GetConfiguredApiVersionAsync(ClientProxyRequestContext requestContext)
+    protected virtual async Task<string?> GetConfiguredApiVersionAsync(ClientProxyRequestContext requestContext)
     {
         var clientConfig = ClientOptions.Value.HttpClientProxies.GetOrDefault(requestContext.ServiceType)
                            ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {requestContext.ServiceType.FullName}.");
@@ -216,6 +218,12 @@ public class ClientProxyBase<TService> : ITransientDependency
 
     protected virtual async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
     {
+        await LocalEventBus.PublishAsync(new ClientProxyExceptionEventData()
+        {
+            StatusCode = (int?)response.StatusCode,
+            ReasonPhrase = response.ReasonPhrase
+        });
+
         if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
         {
             RemoteServiceErrorResponse errorResponse;

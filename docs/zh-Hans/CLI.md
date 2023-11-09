@@ -44,6 +44,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`logout`**: 在你的计算机注销认证.
 * **`bundle`**: 为 ABP Blazor 和 MAUI Blazor 项目生成引用的脚本和样式. 
 * **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
+* **`clear-download-cache`** 删除下载的模版缓存.
 
 ### help
 
@@ -110,11 +111,11 @@ abp new Acme.BookStore
       * `mvc`: ASP.NET Core MVC.此模板的其他选项:
         * `--tiered`: 创建分层解决方案,Web和Http Api层在物理上是分开的.如果未指定会创建一个分层的解决方案,此解决方案没有那么复杂,适合大多数场景.
       * `angular`: Angular. 这个模板还有一些额外的选项:
-        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Auth Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `blazor`: Blazor. 这个模板还有一些额外的选项:
-        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Auth Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `none`: 无UI. 这个模板还有一些额外的选项:
-        * `--separate-auth-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+        * `--separate-auth-server`: 将Auth Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
     * `--mobile` 或者 `-m`: 指定移动应用程序框架. 如果未指定,则不会创建任何移动应用程序,其他选项:
       * `none`: 不包含移动应用程序.
       * `react-native`: React Native.
@@ -129,6 +130,7 @@ abp new Acme.BookStore
   * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项:
     * `mvc`: ASP.NET Core MVC.
     * `angular`: Angular.
+    * `blazor`: Blazor UI.
     * `blazor-server`: Blazor Server.
     * `none`: 不包含UI.
   * `--database-provider` 或 `-d`: 或者 `-d`: 指定数据库提供程序.默认是 `ef`.其他选项:
@@ -141,6 +143,7 @@ abp new Acme.BookStore
 * `--create-solution-folder` 或者 `-csf`: 指定项目是在输出文件夹中的新文件夹中还是直接在输出文件夹中.
 * `--connection-string` 或者 `-cs`:  重写所有 `appsettings.json` 文件的默认连接字符串. 默认连接字符串是 `Server=localhost;Database=MyProjectName;Trusted_Connection=True`. 默认的数据库提供程序是 `SQL Server`. 如果你使用EF Core但需要更改DBMS,可以按[这里所述](Entity-Framework-Core-Other-DBMS.md)进行更改(创建解决方案之后).
 * `--local-framework-ref --abp-path`: 使用对项目的本地引用,而不是替换为NuGet包引用.
+* `--skip-cache` or `-sc`: 从服务器下载最新的模版并更新本地模版缓存.
 
 ### update
 

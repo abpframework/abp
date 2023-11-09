@@ -48,6 +48,9 @@
     "Search": "Recherche",
     "ItemWillBeDeletedMessageWithFormat": "{0} sera supprimé!",
     "ItemWillBeDeletedMessage": "Cet objet va être supprimé!",
-    "ManageYourAccount": "Gérer votre compte"
+    "ManageYourAccount": "Gérer votre compte",
+    "OthersGroup": "Autre",
+    "Today": "Aujourd'hui",
+    "Apply": "Appliquer"
   }
 }

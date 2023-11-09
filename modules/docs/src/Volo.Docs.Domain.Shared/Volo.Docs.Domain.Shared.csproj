@@ -4,14 +4,14 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
     <AssemblyName>Volo.Docs.Domain.Shared</AssemblyName>
     <PackageId>Volo.Docs.Domain.Shared</PackageId>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NuGet.Versioning" Version="5.11.0" />
+    <PackageReference Include="NuGet.Versioning" />
   </ItemGroup>
 
   <ItemGroup>

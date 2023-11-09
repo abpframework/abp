@@ -4,7 +4,9 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.AspNetCore.Components.WebAssembly</AssemblyName>
         <PackageId>Volo.Abp.AspNetCore.Components.WebAssembly</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -21,9 +23,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(MicrosoftAspNetCorePackageVersion)" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="$(MicrosoftAspNetCorePackageVersion)" />
-        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
     </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
 import { LinkedList } from '@abp/utils';
-import { InjectFlags, InjectionToken, Type } from '@angular/core';
+import { InjectFlags, InjectionToken, InjectOptions, Type } from '@angular/core';
 import { O } from 'ts-toolbelt';
 
 export abstract class ActionList<R = any, A = Action<R>> extends LinkedList<A> {}
@@ -8,7 +8,7 @@ export abstract class ActionData<R = any> {
   abstract getInjected: <T>(
     token: Type<T> | InjectionToken<T>,
     notFoundValue?: T,
-    flags?: InjectFlags,
+    flags?: InjectOptions | InjectFlags,
   ) => T;
   index?: number;
   abstract record: R;
@@ -27,8 +27,10 @@ export type ReadonlyActionData<R = any> = O.Readonly<Omit<ActionData<R>, 'data'>
 export abstract class Action<R = any> {
   constructor(
     public readonly permission: string,
-    public readonly visible: ActionPredicate<R> = _ => true,
-    public readonly action: ActionCallback<R> = _ => {},
+    public readonly visible: ActionPredicate<R> = () => true,
+    public readonly action: ActionCallback<R> = () => {},
+    public readonly btnClass?: string,
+    public readonly btnStyle?: string,
   ) {}
 }
 
@@ -46,7 +48,7 @@ export abstract class ActionsFactory<C extends Actions<any>> {
   }
 }
 
-export abstract class Actions<L extends ActionList> {
+export abstract class Actions<L extends ActionList<any, InferredAction<L>>> {
   protected abstract _ctor: Type<L>;
 
   get actions(): L {
@@ -68,11 +70,14 @@ export abstract class Actions<L extends ActionList> {
   }
 }
 
-export type ActionContributorCallbacks<L extends ActionList<any>> = Record<
+export type ActionContributorCallbacks<L extends ActionList<any, InferredAction<L>>> = Record<
   string,
   ActionContributorCallback<L>[]
 >;
 
-export type ActionContributorCallback<L extends ActionList<any>> = (actionList: L) => any;
+export type ActionContributorCallback<L extends ActionList<any, InferredAction<L>>> = (
+  actionList: L,
+) => any;
 
 type InferredActionList<C> = C extends Actions<infer L> ? L : never;
+export type InferredAction<T> = T extends ActionList<any, infer U> ? U : T;

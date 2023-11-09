@@ -48,6 +48,9 @@
     "Search": "Caută",
     "ItemWillBeDeletedMessageWithFormat": "{0} va fi şters!",
     "ItemWillBeDeletedMessage": "Acest articol va fi şters!",
-    "ManageYourAccount": "Administraţi-vă contul"
+    "ManageYourAccount": "Administraţi-vă contul",
+    "OthersGroup": "Alte",
+    "Today": "Astăzi",
+    "Apply": "aplica"
   }
 }

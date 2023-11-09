@@ -16,7 +16,7 @@
     "Tutorial": "Tutorial",
     "UsingCLI": "Folosind CLI",
     "SeeDetails": "Vedeţi detalii",
-    "AbpShortDescription": "ABP Framework este o infrastructură completă pentru crearea aplicaţiilor moderne web prin folosirea celor mai bune practici şi convenţii de dezvoltare software.",
+    "AbpShortDescription": "ABP Framework este o infrastructură completă pentru crearea de soluții software cu arhitecturi moderne bazate pe platforma ASP.NET Core.",
     "SourceCodeUpper": "COD SURSĂ",
     "LatestReleaseLogs": "Cele mai recente jurnale de lansare",
     "Infrastructure": "Infrastructura",
@@ -275,7 +275,7 @@
 	"ThankYou": "Vă mulţumim!",
 	"CheckboxMandatory": "Trebuie să bifaţi asta pentru a continua!",
     "SelectUITheme": "Selectați Tema UI",
-    
-
+    "CreateSolutionFolder": "Creați folderul de soluții",
+    "CreateSolutionFolderOption": "Specifică dacă proiectul va fi într-un folder nou în folderul de ieșire sau direct folderul de ieșire."
   }
 }

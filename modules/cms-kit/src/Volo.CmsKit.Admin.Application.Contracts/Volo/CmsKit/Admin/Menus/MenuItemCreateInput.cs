@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Admin.Menus;
 
 [Serializable]
-public class MenuItemCreateInput
+public class MenuItemCreateInput : ExtensibleObject
 {
     public Guid? ParentId { get; set; }
 

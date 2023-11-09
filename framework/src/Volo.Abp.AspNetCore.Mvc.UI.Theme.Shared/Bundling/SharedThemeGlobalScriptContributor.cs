@@ -35,6 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
     )]
 public class SharedThemeGlobalScriptContributor : BundleContributor
 {
+    
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
         context.Files.AddRange(new[]
@@ -48,6 +49,6 @@ public class SharedThemeGlobalScriptContributor : BundleContributor
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert2/abp-sweetalert2.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js"
-            });
+        });
     }
 }

@@ -3,7 +3,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "BlazorServer", "NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
     "DB": ["EF", "Mongo"]
 }
 ````
@@ -13,6 +13,38 @@ This is a single-part quick-start tutorial to build a simple todo application wi
 ![todo-list](../todo-list.png)
 
 You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp-SingleLayer).
+
+{{if UI=="Blazor"}}
+We are currently preparing a video tutorial for Blazor UI. You can watch other tutorials for the three UI types from [here](https://www.youtube.com/playlist?list=PLsNclT2aHJcPqZxk7D4tU8LtTeCFcN_ci).
+{{else}}
+This documentation has a video tutorial on **YouTube**!! You can watch it here:
+{{end}}
+
+{{if UI=="MVC" && DB =="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Z6jZSPB19iw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="BlazorServer" && DB=="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-ynMYXBIg4Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="NG" && DB=="EF"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Pz4YWsU7CUs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="MVC" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/i9oDVl1J7Dk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="BlazorServer" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/z7YGDjcsTTs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{else if UI=="NG" && DB=="Mongo"}}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/LdKlIHi9S8I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+{{end}}
 
 ## Pre-Requirements
 
@@ -36,12 +68,22 @@ dotnet tool install -g Volo.Abp.Cli
 Then create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
 ````bash
-abp new TodoApp -t app-nolayers{{if UI=="BlazorServer"}} -u blazor-server{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
+abp new TodoApp -t app-nolayers{{if UI=="BlazorServer"}} -u blazor-server{{else if UI=="Blazor"}} -u blazor{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
 ````
 
 {{if UI=="NG"}}
 
 This will create a new solution, named *TodoApp*, with `angular` and `aspnet-core` folders. Once the solution is ready, open the solution (in the `aspnet-core` folder) with your favorite IDE.
+
+{{else if UI=="Blazor"}}
+
+This will create a new solution with three projects: 
+
+* A `blazor` application that contains the Blazor code, the client-side.
+* A `host` application, hosts and serves the `blazor` application. 
+* A `contracts` project, shared library between these two projects.
+
+Once the solution is ready, open it in your favorite IDE.
 
 {{else}}
 
@@ -51,7 +93,7 @@ This will create a new solution with a single project, named *TodoApp*. Once the
 
 ### Create the Database
 
-You can run the following command in the root directory of your project (in the same folder of the `.csproj` file) to create the database and seed the initial data:
+You can run the following command in the {{if UI=="Blazor"}} directory of your `TodoApp.Host` project {{else}}root directory of your project (in the same folder of the `.csproj` file){{end}} to create the database and seed the initial data:
 
 ```bash
 dotnet run --migrate-database
@@ -59,11 +101,51 @@ dotnet run --migrate-database
 
 This command will create the database and seed the initial data for you. Then you can run the application.
 
+### Before Running the Application
+
+#### Installing the Client-Side Packages
+
+[ABP CLI](../../../CLI.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+
+However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
+
+For such cases, run the `abp install-libs` command on the root directory of your solution to install all required NPM packages:
+
+```bash
+abp install-libs
+```
+
+> We suggest you install [Yarn](https://classic.yarnpkg.com/) to prevent possible package inconsistencies, if you haven't installed it yet.
+
+{{if UI=="Blazor" || UI=="BlazorServer"}}
+
+#### Bundling and Minification
+
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../../CLI.md).
+
+However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
+
+```bash
+abp bundle
+```
+
+> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../../../UI/Blazor/Global-Scripts-Styles.md).
+
+{{end}}
+
 ### Run the Application
 
 {{if UI=="MVC" || UI=="BlazorServer"}}
 
 It is good to run the application before starting the development. Running the application is pretty straight-forward, you can run the application with any IDE that supports .NET or by running the `dotnet run` CLI command in the directory of your project: 
+
+{{else if UI=="Blazor"}}
+
+It is good to run the application before starting the development. Running the application is pretty straight-forward, you just need to run the `TodoApp.Host` application with any IDE that supports .NET or by running the `dotnet run` CLI command in the directory of your project.
+
+> **Note:** The `host` application hosts and serves the `blazor` application. Therefore, you should run the `host` application only.
+
+After the application runs, open the application in your default browser:
 
 {{else if UI=="NG"}}
 
@@ -96,12 +178,12 @@ All right. We can start coding!
 
 ## Defining the Entity
 
-This application will have a single [entity](../../../Entities.md) and we can start by creating it. So, create a new `TodoItem` class under the `Entities` folder of the project:
+This application will have a single [entity](../../../Entities.md) and we can start by creating it. So, create a new `TodoItem` class under the `Entities` folder of {{if UI=="Blazor"}}the `TodoApp.Host` project{{else}}the project{{end}}:
 
 ````csharp
 using Volo.Abp.Domain.Entities;
 
-namespace TodoApp.Entities;
+namespace TodoApp{{if UI=="Blazor"}}.{{end}}Entities;
 
 public class TodoItem : BasicAggregateRoot<Guid>
 {
@@ -151,7 +233,7 @@ We've mapped the `TodoItem` entity to the `TodoItems` table in the database. The
 
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-Open a command-line terminal in the root directory of your project and type the following command:
+Open a command-line terminal in the {{if UI=="Blazor"}} directory of your `TodoApp.Host` project {{else}}root directory of your project (in the same folder of the `.csproj` file){{end}} and type the following command:
 
 ````bash
 dotnet ef migrations add Added_TodoItem
@@ -202,7 +284,7 @@ Before starting to implement these use cases, first we need to create a DTO clas
 
 ### Creating the Data Transfer Object (DTO)
 
-[Application services](../../../Application-Services.md) typically get and return DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities. So, create a new `TodoItemDto` class under the `Services/Dtos` folder:
+[Application services](../../../Application-Services.md) typically get and return DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities. So, create a new `TodoItemDto` class under the `Services/Dtos` folder{{if UI=="Blazor"}} of your `TodoApp.Contracts` project{{end}}:
 
 ```csharp
 namespace TodoApp.Services.Dtos;
@@ -216,18 +298,50 @@ public class TodoItemDto
 
 This is a very simple DTO class that has the same properties as the `TodoItem` entity. Now, we are ready to implement our use-cases.
 
-### The Application Service Implementation
+{{if UI=="Blazor"}}
 
-Create a `TodoAppService` class under the `Services` folder of your project, as shown below:
+### The Application Service Interface
+
+Create a `ITodoAppService` interface under the `Services` folder of the `TodoApp.Contracts` project, as shown below:
 
 ```csharp
-using TodoApp.Entities;
+using TodoApp.Services.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
 
 namespace TodoApp.Services;
 
-public class TodoAppService : ApplicationService
+public interface ITodoAppService : IApplicationService
+{
+    Task<List<TodoItemDto>> GetListAsync();
+
+    Task<TodoItemDto> CreateAsync(string text);
+
+    Task DeleteAsync(Guid id);
+}
+```
+
+{{end}}
+
+### The Application Service Implementation
+
+Create a `TodoAppService` class under the `Services` folder of {{if UI=="Blazor"}}your `TodoApp.Host` project{{else}}your project{{end}}, as shown below:
+
+```csharp
+{{if UI=="Blazor"}}
+using TodoApp.Services;
+using TodoApp.Services.Dtos;
+using TodoApp.Entities;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+{{else}}
+using TodoApp.Entities;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+{{end}}
+
+namespace TodoApp.Services;
+
+public class TodoAppService : ApplicationService{{if UI=="Blazor"}}, ITodoAppService{{end}}
 {
     private readonly IRepository<TodoItem, Guid> _todoItemRepository;
     
@@ -472,23 +586,29 @@ If you open [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `
 
 ![todo-api](../todo-api.png)
 
-{{else if UI=="BlazorServer"}}
+{{else if UI=="Blazor" || UI=="BlazorServer"}}
 
 ### Index.razor.cs
 
-Open the `Index.razor.cs` file in the `Pages` folder and replace the content with the following code block:
+Open the `Index.razor.cs` file in the `Pages` folder{{if UI=="Blazor"}} in your `Todo.Blazor` project{{end}} and replace the content with the following code block:
 
 ```csharp
+{{if UI=="Blazor"}}
 using Microsoft.AspNetCore.Components;
 using TodoApp.Services;
 using TodoApp.Services.Dtos;
+{{else}}
+using Microsoft.AspNetCore.Components;
+using TodoApp.Services;
+using TodoApp.Services.Dtos;
+{{end}}
 
 namespace TodoApp.Pages;
 
 public partial class Index
 {
     [Inject]
-    private TodoAppService TodoAppService { get; set; }
+    private {{if UI=="Blazor"}}ITodoAppService{{else}}TodoAppService{{end}} TodoAppService { get; set; }
 
     private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
     private string NewTodoText { get; set; }
@@ -514,7 +634,7 @@ public partial class Index
 }
 ```
 
-This class uses the `TodoAppService` to get the list of todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
+This class uses the {{if UI=="Blazor"}}`ITodoAppService`{{else}}`TodoAppService`{{end}} to get the list of todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
 
 ### Index.razor
 
@@ -592,7 +712,7 @@ As the final touch, open the `Index.razor.css` file in the `Pages` folder and re
 
 This is a simple styling for the todo page. We believe that you can do much better :)
 
-Now, you can run the application again to see the result.
+Now, you can run the {{if UI=="Blazor"}}`TodoApp.Host` project{{else}}application{{end}} again to see the result.
 
 {{else if UI=="NG"}}
 

@@ -4,7 +4,9 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.BackgroundJobs.Abstractions</AssemblyName>
     <PackageId>Volo.Abp.BackgroundJobs.Abstractions</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -16,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

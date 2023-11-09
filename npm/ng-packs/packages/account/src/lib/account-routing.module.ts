@@ -1,20 +1,23 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
 import {
-  AuthGuard,
+  authGuard,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
 } from '@abp/ng.core';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { LoginComponent } from './components/login/login.component';
 import { ManageProfileComponent } from './components/manage-profile/manage-profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { eAccountComponents } from './enums/components';
-import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
-import { AccountExtensionsGuard } from './guards';
+import { authenticationFlowGuard } from './guards';
+import { accountExtensionsResolver } from './resolvers';
 
+const canActivate = [authenticationFlowGuard];
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -25,7 +28,7 @@ const routes: Routes = [
       {
         path: 'login',
         component: ReplaceableRouteContainerComponent,
-        canActivate: [AuthenticationFlowGuard],
+        canActivate,
         data: {
           replaceableComponent: {
             key: eAccountComponents.Login,
@@ -36,7 +39,7 @@ const routes: Routes = [
       {
         path: 'register',
         component: ReplaceableRouteContainerComponent,
-        canActivate: [AuthenticationFlowGuard],
+        canActivate,
         data: {
           replaceableComponent: {
             key: eAccountComponents.Register,
@@ -47,7 +50,8 @@ const routes: Routes = [
       {
         path: 'forgot-password',
         component: ReplaceableRouteContainerComponent,
-        canActivate: [AuthenticationFlowGuard],
+        canActivate,
+
         data: {
           replaceableComponent: {
             key: eAccountComponents.ForgotPassword,
@@ -70,7 +74,8 @@ const routes: Routes = [
       {
         path: 'manage',
         component: ReplaceableRouteContainerComponent,
-        canActivate: [AuthGuard, AccountExtensionsGuard],
+        canActivate: [authGuard],
+        resolve: [accountExtensionsResolver],
         data: {
           replaceableComponent: {
             key: eAccountComponents.ManageProfile,

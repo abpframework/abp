@@ -8,6 +8,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.ObjectExtending;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
@@ -38,24 +39,25 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Create)]
-    public async Task<TagDto> CreateAsync(TagCreateDto input)
+    public virtual async Task<TagDto> CreateAsync(TagCreateDto input)
     {
         var tag = await TagManager.CreateAsync(
             GuidGenerator.Create(),
             input.EntityType,
             input.Name);
-
+        input.MapExtraPropertiesTo(tag);
         await Repository.InsertAsync(tag);
 
         return ObjectMapper.Map<Tag, TagDto>(tag);
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Update)]
-    public async Task<TagDto> UpdateAsync(Guid id, TagUpdateDto input)
+    public virtual async Task<TagDto> UpdateAsync(Guid id, TagUpdateDto input)
     {
         var tag = await TagManager.UpdateAsync(
             id,
             input.Name);
+        input.MapExtraPropertiesTo(tag);
 
         tag.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
@@ -80,7 +82,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
-    public async Task<TagDto> GetAsync(Guid id)
+    public virtual async Task<TagDto> GetAsync(Guid id)
     {
         var tag = await Repository.GetAsync(id);
 
@@ -88,9 +90,9 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
-    public async Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
+    public virtual async Task<PagedResultDto<TagDto>> GetListAsync(TagGetListInput input)
     {
-        var tags = await Repository.GetListAsync(input.Filter);
+        var tags = await Repository.GetListAsync(input.Filter, input.MaxResultCount, input.SkipCount, input.Sorting);
         var count = await Repository.GetCountAsync(input.Filter);
 
         return new PagedResultDto<TagDto>(
@@ -100,7 +102,7 @@ public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     }
 
     [Authorize(CmsKitAdminPermissions.Tags.Delete)]
-    public async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
     {
         await Repository.DeleteAsync(id);
     }

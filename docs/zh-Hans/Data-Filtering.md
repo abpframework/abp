@@ -176,7 +176,7 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
             e => !IsActiveFilterEnabled || EF.Property<bool>(e, "IsActive");
         expression = expression == null 
             ? isActiveFilter 
-            : CombineExpressions(expression, isActiveFilter);
+            : QueryFilterExpressionHelper.CombineExpressions(expression, isActiveFilter);
     }
 
     return expression;
@@ -190,7 +190,7 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 
 ABP抽象了 `IMongoDbRepositoryFilterer` 接口为[MongoDB 集成](MongoDB.md)实现数据过滤, 只有正确的使用仓储,它才会工作. 否则你需要手动过滤数据.
 
-目前为MongoDB集成实现数据过滤的最佳方法是重写派生自 `MongoDbRepositoryFilterer` 基类的 `AddGlobalFilters` 方法:
+目前为MongoDB集成实现数据过滤的最佳方法是重写派生自 `MongoDbRepositoryFilterer` 基类的 `FilterQueryable` 方法:
 
 ````csharp
 [ExposeServices(typeof(IMongoDbRepositoryFilterer<Book, Guid>))]
@@ -203,14 +203,14 @@ public class BookMongoDbRepositoryFilterer : MongoDbRepositoryFilterer<Book, Gui
     {
     }
 
-    public override void AddGlobalFilters(List<FilterDefinition<Book>> filters)
+    public override TQueryable FilterQueryable<TQueryable>(TQueryable query)
     {
-        base.AddGlobalFilters(filters);
-
         if (DataFilter.IsEnabled<IIsActive>())
         {
-            filters.Add(Builders<Book>.Filter.Eq(e => ((IIsActive)e).IsActive, true));
+            return (TQueryable)query.Where(x => x.IsActive);
         }
+
+        return base.FilterQueryable(query);
     }
 }
 ````

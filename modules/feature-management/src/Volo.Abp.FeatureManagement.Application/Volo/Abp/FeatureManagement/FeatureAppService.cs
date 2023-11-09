@@ -14,18 +14,15 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 {
     protected FeatureManagementOptions Options { get; }
     protected IFeatureManager FeatureManager { get; }
-    protected IFeatureValueRepository FeatureValueRepository { get; }
     protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
 
     public FeatureAppService(IFeatureManager featureManager,
         IFeatureDefinitionManager featureDefinitionManager,
-        IOptions<FeatureManagementOptions> options,
-        IFeatureValueRepository featureValueRepository)
+        IOptions<FeatureManagementOptions> options)
     {
         FeatureManager = featureManager;
         FeatureDefinitionManager = featureDefinitionManager;
         Options = options.Value;
-        FeatureValueRepository = featureValueRepository;
     }
 
     public virtual async Task<GetFeatureListResultDto> GetAsync([NotNull] string providerName, string providerKey)
@@ -124,7 +121,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         string policyName;
         if (providerName == TenantFeatureValueProvider.ProviderName && CurrentTenant.Id == null && providerKey == null)
         {
-            policyName = "FeatureManagement.ManageHostFeatures";
+            policyName = FeatureManagementPermissions.ManageHostFeatures;
         }
         else
         {
@@ -140,6 +137,6 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 
     public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey)
     {
-        await FeatureValueRepository.DeleteAsync(providerName, providerKey);
+        await FeatureManager.DeleteAsync(providerName, providerKey);
     }
 }

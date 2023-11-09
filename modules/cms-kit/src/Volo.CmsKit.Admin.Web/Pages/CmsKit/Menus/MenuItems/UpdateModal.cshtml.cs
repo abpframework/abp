@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.Menus;
 
@@ -44,7 +45,7 @@ public class UpdateModalModel : CmsKitAdminPageModel
 
     [AutoMap(typeof(MenuItemDto))]
     [AutoMap(typeof(MenuItemUpdateInput), ReverseMap = true)]
-    public class MenuItemUpdateViewModel : IHasConcurrencyStamp
+    public class MenuItemUpdateViewModel : ExtensibleObject, IHasConcurrencyStamp
     {
         [Required]
         public string DisplayName { get; set; }

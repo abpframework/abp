@@ -41,12 +41,14 @@ Here, is the list of all available commands before explaining their details:
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
 * **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
+* **`switch-to-local`**: Changes NuGet package references on a solution to local project references.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`login-info`**: Shows the current user's login information.
 * **`logout`**: Logouts from your computer if you've authenticated before.
 * **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
+* **`clear-download-cache`** Clears the templates download cache.
 
 ### help
 
@@ -113,15 +115,15 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
       * `angular`: Angular UI. There are some additional options for this template:
-        * `--separate-auth-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--separate-auth-server`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor`: Blazor UI. There are some additional options for this template:
-        * `--separate-auth-server`The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--separate-auth-server`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
-        * `--tiered`: The Identity Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
+        * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `none`: Without UI. No front-end layer will be created. There are some additional options for this template:
-        * `--separate-auth-server`: The Identity Server project comes as a separate project and runs at a different endpoint. It separates the Identity Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--separate-auth-server`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
     * `--mobile` or `-m`: Specifies the mobile application framework. If not specified, no mobile application will be created. Available options:
       * `react-native`: React Native.
       * `maui`: MAUI. This mobile option is only available for ABP Commercial.
@@ -138,6 +140,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC.
       * `angular`: Angular UI.
+      * `blazor`: Blazor UI.
       * `blazor-server`: Blazor Server UI.
       * `none`: Without UI.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
@@ -163,6 +166,8 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
 * `--local-framework-ref --abp-path`: Uses local projects references to the ABP framework instead of using the NuGet packages. This can be useful if you download the ABP Framework source code and have a local reference to the framework from your application.
 * `--no-random-port`: Uses template's default ports.
 * `--skip-installing-libs` or `-sib`: Skip installing client side packages.
+* `--skip-cache` or `-sc`:  Always download the latest from our server and refresh their templates folder cache.
+* `--with-public-website`: **Public Website** is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website.
 
 See some [examples for the new command](CLI-New-Command-Samples.md) here.
 
@@ -359,8 +364,11 @@ abp generate-proxy -t csharp -url https://localhost:44302/
     * `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
     * `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
     * `--target`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+    * `--module`:  Backend module name. Default value: `app`.
+    * `--entry-point`: Targets the Angular project to place the generated code.
     * `--url`: Specifies api definition url. Default value is API Name's url in environment file.
     * `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+
   * `js`: JavaScript. work in the `*.Web` project directory. There are some additional options for this client:
     * `--output` or `-o`: JavaScript file path or folder to place generated code in.
 * `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
@@ -411,7 +419,7 @@ abp remove-proxy -t csharp --folder MyProxies/InnerFolder
 
 ### switch-to-preview
 
-You can use this command to switch your project to latest preview version of the ABP framework.
+You can use this command to switch your solution or project to latest preview version of the ABP framework.
 
 Usage:
 
@@ -421,12 +429,12 @@ abp switch-to-preview [options]
 
 #### Options
 
-* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--directory` or `-d`: Specifies the directory. The solution or project should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 
 ### switch-to-nightly
 
-You can use this command to switch your project to latest [nightly](Nightly-Builds.md) preview version of the ABP framework packages.
+You can use this command to switch your solution or project to latest [nightly](Nightly-Builds.md) preview version of the ABP framework packages.
 
 Usage:
 
@@ -436,7 +444,7 @@ abp switch-to-nightly [options]
 
 #### Options
 
-* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--directory` or `-d`: Specifies the directory. The solution or project should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### switch-to-stable
 
@@ -449,7 +457,28 @@ abp switch-to-stable [options]
 ````
 #### Options
 
-* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--directory` or `-d`: Specifies the directory. The solution or project should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+
+### switch-to-local
+
+Changes all NuGet package references to local project references for all the .csproj files in the specified folder (and all its subfolders with any deep). It is not limited to ABP Framework or Module packages.
+
+Usage:
+
+````bash
+abp switch-to-local [options]
+````
+#### Options
+
+* `--solution` or `-s`: Specifies the solution directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+
+* `--paths` or `-p`: Specifies the local paths that the projects are inside. You can use `|` character to separate the paths.
+
+Example:
+
+````bash
+abp switch-to-local --paths "D:\Github\abp|D:\Github\my-repo"
+````
 
 ### translate
 

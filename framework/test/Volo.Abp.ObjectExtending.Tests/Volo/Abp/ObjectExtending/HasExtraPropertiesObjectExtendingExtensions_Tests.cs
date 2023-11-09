@@ -1,6 +1,10 @@
-﻿using Shouldly;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using Shouldly;
 using Volo.Abp.Data;
+using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending.TestObjects;
+using Volo.Abp.Validation;
 using Xunit;
 
 namespace Volo.Abp.ObjectExtending;
@@ -18,7 +22,8 @@ public class HasExtraPropertiesObjectExtendingExtensions_Tests : AbpObjectExtend
             .SetProperty("ChildCount", 2)
             .SetProperty("Sex", "male")
             .SetProperty("NoPairCheck", "test-value")
-            .SetProperty("CityName", "Adana");
+            .SetProperty("CityName", "Adana")
+            .SetProperty("EnumProperty", (int)ExtensibleTestEnumProperty.Value1);
 
         _personDto = new ExtensibleTestPersonDto()
             .SetProperty("ExistingDtoProperty", "existing-value");
@@ -31,6 +36,7 @@ public class HasExtraPropertiesObjectExtendingExtensions_Tests : AbpObjectExtend
 
         _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
         _personDto.GetProperty<string>("CityName").ShouldBe("Adana"); //Defined in both classes
+        _personDto.GetProperty<ExtensibleTestEnumProperty>("EnumProperty").ShouldBe(ExtensibleTestEnumProperty.Value1); //Defined in both classes
         _personDto.GetProperty<string>("NoPairCheck").ShouldBe("test-value"); //CheckPairDefinitionOnMapping = false
         _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
         _personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
@@ -44,6 +50,7 @@ public class HasExtraPropertiesObjectExtendingExtensions_Tests : AbpObjectExtend
         _person.MapExtraPropertiesTo(_personDto, ignoredProperties: new[] { "CityName" });
 
         _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
+        _personDto.GetProperty<ExtensibleTestEnumProperty>("EnumProperty").ShouldBe(ExtensibleTestEnumProperty.Value1); //Defined in both classes
         _personDto.GetProperty<string>("NoPairCheck").ShouldBe("test-value"); //CheckPairDefinitionOnMapping = false
         _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
         _personDto.GetProperty<string>("CityName").ShouldBeNull(); //Ignored, but was set to the default in the constructor
@@ -59,6 +66,7 @@ public class HasExtraPropertiesObjectExtendingExtensions_Tests : AbpObjectExtend
 
         _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
         _personDto.GetProperty<string>("CityName").ShouldBe("Adana"); //Defined in both classes
+        _personDto.GetProperty<ExtensibleTestEnumProperty>("EnumProperty").ShouldBe(ExtensibleTestEnumProperty.Value1); //Defined in both classes
         _personDto.GetProperty<int>("Age").ShouldBe(42); //Defined in source
         _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
         _personDto.GetProperty<int>("ChildCount").ShouldBe(0); //Not defined in the source, but was set to the default in the constructor
@@ -72,6 +80,7 @@ public class HasExtraPropertiesObjectExtendingExtensions_Tests : AbpObjectExtend
 
         _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
         _personDto.GetProperty<string>("CityName").ShouldBe("Adana"); //Defined in both classes
+        _personDto.GetProperty<ExtensibleTestEnumProperty>("EnumProperty").ShouldBe(ExtensibleTestEnumProperty.Value1); //Defined in both classes
         _personDto.GetProperty<int>("ChildCount").ShouldBe(2); //Defined in destination
         _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
         _personDto.HasProperty("Age").ShouldBeFalse(); //Not defined in destination
@@ -88,6 +97,32 @@ public class HasExtraPropertiesObjectExtendingExtensions_Tests : AbpObjectExtend
         _personDto.GetProperty<int>("Age").ShouldBe(42);
         _personDto.GetProperty<int>("ChildCount").ShouldBe(2);
         _personDto.GetProperty<string>("Sex").ShouldBe("male");
+        _personDto.GetProperty<ExtensibleTestEnumProperty>("EnumProperty").ShouldBe(ExtensibleTestEnumProperty.Value1);
         _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
     }
+
+    [Fact]
+    public void MapExtraPropertiesTo_Should_Validate_Properties()
+    {
+        using (CultureHelper.Use(CultureInfo.InvariantCulture))
+        {
+            ObjectExtensionManager.Instance
+                .AddOrUpdateProperty<ExtensibleTestPersonDto, string>(
+                    "Name",
+                    options =>
+                    {
+                        options.Attributes.Add(new StringLengthAttribute(4));
+                    });
+
+            var person = new ExtensibleTestPerson().SetProperty("Name", "John");
+            var personDto = new ExtensibleTestPersonDto();
+
+            person.MapExtraPropertiesTo(personDto);
+
+            person.SetProperty("Name", "John Bush");
+            Assert.Throws<AbpValidationException>(() => person.MapExtraPropertiesTo(personDto)).ValidationErrors.ShouldContain(x => x.ErrorMessage == "The field Name must be a string with a maximum length of 4.");
+        }
+
+    }
+
 }

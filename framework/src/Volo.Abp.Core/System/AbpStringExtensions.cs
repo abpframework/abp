@@ -47,7 +47,7 @@ public static class AbpStringExtensions
     /// Indicates whether this string is null or an System.String.Empty string.
     /// </summary>
     [ContractAnnotation("str:null => true")]
-    public static bool IsNullOrEmpty(this string str)
+    public static bool IsNullOrEmpty([System.Diagnostics.CodeAnalysis.NotNullWhen(false)]this string? str)
     {
         return string.IsNullOrEmpty(str);
     }
@@ -56,7 +56,7 @@ public static class AbpStringExtensions
     /// indicates whether this string is null, empty, or consists only of white-space characters.
     /// </summary>
     [ContractAnnotation("str:null => true")]
-    public static bool IsNullOrWhiteSpace(this string str)
+    public static bool IsNullOrWhiteSpace([System.Diagnostics.CodeAnalysis.NotNullWhen(false)]this string? str)
     {
         return string.IsNullOrWhiteSpace(str);
     }
@@ -209,7 +209,22 @@ public static class AbpStringExtensions
             return str;
         }
 
-        return str.Substring(0, pos) + replace + str.Substring(pos + search.Length);
+        var searchLength = search.Length;
+        var replaceLength = replace.Length;
+        var newLength = str.Length - searchLength + replaceLength;
+
+        Span<char> buffer = newLength <= 1024 ? stackalloc char[newLength] : new char[newLength];
+
+        // Copy the part of the original string before the search term
+        str.AsSpan(0, pos).CopyTo(buffer);
+
+        // Copy the replacement text
+        replace.AsSpan().CopyTo(buffer.Slice(pos));
+
+        // Copy the remainder of the original string
+        str.AsSpan(pos + searchLength).CopyTo(buffer.Slice(pos + replaceLength));
+
+        return buffer.ToString();
     }
 
     /// <summary>
@@ -467,7 +482,7 @@ public static class AbpStringExtensions
     /// Gets a substring of a string from beginning of the string if it exceeds maximum length.
     /// </summary>
     [ContractAnnotation("null <= str:null")]
-    public static string Truncate(this string str, int maxLength)
+    public static string? Truncate(this string? str, int maxLength)
     {
         if (str == null)
         {
@@ -486,7 +501,7 @@ public static class AbpStringExtensions
     /// Gets a substring of a string from Ending of the string if it exceeds maximum length.
     /// </summary>
     [ContractAnnotation("null <= str:null")]
-    public static string TruncateFromBeginning(this string str, int maxLength)
+    public static string? TruncateFromBeginning(this string? str, int maxLength)
     {
         if (str == null)
         {
@@ -507,7 +522,7 @@ public static class AbpStringExtensions
     /// Returning string can not be longer than maxLength.
     /// </summary>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="str"/> is null</exception>
-    public static string TruncateWithPostfix(this string str, int maxLength)
+    public static string? TruncateWithPostfix(this string? str, int maxLength)
     {
         return TruncateWithPostfix(str, maxLength, "...");
     }
@@ -519,7 +534,7 @@ public static class AbpStringExtensions
     /// </summary>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="str"/> is null</exception>
     [ContractAnnotation("null <= str:null")]
-    public static string TruncateWithPostfix(this string str, int maxLength, string postfix)
+    public static string? TruncateWithPostfix(this string? str, int maxLength, string postfix)
     {
         if (str == null)
         {

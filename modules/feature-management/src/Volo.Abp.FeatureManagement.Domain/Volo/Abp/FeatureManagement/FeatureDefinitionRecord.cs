@@ -7,13 +7,6 @@ namespace Volo.Abp.FeatureManagement;
 
 public class FeatureDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
-    /* Ignoring Id because it is different whenever we create an instance of
-     * this class, and we are using Json Serialize, than Hash to understand
-     * if feature definitions have changed (in StaticFeatureSaver.CalculateHash()).
-     */
-    [JsonIgnore] //TODO: TODO: Use JSON modifier to ignore this property
-    public override Guid Id { get; protected set; }
-
     public string GroupName { get; set; }
 
     public string Name  { get; set; }
@@ -70,7 +63,7 @@ public class FeatureDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         DisplayName =  Check.NotNullOrWhiteSpace(displayName, nameof(displayName), FeatureDefinitionRecordConsts.MaxDisplayNameLength);
 
         Description = Check.Length(description, nameof(description), FeatureDefinitionRecordConsts.MaxDescriptionLength);
-        DefaultValue =  Check.NotNullOrWhiteSpace(defaultValue, nameof(defaultValue), FeatureDefinitionRecordConsts.MaxDefaultValueLength);
+        DefaultValue =  Check.Length(defaultValue, nameof(defaultValue), FeatureDefinitionRecordConsts.MaxDefaultValueLength);
 
         IsVisibleToClients = isVisibleToClients;
         IsAvailableToHost = isAvailableToHost;

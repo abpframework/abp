@@ -25,7 +25,7 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
             throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{args.ContainerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
         }
 
-        DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(filePath));
+        DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(filePath)!);
 
         var fileMode = args.OverrideExisting
             ? FileMode.Create
@@ -59,7 +59,7 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
         return ExistsAsync(filePath);
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public override async Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var filePath = FilePathCalculator.Calculate(args);
 

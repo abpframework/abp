@@ -6,14 +6,15 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.Newtonsoft;
 
-public class AbpDateTimeConverter : DateTimeConverterBase
+public class AbpDateTimeConverter : DateTimeConverterBase, ITransientDependency
 {
-    private readonly string _dateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
+    private const string DefaultDateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
     private readonly DateTimeStyles _dateTimeStyles = DateTimeStyles.RoundtripKind;
     private readonly CultureInfo _culture = CultureInfo.InvariantCulture;
     private readonly IClock _clock;
@@ -30,7 +31,7 @@ public class AbpDateTimeConverter : DateTimeConverterBase
         return objectType == typeof(DateTime) || objectType == typeof(DateTime?);
     }
 
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
         var nullable = Nullable.GetUnderlyingType(objectType) != null;
         if (reader.TokenType == JsonToken.Null)
@@ -45,7 +46,7 @@ public class AbpDateTimeConverter : DateTimeConverterBase
 
         if (reader.TokenType == JsonToken.Date)
         {
-            return _clock.Normalize(reader.Value.To<DateTime>());
+            return _clock.Normalize(reader.Value!.To<DateTime>());
         }
 
         if (reader.TokenType != JsonToken.String)
@@ -71,14 +72,11 @@ public class AbpDateTimeConverter : DateTimeConverterBase
             }
         }
 
-        var date = !_dateTimeFormat.IsNullOrEmpty() ?
-            DateTime.ParseExact(dateText, _dateTimeFormat, _culture, _dateTimeStyles) :
-            DateTime.Parse(dateText, _culture, _dateTimeStyles);
-
+        var date = DateTime.Parse(dateText!, _culture, _dateTimeStyles);
         return _clock.Normalize(date);
     }
 
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
     {
         if (value != null)
         {
@@ -94,16 +92,16 @@ public class AbpDateTimeConverter : DateTimeConverterBase
             }
 
             writer.WriteValue(_options.OutputDateTimeFormat.IsNullOrWhiteSpace()
-                ? dateTime.ToString(_dateTimeFormat, _culture)
+                ? dateTime.ToString(DefaultDateTimeFormat, _culture)
                 : dateTime.ToString(_options.OutputDateTimeFormat, _culture));
         }
         else
         {
-            throw new JsonSerializationException($"Unexpected value when converting date. Expected DateTime or DateTimeOffset, got {value.GetType()}.");
+            throw new JsonSerializationException($"Unexpected value when converting date. Expected DateTime or DateTimeOffset, got {value?.GetType()}.");
         }
     }
 
-    internal static bool ShouldNormalize(MemberInfo member, JsonProperty property)
+    static internal bool ShouldNormalize(MemberInfo member, JsonProperty property)
     {
         if (property.PropertyType != typeof(DateTime) &&
             property.PropertyType != typeof(DateTime?))

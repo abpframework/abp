@@ -28,14 +28,14 @@ public class RolePermissionManagementProvider : PermissionManagementProvider
         UserRoleFinder = userRoleFinder;
     }
 
-    public override async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
+    public async override Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
     {
         var multipleGrantInfo = await CheckAsync(new[] { name }, providerName, providerKey);
 
         return multipleGrantInfo.Result.Values.First();
     }
 
-    public override async Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(string[] names, string providerName, string providerKey)
+    public async override Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(string[] names, string providerName, string providerKey)
     {
         var multiplePermissionValueProviderGrantInfo = new MultiplePermissionValueProviderGrantInfo(names);
         var permissionGrants = new List<PermissionGrant>();
@@ -49,7 +49,7 @@ public class RolePermissionManagementProvider : PermissionManagementProvider
         if (providerName == UserPermissionValueProvider.ProviderName)
         {
             var userId = Guid.Parse(providerKey);
-            var roleNames = await UserRoleFinder.GetRolesAsync(userId);
+            var roleNames = await UserRoleFinder.GetRoleNamesAsync(userId);
 
             foreach (var roleName in roleNames)
             {

@@ -24,7 +24,7 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
         string controllerName,
         ActionModel action,
         string httpMethod,
-        [CanBeNull] ConventionalControllerSetting configuration)
+        ConventionalControllerSetting? configuration)
     {
         var apiRoutePrefix = GetApiRoutePrefix(action, configuration);
         var controllerNameInUrl =
@@ -71,7 +71,7 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
         return url;
     }
 
-    protected virtual string GetApiRoutePrefix(ActionModel actionModel, ConventionalControllerSetting configuration)
+    protected virtual string GetApiRoutePrefix(ActionModel actionModel, ConventionalControllerSetting? configuration)
     {
         if (IntegrationServiceAttribute.IsDefinedOrInherited(actionModel.Controller.ControllerType))
         {
@@ -82,7 +82,7 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
     }
 
     protected virtual string NormalizeUrlActionName(string rootPath, string controllerName, ActionModel action,
-        string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
+        string httpMethod, ConventionalControllerSetting? configuration)
     {
         var actionNameInUrl = HttpMethodHelper
             .RemoveHttpMethodPrefix(action.ActionName, httpMethod)
@@ -105,11 +105,11 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
     }
 
     protected virtual string NormalizeUrlControllerName(string rootPath, string controllerName, ActionModel action,
-        string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
+        string httpMethod, ConventionalControllerSetting? configuration)
     {
         if (configuration?.UrlControllerNameNormalizer == null)
         {
-            return controllerName;
+            return controllerName.RemovePostFix(Options.IgnoredUrlSuffixesInControllerNames);
         }
 
         return configuration.UrlControllerNameNormalizer(
@@ -121,7 +121,7 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
     }
 
     protected virtual string NormalizeControllerNameCase(string controllerName,
-        [CanBeNull] ConventionalControllerSetting configuration)
+        ConventionalControllerSetting? configuration)
     {
         if (configuration?.UseV3UrlStyle ?? Options.UseV3UrlStyle)
         {
@@ -134,7 +134,7 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
     }
 
     protected virtual string NormalizeActionNameCase(string actionName,
-        [CanBeNull] ConventionalControllerSetting configuration)
+        ConventionalControllerSetting? configuration)
     {
         if (configuration?.UseV3UrlStyle ?? Options.UseV3UrlStyle)
         {
@@ -147,13 +147,13 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
     }
 
     protected virtual string NormalizeIdPropertyNameCase(PropertyInfo property,
-        [CanBeNull] ConventionalControllerSetting configuration)
+        ConventionalControllerSetting? configuration)
     {
         return property.Name;
     }
 
     protected virtual string NormalizeSecondaryIdNameCase(ParameterModel secondaryId,
-        [CanBeNull] ConventionalControllerSetting configuration)
+        ConventionalControllerSetting? configuration)
     {
         return secondaryId.ParameterName;
     }

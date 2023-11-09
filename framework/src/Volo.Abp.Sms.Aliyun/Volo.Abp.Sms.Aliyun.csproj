@@ -3,7 +3,9 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.Sms.Aliyun</AssemblyName>
         <PackageId>Volo.Abp.Sms.Aliyun</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -18,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="2.0.9" />
+        <PackageReference Include="AlibabaCloud.SDK.Dysmsapi20170525" />
     </ItemGroup>
 
 </Project>

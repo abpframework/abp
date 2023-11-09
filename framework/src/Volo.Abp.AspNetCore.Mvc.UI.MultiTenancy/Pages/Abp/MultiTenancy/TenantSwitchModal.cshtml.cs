@@ -15,7 +15,7 @@ namespace Pages.Abp.MultiTenancy;
 public class TenantSwitchModalModel : AbpPageModel
 {
     [BindProperty]
-    public TenantInfoModel Input { get; set; }
+    public TenantInfoModel Input { get; set; } = default!;
 
     protected ITenantStore TenantStore { get; }
     protected AbpAspNetCoreMultiTenancyOptions Options { get; }
@@ -45,15 +45,15 @@ public class TenantSwitchModalModel : AbpPageModel
         Guid? tenantId = null;
         if (!Input.Name.IsNullOrEmpty())
         {
-            var tenant = await TenantStore.FindAsync(Input.Name);
+            var tenant = await TenantStore.FindAsync(Input.Name!);
             if (tenant == null)
             {
-                throw new UserFriendlyException(L["GivenTenantIsNotExist", Input.Name]);
+                throw new UserFriendlyException(L["GivenTenantIsNotExist", Input.Name!]);
             }
 
             if (!tenant.IsActive)
             {
-                throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name]);
+                throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name!]);
             }
 
             tenantId = tenant.Id;
@@ -65,6 +65,6 @@ public class TenantSwitchModalModel : AbpPageModel
     public class TenantInfoModel
     {
         [InputInfoText("SwitchTenantHint")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }

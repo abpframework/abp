@@ -16,6 +16,8 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+      - 'Directory.Build.props'
+      - 'Directory.Packages.props'
 
   pull_request:
     paths:
@@ -31,6 +33,8 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+      - 'Directory.Build.props'
+      - 'Directory.Packages.props'
     types:
       - opened
       - synchronize
@@ -41,23 +45,27 @@ permissions:
 
 jobs:
   build-test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     if: ${{ !github.event.pull_request.draft }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-dotnet@master
       with:
-        dotnet-version: 7.0.100
+        dotnet-version: 8.0.100-rc.2.23502.2
+
+    - name: chown
+      run: |
+        sudo chown -R $USER:$USER /home/runneradmin
 
     - name: Build All
-      run: .\build-all.ps1 -f
-      working-directory: .\build
-      shell: powershell
+      run: ./build-all.ps1
+      working-directory: ./build
+      shell: pwsh
 
     - name: Test All
-      run: .\test-all.ps1 -f
-      working-directory: .\build
-      shell: powershell
+      run: ./test-all.ps1
+      working-directory: ./build
+      shell: pwsh
 
     - name: Codecov
       uses: codecov/codecov-action@v2

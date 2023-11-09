@@ -92,6 +92,19 @@ The condition `typeof(IEntity).IsAssignableFrom(type)` will be `true` for any cl
 
 `options.EntityHistorySelectors` is a flexible and dynamic way of selecting the entities for audit logging. Another way is to use the `Audited` and `DisableAuditing` attributes per entity.
 
+## AbpAspNetCoreAuditingOptions
+
+`AbpAspNetCoreAuditingOptions` is the [options object](Options.md) to configure audit logging in the ASP.NET Core layer. You can configure it in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+
+````csharp
+Configure<AbpAspNetCoreAuditingOptions>(options =>
+{
+    options.IgnoredUrls.Add("/products");
+});
+````
+
+`IgnoredUrls` is the only option. It is a list of ignored URLs prefixes. In the preceding example, all URLs starting with `/products` will be ignored for audit logging.
+
 ## Enabling/Disabling Audit Logging for Services
 
 ### Enable/Disable for Controllers & Actions

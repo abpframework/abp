@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -31,62 +30,62 @@ public class DistributedCache<TCacheItem> :
         InternalCache = internalCache;
     }
 
-    public TCacheItem Get(string key, bool? hideErrors = null, bool considerUow = false)
+    public TCacheItem? Get(string key, bool? hideErrors = null, bool considerUow = false)
     {
         return InternalCache.Get(key, hideErrors, considerUow);
     }
 
-    public KeyValuePair<string, TCacheItem>[] GetMany(IEnumerable<string> keys, bool? hideErrors = null, bool considerUow = false)
+    public KeyValuePair<string, TCacheItem?>[] GetMany(IEnumerable<string> keys, bool? hideErrors = null, bool considerUow = false)
     {
         return InternalCache.GetMany(keys, hideErrors, considerUow);
     }
 
-    public Task<KeyValuePair<string, TCacheItem>[]> GetManyAsync(IEnumerable<string> keys, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
+    public Task<KeyValuePair<string, TCacheItem?>[]> GetManyAsync(IEnumerable<string> keys, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
     {
         return InternalCache.GetManyAsync(keys, hideErrors, considerUow, token);
     }
 
-    public Task<TCacheItem> GetAsync(string key, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
+    public Task<TCacheItem?> GetAsync(string key, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
     {
         return InternalCache.GetAsync(key, hideErrors, considerUow, token);
     }
 
-    public TCacheItem GetOrAdd(string key, Func<TCacheItem> factory, Func<DistributedCacheEntryOptions> optionsFactory = null, bool? hideErrors = null, bool considerUow = false)
+    public TCacheItem? GetOrAdd(string key, Func<TCacheItem> factory, Func<DistributedCacheEntryOptions>? optionsFactory = null, bool? hideErrors = null, bool considerUow = false)
     {
         return InternalCache.GetOrAdd(key, factory, optionsFactory, hideErrors, considerUow);
     }
 
-    public Task<TCacheItem> GetOrAddAsync(string key, Func<Task<TCacheItem>> factory, Func<DistributedCacheEntryOptions> optionsFactory = null, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
+    public Task<TCacheItem?> GetOrAddAsync(string key, Func<Task<TCacheItem>> factory, Func<DistributedCacheEntryOptions>? optionsFactory = null, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
     {
         return InternalCache.GetOrAddAsync(key, factory, optionsFactory, hideErrors, considerUow, token);
     }
 
-    public KeyValuePair<string, TCacheItem>[] GetOrAddMany(IEnumerable<string> keys, Func<IEnumerable<string>, List<KeyValuePair<string, TCacheItem>>> factory, Func<DistributedCacheEntryOptions> optionsFactory = null, bool? hideErrors = null, bool considerUow = false)
+    public KeyValuePair<string, TCacheItem?>[] GetOrAddMany(IEnumerable<string> keys, Func<IEnumerable<string>, List<KeyValuePair<string, TCacheItem>>> factory, Func<DistributedCacheEntryOptions>? optionsFactory = null, bool? hideErrors = null, bool considerUow = false)
     {
         return InternalCache.GetOrAddMany(keys, factory, optionsFactory, hideErrors, considerUow);
     }
 
-    public Task<KeyValuePair<string, TCacheItem>[]> GetOrAddManyAsync(IEnumerable<string> keys, Func<IEnumerable<string>, Task<List<KeyValuePair<string, TCacheItem>>>> factory, Func<DistributedCacheEntryOptions> optionsFactory = null, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
+    public Task<KeyValuePair<string, TCacheItem?>[]> GetOrAddManyAsync(IEnumerable<string> keys, Func<IEnumerable<string>, Task<List<KeyValuePair<string, TCacheItem>>>> factory, Func<DistributedCacheEntryOptions>? optionsFactory = null, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
     {
         return InternalCache.GetOrAddManyAsync(keys, factory, optionsFactory, hideErrors, considerUow, token);
     }
 
-    public void Set(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null, bool considerUow = false)
+    public void Set(string key, TCacheItem value, DistributedCacheEntryOptions? options = null, bool? hideErrors = null, bool considerUow = false)
     {
         InternalCache.Set(key, value, options, hideErrors, considerUow);
     }
 
-    public Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
+    public Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions? options = null, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
     {
         return InternalCache.SetAsync(key, value, options, hideErrors, considerUow, token);
     }
 
-    public void SetMany(IEnumerable<KeyValuePair<string, TCacheItem>> items, DistributedCacheEntryOptions options = null, bool? hideErrors = null, bool considerUow = false)
+    public void SetMany(IEnumerable<KeyValuePair<string, TCacheItem>> items, DistributedCacheEntryOptions? options = null, bool? hideErrors = null, bool considerUow = false)
     {
         InternalCache.SetMany(items, options, hideErrors, considerUow);
     }
 
-    public Task SetManyAsync(IEnumerable<KeyValuePair<string, TCacheItem>> items, DistributedCacheEntryOptions options = null, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
+    public Task SetManyAsync(IEnumerable<KeyValuePair<string, TCacheItem>> items, DistributedCacheEntryOptions? options = null, bool? hideErrors = null, bool considerUow = false, CancellationToken token = default)
     {
         return InternalCache.SetManyAsync(items, options, hideErrors, considerUow, token);
     }
@@ -141,12 +140,13 @@ public class DistributedCache<TCacheItem> :
 /// <typeparam name="TCacheKey">The type of cache key being used.</typeparam>
 public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheItem, TCacheKey>
     where TCacheItem : class
+    where TCacheKey : notnull
 {
     public const string UowCacheName = "AbpDistributedCache";
 
     public ILogger<DistributedCache<TCacheItem, TCacheKey>> Logger { get; set; }
 
-    protected string CacheName { get; set; }
+    protected string CacheName { get; set; } = default!;
 
     protected bool IgnoreMultiTenancy { get; set; }
 
@@ -164,7 +164,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
     protected SemaphoreSlim SyncSemaphore { get; }
 
-    protected DistributedCacheEntryOptions DefaultCacheOptions;
+    protected DistributedCacheEntryOptions DefaultCacheOptions = default!;
 
     private readonly AbpDistributedCacheOptions _distributedCacheOption;
 
@@ -195,7 +195,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
     {
         return KeyNormalizer.NormalizeKey(
             new DistributedCacheKeyNormalizeArgs(
-                key.ToString(),
+                key.ToString()!,
                 CacheName,
                 IgnoreMultiTenancy
             )
@@ -234,7 +234,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
     /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
     /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
     /// <returns>The cache item, or null.</returns>
-    public virtual TCacheItem Get(
+    public virtual TCacheItem? Get(
         TCacheKey key,
         bool? hideErrors = null,
         bool considerUow = false)
@@ -250,7 +250,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
             }
         }
 
-        byte[] cachedBytes;
+        byte[]? cachedBytes;
 
         try
         {
@@ -270,7 +270,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         return ToCacheItem(cachedBytes);
     }
 
-    public virtual KeyValuePair<TCacheKey, TCacheItem>[] GetMany(
+    public virtual KeyValuePair<TCacheKey, TCacheItem?>[] GetMany(
         IEnumerable<TCacheKey> keys,
         bool? hideErrors = null,
         bool considerUow = false)
@@ -288,7 +288,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         }
 
         var notCachedKeys = new List<TCacheKey>();
-        var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+        var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem?>>();
         if (ShouldConsiderUow(considerUow))
         {
             var uowCache = GetUnitOfWorkCache();
@@ -297,7 +297,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 var value = uowCache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
                 if (value != null)
                 {
-                    cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
+                    cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem?>(key, value));
                 }
             }
 
@@ -309,7 +309,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         }
 
         hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
-        byte[][] cachedBytes;
+        byte[]?[] cachedBytes;
 
         var readKeys = notCachedKeys.Any() ? notCachedKeys.ToArray() : keyArray;
         try
@@ -330,7 +330,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         return cachedValues.Concat(ToCacheItems(cachedBytes, readKeys)).ToArray();
     }
 
-    protected virtual KeyValuePair<TCacheKey, TCacheItem>[] GetManyFallback(
+    protected virtual KeyValuePair<TCacheKey, TCacheItem?>[] GetManyFallback(
         TCacheKey[] keys,
         bool? hideErrors = null,
         bool considerUow = false)
@@ -340,7 +340,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         try
         {
             return keys
-                .Select(key => new KeyValuePair<TCacheKey, TCacheItem>(
+                .Select(key => new KeyValuePair<TCacheKey, TCacheItem?>(
                         key,
                         Get(key, false, considerUow)
                     )
@@ -358,7 +358,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         }
     }
 
-    public virtual async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyAsync(
+    public virtual async Task<KeyValuePair<TCacheKey, TCacheItem?>[]> GetManyAsync(
         IEnumerable<TCacheKey> keys,
         bool? hideErrors = null,
         bool considerUow = false,
@@ -378,7 +378,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         }
 
         var notCachedKeys = new List<TCacheKey>();
-        var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+        var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem?>>();
         if (ShouldConsiderUow(considerUow))
         {
             var uowCache = GetUnitOfWorkCache();
@@ -387,7 +387,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 var value = uowCache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
                 if (value != null)
                 {
-                    cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
+                    cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem?>(key, value));
                 }
             }
 
@@ -399,7 +399,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         }
 
         hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
-        byte[][] cachedBytes;
+        byte[]?[] cachedBytes;
 
         var readKeys = notCachedKeys.Any() ? notCachedKeys.ToArray() : keyArray;
 
@@ -424,7 +424,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         return cachedValues.Concat(ToCacheItems(cachedBytes, readKeys)).ToArray();
     }
 
-    protected virtual async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyFallbackAsync(
+    protected virtual async Task<KeyValuePair<TCacheKey, TCacheItem?>[]> GetManyFallbackAsync(
         TCacheKey[] keys,
         bool? hideErrors = null,
         bool considerUow = false,
@@ -434,11 +434,11 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
         try
         {
-            var result = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+            var result = new List<KeyValuePair<TCacheKey, TCacheItem?>>();
 
             foreach (var key in keys)
             {
-                result.Add(new KeyValuePair<TCacheKey, TCacheItem>(
+                result.Add(new KeyValuePair<TCacheKey, TCacheItem?>(
                     key,
                     await GetAsync(key, false, considerUow, token: token))
                 );
@@ -466,7 +466,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
     /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
     /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
     /// <returns>The cache item, or null.</returns>
-    public virtual async Task<TCacheItem> GetAsync(
+    public virtual async Task<TCacheItem?> GetAsync(
         TCacheKey key,
         bool? hideErrors = null,
         bool considerUow = false,
@@ -483,7 +483,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
             }
         }
 
-        byte[] cachedBytes;
+        byte[]? cachedBytes;
 
         try
         {
@@ -521,10 +521,10 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
     /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
     /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
     /// <returns>The cache item.</returns>
-    public virtual TCacheItem GetOrAdd(
+    public virtual TCacheItem? GetOrAdd(
         TCacheKey key,
         Func<TCacheItem> factory,
-        Func<DistributedCacheEntryOptions> optionsFactory = null,
+        Func<DistributedCacheEntryOptions>? optionsFactory = null,
         bool? hideErrors = null,
         bool considerUow = false)
     {
@@ -574,10 +574,10 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
     /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
     /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
     /// <returns>The cache item.</returns>
-    public virtual async Task<TCacheItem> GetOrAddAsync(
+    public virtual async Task<TCacheItem?> GetOrAddAsync(
         TCacheKey key,
         Func<Task<TCacheItem>> factory,
-        Func<DistributedCacheEntryOptions> optionsFactory = null,
+        Func<DistributedCacheEntryOptions>? optionsFactory = null,
         bool? hideErrors = null,
         bool considerUow = false,
         CancellationToken token = default)
@@ -618,15 +618,15 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         return value;
     }
 
-    public KeyValuePair<TCacheKey, TCacheItem>[] GetOrAddMany(
+    public KeyValuePair<TCacheKey, TCacheItem?>[] GetOrAddMany(
         IEnumerable<TCacheKey> keys,
         Func<IEnumerable<TCacheKey>, List<KeyValuePair<TCacheKey, TCacheItem>>> factory,
-        Func<DistributedCacheEntryOptions> optionsFactory = null,
+        Func<DistributedCacheEntryOptions>? optionsFactory = null,
         bool? hideErrors = null,
         bool considerUow = false)
     {
 
-        KeyValuePair<TCacheKey, TCacheItem>[] result;
+        KeyValuePair<TCacheKey, TCacheItem?>[] result;
         var keyArray = keys.ToArray();
 
         var cacheSupportsMultipleItems = Cache as ICacheSupportsMultipleItems;
@@ -641,7 +641,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         else
         {
             var notCachedKeys = new List<TCacheKey>();
-            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem?>>();
             if (ShouldConsiderUow(considerUow))
             {
                 var uowCache = GetUnitOfWorkCache();
@@ -650,7 +650,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                     var value = uowCache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
                     if (value != null)
                     {
-                        cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
+                        cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem?>(key, value));
                     }
                 }
 
@@ -662,7 +662,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
             }
 
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
-            byte[][] cachedBytes;
+            byte[]?[] cachedBytes;
 
             var readKeys = notCachedKeys.Any() ? notCachedKeys.ToArray() : keyArray;
             try
@@ -685,7 +685,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
         if (result.All(x => x.Value != null))
         {
-            return result;
+            return result!;
         }
 
         var missingKeys = new List<TCacheKey>();
@@ -708,22 +708,22 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
         foreach (var index in missingValuesIndex)
         {
-            result[index] = valueQueue.Dequeue();
+            result[index] = valueQueue.Dequeue()!;
         }
 
         return result;
     }
 
 
-    public async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetOrAddManyAsync(
+    public async Task<KeyValuePair<TCacheKey, TCacheItem?>[]> GetOrAddManyAsync(
         IEnumerable<TCacheKey> keys,
         Func<IEnumerable<TCacheKey>, Task<List<KeyValuePair<TCacheKey, TCacheItem>>>> factory,
-        Func<DistributedCacheEntryOptions> optionsFactory = null,
+        Func<DistributedCacheEntryOptions>? optionsFactory = null,
         bool? hideErrors = null,
         bool considerUow = false,
         CancellationToken token = default)
     {
-        KeyValuePair<TCacheKey, TCacheItem>[] result;
+        KeyValuePair<TCacheKey, TCacheItem?>[] result;
         var keyArray = keys.ToArray();
 
         var cacheSupportsMultipleItems = Cache as ICacheSupportsMultipleItems;
@@ -737,7 +737,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         else
         {
             var notCachedKeys = new List<TCacheKey>();
-            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem?>>();
             if (ShouldConsiderUow(considerUow))
             {
                 var uowCache = GetUnitOfWorkCache();
@@ -746,7 +746,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                     var value = uowCache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
                     if (value != null)
                     {
-                        cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
+                        cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem?>(key, value));
                     }
                 }
 
@@ -758,7 +758,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
             }
 
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
-            byte[][] cachedBytes;
+            byte[]?[] cachedBytes;
 
             var readKeys = notCachedKeys.Any() ? notCachedKeys.ToArray() : keyArray;
             try
@@ -804,7 +804,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
         foreach (var index in missingValuesIndex)
         {
-            result[index] = valueQueue.Dequeue();
+            result[index] = valueQueue.Dequeue()!;
         }
 
         return result;
@@ -821,7 +821,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
     public virtual void Set(
         TCacheKey key,
         TCacheItem value,
-        DistributedCacheEntryOptions options = null,
+        DistributedCacheEntryOptions? options = null,
         bool? hideErrors = null,
         bool considerUow = false)
     {
@@ -861,8 +861,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 uowCache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(() =>
+            UnitOfWorkManager.Current?.OnCompleted(() =>
             {
                 SetRealCache();
                 return Task.CompletedTask;
@@ -886,7 +885,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
     public virtual async Task SetAsync(
         TCacheKey key,
         TCacheItem value,
-        DistributedCacheEntryOptions options = null,
+        DistributedCacheEntryOptions? options = null,
         bool? hideErrors = null,
         bool considerUow = false,
         CancellationToken token = default)
@@ -928,8 +927,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 uowCache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(SetRealCache);
+            UnitOfWorkManager.Current?.OnCompleted(SetRealCache);
         }
         else
         {
@@ -939,7 +937,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
     public void SetMany(
         IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
-        DistributedCacheEntryOptions options = null,
+        DistributedCacheEntryOptions? options = null,
         bool? hideErrors = null,
         bool considerUow = false)
     {
@@ -997,8 +995,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 }
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(() =>
+            UnitOfWorkManager.Current?.OnCompleted(() =>
             {
                 SetRealCache();
                 return Task.CompletedTask;
@@ -1012,7 +1009,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
     protected virtual void SetManyFallback(
         KeyValuePair<TCacheKey, TCacheItem>[] items,
-        DistributedCacheEntryOptions options = null,
+        DistributedCacheEntryOptions? options = null,
         bool? hideErrors = null,
         bool considerUow = false)
     {
@@ -1045,7 +1042,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
     public virtual async Task SetManyAsync(
         IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
-        DistributedCacheEntryOptions options = null,
+        DistributedCacheEntryOptions? options = null,
         bool? hideErrors = null,
         bool considerUow = false,
         CancellationToken token = default)
@@ -1106,8 +1103,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 }
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(SetRealCache);
+            UnitOfWorkManager.Current?.OnCompleted(SetRealCache);
         }
         else
         {
@@ -1117,7 +1113,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
     protected virtual async Task SetManyFallbackAsync(
         KeyValuePair<TCacheKey, TCacheItem>[] items,
-        DistributedCacheEntryOptions options = null,
+        DistributedCacheEntryOptions? options = null,
         bool? hideErrors = null,
         bool considerUow = false,
         CancellationToken token = default)
@@ -1311,8 +1307,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 uowCache[key].RemoveValue();
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(() =>
+            UnitOfWorkManager.Current?.OnCompleted(() =>
             {
                 RemoveRealCache();
                 return Task.CompletedTask;
@@ -1366,8 +1361,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                 uowCache[key].RemoveValue();
             }
 
-            // ReSharper disable once PossibleNullReferenceException
-            UnitOfWorkManager.Current.OnCompleted(RemoveRealCache);
+            UnitOfWorkManager.Current?.OnCompleted(RemoveRealCache);
         }
         else
         {
@@ -1418,8 +1412,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                     }
                 }
 
-                // ReSharper disable once PossibleNullReferenceException
-                UnitOfWorkManager.Current.OnCompleted(() =>
+                UnitOfWorkManager.Current?.OnCompleted(() =>
                 {
                     RemoveRealCache();
                     return Task.CompletedTask;
@@ -1482,8 +1475,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
                     }
                 }
 
-                // ReSharper disable once PossibleNullReferenceException
-                UnitOfWorkManager.Current.OnCompleted(RemoveRealCache);
+                UnitOfWorkManager.Current?.OnCompleted(RemoveRealCache);
             }
             else
             {
@@ -1516,19 +1508,19 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         }
     }
 
-    protected virtual KeyValuePair<TCacheKey, TCacheItem>[] ToCacheItems(byte[][] itemBytes, TCacheKey[] itemKeys)
+    protected virtual KeyValuePair<TCacheKey, TCacheItem?>[] ToCacheItems(byte[]?[] itemBytes, TCacheKey[] itemKeys)
     {
         if (itemBytes.Length != itemKeys.Length)
         {
             throw new AbpException("count of the item bytes should be same with the count of the given keys");
         }
 
-        var result = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+        var result = new List<KeyValuePair<TCacheKey, TCacheItem?>>();
 
-        for (int i = 0; i < itemKeys.Length; i++)
+        for (var i = 0; i < itemKeys.Length; i++)
         {
             result.Add(
-                new KeyValuePair<TCacheKey, TCacheItem>(
+                new KeyValuePair<TCacheKey, TCacheItem?>(
                     itemKeys[i],
                     ToCacheItem(itemBytes[i])
                 )
@@ -1538,8 +1530,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         return result.ToArray();
     }
 
-    [CanBeNull]
-    protected virtual TCacheItem ToCacheItem([CanBeNull] byte[] bytes)
+    protected virtual TCacheItem? ToCacheItem(byte[]? bytes)
     {
         if (bytes == null)
         {
@@ -1560,10 +1551,10 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
             ).ToArray();
     }
 
-    private static KeyValuePair<TCacheKey, TCacheItem>[] ToCacheItemsWithDefaultValues(TCacheKey[] keys)
+    private static KeyValuePair<TCacheKey, TCacheItem?>[] ToCacheItemsWithDefaultValues(TCacheKey[] keys)
     {
         return keys
-            .Select(key => new KeyValuePair<TCacheKey, TCacheItem>(key, default))
+            .Select(key => new KeyValuePair<TCacheKey, TCacheItem?>(key, default))
             .ToArray();
     }
 

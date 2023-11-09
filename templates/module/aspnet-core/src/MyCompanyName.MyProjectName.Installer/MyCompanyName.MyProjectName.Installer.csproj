@@ -3,7 +3,7 @@
     <Import Project="..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
         <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
@@ -15,7 +15,10 @@
 
     <ItemGroup>
       <None Remove="..\..\MyCompanyName.MyProjectName.abpmdl.json" />
-      <EmbeddedResource Include="..\..\MyCompanyName.MyProjectName.abpmdl.json" />
+      <Content Include="..\..\MyCompanyName.MyProjectName.abpmdl.json">
+        <Pack>true</Pack>
+        <PackagePath>content\</PackagePath>
+      </Content>
     </ItemGroup>
 
 </Project>

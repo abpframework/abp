@@ -5,14 +5,16 @@ namespace Volo.Abp.TextTemplating.VirtualFiles;
 
 public class FileInfoLocalizedTemplateContentReader : ILocalizedTemplateContentReader
 {
-    private string _content;
+    private IFileInfo _fileInfo = default!;
+    private string _content = default!;
 
     public async Task ReadContentsAsync(IFileInfo fileInfo)
     {
+        _fileInfo = fileInfo;
         _content = await fileInfo.ReadAsStringAsync();
     }
 
-    public string GetContentOrNull(string culture)
+    public string? GetContentOrNull(string? culture)
     {
         if (culture == null)
         {
@@ -20,5 +22,14 @@ public class FileInfoLocalizedTemplateContentReader : ILocalizedTemplateContentR
         }
 
         return null;
+    }
+
+    public TemplateContentFileInfo GetFile()
+    {
+        return new TemplateContentFileInfo()
+        {
+            FileName = _fileInfo.Name,
+            FileContent = _content
+        };
     }
 }
