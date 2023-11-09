@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} será excluído!",
     "ItemWillBeDeletedMessage": "Este item será excluído!",
     "ManageYourAccount": "Gerenciar sua conta",
-    "OthersGroup": "Outra"
+    "OthersGroup": "Outra",
+    "Today": "Hoje",
+    "Apply": "Aplicar"
   }
 }

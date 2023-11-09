@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} हटा दिया जाएगा!",
     "ItemWillBeDeletedMessage": "यह आइटम हटा दिया जाएगा!",
     "ManageYourAccount": "अपने खाते का प्रबंधन",
-    "OthersGroup": "अन्य"
+    "OthersGroup": "अन्य",
+    "Today": "आज",
+    "Apply": "आवेदन करना"
   }
 }

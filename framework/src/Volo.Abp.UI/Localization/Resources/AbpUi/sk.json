@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} sa vymaže!",
     "ItemWillBeDeletedMessage": "Táto položka bude vymazaná!",
     "ManageYourAccount": "Spravovať svoje konto",
-    "OthersGroup": "Iné"
+    "OthersGroup": "Iné",
+    "Today": "Dnes",
+    "Apply": "Použiť"
   }
 }

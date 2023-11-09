@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} verður eytt!",
     "ItemWillBeDeletedMessage": "Þessum lið verður eytt!",
     "ManageYourAccount": "Stillingar notandaaðgangs",
-    "OthersGroup": "Annað"
+    "OthersGroup": "Annað",
+    "Today": "Í dag",
+    "Apply": "Sækja um"
   }
 }
