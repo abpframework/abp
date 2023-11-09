@@ -986,7 +986,7 @@
     "Summary": "Summary",
     "TrainingPack": "Training pack",
     "TrainingPackDiscount": "Training pack discount",
-    "Purchase_OnboardingTraining_Description": "This live training package is valid for a class of 8 students and this discount is only valid when purchased with the new license. <a href=\"{0}\" class=\"text-white\">Learn more <i class=\"fa fa-external-link ms-1\"></i></a>",
+    "Purchase_OnboardingTraining_Description": "This live training is valid for a class of 8 students and this discount is only valid when purchased with the new license. <a href=\"{0}\" class=\"text-white\">Learn more <i class=\"fa fa-external-link ms-1\"></i></a>",
     "Purchase_Save": "{0}% <span class=\"save ms-1\">Save {1} {2}</span>",
     "RemoveBasket": "Remove from basket",
     "WhyABPIOPlatform?": "Why <span class=\"gradient-commercial\">ABP.IO Platform</span>?",
