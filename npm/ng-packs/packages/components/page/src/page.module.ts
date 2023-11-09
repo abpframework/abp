@@ -9,6 +9,7 @@ import {
   PageToolbarContainerComponent,
 } from './page-parts.component';
 import { PageComponent } from './page.component';
+import {ExtensibleModule} from "@abp/ng.components/extensible";
 
 const exportedDeclarations = [
   PageComponent,
@@ -20,7 +21,7 @@ const exportedDeclarations = [
 
 @NgModule({
   declarations: [...exportedDeclarations],
-  imports: [CommonModule, CoreModule, ThemeSharedModule],
+    imports: [CommonModule, CoreModule, ThemeSharedModule, ExtensibleModule],
   exports: [...exportedDeclarations],
 })
 export class PageModule {}
