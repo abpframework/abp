@@ -53,13 +53,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
             {
                 Logger.LogDebug($"Filling dynamic claims cache for user: {userId}");
 
-                var user = await UserManager.FindByIdAsync(userId.ToString());
-                if (user == null)
-                {
-                    Logger.LogWarning($"User not found: {userId}");
-                    return new List<AbpClaimCacheItem>();
-                }
-
+                var user = await UserManager.GetByIdAsync(userId);
                 var principal = await UserClaimsPrincipalFactory.CreateAsync(user);
                 return principal.Identities.FirstOrDefault()?.Claims
                     .Where(c => AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims.Contains(c.Type))
