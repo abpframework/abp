@@ -31,7 +31,7 @@ public class IdentityDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincip
         {
             // In case if user not found, We force to clear the claims principal.
             context.ClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
-            var logger = context.GetRequiredService<Logger<IdentityDynamicClaimsPrincipalContributor>>();
+            var logger = context.GetRequiredService<ILogger<IdentityDynamicClaimsPrincipalContributor>>();
             logger.LogWarning(e, $"User not found: {userId.Value}");
             return;
         }
