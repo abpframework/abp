@@ -11,10 +11,10 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
-using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity;
@@ -27,7 +27,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     protected ISettingProvider SettingProvider { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
-
+    protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
     public IdentityUserManager(
@@ -45,7 +45,8 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         ICancellationTokenProvider cancellationTokenProvider,
         IOrganizationUnitRepository organizationUnitRepository,
         ISettingProvider settingProvider,
-        IDistributedEventBus distributedEventBus)
+        IDistributedEventBus distributedEventBus,
+        IIdentityLinkUserRepository identityLinkUserRepository)
         : base(
             store,
             optionsAccessor,
@@ -62,6 +63,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         DistributedEventBus = distributedEventBus;
         RoleRepository = roleRepository;
         UserRepository = userRepository;
+        IdentityLinkUserRepository = identityLinkUserRepository;
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
@@ -74,6 +76,19 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         return await CreateAsync(user);
+    }
+
+    public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
+    {
+        user.Claims.Clear();
+        user.Roles.Clear();
+        user.Tokens.Clear();
+        user.Logins.Clear();
+        user.OrganizationUnits.Clear();
+        await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(user.Id, user.TenantId), CancellationToken);
+        await UpdateAsync(user);
+
+        return await base.DeleteAsync(user);
     }
 
     public virtual async Task<IdentityUser> GetByIdAsync(Guid id)

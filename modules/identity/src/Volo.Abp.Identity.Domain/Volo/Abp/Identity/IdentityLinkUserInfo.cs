@@ -8,7 +8,7 @@ public class IdentityLinkUserInfo
 
     public virtual Guid? TenantId { get; set; }
 
-    public IdentityLinkUserInfo(Guid userId, Guid? tenantId)
+    public IdentityLinkUserInfo(Guid userId, Guid? tenantId = null)
     {
         UserId = userId;
         TenantId = tenantId;

@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} wordt verwijderd!",
     "ItemWillBeDeletedMessage": "Dit item wordt verwijderd!",
     "ManageYourAccount": "Beheer uw account",
-    "OthersGroup": "Ander"
+    "OthersGroup": "Ander",
+    "Today": "Vandaag",
+    "Apply": "Toepassen"
   }
 }
