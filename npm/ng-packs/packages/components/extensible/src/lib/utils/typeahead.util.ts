@@ -39,11 +39,11 @@ export function createTypeaheadOptions(
 }
 
 export function getTypeaheadType(lookup: ExtensionPropertyUiLookupDto, name: string) {
-  return Boolean(lookup.url)
-    ? ePropType.Typeahead
-    : name.endsWith(TYPEAHEAD_TEXT_SUFFIX)
-    ? ePropType.Hidden
-    : undefined;
+  if (!!lookup.url) {
+    return ePropType.Typeahead;
+  } else {
+    return name.endsWith(TYPEAHEAD_TEXT_SUFFIX) ? ePropType.Hidden : undefined;
+  }
 }
 
 export function createTypeaheadDisplayNameGenerator(
