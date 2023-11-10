@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} wird gelöscht!",
     "ItemWillBeDeletedMessage": "Dieses Element wird gelöscht!",
     "ManageYourAccount": "Verwalten Sie Ihr Benutzerkonto",
-    "OthersGroup":"Andere"
+    "OthersGroup":"Andere",
+    "Today": "Heute",
+    "Apply": "Anwenden"
   }
 }

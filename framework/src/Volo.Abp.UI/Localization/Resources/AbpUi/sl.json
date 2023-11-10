@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} bo izbrisan!",
     "ItemWillBeDeletedMessage": "Ta element bo izbrisan!",
     "ManageYourAccount": "Upravljajte svoj račun",
-    "OthersGroup": "Ostalo"
+    "OthersGroup": "Ostalo",
+    "Today": "Danes",
+    "Apply": "Prijavite se"
   }
 }

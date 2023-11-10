@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} törlésre kerül!",
     "ItemWillBeDeletedMessage": "Ez az elem törlődik!",
     "ManageYourAccount": "Kezelje fiókját",
-    "OthersGroup": "Egyéb"
+    "OthersGroup": "Egyéb",
+    "Today": "Ma",
+    "Apply": "Alkalmaz"
   }
 }

@@ -417,7 +417,7 @@
             var isUtc = options.isUtc;
             dateFormat = dateFormat || options.dateFormat;
             if (!date) {
-                return isUtc ? moment.utc() : moment();
+                return isUtc ? moment.utc().startOf('day') : moment().startOf('day');
             }
 
             if (isUtc) {

@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} zostanie usunięty!",
     "ItemWillBeDeletedMessage": "Ten element zostanie usunięty!",
     "ManageYourAccount": "Zarządzaj kontem",
-    "OthersGroup": "Inny"
+    "OthersGroup": "Inny",
+    "Today": "Dzisiaj",
+    "Apply": "Stosować"
   }
 }
