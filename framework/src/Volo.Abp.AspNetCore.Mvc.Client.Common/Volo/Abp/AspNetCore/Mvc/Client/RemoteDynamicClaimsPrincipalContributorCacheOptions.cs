@@ -8,6 +8,6 @@ public class RemoteDynamicClaimsPrincipalContributorCacheOptions
 
     public RemoteDynamicClaimsPrincipalContributorCacheOptions()
     {
-        CacheAbsoluteExpiration = TimeSpan.FromSeconds(5);
+        CacheAbsoluteExpiration = TimeSpan.FromSeconds(60);
     }
 }

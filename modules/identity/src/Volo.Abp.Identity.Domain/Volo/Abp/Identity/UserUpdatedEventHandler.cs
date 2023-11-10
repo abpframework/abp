@@ -14,14 +14,11 @@ public class UserEntityUpdatedEventHandler :
     ILocalEventHandler<EntityDeletedEventData<IdentityUser>>,
     ITransientDependency
 {
-    public ILogger<UserEntityUpdatedEventHandler> Logger { get; set; }
-
     private readonly IdentityDynamicClaimsPrincipalContributorCache _cache;
 
     public UserEntityUpdatedEventHandler(IdentityDynamicClaimsPrincipalContributorCache cache)
     {
         _cache = cache;
-        Logger = NullLogger<UserEntityUpdatedEventHandler>.Instance;
     }
 
     [UnitOfWork]
@@ -38,7 +35,6 @@ public class UserEntityUpdatedEventHandler :
 
     protected virtual async Task ClearAsync(Guid userId, Guid? tenantId)
     {
-        Logger.LogDebug($"Clearing dynamic claims cache for user: {userId}");
         await _cache.ClearAsync(userId, tenantId);
     }
 }
