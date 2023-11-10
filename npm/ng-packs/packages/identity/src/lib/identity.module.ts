@@ -7,6 +7,7 @@ import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { RolesComponent } from './components/roles/roles.component';
 import { UsersComponent } from './components/users/users.component';
+import { IdentityExtensionsGuard } from './guards';
 import { IdentityRoutingModule } from './identity-routing.module';
 import { IdentityConfigOptions } from './models/config-options';
 import {
@@ -58,6 +59,7 @@ export class IdentityModule {
           provide: IDENTITY_EDIT_FORM_PROP_CONTRIBUTORS,
           useValue: options.editFormPropContributors,
         },
+        IdentityExtensionsGuard
       ],
     };
   }

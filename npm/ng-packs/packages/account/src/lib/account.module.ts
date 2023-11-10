@@ -17,6 +17,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { RE_LOGIN_CONFIRMATION_TOKEN } from './tokens';
 import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
 import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS } from './tokens/extensions.token';
+import { AccountExtensionsGuard } from './guards';
 import { PersonalSettingsHalfRowComponent } from './components/personal-settings/personal-settings-half-row.component';
 
 const declarations = [
@@ -61,6 +62,7 @@ export class AccountModule {
           provide: ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS,
           useValue: options.editFormPropContributors,
         },
+        AccountExtensionsGuard
       ],
     };
   }

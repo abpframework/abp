@@ -8,6 +8,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { TenantManagementConfigOptions } from './models/config-options';
 import { TenantManagementRoutingModule } from './tenant-management-routing.module';
+import { TenantManagementExtensionsGuard } from './guards';
 import {
   TENANT_MANAGEMENT_CREATE_FORM_PROP_CONTRIBUTORS,
   TENANT_MANAGEMENT_EDIT_FORM_PROP_CONTRIBUTORS,
@@ -58,6 +59,7 @@ export class TenantManagementModule {
           provide: TENANT_MANAGEMENT_EDIT_FORM_PROP_CONTRIBUTORS,
           useValue: options.editFormPropContributors,
         },
+        TenantManagementExtensionsGuard
       ],
     };
   }
