@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} будет удален!",
     "ItemWillBeDeletedMessage": "Этот предмет будет удален!",
     "ManageYourAccount": "Настройте свой аккаунт",
-    "OthersGroup": "Другой"
+    "OthersGroup": "Другой",
+    "Today": "Сегодня",
+    "Apply": "Применять"
   }
 }

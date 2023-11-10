@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+        <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>

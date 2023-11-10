@@ -1,15 +1,26 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
+import { provideRouter, Route, Router, RouterModule } from '@angular/router';
+import {
+  createServiceFactory,
+  createSpyObject,
+  SpectatorService,
+  SpyObject,
+} from '@ngneat/spectator/jest';
 import { of } from 'rxjs';
-import { PermissionGuard } from '../guards/permission.guard';
+import { permissionGuard, PermissionGuard } from '../guards/permission.guard';
 import { HttpErrorReporterService } from '../services/http-error-reporter.service';
 import { PermissionService } from '../services/permission.service';
 import { RoutesService } from '../services/routes.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { IncludeLocalizationResourcesProvider } from '../providers';
+import { TestBed } from '@angular/core/testing';
+import { RouterTestingHarness } from '@angular/router/testing';
+import { OTHERS_GROUP } from '../tokens';
+import { SORT_COMPARE_FUNC, compareFuncFactory } from '../tokens/compare-func.token';
+import { CoreModule } from '../core.module';
+import { AuthService } from '../abstracts';
 
 describe('PermissionGuard', () => {
   let spectator: SpectatorService<PermissionGuard>;
@@ -17,6 +28,10 @@ describe('PermissionGuard', () => {
   let routes: SpyObject<RoutesService>;
   let httpErrorReporter: SpyObject<HttpErrorReporterService>;
   let permissionService: SpyObject<PermissionService>;
+
+  const mockOAuthService = {
+    isAuthenticated: true,
+  };
 
   @Component({ template: '' })
   class DummyComponent {}
@@ -27,25 +42,25 @@ describe('PermissionGuard', () => {
     declarations: [DummyComponent],
     imports: [
       HttpClientTestingModule,
-      RouterModule.forRoot(
-        [
-          {
-            path: 'test',
-            component: DummyComponent,
-            data: {
-              requiredPolicy: 'TestPolicy',
-            },
+      RouterModule.forRoot([
+        {
+          path: 'test',
+          component: DummyComponent,
+          data: {
+            requiredPolicy: 'TestPolicy',
           },
-        ],
-        {},
-      ),
+        },
+      ]),
     ],
     providers: [
       {
         provide: APP_BASE_HREF,
         useValue: '/',
       },
+      { provide: AuthService, useValue: mockOAuthService },
       { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
+      { provide: OTHERS_GROUP, useValue: 'AbpUi::OthersGroup' },
+      { provide: SORT_COMPARE_FUNC, useValue: compareFuncFactory },
       IncludeLocalizationResourcesProvider,
     ],
   });
@@ -106,5 +121,79 @@ describe('PermissionGuard', () => {
       expect(result).toBe(true);
       done();
     });
+  });
+});
+
+@Component({ standalone: true, template: '' })
+class DummyComponent {}
+describe('authGuard', () => {
+  let permissionService: SpyObject<PermissionService>;
+  let httpErrorReporter: SpyObject<HttpErrorReporterService>;
+
+  const mockOAuthService = {
+    isAuthenticated: true,
+  };
+
+  const routes: Route[] = [
+    {
+      path: 'dummy',
+      component: DummyComponent,
+      canActivate: [permissionGuard],
+      data: {
+        requiredPolicy: 'TestPolicy',
+      },
+    },
+    {
+      path: 'zibzib',
+      component: DummyComponent,
+      canActivate: [permissionGuard],
+    },
+  ];
+
+  beforeEach(() => {
+    httpErrorReporter = createSpyObject(HttpErrorReporterService);
+    permissionService = createSpyObject(PermissionService);
+
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, CoreModule.forRoot()],
+      providers: [
+        { provide: AuthService, useValue: mockOAuthService },
+        { provide: PermissionService, useValue: permissionService },
+        { provide: HttpErrorReporterService, useValue: httpErrorReporter },
+        provideRouter(routes),
+      ],
+    });
+  });
+
+  it('should return true when the grantedPolicy is true', async () => {
+    permissionService.getGrantedPolicy$.andReturn(of(true));
+    await RouterTestingHarness.create('/dummy');
+
+    expect(TestBed.inject(Router).url).toEqual('/dummy');
+    expect(httpErrorReporter.reportError).not.toHaveBeenCalled();
+  });
+
+  it('should return false and report an error when the grantedPolicy is false', async () => {
+    permissionService.getGrantedPolicy$.andReturn(of(false));
+    await RouterTestingHarness.create('/dummy');
+
+    expect(TestBed.inject(Router).url).not.toEqual('/dummy');
+    expect(httpErrorReporter.reportError).toHaveBeenCalled();
+    expect(httpErrorReporter.reportError).toBeCalledWith({ status: 403 });
+  });
+
+  it('should check the requiredPolicy from RoutesService', async () => {
+    permissionService.getGrantedPolicy$.mockImplementation(policy => {
+      return of(policy === 'TestPolicy');
+    });
+    await RouterTestingHarness.create('/dummy');
+
+    expect(TestBed.inject(Router).url).toEqual('/dummy');
+    expect(httpErrorReporter.reportError).not.toHaveBeenCalled();
+  });
+
+  it('should return Observable<true> if RoutesService does not have requiredPolicy for given URL', async () => {
+    await RouterTestingHarness.create('/zibzib');
+    expect(TestBed.inject(Router).url).toEqual('/zibzib');
   });
 });

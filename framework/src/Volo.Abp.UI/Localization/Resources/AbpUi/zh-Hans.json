@@ -51,6 +51,8 @@
     "ManageYourAccount": "管理你的账户",
     "OthersGroup": "其他",
     "CopiedToTheClipboard": "已复制到剪贴板",
-    "NotAssigned": "未分配"
+    "NotAssigned": "未分配",
+    "Today": "今天",
+    "Apply": "应用"
   }
 }

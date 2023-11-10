@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} sẽ bị xóa!",
     "ItemWillBeDeletedMessage": "Vật phẩm này sẽ bị xoá!",
     "ManageYourAccount": "Quản lý tài khoản của bạn",
-    "OthersGroup": "Khác"
+    "OthersGroup": "Khác",
+    "Today": "Hôm nay",
+    "Apply": "Áp dụng"
   }
 }

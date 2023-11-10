@@ -54,20 +54,20 @@ As shown above you can remove elements from DOM with `abpPermission` structural 
 
 ## Permission Guard
 
-You can use `PermissionGuard` if you want to control authenticated user's permission to access to the route during navigation.
+You can use `permissionGuard` if you want to control authenticated user's permission to access to the route during navigation.
 
 * Import the PermissionGuard from @abp/ng.core.
-* Add `canActivate: [PermissionGuard]` to your route object.
+* Add `canActivate: [permissionGuard]` to your route object.
 * Add `requiredPolicy` to the `data` property of your route in your routing module.
 
 ```js
-import { PermissionGuard } from '@abp/ng.core';
+import { permissionGuard } from '@abp/ng.core';
 // ...
 const routes: Routes = [
   {
     path: 'path',
     component: YourComponent,
-    canActivate: [PermissionGuard],
+    canActivate: [permissionGuard],
     data: {
         requiredPolicy: 'YourProjectName.YourComponent', // policy key for your component
     },

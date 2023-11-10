@@ -12,7 +12,7 @@
             <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
         </strong>
         <form method="post" class="mt-4">
-            @if ((!Model.IsExternalLogin || Model.UserNameExtracted) && Model.EnableLocalRegister)
+            @if (Model.EnableLocalRegister || Model.IsExternalLogin)
             {
                 <abp-input asp-for="Input.UserName" auto-focus="true"/>
             }
