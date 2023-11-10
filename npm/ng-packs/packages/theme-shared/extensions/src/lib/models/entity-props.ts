@@ -1,5 +1,5 @@
 import { ABP, escapeHtmlChars } from '@abp/ng.core';
-import { Type } from '@angular/core';
+import { InjectFlags, InjectOptions, InjectionToken, Type } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { O } from 'ts-toolbelt';
 import { ActionCallback } from './actions';
@@ -31,6 +31,7 @@ export class EntityProp<R = any> extends Prop<R> {
   readonly component?: Type<any>;
   readonly enumList?: Array<ABP.Option<any>>;
   readonly tooltip?: string;
+  readonly columnVisible: ColumnPredicate;
 
   constructor(options: EntityPropOptions<R>) {
     super(
@@ -41,7 +42,8 @@ export class EntityProp<R = any> extends Prop<R> {
       options.visible,
       options.isExtra,
     );
-    
+
+    this.columnVisible = options.columnVisible || (() => true);
     this.columnWidth = options.columnWidth;
     this.sortable = options.sortable || false;
     this.valueResolver =
@@ -72,6 +74,7 @@ export type EntityPropOptions<R = any> = O.Optional<
   O.Writable<EntityProp<R>>,
   | 'permission'
   | 'visible'
+  | 'columnVisible'
   | 'displayName'
   | 'isExtra'
   | 'columnWidth'
@@ -85,4 +88,10 @@ export type EntityPropOptions<R = any> = O.Optional<
 export type EntityPropDefaults<R = any> = Record<string, EntityProp<R>[]>;
 export type EntityPropContributorCallback<R = any> = PropContributorCallback<EntityPropList<R>>;
 export type EntityPropContributorCallbacks<R = any> = PropContributorCallbacks<EntityPropList<R>>;
+export type ColumnPredicate = (getInjected: GetInjected, auxData?: any) => boolean;
+export type GetInjected = <T>(
+  token: Type<T> | InjectionToken<T>,
+  notFoundValue?: T,
+  options?: InjectOptions | InjectFlags,
+) => T;
 type PropDataObject = { [key: string]: any };
