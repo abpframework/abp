@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -59,7 +60,7 @@ public class RemoteDynamicClaimsPrincipalContributorCache : ITransientDependency
         // Use independent cache for remote claims.
         return (await Cache.GetOrAddAsync($"{nameof(RemoteDynamicClaimsPrincipalContributorCache)}{AbpClaimCacheItem.CalculateCacheKey(userId, tenantId)}", async () =>
         {
-            var dynamicClaims = new List<AbpClaimCacheItem>();
+            var dynamicClaims = AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims.Select(claimType => new AbpClaimCacheItem(claimType, null)).ToList();
             Logger.LogDebug($"Get dynamic claims for user: {userId} from remote service.");
             try
             {
@@ -67,7 +68,11 @@ public class RemoteDynamicClaimsPrincipalContributorCache : ITransientDependency
                 var requestMessage = new HttpRequestMessage(HttpMethod.Get, AbpClaimsPrincipalFactoryOptions.Value.RemoteUrl);
                 await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration("/"), string.Empty));
                 var response = await client.SendAsync(requestMessage);
-                dynamicClaims = JsonSerializer.Deserialize<List<AbpClaimCacheItem>>(await response.Content.ReadAsStringAsync());
+                var remoteClaims = JsonSerializer.Deserialize<List<AbpClaimCacheItem>>(await response.Content.ReadAsStringAsync());
+                foreach (var claim in dynamicClaims)
+                {
+                    claim.Value = remoteClaims.FirstOrDefault(c => c.Type == claim.Type)?.Value;
+                }
                 Logger.LogDebug($"Successfully got {dynamicClaims.Count} remote claims for user: {userId}");
             }
             catch (Exception e)

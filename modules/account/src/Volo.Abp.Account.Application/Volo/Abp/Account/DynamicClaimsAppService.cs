@@ -29,14 +29,20 @@ public class DynamicClaimsAppService : IdentityAppServiceBase, IDynamicClaimsApp
     {
         var principal = await AbpClaimsPrincipalFactory.CreateAsync(PrincipalAccessor.Principal);
 
-        var dynamicClaims = principal.Claims
-            .Where(c => AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims.Contains(c.Type))
-            .Select(c => new DynamicClaimDto
+        var dynamicClaims = new List<DynamicClaimDto>();
+        foreach (var claimType in AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims)
+        {
+            var claims = principal.Claims.Where(x => x.Type == claimType).ToList();
+            if (claims.Any())
             {
-                Type = c.Type,
-                Value = c.Value
-            });
+                dynamicClaims.AddRange(claims.Select(claim => new DynamicClaimDto(claimType, claim.Value)));
+            }
+            else
+            {
+                dynamicClaims.Add(new DynamicClaimDto(claimType, null));
+            }
+        }
 
-        return dynamicClaims.ToList();
+        return dynamicClaims;
     }
 }

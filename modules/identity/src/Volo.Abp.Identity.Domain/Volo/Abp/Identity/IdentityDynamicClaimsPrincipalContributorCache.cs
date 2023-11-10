@@ -55,9 +55,22 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
 
                 var user = await UserManager.GetByIdAsync(userId);
                 var principal = await UserClaimsPrincipalFactory.CreateAsync(user);
-                return principal.Identities.FirstOrDefault()?.Claims
-                    .Where(c => AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims.Contains(c.Type))
-                    .Select(c => new AbpClaimCacheItem(c.Type, c.Value)).ToList();
+
+                var dynamicClaims = new List<AbpClaimCacheItem>();
+                foreach (var claimType in AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims)
+                {
+                    var claims = principal.Claims.Where(x => x.Type == claimType).ToList();
+                    if (claims.Any())
+                    {
+                        dynamicClaims.AddRange(claims.Select(claim => new AbpClaimCacheItem(claimType, claim.Value)));
+                    }
+                    else
+                    {
+                        dynamicClaims.Add(new AbpClaimCacheItem(claimType, null));
+                    }
+                }
+
+                return dynamicClaims;
             }
         }, () => new DistributedCacheEntryOptions
         {
