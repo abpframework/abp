@@ -1,4 +1,4 @@
-import { CoreModule } from '@abp/ng.core';
+import { CoreModule, ShowPasswordDirective } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule } from '@angular/core';
 import {
@@ -49,7 +49,8 @@ import { CreateInjectorPipe } from './pipes/create-injector.pipe';
     NgbDropdownModule,
     NgbTimepickerModule,
     NgbTypeaheadModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    ShowPasswordDirective
   ],
 })
 export class BaseUiExtensionsModule {}

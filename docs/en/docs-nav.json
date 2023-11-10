@@ -1123,6 +1123,14 @@
                   "path": "UI/Angular/Loading-Directive.md"
                 },
                 {
+                  "text": "Show Password Directive",
+                  "path": "UI/Angular/Show-Password-Directive.md"
+                },
+                {
+                  "text": "Caps Lock Directive",
+                  "path": "UI/Angular/Caps-Lock-Directive.md"
+                },
+                {
                   "text": "Toast Overlay",
                   "path": "UI/Angular/Toaster-Service.md"
                 },
