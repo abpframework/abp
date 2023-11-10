@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} sarà eliminato!",
     "ItemWillBeDeletedMessage": "Questo elemento sarà eliminato!",
     "ManageYourAccount": "Gestisci il tuo account",
-    "OthersGroup": "Altra"
+    "OthersGroup": "Altra",
+    "Today": "Oggi",
+    "Apply": "Fare domanda a"
   }
 }

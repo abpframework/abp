@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Resources;
 
 public class WebRequestResources : IWebRequestResources, IScopedDependency
 {
-    protected Dictionary<string, List<string>> Resources { get; }
+    protected Dictionary<string, List<BundleFile>> Resources { get; }
 
     protected IHttpContextAccessor HttpContextAccessor { get; }
 
     public WebRequestResources(IHttpContextAccessor httpContextAccessor)
     {
         HttpContextAccessor = httpContextAccessor;
-        Resources = new Dictionary<string, List<string>>();
+        Resources = new Dictionary<string, List<BundleFile>>();
     }
 
-    public List<string> TryAdd(List<string> resources)
+    public List<BundleFile> TryAdd(List<BundleFile> resources)
     {
         var path = HttpContextAccessor.HttpContext?.Request?.Path ?? "";
 

@@ -601,7 +601,7 @@
     "PaymentSucceed_ViewOrganization": "Click here to view organization",
     "Purchase_TotalAnnualPrice": "TOTAL <small class=\"opacity-50\">(annual fee)</small>",
     "Purchase_TrainingPrice": "Training Price",
-    "Purchase_OnboardingTraining": "ABP Onboarding & Web Application Development Live Training",
+    "Purchase_OnboardingTraining": "Onboarding & Web Application Development Live Training",
     "TotalDeveloperPrice": "Total Developer Price",
     "Purchase_PricePerDeveloper": "<span>{0} {1}</span> per developer",
     "Purchase_IncludedDeveloperInfo": "{0} {1} included.",
@@ -978,10 +978,10 @@
     "Purchase_DevelopersAlreadyIncluded": "{0} developers already included",
     "1Year": "1 year",
     "{0}Years": "{0} years",
-    "1YearLicense": "1 year license",
-    "{0}YearsLicense": "{0} years license",
-    "1AdditionalDeveloper": "1 additional developer",
-    "{0}AdditionalDevelopers": "{0} additional developers",
+    "1YearLicense": "1 Year License",
+    "{0}YearsLicense": "{0} Years License",
+    "1AdditionalDeveloper": "1 Additional Developer",
+    "{0}AdditionalDevelopers": "{0} Additional Developers",
     "Discount": "Discount ({0}%)",
     "Summary": "Summary",
     "TrainingPack": "Training pack",
@@ -1081,6 +1081,10 @@
     "CampaignInfo": "Buy a new license or renew your existing license and <span class=\"text-white\">get an additional 2 months</span> at no additional cost! This offer is valid for all license plans. Ensure you take advantage of this limited-time promotion to expand your access to premium features and upgrades.",
     "HurryUpLastDay": "Hurry Up! Last Day: {0}",
     "CreatingCRUDPagesWithABPSuite": "Creating CRUD pages with ABP Suite",
-    "Testimonials": "Testimonials"
+    "Testimonials": "Testimonials",
+    "MultipleYearDiscount": "Multiple Year Discount",
+    "CampaignDiscountText": "Black Friday Discount",
+    "CampaignDiscountName": "Black Friday",
+    "CampaignName:BlackFriday": "Black Friday"
   }
 }
