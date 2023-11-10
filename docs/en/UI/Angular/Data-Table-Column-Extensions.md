@@ -203,8 +203,6 @@ type PropPredicate<T> = (data?: PropData<T>) => boolean;
 type ColumnPredicate<T> = (getInjected: GetInjected) => boolean;
 ```
 
-````
-
 ### EntityPropOptions\<R = any\>
 
 `EntityPropOptions` is the type that defines required and optional properties you have to pass in order to create an entity prop.
@@ -223,7 +221,7 @@ type EntityPropOptions<R = any> = {
   visible?: PropPredicate<R>,
   columnVisible?: ColumnPredicate,
 };
-````
+```
 
 As you see, passing `type` and `name` is enough to create an entity prop. Here is what each property is good for:
 
