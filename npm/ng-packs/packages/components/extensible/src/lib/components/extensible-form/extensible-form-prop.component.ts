@@ -24,15 +24,14 @@ import {
 import { NgbDateAdapter, NgbTimeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { DateAdapter } from '../../adapters/date.adapter';
-import { TimeAdapter } from '../../adapters/time.adapter';
+import { DateAdapter, TimeAdapter } from '@abp/ng.theme.shared';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
 import { ePropType } from '../../enums/props.enum';
 import { FormProp } from '../../models/form-props';
 import { PropData } from '../../models/props';
 import { selfFactory } from '../../utils/factory.util';
 import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
-import { eThemeSharedComponents } from '../../enums/components';
+import { eThemeSharedComponents } from "../../enums/components";
 
 @Component({
   selector: 'abp-extensible-form-prop',

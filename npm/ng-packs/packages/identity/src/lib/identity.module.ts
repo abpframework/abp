@@ -1,7 +1,7 @@
 import { CoreModule, LazyModuleFactory } from '@abp/ng.core';
 import { PermissionManagementModule } from '@abp/ng.permission-management';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
+import { ExtensibleModule } from '@abp/ng.components/extensible';
 import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
@@ -27,7 +27,7 @@ import { PageModule } from '@abp/ng.components/page';
     IdentityRoutingModule,
     NgbNavModule,
     ThemeSharedModule,
-    UiExtensionsModule,
+    ExtensibleModule,
     NgbDropdownModule,
     PermissionManagementModule,
     NgxValidateCoreModule,

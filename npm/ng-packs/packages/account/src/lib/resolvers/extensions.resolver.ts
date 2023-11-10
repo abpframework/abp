@@ -6,7 +6,7 @@ import {
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
   mergeWithDefaultProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import { eAccountComponents } from '../enums';
 import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, DEFAULT_ACCOUNT_FORM_PROPS } from '../tokens';
 import { ResolveFn } from '@angular/router';

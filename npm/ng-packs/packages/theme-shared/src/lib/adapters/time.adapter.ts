@@ -31,5 +31,5 @@ export class TimeAdapter extends NgbTimeAdapter<string | Date> {
 }
 
 function isTimeStr(value: string | Date): value is string {
-  return /^((2[123])|[01][0-9])(\:[0-5][0-9]){1,2}$/.test(String(value));
+  return /^((2[123])|[01][0-9])(:[0-5][0-9]){1,2}$/.test(String(value));
 }

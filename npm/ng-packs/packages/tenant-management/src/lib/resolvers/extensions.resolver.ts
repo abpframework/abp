@@ -7,7 +7,7 @@ import {
   mapEntitiesToContributors,
   mergeWithDefaultActions,
   mergeWithDefaultProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import { eTenantManagementComponents } from '../enums';
 import {
   TENANT_MANAGEMENT_ENTITY_ACTION_CONTRIBUTORS,

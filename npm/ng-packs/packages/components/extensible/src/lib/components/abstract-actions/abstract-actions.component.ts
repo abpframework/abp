@@ -16,9 +16,8 @@ export abstract class AbstractActionsComponent<
 
   @Input() record!: InferredData<L>['record'];
 
-  constructor(injector: Injector) {
+  protected constructor(injector: Injector) {
     super();
-
     this.getInjected = injector.get.bind(injector);
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
