@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Auditing;
+using Volo.Abp.Domain;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy.Localization;
@@ -9,7 +10,8 @@ namespace Volo.Abp.MultiTenancy;
 [DependsOn(
     typeof(AbpVirtualFileSystemModule),
     typeof(AbpLocalizationModule),
-    typeof(AbpAuditingContractsModule)
+    typeof(AbpAuditingContractsModule),
+    typeof(AbpDddDomainSharedModule)
 )]
 public class AbpMultiTenancyAbstractionsModule : AbpModule
 {
