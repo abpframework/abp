@@ -211,15 +211,15 @@ Its type definition is as follows:
 
 ```js
 type EntityPropOptions<R = any> = {
-  type: ePropType,
-  name: string,
-  displayName?: string,
-  valueResolver?: PropCallback<R, Observable<any>>,
-  sortable?: boolean,
-  columnWidth?: number,
-  permission?: string,
-  visible?: PropPredicate<R>,
-  columnVisible?: ColumnPredicate,
+  type: ePropType;
+  name: string;
+  displayName?: string;
+  valueResolver?: PropCallback<R, Observable<any>>;
+  sortable?: boolean;
+  columnWidth?: number;
+  permission?: string;
+  visible?: PropPredicate<R>;
+  columnVisible?: ColumnPredicate;
 };
 ```
 
