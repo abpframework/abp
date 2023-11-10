@@ -28,28 +28,9 @@ public abstract class AbpDynamicClaimsPrincipalContributorBase : IAbpDynamicClai
             return Task.CompletedTask;
         }
 
-        foreach (var claimGroup in claims.GroupBy(x => x.Type))
-        {
-            var claim = claimGroup.First();
-            if (claimGroup.Count() > 1)
-            {
-                dynamicClaims.RemoveAll(c => c.Type == claim.Type && identity.Claims.All(x => x.Type != claim.Type));
-                identity.RemoveAll(abpClaimType);
-                identity.AddClaims(claimGroup.Where(c => c.Value != null).Select(c => new Claim(abpClaimType, c.Value!)));
-            }
-            else
-            {
-                dynamicClaims.RemoveAll(c => c.Type == claim.Type && identity.Claims.All(x => x.Type != claim.Type));
-                if (claim.Value != null)
-                {
-                    identity.AddOrReplace(new Claim(abpClaimType, claim.Value));
-                }
-                else
-                {
-                    identity.RemoveAll(abpClaimType);
-                }
-            }
-        }
+        dynamicClaims.RemoveAll(claims);
+        identity.RemoveAll(abpClaimType);
+        identity.AddClaims(claims.Where(c => c.Value != null).Select(c => new Claim(abpClaimType, c.Value!)));
 
         return Task.CompletedTask;;
     }

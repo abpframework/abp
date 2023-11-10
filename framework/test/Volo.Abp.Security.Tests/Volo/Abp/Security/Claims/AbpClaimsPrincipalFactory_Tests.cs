@@ -9,12 +9,12 @@ using Xunit;
 
 namespace Volo.Abp.Security.Claims;
 
-public class AbpClaimsPrincipalFactory_Test : AbpIntegratedTest<AbpSecurityTestModule>
+public class AbpClaimsPrincipalFactory_Tests : AbpIntegratedTest<AbpSecurityTestModule>
 {
     private readonly IAbpClaimsPrincipalFactory _abpClaimsPrincipalFactory;
     private static string TestAuthenticationType => "Identity.Application";
 
-    public AbpClaimsPrincipalFactory_Test()
+    public AbpClaimsPrincipalFactory_Tests()
     {
         _abpClaimsPrincipalFactory = GetRequiredService<IAbpClaimsPrincipalFactory>();
 
