@@ -300,14 +300,14 @@ export function reorderUserContributors(
 ) {
   // drop email node
   const emailPropNode = propList.dropByValue(
-    "AbpIdentity::EmailAddress",
+    'AbpIdentity::EmailAddress',
     (prop, text) => prop.text === text
   );
 
   // add it back after phoneNumber
   propList.addAfter(
     emailPropNode.value,
-    "phoneNumber",
+    'phoneNumber',
     (value, name) => value.name === name
   );
 }
