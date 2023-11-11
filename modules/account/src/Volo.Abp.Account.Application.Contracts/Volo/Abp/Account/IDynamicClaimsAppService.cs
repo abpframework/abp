@@ -4,7 +4,7 @@ using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.Account;
 
-public interface IDynamicClaimsAppService: IApplicationService
+public interface IDynamicClaimsAppService : IApplicationService
 {
     Task<List<DynamicClaimDto>> GetAsync();
 }
