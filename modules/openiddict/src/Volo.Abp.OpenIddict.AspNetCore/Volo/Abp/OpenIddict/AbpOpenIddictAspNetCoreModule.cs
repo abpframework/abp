@@ -24,8 +24,8 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
 
         Configure<AbpOpenIddictClaimsPrincipalOptions>(options =>
         {
-            options.ClaimsPrincipalHandlers.Add<AbpDefaultOpenIddictClaimsPrincipalHandler>();
             options.ClaimsPrincipalHandlers.Add<AbpDynamicClaimsOpenIddictClaimsPrincipalHandler>();
+            options.ClaimsPrincipalHandlers.Add<AbpDefaultOpenIddictClaimsPrincipalHandler>();
         });
 
         Configure<RazorViewEngineOptions>(options =>
