@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Security.Claims;
@@ -11,52 +12,32 @@ public abstract class AbpDynamicClaimsPrincipalContributorBase : IAbpDynamicClai
 {
     public abstract Task ContributeAsync(AbpClaimsPrincipalContributorContext context);
 
-    protected virtual async Task MapCommonClaimsAsync(ClaimsIdentity identity, List<AbpClaimCacheItem> dynamicClaims)
+    protected virtual async Task AddDynamicClaimsAsync(AbpClaimsPrincipalContributorContext context, ClaimsIdentity identity, List<AbpClaimCacheItem> dynamicClaims)
     {
-        await MapClaimAsync(identity, dynamicClaims, AbpClaimTypes.UserName, "preferred_username", "unique_name", ClaimTypes.Name);
-        await MapClaimAsync(identity, dynamicClaims, AbpClaimTypes.Role, "role", "roles", ClaimTypes.Role);
-        await MapClaimAsync(identity, dynamicClaims, AbpClaimTypes.Email, "email", ClaimTypes.Email);
-        await MapClaimAsync(identity, dynamicClaims, AbpClaimTypes.SurName, "family_name", ClaimTypes.Surname);
-        await MapClaimAsync(identity, dynamicClaims, AbpClaimTypes.Name, "given_name", ClaimTypes.GivenName);
+        var options = context.GetRequiredService<IOptions<AbpClaimsPrincipalFactoryOptions>>().Value;
+        foreach (var map in options.ClaimsMap)
+        {
+            await MapClaimAsync(identity, dynamicClaims, map.Key, map.Value.ToArray());
+        }
+
+        foreach (var claimGroup in dynamicClaims.GroupBy(x => x.Type))
+        {
+            identity.RemoveAll(claimGroup.First().Type);
+            identity.AddClaims(claimGroup.Where(c => c.Value != null).Select(c => new Claim(claimGroup.First().Type, c.Value!)));
+        }
     }
 
-    protected virtual Task MapClaimAsync(ClaimsIdentity identity, List<AbpClaimCacheItem> dynamicClaims, string abpClaimType, params string[] dynamicClaimTypes)
+    protected virtual Task MapClaimAsync(ClaimsIdentity identity, List<AbpClaimCacheItem> dynamicClaims, string targetClaimType, params string[] sourceClaimTypes)
     {
-        var claims = dynamicClaims.Where(c => dynamicClaimTypes.Contains(c.Type)).ToList();
+        var claims = dynamicClaims.Where(c => sourceClaimTypes.Contains(c.Type)).ToList();
         if (claims.IsNullOrEmpty())
         {
             return Task.CompletedTask;
         }
 
         dynamicClaims.RemoveAll(claims);
-        identity.RemoveAll(abpClaimType);
-        identity.AddClaims(claims.Where(c => c.Value != null).Select(c => new Claim(abpClaimType, c.Value!)));
-
-        return Task.CompletedTask;;
-    }
-
-    protected virtual Task AddDynamicClaims(ClaimsIdentity identity, List<AbpClaimCacheItem> dynamicClaims)
-    {
-        foreach (var claimGroup in dynamicClaims.GroupBy(x => x.Type))
-        {
-            if (claimGroup.Count() > 1)
-            {
-                identity.RemoveAll(claimGroup.First().Type);
-                identity.AddClaims(claimGroup.Where(c => c.Value != null).Select(c => new Claim(claimGroup.First().Type, c.Value!)));
-            }
-            else
-            {
-                var claim = claimGroup.First();
-                if (claim.Value != null)
-                {
-                    identity.AddOrReplace(new Claim(claimGroup.First().Type, claim.Value));
-                }
-                else
-                {
-                    identity.RemoveAll(claim.Type);
-                }
-            }
-        }
+        identity.RemoveAll(targetClaimType);
+        identity.AddClaims(claims.Where(c => c.Value != null).Select(c => new Claim(targetClaimType, c.Value!)));
 
         return Task.CompletedTask;;
     }

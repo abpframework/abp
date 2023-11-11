@@ -24,7 +24,6 @@ public class RemoteDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincipal
         var dynamicClaimsCache = context.GetRequiredService<RemoteDynamicClaimsPrincipalContributorCache>();
         var dynamicClaims = await dynamicClaimsCache.GetAsync(userId.Value, identity.FindTenantId());
 
-        await MapCommonClaimsAsync(identity, dynamicClaims);
-        await AddDynamicClaims(identity, dynamicClaims);
+        await AddDynamicClaimsAsync(context, identity, dynamicClaims);
     }
 }

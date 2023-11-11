@@ -16,8 +16,7 @@ class TestAbpDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincipalContri
         var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
         Check.NotNull(identity, nameof(identity));
 
-        await MapCommonClaimsAsync(identity, AbpDynamicClaimsPrincipalContributorBase_Tests.DynamicClaims);
-        await AddDynamicClaims(identity, AbpDynamicClaimsPrincipalContributorBase_Tests.DynamicClaims);
+        await AddDynamicClaimsAsync(context, identity, AbpDynamicClaimsPrincipalContributorBase_Tests.DynamicClaims);
     }
 }
 
@@ -33,7 +32,7 @@ public class AbpDynamicClaimsPrincipalContributorBase_Tests : AbpIntegratedTest<
     }
 
     [Fact]
-    public async Task CreateAsync()
+    public async Task AddDynamicClaimsAsync()
     {
         var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
         claimsPrincipal.Identities.First().AddClaim(new Claim(AbpClaimTypes.UserName, "test-source-userName"));
@@ -45,7 +44,6 @@ public class AbpDynamicClaimsPrincipalContributorBase_Tests : AbpIntegratedTest<
         claimsPrincipal.Identities.First().AddClaim(new Claim(AbpClaimTypes.EmailVerified, "test-source-emailVerified"));
         claimsPrincipal.Identities.First().AddClaim(new Claim(AbpClaimTypes.PhoneNumber, "test-source-phoneNumber"));
         claimsPrincipal.Identities.First().AddClaim(new Claim(AbpClaimTypes.PhoneNumberVerified, "test-source-phoneNumberVerified"));
-
         claimsPrincipal.Identities.First().AddClaim(new Claim("my-claim", "test-source-my-claim"));
 
         DynamicClaims.AddRange(new []
@@ -68,6 +66,7 @@ public class AbpDynamicClaimsPrincipalContributorBase_Tests : AbpIntegratedTest<
         claimsPrincipal.Identities.First().Claims.ShouldContain(c => c.Type == AbpClaimTypes.Name && c.Value == "test-given_name");
         claimsPrincipal.Identities.First().Claims.ShouldContain(c => c.Type == AbpClaimTypes.Role && c.Value == "test-role1");
         claimsPrincipal.Identities.First().Claims.ShouldContain(c => c.Type == AbpClaimTypes.Role && c.Value == "test-role2");
+        claimsPrincipal.Identities.First().Claims.ShouldContain(c => c.Type == AbpClaimTypes.Role && c.Value == "test-role3");
         claimsPrincipal.Identities.First().Claims.ShouldContain(c => c.Type == AbpClaimTypes.Email && c.Value == "test-email");
         claimsPrincipal.Identities.First().Claims.ShouldContain(c => c.Type == AbpClaimTypes.EmailVerified && c.Value == "test-email-verified");
         claimsPrincipal.Identities.First().Claims.ShouldContain(c => c.Type == AbpClaimTypes.PhoneNumber && c.Value == "test-source-phoneNumber");

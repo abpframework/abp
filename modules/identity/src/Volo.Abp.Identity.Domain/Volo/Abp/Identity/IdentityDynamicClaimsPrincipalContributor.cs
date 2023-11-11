@@ -36,7 +36,6 @@ public class IdentityDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincip
             return;
         }
 
-        await MapCommonClaimsAsync(identity, dynamicClaims);
-        await AddDynamicClaims(identity, dynamicClaims);
+        await AddDynamicClaimsAsync(context, identity, dynamicClaims);
     }
 }
