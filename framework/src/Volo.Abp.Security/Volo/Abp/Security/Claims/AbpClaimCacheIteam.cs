@@ -15,10 +15,8 @@ public class AbpClaimCacheItem
         Value = value;
     }
 
-
     public static string CalculateCacheKey(Guid userId, Guid? tenantId)
     {
         return $"{tenantId}-{userId}";
     }
-
 }
