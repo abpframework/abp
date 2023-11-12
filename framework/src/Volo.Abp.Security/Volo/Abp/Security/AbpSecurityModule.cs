@@ -63,20 +63,15 @@ public class AbpSecurityModule : AbpModule
     private static void AutoAddClaimsPrincipalContributors(IServiceCollection services)
     {
         var contributorTypes = new List<Type>();
-
-        services.OnRegistered(context =>
-        {
-            if (typeof(IAbpClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType) &&
-                !typeof(IAbpDynamicClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
-            {
-                contributorTypes.Add(context.ImplementationType);
-            }
-        });
-
         var dynamicContributorTypes = new List<Type>();
 
         services.OnRegistered(context =>
         {
+            if (typeof(IAbpClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
+            {
+                contributorTypes.Add(context.ImplementationType);
+            }
+
             if (typeof(IAbpDynamicClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
             {
                 dynamicContributorTypes.Add(context.ImplementationType);

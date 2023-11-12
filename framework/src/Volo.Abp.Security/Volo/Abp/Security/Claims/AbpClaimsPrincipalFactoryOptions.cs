@@ -8,7 +8,7 @@ public class AbpClaimsPrincipalFactoryOptions
 {
     public ITypeList<IAbpClaimsPrincipalContributor> Contributors { get; }
 
-    public ITypeList<IAbpClaimsPrincipalContributor> DynamicContributors { get; }
+    public ITypeList<IAbpDynamicClaimsPrincipalContributor> DynamicContributors { get; }
 
     public List<string> DynamicClaims { get; }
 
@@ -19,7 +19,7 @@ public class AbpClaimsPrincipalFactoryOptions
     public AbpClaimsPrincipalFactoryOptions()
     {
         Contributors = new TypeList<IAbpClaimsPrincipalContributor>();
-        DynamicContributors = new TypeList<IAbpClaimsPrincipalContributor>();
+        DynamicContributors = new TypeList<IAbpDynamicClaimsPrincipalContributor>();
 
         DynamicClaims = new List<string>
         {

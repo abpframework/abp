@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Security.Claims;
@@ -24,15 +23,15 @@ public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientD
 
     public virtual async Task<ClaimsPrincipal> CreateAsync(ClaimsPrincipal? existsClaimsPrincipal = null)
     {
-        return await InternalCreateAsync(Options.Contributors, existsClaimsPrincipal);
+        return await InternalCreateAsync(Options, existsClaimsPrincipal, false);
     }
 
     public virtual async Task<ClaimsPrincipal> CreateDynamicAsync(ClaimsPrincipal? existsClaimsPrincipal = null)
     {
-        return await InternalCreateAsync(Options.DynamicContributors, existsClaimsPrincipal);
+        return await InternalCreateAsync(Options, existsClaimsPrincipal, true);
     }
 
-    public virtual async Task<ClaimsPrincipal> InternalCreateAsync(ITypeList<IAbpClaimsPrincipalContributor> contributorTypes, ClaimsPrincipal? existsClaimsPrincipal = null)
+    public virtual async Task<ClaimsPrincipal> InternalCreateAsync(AbpClaimsPrincipalFactoryOptions options, ClaimsPrincipal? existsClaimsPrincipal = null, bool isDynamic = false)
     {
         using (var scope = ServiceScopeFactory.CreateScope())
         {
@@ -43,10 +42,21 @@ public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientD
 
             var context = new AbpClaimsPrincipalContributorContext(claimsPrincipal, scope.ServiceProvider);
 
-            foreach (var contributorType in contributorTypes)
+            if (!isDynamic)
             {
-                var contributor = (IAbpClaimsPrincipalContributor)scope.ServiceProvider.GetRequiredService(contributorType);
-                await contributor.ContributeAsync(context);
+                foreach (var contributorType in options.Contributors)
+                {
+                    var contributor = (IAbpClaimsPrincipalContributor)scope.ServiceProvider.GetRequiredService(contributorType);
+                    await contributor.ContributeAsync(context);
+                }
+            }
+            else
+            {
+                foreach (var contributorType in options.DynamicContributors)
+                {
+                    var contributor = (IAbpDynamicClaimsPrincipalContributor)scope.ServiceProvider.GetRequiredService(contributorType);
+                    await contributor.ContributeAsync(context);
+                }
             }
 
             return context.ClaimsPrincipal;
