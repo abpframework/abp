@@ -4,10 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Dapr;
 
-[DependsOn(typeof(AbpJsonModule))]
+[DependsOn(typeof(AbpJsonModule), typeof(AbpMultiTenancyAbstractionsModule))]
 public class AbpDaprModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

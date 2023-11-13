@@ -66,7 +66,7 @@ The following NuGet libraries have been upgraded:
 | Serilog.Sinks.Async | 1.4.0       | 1.5.0       |
 | SharpZipLib | 1.3.3       | 1.4.2       |
 | Shouldly | 4.1.0       | 4.2.1       |
-| SixLabors.ImageSharp | 1.0.4       | 2.1.6       |
+| SixLabors.ImageSharp | 1.0.4       | 3.0.2       |
 | Slugify.Core | 3.0.0       | 4.0.1       |
 | Spectre.Console | 0.46.1-preview.0.7       | 0.47.0       |
 | Swashbuckle.AspNetCore | 6.2.1       | 6.5.0       |

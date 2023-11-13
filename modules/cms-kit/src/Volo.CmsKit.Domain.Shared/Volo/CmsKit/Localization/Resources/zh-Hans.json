@@ -76,6 +76,7 @@
     "PageId": "页",
     "Pages": "页面",
     "PageSlugInformation": "Slug用于url. 你的url将是 '/{{slug}}'.",
+    "BlogSlugInformation": "Slug用于url. 你的url将是 '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "博客管理",
     "Permission:BlogManagement.Create": "创建",
     "Permission:BlogManagement.Delete": "删除",

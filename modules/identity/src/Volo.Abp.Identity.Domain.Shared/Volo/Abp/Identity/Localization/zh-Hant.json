@@ -114,6 +114,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "是否啟用電話認證.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "決定使用者是否需電話認證後才能登入.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "決定使用者是否能更新帳號.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "決定使用者是否能更新信箱."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "決定使用者是否能更新信箱.",
+    "Details": "詳情",
+    "CreatedBy": "創建者",
+    "ModifiedBy": "修改者",
+    "ModificationTime": "修改時間",
+    "PasswordUpdateTime": "密碼更新時間",
+    "LockoutEndTime": "鎖定結束時間",
+    "FailedAccessCount": "訪問失敗次數"
   }
 }

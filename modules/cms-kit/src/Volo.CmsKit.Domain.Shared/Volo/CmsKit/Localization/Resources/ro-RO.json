@@ -77,6 +77,7 @@
     "PageId": "Pagina",
     "Pages": "Pagini",
     "PageSlugInformation": "Slug este folosit pe url. Url-ul dumneavoastră va fi '/{{slug}}'.",
+    "BlogSlugInformation": "Slug este folosit pe url. Url-ul dumneavoastră va fi '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Administrare Blog",
     "Permission:BlogManagement.Create": "Creează",
     "Permission:BlogManagement.Delete": "Şterge",

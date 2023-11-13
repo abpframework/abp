@@ -32,7 +32,12 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["packages/components/src/**/*.ts", "packages/components/src/**/*.html"]
+        "lintFilePatterns": [
+          "packages/components/src/**/*.ts",
+          "packages/components/src/**/*.html",
+          "packages/components/extensible/**/*.ts",
+          "packages/components/extensible/**/*.html"
+        ]
       },
       "outputs": ["{options.outputFile}"]
     }

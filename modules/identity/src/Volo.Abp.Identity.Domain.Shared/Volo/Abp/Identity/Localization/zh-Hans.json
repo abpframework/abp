@@ -114,6 +114,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "用户是否可以确认电话号码",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "登录时是否需要验证的手机号码.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "是否允许用户更新用户名.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "是否允许用户更新电子邮箱."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "是否允许用户更新电子邮箱.",
+    "Details": "详情",
+    "CreatedBy": "创建者",
+    "ModifiedBy": "修改者",
+    "ModificationTime": "修改时间",
+    "PasswordUpdateTime": "密码更新时间",
+    "LockoutEndTime": "锁定结束时间",
+    "FailedAccessCount": "访问失败次数"
   }
 }

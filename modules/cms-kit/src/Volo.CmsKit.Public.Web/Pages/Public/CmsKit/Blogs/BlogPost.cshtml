@@ -10,6 +10,7 @@
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
 @using Volo.CmsKit.Contents
+@using Volo.CmsKit.Web
 @using Volo.CmsKit.Web.Pages.CmsKit.Components.Contents
 
 @inherits CmsKitPublicPageBase
@@ -62,7 +63,7 @@
                         <div class="col-lg-8 col-md-10 mx-auto pb-4">
                             <h1 class="mt-lg-4 mt-md-3">@Model.ViewModel.Title</h1>
                             <p class="mb-lg-5 mb-md-3">
-                                <a href="/blogs/@Model.BlogSlug?authorId=@Model.ViewModel.Author.Id">
+                            <a href="/@CmsBlogsWebConsts.BlogsRoutePrefix/@Model.BlogSlug?authorId=@Model.ViewModel.Author.Id">
                                     <span class="font-weight-bold">@@@Model.ViewModel.Author?.UserName</span>
                                 </a>
                                 <small style="opacity:.65;">@Model.ViewModel.CreationTime</small>
@@ -89,7 +90,7 @@
                                     {
                                         entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
                                         entityId = Model.ViewModel.Id.ToString(),
-                                        urlFormat = $"/blogs/{Model.BlogSlug}?tagId={{TagId}}"
+                                        urlFormat = $"/{CmsBlogsWebConsts.BlogsRoutePrefix}/{Model.BlogSlug}?tagId={{TagId}}"
                                     })
                                 }
                             }
@@ -133,9 +134,11 @@
         {
             <button id="deleteBlogPost" class="btn btn-danger">
                 <i class="fa fa-remove">
-                    @L["Delete"]
                 </i>
+                    @L["Delete"]
             </button>
+
+            <hr />
         }
         @if (isScrollIndexEnabled)
         {

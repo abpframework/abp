@@ -105,7 +105,7 @@ abp install-libs
 
 > We suggest you install [Yarn](https://classic.yarnpkg.com/) to prevent possible package inconsistencies, if you haven't installed it yet.
 
-{{if UI=="Blazor" || UI="BlazorServer"}}
+{{if UI=="Blazor" || UI=="BlazorServer"}}
 
 ### Bundling and Minification
 
@@ -124,6 +124,8 @@ abp bundle
 ## Run the Application
 
 {{ if UI == "MVC" || UI == "BlazorServer" }}
+
+> **Note**: Before starting the application, run `abp install-libs` command in your Web directory to restore the client-side libraries. This will populate the `libs` folder.
 
 {{ if Tiered == "Yes" }}
 

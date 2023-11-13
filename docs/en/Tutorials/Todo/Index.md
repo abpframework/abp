@@ -113,7 +113,7 @@ abp install-libs
 
 > We suggest you install [Yarn](https://classic.yarnpkg.com/) to prevent possible package inconsistencies, if you haven't installed it yet.
 
-{{if UI=="Blazor" || UI="BlazorServer"}}
+{{if UI=="Blazor" || UI=="BlazorServer"}}
 
 #### Bundling and Minification
 

@@ -539,17 +539,11 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             return NormalizeTypeName(typeName.Split(".").Last());
         }
 
-        if (typeName.Contains("<") && typeName.Contains(">"))
+        if(usingNamespaceList != null)
         {
-            var left = typeName.IndexOf("<", StringComparison.Ordinal);
-            var right = typeName.LastIndexOf(">", StringComparison.Ordinal);
-            var genericTypes = typeName.Substring(left + 1, right - left - 1);
-            foreach (var genericType in genericTypes.Split(",").Where(x => x.Contains(".")))
-            {
-                usingNamespaceList?.AddIfNotContains($"using {GetTypeNamespace(genericType)};");
-            }
+            AddGenericTypeUsingNamespace(typeName, usingNamespaceList);
         }
-
+        
         var type = new StringBuilder();
         var s1 = typeName.Split("<");
         for (var i = 0; i < s1.Length; i++)
@@ -577,6 +571,25 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         }
 
         return type.ToString();
+    }
+
+    private static void AddGenericTypeUsingNamespace(string typeFullName, List<string> usingNamespaceList)
+    {
+        if(!typeFullName.Contains("<"))
+        {
+            usingNamespaceList.AddIfNotContains($"using {GetTypeNamespace(typeFullName)};");
+        }
+
+        if (typeFullName.Contains("<") && typeFullName.Contains(">"))
+        {
+            var left = typeFullName.IndexOf("<", StringComparison.Ordinal);
+            var right = typeFullName.LastIndexOf(">", StringComparison.Ordinal);
+            var genericTypes = typeFullName.Substring(left + 1, right - left - 1);
+            foreach (var genericType in genericTypes.Split(",").Where(x => x.Contains(".")))
+            {
+                AddGenericTypeUsingNamespace(genericType, usingNamespaceList);
+            }
+        }
     }
 
     private static string NormalizeTypeName(string typeName)

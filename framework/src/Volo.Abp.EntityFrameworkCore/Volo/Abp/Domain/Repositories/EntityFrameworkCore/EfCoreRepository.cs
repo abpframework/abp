@@ -161,16 +161,18 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     {
         var dbContext = await GetDbContextAsync();
 
-        dbContext.Attach(entity);
-
-        var updatedEntity = dbContext.Update(entity).Entity;
+        if (dbContext.Set<TEntity>().Local.All(e => e != entity))
+        {
+            dbContext.Set<TEntity>().Attach(entity);
+            dbContext.Update(entity);
+        }
 
         if (autoSave)
         {
             await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
         }
 
-        return updatedEntity;
+        return entity;
     }
 
     public async override Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
