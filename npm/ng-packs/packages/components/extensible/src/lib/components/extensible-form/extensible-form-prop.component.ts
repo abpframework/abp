@@ -42,7 +42,6 @@ import { PropData } from '../../models/props';
 import { selfFactory } from '../../utils/factory.util';
 import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
 import { eThemeSharedComponents } from '../../enums/components';
-import { CommonModule } from '@angular/common';
 import { ExtensibleDateTimePickerComponent } from '../date-time-picker/extensible-date-time-picker.component';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { ExtensibleFormPropService } from '../../services/extensible-form-prop.service';
@@ -53,7 +52,6 @@ import {CreateInjectorPipe} from "../../pipes/create-injector.pipe";
   templateUrl: './extensible-form-prop.component.html',
   standalone: true,
   imports: [
-    CommonModule,
     CoreModule,
     ExtensibleDateTimePickerComponent,
     NgbDatepickerModule,

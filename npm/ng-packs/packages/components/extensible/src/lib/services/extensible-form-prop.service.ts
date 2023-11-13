@@ -7,7 +7,7 @@ import { ePropType } from '../enums/props.enum';
 
 @Injectable()
 export class ExtensibleFormPropService {
-  #configStateService = inject(ConfigStateService);
+  readonly  #configStateService = inject(ConfigStateService);
 
   meridian$ = this.#configStateService
     .getDeep$('localization.currentCulture.dateTimeFormat.shortTimePattern')

@@ -1,4 +1,4 @@
-import { Component, forwardRef, Injector, Input } from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
 import { AbstractNgModelComponent } from '@abp/ng.core';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';

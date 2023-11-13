@@ -8,7 +8,6 @@ import {
 } from '../../models/toolbar-actions';
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
-import { CommonModule } from '@angular/common';
 import { CreateInjectorPipe } from '../../pipes/create-injector.pipe';
 import { CoreModule } from '@abp/ng.core';
 
@@ -16,7 +15,7 @@ import { CoreModule } from '@abp/ng.core';
   exportAs: 'abpPageToolbar',
   selector: 'abp-page-toolbar',
   standalone: true,
-  imports: [CommonModule, CoreModule, CreateInjectorPipe],
+  imports: [ CoreModule, CreateInjectorPipe],
   templateUrl: './page-toolbar.component.html',
   providers: [
     {

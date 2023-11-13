@@ -33,7 +33,6 @@ import { PropData } from '../../models/props';
 import { ExtensionsService } from '../../services/extensions.service';
 import {
   ENTITY_PROP_TYPE_CLASSES,
-  EntityPropTypeClass,
   EXTENSIONS_IDENTIFIER,
   PROP_DATA_STREAM,
 } from '../../tokens/extensions.token';
@@ -49,7 +48,6 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   selector: 'abp-extensible-table',
   standalone: true,
   imports: [
-    CommonModule,
     CoreModule,
     NgxDatatableModule,
     GridActionsComponent,
