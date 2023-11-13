@@ -40,7 +40,7 @@ You can switch between two rendering modes and even mix them on the same page. W
 
 
 
- ## How it works?
+## How it works?
 
 ### Rendering on Server
 
@@ -50,25 +50,27 @@ You can add `WebComponentRenderMode.Server` to your Blazor components so that th
 
 
 
-And sure you can add `WebComponentRenderMode.Server` to your page level, and the complete page will be rendered as a server component. All inputs on this page can work as an interactive server component like SPA mode.
+And sure, you can add `WebComponentRenderMode.Server` to your page level, and the complete page will be rendered as a server component. All inputs on this page can work as an interactive server component like SPA mode.
 
 ![image-20231106172638604](image-20231106172638604.png)
 
 
 
-### Rendering on client
+### Rendering on Client
 
 You can switch to WebAssembly mode by writing  `WebComponentRenderMode.WebAssembly` attribute to your page. By doing so, the whole page should run interactively using WebAssembly. This time there's no server connection anymore because it loads the binaries (WebAssembly runtimes) at the page load.
 
 ![image-20231106173021958](image-20231106173021958.png)
 
-## How it works?
+
+## Enabling the Blazor Fullstack UI?
 
 To enable Blazor Full-stack Web UI, you need to write `net8.0;net7.0-browser` into the `TargetFrameworks` area of your `csproj` file. These two keywords change your app like this; `net8.0` framework renders on the server, and `net7.0-browser` framework renders on the browser.
 
 ![image-20231106173411309](image-20231106173411309.png)
 
-## Let the System decide on WebAssembly or Server approach
+
+## Let the System Decide WebAssembly or Server Approach
 
 You can let the system decide whether it uses `WebAssembly` or `Server`. This can be done with the `Auto` mode of the `WebComponentRenderMode`. In this case, it will not load binary files (WebAssembly files) for the initial page that has  `WebComponentRenderMode.Server` attribute, but whenever the user navigates to a page that has `WebComponentRenderMode.WebAssembly`, it will download the runtimes. This will allow us to load the initial page very fast, and when we need interactivity, we can switch to `WebAssembly` and wait for the binaries to download. But this download will be done one time because it will be cached.
 
@@ -80,10 +82,10 @@ You can let the system decide whether it uses `WebAssembly` or `Server`. This ca
 
 I summarized the new generation Blazor in a very simple way. This architecture will be useful to everyone who uses Blazor.
 
-
+---
 
 *Resources:*
 
-* You can check out Dan Roth's GitHub issue 👉 [github.com/dotnet/aspnetcore/issues/46636](https://github.com/dotnet/aspnetcore/issues/46636).
+* You can check Dan Roth's GitHub issue 👉 [github.com/dotnet/aspnetcore/issues/46636](https://github.com/dotnet/aspnetcore/issues/46636).
 * Steven Sanderson's YouTube video is very good for understanding these concepts 👉 [Blazor United Prototype Video](https://youtu.be/48G_CEGXZZM).
 
