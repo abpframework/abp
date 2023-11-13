@@ -10,7 +10,7 @@ import {
   mapEntitiesToContributors,
   mergeWithDefaultActions,
   mergeWithDefaultProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 
 import { eIdentityComponents } from '../enums/components';
 import {
