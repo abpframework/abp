@@ -3,7 +3,7 @@
 ![Cover Image](https://github.com/abpframework/abp/assets/9526587/532f46d8-41a1-4fcd-bc77-f28299961a6f)
 
 
-Blazor is a web framework that allows developers to build interactive web applications using .NET instead of JavaScript. The first version of Blazor was **released on May 14, 2020**.  Since its initial release, Blazor has evolved with the new versions. Until now, six different versions have been declared. Sometimes, it can be not very clear to see the differences between these approaches. First, let's try to understand these.
+Blazor is a web framework that allows developers to build interactive web applications using .NET instead of JavaScript. The first version of Blazor was released on May 14, 2020.  Since its initial release, Blazor has evolved with the new versions. Until now, six different versions have been declared. Sometimes, it can be not very clear to see the differences between these approaches. First, let's try to understand these.
 
 * **Blazor-Server**: >> *Loads fast at first* >> In this version, heavy things are done in the server. Browsers are thin clients and download a small page for the first load. The page updates are done via SignalR connection. This was released with .NET Core 3.
 * **Blazor WebAssembly (WASM):** >> *Loads slow at first* >>  In this version, some binary files are being downloaded to the browser. This approach takes longer initialization time than the "Server" approach. The hard work is done on the browser. 
