@@ -11,7 +11,7 @@ import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import { eAccountComponents } from '../../enums';
 
 @Component({

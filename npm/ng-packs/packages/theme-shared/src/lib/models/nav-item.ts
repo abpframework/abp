@@ -1,5 +1,5 @@
 import { Injector, Type } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 export interface Badge {
   count?: number | Observable<number>;

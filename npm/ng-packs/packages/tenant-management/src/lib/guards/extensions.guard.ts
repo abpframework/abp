@@ -10,7 +10,7 @@ import {
   mapEntitiesToContributors,
   mergeWithDefaultActions,
   mergeWithDefaultProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 
 import { eTenantManagementComponents } from '../enums/components';
 import {
@@ -26,6 +26,9 @@ import {
   TENANT_MANAGEMENT_TOOLBAR_ACTION_CONTRIBUTORS,
 } from '../tokens/extensions.token';
 
+/**
+ * @deprecated Use `tenantManagementExtensionsResolver` *function* instead.
+ */
 @Injectable()
 export class TenantManagementExtensionsGuard implements IAbpGuard {
   protected readonly configState = inject(ConfigStateService);
@@ -81,3 +84,5 @@ export class TenantManagementExtensionsGuard implements IAbpGuard {
     );
   }
 }
+
+

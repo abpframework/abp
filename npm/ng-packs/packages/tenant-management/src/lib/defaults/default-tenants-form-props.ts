@@ -1,6 +1,6 @@
 import { TenantCreateDto, TenantUpdateDto } from '@abp/ng.tenant-management/proxy';
 import { getPasswordValidators } from '@abp/ng.theme.shared';
-import { ePropType, FormProp } from '@abp/ng.theme.shared/extensions';
+import { ePropType, FormProp } from '@abp/ng.components/extensible';
 import { Validators } from '@angular/forms';
 
 export const DEFAULT_TENANTS_CREATE_FORM_PROPS = FormProp.createMany<

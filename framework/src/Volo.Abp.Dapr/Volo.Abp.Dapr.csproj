@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <RootNamespace />
@@ -12,10 +12,11 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+        <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dapr.Client" Version="1.9.0" />
+      <PackageReference Include="Dapr.Client" />
     </ItemGroup>
 
 </Project>
