@@ -105,7 +105,7 @@ And update the database:
 dotnet ef database update
 ````
 
-If you check the fields of the `Customers` table in your dayabase, you will see the following fields:
+If you check the fields of the `Customers` table in your database, you will see the following fields:
 
 * `Id`
 * `Name`
