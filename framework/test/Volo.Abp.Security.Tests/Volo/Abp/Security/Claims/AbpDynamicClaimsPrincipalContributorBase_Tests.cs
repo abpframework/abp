@@ -16,7 +16,7 @@ class TestAbpDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincipalContri
         var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
         Check.NotNull(identity, nameof(identity));
 
-        await AddDynamicClaimsAsync(context, identity, AbpDynamicClaimsPrincipalContributorBase_Tests.DynamicClaims);
+        await AddDynamicClaimsAsync(context, identity, AbpDynamicClaimsPrincipalContributorBase_Tests.DynamicClaims.Claims);
     }
 }
 
@@ -24,7 +24,7 @@ public class AbpDynamicClaimsPrincipalContributorBase_Tests : AbpIntegratedTest<
 {
     private readonly TestAbpDynamicClaimsPrincipalContributor _dynamicClaimsPrincipalContributorBase = new TestAbpDynamicClaimsPrincipalContributor();
 
-    public readonly static List<AbpClaimCacheItem> DynamicClaims = new List<AbpClaimCacheItem>();
+    public readonly static AbpDynamicClaimCacheItem DynamicClaims = new AbpDynamicClaimCacheItem();
 
     protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
@@ -46,17 +46,17 @@ public class AbpDynamicClaimsPrincipalContributorBase_Tests : AbpIntegratedTest<
         claimsPrincipal.Identities.First().AddClaim(new Claim(AbpClaimTypes.PhoneNumberVerified, "test-source-phoneNumberVerified"));
         claimsPrincipal.Identities.First().AddClaim(new Claim("my-claim", "test-source-my-claim"));
 
-        DynamicClaims.AddRange(new []
+        DynamicClaims.Claims.AddRange(new []
         {
-            new AbpClaimCacheItem("preferred_username", "test-preferred_username"),
-            new AbpClaimCacheItem(ClaimTypes.GivenName, "test-given_name"),
-            new AbpClaimCacheItem("family_name", "test-family_name"),
-            new AbpClaimCacheItem("role", "test-role1"),
-            new AbpClaimCacheItem("roles", "test-role2"),
-            new AbpClaimCacheItem(ClaimTypes.Role, "test-role3"),
-            new AbpClaimCacheItem("email", "test-email"),
-            new AbpClaimCacheItem(AbpClaimTypes.EmailVerified, "test-email-verified"),
-            new AbpClaimCacheItem(AbpClaimTypes.PhoneNumberVerified, null),
+            new AbpDynamicClaim("preferred_username", "test-preferred_username"),
+            new AbpDynamicClaim(ClaimTypes.GivenName, "test-given_name"),
+            new AbpDynamicClaim("family_name", "test-family_name"),
+            new AbpDynamicClaim("role", "test-role1"),
+            new AbpDynamicClaim("roles", "test-role2"),
+            new AbpDynamicClaim(ClaimTypes.Role, "test-role3"),
+            new AbpDynamicClaim("email", "test-email"),
+            new AbpDynamicClaim(AbpClaimTypes.EmailVerified, "test-email-verified"),
+            new AbpDynamicClaim(AbpClaimTypes.PhoneNumberVerified, null),
         });
 
         await _dynamicClaimsPrincipalContributorBase.ContributeAsync(new AbpClaimsPrincipalContributorContext(claimsPrincipal, GetRequiredService<IServiceProvider>()));

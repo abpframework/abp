@@ -351,28 +351,28 @@
               "name": "IDynamicClaimsAppService",
               "methods": [
                 {
-                  "name": "GetAsync",
+                  "name": "RefreshAsync",
                   "parametersOnMethod": [],
                   "returnValue": {
-                    "type": "System.Collections.Generic.List<Volo.Abp.Account.DynamicClaimDto>",
-                    "typeSimple": "[Volo.Abp.Account.DynamicClaimDto]"
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
                   }
                 }
               ]
             }
           ],
           "actions": {
-            "GetAsync": {
-              "uniqueName": "GetAsync",
-              "name": "GetAsync",
-              "httpMethod": "GET",
-              "url": "api/account/dynamic-claims",
+            "RefreshAsync": {
+              "uniqueName": "RefreshAsync",
+              "name": "RefreshAsync",
+              "httpMethod": "POST",
+              "url": "api/account/dynamic-claims/refresh",
               "supportedVersions": [],
               "parametersOnMethod": [],
               "parameters": [],
               "returnValue": {
-                "type": "System.Collections.Generic.List<Volo.Abp.Account.DynamicClaimDto>",
-                "typeSimple": "[Volo.Abp.Account.DynamicClaimDto]"
+                "type": "System.Void",
+                "typeSimple": "System.Void"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.Account.IDynamicClaimsAppService"

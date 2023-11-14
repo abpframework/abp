@@ -12,7 +12,7 @@ public abstract class AbpDynamicClaimsPrincipalContributorBase : IAbpDynamicClai
 {
     public abstract Task ContributeAsync(AbpClaimsPrincipalContributorContext context);
 
-    protected virtual async Task AddDynamicClaimsAsync(AbpClaimsPrincipalContributorContext context, ClaimsIdentity identity, List<AbpClaimCacheItem> dynamicClaims)
+    protected virtual async Task AddDynamicClaimsAsync(AbpClaimsPrincipalContributorContext context, ClaimsIdentity identity, List<AbpDynamicClaim> dynamicClaims)
     {
         var options = context.GetRequiredService<IOptions<AbpClaimsPrincipalFactoryOptions>>().Value;
         foreach (var map in options.ClaimsMap)
@@ -27,7 +27,7 @@ public abstract class AbpDynamicClaimsPrincipalContributorBase : IAbpDynamicClai
         }
     }
 
-    protected virtual Task MapClaimAsync(ClaimsIdentity identity, List<AbpClaimCacheItem> dynamicClaims, string targetClaimType, params string[] sourceClaimTypes)
+    protected virtual Task MapClaimAsync(ClaimsIdentity identity, List<AbpDynamicClaim> dynamicClaims, string targetClaimType, params string[] sourceClaimTypes)
     {
         var claims = dynamicClaims.Where(c => sourceClaimTypes.Contains(c.Type)).ToList();
         if (claims.IsNullOrEmpty())

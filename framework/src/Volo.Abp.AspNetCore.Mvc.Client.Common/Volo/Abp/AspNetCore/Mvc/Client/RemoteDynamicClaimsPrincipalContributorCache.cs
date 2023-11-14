@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -21,76 +19,58 @@ public class RemoteDynamicClaimsPrincipalContributorCache : ITransientDependency
     public const string HttpClientName = nameof(RemoteDynamicClaimsPrincipalContributorCache);
 
     public ILogger<RemoteDynamicClaimsPrincipalContributorCache> Logger { get; set; }
-    protected IDistributedCache<List<AbpClaimCacheItem>> Cache { get; }
+    protected IDistributedCache<AbpDynamicClaimCacheItem> Cache { get; }
     protected IHttpClientFactory HttpClientFactory { get; }
     protected IOptions<AbpClaimsPrincipalFactoryOptions> AbpClaimsPrincipalFactoryOptions { get; }
     protected IJsonSerializer JsonSerializer { get; }
     protected IRemoteServiceHttpClientAuthenticator HttpClientAuthenticator { get; }
-    protected IOptions<RemoteDynamicClaimsPrincipalContributorCacheOptions> CacheOptions { get; }
 
     public RemoteDynamicClaimsPrincipalContributorCache(
-        IDistributedCache<List<AbpClaimCacheItem>> cache,
+        IDistributedCache<AbpDynamicClaimCacheItem> cache,
         IHttpClientFactory httpClientFactory,
         IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimsPrincipalFactoryOptions,
         IJsonSerializer jsonSerializer,
-        IRemoteServiceHttpClientAuthenticator httpClientAuthenticator,
-        IOptions<RemoteDynamicClaimsPrincipalContributorCacheOptions> cacheOptions)
+        IRemoteServiceHttpClientAuthenticator httpClientAuthenticator)
     {
         Cache = cache;
         HttpClientFactory = httpClientFactory;
         AbpClaimsPrincipalFactoryOptions = abpClaimsPrincipalFactoryOptions;
         JsonSerializer = jsonSerializer;
         HttpClientAuthenticator = httpClientAuthenticator;
-        CacheOptions = cacheOptions;
 
         Logger = NullLogger<RemoteDynamicClaimsPrincipalContributorCache>.Instance;
     }
 
-    public virtual async Task<List<AbpClaimCacheItem>> GetAsync(Guid userId, Guid? tenantId = null)
+    public virtual async Task<AbpDynamicClaimCacheItem> GetAsync(Guid userId, Guid? tenantId = null)
     {
         Logger.LogDebug($"Get dynamic claims cache for user: {userId}");
-        //The UI may use the same cache as AuthServer in the tiered application.
-        var claims = await Cache.GetAsync(AbpClaimCacheItem.CalculateCacheKey(userId, tenantId));
-        if (!claims.IsNullOrEmpty())
+        var claims = await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
+        if (claims != null && !claims.Claims.IsNullOrEmpty())
         {
-            return claims!;
+            return claims;
         }
 
-        Logger.LogDebug($"Get dynamic claims cache for user: {userId} from remote cache.");
-        // Use independent cache for remote claims.
-        return (await Cache.GetOrAddAsync($"{nameof(RemoteDynamicClaimsPrincipalContributorCache)}{AbpClaimCacheItem.CalculateCacheKey(userId, tenantId)}", async () =>
+        Logger.LogDebug($"Refresh dynamic claims for user: {userId} from remote service.");
+        try
         {
-            var dynamicClaims = AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims.Select(claimType => new AbpClaimCacheItem(claimType, null)).ToList();
-            Logger.LogDebug($"Get dynamic claims for user: {userId} from remote service.");
-            try
-            {
-                var client = HttpClientFactory.CreateClient(HttpClientName);
-                var requestMessage = new HttpRequestMessage(HttpMethod.Get, AbpClaimsPrincipalFactoryOptions.Value.RemoteUrl);
-                await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration("/"), string.Empty));
-                var response = await client.SendAsync(requestMessage);
-                var remoteClaims = JsonSerializer.Deserialize<List<AbpClaimCacheItem>>(await response.Content.ReadAsStringAsync());
-                foreach (var claim in dynamicClaims)
-                {
-                    claim.Value = remoteClaims.FirstOrDefault(c => c.Type == claim.Type)?.Value;
-                }
-                Logger.LogDebug($"Successfully got {dynamicClaims.Count} remote claims for user: {userId}");
-            }
-            catch (Exception e)
-            {
-                Logger.LogWarning(e, $"Failed to get remote claims for user: {userId}");
-            }
-            return dynamicClaims;
-        }, () => new DistributedCacheEntryOptions
+            var client = HttpClientFactory.CreateClient(HttpClientName);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, AbpClaimsPrincipalFactoryOptions.Value.RemoteRefreshUrl);
+            await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration("/"), string.Empty));
+            var response = await client.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception e)
         {
-            AbsoluteExpirationRelativeToNow = CacheOptions.Value.CacheAbsoluteExpiration
-        }))!;
-    }
+            Logger.LogWarning(e, $"Failed to refresh remote claims for user: {userId}");
+            throw;
+        }
 
-    public virtual async Task ClearAsync(Guid userId, Guid? tenantId = null)
-    {
-        Logger.LogDebug($"Clear dynamic claims cache for user: {userId}");
-        Logger.LogDebug($"Clear dynamic claims cache from remote cache for user: {userId}");
-        await Cache.RemoveAsync(AbpClaimCacheItem.CalculateCacheKey(userId, tenantId));
-        await Cache.RemoveAsync($"{nameof(RemoteDynamicClaimsPrincipalContributorCache)}{AbpClaimCacheItem.CalculateCacheKey(userId, tenantId)}");
+        claims = await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
+        if (claims == null || claims.Claims.IsNullOrEmpty())
+        {
+            throw new AbpException($"Failed to refresh remote claims for user: {userId}");
+        }
+
+        return claims!;
     }
 }

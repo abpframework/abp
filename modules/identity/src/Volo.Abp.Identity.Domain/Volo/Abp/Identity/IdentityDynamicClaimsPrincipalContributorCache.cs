@@ -18,7 +18,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
 {
     public ILogger<IdentityDynamicClaimsPrincipalContributorCache> Logger { get; set; }
 
-    protected IDistributedCache<List<AbpClaimCacheItem>> Cache { get; }
+    protected IDistributedCache<AbpDynamicClaimCacheItem> Cache { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IdentityUserManager UserManager { get; }
     protected IUserClaimsPrincipalFactory<IdentityUser> UserClaimsPrincipalFactory { get; }
@@ -26,7 +26,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
     protected IOptions<IdentityDynamicClaimsPrincipalContributorCacheOptions> CacheOptions { get; }
 
     public IdentityDynamicClaimsPrincipalContributorCache(
-        IDistributedCache<List<AbpClaimCacheItem>> cache,
+        IDistributedCache<AbpDynamicClaimCacheItem> cache,
         ICurrentTenant currentTenant,
         IdentityUserManager userManager,
         IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory,
@@ -43,11 +43,11 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
         Logger = NullLogger<IdentityDynamicClaimsPrincipalContributorCache>.Instance;
     }
 
-    public virtual async Task<List<AbpClaimCacheItem>> GetAsync(Guid userId, Guid? tenantId = null)
+    public virtual async Task<AbpDynamicClaimCacheItem> GetAsync(Guid userId, Guid? tenantId = null)
     {
         Logger.LogDebug($"Get dynamic claims cache for user: {userId}");
 
-        return await Cache.GetOrAddAsync(AbpClaimCacheItem.CalculateCacheKey(userId, tenantId), async () =>
+        return await Cache.GetOrAddAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), async () =>
         {
             using (CurrentTenant.Change(tenantId))
             {
@@ -56,17 +56,17 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
                 var user = await UserManager.GetByIdAsync(userId);
                 var principal = await UserClaimsPrincipalFactory.CreateAsync(user);
 
-                var dynamicClaims = new List<AbpClaimCacheItem>();
+                var dynamicClaims = new AbpDynamicClaimCacheItem();
                 foreach (var claimType in AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims)
                 {
                     var claims = principal.Claims.Where(x => x.Type == claimType).ToList();
                     if (claims.Any())
                     {
-                        dynamicClaims.AddRange(claims.Select(claim => new AbpClaimCacheItem(claimType, claim.Value)));
+                        dynamicClaims.Claims.AddRange(claims.Select(claim => new AbpDynamicClaim(claimType, claim.Value)));
                     }
                     else
                     {
-                        dynamicClaims.Add(new AbpClaimCacheItem(claimType, null));
+                        dynamicClaims.Claims.Add(new AbpDynamicClaim(claimType, null));
                     }
                 }
 
@@ -81,6 +81,6 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
     public virtual async Task ClearAsync(Guid userId, Guid? tenantId = null)
     {
         Logger.LogDebug($"Clearing dynamic claims cache for user: {userId}");
-        await Cache.RemoveAsync(AbpClaimCacheItem.CalculateCacheKey(userId, tenantId));
+        await Cache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
     }
 }

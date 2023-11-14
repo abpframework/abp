@@ -231,7 +231,8 @@ public class MyProjectNameBlazorModule : AbpModule
 
         context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
-            options.RemoteUrl = configuration["AuthServer:Authority"] + options.RemoteUrl;
+            options.IsDynamicClaimsEnabled = true;
+            options.RemoteRefreshUrl = configuration["AuthServer:Authority"] + options.RemoteRefreshUrl;
         });
     }
 

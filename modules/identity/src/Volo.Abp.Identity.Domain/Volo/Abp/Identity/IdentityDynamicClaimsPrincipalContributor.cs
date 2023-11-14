@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -22,7 +20,7 @@ public class IdentityDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincip
         }
 
         var dynamicClaimsCache = context.GetRequiredService<IdentityDynamicClaimsPrincipalContributorCache>();
-        List<AbpClaimCacheItem> dynamicClaims;
+        AbpDynamicClaimCacheItem dynamicClaims;
         try
         {
             dynamicClaims = await dynamicClaimsCache.GetAsync(userId.Value, identity.FindTenantId());
@@ -36,6 +34,6 @@ public class IdentityDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincip
             return;
         }
 
-        await AddDynamicClaimsAsync(context, identity, dynamicClaims);
+        await AddDynamicClaimsAsync(context, identity, dynamicClaims.Claims);
     }
 }

@@ -6,5 +6,5 @@ namespace Volo.Abp.Account;
 
 public interface IDynamicClaimsAppService : IApplicationService
 {
-    Task<List<DynamicClaimDto>> GetAsync();
+    Task RefreshAsync();
 }

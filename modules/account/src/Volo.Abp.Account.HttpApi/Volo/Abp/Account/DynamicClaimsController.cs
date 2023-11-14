@@ -18,9 +18,10 @@ public class DynamicClaimsController : AbpControllerBase, IDynamicClaimsAppServi
         DynamicClaimsAppService = dynamicClaimsAppService;
     }
 
-    [HttpGet]
-    public virtual Task<List<DynamicClaimDto>> GetAsync()
+    [HttpPost]
+    [Route("refresh")]
+    public virtual Task RefreshAsync()
     {
-        return DynamicClaimsAppService.GetAsync();
+        return DynamicClaimsAppService.RefreshAsync();
     }
 }

@@ -12,9 +12,11 @@ public class AbpClaimsPrincipalFactoryOptions
 
     public List<string> DynamicClaims { get; }
 
-    public string RemoteUrl { get; set; }
+    public string RemoteRefreshUrl { get; set; }
 
     public Dictionary<string, List<string>> ClaimsMap { get; set; }
+
+    public bool IsDynamicClaimsEnabled  { get; set; }
 
     public AbpClaimsPrincipalFactoryOptions()
     {
@@ -33,7 +35,7 @@ public class AbpClaimsPrincipalFactoryOptions
             AbpClaimTypes.PhoneNumberVerified
         };
 
-        RemoteUrl = "/api/account/dynamic-claims";
+        RemoteRefreshUrl = "/api/account/dynamic-claims/refresh";
 
         ClaimsMap = new Dictionary<string, List<string>>()
         {
@@ -43,5 +45,7 @@ public class AbpClaimsPrincipalFactoryOptions
             { AbpClaimTypes.Role, new List<string> { "role", "roles", ClaimTypes.Role }},
             { AbpClaimTypes.Email, new List<string> { "email", ClaimTypes.Email }},
         };
+
+        IsDynamicClaimsEnabled = false;
     }
 }
