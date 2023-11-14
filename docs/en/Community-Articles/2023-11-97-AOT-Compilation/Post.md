@@ -39,7 +39,7 @@ I have created a simple console application to test the Native AOT Compilation. 
 
 
 |       | Size | Speed |
-| ---   | ---   | ---   |
+| ---   | ---   | ---  |
 | .NET 8 <br/>_(Self-Contained, Single File)_   |  65938 kb     | 00.0051806  ~5ms   |
 | .NET 7 AOT (default)          |   4452 kb     | 00.0029823  ~2ms |
 | .NET 8 AOT (default)          |   1242 kb     | 00.0028638  ~2ms |
@@ -65,11 +65,8 @@ Always consider the specific needs and constraints of your project before decidi
 
 Native AOT Compilation is a great feature that improves the performance of .NET applications. It's still in early-stages and not all libraries support it yet. But it's a great beginning for the future of .NET 🚀
 
-
 ## Links
 - Native AOT deployment overview - .NET | Microsoft Learn. https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/.
-- 
 - Optimize AOT deployments https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/optimizing
-- 
 - What's new in .NET 8 | Microsoft Learn. https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8.
 
