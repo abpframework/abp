@@ -45,8 +45,4 @@ export class FormInputComponent extends AbstractNgModelComponent {
   @Input() inputClass = 'form-control';
   @Output() formBlur = new EventEmitter<void>();
   @Output() formFocus = new EventEmitter<void>();
-
-  constructor(injector: Injector) {
-    super(injector);
-  }
 }

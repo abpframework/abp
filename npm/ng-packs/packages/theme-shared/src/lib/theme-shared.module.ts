@@ -22,7 +22,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { DEFAULT_VALIDATION_BLUEPRINTS } from './constants/validation';
-import { EllipsisModule } from './directives/ellipsis.directive';
+import { EllipsisDirective } from './directives/ellipsis.directive';
 import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
@@ -52,9 +52,6 @@ const declarationsWithExports = [
   ModalComponent,
   ToastComponent,
   ToastContainerComponent,
-  PasswordComponent,
-  NgxDatatableDefaultDirective,
-  NgxDatatableListDirective,
   LoadingDirective,
   ModalCloseDirective,
   AbpVisibleDirective,
@@ -68,14 +65,16 @@ const declarationsWithExports = [
     NgxDatatableModule,
     NgxValidateCoreModule,
     NgbPaginationModule,
-    EllipsisModule,
+    EllipsisDirective,
     CardModule,
+    PasswordComponent,
+    NgxDatatableDefaultDirective,
+    NgxDatatableListDirective,
     DisabledDirective
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
   exports: [
     NgxDatatableModule,
-    EllipsisModule,
     NgxValidateCoreModule,
     CardModule,
     DisabledDirective,
