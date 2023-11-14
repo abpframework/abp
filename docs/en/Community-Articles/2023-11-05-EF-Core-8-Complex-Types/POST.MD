@@ -180,7 +180,7 @@ For more details and examples, see the Microsoft's document in the *References* 
 
 You can find the sample project here:
 
-https://github.com/hikalkan/samples/tree/master/EfCoreComplexTypeDemo
+[https://github.com/hikalkan/samples/tree/master/EfCoreComplexTypeDemo](https://github.com/hikalkan/samples/tree/master/EfCoreComplexTypeDemo)
 
 ## References
 
