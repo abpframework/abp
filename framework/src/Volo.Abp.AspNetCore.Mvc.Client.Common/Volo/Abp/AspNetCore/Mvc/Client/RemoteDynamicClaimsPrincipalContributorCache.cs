@@ -44,10 +44,10 @@ public class RemoteDynamicClaimsPrincipalContributorCache : ITransientDependency
     public virtual async Task<AbpDynamicClaimCacheItem> GetAsync(Guid userId, Guid? tenantId = null)
     {
         Logger.LogDebug($"Get dynamic claims cache for user: {userId}");
-        var claims = await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
-        if (claims != null && !claims.Claims.IsNullOrEmpty())
+        var dynamicClaims = await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
+        if (dynamicClaims != null && !dynamicClaims.Claims.IsNullOrEmpty())
         {
-            return claims;
+            return dynamicClaims;
         }
 
         Logger.LogDebug($"Refresh dynamic claims for user: {userId} from remote service.");
@@ -65,12 +65,12 @@ public class RemoteDynamicClaimsPrincipalContributorCache : ITransientDependency
             throw;
         }
 
-        claims = await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
-        if (claims == null || claims.Claims.IsNullOrEmpty())
+        dynamicClaims = await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
+        if (dynamicClaims == null || dynamicClaims.Claims.IsNullOrEmpty())
         {
             throw new AbpException($"Failed to refresh remote claims for user: {userId}");
         }
 
-        return claims!;
+        return dynamicClaims!;
     }
 }
