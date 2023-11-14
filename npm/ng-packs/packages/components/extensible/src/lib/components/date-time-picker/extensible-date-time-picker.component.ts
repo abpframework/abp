@@ -7,19 +7,24 @@ import {
   SkipSelf,
   ViewChild,
 } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+import { ControlContainer, ReactiveFormsModule } from '@angular/forms';
 import {
   NgbDateAdapter,
+  NgbDatepickerModule,
   NgbInputDatepicker,
   NgbTimeAdapter,
   NgbTimepicker,
+  NgbTimepickerModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { FormProp } from '../../models/form-props';
 import { selfFactory } from '../../utils/factory.util';
 import { DateTimeAdapter } from '@abp/ng.theme.shared';
+import { CommonModule } from '@angular/common';
 
 @Component({
   exportAs: 'abpExtensibleDateTimePicker',
+  standalone: true,
+  imports: [CommonModule, NgbDatepickerModule, ReactiveFormsModule, NgbTimepickerModule],
   selector: 'abp-extensible-date-time-picker',
   template: `
     <input
