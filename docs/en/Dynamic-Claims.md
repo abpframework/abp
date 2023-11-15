@@ -38,12 +38,8 @@ Then add the `DynamicClaims` middleware.
 ````csharp
 public override void OnApplicationInitialization(ApplicationInitializationContext context)
 {
-    //...
-    app.UseAuthentication();
-
-    // Add this line after UseAuthentication
+    // Add this line before UseAuthorization.
     app.UseDynamicClaims();
-
     app.UseAuthorization();
     //...
 }
@@ -67,6 +63,8 @@ This implementation is used for the `Tiered` solution. It will get the dynamic c
 ## IAbpDynamicClaimsPrincipalContributor
 
 If you want to add your own dynamic claims contributor, you can a class that implement the `IAbpDynamicClaimsPrincipalContributor` interface. The framework will call the `ContributeAsync` method when get the dynamic claims.
+
+> It better to use cache to improve performance.
 
 ## AbpClaimsPrincipalFactoryOptions
 
