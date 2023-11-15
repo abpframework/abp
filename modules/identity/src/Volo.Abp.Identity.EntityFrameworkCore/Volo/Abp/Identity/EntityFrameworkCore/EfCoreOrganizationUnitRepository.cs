@@ -105,6 +105,28 @@ public class EfCoreOrganizationUnitRepository
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<IdentityRole>> GetRolesAsync(
+        Guid[] organizationUnitIds,
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+
+        var query = from organizationRole in dbContext.Set<OrganizationUnitRole>()
+            join role in dbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
+            where organizationUnitIds.Contains(organizationRole.OrganizationUnitId)
+            select role;
+
+        query = query
+            .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
+            .PageBy(skipCount, maxResultCount);
+
+        return await query.ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<int> GetRolesCountAsync(
         OrganizationUnit organizationUnit,
         CancellationToken cancellationToken = default)

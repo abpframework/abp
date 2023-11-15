@@ -98,6 +98,28 @@ public class MongoOrganizationUnitRepository
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<IdentityRole>> GetRolesAsync(
+        Guid[] organizationUnitIds,
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var organizationUnits = await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(ou => organizationUnitIds.Contains(ou.Id))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        var roleIds = organizationUnits.SelectMany(ou => ou.Roles.Select(r => r.RoleId)).ToArray();
+
+        return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken))
+            .Where(r => roleIds.Contains(r.Id))
+            .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
+            .As<IMongoQueryable<IdentityRole>>()
+            .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<int> GetRolesCountAsync(
         OrganizationUnit organizationUnit,
         CancellationToken cancellationToken = default)
