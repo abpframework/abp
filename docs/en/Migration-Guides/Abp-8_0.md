@@ -1,10 +1,111 @@
 # ABP Version 8.0 Migration Guide
 
-This document is a guide for upgrading ABP v7.4.x solutions to ABP v8.0.x.
+This document is a guide for upgrading ABP v7.x solutions to ABP v8.0. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.
+
+> ABP Framework upgraded to .NET 8.0, so you need to move your solutions to .NET 8.0 if you want to use the ABP 8.0. You can check the [Migrate from ASP.NET Core 7.0 to 8.0](https://learn.microsoft.com/en-us/aspnet/core/migration/70-80) documentation.
+
+## Injected the `IDistributedEventBus` Dependency into the `IdentityUserManager`
+
+In this version, `IDistributedEventBus` service has been injected to the `IdentityUserManager` service, to publish a distributed event when the email or username is changed for a user, this was needed because sometimes there may be scenarios where the old email/username is needed for the synchronization purposes. 
+
+Therefore, you might need to update the `IdentityUserManager`'s constructor if you have overridden the class and are using it. 
+
+> See the issue for more information: https://github.com/abpframework/abp/pull/17990
+
+## Updated Method Signatures in the Bundling System
+
+In this version, ABP Framework introduced the CDN support for bundling. During the development, we have made some improvements on the bundling system and changed some method signatures.
+
+See https://github.com/abpframework/abp/issues/17864 for more information.
+
+## Replaced `IdentityUserLookupAppService` with the `IIdentityUserIntegrationService`
+
+[Integration Services](../Integration-Services.md) are built for module-to-module (or microservice-to-microservice) communication rather than consumed from a UI or a client application as [Application Services](../Application-Services.md) are intended to do.
+
+In that regard, we are discarding the `IIdentityUserLookupAppService` in the Identity Module and moving its functionality to the `IIdentityUserIntegrationService`. Therefore, if you have used that application service directly, use the integration service (`IIdentityUserIntegrationService`) instead. `IIdentityUserLookupAppService` will be removed in thes next versions, so you may need to create a similar service in your application.
+
+> Notice that integration services have no authorization and are not exposed as HTTP API by default.
+Also, if you have overridden the `IdentityUserLookupAppService` and `IdentityUserIntegrationService` classes in your application, you should update these classes' constructors as follows:
+
+*IdentityUserLookupAppService.cs*
+```csharp
+    public IdentityUserLookupAppService(IIdentityUserIntegrationService identityUserIntegrationService)
+    {
+        IdentityUserIntegrationService = identityUserIntegrationService;
+    }
+```
+
+*IdentityUserIntegrationService.cs*
+
+```diff
+    public IdentityUserIntegrationService(
+        IUserRoleFinder userRoleFinder,
++       IdentityUserRepositoryExternalUserLookupServiceProvider userLookupServiceProvider)
+    {
+        UserRoleFinder = userRoleFinder;
++       UserLookupServiceProvider = userLookupServiceProvider;
+    }
+```
+
+## MongoDB Event Bus Enhancements
+
+In this version, we have made some enhancements in the transactional inbox/outbox pattern implementation and defined two new methods: `ConfigureEventInbox` and `ConfigureEventOutbox` for MongoDB Event Box collections.
+
+If you call one of these methods in your DbContext class, then this introduces a breaking-change because if you do it, MongoDB collection names will be changed. Therefore, it should be carefully done since existing (non-processed) event records are not automatically moved to new collection and they will be lost. Existing applications with event records should rename the collection manually while deploying their solutions.
+
+See https://github.com/abpframework/abp/pull/17723 for more information. Also, check the documentation for the related configurations: [Distributed Event Bus](../Distributed-Event-Bus.md)
+
+## Moved the CMS Kit Pages Feature's Routing to a `DynamicRouteValueTransformer`
+
+In this version, we have made some improvements in the [CMS Kit's Pages Feature](../Modules/Cms-Kit/Pages.md), such as moving the routing logic to a `DynamicRouteValueTransformer` and etc...
+
+These enhancements led to some breaking changes as listed below that should be taken care of:
+
+* Page routing has been moved to **DynamicRouteValueTransformer**. If you use `{**slug}` pattern in your routing, it might conflict with new CMS Kit routing.
+* `PageConsts.UrlPrefix` has been removed, instead, the default prefix is *pages* for now. Still `/pages/{slug}` route works for backward compatibility alongside with `/{slug}` route. 
+
+* **Endpoints changed:**  
+  * `api/cms-kit-public/pages/{slug}` endpoint is changed to `api/cms-kit-public/pages/by-slug?slug={slug}`. Now multiple level of page URLs can be used and `/` characters will be transferred as URL Encoded in querysting to the HTTP API.
+  * `api/cms-kit-public/pages` changed to `api/cms-kit-public/pages/home`
+
+>_CmsKit Client Proxies are updated. If you don't send a **custom request** to this endpoint, **you don't need to take an action**_
+
+## Added Integration Postfix for Auto Controllers
+
+With this version on, the `Integration` suffix from controller names while generating [auto controllers](../API/Auto-API-Controllers.md) are not going to be removed, to differ the integration services from application services in the OpenAPI specification:
+
+![](./images/integration-postfix-not-removed.png)
+
+> This should not affect most of the applications since you normally do not depend on the controller names in the client side.
+
+See https://github.com/abpframework/abp/issues/17625 for more information (how to preserve the existing behaviour, etc...).
+
+## Revised the reCaptcha Generator for CMS Kit's Comment Feature
+
+In this version, we have made improvements on the [CMS Kit's Comment Feature](../Modules/Cms-Kit/Comments.md) and revised the reCaptcha generation process, and made a performance improvement.
+
+This introduced some breaking changes that you should aware of:
+
+* Lifetime of the `SimpleMathsCaptchaGenerator` changed from singleton to transient,
+* Changed method signatures for `SimpleMathsCaptchaGenerator` class. (all of its methods are now async)
+
+If you haven't override the comment view component, then you don't need to make any changes, however if you have overriden the component and used the `SimpleMathsCaptchaGenerator` class, then you should make the required changes as described.
+
+## Disabled Logging for `HEAD` HTTP Methods
+
+HTTP GET requests should not make any change in the database normally and audit log system of ABP Framework doesn't save audit log objects for GET requests by default. You can configure the `AbpAuditingOptions` and set the `IsEnabledForGetRequests` to **true** if you want to record _GET_ requests as described in [the documentation](../Audit-Logging.md).
+
+Prior to this version, only the _GET_ requests were not saved as audit logs. From this version on, also the _HEAD_ requests will not be saved as audit logs, if the `IsEnabledForGetRequests` explicitly set as **true**.
+
+You don't need to make any changes related to that, however it's important to know this change.
+
+## Obsolete the `AbpAspNetCoreIntegratedTestBase` Class
+
+In this version, `AbpAspNetCoreAsyncIntegratedTestBase` class has been set as `Obsolete` and it's recommended to use `AbpWebApplicationFactoryIntegratedTest` instead.
 
 ## Upgraded NuGet Dependencies
 
-The following NuGet libraries have been upgraded:
+You can see the following list of NuGet libraries that have been upgraded with .NET 8.0 upgrade, if you are using one of these packages explicitly, you may consider upgrading them in your solution:
 
 | Package             | Old Version | New Version |
 | ------------------- | ----------- | ----------- |
