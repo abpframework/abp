@@ -8,12 +8,13 @@ import {
   ListService,
   PermissionService,
 } from '@abp/ng.core';
-import { formatDate } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   inject,
+  Inject,
   Injector,
   Input,
   LOCALE_ID,
@@ -38,11 +39,7 @@ import {
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { GridActionsComponent } from '../grid-actions/grid-actions.component';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import {
-  AbpVisibleDirective,
-  NgxDatatableDefaultDirective,
-  NgxDatatableListDirective,
-} from '@abp/ng.theme.shared';
+import { NgxDatatableDefaultDirective, NgxDatatableListDirective } from '@abp/ng.theme.shared';
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
@@ -52,7 +49,6 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   standalone: true,
   imports: [
     CoreModule,
-    AbpVisibleDirective,
     NgxDatatableModule,
     GridActionsComponent,
     NgbTooltip,
