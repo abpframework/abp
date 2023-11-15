@@ -1,17 +1,19 @@
 import {
   ABP,
   ConfigStateService,
+  CoreModule,
   getShortDateFormat,
   getShortDateShortTimeFormat,
   getShortTimeFormat,
   ListService,
   PermissionService,
 } from '@abp/ng.core';
-import { formatDate } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  inject,
   Inject,
   Injector,
   Input,
@@ -31,16 +33,28 @@ import { PropData } from '../../models/props';
 import { ExtensionsService } from '../../services/extensions.service';
 import {
   ENTITY_PROP_TYPE_CLASSES,
-  EntityPropTypeClass,
   EXTENSIONS_IDENTIFIER,
   PROP_DATA_STREAM,
 } from '../../tokens/extensions.token';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { GridActionsComponent } from '../grid-actions/grid-actions.component';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgxDatatableDefaultDirective, NgxDatatableListDirective } from '@abp/ng.theme.shared';
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
- @Component({
+@Component({
   exportAs: 'abpExtensibleTable',
   selector: 'abp-extensible-table',
+  standalone: true,
+  imports: [
+    CoreModule,
+    NgxDatatableModule,
+    GridActionsComponent,
+    NgbTooltip,
+    NgxDatatableDefaultDirective,
+    NgxDatatableListDirective,
+  ],
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,6 +64,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   set actionsText(value: string) {
     this._actionsText = value;
   }
+
   get actionsText(): string {
     return this._actionsText ?? (this.actionList.length > 1 ? 'AbpUi::Actions' : '');
   }
@@ -57,18 +72,16 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   @Input() data!: R[];
   @Input() list!: ListService;
   @Input() recordsTotal!: number;
+
   @Input() set actionsColumnWidth(width: number) {
     this.setColumnWidths(width ? Number(width) : undefined);
   }
+
   @Input() actionsTemplate?: TemplateRef<any>;
 
   @Output() tableActivate = new EventEmitter();
 
-  getInjected: typeof this.injector.get
-
   hasAtLeastOnePermittedAction: boolean;
-
-  entityPropTypeClasses: EntityPropTypeClass;
 
   readonly columnWidths!: number[];
 
@@ -78,20 +91,20 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
 
-  constructor(
-    @Inject(LOCALE_ID) private locale: string,
-    private config: ConfigStateService,
-    private injector: Injector,
-  ) {
-    this.entityPropTypeClasses = injector.get(ENTITY_PROP_TYPE_CLASSES);
-    this.getInjected = injector.get.bind(injector);
-    const extensions = injector.get(ExtensionsService);
-    const name = injector.get(EXTENSIONS_IDENTIFIER);
+  locale = inject(LOCALE_ID);
+  private config = inject(ConfigStateService);
+  entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
+  #injector = inject(Injector);
+  getInjected = this.#injector.get.bind(this.#injector);
+
+  constructor() {
+    const extensions = this.#injector.get(ExtensionsService);
+    const name = this.#injector.get(EXTENSIONS_IDENTIFIER);
     this.propList = extensions.entityProps.get(name).props;
     this.actionList = extensions['entityActions'].get(name)
       .actions as unknown as EntityActionList<R>;
 
-    const permissionService = injector.get(PermissionService);
+    const permissionService = this.#injector.get(PermissionService);
     this.hasAtLeastOnePermittedAction =
       permissionService.filterItemsByPolicy(
         this.actionList.toArray().map(action => ({ requiredPolicy: action.permission })),
@@ -149,7 +162,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     if (!data?.currentValue) return;
 
     if (data.currentValue.length < 1) {
-      this.list.totalCount = this.recordsTotal
+      this.list.totalCount = this.recordsTotal;
     }
 
     this.data = data.currentValue.map((record: any, index: number) => {
@@ -170,7 +183,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
                 useValue: value,
               },
             ],
-            parent: this.injector,
+            parent: this.#injector,
           });
           record[propKey].component = prop.value.component;
         }
