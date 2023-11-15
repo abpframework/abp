@@ -9,7 +9,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.Authentication;
-using Volo.Abp.Json;
 using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client;
@@ -22,20 +21,17 @@ public class RemoteDynamicClaimsPrincipalContributorCache : ITransientDependency
     protected IDistributedCache<AbpDynamicClaimCacheItem> Cache { get; }
     protected IHttpClientFactory HttpClientFactory { get; }
     protected IOptions<AbpClaimsPrincipalFactoryOptions> AbpClaimsPrincipalFactoryOptions { get; }
-    protected IJsonSerializer JsonSerializer { get; }
     protected IRemoteServiceHttpClientAuthenticator HttpClientAuthenticator { get; }
 
     public RemoteDynamicClaimsPrincipalContributorCache(
         IDistributedCache<AbpDynamicClaimCacheItem> cache,
         IHttpClientFactory httpClientFactory,
         IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimsPrincipalFactoryOptions,
-        IJsonSerializer jsonSerializer,
         IRemoteServiceHttpClientAuthenticator httpClientAuthenticator)
     {
         Cache = cache;
         HttpClientFactory = httpClientFactory;
         AbpClaimsPrincipalFactoryOptions = abpClaimsPrincipalFactoryOptions;
-        JsonSerializer = jsonSerializer;
         HttpClientAuthenticator = httpClientAuthenticator;
 
         Logger = NullLogger<RemoteDynamicClaimsPrincipalContributorCache>.Instance;
