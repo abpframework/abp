@@ -11,9 +11,9 @@
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
     <PackageVersion Include="AutoMapper" Version="12.0.1" />
-    <PackageVersion Include="AWSSDK.S3" Version="3.7.300.1" />
-    <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.300.1" />
-    <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.16.2" />
+    <PackageVersion Include="AWSSDK.S3" Version="3.7.300.2" />
+    <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.300.2" />
+    <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.17.0" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.19.1" />
     <PackageVersion Include="Blazorise" Version="1.3.2" />
     <PackageVersion Include="Blazorise.Components" Version="1.3.2" />
@@ -61,7 +61,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.24" />
+    <PackageVersion Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.25" />
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
@@ -119,7 +119,7 @@
     <PackageVersion Include="OpenIddict.Validation.AspNetCore" Version="4.10.0" />
     <PackageVersion Include="OpenIddict.Validation.ServerIntegration" Version="4.10.0" />
     <PackageVersion Include="Oracle.EntityFrameworkCore" Version="7.21.12" />
-    <PackageVersion Include="Polly" Version="8.1.0" />
+    <PackageVersion Include="Polly" Version="8.2.0" />
     <PackageVersion Include="Polly.Extensions.Http" Version="3.0.0" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0-beta.1" />
     <PackageVersion Include="Quartz" Version="3.7.0" />
