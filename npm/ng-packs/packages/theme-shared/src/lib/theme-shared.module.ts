@@ -54,7 +54,6 @@ const declarationsWithExports = [
   ToastContainerComponent,
   LoadingDirective,
   ModalCloseDirective,
-  AbpVisibleDirective,
   FormInputComponent,
   FormCheckboxComponent,
 ];
@@ -70,7 +69,8 @@ const declarationsWithExports = [
     PasswordComponent,
     NgxDatatableDefaultDirective,
     NgxDatatableListDirective,
-    DisabledDirective
+    DisabledDirective,
+    AbpVisibleDirective,
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
   exports: [
@@ -78,6 +78,7 @@ const declarationsWithExports = [
     NgxValidateCoreModule,
     CardModule,
     DisabledDirective,
+    AbpVisibleDirective,
     NgxDatatableListDirective,
     NgxDatatableDefaultDirective,
     ...declarationsWithExports,
