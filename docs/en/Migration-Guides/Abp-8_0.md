@@ -11,14 +11,14 @@ The following NuGet libraries have been upgraded:
 | All Microsoft packages | 7.x       | 8.x       |
 | Microsoft.CodeAnalysis | 4.2.0       | 4.5.0      |
 | NUglify | 1.20.0       | 1.21.0       |
-| Polly | 7.2.3       | 8.1.0       |
+| Polly | 7.2.3       | 8.2.0       |
 | aliyun-net-sdk-sts | 3.1.0       | 3.1.2       |
 | Autofac | 7.0.0       | 7.1.0       |
 | Autofac.Extras.DynamicProxy | 6.0.1       | 7.1.0       |
 | AutoMapper | 12.0.0       | 12.0.1       |
 | AsyncKeyedLock | 6.2.1       | 6.2.2       |
-| AWSSDK.S3 | 3.7.9.2       | 3.7.300.1       | 
-| AWSSDK.SecurityToken | 3.7.1.151       | 3.7.300.1       |
+| AWSSDK.S3 | 3.7.9.2       | 3.7.300.2       | 
+| AWSSDK.SecurityToken | 3.7.1.151       | 3.7.300.2       |
 | Azure.Storage.Blobs | 12.15.0       | 12.19.1       |
 | ConfigureAwait.Fody | 3.3.1       | 3.3.2       |
 | Confluent.Kafka | 1.8.2       | 2.3.0       |
@@ -43,7 +43,7 @@ The following NuGet libraries have been upgraded:
 | MailKit | 3.2.0       | 4.3.0       |
 | Markdig.Signed | 0.26.0       | 0.33.0       |
 | Microsoft.AspNetCore.Mvc.Versioning | 5.0.0       | 5.1.0       |
-| Microsoft.AspNetCore.Razor.Language | 6.0.8       | 6.0.24       |
+| Microsoft.AspNetCore.Razor.Language | 6.0.8       | 6.0.25       |
 | Microsoft.NET.Test.Sdk | 17.2.0       | 17.8.0       |
 | Minio | 4.0.6       | 6.0.1       |
 | MongoDB.Driver | 2.19.1       | 2.22.0       |
