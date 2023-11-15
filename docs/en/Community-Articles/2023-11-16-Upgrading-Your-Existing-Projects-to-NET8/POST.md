@@ -2,13 +2,13 @@
 
 A new .NET version was released on November 14, 2023 and ABP 8.0 RC.1 shipped based on .NET 8.0 just after Microsoft's .NET 8.0 release. Therefore, it's a good time to see what we need to do to upgrade our existing projects to .NET 8.0. 
 
-Even all related dependency upgrades and changes made on ABP Framework and ABP Commercial sides, we still need to make some changes and let's see the required actions needs to be taken in the following sections.
+Despite all the related dependency upgrades and changes made on ABP Framework and ABP Commercial sides, we still need to make some changes. Let's see the required actions that need to be taken in the following sections.
 
 ## Installing the .NET 8.0 SDK
 
 To get started with ASP.NET Core in .NET 8.0, you need to install the .NET 8 SDK. You can install it at [https://dotnet.microsoft.com/en-us/download/dotnet/8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). 
 
-After installing the SDK & Runtime, now you can upgrade your existing ASP.NET Core application to .NET 8.0.
+After installing the SDK & Runtime, you can upgrade your existing ASP.NET Core application to .NET 8.0.
 
 ## Updating the Target Framework
 
@@ -26,7 +26,7 @@ You are probably using some Microsoft packages in your solution, so you need to 
 
 ## Checking the Breaking Changes in .NET 8.0
 
-As I have mentioned earlier in this article, on the ABP Framework & ABP Commercial sides all related code changes have been made, so you would not get any error related to breaking changes introduced with .NET 8.0. However, you still need to check the [Breaking Changes in .NET 8.0 documentation](https://learn.microsoft.com/en-us/dotnet/core/compatibility/8.0), because the breaking changes listed in this documentation still might affect you. Therefore, read them accordingly and make the related changes in your application, if its needed.
+As I have mentioned earlier in this article, on the ABP Framework & ABP Commercial sides all the related code changes have been made, so you would not get any error related to breaking changes introduced with .NET 8.0. However, you still need to check the [Breaking Changes in .NET 8.0 documentation](https://learn.microsoft.com/en-us/dotnet/core/compatibility/8.0), because the breaking changes listed in this documentation still might affect you. Therefore, read them accordingly and make the related changes in your application, if needed.
 
 ## Update Your Global Dotnet CLI Tools (optional)
 
@@ -38,7 +38,7 @@ dotnet tool update dotnet-ef --global
 
 ## Installing/Restoring the Workloads (required for Blazor WASM & MAUI apps)
 
-The `dotnet workload restore` command installs workloads needed for a project or a solution. This command analyzes a project or solution to determine which workloads are needed and if you have a .NET MAUI or Blazor-WASM project, you can update your workloads by running the following command in a terminal:
+The `dotnet workload restore` command installs the workloads needed for a project or a solution. This command analyzes a project or solution to determine which workloads are needed and if you have a .NET MAUI or Blazor-WASM project, you can update your workloads by running the following command in a terminal:
 
 ```bash
 dotnet workload restore
