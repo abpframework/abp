@@ -44,7 +44,7 @@
       </ng-template>
       <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
         <ng-container *abpPermission="prop.permission; runChangeDetection: false">
-          <ng-container *ngIf="row['_' + prop.name]?.visible">
+          <ng-container *abpVisible="row['_' + prop.name]?.visible">
             <div
               *ngIf="!row['_' + prop.name].component; else component"
               [innerHTML]="row['_' + prop.name]?.value | async"
