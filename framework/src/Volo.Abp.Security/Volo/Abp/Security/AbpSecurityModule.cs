@@ -59,9 +59,11 @@ public class AbpSecurityModule : AbpModule
         });
     }
 
+
     private static void AutoAddClaimsPrincipalContributors(IServiceCollection services)
     {
         var contributorTypes = new List<Type>();
+        var dynamicContributorTypes = new List<Type>();
 
         services.OnRegistered(context =>
         {
@@ -69,11 +71,17 @@ public class AbpSecurityModule : AbpModule
             {
                 contributorTypes.Add(context.ImplementationType);
             }
+
+            if (typeof(IAbpDynamicClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
+            {
+                dynamicContributorTypes.Add(context.ImplementationType);
+            }
         });
 
         services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.Contributors.AddIfNotContains(contributorTypes);
+            options.DynamicContributors.AddIfNotContains(dynamicContributorTypes);
         });
     }
 }

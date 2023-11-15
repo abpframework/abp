@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Volo.Abp.Security.Claims;
 
-public class CurrentPrincipalAccessor_Test : AbpIntegratedTest<AbpSecurityTestModule>
+public class CurrentPrincipalAccessor_Tests : AbpIntegratedTest<AbpSecurityTestModule>
 {
     private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
 
-    public CurrentPrincipalAccessor_Test()
+    public CurrentPrincipalAccessor_Tests()
     {
         _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
     }

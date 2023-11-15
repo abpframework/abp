@@ -30,6 +30,7 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Web;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Web;
@@ -115,6 +116,10 @@ public class MyProjectNameWebModule : AbpModule
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
         context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -230,6 +235,7 @@ public class MyProjectNameWebModule : AbpModule
             app.UseMultiTenancy();
         }
 
+        app.UseDynamicClaims();
         app.UseUnitOfWork();
         app.UseAuthorization();
         app.UseSwagger();
