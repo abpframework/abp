@@ -113,6 +113,28 @@ Entity Framework Core read-only repository implementation uses [EF Core's No-Tra
 
 > See the issue for more information: https://github.com/abpframework/abp/pull/17421
 
+## Angular UI
+
+# Guards
+
+From Angular Documentation;
+
+> Class-based **`Route`** guards are deprecated in favor of functional guards.
+
+- Angular has been using functional guards since version 14. According to this situation we have moved our guards to functional guards.
+
+We have modified our modules to adaptate functional guards.
+
+```diff
+- import {AuthGuard, PermissionGuard} from '@abp/ng.core';
++ import {authGuard, permissionGuard} from '@abp/ng.core';
+
+- canActivate: mapToCanActivate([AuthGuard, PermissionGuard])
++ canActivate: [authGuard, permissionGuard]
+```
+
+You can still use class based guards but we recommend it to use functional guards like us :)
+
 ## Upgraded NuGet Dependencies
 
 You can see the following list of NuGet libraries that have been upgraded with .NET 8.0 upgrade, if you are using one of these packages explicitly, you may consider upgrading them in your solution:
