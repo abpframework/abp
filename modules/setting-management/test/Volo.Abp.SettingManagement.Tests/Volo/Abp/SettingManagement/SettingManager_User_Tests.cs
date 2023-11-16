@@ -186,4 +186,16 @@ public class SettingManager_User_Tests : SettingsTestBase
         (await _settingManager.GetOrNullForUserAsync("MySettingWithoutInherit", _testData.User2Id)).ShouldBeNull(); //Does not inherit!
         (await _settingManager.GetOrNullGlobalAsync("MySettingWithoutInherit")).ShouldBe("default-store-value");
     }
+
+    [Fact]
+    public async Task DeleteAsync()
+    {
+        (await _settingManager.GetOrNullForUserAsync("MySetting2", _testData.User1Id)).ShouldBe("user1-store-value");
+        (await _settingManager.GetOrNullForUserAsync("MySettingWithoutInherit", _testData.User1Id)).ShouldBe("user1-store-value");
+
+        await _settingManager.DeleteAsync(UserSettingValueProvider.ProviderName, _testData.User1Id.ToString());
+
+        (await _settingManager.GetOrNullForUserAsync("MySetting2", _testData.User1Id)).ShouldNotBe("user1-store-value");
+        (await _settingManager.GetOrNullForUserAsync("MySettingWithoutInherit", _testData.User1Id)).ShouldNotBe("user1-store-value");
+    }
 }

@@ -29,13 +29,15 @@ public class AccountController : AbpControllerBase
     protected ISettingProvider SettingProvider { get; }
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
+    protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
 
     public AccountController(
         SignInManager<IdentityUser> signInManager,
         IdentityUserManager userManager,
         ISettingProvider settingProvider,
         IdentitySecurityLogManager identitySecurityLogManager,
-        IOptions<IdentityOptions> identityOptions)
+        IOptions<IdentityOptions> identityOptions,
+        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
     {
         LocalizationResource = typeof(AccountResource);
 
@@ -44,6 +46,7 @@ public class AccountController : AbpControllerBase
         SettingProvider = settingProvider;
         IdentitySecurityLogManager = identitySecurityLogManager;
         IdentityOptions = identityOptions;
+        IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
     }
 
     [HttpPost]
@@ -68,6 +71,16 @@ public class AccountController : AbpControllerBase
             Action = signInResult.ToIdentitySecurityLogAction(),
             UserName = login.UserNameOrEmailAddress
         });
+
+        if (signInResult.Succeeded)
+        {
+            var user = await UserManager.FindByNameAsync(login.UserNameOrEmailAddress);
+            if (user != null)
+            {
+                // Clear the dynamic claims cache.
+                await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+            }
+        }
 
         return GetAbpLoginResult(signInResult);
     }

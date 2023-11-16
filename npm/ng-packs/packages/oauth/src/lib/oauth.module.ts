@@ -5,6 +5,7 @@ import {
   AbpLocalStorageService,
   ApiInterceptor,
   AuthGuard,
+  authGuard,
   AuthService,
   CHECK_AUTHENTICATION_STATE_FN_KEY,
   noop,
@@ -14,7 +15,7 @@ import { AbpOAuthService } from './services';
 import { OAuthConfigurationHandler } from './handlers/oauth-configuration.handler';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OAuthApiInterceptor } from './interceptors/api.interceptor';
-import { AbpOAuthGuard } from './guards/oauth.guard';
+import { AbpOAuthGuard, abpOAuthGuard } from './guards/oauth.guard';
 import { NavigateToManageProfileProvider } from './providers';
 import { checkAccessToken, pipeToLogin } from './utils';
 
@@ -33,6 +34,10 @@ export class AbpOAuthModule {
         {
           provide: AuthGuard,
           useClass: AbpOAuthGuard,
+        },
+        {
+          provide: authGuard,
+          useValue: abpOAuthGuard,
         },
         {
           provide: ApiInterceptor,

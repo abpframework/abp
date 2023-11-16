@@ -5,9 +5,9 @@ namespace Volo.Abp.EventBus;
 [AttributeUsage(AttributeTargets.Class)]
 public class GenericEventNameAttribute : Attribute, IEventNameProvider
 {
-    public string Prefix { get; set; }
+    public string? Prefix { get; set; }
 
-    public string Postfix { get; set; }
+    public string? Postfix { get; set; }
 
     public virtual string GetName(Type eventType)
     {

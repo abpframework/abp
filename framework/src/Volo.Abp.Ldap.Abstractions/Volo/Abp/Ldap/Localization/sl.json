@@ -1,6 +1,8 @@
 {
   "culture": "sl",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP preko SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP preko SSL",
     "DisplayName:Abp.Ldap.ServerHost": "Gostitelj strežnika",
     "Description:Abp.Ldap.ServerHost": "Gostitelj strežnika",
     "DisplayName:Abp.Ldap.ServerPort": "Vrata strežnika",

@@ -6,7 +6,6 @@ If your app is version 7.0 or higher, you should include "AbpOAuthModule.forRoot
 Those abstractions can be found in the @abp/ng-core packages.
 - `AuthService` (the class that implements the IAuthService interface).
 - `NAVIGATE_TO_MANAGE_PROFILE` Inject token.
-- `AuthGuard` (the class that implements the IAuthGuard interface).
 - `ApiInterceptor` (the class that implements the IApiInterceptor interface).
 
 Those base classes are overridden by the "AbpOAuthModule" for oAuth. There are also three functions provided with AbpOAuthModule.
