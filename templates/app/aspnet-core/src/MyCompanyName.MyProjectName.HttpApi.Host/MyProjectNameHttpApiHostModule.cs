@@ -195,6 +195,8 @@ public class MyProjectNameHttpApiHostModule : AbpModule
         {
             app.UseMultiTenancy();
         }
+
+        app.UseUnitOfWork();
         app.UseDynamicClaims();
         app.UseAuthorization();
 
@@ -210,7 +212,6 @@ public class MyProjectNameHttpApiHostModule : AbpModule
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
-        app.UseUnitOfWork();
         app.UseConfiguredEndpoints();
     }
 }

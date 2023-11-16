@@ -203,8 +203,8 @@ public class MyProjectNameHttpApiHostModule : AbpModule
         {
             app.UseMultiTenancy();
         }
-        app.UseDynamicClaims();
         app.UseUnitOfWork();
+        app.UseDynamicClaims();
         app.UseAuthorization();
 
         app.UseSwagger();

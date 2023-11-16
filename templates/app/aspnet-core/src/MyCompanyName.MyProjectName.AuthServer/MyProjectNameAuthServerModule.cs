@@ -217,9 +217,10 @@ public class MyProjectNameAuthServerModule : AbpModule
             app.UseMultiTenancy();
         }
 
-        app.UseDynamicClaims();
         app.UseUnitOfWork();
+        app.UseDynamicClaims();
         app.UseAuthorization();
+
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
