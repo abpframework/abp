@@ -22,7 +22,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { DEFAULT_VALIDATION_BLUEPRINTS } from './constants/validation';
-import { EllipsisModule } from './directives/ellipsis.directive';
+import { EllipsisDirective } from './directives/ellipsis.directive';
 import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
@@ -37,7 +37,7 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
 import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from './tokens/confirmation-icons.token';
 import { PasswordComponent } from './components/password/password.component';
 import { CardModule } from './components/card/card.module';
-import { AbpVisibleDirective } from './directives';
+import { AbpVisibleDirective, DisabledDirective } from './directives';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormCheckboxComponent } from './components/checkbox/checkbox.component';
 import { tenantNotFoundProvider } from './providers/tenant-not-found.provider';
@@ -52,12 +52,8 @@ const declarationsWithExports = [
   ModalComponent,
   ToastComponent,
   ToastContainerComponent,
-  PasswordComponent,
-  NgxDatatableDefaultDirective,
-  NgxDatatableListDirective,
   LoadingDirective,
   ModalCloseDirective,
-  AbpVisibleDirective,
   FormInputComponent,
   FormCheckboxComponent,
 ];
@@ -68,15 +64,23 @@ const declarationsWithExports = [
     NgxDatatableModule,
     NgxValidateCoreModule,
     NgbPaginationModule,
-    EllipsisModule,
+    EllipsisDirective,
     CardModule,
+    PasswordComponent,
+    NgxDatatableDefaultDirective,
+    NgxDatatableListDirective,
+    DisabledDirective,
+    AbpVisibleDirective,
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
   exports: [
     NgxDatatableModule,
-    EllipsisModule,
     NgxValidateCoreModule,
     CardModule,
+    DisabledDirective,
+    AbpVisibleDirective,
+    NgxDatatableListDirective,
+    NgxDatatableDefaultDirective,
     ...declarationsWithExports,
   ],
   providers: [DatePipe],

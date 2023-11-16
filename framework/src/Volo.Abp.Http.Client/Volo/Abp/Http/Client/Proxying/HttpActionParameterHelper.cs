@@ -6,7 +6,7 @@ namespace Volo.Abp.Http.Client.Proxying;
 
 internal static class HttpActionParameterHelper
 {
-    public static object FindParameterValue(IReadOnlyDictionary<string, object> methodArguments, ParameterApiDescriptionModel apiParameter)
+    public static object? FindParameterValue(IReadOnlyDictionary<string, object> methodArguments, ParameterApiDescriptionModel apiParameter)
     {
         var value = methodArguments.GetOrDefault(apiParameter.NameOnMethod);
         if (value == null)

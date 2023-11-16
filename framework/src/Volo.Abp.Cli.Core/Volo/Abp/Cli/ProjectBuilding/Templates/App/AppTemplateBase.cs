@@ -28,7 +28,7 @@ public abstract class AppTemplateBase : TemplateInfo
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        var steps = new List<ProjectBuildPipelineStep>();
+        var steps = base.GetCustomSteps(context).ToList();
 
         ConfigureTenantSchema(context, steps);
         SwitchDatabaseProvider(context, steps);
@@ -166,7 +166,11 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveFolderStep("/angular"));
         }
 
-        if (context.BuildArgs.MobileApp != MobileApp.ReactNative)
+        if(context.BuildArgs.MobileApp == MobileApp.ReactNative)
+        {
+            context.Symbols.Add("mobile:react-native");
+        }
+        else
         {
             steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName().EnsureStartsWith('/')));
         }
@@ -175,6 +179,7 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             steps.Add(new MauiChangeApplicationIdGuidStep());
             steps.Add(new MauiChangePortStep());
+            context.Symbols.Add("mobile:maui");
         }
         else
         {
@@ -193,10 +198,12 @@ public abstract class AppTemplateBase : TemplateInfo
                 context.BuildArgs.ExtraProperties.ContainsKey("separate-auth-server"))
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Public"));
+                context.Symbols.Add("ui:mvc-public-host");
             }
             else
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Public.Host"));
+                context.Symbols.Add("ui:mvc-public");
             }
         }
     }
@@ -430,6 +437,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+            context.Symbols.Add("HostWithIds");
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
     }
@@ -455,6 +463,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+            context.Symbols.Add("HostWithIds");
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
 
@@ -548,6 +557,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+            context.Symbols.Add("HostWithIds");
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
 
@@ -585,6 +595,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+            context.Symbols.Add("HostWithIds");
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
     }

@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
     <AssemblyName>Volo.Abp.SettingManagement.Domain</AssemblyName>
     <PackageId>Volo.Abp.SettingManagement.Domain</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Polly" Version="$(PollyPackageVersion)" />
+    <PackageReference Include="Polly" />
   </ItemGroup>
 
 </Project>

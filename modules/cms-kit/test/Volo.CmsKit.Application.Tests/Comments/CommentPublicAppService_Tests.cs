@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -48,7 +49,8 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
             new CreateCommentInput
             {
                 RepliedCommentId = null,
-                Text = "newComment"
+                Text = "newComment",
+                IdempotencyToken = Guid.NewGuid().ToString("N")
             }
         );
 
@@ -75,7 +77,8 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
             new CreateCommentInput
             {
                 RepliedCommentId = null,
-                Text = text
+                Text = text,
+                IdempotencyToken = Guid.NewGuid().ToString("N")
             }
         );
     }
@@ -95,6 +98,25 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
                 {
                     RepliedCommentId = null,
                     Text = text, //not allowed URL
+                    IdempotencyToken = Guid.NewGuid().ToString("N")
+                }
+            ));
+    }
+
+    [Fact]
+    public async Task CreateAsync_ShouldThrowUserFriendlyException_If_IdempotencyToken_Not_Unique() 
+    {
+        _currentUser.Id.Returns(_cmsKitTestData.User2Id);
+
+        await Should.ThrowAsync<UserFriendlyException>(async () =>
+            await _commentAppService.CreateAsync(
+                _cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId1,
+                new CreateCommentInput 
+                {
+                    RepliedCommentId = null,
+                    Text = "<text>", 
+                    IdempotencyToken = _cmsKitTestData.IdempotencyToken_1
                 }
             ));
     }

@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, Injector, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 // Not an abstract class on purpose. Do not change!
 @Component({ template: '' })
 export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAccessor {
   protected _value!: T;
-  protected cdRef: ChangeDetectorRef;
+  protected cdRef = inject(ChangeDetectorRef);
   onChange?: (value: T) => void;
   onTouched?: () => void;
 
@@ -37,10 +37,6 @@ export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAcc
 
   get defaultValue(): T {
     return this._value;
-  }
-
-  constructor(public injector: Injector) {
-    this.cdRef = injector.get(ChangeDetectorRef);
   }
 
   notifyValueChange(): void {
