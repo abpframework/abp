@@ -103,7 +103,7 @@ You don't need to make any changes related to that, however it's important to kn
 
 In this version, `AbpAspNetCoreAsyncIntegratedTestBase` class has been set as `Obsolete` and it's recommended to use `AbpWebApplicationFactoryIntegratedTest` instead.
 
-## Use NoTracking for readonly repositories for EF core. 
+## Use NoTracking for Readonly Repositories for EF Core 
 
 In this version, ABP Framework provides read-only [repository](Repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
 
@@ -113,11 +113,11 @@ Entity Framework Core read-only repository implementation uses [EF Core's No-Tra
 
 > See the issue for more information: https://github.com/abpframework/abp/pull/17421
 
-## IAbpDaprClientFactory's method signatures changed
+## Use `IAbpDaprClientFactory` to Obtain `DaprClient`
 
-The `Create` and `CreateHttpClient` methods of the `IAbpDaprClientFactory` interface have been changed to async methods. Please update your code if you have used these methods.
+From this version on, instead of injecting the `DaprClient` directly, using the `IAbpDaprClientFactory.CreateAsync` method to create `DaprClient` or `HttpClient` objects to perform operations on Dapr is recommended.
 
-> See the issue for more information: https://github.com/abpframework/abp/pull/18117/
+The documentation is already updated according to this suggestion and can be found at https://docs.abp.io/en/abp/8.0/Dapr/Index. So, if you want to learn more you can check the documentation or see the PR: https://github.com/abpframework/abp/pull/18117.
 
 ## Angular UI
 
