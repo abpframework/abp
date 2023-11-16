@@ -15,23 +15,25 @@ import {
   ExtensibleTableComponent,
   GridActionsComponent,
   PageToolbarComponent,
-  ExtensibleDateTimePickerComponent
+  ExtensibleDateTimePickerComponent,
 } from './components';
 import { PropDataDirective } from './directives/prop-data.directive';
 import { CreateInjectorPipe } from './pipes/create-injector.pipe';
 import { DisabledDirective } from '@abp/ng.theme.shared';
 
+const importWithExport = [
+  DisabledDirective,
+  ExtensibleDateTimePickerComponent,
+  ExtensibleFormPropComponent,
+  GridActionsComponent,
+  PropDataDirective,
+  PageToolbarComponent,
+  CreateInjectorPipe,
+  ExtensibleFormComponent,
+  ExtensibleTableComponent,
+];
 @NgModule({
-  declarations: [
-    ExtensibleDateTimePickerComponent,
-    PageToolbarComponent,
-    GridActionsComponent,
-    ExtensibleFormPropComponent,
-    ExtensibleFormComponent,
-    ExtensibleTableComponent,
-    PropDataDirective,
-    CreateInjectorPipe,
-  ],
+  declarations: [],
   imports: [
     CoreModule,
     ThemeSharedModule,
@@ -41,15 +43,8 @@ import { DisabledDirective } from '@abp/ng.theme.shared';
     NgbTimepickerModule,
     NgbTypeaheadModule,
     NgbTooltipModule,
-    DisabledDirective,
+    ...importWithExport,
   ],
-  exports: [
-    PageToolbarComponent,
-    GridActionsComponent,
-    ExtensibleFormComponent,
-    ExtensibleTableComponent,
-    PropDataDirective,
-    CreateInjectorPipe,
-  ],
+  exports: [...importWithExport],
 })
 export class ExtensibleModule {}

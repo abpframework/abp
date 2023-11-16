@@ -13,6 +13,7 @@ import { PropData, PropList } from '../models/props';
 @Directive({
   exportAs: 'abpPropData',
   selector: '[abpPropData]',
+  standalone: true,
 })
 export class PropDataDirective<L extends PropList<any>>
   extends PropData<InferredData<L>>

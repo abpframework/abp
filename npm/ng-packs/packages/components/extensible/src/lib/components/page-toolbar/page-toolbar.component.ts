@@ -8,10 +8,14 @@ import {
 } from '../../models/toolbar-actions';
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
+import { CreateInjectorPipe } from '../../pipes/create-injector.pipe';
+import { CoreModule } from '@abp/ng.core';
 
 @Component({
   exportAs: 'abpPageToolbar',
   selector: 'abp-page-toolbar',
+  standalone: true,
+  imports: [ CoreModule, CreateInjectorPipe],
   templateUrl: './page-toolbar.component.html',
   providers: [
     {
@@ -31,6 +35,7 @@ export class PageToolbarComponent<R = any>
 
   readonly trackByFn: TrackByFunction<ToolbarComponent<R>> = (_, item) =>
     item.action || item.component;
+
   constructor(public readonly injector: Injector) {
     super(injector);
   }

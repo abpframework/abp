@@ -12,6 +12,7 @@ import { EXTENSIONS_ACTION_CALLBACK, EXTENSIONS_ACTION_DATA } from '../tokens/ex
 
 @Pipe({
   name: 'createInjector',
+  standalone: true,
 })
 export class CreateInjectorPipe<R> implements PipeTransform {
   public transform(

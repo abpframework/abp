@@ -52,17 +52,19 @@ public class LoginModel : AccountPageModel
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
     protected AbpAccountOptions AccountOptions { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
-
+    protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
     public bool ShowCancelButton { get; set; }
 
     public LoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
-        IOptions<IdentityOptions> identityOptions)
+        IOptions<IdentityOptions> identityOptions,
+        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
     {
         SchemeProvider = schemeProvider;
         IdentityOptions = identityOptions;
         AccountOptions = accountOptions.Value;
+        IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
@@ -137,6 +139,9 @@ public class LoginModel : AccountPageModel
                    await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
 
         Debug.Assert(user != null, nameof(user) + " != null");
+
+        // Clear the dynamic claims cache.
+        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
         return RedirectSafely(ReturnUrl, ReturnUrlHash);
     }
@@ -222,8 +227,16 @@ public class LoginModel : AccountPageModel
             throw new UserFriendlyException("Cannot proceed because user is not allowed!");
         }
 
+        IdentityUser user;
         if (result.Succeeded)
         {
+            user = await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
+            if (user != null)
+            {
+                // Clear the dynamic claims cache.
+                await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+            }
+
             return RedirectSafely(returnUrl, returnUrlHash);
         }
 
@@ -239,7 +252,7 @@ public class LoginModel : AccountPageModel
             });
         }
 
-        var user = await UserManager.FindByEmailAsync(email);
+        user = await UserManager.FindByEmailAsync(email);
         if (user == null)
         {
             return RedirectToPage("./Register", new {
@@ -262,6 +275,9 @@ public class LoginModel : AccountPageModel
             Action = result.ToIdentitySecurityLogAction(),
             UserName = user.Name
         });
+
+        // Clear the dynamic claims cache.
+        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
         return RedirectSafely(returnUrl, returnUrlHash);
     }

@@ -178,7 +178,13 @@
         },
         {
           "text": "Authorization",
-          "path": "Authorization.md"
+          "path": "Authorization.md",
+          "items": [
+            {
+              "text": "Dynamic Claims",
+              "path": "Dynamic-Claims.md"
+            }
+          ]
         },
         {
           "text": "Caching",
