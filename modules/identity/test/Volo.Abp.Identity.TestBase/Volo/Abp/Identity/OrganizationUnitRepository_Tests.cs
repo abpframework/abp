@@ -47,8 +47,13 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
     [Fact]
     public async Task GetAllChildrenWithParentCodeAsync()
     {
-        (await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(0),
-            _guidGenerator.Create())).ShouldNotBeNull();
+        var allChildren = await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(0), _guidGenerator.Create());
+        allChildren.ShouldNotBeNull();
+        allChildren.ShouldBeEmpty();
+
+        allChildren = (await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(1), null));
+        allChildren.ShouldNotBeNull();
+        allChildren.ShouldNotBeEmpty();
     }
 
     [Fact]

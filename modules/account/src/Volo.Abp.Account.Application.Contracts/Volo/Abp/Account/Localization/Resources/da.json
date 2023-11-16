@@ -63,6 +63,8 @@
     "PasswordResetInfoInEmail": "Vi har modtaget en forespørgsel for gendannelse af konto! Hvis du har lavet denne forespørgsel, klik på det efterfølgende link for at nulstille dit kodeord.",
     "ResetMyPassword": "Nulstil mit kodeord",
     "AccessDenied": "Adgang nægtet!",
-    "AccessDeniedMessage": "Du har ikke adgang til denne ressource."
+    "AccessDeniedMessage": "Du har ikke adgang til denne ressource.",
+    "OrRegisterWith": "Eller registrér med:",
+    "RegisterUsingYourProviderAccount": "Registrér med din {0} konto"
   }
 }

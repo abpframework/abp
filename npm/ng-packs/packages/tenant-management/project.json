@@ -25,12 +25,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/tenant-management"],
       "options": {
-        "jestConfig": "packages/tenant-management/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/tenant-management/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "packages/tenant-management/src/**/*.ts",

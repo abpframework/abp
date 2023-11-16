@@ -1,6 +1,6 @@
 import { escapeHtmlChars, LocalizationService } from '@abp/ng.core';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
-import { EntityProp, ePropType } from '@abp/ng.theme.shared/extensions';
+import { EntityProp, ePropType } from '@abp/ng.components/extensible';
 import { of } from 'rxjs';
 
 export const DEFAULT_USERS_ENTITY_PROPS = EntityProp.createMany<IdentityUserDto>([

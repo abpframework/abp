@@ -31,7 +31,7 @@ public class ImageResizer : IImageResizer, ITransientDependency
     public virtual async Task<ImageResizeResult<Stream>> ResizeAsync(
         [NotNull] Stream stream, 
         ImageResizeArgs resizeArgs, 
-        [CanBeNull] string mimeType = null, 
+        string? mimeType = null, 
         CancellationToken cancellationToken = default)
     {
         Check.NotNull(stream, nameof(stream));
@@ -71,7 +71,7 @@ public class ImageResizer : IImageResizer, ITransientDependency
     public virtual async Task<ImageResizeResult<byte[]>> ResizeAsync(
         [NotNull] byte[] bytes, 
         ImageResizeArgs resizeArgs, 
-        [CanBeNull] string mimeType = null, 
+        string? mimeType = null, 
         CancellationToken cancellationToken = default)
     {
         Check.NotNull(bytes, nameof(bytes));

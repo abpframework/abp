@@ -179,4 +179,19 @@ public class BlogPostPublicAppService_Tests : CmsKitApplicationTestBase
         allItemsFromRepository.Any(x => x.Id == draftBlogPost2.Id).ShouldBeTrue();
         allItemsFromRepository.Any(x => x.Id == publishedBlogPost1.Id).ShouldBeTrue();
     }
+
+    [Fact]
+    public async Task GetTagNameAsync_ShouldReturnCorrectName()
+    {
+        var tagName = await blogPostAppService.GetTagNameAsync(cmsKitTestData.TagId_1);
+
+        tagName.ShouldBe(cmsKitTestData.TagName_1);
+    }
+
+    [Fact]
+    public async Task GetTagNameAsync_WithNonExistingIdShouldReturnCorrectName()
+    {
+        await Should.ThrowAsync<EntityNotFoundException>(
+            blogPostAppService.GetTagNameAsync(Guid.NewGuid()));
+    }
 }

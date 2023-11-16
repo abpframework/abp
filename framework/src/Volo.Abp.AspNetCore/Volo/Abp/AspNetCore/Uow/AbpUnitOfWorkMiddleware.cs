@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -38,6 +39,6 @@ public class AbpUnitOfWorkMiddleware : IMiddleware, ITransientDependency
     private bool IsIgnoredUrl(HttpContext context)
     {
         return context.Request.Path.Value != null &&
-               _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x));
+               _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x, StringComparison.OrdinalIgnoreCase));
     }
 }

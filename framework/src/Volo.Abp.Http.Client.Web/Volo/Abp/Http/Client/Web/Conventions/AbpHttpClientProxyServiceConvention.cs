@@ -69,7 +69,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
             if (controllerApiDescription != null &&
                 !controllerApiDescription.ControllerGroupName.IsNullOrWhiteSpace())
             {
-                controller.ControllerName = controllerApiDescription.ControllerGroupName;
+                controller.ControllerName = controllerApiDescription.ControllerGroupName!;
             }
 
             ConfigureClientProxySelector(controller);
@@ -115,7 +115,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         {
             var selector = controller.Selectors.FirstOrDefault();
             selector?.EndpointMetadata.Add(new AreaAttribute(moduleApiDescription.RootPath));
-            controller.RouteValues.Add(new KeyValuePair<string, string>("area", moduleApiDescription.RootPath));
+            controller.RouteValues.Add(new KeyValuePair<string, string?>("area", moduleApiDescription.RootPath));
         }
 
         var controllerType = controller.ControllerType.AsType();
@@ -163,7 +163,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
                 var abpServiceSelectorModel = new SelectorModel
                 {
                     AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(template: actionApiDescriptionModel.Url)),
-                    ActionConstraints = { new HttpMethodActionConstraint(new[] { actionApiDescriptionModel.HttpMethod }) }
+                    ActionConstraints = { new HttpMethodActionConstraint(new[] { actionApiDescriptionModel.HttpMethod! }) }
                 };
 
                 action.Selectors.Add(abpServiceSelectorModel);
@@ -190,7 +190,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
 
                     if (!selector.ActionConstraints.OfType<HttpMethodActionConstraint>().Any())
                     {
-                        selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { httpMethod }));
+                        selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { httpMethod! }));
                     }
                 }
             }
@@ -226,7 +226,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         }
     }
 
-    protected virtual ModuleApiDescriptionModel FindModuleApiDescriptionModel(ControllerModel controller)
+    protected virtual ModuleApiDescriptionModel? FindModuleApiDescriptionModel(ControllerModel controller)
     {
         var appServiceType = FindAppServiceInterfaceType(controller);
         if (appServiceType == null)
@@ -246,7 +246,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         return null;
     }
 
-    protected virtual ControllerApiDescriptionModel FindControllerApiDescriptionModel(ControllerModel controller)
+    protected virtual ControllerApiDescriptionModel? FindControllerApiDescriptionModel(ControllerModel controller)
     {
         var appServiceType = FindAppServiceInterfaceType(controller);
         if (appServiceType == null)
@@ -266,7 +266,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         return null;
     }
 
-    protected virtual ActionApiDescriptionModel FindActionApiDescriptionModel(ControllerModel controller, ActionModel action)
+    protected virtual ActionApiDescriptionModel? FindActionApiDescriptionModel(ControllerModel controller, ActionModel action)
     {
         var appServiceType = FindAppServiceInterfaceType(controller);
         if (appServiceType == null)
@@ -285,7 +285,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
             return null;
         }
 
-        if (actionApiDescriptionModel.ImplementFrom.StartsWith("Volo.Abp.Application.Services"))
+        if (actionApiDescriptionModel.ImplementFrom!.StartsWith("Volo.Abp.Application.Services"))
         {
             return actionApiDescriptionModel;
         }
@@ -298,7 +298,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         return null;
     }
 
-    protected virtual Type FindAppServiceInterfaceType(ControllerModel controller)
+    protected virtual Type? FindAppServiceInterfaceType(ControllerModel controller)
     {
         return controller.ControllerType.GetInterfaces()
             .FirstOrDefault(type => !type.IsGenericType &&

@@ -20,7 +20,7 @@ public class RegularTestControllerClientProxy_AbpRemoteCallException_Tests : Abp
         _controller = ServiceProvider.GetRequiredService<IRegularTestController>();
     }
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Replace(ServiceDescriptor.Singleton<IProxyHttpClientFactory, TestProxyHttpClientFactory>());
     }
