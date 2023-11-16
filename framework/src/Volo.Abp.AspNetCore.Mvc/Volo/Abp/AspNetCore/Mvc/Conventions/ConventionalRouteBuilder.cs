@@ -109,7 +109,7 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
     {
         if (configuration?.UrlControllerNameNormalizer == null)
         {
-            return controllerName;
+            return controllerName.RemovePostFix(Options.IgnoredUrlSuffixesInControllerNames);
         }
 
         return configuration.UrlControllerNameNormalizer(

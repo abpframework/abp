@@ -40,6 +40,8 @@ using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.MongoDB;
+using Volo.Abp.OpenIddict;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
 using Volo.Abp.VirtualFileSystem;
@@ -99,6 +101,9 @@ public class MyProjectNameHostModule : AbpModule
 {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            var hostingEnvironment = context.Services.GetHostingEnvironment();
+            var configuration = context.Services.GetConfiguration();
+
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(
@@ -106,15 +111,28 @@ public class MyProjectNameHostModule : AbpModule
                 );
             });
 
-    		PreConfigure<OpenIddictBuilder>(builder =>
-    		{
-    			builder.AddValidation(options =>
-    			{
-    				options.AddAudiences("MyProjectName");
-    				options.UseLocalServer();
-    				options.UseAspNetCore();
-    			});
-    		});
+            PreConfigure<OpenIddictBuilder>(builder =>
+            {
+                builder.AddValidation(options =>
+                {
+                    options.AddAudiences("MyProjectName");
+                    options.UseLocalServer();
+                    options.UseAspNetCore();
+                });
+            });
+
+            if (!hostingEnvironment.IsDevelopment())
+            {
+                PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+                {
+                    options.AddDevelopmentEncryptionAndSigningCertificate = false;
+                });
+
+                PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+                {
+                    serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
+                });
+            }
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -143,6 +161,10 @@ public class MyProjectNameHostModule : AbpModule
         private void ConfigureAuthentication(ServiceConfigurationContext context)
         {
             context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+            context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+            {
+                options.IsDynamicClaimsEnabled = true;
+            });
         }
 
         private void ConfigureBundles()
@@ -270,6 +292,7 @@ public class MyProjectNameHostModule : AbpModule
 
             if (env.IsDevelopment())
             {
+                app.UseWebAssemblyDebugging();
                 app.UseDeveloperExceptionPage();
             }
 
@@ -294,6 +317,7 @@ public class MyProjectNameHostModule : AbpModule
             }
 
             app.UseUnitOfWork();
+            app.UseDynamicClaims();
             app.UseAuthorization();
 
             app.UseSwagger();

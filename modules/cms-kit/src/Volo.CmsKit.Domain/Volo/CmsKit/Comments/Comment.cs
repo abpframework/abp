@@ -25,9 +25,11 @@ public class Comment : AggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, 
 
     public virtual string Url { get; set; } 
 
+    public virtual string IdempotencyToken { get; set; }
+
     protected Comment()
     {
-
+        
     }
 
     internal Comment(

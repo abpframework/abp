@@ -17,6 +17,17 @@ public static class ServiceCollectionShouldlyExtensions
         serviceDescriptor.Lifetime.ShouldBe(ServiceLifetime.Transient);
     }
 
+    public static void ShouldContainTransientImplementationFactory(this IServiceCollection services, Type serviceType)
+    {
+        var serviceDescriptor = services.FirstOrDefault(s => s.ServiceType == serviceType);
+
+        serviceDescriptor.ShouldNotBeNull();
+        serviceDescriptor.ImplementationType.ShouldBeNull();
+        serviceDescriptor.ImplementationFactory.ShouldNotBeNull();
+        serviceDescriptor.ImplementationInstance.ShouldBeNull();
+        serviceDescriptor.Lifetime.ShouldBe(ServiceLifetime.Transient);
+    }
+
     public static void ShouldContainSingleton(this IServiceCollection services, Type serviceType, Type implementationType = null)
     {
         var serviceDescriptor = services.FirstOrDefault(s => s.ServiceType == serviceType);

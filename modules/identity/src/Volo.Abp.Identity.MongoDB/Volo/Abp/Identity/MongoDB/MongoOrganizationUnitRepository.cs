@@ -39,7 +39,7 @@ public class MongoOrganizationUnitRepository
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-                .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
+                .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId)
                 .ToListAsync(GetCancellationToken(cancellationToken));
     }
 

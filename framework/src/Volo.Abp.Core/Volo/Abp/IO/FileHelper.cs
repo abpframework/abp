@@ -69,7 +69,7 @@ public static class FileHelper
     /// <returns>A string containing all lines of the file.</returns>
     public static async Task<byte[]> ReadAllBytesAsync(string path)
     {
-        using (var stream = File.Open(path, FileMode.Open))
+        using (var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
             var result = new byte[stream.Length];
             await stream.ReadAsync(result, 0, (int)stream.Length);

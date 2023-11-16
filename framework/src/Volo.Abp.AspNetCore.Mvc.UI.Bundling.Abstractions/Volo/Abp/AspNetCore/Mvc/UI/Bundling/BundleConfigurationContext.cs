@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 public class BundleConfigurationContext : IBundleConfigurationContext
 {
-    public List<string> Files { get; }
+    public List<BundleFile> Files { get; }
 
     public IFileProvider FileProvider { get; }
 
@@ -18,7 +18,7 @@ public class BundleConfigurationContext : IBundleConfigurationContext
 
     public BundleConfigurationContext(IServiceProvider serviceProvider, IFileProvider fileProvider)
     {
-        Files = new List<string>();
+        Files = new List<BundleFile>();
         ServiceProvider = serviceProvider;
         LazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
         FileProvider = fileProvider;

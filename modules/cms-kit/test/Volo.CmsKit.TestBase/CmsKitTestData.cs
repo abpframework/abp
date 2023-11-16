@@ -131,4 +131,6 @@ public class CmsKitTestData : ISingletonDependency
     public string PollName { get; } = "Poll";
 
     public string WidgetName { get; } = "CmsPollByCode";
+
+    public string IdempotencyToken_1 { get; } = Guid.NewGuid().ToString("N");
 }

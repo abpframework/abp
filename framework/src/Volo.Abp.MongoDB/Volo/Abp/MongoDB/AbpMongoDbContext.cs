@@ -6,22 +6,22 @@ namespace Volo.Abp.MongoDB;
 
 public abstract class AbpMongoDbContext : IAbpMongoDbContext, ITransientDependency
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
-    public IMongoModelSource ModelSource { get; set; }
+    public IMongoModelSource ModelSource { get; set; } = default!;
 
-    public IMongoClient Client { get; private set; }
+    public IMongoClient Client { get; private set; } = default!;
 
-    public IMongoDatabase Database { get; private set; }
+    public IMongoDatabase Database { get; private set; } = default!;
 
-    public IClientSessionHandle SessionHandle { get; private set; }
+    public IClientSessionHandle? SessionHandle { get; private set; }
 
     protected internal virtual void CreateModel(IMongoModelBuilder modelBuilder)
     {
 
     }
 
-    public virtual void InitializeDatabase(IMongoDatabase database, IMongoClient client, IClientSessionHandle sessionHandle)
+    public virtual void InitializeDatabase(IMongoDatabase database, IMongoClient client, IClientSessionHandle? sessionHandle)
     {
         Database = database;
         Client = client;

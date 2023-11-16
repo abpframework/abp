@@ -41,8 +41,8 @@ public class AbpAspNetCoreMvcDaprEventsController : AbpController
         }
         else
         {
-            var eventData = daprSerializer.Deserialize(data, distributedEventBus.GetEventType(topic));
-            await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(topic), eventData);
+            var eventData = daprSerializer.Deserialize(data, distributedEventBus.GetEventType(topic!));
+            await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(topic!), eventData);
         }
 
         return Ok();
