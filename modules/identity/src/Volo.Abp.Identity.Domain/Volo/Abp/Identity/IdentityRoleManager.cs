@@ -19,6 +19,8 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
 
     protected IStringLocalizer<IdentityResource> Localizer { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    protected IIdentityUserRepository UserRepository { get; }
+    protected IdentityDynamicClaimsPrincipalContributorCache Cache { get; }
 
     public IdentityRoleManager(
         IdentityRoleStore store,
@@ -27,7 +29,9 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         IdentityErrorDescriber errors,
         ILogger<IdentityRoleManager> logger,
         IStringLocalizer<IdentityResource> localizer,
-        ICancellationTokenProvider cancellationTokenProvider)
+        ICancellationTokenProvider cancellationTokenProvider,
+        IIdentityUserRepository userRepository,
+        IdentityDynamicClaimsPrincipalContributorCache cache)
         : base(
               store,
               roleValidators,
@@ -37,6 +41,8 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
     {
         Localizer = localizer;
         CancellationTokenProvider = cancellationTokenProvider;
+        UserRepository = userRepository;
+        Cache = cache;
     }
 
     public virtual async Task<IdentityRole> GetByIdAsync(Guid id)
@@ -57,7 +63,17 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
             throw new BusinessException(IdentityErrorCodes.StaticRoleRenaming);
         }
 
-        return await base.SetRoleNameAsync(role, name);
+        var users = await UserRepository.GetListByNormalizedRoleNameAsync(role.NormalizedName, cancellationToken: CancellationToken);
+        var result = await base.SetRoleNameAsync(role, name);
+        if (result.Succeeded)
+        {
+            foreach (var user in users)
+            {
+                await Cache.ClearAsync(user.Id, user.TenantId);
+            }
+        }
+
+        return result;
     }
 
     public async override Task<IdentityResult> DeleteAsync(IdentityRole role)
@@ -67,6 +83,16 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
             throw new BusinessException(IdentityErrorCodes.StaticRoleDeletion);
         }
 
-        return await base.DeleteAsync(role);
+        var users = await UserRepository.GetListByNormalizedRoleNameAsync(role.NormalizedName, cancellationToken: CancellationToken);
+        var result = await base.DeleteAsync(role);
+        if (result.Succeeded)
+        {
+            foreach (var user in users)
+            {
+                await Cache.ClearAsync(user.Id, user.TenantId);
+            }
+        }
+
+        return result;
     }
 }

@@ -9,14 +9,14 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity;
 
-public class UserEntityUpdatedEventHandler :
+public class UserEntityUpdatedOrDeletedEventHandler :
     ILocalEventHandler<EntityUpdatedEventData<IdentityUser>>,
     ILocalEventHandler<EntityDeletedEventData<IdentityUser>>,
     ITransientDependency
 {
     private readonly IdentityDynamicClaimsPrincipalContributorCache _cache;
 
-    public UserEntityUpdatedEventHandler(IdentityDynamicClaimsPrincipalContributorCache cache)
+    public UserEntityUpdatedOrDeletedEventHandler(IdentityDynamicClaimsPrincipalContributorCache cache)
     {
         _cache = cache;
     }
