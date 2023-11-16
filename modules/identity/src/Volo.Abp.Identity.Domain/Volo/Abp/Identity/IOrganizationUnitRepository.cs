@@ -50,6 +50,15 @@ public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit
         CancellationToken cancellationToken = default
     );
 
+    Task<List<IdentityRole>> GetRolesAsync(
+        Guid[] organizationUnitIds,
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
     Task<int> GetRolesCountAsync(
         OrganizationUnit organizationUnit,
         CancellationToken cancellationToken = default
