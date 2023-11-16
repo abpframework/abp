@@ -113,6 +113,12 @@ Entity Framework Core read-only repository implementation uses [EF Core's No-Tra
 
 > See the issue for more information: https://github.com/abpframework/abp/pull/17421
 
+## IAbpDaprClientFactory's method signatures changed
+
+The `Create` and `CreateHttpClient` methods of the `IAbpDaprClientFactory` interface have been changed to async methods. Please update your code if you have used these methods.
+
+> See the issue for more information: https://github.com/abpframework/abp/pull/18117/
+
 ## Angular UI
 
 # Guards
