@@ -5,7 +5,7 @@ using Volo.Abp.Security.Claims;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-public static class AbpOpenIdConnectExtensions
+public static class AbpJwtBearerExtensions
 {
     public static AuthenticationBuilder AddAbpJwtBearer(this AuthenticationBuilder builder)
         => builder.AddAbpJwtBearer(JwtBearerDefaults.AuthenticationScheme, _ => { });
