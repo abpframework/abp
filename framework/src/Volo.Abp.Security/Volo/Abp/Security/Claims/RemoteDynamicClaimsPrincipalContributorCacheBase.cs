@@ -24,7 +24,7 @@ public abstract class RemoteDynamicClaimsPrincipalContributorCacheBase<TContribu
     {
         Logger.LogDebug($"Get dynamic claims cache for user: {userId}");
         var dynamicClaims = await GetCacheAsync(userId, tenantId);
-        if (dynamicClaims != null && !dynamicClaims.Claims.IsNullOrEmpty())
+        if (dynamicClaims != null)
         {
             return dynamicClaims;
         }
