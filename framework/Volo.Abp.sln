@@ -463,6 +463,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.SkiaSharp"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.SkiaSharp.Tests", "test\Volo.Abp.Imaging.SkiaSharp.Tests\Volo.Abp.Imaging.SkiaSharp.Tests.csproj", "{DFAF8763-D1D6-4EB4-B459-20E31007FE2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Authentication.JwtBearer.DynamicClaims", "src\Volo.Abp.AspNetCore.Authentication.JwtBearer.DynamicClaims\Volo.Abp.AspNetCore.Authentication.JwtBearer.DynamicClaims.csproj", "{6F72FFCE-0183-4EF1-80B6-8FC3268E8E99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1381,6 +1383,10 @@ Global
 		{DFAF8763-D1D6-4EB4-B459-20E31007FE2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFAF8763-D1D6-4EB4-B459-20E31007FE2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFAF8763-D1D6-4EB4-B459-20E31007FE2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F72FFCE-0183-4EF1-80B6-8FC3268E8E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F72FFCE-0183-4EF1-80B6-8FC3268E8E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F72FFCE-0183-4EF1-80B6-8FC3268E8E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F72FFCE-0183-4EF1-80B6-8FC3268E8E99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1614,6 +1620,7 @@ Global
 		{F19A6E0C-F719-4ED9-A024-14E4B8D40883} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{198683D0-7DC6-40F2-B81B-8E446E70A9DE} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{DFAF8763-D1D6-4EB4-B459-20E31007FE2F} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{6F72FFCE-0183-4EF1-80B6-8FC3268E8E99} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

@@ -214,7 +214,6 @@ public class MyProjectNameWebModule : AbpModule
         context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
-            options.RemoteRefreshUrl = configuration["AuthServer:Authority"] + options.RemoteRefreshUrl;
         });
     }
 
