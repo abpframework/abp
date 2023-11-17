@@ -18,7 +18,7 @@
     "Save": "Save",
     "SameUrlAlreadyExist": "Same url already exists if you want to add this post, you should change the url!",
     "UrlIsNotValid": "Url is not valid.",
-    "UrlNotFound" : "Url not found.",
+    "UrlNotFound": "Url not found.",
     "UrlContentNotFound": "Url content not found.",
     "Summary": "Summary",
     "MostRead": "Most Read",
@@ -171,7 +171,7 @@
     "Discord_Page_Announce": "We are happy to announce ABP Community Discord Server!",
     "Discord_Page_Description_1": "ABP Community has been growing since day one. We wanted to take it to the next step by creating an official ABP Discord server so the ABP Community can interact with each other using the wonders of instant messaging.",
     "Discord_Page_Description_2": "ABP Community Discord Server is the place where you can showcase your creations using ABP Framework, share the tips that worked for you, catch up with the latest news and announcements about ABP Framework, just chat with community members to exchange ideas, and have fun!",
-    "Discord_Page_Description_3": "This ABP Community Discord Server is the official one with the ABP Core Team is present on the server to monitor.", 
+    "Discord_Page_Description_3": "This ABP Community Discord Server is the official one with the ABP Core Team is present on the server to monitor.",
     "Discord_Page_JoinToServer": "Join ABP Discord Server",
     "Events_Page_MetaTitle": "ABP Community Events",
     "Events_Page_MetaDescription": "The live shows, hosted by the ABP Team, are casual sessions full of community content, demos, Q&A, and discussions around what's happening in ABP.",
@@ -252,6 +252,9 @@
     "MostWatched": "Most Watched",
     "Articles({0})": "Articles ({0})",
     "Videos({0})": "Videos ({0})",
-    "LatestArticles": "Latest Articles"
+    "LatestArticles": "Latest Articles",
+    "RaffleHeader": "Hello ABP Community Member!",
+    "RafflesInfo": "<br>This is the raffle page dedicated to show our appreciation towards you for being an active Community Member. We do <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">,ABP .NET Conference</a>, attend or sponsor to the .NET-related events in which we give away some gifts. <br><br>You can follow this page to see the upcoming raffles, attend them, or see previous raffles we draw including the winners. <br><br>Thank you for being an active member! See you in the upcoming raffles.",
+    "RafflesInfoTitle": "ABP Community <span class=\"gradient-community\">Raffles</span>"
   }
 }

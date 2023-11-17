@@ -190,6 +190,11 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
             maxResultCount: 1, includeDetails: true);
         ou111Roles.Count.ShouldBe(1);
         ou111Roles.ShouldContain(n => n.Name == "moderator");
+
+        ou111Roles = await _organizationUnitRepository.GetRolesAsync(new []{ ou.Id }, sorting: "name desc",
+            maxResultCount: 1, includeDetails: true);
+        ou111Roles.Count.ShouldBe(1);
+        ou111Roles.ShouldContain(n => n.Name == "moderator");
     }
 
     [Fact]

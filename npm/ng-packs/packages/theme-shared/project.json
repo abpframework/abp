@@ -25,12 +25,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/theme-shared"],
       "options": {
-        "jestConfig": "packages/theme-shared/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/theme-shared/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "packages/theme-shared/src/**/*.ts",
