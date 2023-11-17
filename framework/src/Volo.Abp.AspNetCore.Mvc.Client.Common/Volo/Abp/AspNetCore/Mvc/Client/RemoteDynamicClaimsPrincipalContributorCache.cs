@@ -62,11 +62,11 @@ public class RemoteDynamicClaimsPrincipalContributorCache : ITransientDependency
         }
 
         dynamicClaims = await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
-        if (dynamicClaims == null || dynamicClaims.Claims.IsNullOrEmpty())
+        if (dynamicClaims == null)
         {
             throw new AbpException($"Failed to refresh remote claims for user: {userId}");
         }
 
-        return dynamicClaims!;
+        return dynamicClaims;
     }
 }

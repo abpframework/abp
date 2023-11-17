@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -31,6 +32,11 @@ public class IdentityDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincip
             context.ClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
             var logger = context.GetRequiredService<ILogger<IdentityDynamicClaimsPrincipalContributor>>();
             logger.LogWarning(e, $"User not found: {userId.Value}");
+            return;
+        }
+
+        if (dynamicClaims.Claims.IsNullOrEmpty())
+        {
             return;
         }
 

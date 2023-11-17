@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -36,6 +37,11 @@ public class RemoteDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincipal
             context.ClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
             var logger = context.GetRequiredService<ILogger<RemoteDynamicClaimsPrincipalContributor>>();
             logger.LogWarning(e, $"Failed to refresh remote dynamic claims cache for user: {userId.Value}");
+            return;
+        }
+
+        if (dynamicClaims.Claims.IsNullOrEmpty())
+        {
             return;
         }
 
