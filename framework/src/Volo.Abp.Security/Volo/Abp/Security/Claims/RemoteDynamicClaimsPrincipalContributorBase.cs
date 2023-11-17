@@ -26,7 +26,7 @@ public abstract class RemoteDynamicClaimsPrincipalContributorBase<TContributor, 
             return;
         }
 
-        var dynamicClaimsCache = context.GetRequiredService<TContributor>().As<TContributorCache>();
+        var dynamicClaimsCache = context.GetRequiredService<TContributorCache>().As<TContributorCache>();
         AbpDynamicClaimCacheItem dynamicClaims;
         try
         {

@@ -38,7 +38,7 @@ public class AbpClaimsPrincipalFactoryOptions
         };
 
         RemoteRefreshUrl = "/api/account/dynamic-claims/refresh";
-        IsDynamicClaimsEnabled = true;
+        IsRemoteRefreshEnabled = true;
 
         ClaimsMap = new Dictionary<string, List<string>>()
         {
