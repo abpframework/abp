@@ -7,6 +7,7 @@ using Volo.Abp.Features;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client;
@@ -40,5 +41,12 @@ public class AbpAspNetCoreMvcClientCommonModule : AbpModule
 
         context.Services.AddTransient<AbpApplicationConfigurationClientProxy>();
         context.Services.AddTransient<AbpTenantClientProxy>();
+
+        var abpClaimsPrincipalFactoryOptions = context.Services.ExecutePreConfiguredActions<AbpClaimsPrincipalFactoryOptions>();
+        if (abpClaimsPrincipalFactoryOptions.IsRemoteRefreshEnabled)
+        {
+            context.Services.AddTransient<RemoteDynamicClaimsPrincipalContributor>();
+            context.Services.AddTransient<RemoteDynamicClaimsPrincipalContributorCache>();
+        }
     }
 }
