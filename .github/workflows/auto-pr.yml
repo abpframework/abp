@@ -32,4 +32,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr merge auto-merge/rel-7-4/${{github.run_number}} --merge --admin --delete-branch
+          gh pr review auto-merge/rel-7-4/${{github.run_number}} --approve
+          gh pr merge auto-merge/rel-7-4/${{github.run_number}} --merge --delete-branch
