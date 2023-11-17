@@ -841,6 +841,7 @@
     "OneCodeBaseMultipleDevices": "Tek Kod Tabanı, Birden Çok Cihaz",
     "OneCodeBaseMultipleDevices_Description": "ABP Mobil uygulamaları çapraz platformdur. iOS ve Android cihazlara yüklenmeye ve çalıştırılmaya hazırdırlar ve tek bir kod tabanı kullanarak farklı form faktörlerine uyum sağlarlar. Geliştiricilerin kullanıcı arayüzünü ve ön uç kodunu yalnızca bir kez oluşturması gerekir, desteklemek istediğiniz her cihaz için kodu uyarlamanıza gerek yoktur.",
     "ComesWithTheSourceCode": "Kaynak Koduyla Birlikte Geliyor",
-    "ComesWithTheSourceCode_Description": "Mobil uygulamalar kaynak koduyla birlikte sağlanır. Marka yönergelerini karşılamak için uygulamalarınızın UX/UI'sini kolayca özelleştirin."
+    "ComesWithTheSourceCode_Description": "Mobil uygulamalar kaynak koduyla birlikte sağlanır. Marka yönergelerini karşılamak için uygulamalarınızın UX/UI'sini kolayca özelleştirin.",
+    "MultipleOrganizationInfo": "Tüm Organizasyonlarınızı Görmek İçin Tıklayın."
   }
 }
