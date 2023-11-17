@@ -313,7 +313,7 @@ public class CliService : ITransientDependency
     {
         var toolPathArg = IsGlobalTool(toolPath) ? "-g" : $"--tool-path {toolPath}";
 
-        Logger.LogWarning($"ABP CLI has a newer {updateChannel.ToString().ToLowerInvariant()} version {latestVersion}, please update to get the latest features and fixes.");
+        Logger.LogWarning($"A newer {updateChannel.ToString().ToLowerInvariant()} version of the ABP CLI is available: {latestVersion}.");
         
         if (!string.IsNullOrWhiteSpace(message))
         {

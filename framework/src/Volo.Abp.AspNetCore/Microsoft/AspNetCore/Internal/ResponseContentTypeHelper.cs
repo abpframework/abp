@@ -7,7 +7,7 @@ using Microsoft.Net.Http.Headers;
 namespace Microsoft.AspNetCore.Internal;
 
 /// <summary>
-/// https://github.com/dotnet/aspnetcore/blob/release/7.0/src/Shared/ResponseContentTypeHelper.cs
+/// https://github.com/dotnet/aspnetcore/blob/release/8.0-rc1/src/Shared/ResponseContentTypeHelper.cs
 /// </summary>
 public static class ResponseContentTypeHelper
 {
@@ -15,7 +15,7 @@ public static class ResponseContentTypeHelper
     /// Gets the content type and encoding that need to be used for the response.
     /// The priority for selecting the content type is:
     /// 1. ContentType property set on the action result
-    /// 2. <see cref="ContentType"/> property set on <see cref="HttpResponse"/>
+    /// 2. <see cref="HttpResponse.ContentType"/> property set on <see cref="HttpResponse"/>
     /// 3. Default content type set on the action result
     /// </summary>
     /// <remarks>

@@ -31,9 +31,9 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
 
     public override async Task<string> RenderAsync(
         [NotNull] string templateName,
-        [CanBeNull] object model = null,
-        [CanBeNull] string cultureName = null,
-        [CanBeNull] Dictionary<string, object> globalContext = null)
+        object? model = null,
+        string? cultureName = null,
+        Dictionary<string, object>? globalContext = null)
     {
         Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
 
@@ -67,9 +67,9 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
 
     protected virtual async Task<string> RenderInternalAsync(
         string templateName,
-        string body,
+        string? body,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
         var templateDefinition = await TemplateDefinitionManager.GetAsync(templateName);
 
@@ -94,9 +94,9 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
 
     protected virtual async Task<string> RenderSingleTemplateAsync(
         TemplateDefinition templateDefinition,
-        string body,
+        string? body,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
         return await RenderTemplateContentWithRazorAsync(
             templateDefinition,
@@ -108,16 +108,16 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
 
     protected virtual async Task<string> RenderTemplateContentWithRazorAsync(
         TemplateDefinition templateDefinition,
-        string body,
+        string? body,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
         using (var scope = ServiceScopeFactory.CreateScope())
         {
             var compiledViewProvider = scope.ServiceProvider.GetRequiredService<IAbpCompiledViewProvider>();
             var assembly = await compiledViewProvider.GetAssemblyAsync(templateDefinition);
-            var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName);
-            var template = (IRazorTemplatePage)Activator.CreateInstance(templateType);
+            var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName)!;
+            var template = (IRazorTemplatePage)Activator.CreateInstance(templateType)!;
 
             var modelType = templateType
                 .GetInterfaces()
@@ -145,11 +145,11 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
         }
     }
 
-    private void SetModel<TModel>(IRazorTemplatePage razorTemplatePage, object model = null)
+    private void SetModel<TModel>(IRazorTemplatePage razorTemplatePage, object? model = null)
     {
         if (razorTemplatePage is IRazorTemplatePage<TModel> razorTemplatePageWithModel)
         {
-            razorTemplatePageWithModel.Model = (TModel)model;
+            razorTemplatePageWithModel.Model = (TModel?)model;
         }
     }
 }

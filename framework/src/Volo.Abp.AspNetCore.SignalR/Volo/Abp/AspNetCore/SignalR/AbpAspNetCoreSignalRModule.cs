@@ -78,7 +78,7 @@ public class AbpAspNetCoreSignalRModule : AbpModule
         {
             foreach (var routePattern in routePatterns)
             {
-                options.IgnoredUrls.AddIfNotContains(x => routePattern.StartsWith(x), () => routePattern);
+                options.IgnoredUrls.AddIfNotContains(x => routePattern.StartsWith(x, StringComparison.OrdinalIgnoreCase), () => routePattern);
             }
         });
 

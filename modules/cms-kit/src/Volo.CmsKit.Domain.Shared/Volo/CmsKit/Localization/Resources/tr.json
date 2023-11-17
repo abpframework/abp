@@ -76,6 +76,7 @@
     "PageId": "Sayfa",
     "Pages": "Sayfalar",
     "PageSlugInformation": "Etiket URL'de kullanılır. Url şöyle görünür: '/{{slug}}'.",
+    "BlogSlugInformation": "Etiket URL'de kullanılır. Url şöyle görünür: '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Blog Yönetimi",
     "Permission:BlogManagement.Create": "Oluşturma",
     "Permission:BlogManagement.Delete": "Silme",
@@ -187,6 +188,7 @@
     "RemoveCoverImageConfirmationMessage": "Kapak resmini kaldırmak istediğinize emin misiniz?",
     "RemoveCoverImage": "Kapak resmini kaldır",
     "CmsKit.BlogPost.ScrollIndex": "Blog yazılarında hızlı gezinme çubuğu",
+    "CmsKit.BlogPost.PreventXssFeature": "XSS önleme özelliği",
     "Add": "Ekle",
     "AddWidget": "Widget Ekle",
     "PleaseConfigureWidgets": "Lütfen widget'leri yapılandırın",
@@ -215,6 +217,7 @@
     "DeleteBlogPostMessage": "Blog silinecek. Emin misiniz?",
     "CaptchaCode": "Captcha kodu",
     "CommentTextRequired": "Yorum zorunlu",
-    "PopularTags": "Popüler Etiketler"
+    "PopularTags": "Popüler Etiketler",
+    "ThisPartOfContentCouldntBeLoaded": "Bu içerik yüklenemedi"
   }
 }

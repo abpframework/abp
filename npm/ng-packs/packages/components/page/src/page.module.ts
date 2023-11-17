@@ -1,7 +1,5 @@
 import { CoreModule } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { PagePartDirective } from './page-part.directive';
 import {
@@ -10,6 +8,7 @@ import {
   PageToolbarContainerComponent,
 } from './page-parts.component';
 import { PageComponent } from './page.component';
+import {PageToolbarComponent} from "@abp/ng.components/extensible";
 
 const exportedDeclarations = [
   PageComponent,
@@ -21,7 +20,7 @@ const exportedDeclarations = [
 
 @NgModule({
   declarations: [...exportedDeclarations],
-  imports: [CommonModule, UiExtensionsModule, CoreModule, ThemeSharedModule],
-  exports: [...exportedDeclarations, UiExtensionsModule],
+  imports: [CoreModule, ThemeSharedModule, PageToolbarComponent],
+  exports: [...exportedDeclarations],
 })
 export class PageModule {}

@@ -4,5 +4,5 @@ public class ClientProxyExceptionEventData
 {
     public int? StatusCode { get; set; }
 
-    public string ReasonPhrase { get; set; }
+    public string? ReasonPhrase { get; set; }
 }

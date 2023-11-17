@@ -45,7 +45,7 @@ public class AbpEventBusRebusModule : AbpModule
             .ServiceProvider
             .GetRequiredService<RebusDistributedEventBus>()
             .Initialize();
-            
-        context.ServiceProvider.UseRebus();
+
+        context.ServiceProvider.StartRebus();
     }
 }

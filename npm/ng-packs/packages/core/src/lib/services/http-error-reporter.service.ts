@@ -19,8 +19,8 @@ export class HttpErrorReporterService {
     return this._errors$.value;
   }
 
-  reportError = (error: HttpErrorResponse) => {
+  reportError(error: HttpErrorResponse) {
     this._reporter$.next(error);
     this._errors$.next([...this.errors, error]);
-  };
+  }
 }
