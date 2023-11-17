@@ -95,7 +95,6 @@ $projects = (
     # framework
     "framework/src/Volo.Abp.ApiVersioning.Abstractions",
     "framework/src/Volo.Abp.AspNetCore.Authentication.JwtBearer",
-    "framework/src/Volo.Abp.AspNetCore.Authentication.JwtBearer.DynamicClaims",
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
     "framework/src/Volo.Abp.AspNetCore.Authentication.OpenIdConnect",
     "framework/src/Volo.Abp.AspNetCore",
