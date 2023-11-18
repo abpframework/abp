@@ -30,7 +30,7 @@ jobs:
           token: ${{ github.token }}
       - name: Merge Pull Request
         env:
-          GH_TOKEN: ${{ github.BOT_SECRET }}
+          GH_TOKEN: ${{ secrets.BOT_SECRET }}
         run: |
           gh pr review auto-merge/rel-7-4/${{github.run_number}} --approve
           gh pr merge auto-merge/rel-7-4/${{github.run_number}} --merge --delete-branch
