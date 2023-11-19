@@ -88,10 +88,4 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
             AbsoluteExpirationRelativeToNow = CacheOptions.Value.CacheAbsoluteExpiration
         });
     }
-
-    public virtual async Task ClearAsync(Guid userId, Guid? tenantId = null)
-    {
-        Logger.LogDebug($"Clearing dynamic claims cache for user: {userId}");
-        await Cache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
-    }
 }

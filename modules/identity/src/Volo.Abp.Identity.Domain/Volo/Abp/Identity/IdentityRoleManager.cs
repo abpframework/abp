@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity.Localization;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity;
@@ -20,7 +22,7 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
     protected IStringLocalizer<IdentityResource> Localizer { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected IIdentityUserRepository UserRepository { get; }
-    protected IdentityDynamicClaimsPrincipalContributorCache Cache { get; }
+    protected IDistributedCache<AbpDynamicClaimCacheItem> Cache { get; }
 
     public IdentityRoleManager(
         IdentityRoleStore store,
@@ -31,7 +33,7 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         IStringLocalizer<IdentityResource> localizer,
         ICancellationTokenProvider cancellationTokenProvider,
         IIdentityUserRepository userRepository,
-        IdentityDynamicClaimsPrincipalContributorCache cache)
+        IDistributedCache<AbpDynamicClaimCacheItem> cache)
         : base(
               store,
               roleValidators,
@@ -63,14 +65,12 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
             throw new BusinessException(IdentityErrorCodes.StaticRoleRenaming);
         }
 
-        var users = await UserRepository.GetListByNormalizedRoleNameAsync(role.NormalizedName, cancellationToken: CancellationToken);
+        var userIdList = await UserRepository.GetUserIdListByRoleIdAsync(role.Id, cancellationToken: CancellationToken);
         var result = await base.SetRoleNameAsync(role, name);
         if (result.Succeeded)
         {
-            foreach (var user in users)
-            {
-                await Cache.ClearAsync(user.Id, user.TenantId);
-            }
+            Logger.LogDebug($"Remove dynamic claims cache for users of role: {role.Id}");
+            await Cache.RefreshManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, role.TenantId)), token: CancellationToken);
         }
 
         return result;
@@ -83,14 +83,12 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
             throw new BusinessException(IdentityErrorCodes.StaticRoleDeletion);
         }
 
-        var users = await UserRepository.GetListByNormalizedRoleNameAsync(role.NormalizedName, cancellationToken: CancellationToken);
+        var userIdList = await UserRepository.GetUserIdListByRoleIdAsync(role.Id, cancellationToken: CancellationToken);
         var result = await base.DeleteAsync(role);
         if (result.Succeeded)
         {
-            foreach (var user in users)
-            {
-                await Cache.ClearAsync(user.Id, user.TenantId);
-            }
+            Logger.LogDebug($"Remove dynamic claims cache for users of role: {role.Id}");
+            await Cache.RefreshManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, role.TenantId)), token: CancellationToken);
         }
 
         return result;

@@ -2,9 +2,11 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity;
@@ -14,10 +16,14 @@ public class UserEntityUpdatedOrDeletedEventHandler :
     ILocalEventHandler<EntityDeletedEventData<IdentityUser>>,
     ITransientDependency
 {
-    private readonly IdentityDynamicClaimsPrincipalContributorCache _cache;
+    public ILogger<UserEntityUpdatedOrDeletedEventHandler> Logger { get; set; }
 
-    public UserEntityUpdatedOrDeletedEventHandler(IdentityDynamicClaimsPrincipalContributorCache cache)
+    private readonly IDistributedCache<AbpDynamicClaimCacheItem> _cache;
+
+    public UserEntityUpdatedOrDeletedEventHandler(IDistributedCache<AbpDynamicClaimCacheItem> cache)
     {
+        Logger = NullLogger<UserEntityUpdatedOrDeletedEventHandler>.Instance;
+
         _cache = cache;
     }
 
@@ -35,6 +41,7 @@ public class UserEntityUpdatedOrDeletedEventHandler :
 
     protected virtual async Task ClearAsync(Guid userId, Guid? tenantId)
     {
-        await _cache.ClearAsync(userId, tenantId);
+        Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
+        await _cache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
     }
 }
