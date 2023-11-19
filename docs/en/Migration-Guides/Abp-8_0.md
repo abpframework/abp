@@ -260,8 +260,8 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | Quartz.Plugins.TimeZoneConverter | 3.4.0 |  3.7.0 |
 | Quartz.Serialization.Json | 3.3.3 |  3.7.0 |
 | RabbitMQ.Client | 6.3.0 |  6.6.0 |
-| Rebus | 6.6.5 |  7.2.1 |
-| Rebus.ServiceProvider | 7.0.0 |  9.1.0 |
+| Rebus | 6.6.5 |  8.0.1 |
+| Rebus.ServiceProvider | 7.0.0 |  10.0.0 |
 | Scriban | 5.4.4 |  5.9.0 |
 | Serilog | 2.11.0 |  3.1.1 |
 | Serilog.AspNetCore | 5.0.0 |  8.0.0 |
