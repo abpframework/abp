@@ -254,7 +254,7 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | OpenIddict.Validation.ServerIntegration | 4.8.0 |  4.10.0 |
 | Oracle.EntityFrameworkCore | 7.21.8 |  7.21.12 |
 | Polly | 7.2.3 |  8.2.0 |
-| Pomelo.EntityFrameworkCore.MySql | 7.0.0 |  8.0.0-beta.1 |
+| Pomelo.EntityFrameworkCore.MySql | 7.0.0 |  8.0.0-beta.2 |
 | Quartz | 3.4.0 |  3.7.0 |
 | Quartz.Extensions.DependencyInjection | 3.4.0 |  3.7.0 |
 | Quartz.Plugins.TimeZoneConverter | 3.4.0 |  3.7.0 |
