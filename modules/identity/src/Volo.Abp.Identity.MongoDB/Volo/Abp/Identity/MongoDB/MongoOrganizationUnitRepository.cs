@@ -181,6 +181,14 @@ public class MongoOrganizationUnitRepository
             .ToListAsync(cancellationToken);
     }
 
+    public virtual async Task<List<Guid>> GetMemberIdsAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+        return await (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+            .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == id)).Select(x => x.Id)
+            .ToListAsync(cancellationToken);
+    }
+
     public virtual async Task<int> GetMembersCountAsync(
         OrganizationUnit organizationUnit,
         string filter = null,

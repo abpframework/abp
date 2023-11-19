@@ -12,6 +12,7 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
     private readonly IdentityUserManager _identityUserManager;
     private readonly IIdentityRoleRepository _identityRoleRepository;
     private readonly IdentityRoleManager _identityRoleManager;
+    private readonly IOrganizationUnitRepository _organizationUnitRepository;
     private readonly IAbpClaimsPrincipalFactory _abpClaimsPrincipalFactory;
     private readonly AbpUserClaimsPrincipalFactory _abpUserClaimsPrincipalFactory;
     private readonly IdentityTestData _testData;
@@ -21,6 +22,7 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
         _identityUserManager = GetRequiredService<IdentityUserManager>();
         _identityRoleRepository = GetRequiredService<IIdentityRoleRepository>();
         _identityRoleManager = GetRequiredService<IdentityRoleManager>();
+        _organizationUnitRepository = GetRequiredService<IOrganizationUnitRepository>();
         _abpClaimsPrincipalFactory = GetRequiredService<IAbpClaimsPrincipalFactory>();
         _abpUserClaimsPrincipalFactory = GetRequiredService<AbpUserClaimsPrincipalFactory>();
         _testData = GetRequiredService<IdentityTestData>();
@@ -72,7 +74,38 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
     }
 
     [Fact]
-    public async Task Should_Get_Correct_Claims_After_User_Role_Updated_Or_Deleted()
+    public async Task Should_Get_Correct_Claims_After_User_Role_Updated()
+    {
+        ClaimsPrincipal claimsPrincipal = null;
+        await UsingUowAsync(async () =>
+        {
+            var user = await _identityUserManager.GetByIdAsync(_testData.UserJohnId);
+            user.ShouldNotBeNull();
+            claimsPrincipal = await _abpUserClaimsPrincipalFactory.CreateAsync(user);
+
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+
+            var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+
+            var roles = (await _identityRoleRepository.GetListAsync()).Where(x => user.Roles.Select(r => r.RoleId).Contains(x.Id)).ToList();
+
+            var role = roles.First(x => x.Name == "supporter");
+            await _identityRoleManager.SetRoleNameAsync(role, "newSupporter");
+        });
+
+        var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "newSupporter");
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+    }
+
+    [Fact]
+    public async Task Should_Get_Correct_Claims_After_User_Role_Deleted()
     {
         ClaimsPrincipal claimsPrincipal = null;
         await UsingUowAsync(async () =>
@@ -100,5 +133,77 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
         dynamicClaimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
         dynamicClaimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
         dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+    }
+
+    [Fact]
+    public async Task Should_Get_Correct_Claims_After_User_Organization_Updated()
+    {
+        ClaimsPrincipal claimsPrincipal = null;
+        await UsingUowAsync(async () =>
+        {
+            var user = await _identityUserManager.GetByIdAsync(_testData.UserJohnId);
+            user.ShouldNotBeNull();
+            claimsPrincipal = await _abpUserClaimsPrincipalFactory.CreateAsync(user);
+
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+
+            var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            ou.ShouldNotBeNull();
+            ou.Roles.Count.ShouldBe(2);
+            ou.Roles.ShouldContain(x => x.RoleId == _testData.RoleModeratorId);
+            ou.Roles.ShouldContain(x => x.RoleId == _testData.RoleManagerId);
+
+            ou.AddRole(_testData.RoleSaleId);
+            await _organizationUnitRepository.UpdateAsync(ou);
+        });
+
+        var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "sale");
+    }
+
+    [Fact]
+    public async Task Should_Get_Correct_Claims_After_User_Organization_Deleted()
+    {
+        ClaimsPrincipal claimsPrincipal = null;
+        await UsingUowAsync(async () =>
+        {
+            var user = await _identityUserManager.GetByIdAsync(_testData.UserJohnId);
+            user.ShouldNotBeNull();
+            claimsPrincipal = await _abpUserClaimsPrincipalFactory.CreateAsync(user);
+
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+
+            var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            ou.ShouldNotBeNull();
+            ou.Roles.Count.ShouldBe(2);
+            ou.Roles.ShouldContain(x => x.RoleId == _testData.RoleModeratorId);
+            ou.Roles.ShouldContain(x => x.RoleId == _testData.RoleManagerId);
+            var users = await _organizationUnitRepository.GetMemberIdsAsync(ou.Id);
+            users.ShouldContain(user.Id);
+
+            await _organizationUnitRepository.DeleteAsync(ou);
+        });
+
+        var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+        dynamicClaimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Role && x.Value == "manager"); //manager role from OU111 is deleted.
     }
 }
