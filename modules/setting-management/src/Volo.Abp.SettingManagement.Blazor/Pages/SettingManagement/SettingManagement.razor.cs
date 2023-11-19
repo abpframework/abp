@@ -45,6 +45,12 @@ public partial class SettingManagement
         SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
     }
 
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        StateHasChanged();
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
     protected virtual string GetNormalizedString(string value)
     {
         return value.Replace('.', '_');

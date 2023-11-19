@@ -28,3 +28,9 @@ jobs:
           body: This PR generated automatically to merge dev with rel-7.4. Please review the changed files before merging to prevent any errors that may occur.
           reviewers: ${{github.actor}}
           token: ${{ github.token }}
+      - name: Merge Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.BOT_SECRET }}
+        run: |
+          gh pr review auto-merge/rel-7-4/${{github.run_number}} --approve
+          gh pr merge auto-merge/rel-7-4/${{github.run_number}} --merge --delete-branch

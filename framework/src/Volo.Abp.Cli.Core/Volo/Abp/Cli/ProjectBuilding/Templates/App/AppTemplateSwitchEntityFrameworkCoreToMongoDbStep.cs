@@ -154,13 +154,6 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
 
         //MyCompanyName.MyProjectName.Domain.Tests
 
-        ChangeProjectReference(
-            context,
-            "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyCompanyName.MyProjectName.Domain.Tests.csproj",
-            "EntityFrameworkCore.Tests",
-            "MongoDB.Tests"
-        );
-
         ChangeNamespaceAndKeyword(
             context,
             "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
@@ -254,8 +247,6 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
                 return;
             }
         }
-
-        throw new ApplicationException($"Could not find the '{oldReference}' reference in the project '{targetProjectFilePath}'!");
     }
 
     private void ChangeNamespaceAndKeyword(

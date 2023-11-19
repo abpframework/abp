@@ -270,14 +270,16 @@ public class MyProjectNameBlazorModule : AbpModule
         {
             app.UseMultiTenancy();
         }
-        app.UseDynamicClaims();
         app.UseUnitOfWork();
+        app.UseDynamicClaims();
         app.UseAuthorization();
+
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
         });
+
         app.UseConfiguredEndpoints();
     }
 }

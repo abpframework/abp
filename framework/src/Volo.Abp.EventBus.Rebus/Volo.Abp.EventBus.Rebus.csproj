@@ -21,13 +21,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Text.Json" VersionOverride="7.0.4" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
       <PackageReference Include="Rebus" />
       <PackageReference Include="Rebus.ServiceProvider" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     </ItemGroup>
     
 </Project>
