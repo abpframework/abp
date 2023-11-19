@@ -96,6 +96,7 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
 
             var role = roles.First(x => x.Name == "supporter");
             await _identityRoleManager.SetRoleNameAsync(role, "newSupporter");
+            await _identityRoleRepository.UpdateAsync(role);
         });
 
         var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);

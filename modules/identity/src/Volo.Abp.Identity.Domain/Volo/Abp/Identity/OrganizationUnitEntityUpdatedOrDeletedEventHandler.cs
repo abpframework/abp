@@ -14,8 +14,9 @@ using Volo.Abp.Uow;
 namespace Volo.Abp.Identity;
 
 public class OrganizationUnitEntityUpdatedOrDeletedEventHandler :
-    ILocalEventHandler<EntityCreatedEventData<OrganizationUnitRole>>,
+    ILocalEventHandler<EntityUpdatedEventData<OrganizationUnit>>,
     ILocalEventHandler<EntityDeletedEventData<OrganizationUnit>>,
+    ILocalEventHandler<EntityCreatedEventData<OrganizationUnitRole>>,
     ITransientDependency
 {
     public ILogger<OrganizationUnitEntityUpdatedOrDeletedEventHandler> Logger { get; set; }
@@ -33,11 +34,10 @@ public class OrganizationUnitEntityUpdatedOrDeletedEventHandler :
         _cache = cache;
     }
 
-    [UnitOfWork]
-    public virtual async Task HandleEventAsync(EntityCreatedEventData<OrganizationUnitRole> eventData)
+    public virtual async Task HandleEventAsync(EntityUpdatedEventData<OrganizationUnit> eventData)
     {
-        var users = await _organizationUnitRepository.GetMemberIdsAsync(eventData.Entity.OrganizationUnitId);
-        await ClearAsync(eventData.Entity.OrganizationUnitId, users, eventData.Entity.TenantId);
+        var users = await _organizationUnitRepository.GetMemberIdsAsync(eventData.Entity.Id);
+        await ClearAsync(eventData.Entity.Id, users, eventData.Entity.TenantId);
     }
 
     [UnitOfWork]
@@ -45,6 +45,13 @@ public class OrganizationUnitEntityUpdatedOrDeletedEventHandler :
     {
         var users = await _organizationUnitRepository.GetMemberIdsAsync(eventData.Entity.Id);
         await ClearAsync(eventData.Entity.Id, users, eventData.Entity.TenantId);
+    }
+
+    [UnitOfWork]
+    public virtual async Task HandleEventAsync(EntityCreatedEventData<OrganizationUnitRole> eventData)
+    {
+        var users = await _organizationUnitRepository.GetMemberIdsAsync(eventData.Entity.OrganizationUnitId);
+        await ClearAsync(eventData.Entity.OrganizationUnitId, users, eventData.Entity.TenantId);
     }
 
     protected virtual async Task ClearAsync(Guid organizationId, IEnumerable<Guid> userIds, Guid? tenantId)
