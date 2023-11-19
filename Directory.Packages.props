@@ -127,8 +127,8 @@
     <PackageVersion Include="Quartz.Plugins.TimeZoneConverter" Version="3.7.0" />
     <PackageVersion Include="Quartz.Serialization.Json" Version="3.7.0" />
     <PackageVersion Include="RabbitMQ.Client" Version="6.6.0" />
-    <PackageVersion Include="Rebus" Version="7.2.1" />
-    <PackageVersion Include="Rebus.ServiceProvider" Version="9.1.0" />
+    <PackageVersion Include="Rebus" Version="8.0.1" />
+    <PackageVersion Include="Rebus.ServiceProvider" Version="10.0.0" />
     <PackageVersion Include="Scriban" Version="5.9.0" />
     <PackageVersion Include="Serilog" Version="3.1.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.0" />
