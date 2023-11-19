@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Shouldly;
@@ -9,6 +10,8 @@ namespace Volo.Abp.Identity;
 public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomainTestBase
 {
     private readonly IdentityUserManager _identityUserManager;
+    private readonly IIdentityRoleRepository _identityRoleRepository;
+    private readonly IdentityRoleManager _identityRoleManager;
     private readonly IAbpClaimsPrincipalFactory _abpClaimsPrincipalFactory;
     private readonly AbpUserClaimsPrincipalFactory _abpUserClaimsPrincipalFactory;
     private readonly IdentityTestData _testData;
@@ -16,13 +19,15 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
     public IdentityDynamicClaimsPrincipalContributor_Tests()
     {
         _identityUserManager = GetRequiredService<IdentityUserManager>();
+        _identityRoleRepository = GetRequiredService<IIdentityRoleRepository>();
+        _identityRoleManager = GetRequiredService<IdentityRoleManager>();
         _abpClaimsPrincipalFactory = GetRequiredService<IAbpClaimsPrincipalFactory>();
         _abpUserClaimsPrincipalFactory = GetRequiredService<AbpUserClaimsPrincipalFactory>();
         _testData = GetRequiredService<IdentityTestData>();
     }
 
     [Fact]
-    public async Task Should_Get_Correct_Claims_After_User_Updating()
+    public async Task Should_Get_Correct_Claims_After_User_Updated()
     {
         IdentityUser user = null;
         ClaimsPrincipal claimsPrincipal = null;
@@ -38,12 +43,18 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
             claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == user.UserName);
             claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == user.Email);
             claimsPrincipal.Claims.ShouldContain(x => x.Type == "AspNet.Identity.SecurityStamp" && x.Value == securityStamp);
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
 
             var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
             dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.NameIdentifier && x.Value == user.Id.ToString());
             dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == user.UserName);
             dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == user.Email);
             dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == "AspNet.Identity.SecurityStamp" && x.Value == securityStamp);//SecurityStamp is not dynamic claim
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
 
             await _identityUserManager.SetUserNameAsync(user, "newUserName");
             await _identityUserManager.SetEmailAsync(user, "newUserEmail@abp.io");
@@ -55,5 +66,39 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
         dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value =="newUserName");
         dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "newUserEmail@abp.io");
         dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == "AspNet.Identity.SecurityStamp" && x.Value == securityStamp);//SecurityStamp is not dynamic claim
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+    }
+
+    [Fact]
+    public async Task Should_Get_Correct_Claims_After_User_Role_Updated_Or_Deleted()
+    {
+        ClaimsPrincipal claimsPrincipal = null;
+        await UsingUowAsync(async () =>
+        {
+            var user = await _identityUserManager.GetByIdAsync(_testData.UserJohnId);
+            user.ShouldNotBeNull();
+            claimsPrincipal = await _abpUserClaimsPrincipalFactory.CreateAsync(user);
+
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+
+            var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+            dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
+
+            var roles = (await _identityRoleRepository.GetListAsync()).Where(x => user.Roles.Select(r => r.RoleId).Contains(x.Id)).ToList();
+
+            await _identityRoleManager.DeleteAsync(roles.First(x => x.Name == "supporter"));
+            await _identityRoleManager.DeleteAsync(roles.First(x => x.Name == "moderator"));
+        });
+
+        var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
+        dynamicClaimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Role && x.Value == "supporter");
+        dynamicClaimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Role && x.Value == "moderator");
+        dynamicClaimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "manager");
     }
 }

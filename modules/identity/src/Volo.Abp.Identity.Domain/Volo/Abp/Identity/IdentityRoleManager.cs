@@ -70,7 +70,7 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         if (result.Succeeded)
         {
             Logger.LogDebug($"Remove dynamic claims cache for users of role: {role.Id}");
-            await Cache.RefreshManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, role.TenantId)), token: CancellationToken);
+            await Cache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, role.TenantId)), token: CancellationToken);
         }
 
         return result;
@@ -88,7 +88,7 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         if (result.Succeeded)
         {
             Logger.LogDebug($"Remove dynamic claims cache for users of role: {role.Id}");
-            await Cache.RefreshManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, role.TenantId)), token: CancellationToken);
+            await Cache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, role.TenantId)), token: CancellationToken);
         }
 
         return result;
