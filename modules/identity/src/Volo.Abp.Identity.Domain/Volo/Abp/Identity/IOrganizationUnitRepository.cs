@@ -41,7 +41,7 @@ public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit
         CancellationToken cancellationToken = default
     );
 
-    Task<List<OrganizationUnit>> GetListByRoleAsync(
+    Task<List<OrganizationUnit>> GetListByRoleIdAsync(
         Guid roleId,
         bool includeDetails = false,
         CancellationToken cancellationToken = default

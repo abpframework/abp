@@ -53,7 +53,7 @@ public class MongoOrganizationUnitRepository
                 .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<OrganizationUnit>> GetListByRoleAsync(
+    public virtual async Task<List<OrganizationUnit>> GetListByRoleIdAsync(
         Guid roleId,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)

@@ -90,7 +90,7 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         }
 
         var userIdList = await UserRepository.GetUserIdListByRoleIdAsync(role.Id, cancellationToken: CancellationToken);
-        var orgList = await OrganizationUnitRepository.GetListByRoleAsync(role.Id, includeDetails: false, cancellationToken: CancellationToken);
+        var orgList = await OrganizationUnitRepository.GetListByRoleIdAsync(role.Id, includeDetails: false, cancellationToken: CancellationToken);
         var result = await base.DeleteAsync(role);
         if (result.Succeeded)
         {
