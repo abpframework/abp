@@ -32,7 +32,7 @@ public abstract class ReadOnlyAppService<TEntity, TEntityDto, TKey, TGetListInpu
 
 public abstract class ReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>
     : AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>
-    where TEntity : class, IEntity<TKey>    
+    where TEntity : class, IEntity<TKey>
 {
     protected IReadOnlyRepository<TEntity, TKey> Repository { get; }
 
