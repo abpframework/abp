@@ -151,6 +151,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<Guid>> GetUserIdListByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbContextAsync()).Set<IdentityUserRole>().Where(x => x.RoleId == roleId)
+            .Select(x => x.UserId).ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<IdentityUser>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,

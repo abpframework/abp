@@ -90,6 +90,11 @@ public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit
         CancellationToken cancellationToken = default
     );
 
+    Task<List<Guid>> GetMemberIdsAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    );
+
     Task<int> GetMembersCountAsync(
         OrganizationUnit organizationUnit,
         string filter = null,

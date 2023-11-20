@@ -18,7 +18,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
 {
     public ILogger<IdentityDynamicClaimsPrincipalContributorCache> Logger { get; set; }
 
-    protected IDistributedCache<AbpDynamicClaimCacheItem> Cache { get; }
+    protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IdentityUserManager UserManager { get; }
     protected IUserClaimsPrincipalFactory<IdentityUser> UserClaimsPrincipalFactory { get; }
@@ -26,14 +26,14 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
     protected IOptions<IdentityDynamicClaimsPrincipalContributorCacheOptions> CacheOptions { get; }
 
     public IdentityDynamicClaimsPrincipalContributorCache(
-        IDistributedCache<AbpDynamicClaimCacheItem> cache,
+        IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
         ICurrentTenant currentTenant,
         IdentityUserManager userManager,
         IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory,
         IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimsPrincipalFactoryOptions,
         IOptions<IdentityDynamicClaimsPrincipalContributorCacheOptions> cacheOptions)
     {
-        Cache = cache;
+        DynamicClaimCache = dynamicClaimCache;
         CurrentTenant = currentTenant;
         UserManager = userManager;
         UserClaimsPrincipalFactory = userClaimsPrincipalFactory;
@@ -50,7 +50,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
         if (AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims.IsNullOrEmpty())
         {
             var emptyCacheItem = new AbpDynamicClaimCacheItem();
-            await Cache.SetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), emptyCacheItem, new DistributedCacheEntryOptions
+            await DynamicClaimCache.SetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), emptyCacheItem, new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = CacheOptions.Value.CacheAbsoluteExpiration
             });
@@ -58,7 +58,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
             return emptyCacheItem;
         }
 
-        return await Cache.GetOrAddAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), async () =>
+        return await DynamicClaimCache.GetOrAddAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), async () =>
         {
             using (CurrentTenant.Change(tenantId))
             {
@@ -91,7 +91,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
 
     public virtual async Task ClearAsync(Guid userId, Guid? tenantId = null)
     {
-        Logger.LogDebug($"Clearing dynamic claims cache for user: {userId}");
-        await Cache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
+        Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
+        await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
     }
 }
