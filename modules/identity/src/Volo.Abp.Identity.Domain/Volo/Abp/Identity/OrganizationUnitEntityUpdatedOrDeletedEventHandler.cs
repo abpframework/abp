@@ -34,6 +34,7 @@ public class OrganizationUnitEntityUpdatedOrDeletedEventHandler :
         _cache = cache;
     }
 
+    [UnitOfWork]
     public virtual async Task HandleEventAsync(EntityUpdatedEventData<OrganizationUnit> eventData)
     {
         var users = await _organizationUnitRepository.GetMemberIdsAsync(eventData.Entity.Id);
