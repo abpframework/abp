@@ -89,7 +89,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
         });
     }
 
-    public virtual async Task ClearAsync(Guid userId, Guid? tenantId = null)
+    public virtual async Task RemoveDynamicClaimCacheAsync(Guid userId, Guid? tenantId = null)
     {
         Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
         await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));

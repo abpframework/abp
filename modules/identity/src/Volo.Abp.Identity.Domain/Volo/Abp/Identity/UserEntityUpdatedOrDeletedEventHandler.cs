@@ -30,16 +30,16 @@ public class UserEntityUpdatedOrDeletedEventHandler :
     [UnitOfWork]
     public virtual async Task HandleEventAsync(EntityUpdatedEventData<IdentityUser> eventData)
     {
-        await ClearAsync(eventData.Entity.Id, eventData.Entity.TenantId);
+        await RemoveDynamicClaimCacheAsync(eventData.Entity.Id, eventData.Entity.TenantId);
     }
 
     [UnitOfWork]
     public virtual async Task HandleEventAsync(EntityDeletedEventData<IdentityUser> eventData)
     {
-        await ClearAsync(eventData.Entity.Id, eventData.Entity.TenantId);
+        await RemoveDynamicClaimCacheAsync(eventData.Entity.Id, eventData.Entity.TenantId);
     }
 
-    protected virtual async Task ClearAsync(Guid userId, Guid? tenantId)
+    protected virtual async Task RemoveDynamicClaimCacheAsync(Guid userId, Guid? tenantId)
     {
         Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
         await _dynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
