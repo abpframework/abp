@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -41,7 +40,7 @@ public abstract class ApplicationService :
     [Obsolete("Use LazyServiceProvider instead.")]
     public IServiceProvider ServiceProvider { get; set; } = default!;
 
-    public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "IntService", "IntegrationService", "Service" };
+    public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
 
     public List<string> AppliedCrossCuttingConcerns { get; } = new();
 

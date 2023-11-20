@@ -8,8 +8,7 @@ public static class RemoteServiceConfigurationExtensions
     public const string IdentityClientName = "IdentityClient";
     public const string UseCurrentAccessTokenName = "UseCurrentAccessToken";
 
-    [CanBeNull]
-    public static string GetIdentityClient([NotNull] this RemoteServiceConfiguration configuration)
+    public static string? GetIdentityClient([NotNull] this RemoteServiceConfiguration configuration)
     {
         Check.NotNullOrEmpty(configuration, nameof(configuration));
 

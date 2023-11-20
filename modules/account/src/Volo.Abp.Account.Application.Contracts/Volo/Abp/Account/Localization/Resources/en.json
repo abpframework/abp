@@ -66,6 +66,8 @@
     "PasswordResetInfoInEmail": "We received an account recovery request! If you initiated this request, click the following link to reset your password.",
     "ResetMyPassword": "Reset my password",
     "AccessDenied": "Access denied!",
-    "AccessDeniedMessage": "You do not have access to this resource."
+    "AccessDeniedMessage": "You do not have access to this resource.",
+    "OrRegisterWith": "Or register with",
+    "RegisterUsingYourProviderAccount": "Register using your {0} account"
   }
 }

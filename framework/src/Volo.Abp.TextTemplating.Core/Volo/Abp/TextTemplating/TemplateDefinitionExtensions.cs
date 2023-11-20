@@ -21,7 +21,7 @@ public static class TemplateDefinitionExtensions
         );
     }
 
-    public static string GetVirtualFilePathOrNull(
+    public static string? GetVirtualFilePathOrNull(
         [NotNull] this TemplateDefinition templateDefinition)
     {
         Check.NotNull(templateDefinition, nameof(templateDefinition));

@@ -5,5 +5,5 @@ namespace Volo.Abp.IdentityModel;
 
 public class IdentityModelHttpRequestMessageOptions
 {
-    public Action<HttpRequestMessage> ConfigureHttpRequestMessage { get; set; }
+    public Action<HttpRequestMessage>? ConfigureHttpRequestMessage { get; set; }
 }

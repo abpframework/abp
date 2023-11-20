@@ -39,7 +39,7 @@ export class TypeNode {
   }
 }
 
-export function parseGenerics(type: string, mapperFn?: TypeNodeMapperFn) {
+export function parseGenericsOld(type: string, mapperFn?: TypeNodeMapperFn) {
   const [rootType, ...types] = type.split('<');
   const root = new TypeNode(rootType, null, mapperFn);
 
@@ -67,5 +67,34 @@ export function parseGenerics(type: string, mapperFn?: TypeNodeMapperFn) {
 
   return root;
 }
+
+export function parseGenerics(type: string, mapperFn?: TypeNodeMapperFn, parent?: TypeNode | null): TypeNode {
+  const regex = /(?<MainType>[\w.]+)<(?<GenericType>.*)>/;
+
+  const match = type.match(regex);
+  if (!match) {
+    return new TypeNode(type, null, mapperFn);
+  }
+
+  const mainType = match.groups?.MainType || '';
+  const genericType = match.groups?.GenericType || '';
+  const root = new TypeNode(mainType, parent ?? null, mapperFn);
+  if (genericType.includes(',')) {
+    const genericTypes = genericType.split(',');
+    genericTypes.forEach((genericType, index) => {
+      const child = parseGenerics(genericType, mapperFn, root);
+      child.index = index;
+      root.children.push(child);
+      child.parent = root;
+    });
+  } else {
+    const child = parseGenerics(genericType, mapperFn, root);
+    child.index = root.children.length;
+    root.children.push(child);
+    child.parent = root;
+  }
+  return root;
+}
+
 
 export type TypeNodeMapperFn = (node: TypeNode) => string;

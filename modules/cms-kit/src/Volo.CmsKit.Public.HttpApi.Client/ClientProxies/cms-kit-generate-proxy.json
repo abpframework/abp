@@ -830,6 +830,23 @@
                   }
                 },
                 {
+                  "name": "DoesSlugExistAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "slug",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                },
+                {
                   "name": "FindDefaultHomePageAsync",
                   "parametersOnMethod": [],
                   "returnValue": {
@@ -845,7 +862,7 @@
               "uniqueName": "FindBySlugAsyncBySlug",
               "name": "FindBySlugAsync",
               "httpMethod": "GET",
-              "url": "api/cms-kit-public/pages/{slug}",
+              "url": "api/cms-kit-public/pages/by-slug",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -866,8 +883,8 @@
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
                   "descriptorName": ""
                 }
               ],
@@ -882,13 +899,50 @@
               "uniqueName": "FindDefaultHomePageAsync",
               "name": "FindDefaultHomePageAsync",
               "httpMethod": "GET",
-              "url": "api/cms-kit-public/pages",
+              "url": "api/cms-kit-public/pages/home",
               "supportedVersions": [],
               "parametersOnMethod": [],
               "parameters": [],
               "returnValue": {
                 "type": "Volo.CmsKit.Contents.PageDto",
                 "typeSimple": "Volo.CmsKit.Contents.PageDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.CmsKit.Public.Pages.IPagePublicAppService"
+            },
+            "DoesSlugExistAsyncBySlug": {
+              "uniqueName": "DoesSlugExistAsyncBySlug",
+              "name": "DoesSlugExistAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-public/pages/exist",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "slug",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "slug",
+                  "name": "slug",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Pages.IPagePublicAppService"
@@ -1458,6 +1512,23 @@
                     "type": "System.Void",
                     "typeSimple": "System.Void"
                   }
+                },
+                {
+                  "name": "GetTagNameAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "tagId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
                 }
               ]
             }
@@ -1768,6 +1839,55 @@
               "returnValue": {
                 "type": "System.Void",
                 "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.CmsKit.Public.Blogs.IBlogPostPublicAppService"
+            },
+            "GetTagNameAsyncByTagId": {
+              "uniqueName": "GetTagNameAsyncByTagId",
+              "name": "GetTagNameAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-public/blog-posts/tags/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "tagId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "tagId",
+                  "name": "tagId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": null,
+                  "typeSimple": null,
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Public.Blogs.IBlogPostPublicAppService"

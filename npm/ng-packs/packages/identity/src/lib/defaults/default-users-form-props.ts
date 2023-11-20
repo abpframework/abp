@@ -1,7 +1,7 @@
 import { Validators } from '@angular/forms';
 import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
 import { getPasswordValidators } from '@abp/ng.theme.shared';
-import { ePropType, FormProp } from '@abp/ng.theme.shared/extensions';
+import { ePropType, FormProp } from '@abp/ng.components/extensible';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
 
 export const DEFAULT_USERS_CREATE_FORM_PROPS = FormProp.createMany<IdentityUserDto>([

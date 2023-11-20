@@ -12,6 +12,7 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs;
@@ -24,12 +25,16 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
 
     protected IBlogPostRepository BlogPostRepository { get; }
 
+    protected ITagRepository TagRepository { get; }
+
     public BlogPostPublicAppService(
         IBlogRepository blogRepository,
-        IBlogPostRepository blogPostRepository)
+        IBlogPostRepository blogPostRepository,
+        ITagRepository tagRepository)
     {
         BlogRepository = blogRepository;
         BlogPostRepository = blogPostRepository;
+        TagRepository = tagRepository;
     }
 
     public virtual async Task<BlogPostCommonDto> GetAsync(
@@ -84,5 +89,12 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
         }
 
         await BlogPostRepository.DeleteAsync(id);
+    }
+
+    public async Task<string> GetTagNameAsync([NotNull] Guid tagId)
+    {
+        var tag = await TagRepository.GetAsync(tagId);
+
+        return tag.Name;
     }
 }

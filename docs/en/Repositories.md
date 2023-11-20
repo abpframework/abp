@@ -176,6 +176,77 @@ Some features (like soft-delete, multi-tenancy and audit logging) won't work, so
 
 The `EnsureExistsAsync` extension method accepts entity id or entities query expression to ensure entities exist, otherwise, it will throw `EntityNotFoundException`.
 
+### Enabling / Disabling the Change Tracking
+
+ABP provides repository extension methods and attributes those can be used to control the change tracking behavior for queried entities in the underlying database provider.
+
+Disabling change tracking can gain performance if you query many entities from the database for read-only purposes. Querying single or a few entities won't make much performance difference, but you are free to use it whenever you like.
+
+> If the underlying database provider doesn't support change tracking, then this system won't have any effect. [Entity Framework Core](Entity-Framework-Core.md) supports change tracking, for example, while the [MongoDB](MongoDB.md) provider doesn't support it.
+
+#### Repository Extension Methods for Change Tracking
+
+Change tracking is enabled unless you explicitly disable it.
+
+**Example: Using the `DisableTracking` extension method**
+
+````csharp
+public class MyDemoService : ApplicationService
+{
+    private readonly IRepository<Person, Guid> _personRepository;
+
+    public MyDemoService(IRepository<Person, Guid> personRepository)
+    {
+        _personRepository = personRepository;
+    }
+
+    public async Task DoItAsync()
+    {
+        // Change tracking is enabled in that point (by default)
+        
+        using (_personRepository.DisableTracking())
+        {
+            // Change tracking is disabled in that point
+            var list = await _personRepository.GetPagedListAsync(0, 100, "Name ASC");
+        }
+        
+        // Change tracking is enabled in that point (by default)
+    }
+}
+````
+
+> `DisableTracking` extension method returns a `IDisposable` object, so you can safely **restore** the change tracking behavior to the **previous state** one the `using` block ends. Basically, `DisableTracking` method ensures that the change tracking is disabled inside the `using` block, but doesn't affect outside of the `using` block. That means, if change tracking was already disabled, `DisableTracking` and the disposable return value do nothing. 
+
+`EnableTracking()` method works exactly opposite to the `DisableTracking()` method. You typically won't use it (because the change tracking is already enabled by default), but it is there in case of you need that.
+
+#### Attributes for Change Tracking
+
+You typically use the `DisableTracking()` method for the application service methods those only returns data, but doesn't make any change on entities. For such cases, you can use the `DisableEntityChangeTracking` attribute on your method/class as a shortcut to disable the change tracking for whole method body.
+
+**Example: Using the `DisableEntityChangeTracking` attribute on a method**
+
+````csharp
+[DisableEntityChangeTracking]
+public virtual async Task<List<PersonDto>> GetListAsync()
+{
+    /* We disabled the change tracking in this method
+       because we won't change the people objects */
+    var people = await _personRepository.GetListAsync();
+    return ObjectMapper.Map<List<Person>, List<PersonDto>(people);
+}
+````
+
+`EnableEntityChangeTracking` can be used for the opposite purpose, and it ensures that the change tracking is enabled for a given method. Since the change tracking is enabled by default, `EnableEntityChangeTracking` may be needed only if you know that your method is called from a context that disables the change tracking.
+
+`DisableEntityChangeTracking` and `EnableEntityChangeTracking` attributes can be used on a **method** or on a **class** (which affects all of the class methods).
+
+ABP uses dynamic proxying to make these attributes working. There are some rules here:
+
+* If you are **not injecting** the service over an interface (like `IPersonAppService`), then the methods of the service must be `virtual`. Otherwise, [dynamic proxy / interception](Dynamic-Proxying-Interceptors.md) system can not work.
+* Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted.
+
+> Change tracking behavior doesn't affect tracking entity objects returned from `InsertAsync` and `UpdateAsync` methods. The objects returned from these methods are always tracked (if the underlying provider has the change tracking feature) and any change you made to these objects are saved into the database.
+
 ## Other Generic Repository Types
 
 Standard `IRepository<TEntity, TKey>` interface exposes the standard `IQueryable<TEntity>` and you can freely query using the standard LINQ methods. This is fine for most of the applications. However, some ORM providers or database systems may not support standard `IQueryable` interface. If you want to use such providers, you can't rely on the `IQueryable`.
@@ -205,8 +276,6 @@ Methods:
 - `WithDetails()` 1 overload
 - `WithDetailsAsync()` 1 overload
 
-
-
 Where as the `IReadOnlyBasicRepository<Tentity, TKey>` provides the following methods:
 
 - `GetCountAsync()`
@@ -216,6 +285,12 @@ Where as the `IReadOnlyBasicRepository<Tentity, TKey>` provides the following me
 They can all be seen as below:
 
 ![generic-repositories](images/generic-repositories.png)
+
+#### Read Only Repositories behavior in Entity Framework Core
+
+Entity Framework Core read-only repository implementation uses [EF Core's No-Tracking feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries). That means the entities returned from the repository will not be tracked by the EF Core [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/), because it is expected that you won't update entities queried from a read-only repository. If you need to track the entities, you can still use the [AsTracking()](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.entityframeworkqueryableextensions.astracking) extension method on the LINQ expression, or `EnableTracking()` extension method on the repository object (See *Enabling / Disabling the Change Tracking* section in this document).
+
+> This behavior works only if the repository object is injected with one of the read-only repository interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`). It won't work if you have injected a standard repository (e.g. `IRepository<...>`) then casted it to a read-only repository interface.
 
 ### Generic Repository without a Primary Key
 

@@ -1,7 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Mvc.ViewComponents
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
 @using Volo.Abp.Data
 @using Volo.Abp.Reflection
 @using Volo.CmsKit.Contents
+@using Volo.CmsKit.Localization
 @using Volo.CmsKit.Web.Renderers;
 @using Volo.CmsKit.Web.Pages.CmsKit.Components.Contents;
 
@@ -9,12 +12,14 @@
 
 @inject IMarkdownToHtmlRenderer MarkdownRenderer
 @inject IViewComponentSelector ViewComponentSelector
+@inject ILogger<ContentFragmentViewComponent> Logger
+@inject IStringLocalizer<CmsKitResource> L
 
 @foreach (var contentFragment in Model.ContentDto.ContentFragments)
 {
     if (contentFragment.Type == ContentConsts.Markdown)
     {
-        @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content")))
+        @Html.Raw(await MarkdownRenderer.RenderAsync(contentFragment.GetProperty<string>("Content"), Model.ContentDto.AllowHtmlTags, Model.ContentDto.PreventXSS, Model.ContentDto.ReferralLink))
     }
     else if (contentFragment.Type == ContentConsts.Widget)
     {
@@ -35,6 +40,17 @@
             }
         }
 
-        @await Component.InvokeAsync(componentName, parameters)
+        @try
+        {
+            @await Component.InvokeAsync(componentName, parameters)
+        }
+        catch (Exception ex)
+        {
+            <div class="alert alert-danger" role="alert">
+                @L["ThisPartOfContentCouldntBeLoaded"]
+            </div>
+
+            Logger.LogError(ex, $"Couldn't load the widget: {componentName}");
+        }
     }
 }
