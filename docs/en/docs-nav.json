@@ -1404,6 +1404,10 @@
       ]
     },
     {
+      "text": "Performance Optimization",
+      "path":"Performance-Optimization.md"
+    },
+    {
       "text": "Application Modules",
       "items": [
         {
