@@ -14,8 +14,9 @@ public class AbpAspNetCoreAuthenticationJwtBearerModule : AbpModule
     {
         context.Services.AddHttpClient();
         context.Services.AddHttpContextAccessor();
-        var abpClaimsPrincipalFactoryOptions = context.Services.ExecutePreConfiguredActions<AbpClaimsPrincipalFactoryOptions>();
-        if (abpClaimsPrincipalFactoryOptions.IsRemoteRefreshEnabled)
+
+        if (context.Services.ExecutePreConfiguredActions<WebRemoteDynamicClaimsPrincipalContributorOptions>().IsEnabled &&
+            context.Services.ExecutePreConfiguredActions<AbpClaimsPrincipalFactoryOptions>().IsRemoteRefreshEnabled)
         {
             context.Services.AddTransient<WebRemoteDynamicClaimsPrincipalContributor>();
             context.Services.AddTransient<WebRemoteDynamicClaimsPrincipalContributorCache>();
