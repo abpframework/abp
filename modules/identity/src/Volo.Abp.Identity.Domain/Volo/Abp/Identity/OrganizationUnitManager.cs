@@ -84,6 +84,7 @@ public class OrganizationUnitManager : DomainService
 
         foreach (var child in children)
         {
+            await RemoveDynamicClaimCacheAsync(child);
             await OrganizationUnitRepository.RemoveAllMembersAsync(child);
             await OrganizationUnitRepository.RemoveAllRolesAsync(child);
             await OrganizationUnitRepository.DeleteAsync(child);
