@@ -21,7 +21,7 @@ public abstract class ReadOnlyAppService<TEntity, TEntityDto, TKey>
 
 public abstract class ReadOnlyAppService<TEntity, TEntityDto, TKey, TGetListInput>
     : ReadOnlyAppService<TEntity, TEntityDto, TEntityDto, TKey, TGetListInput>
-    where TEntity : class, IEntity<TKey>    
+    where TEntity : class, IEntity<TKey>
 {
     protected ReadOnlyAppService(IReadOnlyRepository<TEntity, TKey> repository)
         : base(repository)
