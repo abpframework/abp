@@ -114,6 +114,12 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         _ou111.AddRole(_moderatorRole.Id);
         _ou111.AddRole(_managerRole.Id);
         await _organizationUnitRepository.InsertAsync(_ou111);
+
+        var _ou222 = new OrganizationUnit(_guidGenerator.Create(), "OU222");
+        _ou222.Code = OrganizationUnit.CreateCode(1, 1, 1);
+        _ou222.AddRole(_moderatorRole.Id);
+        _ou222.AddRole(_managerRole.Id);
+        await _organizationUnitRepository.InsertAsync(_ou222);
     }
 
     private async Task AddUsers()

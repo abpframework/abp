@@ -22,6 +22,8 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
     protected IStringLocalizer<IdentityResource> Localizer { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected IIdentityUserRepository UserRepository { get; }
+    protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+    protected OrganizationUnitManager OrganizationUnitManager { get; }
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
 
     public IdentityRoleManager(
@@ -33,6 +35,8 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         IStringLocalizer<IdentityResource> localizer,
         ICancellationTokenProvider cancellationTokenProvider,
         IIdentityUserRepository userRepository,
+        IOrganizationUnitRepository organizationUnitRepository,
+        OrganizationUnitManager organizationUnitManager,
         IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache)
         : base(
               store,
@@ -44,6 +48,8 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         Localizer = localizer;
         CancellationTokenProvider = cancellationTokenProvider;
         UserRepository = userRepository;
+        OrganizationUnitRepository = organizationUnitRepository;
+        OrganizationUnitManager = organizationUnitManager;
         DynamicClaimCache = dynamicClaimCache;
     }
 
@@ -84,11 +90,16 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         }
 
         var userIdList = await UserRepository.GetUserIdListByRoleIdAsync(role.Id, cancellationToken: CancellationToken);
+        var orgList = await OrganizationUnitRepository.GetListByRoleIdAsync(role.Id, includeDetails: false, cancellationToken: CancellationToken);
         var result = await base.DeleteAsync(role);
         if (result.Succeeded)
         {
             Logger.LogDebug($"Remove dynamic claims cache for users of role: {role.Id}");
             await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, role.TenantId)), token: CancellationToken);
+            foreach (var organizationUnit in orgList)
+            {
+                await OrganizationUnitManager.RemoveDynamicClaimCacheAsync(organizationUnit);
+            }
         }
 
         return result;

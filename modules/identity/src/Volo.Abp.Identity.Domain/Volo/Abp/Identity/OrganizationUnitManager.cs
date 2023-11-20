@@ -84,6 +84,7 @@ public class OrganizationUnitManager : DomainService
 
         foreach (var child in children)
         {
+            await RemoveDynamicClaimCacheAsync(child);
             await OrganizationUnitRepository.RemoveAllMembersAsync(child);
             await OrganizationUnitRepository.RemoveAllRolesAsync(child);
             await OrganizationUnitRepository.DeleteAsync(child);
@@ -200,12 +201,12 @@ public class OrganizationUnitManager : DomainService
 
     public virtual async Task RemoveRoleFromOrganizationUnitAsync(IdentityRole role, OrganizationUnit organizationUnit)
     {
-        await RemoveDynamicClaimCacheAsync(organizationUnit);
         organizationUnit.RemoveRole(role.Id);
         await OrganizationUnitRepository.UpdateAsync(organizationUnit);
+        await RemoveDynamicClaimCacheAsync(organizationUnit);
     }
 
-    protected virtual async Task RemoveDynamicClaimCacheAsync(OrganizationUnit organizationUnit)
+    public virtual async Task RemoveDynamicClaimCacheAsync(OrganizationUnit organizationUnit)
     {
         Logger.LogDebug($"Remove dynamic claims cache for users of organization: {organizationUnit.Id}");
         var userIds = await OrganizationUnitRepository.GetMemberIdsAsync(organizationUnit.Id);

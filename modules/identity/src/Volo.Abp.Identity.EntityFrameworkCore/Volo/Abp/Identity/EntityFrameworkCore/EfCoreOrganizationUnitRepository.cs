@@ -69,6 +69,21 @@ public class EfCoreOrganizationUnitRepository
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<OrganizationUnit>> GetListByRoleIdAsync(
+        Guid roleId,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+
+        var query = from organizationRole in dbContext.Set<OrganizationUnitRole>()
+            join organizationUnit in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on organizationRole.OrganizationUnitId equals organizationUnit.Id
+            where organizationRole.RoleId == roleId
+            select organizationUnit;
+
+        return await query.ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<OrganizationUnit> GetAsync(
         string displayName,
         bool includeDetails = true,
