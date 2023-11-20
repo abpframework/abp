@@ -37,7 +37,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
-> The `RemoteRefreshUrl` is already configured inside methods `AddAbpOpenIdConnect` and `AddAbpJwtBearer`.
+> The `RemoteRefreshUrl` is already configured inside methods `AddAbpOpenIdConnect` and `AddAbpJwtBearer`. 
 
 
 ### The Dynamic Claims Middleware
@@ -82,7 +82,7 @@ If you want to add your own dynamic claims contributor, you can create a class t
 
 `WebRemoteDynamicClaimsPrincipalContributorOptions` is the options class to configure the behavior of the `WebRemoteDynamicClaimsPrincipalContributor`. It has the following properties:
 
-* `IsEnabled`: Enable or disable the `WebRemoteDynamicClaimsPrincipalContributor`.
+* `IsEnabled`: Enable or disable the `WebRemoteDynamicClaimsPrincipalContributor`. `false` by default.
 * `AuthenticationScheme`: The authentication scheme to authenticate the HTTP call to the authentication server.
   
 ## See Also
