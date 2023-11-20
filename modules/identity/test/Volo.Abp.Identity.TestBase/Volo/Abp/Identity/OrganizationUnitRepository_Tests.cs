@@ -67,6 +67,23 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
     }
 
     [Fact]
+    public async Task GetListByRoleAsync()
+    {
+        var ous = await _organizationUnitRepository.GetListByRoleAsync(_testData.RoleManagerId);
+        ous.Count.ShouldBe(2);
+        ous.ShouldContain(ou => ou.DisplayName == "OU111");
+        ous.ShouldContain(ou => ou.DisplayName == "OU222");
+
+        ous = await _organizationUnitRepository.GetListByRoleAsync(_testData.RoleModeratorId);
+        ous.Count.ShouldBe(2);
+        ous.ShouldContain(ou => ou.DisplayName == "OU111");
+        ous.ShouldContain(ou => ou.DisplayName == "OU222");
+
+        ous = await _organizationUnitRepository.GetListByRoleAsync(_testData.RoleSaleId);
+        ous.Count.ShouldBe(0);
+    }
+
+    [Fact]
     public async Task AddMemberToOrganizationUnit()
     {
         using (var uow = _unitOfWorkManager.Begin())

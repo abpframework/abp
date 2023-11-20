@@ -205,7 +205,7 @@ public class OrganizationUnitManager : DomainService
         await OrganizationUnitRepository.UpdateAsync(organizationUnit);
     }
 
-    protected virtual async Task RemoveDynamicClaimCacheAsync(OrganizationUnit organizationUnit)
+    public virtual async Task RemoveDynamicClaimCacheAsync(OrganizationUnit organizationUnit)
     {
         Logger.LogDebug($"Remove dynamic claims cache for users of organization: {organizationUnit.Id}");
         var userIds = await OrganizationUnitRepository.GetMemberIdsAsync(organizationUnit.Id);
