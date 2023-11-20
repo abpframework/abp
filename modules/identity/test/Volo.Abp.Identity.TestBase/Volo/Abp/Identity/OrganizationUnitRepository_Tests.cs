@@ -233,6 +233,17 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
     }
 
     [Fact]
+    public async Task GetMemberIdsAsync()
+    {
+        var ou = await _organizationUnitRepository.GetAsync("OU111");
+        var users = await _organizationUnitRepository.GetMemberIdsAsync(ou.Id);
+
+        users.Count.ShouldBe(2);
+        users.ShouldContain(x => x == _testData.UserJohnId);
+        users.ShouldContain(x => x == _testData.UserNeoId);
+    }
+
+    [Fact]
     public async Task GetMembersCountOfOrganizationUnit()
     {
         OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
