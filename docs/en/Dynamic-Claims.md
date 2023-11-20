@@ -37,6 +37,9 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
+> The `RemoteRefreshUrl` is already configured inside methods `AddAbpOpenIdConnect` and `AddAbpJwtBearer`. 
+
+
 ### The Dynamic Claims Middleware
 
 Add the `DynamicClaims` middleware to all the applications that performs authentication (including the authentication server):
@@ -56,10 +59,11 @@ public override void OnApplicationInitialization(
 
 The `DynamicClaims` middleware will use `IAbpClaimsPrincipalFactory` to dynamically generate claims for the current user(`HttpContext.User`) in each request.
 
-There are two pre-built implementations of `IAbpDynamicClaimsPrincipalContributor` for different scenarios:
+There are three pre-built implementations of `IAbpDynamicClaimsPrincipalContributor` for different scenarios:
 
 * `IdentityDynamicClaimsPrincipalContributor`: Provided by the [Identity module](Modules/Identity.md) and generates and overrides the actual dynamic claims, and writes to the distributed cache. Typically works in the authentication server in a distributed system.
 * `RemoteDynamicClaimsPrincipalContributor`: For distributed scenarios, this implementation works in the UI application. It tries to get dynamic claim values in the distributed cache. If not found in the distributed cache, it makes an HTTP call to the authentication server and requests filling it by the authentication server. `AbpClaimsPrincipalFactoryOptions.RemoteRefreshUrl` should be properly configure to make it running.
+* `WebRemoteDynamicClaimsPrincipalContributor`: Similar to the `RemoteDynamicClaimsPrincipalContributor` but works in the microservice applications.
 
 ### IAbpDynamicClaimsPrincipalContributor
 
@@ -74,6 +78,13 @@ If you want to add your own dynamic claims contributor, you can create a class t
 * `DynamicClaims`: A list of dynamic claim types. Only the claims in that list will be overridden by the dynamic claims system.
 * `ClaimsMap`: A dictionary to map the claim types. This is used when the claim types are different between the Auth Server and the client. Already set up for common claim types by default.
 
+## WebRemoteDynamicClaimsPrincipalContributorOptions
+
+`WebRemoteDynamicClaimsPrincipalContributorOptions` is the options class to configure the behavior of the `WebRemoteDynamicClaimsPrincipalContributor`. It has the following properties:
+
+* `IsEnabled`: Enable or disable the `WebRemoteDynamicClaimsPrincipalContributor`. `false` by default.
+* `AuthenticationScheme`: The authentication scheme to authenticate the HTTP call to the authentication server.
+  
 ## See Also
 
 * [Authorization](Authorization.md)
