@@ -11,7 +11,6 @@ namespace Volo.Abp.Application.Services;
 public abstract class ReadOnlyAppService<TEntity, TEntityDto, TKey>
     : ReadOnlyAppService<TEntity, TEntityDto, TEntityDto, TKey, PagedAndSortedResultRequestDto>
     where TEntity : class, IEntity<TKey>
-    where TEntityDto : IEntityDto<TKey>
 {
     protected ReadOnlyAppService(IReadOnlyRepository<TEntity, TKey> repository)
         : base(repository)
@@ -22,8 +21,7 @@ public abstract class ReadOnlyAppService<TEntity, TEntityDto, TKey>
 
 public abstract class ReadOnlyAppService<TEntity, TEntityDto, TKey, TGetListInput>
     : ReadOnlyAppService<TEntity, TEntityDto, TEntityDto, TKey, TGetListInput>
-    where TEntity : class, IEntity<TKey>
-    where TEntityDto : IEntityDto<TKey>
+    where TEntity : class, IEntity<TKey>    
 {
     protected ReadOnlyAppService(IReadOnlyRepository<TEntity, TKey> repository)
         : base(repository)
@@ -34,9 +32,7 @@ public abstract class ReadOnlyAppService<TEntity, TEntityDto, TKey, TGetListInpu
 
 public abstract class ReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>
     : AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>
-    where TEntity : class, IEntity<TKey>
-    where TGetOutputDto : IEntityDto<TKey>
-    where TGetListOutputDto : IEntityDto<TKey>
+    where TEntity : class, IEntity<TKey>    
 {
     protected IReadOnlyRepository<TEntity, TKey> Repository { get; }
 
