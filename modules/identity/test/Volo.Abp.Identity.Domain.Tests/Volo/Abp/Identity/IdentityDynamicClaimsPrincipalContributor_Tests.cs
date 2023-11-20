@@ -13,6 +13,7 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
     private readonly IIdentityRoleRepository _identityRoleRepository;
     private readonly IdentityRoleManager _identityRoleManager;
     private readonly IOrganizationUnitRepository _organizationUnitRepository;
+    private readonly OrganizationUnitManager _organizationUnitManager;
     private readonly IAbpClaimsPrincipalFactory _abpClaimsPrincipalFactory;
     private readonly AbpUserClaimsPrincipalFactory _abpUserClaimsPrincipalFactory;
     private readonly IdentityTestData _testData;
@@ -23,6 +24,7 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
         _identityRoleRepository = GetRequiredService<IIdentityRoleRepository>();
         _identityRoleManager = GetRequiredService<IdentityRoleManager>();
         _organizationUnitRepository = GetRequiredService<IOrganizationUnitRepository>();
+        _organizationUnitManager = GetRequiredService<OrganizationUnitManager>();
         _abpClaimsPrincipalFactory = GetRequiredService<IAbpClaimsPrincipalFactory>();
         _abpUserClaimsPrincipalFactory = GetRequiredService<AbpUserClaimsPrincipalFactory>();
         _testData = GetRequiredService<IdentityTestData>();
@@ -162,7 +164,7 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
             ou.Roles.ShouldContain(x => x.RoleId == _testData.RoleManagerId);
 
             ou.AddRole(_testData.RoleSaleId);
-            await _organizationUnitRepository.UpdateAsync(ou);
+            await _organizationUnitManager.UpdateAsync(ou);
         });
 
         var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);
@@ -199,7 +201,7 @@ public class IdentityDynamicClaimsPrincipalContributor_Tests : AbpIdentityDomain
             var users = await _organizationUnitRepository.GetMemberIdsAsync(ou.Id);
             users.ShouldContain(user.Id);
 
-            await _organizationUnitRepository.DeleteAsync(ou);
+            await _organizationUnitManager.DeleteAsync(ou.Id);
         });
 
         var dynamicClaimsPrincipal = await _abpClaimsPrincipalFactory.CreateDynamicAsync(claimsPrincipal);

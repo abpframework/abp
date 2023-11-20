@@ -18,13 +18,13 @@ public class UserEntityUpdatedOrDeletedEventHandler :
 {
     public ILogger<UserEntityUpdatedOrDeletedEventHandler> Logger { get; set; }
 
-    private readonly IDistributedCache<AbpDynamicClaimCacheItem> _cache;
+    private readonly IDistributedCache<AbpDynamicClaimCacheItem> _dynamicClaimCache;
 
-    public UserEntityUpdatedOrDeletedEventHandler(IDistributedCache<AbpDynamicClaimCacheItem> cache)
+    public UserEntityUpdatedOrDeletedEventHandler(IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache)
     {
         Logger = NullLogger<UserEntityUpdatedOrDeletedEventHandler>.Instance;
 
-        _cache = cache;
+        _dynamicClaimCache = dynamicClaimCache;
     }
 
     [UnitOfWork]
@@ -42,6 +42,6 @@ public class UserEntityUpdatedOrDeletedEventHandler :
     protected virtual async Task ClearAsync(Guid userId, Guid? tenantId)
     {
         Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
-        await _cache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
+        await _dynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
     }
 }
