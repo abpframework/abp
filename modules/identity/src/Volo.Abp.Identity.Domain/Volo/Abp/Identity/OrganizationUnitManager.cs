@@ -200,9 +200,9 @@ public class OrganizationUnitManager : DomainService
 
     public virtual async Task RemoveRoleFromOrganizationUnitAsync(IdentityRole role, OrganizationUnit organizationUnit)
     {
+        await RemoveDynamicClaimCacheAsync(organizationUnit);
         organizationUnit.RemoveRole(role.Id);
         await OrganizationUnitRepository.UpdateAsync(organizationUnit);
-        await RemoveDynamicClaimCacheAsync(organizationUnit);
     }
 
     protected virtual async Task RemoveDynamicClaimCacheAsync(OrganizationUnit organizationUnit)

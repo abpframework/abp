@@ -174,6 +174,8 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         var user = await UserRepository.GetAsync(userId, cancellationToken: CancellationToken);
         user.RemoveOrganizationUnit(ouId);
         await UserRepository.UpdateAsync(user, cancellationToken: CancellationToken);
+
+        await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId), token: CancellationToken);
     }
 
     public virtual async Task RemoveFromOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
