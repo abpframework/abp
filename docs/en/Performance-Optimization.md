@@ -59,7 +59,7 @@ When maximum performance is needed (complex queries, very frequent queries,...),
 * [Microsoft ASP.NET Core Best Practices](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/best-practices) covers most topics regarding performance.
 Best Practices is part of [Microsoft ASP.NET Core Performance](https://learn.microsoft.com/en-us/aspnet/core/performance/overview) documentation.
 
-* Use [Cached Service Providers](https://docs.abp.io/en/abp/latest/Dependency-Injection#cached-service-providers) (ICachedServiceProvider or ITransientCachedServiceProvider) to optimize dependency injection.
+* Usege of [Cached Service Providers](https://docs.abp.io/en/abp/latest/Dependency-Injection#cached-service-providers) (ICachedServiceProvider or ITransientCachedServiceProvider) to optimize dependency injection.
 
 * For computationally intensive tasks, which can leverage parallel code use [Task Parallel Library](https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/task-parallel-library-tpl) (TPL) from Microsoft (available from .NET Framework 4.0 onwards).
 
@@ -78,3 +78,6 @@ This section applies to communication between frontend (MVC, Angular,...) and ba
 * Make calls in parallel if possible (usage of [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) or newer protocol for frontend-backed communication and parallel calls from application backend to external services)
 * Prefer lighter data formats (e.g. JSON over XML, [Protobuf](https://en.wikipedia.org/wiki/Protocol_Buffers) over JSON) for fewer data size transfers and/or faster serialization/deserialization
 * Prefer vector-based data formats for graphics elements instead of raster graphics wherever possible
+
+# Optimizing for Production
+abp framework documentation about [Optimizing Your Application for Production Environments](Deployment/Optimizing-Production.md)
