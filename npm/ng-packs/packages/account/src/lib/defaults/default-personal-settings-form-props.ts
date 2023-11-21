@@ -1,4 +1,4 @@
-import { ePropType, FormProp } from '@abp/ng.theme.shared/extensions';
+import { ePropType, FormProp } from '@abp/ng.components/extensible';
 import { UpdateProfileDto } from '@abp/ng.account.core/proxy';
 import { Validators } from '@angular/forms';
 import { PersonalSettingsHalfRowComponent } from '../components/personal-settings/personal-settings-half-row.component';

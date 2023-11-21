@@ -238,6 +238,19 @@ public static class AbpClaimsIdentityExtensions
         return claimsIdentity;
     }
 
+    public static ClaimsIdentity RemoveAll(this ClaimsIdentity claimsIdentity, string claimType)
+    {
+        Check.NotNull(claimsIdentity, nameof(claimsIdentity));
+
+        foreach (var x in claimsIdentity.FindAll(claimType).ToList())
+        {
+            claimsIdentity.RemoveClaim(x);
+        }
+
+        return claimsIdentity;
+    }
+
+
     public static ClaimsIdentity AddOrReplace(this ClaimsIdentity claimsIdentity, Claim claim)
     {
         Check.NotNull(claimsIdentity, nameof(claimsIdentity));
@@ -263,5 +276,4 @@ public static class AbpClaimsIdentityExtensions
 
         return principal;
     }
-
 }

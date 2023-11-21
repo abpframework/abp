@@ -16,5 +16,5 @@ public interface IAzureServiceBusMessageConsumerFactory
     IAzureServiceBusMessageConsumer CreateMessageConsumer(
         string topicName,
         string subscriptionName,
-        string connectionName);
+        string? connectionName);
 }

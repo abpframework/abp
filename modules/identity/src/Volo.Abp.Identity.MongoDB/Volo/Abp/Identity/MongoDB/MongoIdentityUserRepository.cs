@@ -132,6 +132,16 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .ToListAsync(cancellationToken);
     }
 
+    public virtual async Task<List<Guid>> GetUserIdListByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(u => u.Roles.Any(r => r.RoleId == roleId))
+            .Select(x => x.Id)
+            .ToListAsync(cancellationToken);
+    }
+
     public virtual async Task<List<IdentityUser>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
@@ -155,23 +165,24 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        var upperFilter = filter?.ToUpperInvariant();
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.NormalizedUserName.Contains(upperFilter) ||
+                    u.NormalizedEmail.Contains(upperFilter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName.Contains(userName))
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber.Contains(phoneNumber))
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email.Contains(emailAddress))
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(name), x => x.Name.Contains(name))
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(surname), x => x.Surname.Contains(surname))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isLockedOut.HasValue && isLockedOut.Value, x => x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isLockedOut.HasValue && !isLockedOut.Value, x =>  !(x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(notActive.HasValue, x => x.IsActive == !notActive.Value)
@@ -240,12 +251,13 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        var upperFilter = filter?.ToUpperInvariant();
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.NormalizedUserName.Contains(upperFilter) ||
+                    u.NormalizedEmail.Contains(upperFilter) ||
                     (u.Name != null && u.Name.Contains(filter)) ||
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
@@ -268,7 +280,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
-    
+
     public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
         Guid organizationUnitId,
         CancellationToken cancellationToken = default)
@@ -299,7 +311,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .Where(ou => ou.Code.StartsWith(code))
             .Select(ou => ou.Id)
             .ToListAsync(cancellationToken);
- 
+
         return await (await GetMongoQueryableAsync(cancellationToken))
                  .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
                  .ToListAsync(cancellationToken);
@@ -359,5 +371,32 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         }
 
         await UpdateManyAsync(users, cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
+        IEnumerable<Guid> userIds,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+
+        var userAndRoleIds = (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+            .Where(u => userIds.Contains(u.Id))
+            .SelectMany(u => u.Roles)
+            .Select(userRole => new
+            {
+                userRole.UserId,
+                userRole.RoleId
+            }).GroupBy(x => x.UserId).ToDictionary(x => x.Key, x => x.Select(r => r.RoleId).ToList());
+
+        var roleIds = userAndRoleIds.SelectMany(x => x.Value);
+        var roles = await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken)).Where(r => roleIds.Contains(r.Id)).Select(r => new
+        {
+            r.Id,
+            r.Name
+        }).ToListAsync(cancellationToken);
+
+        var result = userAndRoleIds.ToDictionary(x => x.Key, x => roles.Where(r => x.Value.Contains(r.Id)).Select(r => r.Name).ToArray());
+
+        return result.Select(x => new IdentityUserIdWithRoleNames() { Id = x.Key, RoleNames = x.Value }).ToList();
     }
 }

@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.AspNetCore.Authentication.JwtBearer</AssemblyName>
@@ -18,10 +18,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="IdentityModel" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import { Component, Injector, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';

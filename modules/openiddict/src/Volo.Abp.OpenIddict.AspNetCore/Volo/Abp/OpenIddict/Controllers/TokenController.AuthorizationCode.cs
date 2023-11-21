@@ -14,6 +14,7 @@ public partial class TokenController
     {
         // Retrieve the claims principal stored in the authorization code/device code/refresh token.
         var principal = (await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)).Principal;
+        principal = await AbpClaimsPrincipalFactory.CreateDynamicAsync(principal);
         using (CurrentTenant.Change(principal.FindTenantId()))
         {
             // Retrieve the user profile corresponding to the authorization code/refresh token.

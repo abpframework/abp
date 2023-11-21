@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
+using Volo.Abp.Cli.ProjectBuilding.Templates;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building;
 
@@ -29,7 +30,14 @@ public abstract class TemplateInfo
 
     public virtual IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        return Array.Empty<ProjectBuildPipelineStep>();
+        var steps = new List<ProjectBuildPipelineStep>();
+        ConfigureCheckPreRequirements(context, steps);
+        return steps;
+    }
+
+    protected void ConfigureCheckPreRequirements(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new CheckRedisPreRequirements());
     }
 
     public bool IsPro()

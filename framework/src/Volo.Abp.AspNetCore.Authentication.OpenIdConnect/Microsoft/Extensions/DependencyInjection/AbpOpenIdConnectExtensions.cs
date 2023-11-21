@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.Security.Claims;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +25,16 @@ public static class AbpOpenIdConnectExtensions
 
     public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<OpenIdConnectOptions> configureOptions)
     {
+        builder.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            var openIdConnectOptions = new OpenIdConnectOptions();
+            configureOptions?.Invoke(openIdConnectOptions);
+            if (!openIdConnectOptions.Authority.IsNullOrEmpty())
+            {
+                options.RemoteRefreshUrl = openIdConnectOptions.Authority.RemovePostFix("/") + options.RemoteRefreshUrl;
+            }
+        });
+
         return builder.AddOpenIdConnect(authenticationScheme, displayName, options =>
         {
             options.ClaimActions.MapAbpClaimTypes();
@@ -38,7 +49,7 @@ public static class AbpOpenIdConnectExtensions
             };
 
             options.AccessDeniedPath = "/";
-            
+
             options.Events.OnTokenValidated = async (context) =>
             {
                 var client = context.HttpContext.RequestServices.GetRequiredService<IOpenIdLocalUserCreationClient>();

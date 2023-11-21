@@ -21,20 +21,20 @@ public abstract class
 
     public bool LabelTooltipHtml { get; set; } = false;
 
-    [HtmlAttributeName("info")] 
+    [HtmlAttributeName("info")]
     public string? InfoText { get; set; }
 
-    [HtmlAttributeName("disabled")] 
+    [HtmlAttributeName("disabled")]
     public bool IsDisabled { get; set; } = false;
 
-    [HtmlAttributeName("readonly")] 
+    [HtmlAttributeName("readonly")]
     public bool? IsReadonly { get; set; } = false;
 
     public bool AutoFocus { get; set; }
 
     public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;
 
-    [HtmlAttributeName("required-symbol")] 
+    [HtmlAttributeName("required-symbol")]
     public bool DisplayRequiredSymbol { get; set; } = true;
 
     public string? Name { get; set; }
@@ -43,11 +43,13 @@ public abstract class
 
     public bool SuppressLabel { get; set; }
 
+    public bool AddMarginBottomClass  { get; set; } = true;
+
     protected AbpDatePickerBaseTagHelper(AbpDatePickerBaseTagHelperService<TTagHelper> service) : base(service)
     {
         _abpDatePickerOptionsImplementation = new AbpDatePickerOptions();
     }
-    
+
     public void SetDatePickerOptions(IAbpDatePickerOptions options)
     {
         _abpDatePickerOptionsImplementation = options;

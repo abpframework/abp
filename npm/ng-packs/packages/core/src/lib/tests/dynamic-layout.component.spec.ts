@@ -36,7 +36,6 @@ const LAYOUTS = [
 @NgModule({
   imports: [RouterModule],
   declarations: [...LAYOUTS],
-  entryComponents: [...LAYOUTS],
 })
 class DummyLayoutModule {}
 

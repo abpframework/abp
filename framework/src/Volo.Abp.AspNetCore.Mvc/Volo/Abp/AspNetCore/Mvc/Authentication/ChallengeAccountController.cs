@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -61,12 +61,12 @@ public abstract class ChallengeAccountController : AbpController
     }
 
     [HttpGet]
-    public virtual Task<IActionResult> AccessDenied(string returnUrl = "", string returnUrlHash = "")
+    public virtual Task<IActionResult> AccessDenied()
     {
         return Task.FromResult<IActionResult>(Challenge(
             new AuthenticationProperties
             {
-                RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)
+                RedirectUri = "/"
             },
             (ForbidSchemes.IsNullOrEmpty()
                 ? new[]

@@ -197,33 +197,20 @@ namespace AbpDemo
 
 这个类订阅 `EntityCreatedEventData<IdentityUser>`,它在用户创建后发布. 你可能需要向新用户发送一封"欢迎"电子邮件.
 
-这些事件有两种类型:过去时态的事件和进行时态的事件.
-
-### 用过去时态事件
-
-当相关工作单元完成且实体更改成功保存到数据库时,将发布带有过去时态的事件. 如果在这些事件处理程序上抛出异常,则**无法回滚**事务,因为事务已经提交.
-
-事件类型;
+有以下预定义的事件类型;
 
 * `EntityCreatedEventData<T>` 当实体创建成功后发布.
 * `EntityUpdatedEventData<T>` 当实体更新成功后发布.
 * `EntityDeletedEventData<T>` 当实体删除成功后发布.
 * `EntityChangedEventData<T>` 当实体创建,更新,删除后发布. 如果你需要监听任何类型的更改,它是一种快捷方式 - 而不是订阅单个事件.
 
-### 用于进行时态事件
-
-带有进行时态的事件在完成事务之前发布(如果数据库事务由所使用的数据库提供程序支持). 如果在这些事件处理程序上抛出异常,它**会回滚**事务,因为事务还没有完成,更改也没有保存到数据库中.
-
-事件类型;
-
-* `EntityCreatingEventData<T>` 当新实体保存到数据库前发布.
-* `EntityUpdatingEventData<T>` 当已存在实体更新到数据库前发布.
-* `EntityDeletingEventData<T>` 删除实体前发布.
-* `EntityChangingEventData<T>` 当实体创建,更新,删除前发布. 如果你需要监听任何类型的更改,它是一种快捷方式 - 而不是订阅单个事件.
-
-#### 它是如何实现的?
+### 它是如何实现的?
 
 在将更改保存到数据库时发布预构建事件;
 
 * 对于 EF Core, 他们在 `DbContext.SaveChanges` 发布.
 * 对于 MongoDB, 在你调用仓储的 `InsertAsync`, `UpdateAsync` 或 `DeleteAsync` 方法发布(因为MongoDB没有更改追踪系统).
+
+## 另请参阅
+
+* [分布式事件总线](Distributed-Event-Bus.md)

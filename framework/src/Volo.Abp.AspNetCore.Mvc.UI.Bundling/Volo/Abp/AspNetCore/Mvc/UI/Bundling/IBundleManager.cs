@@ -5,7 +5,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 public interface IBundleManager
 {
-    Task<IReadOnlyList<string>> GetStyleBundleFilesAsync(string bundleName);
+    Task<IReadOnlyList<BundleFile>> GetStyleBundleFilesAsync(string bundleName);
 
-    Task<IReadOnlyList<string>> GetScriptBundleFilesAsync(string bundleName);
+    Task<IReadOnlyList<BundleFile>> GetScriptBundleFilesAsync(string bundleName);
 }
