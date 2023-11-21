@@ -55,11 +55,11 @@ Here is a brief list of titles explained in the next sections:
 
 ### Upgraded to .NET 8.0
 
-We've upgraded the ABP Framework to .NET 8.0, so you need to move your solutions to .NET 8.0 if you want to use ABP 8.0. You can check the [Microsoft’s Migrate from ASP.NET Core 7.0 to 8.0 documentation](https://learn.microsoft.com/en-us/aspnet/core/migration/70-80), to see how to update an existing ASP.NET Core 7.0 project to ASP.NET Core 8.0.
+We've upgraded the ABP Framework to .NET 8.0, so you need to move your solutions to .NET 8.0 if you want to use ABP 8.0. You can check [Microsoft’s Migrate from ASP.NET Core 7.0 to 8.0 documentation](https://learn.microsoft.com/en-us/aspnet/core/migration/70-80), to see how to update an existing ASP.NET Core 7.0 project to ASP.NET Core 8.0.
 
 ### Upgraded to Angular 17
 
-Angular 17 [has been released on November 8](https://blog.angular.io/introducing-angular-v17-4d7033312e4b) and ABP Framework & ABP Commercial startup templates are immediately migrated to **Angular 17**! 
+Angular 17 [was released on November 8](https://blog.angular.io/introducing-angular-v17-4d7033312e4b) and ABP Framework & ABP Commercial startup templates were immediately migrated to **Angular 17**! 
 
 So, when you create a new solution with the Angular UI, you will take advantage of the new Angular with the new cutting-edge features and enhancements right from the start!
 
@@ -67,7 +67,7 @@ So, when you create a new solution with the Angular UI, you will take advantage 
 
 The **Dynamic Claims** feature is used to dynamically generate claims for the user in each request. It's used to automatically and dynamically override the configured claim values in the client's authentication token/cookie by the latest user claims.
 
-In the prior versions, whenever a user changes its email address or confirm own email address, or any other information related to user and also being in user claims, he/she would need to logout and then login to refresh its claims. The new **Dynamic Claims** feature overcomes this problem and allows to **always get the latest user claims**.
+In the prior versions, whenever a user changed their email address or confirmed their own email address, or any other information related to the user (and if it's in the claims), he/she would need to logout and then login to refresh its claims. The new **Dynamic Claims** feature overcomes this problem and allows to **always get the latest user claims**.
 
 This feature is disabled by default and you can enable it easily for your existing MVC applications by following the [Dynamic Claims documentation](https://docs.abp.io/en/abp/8.0/Dynamic-Claims). For the other UI options (Angular & Blazor UIs), you don't need to enable this feature, since they obtain claims ftom a configuration endpoint.
 
@@ -75,13 +75,13 @@ This feature is disabled by default and you can enable it easily for your existi
 
 ### CDN Support for Bundling & Minification System
 
-In this version, ABP Framework's [Bundling & Minification System](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification) provides CDN support for MVC / Razor Pages UI. The bundling system automatically recognizes the external/CDN files and places them as link/script tags into the page along with the bundled CSS/JSS files.
+In this version, ABP Framework's [Bundling & Minification System](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification) provides CDN support for MVC / Razor Pages UI. The bundling system automatically recognizes the external/CDN files and places them as link/script tags on the page along with the bundled CSS/JSS files.
 
 > Read the documentation for more info: https://docs.abp.io/en/abp/8.0/UI/AspNetCore/Bundling-Minification
 
 ### Read-Only Repositories
 
-ABP Framework provides read-only repository interfaces (`IReadOnlyRepository<>` or `IReadOnlyBasicRepository<>`) to explicitly indicate that your purpose is to query data, but not change it. It uses [EF Core's No-Tracking Feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries) behind the scene, and that means the entities returned from the repository will not be tracked by the EF Core's [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/) and thanks to that you get significant performance gains.
+ABP Framework provides read-only repository interfaces (`IReadOnlyRepository<>` or `IReadOnlyBasicRepository<>`) to explicitly indicate that your purpose is to query data, but not change it. It uses [EF Core's No-Tracking Feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries) behind the scenes, which means the entities returned from the repository will not be tracked by the EF Core's [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/) and thanks to that you get significant performance gains.
 
 ```csharp
 public class MyService
@@ -97,13 +97,13 @@ public class MyService
 }
 ```
 
-> In addition to the read-only repository interfaces, ABP Framework introduces the `IRepository.DisableTracking()` and `IRepository.EnableTracking()` extension methods to allow developers to disable/enable entity tracking by these methods manually. If you don't want to use the read-only repositories, you can use these methods to enable or disable the change tracker controlly. You can check this issue to learn more: [https://github.com/abpframework/abp/issues/17487](https://github.com/abpframework/abp/issues/17487).
+> In addition to the read-only repository interfaces, ABP Framework introduces the `IRepository.DisableTracking()` and `IRepository.EnableTracking()` extension methods to allow developers to disable/enable entity tracking by these methods manually. If you don't want to use the read-only repositories, you can use these methods to enable or disable the change tracker controlled. You can check this issue to learn more: [https://github.com/abpframework/abp/issues/17487](https://github.com/abpframework/abp/issues/17487).
 
 ### Account Module: Set Username After Social/External Login
 
-Prior to this version, when you register with your social accounts in the first time, your email address was becoming your username and it was shown everywhere in the application. Therefore, you would need to update your username later on and this is not a good user experience.
+Prior to this version, when you registered with your social accounts for the first time, your email address was becoming your username and it was shown everywhere in the application. Therefore, you would need to update your username later on and this is not a good user experience.
 
-Thus, in this version, we have enhanced this flow and now, when you register as an external user in the first time, a username and email address shown you in a form for you to revise and update if you want, before login into the application. Thanks to that, after the social registration you would not need to update your username and email address. This is also good at the point of GDPR regulations because your email address will not be shown as username and will not exposed, unless you make it so :)
+Thus, in this version, we have enhanced this flow, and now, when you register as an external user for the first time, a username and email address are shown you in a form for you to revise and update if you want, before logging into the application. Thanks to that, after the social registration you would not need to update your username and email address. This is also good at the point of GDPR regulations because your email address will not be shown as a username and will not exposed.
 
 ![](account-module-register.png)
 
@@ -111,15 +111,15 @@ Thus, in this version, we have enhanced this flow and now, when you register as 
 
 * LDAP over SSL (LDAPS) setting has been added and recommended to establish a secure connection. See [#17865](https://github.com/abpframework/abp/pull/17865) for more information.
 * Object Mapping Enhancements (supports mapping collection of objects for custom object mappers). 
-* Email Sending Improvements (sending attachements with `IEmailSender.QueueAsync()` method).
+* Email Sending Improvements (sending attachments with `IEmailSender.QueueAsync()` method).
 
 ## What's New with ABP Commercial 8.0?
 
-We've also worked on ABP Commercal to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 8.0.
+We've also worked on ABP Commercial to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 8.0.
 
 ### Suite: Generating Master/Detail Relationship
 
-In this version, we have introduced the **Master/Detail Relationship** support in Suite. The Master-Detail (or Master-Child) relationship refers to a hierarchical connection between two entities, where one entity (the master or parent entity) influences or controls the behavior or properties of another element (the child entity) relationship. The relationship between **Order - Order Lines** and  can be considered as examples of a master-detail relationship.
+In this version, we have introduced the **Master/Detail Relationship** support in Suite. The Master-Detail (or Master-Child) relationship refers to a hierarchical connection between two entities, where one entity (the master or parent entity) influences or controls the behavior or properties of another element (the child entity) relationship. The relationship between **Order - Order Lines**  can be considered as an example of a master-detail relationship.
 
 ![](suite-master-child-datagrid.png)
 
@@ -130,25 +130,26 @@ To establish a master-detail relationship, you need to apply the following two s
 1-) Create the master entity,
 2-) Create a child entity and associate it with a master entity.
 
-That's it! ABP Suite will be generating the entities, making the related configurations, establishing database relations (including the foreign key relationship), generate the UI for the master entity (with child-grids for child entities) and so on...
+That's it! ABP Suite will be generating the entities, making the related configurations, establishing database relations (including the foreign key relationship), generating the UI for the master entity (with child-grids for child entities), and so on...
 
 It’s already documented and you can read the documentation at [https://docs.abp.io/en/commercial/8.0/abp-suite/creating-master-detail-relationship](https://docs.abp.io/en/commercial/8.0/abp-suite/creating-master-detail-relationship).
 
 #### Known Issues
 
-* After you generated CRUD pages via Suite for the Angular UI, you should start the backend project and run the `abp generate-proxy -t ng` command in the root directory of the angular application manually. This is a known issue and it will be automatically done with the next version, so you would not need to run the command manually in the further versions.
+* After you generate CRUD pages via Suite for the Angular UI, you should start the backend project and run the `abp generate-proxy -t ng` command in the root directory of the Angular application manually. It will be automatically done with the next version, so you will not need to run the command manually in further versions.
 
 ### Get Profile Picture From Social/External Logins
 
-When a user register to an application with a social account in the first time via an external authentication provider such as Google or Facebook, his/her profile picture would be empty, because it wouldn't been configured yet. Therefore, after logged into the application, the user needs to change the profile picture. 
+A user's profile picture would be blank when they first register for an application using a social account through an external authentication provider like Google or Facebook because it hasn't been configured yet. The user must update their profile photo after logging into the application.
 
-In this version, we enhanced this behaviour and now, we are trying to get the profile picture from the external authentication providers (for example, Google) and set it as the profile picture of the user, so the user would not need to change the profile picture after his/her first login to the application. If he/she wants then can change the profile picture later on and in the meantime, profile picture shown as same with the external authentication provider's.
+
+In order to save the user from having to change their profile picture after logging in for the first time, we have improved this behavior in this version and are now attempting to retrieve the user's profile picture from external authentication providers (like Google) and set it as their profile picture. Later on, if desired, he or she might modify the profile image.
 
 ### Switch Ocelot to YARP for the API Gateway
 
-Until this version, ABP Commercial was using the [Ocelot](https://github.com/ThreeMammals/Ocelot) for the API Gateway, in the [Microservice Startup Template](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index). Since the **Ocelot** library does not actively maintained, we have searched for an alternative and decided to switch from Ocelot to [YARP](https://github.com/microsoft/reverse-proxy) for the API Gateway. YARP maintains by Microsoft and actively being developed and seemed a better alternative than Ocelot and provide the same feature stack and even more.
+Until this version, ABP Commercial was using the [Ocelot](https://github.com/ThreeMammals/Ocelot) for the API Gateway, in the [Microservice Startup Template](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index). Since the **Ocelot** library is not actively maintained, we have searched for an alternative and decided to switch from Ocelot to [YARP](https://github.com/microsoft/reverse-proxy) for the API Gateway. YARP is maintained by Microsoft and is actively being developed and seems a better alternative than Ocelot and provides the same feature stack and even more.
 
-> We have made the all related changes in the Microservice Startup Template, and also update the documentation, which you can read [here](https://docs.abp.io/en/commercial/8.0/startup-templates/microservice/gateways).
+> We have made the all related changes in the Microservice Startup Template, and also updated the documentation, which you can read [here](https://docs.abp.io/en/commercial/8.0/startup-templates/microservice/gateways).
 
 ### Password Complexity Indicators (MVC & Blazor UIs)
 
@@ -158,15 +159,15 @@ In v7.4, we have introduced the [Password Complexity Indicators for Angular UI](
 
 ### Read-Only View for Users Page
 
-In your application, you may want to grant permission to a specific group or people to read-only view the users of your application to be able to do some actions. For example, you may want to marketing team to see the users to organize campaigns for the customers, or make controls. In this case, you can grant default permissions for these groups, however, they could not see the detail of a user, because in the current design, if the edit permission is not granted you can't see the detailed info for a user.
+In your application, you may want to grant permission to a specific group or people to read-only view the users of your application to be able to do some actions. For example, you may want to marketing team to see the users to organize campaigns for the customers, or make controls. In this case, you can grant default permissions for these groups, however, they could not see the details of a user, because in the current design, if the edit permission is not granted you can't see the detailed info for a user.
 
 ![](identity-users.gif)
 
-In this version, we have added the read-only view action to users page. This allows you to only grant the default view permission to the specific users and allow them to view user informations as read-only and don't allow them to change or modify it.
+In this version, we have added the read-only view action to the user's page. This allows you to only grant the default view permission to the specific users and allow them to view user information as read-only and not allow them to change or modify it.
 
 ### Export & Import Users as Excel / CSV
 
-With v8.0, now it's possible to import and export user records in the Excel and CSV formats. You can import external users, or import users from an Excel or CSV files and also, you can export users to a Excel or CSV files:
+With v8.0, now it's possible to import and export user records in Excel and CSV formats. You can import external users, or import users from Excel or CSV files and also you can export users to Excel or CSV files:
 
 ![](users-page.png)
 
@@ -198,7 +199,7 @@ Thanks to the ABP Community for all the content they have published. You can als
 
 Microsoft has released .NET 8.0 and celebrated it with a 3-day international online conference. The core team members of ABP Framework, [Alper Ebiçoğlu](https://twitter.com/alperebicoglu) and [Enis Necipoğlu](https://twitter.com/EnisNecipoglu) gave speeches at the .NET Conf 2023.
 
-[Alper Ebiçoğlu](https://twitter.com/alperebicoglu)'s topic was "Building Multi-Tenant ASP.NET Core Applications and ABP Framework" and in this talk, he talked about what's saas development, what are its pros and challenges and multi-tenant development with the open-source ABP Framework:
+[Alper Ebiçoğlu](https://twitter.com/alperebicoglu)'s topic was "Building Multi-Tenant ASP.NET Core Applications and ABP Framework" and in this talk, he talked about what's SaaS development, what are its pros and challenges and multi-tenant development with the open-source ABP Framework:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/3uWeyEbV4c4?si=XuU8-QJs2w5j6Inp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
