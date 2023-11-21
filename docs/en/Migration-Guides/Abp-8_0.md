@@ -244,7 +244,7 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | NSubstitute | 4.3.0 |  5.1.0 |
 | NuGet.Versioning | 5.11.0 |  6.7.0 |
 | NUglify | 1.20.0 |  1.21.0 |
-| Npgsql.EntityFrameworkCore.PostgreSQL | 7.0.0 |  8.0.0-rc.2 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 7.0.0 |  8.0.0 |
 | NSubstitute.Analyzers.CSharp | 1.0.15 |  1.0.16 |
 | Octokit | 0.50.0 |  9.0.0 |
 | OpenIddict.Abstractions | 4.8.0 |  4.10.0 |
