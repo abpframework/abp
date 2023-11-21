@@ -59,6 +59,8 @@ When maximum performance is needed (complex queries, very frequent queries,...),
 * [Microsoft ASP.NET Core Best Practices](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/best-practices) covers most topics regarding performance.
 Best Practices is part of [Microsoft ASP.NET Core Performance](https://learn.microsoft.com/en-us/aspnet/core/performance/overview) documentation.
 
+* Use [Cached Service Providers](https://docs.abp.io/en/abp/latest/Dependency-Injection#cached-service-providers) (ICachedServiceProvider or ITransientCachedServiceProvider) to optimize dependency injection.
+
 * For computationally intensive tasks, which can leverage parallel code use [Task Parallel Library](https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/task-parallel-library-tpl) (TPL) from Microsoft (available from .NET Framework 4.0 onwards).
 
 # Frontend
