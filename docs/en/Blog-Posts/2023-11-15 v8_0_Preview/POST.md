@@ -30,7 +30,7 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 > You can also use the [Get Started](https://abp.io/get-started) page to generate a CLI command to create a new application.
 
-You can use any IDE that supports .NET 7.x, like [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
+You can use any IDE that supports .NET 8.x, like [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
 
 ## Migration Guides
 
@@ -42,11 +42,90 @@ Please see the following migration documents, if you are upgrading from v7.x or 
 
 ## What's New with ABP Framework 8.0?
 
-//TODO: write the section!!!
+In this section, I will introduce some major features released in this version.
+Here is a brief list of titles explained in the next sections:
+
+* Upgraded to .NET 8.0
+* Upgraded to Angular 17
+* Dynamic Claims
+* CDN Support for Bundling & Minification System
+* Read-Only Repositories
+* Account Module: Set Username After Social/External Login
+* Other News...
+
+### Upgraded to .NET 8.0
+
+We've upgraded the ABP Framework to .NET 8.0, so you need to move your solutions to .NET 8.0 if you want to use ABP 8.0. You can check the [Microsoft’s Migrate from ASP.NET Core 7.0 to 8.0 documentation](https://learn.microsoft.com/en-us/aspnet/core/migration/70-80), to see how to update an existing ASP.NET Core 7.0 project to ASP.NET Core 8.0.
+
+### Upgraded to Angular 17
+
+Angular 17 [has been released on November 8](https://blog.angular.io/introducing-angular-v17-4d7033312e4b) and ABP Framework & ABP Commercial startup templates are immediately migrated to **Angular 17**! 
+
+So, when you create a new solution with the Angular UI, you will take advantage of the new Angular with the new cutting-edge features and enhancements right from the start!
+
+### Dynamic Claims
+
+The **Dynamic Claims** feature is used to dynamically generate claims for the user in each request. It's used to automatically and dynamically override the configured claim values in the client's authentication token/cookie by the latest user claims.
+
+In the prior versions, whenever a user changes its email address or confirm own email address, or any other information related to user and also being in user claims, he/she would need to logout and then login to refresh its claims. The new **Dynamic Claims** feature overcomes this problem and allows to **always get the latest user claims**.
+
+This feature is disabled by default and you can enable it easily for your existing MVC applications by following the [Dynamic Claims documentation](https://docs.abp.io/en/abp/8.0/Dynamic-Claims). For the other UI options (Angular & Blazor UIs), you don't need to enable this feature, since they obtain claims ftom a configuration endpoint.
+
+> **Note**: Beginning from the v8.0, all the startup templates are pre-configured and the **Dynamic Claims** feature is enabled by default.
+
+### CDN Support for Bundling & Minification System
+
+In this version, ABP Framework's [Bundling & Minification System](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification) provides CDN support for MVC / Razor Pages UI. The bundling system automatically recognizes the external/CDN files and places them as link/script tags into the page along with the bundled CSS/JSS files.
+
+> Read the documentation for more info: https://docs.abp.io/en/abp/8.0/UI/AspNetCore/Bundling-Minification
+
+### Read-Only Repositories
+
+ABP Framework provides read-only repository interfaces (`IReadOnlyRepository<>` or `IReadOnlyBasicRepository<>`) to explicitly indicate that your purpose is to query data, but not change it. It uses [EF Core's No-Tracking Feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries) behind the scene, and that means the entities returned from the repository will not be tracked by the EF Core's [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/) and thanks to that you get significant performance gains.
+
+```csharp
+public class MyService
+{
+   private readonly IReadOnlyRepository<Book, Guid> _bookRepository;
+
+   public async Task MyMethod()
+   {
+      var books = await _bookRepository.GetListAsync(); //change tracking not involved
+
+      //...
+   }
+}
+```
+
+> In addition to the read-only repository interfaces, ABP Framework introduces the `IRepository.DisableTracking()` and `IRepository.EnableTracking()` extension methods to allow developers to disable/enable entity tracking by these methods manually. If you don't want to use the read-only repositories, you can use these methods to enable or disable the change tracker controlly. You can check this issue to learn more: [https://github.com/abpframework/abp/issues/17487](https://github.com/abpframework/abp/issues/17487).
+
+### Account Module: Set Username After Social/External Login
+
+Prior to this version, when you register with your social accounts in the first time, your email address was becoming your username and it was shown everywhere in the application. Therefore, you would need to update your username later on and this is not a good user experience.
+
+Thus, in this version, we have enhanced this flow and now, when you register as an external user in the first time, a username and email address shown you in a form for you to revise and update if you want, before login into the application. Thanks to that, after the social registration you would not need to update your username and email address. This is also good at the point of GDPR regulations because your email address will not be shown as username and will not exposed, unless you make it so :)
+
+![](account-module-register.png)
+
+### Other News
+
+* LDAP over SSL (LDAPS) setting has been added and recommended to establish a secure connection. See [#17865](https://github.com/abpframework/abp/pull/17865) for more information.
+* Object Mapping Enhancements (supports mapping collection of objects for custom object mappers). 
+* Email Sending Improvements (sending attachements with `IEmailSender.QueueAsync()` method).
 
 ## What's New with ABP Commercial 8.0?
 
+We've also worked on ABP Commercal to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 8.0.
+
 //TODO: write the section!!!
+
+### Suite: Generating Master/Detail Relationship
+
+//TODO:
+
+#### Known Issues
+
+* After you generated CRUD pages via Suite for the Angular UI, you should start the backend project and run the `abp generate-proxy -t ng` command in the root directory of the angular application manually. This is a known issue and it will be automatically done with the next version, so you would not need to run the command manually in the further versions.
 
 ## Community News
 
@@ -78,17 +157,17 @@ Microsoft has released .NET 8.0 and celebrated it with a 3-day international onl
 
 [Alper Ebiçoğlu](https://twitter.com/alperebicoglu)'s topic was "Building Multi-Tenant ASP.NET Core Applications and ABP Framework" and in this talk, he talked about what's saas development, what are its pros and challenges and multi-tenant development with the open-source ABP Framework:
 
-![](dotnet-conf-alper-ebicoglu.png)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3uWeyEbV4c4?si=XuU8-QJs2w5j6Inp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 On the other hand, [Enis Necipoğlu](https://twitter.com/EnisNecipoglu)'s topic was "Reactive programming with .NET MAUI" and he talked about applying reactive programming in .NET MAUI with MVVM and ReactiveUI:
 
-![](dotnet-conf-enis-necipoglu.png)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/i0EFuRF2u-w?si=wPTSDxtbfkzMF5CN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ### ABP Community Talks 2023.8: What’s coming with .NET 8.0 & ABP v8.0
 
 ![](community-talk-2023-8.png)
 
-In this episode of ABP Community Talks, 2023.8; we'll talk about .NET 8.0 and ABP 8.0 with the ABP Core Team. We will dive into the features that came with .NET 8.0, how they are implemented in ABP 8.0, and the highlights in the .NET Conf 2023 with [Halil İbrahim Kalkan](https://github.com/hikalkan), [Alper Ebicoglu](https://github.com/ebicoglu), [Engincan Veske](https://github.com/EngincanV), [Berkan Sasmaz](https://github.com/berkansasmaz) and [Bige Besikci Yaman](https://github.com/bigebesikci).
+In this episode of ABP Community Talks, 2023.8; [Steve Sanderson](https://twitter.com/stevensanderson) will be our guest speaker and we'll talk about .NET 8.0 and ABP 8.0 with the ABP Core Team. We will dive into the features that came with .NET 8.0, how they are implemented in ABP 8.0, and the highlights in the .NET Conf 2023 with [Halil İbrahim Kalkan](https://github.com/hikalkan), [Alper Ebicoglu](https://github.com/ebicoglu), [Engincan Veske](https://github.com/EngincanV), [Berkan Sasmaz](https://github.com/berkansasmaz) and [Bige Besikci Yaman](https://github.com/bigebesikci).
 
 ## Conclusion
 
