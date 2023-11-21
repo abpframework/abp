@@ -117,15 +117,58 @@ Thus, in this version, we have enhanced this flow and now, when you register as 
 
 We've also worked on ABP Commercal to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 8.0.
 
-//TODO: write the section!!!
-
 ### Suite: Generating Master/Detail Relationship
 
-//TODO:
+In this version, we have introduced the **Master/Detail Relationship** support in Suite. The Master-Detail (or Master-Child) relationship refers to a hierarchical connection between two entities, where one entity (the master or parent entity) influences or controls the behavior or properties of another element (the child entity) relationship. The relationship between **Order - Order Lines** and  can be considered as examples of a master-detail relationship.
+
+![](suite-master-child-datagrid.png)
+
+ABP Suite allows you to create a master-detail relationship with a few clicks. It generates the necessary code for the master and detail tables, including the foreign key relationship between the two tables.
+
+To establish a master-detail relationship, you need to apply the following two steps:
+
+1-) Create the master entity,
+2-) Create a child entity and associate it with a master entity.
+
+That's it! ABP Suite will be generating the entities, making the related configurations, establishing database relations (including the foreign key relationship), generate the UI for the master entity (with child-grids for child entities) and so on...
+
+It’s already documented and you can read the documentation at [https://docs.abp.io/en/commercial/8.0/abp-suite/creating-master-detail-relationship](https://docs.abp.io/en/commercial/8.0/abp-suite/creating-master-detail-relationship).
 
 #### Known Issues
 
 * After you generated CRUD pages via Suite for the Angular UI, you should start the backend project and run the `abp generate-proxy -t ng` command in the root directory of the angular application manually. This is a known issue and it will be automatically done with the next version, so you would not need to run the command manually in the further versions.
+
+### Get Profile Picture From Social/External Logins
+
+When a user register to an application with a social account in the first time via an external authentication provider such as Google or Facebook, his/her profile picture would be empty, because it wouldn't been configured yet. Therefore, after logged into the application, the user needs to change the profile picture. 
+
+In this version, we enhanced this behaviour and now, we are trying to get the profile picture from the external authentication providers (for example, Google) and set it as the profile picture of the user, so the user would not need to change the profile picture after his/her first login to the application. If he/she wants then can change the profile picture later on and in the meantime, profile picture shown as same with the external authentication provider's.
+
+### Switch Ocelot to YARP for the API Gateway
+
+Until this version, ABP Commercial was using the [Ocelot](https://github.com/ThreeMammals/Ocelot) for the API Gateway, in the [Microservice Startup Template](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index). Since the **Ocelot** library does not actively maintained, we have searched for an alternative and decided to switch from Ocelot to [YARP](https://github.com/microsoft/reverse-proxy) for the API Gateway. YARP maintains by Microsoft and actively being developed and seemed a better alternative than Ocelot and provide the same feature stack and even more.
+
+> We have made the all related changes in the Microservice Startup Template, and also update the documentation, which you can read [here](https://docs.abp.io/en/commercial/8.0/startup-templates/microservice/gateways).
+
+### Password Complexity Indicators (MVC & Blazor UIs)
+
+In v7.4, we have introduced the [Password Complexity Indicators for Angular UI](https://docs.abp.io/en/commercial/7.4/ui/angular/password-complexity-indicator-component) and with this version, we have implemented it for the MVC & Blazor UIs as well. You can use this feature to dynamically evaluate and rate the strength of user-generated passwords, providing real-time feedback to users as they create or update their passwords.
+
+![](password-complexity-indicators.png)
+
+### Read-Only View for Users Page
+
+In your application, you may want to grant permission to a specific group or people to read-only view the users of your application to be able to do some actions. For example, you may want to marketing team to see the users to organize campaigns for the customers, or make controls. In this case, you can grant default permissions for these groups, however, they could not see the detail of a user, because in the current design, if the edit permission is not granted you can't see the detailed info for a user.
+
+![](identity-users.gif)
+
+In this version, we have added the read-only view action to users page. This allows you to only grant the default view permission to the specific users and allow them to view user informations as read-only and don't allow them to change or modify it.
+
+### Export & Import Users as Excel / CSV
+
+With v8.0, now it's possible to import and export user records in the Excel and CSV formats. You can import external users, or import users from an Excel or CSV files and also, you can export users to a Excel or CSV files:
+
+![](users-page.png)
 
 ## Community News
 
