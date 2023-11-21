@@ -210,3 +210,7 @@ namespace AbpDemo
 
 * 对于 EF Core, 他们在 `DbContext.SaveChanges` 发布.
 * 对于 MongoDB, 在你调用仓储的 `InsertAsync`, `UpdateAsync` 或 `DeleteAsync` 方法发布(因为MongoDB没有更改追踪系统).
+
+## 另请参阅
+
+* [分布式事件总线](Distributed-Event-Bus.md)
