@@ -12,11 +12,13 @@ public class AbpClaimsPrincipalFactoryOptions
 
     public List<string> DynamicClaims { get; }
 
+    public bool IsRemoteRefreshEnabled { get; set; }
+
     public string RemoteRefreshUrl { get; set; }
 
     public Dictionary<string, List<string>> ClaimsMap { get; set; }
 
-    public bool IsDynamicClaimsEnabled  { get; set; }
+    public bool IsDynamicClaimsEnabled { get; set; }
 
     public AbpClaimsPrincipalFactoryOptions()
     {
@@ -36,6 +38,7 @@ public class AbpClaimsPrincipalFactoryOptions
         };
 
         RemoteRefreshUrl = "/api/account/dynamic-claims/refresh";
+        IsRemoteRefreshEnabled = true;
 
         ClaimsMap = new Dictionary<string, List<string>>()
         {

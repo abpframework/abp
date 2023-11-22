@@ -244,7 +244,7 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | NSubstitute | 4.3.0 |  5.1.0 |
 | NuGet.Versioning | 5.11.0 |  6.7.0 |
 | NUglify | 1.20.0 |  1.21.0 |
-| Npgsql.EntityFrameworkCore.PostgreSQL | 7.0.0 |  8.0.0-rc.2 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 7.0.0 |  8.0.0 |
 | NSubstitute.Analyzers.CSharp | 1.0.15 |  1.0.16 |
 | Octokit | 0.50.0 |  9.0.0 |
 | OpenIddict.Abstractions | 4.8.0 |  4.10.0 |
@@ -254,14 +254,14 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | OpenIddict.Validation.ServerIntegration | 4.8.0 |  4.10.0 |
 | Oracle.EntityFrameworkCore | 7.21.8 |  7.21.12 |
 | Polly | 7.2.3 |  8.2.0 |
-| Pomelo.EntityFrameworkCore.MySql | 7.0.0 |  8.0.0-beta.1 |
+| Pomelo.EntityFrameworkCore.MySql | 7.0.0 |  8.0.0-beta.2 |
 | Quartz | 3.4.0 |  3.7.0 |
 | Quartz.Extensions.DependencyInjection | 3.4.0 |  3.7.0 |
 | Quartz.Plugins.TimeZoneConverter | 3.4.0 |  3.7.0 |
 | Quartz.Serialization.Json | 3.3.3 |  3.7.0 |
 | RabbitMQ.Client | 6.3.0 |  6.6.0 |
-| Rebus | 6.6.5 |  7.2.1 |
-| Rebus.ServiceProvider | 7.0.0 |  9.1.0 |
+| Rebus | 6.6.5 |  8.0.1 |
+| Rebus.ServiceProvider | 7.0.0 |  10.0.0 |
 | Scriban | 5.4.4 |  5.9.0 |
 | Serilog | 2.11.0 |  3.1.1 |
 | Serilog.AspNetCore | 5.0.0 |  8.0.0 |

@@ -53,6 +53,16 @@ public class MongoOrganizationUnitRepository
                 .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<OrganizationUnit>> GetListByRoleIdAsync(
+        Guid roleId,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => x.Roles.Any(r => r.RoleId == roleId))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<OrganizationUnit>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
@@ -178,6 +188,14 @@ public class MongoOrganizationUnitRepository
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.UserName) : sorting)
             .As<IMongoQueryable<IdentityUser>>()
             .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
+            .ToListAsync(cancellationToken);
+    }
+
+    public virtual async Task<List<Guid>> GetMemberIdsAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+        return await (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+            .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == id)).Select(x => x.Id)
             .ToListAsync(cancellationToken);
     }
 
