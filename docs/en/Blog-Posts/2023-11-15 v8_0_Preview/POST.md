@@ -137,6 +137,7 @@ It’s already documented and you can read the documentation at [https://docs.ab
 #### Known Issues
 
 * After you generate CRUD pages via Suite for the Angular UI, you should start the backend project and run the `abp generate-proxy -t ng` command in the root directory of the Angular application manually. It will be automatically done with the next version, so you will not need to run the command manually in further versions.
+* If you have checked the _Excel Export_, then you should update the `MiniExcel` package version to `1.31.2`.
 
 ### Get Profile Picture From Social/External Logins
 
