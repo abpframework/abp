@@ -150,6 +150,8 @@ In order to save the user from having to change their profile picture after logg
 
 Until this version, ABP Commercial was using the [Ocelot](https://github.com/ThreeMammals/Ocelot) for the API Gateway, in the [Microservice Startup Template](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index). Since the **Ocelot** library is not actively maintained, we have searched for an alternative and decided to switch from Ocelot to [YARP](https://github.com/microsoft/reverse-proxy) for the API Gateway. YARP is maintained by Microsoft and is actively being developed and seems a better alternative than Ocelot and provides the same feature stack and even more.
 
+You can read the [Migrating to YARP](https://docs.abp.io/en/commercial/8.0/migration-guides/migrating-to-yarp) documentation for migrating your existing microservice application's API Gateway from [Ocelot](https://github.com/ThreeMammals/Ocelot) to [YARP](https://github.com/microsoft/reverse-proxy).
+
 > We have made the all related changes in the Microservice Startup Template, and also updated the documentation, which you can read [here](https://docs.abp.io/en/commercial/8.0/startup-templates/microservice/gateways).
 
 ### Password Complexity Indicators (MVC & Blazor UIs)
