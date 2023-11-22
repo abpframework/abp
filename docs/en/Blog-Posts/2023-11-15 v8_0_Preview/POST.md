@@ -97,7 +97,7 @@ public class MyService
 }
 ```
 
-> In addition to the read-only repository interfaces, ABP Framework introduces the `IRepository.DisableTracking()` and `IRepository.EnableTracking()` extension methods to allow developers to disable/enable entity tracking by these methods manually. If you don't want to use the read-only repositories, you can use these methods to enable or disable the change tracker controlled. You can check this issue to learn more: [https://github.com/abpframework/abp/issues/17487](https://github.com/abpframework/abp/issues/17487).
+> In addition to the read-only repository interfaces, ABP Framework introduces the `IRepository.DisableTracking()` and `IRepository.EnableTracking()` extension methods to allow developers to disable/enable entity tracking by these methods manually. If you don't want to use the read-only repositories, you can use these methods to enable or disable the change tracker controlled. Read the documentation to learn more: [https://docs.abp.io/en/abp/8.0/Repositories#enabling-disabling-the-change-tracking](https://docs.abp.io/en/abp/8.0/Repositories#enabling-disabling-the-change-tracking)
 
 ### Account Module: Set Username After Social/External Login
 
