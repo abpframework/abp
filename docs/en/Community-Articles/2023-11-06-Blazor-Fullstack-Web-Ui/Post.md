@@ -91,4 +91,5 @@ I summarized the new generation Blazor in a very simple way. This architecture w
 
 * You can check Dan Roth's GitHub issue 👉 [github.com/dotnet/aspnetcore/issues/46636](https://github.com/dotnet/aspnetcore/issues/46636).
 * Steven Sanderson's YouTube video is very good for understanding these concepts 👉 [Blazor United Prototype Video](https://youtu.be/48G_CEGXZZM).
+* "Full Stack Web UI with Blazor" — .NET Conf 2023 video 👉 [learn.microsoft.com/en-us/shows/dotnetconf-2023/full-stack-web-ui-with-blazor-in-dotnet-8](https://learn.microsoft.com/en-us/shows/dotnetconf-2023/full-stack-web-ui-with-blazor-in-dotnet-8)
 
