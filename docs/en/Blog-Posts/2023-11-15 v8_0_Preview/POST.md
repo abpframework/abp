@@ -137,7 +137,6 @@ It’s already documented and you can read the documentation at [https://docs.ab
 #### Known Issues
 
 * After you generate CRUD pages via Suite for the Angular UI, you should start the backend project and run the `abp generate-proxy -t ng` command in the root directory of the Angular application manually. It will be automatically done with the next version, so you will not need to run the command manually in further versions.
-* If you have checked the _Excel Export_, then you should update the `MiniExcel` package version to `1.31.2`.
 
 ### Get Profile Picture From Social/External Logins
 
@@ -188,6 +187,7 @@ In addition to the ABP's .NET 8.0 upgrade, our team has created 13 great article
 
 In addition to [the 13 articles to highlight .NET 8.0 features written by our team](https://volosoft.com/blog/Highlights-for-ASP-NET-Entity-Framework-Core-NET-8-0), here are some of the recent posts added to the [ABP Community](https://community.abp.io/):
 
+* [Upgrade Your Existing Projects to .NET 8 & ABP 8.0](https://community.abp.io/posts/upgrade-your-existing-projects-to-.net-8-abp-8.0-x0n7hiqr) by [Engincan Veske](https://github.com/EngincanV)
 * [How to Upload and Download Files in the ABP Framework using Angular](https://community.abp.io/posts/how-to-upload-and-download-files-in-the-abp-framework-using-angular-que8cdr8) by [Mahmut Gündoğdu](https://github.com/mahmut-gundogdu)
 * New **ABP Framework Essentials** Videos by [Hamza Albreem](https://github.com/braim23):
    *  [ABP Essentials - Interception](https://community.abp.io/videos/abp-essentials-interception-ath78xhw)
