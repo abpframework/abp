@@ -41,7 +41,7 @@ public class BlazorServerLookupApiRequestService : ILookupApiRequestService, ITr
 
     public async Task<string> SendAsync(string url)
     {
-        var client = HttpClientFactory.CreateClient();
+        var client = HttpClientFactory.CreateClient(nameof(BlazorServerLookupApiRequestService));
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
 
         var uri = new Uri(url, UriKind.RelativeOrAbsolute);

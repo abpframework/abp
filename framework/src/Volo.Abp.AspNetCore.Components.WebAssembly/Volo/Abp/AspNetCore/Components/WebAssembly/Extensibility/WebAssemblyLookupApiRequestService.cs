@@ -32,7 +32,7 @@ public class WebAssemblyLookupApiRequestService : ILookupApiRequestService, ITra
 
     public async Task<string> SendAsync(string url)
     {
-        var client = HttpClientFactory.CreateClient();
+        var client = HttpClientFactory.CreateClient(nameof(WebAssemblyLookupApiRequestService));
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         AddHeaders(requestMessage);
 
