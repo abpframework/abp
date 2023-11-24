@@ -29,8 +29,8 @@
 		<Pack>true</Pack>
 		<PackagePath>content\</PackagePath>
 	</Content>
-    <None Remove="*.abppkg.json" />
-    <Content Include="*.abppkg.json">
+    <None Remove="*.abppkg" />
+    <Content Include="*.abppkg">
 		<Pack>true</Pack>
 		<PackagePath>content\</PackagePath>
     </Content>

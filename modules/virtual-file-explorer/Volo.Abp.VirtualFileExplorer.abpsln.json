@@ -1,7 +1,0 @@
-{
-  "modules": {
-    "Volo.Abp.VirtualFileExplorer": {
-      "path": "Volo.Abp.VirtualFileExplorer.abpmdl.json"
-    }
-  }
-}
