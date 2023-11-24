@@ -1,7 +1,0 @@
-{
-  "modules": {
-    "Volo.Blogging": {
-      "path": "Volo.Blogging.abpmdl.json"
-    }
-  }
-}
