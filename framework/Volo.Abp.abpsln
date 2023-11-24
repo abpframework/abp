@@ -2,7 +2,7 @@
   "template": "empty",
   "modules": {
     "Volo.Abp": {
-      "path": "Volo.Abp.abpmdl.json"
+      "path": "Volo.Abp.abpmdl"
     }
   }
 }

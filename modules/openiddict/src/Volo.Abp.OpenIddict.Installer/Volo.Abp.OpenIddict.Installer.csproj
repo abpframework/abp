@@ -15,8 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="..\..\Volo.Abp.OpenIddict.abpmdl.json" />
-        <Content Include="..\..\Volo.Abp.OpenIddict.abpmdl.json">
+        <None Remove="..\..\Volo.Abp.OpenIddict.abpmdl" />
+        <Content Include="..\..\Volo.Abp.OpenIddict.abpmdl">
 			<Pack>true</Pack>
 			<PackagePath>content\</PackagePath>
 		</Content>

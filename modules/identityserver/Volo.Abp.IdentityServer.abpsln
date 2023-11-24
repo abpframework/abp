@@ -1,7 +1,7 @@
 {
   "modules": {
     "Volo.Abp.IdentityServer": {
-      "path": "Volo.Abp.IdentityServer.abpmdl.json"
+      "path": "Volo.Abp.IdentityServer.abpmdl"
     }
   }
 }

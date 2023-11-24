@@ -1,7 +1,7 @@
 {
   "modules": {
     "Volo.Abp.FeatureManagement": {
-      "path": "Volo.Abp.FeatureManagement.abpmdl.json"
+      "path": "Volo.Abp.FeatureManagement.abpmdl"
     }
   }
 }

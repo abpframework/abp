@@ -1,7 +1,7 @@
 {
   "modules": {
     "Volo.Abp.SettingManagement": {
-      "path": "Volo.Abp.SettingManagement.abpmdl.json"
+      "path": "Volo.Abp.SettingManagement.abpmdl"
     }
   }
 }

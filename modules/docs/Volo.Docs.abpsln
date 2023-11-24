@@ -1,7 +1,7 @@
 {
   "modules": {
     "Volo.Docs": {
-      "path": "Volo.Docs.abpmdl.json"
+      "path": "Volo.Docs.abpmdl"
     }
   }
 }
