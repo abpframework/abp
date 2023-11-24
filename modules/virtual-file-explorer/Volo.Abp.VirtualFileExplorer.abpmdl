@@ -7,11 +7,11 @@
   },
   "packages": {
     "Volo.Abp.VirtualFileExplorer.DemoApp": {
-      "path": "app/Volo.Abp.VirtualFileExplorer.DemoApp/Volo.Abp.VirtualFileExplorer.DemoApp.abppkg.json",
+      "path": "app/Volo.Abp.VirtualFileExplorer.DemoApp/Volo.Abp.VirtualFileExplorer.DemoApp.abppkg",
       "folder": "app"
     },
     "Volo.Abp.VirtualFileExplorer.Web": {
-      "path": "src/Volo.Abp.VirtualFileExplorer.Web/Volo.Abp.VirtualFileExplorer.Web.abppkg.json",
+      "path": "src/Volo.Abp.VirtualFileExplorer.Web/Volo.Abp.VirtualFileExplorer.Web.abppkg",
       "folder": "src"
     }
   }
