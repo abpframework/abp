@@ -119,7 +119,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         var skipBundling = commandLineArgs.Options.ContainsKey(Options.SkipBundling.Long) || commandLineArgs.Options.ContainsKey(Options.SkipBundling.Short);
         if (!skipBundling)
         {
-            await RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(projectArgs);
+            await RunBundleInternalAsync(projectArgs);
         }
 
         await ConfigurePwaSupportForAngular(projectArgs);
