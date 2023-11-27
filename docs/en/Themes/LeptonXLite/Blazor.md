@@ -135,13 +135,17 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
 @attribute [Dependency(ReplaceServices = true)]
 
 @Name
+
+@code {
+    string Name = "My Main Layout";
+}
 ``` 
 
 * If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyMainLayout.razor.cs`, in your blazor application as shown below:
 
 ```csharp	
 [ExposeServices(typeof(MainLayout))]
-[Dependency(ReplaceServices = true)
+[Dependency(ReplaceServices = true)]
 namespace LeptonXLite.DemoApp.Blazor.MyComponents
 {
     public partial class MyMainLayout
@@ -152,6 +156,7 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 ```	
 
 > Don't forget to remove the repeated attributes from the razor page!
+> Don't forget to remove the `@code` section from the razor page!
 
 ### Toolbars
 
@@ -206,6 +211,10 @@ The **branding component** is a simple component that can be used to display you
 @attribute [Dependency(ReplaceServices = true)]
 
 @Name
+
+@code {
+    string Name = "My Branding Component";
+}
 ``` 
 
 * If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyBrandingComponent.razor.cs`, in your blazor application as shown below:
@@ -243,6 +252,10 @@ On websites that have a lot of pages, **breadcrumb navigation** can greatly **en
 @attribute [Dependency(ReplaceServices = true)]
 
 @Name
+
+@code {
+    string Name = "My Breadcrumbs Component";
+}
 ``` 
 
 * If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyBreadcrumbsComponent.razor.cs`, in your blazor application as shown below:
@@ -281,6 +294,10 @@ Sidebar menus have been used as **a directory for Related Pages** for a **Servic
 @attribute [Dependency(ReplaceServices = true)]
 
 @Name
+
+@code {
+    string Name = "My Main Menu Component";
+}
 ``` 
 
 * If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyMainMenu.razor.cs`, in your blazor application as shown below:
@@ -319,6 +336,10 @@ Toolbar items are used to add **extra functionality to the toolbar**. The toolba
 @attribute [Dependency(ReplaceServices = true)]
 
 @Name
+
+@code {
+    string Name = "My Toolbar Items Component";
+}
 ``` 
 
 * If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyToolbarItemsComponent.razor.cs`, in your blazor application as shown below:
@@ -357,6 +378,10 @@ Think about a **multi-lingual** website and the first thing that could **hit you
 @attribute [Dependency(ReplaceServices = true)]
 
 @Name
+
+@code {
+    string Name = "My Language Switch Component";
+}
 ``` 
 
 * If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyLanguageSwitchComponent.razor.cs`, in your blazor application as shown below:
@@ -395,6 +420,10 @@ The **mobile** **language switch component** is used to switch the language of t
 @attribute [Dependency(ReplaceServices = true)]
 
 @Name
+
+@code {
+    string Name = "My Mobile Language Switch Component";
+}
 ``` 
 
 * If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyMobilLanguageSwitchComponent.razor.cs`, in your blazor application as shown below:
@@ -433,6 +462,10 @@ The **User Menu** is the **menu** that **drops down** when you **click your name
 @attribute [Dependency(ReplaceServices = true)]
 
 @Name
+
+@code {
+    string Name = "My User Menu Component";
+}
 ``` 
 
 * If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyUserMenuComponent.razor.cs`, in your blazor application as shown below:
@@ -471,6 +504,10 @@ The **mobile user menu component** is used to display the **user menu on mobile 
 @attribute [Dependency(ReplaceServices = true)]
 
 @Name
+
+@code {
+    string Name = "My Mobile User Menu Component";
+}
 ``` 
 
 * If you prefer to use a code-behind file for the C# code of your component, create a razor component, like `MyMobileUserMenuComponent.razor.cs`, in your blazor application as shown below:
