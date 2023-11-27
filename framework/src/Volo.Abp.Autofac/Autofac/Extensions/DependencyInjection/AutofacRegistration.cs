@@ -183,11 +183,14 @@ public static class AutofacRegistration
     {
         var moduleContainer = services.GetSingletonInstance<IModuleContainer>();
         var registrationActionList = services.GetRegistrationActionList();
+        var activatedActionList = services.GetServiceActivatedActionList();
 
         foreach (var descriptor in services)
         {
             if (descriptor.ImplementationType != null)
             {
+                var activatedActions = activatedActionList.GetActions(descriptor);
+
                 // Test if the an open generic type is being registered
                 var serviceTypeInfo = descriptor.ServiceType.GetTypeInfo();
                 if (serviceTypeInfo.IsGenericTypeDefinition)
@@ -196,7 +199,7 @@ public static class AutofacRegistration
                         .RegisterGeneric(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(moduleContainer, registrationActionList);
+                        .ConfigureAbpConventions(moduleContainer, registrationActionList, activatedActions);
                 }
                 else
                 {
@@ -204,7 +207,7 @@ public static class AutofacRegistration
                         .RegisterType(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(moduleContainer, registrationActionList);
+                        .ConfigureAbpConventions(moduleContainer, registrationActionList, activatedActions);
                 }
             }
             else if (descriptor.ImplementationFactory != null)

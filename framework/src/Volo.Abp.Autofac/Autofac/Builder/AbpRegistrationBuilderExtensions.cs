@@ -15,7 +15,8 @@ public static class AbpRegistrationBuilderExtensions
     public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureAbpConventions<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
             IModuleContainer moduleContainer,
-            ServiceRegistrationActionList registrationActionList)
+            ServiceRegistrationActionList registrationActionList,
+            List<Action<IOnServiceActivatedContext>> serviceActivatedActions)
         where TActivatorData : ReflectionActivatorData
     {
         var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
@@ -23,6 +24,15 @@ public static class AbpRegistrationBuilderExtensions
         {
             return registrationBuilder;
         }
+
+        registrationBuilder.OnActivated(context =>
+        {
+            var serviceActivatedContext = new OnServiceActivatedContext(context.Instance!);
+            foreach (var action in serviceActivatedActions)
+            {
+                action.Invoke(serviceActivatedContext);
+            }
+        });
 
         var implementationType = registrationBuilder.ActivatorData.ImplementationType;
         if (implementationType == null)
