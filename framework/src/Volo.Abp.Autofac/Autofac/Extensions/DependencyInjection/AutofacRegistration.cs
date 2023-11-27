@@ -189,8 +189,6 @@ public static class AutofacRegistration
         {
             if (descriptor.ImplementationType != null)
             {
-                var activatedActions = activatedActionList.GetActions(descriptor);
-
                 // Test if the an open generic type is being registered
                 var serviceTypeInfo = descriptor.ServiceType.GetTypeInfo();
                 if (serviceTypeInfo.IsGenericTypeDefinition)
@@ -199,7 +197,7 @@ public static class AutofacRegistration
                         .RegisterGeneric(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(moduleContainer, registrationActionList, activatedActions);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
                 }
                 else
                 {
@@ -207,7 +205,7 @@ public static class AutofacRegistration
                         .RegisterType(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(moduleContainer, registrationActionList, activatedActions);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
                 }
             }
             else if (descriptor.ImplementationFactory != null)
