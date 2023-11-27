@@ -183,6 +183,7 @@ public static class AutofacRegistration
     {
         var moduleContainer = services.GetSingletonInstance<IModuleContainer>();
         var registrationActionList = services.GetRegistrationActionList();
+        var activatedActionList = services.GetServiceActivatedActionList();
 
         foreach (var descriptor in services)
         {
@@ -196,7 +197,7 @@ public static class AutofacRegistration
                         .RegisterGeneric(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(moduleContainer, registrationActionList);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
                 }
                 else
                 {
@@ -204,7 +205,7 @@ public static class AutofacRegistration
                         .RegisterType(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(moduleContainer, registrationActionList);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
                 }
             }
             else if (descriptor.ImplementationFactory != null)
