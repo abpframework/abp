@@ -380,7 +380,7 @@ Think about a **multi-lingual** website and the first thing that could **hit you
 @Name
 
 @code {
-    string Name = "My Toolbar Items Component";
+    string Name = "My Language Switch Component";
 }
 ``` 
 
