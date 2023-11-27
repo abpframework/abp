@@ -87,7 +87,7 @@
     "JoinOurMarketingNewsletter": "انضم إلى النشرة الإخبارية التسويقية",
     "CommunityPrivacyPolicyConfirmation": "أوافق على الشروط والأحكام و <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">سياسة الخصوصية</a>.",
     "WouldLikeToReceiveNotification": "أرغب في تلقي آخر الأخبار من مواقع abp.io.",
-    "CommercialNewsletterConfirmationMessage": "أنا أوافق على <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">البنود و الظروف</a> و <a  class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">سياسة الخصوصية</a>.",
+    "CommercialNewsletterConfirmationMessage": "أنا أوافق على <a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/TermsConditions\">البنود و الظروف</a> و <a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/Privacy\">سياسة الخصوصية</a>.",
     "FreeDDDEBook": "كتاب تصميم مقاد بالنطاق DDD إلكتروني مجاني",
     "AdditionalServices": "خدمات إضافية",
     "Learn": "تعلم",

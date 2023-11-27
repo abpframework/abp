@@ -90,7 +90,7 @@
     "JoinOurMarketingNewsletter": "加入我们市场推广时事通讯",
     "CommunityPrivacyPolicyConfirmation": "我同意条款 & 条件和<a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">隐私政策 </a>。",
     "WouldLikeToReceiveNotification": "我想从 abp.io 网站接收最新消息。",
-    "CommercialNewsletterConfirmationMessage": "我同意<a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">条款 & 条件</a > 和 <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">隐私政策</a>。",
+    "CommercialNewsletterConfirmationMessage": "我同意<a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/TermsConditions\">条款 & 条件</a > 和 <a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/Privacy\">隐私政策</a>。",
     "FreeDDDEBook": "免费 DDD 电子书",
     "AdditionalServices": "额外服务",
     "Learn": "学习",

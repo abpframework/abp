@@ -90,7 +90,7 @@
     "JoinOurMarketingNewsletter": "Liity markkinointiuutiskirjeeseemme",
     "CommunityPrivacyPolicyConfirmation": "Hyväksyn käyttöehdot ja <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">tietosuojakäytännön</a> .",
     "WouldLikeToReceiveNotification": "Haluan saada viimeisimmät uutiset abp.io-sivustoilta.",
-    "CommercialNewsletterConfirmationMessage": "Hyväksyn <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">käyttöehdot</a> ja <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">tietosuojakäytännön</a>.",
+    "CommercialNewsletterConfirmationMessage": "Hyväksyn <a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/TermsConditions\">käyttöehdot</a> ja <a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/Privacy\">tietosuojakäytännön</a>.",
     "FreeDDDEBook": "Ilmainen DDD e-kirja",
     "AdditionalServices": "Lisäpalvelut",
     "Learn": "Opi",
