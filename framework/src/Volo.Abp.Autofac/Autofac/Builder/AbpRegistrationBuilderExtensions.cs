@@ -18,10 +18,10 @@ public static class AbpRegistrationBuilderExtensions
             ServiceDescriptor serviceDescriptor,
             IModuleContainer moduleContainer,
             ServiceRegistrationActionList registrationActionList,
-            ServiceActivatedActionList serviceActivatedActionList)
+            ServiceActivatedActionList activatedActionList)
         where TActivatorData : ReflectionActivatorData
     {
-        registrationBuilder = registrationBuilder.InvokeActivatedActions(serviceActivatedActionList, serviceDescriptor);
+        registrationBuilder = registrationBuilder.InvokeActivatedActions(activatedActionList, serviceDescriptor);
 
         var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
         if (serviceType == null)
@@ -43,14 +43,14 @@ public static class AbpRegistrationBuilderExtensions
 
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeActivatedActions<TLimit, TActivatorData, TRegistrationStyle>(
         this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-        ServiceActivatedActionList serviceActivatedActionList,
+        ServiceActivatedActionList activatedActionList,
         ServiceDescriptor serviceDescriptor)
         where TActivatorData : ReflectionActivatorData
     {
         registrationBuilder.OnActivated(context =>
         {
             var serviceActivatedContext = new OnServiceActivatedContext(context.Instance!);
-            foreach (var action in serviceActivatedActionList.GetActions(serviceDescriptor))
+            foreach (var action in activatedActionList.GetActions(serviceDescriptor))
             {
                 action.Invoke(serviceActivatedContext);
             }
