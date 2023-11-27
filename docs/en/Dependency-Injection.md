@@ -269,6 +269,21 @@ public class MyService : ITransientDependency
 }
 ````
 
+#### IInjectPropertiesService
+
+You can use the `IInjectPropertiesService` service to inject properties of an object. Generally, it is a service outside of DI, such as manually created services.
+
+````C#
+var injectPropertiesService = serviceProvider.GetRequiredService<IInjectPropertiesService>();
+var instance = new TestService();
+
+// Set any properties on instance that can be resolved by IServiceProvider.
+injectPropertiesService.InjectProperties(instance);
+
+// Set any null-valued properties on instance that can be resolved by the IServiceProvider.
+injectPropertiesService.InjectUnsetProperties(instance);
+````
+
 ### Resolve Service from IServiceProvider
 
 You may want to resolve a service directly from ``IServiceProvider``. In that case, you can inject `IServiceProvider` into your class and use the ``GetService`` or the `GetRequiredService` method as shown below:
