@@ -175,12 +175,14 @@ This project contains the main `appsettings.json` file that contains the connect
 * Depends on the `.HttpApi` project since the UI layer needs to use APIs and the application service interfaces of the solution.
 
 > If you check the source code of the `.Web.csproj` file, you will see the references to the `.Application` and the `.EntityFrameworkCore` projects.
+> They are there so that you can host the Web, API and application layers in a single application endpoint.
+> 
+> These references are actually not needed while coding your UI layer as the UI layer normally doesn't depend on the EF Core or the Application layer's implementation.
+> This gives you the ability to use domain entities & repositories in your presentation layer which you should avoid as it is considered as a bad practice according to DDD.
+> 
+> If you choose the `--tiered` option, the startup template will be configured for tiered deployment where the API layer is hosted on a separate server than the UI layer.
+> In this case these references will be removed.
 >
-> These references are actually not needed while coding your UI layer, because the UI layer normally doesn't depend on the EF Core or the Application layer's implementation. These startup templates are ready for tiered deployment, where the API layer is hosted on a separate server than the UI layer.
->
-> However, if you don't choose the `--tiered` option, these references will be in the .Web project to be able to host the Web, API and application layers in a single application endpoint.
->
-> This gives you the ability to use domain entities & repositories in your presentation layer. However, this is considered as a bad practice according to DDD.
 
 #### Test Projects
 
