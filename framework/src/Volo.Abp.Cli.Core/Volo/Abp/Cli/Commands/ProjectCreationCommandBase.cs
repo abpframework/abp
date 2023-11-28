@@ -419,26 +419,49 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected async Task RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(ProjectBuildArgs projectArgs)
+    protected virtual async Task RunBundleInternalAsync(ProjectBuildArgs projectArgs)
+    {
+        if (!ShouldRunBundleCommand(projectArgs))
+        {
+            return;
+        }
+        
+        var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
+        var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
+        Logger.LogInformation(message + "...");
+
+        await EventBus.PublishAsync(new ProjectCreationProgressEvent
+        {
+            Message = message
+        }, false);
+
+        var path = projectArgs.OutputFolder;
+        if (projectArgs.TemplateName == MicroserviceProTemplate.TemplateName)
+        {
+            path = Path.Combine(path, "apps");
+        }
+        
+        var directory = Path.GetDirectoryName(
+            Directory.GetFiles(path, isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
+        );
+
+        await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
+    }
+
+    protected virtual bool ShouldRunBundleCommand(ProjectBuildArgs projectArgs)
     {
         if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
             && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
         {
-            var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
-            var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
-            Logger.LogInformation($"{message}...");
-
-            await EventBus.PublishAsync(new ProjectCreationProgressEvent
-            {
-                Message = message
-            }, false);
-
-            var directory = Path.GetDirectoryName(
-                Directory.GetFiles(projectArgs.OutputFolder, isWebassembly? "*.Blazor.csproj" :"*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
-                );
-
-            await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
+            return true;
         }
+        
+        if (projectArgs.TemplateName == MicroserviceProTemplate.TemplateName && projectArgs.UiFramework is UiFramework.Blazor)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     protected async Task CreateInitialMigrationsAsync(ProjectBuildArgs projectArgs)

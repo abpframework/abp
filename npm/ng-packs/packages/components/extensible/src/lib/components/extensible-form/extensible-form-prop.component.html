@@ -124,7 +124,7 @@
 
     <ng-template ngSwitchCase="dateTime">
       <ng-template [ngTemplateOutlet]="label"></ng-template>
-      <abp-extensible-date-time-picker [prop]="prop" [meridian]="meridian" />
+      <abp-extensible-date-time-picker [prop]="prop" [meridian]="meridian$ | async" />
     </ng-template>
 
     <ng-template ngSwitchCase="textarea">
@@ -141,17 +141,24 @@
 
     <ng-template ngSwitchCase="passwordinputgroup">
       <ng-template [ngTemplateOutlet]="label"></ng-template>
-      <abp-password
-        *abpReplaceableTemplate="{
-          componentKey: passwordKey,
-          inputs: {
-            inputId: { value: prop.id },
-            formControlName: { value: prop.name }
-          }
-        }"
-        [inputId]="prop.id"
-        [formControlName]="prop.name"
-      ></abp-password>
+      <div class="input-group form-group" validationTarget>
+        <input
+          class="form-control"
+          [id]="prop.id"
+          [formControlName]="prop.name"
+          [abpShowPassword]="showPassword"
+        />
+        <button class="btn btn-secondary" type="button" (click)="showPassword = !showPassword">
+          <i
+            class="fa"
+            aria-hidden="true"
+            [ngClass]="{
+              'fa-eye-slash': !showPassword,
+              'fa-eye': showPassword
+            }"
+          ></i>
+        </button>
+      </div>
     </ng-template>
 
     <small *ngIf="prop.formText" class="text-muted d-block">{{

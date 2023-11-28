@@ -44,6 +44,7 @@ using Volo.Abp.Identity.Blazor.Server;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.Blazor.Server;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Blazor.Server;
@@ -188,7 +189,7 @@ public class MyProjectNameBlazorModule : AbpModule
             * This configuration is used when the AuthServer is running on the internal network such as docker or k8s.
             * Configuring the redirecting URLs for internal network and the web
             * The login and the logout URLs are configured to redirect to the AuthServer real DNS for browser.
-            * The token acquired and validated from the the internal network AuthServer URL. 
+            * The token acquired and validated from the the internal network AuthServer URL.
             */
             if (configuration.GetValue<bool>("AuthServer:IsContainerized"))
             {
@@ -227,6 +228,11 @@ public class MyProjectNameBlazorModule : AbpModule
                     };
                 });
             }
+
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
     }
 
     private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
@@ -351,7 +357,7 @@ public class MyProjectNameBlazorModule : AbpModule
         {
             app.UseMultiTenancy();
         }
-
+        app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

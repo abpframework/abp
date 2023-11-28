@@ -349,7 +349,7 @@ public class MyClaimDestinationsHandler : IAbpOpenIddictClaimsPrincipalHandler, 
     }
 }
 
-Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
+Configure<AbpOpenIddictClaimsPrincipalOptions>(options =>
 {
     options.ClaimsPrincipalHandlers.Add<MyClaimDestinationsHandler>();
 });

@@ -151,10 +151,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "dev-app:build:production"
+          "buildTarget": "dev-app:build:production"
         },
         "development": {
-          "browserTarget": "dev-app:build:development"
+          "buildTarget": "dev-app:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -162,11 +162,11 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "dev-app:build"
+        "buildTarget": "dev-app:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": ["apps/dev-app/src/**/*.ts", "apps/dev-app/src/**/*.html"]
       }
@@ -175,8 +175,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/dev-app"],
       "options": {
-        "jestConfig": "apps/dev-app/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "apps/dev-app/jest.config.ts"
       }
     }
   }

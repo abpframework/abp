@@ -32,6 +32,7 @@ using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
@@ -180,6 +181,11 @@ public class MyProjectNameAuthServerModule : AbpModule
                     .AllowCredentials();
             });
         });
+
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -212,7 +218,9 @@ public class MyProjectNameAuthServerModule : AbpModule
         }
 
         app.UseUnitOfWork();
+        app.UseDynamicClaims();
         app.UseAuthorization();
+
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();

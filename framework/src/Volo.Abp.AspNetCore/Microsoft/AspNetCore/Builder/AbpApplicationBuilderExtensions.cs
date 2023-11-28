@@ -111,4 +111,9 @@ public static class AbpApplicationBuilderExtensions
     {
         return app.UseMiddleware<AbpSecurityHeadersMiddleware>();
     }
+
+    public static IApplicationBuilder UseDynamicClaims(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<AbpDynamicClaimsMiddleware>();
+    }
 }

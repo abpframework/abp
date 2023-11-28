@@ -25,12 +25,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/feature-management"],
       "options": {
-        "jestConfig": "packages/feature-management/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/feature-management/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "packages/feature-management/src/**/*.ts",
