@@ -191,7 +191,7 @@
     "DiscordPageTitle": "ABP Discord Community",
     "ViewVideo": "View Video",
     "AbpCommunityTitleContent": "ABP Community - Open Source ABP Framework",
-    "CommunitySlogan": "A unique community platform for <span class=\"d-inline-block d-md-block gradient-community\">ABP Lovers</span>",
+    "CommunitySlogan": "A unique community platform for <span class=\"{0}\">ABP Lovers</span>",
     "RaffleIsNotActive": "Raffle is not active",
     "YouAreAlreadyJoinedToThisRaffle": "You are already joined to this raffle",
     "InvalidSubscriptionCode": "Invalid subscription code",
