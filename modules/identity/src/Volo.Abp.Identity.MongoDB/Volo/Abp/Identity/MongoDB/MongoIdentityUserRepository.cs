@@ -377,26 +377,47 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         IEnumerable<Guid> userIds,
         CancellationToken cancellationToken = default)
     {
-        cancellationToken = GetCancellationToken(cancellationToken);
-
-        var userAndRoleIds = (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
-            .Where(u => userIds.Contains(u.Id))
-            .SelectMany(u => u.Roles)
-            .Select(userRole => new
-            {
-                userRole.UserId,
-                userRole.RoleId
-            }).GroupBy(x => x.UserId).ToDictionary(x => x.Key, x => x.Select(r => r.RoleId).ToList());
-
+        var users = await GetListByIdsAsync(userIds, cancellationToken: cancellationToken);
+        
+        var userAndRoleIds = users.SelectMany(u => u.Roles)
+            .Select(userRole => new { userRole.UserId, userRole.RoleId })
+            .GroupBy(x => x.UserId).ToDictionary(x => x.Key, x => x.Select(r => r.RoleId).ToList());
+        var userAndOrganizationUnitIds = users.SelectMany(u => u.OrganizationUnits)
+            .Select(userOrganizationUnit => new { userOrganizationUnit.UserId, userOrganizationUnit.OrganizationUnitId })
+            .GroupBy(x => x.UserId).ToDictionary(x => x.Key, x => x.Select(r => r.OrganizationUnitId).ToList());
+        
+        var organizationUnitIds = userAndOrganizationUnitIds.SelectMany(x => x.Value);
         var roleIds = userAndRoleIds.SelectMany(x => x.Value);
-        var roles = await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken)).Where(r => roleIds.Contains(r.Id)).Select(r => new
+        
+        var organizationUnitAndRoleIds = await (await GetMongoQueryableAsync<OrganizationUnit>(cancellationToken)).Where(ou => organizationUnitIds.Contains(ou.Id))
+            .Select(userOrganizationUnit => new
+            {
+                userOrganizationUnit.Id,
+                userOrganizationUnit.Roles
+            }).ToListAsync(cancellationToken: cancellationToken);
+        var allOrganizationUnitRoleIds = organizationUnitAndRoleIds.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToList();
+        var allRoleIds = roleIds.Union(allOrganizationUnitRoleIds);
+        
+        var roles = await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken)).Where(r => allRoleIds.Contains(r.Id)).Select(r => new{ r.Id, r.Name }).ToListAsync(cancellationToken);
+        var userRoles = userAndRoleIds.ToDictionary(x => x.Key, x => roles.Where(r => x.Value.Contains(r.Id)).Select(r => r.Name).ToArray());
+ 
+        var result = userRoles.Select(x => new IdentityUserIdWithRoleNames { Id = x.Key, RoleNames = x.Value }).ToList();
+
+        foreach (var userAndOrganizationUnitId in userAndOrganizationUnitIds)
         {
-            r.Id,
-            r.Name
-        }).ToListAsync(cancellationToken);
+            var user = result.FirstOrDefault(x => x.Id == userAndOrganizationUnitId.Key);
+            var organizationUnitRoleIds = organizationUnitAndRoleIds.Where(x => userAndOrganizationUnitId.Value.Contains(x.Id)).SelectMany(x => x.Roles.Select(r => r.RoleId)).ToList();
+            var roleNames = roles.Where(x => organizationUnitRoleIds.Contains(x.Id)).Select(r => r.Name).ToArray();
+            if (user != null && roleNames.Any())
+            {
+                user.RoleNames = user.RoleNames.Union(roleNames).ToArray();
+            }
+            else if(roleNames.Any())
+            {
+                result.Add(new IdentityUserIdWithRoleNames { Id = userAndOrganizationUnitId.Key, RoleNames = roleNames});
+            }
+        }
 
-        var result = userAndRoleIds.ToDictionary(x => x.Key, x => roles.Where(r => x.Value.Contains(r.Id)).Select(r => r.Name).ToArray());
-
-        return result.Select(x => new IdentityUserIdWithRoleNames() { Id = x.Key, RoleNames = x.Value }).ToList();
+        return result;
     }
 }
