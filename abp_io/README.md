@@ -1,11 +1,22 @@
-## Abp.io platform localization
+## Abp.io Platform Localization Project
 
-This project is all localized resources of the abp.io platform.
+This is the localization project of [abp.io](https://abp.io) platform.
+You can correct the missing localization or translate it into your own language.
+By doing so, [abp.io](https://abp.io) websites will be translated into a new language and the community will be expanded.
 
-If you like, you can contribute to the localization resources in this project.
 
-For example: `AbpIoLocalization\AbpIoLocalization\Www\Localization\Resources\zh-Hans.json`
-If the file is missing some translations or the translation is wrong, you can add it.
-If the language file is missing (eg `kr.json`), you can also add it.
 
-Please refer to the [Contribution Guide](https://github.com/abpframework/abp/blob/dev/docs/en/Contribution/Index.md) for details.
+## To Translate abp.io Into Your Language:
+
+1- Install ABP CLI 
+2- Run the following command for your language. For example for translating from English to French use: `abp translate -c fr`
+3- After you fill in the empty localization keys, run the following command to apply it `abp translate -a`.
+4- Send your PR to the team and after review we merge it.
+
+---
+
+
+
+References:
+* [ABP CLI Translate Command](https://docs.abp.io/en/abp/latest/Contribution/Index#using-the-abp-translate-command)
+* [Contribution Guide](https://github.com/abpframework/abp/blob/dev/docs/en/Contribution/Index.md)
