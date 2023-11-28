@@ -45,7 +45,7 @@
   "private": true,
   "devDependencies": {
     "@abp/ng.theme.lepton-x": "~3.0.0-rc.1",
-    "@abp/utils": "~8.0.0-rc.1",
+    "@abp/utils": "~8.0.0-rc.2",
     "@angular-devkit/build-angular": "~17.0.0",
     "@angular-devkit/core": "~17.0.0",
     "@angular-devkit/schematics": "~17.0.0",
