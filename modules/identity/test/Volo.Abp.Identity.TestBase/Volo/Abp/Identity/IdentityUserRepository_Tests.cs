@@ -73,15 +73,16 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         userBob.RoleNames[0].ShouldBe("manager");
 
         var userJohn = userRoleNames.First(x => x.Id == TestData.UserJohnId);
-        userJohn.RoleNames.Length.ShouldBe(2);
+        userJohn.RoleNames.Length.ShouldBe(3);
         userJohn.RoleNames.ShouldContain("moderator");
         userJohn.RoleNames.ShouldContain("supporter");
+        userJohn.RoleNames.ShouldContain("manager");
 
         var userNeo = userRoleNames.First(x => x.Id == TestData.UserNeoId);
-        userNeo.RoleNames.Length.ShouldBe(1);
-        userNeo.RoleNames[0].ShouldBe("supporter");
-
-        userRoleNames.ShouldNotContain(x => x.Id == TestData.UserDavidId);
+        userNeo.RoleNames.Length.ShouldBe(3);
+        userNeo.RoleNames.ShouldContain("supporter");
+        userJohn.RoleNames.ShouldContain("moderator");
+        userJohn.RoleNames.ShouldContain("manager");
     }
 
     [Fact]
