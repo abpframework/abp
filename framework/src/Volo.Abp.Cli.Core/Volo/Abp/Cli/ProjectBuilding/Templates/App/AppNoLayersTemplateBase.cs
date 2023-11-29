@@ -21,7 +21,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        var steps = new List<ProjectBuildPipelineStep>();
+        var steps = new List<ProjectBuildPipelineStep> { new CheckRedisPreRequirements() };
 
         switch (context.BuildArgs.DatabaseProvider)
         {
