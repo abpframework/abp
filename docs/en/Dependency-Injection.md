@@ -480,6 +480,24 @@ This example simply checks if the service class has `MyLogAttribute` attribute a
 
 > Notice that `OnRegistered` callback might be called multiple times for the same service class if it exposes more than one service/interface. So, it's safe to use `Interceptors.TryAdd` method instead of `Interceptors.Add` method. See [the documentation](Dynamic-Proxying-Interceptors.md) of dynamic proxying / interceptors.
 
+### IServiceCollection.OnActivated Event
+
+The `OnActivated` event is raised once a service is fully constructed. Here you can perform application-level tasks that depend on the service being fully constructed - these should be rare.
+
+````csharp
+var serviceDescriptor = ServiceDescriptor.Transient<MyServer, MyServer>();
+services.Add(serviceDescriptor);
+if (setIsReadOnly)
+{
+    services.OnActivated(serviceDescriptor, x =>
+    {
+        x.Instance.As<MyServer>().IsReadOnly = true;
+    });
+}
+````
+
+> Notice that `OnActivated` event can be registered multiple times for the same `ServiceDescriptor`.
+
 ## 3rd-Party Providers
 
 While ABP has no core dependency to any 3rd-party DI provider, it's required to use a provider that supports dynamic proxying and some other advanced features to make some ABP features properly work. 

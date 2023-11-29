@@ -103,7 +103,7 @@ You don't need to make any changes related to that, however it's important to kn
 
 In this version, `AbpAspNetCoreAsyncIntegratedTestBase` class has been set as `Obsolete` and it's recommended to use `AbpWebApplicationFactoryIntegratedTest` instead.
 
-## Use NoTracking for readonly repositories for EF core. 
+## Use NoTracking for Readonly Repositories for EF Core 
 
 In this version, ABP Framework provides read-only [repository](Repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
 
@@ -112,6 +112,12 @@ Entity Framework Core read-only repository implementation uses [EF Core's No-Tra
 > This behavior works only if the repository object is injected with one of the read-only repository interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`). It won't work if you have injected a standard repository (e.g. `IRepository<...>`) then casted it to a read-only repository interface.
 
 > See the issue for more information: https://github.com/abpframework/abp/pull/17421
+
+## Use `IAbpDaprClientFactory` to Obtain `DaprClient`
+
+From this version on, instead of injecting the `DaprClient` directly, using the `IAbpDaprClientFactory.CreateAsync` method to create `DaprClient` or `HttpClient` objects to perform operations on Dapr is recommended.
+
+The documentation is already updated according to this suggestion and can be found at https://docs.abp.io/en/abp/8.0/Dapr/Index. So, if you want to learn more you can check the documentation or see the PR: https://github.com/abpframework/abp/pull/18117.
 
 ## Angular UI
 
@@ -238,7 +244,7 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | NSubstitute | 4.3.0 |  5.1.0 |
 | NuGet.Versioning | 5.11.0 |  6.7.0 |
 | NUglify | 1.20.0 |  1.21.0 |
-| Npgsql.EntityFrameworkCore.PostgreSQL | 7.0.0 |  8.0.0-rc.2 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 7.0.0 |  8.0.0 |
 | NSubstitute.Analyzers.CSharp | 1.0.15 |  1.0.16 |
 | Octokit | 0.50.0 |  9.0.0 |
 | OpenIddict.Abstractions | 4.8.0 |  4.10.0 |
@@ -248,14 +254,14 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | OpenIddict.Validation.ServerIntegration | 4.8.0 |  4.10.0 |
 | Oracle.EntityFrameworkCore | 7.21.8 |  7.21.12 |
 | Polly | 7.2.3 |  8.2.0 |
-| Pomelo.EntityFrameworkCore.MySql | 7.0.0 |  8.0.0-beta.1 |
+| Pomelo.EntityFrameworkCore.MySql | 7.0.0 |  8.0.0-beta.2 |
 | Quartz | 3.4.0 |  3.7.0 |
 | Quartz.Extensions.DependencyInjection | 3.4.0 |  3.7.0 |
 | Quartz.Plugins.TimeZoneConverter | 3.4.0 |  3.7.0 |
 | Quartz.Serialization.Json | 3.3.3 |  3.7.0 |
 | RabbitMQ.Client | 6.3.0 |  6.6.0 |
-| Rebus | 6.6.5 |  7.2.1 |
-| Rebus.ServiceProvider | 7.0.0 |  9.1.0 |
+| Rebus | 6.6.5 |  8.0.1 |
+| Rebus.ServiceProvider | 7.0.0 |  10.0.0 |
 | Scriban | 5.4.4 |  5.9.0 |
 | Serilog | 2.11.0 |  3.1.1 |
 | Serilog.AspNetCore | 5.0.0 |  8.0.0 |

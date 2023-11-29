@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "app": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.SettingManagement.DemoApp": {
+      "path": "app/Volo.Abp.SettingManagement.DemoApp/Volo.Abp.SettingManagement.DemoApp.abppkg",
+      "folder": "app"
+    },
+    "Volo.Abp.SettingManagement.Web": {
+      "path": "src/Volo.Abp.SettingManagement.Web/Volo.Abp.SettingManagement.Web.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.Blazor": {
+      "path": "src/Volo.Abp.SettingManagement.Blazor/Volo.Abp.SettingManagement.Blazor.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.Blazor.Server": {
+      "path": "src/Volo.Abp.SettingManagement.Blazor.Server/Volo.Abp.SettingManagement.Blazor.Server.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.Blazor.WebAssembly": {
+      "path": "src/Volo.Abp.SettingManagement.Blazor.WebAssembly/Volo.Abp.SettingManagement.Blazor.WebAssembly.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.HttpApi": {
+      "path": "src/Volo.Abp.SettingManagement.HttpApi/Volo.Abp.SettingManagement.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.HttpApi.Client": {
+      "path": "src/Volo.Abp.SettingManagement.HttpApi.Client/Volo.Abp.SettingManagement.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.Application": {
+      "path": "src/Volo.Abp.SettingManagement.Application/Volo.Abp.SettingManagement.Application.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.Application.Contracts": {
+      "path": "src/Volo.Abp.SettingManagement.Application.Contracts/Volo.Abp.SettingManagement.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.Domain.Shared": {
+      "path": "src/Volo.Abp.SettingManagement.Domain.Shared/Volo.Abp.SettingManagement.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.Domain": {
+      "path": "src/Volo.Abp.SettingManagement.Domain/Volo.Abp.SettingManagement.Domain.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.SettingManagement.EntityFrameworkCore/Volo.Abp.SettingManagement.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.Tests": {
+      "path": "test/Volo.Abp.SettingManagement.Tests/Volo.Abp.SettingManagement.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.SettingManagement.MongoDB": {
+      "path": "src/Volo.Abp.SettingManagement.MongoDB/Volo.Abp.SettingManagement.MongoDB.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.SettingManagement.TestBase": {
+      "path": "test/Volo.Abp.SettingManagement.TestBase/Volo.Abp.SettingManagement.TestBase.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.SettingManagement.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.SettingManagement.EntityFrameworkCore.Tests/Volo.Abp.SettingManagement.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.SettingManagement.MongoDB.Tests": {
+      "path": "test/Volo.Abp.SettingManagement.MongoDB.Tests/Volo.Abp.SettingManagement.MongoDB.Tests.abppkg",
+      "folder": "test"
+    }
+  }
+}

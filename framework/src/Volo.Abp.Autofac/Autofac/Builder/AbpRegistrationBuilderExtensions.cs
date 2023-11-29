@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.DependencyInjection;
@@ -14,10 +15,14 @@ public static class AbpRegistrationBuilderExtensions
 {
     public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureAbpConventions<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+            ServiceDescriptor serviceDescriptor,
             IModuleContainer moduleContainer,
-            ServiceRegistrationActionList registrationActionList)
+            ServiceRegistrationActionList registrationActionList,
+            ServiceActivatedActionList activatedActionList)
         where TActivatorData : ReflectionActivatorData
     {
+        registrationBuilder = registrationBuilder.InvokeActivatedActions(activatedActionList, serviceDescriptor);
+
         var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
         if (serviceType == null)
         {
@@ -32,6 +37,24 @@ public static class AbpRegistrationBuilderExtensions
 
         registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
         registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);
+
+        return registrationBuilder;
+    }
+
+    private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeActivatedActions<TLimit, TActivatorData, TRegistrationStyle>(
+        this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+        ServiceActivatedActionList activatedActionList,
+        ServiceDescriptor serviceDescriptor)
+        where TActivatorData : ReflectionActivatorData
+    {
+        registrationBuilder.OnActivated(context =>
+        {
+            var serviceActivatedContext = new OnServiceActivatedContext(context.Instance!);
+            foreach (var action in activatedActionList.GetActions(serviceDescriptor))
+            {
+                action.Invoke(serviceActivatedContext);
+            }
+        });
 
         return registrationBuilder;
     }

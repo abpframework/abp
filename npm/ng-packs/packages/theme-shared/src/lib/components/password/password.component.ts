@@ -3,6 +3,10 @@ import { AbstractNgModelComponent } from '@abp/ng.core';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+/**
+ * @deprecated use ShowPasswordDirective directive 
+ * https://docs.abp.io/en/abp/latest/UI/Angular/Show-Password-Directive
+ */
 @Component({
   selector: 'abp-password',
   standalone: true,

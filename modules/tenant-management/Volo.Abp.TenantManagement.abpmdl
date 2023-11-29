@@ -1,0 +1,78 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.TenantManagement.Web": {
+      "path": "src/Volo.Abp.TenantManagement.Web/Volo.Abp.TenantManagement.Web.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Blazor": {
+      "path": "src/Volo.Abp.TenantManagement.Blazor/Volo.Abp.TenantManagement.Blazor.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Blazor.WebAssembly": {
+      "path": "src/Volo.Abp.TenantManagement.Blazor.WebAssembly/Volo.Abp.TenantManagement.Blazor.WebAssembly.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Blazor.Server": {
+      "path": "src/Volo.Abp.TenantManagement.Blazor.Server/Volo.Abp.TenantManagement.Blazor.Server.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.HttpApi": {
+      "path": "src/Volo.Abp.TenantManagement.HttpApi/Volo.Abp.TenantManagement.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.HttpApi.Client": {
+      "path": "src/Volo.Abp.TenantManagement.HttpApi.Client/Volo.Abp.TenantManagement.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Application": {
+      "path": "src/Volo.Abp.TenantManagement.Application/Volo.Abp.TenantManagement.Application.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Application.Contracts": {
+      "path": "src/Volo.Abp.TenantManagement.Application.Contracts/Volo.Abp.TenantManagement.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Domain": {
+      "path": "src/Volo.Abp.TenantManagement.Domain/Volo.Abp.TenantManagement.Domain.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Domain.Shared": {
+      "path": "src/Volo.Abp.TenantManagement.Domain.Shared/Volo.Abp.TenantManagement.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.TenantManagement.EntityFrameworkCore/Volo.Abp.TenantManagement.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.Application.Tests": {
+      "path": "test/Volo.Abp.TenantManagement.Application.Tests/Volo.Abp.TenantManagement.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.TenantManagement.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.TenantManagement.EntityFrameworkCore.Tests/Volo.Abp.TenantManagement.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.TenantManagement.MongoDB": {
+      "path": "src/Volo.Abp.TenantManagement.MongoDB/Volo.Abp.TenantManagement.MongoDB.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TenantManagement.MongoDB.Tests": {
+      "path": "test/Volo.Abp.TenantManagement.MongoDB.Tests/Volo.Abp.TenantManagement.MongoDB.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.TenantManagement.TestBase": {
+      "path": "test/Volo.Abp.TenantManagement.TestBase/Volo.Abp.TenantManagement.TestBase.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.TenantManagement.Domain.Tests": {
+      "path": "test/Volo.Abp.TenantManagement.Domain.Tests/Volo.Abp.TenantManagement.Domain.Tests.abppkg",
+      "folder": "test"
+    }
+  }
+}
