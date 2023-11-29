@@ -90,6 +90,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   injectorForCustomComponent?: Injector;
   asterisk = '';
   containerClassName = 'mb-2';
+  showPassword = false;
   options$: Observable<ABP.Option<any>[]> = of([]);
   validators: ValidatorFn[] = [];
   readonly!: boolean;
