@@ -21,7 +21,7 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        var steps = base.GetCustomSteps(context).ToList();
+        var steps = new List<ProjectBuildPipelineStep>();
 
         switch (context.BuildArgs.DatabaseProvider)
         {
