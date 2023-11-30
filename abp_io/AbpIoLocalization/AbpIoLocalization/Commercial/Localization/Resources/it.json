@@ -404,6 +404,7 @@
     "WhatHappensWhenLicenseEndsExplanation6": "Non è più possibile ottenere il <a href=\"{0}\">supporto premium</a>.",
     "WhatHappensWhenLicenseEndsExplanation7": "Puoi estendere (rinnovare) la tua licenza se desideri continuare a ottenere questi vantaggi. Se estendi la licenza entro <strong>{3} giorni</strong> dalla scadenza della licenza, verranno applicati i seguenti sconti: Licenza Team {0}; Licenza commerciale {1}; Licenza aziendale {2}.",
     "BlazoriseLicense": "Dobbiamo acquistare la licenza di Blazorise?",
-    "BlazoriseLicenseExplanation": "Abbiamo un accordo tra Volosoft e Megabit, con il quale la licenza di Blazorise viene fornita in bundle con i prodotti commerciali ABP, pertanto i nostri clienti non hanno bisogno di acquistare una licenza Blazorise aggiuntiva."
+    "BlazoriseLicenseExplanation": "Abbiamo un accordo tra Volosoft e Megabit, con il quale la licenza di Blazorise viene fornita in bundle con i prodotti commerciali ABP, pertanto i nostri clienti non hanno bisogno di acquistare una licenza Blazorise aggiuntiva.",
+    "MultipleOrganizationInfo": "Visualizza tutte le tue organizzazioni"
   }
 }

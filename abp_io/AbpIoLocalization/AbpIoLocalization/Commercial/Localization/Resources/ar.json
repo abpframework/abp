@@ -791,6 +791,7 @@
     "PrivacyPolicyPageTitle": "سياسة الخصوصية - سياسة ملفات تعريف الارتباط",
     "TermsConditionsPageTitle": "الأحكام والشروط",
     "TrainingsPageTitle": "حزم تدريب ABP",
-    "ModulesPageTitle": "وحدات تطبيق ABP سابقة البناء"
+    "ModulesPageTitle": "وحدات تطبيق ABP سابقة البناء",
+    "MultipleOrganizationInfo": "شاهد جميع مؤسساتك"
   }
 }
