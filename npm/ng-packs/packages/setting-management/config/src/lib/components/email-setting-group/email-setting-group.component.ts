@@ -1,11 +1,15 @@
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { collapse, ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { SettingManagementPolicyNames } from '../../enums/policy-names';
 import { EmailSettingsService } from '@abp/ng.setting-management/proxy';
 import { EmailSettingsDto } from '../../proxy/models';
+import { ConfigStateService, LocalizationService } from '@abp/ng.core';
+
+const { required, email } = Validators;
 
 @Component({
   selector: 'abp-email-setting-group',
@@ -13,12 +17,18 @@ import { EmailSettingsDto } from '../../proxy/models';
   animations: [collapse],
 })
 export class EmailSettingGroupComponent implements OnInit {
+  protected readonly localizationService = inject(LocalizationService);
+  protected readonly configStateSevice = inject(ConfigStateService);
+  protected readonly currentUserEmail = toSignal(
+    this.configStateSevice.getDeep$(['currentUser', 'email']),
+  );
+
   form!: UntypedFormGroup;
   emailTestForm: UntypedFormGroup;
   saving = false;
   emailingPolicy = SettingManagementPolicyNames.Emailing;
   isEmailTestModalOpen = false;
-  modalSize:NgbModalOptions= { size:"lg"} 
+  modalSize: NgbModalOptions = { size: 'lg' };
 
   constructor(
     private emailSettingsService: EmailSettingsService,
@@ -62,30 +72,36 @@ export class EmailSettingGroupComponent implements OnInit {
         this.getData();
       });
   }
+
   openSendEmailModal() {
     this.buildEmailTestForm();
     this.isEmailTestModalOpen = true;
   }
 
   buildEmailTestForm() {
+    const { defaultFromAddress } = this.form.value || {};
+    const defaultSubject = this.localizationService.instant(
+      'AbpSettingManagement::TestEmailSubject',
+      ...[Math.floor(Math.random() * 9999).toString()],
+    );
+    const defaultBody = this.localizationService.instant('AbpSettingManagement::TestEmailBody');
+
     this.emailTestForm = this.fb.group({
-      senderEmailAddress: ['', [Validators.required, Validators.email]],
-      targetEmailAddress: ['', [Validators.required, Validators.email]],
-      subject: ['', [Validators.required]],
-      body: [''],
+      senderEmailAddress: [defaultFromAddress || '', [required, email]],
+      targetEmailAddress: [this.currentUserEmail(), [required, email]],
+      subject: [defaultSubject, [required]],
+      body: [defaultBody],
     });
   }
 
   emailTestFormSubmit() {
-
-    if(this.emailTestForm.invalid){
+    if (this.emailTestForm.invalid) {
       return;
     }
-     this.emailSettingsService.sendTestEmail(this.emailTestForm.value).subscribe(res => {
+
+    this.emailSettingsService.sendTestEmail(this.emailTestForm.value).subscribe(res => {
       this.toasterService.success('AbpSettingManagement::SuccessfullySent');
       this.isEmailTestModalOpen = false;
-    })
-      
+    });
   }
-
 }
