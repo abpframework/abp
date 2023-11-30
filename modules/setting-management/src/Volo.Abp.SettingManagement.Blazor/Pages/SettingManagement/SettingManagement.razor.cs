@@ -45,10 +45,15 @@ public partial class SettingManagement
         SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
     }
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        StateHasChanged();
-        return base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            await Task.Yield();
+            await InvokeAsync(StateHasChanged);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     protected virtual string GetNormalizedString(string value)
