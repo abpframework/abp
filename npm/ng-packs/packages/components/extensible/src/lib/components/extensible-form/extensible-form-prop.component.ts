@@ -1,5 +1,5 @@
 import { EXTENSIONS_FORM_PROP, EXTENSIONS_FORM_PROP_DATA } from './../../tokens/extensions.token';
-import { ABP, CoreModule, TrackByService } from '@abp/ng.core';
+import { ABP, CoreModule, ShowPasswordDirective, TrackByService } from '@abp/ng.core';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -33,7 +33,6 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import {
   DateAdapter,
   DisabledDirective,
-  PasswordComponent,
   TimeAdapter,
 } from '@abp/ng.theme.shared';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
@@ -60,8 +59,8 @@ import {CreateInjectorPipe} from "../../pipes/create-injector.pipe";
     DisabledDirective,
     NgxValidateCoreModule,
     NgbTypeaheadModule,
-    PasswordComponent,
-    CreateInjectorPipe
+    CreateInjectorPipe,
+    ShowPasswordDirective
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ExtensibleFormPropService],
@@ -91,6 +90,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   injectorForCustomComponent?: Injector;
   asterisk = '';
   containerClassName = 'mb-2';
+  showPassword = false;
   options$: Observable<ABP.Option<any>[]> = of([]);
   validators: ValidatorFn[] = [];
   readonly!: boolean;
