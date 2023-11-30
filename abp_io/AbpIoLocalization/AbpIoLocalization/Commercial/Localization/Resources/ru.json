@@ -384,6 +384,6 @@
     "TrialLicenseExpiredInfo": "Срок действия вашей пробной лицензии истек!",
     "CommercialNewsletterConfirmationMessage": "Я согласен с <a href=\"https://commercial.abp.io/TermsConditions\"> Положениями и условиями </a> и <a href=\"https://commercial.abp.io/Privacy\"> Политикой конфиденциальности </a>.",
     "BlackFridayDiscount": "Черная пятница Скидка",
-    "MultipleOrganizationInfo": "Нажмите здесь, чтобы увидеть все ваши организации"
+    "MultipleOrganizationInfo": "Просмотреть все ваши организации"
   }
 }

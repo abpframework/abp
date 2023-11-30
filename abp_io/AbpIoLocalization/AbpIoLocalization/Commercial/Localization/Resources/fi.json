@@ -828,6 +828,6 @@
     "SpringCampaignDiscount": "Kevään kampanja-alennus",
     "WhyUseAbpIoPlatform": "Miksi minun pitäisi käyttää ABP.IO-alustaa sen sijaan, että luon uuden ratkaisun tyhjästä?",
     "WhyUseAbpIoPlatformFaqExplanation": "Katso <a href=\"https://docs.abp.io/en/commercial/latest/why-abp-io-platform \"> kyseisestä asiakirjasta </a> yksityiskohtainen selitys siitä, miksi ABP.IO Platformin käyttäminen on huomattavasti edullisempaa kuin kaiken tekeminen itse.",
-    "MultipleOrganizationInfo": "Napsauta tätä nähdäksesi kaikki organisaatiosi"
+    "MultipleOrganizationInfo": "Katso kaikki organisaatiosi"
   }
 }

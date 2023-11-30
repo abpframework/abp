@@ -407,6 +407,6 @@
     "WhatHappensWhenLicenseEndsExplanation5": "Você não pode usar o ABP Suite",
     "WhatHappensWhenLicenseEndsExplanation6": "Você não pode mais obter o <a href==\"{0}\">apoio de premium</a>.",
     "WhatHappensWhenLicenseEndsExplanation7": "Você pode estender (renovar) sua licença se quiser continuar obtendo esses benefícios. Se você estender sua licença dentro de <strong>{3} dias</strong> após a expiração de sua licença, os seguintes descontos serão aplicados: Licença de equipe {0}; Licença Comercial {1}; Licença empresarial {2}.",
-    "MultipleOrganizationInfo": "Clique aqui para ver todas as suas organizações"
+    "MultipleOrganizationInfo": "Veja todas as suas organizações"
   }
 }
