@@ -1,15 +1,20 @@
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity;
 
-public class IdentitySession : BasicAggregateRoot<Guid>
+public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
 {
+    public virtual string SessionId { get; protected set; }
+
     /// <summary>
-    /// Web, CLI, STUDIO, ...
+    /// Web, OAuth ...
     /// </summary>
     public virtual string Device { get; protected set; }
+
+    public virtual string DeviceInfo { get; protected set; }
 
     public virtual Guid? TenantId { get; protected set; }
 
@@ -30,16 +35,20 @@ public class IdentitySession : BasicAggregateRoot<Guid>
 
     public IdentitySession(
         Guid id,
+        string sessionId,
         string device,
+        string deviceInfo,
         Guid userId,
         Guid? tenantId,
         string clientId,
         string ipAddresses,
         DateTime signedIn,
-        DateTime? lastAccessed)
+        DateTime? lastAccessed = null)
     {
         Id = id;
+        SessionId = sessionId;
         Device = device;
+        DeviceInfo = deviceInfo;
         UserId = userId;
         TenantId = tenantId;
         ClientId = clientId;

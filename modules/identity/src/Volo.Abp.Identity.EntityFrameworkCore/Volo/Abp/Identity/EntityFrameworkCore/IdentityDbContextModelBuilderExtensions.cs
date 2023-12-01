@@ -285,11 +285,14 @@ public static class IdentityDbContextModelBuilderExtensions
 
             b.ConfigureByConvention();
 
+            b.Property(x => x.SessionId).HasMaxLength(IdentitySessionConsts.MaxSessionIdLength).IsRequired();
             b.Property(x => x.Device).HasMaxLength(IdentitySessionConsts.MaxDeviceLength).IsRequired();
+            b.Property(x => x.DeviceInfo).HasMaxLength(IdentitySessionConsts.MaxDeviceInfoLength);
             b.Property(x => x.ClientId).HasMaxLength(IdentitySessionConsts.MaxClientIdLength);
             b.Property(x => x.IpAddresses).HasMaxLength(IdentitySessionConsts.MaxIpAddressesLength);
 
-            b.HasIndex(x => new { x.Device });
+            b.HasIndex(x => x.SessionId);
+            b.HasIndex(x => x.Device );
             b.HasIndex(x => new { x.TenantId, x.UserId });
 
             b.ApplyObjectExtensionMappings();

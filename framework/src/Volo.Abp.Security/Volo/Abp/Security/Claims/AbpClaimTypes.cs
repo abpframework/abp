@@ -87,9 +87,15 @@ public static class AbpClaimTypes
     /// Default: "impersonator_username".
     /// </summary>
     public static string ImpersonatorUserName { get; set; } = "impersonator_username";
-    
+
     /// <summary>
     /// Default: "picture".
     /// </summary>
     public static string Picture { get; set; } = "picture";
+
+    /// <summary>
+    /// Default: "session_id".
+    /// </summary>
+    public static string SessionId { get; set; } = "session_id";
+
 }
