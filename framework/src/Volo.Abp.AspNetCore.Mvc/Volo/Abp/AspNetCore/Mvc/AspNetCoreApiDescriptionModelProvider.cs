@@ -21,7 +21,6 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
-using System.Collections.Concurrent;
 
 namespace Volo.Abp.AspNetCore.Mvc;
 
