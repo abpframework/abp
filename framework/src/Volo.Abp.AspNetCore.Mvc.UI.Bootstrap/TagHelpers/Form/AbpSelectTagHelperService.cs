@@ -185,11 +185,12 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             label.AddCssClass("form-label");
             label.Attributes.Add("for", GetIdAttributeValue(selectTag));
             label.InnerHtml.AppendHtml(_encoder.Encode(TagHelper.Label));
+            label.InnerHtml.AppendHtml(GetRequiredSymbol(context, output));
 
-            return label.ToHtmlString() + GetRequiredSymbol(context, output);
+            return label.ToHtmlString();
         }
 
-        return await GetLabelAsHtmlUsingTagHelperAsync(context, output) + GetRequiredSymbol(context, output);
+        return await GetLabelAsHtmlUsingTagHelperAsync(context, output);
     }
 
     protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
@@ -304,7 +305,11 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             ViewContext = TagHelper.ViewContext,
         };
 
-        return await labelTagHelper.RenderAsync(new TagHelperAttributeList { { "class", "form-label" } }, context, _encoder, "label", TagMode.StartTagAndEndTag);
+        var innerOutput = await labelTagHelper.ProcessAndGetOutputAsync(new TagHelperAttributeList { { "class", "form-label" } }, context, "label", TagMode.StartTagAndEndTag);
+        
+        innerOutput.Content.AppendHtml(GetRequiredSymbol(context, output));
+
+        return innerOutput.Render(_encoder);
     }
 
     protected virtual async Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
