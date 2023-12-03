@@ -43,7 +43,7 @@ async function compare() {
       !excludedPackages.includes(pkgJson.name) &&
       pkgJson.version !== compareVersion
     ) {
-      throwError(pkgJsonPath, pkgJson.name);
+      throwError(pkgJsonPath, pkgJson.name, pkgJson.version);
     }
 
     const { dependencies, peerDependencies } = pkgJson;
@@ -63,13 +63,15 @@ async function compareDependencies(
 
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
-
+    const packageName = entry[0];
+    const version = getCleanVersionName(entry[1]);
+    const cleanCompareVersion = getCleanVersionName(compareVersion);
     if (
       !excludedPackages.includes(entry[0]) &&
-      entry[0].match(/@(abp|volo)/)?.length &&
-      entry[1] !== `~${compareVersion}`
+      packageName.match(/@(abp|volo)/)?.length &&
+      version !== cleanCompareVersion
     ) {
-      throwError(filePath, entry[0], `~${compareVersion}`);
+      throwError(filePath, entry[0], cleanCompareVersion);
     }
   }
 }
@@ -77,6 +79,11 @@ async function compareDependencies(
 function throwError(filePath: string, pkg: string, version?: string) {
   const { compareVersion } = program.opts();
 
-  log.error(`${filePath}: ${pkg} version is not ${version || compareVersion}`);
+  log.error(`${filePath}: ${pkg} version is not ${compareVersion}. it is ${version}`);
   process.exit(1);
+}
+
+function getCleanVersionName(version) {
+  // Remove caret (^) or tilde (~) from the beginning of the version number
+  return version.replace(/^[\^~]+/, '');
 }

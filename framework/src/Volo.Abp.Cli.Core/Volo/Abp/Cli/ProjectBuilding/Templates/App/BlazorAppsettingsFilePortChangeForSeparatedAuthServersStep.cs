@@ -14,6 +14,11 @@ public class BlazorAppsettingsFilePortChangeForSeparatedAuthServersStep : Projec
                 StringComparison.InvariantCultureIgnoreCase)
         );
 
+        if (appsettingsFile == null)
+        {
+            return;
+        }
+        
         appsettingsFile.NormalizeLineEndings();
         var lines = appsettingsFile.GetLines();
 

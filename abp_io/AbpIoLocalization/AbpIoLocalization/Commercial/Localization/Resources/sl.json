@@ -383,6 +383,7 @@
     "TryForFree": "Poskusite brezplačno",
     "TrialLicenseExpiredInfo": "Vaša preizkusna licenca je potekla!",
     "CommercialNewsletterConfirmationMessage": "Strinjam se s <a href=\"https://commercial.abp.io/TermsConditions\">pogoji in določili</a> in <a href=\"https://commercial.abp.io/Privacy\">pravilnikom o zasebnosti </a>.",
-    "BlackFridayDiscount": "Popust Black Friday"
+    "BlackFridayDiscount": "Popust Black Friday",
+    "MultipleOrganizationInfo": "Oglejte si vse svoje organizacije"
   }
 }

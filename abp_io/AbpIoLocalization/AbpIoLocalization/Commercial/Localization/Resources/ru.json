@@ -1089,6 +1089,7 @@
     "MultipleYearDiscount": "Скидка на несколько лет",
     "CampaignDiscountText": "Скидка на Черную пятницу",
     "CampaignDiscountName": "Черная пятница",
-    "CampaignName:BlackFriday": "Черная пятница"
+    "CampaignName:BlackFriday": "Черная пятница",
+    "MultipleOrganizationInfo": "Просмотреть все ваши организации"
   }
 }

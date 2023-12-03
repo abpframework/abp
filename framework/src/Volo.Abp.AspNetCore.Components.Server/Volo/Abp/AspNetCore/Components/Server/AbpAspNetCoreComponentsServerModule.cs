@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Http.Connections;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp.AspNetCore.Auditing;
+using Volo.Abp.AspNetCore.Components.Server.Extensibility;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.SignalR;
@@ -30,7 +33,11 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         StaticWebAssetsLoader.UseStaticWebAssets(context.Services.GetHostingEnvironment(), context.Services.GetConfiguration());
-        context.Services.AddHttpClient();
+        context.Services.AddHttpClient(nameof(BlazorServerLookupApiRequestService))
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.All
+            });
         var serverSideBlazorBuilder = context.Services.AddServerSideBlazor(options =>
         {
             if (context.Services.GetHostingEnvironment().IsDevelopment())

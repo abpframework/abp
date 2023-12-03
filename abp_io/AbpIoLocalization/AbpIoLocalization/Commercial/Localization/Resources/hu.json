@@ -753,6 +753,7 @@
     "ExtendPaymentInfoSection_DeveloperPrice": "{0}x További Fejlesztő(k)",
     "ExtendPaymentInfoSection_DiscountRate": "Kedvezmény: {0}%",
     "TotalNetPrice": "Total Net Price",
-    "BlackFridayDiscount": "Black Friday Kedvezmény"
+    "BlackFridayDiscount": "Black Friday Kedvezmény",
+    "MultipleOrganizationInfo": "Tekintse meg az összes szervezetét"
   }
 }
