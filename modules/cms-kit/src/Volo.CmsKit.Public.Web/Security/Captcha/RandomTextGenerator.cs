@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using ImageMagick;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Png;
 
 namespace Volo.CmsKit.Public.Web.Security.Captcha;
 public static class RandomTextGenerator
 {
     private static readonly char[] AllowedChars = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVXYZW23456789".ToCharArray();
 
-    public static MagickFormat GetEncoder(EncoderTypes encoderType)
+    public static IImageEncoder GetEncoder(EncoderTypes encoderType)
     {
-        var encoder = encoderType switch
+        IImageEncoder encoder = encoderType switch
         {
-            EncoderTypes.Png => MagickFormat.Png,
-            EncoderTypes.Jpeg => MagickFormat.Jpeg,
+            EncoderTypes.Png => new PngEncoder(),
+            EncoderTypes.Jpeg => new JpegEncoder(),
             _ => throw new ArgumentException($"Encoder '{encoderType}' not found!")
         };
 

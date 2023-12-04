@@ -18,13 +18,12 @@ public class ExchangeDeclareConfiguration
         string exchangeName,
         string type,
         bool durable = false,
-        bool autoDelete = false,
-        IDictionary<string, object>? arguments = null)
+        bool autoDelete = false)
     {
         ExchangeName = exchangeName;
         Type = type;
         Durable = durable;
         AutoDelete = autoDelete;
-        Arguments = arguments?? new Dictionary<string, object>();
+        Arguments = new Dictionary<string, object>();
     }
 }

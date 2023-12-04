@@ -383,7 +383,6 @@
     "TryForFree": "Probeer gratis",
     "TrialLicenseExpiredInfo": "Uw proeflicentieperiode is verlopen!",
     "CommercialNewsletterConfirmationMessage": "Ik ga akkoord met de <a href=\"https://commercial.abp.io/TermsConditions\">Algemene voorwaarden</a> en het <a href=\"https://commercial.abp.io/Privacy\">Privacybeleid </a>.",
-    "BlackFridayDiscount": "Black Friday korting",
-    "MultipleOrganizationInfo": "Bekijk al uw organisaties"
+    "BlackFridayDiscount": "Black Friday korting"
   }
 }

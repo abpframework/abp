@@ -32,18 +32,14 @@ public class WebAssemblyLookupApiRequestService : ILookupApiRequestService, ITra
 
     public async Task<string> SendAsync(string url)
     {
-        var client = HttpClientFactory.CreateClient(nameof(WebAssemblyLookupApiRequestService));
+        var client = HttpClientFactory.CreateClient();
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         AddHeaders(requestMessage);
 
         var uri = new Uri(url, UriKind.RelativeOrAbsolute);
         if (!uri.IsAbsoluteUri)
         {
-            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultOrNullAsync("Default");
-            if (remoteServiceConfig == null)
-            {
-                throw new AbpException("Remote service configuration 'Default' was not found!");
-            }
+            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
             client.BaseAddress = new Uri(remoteServiceConfig.BaseUrl);
             await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(remoteServiceConfig.BaseUrl), string.Empty));
         }

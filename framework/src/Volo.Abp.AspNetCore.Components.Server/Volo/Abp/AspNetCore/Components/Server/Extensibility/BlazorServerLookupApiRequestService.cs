@@ -41,25 +41,27 @@ public class BlazorServerLookupApiRequestService : ILookupApiRequestService, ITr
 
     public async Task<string> SendAsync(string url)
     {
-        var client = HttpClientFactory.CreateClient(nameof(BlazorServerLookupApiRequestService));
+        var client = HttpClientFactory.CreateClient();
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
 
         var uri = new Uri(url, UriKind.RelativeOrAbsolute);
         if (!uri.IsAbsoluteUri)
         {
-            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultOrNullAsync("Default");
-            if (remoteServiceConfig != null)
+            var baseUrl = string.Empty;
+            try
             {
-                // Blazor tiered mode
-                var baseUrl = remoteServiceConfig.BaseUrl;
+                //Blazor tiered -- mode
+                var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
+                baseUrl = remoteServiceConfig.BaseUrl;
                 client.BaseAddress = new Uri(baseUrl);
                 AddHeaders(requestMessage);
-                await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(baseUrl), string.Empty));
+                await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client,
+                    requestMessage, new RemoteServiceConfiguration(baseUrl), string.Empty));
             }
-            else
+            catch (AbpException) // Blazor-Server mode.
             {
-                // Blazor server  mode
-                client.BaseAddress = new Uri(NavigationManager.BaseUri);
+                baseUrl = NavigationManager.BaseUri;
+                client.BaseAddress = new Uri(baseUrl);
                 foreach (var header in HttpContextAccessor.HttpContext!.Request.Headers)
                 {
                     requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());

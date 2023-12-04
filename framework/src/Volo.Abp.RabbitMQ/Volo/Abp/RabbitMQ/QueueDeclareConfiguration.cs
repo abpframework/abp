@@ -23,14 +23,13 @@ public class QueueDeclareConfiguration
         bool durable = true,
         bool exclusive = false,
         bool autoDelete = false,
-        ushort? prefetchCount = null,
-        IDictionary<string, object>? arguments = null)
+        ushort? prefetchCount = null)
     {
         QueueName = queueName;
         Durable = durable;
         Exclusive = exclusive;
         AutoDelete = autoDelete;
-        Arguments = arguments?? new Dictionary<string, object>();
+        Arguments = new Dictionary<string, object>();
         PrefetchCount = prefetchCount;
     }
 

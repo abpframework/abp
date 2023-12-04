@@ -271,7 +271,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         if (string.IsNullOrEmpty(TagHelper.Label))
         {
-            return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox);
+            return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox) + GetRequiredSymbol(context, output);
         }
 
         var label = new TagBuilder("label");
@@ -392,8 +392,6 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             }
             innerOutput.Content.AppendHtml($" <i class=\"{iconClass}\"></i>");
         }
-        
-        innerOutput.Content.AppendHtml(GetRequiredSymbol(context, output));
 
         return innerOutput.Render(_encoder);
     }

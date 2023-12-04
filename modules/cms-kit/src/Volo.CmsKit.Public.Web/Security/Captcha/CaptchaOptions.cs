@@ -1,17 +1,19 @@
 ﻿using System;
-using ImageMagick;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 
 namespace Volo.CmsKit.Public.Web.Security.Captcha;
 
 public class CaptchaOptions
 {
-    public MagickColor[] TextColor { get; set; } = new MagickColor[]
+    public Color[] TextColor { get; set; } = new Color[]
     {
-        MagickColors.Blue, MagickColors.Black, MagickColors.Black, MagickColors.Brown, MagickColors.Gray, MagickColors.Green
+        Color.Blue, Color.Black, Color.Black, Color.Brown, Color.Gray, Color.Green
     };
-    public MagickColor[] DrawLinesColor { get; set; } = new MagickColor[]
+    public Color[] DrawLinesColor { get; set; } = new Color[]
     {
-        MagickColors.Blue, MagickColors.Black, MagickColors.Black, MagickColors.Brown, MagickColors.Gray, MagickColors.Green
+        Color.Blue, Color.Black, Color.Black, Color.Brown, Color.Gray, Color.Green
     };
 
     public float MinLineThickness { get; set; } = 0.7f;
@@ -24,15 +26,15 @@ public class CaptchaOptions
 
     public ushort NoiseRate { get; set; } = 500;
 
-    public MagickColor[] NoiseRateColor { get; set; } = new MagickColor[] { MagickColors.Gray };
+    public Color[] NoiseRateColor { get; set; } = new Color[] { Color.Gray };
 
     public byte FontSize { get; set; } = 32;
 
-    public FontStyleType FontStyle { get; set; } = FontStyleType.Normal;
+    public FontStyle FontStyle { get; set; } = FontStyle.Regular;
 
     public EncoderTypes EncoderType { get; set; } = EncoderTypes.Png;
 
-    public MagickFormat Encoder => RandomTextGenerator.GetEncoder(EncoderType);
+    public IImageEncoder Encoder => RandomTextGenerator.GetEncoder(EncoderType);
 
     public byte DrawLines { get; set; } = 2;
 
