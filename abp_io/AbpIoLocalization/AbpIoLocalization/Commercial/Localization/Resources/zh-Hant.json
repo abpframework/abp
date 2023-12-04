@@ -408,6 +408,7 @@
     "WhatHappensWhenLicenseEndsExplanation6": "您無法再獲得<a href=\"{0}\">高級支持</a>。",
     "WhatHappensWhenLicenseEndsExplanation7": "如果您想繼續獲得這些好處，您可以延長（更新）您的許可證。如果您在許可到期後 <strong>{3} 天</strong> 內延長許可，將應用以下折扣：團隊許可 {0}；營業執照{1}；企業許可證{2}。",
     "DoesTheSubscriptionRenewAutomatically": "許可會自動續費嗎？",
-    "DoesTheSubscriptionRenewAutomaticallyExplanation": "ABP 商業版沒有自動續費的計費模式。因此，在您的許可期結束時，<strong>您的訂閱將不會自動續訂</strong>。如果您希望繼續享受ABP商業版的服務，請在<a href=\"/my-organizations\">組織管理頁面</a>手動進行續費操作。如果您擁有多個組織，您可以點擊即將到期的組織上的\"管理\"按鈕，然後點擊\"立即續費\"按鈕來續訂您的許可。您還可以查看<a href=\"/faq#what-happens-when-license-ends\">許可到期後會發生什麼？</a>部分了解更多信息。"
+    "DoesTheSubscriptionRenewAutomaticallyExplanation": "ABP 商業版沒有自動續費的計費模式。因此，在您的許可期結束時，<strong>您的訂閱將不會自動續訂</strong>。如果您希望繼續享受ABP商業版的服務，請在<a href=\"/my-organizations\">組織管理頁面</a>手動進行續費操作。如果您擁有多個組織，您可以點擊即將到期的組織上的\"管理\"按鈕，然後點擊\"立即續費\"按鈕來續訂您的許可。您還可以查看<a href=\"/faq#what-happens-when-license-ends\">許可到期後會發生什麼？</a>部分了解更多信息。",
+    "MultipleOrganizationInfo": "查看您的所有組織"
   }
 }

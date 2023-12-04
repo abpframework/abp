@@ -601,7 +601,7 @@
     "Purchase_TrainingPrice": "Képzési ár",
     "Purchase_OnboardingTraining": "ABP Onboarding és webalkalmazás-fejlesztés élő képzés",
     "TotalDeveloperPrice": "Teljes fejlesztői ár",
-    "Purchase_PricePerDeveloper": "<span>{0} {1}</span> fejlesztőnként",
+    "Purchase_PricePerDeveloper": "<span>{0}</span> fejlesztőnként",
     "Purchase_IncludedDeveloperInfo": "{0} {1} tartalmazza.",
     "Purchase_LicenseExtraDeveloperPurchaseMessage": "A(z) <span class=\"fw-6\">{0} licensz</span> {1} fejlesztőt tartalmaz. Hozzáadhat további fejlesztőket most vagy később.",
     "StartupTemplates_Page_Title": "Az indítási sablonok",
@@ -753,6 +753,7 @@
     "ExtendPaymentInfoSection_DeveloperPrice": "{0}x További Fejlesztő(k)",
     "ExtendPaymentInfoSection_DiscountRate": "Kedvezmény: {0}%",
     "TotalNetPrice": "Total Net Price",
-    "BlackFridayDiscount": "Black Friday Kedvezmény"
+    "BlackFridayDiscount": "Black Friday Kedvezmény",
+    "MultipleOrganizationInfo": "Tekintse meg az összes szervezetét"
   }
 }

@@ -79,14 +79,16 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
             new ExchangeDeclareConfiguration(
                 AbpRabbitMqEventBusOptions.ExchangeName,
                 type: AbpRabbitMqEventBusOptions.GetExchangeTypeOrDefault(),
-                durable: true
+                durable: true,
+                arguments: AbpRabbitMqEventBusOptions.ExchangeArguments
             ),
             new QueueDeclareConfiguration(
                 AbpRabbitMqEventBusOptions.ClientName,
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
-                prefetchCount: AbpRabbitMqEventBusOptions.PrefetchCount
+                prefetchCount: AbpRabbitMqEventBusOptions.PrefetchCount,
+                arguments: AbpRabbitMqEventBusOptions.QueueArguments
             ),
             AbpRabbitMqEventBusOptions.ConnectionName
         );

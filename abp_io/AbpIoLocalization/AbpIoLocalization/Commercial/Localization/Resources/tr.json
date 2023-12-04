@@ -610,7 +610,7 @@
     "Purchase_TrainingPrice": "Eğitim Fiyatı",
     "Purchase_OnboardingTraining": "ABP Onboarding & Web Uygulama Geliştirme Canlı Eğitimi",
     "TotalDeveloperPrice": "Toplam Geliştirici Fiyatı",
-    "Purchase_PricePerDeveloper": "<span>{0} {1}</span> geliştirici başına",
+    "Purchase_PricePerDeveloper": "<span>{0}</span> geliştirici başına",
     "Purchase_IncludedDeveloperInfo": "{0} {1} dahil.",
     "Purchase_LicenseExtraDeveloperPurchaseMessage": "<span class=\"fw-6\">{0} lisansı</span> {1} geliştirici(ler) içerir. Şimdi veya daha sonra ek geliştiriciler ekleyebilirsiniz.",
     "StartupTemplates_Page_Title": "ABP Başlangıç Şablonları",
@@ -841,6 +841,7 @@
     "OneCodeBaseMultipleDevices": "Tek Kod Tabanı, Birden Çok Cihaz",
     "OneCodeBaseMultipleDevices_Description": "ABP Mobil uygulamaları çapraz platformdur. iOS ve Android cihazlara yüklenmeye ve çalıştırılmaya hazırdırlar ve tek bir kod tabanı kullanarak farklı form faktörlerine uyum sağlarlar. Geliştiricilerin kullanıcı arayüzünü ve ön uç kodunu yalnızca bir kez oluşturması gerekir, desteklemek istediğiniz her cihaz için kodu uyarlamanıza gerek yoktur.",
     "ComesWithTheSourceCode": "Kaynak Koduyla Birlikte Geliyor",
-    "ComesWithTheSourceCode_Description": "Mobil uygulamalar kaynak koduyla birlikte sağlanır. Marka yönergelerini karşılamak için uygulamalarınızın UX/UI'sini kolayca özelleştirin."
+    "ComesWithTheSourceCode_Description": "Mobil uygulamalar kaynak koduyla birlikte sağlanır. Marka yönergelerini karşılamak için uygulamalarınızın UX/UI'sini kolayca özelleştirin.",
+    "MultipleOrganizationInfo": "Tüm Organizasyonlarınızı Görün"
   }
 }

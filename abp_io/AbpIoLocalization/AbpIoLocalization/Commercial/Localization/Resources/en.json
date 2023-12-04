@@ -603,7 +603,7 @@
     "Purchase_TrainingPrice": "Training Price",
     "Purchase_OnboardingTraining": "Onboarding & Web Application Development Live Training",
     "TotalDeveloperPrice": "Total Developer Price",
-    "Purchase_PricePerDeveloper": "<span>{0} {1}</span> per developer",
+    "Purchase_PricePerDeveloper": "<span>{0}</span> per developer",
     "Purchase_IncludedDeveloperInfo": "{0} {1} included.",
     "Purchase_LicenseExtraDeveloperPurchaseMessage": "The <span class=\"fw-bold\">{0} License</span>  includes {1} developers. You can add additional developers.",
     "StartupTemplates_Page_Title": "ABP Startup Templates",
@@ -986,8 +986,8 @@
     "Summary": "Summary",
     "TrainingPack": "Training pack",
     "TrainingPackDiscount": "Training pack discount",
-    "Purchase_OnboardingTraining_Description": "This live training package is valid for a class of 8 students and this discount is only valid when purchased with the new license. <a href=\"{0}\" class=\"text-white\">Learn more <i class=\"fa fa-external-link ms-1\"></i></a>",
-    "Purchase_Save": "{0}% <span class=\"save ms-1\">Save {1} {2}</span>",
+    "Purchase_OnboardingTraining_Description": "This live training is valid for a class of 8 students and this discount is only valid when purchased with the new license. <a href=\"{0}\" class=\"text-white\">Learn more <i class=\"fa fa-external-link ms-1\"></i></a>",
+    "Purchase_Save": "{0}% <span class=\"save ms-1\">Save {1}</span>",
     "RemoveBasket": "Remove from basket",
     "WhyABPIOPlatform?": "Why <span class=\"gradient-commercial\">ABP.IO Platform</span>?",
     "DocumentAim": "This document aims to answer the big question:",
@@ -1085,6 +1085,7 @@
     "MultipleYearDiscount": "Multiple Year Discount",
     "CampaignDiscountText": "Black Friday Discount",
     "CampaignDiscountName": "Black Friday",
-    "CampaignName:BlackFriday": "Black Friday"
+    "CampaignName:BlackFriday": "Black Friday",
+    "MultipleOrganizationInfo": "See All Your Organizations"
   }
 }
