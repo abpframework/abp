@@ -102,7 +102,7 @@ The SQL statement looks like this, and as you can see, it automatically serializ
  Executed DbCommand (0ms) [Parameters=
  [@p0='Maserati' (Nullable = false) (Size = 8),
   @p1='[0,3]' (Nullable = false) (Size = 5),
-  @p2='Flow' (Nullable = false) (Size = 4)
+  @p2='GranTurismo' (Nullable = false) (Size = 4)
  ], CommandType='Text', CommandTimeout='30']
       INSERT INTO "Cars" ("Brand", "Colors", "Model")
       VALUES (@p0, @p1, @p2)
