@@ -229,6 +229,12 @@
     "ManageAccount": "Управлять счетом",
     "CommunityProfile": "Профиль сообщества",
     "BlogProfile": "Профиль блога",
-    "Tickets": "Билеты"
+    "Tickets": "Билеты",
+    "Raffles": "Розыгрыши",
+    "Status": "Положение дел",
+    "Resources": "Ресурсы",
+    "Video Courses": "Видео курсы",
+    "Packages": "Пакеты",
+    "Trainings": "Тренинги"
   }
 }
