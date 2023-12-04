@@ -71,6 +71,8 @@ public partial class PermissionManagementModal
             }
         }
     }
+    
+    protected Dictionary<string, int> _permissionDepths = new Dictionary<string, int>();
 
     public PermissionManagementModal()
     {
@@ -112,6 +114,11 @@ public partial class PermissionManagementModal
             }
 
             _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
+
+            foreach (var group in _groups)
+            {
+                SetPermissionDepths(group.Permissions, null, 0);
+            }
 
             await InvokeAsync(_modal.Show);
         }
@@ -162,6 +169,18 @@ public partial class PermissionManagementModal
     protected virtual string GetNormalizedGroupName(string name)
     {
         return "PermissionGroup_" + name.Replace(".", "_");
+    }
+
+    protected virtual void SetPermissionDepths(List<PermissionGrantInfoDto> permissions, string currentParent, int currentDepth)
+    {
+        foreach (var item in permissions)
+        {
+            if (item.ParentName == currentParent)
+            {
+                _permissionDepths[item.Name] = currentDepth;
+                SetPermissionDepths(permissions, item.Name, currentDepth + 1);
+            }
+        }
     }
 
     protected virtual void GroupGrantAllChanged(bool value, PermissionGroupDto permissionGroup)
