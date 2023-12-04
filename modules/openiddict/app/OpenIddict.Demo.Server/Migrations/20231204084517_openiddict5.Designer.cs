@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace OpenIddict.Demo.Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    [Migration("20231116094249_Initial")]
-    partial class Initial
+    [Migration("20231204084517_openiddict5")]
+    partial class openiddict5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -818,12 +818,20 @@ namespace OpenIddict.Demo.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ApplicationType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("ClientId")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ClientSecret")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ClientUri")
                         .HasColumnType("nvarchar(max)");
@@ -872,6 +880,9 @@ namespace OpenIddict.Demo.Server.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("IsDeleted");
 
+                    b.Property<string>("JsonWebKeySet")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("LastModificationTime");
@@ -898,9 +909,8 @@ namespace OpenIddict.Demo.Server.Migrations
                     b.Property<string>("Requirements")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("Settings")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
