@@ -30,12 +30,12 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
         var application = await _applicationStore.FindByIdAsync(nonExistingId, CancellationToken.None);
         application.ShouldBeNull();
     }
-    
+
     [Fact]
     public async Task FindByIdAsync_Should_Return_Application_If_Found()
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
-        
+
         application.ShouldNotBeNull();
         application.ClientId.ShouldBe(_testData.App1ClientId);
         application.ConsentType.ShouldBe(OpenIddictConstants.ConsentTypes.Explicit);
@@ -76,16 +76,16 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
             ClientId = clientId,
             ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
             DisplayName = "Test Application",
-            Type = OpenIddictConstants.ClientTypes.Public,
+            ClientType = OpenIddictConstants.ClientTypes.Public,
             PostLogoutRedirectUris = "https://abp.io",
             RedirectUris = "https://abp.io"
         }, CancellationToken.None);
-        
+
         var application = await _applicationStore.FindByClientIdAsync(clientId, CancellationToken.None);
         application.ShouldNotBeNull();
         application.ClientId.ShouldBe(clientId);
         application.DisplayName.ShouldBe("Test Application");
-        application.Type.ShouldBe(OpenIddictConstants.ClientTypes.Public);
+        application.ClientType.ShouldBe(OpenIddictConstants.ClientTypes.Public);
         application.PostLogoutRedirectUris.ShouldBe("https://abp.io");
         application.RedirectUris.ShouldBe("https://abp.io");
     }
@@ -95,9 +95,9 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         application.ShouldNotBeNull();
-        
+
         await _applicationStore.DeleteAsync(application, CancellationToken.None);
-        
+
         application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         application.ShouldBeNull();
     }
@@ -115,14 +115,14 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
         var applications = await _applicationStore.FindByPostLogoutRedirectUriAsync("https://abp.io", CancellationToken.None).ToListAsync();
         applications.Count.ShouldBe(2);
     }
-    
+
     [Fact]
     public async Task FindByRedirectUriAsync_Should_Return_Empty_If_Not_Found()
     {
         var applications = await _applicationStore.FindByRedirectUriAsync("non-existing-uri", CancellationToken.None).ToListAsync();
         applications.Count.ShouldBe(0);
     }
-    
+
     [Fact]
     public async Task FindByRedirectUriAsync_Should_Return_Applications_If_Found()
     {
@@ -135,7 +135,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var clientId = await _applicationStore.GetClientIdAsync(application, CancellationToken.None);
-        
+
         clientId.ShouldBe(_testData.App1ClientId);
     }
 
@@ -144,7 +144,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var secret = await _applicationStore.GetClientIdAsync(application, CancellationToken.None);
-        
+
         secret.ShouldBe("Client1");
     }
 
@@ -153,7 +153,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var clientType = await _applicationStore.GetClientTypeAsync(application, CancellationToken.None);
-        
+
         clientType.ShouldBe(OpenIddictConstants.ClientTypes.Public);
     }
 
@@ -162,7 +162,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var consentType = await _applicationStore.GetConsentTypeAsync(application, CancellationToken.None);
-        
+
         consentType.ShouldBe(OpenIddictConstants.ConsentTypes.Explicit);
     }
 
@@ -171,7 +171,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var displayName = await _applicationStore.GetDisplayNameAsync(application, CancellationToken.None);
-        
+
         displayName.ShouldBe("Test Application");
     }
 
@@ -180,7 +180,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var id = await _applicationStore.GetIdAsync(application, CancellationToken.None);
-        
+
         id.ShouldBe(_testData.App1Id.ToString());
     }
 
@@ -189,7 +189,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var permissions = await _applicationStore.GetPermissionsAsync(application, CancellationToken.None);
-        
+
         permissions.Length.ShouldBeGreaterThan(0);
     }
 
@@ -198,7 +198,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var postLogoutRedirectUris = await _applicationStore.GetPostLogoutRedirectUrisAsync(application, CancellationToken.None);
-        
+
         postLogoutRedirectUris.Length.ShouldBe(1);
         postLogoutRedirectUris[0].ShouldBe("https://abp.io");
     }
@@ -208,7 +208,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var redirectUris = await _applicationStore.GetRedirectUrisAsync(application, CancellationToken.None);
-        
+
         redirectUris.Length.ShouldBe(1);
         redirectUris[0].ShouldBe("https://abp.io");
     }
@@ -218,7 +218,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var properties = await _applicationStore.GetPropertiesAsync(application, CancellationToken.None);
-        
+
         properties.Count.ShouldBe(0);
     }
 
@@ -227,14 +227,14 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         var requirements = await _applicationStore.GetRequirementsAsync(application, CancellationToken.None);
-        
+
         requirements.Length.ShouldBe(0);
     }
 
     [Fact]
     public async Task InstantiateAsync()
     {
-        var application = await _applicationStore.InstantiateAsync(CancellationToken.None); 
+        var application = await _applicationStore.InstantiateAsync(CancellationToken.None);
         application.ShouldNotBeNull();
     }
 
@@ -268,7 +268,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
         var clientSecret = Guid.NewGuid().ToString();
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetClientSecretAsync(application, clientSecret, CancellationToken.None);
-        
+
         application.ClientSecret.ShouldBe(clientSecret);
     }
 
@@ -277,8 +277,8 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetClientTypeAsync(application, OpenIddictConstants.ClientTypes.Confidential, CancellationToken.None);
-        
-        application.Type.ShouldBe(OpenIddictConstants.ClientTypes.Confidential);
+
+        application.ClientType.ShouldBe(OpenIddictConstants.ClientTypes.Confidential);
     }
 
     [Fact]
@@ -286,17 +286,17 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetConsentTypeAsync(application, OpenIddictConstants.ConsentTypes.Systematic, CancellationToken.None);
-        
+
         application.ConsentType.ShouldBe(OpenIddictConstants.ConsentTypes.Systematic);
     }
-    
+
     [Fact]
     public async Task SetDisplayNameAsync()
     {
         var displayName = Guid.NewGuid().ToString();
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetDisplayNameAsync(application, displayName, CancellationToken.None);
-        
+
         application.DisplayName.ShouldBe(displayName);
     }
 
@@ -306,7 +306,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
         var displayNames = ImmutableDictionary.Create<CultureInfo, string>();
         displayNames = displayNames.Add(CultureInfo.GetCultureInfo("en"), "Test Application");
         displayNames = displayNames.Add(CultureInfo.GetCultureInfo("zh-Hans"), "测试应用程序");
-        
+
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetDisplayNamesAsync(application, displayNames, CancellationToken.None);
 
@@ -319,7 +319,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetPermissionsAsync(application, ImmutableArray.Create(OpenIddictConstants.Permissions.Endpoints.Authorization), CancellationToken.None);
-        
+
         application.Permissions.ShouldBe("[\""+OpenIddictConstants.Permissions.Endpoints.Authorization+"\"]");
     }
 
@@ -328,7 +328,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetPostLogoutRedirectUrisAsync(application, ImmutableArray.Create("https://abp.io"), CancellationToken.None);
-        
+
         application.PostLogoutRedirectUris.ShouldBe("[\"https://abp.io\"]");
     }
 
@@ -337,7 +337,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetPropertiesAsync(application, ImmutableDictionary.Create<string, JsonElement>(), CancellationToken.None);
-        
+
         application.Properties.ShouldBeNull();
     }
 
@@ -346,7 +346,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetRedirectUrisAsync(application, ImmutableArray.Create("https://abp.io"), CancellationToken.None);
-        
+
         application.RedirectUris.ShouldBe("[\"https://abp.io\"]");
     }
 
@@ -355,7 +355,7 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         await _applicationStore.SetRequirementsAsync(application, ImmutableArray.Create(OpenIddictConstants.Requirements.Features.ProofKeyForCodeExchange), CancellationToken.None);
-        
+
         application.Requirements.ShouldBe("[\""+OpenIddictConstants.Requirements.Features.ProofKeyForCodeExchange+"\"]");
     }
 
@@ -364,17 +364,17 @@ public class AbpOpenIddictApplicationStore_Tests : OpenIddictDomainTestBase
     {
         var application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
         application.ClientId = "new_client_id";
-        application.Type = OpenIddictConstants.ClientTypes.Public;
+        application.ClientType = OpenIddictConstants.ClientTypes.Public;
         application.RedirectUris = "https://new_logout_uri";
         application.PostLogoutRedirectUris = "https://new_post_logout_uri";
         application.DisplayName = "new_display_name";
-        
+
         await _applicationStore.UpdateAsync(application, CancellationToken.None);
         application = await _applicationStore.FindByIdAsync(_testData.App1Id.ToString(), CancellationToken.None);
 
         application.ShouldNotBeNull();
         application.ClientId.ShouldBe("new_client_id");
-        application.Type.ShouldBe(OpenIddictConstants.ClientTypes.Public);
+        application.ClientType.ShouldBe(OpenIddictConstants.ClientTypes.Public);
         application.RedirectUris.ShouldBe("https://new_logout_uri");
         application.PostLogoutRedirectUris.ShouldBe("https://new_post_logout_uri");
         application.DisplayName.ShouldBe("new_display_name");

@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.IdentityModel.Tokens;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
@@ -8,6 +9,11 @@ namespace Volo.Abp.OpenIddict.Applications;
 public class OpenIddictApplicationModel : ExtensibleObject
 {
     public Guid Id { get; set; }
+
+    /// <summary>
+    /// Gets or sets the application type associated with the application.
+    /// </summary>
+    public virtual string ApplicationType { get; set; }
 
     /// <summary>
     /// Gets or sets the client identifier associated with the current application.
@@ -20,6 +26,11 @@ public class OpenIddictApplicationModel : ExtensibleObject
     /// this property may be hashed or encrypted for security reasons.
     /// </summary>
     public virtual string ClientSecret { get; set; }
+
+    /// <summary>
+    /// Gets or sets the client type associated with the application.
+    /// </summary>
+    public string ClientType { get; set; }
 
     /// <summary>
     /// Gets or sets the consent type associated with the current application.
@@ -37,6 +48,11 @@ public class OpenIddictApplicationModel : ExtensibleObject
     /// serialized as a JSON object.
     /// </summary>
     public virtual string DisplayNames { get; set; }
+
+    /// <summary>
+    /// Gets or sets the JSON Web Key Set associated with the application.
+    /// </summary>
+    public virtual JsonWebKeySet JsonWebKeySet { get; set; }
 
     /// <summary>
     /// Gets or sets the permissions associated with the
@@ -69,9 +85,9 @@ public class OpenIddictApplicationModel : ExtensibleObject
     public virtual string Requirements { get; set; }
 
     /// <summary>
-    /// Gets or sets the application type associated with the current application.
+    /// Gets the settings associated with the application.
     /// </summary>
-    public virtual string Type { get; set; }
+    public virtual string Settings { get; set; }
 
     /// <summary>
     /// URI to further information about client.

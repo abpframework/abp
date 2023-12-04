@@ -4,7 +4,7 @@ using OpenIddict.Server;
 
 namespace Volo.Abp.OpenIddict.WildcardDomains;
 
-public class AbpValidateRedirectUriParameter : AbpOpenIddictWildcardDomainBase<OpenIddictServerHandlers.Authentication.ValidateRedirectUriParameter, OpenIddictServerEvents.ValidateAuthorizationRequestContext>
+public class AbpValidateRedirectUriParameter : AbpOpenIddictWildcardDomainBase<AbpValidateRedirectUriParameter, OpenIddictServerHandlers.Authentication.ValidateRedirectUriParameter, OpenIddictServerEvents.ValidateAuthorizationRequestContext>
 {
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
         = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateAuthorizationRequestContext>()
@@ -27,6 +27,6 @@ public class AbpValidateRedirectUriParameter : AbpOpenIddictWildcardDomainBase<O
             return;
         }
 
-        await Handler.HandleAsync(context);
+        await OriginalHandler.HandleAsync(context);
     }
 }

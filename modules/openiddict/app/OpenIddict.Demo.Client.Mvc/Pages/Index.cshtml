@@ -45,24 +45,5 @@
             }
             @apiResponse;
         </code>
-
-        request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44301/api/claims");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
-
-        response = await client.SendAsync(request);
-
-        <code style="display: block; white-space: pre-wrap; text-align: left">
-            @{
-                apiResponse = response.StatusCode.ToString();
-                if (response.IsSuccessStatusCode)
-                {
-                    apiResponse = JsonSerializer.Serialize(JsonDocument.Parse(await response.Content.ReadAsStringAsync()), new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    });
-                }
-            }
-            @apiResponse;
-        </code>
     }
 </div>

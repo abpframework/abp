@@ -12,5 +12,4 @@ public class AbpOpenIddictWildcardDomainOptions
     {
         WildcardDomainsFormat = new HashSet<string>();
     }
-
 }

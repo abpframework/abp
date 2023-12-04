@@ -108,7 +108,7 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
+    public virtual async Task<long> PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
         var authorizationIds = await (await GetMongoQueryableAsync<OpenIddictAuthorization>(cancellationToken))
             .Where(x => x.Status != OpenIddictConstants.Statuses.Valid)
@@ -125,5 +125,16 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
             .ToListAsync(GetCancellationToken(cancellationToken));
 
         await DeleteManyAsync(tokens, cancellationToken: cancellationToken);
+
+        return tokens.Count;
+    }
+
+    public virtual async ValueTask<long> RevokeByAuthorizationIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return (await (await GetCollectionAsync(GetCancellationToken(cancellationToken))).UpdateManyAsync(
+            filter: token => token.AuthorizationId == id,
+            update: Builders<OpenIddictToken>.Update.Set(token => token.Status, OpenIddictConstants.Statuses.Revoked),
+            options: null,
+            cancellationToken: GetCancellationToken(cancellationToken))).MatchedCount;
     }
 }

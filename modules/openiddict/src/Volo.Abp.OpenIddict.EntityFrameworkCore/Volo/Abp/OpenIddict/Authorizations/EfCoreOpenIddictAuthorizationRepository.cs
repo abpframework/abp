@@ -80,7 +80,7 @@ public class EfCoreOpenIddictAuthorizationRepository : EfCoreRepository<IOpenIdd
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
+    public virtual async Task<long> PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
         var authorizations = await (from authorization in (await GetQueryableAsync())
             join token in (await GetDbContextAsync()).Set<OpenIddictToken>()
@@ -91,11 +91,11 @@ public class EfCoreOpenIddictAuthorizationRepository : EfCoreRepository<IOpenIdd
                   (authorization.Type == OpenIddictConstants.AuthorizationTypes.AdHoc && authorizationToken == null)
             select authorization.Id).ToListAsync(cancellationToken);
 
-        await (from token in (await GetDbContextAsync()).Set<OpenIddictToken>()
+        var count = await (from token in (await GetDbContextAsync()).Set<OpenIddictToken>()
                 where token.AuthorizationId != null && authorizations.Contains(token.AuthorizationId.Value)
                 select token)
             .ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
 
-        await (await GetDbSetAsync()).Where(x => authorizations.Contains(x.Id)).ExecuteDeleteAsync(cancellationToken);
+        return count + await (await GetDbSetAsync()).Where(x => authorizations.Contains(x.Id)).ExecuteDeleteAsync(cancellationToken);
     }
 }
