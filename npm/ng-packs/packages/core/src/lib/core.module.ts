@@ -40,6 +40,16 @@ import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
 
+const standaloneDirectives = [
+  AutofocusDirective,
+  InputEventDebounceDirective,
+  ForDirective,
+  FormSubmitDirective,
+  InitDirective,
+  PermissionDirective,
+  ReplaceableTemplateDirective,
+  StopPropagationDirective,
+];
 /**
  * BaseCoreModule is the module that holds
  * all imports, declarations, exports, and entryComponents
@@ -56,21 +66,15 @@ import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.tok
     LocalizationModule,
     AbstractNgModelComponent,
     DynamicLayoutComponent,
-    ForDirective,
-    FormSubmitDirective,
-    InitDirective,
-    InputEventDebounceDirective,
-    PermissionDirective,
     ReplaceableRouteContainerComponent,
-    ReplaceableTemplateDirective,
     RouterOutletComponent,
     SortPipe,
     SafeHtmlPipe,
-    StopPropagationDirective,
     ToInjectorPipe,
     ShortDateTimePipe,
     ShortTimePipe,
     ShortDatePipe,
+    ...standaloneDirectives,
   ],
   imports: [
     CommonModule,
@@ -79,22 +83,15 @@ import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.tok
     ReactiveFormsModule,
     RouterModule,
     LocalizationModule,
-    AutofocusDirective,
+    ...standaloneDirectives,
   ],
   declarations: [
     AbstractNgModelComponent,
     DynamicLayoutComponent,
-    ForDirective,
-    FormSubmitDirective,
-    InitDirective,
-    InputEventDebounceDirective,
-    PermissionDirective,
     ReplaceableRouteContainerComponent,
-    ReplaceableTemplateDirective,
     RouterOutletComponent,
     SortPipe,
     SafeHtmlPipe,
-    StopPropagationDirective,
     ToInjectorPipe,
     ShortDateTimePipe,
     ShortTimePipe,
@@ -178,7 +175,7 @@ export class CoreModule {
         },
         {
           provide: SORT_COMPARE_FUNC,
-          useFactory: compareFuncFactory
+          useFactory: compareFuncFactory,
         },
         {
           provide: QUEUE_MANAGER,

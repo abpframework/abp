@@ -4,7 +4,7 @@ import { debounceTime } from 'rxjs/operators';
 import { SubscriptionService } from '../services/subscription.service';
 
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
+  standalone: true,
   selector: '[input.debounce]',
   providers: [SubscriptionService],
 })
@@ -16,6 +16,7 @@ export class InputEventDebounceDirective implements OnInit {
   constructor(private el: ElementRef, private subscription: SubscriptionService) {}
 
   ngOnInit(): void {
+    console.log('input debounce');
     const input$ = fromEvent<InputEvent>(this.el.nativeElement, 'input').pipe(
       debounceTime(this.debounce),
     );
