@@ -198,11 +198,9 @@ public partial class PermissionManagementModal
     {
         SetPermissionGrant(permission, value);
 
-        if (value && permission.ParentName != null)
+        if (value)
         {
-            var parentPermission = GetParentPermission(permissionGroup, permission);
-
-            SetPermissionGrant(parentPermission, true);
+            SetParentPermissionGrant(permissionGroup, permission);
         }
         else if (value == false)
         {
@@ -213,6 +211,20 @@ public partial class PermissionManagementModal
                 SetPermissionGrant(childPermission, false);
             }
         }
+    }
+
+    private void SetParentPermissionGrant(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
+    {
+        if(permission.ParentName == null)
+        {
+            return;
+        }
+
+        var parentPermission = GetParentPermission(permissionGroup, permission);
+        SetPermissionGrant(parentPermission, true);
+
+        SetParentPermissionGrant(permissionGroup, parentPermission);
+        
     }
 
     private void SetPermissionGrant(PermissionGrantInfoDto permission, bool value)
