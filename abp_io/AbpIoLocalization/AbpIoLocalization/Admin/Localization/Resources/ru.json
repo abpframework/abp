@@ -220,6 +220,7 @@
     "SuccessfullyReIndexAllPosts": "Все сообщения успешно переиндексированы.",
     "Permission:FullSearch": "Полнотекстовый поиск",
     "Menu:CliAnalytics": "Cli Analytics",
+    "Menu:Reports": "Отчеты",
     "TemplateName": "Имя Шаблона",
     "TemplateVersion": "Версия шаблона",
     "DatabaseProvider": "Поставщик базы данных",
@@ -233,6 +234,8 @@
     "CliAnalytics": "Cli Analytics",
     "Permission:CliAnalyticses": "Cli Analyticses",
     "Permission:CliAnalytics": "Cli Analytics",
+    "Reports": "Отчеты",
+    "Permission:Reports": "Отчеты",
     "Search": "Поиск",
     "ClearFilter": "Очистить фильтр",
     "LicensePrivateKey": "Лицензионный закрытый ключ",
@@ -348,6 +351,7 @@
     "Volo.AbpIo.Commercial:030008": "Дата покупки может быть установлена только при статусе «Куплено»!",
     "Volo.AbpIo.Commercial:030009": "Пользователь не найден!",
     "Volo.AbpIo.Commercial:030010": "Чтобы приобрести пробную лицензию, сначала вам необходимо активировать пробную лицензию!",
-    "Volo.AbpIo.Commercial:030011": "Приобретенную пробную лицензию удалить нельзя!"
+    "SponsorLogo": "Логотип спонсора",
+    "RegistrationUrl": "URL-адрес регистрации"
   }
 }
