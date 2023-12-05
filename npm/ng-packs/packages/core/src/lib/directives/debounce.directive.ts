@@ -16,7 +16,6 @@ export class InputEventDebounceDirective implements OnInit {
   constructor(private el: ElementRef, private subscription: SubscriptionService) {}
 
   ngOnInit(): void {
-    console.log('input debounce');
     const input$ = fromEvent<InputEvent>(this.el.nativeElement, 'input').pipe(
       debounceTime(this.debounce),
     );
