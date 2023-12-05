@@ -9,7 +9,7 @@ var abp = abp || {};
         var oidcSupportedFlows = configObject.oidcSupportedFlows || [];
         var oidcSupportedScopes = configObject.oidcSupportedScopes || [];
         var oidcDiscoveryEndpoint = configObject.oidcDiscoveryEndpoint || [];
-        var tenantPlaceHolders = ["{{tenantId}}", "{{tenantName}}" , "{{0}}"]
+        var tenantPlaceHolders = ["{{tenantId}}", "{{tenantName}}" , "{0}"]
         abp.appPath = configObject.baseUrl || abp.appPath;
 
         var requestInterceptor = configObject.requestInterceptor;
