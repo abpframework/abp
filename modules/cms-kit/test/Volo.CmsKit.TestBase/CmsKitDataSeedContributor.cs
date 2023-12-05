@@ -194,7 +194,7 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             "comment",
             null,
             _cmsKitTestData.User1Id
-        ));
+        ){ IdempotencyToken = _cmsKitTestData.IdempotencyToken_1 });
 
         await _commentRepository.InsertAsync(new Comment(_guidGenerator.Create(),
             _cmsKitTestData.EntityType1,

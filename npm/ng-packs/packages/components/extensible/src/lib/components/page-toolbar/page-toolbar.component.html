@@ -1,0 +1,29 @@
+<div class="row justify-content-end mx-0 gap-2" id="AbpContentToolbar">
+  @for (action of actionList; track action.component || action.action; let last = $last) {
+  <div class="col-auto px-0 pt-0" [class.pe-0]="last">
+    @if (action.visible(data)) {
+    <ng-container *abpPermission="action.permission; runChangeDetection: false">
+      @if (action.component; as component) {
+      <ng-container
+        *ngComponentOutlet="component; injector: record | createInjector: action:this"
+      ></ng-container>
+
+      }@else {
+         @if (asToolbarAction(action).value; as toolbarAction ) {
+          <button
+            (click)="action.action(data)"
+            type="button"
+            [ngClass]="toolbarAction?.btnClass ? toolbarAction?.btnClass : defaultBtnClass"
+            class="d-inline-flex align-items-center gap-1"
+          >
+            <i [ngClass]="toolbarAction?.icon" [class.me-1]="toolbarAction?.icon"></i>
+            {{ toolbarAction?.text | abpLocalization }}
+          </button>
+        } 
+      }
+    </ng-container>
+    }
+  </div>
+  }
+</div>
+

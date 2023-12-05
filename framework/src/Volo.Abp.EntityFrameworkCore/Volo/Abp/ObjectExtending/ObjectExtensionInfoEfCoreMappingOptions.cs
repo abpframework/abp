@@ -10,11 +10,9 @@ public class ObjectExtensionInfoEfCoreMappingOptions
     [NotNull]
     public ObjectExtensionInfo ObjectExtension { get; }
 
-    [CanBeNull]
-    public Action<EntityTypeBuilder> EntityTypeBuildAction { get; set; }
+    public Action<EntityTypeBuilder>? EntityTypeBuildAction { get; set; }
 
-    [CanBeNull]
-    public Action<ModelBuilder> ModelBuildAction { get; set; }
+    public Action<ModelBuilder>? ModelBuildAction { get; set; }
 
     public ObjectExtensionInfoEfCoreMappingOptions(
         [NotNull] ObjectExtensionInfo objectExtension,

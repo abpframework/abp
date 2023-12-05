@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
+using Volo.Abp.PermissionManagement;
+using Volo.Abp.PermissionManagement.Identity;
 using Xunit;
 
 namespace Volo.Abp.Identity;
@@ -10,12 +13,16 @@ public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
 {
     private readonly IIdentityUserAppService _userAppService;
     private readonly IIdentityUserRepository _userRepository;
+    private readonly IPermissionManager _permissionManager;
+    private readonly UserPermissionManagementProvider _userPermissionManagementProvider;
     private readonly IdentityTestData _testData;
 
     public IdentityUserAppService_Tests()
     {
         _userAppService = GetRequiredService<IIdentityUserAppService>();
         _userRepository = GetRequiredService<IIdentityUserRepository>();
+        _permissionManager = GetRequiredService<IPermissionManager>();
+        _userPermissionManagementProvider = GetRequiredService<UserPermissionManagementProvider>();
         _testData = GetRequiredService<IdentityTestData>();
     }
 
@@ -172,6 +179,19 @@ public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
         //Assert
 
         FindUser("john.nash").ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task User_Permissions_Should_Deleted_If_User_Deleted()
+    {
+        var johnNash = GetUser("john.nash");
+
+        (await _userPermissionManagementProvider.CheckAsync(IdentityPermissions.Users.Create, UserPermissionValueProvider.ProviderName, johnNash.Id.ToString())).IsGranted.ShouldBeFalse();
+        await _permissionManager.SetForUserAsync(johnNash.Id, IdentityPermissions.Users.Create, true);
+        (await _userPermissionManagementProvider.CheckAsync(IdentityPermissions.Users.Create, UserPermissionValueProvider.ProviderName, johnNash.Id.ToString())).IsGranted.ShouldBeTrue();
+
+        await _userAppService.DeleteAsync(johnNash.Id);
+        (await _userPermissionManagementProvider.CheckAsync(IdentityPermissions.Users.Create, UserPermissionValueProvider.ProviderName, johnNash.Id.ToString())).IsGranted.ShouldBeFalse();
     }
 
     [Fact]

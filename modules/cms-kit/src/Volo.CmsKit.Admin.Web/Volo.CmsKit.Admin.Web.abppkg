@@ -1,0 +1,8 @@
+{
+  "role": "lib.mvc",
+  "npmDependencies": {
+    "@abp/cms-kit.admin": {
+        "version": ""
+    }
+  }
+}

@@ -66,7 +66,7 @@ public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientD
             var returnType = invocation.Method.ReturnType.GenericTypeArguments[0];
             var result = (Task)CallRequestAsyncMethod
                 .MakeGenericMethod(returnType)
-                .Invoke(this, new object[] { context });
+                .Invoke(this, new object[] { context })!;
 
             invocation.ReturnValue = await GetResultAsync(result, returnType);
         }
@@ -99,6 +99,6 @@ public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientD
             .MakeGenericType(resultType)
             .GetProperty(nameof(Task<object>.Result), BindingFlags.Instance | BindingFlags.Public);
         Check.NotNull(resultProperty, nameof(resultProperty));
-        return resultProperty.GetValue(task);
+        return resultProperty!.GetValue(task)!;
     }
 }

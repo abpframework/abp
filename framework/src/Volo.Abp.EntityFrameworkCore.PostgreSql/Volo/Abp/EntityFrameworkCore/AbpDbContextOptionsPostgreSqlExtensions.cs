@@ -9,7 +9,7 @@ public static class AbpDbContextOptionsPostgreSqlExtensions
     [Obsolete("Use 'UseNpgsql(...)' method instead. This will be removed in future versions.")]
     public static void UsePostgreSql(
         [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
+        Action<NpgsqlDbContextOptionsBuilder>? postgreSqlOptionsAction = null)
     {
         options.Configure(context =>
         {
@@ -20,7 +20,7 @@ public static class AbpDbContextOptionsPostgreSqlExtensions
     [Obsolete("Use 'UseNpgsql(...)' method instead. This will be removed in future versions.")]
     public static void UsePostgreSql<TDbContext>(
         [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
+        Action<NpgsqlDbContextOptionsBuilder>? postgreSqlOptionsAction = null)
         where TDbContext : AbpDbContext<TDbContext>
     {
         options.Configure<TDbContext>(context =>
@@ -31,7 +31,7 @@ public static class AbpDbContextOptionsPostgreSqlExtensions
 
     public static void UseNpgsql(
         [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
+        Action<NpgsqlDbContextOptionsBuilder>? postgreSqlOptionsAction = null)
     {
         options.Configure(context =>
         {
@@ -41,7 +41,7 @@ public static class AbpDbContextOptionsPostgreSqlExtensions
 
     public static void UseNpgsql<TDbContext>(
         [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
+        Action<NpgsqlDbContextOptionsBuilder>? postgreSqlOptionsAction = null)
         where TDbContext : AbpDbContext<TDbContext>
     {
         options.Configure<TDbContext>(context =>

@@ -60,4 +60,12 @@ public partial class BlogPostPublicClientProxy : ClientProxyBase<IBlogPostPublic
             { typeof(Guid), id }
         });
     }
+
+    public virtual async Task<string> GetTagNameAsync(Guid tagId)
+    {
+        return await RequestAsync<string>(nameof(GetTagNameAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), tagId }
+        });
+    }
 }

@@ -16,7 +16,7 @@
     "Tutorial": "教學",
     "UsingCLI": "使用CLI",
     "SeeDetails": "看詳細",
-    "AbpShortDescription": "ABP是用於建立現代Web應用程式的完整架構和強大的基礎設施! 遵循最佳實作和約定，為您提供SOLID開發經驗.",
+    "AbpShortDescription": "ABP Framework 是一個完整的基礎架構，用於建立基於 ASP.NET Core 平台的現代架構的軟體解決方案。",
     "SourceCodeUpper": "原始碼",
     "LatestReleaseLogs": "最新發佈日誌",
     "Infrastructure": "基礎設施",

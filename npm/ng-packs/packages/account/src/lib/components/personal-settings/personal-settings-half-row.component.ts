@@ -3,7 +3,7 @@ import {
   EXTENSIONS_FORM_PROP,
   FormProp,
   EXTENSIBLE_FORM_VIEW_PROVIDER,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
