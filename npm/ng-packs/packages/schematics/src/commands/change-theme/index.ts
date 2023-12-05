@@ -81,11 +81,23 @@ export function removeImportPath(appModulePath: string, selectedTheme: ThemeOpti
   return (host: Tree) => {
     const recorder = host.beginUpdate(appModulePath);
     const source = createSourceFile(host, appModulePath);
-    const impMap = getImportPaths(selectedTheme);
+    const impMap = getImportPaths(selectedTheme, true);
 
     const nodes = findNodes(source, ts.isImportDeclaration);
 
-    const filteredNodes = nodes.filter(n => impMap.some(f => n.getFullText().match(f.path)));
+    const filteredNodes = nodes.filter(node =>
+      impMap.some(({ path, importName }) => {
+        const sourceModule = node.getFullText();
+        const moduleName = importName.split('.')[0];
+
+        if (path && sourceModule.match(path)) {
+          return true;
+        }
+
+        return !!(moduleName && sourceModule.match(moduleName));
+      }),
+    );
+
     if (filteredNodes?.length < 1) {
       return;
     }
@@ -106,7 +118,7 @@ export function removeImportFromNgModuleMetadata(
   return (host: Tree) => {
     const recorder = host.beginUpdate(appModulePath);
     const source = createSourceFile(host, appModulePath);
-    const impMap = getImportPaths(selectedTheme);
+    const impMap = getImportPaths(selectedTheme, true);
 
     const node = getDecoratorMetadata(source, 'NgModule', '@angular/core')[0] || {};
     if (!node) {
@@ -144,8 +156,13 @@ export function insertImports(appModulePath: string, selectedTheme: ThemeOptions
     const source = createSourceFile(host, appModulePath);
     const selected = importMap.get(selectedTheme);
 
+    if (!selected) {
+      return host;
+    }
+
     const changes: Change[] = [];
-    selected!.map(({ importName, path }) =>
+
+    selected.map(({ importName, path }) =>
       changes.push(...addImportToModule(source, appModulePath, importName, path)),
     );
 
@@ -168,18 +185,26 @@ export function createSourceFile(host: Tree, appModulePath: string): ts.SourceFi
   }
 
   const sourceText = buffer.toString('utf-8');
-  const source = ts.createSourceFile(
+
+  return ts.createSourceFile(
     appModulePath,
     sourceText,
     ts.ScriptTarget.Latest,
     true,
     ts.ScriptKind.TS,
   );
-
-  return source;
 }
 
-export function getImportPaths(selectedTheme: ThemeOptionsEnum) {
+/**
+ * Returns all import paths except the selected theme
+ * @param selectedTheme The selected theme
+ * @param getAll If true, returns all import paths
+ */
+export function getImportPaths(selectedTheme: ThemeOptionsEnum, getAll: boolean = false) {
+  if (getAll) {
+    return Array.from(importMap.values()).reduce((acc, val) => [...acc, ...val], []);
+  }
+
   return Array.from(importMap.values())
     .filter(f => f !== importMap.get(selectedTheme))
     .reduce((acc, val) => [...acc, ...val], []);
