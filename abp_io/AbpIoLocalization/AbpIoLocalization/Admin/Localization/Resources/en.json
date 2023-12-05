@@ -560,6 +560,7 @@
     "AddSession": "Add Session",
     "AddSponsor": "Add Sponsor",
     "SponsorLogo": "Sponsor Logo",
-    "RegistrationUrl": "Registration Url"
+    "RegistrationUrl": "Registration Url",
+    "AllowAbpStudioBetaAccess": "Allow ABP Studio Beta Access"
   }
 }
