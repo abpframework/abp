@@ -1086,6 +1086,9 @@
     "CampaignDiscountText": "Black Friday Discount",
     "CampaignDiscountName": "Black Friday",
     "CampaignName:BlackFriday": "Black Friday",
-    "MultipleOrganizationInfo": "See All Your Organizations"
+    "MultipleOrganizationInfo": "See All Your Organizations",
+    "AbpStudioBetaAccessInfoTitle": "ABP Studio Beta Access",
+    "AbpStudioBetaAccessInfoText": "We're thrilled to share with you the <span class=\"text-highlight-white\">beta</span> version of <span class=\"text-highlight-white\">ABP Studio</span>! This release marks a significant milestone in our development journey, and we're eager to gather your feedback to make the application even better.",
+    "YouAreNotAuthorizedToDownloadStudio": "You are not authorized to download ABP Studio."
   }
 }
