@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Ocene",
     "CmsKit.Reactions": "Reakcije",
     "CmsKit.Tags": "Oznake",
+    "CmsKit.BlogPost.PreventXssFeature": "Prepreči XSS",
     "CmsKit:0002": "Vsebina že obstaja!",
     "CmsKit:0003": "Entiteta {0} ni mogoče označiti.",
     "CmsKit:Blog:0001": "Podani polž ({Slug}) že obstaja!",
@@ -76,6 +77,7 @@
     "PageId": "stran",
     "Pages": "strani",
     "PageSlugInformation": "Slug se uporablja na url-ju. Vaš url bo '/{{slug}}'.",
+    "BlogSlugInformation": "Slug se uporablja na url-ju. Vaš url bo '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Upravljanje blogov",
     "Permission:BlogManagement.Create": "Ustvari",
     "Permission:BlogManagement.Delete": "Izbriši",
@@ -158,6 +160,7 @@
     "YourEmailAddress": "Vaš email naslov",
     "YourFullName": "Tvoje polno ime",
     "YourMessage": "Tvoje sporočilo",
-    "YourReply": "Vaš odgovor"
+    "YourReply": "Vaš odgovor",
+    "ThisPartOfContentCouldntBeLoaded": "Ta del vsebine ni bil naložen."
   }
 }

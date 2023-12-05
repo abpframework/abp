@@ -17,7 +17,7 @@ public class TemplateDefinitionContext : ITemplateDefinitionContext
         return Templates.Values.ToImmutableList();
     }
 
-    public virtual TemplateDefinition GetOrNull(string name)
+    public virtual TemplateDefinition? GetOrNull(string name)
     {
         return Templates.GetOrDefault(name);
     }

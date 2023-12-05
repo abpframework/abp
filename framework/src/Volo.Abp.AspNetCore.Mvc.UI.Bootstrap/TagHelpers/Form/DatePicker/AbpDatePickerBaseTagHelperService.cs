@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelperService<TTagHelper>
     where TTagHelper : AbpDatePickerBaseTagHelper<TTagHelper>
 {
-    protected readonly Dictionary<Type, Func<object, string>> SupportedInputTypes = new() 
+    protected readonly Dictionary<Type, Func<object, string>> SupportedInputTypes = new()
     {
         {
             typeof(string), o =>
@@ -42,7 +42,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
                 {
                     return dt.ToString("O");
                 }
-                
+
                 return string.Empty;
             }
         },
@@ -54,7 +54,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
                 {
                     return dto.ToString("O");
                 }
-                
+
                 return string.Empty;
             }
         },
@@ -161,7 +161,10 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         output.TagMode = TagMode.StartTagAndEndTag;
         output.TagName = "div";
         LeaveOnlyGroupAttributes(context, output);
-        output.Attributes.AddClass("mb-3");
+        if (TagHelper.AddMarginBottomClass)
+        {
+            output.Attributes.AddClass("mb-3");
+        }
 
         output.Content.AppendHtml(innerHtml);
     }
@@ -224,7 +227,8 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
     {
-        return "<div class=\"mb-3\">" +
+        var mb = TagHelper.AddMarginBottomClass ? "mb-3" : string.Empty;
+        return $"<div class=\"{mb}\">" +
                Environment.NewLine + innerHtml + Environment.NewLine +
                "</div>";
     }
@@ -543,7 +547,16 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             }
 
             label.Attributes.Add("title", TagHelper.LabelTooltip);
-            label.InnerHtml.AppendHtml($" <i class=\"bi {TagHelper.LabelTooltipIcon}\"></i>");
+            var iconClass = TagHelper.LabelTooltipIcon;
+            if (iconClass.StartsWith("bi-"))
+            {
+                iconClass = "bi " + iconClass;
+            }
+            else if (iconClass.StartsWith("fa-"))
+            {
+                iconClass = "fa " + iconClass;
+            }
+            label.InnerHtml.AppendHtml($" <i class=\"{iconClass}\"></i>");
         }
 
         return label.ToHtmlString();
@@ -603,7 +616,16 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             await labelTagHelper.ProcessAndGetOutputAsync(attributeList, context, "label", TagMode.StartTagAndEndTag);
         if (!TagHelper.LabelTooltip.IsNullOrEmpty())
         {
-            innerOutput.Content.AppendHtml($" <i class=\"bi {TagHelper.LabelTooltipIcon}\"></i>");
+            var iconClass = TagHelper.LabelTooltipIcon;
+            if (iconClass.StartsWith("bi-"))
+            {
+                iconClass = "bi " + iconClass;
+            }
+            else if (iconClass.StartsWith("fa-"))
+            {
+                iconClass = "fa " + iconClass;
+            }
+            innerOutput.Content.AppendHtml($" <i class=\"{iconClass}\"></i>");
         }
 
         return innerOutput.Render(Encoder);

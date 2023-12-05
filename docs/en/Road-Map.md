@@ -4,17 +4,18 @@ This document provides a road map, release schedule and planned features for the
 
 ## Next Versions
 
-### v8.0
+### v8.1
 
-The next version will be 8.0 and planned to release the stable 8.0 version in December, 2023. We will be mostly working on the following topics:
+The next version will be 8.1 and planned to release the stable 8.1 version in February, 2024. We will be mostly working on the following topics:
 
-* Enabling nullable annotations for all projects ([#16610](https://github.com/abpframework/abp/issues/16610))
-* Upgrade to .NET 8.0 ([#17355](https://github.com/abpframework/abp/issues/17355))
-* Use NoTracking for readonly repositories for EF Core ([#597](https://github.com/abpframework/abp/issues/597))
-* Support mapping collection of objects for custom object mappers ([#94](https://github.com/abpframework/abp/issues/94))
+* Blazor Full-Stack UI ([#16156](https://github.com/abpframework/abp/issues/16156))
+* Upgrade to OpenIddict 5.x ([#17605](https://github.com/abpframework/abp/issues/17605))
+* Angular Universal ([#15782](https://github.com/abpframework/abp/issues/15782))
+* Blazor - Forms & Validation Documentation ([#16400](https://github.com/abpframework/abp/issues/16400))
+* Deployment Documents Improvements ([#15034](https://github.com/abpframework/abp/issues/15034))
 * Improvements on the existing features and provide more guides.
 
-See the [8.0 milestone](https://github.com/abpframework/abp/milestone/88) for all the issues we've planned to work on.
+See the [8.1 milestone](https://github.com/abpframework/abp/milestone/94) for all the issues we've planned to work on.
 
 ## Backlog Items
 

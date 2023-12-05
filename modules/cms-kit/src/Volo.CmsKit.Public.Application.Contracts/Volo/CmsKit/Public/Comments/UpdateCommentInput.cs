@@ -15,4 +15,8 @@ public class UpdateCommentInput : ExtensibleObject, IHasConcurrencyStamp
     public string Text { get; set; }
 
     public string ConcurrencyStamp { get; set; }
+    
+    public Guid? CaptchaToken { get; set; }
+    
+    public int CaptchaAnswer { get; set; }
 }

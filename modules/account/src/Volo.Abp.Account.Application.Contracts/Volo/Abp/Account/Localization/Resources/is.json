@@ -63,6 +63,8 @@
     "PasswordResetInfoInEmail": "Við fengum beiðni um endurheimt reiknings! Ef þú stofnaðir þessa beiðni skaltu smella á eftirfarandi krækju til að endurstilla lykilorðið þitt.",
     "ResetMyPassword": "Endurstilla lykilorðið mitt",
     "AccessDenied": "Aðgangi hafnað!",
-    "AccessDeniedMessage": "Þú hefur ekki aðgang að þessari auðlind."
+    "AccessDeniedMessage": "Þú hefur ekki aðgang að þessari auðlind.",
+    "OrRegisterWith": "Eða skráðu þig með:",
+    "RegisterUsingYourProviderAccount": "Skráðu þig með {0} aðganginum þínum"
   }
 }

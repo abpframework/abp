@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.BlobStoring.Minio</AssemblyName>
@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
-    <PackageReference Include="Minio" Version="4.0.6" />
+    <PackageReference Include="Minio" />
   </ItemGroup>
 
 </Project>

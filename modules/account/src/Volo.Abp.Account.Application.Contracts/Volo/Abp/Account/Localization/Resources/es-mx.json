@@ -34,6 +34,8 @@
     "NewPasswordConfirmFailed": "Por favor, confirme la nueva contraseña.",
     "NewPasswordSameAsOld": "La nueva contraseña debe ser diferente de la contraseña actual.",
     "Manage": "Administrar",
-    "MyAccount": "Mi cuenta"
+    "MyAccount": "Mi cuenta",
+    "OrRegisterWith": "O registrarse con",
+    "RegisterUsingYourProviderAccount": "Registrarse con su cuenta de {0} "
   }
 }

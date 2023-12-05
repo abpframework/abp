@@ -1,6 +1,8 @@
 {
   "culture": "zh-Hant",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "基於SSL的LDAP",
+    "Description:Abp.Ldap.Ldaps": "基於SSL的LDAP",
     "DisplayName:Abp.Ldap.ServerHost": "服務器主機",
     "Description:Abp.Ldap.ServerHost": "服務器主機",
     "DisplayName:Abp.Ldap.ServerPort": "服務器端口",

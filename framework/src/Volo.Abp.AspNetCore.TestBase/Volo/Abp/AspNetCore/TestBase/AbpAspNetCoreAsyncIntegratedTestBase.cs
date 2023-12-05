@@ -13,6 +13,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.TestBase;
 
+[Obsolete("Use AbpWebApplicationFactoryIntegratedTest instead.")]
 public class AbpAspNetCoreAsyncIntegratedTestBase<TModule>
     where TModule : IAbpModule
 {

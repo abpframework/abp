@@ -165,7 +165,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var headers = new Dictionary<string, string>();
         if (CorrelationIdProvider.Get() != null)
         {
-            headers.Add(EventBusConsts.CorrelationIdHeaderName, CorrelationIdProvider.Get());
+            headers.Add(EventBusConsts.CorrelationIdHeaderName, CorrelationIdProvider.Get()!);
         }
         await PublishAsync(eventType, eventData, headersArguments: headers);
     }
@@ -174,7 +174,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         Type eventType,
         object eventData,
         Guid? eventId = null,
-        Dictionary<string, string> headersArguments = null)
+        Dictionary<string, string>? headersArguments = null)
     {
         if (AbpRebusEventBusOptions.Publish != null)
         {
@@ -250,7 +250,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
-        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
+        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName)!;
         var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
 
         using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
@@ -265,7 +265,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var headers = new Dictionary<string, string>();
         if (outgoingEvent.GetCorrelationId() != null)
         {
-            headers.Add(EventBusConsts.CorrelationIdHeaderName, outgoingEvent.GetCorrelationId());
+            headers.Add(EventBusConsts.CorrelationIdHeaderName, outgoingEvent.GetCorrelationId()!);
         }
 
         await PublishAsync(eventType, eventData, eventId: outgoingEvent.Id, headersArguments: headers);
