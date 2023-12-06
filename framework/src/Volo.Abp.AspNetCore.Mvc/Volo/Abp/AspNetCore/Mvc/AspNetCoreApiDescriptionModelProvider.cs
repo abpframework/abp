@@ -79,6 +79,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             }
         }
 
+        model.NormalizeOrder();
         return model;
     }
 
