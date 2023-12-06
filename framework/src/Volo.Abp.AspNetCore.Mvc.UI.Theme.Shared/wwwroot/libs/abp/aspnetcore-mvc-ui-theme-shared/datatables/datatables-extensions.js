@@ -32,6 +32,12 @@ var abp = abp || {};
         }
 
         var _createDropdownItem = function (record, fieldItem, tableInstance) {
+            if (fieldItem.divider) {
+                return $(fieldItem.dividerHtml ?
+                    (abp.utils.isFunction(fieldItem.dividerHtml) ? fieldItem.dividerHtml(record, tableInstance) : fieldItem.dividerHtml)
+                    : '<li><hr class="dropdown-divider"></li>');
+            }
+
             var $li = $('<li/>');
             var $a = $('<a/>').addClass('dropdown-item');
 
