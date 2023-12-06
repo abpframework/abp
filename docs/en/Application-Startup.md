@@ -144,7 +144,7 @@ AbpApplicationFactory.CreateAsync(typeof(MyConsoleDemoModule));
 
 Both overloads work exactly the same. So, you can use the second one if you don't know the module class type on development time and you (somehow) calculate it on runtime.    
 
-If you create one of the methods above, ABP creates an internal service collection (`IServiceCollection`) and an internal service provider (`IServiceProvider`) to setup the [dependency injection](Dependency-Injection.md) system internally. Notice that we've used the `application.ServiceProvider` property in the *Installing a Framework Package* section to resolve the `IEmailSender` service from the dependency injection system.
+If you use one of the methods above, ABP creates an internal service collection (`IServiceCollection`) and an internal service provider (`IServiceProvider`) to setup the [dependency injection](Dependency-Injection.md) system internally. Notice that we've used the `application.ServiceProvider` property in the *Installing a Framework Package* section to resolve the `IEmailSender` service from the dependency injection system.
 
 The next overload gets an `IServiceCollection` parameter from you to allow you to setup the dependency injection system yourself, or integrate to another framework (like ASP.NET Core) that also sets up the dependency injection system internally.
 
