@@ -1089,6 +1089,13 @@
     "MultipleOrganizationInfo": "See All Your Organizations",
     "AbpStudioBetaAccessInfoTitle": "ABP Studio Beta Access",
     "AbpStudioBetaAccessInfoText": "We're thrilled to share with you the <span class=\"text-highlight-white\">beta</span> version of <span class=\"text-highlight-white\">ABP Studio</span>! This release marks a significant milestone in our development journey, and we're eager to gather your feedback to make the application even better.",
-    "YouAreNotAuthorizedToDownloadStudio": "You are not authorized to download ABP Studio."
+    "YouAreNotAuthorizedToDownloadStudio": "You are not authorized to download ABP Studio.",
+    "TestimonialText": "Testimonial Text",
+    "Position": "Position",
+    "ExperienceYear": "Experience Year",
+    "Select": "Select",
+    "TestimonialTitle": "Referances",
+    "TestimonialInfo": "Share Your Opinion",
+    "Share": "Share"
   }
 }
