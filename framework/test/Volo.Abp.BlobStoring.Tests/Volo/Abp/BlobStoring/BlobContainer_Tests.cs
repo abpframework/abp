@@ -61,7 +61,7 @@ public abstract class BlobContainer_Tests<TStartupModule> : AbpIntegratedTest<TS
 
             using (CurrentTenant.Change(null))
             {
-                // Could not found the requested BLOB...
+                // Could not find the requested BLOB...
                 await Assert.ThrowsAsync<AbpException>(async () =>
                     await Container.GetAllBytesAsync(blobName)
                 );
