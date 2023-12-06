@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "पासवर्ड में कम से कम एक गैर अल्फ़ान्यूमेरिक वर्ण होना चाहिए।",
     "Volo.Abp.Identity:PasswordRequiresUpper": "पासवर्ड में कम से कम एक अपरकेस ('ए' - 'जेड') होना चाहिए।",
     "Volo.Abp.Identity:PasswordTooShort": "पासवर्ड कम से कम {0} वर्ण का होना चाहिए।",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "पासवर्ड में कम से कम {0} अद्वितीय वर्ण होना चाहिए।",
     "Volo.Abp.Identity:RoleNotFound": "भूमिका {0} मौजूद नहीं है।",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "उपयोगकर्ता के पास पहले से ही एक पासवर्ड सेट है।",
     "Volo.Abp.Identity:UserAlreadyInRole": "उपयोगकर्ता पहले से ही '{0}' की भूमिका में है।",

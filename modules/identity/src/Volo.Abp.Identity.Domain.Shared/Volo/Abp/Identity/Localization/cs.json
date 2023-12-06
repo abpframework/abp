@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Hesla musí obsahovat alespoň jeden nealfanumerický znak.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "Hesla musí obsahovat alespoň jedno velké písmeno ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Hesla musí být dlouhá alespoň {0} znaků.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Hesla nesmí obsahovat více než {0} opakujících se znaků.",
     "Volo.Abp.Identity:RoleNotFound": "Role {0} neexistuje.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Uživatel již má nastavené heslo.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Uživatel již je v roli '{0}'.",

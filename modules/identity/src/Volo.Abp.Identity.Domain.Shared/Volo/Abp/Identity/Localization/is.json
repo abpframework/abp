@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Lykilorð verða að hafa að minnsta kosti einn staflausan staf.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "Lykilorð verða að hafa að minnsta kosti eina hástafi ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Lykilorð verða að vera að minnsta kosti {0} stafir.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Lykilorð verða að innihalda að minnsta kosti {0} einstaka stafi.",
     "Volo.Abp.Identity:RoleNotFound": "Hlutverk {0} er ekki til.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Notandi hefur þegar stillt lykilorð.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Notandi þegar í hlutverkinu '{0}'.",

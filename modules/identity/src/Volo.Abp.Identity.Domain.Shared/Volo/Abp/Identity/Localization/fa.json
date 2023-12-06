@@ -55,6 +55,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "گذرواژه ها باید حداقل یک کاراکتر غیر الفبایی داشته باشند.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "رمزهای عبور باید حداقل دارای یک حروف بزرگ ('A'-'Z') باشند.",
     "Volo.Abp.Identity:PasswordTooShort": "گذرواژه ها باید حداقل {0} نویسه داشته باشند.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "گذرواژه ها نباید بیش از {0} کاراکتر تکراری داشته باشند.",
     "Volo.Abp.Identity:RoleNotFound": "نقش/وظیفه {0} یافت نشد.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "کاربر قبلاً گذرواژه تنظیم کرده است.",
     "Volo.Abp.Identity:UserAlreadyInRole": "کاربر قبلاً در این نقش/وظیفه {0} عضو میباشد.",

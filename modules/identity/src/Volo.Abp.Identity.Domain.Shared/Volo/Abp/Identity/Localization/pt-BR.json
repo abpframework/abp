@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Senhas devem possuir pelo menos um caractere especial.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "Senhas devem possuir pelo menos uma letra maiúscula ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Senhas devem possuir pelo menos {0} caracteres.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Senhas devem possuir pelo menos {0} caracteres únicos.",
     "Volo.Abp.Identity:RoleNotFound": "Perfil {0} não existe.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "O usuário já possui uma senha.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Usuário já possui o perfil '{0}'.",

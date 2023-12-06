@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "يجب أن تحتوي كلمات المرور على حرف واحد غير أبجدي رقمي على الأقل.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "يجب أن تحتوي كلمات المرور على حرف كبير واحد على الأقل ('A' - 'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "يجب أن تتكون كلمات المرور من {0} حرف على الأقل.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "يجب أن تحتوي كلمات المرور على {0} حرف فريد على الأقل.",
     "Volo.Abp.Identity:RoleNotFound": "الدور {0} غير موجود.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "لدى المستخدم بالفعل مجموعة كلمات مرور.",
     "Volo.Abp.Identity:UserAlreadyInRole": "المستخدم بالفعل في الدور '{0}'.",

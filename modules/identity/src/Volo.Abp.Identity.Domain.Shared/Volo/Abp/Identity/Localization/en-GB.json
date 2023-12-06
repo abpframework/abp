@@ -55,6 +55,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Passwords must have at least one non alphanumeric character.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "Passwords must have at least one uppercase ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Passwords must be at least {0} characters.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Passwords must use at least {0} different characters.",
     "Volo.Abp.Identity:RoleNotFound": "Role {0} does not exist.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "User already has a password set.",
     "Volo.Abp.Identity:UserAlreadyInRole": "User is already in role '{0}'.",

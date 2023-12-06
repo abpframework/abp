@@ -55,6 +55,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Οι κωδικοί πρόσβασης πρέπει να έχουν τουλάχιστον έναν μη αλφαριθμητικό χαρακτήρα.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "Οι κωδικοί πρόσβασης πρέπει να έχουν τουλάχιστον ένα κεφαλαίο ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Οι κωδικοί πρόσβασης πρέπει να είναι τουλάχιστον {0} χαρακτήρες.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Οι κωδικοί πρόσβασης πρέπει να έχουν τουλάχιστον {0} μοναδικούς χαρακτήρες.",
     "Volo.Abp.Identity:RoleNotFound": "Ο ρόλος {0} δεν υπάρχει",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Ο χρήστης έχει ήδη ορίσει κωδικό πρόσβασης.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Χρήστης ήδη στο ρόλο '{0}'.",

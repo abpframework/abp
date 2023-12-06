@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Passwörter müssen mindestens ein nicht alphanumerisches Zeichen haben.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "Passwörter müssen mindestens einen Großbuchstaben ('A' - 'Z') enthalten.",
     "Volo.Abp.Identity:PasswordTooShort": "Passwörter müssen mindestens {0} Zeichen lang sein.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Passwörter dürfen nicht mehr als {0} aufeinanderfolgende identische Zeichen enthalten.",
     "Volo.Abp.Identity:RoleNotFound": "Rolle {0} existiert nicht.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Der Benutzer hat bereits ein Passwort festgelegt.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Benutzer bereits in Rolle '{0}'.",

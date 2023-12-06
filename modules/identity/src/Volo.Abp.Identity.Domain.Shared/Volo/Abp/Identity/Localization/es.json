@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Contraseñas deben tener al menos un carácter no alfanumérico",
     "Volo.Abp.Identity:PasswordRequiresUpper": "Contraseñas deben tener al menos un carácter en mayúsculas ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Contraseñas deben tener al menos {0} caracteres",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Contraseñas deben usar al menos {0} caracteres diferentes.",
     "Volo.Abp.Identity:RoleNotFound": "El rol {0} no existe.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "El usuario tiene la contraseña establecida",
     "Volo.Abp.Identity:UserAlreadyInRole": "El usuario ya tiene asignado el rol '{0}'´.",

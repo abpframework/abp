@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Wachtwoorden moeten minimaal één niet-alfanumeriek teken bevatten.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "Wachtwoorden moeten ten minste één hoofdletter bevatten ('A' - 'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Wachtwoorden moeten uit minimaal {0} tekens bestaan.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Wachtwoorden moeten minimaal {0} unieke tekens bevatten.",
     "Volo.Abp.Identity:RoleNotFound": "Rol {0} bestaat niet.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Gebruiker heeft al een wachtwoord ingesteld.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Gebruiker al in rol '{0}'.",
