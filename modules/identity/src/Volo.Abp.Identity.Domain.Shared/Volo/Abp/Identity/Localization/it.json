@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "La password deve contenere almeno un carattere non alfanumerico.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "La password deve contenere almeno una lettera maiuscola ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "La password deve essere composta da almeno {0} caratteri.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "La password deve contenere almeno {0} caratteri univoci.",
     "Volo.Abp.Identity:RoleNotFound": "Il ruolo {0} non esiste.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "L'utente ha già una password impostata.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Utente già nel ruolo '{0}'.",
