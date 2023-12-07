@@ -64,6 +64,8 @@
     "PasswordResetInfoInEmail": "Recibimos una solicitud de recuperación de cuenta. Si inició esta solicitud, haga clic en el siguiente enlace para restablecer su contraseña.",
     "ResetMyPassword": "Restablecer mi contraseña",
     "AccessDenied": "¡Acceso denegado!",
-    "AccessDeniedMessage": "No tienes acceso a este recurso."
+    "AccessDeniedMessage": "No tienes acceso a este recurso.",
+    "OrRegisterWith": "O registrarse con:",
+    "RegisterUsingYourProviderAccount": "Registrarse con su cuenta de {0} "
   }
 }

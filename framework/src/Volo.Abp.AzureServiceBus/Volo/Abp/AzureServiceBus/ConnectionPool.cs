@@ -28,7 +28,7 @@ public class ConnectionPool : IConnectionPool, ISingletonDependency
         Logger = new NullLogger<ConnectionPool>();
     }
 
-    public ServiceBusClient GetClient(string connectionName)
+    public ServiceBusClient GetClient(string? connectionName)
     {
         connectionName ??= AzureServiceBusConnections.DefaultConnectionName;
         return _clients.GetOrAdd(
@@ -40,7 +40,7 @@ public class ConnectionPool : IConnectionPool, ISingletonDependency
         ).Value;
     }
 
-    public ServiceBusAdministrationClient GetAdministrationClient(string connectionName)
+    public ServiceBusAdministrationClient GetAdministrationClient(string? connectionName)
     {
         connectionName ??= AzureServiceBusConnections.DefaultConnectionName;
         return _adminClients.GetOrAdd(

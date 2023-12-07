@@ -107,18 +107,34 @@
 
         function registerUpdateOfNewComment($container) {
             $container.find('.cms-comment-update-form').each(function () {
-                let $form = $(this);
+                var $form = $(this);
+
                 $form.submit(function (e) {
                     e.preventDefault();
+                    
+                    abp.ui.setBusy($form.find("button[type='submit']"));
+
                     let formAsObject = $form.serializeFormToObject();
-                    volo.cmsKit.public.comments.commentPublic.update(
-                        formAsObject.id,
-                        {
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CmsKitPublicComments/Update/' + formAsObject.id,
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify({
                             text: formAsObject.commentText,
-                            concurrencyStamp: formAsObject.commentConcurrencyStamp
+                            concurrencyStamp: formAsObject.commentConcurrencyStamp,
+                            captchaToken: formAsObject.captchaId,
+                            captchaAnswer: formAsObject.input?.captcha
+                        }),
+                        success: function () {
+                            widgetManager.refresh($widget);
+                            abp.ui.clearBusy();
+                        },
+                        error: function (data) {
+                            abp.message.error(data.responseJSON.error.message);
+                            abp.ui.clearBusy();
                         }
-                    ).then(function () {
-                        widgetManager.refresh($widget);
                     });
                 });
             });
@@ -126,10 +142,14 @@
 
         function registerSubmissionOfNewComment($container) {
             $container.find('.cms-comment-form').each(function () {
-                let $form = $(this);
+                var $form = $(this);
+
                 $form.submit(function (e) {
                     e.preventDefault();
-                    let formAsObject = $form.serializeFormToObject();
+
+                    abp.ui.setBusy("button[type='submit']");
+
+                    var formAsObject = $form.serializeFormToObject();
 
                     if (formAsObject.repliedCommentId == '') {
                         formAsObject.repliedCommentId = null;
@@ -137,6 +157,7 @@
 
                     if (formAsObject.commentText == '') {
                         abp.message.error(l("CommentTextRequired"));
+                        abp.ui.clearBusy();
                         return;
                     }
 
@@ -152,13 +173,16 @@
                             text: formAsObject.commentText,
                             url: window.location.href,
                             captchaToken: formAsObject.captchaId,
-                            captchaAnswer: formAsObject.input?.captcha
+                            captchaAnswer: formAsObject.input?.captcha,
+                            idempotencyToken: formAsObject.idempotencyToken
                         }),
                         success: function () {
                             widgetManager.refresh($widget);
+                            abp.ui.clearBusy();
                         },
                         error: function (data) {
                             abp.message.error(data.responseJSON.error.message);
+                            abp.ui.clearBusy();
                         }
                     });
                 });

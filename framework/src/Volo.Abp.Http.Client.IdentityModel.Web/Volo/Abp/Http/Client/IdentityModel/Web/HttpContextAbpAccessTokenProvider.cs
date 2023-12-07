@@ -16,7 +16,7 @@ public class HttpContextAbpAccessTokenProvider : IAbpAccessTokenProvider, ITrans
         HttpContextAccessor = httpContextAccessor;
     }
 
-    public virtual async Task<string> GetTokenAsync()
+    public virtual async Task<string?> GetTokenAsync()
     {
         var httpContext = HttpContextAccessor?.HttpContext;
         if (httpContext == null)

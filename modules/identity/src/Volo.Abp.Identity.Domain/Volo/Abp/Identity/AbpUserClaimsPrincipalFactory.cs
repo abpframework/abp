@@ -33,7 +33,7 @@ public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<Identity
     }
 
     [UnitOfWork]
-    public override async Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
+    public async override Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
     {
         var principal = await base.CreateAsync(user);
         var identity = principal.Identities.First();

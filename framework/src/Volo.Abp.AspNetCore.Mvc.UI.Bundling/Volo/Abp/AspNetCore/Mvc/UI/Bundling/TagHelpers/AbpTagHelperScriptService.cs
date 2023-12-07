@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -32,12 +33,12 @@ public class AbpTagHelperScriptService : AbpTagHelperResourceService
         );
     }
 
-    protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
+    protected override async Task<IReadOnlyList<BundleFile>> GetBundleFilesAsync(string bundleName)
     {
         return await BundleManager.GetScriptBundleFilesAsync(bundleName);
     }
 
-    protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file)
+    protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, BundleFile file, IFileInfo? fileInfo = null)
     {
         var defer = tagHelper switch
         {
@@ -46,12 +47,13 @@ public class AbpTagHelperScriptService : AbpTagHelperResourceService
             _ => false
         };
 
-        var deferText = (defer || Options.DeferScriptsByDefault || Options.DeferScripts.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
-                ? "defer"
+        var deferText = (defer || Options.DeferScriptsByDefault || Options.DeferScripts.Any(x => file.FileName.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+                ? "defer "
                 : string.Empty;
         var nonceText = (viewContext.HttpContext.Items.TryGetValue(AbpAspNetCoreConsts.ScriptNonceKey, out var nonce) && nonce is string nonceString && !string.IsNullOrEmpty(nonceString))
-            ? $"nonce=\"{nonceString}\""
+            ? $"nonce=\"{nonceString}\" "
             : string.Empty;
-        output.Content.AppendHtml($"<script {deferText} {nonceText} src=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\"></script>{Environment.NewLine}");
+        var src = file.IsExternalFile ? file.FileName : viewContext.GetUrlHelper().Content((file.FileName + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
+        output.Content.AppendHtml($"<script {deferText}{nonceText}src=\"{src}\"></script>{Environment.NewLine}");
     }
 }

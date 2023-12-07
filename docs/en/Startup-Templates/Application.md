@@ -316,7 +316,7 @@ You should add `routes` property in the `data` object to add a link on the menu 
 {
    path: 'dashboard',
    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-   canActivate: [AuthGuard, PermissionGuard],
+   canActivate: [authGuard, permissionGuard],
    data: {
       routes: {
          name: 'ProjectName::Menu:Dashboard',
@@ -328,7 +328,7 @@ You should add `routes` property in the `data` object to add a link on the menu 
 }
 ```
 In the above example;
-*  If the user is not logged in, AuthGuard blocks access and redirects to the login page.
+*  If the user is not logged in, authGuard blocks access and redirects to the login page.
 *  PermissionGuard checks the user's permission with the `requiredPolicy` property of the `routes` object. If the user is not authorized to access the page, the 403 page appears.
 *  The `name` property of `routes` is the menu link label. A localization key can be defined.
 *  The `iconClass` property of the `routes` object is the menu link icon class.

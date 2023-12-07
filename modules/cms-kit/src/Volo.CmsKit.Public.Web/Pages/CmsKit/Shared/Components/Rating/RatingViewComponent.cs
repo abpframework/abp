@@ -31,7 +31,7 @@ public class RatingViewComponent : AbpViewComponent
         CurrentUser = currentUser;
     }
 
-    public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId)
+    public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId, bool isReadOnly = false)
     {
         var ratings = await RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);
         var totalRating = ratings.Sum(x => x.Count);
@@ -52,7 +52,8 @@ public class RatingViewComponent : AbpViewComponent
             LoginUrl = loginUrl,
             Ratings = ratings,
             CurrentRating = currentUserRating,
-            TotalRating = totalRating
+            TotalRating = totalRating,
+            IsReadOnly = isReadOnly
         };
 
         return View("~/Pages/CmsKit/Shared/Components/Rating/Default.cshtml", viewModel);
@@ -72,4 +73,6 @@ public class RatingViewModel
     public short? CurrentRating { get; set; }
 
     public int TotalRating { get; set; }
+
+    public bool IsReadOnly { get; set; }
 }

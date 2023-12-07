@@ -53,6 +53,7 @@ The comment system provides a commenting [widget](../../UI/AspNetCore/Widgets.md
 {
   entityType = "Product",
   entityId = "...",
+  isReadOnly = false,
   referralLinks  = new [] {"nofollow"}
 })
 ```

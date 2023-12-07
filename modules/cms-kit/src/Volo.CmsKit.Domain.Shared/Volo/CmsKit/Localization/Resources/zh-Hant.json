@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "評分",
     "CmsKit.Reactions": "反應",
     "CmsKit.Tags": "標籤",
+    "CmsKit.BlogPost.PreventXssFeature": "防止XSS攻擊",
     "CmsKit:0002": "內容已經存在!",
     "CmsKit:0003": "實體 {0} 不可標記.",
     "CmsKit:Blog:0001": "給定的slug ({Slug}) 已經存在!",
@@ -76,6 +77,7 @@
     "PageId": "頁",
     "Pages": "頁面",
     "PageSlugInformation": "Slug用於網址. 你的網址將是 '/{{slug}}'.",
+    "BlogSlugInformation": "Slug用於網址. 你的網址將是 '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "部落格管理",
     "Permission:BlogManagement.Create": "創建",
     "Permission:BlogManagement.Delete": "刪除",
@@ -159,6 +161,7 @@
     "YourFullName": "你的全名",
     "YourMessage": "你的消息",
     "YourReply": "你的回覆",
-    "MarkdownSupported": "支援 <a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> ."
+    "MarkdownSupported": "支援 <a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> .",
+    "ThisPartOfContentCouldntBeLoaded": "這部分內容無法加載"
   }
 }

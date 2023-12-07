@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>Volo.Abp.IdentityServer.MongoDB.Tests</AssemblyName>
     <PackageId>Volo.Abp.IdentityServer.MongoDB.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -19,11 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
-    <PackageReference Include="EphemeralMongo.Core" Version="1.1.0" />
-    <PackageReference Include="EphemeralMongo6.runtime.linux-x64" Version="1.1.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
-    <PackageReference Include="EphemeralMongo6.runtime.osx-x64" Version="1.1.0" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
-    <PackageReference Include="EphemeralMongo6.runtime.win-x64" Version="1.1.0" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="EphemeralMongo.Core" />
+    <PackageReference Include="EphemeralMongo6.runtime.linux-x64" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+    <PackageReference Include="EphemeralMongo6.runtime.osx-x64" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+    <PackageReference Include="EphemeralMongo6.runtime.win-x64" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
   </ItemGroup>
 
 </Project>

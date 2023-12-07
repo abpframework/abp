@@ -5,7 +5,7 @@ import {
   EntityActionContributorCallback,
   EntityPropContributorCallback,
   ToolbarActionContributorCallback,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import { InjectionToken } from '@angular/core';
 import { DEFAULT_ROLES_ENTITY_ACTIONS } from '../defaults/default-roles-entity-actions';
 import { DEFAULT_ROLES_ENTITY_PROPS } from '../defaults/default-roles-entity-props';

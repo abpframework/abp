@@ -1,0 +1,8 @@
+{
+  "template": "empty",
+  "modules": {
+    "Volo.Abp": {
+      "path": "Volo.Abp.abpmdl"
+    }
+  }
+}

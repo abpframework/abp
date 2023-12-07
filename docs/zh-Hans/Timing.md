@@ -102,7 +102,7 @@ var normalizedDateTime = Clock.Normalize(dateTime)
 
 ### 时区设置
 
-ABP框架定义了一个名为 `Abp.Timing.Timezone` 的**设置**,可用于为应用程序的用户,[租户](Multi-Tenancy.md)或全局设置和获取时区. 默认值为 `UTC`.
+ABP框架定义了一个名为 `Abp.Timing.TimeZone` 的**设置**,可用于为应用程序的用户,[租户](Multi-Tenancy.md)或全局设置和获取时区. 默认值为 `UTC`.
 
 参阅[设置系统]了解更多关于设置系统.
 

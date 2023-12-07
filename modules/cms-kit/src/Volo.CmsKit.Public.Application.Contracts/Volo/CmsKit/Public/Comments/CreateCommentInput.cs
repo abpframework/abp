@@ -7,7 +7,7 @@ using Volo.CmsKit.Comments;
 namespace Volo.CmsKit.Public.Comments;
 
 [Serializable]
-public class CreateCommentInput: ExtensibleObject
+public class CreateCommentInput : ExtensibleObject
 {
     [Required]
     [DynamicStringLength(typeof(CommentConsts), nameof(CommentConsts.MaxTextLength))]
@@ -20,4 +20,7 @@ public class CreateCommentInput: ExtensibleObject
     public int CaptchaAnswer { get; set; }
     
     public string Url { get; set; }
+
+    [Required]
+    public string IdempotencyToken { get; set; }
 }

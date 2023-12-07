@@ -1,6 +1,5 @@
 # Data Table Column (or Entity Prop) Extensions for Angular UI
 
-
 ## Introduction
 
 Entity prop extension system allows you to add a new column to the data table for an entity or change/remove an already existing one. A "Name" column was added to the user management page below:
@@ -196,6 +195,14 @@ type PropCallback<T, R = any> = (data?: PropData<T>) => R;
 type PropPredicate<T> = (data?: PropData<T>) => boolean;
 ```
 
+### ColumnPredicate
+
+`ColumnPredicate` is the type of the predicate function that can be passed to an `EntityProp` as `columnVisible` parameter. A column predicate gets a single parameter, the `GetInjected`, you can use the `GetInjected` parameter to reach injected `Service` or `Component`. The return type must be `boolean`. Here is a simplified representation:
+
+```js
+type ColumnPredicate<T> = (getInjected: GetInjected) => boolean;
+```
+
 ### EntityPropOptions\<R = any\>
 
 `EntityPropOptions` is the type that defines required and optional properties you have to pass in order to create an entity prop.
@@ -212,6 +219,7 @@ type EntityPropOptions<R = any> = {
   columnWidth?: number;
   permission?: string;
   visible?: PropPredicate<R>;
+  columnVisible?: ColumnPredicate;
 };
 ```
 
@@ -224,9 +232,12 @@ As you see, passing `type` and `name` is enough to create an entity prop. Here i
 - **sortable** defines if the table is sortable based on this entity prop. Sort icons are shown based on it. (_default:_ `false`)
 - **columnWidth** defines a minimum width for the column. Good for horizontal scroll. (_default:_ `undefined`)
 - **permission** is the permission context which will be used to decide if a column for this entity prop should be displayed to the user or not. (_default:_ `undefined`)
-- **visible** is a predicate that will be used to decide if this entity prop should be displayed on the table or not. (_default:_ `() => true`)
+- **visible** is a predicate that will be used to decide if the cell content of this entity prop should be displayed on the table or not based on the data record. (_default:_ `() => true`)
+- **columnVisible** is a predicate that will be used to decide if the column of this entity prop should be displayed on the table or not. (_default:_ `() => true`)
 
 > Important Note: Do not use record in visibility predicates. First of all, the table header checks it too and the record will be `undefined`. Second, if some cells are displayed and others are not, the table will be broken. Use the `valueResolver` and render an empty cell when you need to hide a specific cell.
+>
+> `visible` predicate only hide the cell content, not the column. Use `columnVisible` to hide the entire column.
 
 You may find a full example below.
 
@@ -257,6 +268,10 @@ const options: EntityPropOptions<IdentityUserDto> = {
     
     return store.selectSnapshot(selectSensitiveDataVisibility).toLowerCase() === 'true';
   }
+  columnVisible: getInjected => {
+    const sessionStateService = getInjected(SessionStateService);
+    return !sessionStateService.getTenant()?.isAvailable; // hide this column when the tenant is available.
+  },
 };
 
 const prop = new EntityProp(options);
@@ -281,19 +296,19 @@ The items in the list will be displayed according to the linked list order, i.e.
 
 ```js
 export function reorderUserContributors(
-  propList: EntityPropList<IdentityUserDto>,
+  propList: EntityPropList<IdentityUserDto>
 ) {
   // drop email node
   const emailPropNode = propList.dropByValue(
     'AbpIdentity::EmailAddress',
-    (prop, text) => prop.text === text,
+    (prop, text) => prop.text === text
   );
 
   // add it back after phoneNumber
   propList.addAfter(
     emailPropNode.value,
     'phoneNumber',
-    (value, name) => value.name === name,
+    (value, name) => value.name === name
   );
 }
 ```
@@ -304,7 +319,7 @@ export function reorderUserContributors(
 
 ```js
 export function isLockedOutPropContributor(
-  propList: EntityPropList<IdentityUserDto>,
+  propList: EntityPropList<IdentityUserDto>
 ) {
   // add isLockedOutProp as 2nd column
   propList.add(isLockedOutProp).byIndex(1);

@@ -18,7 +18,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": ["apps/dev-app-e2e/**/*.{js,ts}"]
       },

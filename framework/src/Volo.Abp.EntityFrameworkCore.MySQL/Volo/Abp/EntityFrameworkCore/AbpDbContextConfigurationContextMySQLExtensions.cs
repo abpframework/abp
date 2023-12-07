@@ -10,7 +10,7 @@ public static class AbpDbContextConfigurationContextMySQLExtensions
 {
     public static DbContextOptionsBuilder UseMySQL(
        [NotNull] this AbpDbContextConfigurationContext context,
-       [CanBeNull] Action<MySqlDbContextOptionsBuilder> mySQLOptionsAction = null)
+       Action<MySqlDbContextOptionsBuilder>? mySQLOptionsAction = null)
     {
         if (context.ExistingConnection != null)
         {

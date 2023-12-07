@@ -8,6 +8,7 @@
 @using Volo.Abp.Data
 @using Volo.Abp.Localization
 @using Volo.Abp.ObjectExtending
+@using Volo.CmsKit.Web
 @inject IStringLocalizerFactory StringLocalizerFactory
 @inherits CmsKitAdminPageBase
 
@@ -26,7 +27,7 @@
 
             <abp-input asp-for="ViewModel.Name" />
 
-            <abp-input asp-for="ViewModel.Slug" />
+            <abp-input asp-for="ViewModel.Slug" label-tooltip-icon="fa fa-info-circle" label-tooltip="@L.GetString("BlogSlugInformation", CmsBlogsWebConsts.BlogsRoutePrefix)" />
 
             @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<UpdateModalModel.UpdateBlogViewModel>())
             {

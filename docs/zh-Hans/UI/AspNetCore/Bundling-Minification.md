@@ -353,6 +353,83 @@ services.Configure<AbpBundlingOptions>(options =>
 });
 ````
 
+### 外部/CDN文件支持
+
+捆绑系统会自动识别外部/CDN文件，并将其添加到页面中，无需进行任何更改。
+
+#### 在`AbpBundlingOptions`中添加外部/CDN文件
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.StyleBundles
+        .Add("MyStyleBundle", configuration =>
+        {
+            configuration
+                .AddFiles("/styles/my-style1.css")
+                .AddFiles("/styles/my-style2.css")
+                .AddFiles("https://cdn.abp.io/bootstrap.css")
+                .AddFiles("/styles/my-style3.css")
+                .AddFiles("/styles/my-style4.css");
+        });
+
+    options.ScriptBundles
+        .Add("MyScriptBundle", configuration =>
+        {
+            configuration
+                .AddFiles("/scripts/my-script1.js")
+                .AddFiles("/scripts/my-script2.js")
+                .AddFiles("https://cdn.abp.io/bootstrap.js")
+                .AddFiles("/scripts/my-script3.js")
+                .AddFiles("/scripts/my-script4.js");
+        });
+});
+````
+
+**输出HTMl:**
+
+````html
+<link rel="stylesheet" href="/__bundles/MyStyleBundle.EA8C28419DCA43363E9670973D4C0D15.css?_v=638331889644609730" />
+<link rel="stylesheet" href="https://cdn.abp.io/bootstrap.css" />
+<link rel="stylesheet" href="/__bundles/MyStyleBundle.AC2E0AA6C461A0949A1295E9BDAC049C.css?_v=638331889644623860" />
+
+<script src="/__bundles/MyScriptBundle.C993366DF8840E08228F3EE685CB08E8.js?_v=638331889644937120"></script>
+<script src="https://cdn.abp.io/bootstrap.js"></script>
+<script src="/__bundles/MyScriptBundle.2E8D0FDC6334D2A6B847393A801525B7.js?_v=638331889644943970"></script>
+````
+
+#### 在TagHelpers中添加外部/CDN文件
+
+````html
+<abp-style-bundle name="MyStyleBundle">
+    <abp-style src="/styles/my-style1.css" />
+    <abp-style src="/styles/my-style2.css" />
+    <abp-style src="https://cdn.abp.io/bootstrap.css" />
+    <abp-style src="/styles/my-style3.css" />
+    <abp-style src="/styles/my-style4.css" />
+</abp-style-bundle>
+
+<abp-script-bundle name="MyScriptBundle">
+    <abp-script src="/scripts/my-script1.js" />
+    <abp-script src="/scripts/my-script2.js" />
+    <abp-script src="https://cdn.abp.io/bootstrap.js" />
+    <abp-script src="/scripts/my-script3.js" />
+    <abp-script src="/scripts/my-script4.js" />
+</abp-script-bundle>
+````
+
+**输出HTMl:**
+
+````html
+<link rel="stylesheet" href="/__bundles/MyStyleBundle.C60C7B9C1F539659623BB6E7227A7C45.css?_v=638331889645002500" />
+<link rel="stylesheet" href="https://cdn.abp.io/bootstrap.css" />
+<link rel="stylesheet" href="/__bundles/MyStyleBundle.464328A06039091534650B0E049904C6.css?_v=638331889645012300" />
+
+<script src="/__bundles/MyScriptBundle.55FDCBF2DCB9E0767AE6FA7487594106.js?_v=638331889645050410"></script>
+<script src="https://cdn.abp.io/bootstrap.js"></script>
+<script src="/__bundles/MyScriptBundle.191CB68AB4F41C8BF3A7AE422F19A3D2.js?_v=638331889645055490"></script>
+````
+
 ### 主题
 
 主题使用标准包贡献者将库资源添加到页面布局. 主题还可以定义一些标准/全局包, 因此任何模块都可以为这些标准/全局包做出贡献. 有关更多信息, 请参阅[主题文档](Theming.md).

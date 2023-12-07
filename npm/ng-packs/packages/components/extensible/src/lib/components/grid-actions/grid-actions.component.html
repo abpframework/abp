@@ -1,0 +1,66 @@
+@if (actionList.length > 1) {
+<div ngbDropdown container="body" class="d-inline-block">
+  <button
+    class="btn btn-primary btn-sm dropdown-toggle"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    ngbDropdownToggle
+  >
+    <i [ngClass]="icon" [class.me-1]="icon"></i>{{ text | abpLocalization }}
+  </button>
+  <div ngbDropdownMenu>
+    @for (action of actionList; track action.text) {
+      <ng-container
+        [ngTemplateOutlet]="dropDownBtnItemTmp"
+        [ngTemplateOutletContext]="{ $implicit: action }"
+      >
+      </ng-container>
+    }
+  </div>
+</div>
+} @if (actionList.length === 1) {
+<ng-container
+  [ngTemplateOutlet]="btnTmp"
+  [ngTemplateOutletContext]="{ $implicit: actionList.get(0).value }"
+></ng-container>
+}
+
+<ng-template #dropDownBtnItemTmp let-action>
+  @if (action.visible(data)) {
+  <button
+    ngbDropdownItem
+    *abpPermission="action.permission; runChangeDetection: false"
+    (click)="action.action(data)"
+    type="button"
+  >
+    <ng-container
+      *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
+    ></ng-container>
+  </button>
+  }
+</ng-template>
+
+<ng-template #buttonContentTmp let-action>
+  <i [ngClass]="action.icon" [class.me-1]="action.icon"></i>
+  @if (action.icon) {
+  <span>{{ action.text | abpLocalization }}</span>
+  }@else {
+  <div abpEllipsis>{{ action.text | abpLocalization }}</div>
+  }
+</ng-template>
+
+<ng-template #btnTmp let-action>
+  @if (action.visible(data)) {
+  <button
+    *abpPermission="action.permission; runChangeDetection: false"
+    (click)="action.action(data)"
+    type="button"
+    [class]="action.btnClass"
+    [style]="action.btnStyle"
+  >
+    <ng-container
+      *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
+    ></ng-container>
+  </button>
+  }
+</ng-template>

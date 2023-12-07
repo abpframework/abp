@@ -14,8 +14,8 @@ using Volo.Abp.Uow;
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
 
 [DependsOn(
+    typeof(MyProjectNameApplicationTestModule),
     typeof(MyProjectNameEntityFrameworkCoreModule),
-    typeof(MyProjectNameTestBaseModule),
     typeof(AbpEntityFrameworkCoreSqliteModule)
     )]
 public class MyProjectNameEntityFrameworkCoreTestModule : AbpModule

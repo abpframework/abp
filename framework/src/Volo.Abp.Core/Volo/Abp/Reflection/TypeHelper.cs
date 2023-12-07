@@ -257,6 +257,14 @@ public static class TypeHelper
         {
             return "string";
         }
+        else if (type.FullName == "System.DateOnly")
+        {
+            return "string";
+        }
+        else if (type.FullName == "System.TimeOnly")
+        {
+            return "string";
+        }
         else if (type == typeof(TimeSpan))
         {
             return "string";

@@ -3,15 +3,15 @@
     <Import Project="..\..\..\common.test.props" />
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <AssemblyName>Volo.Abp.AspNetCore.Serilog.Tests</AssemblyName>
         <PackageId>Volo.Abp.AspNetCore.Serilog.Tests</PackageId>
         <RootNamespace />
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+        <PackageReference Include="Serilog.AspNetCore" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
     </ItemGroup>
 
     <ItemGroup>

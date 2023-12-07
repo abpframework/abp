@@ -59,7 +59,7 @@
         <form asp-page="/CmsKit/Pages/Create" id="form-page-create">
             <abp-input asp-for="@Model.ViewModel.Title" />
 
-            <abp-input asp-for="ViewModel.Slug" title="@L["PageSlugInformation"]" data-toggle="tooltip" />
+            <abp-input asp-for="ViewModel.Slug" label-tooltip-icon="fa fa-info-circle" label-tooltip="@L["PageSlugInformation"]" />
 
             <abp-input asp-for="@Model.ViewModel.Content" />
 

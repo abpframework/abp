@@ -323,11 +323,11 @@ Open the `/src/app/book/book-routing.module.ts` and replace with the following c
 ````js
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard, PermissionGuard } from '@abp/ng.core';
+import { authGuard, permissionGuard } from '@abp/ng.core';
 import { BookComponent } from './book.component';
 
 const routes: Routes = [
-  { path: '', component: BookComponent, canActivate: [AuthGuard, PermissionGuard] },
+  { path: '', component: BookComponent, canActivate: [authGuard, permissionGuard] },
 ];
 
 @NgModule({
@@ -337,8 +337,8 @@ const routes: Routes = [
 export class BookRoutingModule {}
 ````
 
-* Imported `AuthGuard` and `PermissionGuard` from the `@abp/ng.core`.
-* Added `canActivate: [AuthGuard, PermissionGuard]` to the route definition.
+* Imported `authGuard` and `permissionGuard` from the `@abp/ng.core`.
+* Added `canActivate: [authGuard, permissionGuard]` to the route definition.
 
 Open the `/src/app/route.provider.ts` and add `requiredPolicy: 'BookStore.Books'` to the `/books` route. The `/books` route block should be following:
 

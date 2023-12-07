@@ -204,6 +204,7 @@ $projects = (
     "framework/src/Volo.Abp.Imaging.AspNetCore",
     "framework/src/Volo.Abp.Imaging.ImageSharp",
     "framework/src/Volo.Abp.Imaging.MagickNet",
+    "framework/src/Volo.Abp.Imaging.SkiaSharp",
     "framework/src/Volo.Abp.Json",
     "framework/src/Volo.Abp.Json.Abstractions",
     "framework/src/Volo.Abp.Json.Newtonsoft",
