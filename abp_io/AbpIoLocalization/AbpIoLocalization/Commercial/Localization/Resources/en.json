@@ -1096,6 +1096,7 @@
     "Select": "Select",
     "TestimonialTitle": "Referances",
     "TestimonialInfo": "Share Your Opinion",
-    "Share": "Share"
+    "Share": "Share",
+    "YouAreNotAuthorizedToWriteTestimonial": "For to write testimonial, you must be sign in"
   }
 }

@@ -849,6 +849,7 @@
     "Select": "Seçiniz",
     "TestimonialTitle": "Referans",
     "TestimonialInfo": "Düşüncelerinizi Paylaşın",
-    "Share": "Paylaş"
+    "Share": "Paylaş",
+    "YouAreNotAuthorizedToWriteTestimonial" : "Referansınızı paylaşabilmeniz için giriş yapmanız gerekmektedir"
   }
 }
