@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "{0} kullanıcısı bulunamadı.",
     "Volo.Abp.Identity:UserNotInRole": "Kullanıcı '{0}' rolünde değil.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Yeni şifre ile onay şifresi uyuşmuyor.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Kullanıcı güvenlik damgası boş olamaz.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Kurtarma kodu kullanılamadı.",
     "Volo.Abp.Identity:010001": "Kendi hesabınızı silemezsiniz!",
     "Volo.Abp.Identity:010002": "Bir kullanıcı en fazla {MaxUserMembershipCount} organizasyon birimine üye olabilir!",
     "Volo.Abp.Identity:010003": "Kimliği dışarıdan alınan kullanıcıların şifresi değiştirilemez!",

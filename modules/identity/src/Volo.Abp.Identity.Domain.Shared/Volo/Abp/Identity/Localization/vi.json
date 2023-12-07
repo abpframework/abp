@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Người dùng {0} không tồn tại.",
     "Volo.Abp.Identity:UserNotInRole": "Người dùng không có vai trò '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Mật khẩu không khớp với mật khẩu xác nhận.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Dấu bảo mật của người dùng không thể là null.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Khôi phục mã không hợp lệ cho người dùng này.",
     "Volo.Abp.Identity:010001": "Bạn không thể xóa tài khoản của riêng bạn!",
     "Volo.Abp.Identity:010002": "Không thể đặt nhiều hơn {MaxUserMembershipCount} đơn vị tổ chức cho một người dùng!",
     "Volo.Abp.Identity:010003": "Không thể thay đổi mật khẩu của người dùng đã đăng nhập bên ngoài!",

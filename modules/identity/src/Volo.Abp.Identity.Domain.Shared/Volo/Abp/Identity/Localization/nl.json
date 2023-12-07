@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Gebruiker {0} bestaat niet.",
     "Volo.Abp.Identity:UserNotInRole": "Gebruiker speelt geen rol '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Wachtwoord komt niet overeen met de wachtwoord bevestiging.",
+    "Volo.Abp.Identity:NullSecurityStamp": "De beveiligingsstempel van de gebruiker kan niet null zijn.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Herstelcode inwisselen mislukt.",
     "Volo.Abp.Identity:010001": "U kunt uw eigen account niet verwijderen!",
     "Volo.Abp.Identity:010002": "Kan niet meer dan {MaxUserMembershipCount} organisatie-eenheden koppelen aan een gebruiker!",
     "Volo.Abp.Identity:010003": "Kan het wachtwoord van een extern ingelogde gebruiker niet wijzigen!",

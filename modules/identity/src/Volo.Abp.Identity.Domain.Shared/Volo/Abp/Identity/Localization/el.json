@@ -64,6 +64,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Ο χρήστης {0} δεν υπάρχει.",
     "Volo.Abp.Identity:UserNotInRole": "Ο χρήστης δεν βρίσκεται στο ρόλο '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Ο κωδικός πρόσβασης δεν ταιριάζει με τον κωδικό επιβεβαίωσης.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Δεν είναι δυνατή η διαχείριση του σφραγίδας ασφαλείας για έναν χρήστη χωρίς σφραγίδα ασφαλείας.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Η εξαργύρωση του κωδικού ανάκτησης απέτυχε.",
     "Volo.Abp.Identity:010001": "Δεν μπορείτε να διαγράψετε τον δικό σας λογαριασμό!",
     "Volo.Abp.Identity:010002": "Δεν μπορείτε να ορίσετε περισσότερες από {MaxUserMembershipCount} μονάδα οργάνωσης για έναν χρήστη!",
     "Volo.Abp.Identity:010003": "Δεν είναι δυνατή η αλλαγή του κωδικού πρόσβασης ενός εξωτερικά συνδεδεμένου χρήστη!",

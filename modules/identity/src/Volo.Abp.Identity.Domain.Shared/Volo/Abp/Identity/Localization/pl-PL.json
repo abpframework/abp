@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Użytkownik {0} nie istnieje.",
     "Volo.Abp.Identity:UserNotInRole": "Użytkownik nie posiada roli '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Podane hasła różnią się od siebie.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Nie można ustawić pustego znaku bezpieczeństwa.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Nie udało się wykorzystać kodu odzyskiwania.",
     "Volo.Abp.Identity:010001": "Nie możesz usunąć swojego własnego konta!",
     "Volo.Abp.Identity:010002": "Nie można ustawić więcej niż {MaxUserMembershipCount} jednostki organizacyjnej dla użytkownika!",
     "Volo.Abp.Identity:010003": "Nie można zmienić hasła zewnętrznie zalogowanego użytkownika!",

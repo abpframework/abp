@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Benutzer {0} existiert nicht.",
     "Volo.Abp.Identity:UserNotInRole": "Der Benutzer hat nicht die Rolle '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Das Passwort stimmt nicht mit dem Bestätigungspasswort überein.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Der Sicherheitsstempel kann nicht NULL sein.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Die Wiederherstellung des Codes ist fehlgeschlagen.",
     "Volo.Abp.Identity:010001": "Sie können Ihr eigenes Benutzerkonto nicht löschen!",
     "Volo.Abp.Identity:010002": "Es kann nicht mehr als die Organisationseinheit {MaxUserMembershipCount} für einen Benutzer festgelegt werden!",
     "Volo.Abp.Identity:010003": "Passwort eines extern angemeldeten Benutzers kann nicht geändert werden!",

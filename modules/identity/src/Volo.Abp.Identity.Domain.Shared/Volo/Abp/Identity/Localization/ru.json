@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Пользователь {0} не существует.",
     "Volo.Abp.Identity:UserNotInRole": "Пользователь не имеет роль '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Пароли не совпадают.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Пользовательский штамп безопасности не может быть нулевым.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Не удалось восстановить код.",
     "Volo.Abp.Identity:010001": "Вы не можете удалить свой собственный аккаунт!",
     "Volo.Abp.Identity:010002": "Невозможно установить для пользователя более {MaxUserMembershipCount} организационной единицы!",
     "Volo.Abp.Identity:010003": "Невозможно изменить пароль пользователя, вошедшего в систему извне!",

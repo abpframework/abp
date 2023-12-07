@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Uživatel {0} neexistuje.",
     "Volo.Abp.Identity:UserNotInRole": "Uživatel není v roli '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Heslo nesouhlasí s potvrzovacím heslem.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Uživatelský bezpečnostní razítko nemůže být null.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Obnovení kódu selhalo.",
     "Volo.Abp.Identity:010001": "Nemůžete smazat svůj vlastní účet!",
     "Volo.Abp.Identity:010002": "Nelze nastavit více než {MaxUserMembershipCount} organizačních jednotek na uživatele!",
     "Volo.Abp.Identity:010003": "Nelze změnit heslo externě přihlášeného uživatele!",

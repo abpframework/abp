@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "El usuario {0} no existe.",
     "Volo.Abp.Identity:UserNotInRole": "El usuario no tiene asignado el rol '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "La contraseña no coincide con la confirmación.",
+    "Volo.Abp.Identity:NullSecurityStamp": "El sello de seguridad del usuario no puede ser nulo.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "No se pudo canjear el código de recuperación",
     "Volo.Abp.Identity:010001": "Tu no puedes borrar tu propia cuenta!",
     "Volo.Abp.Identity:010002": "No puedes establecer más de {MaxUserMembershipCount} unidades organizativas para un usuario!",
     "Volo.Abp.Identity:010003": "No puedes cambiar la contraseña de un usuario que inicio sesión desde un servicio externo!",

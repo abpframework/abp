@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "{0} felhasználó nem létezik.",
     "Volo.Abp.Identity:UserNotInRole": "A felhasználó nem rendelkezik a {0} szerepkörrel.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "A jelszó nem egyezik meg a megerősítési jelszóval.",
+    "Volo.Abp.Identity:NullSecurityStamp": "A felhasználó biztonsági bélyegzője nem lehet null.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "A helyreállítási kód visszavonása sikertelen.",
     "Volo.Abp.Identity:010001": "Nem törölheti saját fiókját!",
     "Volo.Abp.Identity:010002": "Legfeljebb {MaxUserMembershipCount} szervezeti egységet állíthat be egy felhasználó számára!",
     "Volo.Abp.Identity:010003": "Külsőleg bejelentkezett felhasználó jelszavát nem lehet megváltoztatni!",

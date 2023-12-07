@@ -65,6 +65,8 @@
         "Volo.Abp.Identity:UserNameNotFound": "Korisnik {0} ne postoji.",
         "Volo.Abp.Identity:UserNotInRole": "Korisnik nije u ulozi '{0}'.",
         "Volo.Abp.Identity:PasswordConfirmationFailed": "Lozinka ne odgovara lozinci za potvrdu.",
+        "Volo.Abp.Identity:NullSecurityStamp": "Sigurnosna oznaka korisnika ne može biti nula.",
+        "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Kod oporavka nije moguće iskoristiti.",
         "Volo.Abp.Identity:010001": "Ne možete izbrisati vlastiti račun!",
         "Volo.Abp.Identity:010002": "Ne možete postaviti više od {MaxUserMembershipCount} organizacijske jedinice za korisnika!",
         "Volo.Abp.Identity:010003": "Nije moguće promijeniti lozinku eksterno prijavljenog korisnika!",

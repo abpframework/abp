@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Uporabnik {0} ne obstaja.",
     "Volo.Abp.Identity:UserNotInRole": "Uporabnik nima dodeljene vloge '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Geslo se ne ujema s potrditvenim geslom.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Varnostni žig uporabnika ne more biti null.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Ponovna pridobitev kode ni uspela.",
     "Volo.Abp.Identity:010001": "Ne morete izbrisati svojega lastnega računa!",
     "Volo.Abp.Identity:010002": "Za uporabnika ni mogoče nastaviti več kot {MaxUserMembershipCount} organizacijske enote!",
     "Volo.Abp.Identity:010003": "Gesla zunanjega prijavljenega uporabnika ni mogoče spremeniti!",

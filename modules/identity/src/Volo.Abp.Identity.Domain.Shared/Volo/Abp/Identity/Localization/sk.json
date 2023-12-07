@@ -65,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Používateľ {0} neexistuje.",
     "Volo.Abp.Identity:UserNotInRole": "Používateľ nie je v role '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Heslo sa nezhoduje s potvrdením hesla.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Bezpečnostná pečiatka používateľa nemôže byť nulová.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Nastala chyba pri vykonávaní kódu obnovy.",
     "Volo.Abp.Identity:010001": "Nemôžete vymazať svoje vlastné konto!",
     "Volo.Abp.Identity:010002": "Nie je možné nastaviť viac ako {MaxUserMembershipCount} organizačných jednotiek pre používateľa!",
     "Volo.Abp.Identity:010003": "Nie je možné zmeniť heslo externe prihláseného používateľa!",
