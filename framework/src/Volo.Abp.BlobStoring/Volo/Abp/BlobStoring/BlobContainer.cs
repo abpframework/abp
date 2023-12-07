@@ -179,7 +179,7 @@ public class BlobContainer : IBlobContainer
         {
             //TODO: Consider to throw some type of "not found" exception and handle on the HTTP status side
             throw new AbpException(
-                $"Could not found the requested BLOB '{name}' in the container '{ContainerName}'!");
+                $"Could not find the requested BLOB '{name}' in the container '{ContainerName}'!");
         }
 
         return stream;

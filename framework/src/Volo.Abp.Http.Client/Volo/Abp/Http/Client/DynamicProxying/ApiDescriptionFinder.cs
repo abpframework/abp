@@ -82,7 +82,7 @@ public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
             }
         }
 
-        throw new AbpException($"Could not found remote action for method: {method} on the URL: {baseUrl}");
+        throw new AbpException($"Could not find remote action for method: {method} on the URL: {baseUrl}");
     }
 
     public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(HttpClient client, string baseUrl)
