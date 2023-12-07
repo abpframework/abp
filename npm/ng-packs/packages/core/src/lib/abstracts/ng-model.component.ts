@@ -47,7 +47,7 @@ export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAcc
 
   writeValue(value: T): void {
     this._value = this.valueLimitFn(value, this._value) || value;
-    setTimeout(() => this.cdRef.markForCheck(), 0);
+    this.cdRef.markForCheck();
   }
 
   registerOnChange(fn: any): void {
