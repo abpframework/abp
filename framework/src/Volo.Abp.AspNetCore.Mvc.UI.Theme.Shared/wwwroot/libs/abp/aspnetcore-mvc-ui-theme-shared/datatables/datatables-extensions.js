@@ -33,9 +33,15 @@ var abp = abp || {};
 
         var _createDropdownItem = function (record, fieldItem, tableInstance) {
             if (fieldItem.divider) {
-                return $(fieldItem.dividerHtml ?
-                    (abp.utils.isFunction(fieldItem.dividerHtml) ? fieldItem.dividerHtml(record, tableInstance) : fieldItem.dividerHtml)
-                    : '<li><hr class="dropdown-divider"></li>');
+                if (abp.utils.isFunction(fieldItem.divider)) {
+                    return $(fieldItem.divider(record, tableInstance));
+                }
+
+                if (fieldItem.divider === true) {
+                    return $('<li><hr class="dropdown-divider"></li>');
+                }
+
+                return $(fieldItem.divider);
             }
 
             var $li = $('<li/>');
