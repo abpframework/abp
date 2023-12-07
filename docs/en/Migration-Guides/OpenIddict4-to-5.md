@@ -88,7 +88,7 @@ namespace OpenIddict.Demo.Server.Migrations
 
 ## OpenIddictApplicationDescriptor changes
 
-You have to change the `Type` to `ClientType` when creating a new `OpenIddictApplicationDescriptor`.
+You have to change the `Type` to `ClientType` when creating a new `AbpApplicationDescriptor` or `OpenIddictApplicationDescriptor`.
 
 ````csharp
 var application = new AbpApplicationDescriptor {
