@@ -52,12 +52,13 @@
         [abpDisabled]="disabled"
         class="form-select form-control"
       >
-        <option
-          *ngFor="let option of options$ | async; trackBy: track.by('value')"
-          [ngValue]="option.value"
-        >
-          {{ option.key }}
-        </option>
+        @for (option of options$ | async; track option.value) {
+          <option
+            [ngValue]="option.value"
+          >
+            {{ option.key }}
+          </option>
+        }
       </select>
     </ng-template>
 
@@ -161,18 +162,21 @@
       </div>
     </ng-template>
 
-    <small *ngIf="prop.formText" class="text-muted d-block">{{
+    @if (prop.formText) {
+    <small class="text-muted d-block">{{
       prop.formText | abpLocalization
     }}</small>
+    }
   </div>
 </ng-container>
 
 <ng-template #label let-classes>
   <label [htmlFor]="prop.id" [ngClass]="classes || 'form-label'">
-    <ng-container *ngIf="prop.displayTextResolver; else displayNameTemplate">
+    @if (prop.displayTextResolver) {
       {{ prop.displayTextResolver(data) | abpLocalization }}
-    </ng-container>
-    <ng-template #displayNameTemplate> {{ prop.displayName | abpLocalization }}</ng-template>
+    }@else{
+      {{ prop.displayName | abpLocalization }}
+    }
     {{ asterisk }}
   </label>
 </ng-template>

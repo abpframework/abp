@@ -1,5 +1,5 @@
 import { EXTENSIONS_FORM_PROP, EXTENSIONS_FORM_PROP_DATA } from './../../tokens/extensions.token';
-import { ABP, CoreModule, TrackByService } from '@abp/ng.core';
+import { ABP, LocalizationModule, PermissionDirective, ShowPasswordDirective, TrackByService } from '@abp/ng.core';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -30,12 +30,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import {
-  DateAdapter,
-  DisabledDirective,
-  PasswordComponent,
-  TimeAdapter,
-} from '@abp/ng.theme.shared';
+import { DateAdapter, DisabledDirective, TimeAdapter } from '@abp/ng.theme.shared';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
 import { FormProp } from '../../models/form-props';
 import { PropData } from '../../models/props';
@@ -45,14 +40,14 @@ import { eThemeSharedComponents } from '../../enums/components';
 import { ExtensibleDateTimePickerComponent } from '../date-time-picker/extensible-date-time-picker.component';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { ExtensibleFormPropService } from '../../services/extensible-form-prop.service';
-import {CreateInjectorPipe} from "../../pipes/create-injector.pipe";
+import { CreateInjectorPipe } from '../../pipes/create-injector.pipe';
+import { AsyncPipe, NgClass, NgSwitch, NgSwitchCase, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'abp-extensible-form-prop',
   templateUrl: './extensible-form-prop.component.html',
   standalone: true,
   imports: [
-    CoreModule,
     ExtensibleDateTimePickerComponent,
     NgbDatepickerModule,
     NgbTimepickerModule,
@@ -60,8 +55,15 @@ import {CreateInjectorPipe} from "../../pipes/create-injector.pipe";
     DisabledDirective,
     NgxValidateCoreModule,
     NgbTypeaheadModule,
-    PasswordComponent,
-    CreateInjectorPipe
+    CreateInjectorPipe,
+    ShowPasswordDirective,
+    PermissionDirective,
+    LocalizationModule,
+    AsyncPipe,
+    NgSwitch,
+    NgSwitchCase,
+    NgClass,
+    NgTemplateOutlet,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ExtensibleFormPropService],
@@ -91,6 +93,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   injectorForCustomComponent?: Injector;
   asterisk = '';
   containerClassName = 'mb-2';
+  showPassword = false;
   options$: Observable<ABP.Option<any>[]> = of([]);
   validators: ValidatorFn[] = [];
   readonly!: boolean;

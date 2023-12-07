@@ -6,7 +6,7 @@ This is a minimalist, non-layered startup solution with the ABP Framework. All t
 
 ### Pre-requirements
 
-* [.NET 7.0+ SDK](https://dotnet.microsoft.com/download/dotnet)
+* [.NET 8.0+ SDK](https://dotnet.microsoft.com/download/dotnet)
 * [Node v18 or 20](https://nodejs.org/en)
 
 ### Configurations

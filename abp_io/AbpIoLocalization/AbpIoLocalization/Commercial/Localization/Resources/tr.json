@@ -610,7 +610,7 @@
     "Purchase_TrainingPrice": "Eğitim Fiyatı",
     "Purchase_OnboardingTraining": "ABP Onboarding & Web Uygulama Geliştirme Canlı Eğitimi",
     "TotalDeveloperPrice": "Toplam Geliştirici Fiyatı",
-    "Purchase_PricePerDeveloper": "<span>{0} {1}</span> geliştirici başına",
+    "Purchase_PricePerDeveloper": "<span>{0}</span> geliştirici başına",
     "Purchase_IncludedDeveloperInfo": "{0} {1} dahil.",
     "Purchase_LicenseExtraDeveloperPurchaseMessage": "<span class=\"fw-6\">{0} lisansı</span> {1} geliştirici(ler) içerir. Şimdi veya daha sonra ek geliştiriciler ekleyebilirsiniz.",
     "StartupTemplates_Page_Title": "ABP Başlangıç Şablonları",

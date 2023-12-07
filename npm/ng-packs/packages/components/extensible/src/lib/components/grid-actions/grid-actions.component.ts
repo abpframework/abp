@@ -9,13 +9,21 @@ import { EntityAction, EntityActionList } from '../../models/entity-actions';
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { CoreModule } from '@abp/ng.core';
-import {EllipsisDirective} from "@abp/ng.theme.shared";
+import { LocalizationModule, PermissionDirective } from '@abp/ng.core';
+import { EllipsisDirective } from '@abp/ng.theme.shared';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   exportAs: 'abpGridActions',
   standalone: true,
-  imports: [ CoreModule, NgbDropdownModule, EllipsisDirective],
+  imports: [
+    NgbDropdownModule,
+    EllipsisDirective,
+    PermissionDirective,
+    NgClass,
+    LocalizationModule,
+    NgTemplateOutlet,
+  ],
   selector: 'abp-grid-actions',
   templateUrl: './grid-actions.component.html',
   providers: [

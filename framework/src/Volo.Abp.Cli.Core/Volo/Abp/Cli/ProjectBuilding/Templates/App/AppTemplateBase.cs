@@ -107,7 +107,6 @@ public abstract class AppTemplateBase : TemplateInfo
 
         if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
         {
-            steps.Add(new AppTemplateRemoveMongodbCollectionFixtureStep());
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
         }

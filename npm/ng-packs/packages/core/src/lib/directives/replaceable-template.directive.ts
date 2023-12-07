@@ -18,6 +18,7 @@ import { ReplaceableComponentsService } from '../services/replaceable-components
 import { SubscriptionService } from '../services/subscription.service';
 
 @Directive({
+  standalone: true,
   selector: '[abpReplaceableTemplate]',
   providers: [SubscriptionService],
 })

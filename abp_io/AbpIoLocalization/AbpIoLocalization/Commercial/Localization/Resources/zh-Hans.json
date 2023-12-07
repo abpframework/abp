@@ -600,7 +600,7 @@
     "Purchase_TrainingPrice": "培训价格",
     "Purchase_OnboardingTraining": "ABP 熟悉使用和 Web 应用程序开发现场培训",
     "TotalDeveloperPrice": "开发商总价",
-    "Purchase_PricePerDeveloper": "<span>{0} {1}</span> 每个开发者",
+    "Purchase_PricePerDeveloper": "<span>{0}</span> 每个开发者",
     "Purchase_IncludedDeveloperInfo": "{0} {1} 包括在内。",
     "Purchase_LicenseExtraDeveloperPurchaseMessage": "<span class=\"fw-6\">{0} 许可</span> 包含 {1} 个开发者。 您可以现在或以后添加其他开发人员。",
     "StartupTemplates_Page_Title": "ABP启动模板",
