@@ -11,9 +11,9 @@ I will show the changes you need to make to do the migration.
 ## OpenIddictApplication changes
 
 1. The `Type(string)` of the `OpenIddictApplication` has been renamed to `ClientType(string)`.
-2. The `ApplicationType(string)` as been added to the `OpenIddictApplication` entity.
-3. The `JsonWebKeySet(string)` as been added to the `OpenIddictApplication` entity.
-4. The `Settings(string)` as been added to the `OpenIddictApplication` entity.
+2. The `ApplicationType(string)` has been added to the `OpenIddictApplication` entity.
+3. The `JsonWebKeySet(string)` has been added to the `OpenIddictApplication` entity.
+4. The `Settings(string)` has been added to the `OpenIddictApplication` entity.
 
 The new migration looks like this:
 
@@ -82,9 +82,9 @@ namespace OpenIddict.Demo.Server.Migrations
 ## OpenIddictApplicationModel changes
 
 1. The `Type(string)` of the `OpenIddictApplicationModel` has been renamed to `ClientType(string)`.
-2. The `ApplicationType(string)` as been added to the `OpenIddictApplicationModel` entity.
-3. The `JsonWebKeySet`([JsonWebKeySet](https://learn.microsoft.com/en-us/dotnet/api/microsoft.identitymodel.tokens.jsonwebkeyset)) as been added to the `OpenIddictApplicationModel` entity. 
-4. The `Settings(string)` as been added to the `OpenIddictApplicationModel` entity.
+2. The `ApplicationType(string)` has been added to the `OpenIddictApplicationModel` entity.
+3. The `JsonWebKeySet`([JsonWebKeySet](https://learn.microsoft.com/en-us/dotnet/api/microsoft.identitymodel.tokens.jsonwebkeyset)) has been added to the `OpenIddictApplicationModel` entity. 
+4. The `Settings(string)` has been added to the `OpenIddictApplicationModel` entity.
 
 ## OpenIddictApplicationDescriptor changes
 
