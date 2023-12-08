@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
@@ -18,20 +17,17 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     protected ITenantRepository TenantRepository { get; }
     protected ITenantManager TenantManager { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
-    protected IDistributedCache<TenantConfigurationCacheItem> TenantConfigurationCache { get; }
 
     public TenantAppService(
         ITenantRepository tenantRepository,
         ITenantManager tenantManager,
         IDataSeeder dataSeeder,
-        IDistributedEventBus distributedEventBus,
-        IDistributedCache<TenantConfigurationCacheItem> tenantConfigurationCache)
+        IDistributedEventBus distributedEventBus)
     {
         DataSeeder = dataSeeder;
         TenantRepository = tenantRepository;
         TenantManager = tenantManager;
         DistributedEventBus = distributedEventBus;
-        TenantConfigurationCache = tenantConfigurationCache;
     }
 
     public virtual async Task<TenantDto> GetAsync(Guid id)
@@ -103,13 +99,6 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     {
         var tenant = await TenantRepository.GetAsync(id);
 
-        await TenantConfigurationCache.RemoveManyAsync(
-            new[]
-            {
-                TenantConfigurationCacheItem.CalculateCacheKey(tenant.Id, null),
-                TenantConfigurationCacheItem.CalculateCacheKey(null, tenant.Name),
-            });
-
         await TenantManager.ChangeNameAsync(tenant, input.Name);
 
         tenant.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -130,13 +119,6 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
         }
 
         await TenantRepository.DeleteAsync(tenant);
-
-        await TenantConfigurationCache.RemoveManyAsync(
-            new[]
-            {
-                TenantConfigurationCacheItem.CalculateCacheKey(tenant.Id, null),
-                TenantConfigurationCacheItem.CalculateCacheKey(null, tenant.Name),
-            });
     }
 
     [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
