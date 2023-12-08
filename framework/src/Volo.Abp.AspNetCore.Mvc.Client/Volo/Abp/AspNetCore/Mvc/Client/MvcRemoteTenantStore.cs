@@ -33,7 +33,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
 
     public async Task<TenantConfiguration?> FindAsync(string name)
     {
-        var cacheKey = CreateCacheKey(name);
+        var cacheKey = TenantConfigurationCacheHelper.CreateCacheKey(name);
         var httpContext = HttpContextAccessor?.HttpContext;
 
         if (httpContext != null && httpContext.Items[cacheKey] is TenantConfiguration tenantConfiguration)
@@ -60,7 +60,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
 
     public async Task<TenantConfiguration?> FindAsync(Guid id)
     {
-        var cacheKey = CreateCacheKey(id);
+        var cacheKey = TenantConfigurationCacheHelper.CreateCacheKey(id);
         var httpContext = HttpContextAccessor?.HttpContext;
 
         if (httpContext != null && httpContext.Items[cacheKey] is TenantConfiguration tenantConfiguration)
@@ -87,7 +87,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
 
     public TenantConfiguration Find(string name)
     {
-        var cacheKey = CreateCacheKey(name);
+        var cacheKey = TenantConfigurationCacheHelper.CreateCacheKey(name);
         var httpContext = HttpContextAccessor?.HttpContext;
 
         if (httpContext != null && httpContext.Items[cacheKey] is TenantConfiguration tenantConfiguration)
@@ -114,7 +114,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
 
     public TenantConfiguration Find(Guid id)
     {
-        var cacheKey = CreateCacheKey(id);
+        var cacheKey = TenantConfigurationCacheHelper.CreateCacheKey(id);
         var httpContext = HttpContextAccessor?.HttpContext;
 
         if (httpContext != null && httpContext.Items[cacheKey] is TenantConfiguration tenantConfiguration)
@@ -147,15 +147,5 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         }
 
         return new TenantConfiguration(tenantResultDto.TenantId.Value, tenantResultDto.Name!);
-    }
-
-    protected virtual string CreateCacheKey(string tenantName)
-    {
-        return $"RemoteTenantStore_Name_{tenantName}";
-    }
-
-    protected virtual string CreateCacheKey(Guid tenantId)
-    {
-        return $"RemoteTenantStore_Id_{tenantId:N}";
     }
 }

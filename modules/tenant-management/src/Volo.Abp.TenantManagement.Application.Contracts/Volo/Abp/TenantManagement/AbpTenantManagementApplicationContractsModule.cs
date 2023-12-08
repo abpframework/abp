@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Application;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
@@ -10,7 +11,8 @@ namespace Volo.Abp.TenantManagement;
 [DependsOn(
     typeof(AbpDddApplicationContractsModule),
     typeof(AbpTenantManagementDomainSharedModule),
-    typeof(AbpAuthorizationAbstractionsModule)
+    typeof(AbpAuthorizationAbstractionsModule),
+    typeof(AbpAspNetCoreMvcContractsModule)
     )]
 public class AbpTenantManagementApplicationContractsModule : AbpModule
 {
