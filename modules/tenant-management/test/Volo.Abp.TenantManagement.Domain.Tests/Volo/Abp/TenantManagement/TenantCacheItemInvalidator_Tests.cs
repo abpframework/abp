@@ -11,12 +11,14 @@ public class TenantConfigurationCacheItemInvalidator_Tests : AbpTenantManagement
     private readonly IDistributedCache<TenantConfigurationCacheItem> _cache;
     private readonly ITenantStore _tenantStore;
     private readonly ITenantRepository _tenantRepository;
+    private readonly ITenantManager _tenantManager;
 
     public TenantConfigurationCacheItemInvalidator_Tests()
     {
         _cache = GetRequiredService<IDistributedCache<TenantConfigurationCacheItem>>();
         _tenantStore = GetRequiredService<ITenantStore>();
         _tenantRepository = GetRequiredService<ITenantRepository>();
+        _tenantManager = GetRequiredService<ITenantManager>();
     }
 
     [Fact]
@@ -81,5 +83,22 @@ public class TenantConfigurationCacheItemInvalidator_Tests : AbpTenantManagement
 
         (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(volosoft.Id, null))).ShouldBeNull();
         (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(null, volosoft.Name))).ShouldBeNull();
+
+        var abp = await _tenantRepository.FindByNameAsync("abp");
+        abp.ShouldNotBeNull();
+
+        // Find will cache tenant.
+        await _tenantStore.FindAsync(abp.Id);
+        await _tenantStore.FindAsync(abp.Name);
+
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(abp.Id, null))).ShouldNotBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, abp.Name))).ShouldNotBeNull();
+
+        await _tenantManager.ChangeNameAsync(abp, "abp2");
+        await _tenantRepository.UpdateAsync(abp);
+
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(abp.Id, null))).ShouldBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, "abp"))).ShouldBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, "abp2"))).ShouldBeNull();
     }
 }
