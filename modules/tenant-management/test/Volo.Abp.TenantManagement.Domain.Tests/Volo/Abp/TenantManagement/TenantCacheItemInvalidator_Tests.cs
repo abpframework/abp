@@ -6,15 +6,15 @@ using Xunit;
 
 namespace Volo.Abp.TenantManagement;
 
-public class TenantCacheItemInvalidator_Tests : AbpTenantManagementDomainTestBase
+public class TenantConfigurationCacheItemInvalidator_Tests : AbpTenantManagementDomainTestBase
 {
-    private readonly IDistributedCache<TenantCacheItem> _cache;
+    private readonly IDistributedCache<TenantConfigurationCacheItem> _cache;
     private readonly ITenantStore _tenantStore;
     private readonly ITenantRepository _tenantRepository;
 
-    public TenantCacheItemInvalidator_Tests()
+    public TenantConfigurationCacheItemInvalidator_Tests()
     {
-        _cache = GetRequiredService<IDistributedCache<TenantCacheItem>>();
+        _cache = GetRequiredService<IDistributedCache<TenantConfigurationCacheItem>>();
         _tenantStore = GetRequiredService<ITenantStore>();
         _tenantRepository = GetRequiredService<ITenantRepository>();
     }
@@ -25,27 +25,27 @@ public class TenantCacheItemInvalidator_Tests : AbpTenantManagementDomainTestBas
         var acme = await _tenantRepository.FindByNameAsync("acme");
         acme.ShouldNotBeNull();
 
-        (await _cache.GetAsync(TenantCacheItem.CalculateCacheKey(acme.Id, null))).ShouldBeNull();
-        (await _cache.GetAsync(TenantCacheItem.CalculateCacheKey(null, acme.Name))).ShouldBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(acme.Id, null))).ShouldBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, acme.Name))).ShouldBeNull();
 
         await _tenantStore.FindAsync(acme.Id);
-        (await _cache.GetAsync(TenantCacheItem.CalculateCacheKey(acme.Id, null))).ShouldNotBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(acme.Id, null))).ShouldNotBeNull();
 
         await _tenantStore.FindAsync(acme.Name);
-        (await _cache.GetAsync(TenantCacheItem.CalculateCacheKey(null, acme.Name))).ShouldNotBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, acme.Name))).ShouldNotBeNull();
 
 
         var volosoft = _tenantRepository.FindByName("volosoft");
         volosoft.ShouldNotBeNull();
 
-        (_cache.Get(TenantCacheItem.CalculateCacheKey(volosoft.Id, null))).ShouldBeNull();
-        (_cache.Get(TenantCacheItem.CalculateCacheKey(null, volosoft.Name))).ShouldBeNull();
+        (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(volosoft.Id, null))).ShouldBeNull();
+        (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(null, volosoft.Name))).ShouldBeNull();
 
         _tenantStore.Find(volosoft.Id);
-        (_cache.Get(TenantCacheItem.CalculateCacheKey(volosoft.Id, null))).ShouldNotBeNull();
+        (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(volosoft.Id, null))).ShouldNotBeNull();
 
         _tenantStore.Find(volosoft.Name);
-        (_cache.Get(TenantCacheItem.CalculateCacheKey(null, volosoft.Name))).ShouldNotBeNull();
+        (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(null, volosoft.Name))).ShouldNotBeNull();
     }
 
     [Fact]
@@ -58,13 +58,13 @@ public class TenantCacheItemInvalidator_Tests : AbpTenantManagementDomainTestBas
         await _tenantStore.FindAsync(acme.Id);
         await _tenantStore.FindAsync(acme.Name);
 
-        (await _cache.GetAsync(TenantCacheItem.CalculateCacheKey(acme.Id, null))).ShouldNotBeNull();
-        (await _cache.GetAsync(TenantCacheItem.CalculateCacheKey(null, acme.Name))).ShouldNotBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(acme.Id, null))).ShouldNotBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, acme.Name))).ShouldNotBeNull();
 
         await _tenantRepository.DeleteAsync(acme);
 
-        (await _cache.GetAsync(TenantCacheItem.CalculateCacheKey(acme.Id, null))).ShouldBeNull();
-        (await _cache.GetAsync(TenantCacheItem.CalculateCacheKey(null, acme.Name))).ShouldBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(acme.Id, null))).ShouldBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, acme.Name))).ShouldBeNull();
 
 
         var volosoft = await _tenantRepository.FindByNameAsync("volosoft");
@@ -74,12 +74,12 @@ public class TenantCacheItemInvalidator_Tests : AbpTenantManagementDomainTestBas
         _tenantStore.Find(volosoft.Id);
         _tenantStore.Find(volosoft.Name);
 
-        (_cache.Get(TenantCacheItem.CalculateCacheKey(volosoft.Id, null))).ShouldNotBeNull();
-        (_cache.Get(TenantCacheItem.CalculateCacheKey(null, volosoft.Name))).ShouldNotBeNull();
+        (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(volosoft.Id, null))).ShouldNotBeNull();
+        (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(null, volosoft.Name))).ShouldNotBeNull();
 
         await _tenantRepository.DeleteAsync(volosoft);
 
-        (_cache.Get(TenantCacheItem.CalculateCacheKey(volosoft.Id, null))).ShouldBeNull();
-        (_cache.Get(TenantCacheItem.CalculateCacheKey(null, volosoft.Name))).ShouldBeNull();
+        (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(volosoft.Id, null))).ShouldBeNull();
+        (_cache.Get(TenantConfigurationCacheItem.CalculateCacheKey(null, volosoft.Name))).ShouldBeNull();
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus.Distributed;
@@ -19,14 +18,14 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     protected ITenantRepository TenantRepository { get; }
     protected ITenantManager TenantManager { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
-    protected IDistributedCache<TenantConfiguration> TenantConfigurationCache { get; }
+    protected IDistributedCache<TenantConfigurationCacheItem> TenantConfigurationCache { get; }
 
     public TenantAppService(
         ITenantRepository tenantRepository,
         ITenantManager tenantManager,
         IDataSeeder dataSeeder,
         IDistributedEventBus distributedEventBus,
-        IDistributedCache<TenantConfiguration> tenantConfigurationCache)
+        IDistributedCache<TenantConfigurationCacheItem> tenantConfigurationCache)
     {
         DataSeeder = dataSeeder;
         TenantRepository = tenantRepository;
@@ -96,9 +95,6 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
                             );
         }
 
-        await TenantConfigurationCache.RemoveAsync(TenantConfigurationCacheHelper.CreateCacheKey(tenant.Id));
-        await TenantConfigurationCache.RemoveAsync(TenantConfigurationCacheHelper.CreateCacheKey(tenant.Name));
-
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }
 
@@ -107,15 +103,19 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     {
         var tenant = await TenantRepository.GetAsync(id);
 
+        await TenantConfigurationCache.RemoveManyAsync(
+            new[]
+            {
+                TenantConfigurationCacheItem.CalculateCacheKey(tenant.Id, null),
+                TenantConfigurationCacheItem.CalculateCacheKey(null, tenant.Name),
+            });
+
         await TenantManager.ChangeNameAsync(tenant, input.Name);
 
         tenant.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         input.MapExtraPropertiesTo(tenant);
 
         await TenantRepository.UpdateAsync(tenant);
-
-        await TenantConfigurationCache.RemoveAsync(TenantConfigurationCacheHelper.CreateCacheKey(tenant.Id));
-        await TenantConfigurationCache.RemoveAsync(TenantConfigurationCacheHelper.CreateCacheKey(tenant.Name));
 
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }
@@ -131,8 +131,12 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
 
         await TenantRepository.DeleteAsync(tenant);
 
-        await TenantConfigurationCache.RemoveAsync(TenantConfigurationCacheHelper.CreateCacheKey(tenant.Id));
-        await TenantConfigurationCache.RemoveAsync(TenantConfigurationCacheHelper.CreateCacheKey(tenant.Name));
+        await TenantConfigurationCache.RemoveManyAsync(
+            new[]
+            {
+                TenantConfigurationCacheItem.CalculateCacheKey(tenant.Id, null),
+                TenantConfigurationCacheItem.CalculateCacheKey(null, tenant.Name),
+            });
     }
 
     [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
