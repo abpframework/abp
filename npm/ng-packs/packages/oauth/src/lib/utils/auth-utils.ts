@@ -34,7 +34,7 @@ export function setRememberMe(
 ) {
   removeRememberMe(localStorageService);
   localStorageService.setItem(storageKey, 'true');
-  document.cookie = `${cookieKey}=true; path=/${
+  document.cookie = `${cookieKey}=${remember}; path=/${
     remember ? ' ;expires=Fri, 31 Dec 9999 23:59:59 GMT' : ''
   }`;
 }

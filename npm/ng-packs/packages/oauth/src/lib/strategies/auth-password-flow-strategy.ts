@@ -9,8 +9,16 @@ import { LoginParams } from '@abp/ng.core';
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 
 function getCookieValueByName(name: string) {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return match ? match[2] : '';
+  const cookiesArray = document.cookie.split(';');
+
+  for (let i = 0; i < cookiesArray.length; i++) {
+      let cookie = cookiesArray[i].trim();
+
+      if (cookie.startsWith(name + '=')) {
+          return cookie.substring(name.length + 1);
+      }
+  }
+  return null;
 }
 
 export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
@@ -40,7 +48,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   async init() {
-    if (!getCookieValueByName(this.cookieKey) && localStorage.getItem(this.storageKey)) {
+    if (!!getCookieValueByName(this.cookieKey) && localStorage.getItem(this.storageKey)) {
+      removeRememberMe(this.localStorageService);
       this.oAuthService.logOut();
     }
 
