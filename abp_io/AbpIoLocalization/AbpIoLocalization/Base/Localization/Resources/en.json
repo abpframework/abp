@@ -230,6 +230,11 @@
     "CommunityProfile": "Community Profile",
     "BlogProfile": "Blog Profile",
     "Tickets": "Tickets",
-    "Videos": "Videos"
+    "Raffles": "Raffles",
+    "Status": "Status",
+    "Resources": "Resources",
+    "Video Courses": "Video Courses",
+    "Packages": "Packages",
+    "Trainings": "Trainings"
   }
 }
