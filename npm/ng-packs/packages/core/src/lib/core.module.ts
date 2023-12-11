@@ -99,7 +99,7 @@ const standaloneDirectives = [
     ShortTimePipe,
     ShortDatePipe,
   ],
-  providers: [LocalizationPipe,],
+  providers: [LocalizationPipe],
 })
 export class BaseCoreModule {}
 
