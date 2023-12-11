@@ -197,7 +197,7 @@
         "CompletedSettingAsHomePage": "Set as home page",
         "IsHomePage": "Is Home Page",
         "RemovedSettingAsHomePage": "Removed setting the home page",
-        "Feature:CmsKitGroup": "Cms Kit",
+        "Feature:CmsKitGroup": "Cms kit",
         "Feature:BlogEnable": "Blogpost",
         "Feature:BlogEnableDescription": "CMS Kit's blogpost system that allows create blogs and posts dynamically in the application.",
         "Feature:CommentEnable": "Commenting",

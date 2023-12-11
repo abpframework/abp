@@ -28,7 +28,7 @@
     "SmtpUseDefaultCredentials": "Use default credentials",
     "DefaultFromAddress": "Default from address",
     "DefaultFromDisplayName": "Default from display name",
-    "Feature:SettingManagementGroup": "Setting Management",
+    "Feature:SettingManagementGroup": "Setting management",
     "Feature:SettingManagementEnable": "Enable setting management",
     "Feature:SettingManagementEnableDescription": "Enable setting management system in the application.",
     "Feature:AllowChangingEmailSettings": "Allow changing email settings.",
