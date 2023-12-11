@@ -193,7 +193,6 @@ export class PermissionManagementComponent
   setParentClicked(clickedPermissions: PermissionGrantInfoDto) {
     let childPermissionGrantedCount = 0;
     let parentPermission: PermissionGrantInfoDto;
-    console.log({ clickedPermissions });
 
     if (clickedPermissions.parentName) {
       this.permissions.forEach(per => {
