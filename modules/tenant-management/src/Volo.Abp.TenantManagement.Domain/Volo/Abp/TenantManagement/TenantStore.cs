@@ -77,7 +77,7 @@ public class TenantStore : ITenantStore, ITransientDependency
             }
         }
 
-        throw new AbpException("Both id and name can't be invalid.");
+        throw new AbpException("Both id and normalizedName can't be invalid.");
     }
 
     protected virtual async Task<TenantConfigurationCacheItem> SetCacheAsync(string cacheKey, [CanBeNull] Tenant tenant)
@@ -117,7 +117,7 @@ public class TenantStore : ITenantStore, ITransientDependency
             }
         }
 
-        throw new AbpException("Both id and name can't be invalid.");
+        throw new AbpException("Both id and normalizedName can't be invalid.");
     }
 
     [Obsolete("Use SetCacheAsync method.")]

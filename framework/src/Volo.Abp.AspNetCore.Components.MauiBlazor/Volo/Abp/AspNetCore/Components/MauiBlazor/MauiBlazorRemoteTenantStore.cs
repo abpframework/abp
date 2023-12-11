@@ -98,12 +98,12 @@ public class MauiBlazorRemoteTenantStore : ITenantStore, ITransientDependency
             return null;
         }
 
-        return new TenantConfiguration(tenantResultDto.TenantId.Value, tenantResultDto.Name!);
+        return new TenantConfiguration(tenantResultDto.TenantId.Value, tenantResultDto.Name!, tenantResultDto.NormalizedName!);
     }
 
-    protected virtual string CreateCacheKey(string tenantName)
+    protected virtual string CreateCacheKey(string normalizedName)
     {
-        return $"RemoteTenantStore_Name_{tenantName}";
+        return $"RemoteTenantStore_Name_{normalizedName}";
     }
 
     protected virtual string CreateCacheKey(Guid tenantId)

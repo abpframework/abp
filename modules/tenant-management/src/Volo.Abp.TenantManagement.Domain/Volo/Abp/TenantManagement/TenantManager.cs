@@ -10,7 +10,6 @@ public class TenantManager : DomainService, ITenantManager
 {
     protected ITenantRepository TenantRepository { get; }
     protected IDistributedCache<TenantConfigurationCacheItem> Cache { get; }
-
     protected ITenantNormalizer TenantNormalizer { get; }
 
     public TenantManager(ITenantRepository tenantRepository, IDistributedCache<TenantConfigurationCacheItem> cache, ITenantNormalizer tenantNormalizer)
@@ -24,9 +23,9 @@ public class TenantManager : DomainService, ITenantManager
     {
         Check.NotNull(name, nameof(name));
 
-        var normalizedTenantName = TenantNormalizer.NormalizeName(name);
-        await ValidateNameAsync(normalizedTenantName);
-        return new Tenant(GuidGenerator.Create(), name, normalizedTenantName);
+        var normalizedName = TenantNormalizer.NormalizeName(name);
+        await ValidateNameAsync(normalizedName);
+        return new Tenant(GuidGenerator.Create(), name, normalizedName);
     }
 
     public virtual async Task ChangeNameAsync(Tenant tenant, string name)
@@ -34,12 +33,12 @@ public class TenantManager : DomainService, ITenantManager
         Check.NotNull(tenant, nameof(tenant));
         Check.NotNull(name, nameof(name));
 
-        var normalizedTenantName = TenantNormalizer.NormalizeName(name);
+        var normalizedName = TenantNormalizer.NormalizeName(name);
 
-        await ValidateNameAsync(normalizedTenantName, tenant.Id);
+        await ValidateNameAsync(normalizedName, tenant.Id);
         await Cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenant.NormalizedName));
         tenant.SetName(name);
-        tenant.SetNormalizedTenantName(normalizedTenantName);
+        tenant.SetNormalizedName(normalizedName);
     }
 
     protected virtual async Task ValidateNameAsync(string normalizeName, Guid? expectedId = null)

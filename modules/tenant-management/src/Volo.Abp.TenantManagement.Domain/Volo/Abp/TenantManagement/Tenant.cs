@@ -22,11 +22,11 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 
     }
 
-    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string normalizedTenantName)
+    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string normalizedName)
         : base(id)
     {
         SetName(name);
-        SetNormalizedTenantName(normalizedTenantName);
+        SetNormalizedName(normalizedName);
 
         ConnectionStrings = new List<TenantConnectionString>();
     }
@@ -82,8 +82,8 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);
     }
 
-    protected internal virtual void SetNormalizedTenantName([CanBeNull] string normalizedTenantName)
+    protected internal virtual void SetNormalizedName([CanBeNull] string normalizedName)
     {
-        NormalizedName = normalizedTenantName;
+        NormalizedName = normalizedName;
     }
 }
