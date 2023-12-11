@@ -1,6 +1,6 @@
 import type { OnDestroy } from '@angular/core';
 import { Injectable } from '@angular/core';
-import type { Observable, PartialObserver } from 'rxjs';
+import { Observable, PartialObserver, catchError } from 'rxjs';
 import { Subscription } from 'rxjs';
 
 @Injectable()
@@ -22,7 +22,11 @@ export class SubscriptionService implements OnDestroy {
     nextOrObserver?: PartialObserver<T> | Next<T>,
     error?: (error: any) => void,
   ): Subscription {
-    const subscription = source$.subscribe(nextOrObserver as Next<T>, error);
+    const subscription = source$.pipe(catchError(error => {
+      throw error
+    })).subscribe((val => {
+      val as Next<T>
+    }));
     this.subscription.add(subscription);
     return subscription;
   }
