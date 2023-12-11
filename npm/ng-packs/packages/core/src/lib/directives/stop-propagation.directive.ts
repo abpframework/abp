@@ -3,7 +3,7 @@ import { fromEvent } from 'rxjs';
 import { SubscriptionService } from '../services/subscription.service';
 
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
+  standalone: true,
   selector: '[click.stop]',
   providers: [SubscriptionService],
 })

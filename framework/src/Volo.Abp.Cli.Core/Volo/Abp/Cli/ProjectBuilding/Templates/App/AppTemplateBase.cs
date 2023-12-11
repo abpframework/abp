@@ -107,7 +107,6 @@ public abstract class AppTemplateBase : TemplateInfo
 
         if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
         {
-            steps.Add(new AppTemplateRemoveMongodbCollectionFixtureStep());
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
         }
@@ -235,7 +234,7 @@ public abstract class AppTemplateBase : TemplateInfo
         steps.Add(new ChangeThemeStep());
         RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework);
     }
-    
+
     protected void SetDbmsSymbols(ProjectBuildContext context)
     {
         switch (context.BuildArgs.DatabaseManagementSystem)
@@ -265,7 +264,7 @@ public abstract class AppTemplateBase : TemplateInfo
                 throw new AbpException("Unknown Dbms: " + context.BuildArgs.DatabaseManagementSystem);
         }
     }
-
+    
     private void RemoveThemeLogoFolders(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.Theme != Theme.Lepton && IsPro())
@@ -284,9 +283,7 @@ public abstract class AppTemplateBase : TemplateInfo
         var templateThemes = new Dictionary<string, Theme>
         {
             { AppTemplate.TemplateName, AppTemplate.DefaultTheme },
-            { AppProTemplate.TemplateName, AppProTemplate.DefaultTheme },
-            { AppNoLayersTemplate.TemplateName, AppNoLayersTemplate.DefaultTheme },
-            { AppNoLayersProTemplate.TemplateName, AppNoLayersProTemplate.DefaultTheme }
+            { AppProTemplate.TemplateName, AppProTemplate.DefaultTheme }
         };
 
         return templateThemes.TryGetValue(args.TemplateName!, out var templateTheme) && templateTheme == args.Theme;
@@ -304,9 +301,7 @@ public abstract class AppTemplateBase : TemplateInfo
             "/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package.json",
             "/MyCompanyName.MyProjectName.HttpApi.Host/package.json",
             "/MyCompanyName.MyProjectName.AuthServer/package.json",
-            "/MyCompanyName.MyProjectName/package.json",
-            "/MyCompanyName.MyProjectName.Host/package.json",
-            "/MyCompanyName.MyProjectName.Host.Mongo/package.json"
+            "/MyCompanyName.MyProjectName/package.json"
         };
 
         foreach (var packageJsonFilePath in packageJsonFilePaths)
@@ -320,8 +315,7 @@ public abstract class AppTemplateBase : TemplateInfo
             var blazorServerPackageJsonFilePaths = new List<string>
             {
                 "/MyCompanyName.MyProjectName.Blazor/package.json",
-                "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json",
-                "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
+                "/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json"
             };
 
             foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)

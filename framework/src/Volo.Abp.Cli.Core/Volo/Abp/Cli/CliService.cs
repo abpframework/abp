@@ -184,8 +184,20 @@ public class CliService : ITransientDependency
             var updateChannel = GetUpdateChannel(currentCliVersion);
 
             var latestVersionInfo = await GetLatestVersion(updateChannel);
-            if (latestVersionInfo != null && latestVersionInfo.Version > currentCliVersion)
+            if (ShouldLogNewVersionInfo(latestVersionInfo, currentCliVersion))
             {
+                if(updateChannel == UpdateChannel.Prerelease && !latestVersionInfo.Version.IsPrerelease)
+                {
+                    latestVersionInfo = await PackageVersionCheckerService.GetLatestStableVersionFromGithubAsync();
+
+                    if(ShouldLogNewVersionInfo(latestVersionInfo, currentCliVersion))
+                    {
+                        LogNewVersionInfo(updateChannel, latestVersionInfo.Version, toolPath, latestVersionInfo.Message);
+                    }
+
+                    return;
+                }
+
                 LogNewVersionInfo(updateChannel, latestVersionInfo.Version, toolPath, latestVersionInfo.Message);
             }
         }
@@ -193,6 +205,11 @@ public class CliService : ITransientDependency
         {
             Logger.LogWarning("Unable to retrieve the latest version: " + e.Message);
         }
+    }
+
+    private bool ShouldLogNewVersionInfo(LatestVersionInfo latestVersionInfo, SemanticVersion currentCliVersion)
+    {
+        return latestVersionInfo != null && latestVersionInfo.Version > currentCliVersion;
     }
 
     private async Task<bool> IsLatestVersionCheckExpiredAsync()
