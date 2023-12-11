@@ -186,7 +186,42 @@ export class PermissionManagementComponent
       this.updateSelectedGroupPermissions(clickedPermission);
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
+      this.setParentClicked(clickedPermission);
     }, 0);
+  }
+
+  setParentClicked(clickedPermissions: PermissionGrantInfoDto) {
+    let childPermissionGrantedCount = 0;
+    let parentPermission: PermissionGrantInfoDto;
+    console.log({ clickedPermissions });
+
+    if (clickedPermissions.parentName) {
+      this.permissions.forEach(per => {
+        if (per.name === clickedPermissions.parentName) {
+          parentPermission = per;
+        }
+      })
+      this.permissions.forEach(per => {
+        if (parentPermission.name === per.parentName) {
+          per.isGranted && childPermissionGrantedCount++;
+        }
+      })
+      if (childPermissionGrantedCount === 1 && !parentPermission.isGranted) {
+        this.permissions = this.permissions.map(per => {
+          if (per.name === parentPermission.name) {
+            per.isGranted = true;
+          }
+          return per;
+        })
+      }
+      return;
+    }
+    this.permissions = this.permissions.map(per => {
+      if (per.parentName === clickedPermissions.name) {
+        per.isGranted = false;
+      }
+      return per;
+    })
   }
 
   updateSelectedGroupPermissions(clickedPermissions: PermissionGrantInfoDto) {
