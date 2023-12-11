@@ -254,6 +254,7 @@ export class PermissionManagementComponent
       this.selectThisTab = !this.selectAllTab;
       this.setTabCheckboxState();
     }
+    this.onChangeGroup(this.selectedGroup);
   }
 
   onChangeGroup(group: PermissionGroupDto) {
