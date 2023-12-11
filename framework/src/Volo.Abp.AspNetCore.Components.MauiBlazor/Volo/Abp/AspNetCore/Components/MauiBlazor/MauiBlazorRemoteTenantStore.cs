@@ -23,13 +23,13 @@ public class MauiBlazorRemoteTenantStore : ITenantStore, ITransientDependency
         Cache = cache;
     }
 
-    public async Task<TenantConfiguration?> FindAsync(string name)
+    public async Task<TenantConfiguration?> FindAsync(string normalizedName)
     {
-        var cacheKey = CreateCacheKey(name);
+        var cacheKey = CreateCacheKey(normalizedName);
 
         var tenantConfiguration = await Cache.GetOrAddAsync(
             cacheKey,
-            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name))!,
+            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(normalizedName))!,
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow =
@@ -57,13 +57,13 @@ public class MauiBlazorRemoteTenantStore : ITenantStore, ITransientDependency
         return tenantConfiguration;
     }
 
-    public TenantConfiguration? Find(string name)
+    public TenantConfiguration? Find(string normalizedName)
     {
-        var cacheKey = CreateCacheKey(name);
+        var cacheKey = CreateCacheKey(normalizedName);
 
         var tenantConfiguration = Cache.GetOrAdd(
             cacheKey,
-            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name)))!,
+            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(normalizedName)))!,
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow =
