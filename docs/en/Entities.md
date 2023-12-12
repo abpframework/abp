@@ -138,8 +138,8 @@ if (book1.EntityEquals(book2)) //Check equality
 
 ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement the [Domain Driven Design](Domain-Driven-Design.md) and want to create aggregate root classes, there are some best practices you may want to consider:
 
-* An aggregate root is responsible to preserve its own integrity. This is also true for all entities, but aggregate root has responsibility for its sub entities too. So, the aggregate root must always be in a valid state.
-* An aggregate root can be referenced by its Id. Do not reference it by its navigation property.
+* An aggregate root is responsible for preserving its own integrity. This is also true for all entities, but the aggregate root has responsibility for its sub-entities too. So, the aggregate root must always be in a valid state.
+* An aggregate root can be referenced by its `Id`. Do not reference it by its navigation property.
 * An aggregate root is treated as a single unit. It's retrieved and updated as a single unit. It's generally considered as a transaction boundary.
 * Work with sub-entities over the aggregate root- do not modify them independently.
 
