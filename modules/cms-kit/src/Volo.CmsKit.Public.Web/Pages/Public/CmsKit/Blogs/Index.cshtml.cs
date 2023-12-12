@@ -31,6 +31,8 @@ public class IndexModel : CmsKitPublicPageModelBase
 
     public CmsUserDto SelectedAuthor { get; protected set; }
 
+    public string FilteredTagName { get; protected set; }
+
     protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
 
     public IndexModel(IBlogPostPublicAppService blogPostPublicAppService)
@@ -54,7 +56,12 @@ public class IndexModel : CmsKitPublicPageModelBase
         {
             SelectedAuthor = await BlogPostPublicAppService.GetAuthorHasBlogPostAsync(AuthorId.Value);
         }
-        
+
+        if (TagId is not null)
+        {
+            FilteredTagName = await BlogPostPublicAppService.GetTagNameAsync(TagId.Value);
+        }
+
         return Page();
     }
 }

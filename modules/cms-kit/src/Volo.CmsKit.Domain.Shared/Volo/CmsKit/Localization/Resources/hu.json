@@ -76,6 +76,7 @@
     "PageId": "oldal",
     "Pages": "Oldalak",
     "PageSlugInformation": "A Slug az url-en használatos. Az Ön URL-je a következő lesz: '/{{slug}}'.",
+    "BlogSlugInformation": "A Slug az url-en használatos. Az Ön URL-je a következő lesz: '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Blogkezelés",
     "Permission:BlogManagement.Create": "Teremt",
     "Permission:BlogManagement.Delete": "Töröl",
@@ -182,6 +183,7 @@
     "SelectAStatus": "Válasszon állapotot",
     "Status": "Állapot",
     "CmsKit.BlogPost.ScrollIndex": "Gyors navigációs sáv a blogbejegyzésekben",
+    "CmsKit.BlogPost.PreventXssFeature": "XSS megelőzése",
     "Add": "Hozzáadás",
     "AddWidget": "Widget hozzáadása",
     "PleaseConfigureWidgets": "Kérjük, állítsa be a widgeteket",
@@ -204,6 +206,7 @@
     "Feature:ReactionEnable": "Engedélyezett reakció",
     "Feature:ReactionEnableDescription": "Reakció engedélyezése az alkalmazásban.",
     "Feature:TagEnable": "Címkézés engedélyezve",
-    "Feature:TagEnableDescription": "Engedélyezze a címkézést az alkalmazásban."
+    "Feature:TagEnableDescription": "Engedélyezze a címkézést az alkalmazásban.",
+    "ThisPartOfContentCouldntBeLoaded": "A tartalom ezen része nem tölthető be."
   }
 }

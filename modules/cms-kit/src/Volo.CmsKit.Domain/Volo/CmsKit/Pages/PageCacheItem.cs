@@ -16,4 +16,9 @@ public class PageCacheItem : ExtensibleObject
     public string Script { get; set; }
 
     public string Style { get; set; }
+
+    public static string GetKey(string slug)
+    {
+        return $"CmsPage_{slug}";
+    }
 }

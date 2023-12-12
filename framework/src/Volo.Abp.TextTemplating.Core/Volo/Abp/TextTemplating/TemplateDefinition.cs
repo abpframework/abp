@@ -20,23 +20,19 @@ public class TemplateDefinition : IHasNameWithLocalizableDisplayName
             _displayName = value;
         }
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
 
     public bool IsLayout { get; }
 
-    [CanBeNull]
-    public string Layout { get; set; }
+    public string? Layout { get; set; }
 
-    [CanBeNull]
-    public string LocalizationResourceName { get; set; }
+    public string? LocalizationResourceName { get; set; }
 
     public bool IsInlineLocalized { get; set; }
 
-    [CanBeNull]
-    public string DefaultCultureName { get; }
+    public string? DefaultCultureName { get; }
 
-    [CanBeNull]
-    public string RenderEngine { get; set; }
+    public string? RenderEngine { get; set; }
 
     /// <summary>
     /// Gets/sets a key-value on the <see cref="Properties"/>.
@@ -46,8 +42,7 @@ public class TemplateDefinition : IHasNameWithLocalizableDisplayName
     /// Returns the value in the <see cref="Properties"/> dictionary by given <see cref="name"/>.
     /// Returns null if given <see cref="name"/> is not present in the <see cref="Properties"/> dictionary.
     /// </returns>
-    [CanBeNull]
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
@@ -56,15 +51,15 @@ public class TemplateDefinition : IHasNameWithLocalizableDisplayName
     /// Can be used to get/set custom properties for this feature.
     /// </summary>
     [NotNull]
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
     public TemplateDefinition(
         [NotNull] string name,
         [NotNull] Type localizationResource,
-        [CanBeNull] ILocalizableString displayName = null,
+        ILocalizableString? displayName = null,
         bool isLayout = false,
-        string layout = null,
-        string defaultCultureName = null)
+        string? layout = null,
+        string? defaultCultureName = null)
     : this(name, LocalizationResourceNameAttribute.GetName(localizationResource), displayName, isLayout, layout, defaultCultureName)
     {
 
@@ -72,11 +67,11 @@ public class TemplateDefinition : IHasNameWithLocalizableDisplayName
 
     public TemplateDefinition(
         [NotNull] string name,
-        [CanBeNull] string localizationResourceName = null,
-        [CanBeNull] ILocalizableString displayName = null,
+        string? localizationResourceName = null,
+        ILocalizableString? displayName = null,
         bool isLayout = false,
-        string layout = null,
-        string defaultCultureName = null)
+        string? layout = null,
+        string? defaultCultureName = null)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), MaxNameLength);
         LocalizationResourceName = localizationResourceName;
@@ -84,7 +79,7 @@ public class TemplateDefinition : IHasNameWithLocalizableDisplayName
         IsLayout = isLayout;
         Layout = layout;
         DefaultCultureName = defaultCultureName;
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
     }
 
     /// <summary>

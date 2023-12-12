@@ -23,12 +23,12 @@ public class EventNameAttribute : Attribute, IEventNameProvider
     {
         Check.NotNull(eventType, nameof(eventType));
 
-        return eventType
-                   .GetCustomAttributes(true)
-                   .OfType<IEventNameProvider>()
-                   .FirstOrDefault()
-                   ?.GetName(eventType)
-               ?? eventType.FullName;
+        return (eventType
+                    .GetCustomAttributes(true)
+                    .OfType<IEventNameProvider>()
+                    .FirstOrDefault()
+                    ?.GetName(eventType)
+                ?? eventType.FullName)!;
     }
 
     public string GetName(Type eventType)

@@ -16,7 +16,7 @@
     "Tutorial": "Tutorial",
     "UsingCLI": "Usando CLI",
     "SeeDetails": "Ver detalles",
-    "AbpShortDescription": "ABP Framework es una completa infraestructure para crear modernas aplicaciones web que sigue las mejores prácticas y convenciones de desarrollo de software.",
+    "AbpShortDescription": "ABP Framework es una infraestructura completa para la creación de soluciones de software con arquitecturas modernas basadas en la plataforma ASP.NET Core.",
     "SourceCodeUpper": "CÓDIGO FUENTE",
     "LatestReleaseLogs": "Últimos registros de lanzamiento",
     "Infrastructure": "infraestructura",

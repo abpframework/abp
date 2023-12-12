@@ -50,9 +50,9 @@ public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDep
         return expectedAppApiToken == headerAppApiToken;
     }
 
-    public virtual string GetDaprAppApiTokenOrNull()
+    public virtual string? GetDaprAppApiTokenOrNull()
     {
-        string apiTokenHeader = HttpContext.Request.Headers["dapr-api-token"];
+        string? apiTokenHeader = HttpContext.Request.Headers["dapr-api-token"];
         if (string.IsNullOrEmpty(apiTokenHeader) || apiTokenHeader.Length < 1)
         {
             return null;
@@ -61,7 +61,7 @@ public class DaprAppApiTokenValidator : IDaprAppApiTokenValidator, ISingletonDep
         return apiTokenHeader;
     }
 
-    protected virtual string GetConfiguredAppApiTokenOrNull()
+    protected virtual string? GetConfiguredAppApiTokenOrNull()
     {
         return HttpContext
             .RequestServices

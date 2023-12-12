@@ -63,6 +63,8 @@
     "PasswordResetInfoInEmail": "Chúng tôi đã nhận được yêu cầu khôi phục tài khoản! Nếu bạn bắt đầu yêu cầu này, hãy nhấp vào liên kết sau để đặt lại mật khẩu của bạn.",
     "ResetMyPassword": "Đặt lại mật khẩu của tôi",
     "AccessDenied": "Quyền truy cập bị từ chối!",
-    "AccessDeniedMessage": "Bạn không có quyền truy cập vào tài nguyên này."
+    "AccessDeniedMessage": "Bạn không có quyền truy cập vào tài nguyên này.",
+    "OrRegisterWith": "Hoặc đăng ký bằng:",
+    "RegisterUsingYourProviderAccount": "Đăng ký bằng tài khoản {0} của bạn"
   }
 }

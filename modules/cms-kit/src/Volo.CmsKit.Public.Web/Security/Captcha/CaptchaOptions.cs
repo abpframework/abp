@@ -1,4 +1,5 @@
-﻿using SixLabors.Fonts;
+﻿using System;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 
@@ -46,6 +47,8 @@ public class CaptchaOptions
     public int Number2MinValue { get; set; } = 1;
 
     public int Number2MaxValue { get; set; } = 99;
+
+    public TimeSpan DurationOfValidity { get; set; } = TimeSpan.FromMinutes(10);
 
     public CaptchaOptions()
     {

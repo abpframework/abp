@@ -178,7 +178,13 @@
         },
         {
           "text": "Authorization",
-          "path": "Authorization.md"
+          "path": "Authorization.md",
+          "items": [
+            {
+              "text": "Dynamic Claims",
+              "path": "Dynamic-Claims.md"
+            }
+          ]
         },
         {
           "text": "Caching",
@@ -1123,6 +1129,14 @@
                   "path": "UI/Angular/Loading-Directive.md"
                 },
                 {
+                  "text": "Show Password Directive",
+                  "path": "UI/Angular/Show-Password-Directive.md"
+                },
+                {
+                  "text": "Caps Lock Directive",
+                  "path": "UI/Angular/Caps-Lock-Directive.md"
+                },
+                {
                   "text": "Toast Overlay",
                   "path": "UI/Angular/Toaster-Service.md"
                 },
@@ -1153,6 +1167,10 @@
                 {
                   "text": "Content Security Strategy",
                   "path": "UI/Angular/Content-Security-Strategy.md"
+                },
+                {
+                  "text":"Abp Window Service",
+                  "path":"UI/Angular/Abp-Window-Service.md"
                 }
               ]
             },
@@ -1359,6 +1377,10 @@
       "text": "Deployment",
       "path": "Deployment/Index.md",
       "items": [
+        {
+          "text": "Configuring SSL certificate(HTTPS)",
+          "path": "Deployment/SSL.md"
+        },
         {
           "text": "Configuring OpenIddict",
           "path": "Deployment/Configuring-OpenIddict.md"

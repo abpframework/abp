@@ -37,7 +37,7 @@ public class PageManager : DomainService
             CurrentTenant.Id);
     }
 
-    public virtual async Task SetSlugAsync(Page page, string newSlug)
+    public virtual async Task SetSlugAsync(Page page, [NotNull] string newSlug)
     {
         if (page.Slug != newSlug)
         {

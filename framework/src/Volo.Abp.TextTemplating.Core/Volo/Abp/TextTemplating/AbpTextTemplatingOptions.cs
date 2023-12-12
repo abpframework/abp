@@ -10,7 +10,7 @@ public class AbpTextTemplatingOptions
     public ITypeList<ITemplateContentContributor> ContentContributors { get; }
     public IDictionary<string, Type> RenderingEngines { get; }
 
-    public string DefaultRenderingEngine { get; set; }
+    public string? DefaultRenderingEngine { get; set; }
 
     public HashSet<string> DeletedTemplates { get; }
 

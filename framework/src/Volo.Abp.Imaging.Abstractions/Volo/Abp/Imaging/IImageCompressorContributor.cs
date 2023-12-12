@@ -9,10 +9,10 @@ public interface IImageCompressorContributor
 {
     Task<ImageCompressResult<Stream>> TryCompressAsync(
         Stream stream, 
-        [CanBeNull] string mimeType = null, 
+        string? mimeType = null, 
         CancellationToken cancellationToken = default);
     Task<ImageCompressResult<byte[]>> TryCompressAsync(
         byte[] bytes, 
-        [CanBeNull] string mimeType = null, 
+        string? mimeType = null, 
         CancellationToken cancellationToken = default);
 }

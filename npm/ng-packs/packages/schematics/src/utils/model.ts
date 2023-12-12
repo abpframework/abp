@@ -9,7 +9,7 @@ import {
 import { parseNamespace } from './namespace';
 import { relativePathToModel } from './path';
 import { camel } from './text';
-import { parseGenerics } from './tree';
+import { parseGenerics, TypeNode } from './tree';
 import {
   createTypeParser,
   createTypeSimplifier,
@@ -71,12 +71,16 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
       model.interfaces.forEach(_interface => {
         const { baseType } = types[_interface.ref];
 
-        if (baseType && parseNamespace(solution, baseType) !== model.namespace)
-          toBeImported.push({
-            type: baseType.split('<')[0],
-            isEnum: false,
-          });
+        if (baseType && parseNamespace(solution, baseType) !== model.namespace){
+          const baseTypeWithGenericParams = parseBaseTypeWithGenericTypes(baseType);
+          baseTypeWithGenericParams.forEach(t => {
+            toBeImported.push({
+              type: t,
+              isEnum: false,
+            });
+          })
 
+}
         [..._interface.properties, ..._interface.generics].forEach(prop => {
           prop.refs.forEach(ref => {
             const propType = types[ref];
@@ -172,7 +176,20 @@ export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
 }
 
 function isOptionalProperty(prop: PropertyDef) {
-  return (
-    prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && prop.isRequired === false)
-  );
+  return (prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && !prop.isRequired));
+}
+
+export function  parseBaseTypeWithGenericTypes(type: string): string[] {
+  const parsedTypeNode = parseGenerics(type);
+  const nodeToText = (node: TypeNode,acc:string[] = []): string[] => {
+
+    acc.push(node.data);
+    if(node.children && node.children.length > 0){
+      node.children.forEach(child => {
+        nodeToText(child,acc);
+      })
+    }
+    return acc;
+  }
+  return nodeToText(parsedTypeNode);
 }

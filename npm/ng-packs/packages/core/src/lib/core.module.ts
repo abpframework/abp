@@ -39,7 +39,19 @@ import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
+import {DYNAMIC_LAYOUTS_TOKEN} from "./tokens/dynamic-layout.token";
+import {DEFAULT_DYNAMIC_LAYOUTS} from "./constants";
 
+const standaloneDirectives = [
+  AutofocusDirective,
+  InputEventDebounceDirective,
+  ForDirective,
+  FormSubmitDirective,
+  InitDirective,
+  PermissionDirective,
+  ReplaceableTemplateDirective,
+  StopPropagationDirective,
+];
 /**
  * BaseCoreModule is the module that holds
  * all imports, declarations, exports, and entryComponents
@@ -55,23 +67,16 @@ import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.tok
     RouterModule,
     LocalizationModule,
     AbstractNgModelComponent,
-    AutofocusDirective,
     DynamicLayoutComponent,
-    ForDirective,
-    FormSubmitDirective,
-    InitDirective,
-    InputEventDebounceDirective,
-    PermissionDirective,
     ReplaceableRouteContainerComponent,
-    ReplaceableTemplateDirective,
     RouterOutletComponent,
     SortPipe,
     SafeHtmlPipe,
-    StopPropagationDirective,
     ToInjectorPipe,
     ShortDateTimePipe,
     ShortTimePipe,
     ShortDatePipe,
+    ...standaloneDirectives,
   ],
   imports: [
     CommonModule,
@@ -80,22 +85,15 @@ import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.tok
     ReactiveFormsModule,
     RouterModule,
     LocalizationModule,
+    ...standaloneDirectives,
   ],
   declarations: [
     AbstractNgModelComponent,
-    AutofocusDirective,
     DynamicLayoutComponent,
-    ForDirective,
-    FormSubmitDirective,
-    InitDirective,
-    InputEventDebounceDirective,
-    PermissionDirective,
     ReplaceableRouteContainerComponent,
-    ReplaceableTemplateDirective,
     RouterOutletComponent,
     SortPipe,
     SafeHtmlPipe,
-    StopPropagationDirective,
     ToInjectorPipe,
     ShortDateTimePipe,
     ShortTimePipe,
@@ -179,7 +177,7 @@ export class CoreModule {
         },
         {
           provide: SORT_COMPARE_FUNC,
-          useFactory: compareFuncFactory
+          useFactory: compareFuncFactory,
         },
         {
           provide: QUEUE_MANAGER,
@@ -190,6 +188,10 @@ export class CoreModule {
           useValue: options.othersGroup || 'AbpUi::OthersGroup',
         },
         IncludeLocalizationResourcesProvider,
+        {
+          provide: DYNAMIC_LAYOUTS_TOKEN,
+          useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS
+        }
       ],
     };
   }

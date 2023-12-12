@@ -63,6 +63,8 @@
     "PasswordResetInfoInEmail": "Otrzymaliśmy prośbę o odzyskanie konta! Jeśli zainicjowałeś to żądanie, kliknij poniższy link, aby zresetować hasło.",
     "ResetMyPassword": "Zresetować moje hasło",
     "AccessDenied": "Brak dostępu!",
-    "AccessDeniedMessage": "Nie masz dostępu do tego zasobu."
+    "AccessDeniedMessage": "Nie masz dostępu do tego zasobu.",
+    "OrRegisterWith": "Lub zarejestruj się za pomocą:",
+    "RegisterUsingYourProviderAccount": "Zarejestruj się za pomocą konta {0}"
   }
 }

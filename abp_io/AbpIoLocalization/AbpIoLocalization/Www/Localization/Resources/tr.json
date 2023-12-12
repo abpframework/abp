@@ -16,7 +16,7 @@
     "Tutorial": "Öğretici",
     "UsingCLI": "CLI Kullanmak",
     "SeeDetails": "Detayları Görüntüle",
-    "AbpShortDescription": "ABP modern web uygulamaları geliştirmek için eksiksiz bir mimari ve günlü bir altyapıdır! Size SOLID geliştirme tecrübelerini sunmak için en iyi uygulama ve kuralları takip eder.",
+    "AbpShortDescription": "ABP Framework, ASP.NET Core platformunu temel alan modern mimarilerle yazılım çözümleri oluşturmaya yönelik eksiksiz bir altyapıdır.",
     "SourceCodeUpper": "KAYNAK KOD",
     "LatestReleaseLogs": "Son release kayıtları",
     "Infrastructure": "Altyapı",

@@ -1,5 +1,5 @@
 import { eAccountComponents } from '../enums';
-import { EditFormPropContributorCallback } from '@abp/ng.theme.shared/extensions';
+import { EditFormPropContributorCallback } from '@abp/ng.components/extensible';
 import { UpdateProfileDto } from '@abp/ng.account.core/proxy';
 
 export interface AccountConfigOptions {

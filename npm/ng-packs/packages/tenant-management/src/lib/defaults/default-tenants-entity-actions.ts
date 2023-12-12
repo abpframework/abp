@@ -1,5 +1,5 @@
 import { TenantDto } from '@abp/ng.tenant-management/proxy';
-import { EntityAction } from '@abp/ng.theme.shared/extensions';
+import { EntityAction } from '@abp/ng.components/extensible';
 import { TenantsComponent } from '../components/tenants/tenants.component';
 
 export const DEFAULT_TENANTS_ENTITY_ACTIONS = EntityAction.createMany<TenantDto>([

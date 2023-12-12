@@ -64,6 +64,8 @@
     "PasswordResetInfoInEmail": "لقد تلقينا طلب استرداد الحساب! إذا بدأت هذا الطلب ، فانقر فوق الارتباط التالي لإعادة تعيين كلمة المرور الخاصة بك.",
     "ResetMyPassword": "إعادة تعيين كلمة المرور الخاصة بي",
     "AccessDenied": "تم الرفض!",
-    "AccessDeniedMessage": "ليس لديك حق الوصول إلى هذا المورد."
+    "AccessDeniedMessage": "ليس لديك حق الوصول إلى هذا المورد.",
+    "OrRegisterWith": "أو التسجيل بـ:",
+    "RegisterUsingYourProviderAccount": "قم بالتسجيل باستخدام حسابك في {0}"
   }
 }

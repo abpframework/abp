@@ -198,23 +198,10 @@ ABP Framework doesn't provide any infrastructure to test your JavaScript code. Y
 
 > Volo.Abp.AspNetCore.TestBase package is already installed in the `.Web.Tests` project.
 
-This package provides the `AbpAspNetCoreIntegratedTestBase` as the fundamental base class to derive the test classes from. The `MyProjectWebTestBase` base class used above inherits from the `AbpAspNetCoreIntegratedTestBase`, so we indirectly inherited the `AbpAspNetCoreIntegratedTestBase`.
+This package provides the `AbpWebApplicationFactoryIntegratedTest` as the fundamental base class to derive the test classes from.  It's inherited from the [WebApplicationFactory](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests) class provided by the ASP.NET Core.
 
-### Base Properties
-
-The `AbpAspNetCoreIntegratedTestBase` provides the following base properties those are used in the tests:
-
-* `Server`: A `TestServer` instance that hosts the web application in tests.
-* `Client`: An `HttpClient` instance that is configured to perform requests to the test server.
-* `ServiceProvider`: The service provider that you can resolve services in case of need.
-
-### Base Methods
-
-`AbpAspNetCoreIntegratedTestBase` provides the following methods that you can override if you need to customize the test server:
-
-* `ConfigureServices` can be overridden to register/replace services only for the derived test class.
-* `CreateHostBuilder` can be used to customize building the `IHostBuilder`.
+The `MyProjectWebTestBase` base class used above inherits from the `AbpWebApplicationFactoryIntegratedTest`, so we indirectly inherited the `AbpWebApplicationFactoryIntegratedTest`.
 
 See Also
-
+* [Integration tests in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests)
 * [Overall / Server Side Testing](../../Testing.md)

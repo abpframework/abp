@@ -25,12 +25,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/account-core"],
       "options": {
-        "jestConfig": "packages/account-core/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/account-core/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "packages/account-core/src/**/*.ts",

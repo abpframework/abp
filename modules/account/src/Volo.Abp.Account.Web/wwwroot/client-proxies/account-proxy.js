@@ -79,6 +79,21 @@
 
   })();
 
+  // controller volo.abp.account.dynamicClaims
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.abp.account.dynamicClaims');
+
+    volo.abp.account.dynamicClaims.get = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/account/dynamic-claims',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+  })();
+
   // controller volo.abp.account.profile
 
   (function(){

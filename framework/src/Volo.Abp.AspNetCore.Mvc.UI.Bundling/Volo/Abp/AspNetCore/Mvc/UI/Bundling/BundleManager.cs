@@ -12,7 +12,6 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles;
 using Volo.Abp.AspNetCore.Mvc.UI.Resources;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
 
@@ -56,18 +55,20 @@ public class BundleManager : IBundleManager, ITransientDependency
         Logger = NullLogger<BundleManager>.Instance;
     }
 
-    public virtual async Task<IReadOnlyList<string>> GetStyleBundleFilesAsync(string bundleName)
+    public virtual async Task<IReadOnlyList<BundleFile>> GetStyleBundleFilesAsync(string bundleName)
     {
         return await GetBundleFilesAsync(Options.StyleBundles, bundleName, StyleBundler);
     }
 
-    public virtual async Task<IReadOnlyList<string>> GetScriptBundleFilesAsync(string bundleName)
+    public virtual async Task<IReadOnlyList<BundleFile>> GetScriptBundleFilesAsync(string bundleName)
     {
         return await GetBundleFilesAsync(Options.ScriptBundles, bundleName, ScriptBundler);
     }
 
-    protected virtual async Task<IReadOnlyList<string>> GetBundleFilesAsync(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
+    protected virtual async Task<IReadOnlyList<BundleFile>> GetBundleFilesAsync(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
     {
+        var files = new List<BundleFile>();
+
         var contributors = GetContributors(bundles, bundleName);
         var bundleFiles = RequestResources.TryAdd(await GetBundleFilesAsync(contributors));
         var dynamicResources = RequestResources.TryAdd(await GetDynamicResourcesAsync(contributors));
@@ -77,16 +78,45 @@ public class BundleManager : IBundleManager, ITransientDependency
             return bundleFiles.Union(dynamicResources).ToImmutableList();
         }
 
+        var localBundleFiles = new List<string>();
+        foreach (var bundleFile in bundleFiles)
+        {
+            if (!bundleFile.IsExternalFile)
+            {
+                localBundleFiles.Add(bundleFile.FileName);
+            }
+            else
+            {
+                if (localBundleFiles.Count != 0)
+                {
+                    files.AddRange(AddToBundleCache(bundleName, bundler, localBundleFiles).Files);
+                    localBundleFiles.Clear();
+                }
+
+                files.Add(bundleFile);
+            }
+        }
+
+        if (localBundleFiles.Count != 0)
+        {
+            files.AddRange(AddToBundleCache(bundleName, bundler, localBundleFiles).Files);
+        }
+
+        return files.Union(dynamicResources).ToImmutableList();
+    }
+
+    private BundleCacheItem AddToBundleCache(string bundleName, IBundler bundler, List<string> bundleFiles)
+    {
         var bundleRelativePath =
             Options.BundleFolderName.EnsureEndsWith('/') +
             bundleName + "." + bundleFiles.JoinAsString("|").ToMd5() + "." + bundler.FileExtension;
 
-        var cacheItem = BundleCache.GetOrAdd(bundleRelativePath, () =>
+        return BundleCache.GetOrAdd(bundleRelativePath, () =>
         {
             var cacheValue = new BundleCacheItem(
-                new List<string>
+                new List<BundleFile>
                 {
-                        "/" + bundleRelativePath
+                    new BundleFile("/" + bundleRelativePath)
                 }
             );
 
@@ -104,8 +134,6 @@ public class BundleManager : IBundleManager, ITransientDependency
 
             return cacheValue;
         });
-
-        return cacheItem.Files.Union(dynamicResources).ToImmutableList();
     }
 
     private void WatchChanges(BundleCacheItem cacheValue, List<string> files, string bundleRelativePath)
@@ -176,7 +204,7 @@ public class BundleManager : IBundleManager, ITransientDependency
         }
     }
 
-    protected async Task<List<string>> GetBundleFilesAsync(List<IBundleContributor> contributors)
+    protected async Task<List<BundleFile>> GetBundleFilesAsync(List<IBundleContributor> contributors)
     {
         var context = CreateBundleConfigurationContext();
 
@@ -198,7 +226,7 @@ public class BundleManager : IBundleManager, ITransientDependency
         return context.Files;
     }
 
-    protected virtual async Task<List<string>> GetDynamicResourcesAsync(List<IBundleContributor> contributors)
+    protected virtual async Task<List<BundleFile>> GetDynamicResourcesAsync(List<IBundleContributor> contributors)
     {
         var context = CreateBundleConfigurationContext();
 
