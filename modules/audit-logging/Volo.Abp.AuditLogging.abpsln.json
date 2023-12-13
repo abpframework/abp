@@ -1,7 +1,0 @@
-{
-  "modules": {
-    "Volo.Abp.AuditLogging": {
-      "path": "Volo.Abp.AuditLogging.abpmdl.json"
-    }
-  }
-}

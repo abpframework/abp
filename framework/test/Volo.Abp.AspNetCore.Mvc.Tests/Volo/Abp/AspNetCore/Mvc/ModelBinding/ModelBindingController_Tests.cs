@@ -122,22 +122,22 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
 
 public class ModelBindingController_Utc_Tests : ModelBindingController_Tests
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         Kind = DateTimeKind.Utc;
         services.Configure<AbpClockOptions>(x => x.Kind = Kind);
 
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
 }
 
 public class ModelBindingController_Local_Tests : ModelBindingController_Tests
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         Kind = DateTimeKind.Local;
         services.Configure<AbpClockOptions>(x => x.Kind = Kind);
 
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
 }

@@ -21,7 +21,7 @@
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=(LocalDb)\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True"
+  "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True"
 }
 ````
 

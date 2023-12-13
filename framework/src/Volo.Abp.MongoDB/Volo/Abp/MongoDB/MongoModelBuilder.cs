@@ -121,7 +121,7 @@ public class MongoModelBuilder : IMongoModelBuilder
         return dbContext.LazyServiceProvider.LazyGetRequiredService<IOptions<AbpClockOptions>>().Value.Kind;
     }
 
-    public virtual void Entity<TEntity>(Action<IMongoEntityModelBuilder<TEntity>> buildAction = null)
+    public virtual void Entity<TEntity>(Action<IMongoEntityModelBuilder<TEntity>>? buildAction = null)
     {
         var model = (IMongoEntityModelBuilder<TEntity>)_entityModelBuilders.GetOrAdd(
             typeof(TEntity),
@@ -131,7 +131,7 @@ public class MongoModelBuilder : IMongoModelBuilder
         buildAction?.Invoke(model);
     }
 
-    public virtual void Entity(Type entityType, Action<IMongoEntityModelBuilder> buildAction = null)
+    public virtual void Entity(Type entityType, Action<IMongoEntityModelBuilder>? buildAction = null)
     {
         Check.NotNull(entityType, nameof(entityType));
 
@@ -139,7 +139,7 @@ public class MongoModelBuilder : IMongoModelBuilder
             entityType,
             () => (IMongoEntityModelBuilder)Activator.CreateInstance(
                 typeof(MongoEntityModelBuilder<>).MakeGenericType(entityType)
-            )
+            )!
         );
 
         buildAction?.Invoke(model);

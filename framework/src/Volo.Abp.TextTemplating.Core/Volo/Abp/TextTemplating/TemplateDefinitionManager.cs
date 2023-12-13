@@ -28,7 +28,7 @@ public class TemplateDefinitionManager : ITemplateDefinitionManager, ISingletonD
         return permission;
     }
 
-    public virtual async Task<TemplateDefinition> GetOrNullAsync(string name)
+    public virtual async Task<TemplateDefinition?> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 

@@ -9,9 +9,29 @@ public class ExtraPropertyDictionaryValueComparer : ValueComparer<ExtraPropertyD
 {
     public ExtraPropertyDictionaryValueComparer()
         : base(
-              (d1, d2) => d1.SequenceEqual(d2),
-              d => d.Aggregate(0, (k, v) => HashCode.Combine(k, v.GetHashCode())),
-              d => new ExtraPropertyDictionary(d))
+            (a, b) => Compare(a, b),
+            d => d.Aggregate(0, (k, v) => HashCode.Combine(k, v.GetHashCode())),
+            d => new ExtraPropertyDictionary(d))
     {
+    }
+
+    private static bool Compare(ExtraPropertyDictionary? a, ExtraPropertyDictionary? b)
+    {
+        if (ReferenceEquals(a, b))
+        {
+            return true;
+        }
+
+        if (a is null)
+        {
+            return b is null;
+        }
+
+        if (b is null)
+        {
+            return false;
+        }
+
+        return a!.SequenceEqual(b!);
     }
 }

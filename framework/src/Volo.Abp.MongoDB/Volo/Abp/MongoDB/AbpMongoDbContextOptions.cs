@@ -12,7 +12,7 @@ public class AbpMongoDbContextOptions
 {
     internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
 
-    public Action<MongoClientSettings> MongoClientSettingsConfigurer { get; set; }
+    public Action<MongoClientSettings>? MongoClientSettingsConfigurer { get; set; }
 
     public AbpMongoDbContextOptions()
     {

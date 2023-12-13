@@ -4,13 +4,13 @@
   <Import Project="..\..\..\..\configureawait.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Slugify.Core" Version="3.0.0" />
-    <PackageReference Include="Unidecode.NET" Version="2.1.0" />
+    <PackageReference Include="Slugify.Core" />
+    <PackageReference Include="Unidecode.NET" />
   </ItemGroup>
 
   <ItemGroup>

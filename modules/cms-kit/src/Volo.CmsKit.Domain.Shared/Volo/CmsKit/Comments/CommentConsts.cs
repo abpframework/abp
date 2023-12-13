@@ -12,4 +12,6 @@ public static class CommentConsts
     public static int MaxTextLength { get; set; } = 512;
     
     public static int MaxUrlLength { get; set; } = 512;
+
+    public static int MaxIdempotencyTokenLength { get; set; } = 32;
 }

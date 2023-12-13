@@ -63,6 +63,8 @@
     "PasswordResetInfoInEmail": "We hebben een verzoek ontvangen om uw wachtwoord opnieuw in te stellen. Als u dit verzoek heeft ingediend, klikt u op de volgende link om een nieuw wachtwoord in te stellen.",
     "ResetMyPassword": "Reset mijn wachtwoord",
     "AccessDenied": "Toegang geweigerd!",
-    "AccessDeniedMessage": "U heeft geen toegang tot deze bron."
+    "AccessDeniedMessage": "U heeft geen toegang tot deze bron.",
+    "OrRegisterWith": "Of registreer met:",
+    "RegisterUsingYourProviderAccount": "Registreer met uw {0} -account"
   }
 }

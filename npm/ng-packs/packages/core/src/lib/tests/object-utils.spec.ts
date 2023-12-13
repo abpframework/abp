@@ -43,11 +43,9 @@ describe('DeepMerge', () => {
   );
 
   it('should correctly return when both inputs are objects with different fields', () => {
-    const target = { a: 1 };
-    const source = { b: 2 };
     const expected = { a: 1, b: 2 };
-    expect(deepMerge(target, source)).toEqual(expected);
-    expect(deepMerge(source, target)).toEqual(expected);
+    expect(deepMerge({ a: 1 }, { b: 2 })).toEqual(expected);
+    expect(deepMerge({ b: 2 }, { a: 1 })).toEqual(expected);
   });
 
   it('should correctly return when both inputs are object with same fields but different values', () => {

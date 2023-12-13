@@ -302,7 +302,7 @@ ABP 配置模块也已经导入到 `AppModule` 中, 以满足可延迟加载 ABP
 {
    path: 'dashboard',
    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-   canActivate: [AuthGuard, PermissionGuard],
+   canActivate: [authGuard, permissionGuard],
    data: {
       routes: {
          name: 'ProjectName::Menu:Dashboard',
@@ -315,7 +315,7 @@ ABP 配置模块也已经导入到 `AppModule` 中, 以满足可延迟加载 ABP
 ```
 在上面的例子中;
 *  如果用户没有登录,  AuthGuard 会阻塞访问并重定向到登录页面. 
-*  PermissionGuard 使用 `rotues` 对象的 `requiredPolicy` 属性检查用户的权限. 如果用户未被授权访问该页, 则显示403页. 
+*  permissionGuard 使用 `rotues` 对象的 `requiredPolicy` 属性检查用户的权限. 如果用户未被授权访问该页, 则显示403页. 
 *  `routes` 的 `name` 属性是菜单链接标签. 可以定义本地化 key. 
 *  `routes` 对象的 `iconClass` 属性是菜单链接图标类. 
 *  `routes` 对象的 `requiredPolicy` 属性是访问页面所需的策略 key. 

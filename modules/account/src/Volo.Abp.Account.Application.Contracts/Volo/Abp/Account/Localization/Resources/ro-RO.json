@@ -63,6 +63,8 @@
     "PasswordResetInfoInEmail": "Am primit o cerere de recuperare a contului! Dacă dumneavoastră aţi iniţiat această cerere, daţi click pe următorul link pentru a vă reseta parola.",
     "ResetMyPassword": "Resetează-mi parola",
     "AccessDenied": "Acces interzis!",
-    "AccessDeniedMessage": "Nu aveţi acces la această resursă."
+    "AccessDeniedMessage": "Nu aveţi acces la această resursă.",
+    "OrRegisterWith": "Sau înregistraţi-vă cu:",
+    "RegisterUsingYourProviderAccount": "Înregistraţi-vă folosindu-vă contul {0}"
   }
 }

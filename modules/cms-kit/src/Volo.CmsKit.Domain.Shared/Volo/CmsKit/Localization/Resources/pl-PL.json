@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Oceny",
     "CmsKit.Reactions": "Reakcje",
     "CmsKit.Tags": "Tagi",
+    "CmsKit.BlogPost.PreventXssFeature": "Zapobiegaj atakom XSS",
     "CmsKit:0002": "Treść już istnieje!",
     "CmsKit:0003": "Jednostka {0} nie może być otagowana.",
     "CmsKit:Blog:0001": "Podany ślimak ({Slug}) już istnieje!",
@@ -76,6 +77,7 @@
     "PageId": "Strona",
     "Pages": "Strony",
     "PageSlugInformation": "Slug jest używany na adresie URL. Twój adres URL to „/{{slug}}”.",
+    "BlogSlugInformation": "Slug jest używany na adresie URL. Twój adres URL to „/{0}/{{slug}}”.",
     "Permission:BlogManagement": "Zarządzanie blogiem",
     "Permission:BlogManagement.Create": "Tworzyć",
     "Permission:BlogManagement.Delete": "Kasować",
@@ -158,6 +160,7 @@
     "YourEmailAddress": "Twój adres email",
     "YourFullName": "Twoje pełne imię",
     "YourMessage": "Twoja wiadomość",
-    "YourReply": "Pańska odpowiedź"
+    "YourReply": "Pańska odpowiedź",
+    "ThisPartOfContentCouldntBeLoaded": "Ta część zawartości nie mogła zostać załadowana."
   }
 }

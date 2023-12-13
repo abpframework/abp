@@ -2,6 +2,8 @@
 
 public static class LdapSettingNames
 {
+    public const string Ldaps = "Abp.Ldap.Ldaps";
+
     public const string ServerHost = "Abp.Ldap.ServerHost";
 
     public const string ServerPort = "Abp.Ldap.ServerPort";

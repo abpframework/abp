@@ -26,6 +26,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
     private readonly IHtmlGenerator _htmlGenerator;
     private readonly IServiceProvider _serviceProvider;
     private readonly IStringLocalizer<AbpUiResource> _localizer;
+    private List<ModelExpression> _models = new();
 
     public AbpDynamicFormTagHelperService(
         HtmlEncoder htmlEncoder,
@@ -41,6 +42,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
+        _models = GetModels(context, output);
         var list = InitilizeFormGroupContentsContext(context, output);
 
         NormalizeTagMode(context, output);
@@ -157,9 +159,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     protected virtual async Task ProcessFieldsAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var models = GetModels(context, output);
-
-        foreach (var model in models)
+        foreach (var model in _models)
         {
             if (IsSelectGroup(context, model))
             {
@@ -225,7 +225,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     private bool TryToGetOtherDateModel(ModelExpression model, string pickerId, out ModelExplorer? otherModel)
     {
-        otherModel = TagHelper.Model.ModelExplorer.Properties.SingleOrDefault(x => x != model.ModelExplorer && x.GetAttribute<DateRangePickerAttribute>()?.PickerId == pickerId);
+        otherModel = _models.Select(x => x.ModelExplorer).SingleOrDefault(x => x != model.ModelExplorer && x.GetAttribute<DateRangePickerAttribute>()?.PickerId == pickerId);
         return otherModel != null;
     }
 

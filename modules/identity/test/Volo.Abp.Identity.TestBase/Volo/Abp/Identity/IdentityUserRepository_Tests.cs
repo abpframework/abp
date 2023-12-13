@@ -14,6 +14,7 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
     where TStartupModule : IAbpModule
 {
     protected IIdentityUserRepository UserRepository { get; }
+    protected IIdentityRoleRepository RoleRepository { get; }
     protected ILookupNormalizer LookupNormalizer { get; }
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
     protected OrganizationUnitManager OrganizationUnitManager { get; }
@@ -22,6 +23,7 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
     protected IdentityUserRepository_Tests()
     {
         UserRepository = GetRequiredService<IIdentityUserRepository>();
+        RoleRepository = GetRequiredService<IIdentityRoleRepository>();
         LookupNormalizer = GetRequiredService<ILookupNormalizer>();
         OrganizationUnitRepository = GetRequiredService<IOrganizationUnitRepository>();
         OrganizationUnitManager = GetRequiredService<OrganizationUnitManager>();;
@@ -52,6 +54,35 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         roles.ShouldContain("moderator");
         roles.ShouldContain("supporter");
         roles.ShouldContain("manager");
+    }
+
+    [Fact]
+    public async Task GetRoleNames_By_UserIds_Async()
+    {
+        var userRoleNames = await UserRepository.GetRoleNamesAsync(new [] {
+            TestData.UserBobId,
+            TestData.UserJohnId,
+            TestData.UserNeoId,
+            TestData.UserDavidId
+        });
+
+        userRoleNames.Count.ShouldBe(3);
+
+        var userBob = userRoleNames.First(x => x.Id == TestData.UserBobId);
+        userBob.RoleNames.Length.ShouldBe(1);
+        userBob.RoleNames[0].ShouldBe("manager");
+
+        var userJohn = userRoleNames.First(x => x.Id == TestData.UserJohnId);
+        userJohn.RoleNames.Length.ShouldBe(3);
+        userJohn.RoleNames.ShouldContain("moderator");
+        userJohn.RoleNames.ShouldContain("supporter");
+        userJohn.RoleNames.ShouldContain("manager");
+
+        var userNeo = userRoleNames.First(x => x.Id == TestData.UserNeoId);
+        userNeo.RoleNames.Length.ShouldBe(3);
+        userNeo.RoleNames.ShouldContain("supporter");
+        userJohn.RoleNames.ShouldContain("moderator");
+        userJohn.RoleNames.ShouldContain("manager");
     }
 
     [Fact]
@@ -91,6 +122,21 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         users.Count.ShouldBe(2);
         users.ShouldContain(u => u.UserName == "john.nash");
         users.ShouldContain(u => u.UserName == "neo");
+    }
+
+    [Fact]
+    public async Task GetUserIdListByRoleIdAsync()
+    {
+        var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
+        var neo = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("neo"));
+        john.ShouldNotBeNull();
+        neo.ShouldNotBeNull();
+
+        var roleId = (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("supporter"))).Id;
+        var users = await UserRepository.GetUserIdListByRoleIdAsync(roleId);
+        users.Count.ShouldBe(2);
+        users.ShouldContain(id => id == john.Id);
+        users.ShouldContain(id => id == neo.Id);
     }
 
     [Fact]

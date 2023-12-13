@@ -64,6 +64,8 @@
     "PasswordResetInfoInEmail": "我們收到了帳戶恢復請求!如果你發起了此請求,請點擊以下連結以重置密碼.",
     "ResetMyPassword": "重置我的密碼",
     "AccessDenied": "拒絕訪問!",
-    "AccessDeniedMessage": "您無權訪問此資源."
+    "AccessDeniedMessage": "您無權訪問此資源.",
+    "OrRegisterWith": "或是註冊用:",
+    "RegisterUsingYourProviderAccount": "使用你的{0}帳號註冊"
   }
 }

@@ -45,7 +45,7 @@ public class RemoveProjectFromSolutionStep : ProjectBuildPipelineStep
 
     private void RemoveProjectFromAbpmdlFile(ProjectBuildContext context)
     {
-        var abpmdlFile = context.FindFile(_solutionFilePath.RemovePostFix(".sln") + ".abpmdl.json");
+        var abpmdlFile = context.FindFile(_solutionFilePath.RemovePostFix(".sln") + ".abpmdl");
 
         if (abpmdlFile == null)
         {

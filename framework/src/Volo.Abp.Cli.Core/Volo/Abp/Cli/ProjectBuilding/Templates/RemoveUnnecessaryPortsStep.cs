@@ -73,6 +73,11 @@ public class RemoveUnnecessaryPortsStep : ProjectBuildPipelineStep
             .FirstOrDefault(f =>
                 f.Name.Contains("MyCompanyName.MyProjectName.DbMigrator") && f.Name.EndsWith("appsettings.json"));
 
+        if (dbMigratorAppSettings == null)
+        {
+            return;
+        }
+
         var appSettingsJsonObject = JObject.Parse(dbMigratorAppSettings.Content);
         var authServerJsonObject = (JObject)appSettingsJsonObject?["IdentityServer"] ?? (JObject)appSettingsJsonObject["OpenIddict"];
         var clientsJsonObject = (JObject)authServerJsonObject?["Clients"] ?? (JObject)authServerJsonObject?["Applications"];
