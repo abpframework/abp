@@ -14,6 +14,7 @@ using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
+using System.Net.Mail;
 
 namespace Volo.Abp.Cli.Version;
 
@@ -63,15 +64,7 @@ public class PackageVersionCheckerService : ITransientDependency
     {
         if (!includeNightly && !includeReleaseCandidates && !packageId.Contains("LeptonX"))
         {
-            var latestStableVersionResult = await GetLatestStableVersionOrNullAsync();
-            if (latestStableVersionResult == null)
-            {
-                return null;
-            }
-
-            return SemanticVersion.TryParse(latestStableVersionResult.Version, out var semanticVersion) 
-                ? new LatestVersionInfo(semanticVersion, latestStableVersionResult.Message) 
-                : null;
+            return await GetLatestStableVersionFromGithubAsync();
         }
         
         var versionList = await GetPackageVersionListAsync(packageId, includeNightly);
@@ -105,6 +98,19 @@ public class PackageVersionCheckerService : ITransientDependency
         }
         
         return await GetPackageVersionsFromNuGetOrgAsync(packageId) ?? new List<string>();
+    }
+
+    public async Task<LatestVersionInfo> GetLatestStableVersionFromGithubAsync()
+    {
+        var latestStableVersionResult = await GetLatestStableVersionOrNullAsync();
+        if (latestStableVersionResult == null)
+        {
+            return null;
+        }
+
+        return SemanticVersion.TryParse(latestStableVersionResult.Version, out var semanticVersion)
+            ? new LatestVersionInfo(semanticVersion, latestStableVersionResult.Message)
+            : null;
     }
 
     private async Task<bool> IsCommercialPackageAsync(string packageId)

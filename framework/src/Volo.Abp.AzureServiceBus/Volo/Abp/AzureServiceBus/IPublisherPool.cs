@@ -6,5 +6,5 @@ namespace Volo.Abp.AzureServiceBus;
 
 public interface IPublisherPool : IAsyncDisposable
 {
-    Task<ServiceBusSender> GetAsync(string topicName, string connectionName);
+    Task<ServiceBusSender> GetAsync(string topicName, string? connectionName);
 }

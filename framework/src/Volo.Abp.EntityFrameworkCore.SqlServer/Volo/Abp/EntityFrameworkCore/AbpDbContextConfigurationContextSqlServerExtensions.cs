@@ -10,7 +10,7 @@ public static class AbpDbContextConfigurationContextSqlServerExtensions
 {
     public static DbContextOptionsBuilder UseSqlServer(
         [NotNull] this AbpDbContextConfigurationContext context,
-        [CanBeNull] Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = null)
+        Action<SqlServerDbContextOptionsBuilder>? sqlServerOptionsAction = null)
     {
         if (context.ExistingConnection != null)
         {

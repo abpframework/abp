@@ -64,6 +64,6 @@ public class TransientEventHandlerFactory : IEventHandlerFactory
 
     protected virtual IEventHandler CreateHandler()
     {
-        return (IEventHandler)Activator.CreateInstance(HandlerType);
+        return (IEventHandler)Activator.CreateInstance(HandlerType)!;
     }
 }

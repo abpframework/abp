@@ -16,8 +16,6 @@ export class PageAlertService {
 
   alerts$ = this.alerts.sliceState(state => state);
 
-  constructor() {}
-
   show(alert: PageAlert) {
     const newAlert: PageAlert = {
       ...alert,

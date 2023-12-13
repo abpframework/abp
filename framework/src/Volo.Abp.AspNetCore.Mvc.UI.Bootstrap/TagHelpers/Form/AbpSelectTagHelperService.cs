@@ -59,7 +59,11 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             {
                 output.Attributes.AddClass("form-floating");
             }
-            output.Attributes.AddClass("mb-3");
+
+            if (TagHelper.AddMarginBottomClass)
+            {
+                output.Attributes.AddClass("mb-3");
+            }
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Content.SetHtmlContent(innerHtml);
         }
@@ -79,7 +83,8 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
     {
-        return "<div class=\"mb-3\">" + Environment.NewLine + innerHtml + Environment.NewLine + "</div>";
+        var mb3 = TagHelper.AddMarginBottomClass ? "mb-3" : string.Empty;
+        return $"<div class=\"{mb3}\">" + Environment.NewLine + innerHtml + Environment.NewLine + "</div>";
     }
 
     protected virtual async Task<TagHelperOutput> GetSelectTagAsync(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)

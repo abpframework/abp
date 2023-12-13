@@ -15,6 +15,7 @@
     "CmsKit.Ratings": "Calificaciones",
     "CmsKit.Reactions": "Reacciones",
     "CmsKit.Tags": "Etiquetas",
+    "CmsKit.BlogPost.PreventXssFeature": "Prevenir ataques XSS",
     "CmsKit:0002": "¡El contenido ya existe!",
     "CmsKit:0003": "La entidad {0} no se puede etiquetar.",
     "CmsKit:Blog:0001": "¡La babosa dada ({Slug}) ya existe!",
@@ -76,6 +77,7 @@
     "PageId": "Página",
     "Pages": "Paginas",
     "PageSlugInformation": "Slug se usa en la URL. Su URL será '/{{slug}}'.",
+    "BlogSlugInformation": "Slug se usa en la URL. Su URL será '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Gestión de blogs",
     "Permission:BlogManagement.Create": "Crear",
     "Permission:BlogManagement.Delete": "Borrar",
@@ -158,6 +160,7 @@
     "YourEmailAddress": "Tu correo electrónico",
     "YourFullName": "Tu nombre completo",
     "YourMessage": "Tu mensaje",
-    "YourReply": "Tu respuesta"
+    "YourReply": "Tu respuesta",
+    "ThisPartOfContentCouldntBeLoaded": "Esta parte del contenido no se pudo cargar."
   }
 }

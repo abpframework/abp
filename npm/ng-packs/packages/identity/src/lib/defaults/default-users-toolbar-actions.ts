@@ -1,5 +1,5 @@
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
-import { ToolbarAction } from '@abp/ng.theme.shared/extensions';
+import { ToolbarAction } from '@abp/ng.components/extensible';
 import { UsersComponent } from '../components/users/users.component';
 
 export const DEFAULT_USERS_TOOLBAR_ACTIONS = ToolbarAction.createMany<IdentityUserDto[]>([

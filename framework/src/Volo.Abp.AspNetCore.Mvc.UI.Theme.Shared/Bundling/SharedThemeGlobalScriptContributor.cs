@@ -35,20 +35,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
     )]
 public class SharedThemeGlobalScriptContributor : BundleContributor
 {
-    
+
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddRange(new[]
+        context.Files.AddRange(new BundleFile[]
         {
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/ui-extensions.js",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/widget-manager.js",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert2/abp-sweetalert2.js",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js"
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/ui-extensions.js",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/widget-manager.js",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert2/abp-sweetalert2.js",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js"
         });
     }
 }

@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
     <RootNamespace />
@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenIddict.Server.AspNetCore" Version="$(OpenIddictPackageVersion)" />
-    <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="$(OpenIddictPackageVersion)" />
-    <PackageReference Include="OpenIddict.Validation.ServerIntegration" Version="$(OpenIddictPackageVersion)" />
+    <PackageReference Include="OpenIddict.Server.AspNetCore" />
+    <PackageReference Include="OpenIddict.Validation.AspNetCore" />
+    <PackageReference Include="OpenIddict.Validation.ServerIntegration" />
   </ItemGroup>
 </Project>

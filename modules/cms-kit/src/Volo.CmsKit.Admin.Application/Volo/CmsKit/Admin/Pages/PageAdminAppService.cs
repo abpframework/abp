@@ -66,6 +66,8 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         input.MapExtraPropertiesTo(page);
         await PageRepository.InsertAsync(page);
 
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
+
         return ObjectMapper.Map<Page, PageDto>(page);
     }
 
@@ -77,6 +79,8 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         {
             await InvalidateDefaultHomePageCacheAsync(considerUow: true);
         }
+        
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
 
         await PageManager.SetSlugAsync(page, input.Slug);
 
@@ -102,6 +106,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         }
         
         await PageRepository.DeleteAsync(page);
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
     }
 
     [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
@@ -115,6 +120,6 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
 
     protected virtual async Task InvalidateDefaultHomePageCacheAsync(bool considerUow = false)
     {
-        await PageCache.RemoveAsync(PageConsts.DefaultHomePageCacheKey, considerUow: considerUow);
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(PageConsts.DefaultHomePageCacheKey), considerUow: considerUow);
     }
 }

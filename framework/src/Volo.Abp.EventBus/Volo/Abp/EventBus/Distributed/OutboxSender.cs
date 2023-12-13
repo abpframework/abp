@@ -19,10 +19,10 @@ public class OutboxSender : IOutboxSender, ITransientDependency
     protected AbpAsyncTimer Timer { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
     protected IAbpDistributedLock DistributedLock { get; }
-    protected IEventOutbox Outbox { get; private set; }
-    protected OutboxConfig OutboxConfig { get; private set; }
+    protected IEventOutbox Outbox { get; private set; } = default!;
+    protected OutboxConfig OutboxConfig { get; private set; } = default!;
     protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
-    protected string DistributedLockName { get; private set; }
+    protected string DistributedLockName { get; private set; } = default!;
     public ILogger<OutboxSender> Logger { get; set; }
 
     protected CancellationTokenSource StoppingTokenSource { get; }

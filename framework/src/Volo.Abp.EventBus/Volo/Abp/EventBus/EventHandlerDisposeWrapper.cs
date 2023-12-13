@@ -6,9 +6,9 @@ public class EventHandlerDisposeWrapper : IEventHandlerDisposeWrapper
 {
     public IEventHandler EventHandler { get; }
 
-    private readonly Action _disposeAction;
+    private readonly Action? _disposeAction;
 
-    public EventHandlerDisposeWrapper(IEventHandler eventHandler, Action disposeAction = null)
+    public EventHandlerDisposeWrapper(IEventHandler eventHandler, Action? disposeAction = null)
     {
         _disposeAction = disposeAction;
         EventHandler = eventHandler;

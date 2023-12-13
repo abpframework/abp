@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import {
-  AuthGuard,
+  authGuard,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: mapToCanActivate([AuthGuard]),
+    canActivate: [authGuard],
     children: [
       {
         path: '',

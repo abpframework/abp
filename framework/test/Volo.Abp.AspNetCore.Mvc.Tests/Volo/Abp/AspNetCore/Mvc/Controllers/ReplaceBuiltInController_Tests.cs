@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Controllers;
 
 public class ReplaceBuiltInController_Tests : AspNetCoreMvcTestBase
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpAspNetCoreMvcOptions>(options =>
         {

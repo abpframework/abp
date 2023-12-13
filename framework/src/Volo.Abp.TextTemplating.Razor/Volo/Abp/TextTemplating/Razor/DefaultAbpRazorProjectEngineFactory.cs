@@ -7,7 +7,7 @@ namespace Volo.Abp.TextTemplating.Razor;
 
 public class DefaultAbpRazorProjectEngineFactory : IAbpRazorProjectEngineFactory, ITransientDependency
 {
-    public virtual async Task<RazorProjectEngine> CreateAsync(Action<RazorProjectEngineBuilder> configure = null)
+    public virtual async Task<RazorProjectEngine> CreateAsync(Action<RazorProjectEngineBuilder>? configure = null)
     {
         return RazorProjectEngine.Create(await CreateRazorConfigurationAsync(), EmptyProjectFileSystem.Empty, configure);
     }

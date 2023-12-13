@@ -30,7 +30,7 @@ namespace Dapr
         /// <summary>
         /// An optional delegate used to configure the subscriptions.
         /// </summary>
-        public Func<List<AbpSubscription>, Task> SubscriptionsCallback { get; set; }
+        public Func<List<AbpSubscription>, Task>? SubscriptionsCallback { get; set; }
     }
 
     /// <summary>
@@ -41,32 +41,32 @@ namespace Dapr
         /// <summary>
         /// Gets or sets the topic name.
         /// </summary>
-        public string Topic { get; set; }
+        public string Topic { get; set; } = default!;
 
         /// <summary>
         /// Gets or sets the pubsub name
         /// </summary>
-        public string PubsubName { get; set; }
+        public string PubsubName { get; set; } = default!;
 
         /// <summary>
         /// Gets or sets the route
         /// </summary>
-        public string Route { get; set; }
+        public string? Route { get; set; }
 
         /// <summary>
         /// Gets or sets the routes
         /// </summary>
-        public AbpRoutes Routes { get; set; }
+        public AbpRoutes? Routes { get; set; }
 
         /// <summary>
         /// Gets or sets the metadata.
         /// </summary>
-        public AbpMetadata Metadata { get; set; }
+        public AbpMetadata? Metadata { get; set; }
 
         /// <summary>
         /// Gets or sets the deadletter topic.
         /// </summary>
-        public string DeadLetterTopic { get; set; }
+        public string? DeadLetterTopic { get; set; }
     }
 
     /// <summary>
@@ -99,12 +99,12 @@ namespace Dapr
         /// <summary>
         /// Gets or sets the default route
         /// </summary>
-        public string Default { get; set; }
+        public string? Default { get; set; }
 
         /// <summary>
         /// Gets or sets the routing rules
         /// </summary>
-        public List<AbpRule> Rules { get; set; }
+        public List<AbpRule>? Rules { get; set; }
     }
 
     /// <summary>
@@ -115,12 +115,12 @@ namespace Dapr
         /// <summary>
         /// Gets or sets the CEL expression to match this route.
         /// </summary>
-        public string Match { get; set; }
+        public string Match { get; set; } = default!;
 
         /// <summary>
         /// Gets or sets the path of the route.
         /// </summary>
-        public string Path { get; set; }
+        public string Path { get; set; } = default!;
     }
 }
 
@@ -166,7 +166,7 @@ namespace Microsoft.AspNetCore.Builder
             return CreateSubscribeEndPoint(endpoints, options);
         }
 
-        private static IEndpointConventionBuilder CreateSubscribeEndPoint(IEndpointRouteBuilder endpoints, AbpSubscribeOptions options = null)
+        private static IEndpointConventionBuilder CreateSubscribeEndPoint(IEndpointRouteBuilder endpoints, AbpSubscribeOptions? options = null)
         {
             if (endpoints is null)
             {
@@ -175,7 +175,7 @@ namespace Microsoft.AspNetCore.Builder
 
             return endpoints.MapGet("dapr/subscribe", async context =>
             {
-                var logger = context.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger("DaprTopicSubscription");
+                var logger = context.RequestServices.GetService<ILoggerFactory>()?.CreateLogger("DaprTopicSubscription");
                 var dataSource = context.RequestServices.GetRequiredService<EndpointDataSource>();
                 var subscriptions = dataSource.Endpoints
                     .OfType<RouteEndpoint>()
@@ -185,7 +185,7 @@ namespace Microsoft.AspNetCore.Builder
                         var topicMetadata = e.Metadata.GetOrderedMetadata<ITopicMetadata>();
                         var originalTopicMetadata = e.Metadata.GetOrderedMetadata<IOriginalTopicMetadata>();
 
-                        var subs = new List<(string PubsubName, string Name, string DeadLetterTopic, bool? EnableRawPayload, string Match, int Priority, Dictionary<string, string[]> OriginalTopicMetadata, string MetadataSeparator, RoutePattern RoutePattern)>();
+                        var subs = new List<(string PubsubName, string Name, string? DeadLetterTopic, bool? EnableRawPayload, string Match, int Priority, Dictionary<string, string[]> OriginalTopicMetadata, string? MetadataSeparator, RoutePattern RoutePattern)>();
 
                         for (int i = 0; i < topicMetadata.Count(); i++)
                         {
@@ -211,7 +211,7 @@ namespace Microsoft.AspNetCore.Builder
                     {
                         var first = e.First();
                         var rawPayload = e.Any(e => e.EnableRawPayload.GetValueOrDefault());
-                        var metadataSeparator = e.FirstOrDefault(e => !string.IsNullOrEmpty(e.MetadataSeparator)).MetadataSeparator ?? ",";
+                        var metadataSeparator = e.FirstOrDefault(e => !string.IsNullOrEmpty(e.MetadataSeparator)).MetadataSeparator?.ToString() ?? ",";
                         var rules = e.Where(e => !string.IsNullOrEmpty(e.Match)).ToList();
                         var defaultRoutes = e.Where(e => string.IsNullOrEmpty(e.Match)).Select(e => RoutePatternToString(e.RoutePattern)).ToList();
                         var defaultRoute = defaultRoutes.FirstOrDefault();
@@ -276,7 +276,7 @@ namespace Microsoft.AspNetCore.Builder
                     .OrderBy(e => (e.PubsubName, e.Topic))
                     .ToList();
 
-                await options?.SubscriptionsCallback(subscriptions);
+                await options?.SubscriptionsCallback!(subscriptions)!;
                 await context.Response.WriteAsync(JsonSerializer.Serialize(subscriptions,
                     new JsonSerializerOptions
                     {

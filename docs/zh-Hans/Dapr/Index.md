@@ -60,29 +60,6 @@ Configure<AbpDaprOptions>(options =>
 }
 ````
 
-### 注入DaprClient
-
-ABP 将 `DaprClient` 类注册到 [依赖注入](../Dependency-Injection.md) 系统中.因此,你可以在需要时注入并使用它:
-
-````csharp
-public class MyService : ITransientDependency
-{
-    private readonly DaprClient _daprClient;
-
-    public MyService(DaprClient daprClient)
-    {
-        _daprClient = daprClient;
-    }
-
-    public async Task DoItAsync()
-    {
-        // TODO: Use the injected _daprClient object
-    }
-}
-````
-
-注入 `DaprClient` 是在应用程序代码中使用它的推荐方法.当你注入它时,将使用 `IAbpDaprClientFactory` 服务创建它,这会在下一节中将进行说明.
-
 ### IAbpDaprClientFactory
 
 `IAbpDaprClientFactory` 可用于创建 `DaprClient` 或 `HttpClient` 对象来执行对 Dapr 的操作.它使用 `AbpDaprOptions`,因此你可以配置设置.
@@ -113,15 +90,14 @@ public class MyService : ITransientDependency
             });
         
         // Create an HttpClient object
-        HttpClient httpClient = await _daprClientFactory
-            .CreateHttpClientAsync("target-app-id");
+        HttpClient httpClient = await _daprClientFactory.CreateHttpClientAsync("target-app-id");
     }
 }
 ````
 
 `CreateHttpClientAsync` 方法还获取可选的 `daprEndpoint` 和 `daprApiToken` 参数.
 
-> ABP使用`IAbpDaprClientFactory`创建Dapr客户端.你也可以在应用程序中使用Dapr API创建客户端对象.推荐使用`IAbpDaprClientFactory`,但不是必需的.
+> 你可以在应用程序中使用Dapr API创建客户端对象.推荐使用`IAbpDaprClientFactory`,但不是必需的.
 
 ## C# API 客户端代理集成
 
@@ -412,7 +388,7 @@ Configure<AbpDaprOptions>(options =>
 }
 ````
 
-一旦你设置了它,它就会在你注入`DaprClient`或使用`IAbpDaprClientFactory`时使用.如果你需要在应用程序中使用该值,你可以注入`IDaprApiTokenProvider`并使用其`GetDaprApiToken()`方法.
+一旦你设置了它,它就会在使用`IAbpDaprClientFactory`时使用.如果你需要在应用程序中使用该值,你可以注入`IDaprApiTokenProvider`并使用其`GetDaprApiToken()`方法.
 
 ### App API Token
 

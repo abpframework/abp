@@ -1,7 +1,7 @@
 import { CoreModule, LazyModuleFactory } from '@abp/ng.core';
 import { FeatureManagementModule } from '@abp/ng.feature-management';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
+import { ExtensibleModule } from '@abp/ng.components/extensible';
 import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
@@ -28,7 +28,7 @@ import { PageModule } from '@abp/ng.components/page';
     ThemeSharedModule,
     NgbDropdownModule,
     FeatureManagementModule,
-    UiExtensionsModule,
+    ExtensibleModule,
     PageModule,
   ],
 })

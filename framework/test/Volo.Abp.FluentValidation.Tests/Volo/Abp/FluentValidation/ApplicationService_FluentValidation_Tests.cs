@@ -103,6 +103,17 @@ public class ApplicationService_FluentValidation_Tests : AbpIntegratedTest<Appli
         output.ShouldBe("444");
     }
 
+
+    [Fact]
+    public void Should_Add_Validators_To_DI()
+    {
+        var validator = ServiceProvider.GetService<IValidator<MyMethodInput>>();
+        validator.GetType().ShouldBe(typeof(MyMethodInputValidator));
+
+        validator = ServiceProvider.GetService<MyMethodInputValidator>();
+        validator.GetType().ShouldBe(typeof(MyMethodInputValidator));
+    }
+
     [DependsOn(typeof(AbpAutofacModule))]
     [DependsOn(typeof(AbpFluentValidationModule))]
     public class TestModule : AbpModule

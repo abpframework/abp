@@ -22,11 +22,11 @@ public class AuditIntegrationServiceTestController_Tests : AspNetCoreMvcTestBase
         _auditingStore = ServiceProvider.GetRequiredService<IAuditingStore>();
     }
     
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         _auditingStore = Substitute.For<IAuditingStore>();
         services.Replace(ServiceDescriptor.Singleton(_auditingStore));
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
     
     [Fact]

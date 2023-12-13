@@ -11,8 +11,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.Volo.Abp.AspNetCore.Mvc.
 )]
 public class AbpAspNetCoreMvcUiThemeSharedTestModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
 
-    }
 }

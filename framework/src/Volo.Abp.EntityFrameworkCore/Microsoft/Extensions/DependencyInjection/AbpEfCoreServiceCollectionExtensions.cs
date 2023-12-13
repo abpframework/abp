@@ -13,7 +13,7 @@ public static class AbpEfCoreServiceCollectionExtensions
 {
     public static IServiceCollection AddAbpDbContext<TDbContext>(
         this IServiceCollection services,
-        Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null)
+        Action<IAbpDbContextRegistrationOptionsBuilder>? optionsBuilder = null)
         where TDbContext : AbpDbContext<TDbContext>
     {
         services.AddMemoryCache();

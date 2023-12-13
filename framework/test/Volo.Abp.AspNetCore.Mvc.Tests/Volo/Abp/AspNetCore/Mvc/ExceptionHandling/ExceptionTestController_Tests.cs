@@ -26,9 +26,9 @@ public class ExceptionTestController_Tests : AspNetCoreMvcTestBase
         FakeRequiredService = GetRequiredService<FakeUserClaims>();
     }
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
 
         _fakeExceptionSubscriber = Substitute.For<IExceptionSubscriber>();
 

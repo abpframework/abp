@@ -10,32 +10,32 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class ActionApiDescriptionModel
 {
-    public string UniqueName { get; set; }
+    public string UniqueName { get; set; } = default!;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string HttpMethod { get; set; }
+    public string? HttpMethod { get; set; }
 
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
 
-    public IList<string> SupportedVersions { get; set; }
+    public IList<string>? SupportedVersions { get; set; }
 
-    public IList<MethodParameterApiDescriptionModel> ParametersOnMethod { get; set; }
+    public IList<MethodParameterApiDescriptionModel> ParametersOnMethod { get; set; } = default!;
 
-    public IList<ParameterApiDescriptionModel> Parameters { get; set; }
+    public IList<ParameterApiDescriptionModel> Parameters { get; set; } = default!;
 
-    public ReturnValueApiDescriptionModel ReturnValue { get; set; }
+    public ReturnValueApiDescriptionModel ReturnValue { get; set; } = default!;
 
     public bool? AllowAnonymous { get; set; }
 
-    public string ImplementFrom { get; set; }
+    public string? ImplementFrom { get; set; }
 
     public ActionApiDescriptionModel()
     {
 
     }
 
-    public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, [CanBeNull] string httpMethod, [NotNull] IList<string> supportedVersions, bool? allowAnonymous = null, string implementFrom = null)
+    public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, string? httpMethod, [NotNull] IList<string> supportedVersions, bool? allowAnonymous = null, string? implementFrom = null)
     {
         Check.NotNull(uniqueName, nameof(uniqueName));
         Check.NotNull(method, nameof(method));

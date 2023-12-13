@@ -16,7 +16,7 @@
     "Tutorial": "Oktatóanyag",
     "UsingCLI": "CLI használata",
     "SeeDetails": "Lásd a részleteket",
-    "AbpShortDescription": "Az ABP Framework egy komplett infrastruktúra modern webalkalmazások létrehozásához, követve a szoftverfejlesztés legjobb gyakorlatait és konvencióit.",
+    "AbpShortDescription": "Az ABP Framework egy komplett infrastruktúra modern architektúrákkal rendelkező szoftvermegoldások létrehozásához, amelyek az ASP.NET Core platformon alapulnak.",
     "SourceCodeUpper": "FORRÁSKÓD",
     "LatestReleaseLogs": "Legújabb kiadási naplók",
     "Infrastructure": "Infrastruktúra",
