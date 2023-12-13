@@ -562,6 +562,6 @@
     "SponsorLogo": "Sponsor Logo",
     "RegistrationUrl": "Registration Url",
     "AllowAbpStudioBetaAccess": "Allow ABP Studio Beta Access",
-    "TotalQuestionCanNotBeNullMessage": "TotalQuestion can not be null"
+    "TotalQuestionCanNotBeNullMessage": "Total Question can not be null"
   }
 }
