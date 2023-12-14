@@ -19,7 +19,7 @@ public class AbpBackgroundWorkersHangfireModule : AbpModule
         context.Services.AddSingleton(typeof(HangfirePeriodicBackgroundWorkerAdapter<>));
     }
     
-    public async override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+    public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
         if (!options.IsEnabled)
@@ -28,14 +28,9 @@ public class AbpBackgroundWorkersHangfireModule : AbpModule
             hangfireOptions.BackgroundJobServerFactory = CreateOnlyEnqueueJobServer;
         }
         
-        await context.ServiceProvider
-            .GetRequiredService<IBackgroundWorkerManager>()
-            .StartAsync(); 
-    }
-
-    public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-    {
-        AsyncHelper.RunSync(() => OnPreApplicationInitializationAsync(context));
+        context.ServiceProvider
+            .GetRequiredService<HangfireBackgroundWorkerManager>()
+            .Initialize(); 
     }
     
     private BackgroundJobServer? CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
