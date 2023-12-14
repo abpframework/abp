@@ -19,6 +19,7 @@
     "Menu:Emailing": "E-Mail",
     "Menu:TimeZone": "Zeitzone",
     "DisplayName:Timezone": "Zeitzone",
+    "TimezoneHelpText": "Diese Einstellung wird für die Anwendung oder den Mandanten verwendet.",
     "SmtpHost": "Host",
     "SmtpPort": "Port",
     "SmtpUserName": "Benutzername",
