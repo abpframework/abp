@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
-using Volo.Abp.Cli.ProjectBuilding.Building;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates;
+namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
 public class CheckRedisPreRequirements : ProjectBuildPipelineStep
 {
