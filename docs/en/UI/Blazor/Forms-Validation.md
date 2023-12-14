@@ -4,7 +4,7 @@ ABP Framework Blazor UI is based on the [Blazorise](https://blazorise.com/docs) 
 
 ## Sample
 
-_Example provided by official Blazorise documentation._
+_Example is provided by official Blazorise documentation._
 
 ```html
 <Validation Validator="ValidationRule.IsNotEmpty">
