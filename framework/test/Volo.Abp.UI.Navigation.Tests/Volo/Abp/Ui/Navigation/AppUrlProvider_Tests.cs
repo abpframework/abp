@@ -35,7 +35,9 @@ public class AppUrlProvider_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
             options.RedirectAllowedUrls.AddRange(new List<string>()
             {
                 "https://wwww.volosoft.com",
-                "https://wwww.aspnetzero.com"
+                "https://wwww.aspnetzero.com",
+                "https://{{tenantName}}.abp.io",
+                "https://{{tenantId}}.abp.io"
             });
 
             options.Applications["BLAZOR"].RootUrl = "https://{{tenantId}}.abp.io";
@@ -87,9 +89,28 @@ public class AppUrlProvider_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
     }
 
     [Fact]
-    public void IsRedirectAllowedUrl()
+    public async Task IsRedirectAllowedUrlAsync()
     {
-        _appUrlProvider.IsRedirectAllowedUrl("https://community.abp.io").ShouldBeFalse();
-        _appUrlProvider.IsRedirectAllowedUrl("https://wwww.volosoft.com").ShouldBeTrue();
+        (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://community.abp.io")).ShouldBeFalse();
+        (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://wwww.volosoft.com")).ShouldBeTrue();
+
+        using (_currentTenant.Change(null))
+        {
+            (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://www.abp.io")).ShouldBeFalse();
+            (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://abp.io")).ShouldBeTrue();
+        }
+
+        using (_currentTenant.Change(Guid.NewGuid(), "community"))
+        {
+            (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://community.abp.io")).ShouldBeTrue();
+            (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://community2.abp.io")).ShouldBeFalse();
+        }
+
+        var tenantId = Guid.NewGuid();
+        using (_currentTenant.Change(tenantId))
+        {
+            (await _appUrlProvider.IsRedirectAllowedUrlAsync($"https://{tenantId}.abp.io")).ShouldBeTrue();
+            (await _appUrlProvider.IsRedirectAllowedUrlAsync($"https://{Guid.NewGuid()}.abp.io")).ShouldBeFalse();
+        }
     }
 }

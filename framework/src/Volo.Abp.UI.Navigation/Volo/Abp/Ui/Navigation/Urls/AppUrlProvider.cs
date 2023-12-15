@@ -43,9 +43,14 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         );
     }
 
-    public bool IsRedirectAllowedUrl(string url)
+    public virtual async Task<bool> IsRedirectAllowedUrlAsync(string url)
     {
-        var allow = Options.RedirectAllowedUrls.Any(x => url.StartsWith(x, StringComparison.CurrentCultureIgnoreCase));
+        var redirectAllowedUrls = new List<string>();
+        foreach (var redirectAllowedUrl in Options.RedirectAllowedUrls)
+        {
+            redirectAllowedUrls.Add((await NormalizeUrlAsync(redirectAllowedUrl))!);
+        }
+        var allow = redirectAllowedUrls.Any(x => url.StartsWith(x, StringComparison.CurrentCultureIgnoreCase));
         if (!allow)
         {
             Logger.LogError($"Invalid RedirectUrl: {url}, Use {nameof(AppUrlProvider)} to configure it!");
@@ -59,7 +64,7 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         {
             return url;
         }
-        
+
         return await ReplacePlaceHoldersAsync(url!);
     }
 
@@ -117,15 +122,15 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         return url;
     }
 
-    private async Task<string> GetCurrentTenantNameAsync()
+    protected virtual async Task<string?> GetCurrentTenantNameAsync()
     {
         if (CurrentTenant.Id.HasValue && CurrentTenant.Name.IsNullOrEmpty())
         {
             var tenantConfiguration = await TenantStore.FindAsync(CurrentTenant.Id.Value);
-            return tenantConfiguration!.Name;
+            return tenantConfiguration?.Name;
         }
 
-        return CurrentTenant.Name!;
+        return CurrentTenant.Name;
     }
 
     public Task<string?> GetUrlOrNullAsync([NotNull] string appName, string? urlName = null)
