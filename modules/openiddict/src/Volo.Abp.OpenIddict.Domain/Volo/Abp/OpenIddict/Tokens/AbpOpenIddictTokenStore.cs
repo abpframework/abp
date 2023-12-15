@@ -302,13 +302,19 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         throw new NotSupportedException();
     }
 
-    public virtual async ValueTask PruneAsync(DateTimeOffset threshold, CancellationToken cancellationToken)
+    public virtual async ValueTask<long> RevokeByAuthorizationIdAsync(string identifier, CancellationToken cancellationToken)
+    {
+        return await Repository.RevokeByAuthorizationIdAsync(ConvertIdentifierFromString(identifier), cancellationToken);
+    }
+
+    public virtual async ValueTask<long> PruneAsync(DateTimeOffset threshold, CancellationToken cancellationToken)
     {
         using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
         {
             var date = threshold.UtcDateTime;
-            await Repository.PruneAsync(date, cancellationToken: cancellationToken);
+            var count = await Repository.PruneAsync(date, cancellationToken: cancellationToken);
             await uow.CompleteAsync(cancellationToken);
+            return count;
         }
     }
 
