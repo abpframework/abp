@@ -9,7 +9,7 @@ public static class EventOutboxMongoModelBuilderExtensions
     {
         Check.NotNull(builder, nameof(builder));
 
-        builder.Entity<IncomingEventRecord>(b =>
+        builder.Entity<OutgoingEventRecord>(b =>
         {
             b.CollectionName = AbpCommonDbProperties.DbTablePrefix + "EventOutbox";
         });

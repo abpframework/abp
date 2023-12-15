@@ -6,9 +6,18 @@ import {
   getShortDateShortTimeFormat,
   getShortTimeFormat,
   ListService,
+  LocalizationModule,
+  PermissionDirective,
   PermissionService,
 } from '@abp/ng.core';
-import { formatDate } from '@angular/common';
+import {
+  AsyncPipe,
+  formatDate,
+  NgComponentOutlet,
+  NgFor,
+  NgIf,
+  NgTemplateOutlet,
+} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -51,13 +60,17 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   selector: 'abp-extensible-table',
   standalone: true,
   imports: [
-    CoreModule,
     AbpVisibleDirective,
     NgxDatatableModule,
     GridActionsComponent,
     NgbTooltip,
     NgxDatatableDefaultDirective,
     NgxDatatableListDirective,
+    PermissionDirective,
+    LocalizationModule,
+    AsyncPipe,
+    NgTemplateOutlet,
+    NgComponentOutlet,
   ],
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

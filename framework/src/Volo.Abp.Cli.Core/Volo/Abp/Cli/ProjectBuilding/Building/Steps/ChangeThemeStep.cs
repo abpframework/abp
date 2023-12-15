@@ -66,6 +66,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             Theme.LeptonX => "@volosoft/abp.ng.theme.lepton-x",
             Theme.LeptonXLite => "@abp/ng.theme.lepton-x",
+            Theme.Lepton => "@volo/abp.ng.theme.lepton",
             Theme.Basic => "@abp/ng.theme.basic",
             _ => string.Empty
         };

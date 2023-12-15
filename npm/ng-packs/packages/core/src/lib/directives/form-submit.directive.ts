@@ -18,7 +18,7 @@ type Controls = { [key: string]: UntypedFormControl } | UntypedFormGroup[];
  * @deprecated FormSubmitDirective will be removed in V7.0.0. Use `ngSubmit` instead.
  */
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
+  standalone: true,
   selector: 'form[ngSubmit][formGroup]',
   providers: [SubscriptionService],
 })
