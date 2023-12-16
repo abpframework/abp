@@ -170,7 +170,7 @@ If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method
 
 Some features (like soft-delete, multi-tenancy and audit logging) won't work, so use this method carefully when you need it. Use the `DeleteAsync` method if you need to these features.
 
-> Currently only [EF Core supports it](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#basic-executedelete-examples), For the ORMs doesn't support direct delete, we will fallback to the existing `DeleteAsync` method.
+> Currently only [EF Core supports it](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#basic-executedelete-examples), For the ORMs that don't support direct delete, we will fallback to the existing `DeleteAsync` method.
 
 ### Ensure Entities Exists
 
