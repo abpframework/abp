@@ -109,7 +109,7 @@
     "Description:Abp.Identity.Password.RequireUppercase": "Pokud hesla musí obsahovat ASCII znak velkých písmen.",
     "Description:Abp.Identity.Password.RequireDigit": "Pokud hesla musí obsahovat číslici.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Zda musí uživatelé pravidelně měnit heslo.",
-    "Description:Abp.Identity.Password.PasswordChangePeriodDays:": "Počet dní, po které je heslo platné. Pokud je nastaveno na 0, heslo nikdy nevyprší.",
+    "Description:Abp.Identity.Password.PasswordChangePeriodDays": "Počet dní, po které je heslo uživatele platné.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Zda může být uzamčen nový uživatel.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "Doba, po kterou je uživatel zablokován, když dojde k zablokování.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Počet neúspěšných pokusů o přístup než je uživatel uzamčen, za předpokladu, že je uzamčení povoleno.",
@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Zda telefonní číslo může být potvrzeno uživatelem.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Zda je pro přihlášení vyžadováno potvrzené telefonní číslo.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Zda může uživatel změnit uživatelské jméno.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Zda může uživatel změnit email."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Zda může uživatel změnit email.",
+    "Details": "Podrobnosti",
+    "CreatedBy": "Vytvořil",
+    "ModifiedBy": "Upraven",
+    "ModificationTime": "Doba úpravy",
+    "PasswordUpdateTime": "Čas aktualizace hesla",
+    "LockoutEndTime": "Čas konce uzamčení",
+    "FailedAccessCount": "Počet neúspěšných přístupů"
   }
 }
