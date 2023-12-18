@@ -2,6 +2,11 @@
   "culture": "zh-Hant",
   "texts": {
     "ThisFieldIsRequired": "此欄位為必填欄位",
-    "MaxLenghtErrorMessage": "此欄位最多可包含'{0}'個字元"
+    "MaxLenghtErrorMessage": "此欄位最多可包含'{0}'個字元",
+    "Enum:BookType.Undefined": "ValidationResource 中未定義",
+    "Enum:BookType.0": "未定義，來自 ValidationResource 的值為 0",
+    "BookType.Adventure": "ValidationResource 的冒險",
+    "BookType.1": "來自 ValidationResource 的值為 1 的 Adventure",
+    "Biography": "ValidationResource 的簡介"
   }
 }

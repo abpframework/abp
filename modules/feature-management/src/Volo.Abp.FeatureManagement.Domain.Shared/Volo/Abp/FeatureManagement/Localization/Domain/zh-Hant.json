@@ -4,12 +4,14 @@
     "Features": "功能",
     "NoFeatureFoundMessage": "沒有可用的功能.",
     "ManageHostFeatures": "管理Host功能",
+    "ManageHostFeaturesText": "您可以透過點擊以下按鈕來管理主機端功能。",
     "Permission:FeatureManagement": "功能管理",
     "Permission:FeatureManagement.ManageHostFeatures": "管理Host功能",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0}功能的值無效!",
     "Menu:FeatureManagement": "功能管理",
     "ResetToDefault": "重置為預設值",
     "ResetedToDefault": "已重置為預設值",
+    "AreYouSure": "你確定嗎？",
     "AreYouSureToResetToDefault": "是否確定重置為預設值？"
   }
 }
