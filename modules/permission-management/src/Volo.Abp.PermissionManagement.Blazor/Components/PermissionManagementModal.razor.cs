@@ -71,6 +71,8 @@ public partial class PermissionManagementModal
             }
         }
     }
+    
+    protected Dictionary<string, int> _permissionDepths = new Dictionary<string, int>();
 
     public PermissionManagementModal()
     {
@@ -112,6 +114,11 @@ public partial class PermissionManagementModal
             }
 
             _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
+
+            foreach (var group in _groups)
+            {
+                SetPermissionDepths(group.Permissions, null, 0);
+            }
 
             await InvokeAsync(_modal.Show);
         }
@@ -164,6 +171,18 @@ public partial class PermissionManagementModal
         return "PermissionGroup_" + name.Replace(".", "_");
     }
 
+    protected virtual void SetPermissionDepths(List<PermissionGrantInfoDto> permissions, string currentParent, int currentDepth)
+    {
+        foreach (var item in permissions)
+        {
+            if (item.ParentName == currentParent)
+            {
+                _permissionDepths[item.Name] = currentDepth;
+                SetPermissionDepths(permissions, item.Name, currentDepth + 1);
+            }
+        }
+    }
+
     protected virtual void GroupGrantAllChanged(bool value, PermissionGroupDto permissionGroup)
     {
         foreach (var permission in permissionGroup.Permissions)
@@ -179,11 +198,9 @@ public partial class PermissionManagementModal
     {
         SetPermissionGrant(permission, value);
 
-        if (value && permission.ParentName != null)
+        if (value)
         {
-            var parentPermission = GetParentPermission(permissionGroup, permission);
-
-            SetPermissionGrant(parentPermission, true);
+            SetParentPermissionGrant(permissionGroup, permission);
         }
         else if (value == false)
         {
@@ -194,6 +211,20 @@ public partial class PermissionManagementModal
                 SetPermissionGrant(childPermission, false);
             }
         }
+    }
+
+    private void SetParentPermissionGrant(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
+    {
+        if(permission.ParentName == null)
+        {
+            return;
+        }
+
+        var parentPermission = GetParentPermission(permissionGroup, permission);
+        SetPermissionGrant(parentPermission, true);
+
+        SetParentPermissionGrant(permissionGroup, parentPermission);
+        
     }
 
     private void SetPermissionGrant(PermissionGrantInfoDto permission, bool value)

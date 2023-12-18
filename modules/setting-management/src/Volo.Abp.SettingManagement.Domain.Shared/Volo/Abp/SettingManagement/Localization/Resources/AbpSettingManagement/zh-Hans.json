@@ -19,6 +19,7 @@
     "Menu:Emailing": "邮件",
     "Menu:TimeZone": "时区",
     "DisplayName:Timezone": "时区",
+    "TimezoneHelpText": "此设置用于应用程序范围或基于租户.",
     "SmtpHost": "主机",
     "SmtpPort": "端口",
     "SmtpUserName": "用户名",

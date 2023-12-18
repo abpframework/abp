@@ -879,6 +879,10 @@
               "path": "UI/Blazor/Navigation-Menu.md"
             },
             {
+              "text": "Forms & Validation",
+              "path": "UI/Blazor/Forms-Validation.md"
+            },
+            {
               "text": "Localization",
               "path": "UI/Blazor/Localization.md"
             },

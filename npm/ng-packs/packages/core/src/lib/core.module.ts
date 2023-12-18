@@ -39,6 +39,8 @@ import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
+import {DYNAMIC_LAYOUTS_TOKEN} from "./tokens/dynamic-layout.token";
+import {DEFAULT_DYNAMIC_LAYOUTS} from "./constants";
 
 const standaloneDirectives = [
   AutofocusDirective,
@@ -186,6 +188,10 @@ export class CoreModule {
           useValue: options.othersGroup || 'AbpUi::OthersGroup',
         },
         IncludeLocalizationResourcesProvider,
+        {
+          provide: DYNAMIC_LAYOUTS_TOKEN,
+          useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS
+        }
       ],
     };
   }

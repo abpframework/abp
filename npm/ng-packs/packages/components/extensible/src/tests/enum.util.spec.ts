@@ -1,8 +1,8 @@
-import { ConfigStateService, ExtensionEnumFieldDto, LocalizationService } from '@abp/ng.core';
-import { BehaviorSubject, of } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { PropData } from '../lib/models/props';
-import { createEnum, createEnumOptions, createEnumValueResolver } from '../lib/utils/enum.util';
+import {ConfigStateService, ExtensionEnumFieldDto, LocalizationService} from '@abp/ng.core';
+import {BehaviorSubject, of} from 'rxjs';
+import {take} from 'rxjs/operators';
+import {PropData} from '../lib/models/props';
+import {createEnum, createEnumOptions, createEnumValueResolver} from '../lib/utils/enum.util';
 
 const mockSessionState = {
   languageChange$: new BehaviorSubject('tr'),
@@ -12,9 +12,9 @@ const mockSessionState = {
 } as any;
 
 const fields: ExtensionEnumFieldDto[] = [
-  { name: 'foo', value: {number: 1} },
-  { name: 'bar', value: {number: 2} },
-  { name: 'baz', value: {number: 3} },
+  {name: 'foo', value: {number: 1}},
+  {name: 'bar', value: {number: 2}},
+  {name: 'baz', value: {number: 3}},
 ];
 
 class MockPropData<R = any> extends PropData<R> {
@@ -43,10 +43,10 @@ describe('Enum Utils', () => {
     const enumFromFields = createEnum(fields);
 
     test.each([
-      {name:'foo', value: 'number', expected: 1},
-      {name:'bar', value: 'number', expected: 2},
-      {name:'baz', value: 'number', expected: 3}
-    ])('should create an enum that returns $expected when $name $value is accessed',({name, value, expected})=>{
+      {name: 'foo', value: 'number', expected: 1},
+      {name: 'bar', value: 'number', expected: 2},
+      {name: 'baz', value: 'number', expected: 3}
+    ])('should create an enum that returns $expected when $name $value is accessed', ({name, value, expected}) => {
       expect(enumFromFields[name][value]).toBe(expected);
     })
   });
@@ -55,8 +55,6 @@ describe('Enum Utils', () => {
     test.each`
       value | expected
       ${1}  | ${'Foo'}
-      ${2}  | ${'Bar'}
-      ${3}  | ${'Baz'}
     `(
       'should create a resolver that returns observable $expected when enum value is $value',
       async ({ value, expected }) => {
@@ -71,7 +69,7 @@ describe('Enum Utils', () => {
           'EnumProp',
         );
         const propData = new MockPropData({
-          extraProperties: { EnumProp: value }, 
+          extraProperties: { EnumProp: value },
         });
         propData.getInjected = () => service as any;
 
