@@ -492,7 +492,7 @@
     "QuotationTemplate.SubTotal:": "Sub Total :",
     "QuotationTemplate.Tax/VAT:": "Tax / Vat (%{0}) :",
     "QuotationTemplate.TotalDiscount:": "Total Discount :",
-    "QuotationTemplate.TOTALDUE:": "TOTAL DUE :", 
+    "QuotationTemplate.TOTALDUE:": "TOTAL DUE :",
     "QuotationTemplate.BankAccount": "Our bank account information can be found at {0}",
     "Permission:Raffles": "Raffle",
     "Permission:Draw": "Draw",
@@ -560,6 +560,8 @@
     "AddSession": "Add Session",
     "AddSponsor": "Add Sponsor",
     "SponsorLogo": "Sponsor Logo",
-    "RegistrationUrl": "Registration Url"
+    "RegistrationUrl": "Registration Url",
+    "AllowAbpStudioBetaAccess": "Allow ABP Studio Beta Access",
+    "TotalQuestionCanNotBeNullMessage": "Total Question can not be null"
   }
 }

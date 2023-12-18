@@ -33,7 +33,7 @@
     "bootstrap-icons": "~1.8.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.0.0",
-    "zone.js": "~0.13.0"
+    "zone.js": "~0.14.0"
   },
   "devDependencies": {
     "@abp/ng.schematics": "~8.0.0-rc.3",
