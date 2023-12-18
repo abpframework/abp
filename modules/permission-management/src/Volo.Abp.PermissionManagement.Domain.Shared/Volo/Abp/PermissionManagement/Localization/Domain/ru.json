@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "Только этот провайдер",
     "All": "Все",
     "SelectAllInAllTabs": "Предоставить все разрешения",
-    "SelectAllInThisTab": "Выбрать все"
+    "SelectAllInThisTab": "Выбрать все",
+    "SaveWithoutAnyPermissionsWarningMessage": "Вы уверены, что хотите сохранить без каких-либо разрешений?"
   }
 }

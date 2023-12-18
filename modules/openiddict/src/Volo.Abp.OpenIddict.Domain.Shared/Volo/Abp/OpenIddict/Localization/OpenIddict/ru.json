@@ -1,0 +1,15 @@
+{
+  "culture": "ru",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Запрос OpenID Connect не может быть получен.",
+    "TheUserDetailsCannotBbeRetrieved": "Данные пользователя не могут быть получены.",
+    "TheApplicationDetailsCannotBeFound": "Детали приложения не найдены.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Подробности о вызывающем клиентском приложении найти невозможно.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Указанный тип предоставления {0} не реализован.",
+    "Authorization": "Авторизация",
+    "DoYouWantToGrantAccessToYourData": "Вы хотите предоставить пользователю {0} доступ к вашим данным?",
+    "ScopesRequested": "Запрошенные объемы",
+    "Accept": "Принимать",
+    "Deny": "Отрицать"
+  }
+}
