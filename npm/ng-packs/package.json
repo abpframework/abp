@@ -123,7 +123,7 @@
     "tslib": "^2.0.0",
     "tslint": "~6.1.0",
     "typescript": "~5.2.0",
-    "zone.js": "0.14.2",
+    "zone.js": "~0.14.0",
     "@nx/devkit": "~17.1.0",
     "@nx/plugin": "~17.1.0",
     "@swc/helpers": "0.5.3",
