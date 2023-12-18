@@ -219,6 +219,14 @@
     "CommentTextRequired": "请输入评论",
     "CaptchaCodeErrorMessage": "验证码错误，请重试",
     "CaptchaCodeMissingMessage": "请输入验证码！",
-    "ThisPartOfContentCouldntBeLoaded": "无法加载此部分内容"
+    "UnAllowedExternalUrlMessage": "您包含了不允许的外部 URL。请在没有外部 URL 的情况下重试。",
+    "URL": "网址",
+    "PopularTags": "热门标签",
+    "RemoveCoverImageConfirmationMessage": "您确定要删除封面图片吗？",
+    "RemoveCoverImage": "删除封面图片",
+    "CssClass": "CSS类",
+    "TagsHelpText": "标签应以逗号分隔（例如：tag1、tag2、tag3）",
+    "ThisPartOfContentCouldntBeLoaded": "无法加载此部分内容",
+    "DuplicateCommentAttemptMessage": "检测到重复的评论帖子尝试。您的评论已经提交。"
   }
 }
