@@ -1,0 +1,9 @@
+{
+  "culture": "ar",
+  "texts": {
+    "TenantNotFoundMessage": "لم يتم العثور على المستأجر!",
+    "TenantNotFoundDetails": "لا يوجد مستأجر بمعرف المستأجر أو اسمه: {0}",
+    "TenantNotActiveMessage": "المستأجر غير نشط!",
+    "TenantNotActiveDetails": "المستأجر غير نشط بمعرف المستأجر أو اسمه: {0}"
+  }
+}
