@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Trường này phải là một kiểu chuỗi hoặc mảng có độ dài tối thiểu là '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "Trường này không phải là số điện thoại hợp lệ.",
     "ThisFieldMustBeBetween{0}And{1}": "Trường này phải nằm trong khoảng từ {0} đến {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Trường này phải lớn hơn hoặc bằng {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "Trường này phải nhỏ hơn hoặc bằng {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "Trường này phải khớp với biểu thức chính quy '{0}'.",
     "ThisFieldIsRequired.": "Trường này là bắt buộc.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Trường này phải là một chuỗi có độ dài tối đa là {0}.",

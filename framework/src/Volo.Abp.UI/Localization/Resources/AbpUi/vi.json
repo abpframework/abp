@@ -51,6 +51,12 @@
     "ManageYourAccount": "Quản lý tài khoản của bạn",
     "OthersGroup": "Khác",
     "Today": "Hôm nay",
-    "Apply": "Áp dụng"
+    "Apply": "Áp dụng",
+    "InternetConnectionInfo": "Các hoạt động không thể được thực hiện. Kết nối internet của bạn hiện không khả dụng.",
+    "CopiedToTheClipboard": "Đã sao chép vào bảng nhớ tạm",
+    "AddNew": "Thêm mới",
+    "ProfilePicture": "Ảnh đại diện",
+    "Theme": "chủ đề",
+    "NotAssigned": "Không được chỉ định"
   }
 }

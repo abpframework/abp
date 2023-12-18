@@ -1,0 +1,8 @@
+{
+  "culture": "vi",
+  "texts": {
+    "AbpTitle": "Đọc tất cả bài viết trên blog",
+    "AbpDescription": "ABP là một khung ứng dụng nguồn mở tập trung vào phát triển ứng dụng web dựa trên AspNet Core. Đừng lặp lại chính mình, hãy tập trung vào mã doanh nghiệp của riêng bạn.",
+    "AbpDefinition": "Blog ABP để phát triển .NET, đa nền tảng, mẫu ứng dụng ASP.NET, tin tức liên quan đến ABP và hơn thế nữa..."
+  }
+}
