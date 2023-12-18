@@ -1,3 +1,3 @@
-export const enum eThemeSharedComponents {
+export const enum eExtensibleComponents {
   PasswordComponent = 'ThemeShared.Extensions.PasswordComponent',
 }

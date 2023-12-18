@@ -11,7 +11,10 @@ public static class SecurityStampValidatorOptionsExtensions
         options.OnRefreshingPrincipal = async context =>
         {
             await SecurityStampValidatorCallback.UpdatePrincipal(context);
-            await previousOnRefreshingPrincipal?.Invoke(context);
+            if(previousOnRefreshingPrincipal != null)
+            {
+                await previousOnRefreshingPrincipal.Invoke(context);
+            }
         };
         return options;
     }

@@ -1,4 +1,4 @@
-import { TimeAdapter } from '../lib/adapters/time.adapter';
+import { TimeAdapter } from '../adapters/time.adapter';
 
 describe('Time Adapter', () => {
   const adapter = new TimeAdapter();

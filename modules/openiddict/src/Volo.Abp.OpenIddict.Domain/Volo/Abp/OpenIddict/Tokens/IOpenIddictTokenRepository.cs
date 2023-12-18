@@ -32,5 +32,7 @@ public interface IOpenIddictTokenRepository : IBasicRepository<OpenIddictToken, 
 
     Task<List<OpenIddictToken>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default);
 
-    Task PruneAsync(DateTime date, CancellationToken cancellationToken = default);
+    Task<long> PruneAsync(DateTime date, CancellationToken cancellationToken = default);
+
+    ValueTask<long> RevokeByAuthorizationIdAsync(Guid id, CancellationToken cancellationToken);
 }
