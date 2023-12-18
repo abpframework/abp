@@ -51,6 +51,12 @@
     "ManageYourAccount": "Kezelje fiókját",
     "OthersGroup": "Egyéb",
     "Today": "Ma",
-    "Apply": "Alkalmaz"
+    "Apply": "Alkalmaz",
+    "InternetConnectionInfo": "A műveletet nem lehetett végrehajtani. Internetkapcsolata jelenleg nem érhető el.",
+    "CopiedToTheClipboard": "A vágólapra másolva",
+    "AddNew": "Új hozzáadása",
+    "ProfilePicture": "Profil kép",
+    "Theme": "Téma",
+    "NotAssigned": "Nem kijelölt"
   }
 }
