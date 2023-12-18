@@ -1,5 +1,4 @@
-import { DateTimeAdapter } from '../lib/adapters/date-time.adapter';
-
+ import { DateTimeAdapter } from '../adapters/date-time.adapter'
 describe('DateTime Adapter', () => {
   const adapter = new DateTimeAdapter();
   const date = new Date(2002, 2, 30, 13, 30, 45, 0);

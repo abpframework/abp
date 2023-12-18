@@ -31,20 +31,14 @@ public abstract class TemplateInfo
     public virtual IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
         var steps = new List<ProjectBuildPipelineStep>();
-        ConfigureCheckPreRequirements(context, steps);
         return steps;
-    }
-
-    protected void ConfigureCheckPreRequirements(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
-    {
-        steps.Add(new CheckRedisPreRequirements());
     }
 
     public bool IsPro()
     {
         return Name.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
     }
-    
+
     public bool IsNoLayer()
     {
         return Name is AppNoLayersTemplate.TemplateName or AppNoLayersProTemplate.TemplateName;

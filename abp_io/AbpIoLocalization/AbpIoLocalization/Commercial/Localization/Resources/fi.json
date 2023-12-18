@@ -600,7 +600,7 @@
     "Purchase_TrainingPrice": "Koulutuksen hinta",
     "Purchase_OnboardingTraining": "ABP:n perehdytys ja verkkosovelluskehitys live-koulutus",
     "TotalDeveloperPrice": "Kehittäjän kokonaishinta",
-    "Purchase_PricePerDeveloper": "<span>{0} {1}</span> kehittäjää kohden",
+    "Purchase_PricePerDeveloper": "<span>{0}</span> kehittäjää kohden",
     "Purchase_IncludedDeveloperInfo": "{0} {1} mukana.",
     "Purchase_LicenseExtraDeveloperPurchaseMessage": "<span class=\"fw-6\">{0} lisenssi</span> sisältää {1} kehittäjää. Voit lisätä uusia kehittäjiä nyt tai myöhemmin.",
     "StartupTemplates_Page_Title": "Käynnistysmallit",
@@ -827,6 +827,7 @@
     "ExpirationDate": "Viimeinen käyttöpäivä",
     "SpringCampaignDiscount": "Kevään kampanja-alennus",
     "WhyUseAbpIoPlatform": "Miksi minun pitäisi käyttää ABP.IO-alustaa sen sijaan, että luon uuden ratkaisun tyhjästä?",
-    "WhyUseAbpIoPlatformFaqExplanation": "Katso <a href=\"https://docs.abp.io/en/commercial/latest/why-abp-io-platform \"> kyseisestä asiakirjasta </a> yksityiskohtainen selitys siitä, miksi ABP.IO Platformin käyttäminen on huomattavasti edullisempaa kuin kaiken tekeminen itse."
+    "WhyUseAbpIoPlatformFaqExplanation": "Katso <a href=\"https://docs.abp.io/en/commercial/latest/why-abp-io-platform \"> kyseisestä asiakirjasta </a> yksityiskohtainen selitys siitä, miksi ABP.IO Platformin käyttäminen on huomattavasti edullisempaa kuin kaiken tekeminen itse.",
+    "MultipleOrganizationInfo": "Katso kaikki organisaatiosi"
   }
 }
