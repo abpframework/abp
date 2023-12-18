@@ -1,0 +1,9 @@
+{
+  "culture": "is",
+  "texts": {
+    "TenantNotFoundMessage": "Leigjandi fannst ekki!",
+    "TenantNotFoundDetails": "Það er enginn leigjandi með auðkenni eða nafn leigjanda: {0}",
+    "TenantNotActiveMessage": "Leigjandi er ekki virkur!",
+    "TenantNotActiveDetails": "Leigjandinn er ekki virkur með auðkenni eða nafn leigjanda: {0}"
+  }
+}
