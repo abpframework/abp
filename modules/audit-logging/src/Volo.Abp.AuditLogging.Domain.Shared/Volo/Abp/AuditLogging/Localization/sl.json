@@ -39,6 +39,7 @@
     "ExtraProperties": "Dodatne lastnosti",
     "MaxDuration": "Najd. trajanje",
     "MinDuration": "Najk. trajanje",
+    "MinMaxDuration": "Trajanje (min. - maks.)",
     "{0}Milliseconds": "{0} milisekund",
     "ExecutionTime": "Čas",
     "Parameters": "Parametri",

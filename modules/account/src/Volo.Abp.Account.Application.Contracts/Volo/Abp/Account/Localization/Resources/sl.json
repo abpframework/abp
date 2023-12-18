@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefonska številka",
     "PersonalSettings": "Osebne nastavitve",
     "PersonalSettingsSaved": "Osebne nastavitve so shranjene",
+    "PersonalSettingsChangedConfirmationModalTitle": "Osebni podatki spremenjeni",
+    "PersonalSettingsChangedConfirmationModalDescription": "Če želite uporabiti te spremembe, se morate prijaviti. Se želite odjaviti?",
     "PasswordChanged": "Geslo je spremenjeno",
     "NewPasswordConfirmFailed": "Prosimo potrdite novo geslo.",
     "NewPasswordSameAsOld": "Novo geslo mora biti drugačno od starega.",
