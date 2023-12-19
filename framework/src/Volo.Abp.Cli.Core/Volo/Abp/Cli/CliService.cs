@@ -84,6 +84,7 @@ public class CliService : ITransientDependency
         catch (Exception ex)
         {
             Logger.LogException(ex);
+            throw;
         }
     }
 
