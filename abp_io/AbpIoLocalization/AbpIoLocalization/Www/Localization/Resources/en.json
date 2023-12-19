@@ -115,7 +115,7 @@
     "DependencyInjection": "Dependency Injection",
     "DependencyInjectionByConventions": "Dependency Injection by Conventions",
     "ABPCLIExplanation": "ABP CLI (Command Line Interface) is a command line tool to automate some common operations for ABP based solutions.",
-    "ModularityExplanation": "ABP provides a complete infrastructure to build your own application modules that may have entities, services, database integration, APIs, UI components and so on..", //TODO: strong "your own application modules",-
+    "ModularityExplanation": "ABP provides a complete infrastructure to build your own application modules that may have entities, services, database integration, APIs, UI components and so on..",
     "MultiTenancyExplanation": "ABP framework doesn't only support developing multi-tenant applications, but also makes your code mostly unaware of the multi-tenancy.",
     "MultiTenancyExplanation2": "Can automatically determine the current tenant, isolate data of different tenants from each other.",
     "MultiTenancyExplanation3": "Supports single database, database per tenant and hybrid approaches.",
@@ -438,7 +438,7 @@
     "CoolestCompaniesUseABPFramework": "Coolest Companies Use <span class=\"fw-bold\">ABP Framework</span>",
     "Index_Page_Testimonial_1": "ABP Framework is not just a tool but a catalyst that has accelerated my growth as a developer. It has made it possible for me to build new features faster than ever before, reminiscent of the experiences of other users. The unified coding pattern has streamlined my projects, giving me more time to focus on creating rather than troubleshooting.\nI would say the ABP Framework has been the cornerstone of my early professional journey. It has facilitated my transition from an aspiring developer to a confident professional ready to make a mark in the software world. I am looking forward to the exciting projects that await me, knowing that ABP will be there to guide me. It is more than just a product; it's a partner in success.",
     "Index_Page_Testimonial_2": "ABP Framework is not only a framework, it is also a guidance for project development/management, because it provides DDD, GenericRepository, DI, Microservice, Modularity trainings. Even if you are not going to use framework itself, you can develop yourself with docs.abp.io which is well and professionally prepared. (OpenIddict, Redis, Quartz etc.)\nBecause many thing pre-built, it shortens project development time significantly. (Such as login page, exception handling, data filtering-seeding, audit logging, localization, auto api controller etc.)\nAs an example from our app, i have used Local Event Bus for stock control. So, I am able to manage order movements by writing stock handler.\nIt is wonderful not to lose time for CreationTime, CreatorId. They are filled automatically.",
-    "VideosLoginAndRegisterMessage": "You must sign in to watch videos. You can create an account for watch if you haven't.",
+    "VideosLoginAndRegisterMessage": "To be able to watch videos, you must sign in.",
     "Filter": "Filter",
     "VideoCourses": "Video Courses"
   }

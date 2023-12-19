@@ -124,7 +124,10 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         await ConfigurePwaSupportForAngular(projectArgs);
 
-        OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
+        if (!commandLineArgs.Options.ContainsKey(Options.NoOpenWebPage.Long))
+        {
+            OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
+        }
     }
 
     private Task CheckCreatingRequirements(ProjectBuildArgs projectArgs)
@@ -162,8 +165,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             requirementWarningMessages.AddFirst("NOTICE: The following tools are required to run your solution:");
 
             await EventBus.PublishAsync(new ProjectPostRequirementsCheckedEvent
-            { 
-                Message = requirementWarningMessages.JoinAsString(Environment.NewLine) 
+            {
+                Message = requirementWarningMessages.JoinAsString(Environment.NewLine)
             }, false);
 
             foreach (var error in requirementWarningMessages)

@@ -2,7 +2,13 @@
 
 <hr class="my-3" />
 
-<form *ngIf="form" [formGroup]="form" class="abp-md-form"  (ngSubmit)="submit()" [validateOnSubmit]="true">
+<form
+  *ngIf="form"
+  [formGroup]="form"
+  class="abp-md-form"
+  (ngSubmit)="submit()"
+  [validateOnSubmit]="true"
+>
   <div class="mb-3 form-group">
     <label class="form-label"
       >{{ 'AbpSettingManagement::DefaultFromDisplayName' | abpLocalization
@@ -79,10 +85,10 @@
     {{ 'AbpSettingManagement::Save' | abpLocalization }}
   </button>
   <button
+    *abpPermission="emailingPolicy"
     type="button"
     (click)="openSendEmailModal()"
     class="btn btn-primary mx-2"
-    *abpPermission="emailingPolicy"
   >
     <i class="fa f-send" aria-hidden="true"></i>
     {{ 'AbpSettingManagement::SendTestEmail' | abpLocalization }}

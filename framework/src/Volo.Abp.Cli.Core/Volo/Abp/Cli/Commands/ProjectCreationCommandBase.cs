@@ -425,7 +425,7 @@ public abstract class ProjectCreationCommandBase
         {
             return;
         }
-        
+
         var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
         var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
         Logger.LogInformation(message + "...");
@@ -440,7 +440,7 @@ public abstract class ProjectCreationCommandBase
         {
             path = Path.Combine(path, "apps");
         }
-        
+
         var directory = Path.GetDirectoryName(
             Directory.GetFiles(path, isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
         );
@@ -455,7 +455,7 @@ public abstract class ProjectCreationCommandBase
         {
             return true;
         }
-        
+
         if (projectArgs.TemplateName == MicroserviceProTemplate.TemplateName && projectArgs.UiFramework is UiFramework.Blazor)
         {
             return true;
@@ -906,6 +906,11 @@ public abstract class ProjectCreationCommandBase
         public static class ThemeStyle
         {
             public const string Long = "theme-style";
+        }
+
+        public static class NoOpenWebPage
+        {
+            public const string Long = "no-open";
         }
     }
 }
