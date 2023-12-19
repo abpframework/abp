@@ -120,10 +120,10 @@ Here's how you can do it:
 
 ```javascript
 export const CUSTOM_LAYOUT_PROVIDERS = [
-    { provide: APP_INITIALIZER, useFactory: configureFn, deps: [ReplaceableComponentsService], multi: true },
+    { provide: APP_INITIALIZER, useFactory: configureLayoutFn, deps: [ReplaceableComponentsService], multi: true },
     
 ];
-function configureFn() {
+function configureLayoutFn() {
     const service= inject( ReplaceableComponentsService)
     return () =>{
         service.add({
@@ -133,7 +133,7 @@ function configureFn() {
     }
 }
 ```
-In this code, `configureFn` is a factory function that adds the new layout component to the `ReplaceableComponentsService`. The `APP_INITIALIZER` provider runs this function when the application starts.
+In this code, `configureLayoutFn` is a factory function that adds the new layout component to the `ReplaceableComponentsService`. The `APP_INITIALIZER` provider runs this function when the application starts.
 
 note: (don't forget: you should add the CUSTOM_LAYOUT_PROVIDERS in the app.module.ts file)
 
