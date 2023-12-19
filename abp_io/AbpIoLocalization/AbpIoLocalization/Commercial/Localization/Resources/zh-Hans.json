@@ -600,7 +600,7 @@
     "Purchase_TrainingPrice": "培训价格",
     "Purchase_OnboardingTraining": "ABP 熟悉使用和 Web 应用程序开发现场培训",
     "TotalDeveloperPrice": "开发商总价",
-    "Purchase_PricePerDeveloper": "<span>{0} {1}</span> 每个开发者",
+    "Purchase_PricePerDeveloper": "<span>{0}</span> 每个开发者",
     "Purchase_IncludedDeveloperInfo": "{0} {1} 包括在内。",
     "Purchase_LicenseExtraDeveloperPurchaseMessage": "<span class=\"fw-6\">{0} 许可</span> 包含 {1} 个开发者。 您可以现在或以后添加其他开发人员。",
     "StartupTemplates_Page_Title": "ABP启动模板",
@@ -842,6 +842,7 @@
     "BlazoriseSupportExplanation4": "如果您有有效的ABP商业版许可证，您还将拥有Blazorise PRO许可证。您可以在<a href=\"https://blazorise.com/support/user/manage/license\" rel=\"nofollow\">blazorise.com/support/user/manage/license</a>获取您的Blazorise许可密钥。",
     "BlazoriseSupportExplanation5": "您可以在support网站上发布您的问题，并为您的应用程序生成一个产品令牌。",
     "ExtraQuestionCreditsFaqTitle": "我可以购买额外的问题支持次数吗？",
-    "ExtraQuestionCreditsFaqExplanation": "是的，您可以购买额外的问题支持次数，请发送电子邮件至<a href=\"mailto:info@abp.io\">info@abp.io</a>，并提供您的组织名称。以下是额外问题支持次数的价格列表： <ul><li>50次问题 $999</li><li>25次问题 $625</li><li>15次问题 $450</li></ul>"
+    "ExtraQuestionCreditsFaqExplanation": "是的，您可以购买额外的问题支持次数，请发送电子邮件至<a href=\"mailto:info@abp.io\">info@abp.io</a>，并提供您的组织名称。以下是额外问题支持次数的价格列表： <ul><li>50次问题 $999</li><li>25次问题 $625</li><li>15次问题 $450</li></ul>",
+    "MultipleOrganizationInfo": "查看您的所有组织"
   }
 }
