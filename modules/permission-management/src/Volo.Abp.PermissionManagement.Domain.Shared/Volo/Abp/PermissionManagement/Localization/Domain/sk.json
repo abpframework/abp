@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "Iba tento poskytovateľ",
     "All": "Všetky",
     "SelectAllInAllTabs": "Udeliť všetky oprávnenia",
-    "SelectAllInThisTab": "Vybrať všetky"
+    "SelectAllInThisTab": "Vybrať všetky",
+    "SaveWithoutAnyPermissionsWarningMessage": "Naozaj chcete ukladať bez akýchkoľvek povolení?"
   }
 }

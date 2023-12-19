@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "Þú hefur ekki leyfi til að skrá þig inn! Þú þarft að staðfesta netfangið þitt/símanúmer.",
     "InvalidUsername": "Ógilt notendanafn eða lykilorð!",
     "InvalidAuthenticatorCode": "Ógildur auðkenningarkóði!",
+    "InvalidRecoveryCode": "Ógildur endurheimtarkóði!",
     "TheTargetUserIsNotLinkedToYou": "Marknotandinn er ekki tengdur þér!"
   }
 }

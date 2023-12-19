@@ -1,6 +1,7 @@
 {
   "culture": "nl",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Naam van huurder bestaat al: {Name}",
     "Menu:TenantManagement": "Klanten beheer",
     "Tenants": "Klanten",
     "NewTenant": "Nieuwe klant",

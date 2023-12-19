@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "لا يسمح لك بتسجيل الدخول! حسابك غير نشط أو يحتاج إلى تأكيد بريدك الإلكتروني/رقم هاتفك.",
     "InvalidUsername": "اسم المستخدم أو كلمة المرور غير صالحة!",
     "InvalidAuthenticatorCode": "كود المصدق غير صالح!",
+    "InvalidRecoveryCode": "رمز الاسترداد غير صالح!",
     "TheTargetUserIsNotLinkedToYou": "المستخدم المستهدف غير مرتبط بك!"
   }
 }

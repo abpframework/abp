@@ -1,0 +1,15 @@
+{
+  "culture": "nl",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Het OpenID Connect-verzoek kan niet worden opgehaald.",
+    "TheUserDetailsCannotBbeRetrieved": "De gebruikersgegevens kunnen niet worden opgehaald.",
+    "TheApplicationDetailsCannotBeFound": "De toepassingsdetails kunnen niet worden gevonden.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Er kunnen geen details over de bellende clienttoepassing worden gevonden.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Het opgegeven subsidietype {0} is niet geïmplementeerd.",
+    "Authorization": "Autorisatie",
+    "DoYouWantToGrantAccessToYourData": "Wilt u {0} toegang verlenen tot uw gegevens?",
+    "ScopesRequested": "Scopes gevraagd",
+    "Accept": "Aanvaarden",
+    "Deny": "Ontkennen"
+  }
+}

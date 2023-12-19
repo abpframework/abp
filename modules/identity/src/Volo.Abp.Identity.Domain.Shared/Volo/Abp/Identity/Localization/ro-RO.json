@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Dacă numărul de telefon poate fi confirmată de către utilizator.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Dacă un număr de telefon confirmat este oblicatoriu pentru autentificare.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Dacă numele de utilizator poate fi actualizat de către utilizator.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Dacă emailul poate fi actualizat de către utilizator."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Dacă emailul poate fi actualizat de către utilizator.",
+    "Details": "Detalii",
+    "CreatedBy": "Creat de",
+    "ModifiedBy": "Modificat de",
+    "ModificationTime": "Timp de modificare",
+    "PasswordUpdateTime": "Ora actualizării parolei",
+    "LockoutEndTime": "Ora de încheiere a blocării",
+    "FailedAccessCount": "Număr de acces eșuat"
   }
 }

@@ -6,6 +6,11 @@
     "CarPlural": "Cars",
     "MaxLenghtErrorMessage": "Kích thước trường này có tối đa '{0}' kí tự",
     "Universe": "Vũ trụ",
-    "FortyTwo": "Bốn mươi hai"
+    "FortyTwo": "Bốn mươi hai",
+    "Enum:BookType.Undefined": "Không xác định",
+    "Enum:BookType.0": "Không xác định với giá trị 0",
+    "BookType.Adventure": "Cuộc phiêu lưu",
+    "BookType.1": "Cuộc phiêu lưu có giá trị 1",
+    "Biography": "Tiểu sử"
   }
 }
