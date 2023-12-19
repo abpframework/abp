@@ -56,6 +56,7 @@
     "FileName": "Nombre de fichero",
     "LastCachedTime": "Última actualización de caché",
     "Project": "Proyecto",
+    "AdvancedFilters": "Filtros avanzados",
     "RemoveCacheAndReIndexConfirmation": "El documento \"{0}\" será eliminado de la caché y reindexado. ¿Lo confirma?"
   }
 }

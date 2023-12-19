@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "यह फ़ील्ड '{0}' की न्यूनतम लंबाई के साथ एक स्ट्रिंग या सरणी प्रकार होनी चाहिए।",
     "ThisFieldIsNotAValidPhoneNumber.": "यह फ़ील्ड मान्य फ़ोन नंबर नहीं है।",
     "ThisFieldMustBeBetween{0}And{1}": "यह फ़ील्ड {0} और {1} के बीच होनी चाहिए।",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "यह फ़ील्ड {0} से बड़ी या उसके बराबर होनी चाहिए.",
+    "ThisFieldMustBeLessOrEqual{0}": "यह फ़ील्ड {0} से कम या उसके बराबर होनी चाहिए.",
     "ThisFieldMustMatchTheRegularExpression{0}": "यह फ़ील्ड नियमित अभिव्यक्ति '{0}' से मेल खाना चाहिए।",
     "ThisFieldIsRequired.": "यह फ़ील्ड आवश्यक है।",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "यह फ़ील्ड {0} की अधिकतम लंबाई के साथ एक स्ट्रिंग होनी चाहिए।",

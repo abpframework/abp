@@ -6,6 +6,11 @@
     "CarPlural": "Samochody",
     "MaxLenghtErrorMessage": "To pole może mieć maksymalnie '{0}' znaków",
     "Universe": "Wszechświat",
-    "FortyTwo": "Czterdzieści dwa"
+    "FortyTwo": "Czterdzieści dwa",
+    "Enum:BookType.Undefined": "Nieokreślony",
+    "Enum:BookType.0": "Niezdefiniowany o wartości 0",
+    "BookType.Adventure": "Przygoda",
+    "BookType.1": "Przygoda o wartości 1",
+    "Biography": "Biografia"
   }
 }

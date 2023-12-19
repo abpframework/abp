@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Người dùng có thể xác nhận số điện thoại hay không.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Liệu một số điện thoại được xác nhận có được yêu cầu để đăng nhập hay không.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Người dùng có thể cập nhật tên người dùng hay không.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Người dùng có thể cập nhật email hay không."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Người dùng có thể cập nhật email hay không.",
+    "Details": "Chi tiết",
+    "CreatedBy": "Được tạo bởi",
+    "ModifiedBy": "Được sửa đổi bởi",
+    "ModificationTime": "Thời gian sửa đổi",
+    "PasswordUpdateTime": "Thời gian cập nhật mật khẩu",
+    "LockoutEndTime": "Thời gian kết thúc khóa",
+    "FailedAccessCount": "Số lượt truy cập không thành công"
   }
 }

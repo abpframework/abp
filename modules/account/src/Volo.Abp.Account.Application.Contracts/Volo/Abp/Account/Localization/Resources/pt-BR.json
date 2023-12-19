@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefone",
     "PersonalSettings": "Configurações pessoais",
     "PersonalSettingsSaved": "Configurações pessoais salvas",
+    "PersonalSettingsChangedConfirmationModalTitle": "Informações pessoais alteradas",
+    "PersonalSettingsChangedConfirmationModalDescription": "Se você quiser aplicar essas alterações, você deve fazer login. Você quer sair?",
     "PasswordChanged": "Senha alterada",
     "NewPasswordConfirmFailed": "Por favor, confirme a nova senha.",
     "NewPasswordSameAsOld": "A nova senha deve ser diferente da senha atual.",

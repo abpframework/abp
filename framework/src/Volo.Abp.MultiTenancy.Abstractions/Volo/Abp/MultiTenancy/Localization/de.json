@@ -1,0 +1,9 @@
+{
+  "culture": "de",
+  "texts": {
+    "TenantNotFoundMessage": "Mieter nicht gefunden!",
+    "TenantNotFoundDetails": "Es gibt keinen Mandanten mit der Mandanten-ID oder dem Namen: {0}",
+    "TenantNotActiveMessage": "Mieter ist nicht aktiv!",
+    "TenantNotActiveDetails": "Der Mandant ist mit der Mandanten-ID oder dem Namen nicht aktiv: {0}"
+  }
+}

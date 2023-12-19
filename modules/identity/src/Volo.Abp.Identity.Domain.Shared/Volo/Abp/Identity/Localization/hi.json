@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "क्या उपयोगकर्ता द्वारा फोननंबर की पुष्टि की जा सकती है।",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "साइन इन करने के लिए एक पुष्टिकरण टेलीफोन नंबर की आवश्यकता है या नहीं।",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "उपयोगकर्ता द्वारा उपयोगकर्ता नाम अपडेट किया जा सकता है या नहीं।",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "क्या उपयोगकर्ता द्वारा ईमेल को अपडेट किया जा सकता है।"
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "क्या उपयोगकर्ता द्वारा ईमेल को अपडेट किया जा सकता है।",
+    "Details": "विवरण",
+    "CreatedBy": "के द्वारा बनाई गई",
+    "ModifiedBy": "द्वारा संशोधित",
+    "ModificationTime": "संशोधन का समय",
+    "PasswordUpdateTime": "पासवर्ड अद्यतन समय",
+    "LockoutEndTime": "तालाबंदी समाप्ति समय",
+    "FailedAccessCount": "विफल पहुंच गणना"
   }
 }

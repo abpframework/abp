@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "Doar acest furnizor",
     "All": "Toate",
     "SelectAllInAllTabs": "Acordă toate permisiunile",
-    "SelectAllInThisTab": "Selectează toate"
+    "SelectAllInThisTab": "Selectează toate",
+    "SaveWithoutAnyPermissionsWarningMessage": "Sigur doriți să salvați fără nicio permisiune?"
   }
 }
