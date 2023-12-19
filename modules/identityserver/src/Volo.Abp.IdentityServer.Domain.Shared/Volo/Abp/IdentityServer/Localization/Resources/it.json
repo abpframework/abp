@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "Non sei autorizzato ad accedere! Il tuo account non è attivo o devi confermare la tua e-mail/numero di telefono.",
     "InvalidUsername": "Username o password non validi!",
     "InvalidAuthenticatorCode": "Codice autenticatore non valido!",
+    "InvalidRecoveryCode": "Codice di ripristino non valido!",
     "TheTargetUserIsNotLinkedToYou": "L'utente indicato non è collegato a te!"
   }
 }

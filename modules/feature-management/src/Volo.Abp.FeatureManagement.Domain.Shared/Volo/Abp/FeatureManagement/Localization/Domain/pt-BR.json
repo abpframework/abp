@@ -4,9 +4,14 @@
     "Features": "Funcionalidades",
     "NoFeatureFoundMessage": "Não há nenhuma funcionalidade disponivel.",
     "ManageHostFeatures": "Gerenciar recursos do Host",
+    "ManageHostFeaturesText": "Você pode gerenciar os recursos do host clicando no botão a seguir.",
     "Permission:FeatureManagement": "Gerenciamento de recursos",
     "Permission:FeatureManagement.ManageHostFeatures": "Gerenciar recursos do Host",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "O valor do recurso {0} não é válido!",
-		"Menu:FeatureManagement": "Gerenciamento de recursos"
+    "Menu:FeatureManagement": "Gerenciamento de recursos",
+    "ResetToDefault": "Restaurar ao padrão",
+    "ResetedToDefault": "Redefinido para o padrão",
+    "AreYouSure": "Tem certeza?",
+    "AreYouSureToResetToDefault": "Tem certeza de redefinir para o padrão?"
   }
 }

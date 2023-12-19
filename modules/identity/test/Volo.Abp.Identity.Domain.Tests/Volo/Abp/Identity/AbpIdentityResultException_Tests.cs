@@ -21,6 +21,11 @@ public class AbpIdentityResultException_Tests : AbpIdentityDomainTestBase
                 {
                     Code = "PasswordRequiresNonAlphanumeric",
                     Description = "Passwords must have at least one non alphanumeric character."
+                },
+                new IdentityError
+                {
+                    Code = "UnknownError",
+                    Description = "Unknown error"
                 }
             )
         );
@@ -31,6 +36,7 @@ public class AbpIdentityResultException_Tests : AbpIdentityDomainTestBase
 
             localizeMessage.ShouldContain("Şifre uzunluğu 6 karakterden uzun olmalıdır.");
             localizeMessage.ShouldContain("Parola en az bir alfasayısal olmayan karakter içermeli");
+            localizeMessage.ShouldContain("Bilinmeyen bir hata oluştu.");
         }
 
         using (CultureHelper.Use("en"))
@@ -39,6 +45,7 @@ public class AbpIdentityResultException_Tests : AbpIdentityDomainTestBase
 
             localizeMessage.ShouldContain("Password length must be greater than 6 characters.");
             localizeMessage.ShouldContain("Password must contain at least one non-alphanumeric character.");
+            localizeMessage.ShouldContain("An unknown failure has occurred.");
         }
     }
 }

@@ -9,13 +9,20 @@ import {
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
 import { CreateInjectorPipe } from '../../pipes/create-injector.pipe';
-import { CoreModule } from '@abp/ng.core';
+import { LocalizationModule, PermissionDirective } from '@abp/ng.core';
+import { NgClass, NgComponentOutlet } from '@angular/common';
 
 @Component({
   exportAs: 'abpPageToolbar',
   selector: 'abp-page-toolbar',
   standalone: true,
-  imports: [ CoreModule, CreateInjectorPipe],
+  imports: [
+    CreateInjectorPipe,
+    PermissionDirective,
+    LocalizationModule,
+    NgClass,
+    NgComponentOutlet,
+  ],
   templateUrl: './page-toolbar.component.html',
   providers: [
     {

@@ -81,12 +81,6 @@ public class MyProjectNameBlazorModule : AbpModule
             options.ProviderOptions.DefaultScopes.Add("email");
             options.ProviderOptions.DefaultScopes.Add("phone");
         });
-
-        builder.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
-            options.IsDynamicClaimsEnabled = true;
-            options.RemoteRefreshUrl = builder.Configuration["AuthServer:Authority"] + options.RemoteRefreshUrl;
-        });
     }
 
     private static void ConfigureUI(WebAssemblyHostBuilder builder)

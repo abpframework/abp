@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "To pole musi być ciągiem lub typem tablicy o minimalnej długości „{0}”.",
     "ThisFieldIsNotAValidPhoneNumber.": "To pole nie jest prawidłowym numerem telefonu.",
     "ThisFieldMustBeBetween{0}And{1}": "To pole musi zawierać się w przedziale od {0} do {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "To pole musi być większe lub równe {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "To pole musi być mniejsze lub równe {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "To pole musi być zgodne z wyrażeniem regularnym „{0}”.",
     "ThisFieldIsRequired.": "To pole jest wymagane.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "To pole musi być ciągiem o maksymalnej długości {0}.",

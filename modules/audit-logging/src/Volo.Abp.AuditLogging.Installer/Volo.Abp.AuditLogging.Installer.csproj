@@ -14,8 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="..\..\Volo.Abp.AuditLogging.abpmdl.json" />
-      <Content Include="..\..\Volo.Abp.AuditLogging.abpmdl.json">
+      <None Remove="..\..\Volo.Abp.AuditLogging.abpmdl" />
+      <Content Include="..\..\Volo.Abp.AuditLogging.abpmdl">
         <Pack>true</Pack>
         <PackagePath>content\</PackagePath>
       </Content>

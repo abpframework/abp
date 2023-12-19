@@ -82,7 +82,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return await CreateAsync(user);
     }
-
+    
     public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
     {
         user.Claims.Clear();

@@ -1,0 +1,8 @@
+{
+  "culture": "cs",
+  "texts": {
+    "AbpTitle": "Přečtěte si všechny příspěvky na blogu",
+    "AbpDescription": "ABP je open source aplikační framework zaměřený na vývoj webových aplikací založených na AspNet Core. Neopakujte se, zaměřte se na svůj vlastní obchodní kód.",
+    "AbpDefinition": "Blog ABP pro vývoj .NET, multiplatformní, šablony aplikací ASP.NET, novinky související s ABP a další..."
+  }
+}

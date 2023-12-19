@@ -219,6 +219,14 @@
     "CommentTextRequired": "Kommentti vaaditaan",
     "CaptchaCodeErrorMessage": "CAPTCHA:lle antamasi vastaus ei ollut oikea. Yritä uudelleen",
     "CaptchaCodeMissingMessage": "Captcha-koodi puuttuu!",
-    "ThisPartOfContentCouldntBeLoaded": "Tämä sisällön osa ei voitu ladata."
+    "UnAllowedExternalUrlMessage": "Lisäsit kielletty ulkoisen URL-osoitteen. Yritä uudelleen ilman ulkoista URL-osoitetta.",
+    "URL": "URL-osoite",
+    "PopularTags": "Suositut tunnisteet",
+    "RemoveCoverImageConfirmationMessage": "Haluatko varmasti poistaa kansikuvan?",
+    "RemoveCoverImage": "Poista kansikuva",
+    "CssClass": "CSS-luokka",
+    "TagsHelpText": "Tunnisteet on erotettava pilkuilla (esim. tag1, tag2, tag3)",
+    "ThisPartOfContentCouldntBeLoaded": "Tämä sisällön osa ei voitu ladata.",
+    "DuplicateCommentAttemptMessage": "Kopiokommenttiyritys havaittiin. Kommenttisi on jo lähetetty."
   }
 }

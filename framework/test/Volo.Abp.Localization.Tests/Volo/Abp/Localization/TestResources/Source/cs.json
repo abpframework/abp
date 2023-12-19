@@ -6,6 +6,11 @@
     "CarPlural": "Auta",
     "MaxLenghtErrorMessage": "Toto pole může mít nanejvýš '{0}' znaků",
     "Universe": "Vesmír",
-    "FortyTwo": "Čtyřicet dva"
+    "FortyTwo": "Čtyřicet dva",
+    "Enum:BookType.Undefined": "Nedefinováno",
+    "Enum:BookType.0": "Nedefinováno s hodnotou 0",
+    "BookType.Adventure": "Dobrodružství",
+    "BookType.1": "Dobrodružství s hodnotou 1",
+    "Biography": "Životopis"
   }
 }

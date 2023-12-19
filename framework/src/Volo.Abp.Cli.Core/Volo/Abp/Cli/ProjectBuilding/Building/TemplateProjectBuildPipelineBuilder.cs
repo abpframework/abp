@@ -1,6 +1,7 @@
 ﻿using System;
 using NuGet.Versioning;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+using Volo.Abp.Cli.ProjectBuilding.Templates;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
@@ -55,6 +56,8 @@ public static class TemplateProjectBuildPipelineBuilder
         {
             pipeline.Steps.Add(new RemoveRootFolderStep());
         }
+
+        pipeline.Steps.Add(new CheckRedisPreRequirements());
 
         pipeline.Steps.Add(new CreateProjectResultZipStep());
 

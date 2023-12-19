@@ -61,7 +61,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
-        return await (from userRole in dbContext.Set<IdentityUserRole>()
+        var userRoles = await (from userRole in dbContext.Set<IdentityUserRole>()
             join role in dbContext.Roles on userRole.RoleId equals role.Id
             where userIds.Contains(userRole.UserId)
             group new
@@ -73,7 +73,24 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             select new IdentityUserIdWithRoleNames
             {
                 Id = gp.Key, RoleNames = gp.Select(x => x.Name).ToArray()
-            }).ToListAsync(GetCancellationToken(cancellationToken));
+            }).ToListAsync(cancellationToken: cancellationToken);
+        
+        var orgUnitRoles = await (from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+            join roleOu in dbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
+            join role in dbContext.Roles on roleOu.RoleId equals role.Id
+            where userIds.Contains(userOu.UserId)
+            group new
+            {
+                userOu.UserId,
+                role.Name
+            } by userOu.UserId
+            into gp
+            select new IdentityUserIdWithRoleNames
+            {
+                Id = gp.Key, RoleNames = gp.Select(x => x.Name).ToArray()
+            }).ToListAsync(cancellationToken: cancellationToken);
+        
+        return userRoles.Concat(orgUnitRoles).GroupBy(x => x.Id).Select(x => new IdentityUserIdWithRoleNames {Id = x.Key, RoleNames = x.SelectMany(y => y.RoleNames).Distinct().ToArray()}).ToList();
     }
 
     public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(

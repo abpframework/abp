@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "Nie możesz się zalogować! Twoje konto jest nieaktywne lub wymaga potwierdzenia adresu e-mail/numeru telefonu.",
     "InvalidUsername": "Nieprawidłowa nazwa użytkownika lub hasło!",
     "InvalidAuthenticatorCode": "Nieprawidłowy kod uwierzytelniający!",
+    "InvalidRecoveryCode": "Nieprawidłowy kod odzyskiwania!",
     "TheTargetUserIsNotLinkedToYou": "Docelowy użytkownik nie jest z Tobą powiązany!"
   }
 }

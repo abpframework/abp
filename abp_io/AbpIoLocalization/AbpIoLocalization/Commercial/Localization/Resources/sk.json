@@ -402,6 +402,7 @@
     "WhatHappensWhenLicenseEndsExplanation6": "Už nemôžete získať <a href=\"{0}\">prémiovú podporu</a>.",
     "WhatHappensWhenLicenseEndsExplanation7": "Ak chcete naďalej využívať tieto výhody, môžete si licenciu predĺžiť (obnoviť). Ak predĺžite svoju licenciu do <strong>30 dní</strong> po vypršaní platnosti licencie, budú sa uplatňovať nasledujúce zľavy: Tímová licencia {0}; Obchodná licencia {1}; Podniková licencia {2}",
     "BlazoriseLicense": "Musíme si kúpiť licenciu Blazorise?",
-    "BlazoriseLicenseExplanation": "Máme dohodu medzi spoločnosťami Volosoft a Megabit, na základe ktorej je licencia Blazorise pribalená k produktom ABP Commercial, preto si naši zákazníci nemusia kupovať ďalšiu licenciu Blazorise."
+    "BlazoriseLicenseExplanation": "Máme dohodu medzi spoločnosťami Volosoft a Megabit, na základe ktorej je licencia Blazorise pribalená k produktom ABP Commercial, preto si naši zákazníci nemusia kupovať ďalšiu licenciu Blazorise.",
+    "MultipleOrganizationInfo": "Pozrite si všetky vaše organizácie"
   }
 }

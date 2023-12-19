@@ -4,9 +4,14 @@
     "Features": "Caracteristici",
     "NoFeatureFoundMessage": "Nu există nicio caracteristică disponibilă.",
     "ManageHostFeatures": "Administraţi caracteristicile de host",
+    "ManageHostFeaturesText": "Puteți gestiona funcțiile din partea gazdă făcând clic pe următorul buton.",
     "Permission:FeatureManagement": "Administrare caracteristici",
     "Permission:FeatureManagement.ManageHostFeatures": "Gestionare caracteristici gazdă",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Valoarea {0} a caracteristicii nu este validă!",
-		"Menu:FeatureManagement": "Managementul caracteristicilor"
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Valoarea {0} a caracteristicii nu este validă!",
+    "Menu:FeatureManagement": "Managementul caracteristicilor",
+    "ResetToDefault": "Resetare la valorile implicite",
+    "ResetedToDefault": "Resetat la implicit",
+    "AreYouSure": "Esti sigur?",
+    "AreYouSureToResetToDefault": "Sunteți sigur că veți reveni la valorile implicite?"
   }
 }

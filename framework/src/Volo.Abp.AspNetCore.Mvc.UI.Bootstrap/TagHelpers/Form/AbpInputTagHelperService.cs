@@ -271,7 +271,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         if (string.IsNullOrEmpty(TagHelper.Label))
         {
-            return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox) + GetRequiredSymbol(context, output);
+            return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox);
         }
 
         var label = new TagBuilder("label");
@@ -289,7 +289,16 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
                 label.Attributes.Add("data-bs-html", "true");
             }
             label.Attributes.Add("title", TagHelper.LabelTooltip);
-            label.InnerHtml.AppendHtml($" <i class=\"bi {TagHelper.LabelTooltipIcon}\"></i>");
+            var iconClass = TagHelper.LabelTooltipIcon;
+            if (iconClass.StartsWith("bi-"))
+            {
+                iconClass = "bi " + iconClass;
+            }
+            else if (iconClass.StartsWith("fa-"))
+            {
+                iconClass = "fa " + iconClass;
+            }
+            label.InnerHtml.AppendHtml($" <i class=\"{iconClass}\"></i>");
         }
 
         return label.ToHtmlString();
@@ -372,8 +381,19 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         var innerOutput = await labelTagHelper.ProcessAndGetOutputAsync(attributeList, context, "label", TagMode.StartTagAndEndTag);
         if (!TagHelper.LabelTooltip.IsNullOrEmpty())
         {
-            innerOutput.Content.AppendHtml($" <i class=\"bi {TagHelper.LabelTooltipIcon}\"></i>");
+            var iconClass = TagHelper.LabelTooltipIcon;
+            if (iconClass.StartsWith("bi-"))
+            {
+                iconClass = "bi " + iconClass;
+            }
+            else if (iconClass.StartsWith("fa-"))
+            {
+                iconClass = "fa " + iconClass;
+            }
+            innerOutput.Content.AppendHtml($" <i class=\"{iconClass}\"></i>");
         }
+        
+        innerOutput.Content.AppendHtml(GetRequiredSymbol(context, output));
 
         return innerOutput.Render(_encoder);
     }

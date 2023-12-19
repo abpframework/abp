@@ -1,4 +1,5 @@
-<div *ngIf="actionList.length > 1" ngbDropdown container="body" class="d-inline-block">
+@if (actionList.length > 1) {
+<div ngbDropdown container="body" class="d-inline-block">
   <button
     class="btn btn-primary btn-sm dropdown-toggle"
     data-toggle="dropdown"
@@ -8,56 +9,58 @@
     <i [ngClass]="icon" [class.me-1]="icon"></i>{{ text | abpLocalization }}
   </button>
   <div ngbDropdownMenu>
-    <ng-container
-      *ngFor="let action of actionList; trackBy: trackByFn"
-      [ngTemplateOutlet]="dropDownBtnItemTmp"
-      [ngTemplateOutletContext]="{ $implicit: action }"
-    >
-    </ng-container>
+    @for (action of actionList; track action.text) {
+      <ng-container
+        [ngTemplateOutlet]="dropDownBtnItemTmp"
+        [ngTemplateOutletContext]="{ $implicit: action }"
+      >
+      </ng-container>
+    }
   </div>
 </div>
-
+} @if (actionList.length === 1) {
 <ng-container
-  *ngIf="actionList.length === 1"
   [ngTemplateOutlet]="btnTmp"
   [ngTemplateOutletContext]="{ $implicit: actionList.get(0).value }"
 ></ng-container>
+}
 
 <ng-template #dropDownBtnItemTmp let-action>
-  <ng-container *ngIf="action.visible(data)">
-    <button
-      ngbDropdownItem
-      *abpPermission="action.permission; runChangeDetection: false"
-      (click)="action.action(data)"
-      type="button"
-    >
-      <ng-container
-        *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
-      ></ng-container>
-    </button>
-  </ng-container>
+  @if (action.visible(data)) {
+  <button
+    ngbDropdownItem
+    *abpPermission="action.permission; runChangeDetection: false"
+    (click)="action.action(data)"
+    type="button"
+  >
+    <ng-container
+      *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
+    ></ng-container>
+  </button>
+  }
 </ng-template>
 
 <ng-template #buttonContentTmp let-action>
   <i [ngClass]="action.icon" [class.me-1]="action.icon"></i>
-  <span *ngIf="action.icon; else ellipsis">{{ action.text | abpLocalization }}</span>
-  <ng-template #ellipsis>
-    <div abpEllipsis>{{ action.text | abpLocalization }}</div>
-  </ng-template>
+  @if (action.icon) {
+  <span>{{ action.text | abpLocalization }}</span>
+  }@else {
+  <div abpEllipsis>{{ action.text | abpLocalization }}</div>
+  }
 </ng-template>
 
 <ng-template #btnTmp let-action>
-  <ng-container *ngIf="action.visible(data)">
-    <button
-      *abpPermission="action.permission; runChangeDetection: false"
-      (click)="action.action(data)"
-      type="button"
-      [class]="action.btnClass"
-      [style]="action.btnStyle"
-    >
-      <ng-container
-        *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
-      ></ng-container>
-    </button>
-  </ng-container>
+  @if (action.visible(data)) {
+  <button
+    *abpPermission="action.permission; runChangeDetection: false"
+    (click)="action.action(data)"
+    type="button"
+    [class]="action.btnClass"
+    [style]="action.btnStyle"
+  >
+    <ng-container
+      *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
+    ></ng-container>
+  </button>
+  }
 </ng-template>

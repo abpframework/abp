@@ -45,7 +45,7 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
             "MongoDB"
         );
-        
+
         ChangeNamespaceAndKeyword(
             context,
             "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyProjectNameAuthServerModule.cs",
@@ -194,6 +194,22 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             "MyProjectNameMongoDbCollectionFixtureBase"
         );
 
+        ChangeNamespaceAndKeyword(
+            context,
+            "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests/MyProjectNameWebTestModule.cs",
+            "MyCompanyName.MyProjectName.EntityFrameworkCore",
+            "MyCompanyName.MyProjectName.MongoDB",
+            "MyProjectNameEntityFrameworkCoreTestModule",
+            "MyProjectNameMongoDbTestModule"
+        );
+
+        ChangeProjectReference(
+            context,
+            "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests/MyCompanyName.MyProjectName.Web.Tests.csproj",
+            "EntityFrameworkCore",
+            "MongoDB"
+        );
+
         // TODO: remove this method after published 6.0.0
         ProvideIdentityServerBackwardCompatibility(context);
 
@@ -309,7 +325,7 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
 
         throw new ApplicationException("Could not find the 'Default' connection string in appsettings.json file!");
     }
-    
+
     // TODO: remove this method after published 6.0.0
     private void ProvideIdentityServerBackwardCompatibility(ProjectBuildContext context)
     {

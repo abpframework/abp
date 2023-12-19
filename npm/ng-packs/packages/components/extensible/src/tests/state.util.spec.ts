@@ -1,27 +1,30 @@
-import { ConfigStateService } from '@abp/ng.core';
-import { of } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { ePropType } from '../lib/enums/props.enum';
-import { EntityPropList } from '../lib/models/entity-props';
-import { FormPropList } from '../lib/models/form-props';
-import { ObjectExtensions } from '../lib/models/object-extensions';
+import {ConfigStateService} from '@abp/ng.core';
+import {firstValueFrom, of} from 'rxjs';
+import {take} from 'rxjs/operators';
+import {ePropType} from '../lib/enums/props.enum';
+import {EntityPropList} from '../lib/models/entity-props';
+import {FormPropList} from '../lib/models/form-props';
+import {ObjectExtensions} from '../lib/models/object-extensions';
 import {
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
 } from '../lib/utils/state.util';
 
-const fakeAppConfigService = { get: () => of(createMockState()) } as any;
-const fakeLocalizationService = { get: () => of(createMockState()) } as any;
-const configState = new ConfigStateService(fakeAppConfigService,fakeLocalizationService,false);
+const fakeAppConfigService = {get: () => of(createMockState())} as any;
+const fakeLocalizationService = {get: () => of(createMockState())} as any;
+const configState = new ConfigStateService(fakeAppConfigService, fakeLocalizationService, false);
 configState.refreshAppState();
 
 describe('State Utils', () => {
   describe('#getObjectExtensionEntitiesFromStore', () => {
     it('should return observable entities of an existing module', async () => {
-      const entities = await getObjectExtensionEntitiesFromStore(
+
+      const objectExtensionEntitiesFromStore$ = getObjectExtensionEntitiesFromStore(
         configState,
         'Identity',
-      ).toPromise();
+      )
+
+      const entities = await firstValueFrom(objectExtensionEntitiesFromStore$)
       expect('Role' in entities).toBe(true);
     });
 
@@ -31,7 +34,7 @@ describe('State Utils', () => {
     });
 
     it('should not emit when object extensions do not exist', done => {
-      const emptyConfigState = new ConfigStateService(null,null,false);
+      const emptyConfigState = new ConfigStateService(null, null, false);
       const emit = jest.fn();
 
       getObjectExtensionEntitiesFromStore(emptyConfigState, 'Identity').subscribe(emit);
@@ -114,7 +117,9 @@ function createMockState() {
         AbpIdentity: {},
       },
       defaultResourceName: 'Default',
-      currentCulture: null,
+      currentCulture: {
+        cultureName: 'en'
+      },
       languages: [],
     },
   };

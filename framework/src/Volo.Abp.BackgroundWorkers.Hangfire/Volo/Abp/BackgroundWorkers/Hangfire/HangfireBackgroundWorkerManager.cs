@@ -12,6 +12,7 @@ using Volo.Abp.Threading;
 namespace Volo.Abp.BackgroundWorkers.Hangfire;
 
 [Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IBackgroundWorkerManager), typeof(HangfireBackgroundWorkerManager))]
 public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISingletonDependency
 {
     protected AbpHangfireBackgroundJobServer BackgroundJobServer { get; set; } = default!;
@@ -22,10 +23,9 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
         ServiceProvider = serviceProvider;
     }
 
-    public async override Task StartAsync(CancellationToken cancellationToken = default)
+    public void Initialize()
     {
         BackgroundJobServer = ServiceProvider.GetRequiredService<AbpHangfireBackgroundJobServer>();
-        await base.StartAsync(cancellationToken);
     }
 
     public async override Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)

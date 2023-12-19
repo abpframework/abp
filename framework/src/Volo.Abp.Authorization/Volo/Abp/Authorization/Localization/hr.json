@@ -1,0 +1,10 @@
+{
+  "culture": "hr",
+  "texts": {
+    "Volo.Authorization:010001": "Autorizacija neuspjela! Dana politika nije odobrena.",
+    "Volo.Authorization:010002": "Autorizacija neuspjela! Dato pravilo nije odobreno: {PolicyName}",
+    "Volo.Authorization:010003": "Autorizacija neuspjela! Navedeno pravilo nije odobreno za navedeni resurs: {ResourceName}",
+    "Volo.Authorization:010004": "Autorizacija neuspjela! Navedeni zahtjev nije odobren za navedeni resurs: {ResourceName}",
+    "Volo.Authorization:010005": "Autorizacija neuspjela! Zadani zahtjevi nisu odobreni za navedeni resurs: {ResourceName}"
+  }
+}

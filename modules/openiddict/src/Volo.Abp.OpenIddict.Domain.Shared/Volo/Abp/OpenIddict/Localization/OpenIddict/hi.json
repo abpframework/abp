@@ -1,0 +1,15 @@
+{
+  "culture": "hi",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "OpenID कनेक्ट अनुरोध पुनर्प्राप्त नहीं किया जा सकता.",
+    "TheUserDetailsCannotBbeRetrieved": "उपयोगकर्ता विवरण पुनर्प्राप्त नहीं किया जा सकता.",
+    "TheApplicationDetailsCannotBeFound": "आवेदन विवरण नहीं मिल सका.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "कॉलिंग क्लाइंट एप्लिकेशन से संबंधित विवरण नहीं मिल सका।",
+    "TheSpecifiedGrantTypeIsNotImplemented": "निर्दिष्ट अनुदान प्रकार {0} लागू नहीं किया गया है.",
+    "Authorization": "प्राधिकार",
+    "DoYouWantToGrantAccessToYourData": "क्या आप {0} को अपने डेटा तक पहुंच प्रदान करना चाहते हैं?",
+    "ScopesRequested": "दायरे का अनुरोध किया गया",
+    "Accept": "स्वीकार करना",
+    "Deny": "अस्वीकार करना"
+  }
+}

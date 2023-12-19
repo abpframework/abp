@@ -19,6 +19,7 @@
     "Menu:Emailing": "信箱",
     "Menu:TimeZone": "時區",
     "DisplayName:Timezone": "時區",
+    "TimezoneHelpText": "此設置用於應用程序範圍或基於租戶。",
     "SmtpHost": "主機",
     "SmtpPort": "Port",
     "SmtpUserName": "帳號",

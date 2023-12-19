@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "फ़ोन नंबर",
     "PersonalSettings": "व्यक्तिगत सेटिंग",
     "PersonalSettingsSaved": "व्यक्तिगत सेटिंग्स सहेजे गए",
+    "PersonalSettingsChangedConfirmationModalTitle": "व्यक्तिगत जानकारी बदल दी गई",
+    "PersonalSettingsChangedConfirmationModalDescription": "अगर आप इन बदलावों को लागू करना चाहते हैं तो आपको लॉगइन करना होगा। क्या आप लॉग आउट करना चाहते हैं?",
     "PasswordChanged": "पासवर्ड बदला गया",
     "NewPasswordConfirmFailed": "कृपया नए पासवर्ड की पुष्टि करें।",
     "NewPasswordSameAsOld": "नया पासवर्ड वर्तमान पासवर्ड से एक ही होना चाहिए।",

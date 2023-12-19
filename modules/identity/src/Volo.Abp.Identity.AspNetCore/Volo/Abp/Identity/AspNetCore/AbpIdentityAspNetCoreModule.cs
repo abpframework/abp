@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using static Volo.Abp.Identity.AspNetCore.AbpSecurityStampValidatorCallback;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
@@ -40,5 +41,13 @@ public class AbpIdentityAspNetCoreModule : AbpModule
                 })
                 .AddIdentityCookies();
         }
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<SecurityStampValidatorOptions>(options =>
+        {
+            options.UpdatePrincipal();
+        });
     }
 }
