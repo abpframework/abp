@@ -24,7 +24,7 @@ import {
   IdentityEntityPropContributors,
   IdentityUserDto,
 } from '@abp/ng.identity';
-import { EntityProp, EntityPropList, ePropType } from '@abp/ng.theme.shared/extensions';
+import { EntityProp, EntityPropList, ePropType } from '@abp/ng.components/extensible';
 
 const nameProp = new EntityProp<IdentityUserDto>({
   type: ePropType.String,
@@ -93,7 +93,7 @@ import {
   IdentityEntityPropContributors,
   IdentityUserDto,
 } from '@abp/ng.identity';
-import { EntityProp, EntityPropList } from '@abp/ng.theme.shared/extensions';
+import { EntityProp, EntityPropList } from '@abp/ng.components/extensible';
 import { of } from 'rxjs';
 
 export function emailPropContributor(propList: EntityPropList<IdentityUserDto>) {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Connections;
@@ -54,10 +55,17 @@ public class AbpAspNetCoreSignalRModule : AbpModule
                     .GetRequiredService<IOptions<AbpSignalROptions>>()
                     .Value;
 
+                var hubWithRoutePatterns = new List<KeyValuePair<Type, string>>();
                 foreach (var hubConfig in signalROptions.Hubs)
                 {
                     routePatterns.AddIfNotContains(hubConfig.RoutePattern);
 
+                    if (hubWithRoutePatterns.Any(x => x.Key == hubConfig.HubType && x.Value == hubConfig.RoutePattern))
+                    {
+                        throw new AbpException($"The hub type {hubConfig.HubType.FullName} is already registered with route pattern {hubConfig.RoutePattern}");
+                    }
+
+                    hubWithRoutePatterns.Add(new KeyValuePair<Type, string>(hubConfig.HubType, hubConfig.RoutePattern));
                     MapHubType(
                         hubConfig.HubType,
                         endpointContext.Endpoints,

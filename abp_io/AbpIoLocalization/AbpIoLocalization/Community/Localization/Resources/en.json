@@ -254,7 +254,7 @@
     "Videos({0})": "Videos ({0})",
     "LatestArticles": "Latest Articles",
     "RaffleHeader": "Hello ABP Community Member!",
-    "RafflesInfo": "<br>This is the raffle page dedicated to show our appreciation towards you for being an active Community Member. We do <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">,ABP .NET Conference</a>, attend or sponsor to the .NET-related events in which we give away some gifts. <br><br>You can follow this page to see the upcoming raffles, attend them, or see previous raffles we draw including the winners. <br><br>Thank you for being an active member! See you in the upcoming raffles.",
+    "RafflesInfo": "<br>This is the raffle page dedicated to show our appreciation towards you for being an active Community Member. We do <a class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">,ABP .NET Conference</a>, attend or sponsor to the .NET-related events in which we give away some gifts. <br><br>You can follow this page to see the upcoming raffles, attend them, or see previous raffles we draw including the winners. <br><br>Thank you for being an active member! See you in the upcoming raffles.",
     "RafflesInfoTitle": "ABP Community <span class=\"gradient-community\">Raffles</span>"
   }
 }
