@@ -4,9 +4,14 @@
     "Features": "Funzionalità",
     "NoFeatureFoundMessage": "Non ci sono funzioni disponibili.",
     "ManageHostFeatures": "Gestisci le funzionalità dell'host",
+    "ManageHostFeaturesText": "È possibile gestire le funzionalità lato host facendo clic sul pulsante seguente.",
     "Permission:FeatureManagement": "Gestione funzionalità",
     "Permission:FeatureManagement.ManageHostFeatures": "Gestisci le funzionalità dell'host",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Il valore dell'elemento {0} non è valido!",
-		"Menu:FeatureManagement": "Gestione delle funzionalità"
+    "Menu:FeatureManagement": "Gestione delle funzionalità",
+    "ResetToDefault": "Riportare alle condizioni originali",
+    "ResetedToDefault": "Ripristinato alle impostazioni predefinite",
+    "AreYouSure": "Sei sicuro?",
+    "AreYouSureToResetToDefault": "Sei sicuro di ripristinare le impostazioni predefinite?"
   }
 }

@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Numéro de téléphone",
     "PersonalSettings": "Paramètres personnels",
     "PersonalSettingsSaved": "Paramètres personnels enregistrés",
+    "PersonalSettingsChangedConfirmationModalTitle": "Informations personnelles modifiées",
+    "PersonalSettingsChangedConfirmationModalDescription": "Si vous souhaitez appliquer ces modifications, vous devez vous connecter. Voulez-vous vous déconnecter ?",
     "PasswordChanged": "Mot de passe changé",
     "NewPasswordConfirmFailed": "Veuillez confirmer le nouveau mot de passe.",
     "NewPasswordSameAsOld": "Le nouveau mot de passe doit être différent de l'ancien.",

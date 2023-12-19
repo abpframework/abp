@@ -1,0 +1,15 @@
+{
+  "culture": "hr",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Zahtjev za OpenID Connect ne može se dohvatiti.",
+    "TheUserDetailsCannotBbeRetrieved": "Podaci o korisniku se ne mogu dohvatiti.",
+    "TheApplicationDetailsCannotBeFound": "Pojedinosti o prijavi se ne mogu pronaći.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Pojedinosti o pozivnoj klijentskoj aplikaciji nije moguće pronaći.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Navedena vrsta odobrenja {0} nije implementirana.",
+    "Authorization": "Autorizacija",
+    "DoYouWantToGrantAccessToYourData": "Želite li {0} odobriti pristup vašim podacima?",
+    "ScopesRequested": "Traženi dometi",
+    "Accept": "Prihvatiti",
+    "Deny": "poreći"
+  }
+}

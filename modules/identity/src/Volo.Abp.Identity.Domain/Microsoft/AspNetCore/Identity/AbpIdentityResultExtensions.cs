@@ -122,7 +122,7 @@ public static class AbpIdentityResultExtensions
             }
         }
 
-        return localizer["Identity.Default"];
+        return localizer["Volo.Abp.Identity:DefaultError"];
     }
 
     public static string GetResultAsString(this SignInResult signInResult)

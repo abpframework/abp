@@ -138,8 +138,8 @@ if (book1.EntityEquals(book2)) //Check equality
 
 ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement the [Domain Driven Design](Domain-Driven-Design.md) and want to create aggregate root classes, there are some best practices you may want to consider:
 
-* An aggregate root is responsible to preserve it's own integrity. This is also true for all entities, but aggregate root has responsibility for it's sub entities too. So, the aggregate root must always be in a valid state.
-* An aggregate root can be referenced by it's Id. Do not reference it by it's navigation property.
+* An aggregate root is responsible for preserving its own integrity. This is also true for all entities, but the aggregate root has responsibility for its sub-entities too. So, the aggregate root must always be in a valid state.
+* An aggregate root can be referenced by its `Id`. Do not reference it by its navigation property.
 * An aggregate root is treated as a single unit. It's retrieved and updated as a single unit. It's generally considered as a transaction boundary.
 * Work with sub-entities over the aggregate root- do not modify them independently.
 
@@ -241,7 +241,7 @@ While this example may not implement all the best practices of an aggregate root
 * `Order` has a public constructor that takes **minimal requirements** to construct an `Order` instance. So, it's not possible to create an order without an id and reference number. The **protected/private** constructor is only necessary to **deserialize** the object while reading from a data source.
 * `OrderLine` constructor is internal, so it is only allowed to be created by the domain layer. It's used inside of the `Order.AddProduct` method.
 * `Order.AddProduct` implements the business rule to add a product to an order.
-* All properties have `protected` setters. This is to prevent the entity from arbitrary changes from outside of the entity. For example, it would be dangerous to set `TotalItemCount` without adding a new product to the order. It's value is maintained by the `AddProduct` method.
+* All properties have `protected` setters. This is to prevent the entity from arbitrary changes from outside of the entity. For example, it would be dangerous to set `TotalItemCount` without adding a new product to the order. Its value is maintained by the `AddProduct` method.
 
 ABP Framework does not force you to apply any DDD rule or patterns. However, it tries to make it possible and easier when you do want to apply them. The documentation also follows the same principle.
 

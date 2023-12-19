@@ -1,5 +1,8 @@
 {
   "culture": "ro-RO",
   "texts": {
+    "AbpTitle": "Citiți toate postările de pe blog",
+    "AbpDescription": "ABP este un cadru de aplicații open source axat pe dezvoltarea de aplicații web bazate pe AspNet Core. Nu te repeta, concentrează-te pe propriul tău cod de afaceri.",
+    "AbpDefinition": "Blog ABP pentru dezvoltare .NET, multi-platformă, șabloane de aplicații ASP.NET, știri legate de ABP și multe altele..."
   }
 }

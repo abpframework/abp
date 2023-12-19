@@ -1,10 +1,11 @@
 {
-	"culture": "zh-Hant",
-	"texts": {
-		"Permissions": "權限",
-		"OnlyProviderPermissons": "只有這個提供者",
-		"All": "全部",
-		"SelectAllInAllTabs": "授予所有權限",
-		"SelectAllInThisTab": "全選"
-	}
+  "culture": "zh-Hant",
+  "texts": {
+    "Permissions": "權限",
+    "OnlyProviderPermissons": "只有這個提供者",
+    "All": "全部",
+    "SelectAllInAllTabs": "授予所有權限",
+    "SelectAllInThisTab": "全選",
+    "SaveWithoutAnyPermissionsWarningMessage": "您確定要在沒有任何權限的情況下保存嗎？"
+  }
 }

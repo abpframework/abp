@@ -24,7 +24,7 @@ import {
   IdentityToolbarActionContributors
 } from '@abp/ng.identity';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
-import { ToolbarAction, ToolbarActionList } from '@abp/ng.theme.shared/extensions';
+import { ToolbarAction, ToolbarActionList } from '@abp/ng.components/extensible';
 
 const logUserNames = new ToolbarAction<IdentityUserDto[]>({
   text: 'Click Me!',
@@ -94,7 +94,7 @@ We need to have a component before we can pass it to the toolbar action contribu
 // src/app/click-me-button.component.ts
 
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
-import { ActionData, EXTENSIONS_ACTION_DATA } from '@abp/ng.theme.shared/extensions';
+import { ActionData, EXTENSIONS_ACTION_DATA } from '@abp/ng.components/extensible';
 import { Component, Inject } from '@angular/core';
 
 @Component({
@@ -116,7 +116,7 @@ export class ClickMeButtonComponent {
 
 Here, `EXTENSIONS_ACTION_DATA` token provides us the context from the page toolbar. Therefore, we are able to reach the page data via `record`, which is an array of users, i.e. `IdentityUserDto[]`.
 
-> We could also import `EXTENSIONS_ACTION_CALLBACK` from **@abp/ng.theme.shared/extensions** package, which is a higher order function that triggers the predefined `action` when called. It passes `ActionData` as the first parameter, so you do not have to pass it explicitly. In other words, `EXTENSIONS_ACTION_CALLBACK` can be called without any parameters and it will not fail.
+> We could also import `EXTENSIONS_ACTION_CALLBACK` from **@abp/ng.components/extensible** package, which is a higher order function that triggers the predefined `action` when called. It passes `ActionData` as the first parameter, so you do not have to pass it explicitly. In other words, `EXTENSIONS_ACTION_CALLBACK` can be called without any parameters and it will not fail.
 
 ### Step 2. Create Toolbar Action Contributors
 
@@ -130,7 +130,7 @@ import {
   IdentityToolbarActionContributors
 } from '@abp/ng.identity';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
-import { ToolbarActionList, ToolbarComponent } from '@abp/ng.theme.shared/extensions';
+import { ToolbarActionList, ToolbarComponent } from '@abp/ng.components/extensible';
 import { ClickMeButtonComponent } from './click-me-button.component';
 
 const logUserNames = new ToolbarComponent<IdentityUserDto[]>({

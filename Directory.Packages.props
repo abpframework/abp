@@ -113,12 +113,12 @@
     <PackageVersion Include="NUglify" Version="1.21.0" />
     <PackageVersion Include="Nullable" Version="1.3.1" />
     <PackageVersion Include="Octokit" Version="9.0.0" />
-    <PackageVersion Include="OpenIddict.Abstractions" Version="4.10.0" />
-    <PackageVersion Include="OpenIddict.Core" Version="4.10.0" />
-    <PackageVersion Include="OpenIddict.Server.AspNetCore" Version="4.10.0" />
-    <PackageVersion Include="OpenIddict.Validation.AspNetCore" Version="4.10.0" />
-    <PackageVersion Include="OpenIddict.Validation.ServerIntegration" Version="4.10.0" />
-    <PackageVersion Include="Oracle.EntityFrameworkCore" Version="7.21.12" />
+    <PackageVersion Include="OpenIddict.Abstractions" Version="5.0.0" />
+    <PackageVersion Include="OpenIddict.Core" Version="5.0.0" />
+    <PackageVersion Include="OpenIddict.Server.AspNetCore" Version="5.0.0" />
+    <PackageVersion Include="OpenIddict.Validation.AspNetCore" Version="5.0.0" />
+    <PackageVersion Include="OpenIddict.Validation.ServerIntegration" Version="5.0.0" />
+    <PackageVersion Include="Oracle.EntityFrameworkCore" Version="8.21.121" />
     <PackageVersion Include="Polly" Version="8.2.0" />
     <PackageVersion Include="Polly.Extensions.Http" Version="3.0.0" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0-beta.2" />

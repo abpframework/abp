@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "Et saa kirjautua sisään! Tilisi on passiivinen tai sinun on vahvistettava sähköpostiosoitteesi/puhelinnumerosi.",
     "InvalidUsername": "Väärä käyttäjänimi tai salasana!",
     "InvalidAuthenticatorCode": "Virheellinen todennuskoodi!",
+    "InvalidRecoveryCode": "Virheellinen palautuskoodi!",
     "TheTargetUserIsNotLinkedToYou": "Kohdekäyttäjä ei ole linkitetty sinuun!"
   }
 }

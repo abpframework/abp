@@ -101,10 +101,10 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
     private byte[] GenerateInternal(string stringText, CaptchaOptions options)
     {
         var random = new Random();
-        var fontName = MagickNET.FontNames.First();
+        var family = MagickNET.FontFamilies.First();
         
         var drawables = new Drawables()
-            .Font(fontName, options.FontStyle, FontWeight.Normal, FontStretch.Normal)
+            .Font(family, options.FontStyle, FontWeight.Normal, FontStretch.Normal)
             .FontPointSize(options.FontSize)
             .StrokeColor(MagickColors.Transparent);
 

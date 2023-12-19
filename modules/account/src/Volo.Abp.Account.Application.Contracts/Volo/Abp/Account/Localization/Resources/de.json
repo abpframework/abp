@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefonnummer",
     "PersonalSettings": "Persönliche Einstellungen",
     "PersonalSettingsSaved": "Persönliche Einstellungen gespeichert",
+    "PersonalSettingsChangedConfirmationModalTitle": "Persönliche Daten geändert",
+    "PersonalSettingsChangedConfirmationModalDescription": "Wenn Sie diese Änderungen übernehmen möchten, müssen Sie sich anmelden. Möchten Sie sich abmelden?",
     "PasswordChanged": "Passwort geändert",
     "NewPasswordConfirmFailed": "Bitte bestätigen Sie das neue Passwort.",
     "NewPasswordSameAsOld": "Das neue Passwort muss sich vom alten Passwort unterscheiden.",

@@ -13,6 +13,7 @@ export namespace ABP {
     tenantKey?: string;
     localizations?: Localization[];
     othersGroup?: string;
+    dynamicLayouts?: Map<string, string>;
   }
 
   export interface Child {

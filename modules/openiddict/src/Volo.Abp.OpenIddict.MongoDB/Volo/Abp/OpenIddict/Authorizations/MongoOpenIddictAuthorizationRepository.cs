@@ -71,7 +71,7 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
             .As<IMongoQueryable<OpenIddictAuthorization>>().ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
+    public virtual async Task<long> PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
         var tokenIds = await (await GetMongoQueryableAsync<OpenIddictToken>(cancellationToken))
             .Where(x => x.AuthorizationId != null)
@@ -107,5 +107,6 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
         }
 
         await DeleteManyAsync(authorizations, cancellationToken: cancellationToken);
+        return authorizations.Count;
     }
 }

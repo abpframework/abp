@@ -1,0 +1,6 @@
+{
+  "culture": "hr",
+  "texts": {
+    "Volo.Abp.Http.DynamicProxying:10001": "Poslovni izuzetak s podacima: {0}"
+  }
+}

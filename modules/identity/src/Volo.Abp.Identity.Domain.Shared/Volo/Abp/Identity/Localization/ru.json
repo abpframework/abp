@@ -56,6 +56,7 @@
     "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Пароль должен иметь по крайней мере один не буквенно-цифровой символ.",
     "Volo.Abp.Identity:PasswordRequiresUpper": "Пароль должен иметь хотя бы одну букву верхнего регистра.",
     "Volo.Abp.Identity:PasswordTooShort": "Пароль должен содержать не менее {0} символов.",
+    "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Пароль должен содержать по крайней мере {0} уникальных символов.",
     "Volo.Abp.Identity:RoleNotFound": "Роль {0} не существует.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "У пользователя уже установлен пароль.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Пользователь уже имеет роль '{0}'.",
@@ -64,6 +65,8 @@
     "Volo.Abp.Identity:UserNameNotFound": "Пользователь {0} не существует.",
     "Volo.Abp.Identity:UserNotInRole": "Пользователь не имеет роль '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Пароли не совпадают.",
+    "Volo.Abp.Identity:NullSecurityStamp": "Пользовательский штамп безопасности не может быть нулевым.",
+    "Volo.Abp.Identity:RecoveryCodeRedemptionFailed": "Не удалось восстановить код.",
     "Volo.Abp.Identity:010001": "Вы не можете удалить свой собственный аккаунт!",
     "Volo.Abp.Identity:010002": "Невозможно установить для пользователя более {MaxUserMembershipCount} организационной единицы!",
     "Volo.Abp.Identity:010003": "Невозможно изменить пароль пользователя, вошедшего в систему извне!",
@@ -114,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Может ли пользователь подтвердить phoneNumber.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Требуется ли для входа в систему подтвержденный номер телефона.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Может ли пользователь обновить имя пользователя.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Может ли электронная почта быть обновлена пользователем."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Может ли электронная почта быть обновлена пользователем.",
+    "Details": "Подробности",
+    "CreatedBy": "Сделано",
+    "ModifiedBy": "Модифицирован",
+    "ModificationTime": "Время модификации",
+    "PasswordUpdateTime": "Время обновления пароля",
+    "LockoutEndTime": "Время окончания блокировки",
+    "FailedAccessCount": "Количество неудачных попыток доступа"
   }
 }

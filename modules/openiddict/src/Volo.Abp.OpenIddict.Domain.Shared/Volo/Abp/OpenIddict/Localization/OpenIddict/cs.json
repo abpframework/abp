@@ -1,0 +1,15 @@
+{
+  "culture": "cs",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Požadavek OpenID Connect nelze načíst.",
+    "TheUserDetailsCannotBbeRetrieved": "Údaje o uživateli nelze získat.",
+    "TheApplicationDetailsCannotBeFound": "Podrobnosti aplikace nelze nalézt.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Podrobnosti týkající se aplikace volajícího klienta nelze nalézt.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Zadaný typ grantu {0} není implementován.",
+    "Authorization": "Oprávnění",
+    "DoYouWantToGrantAccessToYourData": "Chcete uživateli {0} udělit přístup ke svým datům?",
+    "ScopesRequested": "Požadované rozsahy",
+    "Accept": "Akceptovat",
+    "Deny": "Odmítnout"
+  }
+}
