@@ -10,4 +10,4 @@ foreach ($folder in $folders) {
     Compress-Archive -Path $folder.FullName -DestinationPath $zipFile
 }
 
-Write-Host "All templates have been compressed (zipped)."
+Write-Host "All templates have been zipped."
