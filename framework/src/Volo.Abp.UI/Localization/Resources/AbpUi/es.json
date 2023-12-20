@@ -51,6 +51,12 @@
     "ManageYourAccount": "Administrar cuenta",
     "OthersGroup": "Otra",
     "Today": "Hoy",
-    "Apply": "Aplicar"
+    "Apply": "Aplicar",
+    "InternetConnectionInfo": "No se pudo realizar la operación. Tu conexión a Internet no está disponible en este momento.",
+    "CopiedToTheClipboard": "Copiado al portapapeles",
+    "AddNew": "Agregar nuevo",
+    "ProfilePicture": "Foto de perfil",
+    "Theme": "Tema",
+    "NotAssigned": "No asignado"
   }
 }

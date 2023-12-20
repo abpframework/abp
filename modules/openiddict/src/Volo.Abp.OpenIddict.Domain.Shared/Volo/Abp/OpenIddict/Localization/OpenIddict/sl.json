@@ -1,0 +1,15 @@
+{
+  "culture": "sl",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Zahteve OpenID Connect ni mogoče pridobiti.",
+    "TheUserDetailsCannotBbeRetrieved": "Podatkov o uporabniku ni mogoče pridobiti.",
+    "TheApplicationDetailsCannotBeFound": "Podrobnosti o aplikaciji ni mogoče najti.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Podrobnosti o klicni odjemalski aplikaciji ni mogoče najti.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Navedena vrsta odobritve {0} ni implementirana.",
+    "Authorization": "Pooblastilo",
+    "DoYouWantToGrantAccessToYourData": "Ali želite aplikaciji {0} omogočiti dostop do vaših podatkov?",
+    "ScopesRequested": "Zahtevani obsegi",
+    "Accept": "Sprejmi",
+    "Deny": "Zanikati"
+  }
+}

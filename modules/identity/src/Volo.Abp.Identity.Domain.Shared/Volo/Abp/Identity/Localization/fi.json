@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Voiko käyttäjä vahvistaa puhelinnumeron.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Tarvitaanko sisäänkirjautumisen yhteydessä vahvistettu puhelinnumero.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Voiko käyttäjä päivittää käyttäjänimen?",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Voiko käyttäjä päivittää sähköpostin."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Voiko käyttäjä päivittää sähköpostin.",
+    "Details": "Yksityiskohdat",
+    "CreatedBy": "Luonut",
+    "ModifiedBy": "Muokannut",
+    "ModificationTime": "Muutosaika",
+    "PasswordUpdateTime": "Salasanan päivityksen aika",
+    "LockoutEndTime": "Lukituksen päättymisaika",
+    "FailedAccessCount": "Epäonnistuneet käyttöoikeudet"
   }
 }

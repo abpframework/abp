@@ -2,6 +2,11 @@
   "culture": "is",
   "texts": {
     "ThisFieldIsRequired": "Þessi reitur er nauðsynlegur",
-    "MaxLenghtErrorMessage": "Þessi reitur getur að hámarki verið '{0}' stafir"
+    "MaxLenghtErrorMessage": "Þessi reitur getur að hámarki verið '{0}' stafir",
+    "Enum:BookType.Undefined": "Óskilgreint frá ValidationResource",
+    "Enum:BookType.0": "Óskilgreint með gildi 0 frá ValidationResource",
+    "BookType.Adventure": "Ævintýri frá ValidationResource",
+    "BookType.1": "Ævintýri með gildi 1 frá ValidationResource",
+    "Biography": "Ævisaga frá ValidationResource"
   }
 }

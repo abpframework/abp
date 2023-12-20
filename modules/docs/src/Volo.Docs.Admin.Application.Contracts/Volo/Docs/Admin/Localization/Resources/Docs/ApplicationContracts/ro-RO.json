@@ -56,6 +56,7 @@
     "FileName": "Nume fişier",
     "LastCachedTime": "Durată cache",
     "Project": "Proiect",
+    "AdvancedFilters": "Filtre avansate",
     "RemoveCacheAndReIndexConfirmation": "Documentul \"{0}\" va fi eliminat din memoria cache și va fi reindexat. Confirmați?"
   }
 }

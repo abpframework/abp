@@ -56,6 +56,7 @@
     "FileName": "Nazwa pliku",
     "LastCachedTime": "Czas w pamięci podręcznej",
     "Project": "Projekt",
+    "AdvancedFilters": "Zaawansowane filtry",
     "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" zostanie usunięty z pamięci podręcznej i ponownie zaindeksowany. Czy potwierdzasz?"
   }
 }

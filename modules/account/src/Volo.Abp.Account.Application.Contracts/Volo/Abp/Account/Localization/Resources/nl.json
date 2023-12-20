@@ -1,6 +1,7 @@
 {
   "culture": "nl",
   "texts": {
+    "Menu:Account": "Rekening",
     "UserName": "Gebruikersnaam",
     "EmailAddress": "E-mailadres",
     "UserNameOrEmailAddress": "Gebruikersnaam of e-mailadres",
@@ -33,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefoonnummer",
     "PersonalSettings": "Persoonlijke instellingen",
     "PersonalSettingsSaved": "Persoonlijke instellingen opgeslagen",
+    "PersonalSettingsChangedConfirmationModalTitle": "Persoonlijke gegevens gewijzigd",
+    "PersonalSettingsChangedConfirmationModalDescription": "Als u deze wijzigingen wilt toepassen, moet u inloggen. Wilt u uitloggen?",
     "PasswordChanged": "Wachtwoord veranderd",
     "NewPasswordConfirmFailed": "Bevestig het nieuwe wachtwoord a.u.b.",
     "NewPasswordSameAsOld": "Het nieuwe wachtwoord moet verschillen van het huidige wachtwoord.",

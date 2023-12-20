@@ -51,6 +51,12 @@
     "ManageYourAccount": "إدارة حسابك",
     "OthersGroup": "آخرون",
     "Today": "اليوم",
-    "Apply": "يتقدم"
+    "Apply": "يتقدم",
+    "InternetConnectionInfo": "لا يمكن تنفيذ العملية. اتصالك بالإنترنت غير متوفر في الوقت الراهن.",
+    "CopiedToTheClipboard": "تم النسخ إلى الحافظة",
+    "AddNew": "اضف جديد",
+    "ProfilePicture": "الصوره الشخصيه",
+    "Theme": "سمة",
+    "NotAssigned": "غيرمعتمد"
   }
 }

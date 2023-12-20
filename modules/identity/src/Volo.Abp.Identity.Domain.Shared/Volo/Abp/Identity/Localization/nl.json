@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Of het telefoonnummer kan worden bevestigd door de gebruiker.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Of een bevestigd telefoonnummer vereist is om in te loggen.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Of de gebruikersnaam kan worden bijgewerkt door de gebruiker.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Of de e-mail door de gebruiker kan worden veranderd."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Of de e-mail door de gebruiker kan worden veranderd.",
+    "Details": "Details",
+    "CreatedBy": "Gemaakt door",
+    "ModifiedBy": "Aangepast door",
+    "ModificationTime": "Wijzigingstijd",
+    "PasswordUpdateTime": "Tijd voor het bijwerken van het wachtwoord",
+    "LockoutEndTime": "Eindtijd uitsluiting",
+    "FailedAccessCount": "Aantal mislukte toegangen"
   }
 }

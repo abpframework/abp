@@ -39,6 +39,7 @@
     "ExtraProperties": "अतिरिक्त गुण",
     "MaxDuration": "मैक्स। समयांतराल",
     "MinDuration": "मिन। समयांतराल",
+    "MinMaxDuration": "अवधि (न्यूनतम - अधिकतम)",
     "{0}Milliseconds": "{0} मिलीसेकंड",
     "ExecutionTime": "समय",
     "Parameters": "मापदंडों",

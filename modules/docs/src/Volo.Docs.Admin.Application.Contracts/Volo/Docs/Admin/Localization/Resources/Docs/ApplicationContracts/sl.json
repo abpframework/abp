@@ -55,6 +55,8 @@
     "LanguageCode": "Jezikovna koda",
     "FileName": "Ime datoteke",
     "LastCachedTime": "Čas pred pomnilnika",
-    "Project": "Projekt"
+    "Project": "Projekt",
+    "AdvancedFilters": "Napredni filtri",
+    "RemoveCacheAndReIndexConfirmation": "Dokument »{0}« bo odstranjen iz predpomnilnika in ponovno indeksiran. Ali potrjuješ?"
   }
 }

@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "Nemáte povolenie sa prihlásiť! Váš účet je neaktívny alebo potrebuje potvrdiť váš e -mail/telefónne číslo.",
     "InvalidUsername": "Nesprávne používateľské meno alebo heslo!",
     "InvalidAuthenticatorCode": "Neplatný overovací kód!",
+    "InvalidRecoveryCode": "Neplatný kód na obnovenie!",
     "TheTargetUserIsNotLinkedToYou": "Cieľový používateľ nie je s vami prepojený!"
   }
 }

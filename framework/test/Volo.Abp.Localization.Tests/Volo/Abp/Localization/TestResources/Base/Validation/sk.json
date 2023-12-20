@@ -2,6 +2,11 @@
   "culture": "sk",
   "texts": {
     "ThisFieldIsRequired": "Toto pole je povinné",
-    "MaxLenghtErrorMessage": "Toto pole môže mať maximálne '{0}' znakov"
+    "MaxLenghtErrorMessage": "Toto pole môže mať maximálne '{0}' znakov",
+    "Enum:BookType.Undefined": "Nedefinované z ValidationResource",
+    "Enum:BookType.0": "Nedefinované s hodnotou 0 z ValidationResource",
+    "BookType.Adventure": "Dobrodružstvo z ValidationResource",
+    "BookType.1": "Dobrodružstvo s hodnotou 1 z ValidationResource",
+    "Biography": "Životopis z ValidationResource"
   }
 }

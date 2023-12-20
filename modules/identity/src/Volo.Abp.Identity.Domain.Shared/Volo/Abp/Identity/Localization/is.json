@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Hvort notandinn getur staðfest símanúmerið.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Hvort nauðsynlegt sé að staðfesta símanúmer til að geta skrá sig inn.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Hvort notandi geti uppfært notanda nafnið sitt.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Hvort notandinn getur uppfært tölvupóstfangið sitt."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Hvort notandinn getur uppfært tölvupóstfangið sitt.",
+    "Details": "Upplýsingar",
+    "CreatedBy": "Búið til af",
+    "ModifiedBy": "Breytt af",
+    "ModificationTime": "Breytingartími",
+    "PasswordUpdateTime": "Uppfærslutími lykilorðs",
+    "LockoutEndTime": "Lokatími lokunar",
+    "FailedAccessCount": "Misheppnuð fjöldi aðgangs"
   }
 }

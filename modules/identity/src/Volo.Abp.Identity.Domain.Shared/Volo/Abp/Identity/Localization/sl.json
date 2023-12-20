@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Ali lahko uporabnik potrdi telefonsko številko.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Ali je za prijavo potrebna potrjena telefonska številka.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Ali lahko uporabnik posodobi uporabniško ime.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Ali lahko uporabnik posodobi e-poštni naslov."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Ali lahko uporabnik posodobi e-poštni naslov.",
+    "Details": "Podrobnosti",
+    "CreatedBy": "Ustvaril",
+    "ModifiedBy": "Spremenil",
+    "ModificationTime": "Čas spreminjanja",
+    "PasswordUpdateTime": "Čas posodobitve gesla",
+    "LockoutEndTime": "Končni čas zaklepanja",
+    "FailedAccessCount": "Število neuspešnih dostopov"
   }
 }

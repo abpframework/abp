@@ -1,0 +1,15 @@
+{
+  "culture": "sk",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Požiadavku OpenID Connect nie je možné získať.",
+    "TheUserDetailsCannotBbeRetrieved": "Údaje o používateľovi nie je možné získať.",
+    "TheApplicationDetailsCannotBeFound": "Podrobnosti aplikácie nie je možné nájsť.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Podrobnosti týkajúce sa aplikácie volajúceho klienta nemožno nájsť.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Zadaný typ grantu {0} nie je implementovaný.",
+    "Authorization": "Autorizácia",
+    "DoYouWantToGrantAccessToYourData": "Chcete používateľovi {0} udeliť prístup k svojim údajom?",
+    "ScopesRequested": "Požadované rozsahy",
+    "Accept": "súhlasiť",
+    "Deny": "Odmietnuť"
+  }
+}

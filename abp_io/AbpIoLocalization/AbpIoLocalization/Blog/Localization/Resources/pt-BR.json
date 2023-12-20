@@ -1,5 +1,8 @@
 {
   "culture": "pt-BR",
   "texts": {
+    "AbpTitle": "Leia todas as postagens do blog",
+    "AbpDescription": "ABP é uma estrutura de aplicativos de código aberto focada no desenvolvimento de aplicativos da web baseados em AspNet Core. Não se repita, concentre-se no seu próprio código comercial.",
+    "AbpDefinition": "Blog da ABP para desenvolvimento .NET, plataforma cruzada, modelos de aplicativos ASP.NET, notícias relacionadas à ABP e muito mais..."
   }
 }
