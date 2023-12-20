@@ -1,6 +1,6 @@
 # ABP.IO Platform 8.0 Has Been Released Based on .NET 8.0
 
-[ABP Framework](https://abp.io/) and [ABP Commercial](https://commercial.abp.io/) 8.0 versions have been released today.
+Today, [ABP Framework](https://abp.io/) and [ABP Commercial](https://commercial.abp.io/) 8.0 versions have been released based on [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
 
 ## What's New With Version 8.0?
 
@@ -66,7 +66,7 @@ Through this event, we gained a lot and felt the enthusiasm and support of the d
 
 ![](awards.jpeg)
 
-2023 was the year for ABP.IO to strive with the community. On top of last years' [Software Advice's Front Runner of Application Development in 2022](https://blog.abp.io/abp/abpcommercial-2022-front-runner-in-app-development-category) and [GetApp's Application Development Category Leader in 2022](https://blog.abp.io/abp/abpcommercial-2022-category-leader-in-app-development-category), we won **5 awards** this year from **Gartner**!
+2023 was the year for ABP.IO to strive with the community. On top of last year's [Software Advice's Front Runner of Application Development in 2022](https://blog.abp.io/abp/abpcommercial-2022-front-runner-in-app-development-category) and [GetApp's Application Development Category Leader in 2022](https://blog.abp.io/abp/abpcommercial-2022-category-leader-in-app-development-category), we won **5 awards** this year from **Gartner**!
 
 > If you are interested in these awards and want to learn more, you can check out our [blog post](https://blog.abp.io/abp/ABP-Commercial-Won-5-Recognitions-from-Gartner-in-2023)!
 
