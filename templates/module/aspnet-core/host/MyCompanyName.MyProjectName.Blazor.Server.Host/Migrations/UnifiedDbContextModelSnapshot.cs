@@ -1325,6 +1325,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name");
