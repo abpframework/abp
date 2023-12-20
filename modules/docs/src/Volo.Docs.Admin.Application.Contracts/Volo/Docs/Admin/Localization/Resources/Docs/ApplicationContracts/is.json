@@ -56,6 +56,7 @@
     "FileName": "Skráar nafn",
     "LastCachedTime": "Tími geymt í skyndiminni",
     "Project": "Verkefni",
+    "AdvancedFilters": "Ítarlegar síur",
     "RemoveCacheAndReIndexConfirmation": "Skjalið \"{0}\" verður fjarlægt úr skyndiminni og endurtryggt. Staðfestir þú?"
   }
 }

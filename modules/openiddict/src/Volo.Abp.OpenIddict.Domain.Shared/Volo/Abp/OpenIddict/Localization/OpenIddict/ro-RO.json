@@ -1,0 +1,15 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Solicitarea OpenID Connect nu poate fi preluată.",
+    "TheUserDetailsCannotBbeRetrieved": "Detaliile utilizatorului nu pot fi preluate.",
+    "TheApplicationDetailsCannotBeFound": "Detaliile aplicației nu pot fi găsite.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Detaliile referitoare la aplicația client care apelează nu pot fi găsite.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Tipul de acordare specificat {0} nu este implementat.",
+    "Authorization": "Autorizare",
+    "DoYouWantToGrantAccessToYourData": "Doriți să acordați acces {0} la datele dvs.?",
+    "ScopesRequested": "Domenii de aplicare solicitate",
+    "Accept": "Accept",
+    "Deny": "Negați"
+  }
+}

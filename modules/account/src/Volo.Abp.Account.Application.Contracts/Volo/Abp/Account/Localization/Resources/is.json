@@ -1,6 +1,7 @@
 {
   "culture": "is",
   "texts": {
+    "Menu:Account": "Reikningur",
     "UserName": "Notandanafn",
     "EmailAddress": "Netfang",
     "UserNameOrEmailAddress": "Notandanafn eða netfang",
@@ -33,6 +34,8 @@
     "DisplayName:PhoneNumber": "Símanúmer",
     "PersonalSettings": "Persónulegar stillingar",
     "PersonalSettingsSaved": "Persónulegar stillingar vistaðar",
+    "PersonalSettingsChangedConfirmationModalTitle": "Persónuupplýsingum breytt",
+    "PersonalSettingsChangedConfirmationModalDescription": "Ef þú vilt beita þessum breytingum þarftu að skrá þig inn. Viltu skrá þig út?",
     "PasswordChanged": "Lykilorði breytt",
     "NewPasswordConfirmFailed": "Vinsamlegast staðfestu nýja lykilorðið.",
     "NewPasswordSameAsOld": "Nýtt lykilorð verður að vera frábrugðið núverandi lykilorði.",

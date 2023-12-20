@@ -1,0 +1,9 @@
+{
+  "culture": "hr",
+  "texts": {
+    "TenantNotFoundMessage": "Stanar nije pronađen!",
+    "TenantNotFoundDetails": "Ne postoji stanar s ID-om ili imenom stanara: {0}",
+    "TenantNotActiveMessage": "Stanar nije aktivan!",
+    "TenantNotActiveDetails": "Stanar nije aktivan s ID-om ili imenom stanara: {0}"
+  }
+}

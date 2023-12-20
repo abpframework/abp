@@ -56,6 +56,7 @@
     "FileName": "Názov súboru",
     "LastCachedTime": "Čas vyrovnávacej pamäte",
     "Project": "Projekt",
+    "AdvancedFilters": "Pokročilé filtre",
     "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" sa odstráni z vyrovnávacej pamäte a znovu sa zaindexuje. Potvrdzujete?"
   }
 }

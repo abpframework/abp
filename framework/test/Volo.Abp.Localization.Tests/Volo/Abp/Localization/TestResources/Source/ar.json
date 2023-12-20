@@ -6,6 +6,11 @@
     "CarPlural": "سيارات",
     "MaxLenghtErrorMessage": "اقصى طول للحقل '{0}' حرف",
     "Universe": "عالم",
-    "FortyTwo": "اثنان وأربعون"
+    "FortyTwo": "اثنان وأربعون",
+    "Enum:BookType.Undefined": "غير معرف",
+    "Enum:BookType.0": "غير محدد بقيمة 0",
+    "BookType.Adventure": "مفامرة",
+    "BookType.1": "مغامرة بقيمة 1",
+    "Biography": "سيرة شخصية"
   }
 }

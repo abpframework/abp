@@ -441,15 +441,15 @@
     "VideosLoginAndRegisterMessage": "To be able to watch videos, you must sign in.",
     "Filter": "Filter",
     "VideoCourses": "Video Courses",
-    "TestimonialText": "Testimonial Letter.",
+    "TestimonialText": "Testimonial Letter",
     "Position": "Position",
     "ExperienceYear": "Experience Year",
     "FullName": "Full Name",
     "CompanySize": "Company Size",
-    "Image": "Image.",
+    "Image": "Image",
     "TestimonialTitle": "Testimonial Form",
     "TestimonialInfo": "Share Your Opinion",
-    "Country": "Country.",
+    "Country": "Country",
     "TestimonialTextPlaceholder": "Your testimonial letter.",
     "PositionPlaceholder": "Your position at your company.",
     "SelectExperienceYearPlaceholder": "Your years of experience in software development.",
@@ -459,7 +459,8 @@
     "ImagePlaceholder": "Your image.",
     "SelectCountryPlaceholder": "Your country.",
     "YouAreNotAuthorizedToWriteTestimonial": "To be able to write testimonial letter, you must be sign in.",
-    "Share": "Share"
+    "Share": "Share",
+    "UnAuthorizeTestimonialInfo": "If you want to share your opinion, you must be <a id='signin-btn'>sign in</a>"
   }
 }
 

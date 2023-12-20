@@ -41,7 +41,7 @@ import {ExtensibleDateTimePickerComponent} from '../date-time-picker/extensible-
 import {NgxValidateCoreModule} from '@ngx-validate/core';
 import {ExtensibleFormPropService} from '../../services/extensible-form-prop.service';
 import {CreateInjectorPipe} from '../../pipes/create-injector.pipe';
-import {AsyncPipe, NgClass, NgSwitch, NgSwitchCase, NgTemplateOutlet} from '@angular/common';
+import { CommonModule} from '@angular/common';
 
 @Component({
   selector: 'abp-extensible-form-prop',
@@ -59,11 +59,7 @@ import {AsyncPipe, NgClass, NgSwitch, NgSwitchCase, NgTemplateOutlet} from '@ang
     ShowPasswordDirective,
     PermissionDirective,
     LocalizationModule,
-    AsyncPipe,
-    NgSwitch,
-    NgSwitchCase,
-    NgClass,
-    NgTemplateOutlet,
+    CommonModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ExtensibleFormPropService],
