@@ -1,0 +1,9 @@
+{
+  "culture": "ru",
+  "texts": {
+    "TenantNotFoundMessage": "Арендатор не найден!",
+    "TenantNotFoundDetails": "Нет клиента с идентификатором или именем клиента: {0}",
+    "TenantNotActiveMessage": "Арендатор не активен!",
+    "TenantNotActiveDetails": "Арендатор неактивен с идентификатором или именем арендатора: {0}"
+  }
+}

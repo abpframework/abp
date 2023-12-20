@@ -21,7 +21,7 @@ The following code prepares a constant named `identityEntityActionContributors`,
 
 import { eIdentityComponents, IdentityEntityActionContributors } from '@abp/ng.identity';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
-import { EntityAction, EntityActionList } from '@abp/ng.theme.shared/extensions';
+import { EntityAction, EntityActionList } from '@abp/ng.components/extensible';
 
 const alertUserName = new EntityAction<IdentityUserDto>({
   text: 'Click Me!',
@@ -93,7 +93,7 @@ Let's employ dependency injection to extend the functionality of `IdentityModule
     IdentityEntityActionContributors,
     IdentityUserDto,
   } from '@abp/ng.identity';
-  import { EntityAction, EntityActionList } from '@abp/ng.theme.shared/extensions';
+  import { EntityAction, EntityActionList } from '@abp/ng.components/extensible';
   import { IdentityExtendedComponent } from './identity-extended.component';
 
   const quickViewAction = new EntityAction<IdentityUserDto>({

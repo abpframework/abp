@@ -577,7 +577,7 @@
     "Purchase_TrainingPrice": "سعر التدريب",
     "Purchase_OnboardingTraining": "تدريب مباشر على ABP وتطوير تطبيقات الويب",
     "TotalDeveloperPrice": "إجمالي سعر المطور",
-    "Purchase_PricePerDeveloper": "<span>{0} {1}</span> لكل مطور",
+    "Purchase_PricePerDeveloper": "<span>{0}</span> لكل مطور",
     "Purchase_IncludedDeveloperInfo": "{0} {1} يتضمن.",
     "Purchase_LicenseExtraDeveloperPurchaseMessage": "رخصة <span class=\"fw-6\">{0} </span> تحتوي على {1} مطور/ين. يمكنك إضافة مطورين إضافيين الآن أو لاحقًا.",
     "StartupTemplates_Page_Title": "عارضات بدء التشغيل",
@@ -791,6 +791,7 @@
     "PrivacyPolicyPageTitle": "سياسة الخصوصية - سياسة ملفات تعريف الارتباط",
     "TermsConditionsPageTitle": "الأحكام والشروط",
     "TrainingsPageTitle": "حزم تدريب ABP",
-    "ModulesPageTitle": "وحدات تطبيق ABP سابقة البناء"
+    "ModulesPageTitle": "وحدات تطبيق ABP سابقة البناء",
+    "MultipleOrganizationInfo": "شاهد جميع مؤسساتك"
   }
 }

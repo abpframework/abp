@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Þessi reitur verður að vera strengur eða fylki með lágmarkslengd '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "Þessi reitur er ekki gilt símanúmer.",
     "ThisFieldMustBeBetween{0}And{1}": "Þessi reitur verður að vera á milli {0} og {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Þessi reitur verður að vera stærri en eða jafn og {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "Þessi reitur verður að vera minni en eða jafn og {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "Þessi reitur verður að passa við regexpressionið '{0}'.",
     "ThisFieldIsRequired.": "Þessi reitur er nauðsynlegur.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Þessi reitur verður að vera strengur með hámarkslengd {0}.",

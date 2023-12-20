@@ -4,9 +4,14 @@
     "Features": "المميزات",
     "NoFeatureFoundMessage": "لا توجد أي ميزة متاحة.",
     "ManageHostFeatures": "إدارة ميزات المضيف",
+    "ManageHostFeaturesText": "يمكنك إدارة ميزات الجانب المضيف من خلال النقر على الزر التالي.",
     "Permission:FeatureManagement": "إدارة الميزات",
     "Permission:FeatureManagement.ManageHostFeatures": "إدارة ميزات المضيف",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} قيمة الميزة غير صالحة!",
-		"Menu:FeatureManagement": "إدارة الميزات"
+    "Menu:FeatureManagement": "إدارة الميزات",
+    "ResetToDefault": "إعادة تعيين إلى الافتراضي",
+    "ResetedToDefault": "تمت إعادة التعيين إلى الوضع الافتراضي",
+    "AreYouSure": "هل أنت متأكد؟",
+    "AreYouSureToResetToDefault": "هل أنت متأكد من إعادة التعيين إلى الوضع الافتراضي؟"
   }
 }

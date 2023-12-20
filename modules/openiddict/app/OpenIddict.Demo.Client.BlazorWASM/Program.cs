@@ -21,6 +21,7 @@ builder.Services.AddOidcAuthentication(options =>
     options.ProviderOptions.DefaultScopes.Add("roles");
     options.ProviderOptions.DefaultScopes.Add("email");
     options.ProviderOptions.DefaultScopes.Add("phone");
+    options.ProviderOptions.DefaultScopes.Add("AbpAPI");
 });
 
 await builder.Build().RunAsync();

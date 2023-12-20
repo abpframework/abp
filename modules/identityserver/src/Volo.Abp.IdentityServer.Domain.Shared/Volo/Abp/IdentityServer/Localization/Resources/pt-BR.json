@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "Você não tem permissão para fazer o login! Sua conta está inativa ou precisa confirmar seu e-mail/número de telefone.",
     "InvalidUsername": "Nome de usuário ou senha inválidos!",
     "InvalidAuthenticatorCode": "Código de autenticador inválido!",
+    "InvalidRecoveryCode": "Código de recuperação inválido!",
     "TheTargetUserIsNotLinkedToYou": "O usuário-alvo não está vinculado a você!"
   }
 }

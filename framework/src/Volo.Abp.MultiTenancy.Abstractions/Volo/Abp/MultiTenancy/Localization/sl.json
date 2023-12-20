@@ -1,0 +1,9 @@
+{
+  "culture": "sl",
+  "texts": {
+    "TenantNotFoundMessage": "Najemnika ni mogoče najti!",
+    "TenantNotFoundDetails": "Ni najemnika z ID-jem ali imenom najemnika: {0}",
+    "TenantNotActiveMessage": "Najemnik ni aktiven!",
+    "TenantNotActiveDetails": "Najemnik ni aktiven z ID-jem ali imenom najemnika: {0}"
+  }
+}

@@ -39,6 +39,7 @@
     "ExtraProperties": "額外屬性",
     "MaxDuration": "最大持續時間",
     "MinDuration": "最小持續時間",
+    "MinMaxDuration": "持續時間（最短-最長）",
     "{0}Milliseconds": "{0} 毫秒",
     "ExecutionTime": "時間",
     "Parameters": "參數",

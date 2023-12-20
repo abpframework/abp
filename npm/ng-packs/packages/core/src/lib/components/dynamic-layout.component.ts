@@ -1,60 +1,59 @@
-import { Component, Injector, isDevMode, OnInit, Optional, SkipSelf, Type } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { eLayoutType } from '../enums/common';
-import { ABP } from '../models';
-import { ReplaceableComponents } from '../models/replaceable-components';
-import { LocalizationService } from '../services/localization.service';
-import { ReplaceableComponentsService } from '../services/replaceable-components.service';
-import { RouterEvents } from '../services/router-events.service';
-import { RoutesService } from '../services/routes.service';
-import { SubscriptionService } from '../services/subscription.service';
-import { findRoute, getRoutePath } from '../utils/route-utils';
-import { TreeNode } from '../utils/tree-utils';
+import {
+  Component,
+  inject,
+  isDevMode,
+  OnInit,
+  Optional,
+  SkipSelf,
+  Type
+} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {eLayoutType} from '../enums/common';
+import {ABP} from '../models';
+import {ReplaceableComponents} from '../models/replaceable-components';
+import {LocalizationService} from '../services/localization.service';
+import {ReplaceableComponentsService} from '../services/replaceable-components.service';
+import {RouterEvents} from '../services/router-events.service';
+import {RoutesService} from '../services/routes.service';
+import {SubscriptionService} from '../services/subscription.service';
+import {findRoute, getRoutePath} from '../utils/route-utils';
+import {TreeNode} from '../utils/tree-utils';
+import {DYNAMIC_LAYOUTS_TOKEN} from "../tokens/dynamic-layout.token";
 
 @Component({
   selector: 'abp-dynamic-layout',
-  template: ` <ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container> `,
+  template: `
+    <ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container> `,
   providers: [SubscriptionService],
 })
 export class DynamicLayoutComponent implements OnInit {
   layout?: Type<any>;
   layoutKey?: eLayoutType;
-
-  // TODO: Consider a shared enum (eThemeSharedComponents) for known layouts
-  readonly layouts = new Map([
-    ['application', 'Theme.ApplicationLayoutComponent'],
-    ['account', 'Theme.AccountLayoutComponent'],
-    ['empty', 'Theme.EmptyLayoutComponent'],
-  ]);
-
+  readonly layouts = inject(DYNAMIC_LAYOUTS_TOKEN)
   isLayoutVisible = true;
 
-  private router!: Router;
-  private route!: ActivatedRoute;
-  private routes!: RoutesService;
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly routes = inject(RoutesService);
+  private localizationService = inject(LocalizationService)
+  private replaceableComponents = inject(ReplaceableComponentsService)
+  private subscription = inject(SubscriptionService)
+  private routerEvents = inject(RouterEvents)
+
 
   constructor(
-    injector: Injector,
-    private localizationService: LocalizationService,
-    private replaceableComponents: ReplaceableComponentsService,
-    private subscription: SubscriptionService,
-    private routerEvents: RouterEvents,
     @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
   ) {
     if (dynamicLayoutComponent) {
       if (isDevMode()) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
       return;
     }
-    this.route = injector.get(ActivatedRoute);
-    this.router = injector.get(Router);
-    this.routes = injector.get(RoutesService);
-
     this.checkLayoutOnNavigationEnd();
     this.listenToLanguageChange();
   }
 
   ngOnInit(): void {
-    if(this.layout){
+    if (this.layout) {
       return;
     }
     this.getLayout()
@@ -65,22 +64,10 @@ export class DynamicLayoutComponent implements OnInit {
     this.subscription.addOne(navigationEnd$, () => this.getLayout());
   }
 
+
   private getLayout() {
-    let expectedLayout = (this.route.snapshot.data || {}).layout;
+    let expectedLayout = this.getExtractedLayout();
 
-    if (!expectedLayout) {
-      let node = findRoute(this.routes, getRoutePath(this.router));
-      node = { parent: node } as TreeNode<ABP.Route>;
-
-      while (node.parent) {
-        node = node.parent;
-
-        if (node.layout) {
-          expectedLayout = node.layout;
-          break;
-        }
-      }
-    }
 
     if (!expectedLayout) expectedLayout = eLayoutType.empty;
 
@@ -91,14 +78,36 @@ export class DynamicLayoutComponent implements OnInit {
       this.layout = this.getComponent(key)?.component;
       this.layoutKey = expectedLayout;
     }
-    if(!this.layout){
+    if (!this.layout) {
       this.showLayoutNotFoundError(expectedLayout);
     }
   }
 
+  private getExtractedLayout() {
+    const routeData = (this.route.snapshot.data || {});
+    let expectedLayout = routeData['layout'] as eLayoutType;
+
+    if (expectedLayout) {
+      return expectedLayout;
+    }
+
+    let node = findRoute(this.routes, getRoutePath(this.router));
+    node = {parent: node} as TreeNode<ABP.Route>;
+
+    while (node.parent) {
+      node = node.parent;
+
+      if (node.layout) {
+        expectedLayout = node.layout;
+        break;
+      }
+    }
+    return expectedLayout;
+  }
+
   showLayoutNotFoundError(layoutName: string) {
     let message = `Layout ${layoutName} not found.`;
-    if(layoutName === 'account'){
+    if (layoutName === 'account') {
       message = 'Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "AccountLayoutModule.forRoot()" to your app.module configuration.';
     }
     console.warn(message);

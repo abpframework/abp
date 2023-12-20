@@ -1,0 +1,6 @@
+{
+  "culture": "hr",
+  "texts": {
+    "Volo.GlobalFeature:010001": "Usluga &#39;{ServiceName}&#39; mora omogućiti značajku &#39;{GlobalFeatureName}&#39;."
+  }
+}

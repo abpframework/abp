@@ -8,9 +8,9 @@
     "Universe": "宇宙",
     "FortyTwo": "四十二",
     "Enum:BookType.Undefined": "Undefined",
-    "Enum:BookType.0": "",
-    "BookType.Adventure": "",
-    "BookType.1": "",
-    "Biography": ""
+    "Enum:BookType.0": "未定义，值为 0",
+    "BookType.Adventure": "冒险",
+    "BookType.1": "冒险价值1",
+    "Biography": "传"
   }
 }

@@ -1,6 +1,7 @@
 {
   "culture": "pl-PL",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Nazwa najemcy już istnieje: {Name}",
     "Menu:TenantManagement": "Zarządzanie tenantami",
     "Tenants": "Tenanty",
     "NewTenant": "Nowy tenant",

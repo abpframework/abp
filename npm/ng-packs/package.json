@@ -45,7 +45,7 @@
   "private": true,
   "devDependencies": {
     "@abp/ng.theme.lepton-x": "~3.0.0-rc.1",
-    "@abp/utils": "~8.0.0-rc.3",
+    "@abp/utils": "~8.0.0",
     "@angular-devkit/build-angular": "~17.0.0",
     "@angular-devkit/core": "~17.0.0",
     "@angular-devkit/schematics": "~17.0.0",
@@ -123,7 +123,7 @@
     "tslib": "^2.0.0",
     "tslint": "~6.1.0",
     "typescript": "~5.2.0",
-    "zone.js": "0.14.2",
+    "zone.js": "~0.14.0",
     "@nx/devkit": "~17.1.0",
     "@nx/plugin": "~17.1.0",
     "@swc/helpers": "0.5.3",
