@@ -849,7 +849,7 @@
     "BlazoriseSupportExplanation5": "You can post your questions on the support website and generate a product token for your application.",
     "AbpLiveTrainingPackages": "ABP Live Training Packages",
     "Releases": "Releases",
-    "ReleasesDescription": "Release logs of ABP Commercial.",
+    "ReleasesDescription": "This page contains detailed information about each release. You can see all the closed pull requests for a specific release. For overall milestone developments, you can check out the <a href=\"https://docs.abp.io/en/commercial/latest/release-notes\">brief release notes page</a>.",
     "ReleaseDate": "Release Date",
     "Labels": "Labels",
     "PreRelease": "Pre-release",
