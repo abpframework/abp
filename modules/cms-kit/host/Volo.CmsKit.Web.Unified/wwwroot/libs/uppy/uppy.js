@@ -23457,7 +23457,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       hidePauseResumeButton: false,
       hideProgressAfterFinish: false,
       doneButtonHandler: function doneButtonHandler() {
-        _this.UPPY.cancelAll();
+        _this.uppy.reset();
 
         _this.requestCloseModal();
       },
@@ -25442,7 +25442,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         _this.uppy.log(err);
       });
 
-      _this.uppy.cancelAll();
+      _this.uppy.reset();
 
       _this.uppy.setState({
         recoveredState: null
