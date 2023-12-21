@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -99,7 +99,7 @@ const standaloneDirectives = [
     ShortTimePipe,
     ShortDatePipe,
   ],
-  providers: [LocalizationPipe],
+  providers: [LocalizationPipe,AsyncPipe],
 })
 export class BaseCoreModule {}
 
