@@ -146,9 +146,9 @@ $(function () {
             headers: getUppyHeaders()
         };
 
-        var UPPY = Uppy.Core().use(Uppy.XHRUpload, UPPY_OPTIONS);
+        var UPPY = new Uppy.Uppy().use(Uppy.XHRUpload, UPPY_OPTIONS);
 
-        UPPY.reset();
+        UPPY.cancelAll();
 
         UPPY.addFile({
             id: "content-file",

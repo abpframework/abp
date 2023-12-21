@@ -23457,7 +23457,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
       hidePauseResumeButton: false,
       hideProgressAfterFinish: false,
       doneButtonHandler: function doneButtonHandler() {
-        _this.uppy.reset();
+        _this.UPPY.cancelAll();
 
         _this.requestCloseModal();
       },
@@ -28560,7 +28560,7 @@ module.exports = (_temp = _class = /*#__PURE__*/function (_Plugin) {
         // Implement monitors actions
         switch (message.payload.type) {
           case 'RESET':
-            _this2.uppy.reset();
+            _this2.UPPY.cancelAll();
 
             return;
 
