@@ -4,7 +4,7 @@ Today, [ABP Framework](https://abp.io/) and [ABP Commercial](https://commercial.
 
 ## What's New With Version 8.0?
 
-All the new features were already explained in detail in the [8.0 RC Announcement Post](https://blog.abp.io/abp/announcing-abp-8-0-release-candidate), so no need to go over them again. Check it out for more details. 
+All the new features were explained in detail in the [8.0 RC Announcement Post](https://blog.abp.io/abp/announcing-abp-8-0-release-candidate), so there is no need to review them again. You can check it out for more details. 
 
 ## Getting Started with 8.0
 
@@ -18,7 +18,7 @@ You can create a new solution with the ABP Framework version 8.0 by either using
 
 #### Install/Update the ABP CLI
 
-First of all, install the ABP CLI or upgrade it to the latest version.
+First, install the ABP CLI or upgrade it to the latest version.
 
 If you haven't installed it yet:
 
@@ -45,7 +45,7 @@ Run this command in the root folder of your solution.
 ## Migration Guides
 
 There are breaking changes in this version that may affect your application. 
-Please see the following migration documents, if you are upgrading from v7.x or earlier:
+Please see the following migration documents if you are upgrading from v7.x or earlier:
 
 * [ABP Framework 7.x to 8.0 Migration Guide](https://docs.abp.io/en/abp/8.0/Migration-Guides/Abp-8_0)
 * [ABP Commercial 7.x to 8.0 Migration Guide](https://docs.abp.io/en/commercial/8.0/migration-guides/v8_0)
@@ -72,7 +72,7 @@ Through this event, we gained a lot and felt the enthusiasm and support of the d
 
 ### New ABP Community Posts
 
-There are exciting articles contributed by the ABP community as always. I will highlight some of them here:
+There are exciting articles contributed by the ABP community, as always. I will highlight some of them here:
 
 * [Performance Optimization of .NET-based application](https://community.abp.io/posts/performance-optimization-of-.netbased-and-also-abpbased-application-pmdwhwxc) by [Leon Košak](https://github.com/leonkosak)
 * [Video: ABP Framework Consuming HTTP APIs from a .NET Client](https://community.abp.io/videos/abp-framework-consuming-http-apis-from-a-.net-client-uzul9og4) by [Hamza Albreem](https://github.com/braim23)
