@@ -958,7 +958,7 @@ list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
-list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
+list.dropByValueAll(0, (value, searchedValue) => value.x === searchedValue);
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 ```
