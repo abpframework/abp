@@ -26,6 +26,7 @@
     <PackageVersion Include="Dapper" Version="2.1.21" />
     <PackageVersion Include="Dapr.AspNetCore" Version="1.12.0" />
     <PackageVersion Include="Dapr.Client" Version="1.12.0" />
+    <PackageVersion Include="DeviceDetector.NET" Version="6.1.4" />
     <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="10.1.151.7" />
     <PackageVersion Include="DistributedLock.Core" Version="1.0.5" />
     <PackageVersion Include="DistributedLock.Redis" Version="1.0.2" />

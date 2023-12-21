@@ -30,6 +30,7 @@
     <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
     <PackageReference Include="IdentityModel" />
+    <PackageReference Include="DeviceDetector.NET" />
   </ItemGroup>
 
 </Project>

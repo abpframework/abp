@@ -1,4 +1,5 @@
 ﻿using System;
+using DeviceDetectorNET;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
@@ -22,6 +23,8 @@ public class HttpContextWebClientInfoProvider : IWebClientInfoProvider, ITransie
 
     public string? ClientIpAddress => GetClientIpAddress();
 
+    public string? DeviceInfo => GetDeviceInfo();
+
     protected virtual string? GetBrowserInfo()
     {
         return HttpContextAccessor.HttpContext?.Request?.Headers?["User-Agent"];
@@ -39,4 +42,30 @@ public class HttpContextWebClientInfoProvider : IWebClientInfoProvider, ITransie
             return null;
         }
     }
+
+    protected virtual string? GetDeviceInfo()
+    {
+        string? deviceInfo = null;
+        var deviceDetector = new DeviceDetector(GetBrowserInfo());
+        deviceDetector.Parse();
+        if (!deviceDetector.IsParsed())
+        {
+            return deviceInfo;
+        }
+
+        var osInfo = deviceDetector.GetOs();
+        if (osInfo.Success)
+        {
+            deviceInfo = osInfo.Match.Name;
+        }
+
+        var clientInfo = deviceDetector.GetClient();
+        if (clientInfo.Success)
+        {
+            deviceInfo = deviceInfo.IsNullOrWhiteSpace() ? clientInfo.Match.Name : deviceInfo + " " + clientInfo.Match.Name;
+        }
+
+        return deviceInfo;
+    }
+
 }
