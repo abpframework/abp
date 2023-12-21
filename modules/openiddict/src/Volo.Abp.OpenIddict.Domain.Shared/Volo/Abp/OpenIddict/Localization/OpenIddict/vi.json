@@ -1,0 +1,15 @@
+{
+  "culture": "vi",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Không thể truy xuất yêu cầu OpenID Connect.",
+    "TheUserDetailsCannotBbeRetrieved": "Không thể truy xuất chi tiết người dùng.",
+    "TheApplicationDetailsCannotBeFound": "Không thể tìm thấy chi tiết ứng dụng.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Không thể tìm thấy thông tin chi tiết liên quan đến ứng dụng khách đang gọi.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Loại trợ cấp được chỉ định {0} không được triển khai.",
+    "Authorization": "Ủy quyền",
+    "DoYouWantToGrantAccessToYourData": "Bạn có muốn cấp cho {0} quyền truy cập vào dữ liệu của mình không?",
+    "ScopesRequested": "Phạm vi được yêu cầu",
+    "Accept": "Chấp nhận",
+    "Deny": "Từ chối"
+  }
+}

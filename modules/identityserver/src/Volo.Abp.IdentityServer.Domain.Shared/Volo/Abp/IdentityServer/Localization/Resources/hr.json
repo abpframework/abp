@@ -1,0 +1,16 @@
+{
+  "culture": "hr",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Naziv resursa identiteta već postoji: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Naziv API resursa već postoji: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Naziv opsega API-ja već postoji: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId već postoji: {ClientId}",
+    "UserLockedOut": "Korisnički račun je zaključan zbog nevažećih pokušaja prijave. Pričekajte malo i pokušajte ponovo.",
+    "InvalidUserNameOrPassword": "Neispravno korisničko ime ili lozinka!",
+    "LoginIsNotAllowed": "Nemate dopuštenje za prijavu! Vaš račun nije aktivan ili treba potvrditi vašu e-poštu/broj telefona.",
+    "InvalidUsername": "Neispravno korisničko ime ili lozinka!",
+    "InvalidAuthenticatorCode": "Nevažeći kod autentifikatora!",
+    "InvalidRecoveryCode": "Nevažeći kod za oporavak!",
+    "TheTargetUserIsNotLinkedToYou": "Ciljani korisnik nije povezan s vama!"
+  }
+}

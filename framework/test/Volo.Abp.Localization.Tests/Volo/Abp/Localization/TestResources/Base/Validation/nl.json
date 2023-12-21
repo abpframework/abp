@@ -2,6 +2,11 @@
   "culture": "nl",
   "texts": {
     "ThisFieldIsRequired": "Dit veld is verplicht",
-    "MaxLenghtErrorMessage": "Dit veld mag maximaal '{0}' tekens bevatten"
+    "MaxLenghtErrorMessage": "Dit veld mag maximaal '{0}' tekens bevatten",
+    "Enum:BookType.Undefined": "Niet gedefinieerd vanuit ValidationResource",
+    "Enum:BookType.0": "Niet gedefinieerd met waarde 0 van ValidationResource",
+    "BookType.Adventure": "Avontuur van ValidationResource",
+    "BookType.1": "Avontuur met waarde 1 van ValidationResource",
+    "Biography": "Biografie van ValidationResource"
   }
 }

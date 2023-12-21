@@ -18,7 +18,7 @@
     "UnhandledException": "Excepción no manejada!",
     "401Message": "No autorizado",
     "403Message": "Prohibido",
-    "404Message": "Página no encuentrada",
+    "404Message": "Página no encontrada",
     "500Message": "Error interno de servidor",
     "403MessageDetail": "Tu no estás autorizado para realizar esta operación!",
     "404MessageDetail": "Disculpa, no hay nada en esta dirección."

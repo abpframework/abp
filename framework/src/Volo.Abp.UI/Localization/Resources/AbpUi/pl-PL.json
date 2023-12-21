@@ -51,6 +51,12 @@
     "ManageYourAccount": "Zarządzaj kontem",
     "OthersGroup": "Inny",
     "Today": "Dzisiaj",
-    "Apply": "Stosować"
+    "Apply": "Stosować",
+    "InternetConnectionInfo": "Nie można było wykonać operacji. Twoje połączenie internetowe nie jest w tej chwili dostępne.",
+    "CopiedToTheClipboard": "Skopiowano do schowka",
+    "AddNew": "Dodaj nowe",
+    "ProfilePicture": "Zdjęcie profilowe",
+    "Theme": "Temat",
+    "NotAssigned": "Nie przypisano"
   }
 }

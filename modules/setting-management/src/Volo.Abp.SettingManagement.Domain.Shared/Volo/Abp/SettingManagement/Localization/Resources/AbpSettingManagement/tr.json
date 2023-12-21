@@ -19,6 +19,7 @@
     "Menu:Emailing": "Email",
     "Menu:TimeZone": "Zaman dilimi",
     "DisplayName:Timezone": "Zaman dilimi",
+    "TimezoneHelpText": "Bu ayar uygulama genelinde veya kiracı tabanlı olarak kullanılır.",
     "SmtpHost": "Sunucu",
     "SmtpPort": "Port",
     "SmtpUserName": "Kullanıcı adı",

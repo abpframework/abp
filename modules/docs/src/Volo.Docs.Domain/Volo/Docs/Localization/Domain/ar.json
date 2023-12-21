@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "الاسم المختصر {ShortName} موجود بالفعل.",
     "Preview": "معاينة",
     "Search": "بحث",
-    "SearchResults": "نتائج البحث"
+    "SearchResults": "نتائج البحث",
+    "SearchInTheAllDocuments": "البحث في جميع الوثائق"
   }
 }

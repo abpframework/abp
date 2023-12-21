@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Это поле должно иметь тип строки или массива с минимальной длиной '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "Это поле не содержит действительный номер телефона.",
     "ThisFieldMustBeBetween{0}And{1}": "Это поле должно быть между {0} и {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Это поле должно быть больше или равно {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "Это поле должно быть меньше или равно {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "Это поле должно соответствовать регулярному выражению '{0}'.",
     "ThisFieldIsRequired.": "Это обязательное поле.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Это поле должно быть строкой с максимальной длиной {0}.",

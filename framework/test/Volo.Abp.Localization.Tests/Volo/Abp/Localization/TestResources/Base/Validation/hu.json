@@ -2,6 +2,11 @@
   "culture": "hu",
   "texts": {
     "ThisFieldIsRequired": "Ez a mező kötelező",
-    "MaxLenghtErrorMessage": "Ez a mező legfeljebb „{0}” karakter lehet"
+    "MaxLenghtErrorMessage": "Ez a mező legfeljebb „{0}” karakter lehet",
+    "Enum:BookType.Undefined": "Undefined from ValidationResource",
+    "Enum:BookType.0": "Undefined 0 értékkel a ValidationResource-ból",
+    "BookType.Adventure": "Kaland a ValidationResource-ból",
+    "BookType.1": "Kaland 1 értékkel a ValidationResource-ból",
+    "Biography": "Életrajz a ValidationResource-ból"
   }
 }

@@ -24,12 +24,13 @@ yarn add @abp/ng.theme.lepton-x
 yarn add bootstrap-icons
 ```
 
-- Then, we need to edit the styles array in `angular.json` to replace the existing style with the new one in the following link : 
+- Then, we need to edit the styles array in `angular.json` to replace the existing style with the new one in the following link :
 
 * [Styles - Angular UI](../../UI/Angular/Theme-Configurations.md)
 
 Note: You should remove the old theme styles from "angular.json" if you are switching from "ThemeBasic" or "Lepton."
 Look at the [Theme Configurations](../../UI/Angular/Theme-Configurations) list of styles. Depending on your theme, you can alter your styles in angular.json.
+
 - Finally, remove `ThemeBasicModule` from `app.module.ts`, and import the related modules in `app.module.ts`
 
 ```js
@@ -153,7 +154,7 @@ this.replaceableComponents.add({
 
 ![Breadcrumb component](../../images/leptonxlite-breadcrumb-component.png)
 
-## Sidebar Menu Component
+## Navbar Component
 
 Sidebar menus have been used as a **directory for Related Pages** to a **Service** offering, **Navigation** items to a **specific service** or topic and even just as **Links** the user may be interested in.
 
@@ -161,7 +162,7 @@ Sidebar menus have been used as a **directory for Related Pages** to a **Service
 ///...
 this.replaceableComponents.add({
   component: YourNewSidebarComponent,
-  key: eThemeLeptonXComponents.Sidebar,
+  key: eThemeLeptonXComponents.Navbar,
 });
 ///...
 ```
@@ -262,10 +263,9 @@ The Mobile User-Profile component key is `eThemeLeptonXComponents.MobileUserProf
 ![Angular Footer Component](../../images/angular-footer.png)
 
 The Footer is the section of content at the very bottom of the site. This section of the content can be modified.
-Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService** 
+Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService**
 to assign path or link and description.
-**descUrl** and **footerLinks** are nullable. Constant **footerLinks** are on the right side of footer. 
-
+**descUrl** and **footerLinks** are nullable. Constant **footerLinks** are on the right side of footer.
 
 ```js
 ///...
@@ -291,6 +291,7 @@ this.footerLinksService.setFooterInfo(footerInfo);
 
 ///...
 ```
+
 If you want to change the footer component, the key is `eThemeLeptonXComponents.Footer`
 
 ```js
@@ -301,5 +302,3 @@ this.replaceableComponents.add({
 });
 ///...
 ```
-
-

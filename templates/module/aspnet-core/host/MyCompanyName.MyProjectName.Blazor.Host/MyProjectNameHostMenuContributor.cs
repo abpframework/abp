@@ -35,7 +35,8 @@ public class MyProjectNameHostMenuContributor : IMenuContributor
             $"{openIddictUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
             icon: "fa fa-cog",
             order: 1000,
-            null).RequireAuthenticated());
+            null,
+            "_blank").RequireAuthenticated());
 
         return Task.CompletedTask;
     }

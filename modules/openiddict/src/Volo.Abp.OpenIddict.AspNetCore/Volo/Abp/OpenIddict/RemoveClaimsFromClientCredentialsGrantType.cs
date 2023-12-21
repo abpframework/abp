@@ -14,7 +14,7 @@ public class RemoveClaimsFromClientCredentialsGrantType : IOpenIddictServerHandl
             .SetType(OpenIddictServerHandlerType.Custom)
             .Build();
 
-    public ValueTask HandleAsync(OpenIddictServerEvents.ProcessSignInContext context)
+    public virtual ValueTask HandleAsync(OpenIddictServerEvents.ProcessSignInContext context)
     {
         if (context.Request.IsClientCredentialsGrantType())
         {

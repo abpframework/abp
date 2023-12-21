@@ -6,6 +6,11 @@
     "CarPlural": "Mașini",
     "MaxLenghtErrorMessage": "Lungimea acestui câmp poate fi de maximum „{0}” caractere",
     "Universe": "Univers",
-    "FortyTwo": "Patruzeci si doi"
+    "FortyTwo": "Patruzeci si doi",
+    "Enum:BookType.Undefined": "Nedefinit",
+    "Enum:BookType.0": "Nedefinit cu valoarea 0",
+    "BookType.Adventure": "Aventură",
+    "BookType.1": "Aventura cu valoarea 1",
+    "Biography": "Biografie"
   }
 }
