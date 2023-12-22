@@ -48,6 +48,7 @@ public class AbpIdentityDomainModule : AbpModule
             options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(AbpIdentityDomainModule));
             options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(AbpIdentityDomainModule));
             options.EtoMappings.Add<OrganizationUnit, OrganizationUnitEto>(typeof(AbpIdentityDomainModule));
+            options.EtoMappings.Add<IdentitySession, IdentitySessionEto>(typeof(AbpIdentityDomainModule));
 
             options.AutoEventSelectors.Add<IdentityUser>();
             options.AutoEventSelectors.Add<IdentityRole>();
