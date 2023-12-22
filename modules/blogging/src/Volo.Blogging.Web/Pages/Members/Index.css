@@ -1,3 +1,7 @@
-.post-desc {
+﻿.post-desc {
     overflow-wrap: break-word;
+}
+
+#gravatar {
+    margin: 12px; 
 }
