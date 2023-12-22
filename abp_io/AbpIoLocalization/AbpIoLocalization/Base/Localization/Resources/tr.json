@@ -83,7 +83,7 @@
     "JoinOurMarketingNewsletter": "Pazarlama bültenimize katılın",
     "CommunityPrivacyPolicyConfirmation":  "Şartları, Koşulları ve <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Gizlilik Politikasını</a> kabul ediyorum.",
     "WouldLikeToReceiveNotification": "abp.io web sitelerinden en son haberleri almak istiyorum.",
-    "CommercialNewsletterConfirmationMessage": "<a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Şartlar ve Koşulları</a> ve <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Gizlilik Politikasını</a> kabul ediyorum.",
+    "CommercialNewsletterConfirmationMessage": "<a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/TermsConditions\">Şartlar ve Koşulları</a> ve <a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/Privacy\">Gizlilik Politikasını</a> kabul ediyorum.",
     "FreeDDDEBook": "Ücretsiz DDD E-Kitabı",
     "AdditionalServices": "Ek Hizmetler",
     "Learn": "Öğren",
