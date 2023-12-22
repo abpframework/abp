@@ -4,7 +4,7 @@ export const DEFAULT_VALIDATION_BLUEPRINTS = {
   invalid: 'AbpValidation::ThisFieldIsNotValid.',
   max: 'AbpValidation::ThisFieldMustBeLessOrEqual{0}[{{ max }}]',
   maxlength:
-    'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}[{{ requiredLength }}]',
+    'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWi thAMaximumLengthOf{0}[{{ requiredLength }}]',
   min: 'AbpValidation::ThisFieldMustBeGreaterThanOrEqual{0}[{{ min }}]',
   minlength:
     'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}[{{ requiredLength }}]',
@@ -18,4 +18,5 @@ export const DEFAULT_VALIDATION_BLUEPRINTS = {
   passwordRequiresDigit: 'AbpIdentity::Volo.Abp.Identity:PasswordRequiresDigit',
   passwordRequiresNonAlphanumeric: 'AbpIdentity::Volo.Abp.Identity:PasswordRequiresNonAlphanumeric',
   usernamePattern: 'AbpIdentity::Volo.Abp.Identity:InvalidUserName[{{ actualValue }}]',
+  customMessage: '{{ customMessage }}'
 };
