@@ -58,4 +58,11 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<IIdentityDbCon
                     u.Name.Contains(filter)
             ).LongCountAsync(GetCancellationToken(cancellationToken));
     }
+
+    public virtual async Task<List<IdentityClaimType>> GetListByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Where(x => names.Contains(x.Name))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
 }
