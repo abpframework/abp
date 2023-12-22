@@ -4,7 +4,7 @@ export const DEFAULT_VALIDATION_BLUEPRINTS = {
   invalid: 'AbpValidation::ThisFieldIsNotValid.',
   max: 'AbpValidation::ThisFieldMustBeLessOrEqual{0}[{{ max }}]',
   maxlength:
-    'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWi thAMaximumLengthOf{0}[{{ requiredLength }}]',
+    'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}[{{ requiredLength }}]',
   min: 'AbpValidation::ThisFieldMustBeGreaterThanOrEqual{0}[{{ min }}]',
   minlength:
     'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}[{{ requiredLength }}]',
