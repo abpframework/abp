@@ -1089,6 +1089,22 @@
     "MultipleOrganizationInfo": "See All Your Organizations",
     "AbpStudioBetaAccessInfoTitle": "ABP Studio Beta Access",
     "AbpStudioBetaAccessInfoText": "We're thrilled to share with you the <span class=\"text-highlight-white\">beta</span> version of <span class=\"text-highlight-white\">ABP Studio</span>! This release marks a significant milestone in our development journey, and we're eager to gather your feedback to make the application even better.",
-    "YouAreNotAuthorizedToDownloadStudio": "You are not authorized to download ABP Studio."
+    "YouAreNotAuthorizedToDownloadStudio": "You are not authorized to download ABP Studio.",
+    "OrganizationHasNoDefaultCreditCard": "Your organization has no default credit card. Please add a credit card to your organization.",
+    "YouAreNotAuthorizedToPayThisPaymentRequest": "You are not authorized to pay this payment request.",
+    "YouAreNotAuthorizedToCreateBillingInfoForThisPaymentRequest": "You are not authorized to create billing info for this payment request.",
+    "OrganizationNotFound": "Organization not found.",
+    "CannotDeleteDefaultCardBecauseAutoRenewalEnabled": "You cannot delete this card because it is your default card and you have auto renewal enabled. Please disable auto renewal first.",
+    "AreYouSureWantToDeleteThisCard": "Are you sure you want to delete this card?",
+    "AreYouSureWantToSetThisCardAsDefault": "Are you sure you want to set this card as default?",
+    "OrganizationBillingInfoIsNotSuitableForIyzicoPayment": "Your organization's billing info is not suitable for iyzico payment.",
+    "AutomaticRenewal": "Automatic Renewal",
+    "AutomaticRenewal_Description": "Renewing a license before it expires lets you get a discount of up to %40. The auto-renewal process lets you renew your license without losing this discount, and your development will never interrupt. Auto-renewal is only available for credit cards. You can disable auto-renewal at any time by accessing your Organization Management page. ABP.io does not save your credit card information, but our global payment gateways do secure savings.",
+    "CardNotFoundMessage": "Do you want to add a new card?",
+    "CardNotFoundTitle": "Card Not Found",
+    "AutoRenewalEnabled": "Auto Renewal Enabled",
+    "AutoRenewalDisabled": "Auto Renewal Disabled",
+    "PaymentRequestIdIsNotProvided": "Payment request id is not provided.",
+    
   }
 }
