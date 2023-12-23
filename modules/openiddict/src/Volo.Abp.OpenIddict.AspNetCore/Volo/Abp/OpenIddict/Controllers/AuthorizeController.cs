@@ -127,7 +127,8 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
 
                 if (result.Properties != null && result.Properties.IsPersistent)
                 {
-                    principal.AddClaim(AbpClaimTypes.RememberMe, true.ToString());
+                    var claim = new Claim(AbpClaimTypes.RememberMe, true.ToString()).SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+                    principal.Identities.FirstOrDefault()?.AddClaim(claim);
                 }
 
                 // Note: in this sample, the granted scopes match the requested scope
@@ -226,7 +227,8 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
         if (result.Succeeded && result.Properties != null && result.Properties.IsPersistent)
         {
-            principal.AddClaim(AbpClaimTypes.RememberMe, true.ToString());
+            var claim = new Claim(AbpClaimTypes.RememberMe, true.ToString()).SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+            principal.Identities.FirstOrDefault()?.AddClaim(claim);
         }
 
         // Note: in this sample, the granted scopes match the requested scope
