@@ -1,4 +1,4 @@
-import { Signal, signal } from '@angular/core';
+import { signal } from '@angular/core';
 import { AuthErrorEvent, AuthErrorFilter } from '../models';
 
 export abstract class AbstractAuthErrorFilter<T, E> {
