@@ -626,7 +626,7 @@ public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicatio
     private readonly IBookAppService _bookAppService;
     private readonly IAuthorAppService _authorAppService;
 
-    public BookAppService_Tests()
+    protected BookAppService_Tests()
     {
         _bookAppService = GetRequiredService<IBookAppService>();
         _authorAppService = GetRequiredService<IAuthorAppService>();

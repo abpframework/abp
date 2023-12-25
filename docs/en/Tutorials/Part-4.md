@@ -93,7 +93,7 @@ public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicatio
 {
     private readonly IBookAppService _bookAppService;
 
-    public BookAppService_Tests()
+    protected BookAppService_Tests()
     {
         _bookAppService = GetRequiredService<IBookAppService>();
     }
@@ -219,7 +219,7 @@ public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicatio
 {
     private readonly IBookAppService _bookAppService;
 
-    public BookAppService_Tests()
+    protected BookAppService_Tests()
     {
         _bookAppService = GetRequiredService<IBookAppService>();
     }
