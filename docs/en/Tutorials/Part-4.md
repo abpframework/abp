@@ -82,19 +82,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books;
 
-{{if DB=="Mongo"}}
-[Collection(BookStoreTestConsts.CollectionDefinitionName)]
-{{end}}
-public class BookAppService_Tests : BookStoreApplicationTestBase
+public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicationTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
     private readonly IBookAppService _bookAppService;
 
-    public BookAppService_Tests()
+    protected BookAppService_Tests()
     {
         _bookAppService = GetRequiredService<IBookAppService>();
     }
@@ -113,6 +112,41 @@ public class BookAppService_Tests : BookStoreApplicationTestBase
     }
 }
 ````
+
+{{if DB == "EF"}}
+Add a new implementation class of `BookAppService_Tests` class, named `EfCoreBookAppService_Tests` in the `EntityFrameworkCore\Applications\Books` namespace (folder) of the `Acme.BookStore.EntityFrameworkCore.Tests` project:
+
+````csharp
+using Acme.BookStore.Books;
+using Xunit;
+
+namespace Acme.BookStore.EntityFrameworkCore.Applications.Books;
+
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+public class EfCoreBookAppService_Tests : BookAppService_Tests<BookStoreEntityFrameworkCoreTestModule>
+{
+
+}
+````
+{{end}}
+
+{{if DB == "Mongo"}}
+Add a new implementation class of `BookAppService_Tests` class, named `MongoDBBookAppService_Tests` in the `MongoDb\Applications\Books` namespace (folder) of the `Acme.BookStore.MongoDB.Tests` project:
+
+````csharp
+using Acme.BookStore.MongoDB;
+using Acme.BookStore.Books;
+using Xunit;
+
+namespace Acme.BookStore.MongoDb.Applications.Books;
+
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+public class MongoDBBookAppService_Tests : BookAppService_Tests<BookStoreMongoDbTestModule>
+{
+
+}
+````
+{{end}}
 
 * `Should_Get_List_Of_Books` test simply uses `BookAppService.GetListAsync` method to get and check the list of books.
 * We can safely check the book "1984" by its name, because we know that this books is available in the database since we've added it in the seed data.
@@ -174,19 +208,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books;
 
-{{if DB=="Mongo"}}
-[Collection(BookStoreTestConsts.CollectionDefinitionName)]
-{{end}}
-public class BookAppService_Tests : BookStoreApplicationTestBase
+public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicationTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
     private readonly IBookAppService _bookAppService;
 
-    public BookAppService_Tests()
+    protected BookAppService_Tests()
     {
         _bookAppService = GetRequiredService<IBookAppService>();
     }
@@ -203,7 +236,7 @@ public class BookAppService_Tests : BookStoreApplicationTestBase
         result.TotalCount.ShouldBeGreaterThan(0);
         result.Items.ShouldContain(b => b.Name == "1984");
     }
-    
+
     [Fact]
     public async Task Should_Create_A_Valid_Book()
     {
