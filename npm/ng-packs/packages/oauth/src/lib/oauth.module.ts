@@ -1,18 +1,19 @@
 import { APP_INITIALIZER, ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import {
   AbpLocalStorageService,
   ApiInterceptor,
+  AuthErrorFilterService,
   AuthGuard,
   AuthService,
   CHECK_AUTHENTICATION_STATE_FN_KEY,
   noop,
   PIPE_TO_LOGIN_FN_KEY,
 } from '@abp/ng.core';
-import { AbpOAuthService } from './services';
+import { AbpOAuthService, OAuthErrorFilterService } from './services';
 import { OAuthConfigurationHandler } from './handlers/oauth-configuration.handler';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OAuthApiInterceptor } from './interceptors/api.interceptor';
 import { AbpOAuthGuard } from './guards/oauth.guard';
 import { NavigateToManageProfileProvider } from './providers';
@@ -60,6 +61,7 @@ export class AbpOAuthModule {
         },
         OAuthModule.forRoot().providers as Provider[],
         { provide: OAuthStorage, useClass: AbpLocalStorageService },
+        { provide: AuthErrorFilterService, useExisting: OAuthErrorFilterService },
       ],
     };
   }

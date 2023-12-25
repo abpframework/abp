@@ -39,6 +39,7 @@ import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
+import { AuthErrorFilterService } from './abstracts';
 
 /**
  * BaseCoreModule is the module that holds
@@ -179,7 +180,7 @@ export class CoreModule {
         },
         {
           provide: SORT_COMPARE_FUNC,
-          useFactory: compareFuncFactory
+          useFactory: compareFuncFactory,
         },
         {
           provide: QUEUE_MANAGER,
@@ -189,6 +190,7 @@ export class CoreModule {
           provide: OTHERS_GROUP,
           useValue: options.othersGroup || 'AbpUi::OthersGroup',
         },
+        AuthErrorFilterService,
         IncludeLocalizationResourcesProvider,
       ],
     };
