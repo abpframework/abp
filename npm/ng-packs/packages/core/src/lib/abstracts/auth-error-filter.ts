@@ -2,8 +2,8 @@ import { signal } from '@angular/core';
 import { AuthErrorEvent, AuthErrorFilter } from '../models';
 
 export abstract class AbstractAuthErrorFilter<T, E> {
-  readonly #filters = signal<Array<T>>([]);
-  filters = this.#filters.asReadonly();
+  protected readonly _filters = signal<Array<T>>([]);
+  readonly filters = this._filters.asReadonly();
 
   abstract get(id: string): T;
   abstract add(filter: T): void;
@@ -16,19 +16,25 @@ export class AuthErrorFilterService<
   T = AuthErrorEvent,
   E = AuthErrorFilter,
 > extends AbstractAuthErrorFilter<T, E> {
+  private warningMessage() {
+    console.error('You should add @abp/ng-oauth packages or create your own auth packages.');
+  }
+
   get(id: string): T {
-    throw new Error('Import AbpOAuthModule from  @abp/ng.oauth or custom implementation');
+    this.warningMessage();
+    throw new Error('not implemented');
   }
   add(filter: T): void {
-    throw new Error('Import AbpOAuthModule from  @abp/ng.oauth or custom implementation');
+    this.warningMessage();
   }
   patch(item: Partial<T>): void {
-    throw new Error('Import AbpOAuthModule from  @abp/ng.oauth or custom implementation');
+    this.warningMessage();
   }
   remove(id: string): void {
-    throw new Error('Import AbpOAuthModule from  @abp/ng.oauth or custom implementation');
+    this.warningMessage();
   }
   run(event: E): boolean {
-    throw new Error('Import AbpOAuthModule from  @abp/ng.oauth or custom implementation');
+    this.warningMessage();
+    throw new Error('not implemented');
   }
 }

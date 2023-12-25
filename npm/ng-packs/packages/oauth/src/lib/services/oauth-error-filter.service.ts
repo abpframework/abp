@@ -1,22 +1,18 @@
-import { AbstractAuthErrorFilter, AuthErrorFilter } from '@abp/ng.core';
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { OAuthErrorEvent } from 'angular-oauth2-oidc';
+import { AbstractAuthErrorFilter, AuthErrorFilter } from '@abp/ng.core';
 
 @Injectable({ providedIn: 'root' })
 export class OAuthErrorFilterService extends AbstractAuthErrorFilter<
   AuthErrorFilter<OAuthErrorEvent>,
   OAuthErrorEvent
 > {
-  readonly #filters = signal<Array<AuthErrorFilter<OAuthErrorEvent>>>([]);
-
-  filters = this.#filters.asReadonly();
-
   get(id: string): AuthErrorFilter<OAuthErrorEvent> {
-    return this.#filters().find(({ id: _id }) => _id === id);
+    return this._filters().find(({ id: _id }) => _id === id);
   }
 
   add(filter: AuthErrorFilter<OAuthErrorEvent>): void {
-    this.#filters.update(items => [...items, filter]);
+    this._filters.update(items => [...items, filter]);
   }
 
   patch(item: Partial<AuthErrorFilter<OAuthErrorEvent>>): void {
@@ -34,7 +30,7 @@ export class OAuthErrorFilterService extends AbstractAuthErrorFilter<
       return;
     }
 
-    this.#filters.update(items => items.filter(({ id: _id }) => _id !== id));
+    this._filters.update(items => items.filter(({ id: _id }) => _id !== id));
   }
 
   run(event: OAuthErrorEvent): boolean {
