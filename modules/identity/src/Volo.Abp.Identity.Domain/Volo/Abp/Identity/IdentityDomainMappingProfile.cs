@@ -11,6 +11,5 @@ public class IdentityDomainMappingProfile : Profile
         CreateMap<IdentityClaimType, IdentityClaimTypeEto>();
         CreateMap<IdentityRole, IdentityRoleEto>();
         CreateMap<OrganizationUnit, OrganizationUnitEto>();
-        CreateMap<IdentitySession, IdentitySessionEto>();
     }
 }
