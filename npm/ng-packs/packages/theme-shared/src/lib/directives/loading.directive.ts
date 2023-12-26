@@ -12,11 +12,11 @@ import {
   Renderer2,
   ViewContainerRef,
 } from '@angular/core';
-import { Subscription, timer } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { LoadingComponent } from '../components/loading/loading.component';
+import {Subscription, timer} from 'rxjs';
+import {take} from 'rxjs/operators';
+import {LoadingComponent} from '../components/loading/loading.component';
 
-@Directive({ selector: '[abpLoading]' })
+@Directive({selector: '[abpLoading]'})
 export class LoadingDirective implements OnInit, OnDestroy {
   private _loading!: boolean;
 
@@ -46,9 +46,7 @@ export class LoadingDirective implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe(() => {
           if (!this.componentRef) {
-            this.componentRef = this.cdRes
-              .resolveComponentFactory(LoadingComponent)
-              .create(this.injector);
+            this.componentRef = this.vcRef.createComponent(LoadingComponent, {injector: this.injector})
           }
 
           if (newValue && !this.rootNode) {
@@ -78,14 +76,14 @@ export class LoadingDirective implements OnInit, OnDestroy {
   constructor(
     private elRef: ElementRef<HTMLElement>,
     private vcRef: ViewContainerRef,
-    private cdRes: ComponentFactoryResolver,
     private injector: Injector,
     private renderer: Renderer2,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     if (!this.targetElement) {
-      const { offsetHeight, offsetWidth } = this.elRef.nativeElement;
+      const {offsetHeight, offsetWidth} = this.elRef.nativeElement;
       if (!offsetHeight && !offsetWidth && this.elRef.nativeElement.children.length) {
         this.targetElement = this.elRef.nativeElement.children[0] as HTMLElement;
       } else {

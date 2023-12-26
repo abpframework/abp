@@ -41,6 +41,7 @@ import { AbpVisibleDirective, DisabledDirective } from './directives';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormCheckboxComponent } from './components/checkbox/checkbox.component';
 import { tenantNotFoundProvider } from './providers/tenant-not-found.provider';
+import {LoadingContainerComponent} from "./components/loading/loading-container.component";
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -48,7 +49,6 @@ const declarationsWithExports = [
   ButtonComponent,
   ConfirmationComponent,
   LoaderBarComponent,
-  LoadingComponent,
   ModalComponent,
   ToastComponent,
   ToastContainerComponent,
@@ -56,6 +56,8 @@ const declarationsWithExports = [
   ModalCloseDirective,
   FormInputComponent,
   FormCheckboxComponent,
+  LoadingComponent,
+  LoadingContainerComponent
 ];
 
 @NgModule({

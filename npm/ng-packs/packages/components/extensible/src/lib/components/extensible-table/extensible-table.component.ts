@@ -32,7 +32,7 @@ import {
   TemplateRef,
   TrackByFunction,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ePropType } from '../../enums/props.enum';
 import { EntityActionList } from '../../models/entity-actions';
@@ -50,7 +50,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
   AbpVisibleDirective,
   NgxDatatableDefaultDirective,
-  NgxDatatableListDirective,
+  NgxDatatableListDirective, ThemeSharedModule,
 } from '@abp/ng.theme.shared';
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
@@ -71,6 +71,7 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
     AsyncPipe,
     NgTemplateOutlet,
     NgComponentOutlet,
+    ThemeSharedModule,
   ],
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -113,6 +114,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
   #injector = inject(Injector);
   getInjected = this.#injector.get.bind(this.#injector);
+  loading$:Observable<boolean> = EMPTY
 
   constructor() {
     const extensions = this.#injector.get(ExtensionsService);
@@ -120,6 +122,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     this.propList = extensions.entityProps.get(name).props;
     this.actionList = extensions['entityActions'].get(name)
       .actions as unknown as EntityActionList<R>;
+
+
 
     const permissionService = this.#injector.get(PermissionService);
     this.hasAtLeastOnePermittedAction =
@@ -180,6 +184,9 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
     if (data.currentValue.length < 1) {
       this.list.totalCount = this.recordsTotal;
+    }
+    if(this.list){
+      this.loading$ = this.list.isLoading$;
     }
 
     this.data = data.currentValue.map((record: any, index: number) => {

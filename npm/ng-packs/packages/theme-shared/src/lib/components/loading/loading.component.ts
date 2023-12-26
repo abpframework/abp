@@ -4,7 +4,9 @@ import { Component, ViewEncapsulation } from '@angular/core';
   selector: 'abp-loading',
   template: `
     <div class="abp-loading">
-      <i class="fa fa-spinner fa-pulse abp-spinner" aria-hidden="true"></i>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">{{"AbpUi::LoadingWithThreeDot" | abpLocalization}}</span>
+        </div>
     </div>
   `,
   encapsulation: ViewEncapsulation.None,
@@ -17,18 +19,10 @@ import { Component, ViewEncapsulation } from '@angular/core';
         top: 0;
         left: 0;
         z-index: 1040;
-      }
-
-      .abp-loading .abp-spinner {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        font-size: 14px;
-        -moz-transform: translateX(-50%) translateY(-50%);
-        -o-transform: translateX(-50%) translateY(-50%);
-        -ms-transform: translateX(-50%) translateY(-50%);
-        -webkit-transform: translateX(-50%) translateY(-50%);
-        transform: translateX(-50%) translateY(-50%);
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     `,
   ],
