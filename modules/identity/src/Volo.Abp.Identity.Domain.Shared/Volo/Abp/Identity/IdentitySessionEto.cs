@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.Identity;
 
 [Serializable]
-public class IdentitySessionEto : IMultiTenant, IHasEntityVersion
+public class IdentitySessionEto : IMultiTenant
 {
     public Guid Id { get; set; }
 
@@ -26,6 +26,4 @@ public class IdentitySessionEto : IMultiTenant, IHasEntityVersion
     public virtual DateTime SignedIn  { get; set; }
 
     public virtual DateTime? LastAccessed  { get; set; }
-
-    public int EntityVersion  { get; set; }
 }
