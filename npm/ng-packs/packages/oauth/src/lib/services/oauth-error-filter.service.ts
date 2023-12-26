@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { OAuthErrorEvent } from 'angular-oauth2-oidc';
 import { AbstractAuthErrorFilter, AuthErrorFilter } from '@abp/ng.core';
 
@@ -7,6 +7,9 @@ export class OAuthErrorFilterService extends AbstractAuthErrorFilter<
   AuthErrorFilter<OAuthErrorEvent>,
   OAuthErrorEvent
 > {
+  protected readonly _filters = signal<Array<AuthErrorFilter<OAuthErrorEvent>>>([]);
+  readonly filters = this._filters.asReadonly();
+
   get(id: string): AuthErrorFilter<OAuthErrorEvent> {
     return this._filters().find(({ id: _id }) => _id === id);
   }
