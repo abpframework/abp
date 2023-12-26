@@ -12,7 +12,6 @@ public class RemoveUnnecessaryPortsStep : ProjectBuildPipelineStep
 {
     public override void Execute(ProjectBuildContext context)
     {
-        RemoveUnnecessaryDbMigratorClients(context);
         RemoveUnnecessaryHttpApiHostPorts(context);
     }
 
@@ -65,37 +64,5 @@ public class RemoveUnnecessaryPortsStep : ProjectBuildPipelineStep
         }
 
         httpApiHostAppSettings.SetLines(newlines);
-    }
-
-    private static void RemoveUnnecessaryDbMigratorClients(ProjectBuildContext context)
-    {
-        var dbMigratorAppSettings = context.Files
-            .FirstOrDefault(f =>
-                f.Name.Contains("MyCompanyName.MyProjectName.DbMigrator") && f.Name.EndsWith("appsettings.json"));
-
-        if (dbMigratorAppSettings == null)
-        {
-            return;
-        }
-
-        var appSettingsJsonObject = JObject.Parse(dbMigratorAppSettings.Content);
-        var authServerJsonObject = (JObject)appSettingsJsonObject?["IdentityServer"] ?? (JObject)appSettingsJsonObject["OpenIddict"];
-        var clientsJsonObject = (JObject)authServerJsonObject?["Clients"] ?? (JObject)authServerJsonObject?["Applications"];
-
-        if (clientsJsonObject == null)
-        {
-            return;
-        }
-
-        if (context.BuildArgs.UiFramework != UiFramework.Blazor)
-        {
-            clientsJsonObject.Remove("MyProjectName_Blazor");
-        }
-        if (!context.BuildArgs.PublicWebSite)
-        {
-            clientsJsonObject.Remove("MyProjectName_Web_Public");
-        }
-
-        dbMigratorAppSettings.SetContent(appSettingsJsonObject.ToString(Formatting.Indented));
     }
 }

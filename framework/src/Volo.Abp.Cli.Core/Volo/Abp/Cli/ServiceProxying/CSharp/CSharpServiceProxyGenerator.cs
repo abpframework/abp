@@ -220,7 +220,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         }
 
         classTemplate.Replace($"{UsingPlaceholder}", string.Join(Environment.NewLine, classUsingNamespaceList.Distinct().OrderBy(x => x).Select(x => x)));
-        classTemplate.Replace($"{Environment.NewLine}{Environment.NewLine}    {MethodPlaceholder}", string.Empty);
+        classTemplate.Replace($"{Environment.NewLine}{Environment.NewLine}    {MethodPlaceholder}", string.Empty).Replace(MethodPlaceholder, string.Empty);
 
         filePath = Path.Combine(args.WorkDirectory, folder, $"{clientProxyName}.Generated.cs");
         Directory.CreateDirectory(Path.GetDirectoryName(filePath));

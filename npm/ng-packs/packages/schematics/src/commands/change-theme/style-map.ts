@@ -287,8 +287,4 @@ importMap.set(ThemeOptionsEnum.LeptonX, [
     path: '@volosoft/abp.ng.theme.lepton-x/layouts',
     importName: 'SideMenuLayoutModule.forRoot()',
   },
-  {
-    path: '@volosoft/abp.ng.theme.lepton-x/account',
-    importName: 'AccountLayoutModule.forRoot()',
-  },
 ]);

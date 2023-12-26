@@ -42,4 +42,12 @@ public abstract class IdentityClaimTypeRepository_Tests<TStartupModule> : AbpIde
     {
         (await ClaimTypeRepository.GetCountAsync("Age")).ShouldBe(1);
     }
+    
+    [Fact]
+    public async Task GetListAsyncByNames()
+    {
+        var result = await ClaimTypeRepository.GetListByNamesAsync(new List<string> { "Age", "Education" });
+
+        result.Count.ShouldBe(2);
+    }
 }

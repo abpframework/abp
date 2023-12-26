@@ -75,9 +75,9 @@ public class Author : FullAuditedAggregateRoot<Guid>
 
     internal Author(
         Guid id,
-        [NotNull] string name,
+        string name,
         DateTime birthDate,
-        [CanBeNull] string shortBio = null)
+        string? shortBio = null)
         : base(id)
     {
         SetName(name);
@@ -85,13 +85,13 @@ public class Author : FullAuditedAggregateRoot<Guid>
         ShortBio = shortBio;
     }
 
-    internal Author ChangeName([NotNull] string name)
+    internal Author ChangeName(string name)
     {
         SetName(name);
         return this;
     }
 
-    private void SetName([NotNull] string name)
+    private void SetName(string name)
     {
         Name = Check.NotNullOrWhiteSpace(
             name, 
@@ -146,9 +146,9 @@ public class AuthorManager : DomainService
     }
 
     public async Task<Author> CreateAsync(
-        [NotNull] string name,
+        string name,
         DateTime birthDate,
-        [CanBeNull] string shortBio = null)
+        string? shortBio = null)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
 
@@ -167,8 +167,8 @@ public class AuthorManager : DomainService
     }
 
     public async Task ChangeNameAsync(
-        [NotNull] Author author,
-        [NotNull] string newName)
+        Author author,
+        string newName)
     {
         Check.NotNull(author, nameof(author));
         Check.NotNullOrWhiteSpace(newName, nameof(newName));
