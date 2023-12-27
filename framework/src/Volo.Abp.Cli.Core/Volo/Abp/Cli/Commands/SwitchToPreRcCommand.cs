@@ -40,6 +40,6 @@ public class SwitchToPreRcCommand : IConsoleCommand, ITransientDependency
 
     public string GetShortDescription()
     {
-        return "Switches npm packages to pre-rc preview ABP version.";
+        return "Switches npm packages to pre-rc ABP version.";
     }
 }
