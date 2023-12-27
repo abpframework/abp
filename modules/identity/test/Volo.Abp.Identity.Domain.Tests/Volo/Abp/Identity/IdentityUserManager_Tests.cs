@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -376,6 +377,49 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
 
             await uow.CompleteAsync();
         }
+    }
+
+    [Fact]
+    public async Task ValidateUserNameAsync()
+    {
+        var result = await _identityUserManager.ValidateUserNameAsync("M_y+User-001@abp.io");
+        result.ShouldBeTrue();
+
+        var user = CreateRandomUser();
+        (await _identityUserManager.CreateAsync(user)).CheckErrors();
+
+        result = await _identityUserManager.ValidateUserNameAsync(user.UserName, user.Id);
+        result.ShouldBeTrue();
+
+        result = await _identityUserManager.ValidateUserNameAsync(user.UserName);
+        result.ShouldBeFalse();
+
+        result = await _identityUserManager.ValidateUserNameAsync("无效的字符");
+        result.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task GetRandomUserNameAsync()
+    {
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        var username = await _identityUserManager.GetRandomUserNameAsync(15);
+        username.Length.ShouldBe(15);
+        username.All(c => _identityUserManager.Options.User.AllowedUserNameCharacters.Contains(c)).ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        username = await _identityUserManager.GetRandomUserNameAsync(15);
+        username.Length.ShouldBe(15);
+        username.All(c => _identityUserManager.Options.User.AllowedUserNameCharacters.Contains(c)).ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "0123456789";
+        username = await _identityUserManager.GetRandomUserNameAsync(15);
+        username.Length.ShouldBe(15);
+        username.All(c => _identityUserManager.Options.User.AllowedUserNameCharacters.Contains(c)).ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = null!;
+        username = await _identityUserManager.GetRandomUserNameAsync(15);
+        username.Length.ShouldBe(15);
+        username.All(c => "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+".Contains(c)).ShouldBeTrue();
     }
 
     private async Task CreateRandomDefaultRoleAsync()

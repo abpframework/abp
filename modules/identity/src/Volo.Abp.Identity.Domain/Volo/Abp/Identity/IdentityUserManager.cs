@@ -82,7 +82,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return await CreateAsync(user);
     }
-    
+
     public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
     {
         user.Claims.Clear();
@@ -396,5 +396,44 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         await UserRepository.UpdateOrganizationAsync(sourceOrganizationId, targetOrganizationId, CancellationToken);
+    }
+
+    public virtual async Task<bool> ValidateUserNameAsync(string userName, Guid? userId = null)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrEmpty(Options.User.AllowedUserNameCharacters) && userName.Any(c => !Options.User.AllowedUserNameCharacters.Contains(c)))
+        {
+            return false;
+        }
+
+        var owner = await FindByNameAsync(userName);
+        if (owner != null && owner.Id != userId)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public virtual Task<string> GetRandomUserNameAsync(int length)
+    {
+        var allowedUserNameCharacters = Options.User.AllowedUserNameCharacters;
+        if (allowedUserNameCharacters.IsNullOrWhiteSpace())
+        {
+            allowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        }
+
+        var randomUserName = string.Empty;
+        var random = new Random();
+        while (randomUserName.Length < length)
+        {
+            randomUserName += allowedUserNameCharacters[random.Next(0, allowedUserNameCharacters.Length)];
+        }
+
+        return Task.FromResult(randomUserName);
     }
 }
