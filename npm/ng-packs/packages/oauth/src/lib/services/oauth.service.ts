@@ -44,10 +44,10 @@ export class AbpOAuthService implements IAuthService {
   }
 
   logout(queryParams?: Params): Observable<any> {
-    
-    if(!this.strategy){
-      return EMPTY
+    if (!this.strategy) {
+      return EMPTY;
     }
+
     return this.strategy.logout(queryParams);
   }
 
