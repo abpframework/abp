@@ -187,6 +187,7 @@ export class CoreModule {
           provide: OTHERS_GROUP,
           useValue: options.othersGroup || 'AbpUi::OthersGroup',
         },
+        AuthErrorFilterService,
         IncludeLocalizationResourcesProvider,
         {
           provide: DYNAMIC_LAYOUTS_TOKEN,
