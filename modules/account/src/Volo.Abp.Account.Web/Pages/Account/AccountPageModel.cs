@@ -59,6 +59,13 @@ public abstract class AccountPageModel : AbpPageModel
     protected virtual async Task<string> GetUserNameFromEmail(string email)
     {
         var userName = email.Split('@')[0];
+        
+        await IdentityOptions.SetAsync();
+        if (!IdentityOptions.Value.User.AllowedUserNameCharacters.IsNullOrWhiteSpace())
+        {
+            userName = new string(userName.Where(c => IdentityOptions.Value.User.AllowedUserNameCharacters.Contains(c)).ToArray());
+        }
+        
         var existUser = await UserManager.FindByNameAsync(userName);
         while (existUser != null)
         {
