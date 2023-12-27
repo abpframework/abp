@@ -389,11 +389,11 @@ UI的第一步是防止未认证用户看见"图书"菜单项并进入图书管�
 ````js
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard, PermissionGuard } from '@abp/ng.core';
+import { authGuard, permissionGuard } from '@abp/ng.core';
 import { BookComponent } from './book.component';
 
 const routes: Routes = [
-  { path: '', component: BookComponent, canActivate: [AuthGuard, PermissionGuard] },
+  { path: '', component: BookComponent, canActivate: [authGuard, permissionGuard] },
 ];
 
 @NgModule({
@@ -403,8 +403,8 @@ const routes: Routes = [
 export class BookRoutingModule {}
 ````
 
-* 从 `@abp/ng.core` 引入 `AuthGuard` 和 `PermissionGuard`.
-* 在路由定义中添加 `canActivate: [AuthGuard, PermissionGuard]`.
+* 从 `@abp/ng.core` 引入 `authGuard` 和 `permissionGuard`.
+* 在路由定义中添加 `canActivate: [authGuard, permissionGuard]`.
 
 打开 `/src/app/route.provider.ts`, 在 `/books` 路由中添加 `requiredPolicy: 'BookStore.Books'`. `/books` 路由应该如以下配置:
 

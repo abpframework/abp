@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
     <RootNamespace />
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenIddict.Abstractions" Version="$(OpenIddictPackageVersion)" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="OpenIddict.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
   </ItemGroup>
 
   <ItemGroup>

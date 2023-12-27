@@ -10,9 +10,9 @@ public class AbpDaprEventData
 
     public string JsonData { get; set; }
 
-    public string CorrelationId { get; set; }
+    public string? CorrelationId { get; set; }
 
-    public AbpDaprEventData(string pubSubName, string topic, string messageId, string jsonData, string correlationId)
+    public AbpDaprEventData(string pubSubName, string topic, string messageId, string jsonData, string? correlationId)
     {
         PubSubName = pubSubName;
         Topic = topic;

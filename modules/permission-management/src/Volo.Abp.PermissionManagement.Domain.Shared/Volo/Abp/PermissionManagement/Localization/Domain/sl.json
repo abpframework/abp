@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "Samo ta ponudnik",
     "All": "Vse",
     "SelectAllInAllTabs": "Dodeli vsa dovoljenja",
-    "SelectAllInThisTab": "Izberi vse"
+    "SelectAllInThisTab": "Izberi vse",
+    "SaveWithoutAnyPermissionsWarningMessage": "Ali ste prepričani, da želite shraniti brez kakršnih koli dovoljenj?"
   }
 }

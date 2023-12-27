@@ -9,7 +9,7 @@ import {
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
   mergeWithDefaultProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 
 import {
   ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS,
@@ -17,6 +17,9 @@ import {
 } from '../tokens/extensions.token';
 import { eAccountComponents } from '../enums/components';
 
+/**
+ * @deprecated Use `accountExtensionsResolver` *function* instead.
+ */
 @Injectable()
 export class AccountExtensionsGuard implements IAbpGuard {
   protected readonly configState = inject(ConfigStateService);

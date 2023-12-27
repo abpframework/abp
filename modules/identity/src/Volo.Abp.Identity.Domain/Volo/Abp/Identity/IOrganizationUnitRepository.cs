@@ -41,6 +41,12 @@ public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit
         CancellationToken cancellationToken = default
     );
 
+    Task<List<OrganizationUnit>> GetListByRoleIdAsync(
+        Guid roleId,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
     Task<List<IdentityRole>> GetRolesAsync(
         OrganizationUnit organizationUnit,
         string sorting = null,
@@ -87,6 +93,11 @@ public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit
         int skipCount = 0,
         string filter = null,
         bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<Guid>> GetMemberIdsAsync(
+        Guid id,
         CancellationToken cancellationToken = default
     );
 

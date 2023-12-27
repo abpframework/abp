@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "هذا الموفر فقط",
     "All": "الكل",
     "SelectAllInAllTabs": "منح كافة الأذونات",
-    "SelectAllInThisTab": "تحديد الكل"
+    "SelectAllInThisTab": "تحديد الكل",
+    "SaveWithoutAnyPermissionsWarningMessage": "هل أنت متأكد أنك تريد الحفظ بدون أي أذونات؟"
   }
 }

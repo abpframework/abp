@@ -51,6 +51,12 @@
     "ManageYourAccount": "Administraţi-vă contul",
     "OthersGroup": "Alte",
     "Today": "Astăzi",
-    "Apply": "aplica"
+    "Apply": "aplica",
+    "InternetConnectionInfo": "Operația nu a putut fi efectuată. Conexiunea ta la internet nu este disponibilă momentan.",
+    "CopiedToTheClipboard": "Copiat în clipboard",
+    "AddNew": "Adăuga nou",
+    "ProfilePicture": "Poză de profil",
+    "Theme": "Temă",
+    "NotAssigned": "Nealocat"
   }
 }

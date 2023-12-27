@@ -39,6 +39,7 @@
     "ExtraProperties": "Propriedades extras",
     "MaxDuration": "Máx. Duração",
     "MinDuration": "Min. Duração",
+    "MinMaxDuration": "Duração (Mín. - Máx.)",
     "{0}Milliseconds": "{0} milissegundos",
     "ExecutionTime": "Tempo",
     "Parameters": "Parâmetros",

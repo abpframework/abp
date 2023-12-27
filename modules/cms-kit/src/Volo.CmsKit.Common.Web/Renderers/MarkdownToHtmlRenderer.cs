@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using Ganss.XSS;
+using Ganss.Xss;
 using Markdig;
 using Volo.Abp.DependencyInjection;
 
@@ -37,7 +37,7 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
         {
             html = _htmlSanitizer.Sanitize(html);
         }
-        
+
         if(!referralLinks.IsNullOrWhiteSpace())
         {
             html = SetReferralLinks(html, referralLinks);

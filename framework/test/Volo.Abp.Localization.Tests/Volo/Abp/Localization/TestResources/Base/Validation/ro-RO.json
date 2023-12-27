@@ -2,6 +2,11 @@
   "culture": "ro-RO",
   "texts": {
     "ThisFieldIsRequired": "Acest câmp este obligatoriu",
-    "MaxLenghtErrorMessage": "Acest câmp poate avea maximum „{0}” caractere"
+    "MaxLenghtErrorMessage": "Acest câmp poate avea maximum „{0}” caractere",
+    "Enum:BookType.Undefined": "Nedefinit din ValidationResource",
+    "Enum:BookType.0": "Nedefinit cu valoarea 0 din ValidationResource",
+    "BookType.Adventure": "Aventura de la ValidationResource",
+    "BookType.1": "Aventura cu valoarea 1 din ValidationResource",
+    "Biography": "Biografie de la ValidationResource"
   }
 }

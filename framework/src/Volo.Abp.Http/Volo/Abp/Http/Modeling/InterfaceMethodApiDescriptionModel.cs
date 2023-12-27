@@ -9,11 +9,11 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class InterfaceMethodApiDescriptionModel
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public IList<MethodParameterApiDescriptionModel> ParametersOnMethod { get; set; }
+    public IList<MethodParameterApiDescriptionModel> ParametersOnMethod { get; set; } = default!;
 
-    public ReturnValueApiDescriptionModel ReturnValue { get; set; }
+    public ReturnValueApiDescriptionModel ReturnValue { get; set; } = default!;
 
     public InterfaceMethodApiDescriptionModel()
     {

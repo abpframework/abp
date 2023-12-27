@@ -49,8 +49,14 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} wird gelöscht!",
     "ItemWillBeDeletedMessage": "Dieses Element wird gelöscht!",
     "ManageYourAccount": "Verwalten Sie Ihr Benutzerkonto",
-    "OthersGroup":"Andere",
+    "OthersGroup": "Andere",
     "Today": "Heute",
-    "Apply": "Anwenden"
+    "Apply": "Anwenden",
+    "InternetConnectionInfo": "Der Vorgang konnte nicht ausgeführt werden. Ihre Internetverbindung ist im Moment nicht verfügbar.",
+    "CopiedToTheClipboard": "In die Zwischenablage kopiert",
+    "AddNew": "Neue hinzufügen",
+    "ProfilePicture": "Profilbild",
+    "Theme": "Thema",
+    "NotAssigned": "Nicht zugeordnet"
   }
 }

@@ -5,8 +5,8 @@ namespace Volo.Abp.TextTemplating.VirtualFiles;
 
 public class FileInfoLocalizedTemplateContentReader : ILocalizedTemplateContentReader
 {
-    private IFileInfo _fileInfo;
-    private string _content;
+    private IFileInfo _fileInfo = default!;
+    private string _content = default!;
 
     public async Task ReadContentsAsync(IFileInfo fileInfo)
     {
@@ -14,7 +14,7 @@ public class FileInfoLocalizedTemplateContentReader : ILocalizedTemplateContentR
         _content = await fileInfo.ReadAsStringAsync();
     }
 
-    public string GetContentOrNull(string culture)
+    public string? GetContentOrNull(string? culture)
     {
         if (culture == null)
         {

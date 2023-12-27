@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "Nur dieser Anbieter",
     "All": "Alle",
     "SelectAllInAllTabs": "Alle Berechtigungen erteilen",
-    "SelectAllInThisTab": "Alle auswählen"
+    "SelectAllInThisTab": "Alle auswählen",
+    "SaveWithoutAnyPermissionsWarningMessage": "Sind Sie sicher, dass Sie ohne Berechtigungen speichern möchten?"
   }
 }

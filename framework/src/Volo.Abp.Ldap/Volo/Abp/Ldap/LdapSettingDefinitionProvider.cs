@@ -10,6 +10,12 @@ public class LdapSettingDefinitionProvider : SettingDefinitionProvider
     {
         context.Add(
             new SettingDefinition(
+                LdapSettingNames.Ldaps,
+                "false",
+                L("DisplayName:Abp.Ldap.Ldaps"),
+                L("Description:Abp.Ldap.Ldaps")),
+
+            new SettingDefinition(
                 LdapSettingNames.ServerHost,
                 "",
                 L("DisplayName:Abp.Ldap.ServerHost"),

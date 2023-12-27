@@ -51,6 +51,12 @@
     "ManageYourAccount": "Beheer uw account",
     "OthersGroup": "Ander",
     "Today": "Vandaag",
-    "Apply": "Toepassen"
+    "Apply": "Toepassen",
+    "InternetConnectionInfo": "De bewerking kon niet worden uitgevoerd. Je internetverbinding is momenteel niet beschikbaar.",
+    "CopiedToTheClipboard": "Gekopieerd naar het klembord",
+    "AddNew": "Nieuw toevoegen",
+    "ProfilePicture": "Profielfoto",
+    "Theme": "Thema",
+    "NotAssigned": "Niet toegekend"
   }
 }

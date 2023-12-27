@@ -1,6 +1,7 @@
 {
   "culture": "vi",
   "texts": {
+    "Menu:Account": "Tài khoản",
     "UserName": "Tên đăng nhập",
     "EmailAddress": "Địa chỉ email",
     "UserNameOrEmailAddress": "Tên đăng nhập hoặc địa chỉ email",
@@ -33,6 +34,8 @@
     "DisplayName:PhoneNumber": "Số điện thoại",
     "PersonalSettings": "Thiết lập cá nhân",
     "PersonalSettingsSaved": "Đã lưu cài đặt cá nhân",
+    "PersonalSettingsChangedConfirmationModalTitle": "Thông tin cá nhân đã thay đổi",
+    "PersonalSettingsChangedConfirmationModalDescription": "Nếu bạn muốn áp dụng những thay đổi này, bạn phải đăng nhập. Bạn có muốn đăng xuất không?",
     "PasswordChanged": "mật khẩu đã được thay đổi",
     "NewPasswordConfirmFailed": "Vui lòng xác nhận mật khẩu mới.",
     "NewPasswordSameAsOld": "Mật khẩu mới không được giống như mật khẩu cũ.",
@@ -63,6 +66,8 @@
     "PasswordResetInfoInEmail": "Chúng tôi đã nhận được yêu cầu khôi phục tài khoản! Nếu bạn bắt đầu yêu cầu này, hãy nhấp vào liên kết sau để đặt lại mật khẩu của bạn.",
     "ResetMyPassword": "Đặt lại mật khẩu của tôi",
     "AccessDenied": "Quyền truy cập bị từ chối!",
-    "AccessDeniedMessage": "Bạn không có quyền truy cập vào tài nguyên này."
+    "AccessDeniedMessage": "Bạn không có quyền truy cập vào tài nguyên này.",
+    "OrRegisterWith": "Hoặc đăng ký bằng:",
+    "RegisterUsingYourProviderAccount": "Đăng ký bằng tài khoản {0} của bạn"
   }
 }

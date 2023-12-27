@@ -338,6 +338,47 @@
             }
           }
         },
+        "Volo.Abp.Account.DynamicClaimsController": {
+          "controllerName": "DynamicClaims",
+          "controllerGroupName": "DynamicClaims",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Account.DynamicClaimsController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Account.IDynamicClaimsAppService",
+              "name": "IDynamicClaimsAppService",
+              "methods": [
+                {
+                  "name": "RefreshAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "RefreshAsync": {
+              "uniqueName": "RefreshAsync",
+              "name": "RefreshAsync",
+              "httpMethod": "POST",
+              "url": "api/account/dynamic-claims/refresh",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IDynamicClaimsAppService"
+            }
+          }
+        },
         "Volo.Abp.Account.ProfileController": {
           "controllerName": "Profile",
           "controllerGroupName": "Profile",

@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Volo.CmsKit</RootNamespace>
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
     <UserSecretsId>Volo.CmsKit-c2d31439-b723-48e2-b061-5ebd7aeb6010</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.1" />
-    <PackageReference Include="IdentityModel" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCorePackageVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Sinks.File" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="IdentityModel" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching.StackExchangeRedis\Volo.Abp.Caching.StackExchangeRedis.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />

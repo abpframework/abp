@@ -16,11 +16,5 @@ public static class PageConsts
 
     public static int MaxStyleLength { get; set; } = int.MaxValue;
     
-    public static string DefaultHomePageCacheKey { get; set; } = "DefaultHomePage";
-
-    private static string _urlPrefix = "/";
-    public static string UrlPrefix {
-        get => _urlPrefix;
-        set => _urlPrefix = value.EnsureEndsWith('/').EnsureStartsWith('/');
-    }
+    public static string DefaultHomePageCacheKey { get; set; } = "__DefaultHomePage";
 }

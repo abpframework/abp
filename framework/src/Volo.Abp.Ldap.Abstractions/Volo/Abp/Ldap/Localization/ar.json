@@ -1,6 +1,8 @@
 {
   "culture": "ar",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP عبر SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP عبر SSL",
     "DisplayName:Abp.Ldap.ServerHost": "اسم الخادم",
     "Description:Abp.Ldap.ServerHost": "اسم الخادم",
     "DisplayName:Abp.Ldap.ServerPort": "منفذ الخادم",

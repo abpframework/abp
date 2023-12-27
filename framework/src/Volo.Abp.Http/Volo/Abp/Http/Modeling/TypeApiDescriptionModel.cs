@@ -7,17 +7,17 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class TypeApiDescriptionModel
 {
-    public string BaseType { get; set; }
+    public string? BaseType { get; set; }
 
     public bool IsEnum { get; set; }
 
-    public string[] EnumNames { get; set; }
+    public string[]? EnumNames { get; set; }
 
-    public object[] EnumValues { get; set; }
+    public object[]? EnumValues { get; set; }
 
-    public string[] GenericArguments { get; set; }
+    public string[]? GenericArguments { get; set; }
 
-    public PropertyApiDescriptionModel[] Properties { get; set; }
+    public PropertyApiDescriptionModel[]? Properties { get; set; }
 
     public TypeApiDescriptionModel()
     {

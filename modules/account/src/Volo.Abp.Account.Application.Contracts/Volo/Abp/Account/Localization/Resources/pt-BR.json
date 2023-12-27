@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefone",
     "PersonalSettings": "Configurações pessoais",
     "PersonalSettingsSaved": "Configurações pessoais salvas",
+    "PersonalSettingsChangedConfirmationModalTitle": "Informações pessoais alteradas",
+    "PersonalSettingsChangedConfirmationModalDescription": "Se você quiser aplicar essas alterações, você deve fazer login. Você quer sair?",
     "PasswordChanged": "Senha alterada",
     "NewPasswordConfirmFailed": "Por favor, confirme a nova senha.",
     "NewPasswordSameAsOld": "A nova senha deve ser diferente da senha atual.",
@@ -64,6 +66,8 @@
     "PasswordResetInfoInEmail": "Recebemos um pedido de recuperação de conta! Se você iniciou esta solicitação, clique no link a seguir para redefinir sua senha.",
     "ResetMyPassword": "Resetar minha senha",
     "AccessDenied": "Acesso negado!",
-    "AccessDeniedMessage": "Você não tem acesso a este recurso."
+    "AccessDeniedMessage": "Você não tem acesso a este recurso.",
+    "OrRegisterWith": "Ou registre-se com:",
+    "RegisterUsingYourProviderAccount": "Registre-se utilizando sua conta {0}"
   }
 }

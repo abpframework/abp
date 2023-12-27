@@ -36,7 +36,7 @@ public class StaticTemplateDefinitionStore : IStaticTemplateDefinitionStore, ISi
             throw new AbpException("Undefined template: " + name);
         }
 
-        return template;
+        return template!;
     }
 
     public virtual Task<IReadOnlyList<TemplateDefinition>> GetAllAsync()
@@ -44,7 +44,7 @@ public class StaticTemplateDefinitionStore : IStaticTemplateDefinitionStore, ISi
         return Task.FromResult<IReadOnlyList<TemplateDefinition>>(TemplateDefinitions.Value.Values.ToImmutableList());
     }
 
-    public virtual Task<TemplateDefinition> GetOrNullAsync(string name)
+    public virtual Task<TemplateDefinition?> GetOrNullAsync(string name)
     {
         return Task.FromResult(TemplateDefinitions.Value.GetOrDefault(name));
     }
@@ -57,7 +57,7 @@ public class StaticTemplateDefinitionStore : IStaticTemplateDefinitionStore, ISi
         {
             var providers = Options
                 .DefinitionProviders
-                .Select(p => scope.ServiceProvider.GetRequiredService(p) as ITemplateDefinitionProvider)
+                .Select(p => (scope.ServiceProvider.GetRequiredService(p) as ITemplateDefinitionProvider)!)
                 .ToList();
 
             var context = new TemplateDefinitionContext(templates);

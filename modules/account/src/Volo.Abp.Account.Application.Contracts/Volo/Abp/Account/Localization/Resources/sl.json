@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefonska številka",
     "PersonalSettings": "Osebne nastavitve",
     "PersonalSettingsSaved": "Osebne nastavitve so shranjene",
+    "PersonalSettingsChangedConfirmationModalTitle": "Osebni podatki spremenjeni",
+    "PersonalSettingsChangedConfirmationModalDescription": "Če želite uporabiti te spremembe, se morate prijaviti. Se želite odjaviti?",
     "PasswordChanged": "Geslo je spremenjeno",
     "NewPasswordConfirmFailed": "Prosimo potrdite novo geslo.",
     "NewPasswordSameAsOld": "Novo geslo mora biti drugačno od starega.",
@@ -64,6 +66,8 @@
     "PasswordResetInfoInEmail": "Prejeta je bila zahteva za obnovitev računa! V kolikor ste vi sprožili zahtevo, kliknite na sledečo povezavo, da ponastavite geslo.",
     "ResetMyPassword": "Ponastavi geslo",
     "AccessDenied": "Dostop zavrnjen!",
-    "AccessDeniedMessage": "Nimate dostopa do tega vira."
+    "AccessDeniedMessage": "Nimate dostopa do tega vira.",
+    "OrRegisterWith": "Ali pa se registrirajte z:",
+    "RegisterUsingYourProviderAccount": "Registrirajte se z uporabo vašega {0} računa"
   }
 }

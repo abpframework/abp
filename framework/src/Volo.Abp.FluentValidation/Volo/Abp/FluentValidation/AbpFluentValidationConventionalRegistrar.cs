@@ -24,6 +24,7 @@ public class AbpFluentValidationConventionalRegistrar : DefaultConventionalRegis
     {
         return new List<Type>()
             {
+                type,
                 typeof(IValidator<>).MakeGenericType(GetFirstGenericArgumentOrNull(type, 1)!)
             };
     }

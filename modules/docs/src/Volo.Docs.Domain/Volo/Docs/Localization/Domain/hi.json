@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "ShortName {ShortName} पहले से मौजूद है।",
     "Preview": "पूर्व दर्शन",
     "Search": "खोज",
-    "SearchResults": "खोज परिणाम"
+    "SearchResults": "खोज परिणाम",
+    "SearchInTheAllDocuments": "सभी दस्तावेज़ों में खोजें"
   }
 }

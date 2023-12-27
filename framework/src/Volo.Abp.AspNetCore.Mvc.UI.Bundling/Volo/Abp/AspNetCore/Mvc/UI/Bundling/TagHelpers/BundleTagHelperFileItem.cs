@@ -5,16 +5,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
 public class BundleTagHelperFileItem : BundleTagHelperItem
 {
     [NotNull]
-    public string File { get; }
+    public BundleFile File { get; }
 
-    public BundleTagHelperFileItem([NotNull] string file)
+    public BundleTagHelperFileItem([NotNull] BundleFile file)
     {
         File = Check.NotNull(file, nameof(file));
     }
 
     public override string ToString()
     {
-        return File;
+        return File.FileName;
     }
 
     public override void AddToConfiguration(BundleConfiguration configuration)

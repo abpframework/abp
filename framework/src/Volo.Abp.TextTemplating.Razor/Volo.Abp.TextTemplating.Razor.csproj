@@ -4,7 +4,9 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
         <RootNamespace />
     </PropertyGroup>
 
@@ -13,9 +15,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisPackageVersion)" />
-        <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.8" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftPackageVersion)" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Language" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     </ItemGroup>
 
 </Project>

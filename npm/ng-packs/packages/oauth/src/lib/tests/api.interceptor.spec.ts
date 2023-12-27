@@ -3,11 +3,12 @@ import { SpyObject } from '@ngneat/spectator';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Subject, timer } from 'rxjs';
-import { ApiInterceptor, HttpWaitService, SessionStateService, TENANT_KEY } from '@abp/ng.core';
+import { HttpWaitService, SessionStateService, TENANT_KEY } from '@abp/ng.core';
+import { OAuthApiInterceptor } from '../interceptors';
 
 describe('ApiInterceptor', () => {
-  let spectator: SpectatorService<ApiInterceptor>;
-  let interceptor: ApiInterceptor;
+  let spectator: SpectatorService<OAuthApiInterceptor>;
+  let interceptor: OAuthApiInterceptor;
   let oauthService: SpyObject<OAuthService>;
   let sessionState: SpyObject<SessionStateService>;
   let httpWaitService: SpyObject<HttpWaitService>;
@@ -15,7 +16,7 @@ describe('ApiInterceptor', () => {
   const testTenantKey = 'TEST_TENANT_KEY';
 
   const createService = createServiceFactory({
-    service: ApiInterceptor,
+    service: OAuthApiInterceptor,
     mocks: [OAuthService, SessionStateService],
     providers: [{ provide: TENANT_KEY, useValue: testTenantKey }],
   });

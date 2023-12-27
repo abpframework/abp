@@ -1,0 +1,8 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "AbpTitle": "Przeczytaj wszystkie posty na blogu",
+    "AbpDescription": "ABP to platforma aplikacji typu open source skupiająca się na tworzeniu aplikacji internetowych opartych na AspNet Core. Nie powtarzaj się, skup się na własnym kodzie biznesowym.",
+    "AbpDefinition": "Blog ABP poświęcony programowaniu .NET, wieloplatformowości, szablonom aplikacji ASP.NET, aktualnościom związanym z ABP i nie tylko..."
+  }
+}
