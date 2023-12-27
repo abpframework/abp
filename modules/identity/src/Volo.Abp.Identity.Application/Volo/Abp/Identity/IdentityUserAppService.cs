@@ -140,6 +140,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     [Authorize(IdentityPermissions.Users.Update)]
     public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
     {
+        await IdentityOptions.SetAsync();
         var user = await UserManager.GetByIdAsync(id);
         (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
         await UserRepository.UpdateAsync(user);

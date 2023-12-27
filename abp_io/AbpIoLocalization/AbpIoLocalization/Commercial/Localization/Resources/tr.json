@@ -844,6 +844,14 @@
     "ComesWithTheSourceCode_Description": "Mobil uygulamalar kaynak koduyla birlikte sağlanır. Marka yönergelerini karşılamak için uygulamalarınızın UX/UI'sini kolayca özelleştirin.",
     "MultipleOrganizationInfo": "Tüm Organizasyonlarınızı Görün",
     "PaymentFailedInfo": "Üzgünüz, Ödeme başarısız oldu! Bu hata, yatersiz bakiye, yanlış kredi kartı numarası veya yanlış PIN numarasından dolayı olabilir.",
-    "UsedPayment": "Bu ödeme zaten kullanımda."
+    "UsedPayment": "Bu ödeme zaten kullanımda.",
+    "TestimonialText": "Referans Yazınız",
+    "Position": "Poziyonunuz",
+    "ExperienceYear": "Yazılım Sektöründeki Tecrübeniz (Yıl)",
+    "Select": "Seçiniz",
+    "TestimonialTitle": "Referans",
+    "TestimonialInfo": "Düşüncelerinizi Paylaşın",
+    "Share": "Paylaş",
+    "YouAreNotAuthorizedToWriteTestimonial" : "Referansınızı paylaşabilmeniz için giriş yapmanız gerekmektedir"
   }
 }
