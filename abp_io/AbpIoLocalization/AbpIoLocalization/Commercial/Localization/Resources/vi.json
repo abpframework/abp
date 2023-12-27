@@ -384,6 +384,8 @@
     "TrialLicenseExpiredInfo": "Thời gian cấp phép dùng thử của bạn đã hết hạn!",
     "CommercialNewsletterConfirmationMessage": "Tôi đồng ý với <a href=\"https://commercial.abp.io/TermsConditions\"> Điều khoản & điều kiện </a> và <a href=\"https://commercial.abp.io/Privacy\"> Chính sách quyền riêng tư </a>.",
     "BlackFridayDiscount": "Giảm giá Black Friday",
-    "MultipleOrganizationInfo": "Xem tất cả các tổ chức của bạn"
+    "MultipleOrganizationInfo": "Xem tất cả các tổ chức của bạn",
+    "PaymentFailedInfo": "Rất tiếc, thanh toán không thành công! ",
+    "UsedPayment": "Khoản thanh toán này đã được sử dụng"
   }
 }
