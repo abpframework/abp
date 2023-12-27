@@ -462,7 +462,8 @@
     "UnAuthorizeTestimonialInfo": "If you want to share your opinion, you must be <a id='signin-btn'>sign in</a>",
     "TheFileIsTooLargeForImage": "Your profile picture cannot be more than 1 MB",
     "ThisExtensionIsNotAllowedForImage": "This extension is not allowed.",
-    "FileUploadError": "File upload error"
+    "FileUploadError": "File upload error",
+    "TestimonialSend": "Thank you! We've received your testimonial. We'll review and take the next step soon."
   }
 }
 
