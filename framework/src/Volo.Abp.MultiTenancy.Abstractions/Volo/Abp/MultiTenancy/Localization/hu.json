@@ -1,0 +1,9 @@
+{
+  "culture": "hu",
+  "texts": {
+    "TenantNotFoundMessage": "Bérlő nem található!",
+    "TenantNotFoundDetails": "Nincs bérlő a következő bérlői azonosítóval vagy névvel: {0}",
+    "TenantNotActiveMessage": "A bérlő nem aktív!",
+    "TenantNotActiveDetails": "A bérlő nem aktív a következő bérlői azonosítóval vagy névvel: {0}"
+  }
+}

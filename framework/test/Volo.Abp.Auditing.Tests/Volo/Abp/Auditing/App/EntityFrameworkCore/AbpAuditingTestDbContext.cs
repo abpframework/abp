@@ -27,6 +27,8 @@ public class AbpAuditingTestDbContext : AbpDbContext<AbpAuditingTestDbContext>
 
     public DbSet<AppEntityWithValueObject> AppEntityWithValueObject { get; set; }
 
+    public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
+
     public AbpAuditingTestDbContext(DbContextOptions<AbpAuditingTestDbContext> options)
         : base(options)
     {
@@ -42,5 +44,14 @@ public class AbpAuditingTestDbContext : AbpDbContext<AbpAuditingTestDbContext>
             b.ConfigureByConvention();
             b.OwnsOne(v => v.AppEntityWithValueObjectAddress);
         });
+
+        modelBuilder.Entity<AppEntityWithNavigations>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOne>(x => x.Id);
+            b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationId);
+            b.HasMany(x => x.ManyToMany).WithMany();
+        });
+
     }
 }

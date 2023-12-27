@@ -100,15 +100,15 @@ public class ClientProxyUrlBuilder : ITransientDependency
                 {
                     using (var scope = ServiceScopeFactory.CreateScope())
                     {
-                        var path = await (Task<string>)CallObjectToPathAsyncMethod
+                        var path = await (Task<string?>)CallObjectToPathAsyncMethod
                             .MakeGenericMethod(value.GetType())
-                            .Invoke(this, new object[]
+                            .Invoke(this, new object?[]
                             {
                                 scope.ServiceProvider.GetRequiredService(HttpClientProxyingOptions.PathConverts[value.GetType()]),
                                 action,
                                 pathParameter,
                                 value
-                            });
+                            })!;
 
                         if (path != null)
                         {
@@ -143,7 +143,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
             {
                 using (var scope = ServiceScopeFactory.CreateScope())
                 {
-                    var queryString = await (Task<string>)CallObjectToQueryStringAsyncMethod
+                    var queryString = await (Task<string?>)CallObjectToQueryStringAsyncMethod
                         .MakeGenericMethod(value.GetType())
                         .Invoke(this, new object[]
                         {
@@ -151,7 +151,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
                             action,
                             queryStringParameter,
                             value
-                        });
+                        })!;
 
                     if (queryString != null)
                     {
@@ -218,11 +218,11 @@ public class ClientProxyUrlBuilder : ITransientDependency
         return true;
     }
 
-    protected virtual Task<string> ConvertValueToStringAsync([CanBeNull] object value)
+    protected virtual Task<string?> ConvertValueToStringAsync(object? value)
     {
         if (value is DateTime dateTimeValue)
         {
-            return Task.FromResult(dateTimeValue.ToUniversalTime().ToString("O"));
+            return Task.FromResult(dateTimeValue.ToUniversalTime().ToString("O"))!;
         }
 
         return Task.FromResult(value?.ToString());

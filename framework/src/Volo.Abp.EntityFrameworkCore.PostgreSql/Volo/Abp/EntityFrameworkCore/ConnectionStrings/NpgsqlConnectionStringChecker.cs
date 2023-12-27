@@ -25,7 +25,7 @@ public class NpgsqlConnectionStringChecker : IConnectionStringChecker, ITransien
             await using var conn = new NpgsqlConnection(connString.ConnectionString);
             await conn.OpenAsync();
             result.Connected = true;
-            await conn.ChangeDatabaseAsync(oldDatabaseName);
+            await conn.ChangeDatabaseAsync(oldDatabaseName!);
             result.DatabaseExists = true;
 
             await conn.CloseAsync();

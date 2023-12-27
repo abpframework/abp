@@ -39,6 +39,7 @@
     "ExtraProperties": "خصائص اضافية",
     "MaxDuration": "الأعلى. مدة",
     "MinDuration": "دقيقة. مدة",
+    "MinMaxDuration": "المدة (الحد الأدنى - الحد الأقصى)",
     "{0}Milliseconds": "{0} مللي ثانية",
     "ExecutionTime": "زمن",
     "Parameters": "المعلمات",

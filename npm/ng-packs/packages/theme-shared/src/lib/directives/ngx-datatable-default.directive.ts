@@ -7,6 +7,7 @@ import { debounceTime } from 'rxjs/operators';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'ngx-datatable[default]',
+  standalone:true,
   exportAs: 'ngxDatatableDefault',
 })
 export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {

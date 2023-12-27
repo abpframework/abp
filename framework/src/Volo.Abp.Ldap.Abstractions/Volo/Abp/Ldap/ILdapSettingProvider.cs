@@ -4,6 +4,8 @@ namespace Volo.Abp.Ldap;
 
 public interface ILdapSettingProvider
 {
+    public Task<bool> GetLdapOverSsl();
+
     public Task<string?> GetServerHostAsync();
 
     public Task<int> GetServerPortAsync();

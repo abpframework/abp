@@ -60,29 +60,6 @@ Alternatively, you can configure the options in the `Dapr` section of your `apps
 }
 ````
 
-### Injecting DaprClient
-
-ABP registers the `DaprClient` class to the [dependency injection](../Dependency-Injection.md) system. So, you can inject and use it whenever you need:
-
-````csharp
-public class MyService : ITransientDependency
-{
-    private readonly DaprClient _daprClient;
-
-    public MyService(DaprClient daprClient)
-    {
-        _daprClient = daprClient;
-    }
-
-    public async Task DoItAsync()
-    {
-        // TODO: Use the injected _daprClient object
-    }
-}
-````
-
-Injecting `DaprClient` is the recommended way of using it in your application code. When you inject it, the `IAbpDaprClientFactory` service is used to create it, which is explained in the next section.
-
 ### IAbpDaprClientFactory
 
 `IAbpDaprClientFactory` can be used to create `DaprClient` or `HttpClient` objects to perform operations on Dapr. It uses `AbpDaprOptions`, so you can configure the settings in a central place.
@@ -113,15 +90,14 @@ public class MyService : ITransientDependency
             });
         
         // Create an HttpClient object
-        HttpClient httpClient = await _daprClientFactory
-            .CreateHttpClientAsync("target-app-id");
+        HttpClient httpClient = await _daprClientFactory.CreateHttpClientAsync("target-app-id");
     }
 }
 ````
 
 `CreateHttpClientAsync` method also gets optional `daprEndpoint` and `daprApiToken` parameters.
 
-> ABP uses `IAbpDaprClientFactory` when it needs to create a Dapr client. You can also use Dapr API to create client objects in your application. Using `IAbpDaprClientFactory` is recommended, but not required.
+> You can use Dapr API to create client objects in your application. Using `IAbpDaprClientFactory` is recommended, but not required.
 
 ## C# API Client Proxies Integration
 
@@ -412,7 +388,7 @@ Or you can set it in your `appsettings.json` file:
 }
 ````
 
-Once you set it, it is used when you inject `DaprClient` or use `IAbpDaprClientFactory`. If you need that value in your application, you can inject `IDaprApiTokenProvider` and use its `GetDaprApiToken()` method.
+Once you set it, it is used when you use `IAbpDaprClientFactory`. If you need that value in your application, you can inject `IDaprApiTokenProvider` and use its `GetDaprApiToken()` method.
 
 ### App API Token
 

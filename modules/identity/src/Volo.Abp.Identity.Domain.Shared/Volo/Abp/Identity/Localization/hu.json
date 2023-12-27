@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Meg tudja-e erősíteni a telefonszámot a felhasználó.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Szükség van-e megerősített telefonszámra a bejelentkezéshez.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Meg tudja e módosítani a felhasználónevet a felhasználó?.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Meg tudja-e módosítani az e-mail címét a felhasználó."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Meg tudja-e módosítani az e-mail címét a felhasználó.",
+    "Details": "Részletek",
+    "CreatedBy": "Készítette",
+    "ModifiedBy": "Módosította",
+    "ModificationTime": "Módosítási idő",
+    "PasswordUpdateTime": "A jelszó frissítési ideje",
+    "LockoutEndTime": "A zárolás befejezési ideje",
+    "FailedAccessCount": "Sikertelen hozzáférések száma"
   }
 }

@@ -6,6 +6,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity;
 
+[Obsolete("Use IIdentityUserIntegrationService for module-to-module (or service-to-service) communication.")]
 public interface IIdentityUserLookupAppService : IApplicationService
 {
     Task<UserData> FindByIdAsync(Guid id);

@@ -4,9 +4,14 @@
     "Features": "विशेषताएं",
     "NoFeatureFoundMessage": "कोई भी उपलब्ध सुविधा नहीं है।",
     "ManageHostFeatures": "होस्ट सुविधाएँ प्रबंधित करें",
+    "ManageHostFeaturesText": "आप निम्न बटन पर क्लिक करके होस्ट साइड सुविधाओं को प्रबंधित कर सकते हैं।",
     "Permission:FeatureManagement": "सुविधा प्रबंधन",
     "Permission:FeatureManagement.ManageHostFeatures": "होस्ट सुविधाएँ प्रबंधित करें",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} सुविधा मान मान्य नहीं है!",
-		"Menu:FeatureManagement": "फ़ीचर प्रबंधन"
+    "Menu:FeatureManagement": "फ़ीचर प्रबंधन",
+    "ResetToDefault": "वितथ पर ले जाएं",
+    "ResetedToDefault": "डिफ़ॉल्ट पर रीसेट किया गया",
+    "AreYouSure": "क्या आपको यकीन है?",
+    "AreYouSureToResetToDefault": "क्या आप निश्चित रूप से डिफ़ॉल्ट पर रीसेट हो गए हैं?"
   }
 }

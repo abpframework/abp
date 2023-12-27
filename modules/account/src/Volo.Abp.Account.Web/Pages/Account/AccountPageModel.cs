@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Localization;
@@ -53,5 +54,23 @@ public abstract class AccountPageModel : AbpPageModel
         }
 
         return exception.Message;
+    }
+
+    protected virtual async Task<string> GetUserNameFromEmail(string email)
+    {
+        var userName = email.Split('@')[0];
+        var existUser = await UserManager.FindByNameAsync(userName);
+        while (existUser != null)
+        {
+            var randomUserName = userName + RandomHelper.GetRandom(1000, 9999);
+            existUser = await UserManager.FindByNameAsync(randomUserName);
+            if (existUser == null)
+            {
+                userName = randomUserName;
+                break;
+            }
+        }
+
+        return userName;
     }
 }

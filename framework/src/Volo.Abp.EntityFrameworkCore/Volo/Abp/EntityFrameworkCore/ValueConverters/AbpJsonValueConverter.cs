@@ -19,7 +19,7 @@ public class AbpJsonValueConverter<TPropertyType> : ValueConverter<TPropertyType
         return JsonSerializer.Serialize(d);
     }
 
-    private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
+    public readonly static JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
     {
         Converters =
         {
@@ -29,6 +29,6 @@ public class AbpJsonValueConverter<TPropertyType> : ValueConverter<TPropertyType
 
     private static TPropertyType DeserializeObject(string s)
     {
-        return JsonSerializer.Deserialize<TPropertyType>(s, DeserializeOptions);
+        return JsonSerializer.Deserialize<TPropertyType>(s, DeserializeOptions)!;
     }
 }

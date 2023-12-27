@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "Tên miền ngắn {ShortName} đã tồn tại.",
     "Preview": "xem trước",
     "Search": "Tìm kiếm",
-    "SearchResults": "kết quả tìm kiếm"
+    "SearchResults": "kết quả tìm kiếm",
+    "SearchInTheAllDocuments": "Tìm kiếm trong tất cả các tài liệu"
   }
 }

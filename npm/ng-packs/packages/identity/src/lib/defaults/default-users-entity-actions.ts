@@ -1,5 +1,5 @@
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
-import { EntityAction } from '@abp/ng.theme.shared/extensions';
+import { EntityAction } from '@abp/ng.components/extensible';
 import { UsersComponent } from '../components/users/users.component';
 import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
 

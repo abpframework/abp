@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "केवल यह प्रदाता",
     "All": "सब",
     "SelectAllInAllTabs": "सभी अनुमतियां प्रदान करें",
-    "SelectAllInThisTab": "सभी का चयन करे"
+    "SelectAllInThisTab": "सभी का चयन करे",
+    "SaveWithoutAnyPermissionsWarningMessage": "क्या आप वाकई बिना किसी अनुमति के सहेजना चाहते हैं?"
   }
 }

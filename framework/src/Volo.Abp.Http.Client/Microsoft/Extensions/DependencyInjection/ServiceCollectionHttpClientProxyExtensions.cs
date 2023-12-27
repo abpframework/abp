@@ -191,7 +191,7 @@ public static class ServiceCollectionHttpClientProxyExtensions
                 return Activator.CreateInstance(
                     typeof(HttpClientProxy<>).MakeGenericType(type),
                     service
-                );
+                )!;
             });
 
         return services;

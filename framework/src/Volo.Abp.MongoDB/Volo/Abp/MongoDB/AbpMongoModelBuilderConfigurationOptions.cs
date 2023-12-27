@@ -12,7 +12,8 @@ public class AbpMongoModelBuilderConfigurationOptions
             _collectionPrefix = value;
         }
     }
-    private string _collectionPrefix;
+
+    private string _collectionPrefix = default!;
 
     public AbpMongoModelBuilderConfigurationOptions([NotNull] string collectionPrefix = "")
     {

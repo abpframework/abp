@@ -15,9 +15,9 @@ public class OutgoingEventRecord :
 
     public ExtraPropertyDictionary ExtraProperties { get; private set; }
 
-    public string EventName { get; private set; }
+    public string EventName { get; private set; } = default!;
 
-    public byte[] EventData { get; private set; }
+    public byte[] EventData { get; private set; } = default!;
 
     public DateTime CreationTime { get; private set; }
 

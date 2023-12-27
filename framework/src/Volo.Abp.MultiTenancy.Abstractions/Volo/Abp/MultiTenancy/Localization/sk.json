@@ -1,0 +1,9 @@
+{
+  "culture": "sk",
+  "texts": {
+    "TenantNotFoundMessage": "Nájomca sa nenašiel!",
+    "TenantNotFoundDetails": "Neexistuje žiadny nájomník s ID alebo menom nájomníka: {0}",
+    "TenantNotActiveMessage": "Nájomca nie je aktívny!",
+    "TenantNotActiveDetails": "Nájomník nie je aktívny s ID alebo menom nájomníka: {0}"
+  }
+}

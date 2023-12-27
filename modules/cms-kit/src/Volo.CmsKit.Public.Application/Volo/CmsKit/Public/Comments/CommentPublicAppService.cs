@@ -63,14 +63,15 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
     {
         CheckExternalUrls(entityType, input.Text);
-        
-        var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
         if (input.RepliedCommentId.HasValue)
         {
             await CommentRepository.GetAsync(input.RepliedCommentId.Value);
         }
 
+        await CheckIdempotencyTokenUniquenessAsync(input.IdempotencyToken);
+
+        var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
         var comment = await CommentRepository.InsertAsync(
             await CommentManager.CreateAsync(
                 user,
@@ -191,5 +192,15 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthorQueryResultItem> comments, Guid commentId)
     {
         return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
+    }
+
+    private async Task CheckIdempotencyTokenUniquenessAsync(string idempotencyToken) 
+    {
+        if(!await CommentRepository.ExistsAsync(idempotencyToken))
+        {
+            return;
+        }
+
+        throw new UserFriendlyException(L["DuplicateCommentAttemptMessage"]);
     }
 }

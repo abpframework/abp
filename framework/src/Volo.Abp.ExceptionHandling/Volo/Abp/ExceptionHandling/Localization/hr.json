@@ -1,0 +1,26 @@
+{
+  "culture": "hr",
+  "texts": {
+    "InternalServerErrorMessage": "Došlo je do interne pogreške tijekom vašeg zahtjeva!",
+    "ValidationErrorMessage": "Vaš zahtjev nije valjan!",
+    "ValidationNarrativeErrorMessageTitle": "Tijekom provjere valjanosti otkrivene su sljedeće pogreške.",
+    "DefaultErrorMessage": "Došlo je do pogreške!",
+    "DefaultErrorMessageDetail": "Poslužitelj nije poslao pojedinosti o pogrešci.",
+    "DefaultErrorMessage401": "Niste ovjereni!",
+    "DefaultErrorMessage401Detail": "Morate se prijaviti za izvođenje ove operacije.",
+    "DefaultErrorMessage403": "Niste ovlašteni!",
+    "DefaultErrorMessage403Detail": "Nije vam dopušteno izvršiti ovu operaciju!",
+    "DefaultErrorMessage404": "Resurs nije pronađen!",
+    "DefaultErrorMessage404Detail": "Zatraženi resurs nije pronađen na poslužitelju!",
+    "EntityNotFoundErrorMessage": "Ne postoji entitet {0} s ID = {1}!",
+    "AbpDbConcurrencyErrorMessage": "Podatke koje ste dostavili već je promijenio drugi korisnik/klijent. Odbacite promjene koje ste napravili i pokušajte ispočetka.",
+    "Error": "Greška",
+    "UnhandledException": "Neobrađena iznimka!",
+    "401Message": "Neovlašteno",
+    "403Message": "Zabranjeno",
+    "404Message": "Stranica nije pronađena",
+    "500Message": "Interna pogreška poslužitelja",
+    "403MessageDetail": "Niste ovlašteni za izvođenje ove operacije!",
+    "404MessageDetail": "Nažalost, na ovoj adresi nema ničega."
+  }
+}

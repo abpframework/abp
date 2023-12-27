@@ -66,6 +66,8 @@
     "PasswordResetInfoInEmail": "Saimme tilin palautuspyynnön! Jos aloitit tämän pyynnön, voit nollata salasanasi napsauttamalla seuraavaa linkkiä.",
     "ResetMyPassword": "Vaihda salasanani",
     "AccessDenied": "Pääsy evätty!",
-    "AccessDeniedMessage": "Sinulla ei ole pääsyä tähän resurssiin."
+    "AccessDeniedMessage": "Sinulla ei ole pääsyä tähän resurssiin.",
+    "OrRegisterWith": "Tai rekisteröidy:",
+    "RegisterUsingYourProviderAccount": "Rekisteröidy {0} -tililläsi"
   }
 }

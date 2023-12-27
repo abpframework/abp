@@ -117,6 +117,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Či môže používateľ potvrdiť telefónne číslo.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Či sa na prihlásenie vyžaduje potvrdené telefónne číslo.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Či môže používateľ aktualizovať používateľské meno.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Či môže používateľ aktualizovať email."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Či môže používateľ aktualizovať email.",
+    "Details": "Podrobnosti",
+    "CreatedBy": "Vytvoril",
+    "ModifiedBy": "Upravené používateľom",
+    "ModificationTime": "Čas úpravy",
+    "PasswordUpdateTime": "Čas aktualizácie hesla",
+    "LockoutEndTime": "Čas ukončenia uzamknutia",
+    "FailedAccessCount": "Počet neúspešných prístupov"
   }
 }

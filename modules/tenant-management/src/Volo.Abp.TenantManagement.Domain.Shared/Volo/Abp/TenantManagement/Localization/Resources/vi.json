@@ -1,6 +1,7 @@
 {
   "culture": "vi",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Tên người thuê đã tồn tại: {Name}",
     "Menu:TenantManagement": "Quản lý người thuê",
     "Tenants": "Người thuê",
     "NewTenant": "Người thuê mới",

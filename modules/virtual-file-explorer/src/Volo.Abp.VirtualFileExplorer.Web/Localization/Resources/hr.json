@@ -1,0 +1,14 @@
+{
+  "culture": "hr",
+  "texts": {
+    "VirtualFileExplorer": "Virtualni preglednik datoteka",
+    "VirtualFileType": "Virtualna vrsta datoteke",
+    "Menu:VirtualFileExplorer": "Virtualni preglednik datoteka",
+    "LastUpdateTime": "Vrijeme posljednjeg ažuriranja",
+    "VirtualFileName": "Naziv virtualne datoteke",
+    "FileContent": "Sadržaj datoteke",
+    "Size": "Veličina",
+    "BackToRoot": "Natrag na korijen",
+    "EmptyFileInfoList": "Nema virtualnih datoteka"
+  }
+}

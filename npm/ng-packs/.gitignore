@@ -56,3 +56,5 @@ Thumbs.db
 *.internal.*
 
 .angular
+
+.nx/

@@ -7,7 +7,7 @@ namespace Volo.Abp.IdentityModel;
 [Serializable]
 public class IdentityModelTokenCacheItem
 {
-    public string AccessToken { get; set; }
+    public string AccessToken { get; set; } = default!;
 
     public IdentityModelTokenCacheItem()
     {

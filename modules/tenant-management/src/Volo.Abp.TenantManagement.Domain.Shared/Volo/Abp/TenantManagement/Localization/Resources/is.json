@@ -1,6 +1,7 @@
 {
   "culture": "is",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Nafn leigjanda er þegar til: {Name}",
     "Menu:TenantManagement": "Tenant umsjá",
     "Tenants": "Tenantar",
     "NewTenant": "Nýr tenant",

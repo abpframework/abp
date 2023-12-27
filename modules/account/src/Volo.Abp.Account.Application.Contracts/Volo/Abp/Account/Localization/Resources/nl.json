@@ -1,6 +1,7 @@
 {
   "culture": "nl",
   "texts": {
+    "Menu:Account": "Rekening",
     "UserName": "Gebruikersnaam",
     "EmailAddress": "E-mailadres",
     "UserNameOrEmailAddress": "Gebruikersnaam of e-mailadres",
@@ -33,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefoonnummer",
     "PersonalSettings": "Persoonlijke instellingen",
     "PersonalSettingsSaved": "Persoonlijke instellingen opgeslagen",
+    "PersonalSettingsChangedConfirmationModalTitle": "Persoonlijke gegevens gewijzigd",
+    "PersonalSettingsChangedConfirmationModalDescription": "Als u deze wijzigingen wilt toepassen, moet u inloggen. Wilt u uitloggen?",
     "PasswordChanged": "Wachtwoord veranderd",
     "NewPasswordConfirmFailed": "Bevestig het nieuwe wachtwoord a.u.b.",
     "NewPasswordSameAsOld": "Het nieuwe wachtwoord moet verschillen van het huidige wachtwoord.",
@@ -63,6 +66,8 @@
     "PasswordResetInfoInEmail": "We hebben een verzoek ontvangen om uw wachtwoord opnieuw in te stellen. Als u dit verzoek heeft ingediend, klikt u op de volgende link om een nieuw wachtwoord in te stellen.",
     "ResetMyPassword": "Reset mijn wachtwoord",
     "AccessDenied": "Toegang geweigerd!",
-    "AccessDeniedMessage": "U heeft geen toegang tot deze bron."
+    "AccessDeniedMessage": "U heeft geen toegang tot deze bron.",
+    "OrRegisterWith": "Of registreer met:",
+    "RegisterUsingYourProviderAccount": "Registreer met uw {0} -account"
   }
 }

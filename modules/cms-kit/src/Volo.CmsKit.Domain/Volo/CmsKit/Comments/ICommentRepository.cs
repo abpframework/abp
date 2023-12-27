@@ -44,4 +44,6 @@ public interface ICommentRepository : IBasicRepository<Comment, Guid>
         Comment comment,
         CancellationToken cancellationToken = default
     );
+
+    Task<bool> ExistsAsync(string idempotencyToken, CancellationToken cancellationToken = default);
 }
