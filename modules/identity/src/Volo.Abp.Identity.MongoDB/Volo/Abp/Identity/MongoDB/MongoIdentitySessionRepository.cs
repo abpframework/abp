@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -36,11 +38,37 @@ public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMong
         return session;
     }
 
-    public virtual async Task<List<IdentitySession>> GetListAsync(Guid userId, CancellationToken cancellationToken = default)
+    public virtual async Task<List<IdentitySession>> GetListAsync(
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        Guid? userId = null,
+        string device = null,
+        string clientId = null,
+        CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+            .WhereIf(userId.HasValue, x => x.UserId == userId)
+            .WhereIf(!device.IsNullOrWhiteSpace(), x => x.Device == device)
+            .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySession.LastAccessed)} desc" : sorting)
+            .PageBy(skipCount, maxResultCount)
             .As<IMongoQueryable<IdentitySession>>()
-            .Where(x => x.UserId == userId).ToListAsync(GetCancellationToken(cancellationToken));
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<long> GetCountAsync(
+        Guid? userId = null,
+        string device = null,
+        string clientId = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+            .WhereIf(userId.HasValue, x => x.UserId == userId)
+            .WhereIf(!device.IsNullOrWhiteSpace(), x => x.Device == device)
+            .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .As<IMongoQueryable<IdentitySession>>()
+            .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task DeleteAllAsync(Guid userId, Guid? exceptSessionId = null, CancellationToken cancellationToken = default)

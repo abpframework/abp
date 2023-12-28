@@ -35,9 +35,35 @@ public class EfCoreIdentitySessionRepository : EfCoreRepository<IIdentityDbConte
         return session;
     }
 
-    public virtual async Task<List<IdentitySession>> GetListAsync(Guid userId, CancellationToken cancellationToken = default)
+    public virtual async Task<List<IdentitySession>> GetListAsync(
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        Guid? userId = null,
+        string device = null,
+        string clientId = null,
+        CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync()).Where(x => x.UserId == userId).ToListAsync(GetCancellationToken(cancellationToken));
+        return await (await GetDbSetAsync())
+            .WhereIf(userId.HasValue, x => x.UserId == userId)
+            .WhereIf(!device.IsNullOrWhiteSpace(), x => x.Device == device)
+            .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySession.LastAccessed)} desc" : sorting)
+            .PageBy(skipCount, maxResultCount)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<long> GetCountAsync(
+        Guid? userId = null,
+        string device = null,
+        string clientId = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .WhereIf(userId.HasValue, x => x.UserId == userId)
+            .WhereIf(!device.IsNullOrWhiteSpace(), x => x.Device == device)
+            .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async  Task DeleteAllAsync(Guid userId, Guid? exceptSessionId = null, CancellationToken cancellationToken = default)
