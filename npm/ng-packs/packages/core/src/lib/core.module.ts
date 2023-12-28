@@ -39,8 +39,10 @@ import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
-import {DYNAMIC_LAYOUTS_TOKEN} from "./tokens/dynamic-layout.token";
-import {DEFAULT_DYNAMIC_LAYOUTS} from "./constants";
+import { AuthErrorFilterService } from './abstracts';
+import { DYNAMIC_LAYOUTS_TOKEN } from "./tokens/dynamic-layout.token";
+import { DEFAULT_DYNAMIC_LAYOUTS } from "./constants";
+
 
 const standaloneDirectives = [
   AutofocusDirective,
