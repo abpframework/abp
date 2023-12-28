@@ -5,7 +5,7 @@
   "scripts": {
     "remove-lock-files": "yarn && ts-node -r tsconfig-paths/register remove-lock-files.ts",
     "validate-versions": "yarn && ts-node -r tsconfig-paths/register validate-versions.ts",
-    "change-package-version": "ts-node -r tsconfig-paths/register change-package-version.ts -n  @abp/ng.theme.lepton-x -v 3.0.0"
+    "change-package-version": "ts-node -r tsconfig-paths/register change-package-version.ts"
   },
   "dependencies": {
     "axios": "^0.24.0",
