@@ -491,6 +491,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
             } while (tryCount < maxTryCount);
         }
 
-        throw new AbpException($"Could not get a valid user name for the given email address: {email}, allowed characters: {Options.User.AllowedUserNameCharacters}, tried {maxTryCount} times.");
+        Logger.LogError($"Could not get a valid user name for the given email address: {email}, allowed characters: {Options.User.AllowedUserNameCharacters}, tried {maxTryCount} times.");
+        throw new AbpIdentityResultException(IdentityResult.Failed(new IdentityErrorDescriber().InvalidUserName(userName)));
     }
 }
