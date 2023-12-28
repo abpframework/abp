@@ -56,6 +56,7 @@
     "FileName": "Název souboru",
     "LastCachedTime": "Čas uložení v mezipaměti",
     "Project": "Projekt",
+    "AdvancedFilters": "Pokročilé filtry",
     "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" bude odstraněn z mezipaměti a znovu zaindexován. Potvrzujete to?"
   }
 }

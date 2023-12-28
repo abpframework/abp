@@ -11,7 +11,7 @@ public interface IMongoDbBulkOperationProvider
     Task InsertManyAsync<TEntity>(
        IMongoDbRepository<TEntity> repository,
        IEnumerable<TEntity> entities,
-        IClientSessionHandle sessionHandle,
+        IClientSessionHandle? sessionHandle,
        bool autoSave,
        CancellationToken cancellationToken
    )
@@ -20,7 +20,7 @@ public interface IMongoDbBulkOperationProvider
     Task UpdateManyAsync<TEntity>(
         IMongoDbRepository<TEntity> repository,
         IEnumerable<TEntity> entities,
-        IClientSessionHandle sessionHandle,
+        IClientSessionHandle? sessionHandle,
         bool autoSave,
         CancellationToken cancellationToken
     )
@@ -29,7 +29,7 @@ public interface IMongoDbBulkOperationProvider
     Task DeleteManyAsync<TEntity>(
         IMongoDbRepository<TEntity> repository,
         IEnumerable<TEntity> entities,
-        IClientSessionHandle sessionHandle,
+        IClientSessionHandle? sessionHandle,
         bool autoSave,
         CancellationToken cancellationToken
     )

@@ -1,6 +1,7 @@
 {
   "culture": "ro-RO",
   "texts": {
+    "Menu:Account": "Cont",
     "UserName": "Nume de utilizator",
     "EmailAddress": "Adresa de email",
     "UserNameOrEmailAddress": "Nume de utilizator sau adresa de email",
@@ -33,6 +34,8 @@
     "DisplayName:PhoneNumber": "Număr de telefon",
     "PersonalSettings": "Setări personale",
     "PersonalSettingsSaved": "Setări personale salvate",
+    "PersonalSettingsChangedConfirmationModalTitle": "Informațiile personale s-au schimbat",
+    "PersonalSettingsChangedConfirmationModalDescription": "Dacă doriți să aplicați aceste modificări, trebuie să vă autentificați. Doriți să vă deconectați?",
     "PasswordChanged": "Parola schimbată",
     "NewPasswordConfirmFailed": "Vă rugăm să confirmaţi noua parolă.",
     "NewPasswordSameAsOld": "Noua parolă trebuie să fie diferită de cea curentă.",
@@ -63,6 +66,8 @@
     "PasswordResetInfoInEmail": "Am primit o cerere de recuperare a contului! Dacă dumneavoastră aţi iniţiat această cerere, daţi click pe următorul link pentru a vă reseta parola.",
     "ResetMyPassword": "Resetează-mi parola",
     "AccessDenied": "Acces interzis!",
-    "AccessDeniedMessage": "Nu aveţi acces la această resursă."
+    "AccessDeniedMessage": "Nu aveţi acces la această resursă.",
+    "OrRegisterWith": "Sau înregistraţi-vă cu:",
+    "RegisterUsingYourProviderAccount": "Înregistraţi-vă folosindu-vă contul {0}"
   }
 }

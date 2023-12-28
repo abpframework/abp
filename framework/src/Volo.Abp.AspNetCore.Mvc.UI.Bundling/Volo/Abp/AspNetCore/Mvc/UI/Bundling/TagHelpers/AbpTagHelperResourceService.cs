@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -63,18 +65,24 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
 
         foreach (var bundleFile in bundleFiles)
         {
-            var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile);
-
-            if (file == null || !file.Exists)
+            if (bundleFile.IsExternalFile)
             {
-                Logger.LogError($"Could not find the bundle file '{bundleFile}' for the bundle '{bundleName}'!");
-                AddErrorScript(viewContext, tagHelper, context, output, bundleFile, bundleName!);
-                continue;
+                AddHtmlTag(viewContext, tagHelper, context, output, bundleFile, null);
             }
-
-            if (file.Length > 0)
+            else
             {
-                AddHtmlTag(viewContext, tagHelper, context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
+                var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile.FileName);
+                if (file == null || !file.Exists)
+                {
+                    Logger.LogError($"Could not find the bundle file '{bundleFile.FileName}' for the bundle '{bundleName}'!");
+                    AddErrorScript(viewContext, tagHelper, context, output, bundleFile, bundleName!);
+                    continue;
+                }
+
+                if (file.Length > 0)
+                {
+                    AddHtmlTag(viewContext, tagHelper, context, output, bundleFile, file);
+                }
             }
         }
 
@@ -84,13 +92,13 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
 
     protected abstract void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems);
 
-    protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName);
+    protected abstract Task<IReadOnlyList<BundleFile>> GetBundleFilesAsync(string bundleName);
 
-    protected abstract void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file);
+    protected abstract void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, BundleFile file, IFileInfo? fileInfo = null);
 
-    protected virtual void AddErrorScript(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file, string bundleName)
+    protected virtual void AddErrorScript(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, BundleFile file, string bundleName)
     {
-        output.Content.AppendHtml($"<script>console.log(\"%cCould not find the bundle file '{file}' for the bundle '{bundleName}'!\", 'background: yellow; font-size:20px;');</script>{Environment.NewLine}");
+        output.Content.AppendHtml($"<script>console.log(\"%cCould not find the bundle file '{file.FileName}' for the bundle '{bundleName}'!\", 'background: yellow; font-size:20px;');</script>{Environment.NewLine}");
     }
 
     protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)

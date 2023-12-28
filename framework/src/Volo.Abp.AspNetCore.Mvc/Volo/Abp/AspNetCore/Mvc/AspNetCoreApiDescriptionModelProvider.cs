@@ -145,7 +145,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             ActionApiDescriptionModel.Create(
                 uniqueMethodName,
                 method,
-                apiDescription.RelativePath,
+                apiDescription.RelativePath!,
                 apiDescription.HttpMethod,
                 GetSupportedVersions(controllerType, method, setting),
                 allowAnonymous,
@@ -214,6 +214,8 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             type == typeof(void) ||
             type == typeof(Enum) ||
             type == typeof(ValueType) ||
+            type == typeof(DateOnly) ||
+            type == typeof(TimeOnly) ||
             TypeHelper.IsPrimitiveExtended(type))
         {
             return;

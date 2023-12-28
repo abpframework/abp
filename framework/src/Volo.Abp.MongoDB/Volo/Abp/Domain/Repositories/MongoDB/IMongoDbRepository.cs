@@ -23,9 +23,9 @@ public interface IMongoDbRepository<TEntity> : IRepository<TEntity>
     [Obsolete("Use GetMongoQueryableAsync method.")]
     IMongoQueryable<TEntity> GetMongoQueryable();
 
-    Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions options = null);
+    Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null);
 
-    Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default, AggregateOptions options = null);
+    Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null);
 }
 
 public interface IMongoDbRepository<TEntity, TKey> : IMongoDbRepository<TEntity>, IRepository<TEntity, TKey>

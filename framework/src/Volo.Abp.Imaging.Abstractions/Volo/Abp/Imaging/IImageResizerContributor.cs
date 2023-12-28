@@ -10,12 +10,12 @@ public interface IImageResizerContributor
     Task<ImageResizeResult<Stream>> TryResizeAsync(
         Stream stream, 
         ImageResizeArgs resizeArgs, 
-        [CanBeNull] string mimeType = null, 
+        string? mimeType = null, 
         CancellationToken cancellationToken = default);
     
     Task<ImageResizeResult<byte[]>> TryResizeAsync(
         byte[] bytes, 
         ImageResizeArgs resizeArgs, 
-        [CanBeNull] string mimeType = null, 
+        string? mimeType = null, 
         CancellationToken cancellationToken = default);
 }

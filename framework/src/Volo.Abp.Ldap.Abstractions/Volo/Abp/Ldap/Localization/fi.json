@@ -1,6 +1,8 @@
 {
   "culture": "fi",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP SSL:n kautta",
+    "Description:Abp.Ldap.Ldaps": "LDAP SSL:n kautta",
     "DisplayName:Abp.Ldap.ServerHost": "Palvelimen isäntä",
     "Description:Abp.Ldap.ServerHost": "Palvelimen isäntä",
     "DisplayName:Abp.Ldap.ServerPort": "Palvelimen portti",

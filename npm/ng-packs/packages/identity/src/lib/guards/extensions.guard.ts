@@ -10,7 +10,7 @@ import {
   mapEntitiesToContributors,
   mergeWithDefaultActions,
   mergeWithDefaultProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 
 import { eIdentityComponents } from '../enums/components';
 import {
@@ -26,6 +26,9 @@ import {
   IDENTITY_TOOLBAR_ACTION_CONTRIBUTORS,
 } from '../tokens/extensions.token';
 
+/**
+ * @deprecated Use `identityExtensionsResolver` *function* instead.
+ */
 @Injectable()
 export class IdentityExtensionsGuard implements IAbpGuard {
   protected readonly configState = inject(ConfigStateService);

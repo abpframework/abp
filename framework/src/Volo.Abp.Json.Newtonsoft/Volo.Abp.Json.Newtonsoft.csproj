@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.Json.Newtonsoft</AssemblyName>
@@ -19,7 +19,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.Json.Abstractions\Volo.Abp.Json.Abstractions.csproj" />
         <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 
 </Project>

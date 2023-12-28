@@ -1,6 +1,7 @@
 {
   "culture": "ru",
   "texts": {
+    "Menu:Account": "Счет",
     "UserName": "Имя пользователя",
     "EmailAddress": "Адрес электронной почты",
     "UserNameOrEmailAddress": "Имя пользователя или адрес электронной почты",
@@ -33,6 +34,8 @@
     "DisplayName:PhoneNumber": "Номер телефона",
     "PersonalSettings": "Персональные настройки",
     "PersonalSettingsSaved": "Персональные настройки сохранены",
+    "PersonalSettingsChangedConfirmationModalTitle": "Личная информация изменена",
+    "PersonalSettingsChangedConfirmationModalDescription": "Если вы хотите применить эти изменения, вам необходимо войти в систему. Вы хотите выйти из системы?",
     "PasswordChanged": "Пароль изменен",
     "NewPasswordConfirmFailed": "Пожалуйста подтвердите новый пароль.",
     "NewPasswordSameAsOld": "Новый пароль не должен совпадать со старым.",
@@ -63,6 +66,8 @@
     "PasswordResetInfoInEmail": "Мы получили запрос на восстановление аккаунта! Если вы инициировали этот запрос, щелкните следующую ссылку, чтобы сбросить пароль.",
     "ResetMyPassword": "Сбросить пароль",
     "AccessDenied": "В доступе отказано!",
-    "AccessDeniedMessage": "У вас нет доступа к этому ресурсу."
+    "AccessDeniedMessage": "У вас нет доступа к этому ресурсу.",
+    "OrRegisterWith": "Или зарегистрируйтесь с помощью:",
+    "RegisterUsingYourProviderAccount": "Зарегистрируйтесь, используя свой {0} аккаунт"
   }
 }

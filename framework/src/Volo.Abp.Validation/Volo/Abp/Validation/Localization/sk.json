@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Toto pole musí byť typu reťazec alebo pole s minimálnou dĺžkou '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "V tomto poli nie je platné telefónne číslo.",
     "ThisFieldMustBeBetween{0}And{1}": "Toto pole musí byť medzi {0} a {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Toto pole musí byť väčšie alebo rovné {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "Toto pole musí byť menšie alebo rovné {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "Toto pole musí zodpovedať regulárnemu výrazu '{0}'.",
     "ThisFieldIsRequired.": "Toto pole je povinné.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Toto pole musí byť typu reťazec s maximálnou dĺžkou {0}.",

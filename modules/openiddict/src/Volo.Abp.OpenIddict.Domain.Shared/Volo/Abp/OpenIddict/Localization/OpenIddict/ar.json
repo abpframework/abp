@@ -1,0 +1,15 @@
+{
+  "culture": "ar",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "لا يمكن استرداد طلب OpenID Connect.",
+    "TheUserDetailsCannotBbeRetrieved": "لا يمكن استرجاع تفاصيل المستخدم.",
+    "TheApplicationDetailsCannotBeFound": "لا يمكن العثور على تفاصيل التطبيق.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "لا يمكن العثور على التفاصيل المتعلقة بتطبيق العميل المتصل.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "لم يتم تنفيذ نوع المنحة المحدد {0}.",
+    "Authorization": "تفويض",
+    "DoYouWantToGrantAccessToYourData": "هل تريد منح {0} حق الوصول إلى بياناتك؟",
+    "ScopesRequested": "النطاقات المطلوبة",
+    "Accept": "يقبل",
+    "Deny": "ينكر"
+  }
+}

@@ -184,6 +184,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                     var currentVersion = versionAttribute.Value;
                     
                     var isLeptonXPackage = packageId.Contains("LeptonX");
+                    var isStudioPackage = packageId.StartsWith("Volo.Abp.Studio.");
                     if(isLeptonXPackage)
                     {
                         //'SemanticVersion.TryParse' can not parse the version if the version contains floating version resolution, such as '*-*'
@@ -201,7 +202,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
 
                     if (!specifiedVersion.IsNullOrWhiteSpace())
                     {
-                        if (isLeptonXPackage)
+                        if (isLeptonXPackage || isStudioPackage)
                         {
                             Logger.LogWarning("Package: {0} could not be updated. Please manually update the package version yourself to prevent version mismatches.", packageId);
                             continue;
@@ -232,6 +233,17 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                             string latestVersion;
                             if(isLeptonXPackage)
                             {
+                                var leptonXPackageName = packageId;
+                                if(includeNightlyPreviews) 
+                                {
+                                    //use LeptonX Lite package as the package name to be able to get the package version from the 'abp-nightly' feed.
+                                    leptonXPackageName = "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite";
+                                }
+
+                                latestVersion = (await _packageVersionCheckerService.GetLatestVersionOrNullAsync(leptonXPackageName, includeNightlyPreviews, includeReleaseCandidates))?.Version?.ToString();
+                            }
+                            else if(isStudioPackage)
+                            {
                                 latestVersion = (await _packageVersionCheckerService.GetLatestVersionOrNullAsync(packageId, includeNightlyPreviews, includeReleaseCandidates))?.Version?.ToString();
                             }
                             else
@@ -260,13 +272,13 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                             SemanticVersion latestVersion;
                             if (currentSemanticVersion.IsPrerelease && !switchToStable)
                             {
-                                latestVersion = latestNugetReleaseCandidateVersion == null || isLeptonXPackage 
+                                latestVersion = latestNugetReleaseCandidateVersion == null || isLeptonXPackage || isStudioPackage
                                     ? (await _packageVersionCheckerService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: true))?.Version 
                                     : latestNugetReleaseCandidateVersion;
                             }
                             else
                             {
-                                latestVersion = latestNugetVersion == null || isLeptonXPackage 
+                                latestVersion = latestNugetVersion == null || isLeptonXPackage || isStudioPackage
                                     ? (await _packageVersionCheckerService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: includeReleaseCandidates))?.Version 
                                     : latestNugetVersion;
                             }

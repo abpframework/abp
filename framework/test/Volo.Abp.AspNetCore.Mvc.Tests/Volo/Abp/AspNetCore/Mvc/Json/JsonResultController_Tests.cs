@@ -10,14 +10,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Json;
 
 public class JsonResultController_Tests : AspNetCoreMvcTestBase
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpJsonOptions>(options =>
         {
             options.OutputDateTimeFormat = "yyyy*MM*dd";
         });
 
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
 
     [Fact]

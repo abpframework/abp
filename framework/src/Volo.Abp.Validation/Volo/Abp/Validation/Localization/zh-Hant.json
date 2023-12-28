@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "此欄位必須是最小長度為'{0}'的字串或陣列.",
     "ThisFieldIsNotAValidPhoneNumber.": "此欄位不是有效的電話號碼.",
     "ThisFieldMustBeBetween{0}And{1}": "此欄位值必須在{0}和{1}範圍內.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "該字段必須大於或等於 {0}。",
+    "ThisFieldMustBeLessOrEqual{0}": "該欄位必須小於或等於 {0}。",
     "ThisFieldMustMatchTheRegularExpression{0}": "此欄位必須匹配正規表示式'{0}'.",
     "ThisFieldIsRequired.": "此欄位不可為空.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "此欄位必須是長度為{0}的字串.",

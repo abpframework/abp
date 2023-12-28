@@ -31,7 +31,7 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
     {
         name = DistributedLockKeyNormalizer.NormalizeKey(name);
 
-        var daprClient = DaprClientFactory.Create();
+        var daprClient = await DaprClientFactory.CreateAsync();
         var lockResponse = await daprClient.Lock(
             DistributedLockDaprOptions.StoreName,
             name,

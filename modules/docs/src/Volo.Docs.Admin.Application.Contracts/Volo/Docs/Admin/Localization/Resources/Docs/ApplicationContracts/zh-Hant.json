@@ -56,6 +56,7 @@
     "FileName": "文檔名稱",
     "LastCachedTime": "緩存時間",
     "Project": "项目",
+    "AdvancedFilters": "進階過濾器",
     "RemoveCacheAndReIndexConfirmation": "文檔“{0}”將從緩存中刪除並重新編制索引。 你確認嗎？"
   }
 }

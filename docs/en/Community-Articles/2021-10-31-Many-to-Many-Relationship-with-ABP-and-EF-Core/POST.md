@@ -594,7 +594,7 @@ namespace BookStore.EntityFrameworkCore
             /* Configure your own tables/entities inside here */
             builder.Entity<Author>(b =>
             {
-                b.ToTable(BookStoreConsts.DbTablePrefix + "Authors" + BookStoreConsts.DbSchema);
+                b.ToTable(BookStoreConsts.DbTablePrefix + "Authors", BookStoreConsts.DbSchema);
                 b.ConfigureByConvention();
 
                 b.Property(x => x.Name)
@@ -608,7 +608,7 @@ namespace BookStore.EntityFrameworkCore
 
             builder.Entity<Book>(b =>
             {
-                b.ToTable(BookStoreConsts.DbTablePrefix + "Books" + BookStoreConsts.DbSchema);
+                b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
                 b.ConfigureByConvention();
 
                 b.Property(x => x.Name)
@@ -624,7 +624,7 @@ namespace BookStore.EntityFrameworkCore
 
             builder.Entity<Category>(b =>
             {
-                b.ToTable(BookStoreConsts.DbTablePrefix + "Categories" + BookStoreConsts.DbSchema);
+                b.ToTable(BookStoreConsts.DbTablePrefix + "Categories", BookStoreConsts.DbSchema);
                 b.ConfigureByConvention();
 
                 b.Property(x => x.Name)
@@ -634,7 +634,7 @@ namespace BookStore.EntityFrameworkCore
 
             builder.Entity<BookCategory>(b =>
             {
-                b.ToTable(BookStoreConsts.DbTablePrefix + "BookCategories" + BookStoreConsts.DbSchema);
+                b.ToTable(BookStoreConsts.DbTablePrefix + "BookCategories", BookStoreConsts.DbSchema);
                 b.ConfigureByConvention();
 
                 //define composite key

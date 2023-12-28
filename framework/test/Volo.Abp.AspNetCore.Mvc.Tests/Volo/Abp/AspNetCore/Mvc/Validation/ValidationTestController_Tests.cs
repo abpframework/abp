@@ -118,14 +118,14 @@ public class ValidationTestController_Tests : AspNetCoreMvcTestBase
 
 public class DisableAutoModelValidationTestController_Tests : AspNetCoreMvcTestBase
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.AutoModelValidation = false;
         });
 
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
 
     [Fact]

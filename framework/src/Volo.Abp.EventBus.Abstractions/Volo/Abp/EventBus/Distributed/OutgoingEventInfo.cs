@@ -12,9 +12,9 @@ public class OutgoingEventInfo : IHasExtraProperties
 
     public Guid Id { get; }
 
-    public string EventName { get; }
+    public string EventName { get; } = default!;
 
-    public byte[] EventData { get; }
+    public byte[] EventData { get; } = default!;
 
     public DateTime CreationTime { get; }
 
@@ -43,7 +43,7 @@ public class OutgoingEventInfo : IHasExtraProperties
         ExtraProperties[EventBusConsts.CorrelationIdHeaderName] = correlationId;
     }
 
-    public string GetCorrelationId()
+    public string? GetCorrelationId()
     {
         return ExtraProperties.GetOrDefault(EventBusConsts.CorrelationIdHeaderName)?.ToString();
     }

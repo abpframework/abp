@@ -310,6 +310,24 @@ public class AppModule : AbpModule
 
 > 注意, 如果服务类公开了多于一个服务或接口, `OnRegistered` 回调(callback)可能被同一服务类多次调用. 因此, 较安全的方法是使用 `Interceptors.TryAdd` 方法而不是 `Interceptors.Add` 方法. 请参阅动态代理(dynamic proxying)/拦截器 [文档](Dynamic-Proxying-Interceptors.md).
 
+### IServiceCollection.OnActivated 事件
+
+一旦服务完全构建完成`OnActivated`事件就会触发. 你可以执行依赖于服务已完全构建的的一些任务, 虽然这种情况可能很少见.
+
+````csharp
+var serviceDescriptor = ServiceDescriptor.Transient<MyServer, MyServer>();
+services.Add(serviceDescriptor);
+if (setIsReadOnly)
+{
+    services.OnActivated(serviceDescriptor, x =>
+    {
+        x.Instance.As<MyServer>().IsReadOnly = true;
+    });
+}
+````
+
+> 注意，`OnActivated`事件可以为一个`ServiceDescriptor`注册多次.
+
 ## 第三方提供程序
 
 虽然ABP框架没有对任何第三方DI提供程序的核心依赖, 但它必须使用一个提供程序来支持动态代理(dynamic proxying)和一些高级特性以便ABP特性能正常工作.

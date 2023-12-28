@@ -52,6 +52,8 @@ public class AbpInputTagHelper : AbpTagHelper<AbpInputTagHelper, AbpInputTagHelp
 
     public CheckBoxHiddenInputRenderMode? CheckBoxHiddenInputRenderMode { get; set; }
 
+    public bool AddMarginBottomClass  { get; set; } = true;
+
     public AbpInputTagHelper(AbpInputTagHelperService tagHelperService)
         : base(tagHelperService)
     {

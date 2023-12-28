@@ -27,10 +27,10 @@ public class SharedThemeGlobalStyleContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddRange(new[]
+        context.Files.AddRange(new BundleFile[]
         {
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/date-range-picker/date-range-picker-styles.css"
-            });
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/date-range-picker/date-range-picker-styles.css"
+        });
     }
 }

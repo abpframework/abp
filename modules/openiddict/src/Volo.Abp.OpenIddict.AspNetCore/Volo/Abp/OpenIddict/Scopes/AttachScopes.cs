@@ -21,7 +21,7 @@ public class AttachScopes : IOpenIddictServerHandler<OpenIddictServerEvents.Hand
         _scopeRepository = scopeRepository;
     }
 
-    public async ValueTask HandleAsync(OpenIddictServerEvents.HandleConfigurationRequestContext context)
+    public virtual async ValueTask HandleAsync(OpenIddictServerEvents.HandleConfigurationRequestContext context)
     {
         if (context is null)
         {
