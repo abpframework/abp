@@ -436,4 +436,57 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return Task.FromResult(randomUserName);
     }
+
+    public virtual async Task<string> GetUserNameFromEmailAsync(string email)
+    {
+        var userName = email.Split('@')[0];
+        if (!Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace() && !userName.All(Options.User.AllowedUserNameCharacters.Contains))
+        {
+            // The user name contains not allowed characters. We will use the email address as user name.
+            return email;
+        }
+
+        if (await ValidateUserNameAsync(userName))
+        {
+            return userName;
+        }
+
+        const int maxTryCount = 10;
+        var tryCount = 0;
+
+        if (Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace() || "0123456789".All(Options.User.AllowedUserNameCharacters.Contains))
+        {
+            var randomUserName = userName;
+            var isUserNameValid = await ValidateUserNameAsync(randomUserName);
+            while (tryCount < maxTryCount)
+            {
+                randomUserName = userName + RandomHelper.GetRandom(1000, 9999);
+                isUserNameValid = await ValidateUserNameAsync(randomUserName);
+                if (isUserNameValid)
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            }
+            if (isUserNameValid)
+            {
+                return randomUserName;
+            }
+        }
+
+        tryCount = 0;
+        while (tryCount < maxTryCount)
+        {
+            var randomUserName = userName + await GetRandomUserNameAsync(4);
+            var isUserNameValid = await ValidateUserNameAsync(randomUserName);
+            if (isUserNameValid)
+            {
+                return randomUserName;
+            }
+            tryCount++;
+        }
+
+        // We could not find a valid user name so we are returning the email address.
+        return email;
+    }
 }
