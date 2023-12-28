@@ -39,5 +39,13 @@
     "statusBar.foreground": "#e7e7e7"
   },
   "peacock.color": "#1D70A2",
-  "eslint.validate": ["json"]
+  "eslint.validate": [
+    "json"
+  ],
+  "[typescriptreact][xml]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "never",
+      "source.organizeImports": "never"
+    }
+  }
 }
