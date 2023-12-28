@@ -439,54 +439,58 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public virtual async Task<string> GetUserNameFromEmailAsync(string email)
     {
-        var userName = email.Split('@')[0];
-        if (!Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace() && !userName.All(Options.User.AllowedUserNameCharacters.Contains))
-        {
-            // The user name contains not allowed characters. We will use the email address as user name.
-            return email;
-        }
-
-        if (await ValidateUserNameAsync(userName))
-        {
-            return userName;
-        }
-
-        const int maxTryCount = 10;
+        const int maxTryCount = 20;
         var tryCount = 0;
 
-        if (Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace() || "0123456789".All(Options.User.AllowedUserNameCharacters.Contains))
+        var userName = email.Split('@')[0];
+
+        if (!Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace() && !userName.All(Options.User.AllowedUserNameCharacters.Contains))
         {
-            var randomUserName = userName;
-            var isUserNameValid = await ValidateUserNameAsync(randomUserName);
-            while (tryCount < maxTryCount)
+            // The username contains not allowed characters. So, we are generating a random username.
+            do
             {
-                randomUserName = userName + RandomHelper.GetRandom(1000, 9999);
-                isUserNameValid = await ValidateUserNameAsync(randomUserName);
-                if (isUserNameValid)
+                var randomUserName = await GetRandomUserNameAsync(userName.Length);
+                if ( await ValidateUserNameAsync(randomUserName))
                 {
                     return randomUserName;
                 }
                 tryCount++;
-            }
-            if (isUserNameValid)
-            {
-                return randomUserName;
-            }
+            } while (tryCount < maxTryCount);
         }
-
-        tryCount = 0;
-        while (tryCount < maxTryCount)
+        else if (await ValidateUserNameAsync(userName))
         {
-            var randomUserName = userName + await GetRandomUserNameAsync(4);
-            var isUserNameValid = await ValidateUserNameAsync(randomUserName);
-            if (isUserNameValid)
+            // The username is valid.
+            return userName;
+        }
+        else if (Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace() || "0123456789".All(Options.User.AllowedUserNameCharacters.Contains))
+        {
+            // The AllowedUserNameCharacters includes numbers. So, we are generating 4 random numbers and appending to the username.
+            tryCount = 0;
+            do
             {
-                return randomUserName;
-            }
-            tryCount++;
+                var randomUserName = userName + RandomHelper.GetRandom(1000, 9999);
+                if ( await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+        else
+        {
+            tryCount = 0;
+            do
+            {
+                // The AllowedUserNameCharacters does not include numbers. So, we are generating 4 random characters and appending to the username.
+                var randomUserName = userName + await GetRandomUserNameAsync(4);
+                if (await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
         }
 
-        // We could not find a valid user name so we are returning the email address.
-        return email;
+        throw new AbpException($"Could not get a valid user name for the given email address: {email}, allowed characters: {Options.User.AllowedUserNameCharacters}, tried {maxTryCount} times.");
     }
 }

@@ -427,7 +427,12 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
     public async Task GetUserNameFromEmailAsync()
     {
         _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
-        var username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
+        var username = await _identityUserManager.GetUserNameFromEmailAsync("Yönetici@abp.io");
+        username.Length.ShouldBe("Yönetici".Length); //random username
+        username.All(c => "abcdefghijklmnopqrstuvwxyz0123456789".Contains(c)).ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
         username.Length.ShouldBe(9); //admin and random 4 numbers
         username.ShouldContain("admin");
         Regex.IsMatch(username, @"\d{4}$").ShouldBeTrue();
