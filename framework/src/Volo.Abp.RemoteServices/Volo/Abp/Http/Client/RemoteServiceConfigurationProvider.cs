@@ -38,9 +38,15 @@ public class RemoteServiceConfigurationProvider : IRemoteServiceConfigurationPro
             return configuration;
         }
 
+        var baseUrl = await MultiTenantUrlProvider.GetUrlAsync(configuration.BaseUrl);
+        if (baseUrl == configuration.BaseUrl)
+        {
+            return configuration;
+        }
+        
         var multiTenantConfiguration = new RemoteServiceConfiguration(configuration)
         {
-            BaseUrl = await MultiTenantUrlProvider.GetUrlAsync(configuration.BaseUrl)
+            BaseUrl = baseUrl
         };
         
         return multiTenantConfiguration;
