@@ -60,7 +60,7 @@
     "CreatePostSuccessMessage": "Makale başarıyla gönderildi. Site yöneticisinin incelemesinden sonra yayınlanacaktır.",
     "ChooseCoverImage": "Bir kapak resmi seçin...",
     "CoverImage": "Kapak resmi",
-    "ShareYourExperiencesWithTheABPFramework": "ABP Çerçevesi ile deneyimlerinizi paylaşın!",
+    "ShareYourExperiencesWithTheABPFramework": "ABP Frameworkü ile deneyimlerinizi paylaşın!",
     "Optional": "İsteğe bağlı",
     "UpdateUserWebSiteInfo": "Örnek: https://johndoe.com",
     "UpdateUserTwitterInfo": "Örnek: johndoe",
@@ -182,12 +182,12 @@
     "Events_Page_Title": "ABP<span class=\"gradient-community\"> Topluluk</span> Konuşmaları",
     "Members_Page_WritingFromUser": "ABP Topluluğunda {0} adlı kişiden gelen yazıları okuyun.",
     "Post_Create_Page_MetaTitle": "Yeni Gönderi",
-    "Post_Create_Page_MetaDescription": "ABP çerçevesi hakkındaki deneyimlerinizi paylaşmak ve ABP Topluluğuna katkıda bulunmak için gönderinizi oluşturun.",
+    "Post_Create_Page_MetaDescription": "ABP Frameworkü hakkındaki deneyimlerinizi paylaşmak ve ABP Topluluğuna katkıda bulunmak için gönderinizi oluşturun.",
     "Post_Create_Page_CreateNewPost": "Yeni Gönderi Oluştur",
-    "Post_Index_Page_MetaDescription": "ABP Topluluğu'nun amacı, ABP çerçevesini kullanan geliştiriciler için bir katkı ortamı yaratmaktır.",
+    "Post_Index_Page_MetaDescription": "ABP Topluluğu'nun amacı, ABP Frameworkü kullanan geliştiriciler için bir katkı ortamı yaratmaktır.",
     "Layout_Title": "{0} | ABP Topluluğu",
-    "Layout_MetaDescription": "ABP Topluluğu, insanların ABP çerçevesi hakkında paylaşımlarda bulunabileceği ve projeleri takip edebileceği bir ortamdır.",
-    "Index_Page_CommunityIntroduction": "Burası ABP Çerçevesi, .NET ve yazılım geliştirme için bir merkezdir. Makaleleri okuyabilir, eğitim videolarını izleyebilir, ABP'nin gelişim süreci ve ABP ile ilgili etkinlikler hakkında bilgi alabilir, diğer geliştiricilere yardımcı olabilir ve uzmanlığınızı ABP topluluğu ile paylaşabilirsiniz.",
+    "Layout_MetaDescription": "ABP Topluluğu, insanların ABP Frameworkü hakkında paylaşımlarda bulunabileceği ve projeleri takip edebileceği bir ortamdır.",
+    "Index_Page_CommunityIntroduction": "Burası ABP Framework, .NET ve yazılım geliştirme için bir merkezdir. Makaleleri okuyabilir, eğitim videolarını izleyebilir, ABP'nin gelişim süreci ve ABP ile ilgili etkinlikler hakkında bilgi alabilir, diğer geliştiricilere yardımcı olabilir ve uzmanlığınızı ABP topluluğu ile paylaşabilirsiniz.",
     "IConsentToMedium": "Bu yazının https://medium.com/volosoft adresinde yayınlanmasına izin veriyorum.",
     "DiscordPageTitle": "ABP Discord Topluluğu",
     "LatestArticles": "Son Makaleler",
@@ -200,7 +200,9 @@
     "NoContributorsFound": "Katkıda bulunan bulunamadı!",
     "LATESTPOSTS": "SON GÖNDERİLER",
     "LatestPost": "Son Gönderiler",
-    "{0}Posts": "{0} Gönderi"
+    "{0}Posts": "{0} Gönderi",
+    "CommunitySlogan": "<span class=\"{0}\">ABP Sevenler</span> için benzersiz bir topluluk platformu"
+
 
 
 

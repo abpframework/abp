@@ -229,7 +229,7 @@
     "HowCanIRefundVatExplanation2": "<a href=\"https://secure.2checkout.com/cpanel/login.php\" target=\"_blank\">2Checkout</a> hesabınıza giriş yapın",
     "HowCanIRefundVatExplanation3": "Uygun siparişi bulun ve \"Gecikmiş KDV'yi İade Et\"e basın (KDV numaranızı girin)",
     "HowCanIGetMyInvoice": "Faturamı nasıl alabilirim?",
-    "HowCanIGetMyInvoiceExplanation": "There are 2 payment gateways for purchasing a license: Iyzico and 2Checkout. If you purchase your license through the 2Checkout gateway, it sends the PDF invoice to your email address, see <a href=\"https://knowledgecenter.2checkout.com/Documentation/03Billing-and-payments/Payment-operations/How-do-invoices-work\">2Checkout invoicing.</a> If you purchase through the Iyzico gateway, with custom purchase link or via bank wire transfer, we will prepare and send your invoice. You can request or download your invoice from the <a href=\"{0}\">organization management page</a>. Before contacting us for the invoice, check your organization management page!",
+    "HowCanIGetMyInvoiceExplanation": "Lisans satın almak için 2 ödeme yöntemi bulunmaktadır: Iyzico ve 2Checkout. Eğer lisansınızı 2Checkout yöntemi üzerinden satın alırsanız, PDF faturası e-posta adresinize gönderilir, detaylar için <a href=\"https://knowledgecenter.2checkout.com/Documentation/03Billing-and-payments/Payment-operations/How-do-invoices-work\">2Checkout invoicing</a> fatura sürecine</a> göz atabilirsiniz. Eğer Iyzico yöntemi, özel satın alma bağlantısı veya banka havalesi ile lisans satın alırsanız, faturanızı hazırlayıp size göndereceğiz. Faturanızı <a href=\"{0}\">organizasyon sayfasından</a> talep edebilir veya indirebilirsiniz. Fatura için bizimle iletişime geçmeden önce, organizasyon sayfanızı kontrol etmeyi unutmayın!",
     "Forum": "Forum",
     "SupportExplanation": "ABP Commercial lisansları, ABP Framework uzmanlarından oluşan bir ekip tarafından premium bir forum desteği sağlar.",
     "PrivateTicket": "Özel Bilet",
@@ -666,6 +666,7 @@
     "Landing_Page_WebApplicationFramework": "Web Uygulama Frameworkü",
     "Landing_Page_WebDevelopmentPlatform": "Web Geliştirme Platformu",
     "Landing_Page_CompleteWebDevelopmentPlatform": "Tam Web Geliştirme Platformu",
+    "CompleteWebDevelopment": "Eksiksiz web geliştiren bir",
     "Landing_Page_TryFreeDemo": "Ücretsiz Demo Dene",
     "Landing_Page_StartingPointForWebApplications": "ASP.NET Core tabanlı web uygulamaları için başlangıç noktası! En iyi web geliştirme için ABP Framework'ü temel alır.",
     "Landing_Page_AbpProvidesSoftwareInfrastructure": "ABP Framework, en iyi uygulamalarla mükemmel web uygulamaları geliştirmek için bir yazılım altyapısı sağlar.",
@@ -764,7 +765,7 @@
     "Testimonial_ShortDescription_2": "Yeni özellikleri eskisinden daha hızlı oluşturun.",
     "Testimonial_ShortDescription_3": "Kullanıma hazır özelliklerden başlıyoruz ve sadece yazmamız gerekenlere odaklanıyoruz.",
     "Testimonial_ShortDescription_4": "ABP Commercial ihtiyaçlarımız için en uygun olanıydı.",
-    "DontTakeOurWordForIt": "Bizim sözümüze bakmayın...",
+    "DontTakeOurWordForIt": "Sadece bizim sözümüze bakmayın...",
     "ReadAbpCommercialUsersWantYouToKnow": "ABP Commercial kullanıcılarının bilmenizi istediklerini okuyun.",
     "OnlineReviewersOnAbpCommercial": "ABP Commercial Hakkında Çevrimiçi Yorumlar",
     "SeeWhatToldAboutAbpCommercial": "ABP Commercial hakkında neler söylendiğini görün ve isterseniz düşüncelerinizi yazın.",
@@ -862,7 +863,36 @@
     "HowItWorks_DatabaseProviderOptions": "Veritabanı seçenekleri",
     "UIFrameworkOptions": "UI Framework Seçenekleri",
     "PricingExplanation2": "30 gün para iade garantisi — <a href=\"/faq#refund-policy\">Daha fazla bilgi edinin</a>",
-    "SeeLeptonXDocumentation": "LeptonX Dökümantasyonunu İnceleyin"
+    "SeeLeptonXDocumentation": "LeptonX Dökümantasyonunu İnceleyin",
+    "BlazoriseSupport": "Blazorise lisans anahtarını ve Blazorise ekibinden desteği nasıl alabilirim?",
+    "BlazoriseSupportExplanation": "Blazorise ekibinden destek almak ve Blazorise lisans anahtarınızı almak için aşağıdaki adımları izleyin:",
+    "BlazoriseSupportExplanation1": "Yeni bir hesap oluşturmak için <a href=\"https://blazorise.com/support/register\">blazorise.com/support/register</a> adresine gidin ve abp.io hesabınızdaki e-posta adresinizle kaydolun. \"Lisans\" Anahtarı' girişini boş bırakın. <strong>Girdiğin e-posta adresi abp.io hesabınızdaki e-posta adresinizle aynı olmalıdır</strong>.",
+    "BlazoriseSupportExplanation2": "E-posta adresinizi e-posta kutunuzu kontrol ederek doğrulayın. Gelen kutunuzda bir e-posta göremiyorsanız spam kutunuzu kontrol edin!",
+    "BlazoriseSupportExplanation3": "Blazorise destek web sitesine, <a href=\"https://blazorise.com/support/login\">blazorise.com/support/login</a> adresinden giriş yapın.",
+    "BlazoriseSupportExplanation4": "Eğer aktif bir ABP Commercial lisansınız varsa, aynı zamanda bir Blazorise PRO lisansınız da olacaktır. Blazorise lisans anahtarınızı <a href=\"https://blazorise.com/support/user/manage/license\">blazorise.com/support/user/manage/license</a> adresinden alabilirsiniz.",
+    "BlazoriseSupportExplanation5": "Sorularınızı destek web sitesinde sorabilir ve uygulamanız için bir ürün belirteci oluşturabilirsiniz.",
+    "WhyAbpIo_Page_Title": "Neden ABP.IO Platformu?",
+    "DocumentAim": "Bu belge büyük oranda bu soruyu cevaplamayı amaçlamaktadır:",
+    "DocumentAim_Description": "\"Neden 0'dan modern bir yazılım çözümü oluşturmak yerine ABP.IO kullanmalısınız'?\"",
+    "DocumentAim_Description2": "Bu belge, modern bir yazılım çözümü oluşturmanın zorluklarını tanıtır ve ABP'nin bu zorluklarla nasıl başa çıktığını açıklar.",
+    "CreatingANewSolution": "Yeni bir yazılım çözümü oluşturma",
+    "CreatingANewSolution_Description": "Yeni bir yazılım çözümüne başlayacak olduğunuzda kendinize sormanız gereken bir çok soru ortaya çıkar ve ilk kodlarınızı yazmaya başlamadan önce bir çok zamanınız harcanır.",
+    "CreatingAnEmptySolution": "Boş bir yazılım çözümü oluşturma",
+    "THEPROBLEM": "PROBLEM",
+    "CreatingAnEmptySolution_THEPROBLEM_Description": "Neredeyse boş bir yazılım çözümü oluşturmak bile zordur:",
+    "CreatingAnEmptySolution_THEPROBLEM_Description2": "Kod tabanınızı projeler arasında nasıl düzenlersiniz?",
+    "CreatingAnEmptySolution_THEPROBLEM_Description3": "Katmanlar nelerdir ve nasıl etkileşime girerler?",
+    "CreatingAnEmptySolution_THEPROBLEM_Description4": "3. taraf kütüphaneleri nasıl entegre edersiniz?",
+    "CreatingAnEmptySolution_THEPROBLEM_Description5": "Otomatik testler nasıl kurulur?",
+    "ABPSOLUTION": "ABP ÇÖZÜMÜ",
+    "CreatingAnEmptySolution_ABPSOLUTION_Description": "ABP, iyi tasarlanmış, katmanlı ve üretim için hazır bir <a href=\"https://docs.abp.io/en/abp/latest/Startup-Templates/Application\" target=\"_blank\">başlangıç çözümü</a> sağlar. Bu çözüm, aynı zamanda her katman için önceden yapılandırılmış birim ve entegrasyon <a href=\"https://docs.abp.io/en/abp/latest/Testing\" target=\"_blank\">testlerini</a> içerir. Temeli <a href=\"https://docs.abp.io/en/abp/latest/Domain-Driven-Design\" target=\"_blank\">Domain Driven Design</a> prensiplerine dayanmaktadır. "
+
+
+
+
+
+
+
 
 
 
