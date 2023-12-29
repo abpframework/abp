@@ -107,7 +107,7 @@
           <small *ngIf="description" class="d-block form-text text-muted">{{ description }}</small>
         </ng-template>
 
-        <div class="col-md-8"><div [ngbNavOutlet]="nav"></div></div>
+        <div class="col-md-8"><div class="py-0" [ngbNavOutlet]="nav"></div></div>
       </ng-container>
 
       <div class="col" *ngIf="!groups.length">
