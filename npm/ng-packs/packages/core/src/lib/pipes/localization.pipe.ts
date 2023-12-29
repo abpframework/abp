@@ -2,10 +2,12 @@ import { Injectable, Pipe, PipeTransform, inject } from '@angular/core';
 import { LocalizationWithDefault } from '../models/localization';
 import { LocalizationService } from '../services/localization.service';
 import { AsyncPipe } from '@angular/common';
+import {tap} from "rxjs/operators";
 
 @Injectable()
 @Pipe({
   name: 'abpLocalization',
+  pure:false
 })
 export class LocalizationPipe implements PipeTransform {
   private localization = inject(LocalizationService)
@@ -15,9 +17,9 @@ export class LocalizationPipe implements PipeTransform {
     value: string | LocalizationWithDefault = '',
     ...interpolateParams: (string | string[] | undefined)[]
   ): string {
-    
+
     const params = this.reduceParams(interpolateParams)
-    const localize$ = this.localization.get(value, ...params);
+    const localize$ = this.localization.get(value, ...params)
     return this.asyncPipe.transform(localize$) || '';
 
   }
