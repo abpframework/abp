@@ -83,7 +83,7 @@ To add a new layout component, you need to follow these steps:
 
 #### Step 1: Create a New Angular Component
 
-First, you need to create a new Angular component. This component should have a 'router-outlet' for dynamic content loading. You can create a new component using the Angular CLI. Run the following command in your terminal:
+This component should have a 'router-outlet' for dynamic content loading. You can create a new component using the Angular CLI. Run the following command in your terminal:
 
 ```bash
 ng generate component new-layout
