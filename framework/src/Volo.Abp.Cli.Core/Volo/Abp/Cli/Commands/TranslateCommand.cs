@@ -148,8 +148,6 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
             Logger.LogInformation("Include all keys");
         }
 
-        targetCulture = await GetDeeplLanguageCode(targetCulture);
-        referenceCulture = await GetDeeplLanguageCode(referenceCulture);
         var translateInfo = GetAbpTranslateInfo(directory, targetCulture, referenceCulture, allValues);
         foreach (var resource in translateInfo.Resources)
         {
@@ -194,7 +192,7 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
 
             var texts = resource.Texts.Select(x => x.Reference);
 
-            var translations = await translator.TranslateTextAsync(texts, referenceCulture, targetCulture);
+            var translations = await translator.TranslateTextAsync(texts, await GetDeeplLanguageCode(referenceCulture), await GetDeeplLanguageCode(targetCulture));
             for (var i = 0; i < translations.Length; i++)
             {
                 resource.Texts[i].Target = translations[i].Text;
@@ -264,6 +262,11 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
             LanguageCode.Ukrainian,
             LanguageCode.Chinese
         };
+
+        if (abpCulture == "zh-Hans")
+        {
+            return Task.FromResult(LanguageCode.Chinese);
+        }
 
         var deeplCulture = deeplLanguages.FirstOrDefault(x => x.Equals(abpCulture, StringComparison.OrdinalIgnoreCase));
         if (deeplCulture == null)
