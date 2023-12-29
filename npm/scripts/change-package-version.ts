@@ -18,6 +18,7 @@ import {program} from "commander";
   glob(`${workingDir}**/package.json`, options, (err, files) => {
     if (err) throw err;
 
+    //Todo @masumulu28: check options value and throw error if not provided
     const {packageName,targetVersion}= program.opts();
  
      for (const file of files) {
