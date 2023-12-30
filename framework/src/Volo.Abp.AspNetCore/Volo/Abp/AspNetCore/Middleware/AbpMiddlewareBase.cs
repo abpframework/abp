@@ -12,7 +12,7 @@ public abstract class AbpMiddlewareBase : IMiddleware
         var endpoint = context.GetEndpoint();
         var controllerActionDescriptor = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
         var disableAbpFeaturesAttribute = controllerActionDescriptor?.ControllerTypeInfo.GetCustomAttribute<DisableAbpFeaturesAttribute>();
-        return Task.FromResult(disableAbpFeaturesAttribute != null && disableAbpFeaturesAttribute.DisableMiddlewares);
+        return Task.FromResult(disableAbpFeaturesAttribute != null && disableAbpFeaturesAttribute.DisableMiddleware);
     }
 
     public abstract Task InvokeAsync(HttpContext context, RequestDelegate next);

@@ -15,7 +15,7 @@ public class DisableAbpFeaturesAttribute : Attribute
     /// The framework middleware will skip the class.
     /// This will cause the all features that depend on middleware to not work.
     /// </summary>
-    public bool DisableMiddlewares { get; set; } = true;
+    public bool DisableMiddleware { get; set; } = true;
 
     /// <summary>
     /// The framework will not remove all built-in filters for the class.
