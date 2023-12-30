@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.AspNetCore.Filters;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
@@ -18,7 +19,7 @@ using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 
-public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
+public class AbpExceptionFilter : IAsyncExceptionFilter, IAbpFilter, ITransientDependency
 {
     public virtual async Task OnExceptionAsync(ExceptionContext context)
     {

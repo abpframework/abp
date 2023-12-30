@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -25,6 +26,7 @@ using Volo.Abp.ApiVersioning;
 using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.ApiExploring;
+using Volo.Abp.AspNetCore.Mvc.ApplicationModels;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
@@ -176,6 +178,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
         context.Services.Replace(ServiceDescriptor.Singleton<IValidationAttributeAdapterProvider, AbpValidationAttributeAdapterProvider>());
         context.Services.AddSingleton<ValidationAttributeAdapterProvider>();
 
+        context.Services.TryAddEnumerable(ServiceDescriptor.Transient<IActionDescriptorProvider, AbpMvcActionDescriptorProvider>());
         context.Services.AddOptions<MvcOptions>()
             .Configure<IServiceProvider>((mvcOptions, serviceProvider) =>
             {
@@ -247,7 +250,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
             .Distinct();
 
         AddToApplicationParts(partManager, controllerAssemblies);
-        
+
         var additionalAssemblies = moduleContainer
             .Modules
             .SelectMany(m => m.GetAdditionalAssemblies())

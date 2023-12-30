@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Modularity;
 
 namespace Autofac.Builder;
@@ -73,7 +74,8 @@ public static class AbpRegistrationBuilderExtensions
             registrationAction.Invoke(serviceRegistredArgs);
         }
 
-        if (serviceRegistredArgs.Interceptors.Any())
+        if (serviceRegistredArgs.Interceptors.Any() &&
+            !serviceRegistredArgs.ImplementationType.IsDefined(typeof(DisableInterceptorAttribute), true))
         {
             registrationBuilder = registrationBuilder.AddInterceptors(
                 registrationActionList,
