@@ -11,6 +11,7 @@
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
     <PackageVersion Include="AutoMapper" Version="12.0.1" />
+    <PackageVersion Include="Asp.Versioning.Mvc" Version="7.1.0" />
     <PackageVersion Include="AWSSDK.S3" Version="3.7.300.2" />
     <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.300.2" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.17.0" />
@@ -60,7 +61,6 @@
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.25" />
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.0" />
