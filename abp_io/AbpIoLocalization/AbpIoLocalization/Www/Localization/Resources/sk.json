@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "Sústreďte sa na svoj biznis kód a nechajte framework, aby sa vo vašom mene postaral o multitenantnosť.",
     "BootstrapTagHelpersExplanation": "Namiesto ručného písania opakujúcich sa bootstrap komponentov, použite ABP tag pomocníka na zjednodušenie a využitie výhod intellisense. Bootstrap určite využijete vždy, keď ho budete potrebovať.",
     "DynamicFormsExplanation": "Dynamické formuláre & vstup Tag pomocníka môžu vytvoriť kompletný formulár z C# triedy ako modelu.",
-    "AuthenticationAuthorizationExplanation": "Bohaté možnosti overovania & autorizácie integrované do ASP.NET Core Identity & IdentityServer4. Poskytuje rozšíriteľný a podrobný systém oprávnení.",
+    "AuthenticationAuthorizationExplanation": "Bohaté možnosti overovania & autorizácie integrované do ASP.NET Core Identity & OpenIddict. Poskytuje rozšíriteľný a podrobný systém oprávnení.",
     "CrossCuttingConcernsExplanation": "Neopakujte sa pri implementácii všetkých týchto bežných vecí znova a znova. Zamerajte sa na svoj biznis kód a nechajte ich automatizovať pomocou konvencií.",
     "DatabaseConnectionTransactionManagement": "Pripojenie k databáze & správa transakcií",
     "CorrelationIdTracking": "Sledovanie korelačnej identifikácie",
