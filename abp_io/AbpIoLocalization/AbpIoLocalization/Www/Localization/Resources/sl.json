@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "Osredotočite se na svojo poslovno kodo in dovolite, da okvir obravnava večnajemne storitve v vašem imenu.",
     "BootstrapTagHelpersExplanation": "Namesto ročnega pisanja ponavljajočih se podrobnosti komponent zagonskega zagona, uporabite pomočnike oznak ABP, da ga poenostavite in izkoristite prednosti intellisense. Vsekakor lahko uporabite Bootstrap, kadar koli ga potrebujete.",
     "DynamicFormsExplanation": "Pomočniki za dinamične oblike in oznake za vnos lahko ustvarijo celoten obrazec iz razreda C# kot model.",
-    "AuthenticationAuthorizationExplanation": "Bogate možnosti preverjanja pristnosti in avtorizacije, integrirane v ASP.NET Core Identity & IdentityServer4. Zagotavlja razširljiv in podroben sistem dovoljenj.",
+    "AuthenticationAuthorizationExplanation": "Bogate možnosti preverjanja pristnosti in avtorizacije, integrirane v ASP.NET Core Identity & OpenIddict. Zagotavlja razširljiv in podroben sistem dovoljenj.",
     "CrossCuttingConcernsExplanation": "Ne ponavljajte se, da bi vedno znova izvajali vse te običajne stvari. Osredotočite se na svojo poslovno kodo in dovolite, da jih ABP avtomatizira po dogovorih.",
     "DatabaseConnectionTransactionManagement": "Povezava z bazo podatkov in upravljanje transakcij",
     "CorrelationIdTracking": "Sledenje korelacijskim ID-jem",

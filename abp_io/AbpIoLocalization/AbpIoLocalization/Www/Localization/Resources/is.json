@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "Þú leggur áherslu á viðskiptakóðann þinn og lætur umgjörðina annast tenata virknina fyrir þína hönd.",
     "BootstrapTagHelpersExplanation": "Í stað þess að skrifa handvirkt að endurtaka upplýsingar um bootstrap íhluti skaltu nota merkimiðla ABP til að einfalda það og nýta þér intellisense. Þú getur örugglega notað Bootstrap hvenær sem þú þarft á því að halda.",
     "DynamicFormsExplanation": "Dynamísk form  og input tag hjálp getur búið til fullbúið form úr C# klasa sem fyrirmynd",
-    "AuthenticationAuthorizationExplanation": "Ríkur auðkenningar- og heimildarmöguleiki samþættur með ASP.NET Core Identity & IdentityServer4. Veitir stækkanlegt og ítarlegt leyfiskerfi.",
+    "AuthenticationAuthorizationExplanation": "Ríkur auðkenningar- og heimildarmöguleiki samþættur með ASP.NET Core Identity & OpenIddict. Veitir stækkanlegt og ítarlegt leyfiskerfi.",
     "CrossCuttingConcernsExplanation": "Ekki endurtaka sjálfan þig við að innleiða alla þessu sameiginlegu hluti aftur og aftur. Einbeittu þér að viðskiptakóðanum þínum og láttu ABP þá gera þau sjálfvirt með venjum.",
     "DatabaseConnectionTransactionManagement": "Tengistrengir og færsluyfirlit",
     "CorrelationIdTracking": "Samþættingar auðkennis yfirlit",
