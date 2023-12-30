@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.DependencyInjection;
@@ -74,14 +76,17 @@ public static class AbpRegistrationBuilderExtensions
             registrationAction.Invoke(serviceRegistredArgs);
         }
 
-        if (serviceRegistredArgs.Interceptors.Any() &&
-            !serviceRegistredArgs.ImplementationType.IsDefined(typeof(DisableAbpInterceptorAttribute), true))
+        if (serviceRegistredArgs.Interceptors.Any())
         {
-            registrationBuilder = registrationBuilder.AddInterceptors(
-                registrationActionList,
-                serviceType,
-                serviceRegistredArgs.Interceptors
-            );
+            var disableAbpFeaturesAttribute = serviceRegistredArgs.ImplementationType.GetCustomAttribute<DisableAbpFeaturesAttribute>(true);
+            if (disableAbpFeaturesAttribute == null || !disableAbpFeaturesAttribute.DisableInterceptors)
+            {
+                registrationBuilder = registrationBuilder.AddInterceptors(
+                    registrationActionList,
+                    serviceType,
+                    serviceRegistredArgs.Interceptors
+                );
+            }
         }
 
         return registrationBuilder;

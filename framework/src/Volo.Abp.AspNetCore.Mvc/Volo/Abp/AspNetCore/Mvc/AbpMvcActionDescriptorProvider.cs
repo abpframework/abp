@@ -20,10 +20,11 @@ public class AbpMvcActionDescriptorProvider : IActionDescriptorProvider
     {
         foreach (var action in context.Results.Where(x => x is ControllerActionDescriptor).Cast<ControllerActionDescriptor>())
         {
-            var disableFilterAttribute = action.ControllerTypeInfo.GetCustomAttribute<DisableAbpFilterAttribute>(true);
-            if (disableFilterAttribute != null)
+            var disableAbpFeaturesAttribute = action.ControllerTypeInfo.GetCustomAttribute<DisableAbpFeaturesAttribute>(true);
+            if (disableAbpFeaturesAttribute != null && disableAbpFeaturesAttribute.DisableMvcFilters)
             {
-                action.FilterDescriptors.RemoveAll(x => x.Filter is ServiceFilterAttribute serviceFilterAttribute && typeof(IAbpFilter).IsAssignableFrom(serviceFilterAttribute.ServiceType));
+                action.FilterDescriptors.RemoveAll(x => x.Filter is ServiceFilterAttribute serviceFilterAttribute &&
+                                                        typeof(IAbpFilter).IsAssignableFrom(serviceFilterAttribute.ServiceType));
             }
         }
     }
