@@ -75,7 +75,7 @@ public static class AbpRegistrationBuilderExtensions
         }
 
         if (serviceRegistredArgs.Interceptors.Any() &&
-            !serviceRegistredArgs.ImplementationType.IsDefined(typeof(DisableInterceptorAttribute), true))
+            !serviceRegistredArgs.ImplementationType.IsDefined(typeof(DisableAbpInterceptorAttribute), true))
         {
             registrationBuilder = registrationBuilder.AddInterceptors(
                 registrationActionList,
