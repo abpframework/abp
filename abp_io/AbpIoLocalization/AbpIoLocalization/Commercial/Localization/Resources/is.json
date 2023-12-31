@@ -384,6 +384,8 @@
     "TrialLicenseExpiredInfo": "Prófunartímabil þitt er útrunnið!",
     "CommercialNewsletterConfirmationMessage": "Ég samþykki <a href=\"https://commercial.abp.io/TermsConditions\">skilmálana</a> og <a href=\"https://commercial.abp.io/Privacy\">persónuverndarstefnuna </a>.",
     "BlackFridayDiscount": "Black Friday afsláttur",
-    "MultipleOrganizationInfo": "Sjá öll samtök þín"
+    "MultipleOrganizationInfo": "Sjá öll samtök þín",
+    "PaymentFailedInfo": "Því miður, greiðsla mistókst! ",
+    "UsedPayment": "Þessi greiðsla hefur þegar verið notuð"
   }
 }

@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "ShortName {ShortName} już istnieje.",
     "Preview": "zapowiedź",
     "Search": "Szukaj",
-    "SearchResults": "Wyniki wyszukiwania"
+    "SearchResults": "Wyniki wyszukiwania",
+    "SearchInTheAllDocuments": "Szukaj we wszystkich dokumentach"
   }
 }

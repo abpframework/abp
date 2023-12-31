@@ -30,4 +30,12 @@ public class RemoteServiceConfiguration : Dictionary<string, string?>
         this[nameof(BaseUrl)] = baseUrl;
         this[nameof(Version)] = version;
     }
+    
+    public RemoteServiceConfiguration(RemoteServiceConfiguration configuration)
+    {
+        foreach (var keyValuePair in configuration)
+        {
+            this.Add(keyValuePair.Key, keyValuePair.Value);
+        }
+    }
 }

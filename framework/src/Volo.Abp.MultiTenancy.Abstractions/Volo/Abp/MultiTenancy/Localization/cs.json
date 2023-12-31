@@ -1,0 +1,9 @@
+{
+  "culture": "cs",
+  "texts": {
+    "TenantNotFoundMessage": "Nájemce nenalezen!",
+    "TenantNotFoundDetails": "Neexistuje žádný tenant s ID nebo jménem tenanta: {0}",
+    "TenantNotActiveMessage": "Nájemce není aktivní!",
+    "TenantNotActiveDetails": "Tenant není aktivní s ID nebo jménem tenanta: {0}"
+  }
+}

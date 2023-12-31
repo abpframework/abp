@@ -68,4 +68,11 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
             .As<IMongoQueryable<IdentityClaimType>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
+
+    public virtual async Task<List<IdentityClaimType>> GetListByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => names.Contains(x.Name))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
 }

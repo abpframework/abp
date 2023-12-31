@@ -64,7 +64,7 @@ export class FormProp<R = any> extends Prop<R> {
   readonly disabled: PropPredicate<R>;
   readonly readonly: PropPredicate<R>;
   readonly autocomplete: string;
-  readonly defaultValue: boolean | number | string | Date;
+  readonly defaultValue: boolean | number | string | Date | Array<string>;
   readonly options: PropCallback<R, Observable<ABP.Option<any>[]>> | undefined;
   readonly id: string | undefined;
   readonly template?: Type<any>;

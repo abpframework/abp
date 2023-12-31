@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "V poli musí být řežezec nebo řada o minimální délce '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "V poli není platné telefonní číslo.",
     "ThisFieldMustBeBetween{0}And{1}": "Pole musí být mezi {0} a {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Toto pole musí být větší nebo rovno {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "Toto pole musí být menší nebo rovno {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "Pole musí odpovídat regulérnímu výrazu '{0}'.",
     "ThisFieldIsRequired.": "Pole je povinné.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Pole musí být řetězec o maximální délce {0}.",

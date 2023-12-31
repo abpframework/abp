@@ -50,9 +50,13 @@
     "ItemWillBeDeletedMessage": "此項目將被刪除!",
     "ManageYourAccount": "管理個人帳號",
     "OthersGroup": "其他",
-    "CopiedToTheClipboard": "已复制到剪贴板",
-    "NotAssigned": "未分配",
     "Today": "今天",
-    "Apply": "應用"
+    "Apply": "應用",
+    "InternetConnectionInfo": "無法執行該操作。您的網路連線目前無法使用。",
+    "CopiedToTheClipboard": "已复制到剪贴板",
+    "AddNew": "添新",
+    "ProfilePicture": "個人資料圖片",
+    "Theme": "主題",
+    "NotAssigned": "未分配"
   }
 }

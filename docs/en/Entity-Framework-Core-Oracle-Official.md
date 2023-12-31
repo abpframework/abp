@@ -55,6 +55,76 @@ This will scaffold a new migration for Oracle.
 
 Run the `.DbMigrator` project to create the database, apply the changes and seed the initial data.
 
+## ORA-12899: value too large for column fix
+
+Oracle limits strings to `NVARCHAR2(2000)` when the migration is created. Some of the entity properties may extend it. You can check the known and reported properties of ABP modules entities that can extend this limit. To prevent this problem, you need to convert the `string` type to `long`  type first and generate a new migration. Then convert the `long` type to `clob` type with maximum length. 
+
+### First Migration
+
+Update you application DbContext `OnModelCreating` method:
+
+```csharp
+protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        /* Include modules to your migration db context */
+
+        builder.Entity<OpenIddictToken>(b =>
+        {
+            b.Property(q => q.Payload).HasColumnType("long").HasMaxLength(int.MaxValue);
+        });
+        
+        builder.Entity<AuditLog>(b =>
+        {
+            b.Property(x => x.Exceptions).HasColumnType("long").HasMaxLength(int.MaxValue);
+        });
+        
+        builder.Entity<AuditLogAction>(b =>
+        {
+            b.Property(x => x.Parameters).HasColumnType("long").HasMaxLength(int.MaxValue);
+        });
+        
+        /* Configure your own tables/entities inside here */
+    }
+```
+
+Create a new migration using dotnet tooling under EntityFrameworkCore layer of your solution: `dotnet ef migrations add Oracle_Long_Conversion`
+
+### Second Migration
+
+Update you application DbContext `OnModelCreating` method:
+
+```csharp
+protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        /* Include modules to your migration db context */
+
+        builder.Entity<OpenIddictToken>(b =>
+        {
+            b.Property(q => q.Payload).HasColumnType("clob").HasMaxLength(4000);
+        });
+        
+        builder.Entity<AuditLog>(b =>
+        {
+            b.Property(x => x.Exceptions).HasColumnType("clob").HasMaxLength(4000);
+        });
+        
+        builder.Entity<AuditLogAction>(b =>
+        {
+            b.Property(x => x.Parameters).HasColumnType("clob").HasMaxLength(4000);
+        });
+        
+        /* Configure your own tables/entities inside here */
+    }
+```
+
+Create a new migration using dotnet tooling under EntityFrameworkCore layer of your solution: `dotnet ef migrations add Oracle_Clob_Conversion`
+
+Run DbMigrator (or use dotnet tooling) to migrate the oracle database.
+
 ## Run the Application
 
 It is ready. Just run the application and enjoy coding.

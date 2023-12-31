@@ -1,10 +1,11 @@
 {
- "culture": "fr",
- "texts": {
-  "Permissions": "Autorisations",
-  "OnlyProviderPermissons": "Seul ce fournisseur",
-  "All": "Tous",
-  "SelectAllInAllTabs": "Accorder toutes les autorisations",
-  "SelectAllInThisTab": "Sélectionner tous les"
- }
+  "culture": "fr",
+  "texts": {
+    "Permissions": "Autorisations",
+    "OnlyProviderPermissons": "Seul ce fournisseur",
+    "All": "Tous",
+    "SelectAllInAllTabs": "Accorder toutes les autorisations",
+    "SelectAllInThisTab": "Sélectionner tous les",
+    "SaveWithoutAnyPermissionsWarningMessage": "Êtes-vous sûr de vouloir enregistrer sans aucune autorisation ?"
+  }
 }

@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefónne číslo",
     "PersonalSettings": "Osobné nastavenia",
     "PersonalSettingsSaved": "Osobné nastavenia boli uložené",
+    "PersonalSettingsChangedConfirmationModalTitle": "Osobné údaje zmenené",
+    "PersonalSettingsChangedConfirmationModalDescription": "Ak chcete použiť tieto zmeny, musíte sa prihlásiť. Chcete sa odhlásiť?",
     "PasswordChanged": "Heslo bolo zmenené",
     "NewPasswordConfirmFailed": "Prosím potvrďte nové heslo.",
     "NewPasswordSameAsOld": "Nové heslo musí byť odlišné od aktuálneho.",
