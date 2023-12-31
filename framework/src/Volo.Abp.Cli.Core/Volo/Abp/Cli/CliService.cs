@@ -29,6 +29,7 @@ public class CliService : ITransientDependency
     protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected PackageVersionCheckerService PackageVersionCheckerService { get; }
     public ICmdHelper CmdHelper { get; }
+    protected CliVersionService CliVersionService { get; }
 
     public CliService(
         ICommandLineArgumentParser commandLineArgumentParser,
@@ -36,7 +37,8 @@ public class CliService : ITransientDependency
         IServiceScopeFactory serviceScopeFactory,
         PackageVersionCheckerService nugetService,
         ICmdHelper cmdHelper,
-        MemoryService memoryService)
+        MemoryService memoryService,
+        CliVersionService cliVersionService)
     {
         _memoryService = memoryService;
         CommandLineArgumentParser = commandLineArgumentParser;
@@ -44,13 +46,14 @@ public class CliService : ITransientDependency
         ServiceScopeFactory = serviceScopeFactory;
         PackageVersionCheckerService = nugetService;
         CmdHelper = cmdHelper;
+        CliVersionService = cliVersionService;
 
         Logger = NullLogger<CliService>.Instance;
     }
 
     public async Task RunAsync(string[] args)
     {
-        var currentCliVersion = await GetCurrentCliVersionInternalAsync(typeof(CliService).Assembly);
+        var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
         Logger.LogInformation($"ABP CLI {currentCliVersion}");
 
         var commandLineArgs = CommandLineArgumentParser.Parse(args);
@@ -248,41 +251,6 @@ public class CliService : ITransientDependency
         return assembly.Location.Substring(0, assembly.Location.IndexOf(".store", StringComparison.Ordinal));
     }
 
-    public async Task<SemanticVersion> GetCurrentCliVersionAsync(Assembly assembly)
-    {
-        return await GetCurrentCliVersionInternalAsync(assembly);
-    }
-
-    private async Task<SemanticVersion> GetCurrentCliVersionInternalAsync(Assembly assembly)
-    {
-        SemanticVersion currentCliVersion = default;
-
-        var consoleOutput = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list -g", out int exitCode));
-        string line;
-        while ((line = await consoleOutput.ReadLineAsync()) != null)
-        {
-            if (line.StartsWith("volo.abp.cli", StringComparison.InvariantCultureIgnoreCase))
-            {
-                var version = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[1];
-
-                SemanticVersion.TryParse(version, out currentCliVersion);
-
-                break;
-            }
-        }
-
-
-        if (currentCliVersion == null)
-        {
-            // If not a tool executable, fallback to assembly version and treat as dev without updates
-            // Assembly revisions are not supported by SemVer scheme required for NuGet, trim to {major}.{minor}.{patch}
-            var assemblyVersion = string.Join(".", assembly.GetFileVersion().Split('.').Take(3));
-            return SemanticVersion.Parse(assemblyVersion + "-dev");
-        }
-
-        return currentCliVersion;
-    }
-
     private UpdateChannel GetUpdateChannel(SemanticVersion currentCliVersion)
     {
         if (!currentCliVersion.IsPrerelease)
@@ -332,12 +300,12 @@ public class CliService : ITransientDependency
         var toolPathArg = IsGlobalTool(toolPath) ? "-g" : $"--tool-path {toolPath}";
 
         Logger.LogWarning($"A newer {updateChannel.ToString().ToLowerInvariant()} version of the ABP CLI is available: {latestVersion}.");
-        
+
         if (!string.IsNullOrWhiteSpace(message))
         {
             Logger.LogWarning(message);
         }
-        
+
         Logger.LogWarning(string.Empty);
         Logger.LogWarning("Update Command: ");
 

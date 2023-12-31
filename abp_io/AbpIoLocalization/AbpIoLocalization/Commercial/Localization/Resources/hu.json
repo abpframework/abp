@@ -754,6 +754,8 @@
     "ExtendPaymentInfoSection_DiscountRate": "Kedvezmény: {0}%",
     "TotalNetPrice": "Total Net Price",
     "BlackFridayDiscount": "Black Friday Kedvezmény",
-    "MultipleOrganizationInfo": "Tekintse meg az összes szervezetét"
+    "MultipleOrganizationInfo": "Tekintse meg az összes szervezetét",
+    "PaymentFailedInfo": "Sajnos a fizetés sikertelen! ",
+    "UsedPayment": "Ezt a fizetést már felhasználták"
   }
 }

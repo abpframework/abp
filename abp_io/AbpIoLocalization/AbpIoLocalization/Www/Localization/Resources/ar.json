@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "أنت تركز على رمز عملك وتدع إطار العمل للتعامل مع عقود الإيجار المتعددة نيابة عنك.",
     "BootstrapTagHelpersExplanation": "بدلاً من كتابة التفاصيل المتكررة لمكونات التمهيد يدويًا، استخدم مساعدي علامات ABP لتبسيطها والاستفادة من IntelliSense. يمكنك بالتأكيد استخدام Bootstrap متى احتجت إليه.",
     "DynamicFormsExplanation": "يمكن لمساعدي النموذج الديناميكي وعلامات الإدخال إنشاء النموذج الكامل من فئة C # كنموذج.",
-    "AuthenticationAuthorizationExplanation": "خيارات المصادقة والرخصة الغنية المدمجة في ASP.NET Core Identity & IdentityServer4. يوفر نظام إذن موسع ومفصل.",
+    "AuthenticationAuthorizationExplanation": "خيارات المصادقة والرخصة الغنية المدمجة في ASP.NET Core Identity & OpenIddict. يوفر نظام إذن موسع ومفصل.",
     "CrossCuttingConcernsExplanation": "لا تكرر نفسك لتنفيذ كل هذه الأشياء الشائعة مرارًا وتكرارًا. ركز على كود عملك ودع ABP يقوم بأتمتة ذلك من خلال الاتفاقيات.",
     "DatabaseConnectionTransactionManagement": "اتصال قاعدة البيانات وإدارة المعاملات",
     "CorrelationIdTracking": "تتبع معرف الارتباط",
