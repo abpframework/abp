@@ -215,7 +215,12 @@
                 var today = moment();
                 $dateRangePicker.setStartDate(today);
                 $dateRangePicker.setEndDate(today);
-                $dateRangePicker.updateView();
+                
+                if(options.singleDatePicker && options.autoApply){
+                    $dateRangePicker.clickApply();
+                }else{
+                    $dateRangePicker.updateView();
+                }
             });
 
             return $todayBtn;
@@ -568,14 +573,17 @@
                 });
 
                 $input.on('show.daterangepicker', function (ev, picker) {
+                    const today = moment();
                     if(isEmptyDate(startDate, options)){
-                        picker.setStartDate();
+                        picker.setStartDate(today);
                     }else{
                         picker.setStartDate(convertToMoment(startDate, options, options.inputDateFormat));
                     }
-
-                    if(isEmptyDate(endDate, options)){
-                        picker.setEndDate();
+                    
+                    if(singleDatePicker){
+                        picker.setEndDate(picker.startDate);
+                    }else if(isEmptyDate(endDate, options)){
+                        picker.setEndDate(today);
                     }
                     else{
                         picker.setEndDate(convertToMoment(endDate, options, options.inputDateFormat));
