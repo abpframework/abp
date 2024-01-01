@@ -437,6 +437,12 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         username.ShouldContain("admin");
         Regex.IsMatch(username, @"\d{4}$").ShouldBeTrue();
 
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "admin01234";
+        username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
+        username.Length.ShouldBe(9); //admin and random 4 numbers
+        username.ShouldContain("admin");
+        Regex.IsMatch(username, @"[0-4]{3}$").ShouldBeTrue();
+
         _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
         username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
         username.Length.ShouldBe(9); //admin and random 4 characters

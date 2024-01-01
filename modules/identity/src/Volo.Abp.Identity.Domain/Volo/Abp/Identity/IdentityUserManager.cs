@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -444,7 +445,27 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         var userName = email.Split('@')[0];
 
-        if (!Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace() && !userName.All(Options.User.AllowedUserNameCharacters.Contains))
+        if (await ValidateUserNameAsync(userName))
+        {
+            // The username is valid.
+            return userName;
+        }
+
+        if (Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace())
+        {
+            // The AllowedUserNameCharacters is not set. So, we are generating a random username.
+            tryCount = 0;
+            do
+            {
+                var randomUserName = userName + RandomHelper.GetRandom(1000, 9999);
+                if ( await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+        else if (!userName.All(Options.User.AllowedUserNameCharacters.Contains))
         {
             // The username contains not allowed characters. So, we are generating a random username.
             do
@@ -457,18 +478,23 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
                 tryCount++;
             } while (tryCount < maxTryCount);
         }
-        else if (await ValidateUserNameAsync(userName))
+        else if (Options.User.AllowedUserNameCharacters.Where(char.IsDigit).Distinct().Count() >= 4)
         {
-            // The username is valid.
-            return userName;
-        }
-        else if (Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace() || "0123456789".All(Options.User.AllowedUserNameCharacters.Contains))
-        {
-            // The AllowedUserNameCharacters includes numbers. So, we are generating 4 random numbers and appending to the username.
+            // The AllowedUserNameCharacters includes 4 numbers. So, we are generating 4 random numbers and appending to the username.
+            var numbers = Options.User.AllowedUserNameCharacters.Where(char.IsDigit).OrderBy(x => Guid.NewGuid()).Take(4).ToArray();
+            var minArray = numbers.OrderBy(x => x).ToArray();
+            if (minArray[0] == '0')
+            {
+                var secondItem = minArray[1];
+                minArray[0] = secondItem;
+                minArray[1] = '0';
+            }
+            var min = int.Parse(new string(minArray));
+            var max = int.Parse(new string(numbers.OrderByDescending(x => x).ToArray()));
             tryCount = 0;
             do
             {
-                var randomUserName = userName + RandomHelper.GetRandom(1000, 9999);
+                var randomUserName = userName + RandomHelper.GetRandom(min, max);
                 if ( await ValidateUserNameAsync(randomUserName))
                 {
                     return randomUserName;
