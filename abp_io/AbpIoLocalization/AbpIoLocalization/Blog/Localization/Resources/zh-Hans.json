@@ -2,7 +2,7 @@
   "culture": "zh-Hans",
   "texts": {
     "AbpTitle": "阅读所有博客文章",
-    "AbpDescription": "ABP 是一个开源应用程序框架，专注于基于 AspNet Core 的网络应用程序开发。不要重复自己，专注于自己的业务代码。",
+    "AbpDescription": "ABP 是一个开源应用程序框架，专注于基于 AspNet Core 的Web应用程序开发。不要重复自己，专注于自己的业务代码。",
     "AbpDefinition": "提供.NET开发、跨平台、ASP.NET应用程序模板、ABP相关新闻等内容的ABP博客..."
   }
 }

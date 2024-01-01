@@ -1,16 +1,16 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "Hello <b>{0}</b>.": "你好，<b>{0}</b>。",
+    "Hello <b>{0}</b>.": "你好 <b>{0}</b>.",
     "Car": "汽车",
     "CarPlural": "汽车",
-    "MaxLenghtErrorMessage": "该字段长度最多为\"{0}\"字符",
+    "MaxLenghtErrorMessage": "此字段的长度最多为'{0}'个字符",
     "Universe": "宇宙",
     "FortyTwo": "四十二",
-    "Enum:BookType.Undefined": "未定义",
+    "Enum:BookType.Undefined": "Undefined",
     "Enum:BookType.0": "未定义，值为 0",
-    "BookType.Adventure": "探险",
-    "BookType.1": "值为 1 的冒险",
-    "Biography": "简历"
+    "BookType.Adventure": "冒险",
+    "BookType.1": "冒险价值1",
+    "Biography": "传"
   }
 }

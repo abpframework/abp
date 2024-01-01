@@ -3,7 +3,7 @@
   "texts": {
     "TenantNotFoundMessage": "未找到租户！",
     "TenantNotFoundDetails": "没有租户的 ID 或名称为：{0}的租户。",
-    "TenantNotActiveMessage": "租户不活跃！",
+    "TenantNotActiveMessage": "租户未启用！",
     "TenantNotActiveDetails": "租户未激活，租户 ID 或名称为：{0}。"
   }
 }

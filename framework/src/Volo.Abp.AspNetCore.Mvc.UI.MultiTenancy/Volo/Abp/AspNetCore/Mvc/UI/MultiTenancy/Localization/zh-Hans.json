@@ -4,7 +4,7 @@
     "GivenTenantIsNotExist": "给定租户不存在：{0}",
     "GivenTenantIsNotAvailable": "所给租户不可用：{0}",
     "Tenant": "租户",
-    "Switch": "开关",
+    "Switch": "切换",
     "Name": "名称",
     "SwitchTenantHint": "将名称字段留空以切换到主机端。",
     "SwitchTenant": "切换租户",

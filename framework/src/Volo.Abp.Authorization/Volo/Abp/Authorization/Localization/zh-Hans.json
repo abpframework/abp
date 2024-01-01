@@ -3,8 +3,8 @@
   "texts": {
     "Volo.Authorization:010001": "授权失败！指定政策未授权。",
     "Volo.Authorization:010002": "授权失败！给定策略未授权： {PolicyName}",
-    "Volo.Authorization:010003": "授权失败！给定策略未授权给定资源：{资源名称｝",
-    "Volo.Authorization:010004": "授权失败！未授予指定资源的指定要求：{资源名称｝",
-    "Volo.Authorization:010005": "授权失败！未对指定资源授权：{资源名称｝"
+    "Volo.Authorization:010003": "授权失败！给定策略未授权给定资源：{ResourceName}",
+    "Volo.Authorization:010004": "授权失败！未授予指定资源的指定要求：{ResourceName}",
+    "Volo.Authorization:010005": "授权失败！未对指定资源授权：{ResourceName}"
   }
 }

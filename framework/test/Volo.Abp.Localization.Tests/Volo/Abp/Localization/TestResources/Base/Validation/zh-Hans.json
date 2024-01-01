@@ -1,12 +1,12 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "ThisFieldIsRequired": "该字段为必填字段",
-    "MaxLenghtErrorMessage": "该字段最多可以是\"{0}\"字符",
-    "Enum:BookType.Undefined": "未定义来自 ValidationResource",
-    "Enum:BookType.0": "来自 ValidationResource 的未定义值为 0",
-    "BookType.Adventure": "来自 ValidationResource 的冒险",
-    "BookType.1": "来自 ValidationResource 的值为 1 的冒险",
-    "Biography": "来自 ValidationResource 的传记"
+    "ThisFieldIsRequired": "此字段是必填字段",
+    "MaxLenghtErrorMessage": "该字段最多可包含'{0}'个字符",
+    "Enum:BookType.Undefined": "ValidationResource 中未定义",
+    "Enum:BookType.0": "未定义，来自 ValidationResource 的值为 0",
+    "BookType.Adventure": "ValidationResource 的冒险",
+    "BookType.1": "来自 ValidationResource 的值为 1 的 Adventure",
+    "Biography": "ValidationResource 的简介"
   }
 }
