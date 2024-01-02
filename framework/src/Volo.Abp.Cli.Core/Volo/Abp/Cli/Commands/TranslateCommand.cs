@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization.Json;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -23,6 +24,14 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
         var currentDirectory = Directory.GetCurrentDirectory();
+
+        // Verify
+        if (commandLineArgs.Options.ContainsKey(Options.Verify.Long))
+        {
+            await VerifyJsonAsync(currentDirectory);
+            return;
+        }
+
         var referenceCulture = commandLineArgs.Options.GetOrNull(Options.ReferenceCulture.Short, Options.ReferenceCulture.Long) ?? "en";
         var allValues = commandLineArgs.Options.ContainsKey(Options.AllValues.Short) || commandLineArgs.Options.ContainsKey(Options.AllValues.Long);
 
@@ -368,20 +377,22 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
         return Task.CompletedTask;
     }
 
-    private static IEnumerable<string> GetCultureJsonFiles(string path, string cultureName)
+    private static IEnumerable<string> GetCultureJsonFiles(string path, string cultureName = null)
     {
         var excludeDirectory = new List<string>()
-            {
-                "node_modules",
-                Path.Combine("bin", "debug"),
-                Path.Combine("obj", "debug")
-            };
+        {
+            "node_modules",
+            "wwwroot",
+            ".git",
+            "bin",
+            "obj"
+        };
 
-        var allCultureInfos = CultureInfo.GetCultures(CultureTypes.AllCultures);
-
+        var allCultureNames = CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => !x.Name.IsNullOrWhiteSpace()).Select(x => x.Name).ToList();
         return Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
             .Where(file => excludeDirectory.All(x => file.IndexOf(x, StringComparison.OrdinalIgnoreCase) == -1))
-            .Where(jsonFile => allCultureInfos.Any(culture => jsonFile.EndsWith($"{cultureName}.json", StringComparison.OrdinalIgnoreCase)));
+            .Where(file => allCultureNames.Any(x => Path.GetFileName(file).Equals($"{x}.json", StringComparison.OrdinalIgnoreCase)))
+            .WhereIf(!cultureName.IsNullOrWhiteSpace(), jsonFile => Path.GetFileName(jsonFile).Equals($"{cultureName}.json", StringComparison.OrdinalIgnoreCase));
     }
 
     private AbpLocalizationInfo GetAbpLocalizationInfoOrNull(string path)
@@ -468,6 +479,29 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
         return translateInfo;
     }
 
+    private Task VerifyJsonAsync(string currentDirectory)
+    {
+        var jsonFiles = GetCultureJsonFiles(currentDirectory);
+        var hasInvalidJsonFile = false;
+        foreach (var jsonFile in jsonFiles)
+        {
+            try
+            {
+                var jsonString = File.ReadAllText(jsonFile);
+                _ = JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError($"Invalid json file: {jsonFile}");
+                hasInvalidJsonFile = true;
+            }
+        }
+
+        Logger.LogInformation(!hasInvalidJsonFile ? "All json files are valid." : "Some json files are invalid.");
+
+        return Task.CompletedTask;
+    }
+
     private static AbpLocalizationInfo SortLocalizedKeys(AbpLocalizationInfo targetLocalizationInfo, AbpLocalizationInfo referenceLocalizationInfo)
     {
         var sortedLocalizationInfo = new AbpLocalizationInfo
@@ -503,8 +537,9 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("--all-values|-all                            Include all keys. Default false");
         sb.AppendLine("--apply|-a                                   Creates or updates the file for the translated culture.");
         sb.AppendLine("--file|-f <file-name>                        Default: abp-translation.json");
-        sb.AppendLine("--online|-o                                  Translate online.");
+        sb.AppendLine("--online                                     Translate online.");
         sb.AppendLine("--deepl-auth-key <auth-key>                  DeepL auth key for online translation.");
+        sb.AppendLine("--verify                                     Verify that all localized files are correct JSON format.");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
         sb.AppendLine("");
@@ -571,6 +606,11 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
         public static class DeepLAuthKey
         {
             public const string Short = "deepl-auth-key";
+        }
+
+        public static class Verify
+        {
+            public const string Long = "verify";
         }
     }
 
