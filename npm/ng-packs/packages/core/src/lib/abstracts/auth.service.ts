@@ -33,9 +33,8 @@ export class AuthService implements IAuthService {
 
   navigateToLogin(queryParams?: Params): void {}
 
-  get isInternalAuth() {
+  get isInternalAuth(): boolean {
     throw new Error('not implemented');
-    return false;
   }
 
   get isAuthenticated(): boolean {

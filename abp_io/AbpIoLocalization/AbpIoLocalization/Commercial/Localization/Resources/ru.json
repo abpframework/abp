@@ -1085,6 +1085,8 @@
     "CampaignDiscountText": "Скидка на Черную пятницу",
     "CampaignDiscountName": "Черная пятница",
     "CampaignName:BlackFriday": "Черная пятница",
-    "MultipleOrganizationInfo": "Просмотреть все ваши организации"
+    "MultipleOrganizationInfo": "Просмотреть все ваши организации",
+    "PaymentFailedInfo": "Извините, оплата не удалась! ",
+    "UsedPayment": "Этот платеж уже использован"
   }
 }

@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.TenantManagement;
 
 public class TenantManager : DomainService, ITenantManager
 {
     protected ITenantRepository TenantRepository { get; }
+    protected IDistributedCache<TenantConfigurationCacheItem> Cache { get; }
 
-    public TenantManager(ITenantRepository tenantRepository)
+    public TenantManager(ITenantRepository tenantRepository,
+        IDistributedCache<TenantConfigurationCacheItem> cache)
     {
         TenantRepository = tenantRepository;
-
+        Cache = cache;
     }
 
     public virtual async Task<Tenant> CreateAsync(string name)
@@ -28,6 +32,7 @@ public class TenantManager : DomainService, ITenantManager
         Check.NotNull(name, nameof(name));
 
         await ValidateNameAsync(name, tenant.Id);
+        await Cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenant.Name));
         tenant.SetName(name);
     }
 

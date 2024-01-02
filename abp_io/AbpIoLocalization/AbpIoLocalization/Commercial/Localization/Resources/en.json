@@ -50,7 +50,7 @@
     "AbpCommercialShortDescription": "ABP Commercial provides pre-built application modules, rapid application development tooling, professional UI themes, premium support and more.",
     "LiveDemo": "Live Demo",
     "LiveDemoLead": "<a href=\"{0}\">{1}</a> using your ABP account, <a href=\"{2}\">{3}</a> to abp.io <br/> or fill the form below to create a live demo now",
-    "ThereIsAlreadyAnAccountWithTheGivenEmailAddress": "There is already an account with the given email address: <b>{0}</b><br/> You can login with your account to proceed.",
+    "ThereIsAlreadyAnAccountWithTheGivenEmailAddress": "There is already an account with the given email address: <b>{0}</b><br/> You should login with your account to proceed.",
     "GetLicence": "Get a License",
     "Application": "Application",
     "StartupTemplates": "Startup Templates",
@@ -1105,6 +1105,7 @@
     "AutoRenewalEnabled": "Auto Renewal Enabled",
     "AutoRenewalDisabled": "Auto Renewal Disabled",
     "PaymentRequestIdIsNotProvided": "Payment request id is not provided.",
-    
+    "PaymentFailedInfo": "Sorry, payment failed! This could be due to insufficient funds, invalid credit card numbers or invalid pin",
+    "UsedPayment": "This payment has been already used"
   }
 }

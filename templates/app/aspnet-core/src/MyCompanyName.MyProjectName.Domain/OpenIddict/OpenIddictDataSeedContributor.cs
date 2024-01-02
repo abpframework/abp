@@ -179,7 +179,6 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         }
         //</TEMPLATE-REMOVE>
 
-        //<TEMPLATE-REMOVE IF-NOT='HostWithIds'>
         // Swagger Client
         var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
         if (!swaggerClientId.IsNullOrWhiteSpace())
@@ -198,7 +197,6 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 clientUri: swaggerRootUrl
             );
         }
-        //</TEMPLATE-REMOVE>
     }
 
     private async Task CreateApplicationAsync(
