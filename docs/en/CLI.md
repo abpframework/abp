@@ -527,6 +527,16 @@ Then review changes on your source control system to be sure that it has changed
 
 * `--file` or `-f`: Default: `abp-translation.json`. The translation file (use only if you've used the `--output` option before).
 
+#### Online DeepL translate
+
+The `translate` command also supports online translation. You need to provide your [DeepL Authentication Key](https://support.deepl.com/hc/en-us/articles/360020695820-Authentication-Key).
+
+It will search all the `en.json(reference-culture)` files in the directory and sub-directory and then translate and generate the corresponding `zh-Hans.json(culture)` files.
+
+````bash
+abp translate -c zh-Hans --online --deepl-auth-key <auth-key>
+````
+
 ### login
 
 Some features of the CLI requires to be logged in to abp.io platform. To login with your username write:

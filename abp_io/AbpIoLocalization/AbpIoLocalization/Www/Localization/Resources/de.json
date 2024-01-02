@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "Sie konzentrieren sich auf Ihren geschäftsspezifischen Code und lassen das Framework die Mandantenfähigkeit für Sie übernehmen.",
     "BootstrapTagHelpersExplanation": "Anstatt die sich wiederholenden Details von Bootstrap-Komponenten manuell zu schreiben, verwenden Sie die Tag-Helper von ABP, um diese zu vereinfachen und dabei die Vorteile von Intellisense zu nutzen. Sie können Bootstrap weitherhin verwenden, wann immer Sie es benötigen.",
     "DynamicFormsExplanation": "Helfer für dynamische Formular- und Input-Tags können das vollständige Formular anhand einer C#-Klasse als Model erstellen.",
-    "AuthenticationAuthorizationExplanation": "Umfangreiche Authentifizierungs- und Autorisierungsoptionen, die in ASP.NET Core Identity & IdentityServer4 integriert sind. Bietet ein erweiterbares und detailliertes Berechtigungssystem.",
+    "AuthenticationAuthorizationExplanation": "Umfangreiche Authentifizierungs- und Autorisierungsoptionen, die in ASP.NET Core Identity & OpenIddict integriert sind. Bietet ein erweiterbares und detailliertes Berechtigungssystem.",
     "CrossCuttingConcernsExplanation": "Wiederholen Sie sich nicht, um all diese allgemeinen Dinge immer wieder zu implementieren. Konzentrieren Sie sich auf Ihren geschäftsspezifischen Code und lassen Sie ihn von ABP durch Konventionen automatisieren.",
     "DatabaseConnectionTransactionManagement": "Datenbankverbindungs- und Transaktionsmanagement",
     "CorrelationIdTracking": "Correlation-ID-Verfolgung",
