@@ -48,7 +48,8 @@ public class SharedThemeGlobalScriptContributor : BundleContributor
             "/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js",
             "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js",
             "/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert2/abp-sweetalert2.js",
-            "/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js"
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js",
+            "/libs/abp/aspnetcore-mvc-ui-theme-shared/date-range-picker/date-range-picker-extensions.js"
         });
     }
 }
