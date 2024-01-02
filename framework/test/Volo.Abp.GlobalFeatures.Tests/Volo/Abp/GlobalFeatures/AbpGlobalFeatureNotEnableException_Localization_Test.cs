@@ -23,7 +23,7 @@ public class AbpGlobalFeatureNotEnableException_Localization_Test : GlobalFeatur
                 .WithData("ServiceName", "MyService")
                 .WithData("GlobalFeatureName", "TestFeature"); ;
             var errorInfo = _exceptionToErrorInfoConverter.Convert(exception);
-            errorInfo.Message.ShouldBe("'MyService'服务需要启用'TestFeature'功能.");
+            errorInfo.Message.ShouldBe("'MyService' 服务需要启用 'TestFeature'。");
         }
     }
 }
