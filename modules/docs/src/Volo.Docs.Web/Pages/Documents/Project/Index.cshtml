@@ -318,7 +318,7 @@
                                                 <select class="doc-section-combobox form-select"
                                                         aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
                                                         id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
-                                                    @foreach (var value in parameter.Values)
+                                                    @foreach (var value in parameter.Values.OrderBy(p => p.Value))
                                                     {
                                                         @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
                                                         {

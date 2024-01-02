@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "Ön az üzleti kódjára összpontosít, és hagyja, hogy a keretrendszer kezelje a több bérlést az Ön nevében.",
     "BootstrapTagHelpersExplanation": "A bootstrap komponensek ismétlődő részleteinek manuális megírása helyett használja az ABP címkesegédjét az egyszerűsítéshez és az intellisense előnyeinek kihasználásához. Határozottan használhatja a Bootstrapet, amikor csak szüksége van rá.",
     "DynamicFormsExplanation": "A dinamikus űrlap- és beviteli címke-segítők modellként létrehozhatják a teljes űrlapot egy C# osztályból.",
-    "AuthenticationAuthorizationExplanation": "Az ASP.NET Core Identity & IdentityServer4-be integrált gazdag hitelesítési és engedélyezési lehetőségek. Bővíthető és részletes engedélyezési rendszert biztosít.",
+    "AuthenticationAuthorizationExplanation": "Az ASP.NET Core Identity & OpenIddict-be integrált gazdag hitelesítési és engedélyezési lehetőségek. Bővíthető és részletes engedélyezési rendszert biztosít.",
     "CrossCuttingConcernsExplanation": "Ne ismételje magát, hogy újra és újra végrehajtsa ezeket a gyakori dolgokat. Koncentráljon az üzleti kódjára, és hagyja, hogy az ABP konvenciók szerint automatizálja azokat.",
     "DatabaseConnectionTransactionManagement": "Adatbázis-kapcsolat és tranzakciókezelés",
     "CorrelationIdTracking": "Korreláció-azonosító követés",
