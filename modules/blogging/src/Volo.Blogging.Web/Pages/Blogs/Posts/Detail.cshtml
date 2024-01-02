@@ -456,14 +456,9 @@ else
                     var post = Model.PostsList[index];
                     <div class="post-item">
                         <div class="post-type-cont">
-
                             <a href="/members/@Model.Post.Writer.UserName" class="text-decoration-none">
                                 <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
-                            </a>
-                            <span class="post-type">
-                                <i class="fas fa-pen-nib"></i>
-                                @L["Blog"].Value.ToUpper()
-                            </span>
+                            </a>                           
                         </div>
                         <div class="post-detail-cont">
                             <div class="post-info fs-12 mb-2">

@@ -125,7 +125,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         var openButtonContent = TagHelper.OpenButton
             ? await ProcessButtonAndGetContentAsync(context, output, "calendar", "open")
             : "";
-        var clearButtonContent = TagHelper.ClearButton
+        var clearButtonContent = TagHelper.ClearButton == true || (!TagHelper.ClearButton.HasValue && TagHelper.AutoUpdateInput != true)
             ? await ProcessButtonAndGetContentAsync(context, output, "times", "clear", visible:!TagHelper.SingleOpenAndClearButton)
             : "";
 
@@ -381,6 +381,16 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         if (!options.DateFormat.IsNullOrEmpty())
         {
             attrList.Add("data-date-format", options.DateFormat);
+        }
+        
+        if(!options.VisibleDateFormat.IsNullOrEmpty())
+        {
+            attrList.Add("data-visible-date-format", options.VisibleDateFormat);
+        }
+        
+        if(!options.InputDateFormat.IsNullOrEmpty())
+        {
+            attrList.Add("data-input-date-format", options.InputDateFormat);
         }
 
         if(options.Ranges != null && options.Ranges.Any())

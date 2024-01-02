@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "Soustředíte se na svůj obchodní kód a necháte framework, aby za vás zpracovával multi-tenancy.",
     "BootstrapTagHelpersExplanation": "Místo ručního psaní opakujících se podrobností o komponentách bootstrapu použijte pomocníky značek ABP, abyste to zjednodušili a využili výhody intellisense. Bootstrap můžete určitě použít, kdykoli budete potřebovat.",
     "DynamicFormsExplanation": "Pomocníci dynamického formuláře a vstupní značky mohou vytvořit kompletní formulář z třídy C# jako model.",
-    "AuthenticationAuthorizationExplanation": "Bohaté možnosti ověřování a autorizace integrované do ASP.NET Core Identity & IdentityServer4. Poskytuje rozšiřitelný a podrobný systém oprávnění.",
+    "AuthenticationAuthorizationExplanation": "Bohaté možnosti ověřování a autorizace integrované do ASP.NET Core Identity & OpenIddict. Poskytuje rozšiřitelný a podrobný systém oprávnění.",
     "CrossCuttingConcernsExplanation": "Neopakujte se, abyste zavedli všechny tyto běžné věci znovu a znovu. Zaměřte se na svůj obchodní kód a nechte je ABP automatizovat podle konvencí.",
     "DatabaseConnectionTransactionManagement": "Připojení k databázi a správa transakcí",
     "CorrelationIdTracking": "Correlation-Id Tracking",

@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "您專注於業務邏輯，並讓該框架為您處理多租戶.",
     "BootstrapTagHelpersExplanation": "與其手動撰寫重複細節的bootstrap組件,不如使用ABP的tag helper來簡化它並利用自動完成.您當然也可以在需要時直接使用Bootstrap.",
     "DynamicFormsExplanation": "動態表單和tag helpers可以利用C#類別做為模型來建立完整的表單.",
-    "AuthenticationAuthorizationExplanation": "整合到ASP.NET Core Identity和IdentityServer4的豐富身份驗證和授權選項.提供可擴展且詳細的權限系統.",
+    "AuthenticationAuthorizationExplanation": "整合到ASP.NET Core Identity和OpenIddict的豐富身份驗證和授權選項.提供可擴展且詳細的權限系統.",
     "CrossCuttingConcernsExplanation": "部要重複資幾一次又一次地實作所有這寫常見的東西.專注於您的業務邏輯,並讓ABP按照習慣自動執行.",
     "DatabaseConnectionTransactionManagement": "資料庫連接和交易管理",
     "CorrelationIdTracking": "關聯ID追蹤",
