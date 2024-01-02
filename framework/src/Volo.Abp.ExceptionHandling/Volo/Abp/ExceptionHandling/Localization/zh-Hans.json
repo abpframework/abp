@@ -1,13 +1,13 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "InternalServerErrorMessage": "您的请求出现内部错误！",
+    "InternalServerErrorMessage": "对不起，在处理您的请求期间产生了一个服务器内部错误！！",
     "ValidationErrorMessage": "您的请求无效！",
     "ValidationNarrativeErrorMessageTitle": "验证过程中检测到以下错误。",
     "DefaultErrorMessage": "发生错误！",
     "DefaultErrorMessageDetail": "服务器未发送错误详细信息。",
     "DefaultErrorMessage401": "您未通过身份验证！",
-    "DefaultErrorMessage401Detail": "您应登录后才能执行此操作。",
+    "DefaultErrorMessage401Detail": "您需要进行身份认证(登录)后再执行此操作。",
     "DefaultErrorMessage403": "您未获得授权！",
     "DefaultErrorMessage403Detail": "不允许执行此操作！",
     "DefaultErrorMessage404": "未找到资源！",
