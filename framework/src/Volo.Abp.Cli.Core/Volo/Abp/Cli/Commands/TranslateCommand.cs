@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DeepL;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,63 +17,60 @@ namespace Volo.Abp.Cli.Commands;
 public class TranslateCommand : IConsoleCommand, ITransientDependency
 {
     public const string Name = "translate";
-    
+
     public ILogger<TranslateCommand> Logger { get; set; }
 
-    public Task ExecuteAsync(CommandLineArgs commandLineArgs)
+    public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
         var currentDirectory = Directory.GetCurrentDirectory();
+        var referenceCulture = commandLineArgs.Options.GetOrNull(Options.ReferenceCulture.Short, Options.ReferenceCulture.Long) ?? "en";
+        var allValues = commandLineArgs.Options.ContainsKey(Options.AllValues.Short) || commandLineArgs.Options.ContainsKey(Options.AllValues.Long);
 
-        var apply = commandLineArgs.Options.ContainsKey(Options.Apply.Short) || commandLineArgs.Options.ContainsKey(Options.Apply.Long);
-        if (apply)
+        // Apply abp-translation.json file
+        if (commandLineArgs.Options.ContainsKey(Options.Apply.Short) || commandLineArgs.Options.ContainsKey(Options.Apply.Long))
         {
-            var inputFile = Path.Combine(currentDirectory,
-                commandLineArgs.Options.GetOrNull(Options.File.Short, Options.File.Long)
-                ?? "abp-translation.json");
-
-            Logger.LogInformation("Abp translate apply...");
-            Logger.LogInformation("Input file: " + inputFile);
-
-            ApplyAbpTranslateInfo(currentDirectory, inputFile);
+            var inputFile = Path.Combine(currentDirectory, commandLineArgs.Options.GetOrNull(Options.File.Short, Options.File.Long) ?? "abp-translation.json");
+            await ApplyAbpTranslateInfoAsync(currentDirectory, inputFile);
+            return;
         }
-        else
+
+        var targetCulture = commandLineArgs.Options.GetOrNull(Options.Culture.Short, Options.Culture.Long);
+        if (targetCulture == null)
         {
-            var targetCulture = commandLineArgs.Options.GetOrNull(Options.Culture.Short, Options.Culture.Long);
-            if (targetCulture == null)
-            {
-                throw new CliUsageException(
-                    "Target culture is missing!" +
-                    Environment.NewLine + Environment.NewLine +
-                    GetUsageInfo()
-                );
-            }
-
-            var referenceCulture = commandLineArgs.Options.GetOrNull(Options.ReferenceCulture.Short, Options.ReferenceCulture.Long)
-                                   ?? "en";
-
-            var outputFile = Path.Combine(currentDirectory,
-                commandLineArgs.Options.GetOrNull(Options.Output.Short, Options.Output.Long)
-                ?? "abp-translation.json");
-
-            var allValues = commandLineArgs.Options.ContainsKey(Options.AllValues.Short) ||
-                            commandLineArgs.Options.ContainsKey(Options.AllValues.Long);
-
-            Logger.LogInformation("Abp translate...");
-            Logger.LogInformation("Target culture: " + targetCulture);
-            Logger.LogInformation("Reference culture: " + referenceCulture);
-            Logger.LogInformation("Output file: " + outputFile);
-
-            if (allValues)
-            {
-                Logger.LogInformation("Include all keys");
-            }
-
-            var translateInfo = GetAbpTranslateInfo(currentDirectory, targetCulture, referenceCulture, allValues);
-
-            File.WriteAllText(outputFile, JsonConvert.SerializeObject(translateInfo, Formatting.Indented));
-
-            Logger.LogInformation($"The translation file has been created.");
+            throw new CliUsageException("Target culture is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
         }
+
+        // Translate online
+        if (commandLineArgs.Options.ContainsKey(Options.Online.Long))
+        {
+            var authKey = commandLineArgs.Options.GetOrNull(Options.DeepLAuthKey.Short, Options.DeepLAuthKey.Short);
+            if (authKey == null)
+            {
+                throw new CliUsageException("DeepL auth key is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+            }
+            await TranslateAbpTranslateInfoAsync(currentDirectory, targetCulture, referenceCulture, allValues, authKey);
+            return;
+        }
+
+        // Generate abp-translation.json file
+        var outputFile = Path.Combine(currentDirectory, commandLineArgs.Options.GetOrNull(Options.Output.Short, Options.Output.Long) ?? "abp-translation.json");
+        await GenerateAbpTranslateInfoAsync(currentDirectory, targetCulture, referenceCulture, allValues, outputFile);
+    }
+
+    private Task GenerateAbpTranslateInfoAsync(string currentDirectory, string targetCulture, string referenceCulture, bool allValues, string outputFile)
+    {
+        Logger.LogInformation("Abp translate...");
+        Logger.LogInformation("Target culture: " + targetCulture);
+        Logger.LogInformation("Reference culture: " + referenceCulture);
+        Logger.LogInformation("Output file: " + outputFile);
+        if (allValues)
+        {
+            Logger.LogInformation("Include all keys");
+        }
+
+        var translateInfo = GetAbpTranslateInfo(currentDirectory, targetCulture, referenceCulture, allValues);
+        File.WriteAllText(outputFile, JsonConvert.SerializeObject(translateInfo, Formatting.Indented));
+        Logger.LogInformation($"The translation file has been created.");
 
         return Task.CompletedTask;
     }
@@ -140,8 +138,154 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
         return translateInfo;
     }
 
-    private void ApplyAbpTranslateInfo(string directory, string filename)
+    private async Task TranslateAbpTranslateInfoAsync(string directory, string targetCulture, string referenceCulture, bool allValues, string authKey)
     {
+        Logger.LogInformation("Abp translate online...");
+        Logger.LogInformation("Target culture: " + targetCulture);
+        Logger.LogInformation("Reference culture: " + referenceCulture);
+        if (allValues)
+        {
+            Logger.LogInformation("Include all keys");
+        }
+
+        var translateInfo = GetAbpTranslateInfo(directory, targetCulture, referenceCulture, allValues);
+        foreach (var resource in translateInfo.Resources)
+        {
+            var targetFile = Path.Combine(resource.ResourcePath, translateInfo.TargetCulture + ".json");
+            var targetLocalizationInfo = File.Exists(targetFile)
+                ? GetAbpLocalizationInfoOrNull(targetFile)
+                : new AbpLocalizationInfo()
+                {
+                    Culture = translateInfo.TargetCulture,
+                    Texts = new List<NameValue>()
+                };
+
+            if (targetLocalizationInfo == null)
+            {
+                throw new CliUsageException(
+                    $"Failed to get localization information from {targetFile} file." +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
+            }
+
+            var referenceFile = Path.Combine(resource.ResourcePath, translateInfo.ReferenceCulture + ".json");
+            if (!File.Exists(referenceFile))
+            {
+                throw new CliUsageException(
+                    $"{referenceFile} file does not exist.." +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
+            }
+            var referenceLocalizationInfo = GetAbpLocalizationInfoOrNull(referenceFile);
+            if (referenceLocalizationInfo == null)
+            {
+                throw new CliUsageException(
+                    $"Failed to get localization information from {referenceFile} file." +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
+            }
+
+            var translator = new Translator(authKey);
+
+            var texts = resource.Texts.Select(x => x.Reference);
+
+            var translations = await translator.TranslateTextAsync(texts, await GetDeeplLanguageCode(referenceCulture), await GetDeeplLanguageCode(targetCulture));
+            for (var i = 0; i < translations.Length; i++)
+            {
+                resource.Texts[i].Target = translations[i].Text;
+            }
+
+            foreach (var text in resource.Texts)
+            {
+                var targetText = targetLocalizationInfo.Texts.FirstOrDefault(x => x.Name == text.LocalizationKey);
+                if (targetText != null)
+                {
+                    if (!text.Target.IsNullOrEmpty())
+                    {
+                        Logger.LogInformation($"Update translation: {targetText.Name} => " + text.Target);
+                        targetText.Value = text.Target;
+                    }
+                }
+                else
+                {
+                    Logger.LogInformation($"Create translation: {text.LocalizationKey} => " + text.Target);
+                    targetLocalizationInfo.Texts.Add(new NameValue(text.LocalizationKey, text.Target));
+                }
+            }
+
+            Logger.LogInformation($"Write translation json to {targetFile}.");
+
+            // sort keys
+            targetLocalizationInfo = SortLocalizedKeys(targetLocalizationInfo, referenceLocalizationInfo);
+            File.WriteAllText(targetFile, AbpLocalizationInfoToJsonFile(targetLocalizationInfo));
+        }
+    }
+
+    private Task<string> GetDeeplLanguageCode(string abpCulture)
+    {
+        var deeplLanguages = new List<string>()
+        {
+            LanguageCode.Bulgarian ,
+            LanguageCode.Czech ,
+            LanguageCode.Danish ,
+            LanguageCode.German ,
+            LanguageCode.Greek ,
+            LanguageCode.English ,
+            LanguageCode.EnglishBritish ,
+            LanguageCode.EnglishAmerican ,
+            LanguageCode.Spanish ,
+            LanguageCode.Estonian ,
+            LanguageCode.Finnish ,
+            LanguageCode.French ,
+            LanguageCode.Hungarian ,
+            LanguageCode.Indonesian ,
+            LanguageCode.Italian ,
+            LanguageCode.Japanese ,
+            LanguageCode.Korean ,
+            LanguageCode.Lithuanian ,
+            LanguageCode.Latvian ,
+            LanguageCode.Norwegian ,
+            LanguageCode.Dutch ,
+            LanguageCode.Polish ,
+            LanguageCode.Portuguese ,
+            LanguageCode.PortugueseBrazilian ,
+            LanguageCode.PortugueseEuropean ,
+            LanguageCode.Romanian ,
+            LanguageCode.Russian ,
+            LanguageCode.Slovak ,
+            LanguageCode.Slovenian ,
+            LanguageCode.Swedish ,
+            LanguageCode.Turkish ,
+            LanguageCode.Ukrainian,
+            LanguageCode.Chinese
+        };
+
+        if (abpCulture == "zh-Hans")
+        {
+            return Task.FromResult(LanguageCode.Chinese);
+        }
+
+        var deeplCulture = deeplLanguages.FirstOrDefault(x => x.Equals(abpCulture, StringComparison.OrdinalIgnoreCase));
+        if (deeplCulture == null)
+        {
+            throw new CliUsageException(
+                $"DeepL does not support {abpCulture} culture." +
+                Environment.NewLine + Environment.NewLine +
+                GetUsageInfo()
+            );
+        }
+
+        return Task.FromResult(deeplCulture);
+    }
+
+    private Task ApplyAbpTranslateInfoAsync(string directory, string filename)
+    {
+        Logger.LogInformation("Abp translate apply...");
+        Logger.LogInformation("Input file: " + filename);
+
         var translateJsonPath = Path.Combine(directory, filename);
         if (!File.Exists(translateJsonPath))
         {
@@ -220,6 +364,8 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
             File.Delete(translateJsonPath);
             Logger.LogInformation($"Delete the {translateJsonPath} file, if you need to translate again, please re-run the [abp translate] command.");
         }
+
+        return Task.CompletedTask;
     }
 
     private static IEnumerable<string> GetCultureJsonFiles(string path, string cultureName)
@@ -357,13 +503,17 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("--all-values|-all                            Include all keys. Default false");
         sb.AppendLine("--apply|-a                                   Creates or updates the file for the translated culture.");
         sb.AppendLine("--file|-f <file-name>                        Default: abp-translation.json");
+        sb.AppendLine("--online|-o                                  Translate online.");
+        sb.AppendLine("--deepl-auth-key <auth-key>                  DeepL auth key for online translation.");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
         sb.AppendLine("");
         sb.AppendLine("  abp translate -c zh-Hans");
-        sb.AppendLine("  abp translate -c zh-Hans -r en -a");
+        sb.AppendLine("  abp translate -c zh-Hans -r en");
         sb.AppendLine("  abp translate --apply");
         sb.AppendLine("  abp translate -a -f my-translation.json");
+        sb.AppendLine("  abp translate -c zh-Hans --online --deepl-auth-key <auth-key>");
+        sb.AppendLine("  abp translate -c zh-Hans -r tr --online --deepl-auth-key <auth-key>");
         sb.AppendLine("");
         sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -411,6 +561,16 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
         {
             public const string Short = "f";
             public const string Long = "file";
+        }
+
+        public static class Online
+        {
+            public const string Long = "online";
+        }
+
+        public static class DeepLAuthKey
+        {
+            public const string Short = "deepl-auth-key";
         }
     }
 
