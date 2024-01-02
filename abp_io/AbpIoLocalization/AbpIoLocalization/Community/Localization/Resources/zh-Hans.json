@@ -47,7 +47,7 @@
     "Stackoverflow": "Stackflow",
     "Votes": "投票",
     "Answer": "回答",
-    "Views": "观点",
+    "Views": "视图",
     "Answered": "已回答",
     "WaitingForYourAnswer": "等待您的答复",
     "Asked": "要求",
@@ -65,7 +65,7 @@
     "UpdateUserTwitterInfo": "示例：johndoe",
     "UpdateUserGithubInfo": "示例：johndoe",
     "UpdateUserLinkedinInfo": "例如： https://www.linkedin.com/...",
-    "UpdateUserCompanyInfo": "示例：沃乐软件",
+    "UpdateUserCompanyInfo": "示例：Volosoft",
     "UpdateUserJobTitleInfo": "例如：软件开发人员软件开发人员",
     "UserName": "用户名",
     "Company": "公司名称",
@@ -207,9 +207,9 @@
     "sec": "秒钟",
     "Winners": "获奖者",
     "To{0}LuckyWinners": "赠送给 {0} 名幸运获奖者",
-    "ActiveRaffles": "活跃的 <span class=\"梯度-社区\">来福牌</span",
-    "UpcomingRaffles": "即将推出的 <span class=\"梯度-社区\">来福士</span",
-    "CompletedRaffles": "已完成 <span class=\"梯度-社区\">莱佛士</span",
+    "ActiveRaffles": "活跃的 <span class=\"gradient-community\">来抽奖</span",
+    "UpcomingRaffles": "即将推出的 <span class=\"gradient-community\">抽奖</span",
+    "CompletedRaffles": "已完成 <span class=\"gradient-community\">抽奖</span",
     "NoActiveRaffleTitle": "目前没有正在进行的抽奖活动。",
     "NoActiveRaffleDescription": "目前没有正在进行的抽奖活动。",
     "RaffleSubscriptionCodeInputMessage": "本次抽奖需要注册码。请在下面输入注册码：",
@@ -255,6 +255,6 @@
     "LatestArticles": "最新文章",
     "RaffleHeader": "你好，ABP 社区成员！",
     "RafflesInfo": "<br>这是一个抽奖页面，旨在感谢您成为活跃的社区成员。我们举办 <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP 社区讲座</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">、ABP .NET 会议</a>，参加或赞助与 .NET 相关的活动，并在活动中赠送一些礼品。<br><br>您可以关注此页面，查看即将举行的抽奖活动、参加这些活动或查看我们以前举行的抽奖活动（包括获奖者）。<br><br>感谢您成为我们的活跃会员！在即将举行的抽奖活动中再见。",
-    "RafflesInfoTitle": "ABP 社区<span class=\"gradient-community\">来福牌</span"
+    "RafflesInfoTitle": "ABP 社区<span class=\"gradient-community\">来抽奖</span"
   }
 }
