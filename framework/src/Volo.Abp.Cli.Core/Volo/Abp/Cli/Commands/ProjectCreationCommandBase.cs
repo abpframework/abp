@@ -447,7 +447,7 @@ public abstract class ProjectCreationCommandBase
         var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
         var path = projectArgs.OutputFolder;
         
-        if (ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName))
+        if (isModuleTemplate)
         {
             path = Path.Combine(path, "host");
             searchPattern = "*.Blazor.Host.csproj";
