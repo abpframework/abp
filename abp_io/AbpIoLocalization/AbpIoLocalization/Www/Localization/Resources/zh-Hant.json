@@ -274,7 +274,7 @@
     "EmailNotValid": "請輸入有效的電子郵件地址。",
     "WeWillSendYouADownloadLink": "下載電子書的鏈接已發送至 {0}。檢查您的收件箱、垃圾箱或垃圾郵件箱！",
     "GoHome": "回家",
-    "InvalidFormInputs": "請輸入表格中指定的有效信息。",
+    "InvalidFormInputs": "請輸入表单中指定的有效信息。",
     "DDDBookEmailBody": "謝謝你。 <br />要下載您的圖書，請<a href=\"{0}\">點擊此處</a>。",
     "SubscribeToNewsletter": "訂閱時事通訊以獲取有關 ABP.IO 平台中發生的事件的信息，例如新版本、文章、優惠等。",
     "FirstEdition": "第一版",
