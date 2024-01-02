@@ -792,6 +792,8 @@
     "TermsConditionsPageTitle": "الأحكام والشروط",
     "TrainingsPageTitle": "حزم تدريب ABP",
     "ModulesPageTitle": "وحدات تطبيق ABP سابقة البناء",
-    "MultipleOrganizationInfo": "شاهد جميع مؤسساتك"
+    "MultipleOrganizationInfo": "شاهد جميع مؤسساتك",
+    "PaymentFailedInfo": "عذرا، فشل الدفع! ",
+    "UsedPayment": "لقد تم استخدام هذه الدفعة بالفعل"
   }
 }

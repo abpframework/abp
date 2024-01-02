@@ -1,13 +1,16 @@
 import { Injector } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Params, Router } from '@angular/router';
+
+import { Observable, of } from 'rxjs';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import {
   AuthConfig,
   OAuthErrorEvent,
   OAuthService as OAuthService2,
   OAuthStorage,
 } from 'angular-oauth2-oidc';
-import { Observable, of } from 'rxjs';
-import { filter, map, switchMap, take, tap } from 'rxjs/operators';
+
 import {
   AbpLocalStorageService,
   ConfigStateService,
@@ -17,9 +20,10 @@ import {
   SessionStateService,
   TENANT_KEY,
 } from '@abp/ng.core';
+
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 import { oAuthStorage } from '../utils/oauth-storage';
-import { HttpErrorResponse } from '@angular/common/http';
+import { OAuthErrorFilterService } from '../services';
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
@@ -33,6 +37,8 @@ export abstract class AuthFlowStrategy {
   protected localStorageService: AbpLocalStorageService;
   protected tenantKey: string;
   protected router: Router;
+
+  protected readonly oAuthErrorFilterService: OAuthErrorFilterService;
 
   abstract checkIfInternalAuth(queryParams?: Params): boolean;
   abstract navigateToLogin(queryParams?: Params): void;
@@ -54,6 +60,7 @@ export abstract class AuthFlowStrategy {
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig || {};
     this.tenantKey = injector.get(TENANT_KEY);
     this.router = injector.get(Router);
+    this.oAuthErrorFilterService = injector.get(OAuthErrorFilterService);
 
     this.listenToOauthErrors();
   }
@@ -97,6 +104,7 @@ export abstract class AuthFlowStrategy {
             if (redirect_uri && redirect_uri !== '/') {
               return redirect_uri;
             }
+
             return '/';
           }),
           switchMap(redirectUri =>
@@ -118,7 +126,12 @@ export abstract class AuthFlowStrategy {
     this.oAuthService.events
       .pipe(
         filter(event => event instanceof OAuthErrorEvent),
-        tap(() => clearOAuthStorage()),
+        tap((err: OAuthErrorEvent) => {
+          const shouldSkip = this.oAuthErrorFilterService.run(err);
+          if (!shouldSkip) {
+            clearOAuthStorage();
+          }
+        }),
         switchMap(() => this.configState.refreshAppState()),
       )
       .subscribe();

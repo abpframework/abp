@@ -79,7 +79,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
 
                 await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, checkAll: checkAll, version: version);
 
-                Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
+                Logger.LogInformation("Volo packages are updated in {SolutionName} solution", solutionName);
             }
             return;
         }
@@ -92,7 +92,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
 
             await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, checkAll: checkAll, version: version);
 
-            Logger.LogInformation($"Volo packages are updated in {projectName} project.");
+            Logger.LogInformation("Volo packages are updated in {ProjectName} project", projectName);
             return;
         }
 
