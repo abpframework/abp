@@ -425,9 +425,18 @@ public abstract class ProjectCreationCommandBase
         {
             return;
         }
-        
+
+        var isModuleTemplate = ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName);
         var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
-        var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
+        
+        var message = isWebassembly || isModuleTemplate 
+            ? "Generating bundles for Blazor Wasm" 
+            : "Generating bundles for MAUI Blazor";
+        
+        var projectType = isWebassembly || isModuleTemplate
+            ? BundlingConsts.WebAssembly 
+            : BundlingConsts.MauiBlazor;
+        
         Logger.LogInformation(message + "...");
 
         await EventBus.PublishAsync(new ProjectCreationProgressEvent
@@ -435,19 +444,26 @@ public abstract class ProjectCreationCommandBase
             Message = message
         }, false);
 
+        var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
         var path = projectArgs.OutputFolder;
-        if (projectArgs.TemplateName == MicroserviceProTemplate.TemplateName)
+        
+        if (ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName))
+        {
+            path = Path.Combine(path, "host");
+            searchPattern = "*.Blazor.Host.csproj";
+        }
+        else if (MicroserviceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
             path = Path.Combine(path, "apps");
         }
-        
+
         var directory = Path.GetDirectoryName(
-            Directory.GetFiles(path, isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
+            Directory.GetFiles(path, searchPattern, SearchOption.AllDirectories).First()
         );
 
-        await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
+        await _bundlingService.BundleAsync(directory, true, projectType);
     }
-
+    
     protected virtual bool ShouldRunBundleCommand(ProjectBuildArgs projectArgs)
     {
         if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
@@ -456,7 +472,12 @@ public abstract class ProjectCreationCommandBase
             return true;
         }
         
-        if (projectArgs.TemplateName == MicroserviceProTemplate.TemplateName && projectArgs.UiFramework is UiFramework.Blazor)
+        if (MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName) && projectArgs.UiFramework is UiFramework.Blazor)
+        {
+            return true;
+        }
+
+        if (ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) && projectArgs.UiFramework != UiFramework.None)
         {
             return true;
         }
