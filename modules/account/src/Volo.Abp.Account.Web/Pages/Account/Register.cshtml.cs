@@ -102,7 +102,7 @@ public class RegisterModel : AccountPageModel
                 return;
             }
 
-            var userName = await GetUserNameFromEmail(emailClaim.Value);
+            var userName = await UserManager.GetUserNameFromEmailAsync(emailClaim.Value);
             Input = new PostInput { UserName = userName, EmailAddress = emailClaim.Value };
         }
     }
@@ -128,7 +128,7 @@ public class RegisterModel : AccountPageModel
                 }
                 if (Input.UserName.IsNullOrWhiteSpace())
                 {
-                    Input.UserName = await GetUserNameFromEmail(Input.EmailAddress);
+                    Input.UserName = await UserManager.GetUserNameFromEmailAsync(Input.EmailAddress);
                 }
                 await RegisterExternalUserAsync(externalLoginInfo, Input.UserName, Input.EmailAddress);
             }
