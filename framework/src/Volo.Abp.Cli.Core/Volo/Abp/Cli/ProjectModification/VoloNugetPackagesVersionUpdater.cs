@@ -181,6 +181,11 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                     packageId = package.Attributes["Include"].Value;
 
                     var versionAttribute = package.Attributes["Version"];
+                    if (versionAttribute == null)
+                    {
+                        Logger.LogWarning("Package: {PackageId} uses central package management. Skipped!", packageId);
+                        continue;
+                    }
                     var currentVersion = versionAttribute.Value;
                     
                     var isLeptonXPackage = packageId.Contains("LeptonX");
@@ -194,17 +199,17 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                     var isVersionParsed = SemanticVersion.TryParse(currentVersion, out var currentSemanticVersion);
                     if (!isVersionParsed)
                     {
-                        Logger.LogWarning("Could not parse package \"{0}\" version v{1}. Skipped.", packageId, currentVersion);
+                        Logger.LogWarning("Could not parse package \"{PackageId}\" version v{CurrentVersion}. Skipped!", packageId, currentVersion);
                         continue;
                     }
 
-                    Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, currentSemanticVersion);
+                    Logger.LogDebug("Checking package: \"{PackageId}\" - Current version: {CurrentSemanticVersion}", packageId, currentSemanticVersion);
 
                     if (!specifiedVersion.IsNullOrWhiteSpace())
                     {
                         if (isLeptonXPackage || isStudioPackage)
                         {
-                            Logger.LogWarning("Package: {0} could not be updated. Please manually update the package version yourself to prevent version mismatches.", packageId);
+                            Logger.LogWarning("Package: {PackageId} could not be updated. Please manually update the package version yourself to prevent version mismatches!", packageId);
                             continue;
                         }
 
@@ -213,17 +218,17 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                             var specifiedSemanticVersion = SemanticVersion.Parse(specifiedVersion);
                             if (specifiedSemanticVersion > currentSemanticVersion)
                             {
-                                Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentVersion, specifiedVersion);
+                                Logger.LogInformation("Updating package \"{PackageId}\" from v{CurrentVersion} to v{SpecifiedVersion}", packageId, currentVersion, specifiedVersion);
                                 versionAttribute.Value = specifiedVersion;
                             }
                             else
                             {
-                                Logger.LogWarning("Unable to update package \"{0}\" version v{1} to v{2}.", packageId, currentVersion, specifiedVersion);
+                                Logger.LogWarning("Unable to update package \"{PackageId}\" version v{CurrentVersion} to v{SpecifiedVersion}", packageId, currentVersion, specifiedVersion);
                             }
                         }
                         else
                         {
-                            Logger.LogWarning("Package \"{0}\" specified version v{1} does not exist.", packageId, specifiedVersion);
+                            Logger.LogWarning("Package \"{PackageId}\" specified version v{SpecifiedVersion} does not exist!", packageId, specifiedVersion);
                         }
                     }
                     else
@@ -253,18 +258,18 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
 
                             if(latestVersion == null)
                             {
-                                Logger.LogWarning("Package: {0} could not be updated. Please manually update the package version yourself to prevent version mismatches.", packageId);
+                                Logger.LogWarning("Package: {PackageId} could not be updated. Please manually update the package version yourself to prevent version mismatches!", packageId);
                                 continue;
                             }
 
                             if (currentVersion != latestVersion)
                             {
-                                Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentVersion, latestVersion);
+                                Logger.LogInformation("Updating package \"{PackageId}\" from v{CurrentVersion} to v{LatestVersion}", packageId, currentVersion, latestVersion);
                                 versionAttribute.Value = latestVersion;
                             }
                             else
                             {
-                                Logger.LogDebug("Package: \"{0}-v{1}\" is up to date.", packageId, currentVersion);
+                                Logger.LogDebug("Package: \"{PackageId}-v{CurrentVersion}\" is up to date", packageId, currentVersion);
                             }
                         }
                         else
@@ -285,12 +290,12 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
 
                             if (latestVersion != null && (currentSemanticVersion < latestVersion || (currentSemanticVersion.IsPrerelease && switchToStable)))
                             {
-                                Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentSemanticVersion.ToString(), latestVersion.ToString());
+                                Logger.LogInformation("Updating package \"{PackageId}\" from v{CurrentSemanticVersion} to v{LatestVersion}", packageId, currentSemanticVersion.ToString(), latestVersion.ToString());
                                 versionAttribute.Value = latestVersion.ToString();
                             }
                             else
                             {
-                                Logger.LogInformation("Package: \"{0}-v{1}\" is up to date.", packageId, currentSemanticVersion);
+                                Logger.LogInformation("Package: \"{PackageId}-v{CurrentSemanticVersion}\" is up to date", packageId, currentSemanticVersion);
                             }
                         }
                     }
@@ -301,7 +306,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
         }
         catch (Exception ex)
         {
-            Logger.LogError("Cannot update Volo.* packages! An error occurred while updating the package \"{0}\". Error: {1}", packageId, ex.Message);
+            Logger.LogError("Cannot update Volo.* packages! An error occurred while updating the package \"{PackageId}\". Error: {ErrorMessage}", packageId, ex.Message);
             Logger.LogException(ex);
         }
 
