@@ -838,7 +838,7 @@
     "ModulesPageTitle": "ABP Pre-Built Application Modules",
     "Volo.AbpIo.Commercial:040001": "API Access Key is incorrect.",
     "GetLepton": "Get Lepton Now",
-    "MyOrganizations_Detail_LicenseStartDate": "License Start Date",
+    "MyOrganizations_Detail_LicenseStartDate": "Start Date",
     "MyOrganizations_Detail_LicenseExpiryDate": "Expiry Date",
     "BlazoriseSupport": "How do I get the Blazorise license key and support from the Blazorise team?",
     "BlazoriseSupportExplanation": "Follow the steps below to get support from the Blazorise team and get your Blazorise license key:",
@@ -1106,6 +1106,15 @@
     "AutoRenewalDisabled": "Auto Renewal Disabled",
     "PaymentRequestIdIsNotProvided": "Payment request id is not provided.",
     "PaymentFailedInfo": "Sorry, payment failed! This could be due to insufficient funds, invalid credit card numbers or invalid pin",
-    "UsedPayment": "This payment has been already used"
+    "UsedPayment": "This payment has been already used",
+    "ABPStudioBetaAccess": "ABP Studio Beta Access",
+    "VisitABPStudio": "Visit ABP Studio",
+    "EditBillingInformation": "Edit Billing Information",
+    "Organization": "Organization",
+    "E-Book": "E-Book",
+    "CreditCards": "Credit Cards",
+    "BillingInformation": "Billing Information",
+    "AddNewCreditCard": "Add New Credit Card",
+    "MyOrganizations_LearnMorePlan": "Learn more about plans on the pricing page"
   }
 }
