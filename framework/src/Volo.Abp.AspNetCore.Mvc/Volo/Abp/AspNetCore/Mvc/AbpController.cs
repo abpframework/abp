@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -104,14 +105,14 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
         return localizer;
     }
 
-    protected virtual RedirectResult RedirectSafely(string returnUrl, string? returnUrlHash = null)
+    protected virtual async Task<RedirectResult> RedirectSafelyAsync(string returnUrl, string? returnUrlHash = null)
     {
-        return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
+        return Redirect(await GetRedirectUrlAsync(returnUrl, returnUrlHash));
     }
 
-    protected virtual string GetRedirectUrl(string returnUrl, string? returnUrlHash = null)
+    protected virtual async Task<string> GetRedirectUrlAsync(string returnUrl, string? returnUrlHash = null)
     {
-        returnUrl = NormalizeReturnUrl(returnUrl);
+        returnUrl = await NormalizeReturnUrlAsync(returnUrl);
 
         if (!returnUrlHash.IsNullOrWhiteSpace())
         {
@@ -121,23 +122,23 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
         return returnUrl;
     }
 
-    protected virtual string NormalizeReturnUrl(string returnUrl)
+    protected virtual async Task<string> NormalizeReturnUrlAsync(string returnUrl)
     {
         if (returnUrl.IsNullOrEmpty())
         {
-            return GetAppHomeUrl();
+            return await GetAppHomeUrlAsync();
         }
 
-        if (Url.IsLocalUrl(returnUrl) || AppUrlProvider.IsRedirectAllowedUrl(returnUrl))
+        if (Url.IsLocalUrl(returnUrl) || await AppUrlProvider.IsRedirectAllowedUrlAsync(returnUrl))
         {
             return returnUrl;
         }
 
-        return GetAppHomeUrl();
+        return await GetAppHomeUrlAsync();
     }
 
-    protected virtual string GetAppHomeUrl()
+    protected virtual Task<string> GetAppHomeUrlAsync()
     {
-        return Url.Content("~/");
+        return Task.FromResult(Url.Content("~/"));
     }
 }

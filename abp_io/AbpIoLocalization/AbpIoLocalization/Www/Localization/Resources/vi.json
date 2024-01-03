@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "Bạn tập trung vào mã doanh nghiệp của mình và để khuôn khổ xử lý việc thuê nhiều người thay cho bạn.",
     "BootstrapTagHelpersExplanation": "Thay vì viết thủ công các chi tiết lặp lại của các thành phần bootstrap, hãy sử dụng trình trợ giúp thẻ của ABP để đơn giản hóa nó và tận dụng lợi thế của intellisense. Bạn chắc chắn có thể sử dụng Bootstrap bất cứ khi nào bạn cần.",
     "DynamicFormsExplanation": "Trình trợ giúp biểu mẫu động & thẻ nhập có thể tạo biểu mẫu hoàn chỉnh từ lớp C # làm mô hình.",
-    "AuthenticationAuthorizationExplanation": "Các tùy chọn xác thực & ủy quyền phong phú được tích hợp vào ASP.NET Core Identity & IdentityServer4. Cung cấp hệ thống quyền chi tiết và có thể mở rộng.",
+    "AuthenticationAuthorizationExplanation": "Các tùy chọn xác thực & ủy quyền phong phú được tích hợp vào ASP.NET Core Identity & OpenIddict. Cung cấp hệ thống quyền chi tiết và có thể mở rộng.",
     "CrossCuttingConcernsExplanation": "Đừng lặp lại chính mình để thực hiện lại tất cả những thứ phổ biến này. Tập trung vào mã doanh nghiệp của bạn và để ABP tự động hóa chúng theo quy ước.",
     "DatabaseConnectionTransactionManagement": "Kết nối cơ sở dữ liệu & Quản lý giao dịch",
     "CorrelationIdTracking": "Theo dõi Id tương quan",

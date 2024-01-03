@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "Keskity yrityksesi koodiin ja annat kehyksen hoitamaan monivuokrausta puolestasi.",
     "BootstrapTagHelpersExplanation": "Sen sijaan, että kirjoittaisit manuaalisesti uudelleenkäynnistyskomponenttien yksityiskohtia, käytä ABP: n tunnisteita yksinkertaistaaksesi sitä ja hyödyntäksesi älykkäitä ominaisuuksia. Voit ehdottomasti käyttää Bootstrapia milloin tahansa.",
     "DynamicFormsExplanation": "Dynaamiset lomake- ja syöttötunnisteiden apurit voivat luoda täydellisen lomakkeen mallina C# -luokasta.",
-    "AuthenticationAuthorizationExplanation": "ASP.NET Core Identity & IdentityServer4 -palveluun integroidut monipuoliset todennus- ja todennusvaihtoehdot. Tarjoaa laajennettavan ja yksityiskohtaisen lupajärjestelmän.",
+    "AuthenticationAuthorizationExplanation": "ASP.NET Core Identity & OpenIddict -palveluun integroidut monipuoliset todennus- ja todennusvaihtoehdot. Tarjoaa laajennettavan ja yksityiskohtaisen lupajärjestelmän.",
     "CrossCuttingConcernsExplanation": "Älä toista itseäsi kaikkien näiden yleisten asioiden toteuttamiseksi uudelleen ja uudelleen. Keskity yrityskoodiin ja anna ABP: n automatisoida ne käytäntöjen mukaan.",
     "DatabaseConnectionTransactionManagement": "Tietokantayhteys ja tapahtumien hallinta",
     "CorrelationIdTracking": "Korrelaatio-Id-seuranta",

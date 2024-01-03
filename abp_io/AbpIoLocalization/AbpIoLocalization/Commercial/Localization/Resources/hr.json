@@ -1084,6 +1084,8 @@
     "MultipleYearDiscount": "Višegodišnji popust",
     "CampaignDiscountText": "Crni petak popust",
     "CampaignDiscountName": "Crni petak",
-    "CampaignName:BlackFriday": "Crni petak"
+    "CampaignName:BlackFriday": "Crni petak",
+    "PaymentFailedInfo": "Nažalost, plaćanje nije uspjelo! ",
+    "UsedPayment": "Ovo plaćanje je već iskorišteno"
   }
 }
