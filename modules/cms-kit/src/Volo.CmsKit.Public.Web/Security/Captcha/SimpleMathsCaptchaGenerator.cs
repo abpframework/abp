@@ -1,21 +1,13 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using Volo.Abp;
 using Volo.CmsKit.Localization;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
-using Color = SixLabors.ImageSharp.Color;
-using PointF = SixLabors.ImageSharp.PointF;
 using Volo.Abp.Caching;
 using Microsoft.Extensions.Caching.Distributed;
+using ImageMagick;
 
 namespace Volo.CmsKit.Public.Web.Security.Captcha;
 
@@ -108,93 +100,79 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
 
     private byte[] GenerateInternal(string stringText, CaptchaOptions options)
     {
-        byte[] result;
+        var random = new Random();
+        var family = MagickNET.FontFamilies.First();
+        
+        var drawables = new Drawables()
+            .Font(family, options.FontStyle, FontWeight.Normal, FontStretch.Normal)
+            .FontPointSize(options.FontSize)
+            .StrokeColor(MagickColors.Transparent);
 
-        using (var image = new Image<Rgba32>(options.Width, options.Height))
+        var size = (ushort)(drawables.FontTypeMetrics(stringText)?.TextWidth ?? 0);
+        using var image = new MagickImage(MagickColors.White, size + 15, options.Height);
+
+        double position = 0;
+        var startWith = (byte)random.Next(5, 10);
+
+        foreach (var character in stringText)
         {
-            float position = 0;
-            var random = new Random();
-            var startWith = (byte)random.Next(5, 10);
-            image.Mutate(ctx => ctx.BackgroundColor(Color.Transparent));
+            var text = character.ToString();
+            var color = options.TextColor[random.Next(0, options.TextColor.Length)];
+            drawables.FillColor(new MagickColor(color.R, color.G, color.B, color.A))
+                .Text(startWith + position,
+                    RandomTextGenerator.GenerateNextFloat(image.BaseHeight / 2.3, image.BaseHeight / 1.7), text);
 
-            var fontFamily = SystemFonts.Families
-                .FirstOrDefault(x => x.GetAvailableStyles().Contains(options.FontStyle), SystemFonts.Families.First())
-                .Name;
-
-            var font = SystemFonts.CreateFont(fontFamily, options.FontSize, options.FontStyle);
-            
-            foreach (var character in stringText)
-            {
-                var text = character.ToString();
-                var color = options.TextColor[random.Next(0, options.TextColor.Length)];
-                var location = new PointF(startWith + position, random.Next(6, 13));
-                image.Mutate(ctx => ctx.DrawText(text, font, color, location));
-                position += TextMeasurer.MeasureSize(character.ToString(), new TextOptions (font)
-                {
-                    Origin = location
-                }).Width;
-            }
-
-            //add rotation
-            var rotation = GetRotation(options);
-            image.Mutate(ctx => ctx.Transform(rotation));
-
-            // add the dynamic image to original image
-            var size = (ushort)TextMeasurer.MeasureSize(stringText, new TextOptions(font)).Width;
-            var img = new Image<Rgba32>(size + 15, options.Height);
-            img.Mutate(ctx => ctx.BackgroundColor(Color.White));
-
-            Parallel.For(0, options.DrawLines, i =>
-            {
-                var x0 = random.Next(0, random.Next(0, 30));
-                var y0 = random.Next(10, img.Height);
-
-                var x1 = random.Next(30, img.Width);
-                var y1 = random.Next(0, img.Height);
-
-                img.Mutate(ctx =>
-                    ctx.DrawLine(options.TextColor[random.Next(0, options.TextColor.Length)],
-                                  RandomTextGenerator.GenerateNextFloat(options.MinLineThickness, options.MaxLineThickness),
-                                  new PointF[] { new PointF(x0, y0), new PointF(x1, y1) })
-                    );
-            });
-
-            img.Mutate(ctx => ctx.DrawImage(image, 0.80f));
-
-            Parallel.For(0, options.NoiseRate, _ =>
-            {
-                var x0 = random.Next(0, img.Width - 1);
-                var y0 = random.Next(0, img.Height - 1);
-                img.Mutate(
-                    ctx => ctx
-                        .DrawLine(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)],
-                            RandomTextGenerator.GenerateNextFloat(0.5, 1.5),
-                            new PointF[] { new Vector2(x0, y0), new Vector2(x0 + 0.005f, y0 + 0.005f) })
-                );
-            });
-
-            img.Mutate(x =>
-            {
-                x.Resize(options.Width, options.Height);
-            });
-
-            using (var ms = new MemoryStream())
-            {
-                img.Save(ms, options.Encoder);
-                result = ms.ToArray();
-            }
+            position += drawables.FontTypeMetrics(text)?.TextWidth ?? 0;
         }
 
-        return result;
+        // add rotation
+        var rotation = GetRotation(options);
+        drawables.Rotation(rotation);
+
+        drawables.Draw(image);
+
+        Parallel.For(0, options.DrawLines, _ =>
+        {
+            // ReSharper disable once AccessToDisposedClosure
+            if (image is { IsDisposed: false })
+            {
+                var x0 = random.Next(0, random.Next(0, 30));
+                var y0 = random.Next(10, image.Height);
+
+                var x1 = random.Next(30, image.Width);
+                var y1 = random.Next(0, image.Height);
+
+                image.Draw(new Drawables()
+                    .StrokeColor(options.DrawLinesColor[random.Next(0, options.DrawLinesColor.Length)])
+                    .StrokeWidth(RandomTextGenerator.GenerateNextFloat(options.MinLineThickness,
+                        options.MaxLineThickness))
+                    .Line(x0, y0, x1, y1));
+            }
+        });
+
+        Parallel.For(0, options.NoiseRate, _ =>
+        {
+            if (image is { IsDisposed: false })
+            {
+                var x = random.Next(0, image.Width);
+                var y = random.Next(0, image.Height);
+                image.Draw(new Drawables()
+                    .FillColor(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)])
+                    .Point(x, y)
+                );
+            }
+        });
+
+        image.Resize(new MagickGeometry(options.Width, options.Height) { IgnoreAspectRatio = true });
+
+        return image.ToByteArray(options.Encoder);
     }
 
-    private static AffineTransformBuilder GetRotation(CaptchaOptions options)
+    private double GetRotation(CaptchaOptions options)
     {
         var random = new Random();
-        var width = random.Next(10, options.Width);
-        var height = random.Next(10, options.Height);
-        var pointF = new PointF(width, height);
         var rotationDegrees = random.Next(0, options.MaxRotationDegrees);
-        return new AffineTransformBuilder().PrependRotationDegrees(rotationDegrees, pointF);
+        return rotationDegrees;
     }
+
 }
