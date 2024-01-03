@@ -586,5 +586,7 @@
     "AutoRenewalEnabled": "Auto Renewal Enabled",
     "LastAutoRenewalPaymentTime": "Last Auto Renewal Payment Time",
     "OrganizationDoesNotHaveACreditCard": "Organization does not have a credit card!",
+    "Permission:EditWinners": "Edit Winners",
+    "Permission:ChangeDrawingStatus": "Change Drawing Status"
   }
 }

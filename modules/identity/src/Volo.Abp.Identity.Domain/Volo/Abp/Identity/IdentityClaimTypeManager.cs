@@ -16,7 +16,7 @@ public class IdentityClaimTypeManager : DomainService
     {
         if (await IdentityClaimTypeRepository.AnyAsync(claimType.Name))
         {
-            throw new AbpException($"Name Exist: {claimType.Name}");
+            throw new BusinessException(IdentityErrorCodes.ClaimNameExist).WithData("0", claimType.Name);
         }
 
         return await IdentityClaimTypeRepository.InsertAsync(claimType);

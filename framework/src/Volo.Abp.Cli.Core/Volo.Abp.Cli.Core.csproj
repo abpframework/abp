@@ -32,6 +32,7 @@
     <ProjectReference Include="..\Volo.Abp.Http\Volo.Abp.Http.csproj" />
     <ProjectReference Include="..\Volo.Abp.IdentityModel\Volo.Abp.IdentityModel.csproj" />
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 </Project>
