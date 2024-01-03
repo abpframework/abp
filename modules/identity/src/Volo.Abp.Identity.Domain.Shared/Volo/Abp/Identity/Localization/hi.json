@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "आप अपनी दो कारक सेटिंग नहीं बदल सकते।",
     "Volo.Abp.Identity:010008": "इसे दो कारक सेटिंग बदलने की अनुमति नहीं है।",
     "Volo.Abp.Identity:010009": "आप अपने आप को अधिकृत नहीं कर सकते हैं!",
+    "Volo.Abp.Identity:010021" : "नाम '{0}' पहले से ही लिया गया है।",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "उपयोगकर्ता के लिए अधिकतम अनुमत संगठन इकाई सदस्यता गणना",
     "ThisUserIsNotActiveMessage": "यह उपयोगकर्ता सक्रिय नहीं है।",
     "Permission:IdentityManagement": "पहचान प्रबंधन",

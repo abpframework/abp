@@ -75,6 +75,7 @@
     "Volo.Abp.Identity:010007": "You can't change your two factor setting.",
     "Volo.Abp.Identity:010008": "Changing the two factor setting is not allowed.",
     "Volo.Abp.Identity:010009": "You cannot delegate yourself!",
+    "Volo.Abp.Identity:010021": "Name exist: '{0}'",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximum allowed organisation unit membership count for a user",
     "Permission:IdentityManagement": "Identity management",
     "Permission:RoleManagement": "Role management",
