@@ -10,6 +10,7 @@ using Volo.Abp.Domain;
 using Volo.Abp.Http;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
+using Volo.Abp.Localization;
 using Volo.Abp.Minify;
 using Volo.Abp.Modularity;
 
@@ -20,7 +21,8 @@ namespace Volo.Abp.Cli;
     typeof(AbpJsonModule),
     typeof(AbpIdentityModelModule),
     typeof(AbpMinifyModule),
-    typeof(AbpHttpModule)
+    typeof(AbpHttpModule),
+    typeof(AbpLocalizationModule)
 )]
 public class AbpCliCoreModule : AbpModule
 {
