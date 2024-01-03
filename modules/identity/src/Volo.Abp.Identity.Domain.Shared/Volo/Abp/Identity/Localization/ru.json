@@ -8,7 +8,7 @@
     "Surname": "Фамилия",
     "EmailAddress": "Адрес электронной почты",
     "PhoneNumber": "Номер телефона",
-    "UserInformations": "Информация о пользователе",
+    "UserInformations": "Информация о Пользователе",
     "DisplayName:IsDefault": "По умолчанию",
     "DisplayName:IsStatic": "Статичная",
     "DisplayName:IsPublic": "Доступно",
