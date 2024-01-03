@@ -122,7 +122,7 @@
     "MultiTenancyExplanation4": "Sen kendi uygulama kodunu odaklan ve bırak framework sizin adınıza multi-tenancy üstesinden gelsin.",
     "BootstrapTagHelpersExplanation": "Bootstrap bileşenlerinin tekrar eden detaylarını manuel olarak yazmak yerine, ABP'nin etiket yardımcılarını kullanarak bu işlemi basitleştirin ve IntelliSense'den yararlanın. İhtiyaç duyduğunuzda kesinlikle Bootstrap'i kullanabilirsiniz.",
     "DynamicFormsExplanation": "Dinamik form & input tag helpers bir C# sınıfından model olarak eksiksiz form oluşturabilir.",
-    "AuthenticationAuthorizationExplanation": "Zengin kimlik doğrulama ve yetkilendirme seçenekleri, ASP.NET Core Identity ve IdentityServer4 ile entegre edilmiştir. Genişletilebilir ve detaylı bir izin sistemi sunar.",
+    "AuthenticationAuthorizationExplanation": "Zengin kimlik doğrulama ve yetkilendirme seçenekleri, ASP.NET Core Identity ve OpendIddict ile entegre edilmiştir. Genişletilebilir ve detaylı bir izin sistemi sunar.",
     "CrossCuttingConcernsExplanation": "Tüm bu ortak şeyleri geliştirmek için kendini sürekli tekrar etme. Kendi iş koduna odaklan ve bırak ABP bunları kurallar ile otomatik hale getirsin.",
     "DatabaseConnectionTransactionManagement": "Veritabanı Bğlantısı & İşlem Yönetimi",
     "CorrelationIdTracking": "Correlation-Id Tracking",
