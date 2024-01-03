@@ -32,7 +32,7 @@ public class IdentityClaimTypeManager_Tests : AbpIdentityDomainTestBase
     [Fact]
     public async Task Create_Name_Exist_Should_Exception()
     {
-        await Assert.ThrowsAnyAsync<AbpException>(async () => await _claimTypeManager.CreateAsync(
+        await Assert.ThrowsAnyAsync<BusinessException>(async () => await _claimTypeManager.CreateAsync(
             new IdentityClaimType(
                 Guid.NewGuid(), "Age")));
     }

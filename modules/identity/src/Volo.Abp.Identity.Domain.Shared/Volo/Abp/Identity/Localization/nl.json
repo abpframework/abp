@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "U kunt uw instelling voor tweefactor authenticatie niet wijzigen.",
     "Volo.Abp.Identity:010008": "Het is niet toegestaan om de instelling van tweefactor authenticatie te wijzigen.",
     "Volo.Abp.Identity:010009": "U kunt uzelf niet delegeren.",
+    "Volo.Abp.Identity:010021" : "Er bestaat al een met de naam '{0}'.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximaal toegestande aantal lidmaatschappen van organisatie-eenheden voor een gebruiker",
     "ThisUserIsNotActiveMessage": "Deze gebruiker is niet actief.",
     "Permission:IdentityManagement": "Identiteitsbeheer",

@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "Dvojfaktorové nastavenie nie je možné zmeniť.",
     "Volo.Abp.Identity:010008": "Dvojfaktorové nastavenie nie je povolené zmeniť.",
     "Volo.Abp.Identity:010009": "Nemôžete delegovať svoje vlastné oprávnenia.",
+    "Volo.Abp.Identity:010021" : "Názov '{0}' sa už používa.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximálny povolený počet členov organizačnej jednotky pre používateľa",
     "ThisUserIsNotActiveMessage": "Tento používateľ nie je aktívny.",
     "Permission:IdentityManagement": "Správa identít",
