@@ -2,11 +2,17 @@ import { noop } from '@abp/ng.core';
 import { Params } from '@angular/router';
 import { from, of } from 'rxjs';
 import { AuthFlowStrategy } from './auth-flow-strategy';
+import { deleteAllCookies } from '../utils/cookie-utils';
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = false;
+  private rememberMeKey = 'remember_me'
 
   async init() {
+    console.log('code flow');
+    const accessToken = this.oAuthService.getAccessToken();
+    let parsedToken = JSON.parse(atob(accessToken.split(".")[1]));;
+
     return super
       .init()
       .then(() => this.oAuthService.tryLogin().catch(noop))
