@@ -176,30 +176,20 @@
             for(var format of formats) {
                 var date = moment(value, format);
                 if(date.isValid()) {
-                    return maybeUtc(date, options);
+                    return date;
                 }
             }
         }
 
         if (value.isAbpDate) {
-            return maybeUtc(value._moment.clone(), options);
+            return value._moment.clone();
         }
 
         if(value.isLuxonDateTime) {
-            return maybeUtc(moment(value.toISO()), options);
+            return moment(value.toISO());
         }
 
-        return maybeUtc(moment(value), options);
-    }
-
-    function maybeUtc(date, options) {
-        if (options.isUtc) {
-            date = date.utc();
-        }else{
-            date = date.local();
-        }
-
-        return date;
+        return moment(value);
     }
 
     function getTodayButton(options, $dateRangePicker) {
@@ -430,6 +420,11 @@
     function formatHiddenDate(date, options) {
         date = convertToMoment(date, options, options.inputDateFormat);
         if (date.isValid()) {
+            if (options.isUtc) {
+                date = date.utc();
+            }else{
+                date = date.local();
+            }
             if (options.isIso) {
                 return date.toISOString();
             }
@@ -704,6 +699,10 @@
                 inputChangeHandler(false, false, false);
             });
     }
+
+    abp.dom.onNodeAdded(function (args) {
+        abp.dom.initializers.initializeDateRangePickers(args.$el);
+    });
 
     $(function () {
         abp.dom.initializers.initializeDateRangePickers($('body'));
