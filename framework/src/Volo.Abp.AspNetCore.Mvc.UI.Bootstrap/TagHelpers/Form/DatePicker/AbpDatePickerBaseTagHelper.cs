@@ -185,9 +185,20 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.ParentEl = value;
     }
 
+    [Obsolete("Use VisibleDateFormat instead.")]
     public string? DateFormat {
         get => _abpDatePickerOptionsImplementation.DateFormat;
         set => _abpDatePickerOptionsImplementation.DateFormat = value;
+    }
+    
+    public string? VisibleDateFormat {
+        get => _abpDatePickerOptionsImplementation.VisibleDateFormat;
+        set => _abpDatePickerOptionsImplementation.VisibleDateFormat = value;
+    }
+    
+    public string? InputDateFormat {
+        get => _abpDatePickerOptionsImplementation.InputDateFormat;
+        set => _abpDatePickerOptionsImplementation.InputDateFormat = value;
     }
 
     public bool OpenButton {
@@ -195,7 +206,7 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.OpenButton = value;
     }
 
-    public bool ClearButton {
+    public bool? ClearButton {
         get => _abpDatePickerOptionsImplementation.ClearButton;
         set => _abpDatePickerOptionsImplementation.ClearButton = value;
     }
