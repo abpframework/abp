@@ -641,7 +641,7 @@
     "Tools_Page_Description": "ABP 商业版提供快速应用程序开发工具，以提高开发人员的工作效率。ABP Suite 可让您轻松创建 CRUD 页面。",
     "DeveloperPrice": "开发者价格",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0}<小>开发人员</小",
-    "LicenseRemainingDays": "为<span> {0} </span> 天",
+    "LicenseRemainingDays": "为<span class=\"text-white\"> {0} </span> 天",
     "ExtendPaymentInfoSection_Description": "延长/续订许可证后，您将继续获得<a href=\"{0}\" target=\"_blank\">高级支持</a>。您还可以获得模块和主题的主要或次要更新。您还可以继续创建新项目。您还可以使用 <a href=\"{1}\" target=\"_blank\">ABP Suite</a> 来加快开发速度。",
     "LicenseRenewalPrice": "许可证续期价格",
     "LicensePrice": "许可证价格",

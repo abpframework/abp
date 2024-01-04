@@ -648,7 +648,7 @@
     "Tools_Page_Description": "ABP Commercial, geliştirici verimliliğini artırmak için hızlı uygulama geliştirme araçları sağlar. ABP Suite, CRUD sayfalarını kolayca oluşturmanızı sağlar.",
     "DeveloperPrice": "Geliştirici Fiyatı",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0} <small>geliştiriciler</small>",
-    "LicenseRemainingDays": "<span> {0} </span> gün boyunca",
+    "LicenseRemainingDays": "<span class=\"text-white\"> {0} </span> gün boyunca",
     "ExtendPaymentInfoSection_Description": "Lisansınızı uzatarak/yenileyerek <a href=\"{0}\" target=\"_blank\">premium destek</a> almaya devam edeceksiniz. You will also be able to get major or minor updates for modules and themes. You will be able to continue creating new projects. Ve gelişiminizi hızlandıran <a href=\"{1}\" target=\"_blank\">ABP Suite</a>'i kullanmaya devam edebileceksiniz.",
     "LicenseRenewalPrice": "Lisans yenileme fiyatı",
     "LicensePrice": "Lisans fiyatı",

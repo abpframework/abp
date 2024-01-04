@@ -628,7 +628,7 @@
     "Tools_Page_Description": "ABP Commercial 提供快速應用程式開發工具來提高開發人員的工作效率。 ABP Suite 讓您輕鬆建立 CRUD 頁面。",
     "DeveloperPrice": "開發商價格",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0}<small>開發者</small>",
-    "LicenseRemainingDays": "<span>{0}</span>天",
+    "LicenseRemainingDays": "<span class=\"text-white\">{0}</span>天",
     "ExtendPaymentInfoSection_Description": "透過延長/更新您的許可證，您將繼續獲得<a href=\"{0}\" target=\"_blank\">高級支援</a>。您還可以獲得模組和主題的主要或次要更新。您將能夠繼續建立新專案。而且您仍然可以使用<a href=\"{1}\" target=\"_blank\">ABP Suite</a>來加快您的開發速度。",
     "LicenseRenewalPrice": "許可證更新價格",
     "LicensePrice": "許可價格",

@@ -615,7 +615,7 @@
     "Tools_Page_Description": "يوفر ABP التجاري أدوات تطوير سريعة للتطبيقات لزيادة إنتاجية المطورين. يتيح لك ABP Suite إنشاء صفحات CRUD بسهولة.",
     "DeveloperPrice": "سعر المطور",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0} <small>مطورين</small>",
-    "LicenseRemainingDays": "لمدة <span> {0} </span> يوم",
+    "LicenseRemainingDays": "لمدة <span class=\"text-white\"> {0} </span> يوم",
     "ExtendPaymentInfoSection_Description": "من خلال تمديد / تجديد رخصتك، ستستمر في الحصول على <a href=\"{0}\" target=\"_blank\">الدعم المتميز</a>. ستتمكن أيضًا من الحصول على تحديثات رئيسية أو ثانوية للوحدات والسمات. ستتمكن من الاستمرار في إنشاء مشاريع جديدة. وستظل قادرًا على استخدام <a href=\"{1}\" target=\"_blank\">ABP Suite</a> مما يسرع من تطويرك.",
     "LicenseRenewalPrice": "سعر تجديد الرخصة",
     "LicensePrice": "سعر الرخصة",

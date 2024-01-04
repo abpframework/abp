@@ -642,7 +642,7 @@
     "Tools_Page_Description": "ABP Commercial предоставляет инструменты для быстрой разработки приложений, позволяющие повысить продуктивность разработчиков. ",
     "DeveloperPrice": "Цена застройщика",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0} <small>Разработчики</small>",
-    "LicenseRemainingDays": "для <span> {0} </span> дни",
+    "LicenseRemainingDays": "для <span class=\"text-white\"> {0} </span> дни",
     "ExtendPaymentInfoSection_Description": "Продлив/продлив лицензию, вы продолжите получать <a href=\"{0}\" target=\"_blank\">премиум-поддержка</a>.  <a href=\"{1}\" target=\"_blank\">ABP Люкс</a> что ускоряет ваше развитие.",
     "LicenseRenewalPrice": "Стоимость продления лицензии",
     "LicensePrice": "Цена лицензии",

@@ -641,7 +641,7 @@
     "Tools_Page_Description": "ABP Commercial pruža alate za brzi razvoj aplikacija za povećanje produktivnosti programera. ABP Suite vam omogućuje jednostavno stvaranje CRUD stranica.",
     "DeveloperPrice": "Cijena programera",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0} <small>programeri</small>",
-    "LicenseRemainingDays": "za <span>{0}</span> dana",
+    "LicenseRemainingDays": "za <span class=\"text-white\">{0}</span> dana",
     "ExtendPaymentInfoSection_Description": "Produljenjem/obnavljanjem licence i dalje ćete dobivati <a href=\"{0}\" target=\"_blank\">premium podršku</a> . Također ćete moći dobiti veća ili manja ažuriranja za module i teme. Moći ćete nastaviti stvarati nove projekte. I dalje ćete moći koristiti <a href=\"{1}\" target=\"_blank\">ABP Suite</a> koji ubrzava vaš razvoj.",
     "LicenseRenewalPrice": "Cijena obnove licence",
     "LicensePrice": "Cijena licence",

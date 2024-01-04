@@ -639,7 +639,7 @@
     "Tools_Page_Description": "ABP Commercial tarjoaa nopeat sovelluskehitystyökalut kehittäjien tuottavuuden lisäämiseksi. ABP Suiten avulla voit luoda CRUD-sivuja helposti.",
     "DeveloperPrice": "Kehittäjän hinta",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0} <small>kehittäjät</small>",
-    "LicenseRemainingDays": "<span> {0}</span> päivän ajan",
+    "LicenseRemainingDays": "<span class=\"text-white\"> {0}</span> päivän ajan",
     "ExtendPaymentInfoSection_Description": "Pidentämällä/uusimalla käyttölupaasi saat edelleen <a href=\"{0}\" target=\"_blank\">premium-tuen</a>. Voit myös saada suurempia tai pieniä päivityksiä moduuleille ja teemoille. Voit jatkaa uusien projektien luomista. Voit silti käyttää <a href=\"{1}\" target=\"_blank\">ABP Suitea</a>, joka nopeuttaa kehitystäsi.",
     "LicenseRenewalPrice": "Lisenssin uusimisen hinta",
     "LicensePrice": "Lisenssin hinta",

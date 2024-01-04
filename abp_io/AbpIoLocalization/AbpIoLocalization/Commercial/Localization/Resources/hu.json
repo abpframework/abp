@@ -639,7 +639,7 @@
     "Tools_Page_Description": "Az ABP Commercial gyors alkalmazásfejlesztési eszközöket biztosít a fejlesztők termelékenységének növelése érdekében. Az ABP Suite segítségével könnyedén hozhat létre CRUD oldalakat.",
     "DeveloperPrice": "Fejlesztői ár",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0} <small>fejlesztő</small>",
-    "LicenseRemainingDays": "<span>{0}</span> napig",
+    "LicenseRemainingDays": "<span class=\"text-white\">{0}</span> napig",
     "ExtendPaymentInfoSection_Description": "A licensz meghosszabbításával/megújításával továbbra is <a href=\"{0}\" target=\"_blank\">prémium támogatást</a> kap. Emellett kisebb-nagyobb frissítéseket is kaphat a modulokhoz és témákhoz. Folytathatja új projektek létrehozását. És továbbra is használhatja az <a href=\"{1}\" target=\"_blank\">ABP Suite</a> -ot, amely felgyorsítja a fejlesztést.",
     "LicenseRenewalPrice": "Licensz megújítási ára",
     "LicensePrice": "Licensz ára",
