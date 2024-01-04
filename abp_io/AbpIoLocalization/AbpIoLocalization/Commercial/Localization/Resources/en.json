@@ -1118,6 +1118,7 @@
     "MyOrganizations_LearnMorePlan": "Learn more about plans on the pricing page",
     "AutoLicenseRenewalIsNotEnabled": "Auto license renewal is not enabled.",
     "SetAsDefaultPaymentMethod": "Set as default payment method",
-    "{0}PerAdditionalDeveloper": "{0} per additional developer"
+    "{0}PerAdditionalDeveloper": "{0} per additional developer",
+    "CardAlias": "Card Alias"
   }
 }
