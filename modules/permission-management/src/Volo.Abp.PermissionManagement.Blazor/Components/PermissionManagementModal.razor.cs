@@ -182,6 +182,11 @@ public partial class PermissionManagementModal
             }
         }
     }
+    
+    protected virtual int GetPermissionDepthOrDefault(string name)
+    {
+        return _permissionDepths.GetValueOrDefault(name, 0);
+    }
 
     protected virtual void GroupGrantAllChanged(bool value, PermissionGroupDto permissionGroup)
     {
