@@ -229,6 +229,8 @@
     "ManageAccount": "Spravovať účet",
     "CommunityProfile": "Profil komunity",
     "BlogProfile": "Profil blogu",
-    "Tickets": "Vstupenky"
+    "Tickets": "Vstupenky",
+    "MeetTheABPCommunity": "Spoznajte ABP s <span class=\"gradient-community\">Komunitou</span>"
+
   }
 }

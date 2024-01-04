@@ -229,6 +229,8 @@
     "ManageAccount": "Upravljaj računom",
     "CommunityProfile": "Profil zajednice",
     "BlogProfile": "Blog profil",
-    "Tickets": "Ulaznice"
+    "Tickets": "Ulaznice",
+    "MeetTheABPCommunity": "Upoznaj ABP <span class=\"gradient-community\">Zajednicu</span>"
+
   }
 }

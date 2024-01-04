@@ -229,6 +229,8 @@
     "ManageAccount": "Beheer account",
     "CommunityProfile": "Gemeenschapsprofiel",
     "BlogProfile": "Blogprofiel",
-    "Tickets": "Kaartjes"
+    "Tickets": "Kaartjes",
+    "MeetTheABPCommunity": "Maak kennis met ABP <span class=\"gradient-community\">Gemeenschap</span>"
+
   }
 }

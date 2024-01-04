@@ -229,6 +229,8 @@
     "ManageAccount": "Fiók kezelése",
     "CommunityProfile": "Közösségi profil",
     "BlogProfile": "Blog profil",
-    "Tickets": "Jegyek"
+    "Tickets": "Jegyek",
+    "MeetTheABPCommunity": "Ismerd meg az ABP-t a <span class=\"gradient-community\">Közösséggel</span>"
+
   }
 }

@@ -229,6 +229,8 @@
     "ManageAccount": "Gestionează contul",
     "CommunityProfile": "Profilul comunității",
     "BlogProfile": "Profil blog",
-    "Tickets": "bilete"
+    "Tickets": "bilete",
+    "MeetTheABPCommunity": "Cunoaște ABP cu <span class=\"gradient-community\">Comunitatea</span>"
+
   }
 }

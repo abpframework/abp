@@ -229,6 +229,8 @@
     "ManageAccount": "管理账户",
     "CommunityProfile": "社区概况",
     "BlogProfile": "博客简介",
-    "Tickets": "门票"
+    "Tickets": "门票",
+    "MeetTheABPCommunity": "与 ABP 一起认识 <span class=\"gradient-community\">社区</span>"
+
   }
 }

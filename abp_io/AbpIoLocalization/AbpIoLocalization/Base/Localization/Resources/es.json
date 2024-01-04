@@ -228,6 +228,8 @@
     "ManageAccount": "Administrar cuenta",
     "CommunityProfile": "Perfil de la comunidad",
     "BlogProfile": "Perfil del blog",
-    "Tickets": "Entradas"
+    "Tickets": "Entradas",
+    "MeetTheABPCommunity": "Conozca la ABP<span class=\"gradient-community\">Comunidad</span>"
+
   }
 }
