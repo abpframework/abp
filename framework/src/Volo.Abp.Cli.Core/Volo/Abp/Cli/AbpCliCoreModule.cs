@@ -10,6 +10,7 @@ using Volo.Abp.Domain;
 using Volo.Abp.Http;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
+using Volo.Abp.Localization;
 using Volo.Abp.Minify;
 using Volo.Abp.Modularity;
 
@@ -20,7 +21,8 @@ namespace Volo.Abp.Cli;
     typeof(AbpJsonModule),
     typeof(AbpIdentityModelModule),
     typeof(AbpMinifyModule),
-    typeof(AbpHttpModule)
+    typeof(AbpHttpModule),
+    typeof(AbpLocalizationModule)
 )]
 public class AbpCliCoreModule : AbpModule
 {
@@ -56,6 +58,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[SwitchToPreviewCommand.Name] = typeof(SwitchToPreviewCommand);
             options.Commands[SwitchToStableCommand.Name] = typeof(SwitchToStableCommand);
             options.Commands[SwitchToNightlyCommand.Name] = typeof(SwitchToNightlyCommand);
+            options.Commands[SwitchToPreRcCommand.Name] = typeof(SwitchToPreRcCommand);
             options.Commands[SwitchToLocal.Name] = typeof(SwitchToLocal);
             options.Commands[TranslateCommand.Name] = typeof(TranslateCommand);
             options.Commands[BuildCommand.Name] = typeof(BuildCommand);

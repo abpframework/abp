@@ -177,7 +177,7 @@ public class IdentityServerSupportedLoginModel : LoginModel
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-        return RedirectSafely(ReturnUrl, ReturnUrlHash);
+        return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
     }
 
     public override async Task<IActionResult> OnPostExternalLogin(string provider)

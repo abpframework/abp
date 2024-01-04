@@ -122,7 +122,7 @@ namespace MyProject.Issues
                 throw new IssueStateException("You can not open a locked issue!");
             }
 
-            IsClosed = true;
+            IsClosed = false;
             CloseDate = null;
         }
     }

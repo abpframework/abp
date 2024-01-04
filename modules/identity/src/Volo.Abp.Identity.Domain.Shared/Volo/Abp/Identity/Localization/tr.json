@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "İki faktörlü ayarınızı değiştiremezsiniz.",
     "Volo.Abp.Identity:010008": "İki faktörlü ayarın değiştirilmesine izin verilmez.",
     "Volo.Abp.Identity:010009": "Kendinizi yetkilendiremezsiniz.",
+    "Volo.Abp.Identity:010021" : "{0} isminde bir birim zaten var.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Bir kullanıcı için izin verilen en fazla organizasyon birimi sayısı",
     "ThisUserIsNotActiveMessage": "Bu kullanıcı aktif değil.",
     "Permission:IdentityManagement": "Kimlik yönetimi",
