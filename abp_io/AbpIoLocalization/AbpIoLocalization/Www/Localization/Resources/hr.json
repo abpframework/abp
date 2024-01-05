@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Vaša slika.",
     "SelectCountryPlaceholder": "Vaša država.",
     "YouAreNotAuthorizedToWriteTestimonial": "Da biste mogli napisati preporuku, morate biti prijavljeni.",
-    "UnAuthorizeTestimonialInfo": "Vaše mišljenje je važno! Prijavite se kako biste ga podijelili."
+    "UnAuthorizeTestimonialInfo": "Vaše mišljenje je važno! Prijavite se kako biste ga podijelili.",
     "TheFileIsTooLargeForImage": "Vaša profilna slika ne smije biti veća od 1 MB.",
     "ThisExtensionIsNotAllowedForImage": "Ovo proširenje nije dopušteno.",
     "FileUploadError": "Pogreška prilikom prijenosa datoteke",
