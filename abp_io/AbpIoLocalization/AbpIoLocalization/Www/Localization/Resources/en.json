@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Your image",
     "SelectCountryPlaceholder": "Your country",
     "YouAreNotAuthorizedToWriteTestimonial": "To be able to write testimonial letter, you must be sign in.",
-    "UnAuthorizeTestimonialInfo": "If you want to share your opinion, you must be <a id='signin-btn'>sign in</a>",
+    "UnAuthorizeTestimonialInfo": "If you want to share your opinion, you must login",
     "TheFileIsTooLargeForImage": "Your profile picture cannot be more than 1 MB",
     "ThisExtensionIsNotAllowedForImage": "This extension is not allowed.",
     "FileUploadError": "File upload error",
