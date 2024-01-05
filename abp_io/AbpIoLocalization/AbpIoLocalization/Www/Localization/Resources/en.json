@@ -465,7 +465,8 @@
     "FileUploadError": "File upload error",
     "TestimonialSend": "Thank you! We've received your testimonial. We'll review and take the next step soon.",
     "Title": "Title",
-    "TitlePlaceholder": "Software Developer, CTO etc."
+    "TitlePlaceholder": "Software Developer, CTO etc.",
+    "Characters": "characters"
   }
 }
 

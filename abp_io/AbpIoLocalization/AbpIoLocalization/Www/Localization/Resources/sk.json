@@ -465,6 +465,7 @@
     "FileUploadError": "Chyba pri nahrávaní súboru",
     "TestimonialSend": "Ďakujem! ",
     "Title": "Názov",
-    "TitlePlaceholder": "Vývojár softvéru, CTO atď."
+    "TitlePlaceholder": "Vývojár softvéru, CTO atď.",
+    "Characters": "znaky"
   }
 }

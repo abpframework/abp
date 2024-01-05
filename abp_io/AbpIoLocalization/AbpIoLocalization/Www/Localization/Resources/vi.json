@@ -465,6 +465,7 @@
     "FileUploadError": "Lỗi tải tập tin lên",
     "TestimonialSend": "Cảm ơn! ",
     "Title": "Tiêu đề",
-    "TitlePlaceholder": "Nhà phát triển phần mềm, CTO, v.v."
+    "TitlePlaceholder": "Nhà phát triển phần mềm, CTO, v.v.",
+    "Characters": "Ký tự"
   }
 }

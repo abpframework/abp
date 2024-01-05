@@ -465,6 +465,7 @@
     "FileUploadError": "Error al cargar el archivo",
     "TestimonialSend": "¡Gracias! Hemos recibido tu testimonio. Lo revisaremos y daremos el próximo paso pronto.",
     "Title": "Título",
-    "TitlePlaceholder": "Desarrollador de software, CTO, etc."
+    "TitlePlaceholder": "Desarrollador de software, CTO, etc.",
+    "Characters": "caracteres"
   }
 }

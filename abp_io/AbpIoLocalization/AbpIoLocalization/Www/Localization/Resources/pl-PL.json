@@ -465,6 +465,7 @@
     "FileUploadError": "Błąd przesyłania pliku",
     "TestimonialSend": "Dziękuję! ",
     "Title": "Tytuł",
-    "TitlePlaceholder": "Programista, CTO itp."
+    "TitlePlaceholder": "Programista, CTO itp.",
+    "Characters": "znaki"
   }
 }

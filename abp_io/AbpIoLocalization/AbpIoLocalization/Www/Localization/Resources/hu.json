@@ -465,6 +465,7 @@
     "FileUploadError": "Hiba történt a fájl feltöltése közben",
     "TestimonialSend": "Köszönjük! Megkaptuk az ajánlásod. Hamarosan átnézzük és következő lépéseket teszünk.",
     "Title": "Cím",
-    "TitlePlaceholder": "Szoftvertervező, CTO, stb."
+    "TitlePlaceholder": "Szoftvertervező, CTO, stb.",
+    "Characters": "karakterek"
   }
 }

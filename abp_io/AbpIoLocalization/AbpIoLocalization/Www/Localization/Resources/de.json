@@ -465,6 +465,7 @@
     "FileUploadError": "Fehler beim Hochladen der Datei",
     "TestimonialSend": "Vielen Dank! Wir haben Ihre Bewertung erhalten. Wir werden sie bald überprüfen und den nächsten Schritt unternehmen.",
     "Title": "Titel",
-    "TitlePlaceholder": "Softwareentwickler, CTO usw."
+    "TitlePlaceholder": "Softwareentwickler, CTO usw.",
+    "Characters": "zeichen"
   }
 }

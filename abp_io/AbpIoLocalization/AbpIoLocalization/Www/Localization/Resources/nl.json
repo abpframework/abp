@@ -465,6 +465,7 @@
     "FileUploadError": "Fout bij het uploaden van bestanden",
     "TestimonialSend": "Bedankt! ",
     "Title": "Titel",
-    "TitlePlaceholder": "Softwareontwikkelaar, CTO enz."
+    "TitlePlaceholder": "Softwareontwikkelaar, CTO enz.",
+    "Characters": "tekens"
   }
 }

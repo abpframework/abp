@@ -465,6 +465,7 @@
     "FileUploadError": "Errore nel caricamento del file",
     "TestimonialSend": "Grazie! ",
     "Title": "Titolo",
-    "TitlePlaceholder": "Sviluppatore di software, CTO ecc."
+    "TitlePlaceholder": "Sviluppatore di software, CTO ecc.",
+    "Characters": "caratteri"
   }
 }

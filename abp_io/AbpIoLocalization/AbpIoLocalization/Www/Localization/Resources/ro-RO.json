@@ -465,6 +465,7 @@
     "FileUploadError": "Eroare de încărcare a fișierului",
     "TestimonialSend": "Mulțumesc! ",
     "Title": "Titlu",
-    "TitlePlaceholder": "Dezvoltator software, CTO etc."
+    "TitlePlaceholder": "Dezvoltator software, CTO etc.",
+    "Characters": "caractere"
   }
 }

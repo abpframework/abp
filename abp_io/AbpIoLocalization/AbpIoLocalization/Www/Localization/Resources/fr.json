@@ -465,6 +465,7 @@
     "FileUploadError": "Erreur lors du téléchargement du fichier",
     "TestimonialSend": "Merci ! Nous avons bien reçu votre témoignage. Nous le passerons en revue et prendrons la prochaine étape bientôt.",
     "Title": "Titre",
-    "TitlePlaceholder": "Développeur de logiciels, CTO, etc."
+    "TitlePlaceholder": "Développeur de logiciels, CTO, etc.",
+    "Characters": "caractères"
   }
 }

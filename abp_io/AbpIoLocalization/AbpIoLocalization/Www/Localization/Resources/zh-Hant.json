@@ -465,6 +465,7 @@
     "FileUploadError": "文件上传错误",
     "TestimonialSend": "谢谢你！",
     "Title": "标题",
-    "TitlePlaceholder": "软件开发人员、CTO等"
+    "TitlePlaceholder": "软件开发人员、CTO等",
+    "Characters": "字符"
   }
 }

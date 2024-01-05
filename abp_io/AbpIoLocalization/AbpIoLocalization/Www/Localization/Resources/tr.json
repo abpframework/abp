@@ -303,7 +303,7 @@
     "Back": "Geri",
     "SeeMore": "Daha fazla göster",
     "DetailsOfTheEBook": "E-kitap detayları",
-    "JoinOurMarketingNewsletter":  "Pazarlama bültenimize katılın",
+    "JoinOurMarketingNewsletter": "Pazarlama bültenimize katılın",
     "FrameworkNewsletterConfirmationMessage": "<a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Şartlar ve Koşulları</a> ve <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Gizlilik Politikasını</a> kabul ediyorum.",
     "GetYourFreeEBook": "<span class=\"gradient-framework d-block\">Ücretsiz DDD E-kitabınızı</span> Alın ",
     "EverythingYouNeedToKnow": "Bilmeniz gereken her şey",
@@ -411,6 +411,7 @@
     "FileUploadError": "Dosya yükleme hatası",
     "TestimonialSend": "Referansınızı paylaştığınız için teşekkürler!",
     "Title": "Başlık",
-    "TitlePlaceholder": "Yazılım Geliştiricisi, CTO vb."
+    "TitlePlaceholder": "Yazılım Geliştiricisi, CTO vb.",
+    "Characters": "karakter"
   }
 }

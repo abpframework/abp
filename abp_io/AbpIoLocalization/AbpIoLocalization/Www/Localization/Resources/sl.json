@@ -465,6 +465,7 @@
     "FileUploadError": "Napaka pri nalaganju datoteke",
     "TestimonialSend": "Hvala vam! ",
     "Title": "Naslov",
-    "TitlePlaceholder": "Razvijalec programske opreme, tehnični direktor itd."
+    "TitlePlaceholder": "Razvijalec programske opreme, tehnični direktor itd.",
+    "Characters": "znaki"
   }
 }

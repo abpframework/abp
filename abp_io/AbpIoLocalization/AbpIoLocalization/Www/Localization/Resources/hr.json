@@ -465,6 +465,7 @@
     "FileUploadError": "Pogreška prilikom prijenosa datoteke",
     "TestimonialSend": "Hvala vam! Primili smo vašu preporuku. Provjerit ćemo je i uskoro poduzeti sljedeći korak.",
     "Title": "Naslov",
-    "TitlePlaceholder": "Razvojni inženjer, CTO, itd."
+    "TitlePlaceholder": "Razvojni inženjer, CTO, itd.",
+    "Characters": "znakovi"
   }
 }

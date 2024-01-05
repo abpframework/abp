@@ -465,7 +465,7 @@
     "FileUploadError": "Villa við upphleðslu skráar",
     "TestimonialSend": "Þakka þér! Við höfum fengið viðmiðuna þína. Við munum fara yfir hana fljótt og taka næsta skref.",
     "Title": "Titill",
-    "TitlePlaceholder": "Hugbúnaðarþróunarmiðill, CTO o.s.frv."
-
+    "TitlePlaceholder": "Hugbúnaðarþróunarmiðill, CTO o.s.frv.",
+    "Characters": "stafir"
   }
 }
