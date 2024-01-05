@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Hình ảnh của bạn.",
     "SelectCountryPlaceholder": "Quốc gia của bạn.",
     "YouAreNotAuthorizedToWriteTestimonial": "Để có thể viết thư chứng thực, bạn phải đăng nhập.",
-    "UnAuthorizeTestimonialInfo": "Nếu muốn chia sẻ quan điểm của mình, bạn phải <a id='signin-btn'>đăng nhập</a>",
+    "UnAuthorizeTestimonialInfo": "Ý kiến của bạn rất quan trọng! ",
     "TheFileIsTooLargeForImage": "Ảnh hồ sơ của bạn không thể lớn hơn 1 MB",
     "ThisExtensionIsNotAllowedForImage": "Phần mở rộng này không được phép.",
     "FileUploadError": "Lỗi tải tập tin lên",

@@ -405,7 +405,7 @@
     "ImagePlaceholder": "Profil resminiz",
     "SelectCountryPlaceholder": "Ülkeniz",
     "YouAreNotAuthorizedToWriteTestimonial": "Referans mektubu yazabilmek için giriş yapmalısınız.",
-    "UnAuthorizeTestimonialInfo": "Fikrinizi paylaşmak istiyorsanız, <a id='signin-btn'>giriş</a> yapmalısınız",
+    "UnAuthorizeTestimonialInfo": "Fikriniz bizim için önemli! Paylaşmak için giriş yapınız.",
     "TheFileIsTooLargeForImage": "Profil resminiz 1 MB'tan fazla olamaz.",
     "ThisExtensionIsNotAllowedForImage": "Bu dosya uzantısınız izin verilmiyor.",
     "FileUploadError": "Dosya yükleme hatası",

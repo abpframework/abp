@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Imaginea ta.",
     "SelectCountryPlaceholder": "Tara ta.",
     "YouAreNotAuthorizedToWriteTestimonial": "Pentru a putea scrie o scrisoare de mărturie, trebuie să vă conectați.",
-    "UnAuthorizeTestimonialInfo": "Dacă vrei să-ți împărtășești părerea, trebuie să fii <a id='signin-btn'>conectare</a>",
+    "UnAuthorizeTestimonialInfo": "Părerea ta contează, conectează-te pentru a o împărtăși.",
     "TheFileIsTooLargeForImage": "Fotografia dvs. de profil nu poate depăși 1 MB",
     "ThisExtensionIsNotAllowedForImage": "Această extensie nu este permisă.",
     "FileUploadError": "Eroare de încărcare a fișierului",

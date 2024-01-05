@@ -457,7 +457,7 @@
     "ImagePlaceholder": "Ваш имидж.",
     "SelectCountryPlaceholder": "Твоя страна.",
     "YouAreNotAuthorizedToWriteTestimonial": "Чтобы иметь возможность написать рекомендательное письмо, вам необходимо войти в систему.",
-    "UnAuthorizeTestimonialInfo": "Если вы хотите поделиться своим мнением, вам необходимо быть <a id='signin-btn'>войти</a>",
+    "UnAuthorizeTestimonialInfo": "Ваше мнение имеет значение. Войдите, чтобы поделиться им.",
     "TheFileIsTooLargeForImage": "Размер изображения вашего профиля не может превышать 1 МБ.",
     "ThisExtensionIsNotAllowedForImage": "Это расширение не разрешено.",
     "FileUploadError": "Ошибка загрузки файла",

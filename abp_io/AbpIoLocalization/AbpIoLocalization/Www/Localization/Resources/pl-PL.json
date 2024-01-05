@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Twój obraz.",
     "SelectCountryPlaceholder": "Twój kraj.",
     "YouAreNotAuthorizedToWriteTestimonial": "Aby móc napisać list referencyjny, musisz się zalogować.",
-    "UnAuthorizeTestimonialInfo": "Jeśli chcesz podzielić się swoją opinią, musisz to zrobić <a id='signin-btn'>zalogować się</a>",
+    "UnAuthorizeTestimonialInfo": "Twoja opinia ma znaczenie. Zaloguj się, aby ją udostępnić.",
     "TheFileIsTooLargeForImage": "Twoje zdjęcie profilowe nie może przekraczać 1 MB",
     "ThisExtensionIsNotAllowedForImage": "To rozszerzenie jest niedozwolone.",
     "FileUploadError": "Błąd przesyłania pliku",

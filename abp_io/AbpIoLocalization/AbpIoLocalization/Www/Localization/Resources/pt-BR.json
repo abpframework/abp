@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Sua imagem.",
     "SelectCountryPlaceholder": "Seu país.",
     "YouAreNotAuthorizedToWriteTestimonial": "Para poder escrever uma carta de depoimento, você deve estar logado.",
-    "UnAuthorizeTestimonialInfo": "Se você quiser compartilhar sua opinião, você deve estar <a id='signin-btn'>entrar</a>",
+    "UnAuthorizeTestimonialInfo": "Sua opinião é importante, faça login para compartilhá-la.",
     "TheFileIsTooLargeForImage": "Sua foto de perfil não pode ter mais de 1 MB",
     "ThisExtensionIsNotAllowedForImage": "Esta extensão não é permitida.",
     "FileUploadError": "Erro no upload do arquivo",

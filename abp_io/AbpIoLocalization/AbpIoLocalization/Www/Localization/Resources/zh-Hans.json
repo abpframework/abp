@@ -459,7 +459,7 @@
     "ImagePlaceholder": "你的形象。",
     "SelectCountryPlaceholder": "你的国家。",
     "YouAreNotAuthorizedToWriteTestimonial": "为了能够撰写推荐信，您必须登录。",
-    "UnAuthorizeTestimonialInfo": "如果您想分享您的意见，您必须 <a id='signin-btn'>登入</a>",
+    "UnAuthorizeTestimonialInfo": "您的意见很重要，登录即可分享。",
     "TheFileIsTooLargeForImage": "您的个人资料图片不能超过 1 MB",
     "ThisExtensionIsNotAllowedForImage": "不允许此扩展。",
     "FileUploadError": "文件上传错误",

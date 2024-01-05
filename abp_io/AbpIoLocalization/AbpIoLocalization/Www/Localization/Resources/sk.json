@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Váš obraz.",
     "SelectCountryPlaceholder": "Tvoja krajina.",
     "YouAreNotAuthorizedToWriteTestimonial": "Aby ste mohli napísať posudkový list, musíte sa prihlásiť.",
-    "UnAuthorizeTestimonialInfo": "Ak sa chcete podeliť o svoj názor, musíte byť <a id='signin-btn'>Prihlásiť sa</a>",
+    "UnAuthorizeTestimonialInfo": "Váš názor je dôležitý! ",
     "TheFileIsTooLargeForImage": "Váš profilový obrázok nemôže byť väčší ako 1 MB",
     "ThisExtensionIsNotAllowedForImage": "Toto rozšírenie nie je povolené.",
     "FileUploadError": "Chyba pri nahrávaní súboru",

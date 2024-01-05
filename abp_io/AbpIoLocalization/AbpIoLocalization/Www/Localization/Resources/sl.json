@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Vaša slika.",
     "SelectCountryPlaceholder": "Tvoja država.",
     "YouAreNotAuthorizedToWriteTestimonial": "Če želite napisati izjavno pismo, se morate prijaviti.",
-    "UnAuthorizeTestimonialInfo": "Če želite deliti svoje mnenje, morate biti <a id='signin-btn'>Prijava</a>",
+    "UnAuthorizeTestimonialInfo": "Vaše mnenje je pomembno! ",
     "TheFileIsTooLargeForImage": "Vaša profilna slika ne sme biti večja od 1 MB",
     "ThisExtensionIsNotAllowedForImage": "Ta razširitev ni dovoljena.",
     "FileUploadError": "Napaka pri nalaganju datoteke",
