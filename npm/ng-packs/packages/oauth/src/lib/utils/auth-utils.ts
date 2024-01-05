@@ -11,6 +11,7 @@ import {
 
 const cookieKey = 'rememberMe';
 const storageKey = 'passwordFlow';
+const remember_me = 'remember_me';
 
 export const pipeToLogin: PipeToLoginFn = function (
   params: Pick<LoginParams, 'redirectUrl' | 'rememberMe'>,
@@ -32,14 +33,15 @@ export function setRememberMe(
   remember: boolean | undefined,
   localStorageService: AbpLocalStorageService,
 ) {
-  removeRememberMe(localStorageService);
-  localStorageService.setItem(storageKey, 'true');
-  document.cookie = `${cookieKey}=true; path=/${
-    remember ? ' ;expires=Fri, 31 Dec 9999 23:59:59 GMT' : ''
-  }`;
+  console.log('set Remember Me');
+  localStorageService.setItem(remember_me, JSON.stringify(remember));
 }
 
 export function removeRememberMe(localStorageService: AbpLocalStorageService) {
-  localStorageService.removeItem(storageKey);
-  document.cookie = cookieKey + '= ; path=/; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+  console.log('remove remember Me');
+  localStorageService.removeItem(remember_me);
+}
+
+export function getRememberMe(localStorageService: AbpLocalStorageService){
+  return localStorageService.getItem(remember_me);
 }

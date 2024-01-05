@@ -70,23 +70,20 @@ export abstract class AuthFlowStrategy {
       const shouldClear = shouldStorageClear(this.oAuthConfig.clientId, oAuthStorage);
       if (shouldClear) clearOAuthStorage(oAuthStorage);
     }
-
     this.oAuthService.configure(this.oAuthConfig);
-
     this.oAuthService.events
       .pipe(filter(event => event.type === 'token_refresh_error'))
       .subscribe(() => this.navigateToLogin());
-
     this.navigateToPreviousUrl();
-
     return this.oAuthService
       .loadDiscoveryDocument()
       .then(() => {
-        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
-          return Promise.resolve();
+        const expireDate = this.oAuthService.getAccessTokenExpiration();
+        const currentDate = new Date().getTime();
+        if (expireDate > currentDate || this.oAuthService.getRefreshToken()) {
+          return this.refreshToken();
         }
-
-        return this.refreshToken();
+        return Promise.resolve();
       })
       .catch(this.catchError);
   }

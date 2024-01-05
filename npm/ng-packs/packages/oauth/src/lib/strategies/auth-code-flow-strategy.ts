@@ -1,22 +1,71 @@
 import { noop } from '@abp/ng.core';
 import { Params } from '@angular/router';
-import { from, of } from 'rxjs';
+import { filter, from, of } from 'rxjs';
 import { AuthFlowStrategy } from './auth-flow-strategy';
-import { deleteAllCookies } from '../utils/cookie-utils';
+import { getRememberMe, removeRememberMe, setRememberMe } from '../utils';
 
-export class AuthCodeFlowStrategy extends AuthFlowStrategy {
+export class AuthCodeFlowStrategy extends AuthFlowStrategy{
   readonly isInternalAuth = false;
-  private rememberMeKey = 'remember_me'
+  private remember_me = 'remember_me'
 
   async init() {
-    console.log('code flow');
-    const accessToken = this.oAuthService.getAccessToken();
-    let parsedToken = JSON.parse(atob(accessToken.split(".")[1]));;
+    this.checkRememberMeOption();
 
     return super
       .init()
       .then(() => this.oAuthService.tryLogin().catch(noop))
-      .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
+      .then(() => this.oAuthService.setupAutomaticSilentRefresh())
+      // .then(() => this.listenToTokenExpiration());
+  }
+
+  // private listenToTokenExpiration() {
+  //   this.oAuthService.events
+  //     .pipe(
+  //       filter(
+  //         event => {
+  //           return event instanceof OAuthInfoEvent &&
+  //           event.type === 'token_expires' &&
+  //           event.info === 'access_token'
+  //         }
+  //       ),
+  //     )
+  //     .subscribe(() => {
+  //       if (this.oAuthService.getRefreshToken()) {
+  //         console.log('refresh token');
+  //         this.refreshToken();
+  //       } else {
+  //         this.oAuthService.logOut();
+  //         removeRememberMe(this.localStorageService);
+  //         this.configState.refreshAppState().subscribe();
+  //       }
+  //     });
+  // }
+
+  private checkRememberMeOption() {
+    const accessToken = this.oAuthService.getAccessToken();
+    const expireDate = this.oAuthService.getAccessTokenExpiration();
+    const currentDate = new Date().getTime();
+    let rememberMe = getRememberMe(this.localStorageService);
+
+    if (accessToken && rememberMe === null) {
+      let parsedToken = JSON.parse(atob(accessToken.split(".")[1]));
+
+      if (parsedToken[this.remember_me]) {
+        setRememberMe(true, this.localStorageService);
+      } else {
+        setRememberMe(false, this.localStorageService)
+      }
+      
+    }
+    rememberMe = getRememberMe(this.localStorageService);
+
+    if (accessToken && expireDate < currentDate && rememberMe === 'false') {
+      removeRememberMe(this.localStorageService);
+      this.oAuthService.logOut();
+    }else{
+      console.log('try login');
+      this.oAuthService.tryLogin().catch(noop)
+    }
   }
 
   navigateToLogin(queryParams?: Params) {
@@ -35,6 +84,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   logout(queryParams?: Params) {
+    removeRememberMe(this.localStorageService);
     return from(this.oAuthService.revokeTokenAndLogout(this.getCultureParams(queryParams)));
   }
 
