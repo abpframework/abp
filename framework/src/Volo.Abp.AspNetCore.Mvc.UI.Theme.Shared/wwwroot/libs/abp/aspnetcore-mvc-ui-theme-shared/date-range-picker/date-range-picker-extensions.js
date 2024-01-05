@@ -163,10 +163,10 @@
         }
     }
 
-    function convertToMoment(value, options, dateFormat) {
+    function convertToMoment(value, options, dateFormat, isUtc) {
         if(!value) {
             // invalid date
-            return moment('');
+            return moment.invalid();
         }
 
         options = options || {};
@@ -174,32 +174,22 @@
 
         if (typeof value === 'string') {
             for(var format of formats) {
-                var date = moment(value, format);
+                var date = isUtc ? moment.utc(value, format) : moment(value, format);
                 if(date.isValid()) {
-                    return maybeUtc(date, options);
+                    return date;
                 }
             }
         }
 
         if (value.isAbpDate) {
-            return maybeUtc(value._moment.clone(), options);
+            return value._moment.clone();
         }
 
         if(value.isLuxonDateTime) {
-            return maybeUtc(moment(value.toISO()), options);
+            return isUtc ? moment.utc(value.toISO()) : moment(value.toISO());
         }
 
-        return maybeUtc(moment(value), options);
-    }
-
-    function maybeUtc(date, options) {
-        if (options.isUtc) {
-            date = date.utc();
-        }else{
-            date = date.local();
-        }
-
-        return date;
+        return isUtc ? moment.utc(value) : moment(value);
     }
 
     function getTodayButton(options, $dateRangePicker) {
@@ -430,6 +420,11 @@
     function formatHiddenDate(date, options) {
         date = convertToMoment(date, options, options.inputDateFormat);
         if (date.isValid()) {
+            if (options.isUtc) {
+                date = date.utc();
+            }else{
+                date = date.local();
+            }
             if (options.isIso) {
                 return date.toISOString();
             }
@@ -437,6 +432,15 @@
         }
 
         return '';
+    }
+    
+    function createInitialAbpDate(date, options) {
+        date = convertToMoment(date, options, undefined, options.isUtc);
+        if (options.isUtc) {
+            date = date.local();
+        }
+        
+        return AbpDate(date, options);
     }
 
     abp.dom.initializers.initializeDateRangePickers = function ($rootElement) {
@@ -463,10 +467,10 @@
 
                 var singleOpenAndClearButton = options.singleOpenAndClearButton && $clearButton.length > 0 && $openButton.length > 0;
 
-                var startDate = AbpDate(options.startDate || options.date || (options.autoUpdateInput ? new Date() : undefined), options);
+                var startDate = createInitialAbpDate(options.startDate || options.date || (options.autoUpdateInput ? new Date() : undefined), options);
                 var oldStartDate = AbpDate(undefined, options);
-
-                var endDate = AbpDate(options.endDate || undefined, options);
+                
+                var endDate = createInitialAbpDate(options.endDate || (options.autoUpdateInput ? new Date() : undefined), options);
                 var oldEndDate = AbpDate(undefined, options);
 
                 options.startDate = convertToMoment(startDate, options);
@@ -704,6 +708,10 @@
                 inputChangeHandler(false, false, false);
             });
     }
+
+    abp.dom.onNodeAdded(function (args) {
+        abp.dom.initializers.initializeDateRangePickers(args.$el);
+    });
 
     $(function () {
         abp.dom.initializers.initializeDateRangePickers($('body'));
