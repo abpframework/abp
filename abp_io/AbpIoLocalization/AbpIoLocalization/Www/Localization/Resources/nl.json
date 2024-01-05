@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Jou foto.",
     "SelectCountryPlaceholder": "Jouw land.",
     "YouAreNotAuthorizedToWriteTestimonial": "Om een getuigenisbrief te kunnen schrijven, moet u ingelogd zijn.",
-    "UnAuthorizeTestimonialInfo": "Als u uw mening wilt delen, moet u dat doen <a id='signin-btn'>Inloggen</a>",
+    "UnAuthorizeTestimonialInfo": "Jouw mening is belangrijk! Log in om het te delen.",
     "TheFileIsTooLargeForImage": "Je profielfoto mag niet groter zijn dan 1 MB",
     "ThisExtensionIsNotAllowedForImage": "Deze verlenging is niet toegestaan.",
     "FileUploadError": "Fout bij het uploaden van bestanden",

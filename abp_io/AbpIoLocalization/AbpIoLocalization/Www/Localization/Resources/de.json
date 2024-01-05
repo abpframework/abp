@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Ihr Bild.",
     "SelectCountryPlaceholder": "Ihr Land.",
     "YouAreNotAuthorizedToWriteTestimonial": "Um eine Bewertung zu schreiben, müssen Sie angemeldet sein.",
-    "UnAuthorizeTestimonialInfo": "Wenn Sie Ihre Meinung teilen möchten, müssen Sie sich <a id='signin-btn'>anmelden</a>.",
+    "UnAuthorizeTestimonialInfo": "Ihre Meinung ist wichtig! Melden Sie sich an, um sie zu teilen.",
     "TheFileIsTooLargeForImage": "Ihr Profilbild darf nicht größer als 1 MB sein.",
     "ThisExtensionIsNotAllowedForImage": "Diese Erweiterung ist nicht erlaubt.",
     "FileUploadError": "Fehler beim Hochladen der Datei",

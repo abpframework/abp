@@ -459,7 +459,7 @@
     "ImagePlaceholder": "आपकी छवि।",
     "SelectCountryPlaceholder": "आपका देश।",
     "YouAreNotAuthorizedToWriteTestimonial": "एक साक्षात्कार लिखने के लिए, आपको लॉग इन करना होगा।",
-    "UnAuthorizeTestimonialInfo": "अगर आप अपनी राय साझा करना चाहते हैं, तो आपको <a id='signin-btn'>लॉग इन</a> होना चाहिए।",
+    "UnAuthorizeTestimonialInfo": "आपकी राय महत्वपूर्ण है! इसे साझा करने के लिए लॉग इन करें।",
     "TheFileIsTooLargeForImage": "आपकी प्रोफ़ाइल तस्वीर 1 MB से अधिक नहीं हो सकती।",
     "ThisExtensionIsNotAllowedForImage": "यह एक्सटेंशन अनुमति नहीं है।",
     "FileUploadError": "फ़ाइल अपलोड की गई में त्रुटि",

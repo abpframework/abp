@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Prófílmynd þín.",
     "SelectCountryPlaceholder": "Landið þitt.",
     "YouAreNotAuthorizedToWriteTestimonial": "Til að geta skrifað viðmiðun, verður þú að skrá þig inn.",
-    "UnAuthorizeTestimonialInfo": "Ef þú vilt deila skoðun þinni, verður þú að <a id='signin-btn'>skrá þig inn</a>.",
+    "UnAuthorizeTestimonialInfo": "Þín skoðun er mikilvæg! Skráðu þig inn til að deila henni.",
     "TheFileIsTooLargeForImage": "Prófílmynd þín má ekki vera stærri en 1 MB.",
     "ThisExtensionIsNotAllowedForImage": "Þessi viðbót er ekki leyfð.",
     "FileUploadError": "Villa við upphleðslu skráar",

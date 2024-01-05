@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Votre image.",
     "SelectCountryPlaceholder": "Votre pays.",
     "YouAreNotAuthorizedToWriteTestimonial": "Pour pouvoir écrire un témoignage, vous devez être connecté(e).",
-    "UnAuthorizeTestimonialInfo": "Si vous souhaitez partager votre avis, vous devez être <a id='signin-btn'>connecté(e)</a>.",
+    "UnAuthorizeTestimonialInfo": "Votre avis compte ! Connectez-vous pour le partager.",
     "TheFileIsTooLargeForImage": "Votre photo de profil ne peut pas dépasser 1 Mo.",
     "ThisExtensionIsNotAllowedForImage": "Cette extension n'est pas autorisée.",
     "FileUploadError": "Erreur lors du téléchargement du fichier",
