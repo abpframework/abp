@@ -408,6 +408,7 @@
     "BlazoriseLicenseExplanation": "Máme dohodu mezi společnostmi Volosoft a Megabit, na základě této dohody je licence Blazorise přibalena k produktům ABP Commercial, proto si naši zákazníci nemusí kupovat další licenci Blazorise.",
     "MultipleOrganizationInfo": "Podívejte se na všechny vaše organizace",
     "PaymentFailedInfo": "Omlouváme se, platba se nezdařila! ",
-    "UsedPayment": "Tato platba již byla použita"
+    "UsedPayment": "Tato platba již byla použita",
+    "ManageLicense": "Správa licence"
   }
 }

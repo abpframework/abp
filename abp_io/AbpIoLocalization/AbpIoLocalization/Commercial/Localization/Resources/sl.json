@@ -386,6 +386,7 @@
     "BlackFridayDiscount": "Popust Black Friday",
     "MultipleOrganizationInfo": "Oglejte si vse svoje organizacije",
     "PaymentFailedInfo": "Žal plačilo ni uspelo! ",
-    "UsedPayment": "To plačilo je že bilo uporabljeno"
+    "UsedPayment": "To plačilo je že bilo uporabljeno",
+    "ManageLicense": "Upravljanje licenco"
   }
 }

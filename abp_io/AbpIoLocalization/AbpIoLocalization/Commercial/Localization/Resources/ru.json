@@ -1087,6 +1087,7 @@
     "CampaignName:BlackFriday": "Черная пятница",
     "MultipleOrganizationInfo": "Просмотреть все ваши организации",
     "PaymentFailedInfo": "Извините, оплата не удалась! ",
-    "UsedPayment": "Этот платеж уже использован"
+    "UsedPayment": "Этот платеж уже использован",
+    "ManageLicense": "Управление лицензией"
   }
 }

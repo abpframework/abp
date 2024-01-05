@@ -997,10 +997,8 @@
     "SeeFAQ": "SSS'yi Görüntüle",
     "AbpLiveTrainingPackages": "ABP Canlı Eğitim Paketleri",
     "MyOrganizations_Detail_LicenseStartDate": "Lisans Başlangıç Tarihi",
-    "MyOrganizations_Detail_LicenseExpiryDate": "Bitiş Tarihi"
-
-
-
+    "MyOrganizations_Detail_LicenseExpiryDate": "Bitiş Tarihi",
+    "ManageLicense": "Lisansı Yönet"
   }
 }
 

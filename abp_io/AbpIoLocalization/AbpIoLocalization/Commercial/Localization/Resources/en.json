@@ -1091,6 +1091,7 @@
     "AbpStudioBetaAccessInfoText": "We're thrilled to share with you the <span class=\"text-highlight-white\">beta</span> version of <span class=\"text-highlight-white\">ABP Studio</span>! This release marks a significant milestone in our development journey, and we're eager to gather your feedback to make the application even better.",
     "YouAreNotAuthorizedToDownloadStudio": "You are not authorized to download ABP Studio.",
     "PaymentFailedInfo": "Sorry, payment failed! This could be due to insufficient funds, invalid credit card numbers or invalid pin",
-    "UsedPayment": "This payment has been already used"
+    "UsedPayment": "This payment has been already used",
+    "ManageLicense": "Manage License"
   }
 }

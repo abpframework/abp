@@ -1086,6 +1086,7 @@
     "CampaignDiscountName": "Crni petak",
     "CampaignName:BlackFriday": "Crni petak",
     "PaymentFailedInfo": "Nažalost, plaćanje nije uspjelo! ",
-    "UsedPayment": "Ovo plaćanje je već iskorišteno"
+    "UsedPayment": "Ovo plaćanje je već iskorišteno",
+    "ManageLicense": "Upravljanje licencom"
   }
 }

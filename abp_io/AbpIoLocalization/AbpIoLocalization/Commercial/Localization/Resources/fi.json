@@ -830,6 +830,7 @@
     "WhyUseAbpIoPlatformFaqExplanation": "Katso <a href=\"https://docs.abp.io/en/commercial/latest/why-abp-io-platform \"> kyseisestä asiakirjasta </a> yksityiskohtainen selitys siitä, miksi ABP.IO Platformin käyttäminen on huomattavasti edullisempaa kuin kaiken tekeminen itse.",
     "MultipleOrganizationInfo": "Katso kaikki organisaatiosi",
     "PaymentFailedInfo": "Anteeksi, maksu epäonnistui! ",
-    "UsedPayment": "Tämä maksu on jo käytetty"
+    "UsedPayment": "Tämä maksu on jo käytetty",
+    "ManageLicense": "Hallinnoi lisenssiä"
   }
 }

@@ -389,6 +389,7 @@
     "BlackFridayDiscount": "Descuento de viernes negro",
     "MultipleOrganizationInfo": "Vea todas sus organizaciones",
     "PaymentFailedInfo": "Lo sentimos, ¡el pago falló! ",
-    "UsedPayment": "Este pago ya ha sido utilizado."
+    "UsedPayment": "Este pago ya ha sido utilizado.",
+    "ManageLicense": "Gestionar licencia"
   }
 }

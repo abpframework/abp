@@ -1077,6 +1077,7 @@
     "WhatHappensWhenLicenseEndsExplanation7": "如果您想繼續獲得這些好處，您可以延長（更新）您的許可證。如果您在許可到期後 <strong>{3} 天</strong> 內延長許可，將應用以下折扣：團隊許可 {0}；營業執照{1}；企業許可證{2}。",
     "MultipleOrganizationInfo": "查看您的所有組織",
     "PaymentFailedInfo": "抱歉，支付失败！",
-    "UsedPayment": "该付款已被使用"
+    "UsedPayment": "该付款已被使用",
+    "ManageLicense": "管理許可證"
   }
 }

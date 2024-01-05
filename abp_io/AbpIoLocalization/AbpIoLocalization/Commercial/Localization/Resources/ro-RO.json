@@ -386,6 +386,7 @@
     "BlackFridayDiscount": "Black Friday Discount",
     "MultipleOrganizationInfo": "Vedeți toate organizațiile dvs",
     "PaymentFailedInfo": "Ne pare rău, plata nu a reușit! ",
-    "UsedPayment": "Această plată a fost deja utilizată"
+    "UsedPayment": "Această plată a fost deja utilizată",
+    "ManageLicense": "Administrare licență"
   }
 }

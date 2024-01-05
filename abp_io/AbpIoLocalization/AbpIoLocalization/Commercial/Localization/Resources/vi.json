@@ -386,6 +386,7 @@
     "BlackFridayDiscount": "Giảm giá Black Friday",
     "MultipleOrganizationInfo": "Xem tất cả các tổ chức của bạn",
     "PaymentFailedInfo": "Rất tiếc, thanh toán không thành công! ",
-    "UsedPayment": "Khoản thanh toán này đã được sử dụng"
+    "UsedPayment": "Khoản thanh toán này đã được sử dụng",
+    "ManageLicense": "Quản lý Giấy phép"
   }
 }

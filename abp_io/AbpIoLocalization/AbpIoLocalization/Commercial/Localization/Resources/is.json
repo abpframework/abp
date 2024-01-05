@@ -386,6 +386,7 @@
     "BlackFridayDiscount": "Black Friday afsláttur",
     "MultipleOrganizationInfo": "Sjá öll samtök þín",
     "PaymentFailedInfo": "Því miður, greiðsla mistókst! ",
-    "UsedPayment": "Þessi greiðsla hefur þegar verið notuð"
+    "UsedPayment": "Þessi greiðsla hefur þegar verið notuð",
+    "ManageLicense": "Stjórna leyfi"
   }
 }

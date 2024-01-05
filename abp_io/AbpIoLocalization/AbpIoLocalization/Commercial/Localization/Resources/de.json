@@ -389,6 +389,7 @@
     "BlackFridayDiscount": "Black Friday Rabatt",
     "MultipleOrganizationInfo": "Alle Ihre Organisationen anzeigen",
     "PaymentFailedInfo": "Entschuldigung, die Zahlung ist fehlgeschlagen! ",
-    "UsedPayment": "Diese Zahlung wurde bereits verwendet"
+    "UsedPayment": "Diese Zahlung wurde bereits verwendet",
+    "ManageLicense": "Lizenz verwalten"
   }
 }
