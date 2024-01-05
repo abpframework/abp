@@ -459,7 +459,7 @@
     "ImagePlaceholder": "La tua immagine.",
     "SelectCountryPlaceholder": "Il tuo paese.",
     "YouAreNotAuthorizedToWriteTestimonial": "Per poter scrivere una lettera di testimonianza, devi effettuare l'accesso.",
-    "UnAuthorizeTestimonialInfo": "Se vuoi condividere la tua opinione, devi esserlo <a id='signin-btn'>registrazione</a>",
+    "UnAuthorizeTestimonialInfo": "La tua opinione conta! Accedi per condividerla.",
     "TheFileIsTooLargeForImage": "La tua immagine del profilo non può essere più di 1 MB",
     "ThisExtensionIsNotAllowedForImage": "Questa estensione non è consentita.",
     "FileUploadError": "Errore nel caricamento del file",

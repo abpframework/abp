@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Kuvasi.",
     "SelectCountryPlaceholder": "Maasi.",
     "YouAreNotAuthorizedToWriteTestimonial": "Voit kirjoittaa arvostelun vain kirjautuneena sisään.",
-    "UnAuthorizeTestimonialInfo": "Jos haluat jakaa mielipiteesi, sinun on oltava <a id='signin-btn'>kirjautunut sisään</a>.",
+    "UnAuthorizeTestimonialInfo": "Mielipiteesi on tärkeä! Kirjaudu sisään jakaaaksesi sen.",
     "TheFileIsTooLargeForImage": "Profiilikuvasi ei saa olla yli 1 Mt.",
     "ThisExtensionIsNotAllowedForImage": "Tätä tiedostotyyppiä ei sallita.",
     "FileUploadError": "Tiedoston latausvirhe",

@@ -459,7 +459,7 @@
     "ImagePlaceholder": "Profilképed.",
     "SelectCountryPlaceholder": "Országod.",
     "YouAreNotAuthorizedToWriteTestimonial": "Ahhoz, hogy ajánlást írhass, be kell jelentkezned.",
-    "UnAuthorizeTestimonialInfo": "Ha meg szeretnéd osztani a véleményedet, <a id='signin-btn'>be kell jelentkezned</a>.",
+    "UnAuthorizeTestimonialInfo": "A véleménye számít! Jelentkezzen be, hogy megossza.",
     "TheFileIsTooLargeForImage": "A profilképed nem lehet nagyobb, mint 1 MB.",
     "ThisExtensionIsNotAllowedForImage": "Ez a kiterjesztés nem engedélyezett.",
     "FileUploadError": "Hiba történt a fájl feltöltése közben",

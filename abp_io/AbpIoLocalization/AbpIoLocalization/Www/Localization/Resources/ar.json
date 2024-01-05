@@ -459,7 +459,7 @@
     "ImagePlaceholder": "صورتك.",
     "SelectCountryPlaceholder": "بلدك.",
     "YouAreNotAuthorizedToWriteTestimonial": "لا يُسمح لك بكتابة الشهادة إلا إذا قمت بتسجيل الدخول.",
-    "UnAuthorizeTestimonialInfo": "إذا كنت ترغب في مشاركة رأيك، يجب أن تكون <a id='signin-btn'>قد قمت بتسجيل الدخول</a>.",
+    "UnAuthorizeTestimonialInfo": "رأيك مهم! قم بتسجيل الدخول لمشاركته.",
     "TheFileIsTooLargeForImage": "لا يمكن أن تكون صورتك الشخصية أكبر من 1 ميغابايت.",
     "ThisExtensionIsNotAllowedForImage": "هذا الامتداد غير مسموح به.",
     "FileUploadError": "خطأ في تحميل الملف",
