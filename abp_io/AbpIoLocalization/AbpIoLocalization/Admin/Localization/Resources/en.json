@@ -571,7 +571,7 @@
     "PaymentAlreadyTried": "Payment already tried!",
     "PaymentIsNotFailed": "Payment is not failed!",
     "OrganizationIdIsNull": "OrganizationId is null!",
-    "Menu:OrganizationAutoRenewalPayments": "Organization Auto Renewal Payments",
+    "Menu:AutoRenewals": "Auto Renewals",
     "OrganizationAutoRenewalPayments": "Organization Auto Renewal Payments",
     "PaymentDate": "Payment Date",
     "TryCount": "Try Count",
@@ -587,6 +587,8 @@
     "LastAutoRenewalPaymentTime": "Last Auto Renewal Payment Time",
     "OrganizationDoesNotHaveACreditCard": "Organization does not have a credit card!",
     "Permission:EditWinners": "Edit Winners",
-    "Permission:ChangeDrawingStatus": "Change Drawing Status"
+    "Permission:ChangeDrawingStatus": "Change Drawing Status",
+    "Menu:Licenses": "Licenses",
+    "OrganizationId": "Organization Id"
   }
 }
