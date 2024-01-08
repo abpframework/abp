@@ -62,7 +62,7 @@
                                 
                                 @foreach (var permission in group.Permissions)
                                 {
-                                    <Field Style="@($"margin-inline-start: {_permissionDepths[permission.Name] * 20}px")">
+                                    <Field Style="@($"margin-inline-start: {GetPermissionDepthOrDefault(permission.Name) * 20}px")">
                                         <Check
                                             Disabled="@(IsDisabledPermission(permission))"
                                             Cursor="Cursor.Pointer"
