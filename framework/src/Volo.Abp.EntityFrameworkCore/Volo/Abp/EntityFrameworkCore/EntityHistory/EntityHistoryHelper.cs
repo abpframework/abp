@@ -85,7 +85,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             case EntityState.Modified:
                 changeType = IsDeleted(entityEntry) ? EntityChangeType.Deleted : EntityChangeType.Updated;
                 break;
-            case EntityState.Unchanged when Options.SaveEntityHistoryWhenNavigationChanges:
+            case EntityState.Unchanged when HasNavigationPropertiesChanged(entityEntry):
                 changeType = EntityChangeType.Updated; // Navigation property changes.
                 break;
             case EntityState.Detached:
@@ -227,21 +227,6 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             return false;
         }
 
-        if (Options.SaveEntityHistoryWhenNavigationChanges && entityEntry.State == EntityState.Unchanged)
-        {
-            if (entityEntry.Navigations.Any(navigationEntry => navigationEntry.IsModified))
-            {
-                return true;
-            }
-
-            if (entityEntry.Navigations.Where(x => x is ReferenceEntry).Cast<ReferenceEntry>().Any(x => x.TargetEntry != null && x.TargetEntry.State == EntityState.Modified))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         var entityType = entityEntry.Metadata.ClrType;
 
         if (!EntityHelper.IsEntity(entityType) && !EntityHelper.IsValueObject(entityType))
@@ -249,12 +234,20 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             return false;
         }
 
-        if (AuditingHelper.IsEntityHistoryEnabled(entityType))
+        var isEntityHistoryEnabled = AuditingHelper.IsEntityHistoryEnabled(entityType);
+        if (isEntityHistoryEnabled && HasNavigationPropertiesChanged(entityEntry))
         {
             return true;
         }
 
-        return defaultValue;
+        return isEntityHistoryEnabled || defaultValue;
+    }
+
+    protected virtual bool HasNavigationPropertiesChanged(EntityEntry entityEntry)
+    {
+        return Options.SaveEntityHistoryWhenNavigationChanges && entityEntry.State == EntityState.Unchanged &&
+               (entityEntry.Navigations.Any(navigationEntry => navigationEntry.IsModified) ||
+                entityEntry.Navigations.Where(x => x is ReferenceEntry).Cast<ReferenceEntry>().Any(x => x.TargetEntry != null && x.TargetEntry.State == EntityState.Modified));
     }
 
     protected virtual bool ShouldSavePropertyHistory(PropertyEntry propertyEntry, bool defaultValue)
