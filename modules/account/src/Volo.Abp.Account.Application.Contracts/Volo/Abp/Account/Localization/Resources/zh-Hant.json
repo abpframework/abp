@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "電話號碼",
     "PersonalSettings": "個人設置",
     "PersonalSettingsSaved": "個人設置已保存",
+    "PersonalSettingsChangedConfirmationModalTitle": "個人資訊已更改",
+    "PersonalSettingsChangedConfirmationModalDescription": "如果您想套用這些更改，您必須登入。您想退出嗎？",
     "PasswordChanged": "修改密碼",
     "NewPasswordConfirmFailed": "請確認新密碼",
     "NewPasswordSameAsOld": "新密碼不能與舊密碼相同",
@@ -64,6 +66,8 @@
     "PasswordResetInfoInEmail": "我們收到了帳戶恢復請求!如果你發起了此請求,請點擊以下連結以重置密碼.",
     "ResetMyPassword": "重置我的密碼",
     "AccessDenied": "拒絕訪問!",
-    "AccessDeniedMessage": "您無權訪問此資源."
+    "AccessDeniedMessage": "您無權訪問此資源.",
+    "OrRegisterWith": "或是註冊用:",
+    "RegisterUsingYourProviderAccount": "使用你的{0}帳號註冊"
   }
 }

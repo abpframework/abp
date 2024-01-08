@@ -12,15 +12,13 @@ namespace Volo.Abp.Emailing;
 /// </summary>
 public class NullEmailSender : EmailSenderBase
 {
-    public ILogger<NullEmailSender> Logger { get; set; }
-
     /// <summary>
     /// Creates a new <see cref="NullEmailSender"/> object.
     /// </summary>
     public NullEmailSender(IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
         : base(configuration, backgroundJobManager)
     {
-        Logger = NullLogger<NullEmailSender>.Instance;
+
     }
 
     protected override Task SendEmailAsync(MailMessage mail)

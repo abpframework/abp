@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.Autofac</AssemblyName>
@@ -17,11 +17,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="7.0.0" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Autofac.Extras.DynamicProxy" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" />
+    <PackageReference Include="Autofac.Extras.DynamicProxy" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>

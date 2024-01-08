@@ -20,15 +20,17 @@ nav[data-toggle='toc'] .nav > li > a:focus {
     text-decoration: none;
     background-color: transparent;
     border-left: 1px solid #563d7c;
+    border-radius: 0;
 }
 nav[data-toggle='toc'] .nav-link.active,
 nav[data-toggle='toc'] .nav-link.active:hover,
 nav[data-toggle='toc'] .nav-link.active:focus {
-    padding-left: 18px;
+    padding-left: 8px;
     font-weight: bold;
     color: #563d7c;
     background-color: transparent;
     border-left: 2px solid #563d7c;
+    border-radius: 0;
 }
 
 /* Nav: second level (shown on .active) */
@@ -40,18 +42,16 @@ nav[data-toggle='toc'] .nav-link + ul {
 nav[data-toggle='toc'] .nav .nav > li > a {
     padding-top: 1px;
     padding-bottom: 1px;
-    padding-left: 30px;
+    padding-left: 8px;
+    margin-left: 8px;
     font-size: 12px;
     font-weight: normal;
 }
-nav[data-toggle='toc'] .nav .nav > li > a:hover,
-nav[data-toggle='toc'] .nav .nav > li > a:focus {
-    padding-left: 29px;
-}
+
 nav[data-toggle='toc'] .nav .nav > li > .active,
 nav[data-toggle='toc'] .nav .nav > li > .active:hover,
 nav[data-toggle='toc'] .nav .nav > li > .active:focus {
-    padding-left: 28px;
+    padding-left: 8px;
     font-weight: 500;
 }
 

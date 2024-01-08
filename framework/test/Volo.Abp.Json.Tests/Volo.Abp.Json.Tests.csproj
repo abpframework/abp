@@ -3,12 +3,12 @@
     <Import Project="..\..\..\common.test.props" />
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <RootNamespace />
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
         <ProjectReference Include="..\..\src\Volo.Abp.Json.Newtonsoft\Volo.Abp.Json.Newtonsoft.csproj" />
         <ProjectReference Include="..\..\src\Volo.Abp.Json.SystemTextJson\Volo.Abp.Json.SystemTextJson.csproj" />
         <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />

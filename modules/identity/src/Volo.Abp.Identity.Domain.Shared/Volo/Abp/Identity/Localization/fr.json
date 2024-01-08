@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "Vous ne pouvez pas modifier votre paramètre à deux facteurs.",
     "Volo.Abp.Identity:010008": "Il n’est pas permis de changer deux facteurs de réglage.",
     "Volo.Abp.Identity:010009": "Vous ne pouvez pas vous déléguer vous-même.",
+    "Volo.Abp.Identity:010021" : "Le nom '{0}' existe déjà.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Nombre maximal d’adhésions autorisées à l’unité d’organisation pour un utilisateur",
     "ThisUserIsNotActiveMessage": "Cet utilisateur n'est pas actif.",
     "Permission:IdentityManagement": "Gestion de l’identité",
@@ -117,6 +118,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Si le téléphoneNumber peut être confirmé par l’utilisateur.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Si un numéro de téléphone confirmé est nécessaire pour se connecter.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Si le nom d’utilisateur peut être mis à jour par l’utilisateur.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Si l’e-mail peut être mis à jour par l’utilisateur."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Si l’e-mail peut être mis à jour par l’utilisateur.",
+    "Details": "Détails",
+    "CreatedBy": "Créé par",
+    "ModifiedBy": "Modifié par",
+    "ModificationTime": "Temps de modification",
+    "PasswordUpdateTime": "Temps de mise à jour du mot de passe",
+    "LockoutEndTime": "Heure de fin du verrouillage",
+    "FailedAccessCount": "Nombre d&#39;accès ayant échoué"
   }
 }

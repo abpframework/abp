@@ -11,7 +11,7 @@ import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import {
   Component,
   Injector,
@@ -60,7 +60,7 @@ export class UsersComponent implements OnInit {
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   entityDisplayName: string;
-  
+
   inputKey=eFormComponets.FormCheckboxComponent
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;

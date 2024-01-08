@@ -12,7 +12,7 @@ namespace Volo.Abp.Domain.Repositories;
 /// </summary>
 public interface IRepository
 {
-
+    bool? IsChangeTrackingEnabled { get; }
 }
 
 public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>, IBasicRepository<TEntity>

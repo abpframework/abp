@@ -16,6 +16,7 @@ using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Events;
+using Volo.Abp.Cli.ProjectBuilding.Templates;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
@@ -424,9 +425,18 @@ public abstract class ProjectCreationCommandBase
         {
             return;
         }
-        
+
+        var isModuleTemplate = ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName);
         var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
-        var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
+        
+        var message = isWebassembly || isModuleTemplate 
+            ? "Generating bundles for Blazor Wasm" 
+            : "Generating bundles for MAUI Blazor";
+        
+        var projectType = isWebassembly || isModuleTemplate
+            ? BundlingConsts.WebAssembly 
+            : BundlingConsts.MauiBlazor;
+        
         Logger.LogInformation(message + "...");
 
         await EventBus.PublishAsync(new ProjectCreationProgressEvent
@@ -434,19 +444,26 @@ public abstract class ProjectCreationCommandBase
             Message = message
         }, false);
 
+        var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
         var path = projectArgs.OutputFolder;
-        if (projectArgs.TemplateName == MicroserviceProTemplate.TemplateName)
+        
+        if (isModuleTemplate)
+        {
+            path = Path.Combine(path, "host");
+            searchPattern = "*.Blazor.Host.csproj";
+        }
+        else if (MicroserviceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
             path = Path.Combine(path, "apps");
         }
-        
+
         var directory = Path.GetDirectoryName(
-            Directory.GetFiles(path, isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
+            Directory.GetFiles(path, searchPattern, SearchOption.AllDirectories).First()
         );
 
-        await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
+        await _bundlingService.BundleAsync(directory, true, projectType);
     }
-
+    
     protected virtual bool ShouldRunBundleCommand(ProjectBuildArgs projectArgs)
     {
         if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
@@ -455,7 +472,12 @@ public abstract class ProjectCreationCommandBase
             return true;
         }
         
-        if (projectArgs.TemplateName == MicroserviceProTemplate.TemplateName && projectArgs.UiFramework is UiFramework.Blazor)
+        if (MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName) && projectArgs.UiFramework is UiFramework.Blazor)
+        {
+            return true;
+        }
+
+        if (ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) && projectArgs.UiFramework != UiFramework.None)
         {
             return true;
         }
@@ -472,7 +494,7 @@ public abstract class ProjectCreationCommandBase
 
         var efCoreProjectPath = string.Empty;
         bool isLayeredTemplate;
-
+        var isModuleTemplate = false;
         switch (projectArgs.TemplateName)
         {
             case AppTemplate.TemplateName:
@@ -486,11 +508,16 @@ public abstract class ProjectCreationCommandBase
                     ?? Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
                 isLayeredTemplate = false;
                 break;
+            case ModuleTemplate.TemplateName:
+            case ModuleProTemplate.TemplateName:
+                isModuleTemplate = true;
+                isLayeredTemplate = false;
+                break;
             default:
                 return;
         }
 
-        if (string.IsNullOrWhiteSpace(efCoreProjectPath))
+        if (string.IsNullOrWhiteSpace(efCoreProjectPath) && !isModuleTemplate)
         {
             Logger.LogWarning("Couldn't find the project to create initial migrations!");
             return;
@@ -501,7 +528,55 @@ public abstract class ProjectCreationCommandBase
             Message = "Creating the initial DB migration"
         }, false);
 
-        await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+        if (!isModuleTemplate)
+        {
+            await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+        }
+        else
+        {
+            var hostProjectsWithEfCore = Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories)
+                .Where(x => File.ReadAllText(x).Contains("Microsoft.EntityFrameworkCore.Tools"))
+                .ToList();
+            foreach (var project in hostProjectsWithEfCore)
+            {
+                await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(project));
+            }
+        }
+    }
+
+    protected Task CreateOpenIddictPfxFilesAsync(ProjectBuildArgs projectArgs)
+    {
+        if (!projectArgs.ExtraProperties.ContainsKey(nameof(RandomizeAuthServerPassPhraseStep)))
+        {
+            return Task.CompletedTask;
+        }
+
+        var module = projectArgs.ExtraProperties[nameof(RandomizeAuthServerPassPhraseStep)];
+        if (string.IsNullOrWhiteSpace(module))
+        {
+            return Task.CompletedTask;
+        }
+
+        var moduleDirectory = projectArgs.OutputFolder + module;
+        if (projectArgs.UiFramework != UiFramework.Angular)
+        {
+            moduleDirectory = moduleDirectory.Replace("/aspnet-core/", "/");
+        }
+
+        moduleDirectory = Path.GetDirectoryName(projectArgs.SolutionName.CompanyName == null
+            ? moduleDirectory.Replace("MyCompanyName.MyProjectName", projectArgs.SolutionName.ProjectName)
+            : moduleDirectory.Replace("MyCompanyName", projectArgs.SolutionName.CompanyName).Replace("MyProjectName", projectArgs.SolutionName.ProjectName));
+
+        if (Directory.Exists(moduleDirectory))
+        {
+            Logger.LogInformation($"Creating openiddict.pfx file on {moduleDirectory}");
+            CmdHelper.RunCmd($"dotnet dev-certs https -ep openiddict.pfx -p {RandomizeAuthServerPassPhraseStep.RandomOpenIddictPassword}", moduleDirectory);
+        }
+        else
+        {
+            Logger.LogWarning($"Couldn't find the module directory to create openiddict.pfx file: {moduleDirectory}");
+        }
+        return Task.CompletedTask;
     }
 
     protected async Task ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)

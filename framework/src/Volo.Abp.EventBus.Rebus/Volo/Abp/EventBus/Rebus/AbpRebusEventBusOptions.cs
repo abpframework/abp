@@ -11,7 +11,7 @@ namespace Volo.Abp.EventBus.Rebus;
 public class AbpRebusEventBusOptions
 {
     [NotNull]
-    public string InputQueueName { get; set; }
+    public string InputQueueName { get; set; } = default!;
 
     [NotNull]
     public Action<RebusConfigurer> Configurer {
@@ -20,7 +20,7 @@ public class AbpRebusEventBusOptions
     }
     private Action<RebusConfigurer> _configurer;
 
-    public Func<IBus, Type, object, Task> Publish { get; set; }
+    public Func<IBus, Type, object, Task>? Publish { get; set; }
 
     public AbpRebusEventBusOptions()
     {

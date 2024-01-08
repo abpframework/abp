@@ -14,6 +14,6 @@ public class RebusDistributedEventHandlerAdapter<TEventData> : IHandleMessages<T
 
     public async Task Handle(TEventData message)
     {
-        await RebusDistributedEventBus.ProcessEventAsync(message.GetType(), message);
+        await RebusDistributedEventBus.ProcessEventAsync(message!.GetType(), message);
     }
 }

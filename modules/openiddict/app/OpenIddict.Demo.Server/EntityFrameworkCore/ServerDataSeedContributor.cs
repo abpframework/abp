@@ -47,8 +47,10 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
         {
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
+                ApplicationType = OpenIddictConstants.ApplicationTypes.Web,
                 ClientId = "AbpApp",
                 ClientSecret = "1q2w3e*",
+                ClientType = OpenIddictConstants.ClientTypes.Confidential,
                 ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
                 DisplayName = "Abp Application",
                 PostLogoutRedirectUris =
@@ -93,6 +95,11 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                     OpenIddictConstants.Permissions.Scopes.Address,
                     OpenIddictConstants.Permissions.Scopes.Phone,
                     OpenIddictConstants.Permissions.Prefixes.Scope + "AbpAPI"
+                },
+                Settings =
+                {
+                    // Use a shorter access token lifetime for tokens issued to the Postman application.
+                    [OpenIddictConstants.Settings.TokenLifetimes.AccessToken] = TimeSpan.FromMinutes(5).ToString("c", CultureInfo.InvariantCulture)
                 }
             });
         }
@@ -101,7 +108,9 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
         {
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
+                ApplicationType = OpenIddictConstants.ApplicationTypes.Web,
                 ClientId = "AbpBlazorWASMApp",
+                ClientType = OpenIddictConstants.ClientTypes.Public,
                 ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
                 DisplayName = "Abp Blazor WASM Application",
                 PostLogoutRedirectUris =

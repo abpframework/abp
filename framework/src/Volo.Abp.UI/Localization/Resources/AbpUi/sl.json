@@ -51,6 +51,12 @@
     "ManageYourAccount": "Upravljajte svoj račun",
     "OthersGroup": "Ostalo",
     "Today": "Danes",
-    "Apply": "Prijavite se"
+    "Apply": "Prijavite se",
+    "InternetConnectionInfo": "Operacije ni bilo mogoče izvesti. Vaša internetna povezava trenutno ni na voljo.",
+    "CopiedToTheClipboard": "Kopirano v odložišče",
+    "AddNew": "Dodaj novo",
+    "ProfilePicture": "Profilna slika",
+    "Theme": "Tema",
+    "NotAssigned": "Ni dodeljena"
   }
 }

@@ -21,6 +21,6 @@ public class Utf8JsonMemoryDbSerializer : IMemoryDbSerializer, ITransientDepende
 
     public object Deserialize(byte[] value, Type type)
     {
-        return JsonSerializer.Deserialize(value, type, Options.JsonSerializerOptions);
+        return JsonSerializer.Deserialize(value, type, Options.JsonSerializerOptions)!;
     }
 }

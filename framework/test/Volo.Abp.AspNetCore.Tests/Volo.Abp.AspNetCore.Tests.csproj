@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>Volo.Abp.AspNetCore.Tests</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -24,7 +24,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.AspNetCore.TestBase\Volo.Abp.AspNetCore.TestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
   </ItemGroup>
 
 </Project>

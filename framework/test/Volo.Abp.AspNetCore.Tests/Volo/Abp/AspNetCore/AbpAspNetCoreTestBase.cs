@@ -9,13 +9,12 @@ using Volo.Abp.AspNetCore.TestBase;
 
 namespace Volo.Abp.AspNetCore;
 
-public class AbpAspNetCoreTestBase : AbpAspNetCoreTestBase<Startup>
+public class AbpAspNetCoreTestBase : AbpAspNetCoreTestBase<Program>
 {
-
 }
 
-public abstract class AbpAspNetCoreTestBase<TStartup> : AbpAspNetCoreIntegratedTestBase<TStartup>
-    where TStartup : class
+public abstract class AbpAspNetCoreTestBase<TProgram> : AbpWebApplicationFactoryIntegratedTest<TProgram>
+    where TProgram : class
 {
     protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
     {

@@ -10,5 +10,5 @@ public interface IDynamicTemplateDefinitionStore
 
     Task<IReadOnlyList<TemplateDefinition>> GetAllAsync();
 
-    Task<TemplateDefinition> GetOrNullAsync(string name);
+    Task<TemplateDefinition?> GetOrNullAsync(string name);
 }

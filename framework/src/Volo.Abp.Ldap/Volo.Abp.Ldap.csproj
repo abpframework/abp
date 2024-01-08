@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.Ldap</AssemblyName>
@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LdapForNet" Version="2.7.15" />
+    <PackageReference Include="LdapForNet" />
   </ItemGroup>
 
   <ItemGroup>

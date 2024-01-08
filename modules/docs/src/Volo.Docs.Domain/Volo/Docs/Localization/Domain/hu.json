@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "Rövid név {ShortName} már létezik.",
     "Preview": "előnézet",
     "Search": "Keresés",
-    "SearchResults": "Keresési eredmények"
+    "SearchResults": "Keresési eredmények",
+    "SearchInTheAllDocuments": "Keressen az összes dokumentumban"
   }
 }

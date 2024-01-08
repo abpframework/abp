@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import {
-  AuthGuard,
-  PermissionGuard,
+  authGuard,
+  permissionGuard,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
@@ -11,14 +11,15 @@ import {
 
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { eTenantManagementComponents } from './enums/components';
-import { TenantManagementExtensionsGuard } from './guards';
+import { tenantManagementExtensionsResolver } from './resolvers';
 
 const routes: Routes = [
   { path: '', redirectTo: 'tenants', pathMatch: 'full' },
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: mapToCanActivate([AuthGuard, PermissionGuard, TenantManagementExtensionsGuard]),
+    canActivate: [authGuard, permissionGuard],
+    resolve: [tenantManagementExtensionsResolver],
     children: [
       {
         path: 'tenants',

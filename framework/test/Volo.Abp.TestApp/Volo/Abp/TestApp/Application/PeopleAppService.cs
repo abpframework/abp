@@ -129,17 +129,19 @@ public class PeopleAppService : CrudAppService<Person, PersonDto, Guid>, IPeople
 
     public Task<string> GetParamsFromQueryAsync([FromQuery] GetParamsInput input)
     {
-        return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" +
-                               input.NameValues?.FirstOrDefault()?.Value + ":" +
+        return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" + input.NameValues?.FirstOrDefault()?.Value + ":" +
+                               input.NameValues?.FirstOrDefault()?.ExtraProperties["TestPropertyInList"] + ":" +
                                input.NameValues?.LastOrDefault()?.Name + "-" + input.NameValues?.LastOrDefault()?.Value + ":" +
-                               input.NameValue?.Name + "-" + input.NameValue?.Value);
+                               input.NameValue?.Name + "-" + input.NameValue?.Value + ":" +
+                               input.ExtraProperties["TestProperty"]);
     }
 
     public Task<string> GetParamsFromFormAsync([FromForm] GetParamsInput input)
     {
-        return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" +
-                               input.NameValues?.FirstOrDefault()?.Value + ":" +
+        return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" + input.NameValues?.FirstOrDefault()?.Value + ":" +
+                               input.NameValues?.FirstOrDefault()?.ExtraProperties["TestPropertyInList"] + ":" +
                                input.NameValues?.LastOrDefault()?.Name + "-" + input.NameValues?.LastOrDefault()?.Value + ":" +
-                               input.NameValue?.Name + "-" + input.NameValue?.Value);
+                               input.NameValue?.Name + "-" + input.NameValue?.Value + ":" +
+                               input.ExtraProperties["TestProperty"]);
     }
 }

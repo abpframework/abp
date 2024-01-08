@@ -77,6 +77,140 @@ export class AppComponent {
 
 ![Layout Components](./images/layout-components.png)
 
+### How to Add a New Layout Component
+
+To add a new layout component, you need to follow these steps:
+
+#### Step 1: Create a New Angular Component
+
+This component should have a 'router-outlet' for dynamic content loading. You can create a new component using the Angular CLI. Run the following command in your terminal:
+
+```bash
+ng generate component new-layout
+```
+This command will create a new component named `new-layout`. Now, open the new-layout.component.html file and add a `router-outlet` to it:
+
+```html
+  <router-outlet></router-outlet>
+```
+This 'router-outlet' will act as a placeholder that Angular dynamically fills based on the current router state.
+
+note: (don't forget: you should add the app in the app.module.ts file)
+
+#### Step 2: Define a Variable for the Layout Component
+
+Although this step is optional, it can be useful if you're going to use the layout component's value multiple times. You can define a variable for the layout component like this:
+
+```javascript
+export const eCustomLayout = {
+    key: 'CustomLayout',
+    component: 'CustomLayoutComponent',
+};
+```
+In this variable, `key` is a unique identifier for the layout component, and `component` is the name of the layout component.
+You can use this variable when you need to refer to the layout component.
+
+#### Step 3: Add the Layout Component to the ABP Replaceable-System
+
+Next, you need to add the new layout component to the `ReplaceableComponentsService`. This service allows you to replace a component with another one dynamically.
+
+You can do this by defining a provider for `APP_INITIALIZER` that uses a factory function. In this function, you inject the `ReplaceableComponentsService` and use its `add` method to add the new layout component.
+
+Here's how you can do it:
+
+```javascript
+export const CUSTOM_LAYOUT_PROVIDERS = [
+    { provide: APP_INITIALIZER, useFactory: configureLayoutFn, deps: [ReplaceableComponentsService], multi: true },
+    
+];
+function configureLayoutFn() {
+    const service= inject( ReplaceableComponentsService)
+    return () =>{
+        service.add({
+            key: eCustomLayout.component,
+            component: CustomLayoutComponent,
+        })
+    }
+}
+```
+In this code, `configureLayoutFn` is a factory function that adds the new layout component to the `ReplaceableComponentsService`. The `APP_INITIALIZER` provider runs this function when the application starts.
+
+note: (don't forget: you should add the CUSTOM_LAYOUT_PROVIDERS in the app.module.ts file)
+
+#### Step 4: Define the Application's Dynamic Layouts
+
+Finally, you need to define the application's dynamic layouts. This is a map where the keys are the layout keys and the values are the layout components.
+
+You can add the new layout to the existing layouts like this:
+
+```javascript
+export const myDynamicLayouts = new Map<string, string>([...DEFAULT_DYNAMIC_LAYOUTS, [eCustomLayout.key, eCustomLayout.component]]);
+```
+
+#### Step 5: Pass the Dynamic Layouts to the CoreModule
+
+The final step is to pass the dynamic layouts to the `CoreModule` using the `forRoot` method. This method allows you to configure the module with a static method.
+
+Here's how you can do it:
+
+```javascript
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    // other imports...
+    CoreModule.forRoot({
+      dynamicLayouts: myDynamicLayouts,
+      environment,
+      registerLocaleFn: registerLocale(),
+    }),
+    // other imports...
+    NewLayoutComponent
+  ],
+  providers: [APP_ROUTE_PROVIDER, CUSTOM_LAYOUT_PROVIDERS],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+In this code, `myDynamicLayouts` is the map of dynamic layouts you defined earlier. We pass this map to the `CoreModule` using the `forRoot` method. 
+
+
+Now that you have defined the new layout, you can use it in the router definition. You do this by adding a new route that uses the new layout.
+
+Here's how you can do it: 
+
+```javascript
+// route.provider.ts
+import { eCustomLayout } from './custom-layout/custom-layout.provider';
+import { RoutesService, eLayoutType } from '@abp/ng.core';
+import { APP_INITIALIZER } from '@angular/core';
+
+export const APP_ROUTE_PROVIDER = [
+  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+];
+
+function configureRoutes(routes: RoutesService) {
+  return () => {
+    routes.add([
+      {
+        path: '/',
+        name: '::Menu:Home',
+        iconClass: 'fas fa-home',
+        order: 1,
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/dashboard',
+        name: '::Menu:Dashboard',
+        iconClass: 'fas fa-chart-line',
+        order: 2,
+        layout: eCustomLayout.key as eLayoutType,
+        requiredPolicy: 'MyProjectName.Dashboard.Host  || MyProjectName.Dashboard.Tenant',
+      },
+    ]);
+  };
+}
+```
+
 #### How to Replace LogoComponent
 
 ![LogoComponent](./images/logo-component.png)

@@ -41,7 +41,7 @@ public class ResizeImageAttribute : ActionFilterAttribute
         
         foreach (var (key, value) in parameters)
         {
-            object resizedValue = value switch {
+            object? resizedValue = value switch {
                 IFormFile file => await ResizeImageAsync(file, imageResizer),
                 IRemoteStreamContent remoteStreamContent => await ResizeImageAsync(remoteStreamContent, imageResizer),
                 Stream stream => await ResizeImageAsync(stream, imageResizer),

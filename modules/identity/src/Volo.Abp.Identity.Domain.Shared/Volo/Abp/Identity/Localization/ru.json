@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "Вы не можете изменить настройку двух факторов.",
     "Volo.Abp.Identity:010008": "Изменение двухфакторной настройки не допускается.",
     "Volo.Abp.Identity:010009": "Вы не можете делегировать свои собственные права.",
+    "Volo.Abp.Identity:010021" : "Имя '{0}' уже существует.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Максимально допустимое количество членов организационного подразделения для пользователя",
     "ThisUserIsNotActiveMessage": "Этот пользователь не активен.",
     "Permission:IdentityManagement": "Управление идентификацией",
@@ -117,6 +118,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Может ли пользователь подтвердить phoneNumber.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Требуется ли для входа в систему подтвержденный номер телефона.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Может ли пользователь обновить имя пользователя.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Может ли электронная почта быть обновлена пользователем."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Может ли электронная почта быть обновлена пользователем.",
+    "Details": "Подробности",
+    "CreatedBy": "Сделано",
+    "ModifiedBy": "Модифицирован",
+    "ModificationTime": "Время модификации",
+    "PasswordUpdateTime": "Время обновления пароля",
+    "LockoutEndTime": "Время окончания блокировки",
+    "FailedAccessCount": "Количество неудачных попыток доступа"
   }
 }

@@ -2,6 +2,6 @@
   "culture": "zh-Hans",
   "texts": {
     "DisplayName:Abp.Localization.DefaultLanguage": "默认语言",
-    "Description:Abp.Localization.DefaultLanguage": "应用程序的默认语言."
+    "Description:Abp.Localization.DefaultLanguage": "应用程序的默认语言。"
   }
 }

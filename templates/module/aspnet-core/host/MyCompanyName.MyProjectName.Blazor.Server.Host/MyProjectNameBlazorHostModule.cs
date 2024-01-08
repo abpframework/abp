@@ -64,6 +64,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountApplicationModule),
+    typeof(AbpAccountHttpApiModule),
     typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),

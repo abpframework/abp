@@ -39,6 +39,7 @@
     "ExtraProperties": "Ďalšie vlastnosti",
     "MaxDuration": "Max. trvanie",
     "MinDuration": "Min. trvanie",
+    "MinMaxDuration": "Trvanie (min. – max.)",
     "{0}Milliseconds": "{0} milisekúnd",
     "ExecutionTime": "Čas",
     "Parameters": "Parametre",

@@ -41,7 +41,8 @@ The ratings system provides a rating widget to allow users send ratings to resou
 @await Component.InvokeAsync(typeof(RatingViewComponent), new
 {
   entityType = "Product",
-  entityId = "entityId"
+  entityId = "entityId",
+  isReadOnly = false
 })
 ```
 

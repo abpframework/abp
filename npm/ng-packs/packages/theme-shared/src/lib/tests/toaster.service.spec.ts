@@ -8,7 +8,6 @@ import { ToasterService } from '../services/toaster.service';
 
 @NgModule({
   exports: [ToastContainerComponent],
-  entryComponents: [ToastContainerComponent],
   declarations: [ToastContainerComponent, ToastComponent],
   imports: [CoreTestingModule.withConfig()],
 })

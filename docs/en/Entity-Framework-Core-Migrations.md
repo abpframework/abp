@@ -173,7 +173,7 @@ First step is to change the connection string section inside all the `appsetting
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=(LocalDb)\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True"
+  "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True"
 }
 ````
 
@@ -184,7 +184,7 @@ Change it as shown below:
   "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True",
   "AbpPermissionManagement": "Server=(LocalDb)\\MSSQLLocalDB;Database=BookStore_SecondDb;Trusted_Connection=True",
   "AbpSettingManagement": "Server=(LocalDb)\\MSSQLLocalDB;Database=BookStore_SecondDb;Trusted_Connection=True",
-  "AbpAuditLogging": "Server=(LocalDb)\MSSQLLocalDB;Database=BookStore_SecondDb;Trusted_Connection=True"
+  "AbpAuditLogging": "Server=(LocalDb)\\MSSQLLocalDB;Database=BookStore_SecondDb;Trusted_Connection=True"
 }
 ````
 

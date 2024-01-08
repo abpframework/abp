@@ -51,6 +51,12 @@
     "ManageYourAccount": "Spravovať svoje konto",
     "OthersGroup": "Iné",
     "Today": "Dnes",
-    "Apply": "Použiť"
+    "Apply": "Použiť",
+    "InternetConnectionInfo": "Operáciu nebolo možné vykonať. Vaše internetové pripojenie momentálne nie je dostupné.",
+    "CopiedToTheClipboard": "Skopírované do schránky",
+    "AddNew": "Pridať nové",
+    "ProfilePicture": "Profilový obrázok",
+    "Theme": "Téma",
+    "NotAssigned": "Nepridelené"
   }
 }

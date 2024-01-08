@@ -1,6 +1,7 @@
 {
   "culture": "is",
   "texts": {
+    "Menu:Account": "Reikningur",
     "UserName": "Notandanafn",
     "EmailAddress": "Netfang",
     "UserNameOrEmailAddress": "Notandanafn eða netfang",
@@ -33,6 +34,8 @@
     "DisplayName:PhoneNumber": "Símanúmer",
     "PersonalSettings": "Persónulegar stillingar",
     "PersonalSettingsSaved": "Persónulegar stillingar vistaðar",
+    "PersonalSettingsChangedConfirmationModalTitle": "Persónuupplýsingum breytt",
+    "PersonalSettingsChangedConfirmationModalDescription": "Ef þú vilt beita þessum breytingum þarftu að skrá þig inn. Viltu skrá þig út?",
     "PasswordChanged": "Lykilorði breytt",
     "NewPasswordConfirmFailed": "Vinsamlegast staðfestu nýja lykilorðið.",
     "NewPasswordSameAsOld": "Nýtt lykilorð verður að vera frábrugðið núverandi lykilorði.",
@@ -63,6 +66,8 @@
     "PasswordResetInfoInEmail": "Við fengum beiðni um endurheimt reiknings! Ef þú stofnaðir þessa beiðni skaltu smella á eftirfarandi krækju til að endurstilla lykilorðið þitt.",
     "ResetMyPassword": "Endurstilla lykilorðið mitt",
     "AccessDenied": "Aðgangi hafnað!",
-    "AccessDeniedMessage": "Þú hefur ekki aðgang að þessari auðlind."
+    "AccessDeniedMessage": "Þú hefur ekki aðgang að þessari auðlind.",
+    "OrRegisterWith": "Eða skráðu þig með:",
+    "RegisterUsingYourProviderAccount": "Skráðu þig með {0} aðganginum þínum"
   }
 }

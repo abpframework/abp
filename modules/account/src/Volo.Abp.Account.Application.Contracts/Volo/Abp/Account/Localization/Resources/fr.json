@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Numéro de téléphone",
     "PersonalSettings": "Paramètres personnels",
     "PersonalSettingsSaved": "Paramètres personnels enregistrés",
+    "PersonalSettingsChangedConfirmationModalTitle": "Informations personnelles modifiées",
+    "PersonalSettingsChangedConfirmationModalDescription": "Si vous souhaitez appliquer ces modifications, vous devez vous connecter. Voulez-vous vous déconnecter ?",
     "PasswordChanged": "Mot de passe changé",
     "NewPasswordConfirmFailed": "Veuillez confirmer le nouveau mot de passe.",
     "NewPasswordSameAsOld": "Le nouveau mot de passe doit être différent de l'ancien.",
@@ -64,6 +66,8 @@
     "PasswordResetInfoInEmail": "Nous avons reçu une demande de récupération de compte! Si vous avez lancé cette demande, cliquez sur le lien suivant pour réinitialiser votre mot de passe.",
     "ResetMyPassword": "Réinitialiser mon mot de passe",
     "AccessDenied": "Accès refusé!",
-    "AccessDeniedMessage": "Vous n'avez pas accès à cette ressource."
+    "AccessDeniedMessage": "Vous n'avez pas accès à cette ressource.",
+    "OrRegisterWith": "Or register with",
+    "RegisterUsingYourProviderAccount": "Register using your {0} account"
   }
 }

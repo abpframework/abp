@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "رقم الهاتف",
     "PersonalSettings": "الإعدادات الشخصية",
     "PersonalSettingsSaved": "تم حفظ الإعدادات الشخصية",
+    "PersonalSettingsChangedConfirmationModalTitle": "تغيرت المعلومات الشخصية",
+    "PersonalSettingsChangedConfirmationModalDescription": "إذا كنت تريد تطبيق هذه التغييرات، عليك تسجيل الدخول. هل ترغب بالخروج؟",
     "PasswordChanged": "تم تغيير كلمة المرور",
     "NewPasswordConfirmFailed": "يرجى تأكيد كلمة المرور الجديدة.",
     "NewPasswordSameAsOld": "يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمة المرور الحالية.",
@@ -64,6 +66,8 @@
     "PasswordResetInfoInEmail": "لقد تلقينا طلب استرداد الحساب! إذا بدأت هذا الطلب ، فانقر فوق الارتباط التالي لإعادة تعيين كلمة المرور الخاصة بك.",
     "ResetMyPassword": "إعادة تعيين كلمة المرور الخاصة بي",
     "AccessDenied": "تم الرفض!",
-    "AccessDeniedMessage": "ليس لديك حق الوصول إلى هذا المورد."
+    "AccessDeniedMessage": "ليس لديك حق الوصول إلى هذا المورد.",
+    "OrRegisterWith": "أو التسجيل بـ:",
+    "RegisterUsingYourProviderAccount": "قم بالتسجيل باستخدام حسابك في {0}"
   }
 }

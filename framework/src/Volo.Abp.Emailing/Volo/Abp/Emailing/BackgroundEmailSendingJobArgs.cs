@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.Emailing;
 
@@ -18,5 +20,5 @@ public class BackgroundEmailSendingJobArgs
     /// </summary>
     public bool IsBodyHtml { get; set; } = true;
 
-    //TODO: Add other properties and attachments
+    public AdditionalEmailSendingArgs? AdditionalEmailSendingArgs { get; set; }
 }

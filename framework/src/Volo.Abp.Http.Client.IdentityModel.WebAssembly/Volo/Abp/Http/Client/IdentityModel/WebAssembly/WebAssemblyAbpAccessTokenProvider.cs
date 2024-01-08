@@ -8,14 +8,14 @@ namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly;
 [Dependency(ReplaceServices = true)]
 public class WebAssemblyAbpAccessTokenProvider : IAbpAccessTokenProvider, ITransientDependency
 {
-    protected IAccessTokenProvider AccessTokenProvider { get; }
+    protected IAccessTokenProvider? AccessTokenProvider { get; }
 
     public WebAssemblyAbpAccessTokenProvider(IAccessTokenProvider accessTokenProvider)
     {
         AccessTokenProvider = accessTokenProvider;
     }
 
-    public virtual async Task<string> GetTokenAsync()
+    public virtual async Task<string?> GetTokenAsync()
     {
         if (AccessTokenProvider == null)
         {
@@ -29,6 +29,6 @@ public class WebAssemblyAbpAccessTokenProvider : IAbpAccessTokenProvider, ITrans
         }
 
         result.TryGetToken(out var token);
-        return token.Value;
+        return token?.Value;
     }
 }

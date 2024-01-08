@@ -51,6 +51,12 @@
     "ManageYourAccount": "अपने खाते का प्रबंधन",
     "OthersGroup": "अन्य",
     "Today": "आज",
-    "Apply": "आवेदन करना"
+    "Apply": "आवेदन करना",
+    "InternetConnectionInfo": "ऑपरेशन नहीं किया जा सका. आपका इंटरनेट कनेक्शन इस समय उपलब्ध नहीं है.",
+    "CopiedToTheClipboard": "क्लिपबोर्ड पर कॉपी किया गया",
+    "AddNew": "नया जोड़ो",
+    "ProfilePicture": "प्रोफ़ाइल फोटो",
+    "Theme": "विषय",
+    "NotAssigned": "सौंपा नहीं गया है"
   }
 }

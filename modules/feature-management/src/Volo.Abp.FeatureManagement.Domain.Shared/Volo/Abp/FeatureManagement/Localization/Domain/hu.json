@@ -4,9 +4,14 @@
     "Features": "Funkciók",
     "NoFeatureFoundMessage": "Nincs elérhető funkció.",
     "ManageHostFeatures": "Host funkciók kezelése",
+    "ManageHostFeaturesText": "A gazdaoldali funkciókat a következő gombra kattintva kezelheti.",
     "Permission:FeatureManagement": "Funkciókezelés",
     "Permission:FeatureManagement.ManageHostFeatures": "Host funkciók kezelése",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "A (z) {0} szolgáltatás értéke érvénytelen!",
-		"Menu:FeatureManagement": "Funkciókezelés"
+    "Menu:FeatureManagement": "Funkciókezelés",
+    "ResetToDefault": "Visszaállítás alapértelmezettre",
+    "ResetedToDefault": "Visszaállítva alapértelmezettre",
+    "AreYouSure": "biztos vagy ebben?",
+    "AreYouSureToResetToDefault": "Biztosan visszaállítod az alapértelmezést?"
   }
 }

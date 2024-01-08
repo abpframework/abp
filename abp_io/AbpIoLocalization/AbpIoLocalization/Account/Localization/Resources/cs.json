@@ -11,6 +11,7 @@
     "CommercialSupportWebSite": "Webová stránka komerční podpory",
     "CommunityWebSite": "Web komunity ABP",
     "ManageAccount": "Můj účet | ABP.IO",
-    "ManageYourAccount": "Správa vášho účtu"
+    "ManageYourProfile": "Spravujte svůj profil",
+    "ReturnToApplication": "Návrat k aplikaci"
   }
 }

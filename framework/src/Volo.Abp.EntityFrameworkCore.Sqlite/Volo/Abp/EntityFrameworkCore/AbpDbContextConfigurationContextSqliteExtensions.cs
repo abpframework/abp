@@ -11,7 +11,7 @@ public static class AbpDbContextConfigurationContextSqliteExtensions
 {
     public static DbContextOptionsBuilder UseSqlite(
         [NotNull] this AbpDbContextConfigurationContext context,
-        [CanBeNull] Action<SqliteDbContextOptionsBuilder> sqliteOptionsAction = null)
+        Action<SqliteDbContextOptionsBuilder>? sqliteOptionsAction = null)
     {
         if (context.ExistingConnection != null)
         {
@@ -34,7 +34,7 @@ public static class AbpDbContextConfigurationContextSqliteExtensions
     public static DbContextOptionsBuilder UseSqlite(
         [NotNull] this AbpDbContextConfigurationContext context,
         DbConnection connection,
-        [CanBeNull] Action<SqliteDbContextOptionsBuilder> sqliteOptionsAction = null)
+        Action<SqliteDbContextOptionsBuilder>? sqliteOptionsAction = null)
     {
         if (context.ExistingConnection != null)
         {

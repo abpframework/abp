@@ -32,7 +32,7 @@ public class ServiceProxyGenerationModel
 
     public ProxyScriptingModel CreateOptions()
     {
-        var options = new ProxyScriptingModel(Type, UseCache);
+        var options = new ProxyScriptingModel(Type!, UseCache);
 
         if (!Modules.IsNullOrEmpty())
         {
