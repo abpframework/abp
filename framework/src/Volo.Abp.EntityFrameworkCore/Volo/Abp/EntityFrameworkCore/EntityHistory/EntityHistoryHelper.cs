@@ -85,7 +85,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             case EntityState.Modified:
                 changeType = IsDeleted(entityEntry) ? EntityChangeType.Deleted : EntityChangeType.Updated;
                 break;
-            case EntityState.Unchanged:
+            case EntityState.Unchanged when Options.SaveEntityHistoryWhenNavigationChanges:
                 changeType = EntityChangeType.Updated; // Navigation property changes.
                 break;
             case EntityState.Detached:
@@ -186,7 +186,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             }
         }
 
-        if (entityEntry.State == EntityState.Unchanged)
+        if (Options.SaveEntityHistoryWhenNavigationChanges && entityEntry.State == EntityState.Unchanged)
         {
             foreach (var navigation in entityEntry.Navigations)
             {
@@ -227,7 +227,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             return false;
         }
 
-        if (entityEntry.State == EntityState.Unchanged)
+        if (Options.SaveEntityHistoryWhenNavigationChanges && entityEntry.State == EntityState.Unchanged)
         {
             if (entityEntry.Navigations.Any(navigationEntry => navigationEntry.IsModified))
             {
