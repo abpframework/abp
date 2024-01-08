@@ -98,8 +98,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     OpenIddictConstants.GrantTypes.AuthorizationCode, OpenIddictConstants.GrantTypes.Implicit
                 },
                 scopes: commonScopes,
-                redirectUri: $"{webClientRootUrl}signin-oidc",
                 clientUri: webClientRootUrl,
+                redirectUri: $"{webClientRootUrl}signin-oidc",
                 postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
             );
         }
@@ -122,8 +122,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     OpenIddictConstants.GrantTypes.RefreshToken
                 },
                 scopes: commonScopes,
-                redirectUri: consoleAndAngularClientRootUrl,
                 clientUri: consoleAndAngularClientRootUrl,
+                redirectUri: consoleAndAngularClientRootUrl,
                 postLogoutRedirectUri: consoleAndAngularClientRootUrl
             );
         }
@@ -142,8 +142,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 secret: null,
                 grantTypes: new List<string> { OpenIddictConstants.GrantTypes.AuthorizationCode, },
                 scopes: commonScopes,
-                redirectUri: $"{blazorRootUrl}/authentication/login-callback",
                 clientUri: blazorRootUrl,
+                redirectUri: $"{blazorRootUrl}/authentication/login-callback",
                 postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
             );
         }
@@ -165,8 +165,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                     OpenIddictConstants.GrantTypes.AuthorizationCode, OpenIddictConstants.GrantTypes.Implicit
                 },
                 scopes: commonScopes,
-                redirectUri: $"{blazorServerTieredRootUrl}signin-oidc",
                 clientUri: blazorServerTieredRootUrl,
+                redirectUri: $"{blazorServerTieredRootUrl}signin-oidc",
                 postLogoutRedirectUri: $"{blazorServerTieredRootUrl}signout-callback-oidc"
             );
         }
@@ -185,8 +185,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 secret: null,
                 grantTypes: new List<string> { OpenIddictConstants.GrantTypes.AuthorizationCode, },
                 scopes: commonScopes,
-                redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
-                clientUri: swaggerRootUrl
+                clientUri: swaggerRootUrl,
+                redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html"
             );
         }
     }
