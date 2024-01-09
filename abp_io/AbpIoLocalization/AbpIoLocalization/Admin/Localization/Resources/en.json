@@ -564,6 +564,7 @@
     "AllowAbpStudioBetaAccess": "Allow ABP Studio Beta Access",
     "TotalQuestionCanNotBeNullMessage": "Total Question can not be null",
     "Permission:EditWinners": "Edit Winners",
-    "Permission:ChangeDrawingStatus": "Change Drawing Status"
+    "Permission:ChangeDrawingStatus": "Change Drawing Status",
+    "RemoveAllWinnersConfirmationMessage": "Are you sure you want to remove all winners?"
   }
 }
