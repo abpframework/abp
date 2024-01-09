@@ -229,6 +229,7 @@
     "ManageAccount": "إدارة الحساب",
     "CommunityProfile": "ملف تعريف المجتمع",
     "BlogProfile": "الملف الشخصي للمدونة",
-    "Tickets": "التذاكر"
+    "Tickets": "التذاكر",
+    "DisplayName:CommunityIndexPagePoll": "استطلاع"
   }
 }
