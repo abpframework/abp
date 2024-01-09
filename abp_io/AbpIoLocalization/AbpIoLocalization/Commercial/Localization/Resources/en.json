@@ -1127,5 +1127,6 @@
     "TaxNo": "Tax No",
     "CardNumber": "Card Number",
     "NameOnCard": "Name on Card",
+    "BillingDetails": "Billing Details"
   }
 }
