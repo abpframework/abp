@@ -229,6 +229,7 @@
     "ManageAccount": "Fiók kezelése",
     "CommunityProfile": "Közösségi profil",
     "BlogProfile": "Blog profil",
-    "Tickets": "Jegyek"
+    "Tickets": "Jegyek",
+    "DisplayName:CommunityIndexPagePoll": "Közösségi Indexoldal Szavazás"
   }
 }
