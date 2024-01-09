@@ -6,7 +6,7 @@ namespace Volo.Abp.UI.Navigation;
 
 public static class ApplicationMenuExtensions
 {
-    public const string CustomDataComponentKey = "ApplicationMenuCustomComponent";
+    public const string CustomDataComponentKey = "ApplicationMenu.CustomComponent";
     
     [NotNull]
     public static ApplicationMenuItem GetAdministration(
