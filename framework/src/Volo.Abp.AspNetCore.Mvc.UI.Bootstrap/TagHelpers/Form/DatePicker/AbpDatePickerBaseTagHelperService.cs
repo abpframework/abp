@@ -270,12 +270,12 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
 
         if (options.MinDate != null)
         {
-            attrList.Add("data-min-date", options.MinDate);
+            attrList.Add("data-min-date", options.MinDate?.ToString("O"));
         }
 
         if (options.MaxDate != null)
         {
-            attrList.Add("data-max-date", options.MaxDate);
+            attrList.Add("data-max-date", options.MaxDate?.ToString("O"));
         }
 
         if (options.MaxSpan != null)
