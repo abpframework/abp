@@ -68,7 +68,6 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
     protected readonly IAbpTagHelperLocalizer TagHelperLocalizer;
     protected virtual string TagName { get; set; } = "abp-date-picker";
     protected IStringLocalizer<AbpUiResource> L { get; }
-    protected InputTagHelper InputTagHelper { get; set; }
     protected abstract TagHelperOutput TagHelperOutput { get; set; }
 
     protected AbpDatePickerBaseTagHelperService(IJsonSerializer jsonSerializer, IHtmlGenerator generator,
@@ -81,8 +80,6 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         ServiceProvider = serviceProvider;
         L = l;
         TagHelperLocalizer = tagHelperLocalizer;
-
-        InputTagHelper = new InputTagHelper(Generator) { InputTypeName = "text" };
     }
 
     protected virtual T? GetAttribute<T>() where T : Attribute
@@ -95,19 +92,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
 
     public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        TagHelperOutput = new TagHelperOutput("input", GetInputAttributes(context, output), (_, _) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
-
-        InputTagHelper.ViewContext = TagHelper.ViewContext;
-
-        if (!TagHelper.Name.IsNullOrEmpty())
-        {
-            InputTagHelper.Name = TagHelper.Name;
-        }
-
-        if (!TagHelper.Value.IsNullOrEmpty())
-        {
-            InputTagHelper.Value = TagHelper.Value;
-        }
+        TagHelperOutput = TagHelperOutput = new TagHelperOutput("input", GetInputAttributes(context, output), (_, _) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
 
         AddDisabledAttribute(TagHelperOutput);
         AddAutoFocusAttribute(TagHelperOutput);
@@ -131,7 +116,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
 
         var labelContent = await GetLabelAsHtmlAsync(context, output, TagHelperOutput);
         var infoContent = GetInfoAsHtml(context, output, TagHelperOutput);
-        var validationContent = await GetValidationAsHtmlAsync(context, output);
+        var validationContent = await GetValidationAsHtmlAsync(context, TagHelperOutput);
 
         var inputGroup = new TagHelperOutput("div",
             new TagHelperAttributeList(new[] { new TagHelperAttribute("class", "input-group") }),
@@ -754,16 +739,37 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         };
     }
 
-    protected abstract Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output);
+    protected virtual Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var @for = GetModelExpression();
+        if (@for == null)
+        {
+            return Task.FromResult(string.Empty);
+        }
+        
+        return GetValidationAsHtmlByInputAsync(context, output, @for);
+    }
 
     protected virtual async Task<string> GetValidationAsHtmlByInputAsync(TagHelperContext context,
         TagHelperOutput output,
-        [NotNull]InputTagHelper inputTag)
+        [NotNull]ModelExpression @for)
     {
         var validationMessageTagHelper =
-            new ValidationMessageTagHelper(Generator) { For = inputTag.For, ViewContext = TagHelper.ViewContext };
+            new ValidationMessageTagHelper(Generator) { For = @for, ViewContext = TagHelper.ViewContext };
 
-        var attributeList = new TagHelperAttributeList { { "class", "text-danger col-auto" } };
+        var attributeList = new TagHelperAttributeList { { "class", "text-danger" } };
+        
+        if(!output.Attributes.TryGetAttribute("name", out var nameAttribute) || nameAttribute == null || nameAttribute.Value == null)
+        {
+            if (nameAttribute != null)
+            {
+                output.Attributes.Remove(nameAttribute);
+            }
+            nameAttribute = new TagHelperAttribute("name", "date_" + Guid.NewGuid().ToString("N"));
+            output.Attributes.Add(nameAttribute);
+        }
+        
+        attributeList.Add("data-valmsg-for", nameAttribute.Value);
 
         return await validationMessageTagHelper.RenderAsync(attributeList, context, Encoder, "span",
             TagMode.StartTagAndEndTag);
