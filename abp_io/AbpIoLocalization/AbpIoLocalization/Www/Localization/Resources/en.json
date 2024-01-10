@@ -446,7 +446,6 @@
     "ExperienceYear": "Years of experience",
     "FullName": "Full name",
     "CompanySize": "Company size",
-    "Image": "Your profile picture",
     "TestimonialTitle": "Let's hear your testimonial",
     "TestimonialInfo": "What our customers say matters! Tell us about your experience with our product and service.",
     "Country": "Country",
@@ -460,13 +459,14 @@
     "SelectCountryPlaceholder": "Your country",
     "YouAreNotAuthorizedToWriteTestimonial": "To be able to write testimonial letter, you must be sign in.",
     "UnAuthorizeTestimonialInfo": "Your opinion matters! Log in to share it.",
-    "TheFileIsTooLargeForImage": "Your profile picture cannot be more than 1 MB",
+    "TheFileIsTooLargeForImage": "Your profile picture cannot be more than {0} MB",
     "ThisExtensionIsNotAllowedForImage": "This extension is not allowed.",
     "FileUploadError": "File upload error",
-    "TestimonialSend": "Thank you! We've received your testimonial. We'll review and take the next step soon.",
+    "TestimonialSend": "Thank you! We've received your testimonial. <br> We'll review and take the next step soon.",
     "Title": "Title",
     "TitlePlaceholder": "Software Developer, CTO etc.",
-    "Characters": "characters"
+    "Characters": "characters",
+    "Testimonial_YourProfilePicture": "Your profile picture (only {0} formats are allowed)"
   }
 }
 
