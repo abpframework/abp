@@ -10,6 +10,7 @@ export namespace Toaster {
     titleLocalizationParams?: string[];
     id: any;
     containerKey?: string;
+    iconClass?: string;
   }
 
   export interface Toast {
