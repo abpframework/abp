@@ -12,7 +12,7 @@
     {
         if (customComponentType != null)
         {
-            @Component.InvokeAsync(customComponentType)
+            @(await Component.InvokeAsync(customComponentType))
         }
         else if (menuItem.Url != null)
         {
@@ -36,7 +36,7 @@
             <div class="dropdown">
                 @if (customComponentType != null)
                 {
-                    @Component.InvokeAsync(customComponentType)
+                    @(await Component.InvokeAsync(customComponentType))
                 }
                 else
                 {
