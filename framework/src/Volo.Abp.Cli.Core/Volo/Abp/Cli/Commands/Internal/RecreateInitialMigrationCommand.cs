@@ -29,6 +29,7 @@ public class RecreateInitialMigrationCommand : IConsoleCommand, ITransientDepend
             .Where(x => x.Contains("templates") || x.Contains("test-app"))
             .Where(x => File.ReadAllText(x).Contains("Microsoft.EntityFrameworkCore.Tools")).ToList();
 
+        var projectCounts = 0;
         foreach (var csprojFile in csprojFiles)
         {
             var projectDir = Path.GetDirectoryName(csprojFile)!;
@@ -65,9 +66,13 @@ public class RecreateInitialMigrationCommand : IConsoleCommand, ITransientDepend
             {
                 Directory.Delete(Path.Combine(projectDir, "Logs"), true);
             }
+
+            projectCounts++;
         }
 
-        Logger.LogInformation("Done! All migrations recreated.");
+        Logger.LogInformation(projectCounts > 0
+            ? $"Done! All {projectCounts} migrations recreated."
+            : "No project found to recreate migrations.");
 
         return Task.CompletedTask;
     }
