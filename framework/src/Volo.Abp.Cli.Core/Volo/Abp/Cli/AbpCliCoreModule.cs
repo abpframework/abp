@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
@@ -58,6 +58,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[SwitchToPreviewCommand.Name] = typeof(SwitchToPreviewCommand);
             options.Commands[SwitchToStableCommand.Name] = typeof(SwitchToStableCommand);
             options.Commands[SwitchToNightlyCommand.Name] = typeof(SwitchToNightlyCommand);
+            options.Commands[SwitchToPreRcCommand.Name] = typeof(SwitchToPreRcCommand);
             options.Commands[SwitchToLocal.Name] = typeof(SwitchToLocal);
             options.Commands[TranslateCommand.Name] = typeof(TranslateCommand);
             options.Commands[BuildCommand.Name] = typeof(BuildCommand);

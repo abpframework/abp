@@ -229,6 +229,7 @@
     "ManageAccount": "Upravljanje računa",
     "CommunityProfile": "Profil skupnosti",
     "BlogProfile": "Blog profil",
-    "Tickets": "Vstopnice"
+    "Tickets": "Vstopnice",
+    "DisplayName:CommunityIndexPagePoll": "Anketa na strani z indeksom skupnosti"
   }
 }
