@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Commands.Internal;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ServiceProxying;
 using Volo.Abp.Cli.ServiceProxying.Angular;
@@ -68,6 +69,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
             options.Commands[CliCommand.Name] = typeof(CliCommand);
             options.Commands[ClearDownloadCacheCommand.Name] = typeof(ClearDownloadCacheCommand);
+            options.Commands[RecreateInitialMigrationCommand.Name] = typeof(RecreateInitialMigrationCommand);
 
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Pro");
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Lite");
