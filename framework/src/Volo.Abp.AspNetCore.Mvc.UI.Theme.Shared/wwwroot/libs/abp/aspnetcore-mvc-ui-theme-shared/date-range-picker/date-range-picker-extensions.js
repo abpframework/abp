@@ -553,6 +553,10 @@
                             triggerDateChange($input, startDate, isDateRangePickerTrigger);
                         }
                     }
+
+                    if(isTrigger || isInputTrigger || isDateRangePickerTrigger){
+                        triggerValidation();
+                    }
                 }
 
                 function setDataDates(date, $selfInput, prefix){
@@ -560,6 +564,25 @@
                     $selfInput.data('date', date);
                     $this.data(prefix + 'date', date);
                     $input.data(prefix + 'date', date);
+                }
+
+                function triggerValidation() {
+                    checkValidity($startDateInput);
+                    checkValidity($endDateInput);
+                    checkValidity($dateInput);
+                    checkValidity($input);
+                }
+
+                function checkValidity($selfInput) {
+                    if (!$selfInput) {
+                        return;
+                    }
+
+                    if($selfInput.closest('form').length === 0) {
+                        return;
+                    }
+
+                    $selfInput.valid();
                 }
 
                 function triggerDateChange($selfInput, value, isDateRangePickerTrigger) {
