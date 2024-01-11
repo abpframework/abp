@@ -431,7 +431,7 @@ ABP为编写集成测试提供了完整的基础设施. 所有ABP基础设施和
 
 #### 数据库
 
-启动模板使用EF Core配置**内存中的SQLite**数据库(对于MongoDB, 它使用[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)). 因此, 所有配置和查询都是针对真实数据库执行的, 你甚至可以测试数据库事务.
+启动模板使用EF Core配置**内存中的SQLite**数据库(对于MongoDB, 它使用[EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)). 因此, 所有配置和查询都是针对真实数据库执行的, 你甚至可以测试数据库事务.
 
 使用内存中的SQLite数据库有两个主要优点:
 
