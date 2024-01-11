@@ -110,7 +110,7 @@ Além disso, `.HttpApi.Client.ConsoleTestApp`é um aplicativo de console (não u
 Projetos de teste são preparados para testes de integração;
 
 - É totalmente integrado à estrutura ABP e a todos os serviços em sua aplicação.
-- Ele usa o banco de dados SQLite na memória para o EF Core. Para o MongoDB, ele usa a biblioteca [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) .
+- Ele usa o banco de dados SQLite na memória para o EF Core. Para o MongoDB, ele usa a biblioteca [EphemeralMongo](https://github.com/asimmon/ephemeral-mongo) .
 - A autorização está desabilitada, portanto, qualquer serviço de aplicativo pode ser facilmente usado em testes.
 
 Você ainda pode criar testes de unidade para suas classes, que serão mais difíceis de escrever (porque você precisará preparar objetos simulados / falsos), mas mais rápidos de executar (porque apenas testa uma única classe e ignora todo o processo de inicialização).

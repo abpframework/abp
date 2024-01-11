@@ -229,6 +229,7 @@
     "ManageAccount": "管理账户",
     "CommunityProfile": "社区概况",
     "BlogProfile": "博客简介",
-    "Tickets": "门票"
+    "Tickets": "门票",
+    "DisplayName:CommunityIndexPagePoll": "社区首页投票"
   }
 }

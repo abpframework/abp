@@ -209,7 +209,7 @@ ABP有[动态 C# API 客户端](../API/Dynamic-CSharp-API-Clients.md)功能,所�
 测试项目是用于做集成测试的:
 
 * 它完全集成到ABP框架和应用程序的所有服务.
-* 如果数据库提供程序是EF Core,测试项目会使用SQLite内存数据库,如果是MongoDB,它使用[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)库.
+* 如果数据库提供程序是EF Core,测试项目会使用SQLite内存数据库,如果是MongoDB,它使用[EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)库.
 * 授权被禁用,任何的应用服务都可以在测试中轻松调用.
 
 你依然可以编写单元测试,只不过它很难写(因为你需要准备mock/fake对象),但它的运行速度更快(因为只测试单个类并跳过所有初始化过程).
@@ -314,7 +314,7 @@ ABP 配置模块也已经导入到 `AppModule` 中, 以满足可延迟加载 ABP
 }
 ```
 在上面的例子中;
-*  如果用户没有登录,  AuthGuard 会阻塞访问并重定向到登录页面. 
+*  如果用户没有登录,  authGuard 会阻塞访问并重定向到登录页面. 
 *  permissionGuard 使用 `rotues` 对象的 `requiredPolicy` 属性检查用户的权限. 如果用户未被授权访问该页, 则显示403页. 
 *  `routes` 的 `name` 属性是菜单链接标签. 可以定义本地化 key. 
 *  `routes` 对象的 `iconClass` 属性是菜单链接图标类. 

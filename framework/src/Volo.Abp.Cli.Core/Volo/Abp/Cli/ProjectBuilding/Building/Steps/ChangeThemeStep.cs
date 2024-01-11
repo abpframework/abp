@@ -372,7 +372,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             return;
         }
 
-        lines[lineIndex] = lines[lineIndex].Replace(lines[lineIndex], $"\t<ProjectReference Include=\"{projectReference}\" />");
+        lines[lineIndex] = lines[lineIndex].Replace(lines[lineIndex], $"\t\t<ProjectReference Include=\"{projectReference}\" />\n");
         file.SetLines(lines);
     }
 
@@ -568,7 +568,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     private static void ChangeThemeToBasicForMvcProjects(ProjectBuildContext context, string defaultThemeName)
     {
         var projectNames = new[]
-{
+        {
             ".Web", ".HttpApi.Host", ".AuthServer", ".Web.Public", ".Web.Public.Host",
             "" //for app-nolayers-mvc
         };
@@ -608,45 +608,46 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     {
         var projects = new Dictionary<string, string>
         {
-            {"Blazor", "MyProjectNameBlazorModule"},
-            {"Blazor.Server.Tiered", "MyProjectNameBlazorModule"},
-            {"Blazor.Server", "MyProjectNameModule"},
-            {"Blazor.Server.Mongo", "MyProjectNameModule"}
+            {".Blazor", "MyProjectNameBlazorModule"},
+            {".Blazor.Server.Tiered", "MyProjectNameBlazorModule"},
+            {".Blazor.Server", "MyProjectNameModule"},
+            {"Blazor.Server.Mongo", "MyProjectNameModule"},
+            {"", ""} //for app-nolayers blazor-server
         };
 
         foreach (var project in projects)
         {
             ReplacePackageReferenceWithProjectReference(
                 context,
-                $"/MyCompanyName.MyProjectName.{project.Key}/MyCompanyName.MyProjectName.{project.Key}.csproj",
-                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}Theme",
-                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
+                $"/MyCompanyName.MyProjectName{project.Key}/MyCompanyName.MyProjectName{project.Key}.csproj",
+                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}",
+                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj"
             );
 
             ReplacePackageReferenceWithProjectReference(
                 context,
-                $"/MyCompanyName.MyProjectName.{project.Key}/MyCompanyName.MyProjectName.{project.Key}.csproj",
+                $"/MyCompanyName.MyProjectName{project.Key}/MyCompanyName.MyProjectName{project.Key}.csproj",
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
-                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj"
+                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
             );
             
             ReplaceAllKeywords(
                 context,
-                $"/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
+                $"/Pages/_Host.cshtml",
                 $"{defaultThemeName}Theme.Components",
                 Basic
             );
             
             ReplaceAllKeywords(
                 context,
-                $"/MyCompanyName.MyProjectName.{project.Key}/{project.Value}.cs",
+                $"/MyCompanyName.MyProjectName{project.Key}/{project.Value}.cs",
                 defaultThemeName,
-                Basic
+                Basic + "Theme"
             );
             
             ReplaceAllKeywords(
                 context,
-                $"/MyCompanyName.MyProjectName.{project.Key}/Pages/_Host.cshtml",
+                $"/Pages/_Host.cshtml",
                 defaultThemeName,
                 Basic
             );
@@ -682,7 +683,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             
             ReplaceAllKeywords(
                 context,
-                $"/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
+                $"/Pages/_Host.cshtml",
                 LeptonX,
                 Lepton
             );
@@ -731,7 +732,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             
             ReplaceAllKeywords(
                 context,
-                $"/MyCompanyName.MyProjectName.{projectName}/Pages/_Host.cshtml",
+                $"/Pages/_Host.cshtml",
                 LeptonX,
                 Lepton
             );

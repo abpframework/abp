@@ -33,6 +33,7 @@
     "Samples": "Samples",
     "FreeDDDBook": "Free DDD E-book",
     "New": "New",
-    "Volo.AbpIo.Domain:020005": "License extend year can not be lower than {MinExtendLicenseYear} year and greater than {MaxExtendLicenseYear} years "
+    "Volo.AbpIo.Domain:020005": "License extend year can not be lower than {MinExtendLicenseYear} year and greater than {MaxExtendLicenseYear} years ",
+    "DisplayName:CommunityIndexPagePoll": "Community Index Page Poll"
   }
 }

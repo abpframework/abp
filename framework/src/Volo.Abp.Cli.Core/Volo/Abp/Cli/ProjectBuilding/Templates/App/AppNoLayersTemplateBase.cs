@@ -346,6 +346,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
             var blazorServerPackageJsonFilePaths = new List<string>
             {
+                "/MyCompanyName.MyProjectName/package.json",
                 "/MyCompanyName.MyProjectName.Blazor/package.json",
                 "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
             };
