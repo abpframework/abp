@@ -431,7 +431,7 @@ ABP Provides a complete infrastructure to write integration tests. All the ABP i
 
 #### The Database
 
-The startup template is configured to use **in-memory SQLite** database for the EF Core (for MongoDB, it uses [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library). So, all the configuration and queries are performed against a real database and you can even test database transactions.
+The startup template is configured to use **in-memory SQLite** database for the EF Core (for MongoDB, it uses [EphemeralMongo](https://github.com/asimmon/ephemeral-mongo) library). So, all the configuration and queries are performed against a real database and you can even test database transactions.
 
 Using in-memory SQLite database has two main advantages;
 
