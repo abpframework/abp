@@ -115,6 +115,11 @@ public static class ApplicationMenuExtensions
         return menuWithGroups;
     }
     
+    public static ApplicationMenuItem UseComponent<TComponent>(this ApplicationMenuItem applicationMenuItem)
+    {
+        return applicationMenuItem.UseComponent(typeof(TComponent));
+    }
+    
     public static ApplicationMenuItem UseComponent(this ApplicationMenuItem applicationMenuItem, Type componentType)
     {
         return applicationMenuItem.WithCustomData(CustomDataComponentKey, componentType);

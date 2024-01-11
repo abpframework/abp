@@ -205,7 +205,7 @@
                 var today = moment();
                 $dateRangePicker.setStartDate(today);
                 $dateRangePicker.setEndDate(today);
-                
+
                 if(options.singleDatePicker && options.autoApply){
                     $dateRangePicker.clickApply();
                 }else{
@@ -366,6 +366,14 @@
             });
         }
 
+        if (options.maxDate){
+            options.maxDate = convertToMoment(options.maxDate, options);
+        }
+
+        if (options.minDate){
+            options.minDate = convertToMoment(options.minDate, options);
+        }
+
         if (typeof options.template !== 'string' && !(options.template instanceof $))
             options.template =
                 '<div class="daterangepicker">' +
@@ -433,13 +441,13 @@
 
         return '';
     }
-    
+
     function createInitialAbpDate(date, options) {
         date = convertToMoment(date, options, undefined, options.isUtc);
         if (options.isUtc) {
             date = date.local();
         }
-        
+
         return AbpDate(date, options);
     }
 
@@ -468,8 +476,9 @@
                 var singleOpenAndClearButton = options.singleOpenAndClearButton && $clearButton.length > 0 && $openButton.length > 0;
 
                 var startDate = createInitialAbpDate(options.startDate || options.date || (options.autoUpdateInput ? new Date() : undefined), options);
+
                 var oldStartDate = AbpDate(undefined, options);
-                
+
                 var endDate = createInitialAbpDate(options.endDate || (options.autoUpdateInput ? new Date() : undefined), options);
                 var oldEndDate = AbpDate(undefined, options);
 
@@ -544,6 +553,10 @@
                             triggerDateChange($input, startDate, isDateRangePickerTrigger);
                         }
                     }
+
+                    if(isTrigger || isInputTrigger || isDateRangePickerTrigger){
+                        triggerValidation();
+                    }
                 }
 
                 function setDataDates(date, $selfInput, prefix){
@@ -551,6 +564,25 @@
                     $selfInput.data('date', date);
                     $this.data(prefix + 'date', date);
                     $input.data(prefix + 'date', date);
+                }
+
+                function triggerValidation() {
+                    checkValidity($startDateInput);
+                    checkValidity($endDateInput);
+                    checkValidity($dateInput);
+                    checkValidity($input);
+                }
+
+                function checkValidity($selfInput) {
+                    if (!$selfInput) {
+                        return;
+                    }
+
+                    if($selfInput.closest('form').length === 0) {
+                        return;
+                    }
+
+                    $selfInput.valid();
                 }
 
                 function triggerDateChange($selfInput, value, isDateRangePickerTrigger) {
@@ -583,7 +615,7 @@
                     }else{
                         picker.setStartDate(convertToMoment(startDate, options, options.inputDateFormat));
                     }
-                    
+
                     if(singleDatePicker){
                         picker.setEndDate(picker.startDate);
                     }else if(isEmptyDate(endDate, options)){
