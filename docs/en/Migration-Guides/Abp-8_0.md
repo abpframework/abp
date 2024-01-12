@@ -125,9 +125,15 @@ From this version on, instead of injecting the `DaprClient` directly, using the 
 
 The documentation is already updated according to this suggestion and can be found at https://docs.abp.io/en/abp/8.0/Dapr/Index. So, if you want to learn more you can check the documentation or see the PR: https://github.com/abpframework/abp/pull/18117.
 
+## Use Newer Versions of the SQL Server (SQL Server 14+)
+
+Starting with EF Core 8.0, EF now generates SQL that is more efficient, but is unsupported on SQL Server 2014 and below. Therefore, if your database provider is SQL Server, then ensure that it's newer than SQL Server 2014. Otherwise, you may get errors due to database creation or while seeding initial data.
+
+> Check the [Entity Framework Core's Breaking Changes](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/breaking-changes#high-impact-changes) documentation for more info.
+
 ## Angular UI
 
-# Guards
+### Guards
 
 From Angular Documentation;
 
