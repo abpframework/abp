@@ -92,18 +92,31 @@
                     <div class="col-12 mb-2">
 
                         <div class="docs-version">
-                            <span>Project</span>
+                            @if (Model.ShowProjectsComboboxLabel)
+                            {
+                                <span>@L["Project"]</span>
+                            }
                             <div class="version-select">
-                                <div class="input-group">
-                                    <span class="input-group-text d-none">
-                                        <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
-                                    </span>
+                                @if (Model.ShowProjectsComboboxLabel)
+                                {
+                                    <div class="input-group">
+                                        <span class="input-group-text d-none">
+                                            <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
+                                        </span>
 
+                                        <select asp-items="Model.ProjectSelectItems"
+                                                class="form-select"
+                                                onchange="window.location.pathname = this.value">
+                                        </select>
+                                    </div>
+                                }
+                                else
+                                {
                                     <select asp-items="Model.ProjectSelectItems"
                                             class="form-select"
                                             onchange="window.location.pathname = this.value">
                                     </select>
-                                </div>
+                                }
                             </div>
                         </div>
 
