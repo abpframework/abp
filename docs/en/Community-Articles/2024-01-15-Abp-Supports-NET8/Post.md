@@ -12,19 +12,19 @@ Recently we have published ABP v8 and with this version The ABP Framework and AB
 
 ### Serialization
 
-*  12 features have been implemented for [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/api/system.text.json) serialization and deserialization library with .NET 8.  See these enhancements
-  * [Built-in support for additional types](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#built-in-support-for-additional-types)
-  * [Source generator](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#source-generator)
-  * [Interface hierarchies](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#interface-hierarchies)
-  * [Naming policies](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#naming-policies)
-  * [Read-only properties](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#read-only-properties)
-  * [Disable reflection-based default](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#disable-reflection-based-default)
-  * [New JsonNode API methods](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#new-jsonnode-api-methods)
-  * [Non-public members](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#non-public-members)
-  * [Streaming deserialization APIs](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#streaming-deserialization-apis)
-  * [WithAddedModifier extension method](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#withaddedmodifier-extension-method)
-  * [New JsonContent.Create overloads](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#new-jsoncontentcreate-overloads)
-  * [Freeze a JsonSerializerOptions instance](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#freeze-a-jsonserializeroptions-instance)
+12 features have been implemented for [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/api/system.text.json) serialization and deserialization library with .NET 8.  See these enhancements
+* [Built-in support for additional types](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#built-in-support-for-additional-types)
+* [Source generator](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#source-generator)
+* [Interface hierarchies](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#interface-hierarchies)
+* [Naming policies](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#naming-policies)
+* [Read-only properties](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#read-only-properties)
+* [Disable reflection-based default](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#disable-reflection-based-default)
+* [New JsonNode API methods](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#new-jsonnode-api-methods)
+* [Non-public members](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#non-public-members)
+* [Streaming deserialization APIs](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#streaming-deserialization-apis)
+* [WithAddedModifier extension method](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#withaddedmodifier-extension-method)
+* [New JsonContent.Create overloads](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#new-jsoncontentcreate-overloads)
+* [Freeze a JsonSerializerOptions instance](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#freeze-a-jsonserializeroptions-instance)
 
 ### Time abstraction
 
