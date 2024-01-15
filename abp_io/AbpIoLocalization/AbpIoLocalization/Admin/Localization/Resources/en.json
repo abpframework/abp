@@ -589,6 +589,7 @@
     "Permission:EditWinners": "Edit Winners",
     "Permission:ChangeDrawingStatus": "Change Drawing Status",
     "Menu:Licenses": "Licenses",
-    "OrganizationId": "Organization Id"
+    "OrganizationId": "Organization Id",
+    "RemoveAllWinnersConfirmationMessage": "Are you sure you want to remove all winners?"
   }
 }

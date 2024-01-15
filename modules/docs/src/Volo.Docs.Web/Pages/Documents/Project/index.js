@@ -74,7 +74,10 @@
             });
             
             function fullSearch(filterText){
-                window.open($('#fullsearch').data('fullsearch-url') + "?keyword=" + encodeURIComponent(filterText));
+                var url = $('#fullsearch').data('fullsearch-url');
+                if(url){
+                    window.open(url + "?keyword=" + encodeURIComponent(filterText));
+                }
             }
 
             $('#fullsearch').keyup(function (e) {
