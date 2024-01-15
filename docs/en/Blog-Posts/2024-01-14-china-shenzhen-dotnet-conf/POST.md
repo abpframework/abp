@@ -1,4 +1,4 @@
-# 2024 First Community Event.
+   # 2024 First Community Event.
 
 The first .NET community event in 2024 was successfully held in Shenzhen on January 14, 2024.
 
@@ -18,4 +18,4 @@ The event includes four wonderful technical lectures to reveal the potential opp
 ![](8.jpg)
 ![](9.jpg)
 
-**See you next community event!**
+**See you at next community event!**
