@@ -1,3 +1,5 @@
+![cover](cover.png)
+
 # ABP now supports .NET 8
 
 Recently we have published ABP v8 and with this version The ABP Framework and ABP Commercial both supports for .NET 8, aligning itself with the latest enhancements and new features of the ASP.NET's new version 8. This update ensures that developers using ABP can leverage the new features and improvements of .NET 8, enhancing the capability and performance of their applications. With .NET 8 support, ABP 8.0 likely offers improved performance, enhanced security, and greater efficiency, making it a robust choice for building modern web applications. Here's the summary of .NET 8 features and enhancements:
