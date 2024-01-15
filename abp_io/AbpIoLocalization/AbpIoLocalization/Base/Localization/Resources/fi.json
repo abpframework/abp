@@ -229,6 +229,7 @@
     "ManageAccount": "Hallitse tiliä",
     "CommunityProfile": "Yhteisön profiili",
     "BlogProfile": "Blogin profiili",
-    "Tickets": "Liput"
+    "Tickets": "Liput",
+    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely"
   }
 }

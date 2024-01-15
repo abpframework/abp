@@ -112,23 +112,6 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
 
     protected override ModelExpression? GetModelExpression()
     {
-        return TagHelper.AspForStart;
-    }
-
-    protected async override Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        var validationHtml = string.Empty;
-
-        if (StartDateTagHelper != null)
-        {
-            validationHtml += await GetValidationAsHtmlByInputAsync(context, output, StartDateTagHelper);
-        }
-
-        if (EndDateTagHelper != null)
-        {
-            validationHtml += await GetValidationAsHtmlByInputAsync(context, output, EndDateTagHelper);
-        }
-
-        return validationHtml;
+        return TagHelper.AspForStart ?? TagHelper.AspForEnd;
     }
 }

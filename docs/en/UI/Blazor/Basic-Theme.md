@@ -86,10 +86,10 @@ You can simply override the styles in the Global Styles file of your application
 See the [Customization / Overriding Components](Customization-Overriding-Components.md) to learn how you can replace components, customize and extend the user interface.
 
 ### Overriding the Menu Item
-Basic theme supports overriding a single menu item with a custom component. You can create a custom component and call `UseComponent` extension method of Basic Theme in the **MenuContributor**.
+Basic theme supports overriding a single menu item with a custom component. You can create a custom component and call `UseComponent` extension method in the **MenuContributor**.
 
 ```csharp
-using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Navigation;
+using Volo.Abp.UI.Navigation;
 
 //...
 

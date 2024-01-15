@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "Sie können Ihre Zwei-Faktor-Einstellung nicht ändern.",
     "Volo.Abp.Identity:010008": "Die Zwei-Faktor-Einstellung dürfen nicht geändert werden.",
     "Volo.Abp.Identity:010009": "Sie können sich nicht selbst delegieren.",
+    "Volo.Abp.Identity:010021": "Der Name existiert bereits {0}",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximal zulässige Anzahl an Mitgliedschaften in Organisationseinheiten für einen Benutzer",
     "ThisUserIsNotActiveMessage": "Dieser Benutzer ist nicht aktiv.",
     "Permission:IdentityManagement": "Identitätsverwaltung",
