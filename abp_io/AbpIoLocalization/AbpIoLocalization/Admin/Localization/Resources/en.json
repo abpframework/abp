@@ -590,6 +590,7 @@
     "Permission:ChangeDrawingStatus": "Change Drawing Status",
     "Menu:Licenses": "Licenses",
     "OrganizationId": "Organization Id",
-    "RemoveAllWinnersConfirmationMessage": "Are you sure you want to remove all winners?"
+    "RemoveAllWinnersConfirmationMessage": "Are you sure you want to remove all winners?",
+    "AutoRenewals": "Auto Renewals"
   }
 }
