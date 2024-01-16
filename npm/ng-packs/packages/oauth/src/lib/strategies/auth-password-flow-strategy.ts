@@ -45,9 +45,9 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     const accessToken = this.oAuthService.getAccessToken();
     const expireDate = this.oAuthService.getAccessTokenExpiration();
     const currentDate = new Date().getTime();
-    const rememberMe = getRememberMe(localStorageService) === 'true';
+    const rememberMe = getRememberMe(localStorageService);
 
-    if (accessToken && expireDate < currentDate && !rememberMe) {
+    if (accessToken && expireDate < currentDate && rememberMe !== 'true') {
       removeRememberMe(this.localStorageService);
       this.oAuthService.logOut();
     }
@@ -73,6 +73,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       ),
     ).pipe(pipeToLogin(params, this.injector));
   }
+  
   logout() {
     const router = this.injector.get(Router);
     const noRedirectToLogoutUrl = true;
@@ -86,7 +87,6 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   protected refreshToken() {
-    console.log('token refreshed');
     return this.oAuthService.refreshToken().catch(() => {
       clearOAuthStorage();
       removeRememberMe(this.localStorageService);

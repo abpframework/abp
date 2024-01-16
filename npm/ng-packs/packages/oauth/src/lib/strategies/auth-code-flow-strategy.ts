@@ -1,10 +1,10 @@
 import { noop } from '@abp/ng.core';
 import { Params } from '@angular/router';
-import { filter, from, of } from 'rxjs';
+import { from, of } from 'rxjs';
 import { AuthFlowStrategy } from './auth-flow-strategy';
 import { getRememberMe, removeRememberMe, setRememberMe } from '../utils';
 
-export class AuthCodeFlowStrategy extends AuthFlowStrategy{
+export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = false;
   private remember_me = 'remember_me'
 
@@ -15,31 +15,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy{
       .init()
       .then(() => this.oAuthService.tryLogin().catch(noop))
       .then(() => this.oAuthService.setupAutomaticSilentRefresh())
-      // .then(() => this.listenToTokenExpiration());
   }
-
-  // private listenToTokenExpiration() {
-  //   this.oAuthService.events
-  //     .pipe(
-  //       filter(
-  //         event => {
-  //           return event instanceof OAuthInfoEvent &&
-  //           event.type === 'token_expires' &&
-  //           event.info === 'access_token'
-  //         }
-  //       ),
-  //     )
-  //     .subscribe(() => {
-  //       if (this.oAuthService.getRefreshToken()) {
-  //         console.log('refresh token');
-  //         this.refreshToken();
-  //       } else {
-  //         this.oAuthService.logOut();
-  //         removeRememberMe(this.localStorageService);
-  //         this.configState.refreshAppState().subscribe();
-  //       }
-  //     });
-  // }
 
   private checkRememberMeOption() {
     const accessToken = this.oAuthService.getAccessToken();
@@ -49,22 +25,19 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy{
 
     if (accessToken && rememberMe === null) {
       let parsedToken = JSON.parse(atob(accessToken.split(".")[1]));
+      let rememberMeValue = parsedToken[this.remember_me];
 
-      if (parsedToken[this.remember_me]) {
+      if (rememberMeValue && (rememberMeValue === 'True' || rememberMeValue === 'true')) {
         setRememberMe(true, this.localStorageService);
       } else {
         setRememberMe(false, this.localStorageService)
       }
-      
     }
-    rememberMe = getRememberMe(this.localStorageService);
 
-    if (accessToken && expireDate < currentDate && rememberMe === 'false') {
+    rememberMe = getRememberMe(this.localStorageService);
+    if (accessToken && expireDate < currentDate && rememberMe !== 'true') {
       removeRememberMe(this.localStorageService);
       this.oAuthService.logOut();
-    }else{
-      console.log('try login');
-      this.oAuthService.tryLogin().catch(noop)
     }
   }
 

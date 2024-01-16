@@ -9,8 +9,6 @@ import {
   AbpLocalStorageService,
 } from '@abp/ng.core';
 
-const cookieKey = 'rememberMe';
-const storageKey = 'passwordFlow';
 const remember_me = 'remember_me';
 
 export const pipeToLogin: PipeToLoginFn = function (
@@ -30,15 +28,13 @@ export const pipeToLogin: PipeToLoginFn = function (
 };
 
 export function setRememberMe(
-  remember: boolean | undefined,
+  remember: boolean,
   localStorageService: AbpLocalStorageService,
 ) {
-  console.log('set Remember Me');
   localStorageService.setItem(remember_me, JSON.stringify(remember));
 }
 
 export function removeRememberMe(localStorageService: AbpLocalStorageService) {
-  console.log('remove remember Me');
   localStorageService.removeItem(remember_me);
 }
 
