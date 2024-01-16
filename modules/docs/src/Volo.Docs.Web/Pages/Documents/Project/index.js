@@ -290,7 +290,7 @@
             return null;
         };
         
-        const originalSet = Map.prototype.set;
+        var originalSet = Map.prototype.set;
         Map.prototype.set = function (key, value) {
             if(typeof key === 'string'){
                 key = decodeURI(key);
