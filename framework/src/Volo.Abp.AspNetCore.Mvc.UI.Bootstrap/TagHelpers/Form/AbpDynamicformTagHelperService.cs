@@ -22,11 +22,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicFormTagHelper>
 {
-    private readonly HtmlEncoder _htmlEncoder;
-    private readonly IHtmlGenerator _htmlGenerator;
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IStringLocalizer<AbpUiResource> _localizer;
-    private List<ModelExpression> _models = new();
+    protected HtmlEncoder HtmlEncoder { get; }
+    protected IHtmlGenerator HtmlGenerator { get; }
+    protected IServiceProvider _serviceProvider { get; }
+    protected IStringLocalizer<AbpUiResource> Localizer { get; }
+    protected List<ModelExpression> Models = new();
 
     public AbpDynamicFormTagHelperService(
         HtmlEncoder htmlEncoder,
@@ -34,15 +34,15 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         IServiceProvider serviceProvider,
         IStringLocalizer<AbpUiResource> localizer)
     {
-        _htmlEncoder = htmlEncoder;
-        _htmlGenerator = htmlGenerator;
+        HtmlEncoder = htmlEncoder;
+        HtmlGenerator = htmlGenerator;
         _serviceProvider = serviceProvider;
-        _localizer = localizer;
+        Localizer = localizer;
     }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        _models = GetModels(context, output);
+        Models = GetModels(context, output);
         var list = InitilizeFormGroupContentsContext(context, output);
 
         NormalizeTagMode(context, output);
@@ -64,7 +64,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     protected virtual async Task ConvertToMvcForm(TagHelperContext context, TagHelperOutput output)
     {
-        var formTagHelper = new FormTagHelper(_htmlGenerator)
+        var formTagHelper = new FormTagHelper(HtmlGenerator)
         {
             Action = TagHelper.Action,
             Controller = TagHelper.Controller,
@@ -159,7 +159,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     protected virtual async Task ProcessFieldsAsync(TagHelperContext context, TagHelperOutput output)
     {
-        foreach (var model in _models)
+        foreach (var model in Models)
         {
             if (IsSelectGroup(context, model))
             {
@@ -176,21 +176,21 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         }
     }
 
-    private async Task ProcessDateGroupAsync(TagHelperContext context, TagHelperOutput output, ModelExpression model)
+    protected virtual async Task ProcessDateGroupAsync(TagHelperContext context, TagHelperOutput output, ModelExpression model)
     {
         var abpDateTagHelper = GetDateGroupTagHelper(context, output, model);
 
-        await abpDateTagHelper.RenderAsync(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+        await abpDateTagHelper.RenderAsync(new TagHelperAttributeList(), context, HtmlEncoder, "div", TagMode.StartTagAndEndTag);
     }
 
-    private AbpTagHelper GetDateGroupTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
+    protected virtual AbpTagHelper GetDateGroupTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
     {
         return IsDateRangeGroup(model.ModelExplorer)
             ? GetAbpDateRangeInputTagHelper(context, output, model)
             : GetAbpDateInputTagHelper(model);
     }
 
-    private AbpTagHelper GetAbpDateInputTagHelper(ModelExpression model)
+    protected virtual AbpTagHelper GetAbpDateInputTagHelper(ModelExpression model)
     {
         var abpDateInputTagHelper = _serviceProvider.GetRequiredService<AbpDatePickerTagHelper>();
         abpDateInputTagHelper.AspFor = model;
@@ -199,7 +199,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         return abpDateInputTagHelper;
     }
 
-    private AbpTagHelper GetAbpDateRangeInputTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
+    protected virtual AbpTagHelper GetAbpDateRangeInputTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
     {
         var modelAttribute = model.ModelExplorer.GetAttribute<DateRangePickerAttribute>()!;
 
@@ -223,13 +223,13 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         return abpDateRangeInputTagHelper;
     }
 
-    private bool TryToGetOtherDateModel(ModelExpression model, string pickerId, out ModelExplorer? otherModel)
+    protected virtual bool TryToGetOtherDateModel(ModelExpression model, string pickerId, out ModelExplorer? otherModel)
     {
-        otherModel = _models.Select(x => x.ModelExplorer).SingleOrDefault(x => x != model.ModelExplorer && x.GetAttribute<DateRangePickerAttribute>()?.PickerId == pickerId);
+        otherModel = Models.Select(x => x.ModelExplorer).SingleOrDefault(x => x != model.ModelExplorer && x.GetAttribute<DateRangePickerAttribute>()?.PickerId == pickerId);
         return otherModel != null;
     }
 
-    private static bool IsDateRangeGroup(ModelExplorer modelModelExplorer)
+    protected virtual bool IsDateRangeGroup(ModelExplorer modelModelExplorer)
     {
         return modelModelExplorer.GetAttribute<DateRangePickerAttribute>() != null;
     }
@@ -245,7 +245,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
     {
         var abpSelectTagHelper = GetSelectGroupTagHelper(context, output, model);
 
-        await abpSelectTagHelper.RenderAsync(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+        await abpSelectTagHelper.RenderAsync(new TagHelperAttributeList(), context, HtmlEncoder, "div", TagMode.StartTagAndEndTag);
     }
 
     protected virtual AbpTagHelper GetSelectGroupTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
@@ -280,10 +280,10 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
     {
         var abpButtonTagHelper = _serviceProvider.GetRequiredService<AbpButtonTagHelper>();
         var attributes = new TagHelperAttributeList { new TagHelperAttribute("type", "submit") };
-        abpButtonTagHelper.Text = _localizer["Submit"];
+        abpButtonTagHelper.Text = Localizer["Submit"];
         abpButtonTagHelper.ButtonType = AbpButtonType.Primary;
 
-        return await abpButtonTagHelper.RenderAsync(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
+        return await abpButtonTagHelper.RenderAsync(attributes, context, HtmlEncoder, "button", TagMode.StartTagAndEndTag);
     }
 
     protected virtual async Task ProcessInputGroupAsync(TagHelperContext context, TagHelperOutput output, ModelExpression model)
@@ -293,7 +293,7 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         abpInputTagHelper.ViewContext = TagHelper.ViewContext;
         abpInputTagHelper.DisplayRequiredSymbol = TagHelper.RequiredSymbols ?? true;
 
-        await abpInputTagHelper.RenderAsync(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+        await abpInputTagHelper.RenderAsync(new TagHelperAttributeList(), context, HtmlEncoder, "div", TagMode.StartTagAndEndTag);
     }
 
     protected virtual List<ModelExpression> GetModels(TagHelperContext context, TagHelperOutput output)

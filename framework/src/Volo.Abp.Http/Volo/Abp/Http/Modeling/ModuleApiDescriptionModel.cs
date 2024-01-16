@@ -35,7 +35,7 @@ public class ModuleApiDescriptionModel
         {
             RootPath = rootPath,
             RemoteServiceName = remoteServiceName,
-            Controllers = new Dictionary<string, ControllerApiDescriptionModel>()
+            Controllers = new SortedDictionary<string, ControllerApiDescriptionModel>()
         };
     }
 

@@ -152,4 +152,14 @@ Configure<AbpRabbitMqEventBusOptions>(options =>
 });
 ````
 
+**示例：配置队列和交换机的额外参数**
+
+```csharp
+Configure<AbpRabbitMqEventBusOptions>(options =>
+{
+    options.ExchangeArguments["x-delayed-type"] = "direct";
+    options.QueueArguments["x-message-ttl"] = 60000;
+});
+```
+
 使用这些选项类可以与 `appsettings.json` 组合在一起. 在代码中配置选项属性会覆盖配置文件中的值.
