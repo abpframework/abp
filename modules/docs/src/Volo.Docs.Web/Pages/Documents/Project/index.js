@@ -281,5 +281,22 @@
         initSections();
 
         initDocumentNodeBreadcrumb();
+        
+        Element.prototype.querySelector = function (selector) {
+            var result = $(decodeURI(selector));
+            if(result.length > 0){
+                return result[0];
+            }
+            return null;
+        };
+        
+        const originalSet = Map.prototype.set;
+        Map.prototype.set = function (key, value) {
+            if(typeof key === 'string'){
+                key = decodeURI(key);
+            }
+            return originalSet.call(this, key, value);
+        };
+        
     });
 })(jQuery);
