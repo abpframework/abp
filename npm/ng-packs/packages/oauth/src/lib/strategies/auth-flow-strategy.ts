@@ -78,12 +78,11 @@ export abstract class AuthFlowStrategy {
     return this.oAuthService
       .loadDiscoveryDocument()
       .then(() => {
-        const expireDate = this.oAuthService.getAccessTokenExpiration();
-        const currentDate = new Date().getTime();
-        if (expireDate > currentDate || this.oAuthService.getRefreshToken()) {
-          return this.refreshToken();
+        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
+          return Promise.resolve();
         }
-        return Promise.resolve();
+
+        return this.refreshToken();
       })
       .catch(this.catchError);
   }
