@@ -27,7 +27,7 @@ $(function () {
     var UPPY_FILE_ID = "uppy-upload-file";
 
     var isTagsEnabled = true;
-    var message = l('BlogPostSaveConfirmationMessage', $status.val());
+    var message = l('BlogPostSaveConfirmationMessage', $title.val());
 
     $formCreate.data('validator').settings.ignore = ":hidden, [contenteditable='true']:not([name]), .tui-popup-wrapper";
 
@@ -47,7 +47,6 @@ $(function () {
         e.preventDefault();
 
         if ($formCreate.valid()) {
-
             abp.message.confirm(
                 message,
                 async function (isConfirmed) {
@@ -162,9 +161,6 @@ $(function () {
             } else {
                 $coverImage.val(result.successful[0].response.body.id);
             }
-        }
-        else {
-            abp.ui.clearBusy();
         }
     }
 
