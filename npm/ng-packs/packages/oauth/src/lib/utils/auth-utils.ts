@@ -8,8 +8,26 @@ import {
   PipeToLoginFn,
   AbpLocalStorageService,
 } from '@abp/ng.core';
+import { OAuthService } from 'angular-oauth2-oidc';
 
-const remember_me = 'remember_me';
+const rememberMe = 'remember_me';
+
+export class RememberMeService {
+  constructor(private injector: Injector) { }
+  localStorageService = this.injector.get(AbpLocalStorageService);
+
+  setRememberMe(remember: boolean) {
+    this.localStorageService.setItem(rememberMe, JSON.stringify(remember));
+  }
+
+  removeRememberMe() {
+    this.localStorageService.removeItem(rememberMe);
+  }
+
+  getRememberMe() {
+    return this.localStorageService.getItem(rememberMe);
+  }
+}
 
 export const pipeToLogin: PipeToLoginFn = function (
   params: Pick<LoginParams, 'redirectUrl' | 'rememberMe'>,
@@ -17,27 +35,18 @@ export const pipeToLogin: PipeToLoginFn = function (
 ) {
   const configState = injector.get(ConfigStateService);
   const router = injector.get(Router);
-  const localStorage = injector.get(AbpLocalStorageService);
+  const rememberMeService = new RememberMeService(injector);
   return pipe(
     switchMap(() => configState.refreshAppState()),
     tap(() => {
-      setRememberMe(params.rememberMe, localStorage);
+      rememberMeService.setRememberMe(params.rememberMe);
       if (params.redirectUrl) router.navigate([params.redirectUrl]);
     }),
   );
 };
 
-export function setRememberMe(
-  remember: boolean,
-  localStorageService: AbpLocalStorageService,
-) {
-  localStorageService.setItem(remember_me, JSON.stringify(remember));
-}
-
-export function removeRememberMe(localStorageService: AbpLocalStorageService) {
-  localStorageService.removeItem(remember_me);
-}
-
-export function getRememberMe(localStorageService: AbpLocalStorageService){
-  return localStorageService.getItem(remember_me);
+export function isTokenExpired(oAuthService: OAuthService): boolean {
+  const expireDate = oAuthService.getAccessTokenExpiration();
+  const currentDate = new Date().getTime();
+  return expireDate < currentDate;
 }

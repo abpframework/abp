@@ -2,11 +2,12 @@ import { noop } from '@abp/ng.core';
 import { Params } from '@angular/router';
 import { from, of } from 'rxjs';
 import { AuthFlowStrategy } from './auth-flow-strategy';
-import { getRememberMe, removeRememberMe, setRememberMe } from '../utils';
+import { RememberMeService, isTokenExpired } from '../utils';
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = false;
-  private remember_me = 'remember_me'
+  private rememberMe = 'remember_me'
+  rememberMeService = new RememberMeService(this.injector);
 
   async init() {
     this.checkRememberMeOption();
@@ -19,24 +20,23 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 
   private checkRememberMeOption() {
     const accessToken = this.oAuthService.getAccessToken();
-    const expireDate = this.oAuthService.getAccessTokenExpiration();
-    const currentDate = new Date().getTime();
-    let rememberMe = getRememberMe(this.localStorageService);
+    const isTokenExpire = isTokenExpired(this.oAuthService);
+    let rememberMe = Boolean(JSON.parse(this.rememberMeService.getRememberMe()));
 
-    if (accessToken && rememberMe === null) {
+    if (accessToken && !rememberMe) {
       let parsedToken = JSON.parse(atob(accessToken.split(".")[1]));
-      let rememberMeValue = parsedToken[this.remember_me];
+      const rememberMeValue = Boolean(parsedToken[this.rememberMe]);
 
-      if (rememberMeValue && (rememberMeValue === 'True' || rememberMeValue === 'true')) {
-        setRememberMe(true, this.localStorageService);
+      if (rememberMeValue) {
+        this.rememberMeService.setRememberMe(true);
       } else {
-        setRememberMe(false, this.localStorageService)
+        this.rememberMeService.setRememberMe(false)
       }
     }
 
-    rememberMe = getRememberMe(this.localStorageService);
-    if (accessToken && expireDate < currentDate && rememberMe !== 'true') {
-      removeRememberMe(this.localStorageService);
+    rememberMe = Boolean(JSON.parse(this.rememberMeService.getRememberMe()));
+    if (accessToken && isTokenExpire && !rememberMe) {
+      this.rememberMeService.removeRememberMe();
       this.oAuthService.logOut();
     }
   }
@@ -57,7 +57,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   logout(queryParams?: Params) {
-    removeRememberMe(this.localStorageService);
+    this.rememberMeService.removeRememberMe();
     return from(this.oAuthService.revokeTokenAndLogout(this.getCultureParams(queryParams)));
   }
 

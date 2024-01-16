@@ -24,6 +24,7 @@ import {
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 import { oAuthStorage } from '../utils/oauth-storage';
 import { OAuthErrorFilterService } from '../services';
+import { isTokenExpired } from '../utils';
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
@@ -78,11 +79,12 @@ export abstract class AuthFlowStrategy {
     return this.oAuthService
       .loadDiscoveryDocument()
       .then(() => {
-        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
-          return Promise.resolve();
+        const isTokenExpire = isTokenExpired(this.oAuthService);
+        if (!isTokenExpire || this.oAuthService.getRefreshToken()) {
+          return this.refreshToken();
         }
-
-        return this.refreshToken();
+        
+        return Promise.resolve();
       })
       .catch(this.catchError);
   }
