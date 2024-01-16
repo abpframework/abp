@@ -230,7 +230,7 @@
     "CommunityProfile": "Profil społeczności",
     "BlogProfile": "Profil bloga",
     "Tickets": "Bilety",
-    "MeetTheABPCommunity": "Maak kennis met ABP <span class=\"gradient-community\">Gemeenschap</span>"
-
+    "MeetTheABPCommunity": "Maak kennis met ABP <span class=\"gradient-community\">Gemeenschap</span>",
+    "DisplayName:CommunityIndexPagePoll": "Ankieta na stronie głównej społeczności"
   }
 }

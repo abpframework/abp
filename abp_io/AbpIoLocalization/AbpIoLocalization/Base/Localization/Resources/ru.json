@@ -236,7 +236,7 @@
     "Video Courses": "Видео курсы",
     "Packages": "Пакеты",
     "Trainings": "Тренинги",
-    "MeetTheABPCommunity": "Познакомьтесь с ABP с <span class=\"gradient-community\">Сообществом</span>"
-
+    "MeetTheABPCommunity": "Познакомьтесь с ABP с <span class=\"gradient-community\">Сообществом</span>",
+    "DisplayName:CommunityIndexPagePoll": "Опрос на главной странице сообщества"
   }
 }

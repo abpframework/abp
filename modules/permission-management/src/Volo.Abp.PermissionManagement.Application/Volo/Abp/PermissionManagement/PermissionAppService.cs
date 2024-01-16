@@ -57,6 +57,11 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
             
             foreach (var permission in permissions)
             {
+                if(permission.Parent != null && !neededCheckPermissions.Contains(permission.Parent))
+                {
+                    continue;
+                }
+                
                 if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
                 {
                     neededCheckPermissions.Add(permission);

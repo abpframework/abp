@@ -64,7 +64,7 @@ Each project is used to test the related project. Test projects use the followin
 
 {{else if DB=="Mongo"}}
 
-> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
+> **[EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
 
 {{end}}
 

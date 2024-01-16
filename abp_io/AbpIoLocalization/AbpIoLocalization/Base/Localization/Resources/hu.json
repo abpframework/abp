@@ -230,7 +230,7 @@
     "CommunityProfile": "Közösségi profil",
     "BlogProfile": "Blog profil",
     "Tickets": "Jegyek",
-    "MeetTheABPCommunity": "Ismerd meg az ABP-t a <span class=\"gradient-community\">Közösséggel</span>"
-
+    "MeetTheABPCommunity": "Ismerd meg az ABP-t a <span class=\"gradient-community\">Közösséggel</span>",
+    "DisplayName:CommunityIndexPagePoll": "Közösségi Indexoldal Szavazás"
   }
 }

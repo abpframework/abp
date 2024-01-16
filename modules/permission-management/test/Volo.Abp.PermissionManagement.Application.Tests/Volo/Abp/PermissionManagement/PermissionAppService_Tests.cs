@@ -42,12 +42,24 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
         permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission4");
 
         permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyPermission5");
+        permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyPermission5.ChildPermission1");
 
         using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.Role, "super-admin")))
         {
-            (await _permissionAppService.GetAsync(UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString())).Groups.First().Permissions
-                .ShouldContain(x => x.Name == "MyPermission5");
+            var result = await _permissionAppService.GetAsync(UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString());
+            result.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission5");
+            result.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission5.ChildPermission1");
         }
+        
+        permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission6");
+        permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyPermission6.ChildDisabledPermission1");
+        permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission6.ChildPermission2");
+        
+        permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission1");
+        permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission2");
+        permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission2.ChildPermission1");
+        permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission2.ChildPermission2");
+        permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission2.ChildPermission2.ChildPermission1");
     }
 
     [Fact]

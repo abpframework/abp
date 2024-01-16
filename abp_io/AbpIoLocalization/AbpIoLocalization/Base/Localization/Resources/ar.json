@@ -230,7 +230,7 @@
     "CommunityProfile": "ملف تعريف المجتمع",
     "BlogProfile": "الملف الشخصي للمدونة",
     "Tickets": "التذاكر",
-    "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">المجتمع</span> معرفة"
-
+    "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">المجتمع</span> معرفة",
+    "DisplayName:CommunityIndexPagePoll": "استطلاع"
   }
 }

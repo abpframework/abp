@@ -230,7 +230,7 @@
     "CommunityProfile": "Profilo della comunità",
     "BlogProfile": "Profilo del blog",
     "Tickets": "Biglietti",
-    "MeetTheABPCommunity": "Incontra la ABP<span class=\"gradient-community\">comunità</span>"
-
+    "MeetTheABPCommunity": "Incontra la ABP<span class=\"gradient-community\">comunità</span>",
+    "DisplayName:CommunityIndexPagePoll": "Sondaggio della pagina indice della comunità"
   }
 }

@@ -175,10 +175,7 @@
     "Organizations": "Organizasyonlar",
     "ManageAccount": "Hesabı Yönet",
     "CommunityProfile": "Topluluk Profili",
-    "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">Community</span> ile tanışın"
-
-
-
-
+    "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">Community</span> ile tanışın",
+    "DisplayName:CommunityIndexPagePoll": "Topluluk Anasayfası Anketi"
   }
 }

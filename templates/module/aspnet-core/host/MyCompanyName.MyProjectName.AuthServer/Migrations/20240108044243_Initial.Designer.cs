@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.Data;
+using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
-    [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20231207053812_Initial")]
+    [DbContext(typeof(AuthServerDbContext))]
+    [Migration("20240108044243_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1589,8 +1589,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DefaultValue")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(512)
@@ -1620,8 +1620,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Providers")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
 
                     b.HasKey("Id");
 

@@ -236,7 +236,7 @@
     "Video Courses": "Video Courses",
     "Packages": "Packages",
     "Trainings": "Trainings",
-    "MeetTheABPCommunity": "Meet the ABP <span class=\"gradient-community\">Community</span>"
-
+    "MeetTheABPCommunity": "Meet the ABP <span class=\"gradient-community\">Community</span>",
+    "DisplayName:CommunityIndexPagePoll": "Community Index Page Poll"
   }
 }
