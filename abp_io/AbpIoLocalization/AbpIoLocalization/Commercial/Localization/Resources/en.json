@@ -1128,6 +1128,7 @@
     "CardNumber": "Card Number",
     "NameOnCard": "Name on Card",
     "BillingDetails": "Billing Details",
-    "ThereIsNoDeveloper": "There is no developer."
+    "ThereIsNoDeveloper": "There is no developer.",
+    "CardDetails": "Card Details"
   }
 }
