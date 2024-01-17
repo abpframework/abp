@@ -466,6 +466,7 @@
     "TestimonialSend": "Þakka þér! Við höfum fengið viðmiðuna þína. Við munum fara yfir hana fljótt og taka næsta skref.",
     "Title": "Titill",
     "TitlePlaceholder": "Hugbúnaðarþróunarmiðill, CTO o.s.frv.",
-    "Characters": "stafir"
+    "Characters": "stafir",
+    "ABPTestimonialDescription": "ABP Framework: Við skulum heyra vitnisburð þinn"
   }
 }

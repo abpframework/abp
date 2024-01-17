@@ -464,6 +464,7 @@
     "TestimonialSend": "Спасибо! ",
     "Title": "Заголовок",
     "TitlePlaceholder": "Разработчик программного обеспечения, технический директор и т. д.",
-    "Characters": "Символы"
+    "Characters": "Символы",
+    "ABPTestimonialDescription": "ABP Framework: давайте послушаем ваш отзыв"
   }
 }

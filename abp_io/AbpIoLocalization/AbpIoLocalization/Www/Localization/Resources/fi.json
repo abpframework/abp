@@ -466,6 +466,7 @@
     "TestimonialSend": "Kiitos! Olemme vastaanottaneet arvostelusi. Käymme sen läpi ja otamme seuraavan askeleen pian.",
     "Title": "Titteli",
     "TitlePlaceholder": "Ohjelmistokehittäjä, CTO, jne.",
-    "Characters": "hahmot"
+    "Characters": "hahmot",
+    "ABPTestimonialDescription": "ABP Framework: Kuunnellaanpa sinun suosittelua"
   }
 }
