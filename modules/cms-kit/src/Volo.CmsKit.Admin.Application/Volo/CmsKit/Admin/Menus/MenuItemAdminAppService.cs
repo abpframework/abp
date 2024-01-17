@@ -94,6 +94,7 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
         }
         else
         {
+            input.PageId = null;
             menuItem.SetUrl(input.Url);
         }
 
