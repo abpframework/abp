@@ -5,8 +5,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.ObjectExtending;
 using Volo.CmsKit.Admin.Menus;
+using Volo.CmsKit.Features;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems;
@@ -14,6 +18,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems;
 public class UpdateModalModel : CmsKitAdminPageModel
 {
     protected IMenuItemAdminAppService MenuAdminAppService { get; }
+    protected IFeatureChecker FeatureChecker { get; }
 
     [BindProperty]
     public MenuItemUpdateViewModel ViewModel { get; set; }
@@ -22,14 +27,21 @@ public class UpdateModalModel : CmsKitAdminPageModel
     [BindProperty(SupportsGet = true)]
     public Guid Id { get; set; }
 
-    public UpdateModalModel(IMenuItemAdminAppService menuAdminAppService)
+    public bool IsPageFeatureEnabled { get; set; }
+
+    public UpdateModalModel(IMenuItemAdminAppService menuAdminAppService, IFeatureChecker featureChecker)
     {
         MenuAdminAppService = menuAdminAppService;
+        FeatureChecker = featureChecker;
+        IsPageFeatureEnabled = GlobalFeatureManager.Instance.IsEnabled<PagesFeature>();
     }
 
     public async Task OnGetAsync()
     {
         var menuItemDto = await MenuAdminAppService.GetAsync(Id);
+
+        IsPageFeatureEnabled = GlobalFeatureManager.Instance.IsEnabled<PagesFeature>()
+            && await FeatureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable);
 
         ViewModel = ObjectMapper.Map<MenuItemWithDetailsDto, MenuItemUpdateViewModel>(menuItemDto);
     }
