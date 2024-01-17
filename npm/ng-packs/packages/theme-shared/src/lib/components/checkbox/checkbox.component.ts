@@ -43,8 +43,4 @@ export class FormCheckboxComponent extends AbstractNgModelComponent {
   @Input() checkboxReadonly = false;
   @Output() checkboxBlur = new EventEmitter<void>();
   @Output() checkboxFocus = new EventEmitter<void>();
-
-  constructor(injector: Injector) {
-    super(injector);
-  }
 }

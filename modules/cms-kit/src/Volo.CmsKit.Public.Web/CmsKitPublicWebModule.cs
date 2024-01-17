@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -91,8 +92,13 @@ public class CmsKitPublicWebModule : AbpModule
         {
             Configure<RazorPagesOptions>(options =>
             {
-                options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/Index", @"/blogs/{blogSlug:minlength(1)}");
-                options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/BlogPost", @"/blogs/{blogSlug}/{blogPostSlug:minlength(1)}");
+                options.Conventions.AddPageRoute(
+                    "/Public/CmsKit/Blogs/Index",
+                    CmsBlogsWebConsts.BlogsRoutePrefix.EnsureStartsWith('/') + @"/{blogSlug:minlength(1)}");
+
+                options.Conventions.AddPageRoute(
+                    "/Public/CmsKit/Blogs/BlogPost",
+                    CmsBlogsWebConsts.BlogsRoutePrefix.EnsureStartsWith('/') + @"/{blogSlug}/{blogPostSlug:minlength(1)}");
             });
         }
 

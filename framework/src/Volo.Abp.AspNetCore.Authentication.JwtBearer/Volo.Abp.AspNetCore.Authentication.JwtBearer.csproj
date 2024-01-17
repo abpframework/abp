@@ -18,10 +18,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="IdentityModel" />
   </ItemGroup>
 
 </Project>

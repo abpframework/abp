@@ -46,7 +46,7 @@
     "IndexPageHeroSection": "<span class=\"first-line\"> نظام أساسي كامل لتطوير الويب </ span> <span class=\"second-line\"> </ span> <span class=\"third-line\"> مدمج <img src=\"{0}\" width = \"110\" class=\"ml-1\" /> framework </span>",
     "AbpCommercialShortDescription": "يوفر ABP Commercial وحدات تطبيق مسبقة الإنشاء وأدوات تطوير سريعة للتطبيقات وموضوعات واجهة مستخدم احترافية ودعمًا متميزًا والمزيد.",
     "LiveDemo": "عرض حي",
-    "LiveDemoLead": "<a href=\"{0}\">{1}</a> باستخدام حساب ABP الخاص بك، <a href=\"{2}\">{3}</a>إلى abp.io.<br/>أو املأ النموذج أدناه لإنشاء عرض توضيحي مباشر الآن",
+    "LiveDemoLead": "<a href=\"{0}\">{1}</a> باستخدام حساب ABP الخاص بك، <a href=\"{2}\">{3}</a>إلى abp.io.أو املأ النموذج أدناه لإنشاء عرض توضيحي مباشر الآن",
     "ThereIsAlreadyAnAccountWithTheGivenEmailAddress": "هناك حساب بالفعل باستخدام عنوان البريد الإلكتروني المحدد: <b>{0}</b><br/> يمكنك تسجيل الدخول باستخدام حسابك للمتابعة.",
     "GetLicence": "احصل على ترخيص",
     "Application": "تطبيق",
@@ -577,7 +577,7 @@
     "Purchase_TrainingPrice": "سعر التدريب",
     "Purchase_OnboardingTraining": "تدريب مباشر على ABP وتطوير تطبيقات الويب",
     "TotalDeveloperPrice": "إجمالي سعر المطور",
-    "Purchase_PricePerDeveloper": "<span>{0} {1}</span> لكل مطور",
+    "Purchase_PricePerDeveloper": "<span>{0}</span> لكل مطور",
     "Purchase_IncludedDeveloperInfo": "{0} {1} يتضمن.",
     "Purchase_LicenseExtraDeveloperPurchaseMessage": "رخصة <span class=\"fw-6\">{0} </span> تحتوي على {1} مطور/ين. يمكنك إضافة مطورين إضافيين الآن أو لاحقًا.",
     "StartupTemplates_Page_Title": "عارضات بدء التشغيل",
@@ -791,6 +791,9 @@
     "PrivacyPolicyPageTitle": "سياسة الخصوصية - سياسة ملفات تعريف الارتباط",
     "TermsConditionsPageTitle": "الأحكام والشروط",
     "TrainingsPageTitle": "حزم تدريب ABP",
-    "ModulesPageTitle": "وحدات تطبيق ABP سابقة البناء"
+    "ModulesPageTitle": "وحدات تطبيق ABP سابقة البناء",
+    "MultipleOrganizationInfo": "شاهد جميع مؤسساتك",
+    "PaymentFailedInfo": "عذرا، فشل الدفع! ",
+    "UsedPayment": "لقد تم استخدام هذه الدفعة بالفعل"
   }
 }

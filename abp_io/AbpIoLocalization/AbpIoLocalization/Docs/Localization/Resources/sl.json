@@ -1,5 +1,9 @@
 {
   "culture": "sl",
   "texts": {
+    "Buy": "Nakup",
+    "SeeBookDetails": "Glejte podrobnosti o knjigi",
+    "MasteringAbpFrameworkEBookDescription": "Ta knjiga vam bo pomagala pridobiti popolno razumevanje ogrodja in sodobnih tehnik razvoja spletnih aplikacij.",
+    "Feedback": "Povratne informacije"
   }
 }

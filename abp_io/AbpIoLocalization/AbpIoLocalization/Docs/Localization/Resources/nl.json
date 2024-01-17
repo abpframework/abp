@@ -1,0 +1,9 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Buy": "Kopen",
+    "SeeBookDetails": "Zie Boekdetails",
+    "MasteringAbpFrameworkEBookDescription": "Dit boek zal u helpen een volledig inzicht te krijgen in het raamwerk en de moderne ontwikkelingstechnieken voor webapplicaties.",
+    "Feedback": "Feedback"
+  }
+}

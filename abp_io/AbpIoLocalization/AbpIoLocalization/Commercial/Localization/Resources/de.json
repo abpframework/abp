@@ -46,7 +46,7 @@
     "IndexPageHeroSection": "<span class=\"first-line\">Eine komplette</span><span class=\"second-line\"> Webentwicklungsplattform</span><span class=\"third-line\">aufgebaute <img src= \"{0}\" width=\"110\" class=\"ml-1\" /> Framework</span>",
     "AbpCommercialShortDescription": "ABP Commercial bietet vorgefertigte Anwendungsmodule, schnelle Anwendungsentwicklungstools, professionelle UI-Themen, Premium-Support und mehr.",
     "LiveDemo": "Live-Demo",
-    "LiveDemoLead": "<a href=\"{0}\">{1}</a> mit Ihrem ABP-Konto, <a href=\"{2}\">{3}</a> zu abp.io.<br/>Oder füllen Sie das Formular unten aus, um jetzt eine Live-Demo zu erstellen",
+    "LiveDemoLead": "<a href=\"{0}\">{1}</a> mit Ihrem ABP-Konto, <a href=\"{2}\">{3}</a> zu abp.io. Oder füllen Sie das Formular unten aus, um jetzt eine Live-Demo zu erstellen",
     "ThereIsAlreadyAnAccountWithTheGivenEmailAddress": "Es gibt bereits ein Konto mit der angegebenen E-Mail-Adresse: <b>{0}</b><br/> Sie können sich mit Ihrem Konto anmelden, um fortzufahren.",
     "GetLicence": "Holen Sie sich eine Lizenz",
     "Application": "Anwendung",
@@ -386,6 +386,9 @@
     "ContinueWithNewOrganization": "Weiter mit einer neuen Organisation",
     "RenewLicenseEarly": "Erhalte ich das ganze Jahr, wenn ich meine Lizenz vorzeitig erneuere?",
     "RenewLicenseEarylExplanation": "Wenn Sie Ihre Lizenz vor dem Ablaufdatum Ihrer Lizenz erneuern, wird Ihr Lizenzablaufdatum um 1 Jahr verlängert. Wenn Ihre Lizenz beispielsweise am {0}-06-06 abläuft und Sie sie am {0}-01-01 erneuern, ist das neue Ablaufdatum der Lizenz der {1}-06-06.",
-    "BlackFridayDiscount": "Black Friday Rabatt"
+    "BlackFridayDiscount": "Black Friday Rabatt",
+    "MultipleOrganizationInfo": "Alle Ihre Organisationen anzeigen",
+    "PaymentFailedInfo": "Entschuldigung, die Zahlung ist fehlgeschlagen! ",
+    "UsedPayment": "Diese Zahlung wurde bereits verwendet"
   }
 }

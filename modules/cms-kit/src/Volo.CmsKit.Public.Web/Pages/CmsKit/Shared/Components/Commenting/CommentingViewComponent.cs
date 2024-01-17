@@ -60,6 +60,7 @@ public class CommentingViewComponent : AbpViewComponent
     public virtual async Task<IViewComponentResult> InvokeAsync(
         string entityType,
         string entityId,
+        bool isReadOnly,
         IEnumerable<string> referralLinks = null)
     {
         referralLinks ??= Enumerable.Empty<string>();
@@ -74,7 +75,8 @@ public class CommentingViewComponent : AbpViewComponent
             EntityType = entityType,
             ReferralLinks = referralLinks,
             LoginUrl = loginUrl,
-            Comments = comments.OrderByDescending(i => i.CreationTime).ToList()
+            IsReadOnly = isReadOnly,
+            Comments = comments.OrderByDescending(i => i.CreationTime).ToList(),
         };
 
         await ConvertMarkdownTextsToHtml(viewModel);
@@ -144,6 +146,8 @@ public class CommentingViewComponent : AbpViewComponent
         public string Captcha { get; set; }
 
         public string CaptchaImageBase64 { get; set; }
+
+        public bool IsReadOnly { get; set; }
     }
 }
 

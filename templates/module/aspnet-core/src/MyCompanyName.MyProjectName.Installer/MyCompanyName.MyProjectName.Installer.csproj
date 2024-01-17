@@ -14,8 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="..\..\MyCompanyName.MyProjectName.abpmdl.json" />
-      <Content Include="..\..\MyCompanyName.MyProjectName.abpmdl.json">
+      <None Remove="..\..\MyCompanyName.MyProjectName.abpmdl" />
+      <Content Include="..\..\MyCompanyName.MyProjectName.abpmdl">
         <Pack>true</Pack>
         <PackagePath>content\</PackagePath>
       </Content>

@@ -21,20 +21,20 @@ public abstract class
 
     public bool LabelTooltipHtml { get; set; } = false;
 
-    [HtmlAttributeName("info")] 
+    [HtmlAttributeName("info")]
     public string? InfoText { get; set; }
 
-    [HtmlAttributeName("disabled")] 
+    [HtmlAttributeName("disabled")]
     public bool IsDisabled { get; set; } = false;
 
-    [HtmlAttributeName("readonly")] 
+    [HtmlAttributeName("readonly")]
     public bool? IsReadonly { get; set; } = false;
 
     public bool AutoFocus { get; set; }
 
     public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;
 
-    [HtmlAttributeName("required-symbol")] 
+    [HtmlAttributeName("required-symbol")]
     public bool DisplayRequiredSymbol { get; set; } = true;
 
     public string? Name { get; set; }
@@ -43,11 +43,13 @@ public abstract class
 
     public bool SuppressLabel { get; set; }
 
+    public bool AddMarginBottomClass  { get; set; } = true;
+
     protected AbpDatePickerBaseTagHelper(AbpDatePickerBaseTagHelperService<TTagHelper> service) : base(service)
     {
         _abpDatePickerOptionsImplementation = new AbpDatePickerOptions();
     }
-    
+
     public void SetDatePickerOptions(IAbpDatePickerOptions options)
     {
         _abpDatePickerOptionsImplementation = options;
@@ -183,9 +185,20 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.ParentEl = value;
     }
 
+    [Obsolete("Use VisibleDateFormat instead.")]
     public string? DateFormat {
         get => _abpDatePickerOptionsImplementation.DateFormat;
         set => _abpDatePickerOptionsImplementation.DateFormat = value;
+    }
+    
+    public string? VisibleDateFormat {
+        get => _abpDatePickerOptionsImplementation.VisibleDateFormat;
+        set => _abpDatePickerOptionsImplementation.VisibleDateFormat = value;
+    }
+    
+    public string? InputDateFormat {
+        get => _abpDatePickerOptionsImplementation.InputDateFormat;
+        set => _abpDatePickerOptionsImplementation.InputDateFormat = value;
     }
 
     public bool OpenButton {
@@ -193,7 +206,7 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.OpenButton = value;
     }
 
-    public bool ClearButton {
+    public bool? ClearButton {
         get => _abpDatePickerOptionsImplementation.ClearButton;
         set => _abpDatePickerOptionsImplementation.ClearButton = value;
     }

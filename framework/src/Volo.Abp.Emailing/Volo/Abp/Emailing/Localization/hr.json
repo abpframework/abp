@@ -1,0 +1,25 @@
+{
+  "culture": "hr",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Zadana adresa",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Zadano iz imena za prikaz",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Domaćin",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Luka",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Korisničko ime",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Lozinka",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Domena",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Omogući SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Koristite zadane vjerodajnice",
+    "Description:Abp.Mailing.DefaultFromAddress": "Zadana adresa pošiljatelja",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Zadani naziv za prikaz",
+    "Description:Abp.Mailing.Smtp.Host": "Naziv ili IP adresa glavnog računala koji se koristi za SMTP transakcije.",
+    "Description:Abp.Mailing.Smtp.Port": "Port koji se koristi za SMTP transakcije.",
+    "Description:Abp.Mailing.Smtp.UserName": "Korisničko ime povezano s vjerodajnicama.",
+    "Description:Abp.Mailing.Smtp.Password": "Lozinka za korisničko ime povezano s vjerodajnicama.",
+    "Description:Abp.Mailing.Smtp.Domain": "Naziv domene ili računala koji provjerava vjerodajnice.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Koristi li SmtpClient Secure Sockets Layer (SSL) za šifriranje veze.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Jesu li DefaultCredentials poslani sa zahtjevima.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Zadani predložak izgleda e-pošte",
+    "TextTemplate:StandardEmailTemplates.Message": "Jednostavan predložak poruke za e-poštu"
+  }
+}

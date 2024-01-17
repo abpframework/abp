@@ -8,11 +8,32 @@
           "controllerName": "MediaDescriptor",
           "controllerGroupName": "MediaDescriptor",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.MediaDescriptors.MediaDescriptorController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.MediaDescriptors.IMediaDescriptorAppService"
+              "type": "Volo.CmsKit.MediaDescriptors.IMediaDescriptorAppService",
+              "name": "IMediaDescriptorAppService",
+              "methods": [
+                {
+                  "name": "DownloadAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.RemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.RemoteStreamContent"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -59,11 +80,40 @@
           "controllerName": "BlogFeature",
           "controllerGroupName": "BlogFeature",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Blogs.BlogFeatureController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Blogs.IBlogFeatureAppService"
+              "type": "Volo.CmsKit.Blogs.IBlogFeatureAppService",
+              "name": "IBlogFeatureAppService",
+              "methods": [
+                {
+                  "name": "GetOrDefaultAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "blogId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "featureName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Blogs.BlogFeatureDto",
+                    "typeSimple": "Volo.CmsKit.Blogs.BlogFeatureDto"
+                  }
+                }
+              ]
             }
           ],
           "actions": {

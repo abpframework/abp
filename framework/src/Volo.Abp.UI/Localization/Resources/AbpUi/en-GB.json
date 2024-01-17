@@ -50,6 +50,8 @@
     "ItemWillBeDeletedMessage": "This item will be deleted!",
     "ManageYourAccount": "Manage your account",
     "OthersGroup": "Other",
-    "NotAssigned": "Not Assigned"
+    "NotAssigned": "Not Assigned",
+    "Today": "Today",
+    "Apply": "Apply"
   }
 }

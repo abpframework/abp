@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.Data;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
@@ -41,7 +40,7 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
         return JsonSerializer.Serialize(copyDictionary);
     }
 
-    private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
+    public static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
     {
         Converters =
         {

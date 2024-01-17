@@ -49,6 +49,14 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} sarà eliminato!",
     "ItemWillBeDeletedMessage": "Questo elemento sarà eliminato!",
     "ManageYourAccount": "Gestisci il tuo account",
-    "OthersGroup": "Altra"
+    "OthersGroup": "Altra",
+    "Today": "Oggi",
+    "Apply": "Fare domanda a",
+    "InternetConnectionInfo": "Impossibile eseguire l&#39;operazione. La tua connessione Internet non è disponibile al momento.",
+    "CopiedToTheClipboard": "Copiato negli appunti",
+    "AddNew": "Aggiungere nuova",
+    "ProfilePicture": "Immagine del profilo",
+    "Theme": "Tema",
+    "NotAssigned": "Non assegnato"
   }
 }

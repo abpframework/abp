@@ -16,19 +16,16 @@ In this example, we will add a "Click Me!" action and alert the current row's `u
 
 The following code prepares a constant named `identityEntityActionContributors`, ready to be imported and used in your root module:
 
-```js
+```ts
 // src/app/entity-action-contributors.ts
 
-import {
-  eIdentityComponents,
-  IdentityEntityActionContributors,
-  IdentityUserDto,
-} from '@abp/ng.identity';
-import { EntityAction, EntityActionList } from '@abp/ng.theme.shared/extensions';
+import { eIdentityComponents, IdentityEntityActionContributors } from '@abp/ng.identity';
+import { IdentityUserDto } from '@abp/ng.identity/proxy';
+import { EntityAction, EntityActionList } from '@abp/ng.components/extensible';
 
 const alertUserName = new EntityAction<IdentityUserDto>({
   text: 'Click Me!',
-  action: data => {
+  action: (data) => {
     // Replace alert with your custom code
     alert(data.record.userName);
   },
@@ -96,7 +93,7 @@ Let's employ dependency injection to extend the functionality of `IdentityModule
     IdentityEntityActionContributors,
     IdentityUserDto,
   } from '@abp/ng.identity';
-  import { EntityAction, EntityActionList } from '@abp/ng.theme.shared/extensions';
+  import { EntityAction, EntityActionList } from '@abp/ng.components/extensible';
   import { IdentityExtendedComponent } from './identity-extended.component';
 
   const quickViewAction = new EntityAction<IdentityUserDto>({

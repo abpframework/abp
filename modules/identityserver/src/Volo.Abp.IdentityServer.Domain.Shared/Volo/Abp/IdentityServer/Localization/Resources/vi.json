@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "Bạn không được phép đăng nhập! Tài khoản của bạn không hoạt động hoặc cần xác nhận email/số điện thoại của bạn.",
     "InvalidUsername": "Sai username hoặc password!",
     "InvalidAuthenticatorCode": "Mã xác thực không hợp lệ!",
+    "InvalidRecoveryCode": "Mã khôi phục không hợp lệ!",
     "TheTargetUserIsNotLinkedToYou": "Người dùng mục tiêu không được liên kết với bạn!"
   }
 }

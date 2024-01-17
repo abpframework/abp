@@ -163,6 +163,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
         if (dbContext.Set<TEntity>().Local.All(e => e != entity))
         {
+            dbContext.Set<TEntity>().Attach(entity);
             dbContext.Update(entity);
         }
 

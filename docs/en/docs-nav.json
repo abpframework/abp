@@ -178,7 +178,13 @@
         },
         {
           "text": "Authorization",
-          "path": "Authorization.md"
+          "path": "Authorization.md",
+          "items": [
+            {
+              "text": "Dynamic Claims",
+              "path": "Dynamic-Claims.md"
+            }
+          ]
         },
         {
           "text": "Caching",
@@ -873,6 +879,10 @@
               "path": "UI/Blazor/Navigation-Menu.md"
             },
             {
+              "text": "Forms & Validation",
+              "path": "UI/Blazor/Forms-Validation.md"
+            },
+            {
               "text": "Localization",
               "path": "UI/Blazor/Localization.md"
             },
@@ -1121,6 +1131,14 @@
                 {
                   "text": "Loading Directive",
                   "path": "UI/Angular/Loading-Directive.md"
+                },
+                {
+                  "text": "Show Password Directive",
+                  "path": "UI/Angular/Show-Password-Directive.md"
+                },
+                {
+                  "text": "Caps Lock Directive",
+                  "path": "UI/Angular/Caps-Lock-Directive.md"
                 },
                 {
                   "text": "Toast Overlay",

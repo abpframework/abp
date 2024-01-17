@@ -6,6 +6,11 @@
     "CarPlural": "Машины",
     "MaxLenghtErrorMessage": "Длина этого поля не может превышать \"{0}\" символов.",
     "Universe": "Вселенная",
-    "FortyTwo": "Сорок два"
+    "FortyTwo": "Сорок два",
+    "Enum:BookType.Undefined": "Неопределенный",
+    "Enum:BookType.0": "Не определено со значением 0",
+    "BookType.Adventure": "Приключение",
+    "BookType.1": "Приключение со стоимостью 1",
+    "Biography": "биография"
   }
 }

@@ -5,6 +5,7 @@
     "OnlyProviderPermissons": "Aðeins þessi veitandi",
     "All": "Allt",
     "SelectAllInAllTabs": "Veita allar heimildir",
-    "SelectAllInThisTab": "Velja allt"
+    "SelectAllInThisTab": "Velja allt",
+    "SaveWithoutAnyPermissionsWarningMessage": "Ertu viss um að þú viljir vista án nokkurra heimilda?"
   }
 }

@@ -30,11 +30,13 @@ public class AbpAspNetCoreMvcUiPackagesModule : AbpModule
             //moment
             options.AddLanguagesMapOrUpdate(MomentScriptContributor.PackageName,
                 new NameValue("zh-Hans", "zh-cn"),
-                new NameValue("zh-Hant", "zh-tw"));
+                new NameValue("zh-Hant", "zh-tw"),
+                new NameValue("de-DE", "de"));
 
             options.AddLanguageFilesMapOrUpdate(MomentScriptContributor.PackageName,
                 new NameValue("zh-Hans", "zh-cn"),
-                new NameValue("zh-Hant", "zh-tw"));
+                new NameValue("zh-Hant", "zh-tw"),
+                new NameValue("de-DE", "de"));
 
             //Timeago
             options.AddLanguageFilesMapOrUpdate(TimeagoScriptContributor.PackageName,

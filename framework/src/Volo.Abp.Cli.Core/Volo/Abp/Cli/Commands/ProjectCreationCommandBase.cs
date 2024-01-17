@@ -22,6 +22,7 @@ using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.Utils;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.EventBus.Local;
 
 namespace Volo.Abp.Cli.Commands;
@@ -42,6 +43,8 @@ public abstract class ProjectCreationCommandBase
     public ThemePackageAdder ThemePackageAdder { get; }
 
     public AngularThemeConfigurer AngularThemeConfigurer { get; }
+    
+    public CliVersionService CliVersionService { get; }
 
     public ProjectCreationCommandBase(
         ConnectionStringProvider connectionStringProvider,
@@ -54,7 +57,8 @@ public abstract class ProjectCreationCommandBase
         ThemePackageAdder themePackageAdder,
         ILocalEventBus eventBus,
         IBundlingService bundlingService,
-        AngularThemeConfigurer angularThemeConfigurer)
+        AngularThemeConfigurer angularThemeConfigurer,
+        CliVersionService cliVersionService)
     {
         _bundlingService = bundlingService;
         ConnectionStringProvider = connectionStringProvider;
@@ -67,6 +71,7 @@ public abstract class ProjectCreationCommandBase
         EventBus = eventBus;
         ThemePackageAdder = themePackageAdder;
         AngularThemeConfigurer = angularThemeConfigurer;
+        CliVersionService = cliVersionService;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -86,7 +91,7 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("Preview: yes");
 
 #if !DEBUG
-            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+            var cliVersion = await CliVersionService.GetCurrentCliVersionAsync();
 
             if (!cliVersion.IsPrerelease)
             {
@@ -419,26 +424,70 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected async Task RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(ProjectBuildArgs projectArgs)
+    protected virtual async Task RunBundleInternalAsync(ProjectBuildArgs projectArgs)
+    {
+        if (!ShouldRunBundleCommand(projectArgs))
+        {
+            return;
+        }
+
+        var isModuleTemplate = ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName);
+        var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
+        
+        var message = isWebassembly || isModuleTemplate 
+            ? "Generating bundles for Blazor Wasm" 
+            : "Generating bundles for MAUI Blazor";
+        
+        var projectType = isWebassembly || isModuleTemplate
+            ? BundlingConsts.WebAssembly 
+            : BundlingConsts.MauiBlazor;
+        
+        Logger.LogInformation(message + "...");
+
+        await EventBus.PublishAsync(new ProjectCreationProgressEvent
+        {
+            Message = message
+        }, false);
+
+        var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
+        var path = projectArgs.OutputFolder;
+        
+        if (isModuleTemplate)
+        {
+            path = Path.Combine(path, "host");
+            searchPattern = "*.Blazor.Host.csproj";
+        }
+        else if (MicroserviceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
+        {
+            path = Path.Combine(path, "apps");
+        }
+
+        var directory = Path.GetDirectoryName(
+            Directory.GetFiles(path, searchPattern, SearchOption.AllDirectories).First()
+        );
+
+        await _bundlingService.BundleAsync(directory, true, projectType);
+    }
+    
+    protected virtual bool ShouldRunBundleCommand(ProjectBuildArgs projectArgs)
     {
         if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
             && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
         {
-            var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
-            var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
-            Logger.LogInformation($"{message}...");
-
-            await EventBus.PublishAsync(new ProjectCreationProgressEvent
-            {
-                Message = message
-            }, false);
-
-            var directory = Path.GetDirectoryName(
-                Directory.GetFiles(projectArgs.OutputFolder, isWebassembly? "*.Blazor.csproj" :"*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
-                );
-
-            await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
+            return true;
         }
+
+        if (MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName) && projectArgs.UiFramework is UiFramework.Blazor)
+        {
+            return true;
+        }
+
+        if (ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) && projectArgs.UiFramework != UiFramework.None)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     protected async Task CreateInitialMigrationsAsync(ProjectBuildArgs projectArgs)
@@ -883,6 +932,11 @@ public abstract class ProjectCreationCommandBase
         public static class ThemeStyle
         {
             public const string Long = "theme-style";
+        }
+
+        public static class NoOpenWebPage
+        {
+            public const string Long = "no-open";
         }
     }
 }

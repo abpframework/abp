@@ -61,7 +61,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
-        return await (from userRole in dbContext.Set<IdentityUserRole>()
+        var userRoles = await (from userRole in dbContext.Set<IdentityUserRole>()
             join role in dbContext.Roles on userRole.RoleId equals role.Id
             where userIds.Contains(userRole.UserId)
             group new
@@ -73,7 +73,24 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             select new IdentityUserIdWithRoleNames
             {
                 Id = gp.Key, RoleNames = gp.Select(x => x.Name).ToArray()
-            }).ToListAsync(GetCancellationToken(cancellationToken));
+            }).ToListAsync(cancellationToken: cancellationToken);
+        
+        var orgUnitRoles = await (from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+            join roleOu in dbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
+            join role in dbContext.Roles on roleOu.RoleId equals role.Id
+            where userIds.Contains(userOu.UserId)
+            group new
+            {
+                userOu.UserId,
+                role.Name
+            } by userOu.UserId
+            into gp
+            select new IdentityUserIdWithRoleNames
+            {
+                Id = gp.Key, RoleNames = gp.Select(x => x.Name).ToArray()
+            }).ToListAsync(cancellationToken: cancellationToken);
+        
+        return userRoles.Concat(orgUnitRoles).GroupBy(x => x.Id).Select(x => new IdentityUserIdWithRoleNames {Id = x.Key, RoleNames = x.SelectMany(y => y.RoleNames).Distinct().ToArray()}).ToList();
     }
 
     public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
@@ -151,6 +168,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<Guid>> GetUserIdListByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbContextAsync()).Set<IdentityUserRole>().Where(x => x.RoleId == roleId)
+            .Select(x => x.UserId).ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<IdentityUser>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
@@ -174,9 +197,19 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        
         var upperFilter = filter?.ToUpperInvariant();
-        return await (await GetDbSetAsync())
-            .IncludeDetails(includeDetails)
+        var query = (await GetDbSetAsync())
+            .IncludeDetails(includeDetails);
+        
+        if (roleId.HasValue)
+        {
+            var dbContext = await GetDbContextAsync();
+            var organizationUnitIds = await dbContext.Set<OrganizationUnitRole>().Where(q => q.RoleId == roleId.Value).Select(q => q.OrganizationUnitId).ToArrayAsync(cancellationToken: cancellationToken);
+            query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value) || identityUser.OrganizationUnits.Any(x => organizationUnitIds.Contains(x.OrganizationUnitId)));
+        }
+        
+        return await query
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
@@ -186,7 +219,6 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
-            .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName.Contains(userName))
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber.Contains(phoneNumber))

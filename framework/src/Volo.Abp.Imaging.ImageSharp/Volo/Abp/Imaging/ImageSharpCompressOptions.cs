@@ -22,7 +22,7 @@ public class ImageSharpCompressOptions
         
         PngEncoder = new PngEncoder {
             CompressionLevel = PngCompressionLevel.BestCompression,
-            IgnoreMetadata = true
+            SkipMetadata = true
         };
         
         WebpEncoder = new WebpEncoder {

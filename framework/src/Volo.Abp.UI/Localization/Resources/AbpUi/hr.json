@@ -49,6 +49,14 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} zapis će biti obrisan!",
     "ItemWillBeDeletedMessage": "Ovaj zapis će biti obrisan!",
     "ManageYourAccount": "Upravljaj korisničkim računom",
-    "OthersGroup": "Drugi"
+    "OthersGroup": "Drugi",
+    "Today": "Danas",
+    "Apply": "primijeniti",
+    "InternetConnectionInfo": "Operacija se nije mogla izvesti. Vaša internetska veza trenutačno nije dostupna.",
+    "CopiedToTheClipboard": "Kopirano u međuspremnik",
+    "AddNew": "Dodaj novi",
+    "ProfilePicture": "Profilna slika",
+    "Theme": "Tema",
+    "NotAssigned": "Nije dodijeljeno"
   }
 }

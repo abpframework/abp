@@ -38,6 +38,7 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Web;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Web;
@@ -170,7 +171,7 @@ public class MyProjectNameWebModule : AbpModule
             * This configuration is used when the AuthServer is running on the internal network such as docker or k8s.
             * Configuring the redirecting URLs for internal network and the web
             * The login and the logout URLs are configured to redirect to the AuthServer real DNS for browser.
-            * The token acquired and validated from the the internal network AuthServer URL. 
+            * The token acquired and validated from the the internal network AuthServer URL.
             */
             if (configuration.GetValue<bool>("AuthServer:IsContainerized"))
             {
@@ -209,6 +210,11 @@ public class MyProjectNameWebModule : AbpModule
                     };
                 });
             }
+
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
     }
 
     private void ConfigureAutoMapper()
@@ -316,6 +322,7 @@ public class MyProjectNameWebModule : AbpModule
             app.UseMultiTenancy();
         }
 
+        app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

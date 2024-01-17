@@ -26,5 +26,6 @@ public class ComponentsComponentsBundleContributor : IBundleContributor
         context.Add("_content/Blazorise/blazorise.css");
         context.Add("_content/Blazorise.Bootstrap5/blazorise.bootstrap5.css");
         context.Add("_content/Blazorise.Snackbar/blazorise.snackbar.css");
+        context.Add("_content/Volo.Abp.BlazoriseUI/volo.abp.blazoriseui.css");
     }
 }

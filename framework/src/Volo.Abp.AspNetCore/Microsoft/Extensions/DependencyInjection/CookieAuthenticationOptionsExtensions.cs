@@ -28,8 +28,8 @@ public static class CookieAuthenticationOptionsExtensions
 
             var logger = principalContext.HttpContext.RequestServices.GetRequiredService<ILogger<CookieAuthenticationOptions>>();
 
-            var tokenExpiresAt = principalContext.Properties.Items[".Token.expires_at"];
-            if (DateTimeOffset.TryParseExact(tokenExpiresAt, "o", null, DateTimeStyles.RoundtripKind, out var expiresAt) &&
+            var tokenExpiresAt = principalContext.Properties.GetString(".Token.expires_at");
+            if (!tokenExpiresAt.IsNullOrWhiteSpace() && DateTimeOffset.TryParseExact(tokenExpiresAt, "o", null, DateTimeStyles.RoundtripKind, out var expiresAt) &&
                 expiresAt < DateTimeOffset.UtcNow.Subtract(advance.Value))
             {
                 logger.LogInformation("The access_token is expired.");

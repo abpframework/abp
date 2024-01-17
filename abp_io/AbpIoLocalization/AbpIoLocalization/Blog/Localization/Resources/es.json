@@ -1,0 +1,8 @@
+{
+  "culture": "es",
+  "texts": {
+    "AbpTitle": "Leer todas las publicaciones del blog",
+    "AbpDescription": "ABP es un marco de aplicación de código abierto centrado en el desarrollo de aplicaciones web basado en AspNet Core. No te repitas, concéntrate en tu propio código comercial.",
+    "AbpDefinition": "Blog de ABP para desarrollo .NET, multiplataforma, plantillas de aplicaciones ASP.NET, noticias relacionadas con ABP y más..."
+  }
+}

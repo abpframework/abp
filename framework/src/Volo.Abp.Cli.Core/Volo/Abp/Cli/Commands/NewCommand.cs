@@ -19,6 +19,7 @@ using Volo.Abp.Cli.ProjectBuilding.Events;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Local;
 
@@ -44,7 +45,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         IBundlingService bundlingService,
         ITemplateInfoProvider templateInfoProvider,
         TemplateProjectBuilder templateProjectBuilder,
-        AngularThemeConfigurer angularThemeConfigurer) :
+        AngularThemeConfigurer angularThemeConfigurer,
+        CliVersionService cliVersionService) :
         base(connectionStringProvider,
             solutionPackageVersionFinder,
             cmdHelper,
@@ -55,7 +57,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             themePackageAdder,
             eventBus,
             bundlingService,
-            angularThemeConfigurer)
+            angularThemeConfigurer,
+            cliVersionService)
     {
         TemplateInfoProvider = templateInfoProvider;
         TemplateProjectBuilder = templateProjectBuilder;
@@ -119,12 +122,15 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         var skipBundling = commandLineArgs.Options.ContainsKey(Options.SkipBundling.Long) || commandLineArgs.Options.ContainsKey(Options.SkipBundling.Short);
         if (!skipBundling)
         {
-            await RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(projectArgs);
+            await RunBundleInternalAsync(projectArgs);
         }
 
         await ConfigurePwaSupportForAngular(projectArgs);
 
-        OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
+        if (!commandLineArgs.Options.ContainsKey(Options.NoOpenWebPage.Long))
+        {
+            OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
+        }
     }
 
     private Task CheckCreatingRequirements(ProjectBuildArgs projectArgs)
@@ -162,8 +168,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             requirementWarningMessages.AddFirst("NOTICE: The following tools are required to run your solution:");
 
             await EventBus.PublishAsync(new ProjectPostRequirementsCheckedEvent
-            { 
-                Message = requirementWarningMessages.JoinAsString(Environment.NewLine) 
+            {
+                Message = requirementWarningMessages.JoinAsString(Environment.NewLine)
             }, false);
 
             foreach (var error in requirementWarningMessages)

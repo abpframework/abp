@@ -77,6 +77,7 @@
     "PageId": "Buchseite",
     "Pages": "Seiten",
     "PageSlugInformation": "Slug wird auf URL verwendet. Ihre URL lautet '/{{slug}}'.",
+    "BlogSlugInformation": "Slug wird auf URL verwendet. Ihre URL lautet '/{0}/{{slug}}'.",
     "Permission:BlogManagement": "Blog-Verwaltung",
     "Permission:BlogManagement.Create": "Schaffen",
     "Permission:BlogManagement.Delete": "Löschen",

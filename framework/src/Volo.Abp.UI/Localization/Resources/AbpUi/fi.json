@@ -49,6 +49,14 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} poistetaan!",
     "ItemWillBeDeletedMessage": "Tämä kohde poistetaan!",
     "ManageYourAccount": "Hallitse tiliäsi",
-    "OthersGroup": "Muut"
+    "OthersGroup": "Muut",
+    "Today": "Tänään",
+    "Apply": "Käytä",
+    "InternetConnectionInfo": "Toimenpidettä ei voitu suorittaa. Internetyhteytesi ei ole tällä hetkellä käytettävissä.",
+    "CopiedToTheClipboard": "Kopioitu leikepöydälle",
+    "AddNew": "Lisää uusi",
+    "ProfilePicture": "Profiilikuva",
+    "Theme": "Teema",
+    "NotAssigned": "Ei määritetty"
   }
 }

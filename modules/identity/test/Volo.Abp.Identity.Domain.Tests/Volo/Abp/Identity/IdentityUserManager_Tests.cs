@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using NSubstitute;
 using Shouldly;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity.Settings;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -20,7 +28,11 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
     private readonly ILookupNormalizer _lookupNormalizer;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
     private readonly IdentityTestData _testData;
-    protected IOptions<IdentityOptions> _identityOptions { get; }
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IOptions<IdentityOptions> _identityOptions;
+    private readonly IdentityLinkUserManager _identityLinkUserManager;
+
+    private IDistributedEventBus _distributedEventBus { get; set; }
 
     public IdentityUserManager_Tests()
     {
@@ -31,7 +43,15 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         _lookupNormalizer = GetRequiredService<ILookupNormalizer>();
         _testData = GetRequiredService<IdentityTestData>();
         _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+        _currentTenant = GetRequiredService<ICurrentTenant>();
         _identityOptions = GetRequiredService<IOptions<IdentityOptions>>();
+        _identityLinkUserManager = GetRequiredService<IdentityLinkUserManager>();
+    }
+
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        _distributedEventBus = Substitute.For<IDistributedEventBus>();
+        services.Replace(ServiceDescriptor.Singleton(_distributedEventBus));
     }
 
     [Fact]
@@ -247,6 +267,199 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         user.CreationTime = DateTime.Now.AddDays(-3);
         user.SetLastPasswordChangeTime(null);
         (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user)).ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task IdentityUserUserNameChangedEto_Test()
+    {
+        var user = CreateRandomUser();
+
+        (await _identityUserManager.CreateAsync(user)).CheckErrors();
+
+        await _distributedEventBus.DidNotReceive()
+            .PublishAsync(Arg.Any<IdentityUserUserNameChangedEto>(), Arg.Any<bool>(), Arg.Any<bool>());
+
+        var newUser = await _identityUserManager.FindByIdAsync(user.Id.ToString());
+        newUser.ShouldNotBeNull();
+
+        using (_currentTenant.Change(Guid.NewGuid()))
+        {
+            var oldUsername = newUser.UserName;
+            await _identityUserManager.SetUserNameAsync(newUser, "newUserName");
+            await _distributedEventBus.Received()
+                .PublishAsync(
+                    Arg.Is<IdentityUserUserNameChangedEto>(x =>
+                        x.Id == newUser.Id && x.TenantId == newUser.TenantId && x.OldUserName == oldUsername && x.UserName == "newUserName"),
+                    Arg.Any<bool>(), Arg.Any<bool>());
+        }
+
+        _distributedEventBus.ClearReceivedCalls();
+        await _identityUserManager.SetUserNameAsync(newUser, newUser.UserName);
+        await _distributedEventBus.DidNotReceive()
+            .PublishAsync(Arg.Any<IdentityUserUserNameChangedEto>(), Arg.Any<bool>(), Arg.Any<bool>());
+    }
+
+    [Fact]
+    public async Task IdentityUserEmailChangedEto_Test()
+    {
+        var user = CreateRandomUser();
+
+        (await _identityUserManager.CreateAsync(user)).CheckErrors();
+
+        await _distributedEventBus.DidNotReceive()
+            .PublishAsync(Arg.Any<IdentityUserEmailChangedEto>(), Arg.Any<bool>(), Arg.Any<bool>());
+
+        var newUser = await _identityUserManager.FindByIdAsync(user.Id.ToString());
+        newUser.ShouldNotBeNull();
+
+        using (_currentTenant.Change(Guid.NewGuid()))
+        {
+            var oldEmail = newUser.Email;
+            await _identityUserManager.SetEmailAsync(newUser, "newEmail@abp.io");
+            await _distributedEventBus.Received()
+                .PublishAsync(
+                    Arg.Is<IdentityUserEmailChangedEto>(x =>
+                        x.Id == newUser.Id && x.TenantId == newUser.TenantId && x.OldEmail == oldEmail && x.Email == "newEmail@abp.io"),
+                    Arg.Any<bool>(), Arg.Any<bool>());
+        }
+
+        _distributedEventBus.ClearReceivedCalls();
+        await _identityUserManager.SetEmailAsync(newUser, newUser.Email);
+        await _distributedEventBus.DidNotReceive()
+            .PublishAsync(Arg.Any<IdentityUserEmailChangedEto>(), Arg.Any<bool>(), Arg.Any<bool>());
+    }
+
+    [Fact]
+    public async Task DeleteAsync()
+    {
+        await CreateRandomDefaultRoleAsync();
+        var user = CreateRandomUser();
+        (await _identityUserManager.CreateAsync(user)).CheckErrors();
+
+        var user2 = CreateRandomUser();
+        (await _identityUserManager.CreateAsync(user2)).CheckErrors();
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            user = await _identityUserManager.FindByIdAsync(user.Id.ToString());
+            user.ShouldNotBeNull();
+
+            await _identityUserManager.AddClaimAsync(user, new Claim("test", "test"));
+            await _identityUserManager.AddLoginAsync(user, new UserLoginInfo("test", "test", "test"));
+            await _identityUserManager.AddDefaultRolesAsync(user);
+            user.SetToken("test", "test", "test");
+            var ou = await _organizationUnitRepository.GetAsync(_lookupNormalizer.NormalizeName("OU11"));
+            await _identityUserManager.AddToOrganizationUnitAsync(user, ou);
+            await _identityLinkUserManager.LinkAsync(new IdentityLinkUserInfo(user.Id), new IdentityLinkUserInfo(user2.Id));
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            user = await _identityUserManager.FindByIdAsync(user.Id.ToString());
+            user.ShouldNotBeNull();
+
+            user.Claims.Count.ShouldBeGreaterThan(0);
+            user.Logins.Count.ShouldBeGreaterThan(0);
+            user.Roles.Count.ShouldBeGreaterThan(0);
+            user.Tokens.Count.ShouldBeGreaterThan(0);
+            user.OrganizationUnits.Count.ShouldBeGreaterThan(0);
+            (await _identityLinkUserManager.IsLinkedAsync(new IdentityLinkUserInfo(user.Id), new IdentityLinkUserInfo(user2.Id))).ShouldBeTrue();
+
+            await _identityUserManager.DeleteAsync(user);
+
+            user.Claims.Count.ShouldBe(0);
+            user.Logins.Count.ShouldBe(0);
+            user.Roles.Count.ShouldBe(0);
+            user.Tokens.Count.ShouldBe(0);
+            user.OrganizationUnits.Count.ShouldBe(0);
+            (await _identityLinkUserManager.IsLinkedAsync(new IdentityLinkUserInfo(user.Id), new IdentityLinkUserInfo(user2.Id))).ShouldBeFalse();
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task ValidateUserNameAsync()
+    {
+        var result = await _identityUserManager.ValidateUserNameAsync("M_y+User-001@abp.io");
+        result.ShouldBeTrue();
+
+        var user = CreateRandomUser();
+        (await _identityUserManager.CreateAsync(user)).CheckErrors();
+
+        result = await _identityUserManager.ValidateUserNameAsync(user.UserName, user.Id);
+        result.ShouldBeTrue();
+
+        result = await _identityUserManager.ValidateUserNameAsync(user.UserName);
+        result.ShouldBeFalse();
+
+        result = await _identityUserManager.ValidateUserNameAsync("无效的字符");
+        result.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task GetRandomUserNameAsync()
+    {
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        var username = await _identityUserManager.GetRandomUserNameAsync(15);
+        username.Length.ShouldBe(15);
+        username.All(c => _identityUserManager.Options.User.AllowedUserNameCharacters.Contains(c)).ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        username = await _identityUserManager.GetRandomUserNameAsync(15);
+        username.Length.ShouldBe(15);
+        username.All(c => _identityUserManager.Options.User.AllowedUserNameCharacters.Contains(c)).ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "0123456789";
+        username = await _identityUserManager.GetRandomUserNameAsync(15);
+        username.Length.ShouldBe(15);
+        username.All(c => _identityUserManager.Options.User.AllowedUserNameCharacters.Contains(c)).ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = null!;
+        username = await _identityUserManager.GetRandomUserNameAsync(15);
+        username.Length.ShouldBe(15);
+        username.All(c => "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+".Contains(c)).ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task GetUserNameFromEmailAsync()
+    {
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        var username = await _identityUserManager.GetUserNameFromEmailAsync("Yönetici@abp.io");
+        username.Length.ShouldBe("Yönetici".Length); //random username
+        username.All(c => "abcdefghijklmnopqrstuvwxyz0123456789".Contains(c)).ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
+        username.Length.ShouldBe(9); //admin and random 4 numbers
+        username.ShouldContain("admin");
+        Regex.IsMatch(username, @"\d{4}$").ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "admin01234";
+        username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
+        username.Length.ShouldBe(9); //admin and random 4 numbers
+        username.ShouldContain("admin");
+        Regex.IsMatch(username, @"[0-4]{3}$").ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+        username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
+        username.Length.ShouldBe(9); //admin and random 4 characters
+        username.ShouldContain("admin");
+        Regex.IsMatch(username, @"[a-z]{4}$").ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        username = await _identityUserManager.GetUserNameFromEmailAsync("ADMIN@abp.io");
+        username.Length.ShouldBe(9); //admin and random 4 characters
+        username.ShouldContain("ADMIN");
+        Regex.IsMatch(username, @"[A-Z]{4}$").ShouldBeTrue();
+
+        _identityUserManager.Options.User.AllowedUserNameCharacters = null!;
+        username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
+        username.Length.ShouldBe(9); //admin and random 4 numbers
+        username.ShouldContain("admin");
+        Regex.IsMatch(username, @"[0-9]{4}$").ShouldBeTrue();
     }
 
     private async Task CreateRandomDefaultRoleAsync()

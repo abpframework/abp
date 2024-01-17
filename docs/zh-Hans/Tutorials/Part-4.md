@@ -67,7 +67,7 @@
 
 {{else if DB=="Mongo"}}
 
-> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)**库用于模拟MongoDB数据库. 创建一个单独的数据库实例并使用[数据种子系统](../Data-Seeding.md)初始化种子数据,为每个测试准备一个新的数据库.
+> **[EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)**库用于模拟MongoDB数据库. 创建一个单独的数据库实例并使用[数据种子系统](../Data-Seeding.md)初始化种子数据,为每个测试准备一个新的数据库.
 
 {{end}}
 
@@ -85,36 +85,70 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 using Xunit;
 
-namespace Acme.BookStore.Books
-{ {{if DB=="Mongo"}}
-    [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
-    public class BookAppService_Tests : BookStoreApplicationTestBase
+namespace Acme.BookStore.Books;
+
+public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicationTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
+{
+    private readonly IBookAppService _bookAppService;
+
+    protected BookAppService_Tests()
     {
-        private readonly IBookAppService _bookAppService;
+        _bookAppService = GetRequiredService<IBookAppService>();
+    }
 
-        public BookAppService_Tests()
-        {
-            _bookAppService = GetRequiredService<IBookAppService>();
-        }
+    [Fact]
+    public async Task Should_Get_List_Of_Books()
+    {
+        //Act
+        var result = await _bookAppService.GetListAsync(
+            new PagedAndSortedResultRequestDto()
+        );
 
-        [Fact]
-        public async Task Should_Get_List_Of_Books()
-        {
-            //Act
-            var result = await _bookAppService.GetListAsync(
-                new PagedAndSortedResultRequestDto()
-            );
-
-            //Assert
-            result.TotalCount.ShouldBeGreaterThan(0);
-            result.Items.ShouldContain(b => b.Name == "1984");
-        }
+        //Assert
+        result.TotalCount.ShouldBeGreaterThan(0);
+        result.Items.ShouldContain(b => b.Name == "1984");
     }
 }
 ````
+{{if DB == "EF"}}
+添加 `BookAppService_Tests` 的实现类,命名为 `EfCoreBookAppService_Tests` ,并放置在 `EntityFrameworkCore\Applications\Books` 命名空间 (文件夹)下,在 `Acme.BookStore.EntityFrameworkCore.Tests` 项目中:
+
+````csharp
+using Acme.BookStore.Books;
+using Xunit;
+
+namespace Acme.BookStore.EntityFrameworkCore.Applications.Books;
+
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+public class EfCoreBookAppService_Tests : BookAppService_Tests<BookStoreEntityFrameworkCoreTestModule>
+{
+
+}
+````
+{{end}}
+
+{{if DB == "Mongo"}}
+添加 `BookAppService_Tests` 的实现类,命名为`MongoDBBookAppService_Tests` ,并放置在 `MongoDb\Applications\Books` 命名空间 (文件夹)下,在 `Acme.BookStore.MongoDB.Tests` 项目中:
+
+````csharp
+using Acme.BookStore.MongoDB;
+using Acme.BookStore.Books;
+using Xunit;
+
+namespace Acme.BookStore.MongoDb.Applications.Books;
+
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+public class MongoDBBookAppService_Tests : BookAppService_Tests<BookStoreMongoDbTestModule>
+{
+
+}
+````
+{{end}}
 
 * 测试方法 `Should_Get_List_Of_Books` 直接使用 `BookAppService.GetListAsync` 方法来获取用户列表,并执行检查.
 * 我们可以安全地检查 "1984" 这本书的名称,因为我们知道这本书可以在数据库中找到,我们已将其添加到种子数据中.

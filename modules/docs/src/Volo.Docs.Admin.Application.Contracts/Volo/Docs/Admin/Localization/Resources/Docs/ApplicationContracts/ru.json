@@ -56,6 +56,7 @@
     "FileName": "Имя файла",
     "LastCachedTime": "Время кеширования",
     "Project": "Проект",
+    "AdvancedFilters": "Расширенные фильтры",
     "RemoveCacheAndReIndexConfirmation": "Документ \"{0}\" будет удален из кэша и переиндексирован. Вы подтверждаете?"
   }
 }

@@ -25,7 +25,7 @@ if ($IsPrerelease) {
 }
 
 $commands = (
-  "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
+  "npm run lerna -- version $Version --yes --no-commit-hooks --no-git-tag-version --no-push --force-publish",
   "yarn replace-with-tilde",
   "cd scripts",
   "yarn install",

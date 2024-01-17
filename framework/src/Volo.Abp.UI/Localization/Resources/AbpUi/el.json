@@ -49,6 +49,8 @@
     "ItemWillBeDeletedMessageWithFormat": "Το {0} θα διαγραφεί",
     "ItemWillBeDeletedMessage": "Αυτό το στοιχείο θα διαγραφεί!",
     "ManageYourAccount": "Διαχείριση Λογαριασμού",
-    "OthersGroup":"άλλος"
+    "OthersGroup":"άλλος",
+    "Today": "Σήμερα",
+    "Apply": "Ισχύουν"
   }
 }

@@ -50,6 +50,11 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         CancellationToken cancellationToken = default
     );
 
+    Task<List<Guid>> GetUserIdListByRoleIdAsync(
+        Guid roleId,
+        CancellationToken cancellationToken = default
+    );
+
     Task<List<IdentityUser>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,

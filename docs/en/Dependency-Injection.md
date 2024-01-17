@@ -269,6 +269,21 @@ public class MyService : ITransientDependency
 }
 ````
 
+#### IInjectPropertiesService
+
+You can use the `IInjectPropertiesService` service to inject properties of an object. Generally, it is a service outside of DI, such as manually created services.
+
+````C#
+var injectPropertiesService = serviceProvider.GetRequiredService<IInjectPropertiesService>();
+var instance = new TestService();
+
+// Set any properties on instance that can be resolved by IServiceProvider.
+injectPropertiesService.InjectProperties(instance);
+
+// Set any null-valued properties on instance that can be resolved by the IServiceProvider.
+injectPropertiesService.InjectUnsetProperties(instance);
+````
+
 ### Resolve Service from IServiceProvider
 
 You may want to resolve a service directly from ``IServiceProvider``. In that case, you can inject `IServiceProvider` into your class and use the ``GetService`` or the `GetRequiredService` method as shown below:
@@ -479,6 +494,24 @@ public class AppModule : AbpModule
 This example simply checks if the service class has `MyLogAttribute` attribute and adds `MyLogInterceptor` to the interceptor list if so.
 
 > Notice that `OnRegistered` callback might be called multiple times for the same service class if it exposes more than one service/interface. So, it's safe to use `Interceptors.TryAdd` method instead of `Interceptors.Add` method. See [the documentation](Dynamic-Proxying-Interceptors.md) of dynamic proxying / interceptors.
+
+### IServiceCollection.OnActivated Event
+
+The `OnActivated` event is raised once a service is fully constructed. Here you can perform application-level tasks that depend on the service being fully constructed - these should be rare.
+
+````csharp
+var serviceDescriptor = ServiceDescriptor.Transient<MyServer, MyServer>();
+services.Add(serviceDescriptor);
+if (setIsReadOnly)
+{
+    services.OnActivated(serviceDescriptor, x =>
+    {
+        x.Instance.As<MyServer>().IsReadOnly = true;
+    });
+}
+````
+
+> Notice that `OnActivated` event can be registered multiple times for the same `ServiceDescriptor`.
 
 ## 3rd-Party Providers
 

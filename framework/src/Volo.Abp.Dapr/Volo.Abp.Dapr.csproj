@@ -11,11 +11,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
         <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+        <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dapr.Client" />
+        <PackageReference Include="Dapr.Client" />
+        <PackageReference Include="IdentityModel" />
     </ItemGroup>
 
 </Project>

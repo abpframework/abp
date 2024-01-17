@@ -20,7 +20,7 @@ public class AbpBlazorMessageLocalizerHelper<T>
         {
             var argumentsList = arguments?.ToList();
             return argumentsList?.Count > 0
-                ? stringLocalizer[message, LocalizeMessageArguments(argumentsList)]
+                ? stringLocalizer[message, LocalizeMessageArguments(argumentsList).ToArray()]
                 : stringLocalizer[message];
         }
         catch
@@ -29,7 +29,7 @@ public class AbpBlazorMessageLocalizerHelper<T>
         }
     }
 
-    private IEnumerable<string> LocalizeMessageArguments(List<string> arguments)
+    private IEnumerable<object> LocalizeMessageArguments(List<string> arguments)
     {
         foreach (var argument in arguments)
         {

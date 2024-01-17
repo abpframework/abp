@@ -15,13 +15,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="..\..\Volo.Docs.abpmdl.json" />
-        <Content Include="..\..\Volo.Docs.abpmdl.json">
+        <None Remove="..\..\Volo.Docs.abpmdl" />
+        <Content Include="..\..\Volo.Docs.abpmdl">
 			<Pack>true</Pack>
 			<PackagePath>content\</PackagePath>
 		</Content>
-        <None Remove="..\..\**\*.abppkg*.json" />
-        <Content Include="..\..\**\*.abppkg*.json">
+        <None Remove="..\..\**\*.abppkg*" />
+        <Content Include="..\..\**\*.abppkg*">
 			<Pack>true</Pack>
 			<PackagePath>content\</PackagePath>
 		</Content>
