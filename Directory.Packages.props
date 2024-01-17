@@ -7,8 +7,8 @@
     <PackageVersion Include="aliyun-net-sdk-sts" Version="3.1.2" />
     <PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.13.0" />
     <PackageVersion Include="AsyncKeyedLock" Version="6.2.2" />
-    <PackageVersion Include="Autofac" Version="7.1.0" />
-    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageVersion Include="Autofac" Version="8.0.0" />
+    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
     <PackageVersion Include="AutoMapper" Version="12.0.1" />
     <PackageVersion Include="AWSSDK.S3" Version="3.7.300.2" />
