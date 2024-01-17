@@ -591,6 +591,7 @@
     "Menu:Licenses": "Licenses",
     "OrganizationId": "Organization Id",
     "RemoveAllWinnersConfirmationMessage": "Are you sure you want to remove all winners?",
-    "AutoRenewals": "Auto Renewals"
+    "AutoRenewals": "Auto Renewals",
+    "OrganizationHasCreditCard": "Organization has credit card. Please remove credit card first!"
   }
 }
