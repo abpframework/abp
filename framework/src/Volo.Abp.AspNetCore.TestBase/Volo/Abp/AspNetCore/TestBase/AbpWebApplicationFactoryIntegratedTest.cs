@@ -43,6 +43,16 @@ public abstract class AbpWebApplicationFactoryIntegratedTest<TProgram> : WebAppl
         return Services.GetRequiredService<T>();
     }
 
+    protected virtual T? GetKeyedServices<T>(object? serviceKey)
+    {
+        return ServiceProvider.GetKeyedService<T>(serviceKey);
+    }
+
+    protected virtual T GetRequiredKeyedService<T>(object? serviceKey) where T : notnull
+    {
+        return ServiceProvider.GetRequiredKeyedService<T>(serviceKey);
+    }
+
     protected virtual void ConfigureServices(IServiceCollection services)
     {
 

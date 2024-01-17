@@ -88,6 +88,25 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
         ReferenceEquals(objectByInterfaceRef, objectByClassRef).ShouldBeTrue();
     }
 
+    [Fact]
+    public void Should_Get_Keyed_Services()
+    {
+        var bigCache = GetRequiredKeyedService<ICache>("big");
+        var bigInstanceCache = GetRequiredKeyedService<ICache>("bigInstance");
+        var smallCache = GetRequiredKeyedService<ICache>("small");
+        var smallFactoryCache = GetRequiredKeyedService<ICache>("smallFactory");
+
+        bigCache.GetType().ShouldBe(typeof(BigCache));
+        bigInstanceCache.GetType().ShouldBe(typeof(BigCache));
+        smallCache.GetType().ShouldBe(typeof(SmallCache));
+        smallFactoryCache.GetType().ShouldBe(typeof(SmallCache));
+
+        bigCache.Get("key").ShouldBe("Resolving key from big cache.");
+        bigInstanceCache.Get("key").ShouldBe("Resolving key from big cache.");
+        smallCache.Get("key").ShouldBe("Resolving key from small cache.");
+        smallFactoryCache.Get("key").ShouldBe("Resolving key from small cache.");
+    }
+
     public class MySingletonService : ISingletonDependency
     {
         public List<MyEmptyTransientService> TransientInstances { get; }
@@ -164,6 +183,10 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
             context.Services.AddTransient(typeof(GenericServiceWithPropertyInject<>));
             context.Services.AddTransient(typeof(GenericServiceWithDisablePropertyInjectionOnClass<>));
             context.Services.AddTransient(typeof(GenericServiceWithDisablePropertyInjectionOnProperty<>));
+            context.Services.AddKeyedSingleton<ICache, BigCache>("big");
+            context.Services.AddKeyedSingleton<ICache, SmallCache>("small");
+            context.Services.AddKeyedSingleton<ICache>("bigInstance", new BigCache());
+            context.Services.AddKeyedSingleton<ICache>("smallFactory", (sp, key) => new SmallCache());
         }
     }
 
@@ -214,5 +237,19 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
         public MyEmptyTransientService DisablePropertyInjectionService { get; set; }
 
         public T Value { get; set; }
+    }
+
+    public interface ICache
+    {
+        object Get(string key);
+    }
+    public class BigCache : ICache
+    {
+        public object Get(string key) => $"Resolving {key} from big cache.";
+    }
+
+    public class SmallCache : ICache
+    {
+        public object Get(string key) => $"Resolving {key} from small cache.";
     }
 }
