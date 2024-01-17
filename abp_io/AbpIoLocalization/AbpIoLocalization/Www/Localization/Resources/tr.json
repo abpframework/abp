@@ -40,7 +40,7 @@
     "Theming": "Theming",
     "ThemingExplanationShort": "Bootstrap tabanlı standart kullanıcı arayüzlerini kullan ve kişiselleştir veya kendin yeni bir tane oluştur.",
     "BootstrapTagHelpersDynamicForms": "Bootstrap Tag Helpers & Dinamik Formlar",
-    "BootstrapTagHelpersDynamicFormsExplanation": "Bootstrap bileşenlerinin tekrar eden detaylarını manuel olarak yazmak yerine, ABP'nin etiket yardımcılarını kullanarak bunları basitleştirin ve IntelliSense avantajından yararlanın. C# modeline dayalı hızlı bir şekilde UI formları oluşturun, dinamik form etiket yardımcısını kullanın..",
+    "BootstrapTagHelpersDynamicFormsExplanation": "Bootstrap bileşenlerinin tekrar eden detaylarını manuel olarak yazmak yerine, ABP'nin etiket yardımcılarını kullanarak bunları basitleştirin ve IntelliSense avantajından yararlanın. C# modeline dayalı hızlı bir şekilde UI formları oluşturun, dinamik form etiket yardımcısını kullanın.",
     "HTTPAPIsDynamicProxies": "HTTP APIs & Dynamic Proxies",
     "HTTPAPIsDynamicProxiesExplanation": "Application servislerini otomatik olarak Rest stil Http API olarak ayarlayın ve dinamik Javascript & C# proxyler ile kullanın.",
     "CompleteArchitectureInfo": "Bakım yapılabilir yazılım çözümleri üretmek için modern mimari.",
@@ -121,7 +121,7 @@
     "MultiTenancyExplanation3": "Tek bir veritabanını, her tenant için ayrı bir veritabanını ve hibrid yaklaşımları destekler.",
     "MultiTenancyExplanation4": "Sen kendi uygulama kodunu odaklan ve bırak framework sizin adınıza multi-tenancy üstesinden gelsin.",
     "BootstrapTagHelpersExplanation": "Bootstrap bileşenlerinin tekrar eden detaylarını manuel olarak yazmak yerine, ABP'nin etiket yardımcılarını kullanarak bu işlemi basitleştirin ve IntelliSense'den yararlanın. İhtiyaç duyduğunuzda kesinlikle Bootstrap'i kullanabilirsiniz.",
-    "DynamicFormsExplanation": "Dinamik form & input tag helpers bir C# sınıfından model olarak eksiksiz form oluşturabilir.",
+    "DynamicFormsExplanation": "Dinamik form & giriş tag yardımcıları bir C# sınıfından model olarak eksiksiz form oluşturabilir.",
     "AuthenticationAuthorizationExplanation": "Zengin kimlik doğrulama ve yetkilendirme seçenekleri, ASP.NET Core Identity ve OpendIddict ile entegre edilmiştir. Genişletilebilir ve detaylı bir izin sistemi sunar.",
     "CrossCuttingConcernsExplanation": "Tüm bu ortak şeyleri geliştirmek için kendini sürekli tekrar etme. Kendi iş koduna odaklan ve bırak ABP bunları kurallar ile otomatik hale getirsin.",
     "DatabaseConnectionTransactionManagement": "Veritabanı Bğlantısı & İşlem Yönetimi",
@@ -152,7 +152,7 @@
     "PublishEvents": "Publish Events",
     "HandleEvents": "Handle  Events",
     "AndMore": "ve dahası...",
-    "Code": "Code",
+    "Code": "Kod",
     "Result": "Sonuç",
     "SeeTheDocumentForMoreInformation": "Daha fazlası için <a href=\"{1}\">{0} dökümantasyonuna</a> göz atın.",
     "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>open source</strong></span><span class=\"second-line text-uppercase\">Web Application<br />Framework </span><span class=\"third-line shine2\"><strong>for asp.net core</strong></span>",
@@ -374,11 +374,11 @@
     "ThisBookIsInDraftStageAndIsNotCompletedYet": "Bu kitap taslak aşamasındadır ve henüz tamamlanmamıştır.",
     "CreateSolutionFolder": "Çözüm Klasörü Oluşturun",
     "CreateSolutionFolderOption": "Projenin çıktı klasöründe yeni bir klasörde mi yoksa doğrudan çıktı klasöründe mi olacağını belirtir.",
-    "SelectUITheme": "UI Temasını Seçin",
+    "SelectUITheme": "UI temasını Seçin",
     "BooksPageTitle": "ABP Kitapları",
     "InstallAbpCliMessage": "Eğer daha önce yüklemediyseniz, ABP CLI'ı komut satırı terminalinde kurun:",
     "RunTheFollowingCommand": "Aşağıdaki komutu bir komut satırı terminalinde çalıştırın:",
-    "ChangeSolutionOptionsBelow": "Aşağıdaki çözüm seçeneklerini değiştirebilirsiniz.",
+    "ChangeSolutionOptionsBelow": "Aşağıdaki proje seçeneklerini değiştirebilirsiniz.",
     "MultiLayerApplicationExplanation1": "Domain Driven Design uygulamalarına dayalı olarak tamamen katmanlı bir çözüm oluşturur.",
     "MultiLayerApplicationExplanation2": "Sürdürülebilir ve genişletilebilir bir kod tabanına ihtiyaç duyan uzun vadeli projeler için önerilir.",
     "SingleLayerApplicationExplanation1": "Tek katmanlı bir web uygulaması oluşturur.",
@@ -413,6 +413,14 @@
     "TestimonialSend": "Referansınızı paylaştığınız için teşekkürler!",
     "Title": "Başlık",
     "TitlePlaceholder": "Yazılım Geliştiricisi, CTO vb.",
-    "Characters": "karakter"
+    "Characters": "karakter",
+    "Install The ABP CLI": "ABP CLI yükleyin",
+    "Create Your Solution": "Projenizi Oluşturun",
+    "Options": "Seçenekler",
+    "Follow the links below": "Aşağıdaki bağlantıları takip edin",
+    "BootstrapCardTitle": "Bu örnek, ABP bootstrap kart tag yardımcısı tarafından oluşturulmuştur.",
+    "GoSomewhere": "Buraya Git →"
+
+
   }
 }

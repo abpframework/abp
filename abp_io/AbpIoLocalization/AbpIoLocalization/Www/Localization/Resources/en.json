@@ -466,7 +466,9 @@
     "Title": "Title",
     "TitlePlaceholder": "Software Developer, CTO etc.",
     "Characters": "characters",
-    "Testimonial_YourProfilePicture": "Your profile picture (only {0})"
+    "Testimonial_YourProfilePicture": "Your profile picture (only {0})",
+    "BootstrapCardTitle": "This is a sample card component built by ABP bootstrap card tag helper.",
+    "GoSomewhere": "Go somewhere →"
   }
 }
 
