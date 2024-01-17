@@ -1,11 +1,11 @@
 import { inject, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, filter, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
 
 import { HttpErrorReporterService } from '@abp/ng.core';
 
-import { CustomHttpErrorHandlerService } from '../models/common';
+import { CustomHttpErrorHandlerService, HttpErrorHandler } from '../models/common';
 import { Confirmation } from '../models/confirmation';
 
 import { CUSTOM_ERROR_HANDLERS, HTTP_ERROR_HANDLER } from '../tokens/http-error.token';
@@ -21,10 +21,8 @@ export class ErrorHandler {
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly routerErrorHandlerService = inject(RouterErrorHandlerService);
   protected readonly httpErrorConfig = inject(HTTP_ERROR_CONFIG);
-  protected readonly customErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
-  protected readonly defaultHttpErrorHandler = (_, err: HttpErrorResponse) => throwError(() => err);
-  protected readonly httpErrorHandler =
-    inject(HTTP_ERROR_HANDLER, { optional: true }) || this.defaultHttpErrorHandler;
+  protected readonly defaultErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
+  protected readonly httpErrorHandler = inject(HTTP_ERROR_HANDLER, { optional: true });
 
   constructor(protected injector: Injector) {
     this.listenToRestError();
@@ -42,10 +40,11 @@ export class ErrorHandler {
   }
 
   protected executeErrorHandler = (error: HttpErrorResponse) => {
-    const errHandler = this.httpErrorHandler(this.injector, error);
-    const isObservable = errHandler instanceof Observable;
-
-    return (isObservable ? errHandler : of(null)).pipe(catchError(err => of(err)));
+    if (this.httpErrorHandler) {
+      return this.httpErrorHandler(this.injector, error);
+    }
+    
+    return of(error);
   };
 
   protected sortHttpErrorHandlers(
@@ -56,17 +55,17 @@ export class ErrorHandler {
   }
 
   protected handleError(err: unknown) {
-    if (this.customErrorHandlers && this.customErrorHandlers.length) {
-      const canHandleService = this.customErrorHandlers
+    if (this.defaultErrorHandlers && this.defaultErrorHandlers.length) {
+      const errorHandlerService = this.defaultErrorHandlers
         .sort(this.sortHttpErrorHandlers)
         .find(service => service.canHandle(err));
-
-      if (canHandleService) {
-        canHandleService.execute();
+  
+      if (errorHandlerService) {
+        errorHandlerService.execute();
         return;
       }
     }
-
+    
     this.showError().subscribe();
   }
 

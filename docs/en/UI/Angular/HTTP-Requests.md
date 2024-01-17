@@ -219,23 +219,23 @@ import { ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injector } from '@angular/core';
-import { throwError } from 'rxjs';
+import { of, EMPTY } from 'rxjs';
 import { Error404Component } from './error404/error404.component';
 
 export function handleHttpErrors(injector: Injector, httpError: HttpErrorResponse) {
   if (httpError.status === 400) {
     const toaster = injector.get(ToasterService);
     toaster.error(httpError.error?.error?.message || 'Bad request!', '400');
-    return;
+    return EMPTY;
   }
 
   if (httpError.status === 404) {
     const contentProjection = injector.get(ContentProjectionService);
     contentProjection.projectContent(PROJECTION_STRATEGY.AppendComponentToBody(Error404Component));
-    return;
+    return EMPTY;
   }
 
-  return throwError(httpError);
+  return of(httpError);
 }
 
 // app.module.ts
@@ -267,22 +267,22 @@ In the example above:
 
 ![custom-error-handler-404-component](images/custom-error-handler-404-component.jpg)
 
- - Since `throwError(httpError)` is returned at bottom of the `handleHttpErrors`, the `ErrorHandler` will handle the HTTP errors except 400 and 404 errors.
+ - Since `of(httpError)` is returned at bottom of the `handleHttpErrors`, the `ErrorHandler` will handle the HTTP errors except 400 and 404 errors.
 
 
-**Note 1:** If you put `return` to next line of handling an error, default error handling will not work for that error.
+**Note 1:** If you put `return EMPTY` to next line of handling an error, default error handling will not work for that error. `EMPTY` can be imported from `rxjs`
 
 ```js
 export function handleHttpErrors(injector: Injector, httpError: HttpErrorResponse) {
   if (httpError.status === 403) {
     // handle 403 errors here
-    return; // put return to skip default error handling
+    return EMPTY; // put return to skip default error handling
   }
 }
 ```
 
-**Note 2:** If you put `return throwError(httpError)`, default error handling will work.
-  - `throwError` is a function. It can be imported from `rxjs`.
+**Note 2:** If you put `return of(httpError)`, default error handling will work.
+  - `of` is a function. It can be imported from `rxjs`.
   - `httpError` is the second parameter of the error handler function which is registered to the `HTTP_ERROR_HANDLER` provider. Type of the `httpError` is `HttpErrorResponse`.
 
 ```js
@@ -291,11 +291,11 @@ import { throwError } from 'rxjs';
 export function handleHttpErrors(injector: Injector, httpError: HttpErrorResponse) {
   if (httpError.status === 500) {
     // handle 500 errors here
-    return;
+    return EMPTY;
   }
 
-  // you can return the throwError(httpError) at bottom of the function to run the default handler of ABP for HTTP errors that you didn't handle above.
-  return throwError(httpError)
+  // you can return the of(httpError) at bottom of the function to run the default handler of ABP for HTTP errors that you didn't handle above.
+  return of(httpError)
 }
 ```
 
