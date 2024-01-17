@@ -134,11 +134,22 @@ public interface IAbpDatePickerOptions
     /// </summary>
     string? ParentEl { get; set; }
     
+    [Obsolete("Use VisibleDateFormat instead.")]
     string? DateFormat { get; set; }
+    
+    /// <summary>
+    /// The date format string that will appear in the input element. For user input.
+    /// </summary>
+    string? VisibleDateFormat { get; set; }
+    
+    /// <summary>
+    /// The date format string that will appear in the hidden input element. For backend compatibility.
+    /// </summary>
+    string? InputDateFormat { get; set; }
 
     bool OpenButton { get; set; }
 
-    bool ClearButton { get; set; }
+    bool? ClearButton { get; set; }
 
     bool SingleOpenAndClearButton { get; set; }
 

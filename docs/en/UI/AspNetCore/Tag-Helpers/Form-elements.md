@@ -364,7 +364,8 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
 * `single-open-and-clear-button`: Shows the open and clear buttons in a single button when it's `True`. The default value is `True`.
 * `is-utc`: Converts the date to UTC when its `True`. The default value is `False`.
 * `is-iso`: Converts the date to ISO format when its `True`. The default value is `False`.
-* `date-format`: Sets the date format of the input. The default format is the user's culture date format. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
+* `visible-date-format`: Sets the date format of the input. The default format is the user's culture date format. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
+* `input-date-format`: Sets the date format of the hidden input for backend compatibility. The default format is `YYYY-MM-DD`. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
 * `date-separator`: Sets a character to separate start and end dates. The default value is `-`
 * Other non-mapped attributes will be automatically added to the input element as is. See the available [datepicker options](https://www.daterangepicker.com/#options). Eg: `data-start-date="2020-01-01"`
 
@@ -425,7 +426,8 @@ newPicker.insertAfter($('body'));
 * `singleOpenAndClearButton`: Shows the open and clear buttons in a single button when it's `True`. The default value is `True`.
 * `isUtc`: Converts the date to UTC when its `True`. The default value is `False`.
 * `isIso`: Converts the date to ISO format when its `True`. The default value is `False`.
-* `dateFormat`: Sets the date format of the input. The default format is the user's culture date format. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
+* `visibleDateFormat`: Sets the date format of the input. The default format is the user's culture date format. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
+* `inputDateFormat`: Sets the date format of the hidden input for backend compatibility. The default format is `YYYY-MM-DD`. You need to provide a JavaScript date format convention. Eg:  `YYYY-MM-DDTHH:MM:SSZ`.
 * `dateSeparator`: Sets a character to separate start and end dates. The default value is `-`.
 * `startDateName`: Sets the name of the hidden start date input.
 * `endDateName`: Sets the name of the hidden end date input.

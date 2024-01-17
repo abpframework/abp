@@ -18,8 +18,7 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
     <PackageReference Include="Markdig.Signed" />
     <PackageReference Include="HtmlSanitizer" />
-    <PackageReference Include="SixLabors.ImageSharp"/>
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" />
   </ItemGroup>
 
   <ItemGroup>
