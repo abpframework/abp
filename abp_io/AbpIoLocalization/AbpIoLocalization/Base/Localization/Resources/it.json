@@ -229,6 +229,7 @@
     "ManageAccount": "Gestisci profilo",
     "CommunityProfile": "Profilo della comunità",
     "BlogProfile": "Profilo del blog",
-    "Tickets": "Biglietti"
+    "Tickets": "Biglietti",
+    "DisplayName:CommunityIndexPagePoll": "Sondaggio della pagina indice della comunità"
   }
 }
