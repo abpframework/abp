@@ -2,12 +2,11 @@ import { noop } from '@abp/ng.core';
 import { Params } from '@angular/router';
 import { from, of } from 'rxjs';
 import { AuthFlowStrategy } from './auth-flow-strategy';
-import { RememberMeService, isTokenExpired } from '../utils';
+import { isTokenExpired } from '../utils';
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = false;
-  private rememberMe = 'remember_me'
-  rememberMeService = new RememberMeService(this.injector);
+  readonly #rememberMe = 'remember_me'
 
   async init() {
     this.checkRememberMeOption();
@@ -21,22 +20,22 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   private checkRememberMeOption() {
     const accessToken = this.oAuthService.getAccessToken();
     const isTokenExpire = isTokenExpired(this.oAuthService);
-    let rememberMe = Boolean(JSON.parse(this.rememberMeService.getRememberMe()));
+    let rememberMe = this.rememberMeService.get();
 
     if (accessToken && !rememberMe) {
       let parsedToken = JSON.parse(atob(accessToken.split(".")[1]));
-      const rememberMeValue = Boolean(parsedToken[this.rememberMe]);
+      const rememberMeValue = Boolean(parsedToken[this.#rememberMe]);
 
       if (rememberMeValue) {
-        this.rememberMeService.setRememberMe(true);
+        this.rememberMeService.set(true);
       } else {
-        this.rememberMeService.setRememberMe(false)
+        this.rememberMeService.set(false)
       }
     }
 
-    rememberMe = Boolean(JSON.parse(this.rememberMeService.getRememberMe()));
+    rememberMe = this.rememberMeService.get();
     if (accessToken && isTokenExpire && !rememberMe) {
-      this.rememberMeService.removeRememberMe();
+      this.rememberMeService.remove();
       this.oAuthService.logOut();
     }
   }
@@ -57,7 +56,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   logout(queryParams?: Params) {
-    this.rememberMeService.removeRememberMe();
+    this.rememberMeService.remove();
     return from(this.oAuthService.revokeTokenAndLogout(this.getCultureParams(queryParams)));
   }
 

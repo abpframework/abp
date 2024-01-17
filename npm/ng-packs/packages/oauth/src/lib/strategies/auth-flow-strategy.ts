@@ -25,6 +25,7 @@ import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 import { oAuthStorage } from '../utils/oauth-storage';
 import { OAuthErrorFilterService } from '../services';
 import { isTokenExpired } from '../utils';
+import { RememberMeService } from '../services/remember-me.service';
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
@@ -36,6 +37,7 @@ export abstract class AuthFlowStrategy {
   protected oAuthConfig!: AuthConfig;
   protected sessionState: SessionStateService;
   protected localStorageService: AbpLocalStorageService;
+  protected rememberMeService: RememberMeService;
   protected tenantKey: string;
   protected router: Router;
 
@@ -62,6 +64,7 @@ export abstract class AuthFlowStrategy {
     this.tenantKey = injector.get(TENANT_KEY);
     this.router = injector.get(Router);
     this.oAuthErrorFilterService = injector.get(OAuthErrorFilterService);
+    this.rememberMeService = injector.get(RememberMeService);
 
     this.listenToOauthErrors();
   }

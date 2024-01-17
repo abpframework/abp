@@ -4,13 +4,12 @@ import { Params, Router } from '@angular/router';
 import { from, Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import { AuthFlowStrategy } from './auth-flow-strategy';
-import { RememberMeService, isTokenExpired, pipeToLogin } from '../utils/auth-utils';
+import { isTokenExpired, pipeToLogin } from '../utils/auth-utils';
 import { AbpLocalStorageService, LoginParams } from '@abp/ng.core';
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 
 export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = true;
-  rememberMeService = new RememberMeService(this.injector);
 
   private listenToTokenExpiration() {
     this.oAuthService.events
@@ -26,7 +25,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
           this.refreshToken();
         } else {
           this.oAuthService.logOut();
-          this.rememberMeService.removeRememberMe();
+          this.rememberMeService.remove();
           this.configState.refreshAppState().subscribe();
         }
       });
@@ -41,9 +40,9 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   private checkRememberMeOption(localStorageService: AbpLocalStorageService) {
     const accessToken = this.oAuthService.getAccessToken();
     const isTokenExpire = isTokenExpired(this.oAuthService);
-    const rememberMe = Boolean(JSON.parse(this.rememberMeService.getRememberMe()))
+    const rememberMe = this.rememberMeService.get();
     if (accessToken && isTokenExpire && !rememberMe) {
-      this.rememberMeService.removeRememberMe();
+      this.rememberMeService.remove();
       this.oAuthService.logOut();
     }
   }
@@ -76,7 +75,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       switchMap(() => this.configState.refreshAppState()),
       tap(() => {
         router.navigateByUrl('/');
-        this.rememberMeService.removeRememberMe();
+        this.rememberMeService.remove();
       }),
     );
   }
@@ -84,7 +83,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   protected refreshToken() {
     return this.oAuthService.refreshToken().catch(() => {
       clearOAuthStorage();
-      this.rememberMeService.removeRememberMe();
+      this.rememberMeService.remove();
     });
   }
 }
