@@ -6,7 +6,6 @@ import { isTokenExpired } from '../utils';
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = false;
-  readonly #rememberMe = 'remember_me'
 
   async init() {
     this.checkRememberMeOption();
@@ -19,12 +18,11 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 
   private checkRememberMeOption() {
     const accessToken = this.oAuthService.getAccessToken();
-    const isTokenExpire = isTokenExpired(this.oAuthService);
+    const isTokenExpire = isTokenExpired(this.oAuthService.getAccessTokenExpiration());
     let rememberMe = this.rememberMeService.get();
 
     if (accessToken && !rememberMe) {
-      let parsedToken = JSON.parse(atob(accessToken.split(".")[1]));
-      const rememberMeValue = Boolean(parsedToken[this.#rememberMe]);
+      const rememberMeValue = this.rememberMeService.getFromToken(accessToken);
 
       if (rememberMeValue) {
         this.rememberMeService.set(true);

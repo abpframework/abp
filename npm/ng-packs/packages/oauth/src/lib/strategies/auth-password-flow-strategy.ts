@@ -5,7 +5,7 @@ import { from, Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import { AuthFlowStrategy } from './auth-flow-strategy';
 import { isTokenExpired, pipeToLogin } from '../utils/auth-utils';
-import { AbpLocalStorageService, LoginParams } from '@abp/ng.core';
+import { LoginParams } from '@abp/ng.core';
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 
 export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
@@ -32,14 +32,14 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   async init() {
-      this.checkRememberMeOption(this.localStorageService);
+    this.checkRememberMeOption();
 
     return super.init().then(() => this.listenToTokenExpiration());
   }
 
-  private checkRememberMeOption(localStorageService: AbpLocalStorageService) {
+  private checkRememberMeOption() {
     const accessToken = this.oAuthService.getAccessToken();
-    const isTokenExpire = isTokenExpired(this.oAuthService);
+    const isTokenExpire = isTokenExpired(this.oAuthService.getAccessTokenExpiration());
     const rememberMe = this.rememberMeService.get();
     if (accessToken && isTokenExpire && !rememberMe) {
       this.rememberMeService.remove();

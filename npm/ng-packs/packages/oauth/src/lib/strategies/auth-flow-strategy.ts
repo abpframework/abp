@@ -82,11 +82,11 @@ export abstract class AuthFlowStrategy {
     return this.oAuthService
       .loadDiscoveryDocument()
       .then(() => {
-        const isTokenExpire = isTokenExpired(this.oAuthService);
+        const isTokenExpire = isTokenExpired(this.oAuthService.getAccessTokenExpiration());
         if (!isTokenExpire || this.oAuthService.getRefreshToken()) {
           return this.refreshToken();
         }
-        
+
         return Promise.resolve();
       })
       .catch(this.catchError);

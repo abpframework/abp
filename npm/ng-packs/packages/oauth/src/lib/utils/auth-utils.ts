@@ -7,7 +7,6 @@ import {
   LoginParams,
   PipeToLoginFn,
 } from '@abp/ng.core';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { RememberMeService } from '../services/remember-me.service';
 
 export const pipeToLogin: PipeToLoginFn = function (
@@ -26,8 +25,7 @@ export const pipeToLogin: PipeToLoginFn = function (
   );
 };
 
-export function isTokenExpired(oAuthService: OAuthService): boolean {
-  const expireDate = oAuthService.getAccessTokenExpiration();
+export function isTokenExpired(expireDate: number): boolean {
   const currentDate = new Date().getTime();
   return expireDate < currentDate;
 }
