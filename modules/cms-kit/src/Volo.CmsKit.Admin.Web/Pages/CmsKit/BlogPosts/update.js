@@ -4,6 +4,7 @@ $(function () {
 
     var $selectBlog = $('#BlogSelectionSelect');
     var $formUpdate = $('#form-blog-post-update');
+    var $title = $('#ViewModel_Title');
     var $coverImage = $('#ViewModel_CoverImageMediaId');
     var $slug = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-blog-post-update');
@@ -16,6 +17,7 @@ $(function () {
     var UPPY_FILE_ID = "uppy-upload-file";
 
     var isTagsEnabled = true;
+    var message = l('BlogPostSaveConfirmationMessage', $title.val());
 
     $formUpdate.data('validator').settings.ignore = ":hidden, [contenteditable='true']:not([name]), .tui-popup-wrapper";
 
@@ -31,12 +33,14 @@ $(function () {
 
     initSelectBlog();
 
-    $formUpdate.on('submit', function (e) {
+    $formUpdate.on('submit', async function (e) {
         e.preventDefault();
 
         if ($formUpdate.valid()) {
 
             abp.ui.setBusy();
+
+            await submitCoverImage();
 
             $formUpdate.ajaxSubmit({
                 success: function (result) {
@@ -60,7 +64,7 @@ $(function () {
 
     $buttonSubmit.click(function (e) {
         e.preventDefault();
-        submitCoverImage();
+        $formUpdate.submit();
     });
 
     function submitEntityTags(blogPostId) {
@@ -93,7 +97,7 @@ $(function () {
         return headers;
     }
 
-    function submitCoverImage() {
+    async function submitCoverImage() {
         abp.ui.setBusy();
 
         var UPPY_OPTIONS = {
@@ -119,18 +123,13 @@ $(function () {
                 data: file, // file
             });
 
-            UPPY.upload().then((result) => {
-                if (result.failed.length > 0) {
-                    abp.message.error(l("UploadFailedMessage"));
-                } else {
-                    $coverImage.val(result.successful[0].response.body.id);
+            var result = await UPPY.upload();
 
-                    $formUpdate.submit();
-                }
-            });
-        }
-        else {
-            $formUpdate.submit();
+            if (result.failed.length > 0) {
+                abp.message.error(l("UploadFailedMessage"));
+            } else {
+                $coverImage.val(result.successful[0].response.body.id);
+            }
         }
     }
 

@@ -47,7 +47,8 @@ const options: Partial<Toaster.ToastOptions> = {
     closable: true,
     tapToDismiss: true,
     messageLocalizationParams: ['Demo', '1'],
-    titleLocalizationParams: []
+    titleLocalizationParams: [],
+    iconClass: 'custom-icon-name';
   };
 
   this.toaster.error('AbpUi::EntityNotFoundErrorMessage', 'AbpUi::Error', options);
@@ -60,6 +61,7 @@ const options: Partial<Toaster.ToastOptions> = {
 - `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`.
 - `messageLocalizationParams` is the interpolation parameters for the localization of the message.
 - `titleLocalizationParams` is the interpolation parameters for the localization of the title.
+- `iconClass` is the CSS class assigned to the icon displayed on a toast overlay.
 
 With the options above, the toast overlay looks like this:
 

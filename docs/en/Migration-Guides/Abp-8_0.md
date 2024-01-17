@@ -163,7 +163,8 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | ------------------- | ----------- | ----------- |
 | aliyun-net-sdk-sts | 3.1.0 |  3.1.2 |
 | AsyncKeyedLock | 6.2.1 |  6.2.2 |
-| Autofac | 7.0.0 |  7.1.0 |
+| Autofac | 7.0.0 |  8.0.0 |
+| Autofac.Extensions.DependencyInjection | 8.0.0 |  9.0.0 |
 | Autofac.Extras.DynamicProxy | 6.0.1 |  7.1.0 |
 | AutoMapper | 12.0.0 |  12.0.1 |
 | AWSSDK.S3 | 3.7.9.2 |  3.7.300.2 |
