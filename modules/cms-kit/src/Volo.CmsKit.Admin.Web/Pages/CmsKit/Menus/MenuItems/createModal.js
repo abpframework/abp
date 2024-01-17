@@ -9,7 +9,7 @@ $(function () {
             var $displayName = $('#ViewModel_DisplayName');
             var $pageIdClearButton = $('#url-tab');
             
-            initSelectPageId();
+            //initSelectPageId();
             
             $pageId.on('change', function (params) {
                 $url.prop('disabled', $pageId.val());
