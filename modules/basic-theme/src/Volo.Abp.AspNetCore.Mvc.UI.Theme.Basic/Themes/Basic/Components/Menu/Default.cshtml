@@ -10,7 +10,7 @@
     
     if (menuItem.IsLeaf)
     {
-        if (customComponentType != null)
+        if (customComponentType != null && typeof(ViewComponent).IsAssignableFrom(customComponentType))
         {
             @(await Component.InvokeAsync(customComponentType))
         }
@@ -34,7 +34,7 @@
     {
         <li class="nav-item">
             <div class="dropdown">
-                @if (customComponentType != null)
+                @if (customComponentType != null && typeof(ViewComponent).IsAssignableFrom(customComponentType))
                 {
                     @(await Component.InvokeAsync(customComponentType))
                 }
