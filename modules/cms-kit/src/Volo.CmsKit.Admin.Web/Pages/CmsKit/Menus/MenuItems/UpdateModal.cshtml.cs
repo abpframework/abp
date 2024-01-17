@@ -31,7 +31,7 @@ public class UpdateModalModel : CmsKitAdminPageModel
     {
         var menuItemDto = await MenuAdminAppService.GetAsync(Id);
 
-        ViewModel = ObjectMapper.Map<MenuItemDto, MenuItemUpdateViewModel>(menuItemDto);
+        ViewModel = ObjectMapper.Map<MenuItemWithDetailsDto, MenuItemUpdateViewModel>(menuItemDto);
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -43,8 +43,6 @@ public class UpdateModalModel : CmsKitAdminPageModel
         return new OkObjectResult(result);
     }
 
-    [AutoMap(typeof(MenuItemDto))]
-    [AutoMap(typeof(MenuItemUpdateInput), ReverseMap = true)]
     public class MenuItemUpdateViewModel : ExtensibleObject, IHasConcurrencyStamp
     {
         [Required]
@@ -63,6 +61,8 @@ public class UpdateModalModel : CmsKitAdminPageModel
         public string CssClass { get; set; }
 
         public Guid? PageId { get; set; }
+
+        public string? PageTitle { get; set; }
 
         [HiddenInput]
         public string ConcurrencyStamp { get; set; }
