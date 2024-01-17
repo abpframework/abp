@@ -52,6 +52,7 @@ public class CreateModalModel : CmsKitAdminPageModel
 
         public bool IsActive { get; set; } = true;
 
+        [Required]
         public string Url { get; set; }
 
         public Guid? PageId { get; set; }

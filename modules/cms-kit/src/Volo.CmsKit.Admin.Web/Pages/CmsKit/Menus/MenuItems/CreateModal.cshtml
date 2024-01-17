@@ -19,7 +19,7 @@
     Layout = null;
 }
 
-<form asp-page="/CmsKit/Menus/MenuItems/CreateModal">
+<form id="menu-item-form" asp-page="/CmsKit/Menus/MenuItems/CreateModal">
     <abp-modal id="menu-create-modal">
         <abp-modal-header title="@L["New"].Value"></abp-modal-header>
         <abp-modal-body>
@@ -27,7 +27,7 @@
             <abp-tabs tab-style="Tab">
                 <abp-tab name="url" title="@L["Url"]">
                 
-                    <abp-input asp-for="ViewModel.Url"/>
+                    <abp-input asp-for="ViewModel.Url" />
 
                 </abp-tab>
                 <abp-tab title="@L["Page"]">

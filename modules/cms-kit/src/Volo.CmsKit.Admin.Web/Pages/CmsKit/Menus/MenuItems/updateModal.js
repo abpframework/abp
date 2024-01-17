@@ -7,6 +7,7 @@ $(function () {
             var $pageId = $('#ViewModel_PageId');
             var $url = $('#ViewModel_Url');
             var $displayName = $('#ViewModel_DisplayName');
+            var $menuItemForm = $('#menu-item-form');
 
             $pageId.on('change', function (params) {
                 $url.prop('disabled', $pageId.val());
@@ -19,6 +20,10 @@ $(function () {
             })
 
             $pageId.trigger('change');
+
+            $menuItemForm.on('submit', function (e) {
+                $('[href="#url"]').tab('show');
+            });
         };
 
         return {
