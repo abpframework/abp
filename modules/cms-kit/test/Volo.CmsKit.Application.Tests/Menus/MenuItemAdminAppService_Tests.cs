@@ -78,6 +78,29 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
     }
 
     [Fact]
+    public async Task UpdateAsync_ShouldRemoveRelation_WithoutPageId()
+    {
+        var newUrl = "/my-new-url";
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await MenuAdminAppService.UpdateAsync(
+                TestData.MenuItem_4_With_Page_1_Id,
+                new MenuItemUpdateInput
+                {
+                    DisplayName = TestData.MenuItem_4_With_Page_1_Name,
+                    Url = newUrl,
+                    PageId = null
+                });
+        });
+
+        var menu = await MenuRepository.FindAsync(TestData.MenuItem_4_With_Page_1_Id);
+
+        menu.ShouldNotBeNull();
+        menu.Url.ShouldBe(newUrl);
+        menu.PageId.ShouldBeNull();
+    }
+
+    [Fact]
     public async Task DeleteAsync_ShouldWorkProperly_WithExistingId()
     {
         await MenuAdminAppService.DeleteAsync(TestData.MenuItem_1_Id);
