@@ -10,7 +10,7 @@ public interface IMenuItemAdminAppService : IApplicationService
 {
     Task<ListResultDto<MenuItemDto>> GetListAsync();
 
-    Task<MenuItemDto> GetAsync(Guid id);
+    Task<MenuItemWithDetailsDto> GetAsync(Guid id);
 
     Task<MenuItemDto> CreateAsync(MenuItemCreateInput input);
 
