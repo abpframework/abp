@@ -39,7 +39,7 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
 
         result.ShouldNotBeNull();
         result.Items.ShouldNotBeEmpty();
-        result.Items.Count.ShouldBe(3);
+        result.Items.Count.ShouldBe(4);
     }
 
     [Fact]
