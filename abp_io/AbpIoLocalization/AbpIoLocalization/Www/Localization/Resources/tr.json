@@ -420,6 +420,14 @@
     "Follow the links below": "Aşağıdaki bağlantıları takip edin",
     "BootstrapCardTitle": "Bu örnek, ABP bootstrap kart tag yardımcısı tarafından oluşturulmuştur.",
     "GoSomewhere": "Buraya Git →",
-    "ABPTestimonialDescription": "ABP Framework: Referanslarınızı dinleyelim"
+    "ABPTestimonialDescription": "ABP Framework: Referanslarınızı dinleyelim",
+    "NotValidEmailAddress": "Geçerli bir e-posta adresi giriniz.",
+    "EmailAddressMaxLength": "E-posta maksimum uzunluğu 255 karakter olmalıdır.",
+    "EmailAddressRequired": "E-posta alanı zorunludur.",
+    "PasswordLength": "Şifre alanı maksimum 32 karakter olmalıdır.",
+    "PasswordRequired": "Şifre alanı zorunludur.",
+    "AddressLength": "Adres alanı maksimum uzunluğu 255 karakter olmalıdır.",
+    "GenderRequired": "Cinsiyet alanı zorunludur."
+
   }
 }
