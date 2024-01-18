@@ -468,8 +468,7 @@
     "Characters": "characters",
     "Testimonial_YourProfilePicture": "Your profile picture (only {0})",
     "BootstrapCardTitle": "This is a sample card component built by ABP bootstrap card tag helper.",
-    "GoSomewhere": "Go somewhere →"
+    "GoSomewhere": "Go somewhere →",
+    "ABPTestimonialDescription": "ABP Framework: Let's hear your testimonial"
   }
 }
-
-

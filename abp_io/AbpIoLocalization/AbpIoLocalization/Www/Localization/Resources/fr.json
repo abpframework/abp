@@ -466,6 +466,7 @@
     "TestimonialSend": "Merci ! Nous avons bien reçu votre témoignage. Nous le passerons en revue et prendrons la prochaine étape bientôt.",
     "Title": "Titre",
     "TitlePlaceholder": "Développeur de logiciels, CTO, etc.",
-    "Characters": "caractères"
+    "Characters": "caractères",
+    "ABPTestimonialDescription": "ABP Framework : Écoutons votre témoignage"
   }
 }

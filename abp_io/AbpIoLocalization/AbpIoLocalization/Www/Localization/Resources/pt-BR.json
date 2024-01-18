@@ -466,6 +466,7 @@
     "TestimonialSend": "Obrigado! ",
     "Title": "Título",
     "TitlePlaceholder": "Desenvolvedor de software, CTO etc.",
-    "Characters": "caracteres"
+    "Characters": "caracteres",
+    "ABPTestimonialDescription": "Estrutura ABP: vamos ouvir seu depoimento"
   }
 }

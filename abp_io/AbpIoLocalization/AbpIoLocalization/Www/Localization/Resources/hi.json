@@ -466,6 +466,7 @@
     "TestimonialSend": "धन्यवाद! हमने आपका साक्षात्कार प्राप्त किया है। हम इसे समीक्षा करेंगे और शीघ्र अगला कदम उठाएंगे।",
     "Title": "शीर्षक",
     "TitlePlaceholder": "सॉफ़्टवेयर डेवेलपर, सीटीओ, आदि।",
-    "Characters": "अक्षर"
+    "Characters": "अक्षर",
+    "ABPTestimonialDescription": "ABP Framework: आइए आपका प्रशंसापत्र सुनें"
   }
 }

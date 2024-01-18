@@ -466,6 +466,7 @@
     "TestimonialSend": "Ďakujem! ",
     "Title": "Názov",
     "TitlePlaceholder": "Vývojár softvéru, CTO atď.",
-    "Characters": "znaky"
+    "Characters": "znaky",
+    "ABPTestimonialDescription": "Rámec ABP: Vypočujme si vaše svedectvo"
   }
 }

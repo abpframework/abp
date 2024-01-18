@@ -419,8 +419,7 @@
     "Options": "Seçenekler",
     "Follow the links below": "Aşağıdaki bağlantıları takip edin",
     "BootstrapCardTitle": "Bu örnek, ABP bootstrap kart tag yardımcısı tarafından oluşturulmuştur.",
-    "GoSomewhere": "Buraya Git →"
-
-
+    "GoSomewhere": "Buraya Git →",
+    "ABPTestimonialDescription": "ABP Framework: Referanslarınızı dinleyelim"
   }
 }
