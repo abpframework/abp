@@ -466,7 +466,8 @@
     "Title": "Title",
     "TitlePlaceholder": "Software Developer, CTO etc.",
     "Characters": "characters",
-    "Testimonial_YourProfilePicture": "Your profile picture (only {0})"
+    "Testimonial_YourProfilePicture": "Your profile picture (only {0})",
+    "ABPTestimonialDescription": "ABP Framework: Let's hear your testimonial"
   }
 }
 

@@ -466,6 +466,7 @@
     "TestimonialSend": "Vielen Dank! Wir haben Ihre Bewertung erhalten. Wir werden sie bald überprüfen und den nächsten Schritt unternehmen.",
     "Title": "Titel",
     "TitlePlaceholder": "Softwareentwickler, CTO usw.",
-    "Characters": "zeichen"
+    "Characters": "zeichen",
+    "ABPTestimonialDescription": "ABP Framework: Lass uns deine Bewertung hören"
   }
 }
