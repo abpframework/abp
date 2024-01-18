@@ -298,32 +298,4 @@ public static class AutofacRegistration
                 .ConfigureLifecycle(descriptor.Lifetime, null);
         }
     }
-
-    /// <summary>
-    /// Normalizes the implementation instance data between keyed and not keyed services.
-    /// </summary>
-    /// <param name="descriptor">
-    /// The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor" /> to normalize.
-    /// </param>
-    /// <returns>
-    /// The appropriate implementation instance from the service descriptor.
-    /// </returns>
-    public static object? NormalizedImplementationInstance(this ServiceDescriptor descriptor)
-    {
-        return !descriptor.IsKeyedService ? descriptor.ImplementationInstance : descriptor.KeyedImplementationInstance;
-    }
-
-    /// <summary>
-    /// Normalizes the implementation type data between keyed and not keyed services.
-    /// </summary>
-    /// <param name="descriptor">
-    /// The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor" /> to normalize.
-    /// </param>
-    /// <returns>
-    /// The appropriate implementation type from the service descriptor.
-    /// </returns>
-    public static Type? NormalizedImplementationType(this ServiceDescriptor descriptor)
-    {
-        return !descriptor.IsKeyedService ? descriptor.ImplementationType : descriptor.KeyedImplementationType;
-    }
 }
