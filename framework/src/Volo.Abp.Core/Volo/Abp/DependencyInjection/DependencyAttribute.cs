@@ -11,6 +11,10 @@ public class DependencyAttribute : Attribute
 
     public virtual bool ReplaceServices { get; set; }
 
+    public virtual bool IsKeyedService { get; set; }
+    
+    public virtual object? ServiceKey { get; set; }
+
     public DependencyAttribute()
     {
 
@@ -18,6 +22,19 @@ public class DependencyAttribute : Attribute
 
     public DependencyAttribute(ServiceLifetime lifetime)
     {
+        Lifetime = lifetime;
+    }
+
+    public DependencyAttribute(bool isKeyedService, object? serviceKey)
+    {
+        IsKeyedService = isKeyedService;
+        ServiceKey = serviceKey;
+    }
+
+    public DependencyAttribute(bool isKeyedService, object? serviceKey, ServiceLifetime lifetime)
+    {
+        IsKeyedService = isKeyedService;
+        ServiceKey = serviceKey;
         Lifetime = lifetime;
     }
 }

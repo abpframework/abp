@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Reflection;
 
@@ -96,6 +95,8 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
         Type implementationType,
         Type exposingServiceType,
         List<Type> allExposingServiceTypes,
+        bool isKeyedService, 
+        object? serviceKey,
         ServiceLifetime lifeTime)
     {
         if (lifeTime.IsIn(ServiceLifetime.Singleton, ServiceLifetime.Scoped))
@@ -108,19 +109,32 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
 
             if (redirectedType != null)
             {
-                return ServiceDescriptor.Describe(
-                    exposingServiceType,
-                    provider => provider.GetService(redirectedType)!,
-                    lifeTime
-                );
+                return isKeyedService
+                    ? ServiceDescriptor.DescribeKeyed(
+                        exposingServiceType,
+                        serviceKey,
+                        (provider,key) => provider.GetRequiredKeyedService(redirectedType, key),
+                        lifeTime)
+                    : ServiceDescriptor.Describe(
+                        exposingServiceType,
+                        provider => provider.GetRequiredService(redirectedType),
+                        lifeTime
+                    );
             }
         }
 
-        return ServiceDescriptor.Describe(
-            exposingServiceType,
-            implementationType,
-            lifeTime
-        );
+        return isKeyedService
+            ? ServiceDescriptor.DescribeKeyed(
+                exposingServiceType,
+                serviceKey,
+                implementationType,
+                lifeTime
+            )
+            : ServiceDescriptor.Describe(
+                exposingServiceType,
+                implementationType,
+                lifeTime
+            );
     }
 
     protected virtual Type? GetRedirectedTypeOrNull(

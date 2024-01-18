@@ -32,6 +32,8 @@ public class DefaultConventionalRegistrar : ConventionalRegistrarBase
                 type,
                 exposedServiceType,
                 exposedServiceTypes,
+                dependencyAttribute?.IsKeyedService ?? false,
+                dependencyAttribute?.ServiceKey,
                 lifeTime.Value
             );
 

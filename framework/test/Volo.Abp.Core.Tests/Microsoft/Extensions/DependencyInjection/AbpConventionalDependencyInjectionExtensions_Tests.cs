@@ -55,6 +55,16 @@ public class AbpConventionalDependencyInjectionExtensions_Tests
     }
 
     [Fact]
+    public void Should_Register_Keyed_Scoped_With_Dependency_Attribute()
+    {
+        //Act
+        _services.AddType(typeof(MyKeyedScopedClassWithDependencyAttribute));
+        
+        //Assert
+        _services.ShouldContainKeyedScoped(typeof(MyKeyedScopedClassWithDependencyAttribute), typeof(MyKeyedScopedClassWithDependencyAttribute), typeof(MyKeyedScopedClassWithDependencyAttribute));
+    }
+
+    [Fact]
     public void Dependency_Attribute_Should_Override_Interface_Lifetimes()
     {
         //Act
@@ -62,6 +72,16 @@ public class AbpConventionalDependencyInjectionExtensions_Tests
 
         //Assert
         _services.ShouldContainScoped(typeof(MyScopedClassWithDependencyAttribute2));
+    }
+
+    [Fact]
+    public void Dependency_Keyed_Attribute_Should_Override_Interface_Lifetimes()
+    {
+        //Act
+        _services.AddType(typeof(MyKeyedScopedClassWithDependencyAttribute2));
+
+        //Assert
+        _services.ShouldContainKeyedScoped(typeof(MyKeyedScopedClassWithDependencyAttribute2),typeof(MyKeyedScopedClassWithDependencyAttribute2));
     }
 
     [Fact]
@@ -74,6 +94,18 @@ public class AbpConventionalDependencyInjectionExtensions_Tests
         _services.ShouldContain(typeof(IMyService1), typeof(MyServiceWithExposeList), ServiceLifetime.Transient);
         _services.ShouldContain(typeof(IMyService2), typeof(MyServiceWithExposeList), ServiceLifetime.Transient);
         _services.ShouldNotContainService(typeof(MyServiceWithExposeList));
+    }
+
+    [Fact]
+    public void Should_Register_Keyed_For_Exposed_Services()
+    {
+        //Act
+        _services.AddType(typeof(MyKeyedServiceWithExposeList));
+
+        //Assert
+        _services.ShouldContainKeyed(typeof(IMyService1), typeof(MyKeyedServiceWithExposeList), typeof(MyKeyedServiceWithExposeList), ServiceLifetime.Singleton);
+        _services.ShouldContainKeyedSingleton(typeof(IMyService2), typeof(MyKeyedServiceWithExposeList), typeof(MyKeyedServiceWithExposeList));
+        _services.ShouldNotContainKeyedService(typeof(MyKeyedServiceWithExposeList), typeof(MyKeyedServiceWithExposeList));
     }
 
     [Fact]
@@ -208,8 +240,19 @@ public class AbpConventionalDependencyInjectionExtensions_Tests
 
     }
 
+    [Dependency(true, typeof(MyKeyedScopedClassWithDependencyAttribute), ServiceLifetime.Scoped)]
+    public class MyKeyedScopedClassWithDependencyAttribute
+    {
+
+    }
+
     [Dependency(ServiceLifetime.Scoped)] //Attribute overrides interface
     public class MyScopedClassWithDependencyAttribute2 : ITransientDependency
+    {
+
+    }
+    [Dependency(true, typeof(MyKeyedScopedClassWithDependencyAttribute2), ServiceLifetime.Scoped)]
+    public class MyKeyedScopedClassWithDependencyAttribute2 : ITransientDependency
     {
 
     }
@@ -226,6 +269,13 @@ public class AbpConventionalDependencyInjectionExtensions_Tests
 
     [ExposeServices(typeof(IMyService1), typeof(IMyService2))]
     public class MyServiceWithExposeList : IMyService1, IMyService2, ITransientDependency
+    {
+
+    }
+
+    [Dependency(true, typeof(MyKeyedServiceWithExposeList), ServiceLifetime.Singleton)]
+    [ExposeServices(typeof(IMyService1), typeof(IMyService2))]
+    public class MyKeyedServiceWithExposeList : IMyService1, IMyService2
     {
 
     }

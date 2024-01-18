@@ -48,7 +48,10 @@ public static class ServiceCollectionCommonExtensions
 
         foreach (var service in services)
         {
-            var factoryInterface = service.ImplementationInstance?.GetType()
+            var factoryInterface = (service.IsKeyedService
+                    ? service.KeyedImplementationInstance
+                    : service.ImplementationInstance)?
+                .GetType()
                 .GetTypeInfo()
                 .GetInterfaces()
                 .FirstOrDefault(i => i.GetTypeInfo().IsGenericType &&
