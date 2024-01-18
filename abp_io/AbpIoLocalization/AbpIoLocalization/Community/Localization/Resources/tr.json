@@ -201,8 +201,13 @@
     "LATESTPOSTS": "SON GÖNDERİLER",
     "LatestPost": "Son Gönderiler",
     "{0}Posts": "{0} Gönderi",
-    "CommunitySlogan": "<span class=\"{0}\">ABP Sevenler</span> için benzersiz bir topluluk platformu"
-
+    "CommunitySlogan": "<span class=\"{0}\">ABP Sevenler</span> için benzersiz bir topluluk platformu",
+    "CompletedRaffles": "Tamamlanmış <span class=\"gradient-community\">Çekilişler</span>",
+    "UpcomingRaffles": "Yaklaşan <span class=\"gradient-community\">Çekilişler</span>",
+    "NoActiveRaffleDescription": "Şu anda aktif bir çekiliş mevcut değildir.",
+    "RaffleSubscriptionCodeInputMessage": "Bu çekiliş bir kayıt kodu gerektiriyor. Lütfen kayıt kodunu aşağıya girin:",
+    "RaffleSubscriptionCodeInputErrorMessage": "Kayıt kodu hatalı. Lütfen tekrar deneyin.",
+    "GoodJob!": "İyi iş!"
 
 
 

@@ -406,6 +406,7 @@
     "MultipleOrganizationInfo": "Pozrite si všetky vaše organizácie",
     "PaymentFailedInfo": "Ľutujeme, platba zlyhala! ",
     "UsedPayment": "Táto platba už bola použitá",
-    "ManageLicense": "Spravovať licenciu"
+    "ManageLicense": "Spravovať licenciu",
+    "AbpPlatformLeptonXTheme": "Téma LeptonX pre váš administratívny panel od <span class=\"gradient-commercial\">ABP Platform</span>"
   }
 }

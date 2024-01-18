@@ -409,6 +409,8 @@
     "MultipleOrganizationInfo": "Podívejte se na všechny vaše organizace",
     "PaymentFailedInfo": "Omlouváme se, platba se nezdařila! ",
     "UsedPayment": "Tato platba již byla použita",
-    "ManageLicense": "Správa licence"
+    "ManageLicense": "Správa licence",
+    "AbpPlatformLeptonXTheme": "LeptonX téma pro váš správce účtu od <span class=\"gradient-commercial\">ABP Platform</span>"
+    
   }
 }

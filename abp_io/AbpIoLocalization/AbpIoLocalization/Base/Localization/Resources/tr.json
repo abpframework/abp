@@ -176,6 +176,11 @@
     "ManageAccount": "Hesabı Yönet",
     "CommunityProfile": "Topluluk Profili",
     "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">Community</span> ile tanışın",
-    "DisplayName:CommunityIndexPagePoll": "Topluluk Anasayfası Anketi"
+    "DisplayName:CommunityIndexPagePoll": "Topluluk Anasayfası Anketi",
+    "Articles": "Makaleler",
+    "Raffles": "Çekilişler",
+    "HowItWorks": "Nasıl Çalışıyor?",
+    "WhyABPIOPlatform": "Neden ABP.IO Platform?",
+    "ReleaseNotes": "Sürüm Notları"
   }
 }

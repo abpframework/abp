@@ -1092,6 +1092,9 @@
     "YouAreNotAuthorizedToDownloadStudio": "You are not authorized to download ABP Studio.",
     "PaymentFailedInfo": "Sorry, payment failed! This could be due to insufficient funds, invalid credit card numbers or invalid pin",
     "UsedPayment": "This payment has been already used",
-    "ManageLicense": "Manage License"
+    "ManageLicense": "Manage License",    
+    "AbpPlatformLeptonXTheme": "LeptonX Theme for Your Admin Dashboard by <span class=\"gradient-commercial\">ABP Platform</span>"    
   }
 }
+
+

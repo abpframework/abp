@@ -1087,6 +1087,7 @@
     "CampaignName:BlackFriday": "Crni petak",
     "PaymentFailedInfo": "Nažalost, plaćanje nije uspjelo! ",
     "UsedPayment": "Ovo plaćanje je već iskorišteno",
-    "ManageLicense": "Upravljanje licencom"
+    "ManageLicense": "Upravljanje licencom",
+    "AbpPlatformLeptonXTheme": "LeptonX Tema za vašu administratorsku nadzornu ploču od strane <span class=\"gradient-commercial\">ABP Platform</span>"
   }
 }

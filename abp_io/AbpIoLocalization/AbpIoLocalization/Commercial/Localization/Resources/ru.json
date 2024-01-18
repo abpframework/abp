@@ -1088,6 +1088,7 @@
     "MultipleOrganizationInfo": "Просмотреть все ваши организации",
     "PaymentFailedInfo": "Извините, оплата не удалась! ",
     "UsedPayment": "Этот платеж уже использован",
-    "ManageLicense": "Управление лицензией"
+    "ManageLicense": "Управление лицензией",
+    "AbpPlatformLeptonXTheme": "Тема LeptonX для вашей панели администратора от <span class=\"gradient-commercial\">ABP Platform</span>"
   }
 }

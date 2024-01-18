@@ -1078,6 +1078,7 @@
     "MultipleOrganizationInfo": "查看您的所有組織",
     "PaymentFailedInfo": "抱歉，支付失败！",
     "UsedPayment": "该付款已被使用",
-    "ManageLicense": "管理許可證"
+    "ManageLicense": "管理許可證",
+    "AbpPlatformLeptonXTheme": "由 <span class=\"gradient-commercial\">ABP Platform</span> 提供的您的管理儀表板的 LeptonX 主題"
   }
 }

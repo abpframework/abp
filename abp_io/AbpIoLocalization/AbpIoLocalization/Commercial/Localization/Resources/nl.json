@@ -387,6 +387,7 @@
     "MultipleOrganizationInfo": "Bekijk al uw organisaties",
     "PaymentFailedInfo": "Excuses, betaling mislukt! ",
     "UsedPayment": "Deze betaling is al gebruikt",
-    "ManageLicense": "Licentie beheren"
+    "ManageLicense": "Licentie beheren",
+    "AbpPlatformLeptonXTheme": "LeptonX-thema voor uw beheerdersdashboard door <span class=\"gradient-commercial\">ABP Platform</span>"
   }
 }

@@ -390,6 +390,7 @@
     "MultipleOrganizationInfo": "Vea todas sus organizaciones",
     "PaymentFailedInfo": "Lo sentimos, ¡el pago falló! ",
     "UsedPayment": "Este pago ya ha sido utilizado.",
-    "ManageLicense": "Gestionar licencia"
+    "ManageLicense": "Gestionar licencia",
+    "AbpPlatformLeptonXTheme": "Tema LeptonX para su panel de administración por <span class=\"gradient-commercial\">ABP Platform</span>"
   }
 }
