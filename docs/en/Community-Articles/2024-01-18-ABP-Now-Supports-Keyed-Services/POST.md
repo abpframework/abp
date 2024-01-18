@@ -37,9 +37,9 @@ There was not a simple way to retrieve a specific implementation type directly. 
 
 ## ABP Framework Now Supports Keyed Services!
 
-Autofac was already supporting the named/keyed DI services for a long time and with v9.0.0, they make it compatible with `Microsoft.Extensions.DependencyInjection` package (including the keyed service support).
+Autofac was already supporting the named/keyed DI services for a long time and with v9.0.0, they made it compatible with the `Microsoft.Extensions.DependencyInjection` package (including the keyed service support).
 
-After the v9.0.0 was released for Autofac, then the ABP Framework Core team immediately updated the `Autofac.Extensions.DependencyInjection` package to `v9.0.0`, made the related changes in its own Autofac project and included in the v8.0.2 release.
+After the v9.0.0 was released for Autofac, then the ABP Framework Core team immediately updated the `Autofac.Extensions.DependencyInjection` package to `v9.0.0`, made the related changes in its own Autofac package and included in the v8.0.2 release.
 
 You can see the related changes in the following PRs:
 
