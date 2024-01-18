@@ -418,10 +418,10 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
 
     private async Task SeedMenusAsync()
     {
-        var menuItem4 = await _menuItemRepository.InsertAsync(new MenuItem(
+        var menuItem4 = new MenuItem(
                        _cmsKitTestData.MenuItem_4_With_Page_1_Id,
                         _cmsKitTestData.MenuItem_4_With_Page_1_Name,
-                        _cmsKitTestData.Page_1_Slug.EnsureStartsWith('/')));
+                        _cmsKitTestData.Page_1_Slug.EnsureStartsWith('/'));
 
         menuItem4.SetPageId(_cmsKitTestData.Page_1_Id);
 
