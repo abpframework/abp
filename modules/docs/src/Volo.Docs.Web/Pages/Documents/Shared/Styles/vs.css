@@ -303,6 +303,9 @@ body.scrolledMore .alert-criteria p.alert-p {
 .docs-page .docs-sidebar .docs-tree-list ul li.selected-tree.last-link > span .fa {
   transform: rotate(0deg);
 }
+.docs-page .docs-sidebar .docs-tree-list .mCSB_scrollTools {
+  right: -20px;
+}
 .docs-page .docs-content {
   display: inline-block;
   overflow-x: scroll;
