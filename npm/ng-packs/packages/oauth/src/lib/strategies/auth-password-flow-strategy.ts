@@ -74,8 +74,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     return from(this.oAuthService.revokeTokenAndLogout(noRedirectToLogoutUrl)).pipe(
       switchMap(() => this.configState.refreshAppState()),
       tap(() => {
-        router.navigateByUrl('/');
         this.rememberMeService.remove();
+        router.navigateByUrl('/');
       }),
     );
   }
