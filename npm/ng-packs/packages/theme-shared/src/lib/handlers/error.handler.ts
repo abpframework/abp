@@ -21,7 +21,7 @@ export class ErrorHandler {
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly routerErrorHandlerService = inject(RouterErrorHandlerService);
   protected readonly httpErrorConfig = inject(HTTP_ERROR_CONFIG);
-  protected readonly defaultErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
+  protected readonly customErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
   protected readonly httpErrorHandler = inject(HTTP_ERROR_HANDLER, { optional: true });
 
   constructor(protected injector: Injector) {
@@ -43,7 +43,7 @@ export class ErrorHandler {
     if (this.httpErrorHandler) {
       return this.httpErrorHandler(this.injector, error);
     }
-    
+
     return of(error);
   };
 
@@ -55,17 +55,17 @@ export class ErrorHandler {
   }
 
   protected handleError(err: unknown) {
-    if (this.defaultErrorHandlers && this.defaultErrorHandlers.length) {
-      const errorHandlerService = this.defaultErrorHandlers
+    if (this.customErrorHandlers && this.customErrorHandlers.length) {
+      const errorHandlerService = this.customErrorHandlers
         .sort(this.sortHttpErrorHandlers)
         .find(service => service.canHandle(err));
-  
+
       if (errorHandlerService) {
         errorHandlerService.execute();
         return;
       }
     }
-    
+
     this.showError().subscribe();
   }
 
