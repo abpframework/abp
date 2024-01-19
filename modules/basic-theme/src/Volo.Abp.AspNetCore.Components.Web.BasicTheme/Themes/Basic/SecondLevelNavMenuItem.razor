@@ -8,7 +8,7 @@
 }
 @if (MenuItem.IsLeaf)
 {
-    if (customComponentType != null)
+    if (customComponentType != null && typeof(ComponentBase).IsAssignableFrom(customComponentType))
     {
         <DynamicComponent Type="@customComponentType" />
     }
@@ -28,7 +28,7 @@
 else
 {
     <div class="dropdown-submenu">
-        @if (customComponentType != null)
+        @if (customComponentType != null && typeof(ComponentBase).IsAssignableFrom(customComponentType))
         {
             <DynamicComponent Type="@customComponentType" />
         }
