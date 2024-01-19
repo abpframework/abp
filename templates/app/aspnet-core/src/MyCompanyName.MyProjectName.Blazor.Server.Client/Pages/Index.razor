@@ -8,3 +8,19 @@
 
 <a class="btn btn-primary" href="/Counter">Counter Wasm</a>
 <a class="btn btn-primary" href="/Counter2">Counter2 server</a>
+
+<div>
+    <p role="status">Current count: @currentCount </p>
+</div>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
