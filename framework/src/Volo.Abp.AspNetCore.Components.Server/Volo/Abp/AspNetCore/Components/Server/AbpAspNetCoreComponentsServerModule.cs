@@ -58,15 +58,20 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
         });
 
         var preConfigureActions = context.Services.GetPreConfigureActions<HttpConnectionDispatcherOptions>();
+        var componentsServerOptions = context.Services.ExecutePreConfiguredActions<AbpAspNetCoreComponentsServerOptions>();
         Configure<AbpEndpointRouterOptions>(options =>
         {
             options.EndpointConfigureActions.Add(endpointContext =>
             {
-                endpointContext.Endpoints.MapBlazorHub(httpConnectionDispatcherOptions =>
-                {
-                    preConfigureActions.Configure(httpConnectionDispatcherOptions);
-                });
-                endpointContext.Endpoints.MapFallbackToPage("/_Host");
+                // endpointContext.Endpoints.MapBlazorHub(httpConnectionDispatcherOptions =>
+                // {
+                //     preConfigureActions.Configure(httpConnectionDispatcherOptions);
+                // });
+                //
+                // if (componentsServerOptions.MapFallbackToPageToHost)
+                // {
+                //     endpointContext.Endpoints.MapFallbackToPage("/_Host");
+                // }
             });
         });
     }

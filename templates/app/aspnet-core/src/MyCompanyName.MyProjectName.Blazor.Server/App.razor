@@ -1,0 +1,53 @@
+﻿@using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling
+@inject IBundleManager BundleManager
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+
+    @* <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global"/> *@
+    @if (StyleBundleFiles != null)
+    {
+        foreach (var bundleFile in StyleBundleFiles)
+        {
+            <link rel="stylesheet" href="@bundleFile.FileName" />
+        }
+    }
+
+    <HeadOutlet />
+
+</head>
+<body>
+
+    <Routes />
+
+    <script src="_framework/blazor.web.js"></script>
+
+    @* <abp-script-bundle name="@BlazorBasicThemeBundles.Scripts.Global" /> *@
+    @if (ScriptBundleFiles != null)
+    {
+        foreach (var bundleFile in ScriptBundleFiles)
+        {
+            <script src="@bundleFile.FileName"></script>
+        }
+    }
+
+    </body>
+</html>
+
+@code {
+
+    private IReadOnlyList<BundleFile>? StyleBundleFiles { get; set; }
+    private IReadOnlyList<BundleFile>? ScriptBundleFiles { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        StyleBundleFiles = await BundleManager.GetStyleBundleFilesAsync(BlazorBasicThemeBundles.Styles.Global);
+        ScriptBundleFiles = await BundleManager.GetScriptBundleFilesAsync(BlazorBasicThemeBundles.Scripts.Global);
+    }
+}

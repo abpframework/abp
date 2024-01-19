@@ -1,0 +1,27 @@
+﻿@page "/counter2"
+@using Volo.Abp.Http.Client.Authentication
+@inject IAbpAccessTokenProvider AccessTokenProvider
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@rendermode InteractiveServer
+
+<PageTitle>Counter 2</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount </p>
+<p role="status"><b>IAbpAccessTokenProvider Type:</b> @AccessTokenProvider.GetType().FullName </p>
+<p role="status"><b>AuthenticationStateProvider Type:</b> @AuthenticationStateProvider.GetType().FullName </p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<a class="btn btn-primary" href="/Counter">Counter Wasm</a>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
