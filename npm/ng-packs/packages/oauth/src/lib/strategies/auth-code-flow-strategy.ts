@@ -24,11 +24,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     if (accessToken && !rememberMe) {
       const rememberMeValue = this.rememberMeService.getFromToken(accessToken);
 
-      if (rememberMeValue) {
-        this.rememberMeService.set(!!rememberMeValue);
-      } else {
-        this.rememberMeService.set(!!rememberMeValue)
-      }
+      this.rememberMeService.set(!!rememberMeValue);
     }
 
     rememberMe = this.rememberMeService.get();
