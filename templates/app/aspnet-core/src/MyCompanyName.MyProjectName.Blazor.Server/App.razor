@@ -1,5 +1,6 @@
 ﻿@using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
 @using Volo.Abp.AspNetCore.Mvc.UI.Bundling
+@using Microsoft.AspNetCore.Http
 @inject IBundleManager BundleManager
 <!DOCTYPE html>
 <html lang="en">
@@ -19,12 +20,12 @@
         }
     }
 
-    <HeadOutlet />
+    <HeadOutlet @rendermode="RenderModeForPage" />
 
 </head>
 <body>
 
-    <Routes />
+    <Routes @rendermode="RenderModeForPage" />
 
     <script src="_framework/blazor.web.js"></script>
 
@@ -44,6 +45,11 @@
 
     private IReadOnlyList<BundleFile>? StyleBundleFiles { get; set; }
     private IReadOnlyList<BundleFile>? ScriptBundleFiles { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/Identity") ? InteractiveAuto : null;
 
     protected override async Task OnInitializedAsync()
     {
