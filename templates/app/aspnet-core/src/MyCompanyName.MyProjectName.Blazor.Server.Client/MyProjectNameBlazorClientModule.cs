@@ -33,7 +33,8 @@ public class MyProjectNameBlazorClientModule : AbpModule
         var environment = context.Services.GetSingletonInstance<IWebAssemblyHostEnvironment>();
         var builder = context.Services.GetSingletonInstance<WebAssemblyHostBuilder>();
 
-        builder.Services.AddSingleton<AuthenticationStateProvider, RemoteAuthenticationStateProvider>();
+        context.Services.AddCascadingAuthenticationState();
+        context.Services.AddSingleton<AuthenticationStateProvider, RemoteAuthenticationStateProvider>();
 
         ConfigureHttpClient(context, environment);
         ConfigureBlazorise(context);

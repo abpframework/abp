@@ -13,9 +13,9 @@
         </button>
         <div class="collapse navbar-collapse @(IsCollapseShown ? "show" : "")" id="main-navbar-collapse">
             <ul class="navbar-nav mx-auto">
-                <NavMenu />
+                <NavMenu @rendermode="InteractiveAuto" />
             </ul>
-            <NavToolbar />
+            <NavToolbar @rendermode="InteractiveAuto" />
         </div>
     </div>
 </nav>
