@@ -1,6 +1,8 @@
 ﻿@page "/"
 @inherits MyProjectNameComponentBase
 
+@rendermode InteractiveServer
+
 @if (!CurrentUser.IsAuthenticated)
 {
     <a class="btn btn-primary" href="Account/Login"><i class="fa fa-sign-in"></i> @L["Login"]</a>
