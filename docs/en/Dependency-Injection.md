@@ -143,6 +143,36 @@ public class TaxCalculator : ITaxCalculator, ITransientDependency
 }
 ````
 
+### ExposeKeyedService Attribute 
+
+``ExposeKeyedServiceAttribute`` is used to control which keyed services are provided by the related class. Example:
+
+````C#
+[ExposeKeyedService<ITaxCalculator>("taxCalculator")]
+[ExposeKeyedService<ICalculator>("calculator")]
+public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+{
+}
+````
+
+``TaxCalculator`` class exposes ``ITaxCalculator`` interface with the key ``tax`` and ``ICalculator`` interface with the key ``calculator``. That means you can get keyed services from the ``IServiceProvider`` as shown below:
+
+````C#
+var taxCalculator = ServiceProvider.GetRequiredKeyedService<ITaxCalculator>("taxCalculator");
+var calculator = ServiceProvider.GetRequiredKeyedService<ICalculator>("calculator");
+````
+
+> Notice that the ``ExposeKeyedServiceAttribute`` is only expose keyed services. So, you can not inject ``ITaxCalculator`` or ``ICalculator`` in your application. If you want to expose both keyed and non-keyed services, you can use ``ExposeServicesAttribute`` and ``ExposeKeyedServiceAttribute`` together as shown below:
+
+````C#
+[ExposeKeyedService<ITaxCalculator>("taxCalculator")]
+[ExposeKeyedService<ICalculator>("calculator")]
+[ExposeServices(typeof(ITaxCalculator), typeof(ICalculator))]
+public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+{
+}
+````
+
 ### Manually Registering
 
 In some cases, you may need to register a service to the `IServiceCollection` manually, especially if you need to use custom factory methods or singleton instances. In that case, you can directly add services just as [Microsoft documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) describes. Example:

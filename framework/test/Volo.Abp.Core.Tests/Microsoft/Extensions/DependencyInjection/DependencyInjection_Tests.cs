@@ -79,11 +79,35 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
         GetRequiredService<GenericServiceWithDisablePropertyInjectionOnProperty<string>>().DisablePropertyInjectionService.ShouldBeNull();
     }
 
+
+    [Fact]
+    public void ExposeKeyedServices_Should_Expose_Correct_Services()
+    {
+        GetService<IMyExposingKeyedServices>().ShouldBeNull();
+        GetService<MyExposingKeyedService1>().ShouldBeNull();
+        GetService<MyExposingKeyedService2>().ShouldBeNull();
+
+        GetRequiredKeyedService<IMyExposingKeyedServices>("k1").ShouldNotBeNull();
+        GetRequiredKeyedService<MyExposingKeyedService1>("k1").ShouldNotBeNull();
+
+        GetRequiredKeyedService<IMyExposingKeyedServices>("k2").ShouldNotBeNull();
+        GetRequiredKeyedService<MyExposingKeyedService2>("k2").ShouldNotBeNull();
+
+        GetService<MyExposingKeyedService3>().ShouldNotBeNull();
+        GetRequiredKeyedService<IMyExposingKeyedServices>("k3").ShouldNotBeNull();
+        GetRequiredKeyedService<MyExposingKeyedService3>("k3").ShouldNotBeNull();
+    }
+
     [Fact]
     public void Singletons_Exposing_Multiple_Services_Should_Returns_The_Same_Instance()
     {
         var objectByInterfaceRef = GetRequiredService<IMySingletonExposingMultipleServices>();
         var objectByClassRef = GetRequiredService<MySingletonExposingMultipleServices>();
+
+        ReferenceEquals(objectByInterfaceRef, objectByClassRef).ShouldBeTrue();
+
+        objectByInterfaceRef = GetRequiredKeyedService<IMySingletonExposingMultipleServices>("k1");
+        objectByClassRef = GetRequiredKeyedService<MySingletonExposingMultipleServices>("k1");
 
         ReferenceEquals(objectByInterfaceRef, objectByClassRef).ShouldBeTrue();
     }
@@ -166,7 +190,36 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
     }
 
     [ExposeServices(typeof(IMySingletonExposingMultipleServices), typeof(MySingletonExposingMultipleServices))]
+    [ExposeKeyedService<IMySingletonExposingMultipleServices>("k1")]
+    [ExposeKeyedService<MySingletonExposingMultipleServices>("k1")]
     public class MySingletonExposingMultipleServices : IMySingletonExposingMultipleServices, ISingletonDependency
+    {
+
+    }
+
+    public interface IMyExposingKeyedServices
+    {
+
+    }
+
+    [ExposeKeyedService<IMyExposingKeyedServices>("k1")]
+    [ExposeKeyedService<MyExposingKeyedService1>("k1")]
+    public class MyExposingKeyedService1 : IMyExposingKeyedServices, ITransientDependency
+    {
+
+    }
+
+    [ExposeKeyedService<IMyExposingKeyedServices>("k2")]
+    [ExposeKeyedService<MyExposingKeyedService2>("k2")]
+    public class MyExposingKeyedService2 : IMyExposingKeyedServices, ITransientDependency
+    {
+
+    }
+
+    [ExposeServices(typeof(MyExposingKeyedService3))]
+    [ExposeKeyedService<IMyExposingKeyedServices>("k3")]
+    [ExposeKeyedService<MyExposingKeyedService3>("k3")]
+    public class MyExposingKeyedService3 : IMyExposingKeyedServices, ITransientDependency
     {
 
     }
