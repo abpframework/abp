@@ -2,28 +2,53 @@ using System;
 
 namespace Volo.Abp.DependencyInjection;
 
-public class CachedServiceDescriptor
+/// <summary>
+/// https://github.com/dotnet/runtime/blob/release/8.0/src/libraries/Microsoft.Extensions.DependencyInjection/src/ServiceLookup/ServiceIdentifier.cs#L9
+/// </summary>
+public readonly struct ServiceIdentifier : IEquatable<ServiceIdentifier>
 {
-    private object? Key { get; }
+    public object? ServiceKey { get; }
 
-    private Type ServiceType { get; }
+    public Type ServiceType { get; }
 
-    public CachedServiceDescriptor(object? key, Type serviceType)
+    public ServiceIdentifier(Type serviceType)
     {
-        Key = key;
         ServiceType = serviceType;
+    }
+
+    public ServiceIdentifier(object? serviceKey, Type serviceType)
+    {
+        ServiceKey = serviceKey;
+        ServiceType = serviceType;
+    }
+
+    public bool Equals(ServiceIdentifier other)
+    {
+        if (ServiceKey == null && other.ServiceKey == null)
+        {
+            return ServiceType == other.ServiceType;
+        }
+        else if (ServiceKey != null && other.ServiceKey != null)
+        {
+            return ServiceType == other.ServiceType && ServiceKey.Equals(other.ServiceKey);
+        }
+        return false;
     }
 
     public override bool Equals(object? obj)
     {
-        return obj is CachedServiceDescriptor descriptor &&
-               Key == descriptor.Key &&
-               ServiceType == descriptor.ServiceType;
+        return obj is ServiceIdentifier && Equals((ServiceIdentifier)obj);
     }
 
     public override int GetHashCode()
     {
-        var keyHashCode = Key?.GetHashCode() ?? 0;
-        return keyHashCode ^ ServiceType.GetHashCode();
+        if (ServiceKey == null)
+        {
+            return ServiceType.GetHashCode();
+        }
+        unchecked
+        {
+            return (ServiceType.GetHashCode() * 397) ^ ServiceKey.GetHashCode();
+        }
     }
 }

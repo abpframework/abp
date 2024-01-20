@@ -18,23 +18,13 @@ public class RootServiceProvider : IRootServiceProvider, ISingletonDependency
         return ServiceProvider.GetService(serviceType);
     }
 
-    public virtual object? GetKeyedService(Type serviceType, object? serviceKey)
+    public object? GetKeyedService(Type serviceType, object? serviceKey)
     {
-        if (ServiceProvider is IKeyedServiceProvider requiredServiceSupportingProvider)
-        {
-            return requiredServiceSupportingProvider.GetKeyedService(serviceType, serviceKey);
-        }
-
-        throw new InvalidOperationException("This service provider doesn't support keyed services.");
+        return ServiceProvider.GetKeyedService(serviceType, serviceKey);
     }
 
     public virtual object GetRequiredKeyedService(Type serviceType, object? serviceKey)
     {
-        if (ServiceProvider is IKeyedServiceProvider requiredServiceSupportingProvider)
-        {
-            return requiredServiceSupportingProvider.GetRequiredKeyedService(serviceType, serviceKey);
-        }
-
-        throw new InvalidOperationException("This service provider doesn't support keyed services.");
+        return ServiceProvider.GetRequiredKeyedService(serviceType, serviceKey);
     }
 }

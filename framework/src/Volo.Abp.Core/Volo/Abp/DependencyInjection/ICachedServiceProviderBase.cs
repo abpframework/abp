@@ -12,8 +12,4 @@ public interface ICachedServiceProviderBase : IKeyedServiceProvider
     T GetService<T>(Func<IServiceProvider, object> factory);
 
     object GetService(Type serviceType, Func<IServiceProvider, object> factory);
-
-    T GetKeyedService<T>(object? serviceKey);
-
-    T GetRequiredKeyedService<T>(object? serviceKey);
 }

@@ -7,19 +7,19 @@ namespace Volo.Abp.DependencyInjection;
 public abstract class CachedServiceProviderBase : ICachedServiceProviderBase
 {
     protected IServiceProvider ServiceProvider { get; }
-    protected ConcurrentDictionary<CachedServiceDescriptor, Lazy<object?>> CachedServices { get; }
+    protected ConcurrentDictionary<ServiceIdentifier, Lazy<object?>> CachedServices { get; }
 
     protected CachedServiceProviderBase(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
-        CachedServices = new ConcurrentDictionary<CachedServiceDescriptor, Lazy<object?>>();
-        CachedServices.TryAdd(new CachedServiceDescriptor(null, typeof(IServiceProvider)), new Lazy<object?>(() => ServiceProvider));
+        CachedServices = new ConcurrentDictionary<ServiceIdentifier, Lazy<object?>>();
+        CachedServices.TryAdd(new ServiceIdentifier(typeof(IServiceProvider)), new Lazy<object?>(() => ServiceProvider));
     }
 
     public virtual object? GetService(Type serviceType)
     {
         return CachedServices.GetOrAdd(
-            new CachedServiceDescriptor(null, serviceType),
+            new ServiceIdentifier(serviceType),
             _ => new Lazy<object?>(() => ServiceProvider.GetService(serviceType))
         ).Value;
     }
@@ -42,44 +42,24 @@ public abstract class CachedServiceProviderBase : ICachedServiceProviderBase
     public object GetService(Type serviceType, Func<IServiceProvider, object> factory)
     {
         return CachedServices.GetOrAdd(
-            new CachedServiceDescriptor(null, serviceType),
+            new ServiceIdentifier(serviceType),
             _ => new Lazy<object?>(() => factory(ServiceProvider))
         ).Value!;
     }
 
-    public virtual T GetKeyedService<T>(object? serviceKey)
+    public object? GetKeyedService(Type serviceType, object? serviceKey)
     {
-        return (T)GetKeyedService(typeof(T), serviceKey)!;
+        return CachedServices.GetOrAdd(
+            new ServiceIdentifier(serviceKey, serviceType),
+            _ => new Lazy<object?>(() =>  ServiceProvider.GetKeyedService(serviceType, serviceKey))
+        ).Value;
     }
 
-    public virtual object? GetKeyedService(Type serviceType, object? serviceKey)
+    public object GetRequiredKeyedService(Type serviceType, object? serviceKey)
     {
-        if (ServiceProvider is IKeyedServiceProvider requiredServiceSupportingProvider)
-        {
-            return CachedServices.GetOrAdd(
-                new CachedServiceDescriptor(serviceKey, serviceType),
-                _ => new Lazy<object?>(() =>  requiredServiceSupportingProvider.GetKeyedService(serviceType, serviceKey))
-            ).Value;
-        }
-
-        throw new InvalidOperationException("This service provider doesn't support keyed services.");
-    }
-
-    public virtual T GetRequiredKeyedService<T>(object? serviceKey)
-    {
-        return (T)GetRequiredKeyedService(typeof(T), serviceKey);
-    }
-
-    public virtual object GetRequiredKeyedService(Type serviceType, object? serviceKey)
-    {
-        if (ServiceProvider is IKeyedServiceProvider requiredServiceSupportingProvider)
-        {
-            return CachedServices.GetOrAdd(
-                new CachedServiceDescriptor(serviceKey, serviceType),
-                _ => new Lazy<object?>(() =>  requiredServiceSupportingProvider.GetRequiredKeyedService(serviceType, serviceKey))
-            ).Value!;
-        }
-
-        throw new InvalidOperationException("This service provider doesn't support keyed services.");
+        return CachedServices.GetOrAdd(
+            new ServiceIdentifier(serviceKey, serviceType),
+            _ => new Lazy<object?>(() =>  ServiceProvider.GetRequiredKeyedService(serviceType, serviceKey))
+        ).Value!;
     }
 }
