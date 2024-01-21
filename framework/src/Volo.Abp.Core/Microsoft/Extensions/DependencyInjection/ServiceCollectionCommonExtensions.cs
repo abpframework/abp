@@ -28,7 +28,7 @@ public static class ServiceCollectionCommonExtensions
     {
         return (T?)services
             .FirstOrDefault(d => d.ServiceType == typeof(T))
-            ?.ImplementationInstance;
+            ?.NormalizedImplementationInstance();
     }
 
     public static T GetSingletonInstance<T>(this IServiceCollection services)
@@ -48,7 +48,7 @@ public static class ServiceCollectionCommonExtensions
 
         foreach (var service in services)
         {
-            var factoryInterface = service.ImplementationInstance?.GetType()
+            var factoryInterface = service.NormalizedImplementationInstance()?.GetType()
                 .GetTypeInfo()
                 .GetInterfaces()
                 .FirstOrDefault(i => i.GetTypeInfo().IsGenericType &&
