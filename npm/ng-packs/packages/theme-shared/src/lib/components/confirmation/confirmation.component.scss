@@ -31,8 +31,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 0 10px 0;
-      padding: 20px;
+      padding: 40px 20px 10px;
       .icon {
         width: 100px;
         height: 100px;
@@ -54,29 +53,19 @@
       }
       .message {
         display: block;
-        margin: 10px auto;
-        padding: 20px;
+        padding: 8px 20px 20px 20px;
         font-size: 16px;
         font-weight: 400;
         text-align: center;
+        margin-bottom: 0;
       }
     }
     .footer {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      margin: 10px 0 0 0;
       padding: 20px;
       width: 100%;
-      .confirmation-button {
-        display: inline-block;
-        margin: 0px 5px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 600;
-      }
     }
   }
 }

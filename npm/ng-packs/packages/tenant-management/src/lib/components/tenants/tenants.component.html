@@ -39,7 +39,7 @@
     </ng-template>
 
     <ng-template #abpFooter>
-      <button abpClose type="button" class="btn btn-secondary">
+      <button abpClose type="button" class="btn btn-outline-primary">
         {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
       </button>
       <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="tenantForm?.invalid">{{
