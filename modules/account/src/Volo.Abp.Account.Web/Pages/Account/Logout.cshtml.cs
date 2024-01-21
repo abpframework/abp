@@ -27,7 +27,7 @@ public class LogoutModel : AccountPageModel
         await SignInManager.SignOutAsync();
         if (ReturnUrl != null)
         {
-            return RedirectSafely(ReturnUrl, ReturnUrlHash);
+            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
         }
 
         if (await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
