@@ -9,7 +9,8 @@ namespace Volo.Abp.Settings;
 
 public class SettingValueProviderManager : ISettingValueProviderManager, ISingletonDependency
 {
-    public List<ISettingValueProvider> Providers => _lazyProviders.Value;
+    public List<ISettingValueProvider> Providers => GetProviders();
+
     protected AbpSettingOptions Options { get; }
     private readonly Lazy<List<ISettingValueProvider>> _lazyProviders;
 
@@ -27,5 +28,18 @@ public class SettingValueProviderManager : ISettingValueProviderManager, ISingle
                 .ToList()!,
             true
         );
+    }
+    
+    protected virtual List<ISettingValueProvider> GetProviders()
+    {
+        var providers = _lazyProviders.Value;
+        
+        var multipleProviders = providers.GroupBy(p => p.Name).FirstOrDefault(x => x.Count() > 1);
+        if(multipleProviders != null)
+        {
+            throw new AbpException($"Duplicate setting value provider name detected: {multipleProviders.Key}. Providers:{Environment.NewLine}{multipleProviders.Select(p => p.GetType().FullName!).JoinAsString(Environment.NewLine)}");
+        }
+
+        return providers;
     }
 }
