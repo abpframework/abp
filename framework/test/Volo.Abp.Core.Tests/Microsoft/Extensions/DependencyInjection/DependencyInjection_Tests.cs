@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
@@ -96,6 +97,10 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
         GetService<MyExposingKeyedService3>().ShouldNotBeNull();
         GetRequiredKeyedService<IMyExposingKeyedServices>("k3").ShouldNotBeNull();
         GetRequiredKeyedService<MyExposingKeyedService3>("k3").ShouldNotBeNull();
+        
+        //resolving multiple keyed services
+        GetKeyedServices<IEnumerable<IMyExposingKeyedServices>>("k1").ShouldNotBeEmpty();
+        GetKeyedServices<IEnumerable<IMyExposingKeyedServices>>("k1").Count().ShouldBeGreaterThanOrEqualTo(2);
     }
 
     [Fact]
@@ -222,6 +227,12 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
     public class MyExposingKeyedService3 : IMyExposingKeyedServices, ITransientDependency
     {
 
+    }
+    
+    [ExposeKeyedService<IMyExposingKeyedServices>("k1")]
+    public class MyExposingKeyedService4 : IMyExposingKeyedServices, ITransientDependency
+    {
+        
     }
 
     public class TestModule : AbpModule
