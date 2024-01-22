@@ -14,7 +14,6 @@ public class MenuItemCreateInput : ExtensibleObject
 
     public bool IsActive { get; set; }
 
-    [Required]
     public string Url { get; set; }
 
     public string Icon { get; set; }

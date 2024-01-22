@@ -49,7 +49,6 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
         var menu = await MenuAdminAppService.CreateAsync(new MenuItemCreateInput
         {
             DisplayName = name,
-            Url = "#"
         });
 
         menu.ShouldNotBeNull();
