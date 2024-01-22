@@ -48,7 +48,8 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
         var name = "My Awesome Menu";
         var menu = await MenuAdminAppService.CreateAsync(new MenuItemCreateInput
         {
-            DisplayName = name
+            DisplayName = name,
+            Url = "#"
         });
 
         menu.ShouldNotBeNull();
