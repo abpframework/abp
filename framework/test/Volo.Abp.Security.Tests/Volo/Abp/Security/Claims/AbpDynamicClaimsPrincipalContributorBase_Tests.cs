@@ -3,28 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Security.Claims;
 
+[DisableConventionalRegistration]
 class TestAbpDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincipalContributorBase
 {
+    private readonly List<AbpDynamicClaim> _claims;
+
+    public TestAbpDynamicClaimsPrincipalContributor(List<AbpDynamicClaim> claims)
+    {
+        _claims = claims;
+    }
+
     public async override Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
     {
         var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
         Check.NotNull(identity, nameof(identity));
 
-        await AddDynamicClaimsAsync(context, identity, AbpDynamicClaimsPrincipalContributorBase_Tests.DynamicClaims.Claims);
+        await AddDynamicClaimsAsync(context, identity, _claims);
     }
 }
 
 public class AbpDynamicClaimsPrincipalContributorBase_Tests : AbpIntegratedTest<AbpSecurityTestModule>
 {
-    private readonly TestAbpDynamicClaimsPrincipalContributor _dynamicClaimsPrincipalContributorBase = new TestAbpDynamicClaimsPrincipalContributor();
+    private readonly TestAbpDynamicClaimsPrincipalContributor _dynamicClaimsPrincipalContributorBase;
 
-    public readonly static AbpDynamicClaimCacheItem DynamicClaims = new AbpDynamicClaimCacheItem();
+    private readonly AbpDynamicClaimCacheItem _dynamicClaims;
+
+    public AbpDynamicClaimsPrincipalContributorBase_Tests()
+    {
+        _dynamicClaims = new AbpDynamicClaimCacheItem(new List<AbpDynamicClaim>()
+        {
+            new AbpDynamicClaim("preferred_username", "test-preferred_username"),
+            new AbpDynamicClaim(ClaimTypes.GivenName, "test-given_name"),
+            new AbpDynamicClaim("family_name", "test-family_name"),
+            new AbpDynamicClaim("role", "test-role1"),
+            new AbpDynamicClaim("roles", "test-role2"),
+            new AbpDynamicClaim(ClaimTypes.Role, "test-role3"),
+            new AbpDynamicClaim("email", "test-email"),
+            new AbpDynamicClaim(AbpClaimTypes.EmailVerified, "test-email-verified"),
+            new AbpDynamicClaim(AbpClaimTypes.PhoneNumberVerified, null),
+        });
+        _dynamicClaimsPrincipalContributorBase = new TestAbpDynamicClaimsPrincipalContributor(_dynamicClaims.Claims);
+    }
 
     protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
@@ -45,19 +72,6 @@ public class AbpDynamicClaimsPrincipalContributorBase_Tests : AbpIntegratedTest<
         claimsPrincipal.Identities.First().AddClaim(new Claim(AbpClaimTypes.PhoneNumber, "test-source-phoneNumber"));
         claimsPrincipal.Identities.First().AddClaim(new Claim(AbpClaimTypes.PhoneNumberVerified, "test-source-phoneNumberVerified"));
         claimsPrincipal.Identities.First().AddClaim(new Claim("my-claim", "test-source-my-claim"));
-
-        DynamicClaims.Claims.AddRange(new []
-        {
-            new AbpDynamicClaim("preferred_username", "test-preferred_username"),
-            new AbpDynamicClaim(ClaimTypes.GivenName, "test-given_name"),
-            new AbpDynamicClaim("family_name", "test-family_name"),
-            new AbpDynamicClaim("role", "test-role1"),
-            new AbpDynamicClaim("roles", "test-role2"),
-            new AbpDynamicClaim(ClaimTypes.Role, "test-role3"),
-            new AbpDynamicClaim("email", "test-email"),
-            new AbpDynamicClaim(AbpClaimTypes.EmailVerified, "test-email-verified"),
-            new AbpDynamicClaim(AbpClaimTypes.PhoneNumberVerified, null),
-        });
 
         await _dynamicClaimsPrincipalContributorBase.ContributeAsync(new AbpClaimsPrincipalContributorContext(claimsPrincipal, GetRequiredService<IServiceProvider>()));
 
