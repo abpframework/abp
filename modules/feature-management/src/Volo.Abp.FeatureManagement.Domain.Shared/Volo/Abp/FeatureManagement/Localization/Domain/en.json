@@ -5,7 +5,7 @@
     "NoFeatureFoundMessage": "There isn't any available feature.",
     "ManageHostFeatures": "Manage Host features",
     "ManageHostFeaturesText": "You can manage the host side features by clicking the following button.",
-    "Permission:FeatureManagement": "Feature management",
+    "Permission:FeatureManagement": "Feature Management",
     "Permission:FeatureManagement.ManageHostFeatures": "Manage Host features",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} feature value is not valid!",
     "Menu:FeatureManagement": "Feature Management",
