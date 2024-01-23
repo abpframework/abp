@@ -59,7 +59,7 @@ Model:
 
 ### 特性(Attributes)
 
-你可以在你的c#属性上设置一些特性，或者直接在html标签上设置。如果您要在[abp-dynamic-form](Dynamic-forms.md)中使用此属性，则只能通过属性特性设置这些属性。
+你可以在你的c#属性上设置一些特性，或者直接在html标签上设置。如果您要在[abp-dynamic-form](Dynamic-Forms.md)中使用此属性，则只能通过属性特性设置这些属性。
 
 
 #### 属性特性(Property Attributes)
@@ -104,7 +104,7 @@ Model:
 
 `abp-select` 标签为给定的 C# 属性创建了一个 Bootstrap 表单选择器。它在后台使用 [Asp.Net Core 选择标签助手](https://docs.microsoft.com/tr-tr/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-3.1#the-select-tag-helper)，因此 `Asp.Net Core` 的 `select` 标签助手的每个数据注释属性也适用于 `abp-select`。
 
-`abp-select` 标签需要一个 `Microsoft.AspNetCore.Mvc.Rendering.SelectListItem` 的列表来工作。它可以通过标签上的 `asp-items` 属性或 C# 属性上的 `[SelectItems()]` 属性来提供（如果您使用的是 [abp-dynamic-form](Dynamic-forms.md)，则只能使用 C# 属性的方式。）
+`abp-select` 标签需要一个 `Microsoft.AspNetCore.Mvc.Rendering.SelectListItem` 的列表来工作。它可以通过标签上的 `asp-items` 属性或 C# 属性上的 `[SelectItems()]` 属性来提供（如果您使用的是 [abp-dynamic-form](Dynamic-Forms.md)，则只能使用 C# 属性的方式。）
 
 `abp-select` 支持多重选择。
 
@@ -172,7 +172,7 @@ Model:
 
 ### 属性
 
-您可以在 C# 属性上或直接在 HTML 标签上设置一些属性。如果您将在 [abp-dynamic-form](Dynamic-forms.md) 中使用此属性，则只能通过属性属性设置这些属性。
+您可以在 C# 属性上或直接在 HTML 标签上设置一些属性。如果您将在 [abp-dynamic-form](Dynamic-Forms.md) 中使用此属性，则只能通过属性属性设置这些属性。
 
 #### 属性特性(Property Attributes)
 
@@ -255,7 +255,7 @@ Model:
 
 ### 特性(attributes)
 
-您可以在C#属性或直接在HTML标签上设置一些属性。如果您将在[abp-dynamic-form](Dynamic-forms.md)中使用此属性，则只能通过属性属性设置这些属性。
+您可以在C#属性或直接在HTML标签上设置一些属性。如果您将在[abp-dynamic-form](Dynamic-Forms.md)中使用此属性，则只能通过属性属性设置这些属性。
 
 ####  属性特性(Property Attributes)
 

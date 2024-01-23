@@ -26,7 +26,7 @@ abp generate-proxy -t ng
 
 ### Services
 
-每个生成的服务都与后端控制器匹配. 服务方法通过[RestService](./Http-Requests#restservice)调用后端API.
+每个生成的服务都与后端控制器匹配. 服务方法通过[RestService](./HTTP-Requests#restservice)调用后端API.
 
 在每个服务中都定义了一个名为 `apiName` 的变量(自v2.4起可用). `apiName` 与模块的 `RemoteServiceName` 匹配. 在每次请求时该变量将作为参数传递给 `RestService`. 如果环境中未定义微服务API, `RestService` 使用默认值. 请参阅[从应用程序配置中获取特定的API端点](./Http-Requests#how-to-get-a-specific-api-endpoint-from-application-config)
 
@@ -65,4 +65,4 @@ const instance = new IdentityRoleCreateDto({name: 'Role 1', isDefault: false, is
 
 ## 下一步是什么?
 
-* [HTTP请求](./Http-Requests)
+* [HTTP请求](./HTTP-Requests)

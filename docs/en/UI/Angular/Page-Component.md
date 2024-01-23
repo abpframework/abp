@@ -209,4 +209,4 @@ export class DashboardModule {}
 
 ## See Also
 
-- [Page Toolbar Extensions for Angular UI](./Page-Page-Toolbar-Extensions.md)
+- [Page Toolbar Extensions for Angular UI](./Page-Toolbar-Extensions.md)
