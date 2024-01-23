@@ -5,7 +5,7 @@ import { filter, switchMap } from 'rxjs/operators';
 
 import { HttpErrorReporterService } from '@abp/ng.core';
 
-import { CustomHttpErrorHandlerService, HttpErrorHandler } from '../models/common';
+import { CustomHttpErrorHandlerService } from '../models/common';
 import { Confirmation } from '../models/confirmation';
 
 import { CUSTOM_ERROR_HANDLERS, HTTP_ERROR_HANDLER } from '../tokens/http-error.token';
