@@ -3,7 +3,7 @@
   "texts": {
     "Features": "Funkcie",
     "NoFeatureFoundMessage": "Nie je k dispozícii žiadna funkcia.",
-    "ManageHostFeatures": "Spravovať funkcie poskytovateľa",
+    "ManageHostFeatures": "Spravovať Funkcie Poskytovateľa",
     "ManageHostFeaturesText": "Funkcie na strane hostiteľa môžete spravovať kliknutím na nasledujúce tlačidlo.",
     "Permission:FeatureManagement": "Správa Funkcií",
     "Permission:FeatureManagement.ManageHostFeatures": "Správa funkcií poskytovateľa",

@@ -3,7 +3,7 @@
   "texts": {
     "Features": "Features",
     "NoFeatureFoundMessage": "There isn't any available feature.",
-    "ManageHostFeatures": "Manage Host features",
+    "ManageHostFeatures": "Manage Host Features",
     "ManageHostFeaturesText": "You can manage the host side features by clicking the following button.",
     "Permission:FeatureManagement": "Feature Management",
     "Permission:FeatureManagement.ManageHostFeatures": "Manage Host features",
