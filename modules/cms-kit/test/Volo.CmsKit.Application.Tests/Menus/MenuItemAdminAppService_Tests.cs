@@ -33,6 +33,15 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
     }
 
     [Fact]
+    public async Task GetAsync_PageTitleShouldBeCorrect_WithRelatedPage()
+    {
+        var menu = await MenuAdminAppService.GetAsync(TestData.MenuItem_4_With_Page_1_Id);
+
+        menu.ShouldNotBeNull();
+        menu.PageTitle.ShouldBe(TestData.Page_1_Title);
+    }
+
+    [Fact]
     public async Task GetListAsync_ShouldWorkProperly()
     {
         var result = await MenuAdminAppService.GetListAsync();
