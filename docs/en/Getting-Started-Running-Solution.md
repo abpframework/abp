@@ -131,7 +131,7 @@ abp bundle
 
 > Tiered solutions use **Redis** as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
 
-{{ UI == "BlazorServer" }}
+{{ if UI == "BlazorServer" }}
 
 > **Important:**  The `.AuthServer` application serves as the **Authentication Server** for the `.Blazor` application. It is essential to have the `.AuthServer` application running in the background to ensure the proper functioning of the `.Blazor` application.
 
@@ -141,7 +141,9 @@ To do this, open terminal in `.AuthServer` project folder and run the following 
 dotnet run
 ````
 
-> **Important:** It is also needed to run `.HttpApi.Host` application before running `.Blazor` project.
+Once the `.AuthServer`application has started, it is time to run `.HttpApi.Host` application.
+
+> **Important:** Prior to launching the `.Blazor` project, it is essential to execute the `.HttpApi.Host` application as well.
 
 To do this, open terminal in `.HttpApi.Host` project folder and run the following command.
 
