@@ -106,8 +106,8 @@ var abp = abp || {};
         abp.libs.sweetAlert.config.default.buttonsStyling = false;
         abp.libs.sweetAlert.config.default.customClass = {
             confirmButton: "btn btn-primary",
-            cancelButton: "btn btn-outline-primary me-1",
-            denyButton: "btn btn-outline-primary me-1"
+            cancelButton: "btn btn-outline-primary mx-2",
+            denyButton: "btn btn-outline-primary mx-2"
         };
 
         abp.libs.sweetAlert.config.confirm.title = l('AreYouSure');
