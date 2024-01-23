@@ -1085,6 +1085,9 @@
     "MultipleYearDiscount": "多年折扣",
     "CampaignDiscountText": "黑色星期五折扣",
     "CampaignDiscountName": "黑色星期五",
-    "CampaignName:BlackFriday": "黑色星期五"
+    "CampaignName:BlackFriday": "黑色星期五",
+    "MultipleOrganizationInfo": "查看您的所有组织",
+    "PaymentFailedInfo": "抱歉，支付失败！",
+    "UsedPayment": "该付款已被使用"
   }
 }

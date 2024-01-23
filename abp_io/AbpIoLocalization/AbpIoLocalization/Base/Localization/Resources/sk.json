@@ -229,6 +229,7 @@
     "ManageAccount": "Spravovať účet",
     "CommunityProfile": "Profil komunity",
     "BlogProfile": "Profil blogu",
-    "Tickets": "Vstupenky"
+    "Tickets": "Vstupenky",
+    "DisplayName:CommunityIndexPagePoll": "Anketa na stránke indexu komunity"
   }
 }

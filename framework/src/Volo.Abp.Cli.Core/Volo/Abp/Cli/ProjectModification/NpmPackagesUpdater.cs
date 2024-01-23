@@ -53,7 +53,7 @@ public class NpmPackagesUpdater : ITransientDependency
 
     public async Task Update(string rootDirectory, bool includePreviews = false,
         bool includeReleaseCandidates = false,
-        bool switchToStable = false, string version = null)
+        bool switchToStable = false, string version = null, bool includePreRc = false)
     {
         var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
@@ -66,7 +66,7 @@ public class NpmPackagesUpdater : ITransientDependency
 
         foreach (var file in fileList)
         {
-            if (includePreviews)
+            if (includePreviews || includePreRc)
             {
                 await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
             }
@@ -82,7 +82,9 @@ public class NpmPackagesUpdater : ITransientDependency
         {
             var updated = await UpdatePackagesInFile(file, includePreviews, includeReleaseCandidates,
                 switchToStable,
-                version);
+                version,
+                includePreRc);
+            
             packagesUpdated.TryAdd(file, updated);
         }
 
@@ -162,7 +164,8 @@ public class NpmPackagesUpdater : ITransientDependency
         bool includePreviews = false,
         bool includeReleaseCandidates = false,
         bool switchToStable = false,
-        string specifiedVersion = null)
+        string specifiedVersion = null,
+        bool includePreRc = false)
     {
         var packagesUpdated = false;
         var fileContent = File.ReadAllText(filePath);
@@ -177,7 +180,7 @@ public class NpmPackagesUpdater : ITransientDependency
         foreach (var abpPackage in abpPackages)
         {
             var updated = await TryUpdatingPackage(filePath, abpPackage, includePreviews, includeReleaseCandidates,
-                switchToStable, specifiedVersion);
+                switchToStable, specifiedVersion, includePreRc);
 
             if (updated)
             {
@@ -198,7 +201,8 @@ public class NpmPackagesUpdater : ITransientDependency
         bool includePreviews = false,
         bool includeReleaseCandidates = false,
         bool switchToStable = false,
-        string specifiedVersion = null)
+        string specifiedVersion = null,
+        bool includePreRc = false)
     {
         var currentVersion = (string)package.Value;
 
@@ -221,7 +225,11 @@ public class NpmPackagesUpdater : ITransientDependency
         }
         else
         {
-            if ((includePreviews ||
+            if (includePreRc && !includeReleaseCandidates)
+            {
+                version = await GetLatestVersion(package, includePreRc: true, workingDirectory: filePath.RemovePostFix("package.json"));
+            }
+            else if ((includePreviews ||
                  (!switchToStable && (currentVersion != null && currentVersion.Contains("-preview")))) &&
                 !includeReleaseCandidates)
             {
@@ -262,9 +270,10 @@ public class NpmPackagesUpdater : ITransientDependency
         return version.Split("-", StringSplitOptions.RemoveEmptyEntries).Length > 1;
     }
 
-    protected virtual async Task<string> GetLatestVersion(JProperty package, bool includeReleaseCandidates = false, bool includePreviews = false, string workingDirectory = null)
+    protected virtual async Task<string> GetLatestVersion(JProperty package, bool includeReleaseCandidates = false, bool includePreviews = false, string workingDirectory = null, bool includePreRc = false)
     {
-        var key = package.Name + (includePreviews ? "(preview)" : string.Empty);
+        var postfix = includePreviews ? "(preview)" : (includePreRc ? "(prerc)" : string.Empty);
+        var key = package.Name + postfix;
 
         if (_fileVersionStorage.ContainsKey(key))
         {
@@ -275,7 +284,11 @@ public class NpmPackagesUpdater : ITransientDependency
 
         string newVersion = string.Empty;
 
-        if (includePreviews)
+        if (includePreRc)
+        {
+            newVersion = versionList.FirstOrDefault(v => v.Contains("-prerc"));
+        }
+        else if (includePreviews)
         {
             newVersion = versionList.FirstOrDefault(v => v.Contains("-preview"));
         }
