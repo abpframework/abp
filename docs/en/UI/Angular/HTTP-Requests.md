@@ -184,3 +184,7 @@ The `ExternalHttpClient` extends from `HTTPClient` and sets the `IS_EXTERNAL_REQ
 When you are using `ExternalHttpClient` as HttpClient in your components, it does not add ABP-specific headers.
 
 Note: With `IS_EXTERNAL_REQUEST` or without it, ABP loading service works.
+
+## See Also
+
+- [HTTP Error Handling / Customization](./HTTP-Error-Handling)

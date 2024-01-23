@@ -4,11 +4,107 @@ When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorR
 
 ## Custom HTTP Error Handler
 
-A custom HTTP error handler service can be registered to an injection token named **`CUSTOM_ERROR_HANDLERS`**. ABP has some default error handlers, you can see them [here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/theme-shared/src/lib/providers/error-handlers.provider.ts).
+### (Deprecated!) Function Method;
 
-### How ABP handles errors and How to add new one?
+A custom HTTP error handler can be registered to an injection token named `HTTP_ERROR_HANDLER`. If a custom handler function is registered, the `ErrorHandler` executes that function.
 
-- First of all it will be better to understand how ABP handles errors.
+See an example:
+
+```ts
+// http-error-handler.ts
+import { ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
+import { ToasterService } from '@abp/ng.theme.shared';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injector } from '@angular/core';
+import { of, EMPTY } from 'rxjs';
+import { Error404Component } from './error404/error404.component';
+
+export function handleHttpErrors(injector: Injector, httpError: HttpErrorResponse) {
+  if (httpError.status === 400) {
+    const toaster = injector.get(ToasterService);
+    toaster.error(httpError.error?.error?.message || 'Bad request!', '400');
+    return EMPTY;
+  }
+
+  if (httpError.status === 404) {
+    const contentProjection = injector.get(ContentProjectionService);
+    contentProjection.projectContent(PROJECTION_STRATEGY.AppendComponentToBody(Error404Component));
+    return EMPTY;
+  }
+
+  return of(httpError);
+}
+
+// app.module.ts
+import { Error404Component } from './error404/error404.component';
+import { handleHttpErrors } from './http-error-handling';
+import { HTTP_ERROR_HANDLER, ... } from '@abp/ng.theme.shared';
+
+@NgModule({
+  // ...
+  providers: [
+    // ...
+    { provide: HTTP_ERROR_HANDLER, useValue: handleHttpErrors }
+  ],
+  declarations: [
+   //...
+   Error404Component],
+})
+export class AppModule {}
+```
+
+In the example above:
+
+- Created a function named `handleHttpErrors` and defined as value of the `HTTP_ERROR_HANDLER` provider in app.module. After this, the function executes when an HTTP error occurs.
+- 400 bad request errors is handled. When a 400 error occurs.
+
+- Since `of(httpError)` is returned at bottom of the `handleHttpErrors`, the `ErrorHandler` will handle the HTTP errors except 400 and 404 errors.
+
+**Note 1:** If you put `return EMPTY` to next line of handling an error, default error handling will not work for that error. [EMPTY](https://rxjs.dev/api/index/const/EMPTY) can be imported from `rxjs`.
+
+```ts
+export function handleHttpErrors(
+  injector: Injector,
+  httpError: HttpErrorResponse
+) {
+  if (httpError.status === 403) {
+    // handle 403 errors here
+    return EMPTY; // put return EMPTY to skip default error handling
+  }
+}
+```
+
+**Note 2:** If you put `return of(httpError)`, default error handling will work.
+
+- `of` is a function. It can be imported from `rxjs`.
+- `httpError` is the second parameter of the error handler function which is registered to the `HTTP_ERROR_HANDLER` provider. Type of the `httpError` is `HttpErrorResponse`.
+
+```ts
+import { of } from "rxjs";
+
+export function handleHttpErrors(
+  injector: Injector,
+  httpError: HttpErrorResponse
+) {
+  if (httpError.status === 500) {
+    // handle 500 errors here
+  }
+
+  // you can return the of(httpError) at bottom of the function to run the default handler of ABP for HTTP errors that you didn't handle above.
+  return of(httpError);
+}
+```
+
+### Service Method;
+
+With Services you can provide **more than one handler**.
+
+A custom HTTP error handler service can be registered to an injection token named **`CUSTOM_ERROR_HANDLERS`**.
+
+ABP has some default error handlers, you can see them [here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/theme-shared/src/lib/providers/error-handlers.provider.ts).
+
+### How To Add New Handler Service?
+
 - ABP error handler services are implements the interface of **CustomHttpErrorHandlerService**.
 
 **Interface of `CUSTOM_ERROR_HANDLERS`**
@@ -25,7 +121,7 @@ interface CustomHttpErrorHandlerService {
 - **`canHandle(error: unknown): boolean :`** Check if the service can handle the error. Returns boolean.
 - **`execute(): void :`** If the service can handle the error, then run the execute method.
 
-**In Summarry**
+**In Summary**
 
 - Services are sorted by their priority number.
 - Start from highest priority service and run canHandle() method. Pick the service if can handle the error, if not check next service.
@@ -45,9 +141,8 @@ import { ToasterService } from "@abp/ng.theme.shared";
 export class MyCustomErrorHandlerService
   implements CustomHttpErrorHandlerService
 {
-
   // You can write any number here, ex: 9999
-  readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.veryHigh; 
+  readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.veryHigh;
   private toaster = inject(ToasterService);
   private error: HttpErrorResponse | undefined = undefined;
 
