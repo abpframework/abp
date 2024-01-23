@@ -3,7 +3,7 @@
   "texts": {
     "Features": "Fonctionnalités",
     "NoFeatureFoundMessage": "Il n'y a aucune fonctionnalité disponible.",
-    "ManageHostFeatures": "Gérer les fonctionnalités de l’hôte",
+    "ManageHostFeatures": "Gérer les Fonctionnalités de l’hôte",
     "ManageHostFeaturesText": "Vous pouvez gérer les fonctionnalités côté hôte en cliquant sur le bouton suivant.",
     "Permission:FeatureManagement": "Gestion des Fonctionnalités",
     "Permission:FeatureManagement.ManageHostFeatures": "Gérer les fonctionnalités de l'hôte",
