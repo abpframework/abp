@@ -1,27 +1,27 @@
-import { AbpLocalStorageService } from "@abp/ng.core";
-import { Injectable, inject } from "@angular/core";
+import { AbpLocalStorageService } from '@abp/ng.core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class RememberMeService {
-    readonly #rememberMe = 'remember_me'
-    protected readonly localStorageService = inject(AbpLocalStorageService);
+  readonly #rememberMe = 'remember_me';
+  protected readonly localStorageService = inject(AbpLocalStorageService);
 
-    set(remember: boolean) {
-        this.localStorageService.setItem(this.#rememberMe, JSON.stringify(remember));
-    }
+  set(remember: boolean) {
+    this.localStorageService.setItem(this.#rememberMe, JSON.stringify(remember));
+  }
 
-    remove() {
-        this.localStorageService.removeItem(this.#rememberMe);
-    }
+  remove() {
+    this.localStorageService.removeItem(this.#rememberMe);
+  }
 
-    get() {
-        return Boolean(JSON.parse(this.localStorageService.getItem(this.#rememberMe)));
-    }
+  get() {
+    return Boolean(JSON.parse(this.localStorageService.getItem(this.#rememberMe)));
+  }
 
-    getFromToken(accessToken: string) {
-        let parsedToken = JSON.parse(atob(accessToken.split(".")[1]));
-        return Boolean(parsedToken[this.#rememberMe]);
-    }
+  getFromToken(accessToken: string) {
+    const parsedToken = JSON.parse(atob(accessToken.split('.')[1]));
+    return Boolean(parsedToken[this.#rememberMe]);
+  }
 }

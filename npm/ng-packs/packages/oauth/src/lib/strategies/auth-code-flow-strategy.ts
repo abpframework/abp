@@ -13,7 +13,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     return super
       .init()
       .then(() => this.oAuthService.tryLogin().catch(noop))
-      .then(() => this.oAuthService.setupAutomaticSilentRefresh())
+      .then(() => this.oAuthService.setupAutomaticSilentRefresh());
   }
 
   private checkRememberMeOption() {
