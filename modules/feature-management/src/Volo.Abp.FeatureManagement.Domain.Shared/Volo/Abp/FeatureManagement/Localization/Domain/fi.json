@@ -5,7 +5,7 @@
     "NoFeatureFoundMessage": "Käytettävissä olevia ominaisuuksia ei löydy.",
     "ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
     "ManageHostFeaturesText": "Voit hallita isäntäpuolen ominaisuuksia napsauttamalla seuraavaa painiketta.",
-    "Permission:FeatureManagement": "Ominaisuuden hallinta",
+    "Permission:FeatureManagement": "Ominaisuuden Hallinta",
     "Permission:FeatureManagement.ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Ominaisuuden {0} arvo ei kelpaa!",
     "Menu:FeatureManagement": "Ominaisuuden hallinta",

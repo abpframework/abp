@@ -17,7 +17,7 @@
     "SuccessfullySent": "Inviato con successo",
     "Send": "Inviare",
     "Menu:Emailing": "Invio di e-mail",
-    "Menu:TimeZone": "Fuso orario",
+    "Menu:TimeZone": "Fuso Orario",
     "DisplayName:Timezone": "Fuso orario",
     "TimezoneHelpText": "Questa impostazione viene utilizzata per l&#39;intera applicazione o in base al tenant.",
     "SmtpHost": "Host",
