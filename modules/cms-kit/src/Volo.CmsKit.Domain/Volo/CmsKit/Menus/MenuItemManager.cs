@@ -25,6 +25,12 @@ public class MenuItemManager : CmsKitDomainServiceBase
         menuItem.SetUrl(page.Slug.EnsureStartsWith('/'));
     }
 
+    public virtual void SetPageUrl(MenuItem menuItem, string url)
+    {
+        menuItem.SetPageId(null);
+        menuItem.SetUrl(url);
+    }
+
     [UnitOfWork]
     public virtual async Task MoveAsync(Guid menuItemId, Guid? newParentMenuItemId, int position = 0)
     {

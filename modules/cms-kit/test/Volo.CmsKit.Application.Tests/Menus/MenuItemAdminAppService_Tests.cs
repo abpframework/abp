@@ -33,13 +33,22 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
     }
 
     [Fact]
+    public async Task GetAsync_PageTitleShouldBeCorrect_WithRelatedPage()
+    {
+        var menu = await MenuAdminAppService.GetAsync(TestData.MenuItem_4_With_Page_1_Id);
+
+        menu.ShouldNotBeNull();
+        menu.PageTitle.ShouldBe(TestData.Page_1_Title);
+    }
+
+    [Fact]
     public async Task GetListAsync_ShouldWorkProperly()
     {
         var result = await MenuAdminAppService.GetListAsync();
 
         result.ShouldNotBeNull();
         result.Items.ShouldNotBeEmpty();
-        result.Items.Count.ShouldBe(3);
+        result.Items.Count.ShouldBe(4);
     }
 
     [Fact]
@@ -48,7 +57,7 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
         var name = "My Awesome Menu";
         var menu = await MenuAdminAppService.CreateAsync(new MenuItemCreateInput
         {
-            DisplayName = name
+            DisplayName = name,
         });
 
         menu.ShouldNotBeNull();
@@ -75,6 +84,29 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
         menu.ShouldNotBeNull();
         menu.DisplayName.ShouldBe(newName);
         menu.Url.ShouldBe(newUrl);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ShouldRemoveRelation_WithoutPageId()
+    {
+        var newUrl = "/my-new-url";
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await MenuAdminAppService.UpdateAsync(
+                TestData.MenuItem_4_With_Page_1_Id,
+                new MenuItemUpdateInput
+                {
+                    DisplayName = TestData.MenuItem_4_With_Page_1_Name,
+                    Url = newUrl,
+                    PageId = null
+                });
+        });
+
+        var menu = await MenuRepository.FindAsync(TestData.MenuItem_4_With_Page_1_Id);
+
+        menu.ShouldNotBeNull();
+        menu.Url.ShouldBe(newUrl);
+        menu.PageId.ShouldBeNull();
     }
 
     [Fact]
