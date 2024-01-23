@@ -17,7 +17,7 @@
     "SuccessfullySent": "Successfully sent",
     "Send": "Send",
     "Menu:Emailing": "Emailing",
-    "Menu:TimeZone": "Time zone",
+    "Menu:TimeZone": "Time Zone",
     "DisplayName:Timezone": "Time zone",
     "TimezoneHelpText": "This setting is used for application-wide or tenant-based.",
     "SmtpHost": "Host",

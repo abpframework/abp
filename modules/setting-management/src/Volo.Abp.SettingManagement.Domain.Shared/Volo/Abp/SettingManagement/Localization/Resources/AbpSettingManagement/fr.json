@@ -17,7 +17,7 @@
     "SuccessfullySent": "Envoyé avec succès",
     "Send": "Envoyer",
     "Menu:Emailing": "Envoi par e-mail",
-    "Menu:TimeZone": "Fuseau horaire",
+    "Menu:TimeZone": "Fuseau Horaire",
     "DisplayName:Timezone": "Fuseau horaire",
     "TimezoneHelpText": "Ce paramètre est utilisé à l’échelle de l’application ou basé sur le client.",
     "SmtpHost": "Hôte",

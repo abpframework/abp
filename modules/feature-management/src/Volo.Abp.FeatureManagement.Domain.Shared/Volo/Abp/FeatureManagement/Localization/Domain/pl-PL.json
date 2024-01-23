@@ -5,7 +5,7 @@
     "NoFeatureFoundMessage": "Brak dostępnej funkcji.",
     "ManageHostFeatures": "Zarządzaj funkcjami hosta",
     "ManageHostFeaturesText": "Możesz zarządzać funkcjami po stronie hosta, klikając poniższy przycisk.",
-    "Permission:FeatureManagement": "Zarządzanie funkcjami",
+    "Permission:FeatureManagement": "Zarządzanie Funkcjami",
     "Permission:FeatureManagement.ManageHostFeatures": "Zarządzaj funkcjami hosta",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} wartość funkcji jest nieprawidłowa!",
     "Menu:FeatureManagement": "Zarządzanie funkcjami",
