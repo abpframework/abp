@@ -131,6 +131,27 @@ abp bundle
 
 > Tiered solutions use **Redis** as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
 
+{{ UI == "BlazorServer" }}
+
+> **Important:**  The `.AuthServer` application serves as the **Authentication Server** for the `.Blazor` application. It is essential to have the `.AuthServer` application running in the background to ensure the proper functioning of the `.Blazor` application.
+
+To do this, open terminal in `.AuthServer` project folder and run the following command.
+
+````bash
+dotnet run
+````
+
+> **Important:** It is also needed to run `.HttpApi.Host` application before running `.Blazor` project.
+
+To do this, open terminal in `.HttpApi.Host` project folder and run the following command.
+
+````bash
+dotnet run
+````
+Once the `.AuthServer` and `.HttpApi.Host` applications has started, you can proceed to run the `.Blazor` project.
+
+{{ end # UI }}
+
 1. Ensure that the `.AuthServer` project is the startup project. Run this application that will open a **login** page in your browser.
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
@@ -194,6 +215,16 @@ You can see the application APIs and test them here. Get [more info](https://swa
 {{ if UI == "Blazor" }}
 
 ### Running the Blazor Application (Client Side)
+
+> **Important:**  The `.HttpApi.Host` application serves as the **Authentication Server** for the `.Blazor` application. It is essential to have the `.HttpApi.Host` application running in the background to ensure the proper functioning of the `.Blazor` application.
+
+To do this, you can open terminal in `.HttpApi.Host` project folder and run the following command.
+
+````bash
+dotnet run
+````
+
+Once the `.HttpApi.Host` application has started, you can proceed to run the `.Blazor` application.
 
 Ensure that the `.Blazor` project is the startup project and run the application.
 
