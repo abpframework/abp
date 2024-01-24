@@ -97,9 +97,7 @@ export function handleHttpErrors(
 
 ### Service Method
 
-With Services you can provide **more than one handler**.
-
-A custom HTTP error handler service can be registered to an injection token named **`CUSTOM_ERROR_HANDLERS`**. ABP has some default [error handlers](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/theme-shared/src/lib/providers/error-handlers.provider.ts).
+You can provide **more than one handler** with services, a custom HTTP error handler service can be registered with injection token named **`CUSTOM_ERROR_HANDLERS`**. ABP has some default [error handlers](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/theme-shared/src/lib/providers/error-handlers.provider.ts).
 
 ### How To Add New Handler Service
 
