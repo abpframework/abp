@@ -181,7 +181,7 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | Dapper | 2.0.123 |  2.1.21 |
 | Dapr.AspNetCore | 1.9.0 |  1.12.0 |
 | Dapr.Client | 1.9.0 |  1.12.0 |
-| Devart.Data.Oracle.EFCore | 10.1.134.7 |  10.1.151.7 |
+| Devart.Data.Oracle.EFCore | 10.1.134.7 |  10.3.10.8 |
 | DistributedLock.Core | 1.0.4 |  1.0.5 |
 | DistributedLock.Redis | 1.0.1 |  1.0.2 |
 | EphemeralMongo.Core | 1.1.0 |  1.1.3 |
