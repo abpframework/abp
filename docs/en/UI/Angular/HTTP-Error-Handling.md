@@ -4,7 +4,7 @@ When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorR
 
 ## Custom HTTP Error Handler
 
-### (Deprecated!) Function Method;
+### Function Method `Deprecated`
 
 A custom HTTP error handler can be registered to an injection token named `HTTP_ERROR_HANDLER`. If a custom handler function is registered, the `ErrorHandler` executes that function.
 
@@ -95,17 +95,15 @@ export function handleHttpErrors(
 }
 ```
 
-### Service Method;
+### Service Method
 
 With Services you can provide **more than one handler**.
 
-A custom HTTP error handler service can be registered to an injection token named **`CUSTOM_ERROR_HANDLERS`**.
+A custom HTTP error handler service can be registered to an injection token named **`CUSTOM_ERROR_HANDLERS`**. ABP has some default [error handlers](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/theme-shared/src/lib/providers/error-handlers.provider.ts).
 
-ABP has some default error handlers, you can see them [here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/theme-shared/src/lib/providers/error-handlers.provider.ts).
+### How To Add New Handler Service
 
-### How To Add New Handler Service?
-
-- ABP error handler services are implements the interface of **CustomHttpErrorHandlerService**.
+ABP error handler services are implements the interface of **CustomHttpErrorHandlerService**.
 
 **Interface of `CUSTOM_ERROR_HANDLERS`**
 
@@ -117,9 +115,9 @@ interface CustomHttpErrorHandlerService {
 }
 ```
 
-- **`priority`** ABP sorts the services according to the number of the priority variable. Higher priority will be checked first. You can think this as a z-index property in CSS.
-- **`canHandle(error: unknown): boolean :`** Check if the service can handle the error. Returns boolean.
-- **`execute(): void :`** If the service can handle the error, then run the execute method.
+- **`priority`** ABP sorts the services according to the number of the priority variable. Higher priority will be checked first.
+- **`canHandle`** Check if the service can handle the error. Returns boolean.
+- **`execute`** If the service can handle the error, then run the execute method.
 
 **In Summary**
 
@@ -138,7 +136,8 @@ import { CUSTOM_HTTP_ERROR_HANDLER_PRIORITY } from "@abp/ng.theme.shared";
 import { ToasterService } from "@abp/ng.theme.shared";
 
 @Injectable({ providedIn: "root" })
-export class MyCustomErrorHandlerService implements CustomHttpErrorHandlerService
+export class MyCustomErrorHandlerService
+  implements CustomHttpErrorHandlerService
 {
   // You can write any number here, ex: 9999
   readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.veryHigh;
@@ -192,7 +191,9 @@ In the example above:
 
 ![custom-error-handler-toaster-message](images/custom-error-handler-toaster-message.jpg)
 
-**Note 1:** If your service cannot handle the error. Then ABP will check the next Error Service.
-**Note 2:** If none of the service handle the error. Then basic confirmation message about the error will be shown to the user.
-**Note 3:** You can provide more than one service, with CUSTOM_ERROR_HANDLER injection token.
-**Note 4:** If you want your custom service to be evaluated (checked) earlier, set the priority variable high.
+### Notes
+
+- If your service cannot handle the error. Then ABP will check the next Error Service.
+- If none of the service handle the error. Then basic confirmation message about the error will be shown to the user.
+- You can provide more than one service, with CUSTOM_ERROR_HANDLER injection token.
+- If you want your custom service to be evaluated (checked) earlier, set the priority variable high.
