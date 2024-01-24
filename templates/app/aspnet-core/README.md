@@ -64,6 +64,10 @@ abp install-libs
 
 > This command installs all NPM packages for MVC/Razor Pages and Blazor Server UIs and this command is already run by the ABP CLI, so most of the time you don't need to run this command manually.
 
+#### Create the Database
+
+Run `MyCompanyName.MyProjectName.DbMigrator` to create the initial database. This should be done in the first run. It is also needed if a new database migration is added to the solution later.
+
 ### Solution structure
 
 This is a layered monolith application that consists of the following applications:
