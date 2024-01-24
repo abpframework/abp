@@ -3,7 +3,7 @@
   "texts": {
     "Features": "Funkce",
     "NoFeatureFoundMessage": "Nejsou zde dostupné žádné funkce.",
-    "ManageHostFeatures": "Správa funkcí hostitele",
+    "ManageHostFeatures": "Správa Funkcí Hostitele",
     "ManageHostFeaturesText": "Funkce na straně hostitele můžete spravovat kliknutím na následující tlačítko.",
     "Permission:FeatureManagement": "Správa Funkcí",
     "Permission:FeatureManagement.ManageHostFeatures": "Správa funkcí hostitele",
