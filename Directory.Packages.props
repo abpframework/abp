@@ -6,7 +6,7 @@
     <PackageVersion Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="2.0.24" />
     <PackageVersion Include="aliyun-net-sdk-sts" Version="3.1.2" />
     <PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.13.0" />
-    <PackageVersion Include="AsyncKeyedLock" Version="6.3.3" />
+    <PackageVersion Include="AsyncKeyedLock" Version="6.3.4" />
     <PackageVersion Include="Autofac" Version="8.0.0" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
@@ -27,7 +27,7 @@
     <PackageVersion Include="Dapper" Version="2.1.21" />
     <PackageVersion Include="Dapr.AspNetCore" Version="1.12.0" />
     <PackageVersion Include="Dapr.Client" Version="1.12.0" />
-    <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="10.1.151.7" />
+    <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="10.3.10.8" />
     <PackageVersion Include="DistributedLock.Core" Version="1.0.5" />
     <PackageVersion Include="DistributedLock.Redis" Version="1.0.2" />
     <PackageVersion Include="DeepL.net" Version="1.8.0" />

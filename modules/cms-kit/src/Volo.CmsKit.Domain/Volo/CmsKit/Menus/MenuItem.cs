@@ -80,7 +80,7 @@ public class MenuItem : AuditedAggregateRoot<Guid>, IMultiTenant
         Url = Check.NotNullOrEmpty(url, nameof(url), MenuItemConsts.MaxUrlLength);
     }
 
-    internal void SetPageId(Guid pageId)
+    internal void SetPageId(Guid? pageId)
     {
         PageId = pageId;
     }

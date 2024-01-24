@@ -3,7 +3,7 @@
   "texts": {
     "Features": "Functies",
     "NoFeatureFoundMessage": "Er is geen functie beschikbaar.",
-    "ManageHostFeatures": "Beheer host functies",
+    "ManageHostFeatures": "Beheer Host Functies",
     "ManageHostFeaturesText": "U kunt de functies aan de hostzijde beheren door op de volgende knop te klikken.",
     "Permission:FeatureManagement": "Functiebeheer",
     "Permission:FeatureManagement.ManageHostFeatures": "Beheer host functies",
