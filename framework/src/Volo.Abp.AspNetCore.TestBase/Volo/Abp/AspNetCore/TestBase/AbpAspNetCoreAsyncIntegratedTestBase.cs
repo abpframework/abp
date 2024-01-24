@@ -35,6 +35,16 @@ public class AbpAspNetCoreAsyncIntegratedTestBase<TModule>
         return ServiceProvider.GetRequiredService<T>();
     }
 
+    protected virtual T? GetKeyedServices<T>(object? serviceKey)
+    {
+        return ServiceProvider.GetKeyedService<T>(serviceKey);
+    }
+
+    protected virtual T GetRequiredKeyedService<T>(object? serviceKey) where T : notnull
+    {
+        return ServiceProvider.GetRequiredKeyedService<T>(serviceKey);
+    }
+
     public virtual async Task InitializeAsync()
     {
         var builder = WebApplication.CreateBuilder();

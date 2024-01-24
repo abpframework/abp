@@ -466,6 +466,7 @@
     "TestimonialSend": "Köszönjük! Megkaptuk az ajánlásod. Hamarosan átnézzük és következő lépéseket teszünk.",
     "Title": "Cím",
     "TitlePlaceholder": "Szoftvertervező, CTO, stb.",
-    "Characters": "karakterek"
+    "Characters": "karakterek",
+    "ABPTestimonialDescription": "ABP Framework: Halljuk az Ön beszámolóját"
   }
 }

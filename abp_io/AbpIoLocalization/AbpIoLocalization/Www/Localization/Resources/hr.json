@@ -466,6 +466,7 @@
     "TestimonialSend": "Hvala vam! Primili smo vašu preporuku. Provjerit ćemo je i uskoro poduzeti sljedeći korak.",
     "Title": "Naslov",
     "TitlePlaceholder": "Razvojni inženjer, CTO, itd.",
-    "Characters": "znakovi"
+    "Characters": "znakovi",
+    "ABPTestimonialDescription": "ABP Framework: Hajde da čujemo tvoje iskustvo"
   }
 }

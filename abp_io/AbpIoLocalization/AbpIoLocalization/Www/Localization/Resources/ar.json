@@ -466,6 +466,7 @@
     "TestimonialSend": "شكرًا لك! لقد تلقينا شهادتك. سنقوم بمراجعتها واتخاذ الخطوة التالية قريبًا.",
     "Title": "العنوان",
     "TitlePlaceholder": "مطور برامج، مدير تكنولوجيا المعلومات، إلخ.",
-    "Characters": "الأحرف"
+    "Characters": "الأحرف",
+    "ABPTestimonialDescription": "ABP Framework: دعونا نسمع شهادتك"
   }
 }

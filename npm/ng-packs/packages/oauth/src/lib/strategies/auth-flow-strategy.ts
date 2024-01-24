@@ -99,10 +99,10 @@ export abstract class AuthFlowStrategy {
           filter(event => event.type === 'token_received' && !!this.oAuthService.state),
           take(1),
           map(() => {
-            const redirect_uri = decodeURIComponent(this.oAuthService.state);
+            const redirectUri = decodeURIComponent(this.oAuthService.state);
 
-            if (redirect_uri && redirect_uri !== '/') {
-              return redirect_uri;
+            if (redirectUri && redirectUri !== '/') {
+              return redirectUri;
             }
 
             return '/';
@@ -110,7 +110,7 @@ export abstract class AuthFlowStrategy {
           switchMap(redirectUri =>
             this.configState.getOne$('currentUser').pipe(
               filter(user => !!user?.isAuthenticated),
-              tap(() => this.router.navigate([redirectUri])),
+              tap(() => this.router.navigateByUrl(redirectUri)),
             ),
           ),
         )

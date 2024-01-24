@@ -466,6 +466,7 @@
     "TestimonialSend": "Hvala vam! ",
     "Title": "Naslov",
     "TitlePlaceholder": "Razvijalec programske opreme, tehnični direktor itd.",
-    "Characters": "znaki"
+    "Characters": "znaki",
+    "ABPTestimonialDescription": "Ogrodje ABP: poslušajmo vaše pričevanje"
   }
 }
