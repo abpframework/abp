@@ -138,12 +138,11 @@ import { CUSTOM_HTTP_ERROR_HANDLER_PRIORITY } from "@abp/ng.theme.shared";
 import { ToasterService } from "@abp/ng.theme.shared";
 
 @Injectable({ providedIn: "root" })
-export class MyCustomErrorHandlerService
-  implements CustomHttpErrorHandlerService
+export class MyCustomErrorHandlerService implements CustomHttpErrorHandlerService
 {
   // You can write any number here, ex: 9999
   readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.veryHigh;
-  private toaster = inject(ToasterService);
+  protected readonly toaster = inject(ToasterService);
   private error: HttpErrorResponse | undefined = undefined;
 
   // What kind of error should be handled by this service? You can decide it in this method. If error is suitable to your case then return true; otherwise return false.
@@ -175,7 +174,11 @@ import { MyCustomErrorHandlerService } from './custom-error-handler.service';
   // ...
   providers: [
     // ...
-    { provide: CUSTOM_ERROR_HANDLERS, useExisting: MyCustomErrorHandlerService, multi: true }
+    {
+      provide: CUSTOM_ERROR_HANDLERS,
+      useExisting: MyCustomErrorHandlerService,
+      multi: true,
+    }
   ]
 })
 export class AppModule {}
