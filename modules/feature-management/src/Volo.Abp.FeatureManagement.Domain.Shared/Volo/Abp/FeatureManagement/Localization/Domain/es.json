@@ -3,7 +3,7 @@
   "texts": {
     "Features": "Características",
     "NoFeatureFoundMessage": "No hay ninguna característica disponible.",
-    "ManageHostFeatures": "Administrar funciones de host",
+    "ManageHostFeatures": "Administrar Funciones de Host",
     "ManageHostFeaturesText": "Puede administrar las funciones del lado del host haciendo clic en el siguiente botón.",
     "Permission:FeatureManagement": "Gestión de Características",
     "Permission:FeatureManagement.ManageHostFeatures": "Gestionar características del Host",
