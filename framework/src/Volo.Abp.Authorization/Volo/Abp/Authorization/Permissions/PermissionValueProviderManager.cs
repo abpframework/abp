@@ -9,7 +9,7 @@ namespace Volo.Abp.Authorization.Permissions;
 
 public class PermissionValueProviderManager : IPermissionValueProviderManager, ISingletonDependency
 {
-    public IReadOnlyList<IPermissionValueProvider> ValueProviders => _lazyProviders.Value;
+    public IReadOnlyList<IPermissionValueProvider> ValueProviders => GetProviders();
     private readonly Lazy<List<IPermissionValueProvider>> _lazyProviders;
 
     protected AbpPermissionOptions Options { get; }
@@ -27,5 +27,18 @@ public class PermissionValueProviderManager : IPermissionValueProviderManager, I
                 .ToList()!,
             true
         );
+    }
+    
+    protected virtual List<IPermissionValueProvider> GetProviders()
+    {
+        var providers = _lazyProviders.Value;
+        
+        var multipleProviders = providers.GroupBy(p => p.Name).FirstOrDefault(x => x.Count() > 1);
+        if(multipleProviders != null)
+        {
+            throw new AbpException($"Duplicate permission value provider name detected: {multipleProviders.Key}. Providers:{Environment.NewLine}{multipleProviders.Select(p => p.GetType().FullName!).JoinAsString(Environment.NewLine)}");
+        }
+
+        return providers;
     }
 }
