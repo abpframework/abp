@@ -1092,6 +1092,7 @@
     "YouAreNotAuthorizedToDownloadStudio": "You are not authorized to download ABP Studio.",
     "PaymentFailedInfo": "Sorry, payment failed! This could be due to insufficient funds, invalid credit card numbers or invalid pin",
     "UsedPayment": "This payment has been already used",
-    "NoActiveLicence": "You are not eligible for this action! You have no active license."
+    "NoActiveLicence": "You are not eligible for this action! You have no active license.",
+    "ABPStudioBetaTester": "To be able to submit your request, you must sign in"
   }
 }
