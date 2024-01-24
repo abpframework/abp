@@ -23,6 +23,7 @@ public static class AbpTenantManagementDbContextModelCreatingExtensions
             b.ConfigureByConvention();
 
             b.Property(t => t.Name).IsRequired().HasMaxLength(TenantConsts.MaxNameLength);
+            b.Property(t => t.NormalizedName).IsRequired().HasMaxLength(TenantConsts.MaxNameLength);
 
             b.HasMany(u => u.ConnectionStrings).WithOne().HasForeignKey(uc => uc.TenantId).IsRequired();
 

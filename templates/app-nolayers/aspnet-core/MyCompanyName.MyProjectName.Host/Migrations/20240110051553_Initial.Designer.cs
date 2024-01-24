@@ -10,10 +10,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace MyCompanyName.MyProjectName.Host.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20240108044315_Initial")]
+    [Migration("20240110051553_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1683,6 +1683,11 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnName("LastModifierId");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");

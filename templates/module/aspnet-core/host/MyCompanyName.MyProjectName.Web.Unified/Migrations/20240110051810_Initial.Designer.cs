@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.Blazor.Server.Host.EntityFrameworkCore;
+using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20240108044309_Initial")]
+    [Migration("20240110051810_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1324,6 +1324,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                         .HasColumnName("LastModifierId");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");

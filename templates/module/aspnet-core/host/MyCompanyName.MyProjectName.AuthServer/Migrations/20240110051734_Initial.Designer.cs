@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(AuthServerDbContext))]
-    [Migration("20240108044243_Initial")]
+    [Migration("20240110051734_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1683,6 +1683,11 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnName("LastModifierId");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");

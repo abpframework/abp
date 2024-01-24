@@ -29,9 +29,9 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         Options = options.Value;
     }
 
-    public async Task<TenantConfiguration?> FindAsync(string name)
+    public async Task<TenantConfiguration?> FindAsync(string normalizedName)
     {
-        var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(name);
+        var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(normalizedName);
         var httpContext = HttpContextAccessor?.HttpContext;
 
         if (httpContext != null && httpContext.Items[cacheKey] is TenantConfigurationCacheItem tenantConfigurationInHttpContext)
@@ -42,7 +42,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         var tenantConfiguration = await Cache.GetAsync(cacheKey);
         if (tenantConfiguration == null)
         {
-            await TenantAppService.FindTenantByNameAsync(name);
+            await TenantAppService.FindTenantByNameAsync(normalizedName);
             tenantConfiguration = await Cache.GetAsync(cacheKey);
         }
 
@@ -79,9 +79,9 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         return tenantConfiguration?.Value;
     }
 
-    public TenantConfiguration? Find(string name)
+    public TenantConfiguration? Find(string normalizedName)
     {
-        var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(name);
+        var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(normalizedName);
         var httpContext = HttpContextAccessor?.HttpContext;
 
         if (httpContext != null && httpContext.Items[cacheKey] is TenantConfigurationCacheItem tenantConfigurationInHttpContext)
@@ -92,7 +92,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         var tenantConfiguration = Cache.Get(cacheKey);
         if (tenantConfiguration == null)
         {
-            AsyncHelper.RunSync(async () => await TenantAppService.FindTenantByNameAsync(name));
+            AsyncHelper.RunSync(async () => await TenantAppService.FindTenantByNameAsync(normalizedName));
             tenantConfiguration = Cache.Get(cacheKey);
         }
 

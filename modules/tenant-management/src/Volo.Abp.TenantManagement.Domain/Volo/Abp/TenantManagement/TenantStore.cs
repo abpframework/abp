@@ -27,9 +27,9 @@ public class TenantStore : ITenantStore, ITransientDependency
         Cache = cache;
     }
 
-    public virtual async Task<TenantConfiguration> FindAsync(string name)
+    public virtual async Task<TenantConfiguration> FindAsync(string normalizedName)
     {
-        return (await GetCacheItemAsync(null, name)).Value;
+        return (await GetCacheItemAsync(null, normalizedName)).Value;
     }
 
     public virtual async Task<TenantConfiguration> FindAsync(Guid id)
@@ -38,9 +38,9 @@ public class TenantStore : ITenantStore, ITransientDependency
     }
 
     [Obsolete("Use FindAsync method.")]
-    public virtual TenantConfiguration Find(string name)
+    public virtual TenantConfiguration Find(string normalizedName)
     {
-        return (GetCacheItem(null, name)).Value;
+        return (GetCacheItem(null, normalizedName)).Value;
     }
 
     [Obsolete("Use FindAsync method.")]
@@ -49,9 +49,9 @@ public class TenantStore : ITenantStore, ITransientDependency
         return (GetCacheItem(id, null)).Value;
     }
 
-    protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemAsync(Guid? id, string name)
+    protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemAsync(Guid? id, string normalizedName)
     {
-        var cacheKey = CalculateCacheKey(id, name);
+        var cacheKey = CalculateCacheKey(id, normalizedName);
 
         var cacheItem = await Cache.GetAsync(cacheKey, considerUow: true);
         if (cacheItem != null)
@@ -68,16 +68,16 @@ public class TenantStore : ITenantStore, ITransientDependency
             }
         }
 
-        if (!name.IsNullOrWhiteSpace())
+        if (!normalizedName.IsNullOrWhiteSpace())
         {
             using (CurrentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
-                var tenant = await TenantRepository.FindByNameAsync(name);
+                var tenant = await TenantRepository.FindByNameAsync(normalizedName);
                 return await SetCacheAsync(cacheKey, tenant);
             }
         }
 
-        throw new AbpException("Both id and name can't be invalid.");
+        throw new AbpException("Both id and normalizedName can't be invalid.");
     }
 
     protected virtual async Task<TenantConfigurationCacheItem> SetCacheAsync(string cacheKey, [CanBeNull] Tenant tenant)
@@ -89,9 +89,9 @@ public class TenantStore : ITenantStore, ITransientDependency
     }
 
     [Obsolete("Use GetCacheItemAsync method.")]
-    protected virtual TenantConfigurationCacheItem GetCacheItem(Guid? id, string name)
+    protected virtual TenantConfigurationCacheItem GetCacheItem(Guid? id, string normalizedName)
     {
-        var cacheKey = CalculateCacheKey(id, name);
+        var cacheKey = CalculateCacheKey(id, normalizedName);
 
         var cacheItem = Cache.Get(cacheKey, considerUow: true);
         if (cacheItem != null)
@@ -108,16 +108,16 @@ public class TenantStore : ITenantStore, ITransientDependency
             }
         }
 
-        if (!name.IsNullOrWhiteSpace())
+        if (!normalizedName.IsNullOrWhiteSpace())
         {
             using (CurrentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
-                var tenant = TenantRepository.FindByName(name);
+                var tenant = TenantRepository.FindByName(normalizedName);
                 return SetCache(cacheKey, tenant);
             }
         }
 
-        throw new AbpException("Both id and name can't be invalid.");
+        throw new AbpException("Both id and normalizedName can't be invalid.");
     }
 
     [Obsolete("Use SetCacheAsync method.")]
@@ -129,8 +129,8 @@ public class TenantStore : ITenantStore, ITransientDependency
         return cacheItem;
     }
 
-    protected virtual string CalculateCacheKey(Guid? id, string name)
+    protected virtual string CalculateCacheKey(Guid? id, string normalizedName)
     {
-        return TenantConfigurationCacheItem.CalculateCacheKey(id, name);
+        return TenantConfigurationCacheItem.CalculateCacheKey(id, normalizedName);
     }
 }
