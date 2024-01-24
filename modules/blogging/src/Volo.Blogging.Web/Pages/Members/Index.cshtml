@@ -26,73 +26,81 @@
             <div class="col-md-4 mb-5 mb-md-0">
                 <div class="card h-auto member-profile-info">
                     <div class="card-body">
-                        <div class="d-inline-block position-relative">
-                            <img gravatar-email="@Model.User.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
-                        </div>
-                        @if (Model.User.Name != null && Model.User.Surname != null)
-                        {
-                            <h2 class="m-1">@Model.User.Name @Model.User.Surname</h2>
-                        }
-                        @if (Model.User.Company != null)
-                        {
-                            <h4 class="m-2">@Model.User.Company</h4>
-                        }
-                        @if (Model.User.JobTitle != null)
-                        {
-                            <h4>@Model.User.JobTitle</h4>
-                        }
-
-                        <small class="d-block">@L["UserName"].Value.ToUpper()</small>
-                        <h5>@Model.User.UserName</h5>
-
-                        @if (Model.User.WebSite != null)
-                        {
-                            <small>@L["PersonalWebsite"].Value.ToUpper()</small>
-                            <h5>
-                                <a href="@Model.User.WebSite">@Model.User.WebSite</a>
-                            </h5>
-                        }
-
-
-                        @if (Model.User.Twitter != null || Model.User.Github != null || Model.User.Linkedin != null)
-                        {
-                            <small>@L["Social"].Value.ToUpper()</small>
-                            <ul class="d-flex justify-content-center">
-                                @if (Model.User.Twitter != null)
-                                {
-                                    <li class="mx-3">
-                                        <a href="https://twitter.com/@Model.User.Twitter">
-                                            <div class="icon-twitter-v1"></div>
-                                        </a>
-                                    </li>
-                                }
-                                @if (Model.User.Github != null)
-                                {
-                                    <li class="mx-3">
-                                        <a href="https://github.com/@Model.User.Github">
-                                            <div class="icon-github large bg-dark"></div>
-                                        </a>
-                                    </li>
-                                }
-                                @if (Model.User.Linkedin != null)
-                                {
-                                    <li class="mx-3">
-                                        <a href="@Model.User.Linkedin">
-                                            <div class="icon-linkedin-v1"></div>
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                        }
-
-                        @if (Model.User.Biography != null)
-                        {
-                            <div class="m-2 mt-4">
-                                <small>@L["Biography"].Value.ToUpper()</small>
-                                <p>@Model.User.Biography</p>
+                        <div class="text-center">
+                            <div class="position-relative d-inline-block">
+                                <img gravatar-email="@Model.User.Email" default-image="Identicon" id="profile-photo" class="post-member-img rounded-circle d-block mx-auto" />
                             </div>
-                        }
+                        </div>
+                        <div class="d-inline-block align-top text-left ml-3">
+                            @if (Model.User.Name != null && Model.User.Surname != null)
+                            {
+                                <h2 class="m-0 custom-heading">
+                                    @Model.User.Name @Model.User.Surname
+                                </h2>}
+                            @if (Model.User.Company != null)
+                            {
+                                <h4 class="m-0 company-jobtitle">@Model.User.Company</h4>
+                            }
+
+                            @if (Model.User.JobTitle != null)
+                            {
+                                <h4 class="company-jobtitle">@Model.User.JobTitle</h4>
+                            }
+
+                            <small class="d-block custom-small">@L["UserName"].Value.ToUpper()</small>
+                            <h5 class="username-website">@Model.User.UserName</h5>
+
+                            @if (Model.User.WebSite != null)
+                            {
+                                <small class="custom-small">@L["PersonalWebsite"].Value.ToUpper()</small>
+                                <h5 class="username-website">
+                                    <a href="@Model.User.WebSite">@Model.User.WebSite</a>
+                                </h5>
+                            }
+
+
+                            @if (Model.User.Twitter != null || Model.User.Github != null || Model.User.Linkedin != null)
+                            {
+                                <small>@L["Social"].Value.ToUpper()</small>
+                                <ul class="d-flex list-unstyled mb-0">
+                                    @if (Model.User.Twitter != null)
+                                    {
+                                        <li class="mx-3">
+                                            <a href="https://twitter.com/@Model.User.Twitter">
+                                                <div class="icon-twitter-v1"></div>
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (Model.User.Github != null)
+                                    {
+                                        <li class="mx-3">
+                                            <a href="https://github.com/@Model.User.Github">
+                                                <div class="icon-github large bg-dark"></div>
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (Model.User.Linkedin != null)
+                                    {
+                                        <li class="mx-3">
+                                            <a href="@Model.User.Linkedin">
+                                                <div class="icon-linkedin-v1"></div>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+
+                            @if (Model.User.Biography != null)
+                            {
+                                <div class="m-0 mt-4">
+                                    <small>@L["Biography"].Value.ToUpper()</small>
+                                    <p>@Model.User.Biography</p>
+                                </div>
+                            }
+                        </div>
                     </div>
+
+
                 </div>
             </div>
             <div class="col-md-8">
@@ -106,16 +114,13 @@
                                 @foreach (var post in Model.Posts)
                                 {
                                     <div class="post-item">
-                                        <div class="post-type-cont">
+                                        <div class="post-type-cont" style="text-align: center;">
 
                                             <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
-                                                <img gravatar-email="@Model.User.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
+                                                <img gravatar-email="@Model.User.Email" default-image="Identicon" id="gravatar" class="post-member-img rounded-circle d-block" />
                                             </a>
-                                            <span class="post-type">
-                                                <i class="fas fa-pen-nib"></i>
-                                                @L["Blog"].Value.ToUpper()
-                                            </span>
                                         </div>
+
                                         <div class="post-detail-cont">
                                             <div class="post-info fs-12 mb-2">
                                                 <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
@@ -203,10 +208,6 @@
                                         <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
                                             <img gravatar-email="@Model.User.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
                                         </a>
-                                        <span class="post-type">
-                                            <i class="fas fa-pen-nib"></i>
-                                            @L["Blog"].Value.ToUpper()
-                                        </span>
                                     </div>
                                     <div class="post-detail-cont">
                                         <div class="post-info fs-12 mb-2">

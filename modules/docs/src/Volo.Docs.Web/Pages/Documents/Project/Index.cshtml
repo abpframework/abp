@@ -36,18 +36,27 @@
 }
 
 @section scripts {
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
-        <abp-script type="@typeof(ClipboardScriptBundleContributor)"/>
-        <abp-script type="@typeof(AnchorJsScriptBundleContributor)"/>
-        <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
-        <abp-script type="@typeof(PopperJsScriptBundleContributor)"/>
-        <abp-script src="/client-proxies/docs-proxy.js"/>
-        <abp-script src="/Pages/Documents/Project/bootstrap-toc.js"/>
-        <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
-        <abp-script src="/Pages/Documents/Project/index.js"/>
-        <abp-script src="/Pages/Documents/Shared/ErrorComponent/error.js"/>
-    </abp-script-bundle>
+    
+    @if (Model.LoadSuccess)
+    {
+        <abp-script-bundle name="@typeof(IndexModel).FullName">
+            <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
+            <abp-script type="@typeof(ClipboardScriptBundleContributor)"/>
+            <abp-script type="@typeof(AnchorJsScriptBundleContributor)"/>
+            <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
+            <abp-script type="@typeof(PopperJsScriptBundleContributor)"/>
+            <abp-script src="/client-proxies/docs-proxy.js"/>
+            <abp-script src="/Pages/Documents/Project/bootstrap-toc.js"/>
+            <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
+            <abp-script src="/Pages/Documents/Project/index.js"/>
+        </abp-script-bundle>
+    }
+    else
+    {
+        <abp-script-bundle name="@typeof(ErrorViewComponent).FullName">
+            <abp-script src="/Pages/Documents/Shared/ErrorComponent/error.js"/>
+        </abp-script-bundle>
+    }
 }
 
 @if (Model.LoadSuccess)
@@ -92,18 +101,31 @@
                     <div class="col-12 mb-2">
 
                         <div class="docs-version">
-                            <span>Project</span>
+                            @if (Model.ShowProjectsComboboxLabel)
+                            {
+                                <span>@L["Project"]</span>
+                            }
                             <div class="version-select">
-                                <div class="input-group">
-                                    <span class="input-group-text d-none">
-                                        <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
-                                    </span>
+                                @if (Model.ShowProjectsComboboxLabel)
+                                {
+                                    <div class="input-group">
+                                        <span class="input-group-text d-none">
+                                            <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
+                                        </span>
 
+                                        <select asp-items="Model.ProjectSelectItems"
+                                                class="form-select"
+                                                onchange="window.location.pathname = this.value">
+                                        </select>
+                                    </div>
+                                }
+                                else
+                                {
                                     <select asp-items="Model.ProjectSelectItems"
                                             class="form-select"
                                             onchange="window.location.pathname = this.value">
                                     </select>
-                                </div>
+                                }
                             </div>
                         </div>
 
@@ -318,7 +340,7 @@
                                                 <select class="doc-section-combobox form-select"
                                                         aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
                                                         id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
-                                                    @foreach (var value in parameter.Values)
+                                                    @foreach (var value in parameter.Values.OrderBy(p => p.Value))
                                                     {
                                                         @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
                                                         {
