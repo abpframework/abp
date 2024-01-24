@@ -25,6 +25,7 @@ export const pipeToLogin: PipeToLoginFn = function (
   );
 };
 
+//Ref: https://github.com/manfredsteyer/angular-oauth2-oidc/issues/1214
 export function isTokenExpired(expireDate: number): boolean {
   const currentDate = new Date().getTime();
   return expireDate < currentDate;
