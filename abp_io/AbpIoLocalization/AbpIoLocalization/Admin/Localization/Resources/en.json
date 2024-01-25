@@ -592,6 +592,8 @@
     "OrganizationId": "Organization Id",
     "RemoveAllWinnersConfirmationMessage": "Are you sure you want to remove all winners?",
     "AutoRenewals": "Auto Renewals",
-    "OrganizationHasCreditCard": "Organization has credit card. Please remove credit card first!"
+    "OrganizationHasCreditCard": "Organization has credit card. Please remove credit card first!",
+    "DisplayName:DontSendEmailForLicenseExpire": "Don't Send Email For License Expire",
+    "DontSendEmailForLicenseExpire": "Don't Send Email For License Expire"
   }
 }
