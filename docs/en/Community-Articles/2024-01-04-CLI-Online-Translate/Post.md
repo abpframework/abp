@@ -1,12 +1,12 @@
 # Use Deepl to translate localization files
 
-Translating localized text during the development ABP modules is a boring work. For this reason we have added the `translate` command to the CLI tool to translate the localization files, but it still requires manual translate texts by the developer.
+Translating localized text during the development of ABP modules is a boring job. For this reason, we have added the `translate` command to the CLI tool to translate the localization files, but it still requires manual translation of texts by the developer.
 
-Now, We introduce a new way to translate the target language, which is to use the [Deepl](https://www.deepl.com/translator) translation service to translate the target language.
+Now, we introduce a new way to translate the target language, which is to use the [Deepl](https://www.deepl.com/translator) translation service to translate the target language.
 
-You can use the `translate --online` command to in your module directory to translate the target language.
+You can use the `translate --online` command in your module directory to translate the target language.
 
-For example, You have added all `en` localization texts to your module, and you want to translate them to `zh-Hans`, you can run the following command:
+For example, if you have added all `en` localization texts to your module, and you want to translate them to `zh-Hans`, you can run the following command:
 
 ```
 abp translate -r en -c zh-Hans --online --deepl-auth-key your_auth_key
