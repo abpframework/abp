@@ -10,10 +10,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace MyCompanyName.MyProjectName.Mvc.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20240110051838_Initial")]
+    [Migration("20240125061143_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1695,6 +1695,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name");
+
+                    b.HasIndex("NormalizedName");
 
                     b.ToTable("AbpTenants", (string)null);
                 });

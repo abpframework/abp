@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20240110051639_Initial")]
+    [Migration("20240125061235_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1695,6 +1695,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name");
+
+                    b.HasIndex("NormalizedName");
 
                     b.ToTable("AbpTenants", (string)null);
                 });

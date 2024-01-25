@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -777,6 +777,11 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "IX_AbpTenants_Name",
                 table: "AbpTenants",
                 column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpTenants_NormalizedName",
+                table: "AbpTenants",
+                column: "NormalizedName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",

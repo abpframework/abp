@@ -28,6 +28,7 @@ public static class AbpTenantManagementDbContextModelCreatingExtensions
             b.HasMany(u => u.ConnectionStrings).WithOne().HasForeignKey(uc => uc.TenantId).IsRequired();
 
             b.HasIndex(u => u.Name);
+            b.HasIndex(u => u.NormalizedName);
 
             b.ApplyObjectExtensionMappings();
         });

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Mvc.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -913,6 +913,11 @@ namespace MyCompanyName.MyProjectName.Mvc.Migrations
                 name: "IX_AbpTenants_Name",
                 table: "AbpTenants",
                 column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpTenants_NormalizedName",
+                table: "AbpTenants",
+                column: "NormalizedName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
