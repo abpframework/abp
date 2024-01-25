@@ -55,8 +55,7 @@ public partial class Add_NormalizedName : Migration
         migrationBuilder.AddColumn<string>(
             name: "NormalizedName",
             table: "SaasTenants",
-            type: "citext",
-            maxLength: 64,
+            type: "nvarchar(64)",
             nullable: false,
             defaultValue: "");
 
