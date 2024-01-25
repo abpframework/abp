@@ -394,7 +394,7 @@ app.UseMultiTenancy();
 
 `ITenantStore` is used to get the tenant configuration from a data source.
 
-> Tenant names are not case-sensitive. `ITenantStore` will use the `NormalizedName` parameter to get tenants, You need to use `ITenantNormalizer`` to normalize tenant names.
+> Tenant names are not case-sensitive. `ITenantStore` will use the `NormalizedName` parameter to get tenants, You need to use `ITenantNormalizer` to normalize tenant names.
 
 #### Tenant Management Module
 
