@@ -1745,6 +1745,8 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("Name");
 
+                    b.HasIndex("NormalizedName");
+
                     b.ToTable("AbpTenants", (string)null);
                 });
 

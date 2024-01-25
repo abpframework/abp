@@ -915,6 +915,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                 column: "Name");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpTenants_NormalizedName",
+                table: "AbpTenants",
+                column: "NormalizedName");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
                 table: "AbpUserClaims",
                 column: "UserId");

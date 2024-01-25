@@ -1693,6 +1693,8 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
 
                     b.HasIndex("Name");
 
+                    b.HasIndex("NormalizedName");
+
                     b.ToTable("AbpTenants", (string)null);
                 });
 
