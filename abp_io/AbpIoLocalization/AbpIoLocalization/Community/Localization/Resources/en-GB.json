@@ -104,6 +104,7 @@
     "CreatePostLanguageInfo": "Language of the post",
     "SeeMore": "See More",
     "MemberNotPublishedPostYet": "This member hasn't published any posts yet.",
-    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> supported."
+    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> supported.",
+    "Preview": "Preview"
   }
 }
