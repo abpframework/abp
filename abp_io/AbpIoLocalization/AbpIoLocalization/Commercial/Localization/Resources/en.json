@@ -1119,7 +1119,7 @@
     "AutoLicenseRenewalIsNotEnabled": "Auto license renewal is not enabled.",
     "SetAsDefaultPaymentMethod": "Set as default payment method",
     "{0}PerAdditionalDeveloper": "{0} per additional developer",
-    "CardAlias": "Card Alias",
+    "CardAlias": "Card Alias (Optional)",
     "AbpDoesNotSaveYourPaymentDetails_Description": "The payment data will be saved in <a href=\"{0}\" target=\"_blank\" class=\"{1}\">{2}</a> security vaults and you can remove stored data anytime. Enabling auto-renewal ensures that your ABP subscription will automatically renew prior to expiration, providing a valid credit card. Disabling auto-renewal means you will have to renew your subscription manually. To continue your project development without interruption, we suggest you enable the Auto-Renewal option.",
     "AddBillingInformation": "Add Billing Information",
     "YouHaveNoCardsSaved": "You have no cards saved.",
@@ -1130,6 +1130,8 @@
     "BillingDetails": "Billing Details",
     "ThereIsNoDeveloper": "There is no developer.",
     "CardDetails": "Debit/Credit Card Details",
-    "NoActiveLicence": "You are not eligible for this action! You have no active license."
+    "NoActiveLicence": "You are not eligible for this action! You have no active license.",
+    "ExpirationMonthWarning": "Month should be 12 or less.",
+    "ExpirationYearWarning": "Year should be 24 or more."
   }
 }
