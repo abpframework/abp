@@ -125,7 +125,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
 
         if (!providers.Any())
         {
-            throw new AbpException($"Could not find a setting provider named '{providerName}'.");
+            throw new AbpException($"Unknown setting value provider: {providerName}");
         }
 
         if (setting.IsEncrypted)

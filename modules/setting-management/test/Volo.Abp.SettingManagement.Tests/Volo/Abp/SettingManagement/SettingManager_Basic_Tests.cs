@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Settings;
@@ -65,13 +66,13 @@ public class SettingManager_Basic_Tests : SettingsTestBase
     }
     
     [Fact]
-    public async Task Should_Throw_Exception_If_Provider_Not_Found()
+    public async Task Set_Should_Throw_Exception_If_Provider_Not_Found()
     {
         var exception = await Assert.ThrowsAsync<AbpException>(async () =>
         {
-            await _settingManager.SetAsync("MySetting1", "43", "UndefinedProvider", "UndefinedProviderKey");
+            await _settingManager.SetAsync("MySetting1", "43", "UndefinedProvider", "Test");
         });
         
-        exception.Message.ShouldBe("Could not find a setting provider named 'UndefinedProvider'.");
+        exception.Message.ShouldBe("Unknown setting value provider: UndefinedProvider");
     }
 }
