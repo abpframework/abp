@@ -22,21 +22,21 @@ public class TenantConfigurationCacheItemInvalidator :
 
     public virtual async Task HandleEventAsync(EntityChangedEventData<Tenant> eventData)
     {
-        await ClearCacheAsync(eventData.Entity.Id, eventData.Entity.Name);
+        await ClearCacheAsync(eventData.Entity.Id, eventData.Entity.NormalizedName);
     }
 
     public virtual async Task HandleEventAsync(EntityDeletedEventData<Tenant> eventData)
     {
-        await ClearCacheAsync(eventData.Entity.Id, eventData.Entity.Name);
+        await ClearCacheAsync(eventData.Entity.Id, eventData.Entity.NormalizedName);
     }
 
-    protected virtual async Task ClearCacheAsync(Guid? id, string name)
+    protected virtual async Task ClearCacheAsync(Guid? id, string normalizedName)
     {
         await Cache.RemoveManyAsync(
             new[]
             {
                 TenantConfigurationCacheItem.CalculateCacheKey(id, null),
-                TenantConfigurationCacheItem.CalculateCacheKey(null, name),
+                TenantConfigurationCacheItem.CalculateCacheKey(null, normalizedName),
             });
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
@@ -34,7 +33,10 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
 
     public virtual IFileInfo GetFileInfo(string subpath)
     {
-        Check.NotNullOrEmpty(subpath, nameof(subpath));
+        if (string.IsNullOrEmpty(subpath))
+        {
+            return new NotFoundFileInfo(subpath);
+        }
 
         if (PathUtils.PathNavigatesAboveRoot(subpath))
         {
@@ -53,11 +55,9 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
         return _fileProvider.GetFileInfo(_rootPath + subpath);
     }
 
-    public virtual IDirectoryContents GetDirectoryContents([NotNull] string subpath)
+    public virtual IDirectoryContents GetDirectoryContents(string subpath)
     {
-        Check.NotNullOrEmpty(subpath, nameof(subpath));
-
-        if (PathUtils.PathNavigatesAboveRoot(subpath))
+        if (subpath == null || PathUtils.PathNavigatesAboveRoot(subpath))
         {
             return NotFoundDirectoryContents.Singleton;
         }

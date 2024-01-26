@@ -11,5 +11,7 @@ public class FindTenantResultDto
 
     public string? Name { get; set; }
 
+    public string? NormalizedName { get; set; }
+
     public bool IsActive { get; set; }
 }
