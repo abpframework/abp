@@ -44,6 +44,19 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
                 typeof(AbpAspNetCoreMvcTestModule).Assembly
             );
         });
+
+        context.Services.PreConfigure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
+            {
+                opts.UrlActionNameNormalizer = urlActionNameNormalizerContext =>
+                    string.Equals(urlActionNameNormalizerContext.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
+                        ? "phones"
+                        : urlActionNameNormalizerContext.ActionNameInUrl;
+            });
+
+            options.ExposeIntegrationServices = true;
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -77,19 +90,6 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
             {
                 policy.Requirements.Add(new PermissionsRequirement(new []{"TestPermission1", "TestPermission2"}, requiresAll: false));
             });
-        });
-
-        Configure<AbpAspNetCoreMvcOptions>(options =>
-        {
-            options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
-            {
-                opts.UrlActionNameNormalizer = urlActionNameNormalizerContext =>
-                    string.Equals(urlActionNameNormalizerContext.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
-                        ? "phones"
-                        : urlActionNameNormalizerContext.ActionNameInUrl;
-            });
-
-            options.ExposeIntegrationServices = true;
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>
