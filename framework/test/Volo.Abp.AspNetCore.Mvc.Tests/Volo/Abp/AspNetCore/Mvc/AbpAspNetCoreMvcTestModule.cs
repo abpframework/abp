@@ -19,6 +19,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
+using Volo.Abp.TestApp.Application;
 using Volo.Abp.Threading;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
@@ -53,6 +54,8 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
                     string.Equals(urlActionNameNormalizerContext.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
                         ? "phones"
                         : urlActionNameNormalizerContext.ActionNameInUrl;
+
+                opts.TypePredicate = type => type != typeof(ConventionalAppService);
             });
 
             options.ExposeIntegrationServices = true;
