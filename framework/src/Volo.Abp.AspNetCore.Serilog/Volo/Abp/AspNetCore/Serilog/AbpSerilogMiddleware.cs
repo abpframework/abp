@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Core.Enrichers;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -13,7 +14,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Serilog;
 
-public class AbpSerilogMiddleware : IMiddleware, ITransientDependency
+public class AbpSerilogMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     private readonly ICurrentClient _currentClient;
     private readonly ICurrentTenant _currentTenant;
@@ -35,7 +36,7 @@ public class AbpSerilogMiddleware : IMiddleware, ITransientDependency
         _options = options.Value;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var enrichers = new List<ILogEventEnricher>();
 
