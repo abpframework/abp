@@ -31,7 +31,6 @@
     <PackageReference Include="System.Linq.Dynamic.Core" />
     <PackageReference Include="System.Linq.Queryable" />
     <PackageReference Include="JetBrains.Annotations" />
-    <PackageReference Include="Nito.AsyncEx.Coordination" />
     <PackageReference Include="Nito.AsyncEx.Context" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETStandard' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '2.1')) ">
