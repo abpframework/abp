@@ -230,6 +230,7 @@
     "CommunityProfile": "Profilul comunității",
     "BlogProfile": "Profil blog",
     "Tickets": "bilete",
-    "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității"
+    "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității",
+    "EmailPreferences": "preferinte de email"
   }
 }

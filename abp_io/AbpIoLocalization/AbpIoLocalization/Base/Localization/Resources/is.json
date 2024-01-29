@@ -230,6 +230,7 @@
     "CommunityProfile": "Samfélagssnið",
     "BlogProfile": "Bloggprófíll",
     "Tickets": "Miðar",
-    "DisplayName:CommunityIndexPagePoll": "Samfélagssnið"
+    "DisplayName:CommunityIndexPagePoll": "Samfélagssnið",
+    "EmailPreferences": "Tölvupóststillingar"
   }
 }

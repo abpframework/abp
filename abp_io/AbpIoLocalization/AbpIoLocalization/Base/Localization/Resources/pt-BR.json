@@ -230,6 +230,7 @@
     "CommunityProfile": "Perfil da comunidade",
     "BlogProfile": "Perfil do blog",
     "Tickets": "Ingressos",
-    "DisplayName:CommunityIndexPagePoll": "Enquete da página inicial da comunidade"
+    "DisplayName:CommunityIndexPagePoll": "Enquete da página inicial da comunidade",
+    "EmailPreferences": "Preferências de Email"
   }
 }

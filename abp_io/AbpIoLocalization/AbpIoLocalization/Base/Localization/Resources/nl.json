@@ -230,6 +230,7 @@
     "CommunityProfile": "Gemeenschapsprofiel",
     "BlogProfile": "Blogprofiel",
     "Tickets": "Kaartjes",
-    "DisplayName:CommunityIndexPagePoll": "Gemeenschapsindexpagina-enquête"
+    "DisplayName:CommunityIndexPagePoll": "Gemeenschapsindexpagina-enquête",
+    "EmailPreferences": "e-mail voorkeuren"
   }
 }

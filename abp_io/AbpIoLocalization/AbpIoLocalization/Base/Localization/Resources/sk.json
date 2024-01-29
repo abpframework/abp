@@ -230,6 +230,7 @@
     "CommunityProfile": "Profil komunity",
     "BlogProfile": "Profil blogu",
     "Tickets": "Vstupenky",
-    "DisplayName:CommunityIndexPagePoll": "Anketa na stránke indexu komunity"
+    "DisplayName:CommunityIndexPagePoll": "Anketa na stránke indexu komunity",
+    "EmailPreferences": "Predvoľby e-mailu"
   }
 }

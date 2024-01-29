@@ -230,6 +230,7 @@
     "CommunityProfile": "Profil społeczności",
     "BlogProfile": "Profil bloga",
     "Tickets": "Bilety",
-    "DisplayName:CommunityIndexPagePoll": "Ankieta na stronie głównej społeczności"
+    "DisplayName:CommunityIndexPagePoll": "Ankieta na stronie głównej społeczności",
+    "EmailPreferences": "Preferencje poczty e-mail"
   }
 }

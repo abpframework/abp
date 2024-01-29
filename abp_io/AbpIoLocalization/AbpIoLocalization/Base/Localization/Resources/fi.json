@@ -230,6 +230,7 @@
     "CommunityProfile": "Yhteisön profiili",
     "BlogProfile": "Blogin profiili",
     "Tickets": "Liput",
-    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely"
+    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely",
+    "EmailPreferences": "Sähköpostiasetukset"
   }
 }

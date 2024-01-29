@@ -230,6 +230,7 @@
     "CommunityProfile": "सामुदायिक प्रोफ़ाइल",
     "BlogProfile": "ब्लॉग प्रोफ़ाइल",
     "Tickets": "टिकट",
-    "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान"
+    "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान",
+    "EmailPreferences": "ईमेल प्राथमिकताएं"
   }
 }

@@ -236,6 +236,7 @@
     "Video Courses": "Видео курсы",
     "Packages": "Пакеты",
     "Trainings": "Тренинги",
-    "DisplayName:CommunityIndexPagePoll": "Опрос на главной странице сообщества"
+    "DisplayName:CommunityIndexPagePoll": "Опрос на главной странице сообщества",
+    "EmailPreferences": "Настройки электронной почты"
   }
 }

@@ -230,6 +230,7 @@
     "CommunityProfile": "社区概况",
     "BlogProfile": "博客简介",
     "Tickets": "门票",
-    "DisplayName:CommunityIndexPagePoll": "社区首页投票"
+    "DisplayName:CommunityIndexPagePoll": "社区首页投票",
+    "EmailPreferences": "电子邮件首选项"
   }
 }

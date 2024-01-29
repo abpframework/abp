@@ -230,6 +230,7 @@
     "CommunityProfile": "Közösségi profil",
     "BlogProfile": "Blog profil",
     "Tickets": "Jegyek",
-    "DisplayName:CommunityIndexPagePoll": "Közösségi Indexoldal Szavazás"
+    "DisplayName:CommunityIndexPagePoll": "Közösségi Indexoldal Szavazás",
+    "EmailPreferences": "E-mail beállítások"
   }
 }

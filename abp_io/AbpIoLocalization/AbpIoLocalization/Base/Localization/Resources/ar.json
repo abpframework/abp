@@ -230,6 +230,7 @@
     "CommunityProfile": "ملف تعريف المجتمع",
     "BlogProfile": "الملف الشخصي للمدونة",
     "Tickets": "التذاكر",
-    "DisplayName:CommunityIndexPagePoll": "استطلاع"
+    "DisplayName:CommunityIndexPagePoll": "استطلاع",
+    "EmailPreferences": "تفضيلات البريد الإلكتروني"
   }
 }

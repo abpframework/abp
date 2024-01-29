@@ -230,6 +230,7 @@
     "CommunityProfile": "Profilo della comunità",
     "BlogProfile": "Profilo del blog",
     "Tickets": "Biglietti",
-    "DisplayName:CommunityIndexPagePoll": "Sondaggio della pagina indice della comunità"
+    "DisplayName:CommunityIndexPagePoll": "Sondaggio della pagina indice della comunità",
+    "EmailPreferences": "preferenze email"
   }
 }
