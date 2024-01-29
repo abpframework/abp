@@ -14,8 +14,6 @@ var abp = abp || {};
 
         var requestInterceptor = configObject.requestInterceptor;
         var responseInterceptor = configObject.responseInterceptor;
-
-        getAbpApplicationConfiguration();
         
         configObject.requestInterceptor = async function (request) {
 
@@ -29,17 +27,19 @@ var abp = abp || {};
                 });
                 firstRequest = false;
             }
+            
             // Intercept .well-known request when the discoveryEndpoint is provided
             if (!firstRequest && oidcDiscoveryEndpoint.length !== 0 && request.url.includes(".well-known/openid-configuration")) {
+                
                 if (oidcDiscoveryEndpoint.endsWith(".well-known/openid-configuration")) {
-                    request.url = replaceTenantPlaceHolder(oidcDiscoveryEndpoint);
+                    request.url = await replaceTenantPlaceHolder(oidcDiscoveryEndpoint);
                     console.log(request.url);
                     return;
                 }
                 if (!oidcDiscoveryEndpoint.endsWith("/")) {
                     oidcDiscoveryEndpoint += "/"
                 }
-                request.url = replaceTenantPlaceHolder(oidcDiscoveryEndpoint) + ".well-known/openid-configuration";
+                request.url = await replaceTenantPlaceHolder(oidcDiscoveryEndpoint) + ".well-known/openid-configuration";
                 
                 console.log(request.url);
             }
@@ -84,7 +84,11 @@ var abp = abp || {};
             return response;
         };
         
-        function replaceTenantPlaceHolder(url) {
+        async function replaceTenantPlaceHolder(url) {
+            
+            if(!abp.currentTenant){
+                await getAbpApplicationConfiguration();
+            }
             
             url.replace(tenantPlaceHolders[0], abp.currentTenant.id);
             url.replace(tenantPlaceHolders[1], abp.currentTenant.name);
@@ -99,7 +103,7 @@ var abp = abp || {};
         }
         
         function getAbpApplicationConfiguration() {
-            fetch(`${abp.appPath}api/abp/application-configuration`).then(response => response.json()).then(data => {
+            return fetch(`${abp.appPath}api/abp/application-configuration`).then(response => response.json()).then(data => {
                 abp.currentTenant = data.currentTenant; 
             });
         }
