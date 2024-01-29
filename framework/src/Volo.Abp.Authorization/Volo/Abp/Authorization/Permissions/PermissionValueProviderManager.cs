@@ -9,29 +9,28 @@ namespace Volo.Abp.Authorization.Permissions;
 
 public class PermissionValueProviderManager : IPermissionValueProviderManager, ISingletonDependency
 {
-    public IReadOnlyList<IPermissionValueProvider> ValueProviders => GetProviders();
+    public IReadOnlyList<IPermissionValueProvider> ValueProviders => _lazyProviders.Value;
     private readonly Lazy<List<IPermissionValueProvider>> _lazyProviders;
 
     protected AbpPermissionOptions Options { get; }
+    protected IServiceProvider ServiceProvider { get; }
 
     public PermissionValueProviderManager(
         IServiceProvider serviceProvider,
         IOptions<AbpPermissionOptions> options)
     {
         Options = options.Value;
+        ServiceProvider = serviceProvider;
 
-        _lazyProviders = new Lazy<List<IPermissionValueProvider>>(
-            () => Options
-                .ValueProviders
-                .Select(c => serviceProvider.GetRequiredService(c) as IPermissionValueProvider)
-                .ToList()!,
-            true
-        );
+        _lazyProviders = new Lazy<List<IPermissionValueProvider>>(GetProviders, true);
     }
     
     protected virtual List<IPermissionValueProvider> GetProviders()
     {
-        var providers = _lazyProviders.Value;
+        var providers = Options
+            .ValueProviders
+            .Select(type => (ServiceProvider.GetRequiredService(type) as IPermissionValueProvider)!)
+            .ToList();
         
         var multipleProviders = providers.GroupBy(p => p.Name).FirstOrDefault(x => x.Count() > 1);
         if(multipleProviders != null)
