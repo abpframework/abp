@@ -283,7 +283,7 @@
         initDocumentNodeBreadcrumb();
         
         Element.prototype.querySelector = function (selector) {
-            var result = $(decodeURI(selector));
+            var result = $(this).find(decodeURI(selector));
             if(result.length > 0){
                 return result[0];
             }
