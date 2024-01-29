@@ -58,7 +58,7 @@ Model:
 
 ### Attributes
 
-You can set some of the attributes on your c# property, or directly on HTML tag. If you are going to use this property in a [abp-dynamic-form](Dynamic-forms.md), then you can only set these properties via property attributes.
+You can set some of the attributes on your c# property, or directly on HTML tag. If you are going to use this property in a [abp-dynamic-form](Dynamic-Forms.md), then you can only set these properties via property attributes.
 
 #### Property Attributes
 
@@ -103,7 +103,7 @@ You can set the label of the input in several ways:
 
 `abp-select` tag creates a Bootstrap form select for a given c# property. It uses [ASP.NET Core Select Tag Helper](https://docs.microsoft.com/tr-tr/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-3.1#the-select-tag-helper) in background, so every data annotation attribute of `select` tag helper of ASP.NET Core is also valid for `abp-select`.
 
-`abp-select` tag needs a list of `Microsoft.AspNetCore.Mvc.Rendering.SelectListItem ` to work. It can be provided by `asp-items` attriube on the tag or `[SelectItems()]` attribute on c# property. (if you are using [abp-dynamic-form](Dynamic-forms.md), c# attribute is the only way.)
+`abp-select` tag needs a list of `Microsoft.AspNetCore.Mvc.Rendering.SelectListItem ` to work. It can be provided by `asp-items` attriube on the tag or `[SelectItems()]` attribute on c# property. (if you are using [abp-dynamic-form](Dynamic-Forms.md), c# attribute is the only way.)
 
 `abp-select` supports multiple selection.
 
@@ -171,7 +171,7 @@ Model:
 
 ### Attributes
 
-You can set some of the attributes on your c# property, or directly on HTML tag. If you are going to use this property in a [abp-dynamic-form](Dynamic-forms.md), then you can only set these properties via property attributes.
+You can set some of the attributes on your c# property, or directly on HTML tag. If you are going to use this property in a [abp-dynamic-form](Dynamic-Forms.md), then you can only set these properties via property attributes.
 
 #### Property Attributes
 
@@ -252,7 +252,7 @@ Model:
 
 ### Attributes
 
-You can set some of the attributes on your c# property, or directly on HTML tag. If you are going to use this property in a [abp-dynamic-form](Dynamic-forms.md), then you can only set these properties via property attributes.
+You can set some of the attributes on your c# property, or directly on HTML tag. If you are going to use this property in a [abp-dynamic-form](Dynamic-Forms.md), then you can only set these properties via property attributes.
 
 #### Property Attributes
 
@@ -325,7 +325,7 @@ Model:
 
 ### Attributes
 
-You can set some of the attributes on your c# property, or directly on HTML tag. If you are going to use this property in a [abp-dynamic-form](Dynamic-forms.md), then you can only set these properties via property attributes.
+You can set some of the attributes on your c# property, or directly on HTML tag. If you are going to use this property in a [abp-dynamic-form](Dynamic-Forms.md), then you can only set these properties via property attributes.
 
 #### Property Attributes
 

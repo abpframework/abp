@@ -55,7 +55,7 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 
 #### MongoDB 事务
 
-[启动模板](Startup-templates/Index.md) 默认在`.MongoDB`项目中**禁用**事务. 如果你的MongoDB服务器支持事务, 你可以在*YourProjectMongoDbModule*类中的`ConfigureServices`方法开启它:
+[启动模板](Startup-Templates/Index.md) 默认在`.MongoDB`项目中**禁用**事务. 如果你的MongoDB服务器支持事务, 你可以在*YourProjectMongoDbModule*类中的`ConfigureServices`方法开启它:
 
   ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
