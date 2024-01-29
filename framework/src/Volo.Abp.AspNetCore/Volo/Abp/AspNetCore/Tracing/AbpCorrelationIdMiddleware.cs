@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Tracing;
 
 namespace Volo.Abp.AspNetCore.Tracing;
 
-public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
+public class AbpCorrelationIdMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     private readonly AbpCorrelationIdOptions _options;
     private readonly ICorrelationIdProvider _correlationIdProvider;
@@ -20,7 +21,7 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
         _correlationIdProvider = correlationIdProvider;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var correlationId = GetCorrelationIdFromRequest(context);
         using (_correlationIdProvider.Change(correlationId))

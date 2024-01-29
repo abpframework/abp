@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.Data;
+using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Host.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
-    [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20240108044236_Initial")]
+    [DbContext(typeof(AuthServerDbContext))]
+    [Migration("20240125061344_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1687,9 +1687,16 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name");
+
+                    b.HasIndex("NormalizedName");
 
                     b.ToTable("AbpTenants", (string)null);
                 });

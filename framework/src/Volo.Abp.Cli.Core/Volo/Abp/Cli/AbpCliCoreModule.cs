@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Internal;
