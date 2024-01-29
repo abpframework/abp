@@ -3,7 +3,7 @@
   "texts": {
     "Features": "Značajke",
     "NoFeatureFoundMessage": "Ne postoji nijedna dostupna značajka.",
-    "ManageHostFeatures": "Upravljanje značajkama domaćina",
+    "ManageHostFeatures": "Upravljanje Značajkama Domaćina",
     "ManageHostFeaturesText": "Možete upravljati značajkama strane domaćina klikom na sljedeći gumb.",
     "Permission:FeatureManagement": "Upravljanje Značajkama",
     "Permission:FeatureManagement.ManageHostFeatures": "Upravljanje značajkama domaćina",
