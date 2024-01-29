@@ -55,7 +55,7 @@ The solution has a layered structure (based on the [Domain Driven Design](Domain
 
 ## MongoDB Transactions
 
-The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectMongoDbModule* class's `ConfigureServices` method:
+The [startup template](Startup-Templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectMongoDbModule* class's `ConfigureServices` method:
 
   ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>

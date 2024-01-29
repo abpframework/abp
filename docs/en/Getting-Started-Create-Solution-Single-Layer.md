@@ -34,7 +34,7 @@ The solution structure is based on the [Single-Layer Startup Template](Startup-T
 
 ## MongoDB Transactions
 
-The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectModule* class's `ConfigureMongoDB` method:
+The [startup template](Startup-Templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectModule* class's `ConfigureMongoDB` method:
 
   ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
