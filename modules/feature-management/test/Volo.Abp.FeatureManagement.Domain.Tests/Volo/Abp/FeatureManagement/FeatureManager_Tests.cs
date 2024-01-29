@@ -209,4 +209,15 @@ public class FeatureManager_Tests : FeatureManagementDomainTestBase
 
         (await _featureManager.GetOrNullAsync(TestFeatureDefinitionProvider.BackupCount, TenantFeatureValueProvider.ProviderName, TestEditionIds.TenantId.ToString())).ShouldBe("0");
     }
+    
+    [Fact]
+    public async Task Set_Should_Throw_Exception_If_Provider_Not_Found()
+    {
+        var exception = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _featureManager.SetAsync(TestFeatureDefinitionProvider.EmailSupport, "true", "UndefinedProvider", "Test");
+        });
+        
+        exception.Message.ShouldBe("Unknown feature value provider: UndefinedProvider");
+    }
 }
