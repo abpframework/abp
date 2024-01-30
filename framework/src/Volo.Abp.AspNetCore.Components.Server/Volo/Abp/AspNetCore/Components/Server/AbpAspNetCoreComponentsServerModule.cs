@@ -57,18 +57,21 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
             options.IgnoredUrls.AddIfNotContains("/_blazor");
         });
 
-        var preConfigureActions = context.Services.GetPreConfigureActions<HttpConnectionDispatcherOptions>();
-        Configure<AbpEndpointRouterOptions>(options =>
+        if (!context.Services.ExecutePreConfiguredActions<AbpAspNetCoreComponentsWebOptions>().IsBlazorWebApp)
         {
-            options.EndpointConfigureActions.Add(endpointContext =>
+            var preConfigureActions = context.Services.GetPreConfigureActions<HttpConnectionDispatcherOptions>();
+            Configure<AbpEndpointRouterOptions>(options =>
             {
-                endpointContext.Endpoints.MapBlazorHub(httpConnectionDispatcherOptions =>
+                options.EndpointConfigureActions.Add(endpointContext =>
                 {
-                    preConfigureActions.Configure(httpConnectionDispatcherOptions);
+                    endpointContext.Endpoints.MapBlazorHub(httpConnectionDispatcherOptions =>
+                    {
+                        preConfigureActions.Configure(httpConnectionDispatcherOptions);
+                    });
+                    endpointContext.Endpoints.MapFallbackToPage("/_Host");
                 });
-                endpointContext.Endpoints.MapFallbackToPage("/_Host");
             });
-        });
+        }
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

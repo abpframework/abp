@@ -1,0 +1,26 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling
+@inject IBundleManager BundleManager
+
+@if (ScriptBundleFiles != null)
+{
+    foreach (var bundleFile in ScriptBundleFiles)
+    {
+        <script src="@bundleFile.FileName"></script>
+    }
+}
+
+@code {
+    private IReadOnlyList<BundleFile>? ScriptBundleFiles { get; set; }
+
+    [Parameter]
+    public string? BundleName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (BundleName == null)
+        {
+            throw new AbpException("The BundleName parameter of the AbpScripts component can not be null!");
+        }
+        ScriptBundleFiles = await BundleManager.GetScriptBundleFilesAsync(BundleName!);
+    }
+}
