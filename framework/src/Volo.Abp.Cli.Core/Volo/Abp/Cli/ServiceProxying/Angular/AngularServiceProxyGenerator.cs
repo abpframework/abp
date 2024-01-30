@@ -7,6 +7,7 @@ using NuGet.Versioning;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -16,18 +17,18 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
 {
     public const string Name = "NG";
 
-    private readonly CliService _cliService;
+    private readonly CliVersionService _cliVersionService;
     private readonly ICmdHelper _cmdhelper;
 
     public AngularServiceProxyGenerator(
         CliHttpClientFactory cliHttpClientFactory,
         IJsonSerializer jsonSerializer,
         ICmdHelper cmdhelper,
-        CliService cliService) :
+        CliVersionService cliVersionService) :
         base(cliHttpClientFactory, jsonSerializer)
     {
         _cmdhelper = cmdhelper;
-        _cliService = cliService;
+        _cliVersionService = cliVersionService;
     }
 
     public async override Task GenerateProxyAsync(GenerateProxyArgs args)
@@ -123,7 +124,7 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
             return;
         }
 
-        var cliVersion = await _cliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+        var cliVersion = await _cliVersionService.GetCurrentCliVersionAsync();
         if (semanticSchematicsVersion < cliVersion)
         {
             Logger.LogWarning("\"@abp/ng.schematics\" version is lower than ABP Cli version.");
