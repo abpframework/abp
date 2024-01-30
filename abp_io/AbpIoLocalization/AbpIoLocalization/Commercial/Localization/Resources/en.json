@@ -1108,6 +1108,8 @@
     "PaymentRequestIdIsNotProvided": "Payment request id is not provided.",
     "PaymentFailedInfo": "Sorry, payment failed! This could be due to insufficient funds, invalid credit card numbers or invalid pin",
     "UsedPayment": "This payment has been already used",
+    "NoActiveLicence": "You are not eligible for this action! You have no active license.",
+    "ABPStudioBetaTester": "To be able to submit your request, you must sign in",
     "ABPStudioBetaAccess": "ABP Studio Beta Access",
     "VisitABPStudio": "Visit ABP Studio",
     "EditBillingInformation": "Edit Billing Information",
