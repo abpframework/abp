@@ -32,5 +32,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.BOT_SECRET }}
         run: |
-          gh pr review auto-merge/rel-8-0/${{github.run_number}} --approve
-          gh pr merge auto-merge/rel-8-0/${{github.run_number}} --merge --auto --delete-branch
+          gh pr review auto-merge/prerel-8-1/${{github.run_number}} --approve
+          gh pr merge auto-merge/prerel-8-1/${{github.run_number}} --merge --auto --delete-branch
