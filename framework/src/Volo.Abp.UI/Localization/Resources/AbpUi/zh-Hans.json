@@ -57,6 +57,8 @@
     "AddNew": "添新",
     "ProfilePicture": "个人资料图片",
     "Theme": "主题",
-    "NotAssigned": "未分配"
+    "NotAssigned": "未分配",
+    "ASC": "升序",
+    "DESC": "降序"
   }
 }
