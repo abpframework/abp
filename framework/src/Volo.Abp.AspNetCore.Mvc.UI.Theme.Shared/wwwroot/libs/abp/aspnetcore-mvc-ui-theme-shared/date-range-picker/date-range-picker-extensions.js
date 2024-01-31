@@ -693,12 +693,12 @@
                     changeDate(isTrigger, isInputTrigger, isDateRangePickerTrigger);
                 }
 
-                const setStartDateByMomentDate = (momentDate) => {
+                function setStartDateByMomentDate (momentDate) {
                     oldStartDate = startDate;
                     startDate = AbpDate(momentDate, options);
                 }
 
-                const setEndDateByMomentEndDate = (momentDate) => {
+                function setEndDateByMomentEndDate(momentDate){
                     if(singleDatePicker){
                         return;
                     }
