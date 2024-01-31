@@ -83,4 +83,20 @@ export class AbpOAuthService implements IAuthService {
 
     return this.oAuthService.fetchTokenUsingGrant(grantType, p, headers);
   }
+
+  getRefreshToken(): string {
+    return this.oAuthService.getRefreshToken();
+  }
+
+  getAccessToken(): string {
+    return this.oAuthService.getAccessToken();
+  }
+
+  refreshToken(): Promise<AbpAuthResponse> {
+    return this.oAuthService.refreshToken();
+  }
+
+  getAccessTokenExpiration(): number {
+    return this.oAuthService.getAccessTokenExpiration();
+  }
 }

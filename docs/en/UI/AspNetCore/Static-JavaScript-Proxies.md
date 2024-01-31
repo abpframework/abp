@@ -49,7 +49,7 @@ Open a command-line terminal in the root folder of your web project (`.csproj`) 
 abp generate-proxy -t js -u https://localhost:53929/
 ````
 
-> If you haven't installed yet, you should install the [ABP CLI](../CLI.md). Change the example URL to your application's root URL.
+> If you haven't installed yet, you should install the [ABP CLI](../../CLI.md). Change the example URL to your application's root URL.
 
 This command should generate the following files under the `ClientProxies` folder:
 

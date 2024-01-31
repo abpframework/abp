@@ -22,7 +22,7 @@ public class ApplicationApiDescriptionModel
         return new ApplicationApiDescriptionModel
         {
             Modules = new ConcurrentDictionary<string, ModuleApiDescriptionModel>(), //TODO: Why ConcurrentDictionary?
-            Types = new Dictionary<string, TypeApiDescriptionModel>()
+            Types = new SortedDictionary<string, TypeApiDescriptionModel>()
         };
     }
 
@@ -54,5 +54,10 @@ public class ApplicationApiDescriptionModel
         }
 
         return subModel;
+    }
+
+    public void NormalizeOrder()
+    {
+        Modules = Modules.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
     }
 }

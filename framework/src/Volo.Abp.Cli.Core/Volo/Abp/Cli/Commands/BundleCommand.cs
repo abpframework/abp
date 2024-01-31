@@ -49,6 +49,7 @@ public class BundleCommand : IConsoleCommand, ITransientDependency
         catch (BundlingException ex)
         {
             Logger.LogError(ex.Message);
+            throw;
         }
     }
 
