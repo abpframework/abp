@@ -594,6 +594,8 @@
     "AutoRenewals": "Auto Renewals",
     "OrganizationHasCreditCard": "Organization has credit card. Please remove credit card first!",
     "DisplayName:DontSendEmailForLicenseExpire": "Don't Send Email For License Expire",
-    "DontSendEmailForLicenseExpire": "Don't Send Email For License Expire"
+    "DontSendEmailForLicenseExpire": "Don't Send Email For License Expire",
+    "SuccessfullyChanged": "Successfully changed",
+    "WinnerCountMustBeLessThanMaxWinnerCount": "Winner count must be less than max winner count"
   }
 }
