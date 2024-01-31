@@ -3,9 +3,9 @@
   "texts": {
     "Features": "Funkcionalnosti",
     "NoFeatureFoundMessage": "Na voljo ni nobene funkcionalnosti.",
-    "ManageHostFeatures": "Upravljajte funkcije gostitelja",
+    "ManageHostFeatures": "Upravljajte Funkcije Gostitelja",
     "ManageHostFeaturesText": "Funkcije gostiteljske strani lahko upravljate s klikom na naslednji gumb.",
-    "Permission:FeatureManagement": "Upravljanje funkcij",
+    "Permission:FeatureManagement": "Upravljanje Funkcij",
     "Permission:FeatureManagement.ManageHostFeatures": "Upravljajte funkcije gostitelja",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Vrednost funkcije {0} ni veljavna!",
     "Menu:FeatureManagement": "Upravljanje funkcij",

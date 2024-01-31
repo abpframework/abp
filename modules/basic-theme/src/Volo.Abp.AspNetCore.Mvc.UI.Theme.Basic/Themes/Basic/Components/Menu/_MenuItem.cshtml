@@ -10,7 +10,7 @@
 }
 @if (Model.IsLeaf)
 {
-    if (customComponentType != null)
+    if (customComponentType != null && typeof(ViewComponent).IsAssignableFrom(customComponentType))
     {
         @(await Component.InvokeAsync(customComponentType))
     }
@@ -31,10 +31,10 @@
 else
 {
     <div class="dropdown-submenu">
-        @if (customComponentType != null)
-         {
+        @if (customComponentType != null && typeof(ViewComponent).IsAssignableFrom(customComponentType))
+        {
              @(await Component.InvokeAsync(customComponentType))
-         }
+        }
         else
         {
             <a role="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"

@@ -207,9 +207,8 @@
     "NoActiveRaffleDescription": "Şu anda aktif bir çekiliş mevcut değildir.",
     "RaffleSubscriptionCodeInputMessage": "Bu çekiliş bir kayıt kodu gerektiriyor. Lütfen kayıt kodunu aşağıya girin:",
     "RaffleSubscriptionCodeInputErrorMessage": "Kayıt kodu hatalı. Lütfen tekrar deneyin.",
-    "GoodJob!": "İyi iş!"
-
-
-
+    "GoodJob!": "İyi iş!",
+    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> destekleniyor.",
+    "Preview": "Ön izleme"
   }
 }

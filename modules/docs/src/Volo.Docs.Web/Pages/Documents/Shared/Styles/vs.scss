@@ -382,6 +382,9 @@ body {
                     }
                 }
             }
+                .mCSB_scrollTools{
+                    right: -20px;
+                }
         }
     }
 
@@ -464,7 +467,7 @@ body {
                 color: #3e9fcb;
 
                 .text-muted {
-                    color: rgb(11 22 33 / 30%) !important;
+                    color: rgb(11 22 33 / 60%) !important;
                 }
 
                 &:hover {
@@ -719,7 +722,7 @@ body {
 
                     .nav-link {
                         padding: 3px 14px 4px;
-                        color: #aaa;
+                        color: #726d6d;
                         line-height: 1.2;
                         position: relative;
                         border-left: 1px solid #eee;
@@ -941,6 +944,7 @@ body {
                 .docs-filter {
                     padding: 0 0 1rem !important;
                 }
+              
             }
         }
 

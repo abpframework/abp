@@ -44,15 +44,15 @@ public class CreateModel : CmsKitAdminPageModel
         public string Slug { get; set; }
 
         [HiddenInput]
-        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxContentLength))]
         public string Content { get; set; }
 
         [TextArea(Rows = 6)]
-        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxScriptLength))]
         public string Script { get; set; }
 
         [TextArea(Rows = 6)]
-        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxStyleLength))]
         public string Style { get; set; }
     }
 }

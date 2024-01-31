@@ -1,14 +1,8 @@
 <h2>{{ 'AbpSettingManagement::Menu:Emailing' | abpLocalization }}</h2>
 
-<hr class="my-3" />
+<hr class="my-2" />
 
-<form
-  *ngIf="form"
-  [formGroup]="form"
-  class="abp-md-form"
-  (ngSubmit)="submit()"
-  [validateOnSubmit]="true"
->
+<form *ngIf="form" [formGroup]="form" class="py-2 abp-md-form"  (ngSubmit)="submit()" [validateOnSubmit]="true">
   <div class="mb-3 form-group">
     <label class="form-label"
       >{{ 'AbpSettingManagement::DefaultFromDisplayName' | abpLocalization
@@ -73,7 +67,7 @@
       <input type="text" class="form-control" formControlName="smtpUserName" />
     </div>
 
-    <div class="mb-3 form-group">
+    <div class="form-group">
       <label class="form-label">{{ 'AbpSettingManagement::SmtpPassword' | abpLocalization }}</label>
       <input type="password" class="form-control" formControlName="smtpPassword" />
     </div>
@@ -81,9 +75,9 @@
 
   <hr />
 
-  <button type="submit" class="btn btn-primary">
+  <abp-button buttonType="submit" iconClass="fa fa-save">
     {{ 'AbpSettingManagement::Save' | abpLocalization }}
-  </button>
+  </abp-button>
   <button
     *abpPermission="emailingPolicy"
     type="button"

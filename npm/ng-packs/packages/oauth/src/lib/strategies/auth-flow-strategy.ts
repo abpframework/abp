@@ -24,6 +24,8 @@ import {
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 import { oAuthStorage } from '../utils/oauth-storage';
 import { OAuthErrorFilterService } from '../services';
+import { isTokenExpired } from '../utils';
+import { RememberMeService } from '../services/remember-me.service';
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
@@ -35,6 +37,7 @@ export abstract class AuthFlowStrategy {
   protected oAuthConfig!: AuthConfig;
   protected sessionState: SessionStateService;
   protected localStorageService: AbpLocalStorageService;
+  protected rememberMeService: RememberMeService;
   protected tenantKey: string;
   protected router: Router;
 
@@ -61,6 +64,7 @@ export abstract class AuthFlowStrategy {
     this.tenantKey = injector.get(TENANT_KEY);
     this.router = injector.get(Router);
     this.oAuthErrorFilterService = injector.get(OAuthErrorFilterService);
+    this.rememberMeService = injector.get(RememberMeService);
 
     this.listenToOauthErrors();
   }
@@ -70,23 +74,20 @@ export abstract class AuthFlowStrategy {
       const shouldClear = shouldStorageClear(this.oAuthConfig.clientId, oAuthStorage);
       if (shouldClear) clearOAuthStorage(oAuthStorage);
     }
-
     this.oAuthService.configure(this.oAuthConfig);
-
     this.oAuthService.events
       .pipe(filter(event => event.type === 'token_refresh_error'))
       .subscribe(() => this.navigateToLogin());
-
     this.navigateToPreviousUrl();
-
     return this.oAuthService
       .loadDiscoveryDocument()
       .then(() => {
-        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
-          return Promise.resolve();
+        const isTokenExpire = isTokenExpired(this.oAuthService.getAccessTokenExpiration());
+        if (!isTokenExpire || this.oAuthService.getRefreshToken()) {
+          return this.refreshToken();
         }
 
-        return this.refreshToken();
+        return Promise.resolve();
       })
       .catch(this.catchError);
   }
@@ -99,10 +100,10 @@ export abstract class AuthFlowStrategy {
           filter(event => event.type === 'token_received' && !!this.oAuthService.state),
           take(1),
           map(() => {
-            const redirect_uri = decodeURIComponent(this.oAuthService.state);
+            const redirectUri = decodeURIComponent(this.oAuthService.state);
 
-            if (redirect_uri && redirect_uri !== '/') {
-              return redirect_uri;
+            if (redirectUri && redirectUri !== '/') {
+              return redirectUri;
             }
 
             return '/';
@@ -110,7 +111,7 @@ export abstract class AuthFlowStrategy {
           switchMap(redirectUri =>
             this.configState.getOne$('currentUser').pipe(
               filter(user => !!user?.isAuthenticated),
-              tap(() => this.router.navigate([redirectUri])),
+              tap(() => this.router.navigateByUrl(redirectUri)),
             ),
           ),
         )

@@ -191,6 +191,11 @@ styleMap.set(ThemeOptionsEnum.LeptonX, [
     inject: false,
     bundleName: 'abp-bundle.rtl',
   },
+  {
+    input: 'node_modules/bootstrap-icons/font/bootstrap-icons.css',
+    inject: true,
+    bundleName: 'bootstrap-icons',
+  },
 ]);
 styleMap.set(ThemeOptionsEnum.LeptonXLite, [
   {
@@ -242,6 +247,11 @@ styleMap.set(ThemeOptionsEnum.LeptonXLite, [
     input: 'node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.rtl.css',
     inject: false,
     bundleName: 'abp-bundle.rtl',
+  },
+  {
+    input: 'node_modules/bootstrap-icons/font/bootstrap-icons.css',
+    inject: true,
+    bundleName: 'bootstrap-icons',
   },
 ]);
 // the code written by Github co-pilot. thank go-pilot. You are the best sidekick.

@@ -108,7 +108,11 @@
             "inject": false,
             "bundleName": "ng-zorro-antd-tree"
           },
-          "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+          {
+            "input": "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+            "inject": true,
+            "bundleName": "bootstrap-icons"
+          },
           "apps/dev-app/src/styles.scss"
         ],
         "scripts": []

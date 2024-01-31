@@ -3,9 +3,9 @@
   "texts": {
     "Features": "Funzionalità",
     "NoFeatureFoundMessage": "Non ci sono funzioni disponibili.",
-    "ManageHostFeatures": "Gestisci le funzionalità dell'host",
+    "ManageHostFeatures": "Gestisci le Funzionalità Dell'host",
     "ManageHostFeaturesText": "È possibile gestire le funzionalità lato host facendo clic sul pulsante seguente.",
-    "Permission:FeatureManagement": "Gestione funzionalità",
+    "Permission:FeatureManagement": "Gestione Funzionalità",
     "Permission:FeatureManagement.ManageHostFeatures": "Gestisci le funzionalità dell'host",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Il valore dell'elemento {0} non è valido!",
     "Menu:FeatureManagement": "Gestione delle funzionalità",
