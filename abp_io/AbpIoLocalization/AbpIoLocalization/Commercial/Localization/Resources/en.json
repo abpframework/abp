@@ -1134,6 +1134,10 @@
     "ExpirationMonthWarning": "Month should be 12 or less.",
     "ExpirationMoreMonthWarning": "Month should be 1 or more.",
     "ExpirationYearWarning": "Year should be {0} or more.",
-    "YearCantBeNull": "Year field cannot be empty."
+    "YearCantBeNull": "Year field cannot be empty.",
+    "CardHolderName": "Name on Card",
+    "ExpireDate": "Expiration Date",
+    "DisplayName:ExpireDate": "Expiration Date",
+    "DisplayName:CardHolderName": "Name on Card"
   }
 }
