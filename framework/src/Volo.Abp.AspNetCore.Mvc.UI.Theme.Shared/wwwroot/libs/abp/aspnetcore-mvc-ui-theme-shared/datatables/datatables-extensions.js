@@ -481,7 +481,7 @@ var abp = abp || {};
         };
 
         function customizeColumnTitleForResponsive(columns, orderby) {
-            var doropdownColumn = '<option value="">' + localize("Default") + '</option>';
+            var doropdownColumn = '<option value=""></option>';
 
             for (var i = 0; i < columns.length; i++) {
 
