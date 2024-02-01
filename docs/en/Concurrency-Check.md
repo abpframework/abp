@@ -29,7 +29,7 @@ public interface IHasConcurrencyStamp
 * While a new record is **creating**, if the entity implements the `IHasConcurrencyStamp` interface, ABP Framework automatically sets a unique value to the **ConcurrencyStamp** property.
 * While a record is **updating**, ABP Framework compares the **ConcurrencyStamp** property of the entity with the provided **ConcurrencyStamp** value by the user and if the values match, it automatically updates the **ConcurrencyStamp** property with the new unique value. If there is a mismatch, `AbpDbConcurrencyException` is thrown.
 
-> If there is a unit of work, You need to call the [SaveChangesAsync](./Unit-Of-Work.md#savechangesasync) method to get the generated `ConcurrencyStamp` when creating or updating.
+> If there is a unit of work, you need to call the [SaveChangesAsync](./Unit-Of-Work.md#savechangesasync) method to get the generated `ConcurrencyStamp` when creating or updating.
 
 **Example: Applying Concurrency Control for the Book Entity**
 
