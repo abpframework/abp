@@ -56,6 +56,18 @@ A value indicates the size of the button. Should be one of the following values:
 
 A text that is shown when the button is busy.
 
+To be able to make the button busy:
+
+````xml
+$('#btnTest').buttonBusy(true);
+````
+
+To make it usable again:
+
+````xml
+$('#btnTest').buttonBusy(false);
+````
+
 ### text
 
 The text of the button. This is a shortcut if you simply want to set a text to the button. Example:
