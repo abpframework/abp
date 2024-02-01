@@ -59,6 +59,13 @@ public partial class LoginDisplay : IDisposable
 
     private void BeginSignOut()
     {
-        Navigation.NavigateToLogout(AuthenticationOptions.Value.LogoutUrl);
+        if (AbpAspNetCoreComponentsWebOptions.Value.IsBlazorWebApp)
+        {
+            Navigation.NavigateTo(AuthenticationOptions.Value.LogoutUrl, forceLoad: true);
+        }
+        else
+        {
+            Navigation.NavigateToLogout(AuthenticationOptions.Value.LogoutUrl);
+        }
     }
 }
