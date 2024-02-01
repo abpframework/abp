@@ -46,7 +46,7 @@ public class MyProjectNameMenuContributor : IMenuContributor
                 icon: "fas fa-home"
             )
         );
-     
+
         var administration = context.Menu.GetAdministration();
 
         if (MultiTenancyConsts.IsEnabled)
@@ -68,12 +68,10 @@ public class MyProjectNameMenuContributor : IMenuContributor
     {
         var accountStringLocalizer = context.GetLocalizer<AccountResource>();
 
-        var authServerUrl = _configuration["AuthServer:Authority"] ?? "";
-
         context.Menu.AddItem(new ApplicationMenuItem(
             "Account.Manage",
             accountStringLocalizer["MyAccount"],
-            $"{authServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
+            $"Account/Manage",
             icon: "fa fa-cog",
             order: 1000,
             null).RequireAuthenticated());

@@ -2,18 +2,16 @@
 using System.Net.Http;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MyCompanyName.MyProjectName.Blazor.Server.WebApp.Tiered.Client.Menus;
+using Volo.Abp.AspNetCore.Components.Server;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme;
-using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
 using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Identity.Blazor.WebAssembly;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Blazor.WebAssembly;
@@ -32,6 +30,14 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.WebApp.Tiered.Client;
 )]
 public class MyProjectNameBlazorClientModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
+        {
+            options.IsBlazorWebApp = true;
+        });
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var environment = context.Services.GetSingletonInstance<IWebAssemblyHostEnvironment>();
@@ -70,6 +76,7 @@ public class MyProjectNameBlazorClientModule : AbpModule
 
     private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
     {
+        //TODO: Remove SignOutSessionStateManager in new version.
         builder.Services.TryAddScoped<SignOutSessionStateManager>();
         builder.Services.AddBlazorWebAppTieredServices();
     }

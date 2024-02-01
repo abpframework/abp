@@ -3,12 +3,14 @@ using System.Net.Http;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MyCompanyName.MyProjectName.Blazor.Server.WebApp.Client.Menus;
 using OpenIddict.Abstractions;
+using Volo.Abp.AspNetCore.Components.Server;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
@@ -34,6 +36,14 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.WebApp.Client;
 )]
 public class MyProjectNameBlazorClientModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
+        {
+            options.IsBlazorWebApp = true;
+        });
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var environment = context.Services.GetSingletonInstance<IWebAssemblyHostEnvironment>();
@@ -73,19 +83,9 @@ public class MyProjectNameBlazorClientModule : AbpModule
 
     private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
     {
+        //TODO: Remove SignOutSessionStateManager in new version.
+        builder.Services.TryAddScoped<SignOutSessionStateManager>();
         builder.Services.AddBlazorWebAppServices();
-        builder.Services.AddCascadingAuthenticationState();
-        builder.Services.AddOidcAuthentication(options =>
-        {
-            builder.Configuration.Bind("AuthServer", options.ProviderOptions);
-            options.UserOptions.NameClaim = OpenIddictConstants.Claims.Name;
-            options.UserOptions.RoleClaim = OpenIddictConstants.Claims.Role;
-
-            options.ProviderOptions.DefaultScopes.Add("MyProjectName");
-            options.ProviderOptions.DefaultScopes.Add("roles");
-            options.ProviderOptions.DefaultScopes.Add("email");
-            options.ProviderOptions.DefaultScopes.Add("phone");
-        });
     }
 
     private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)
