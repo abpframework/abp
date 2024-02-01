@@ -140,9 +140,8 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                 ? $"> dotnet tool install -g volo.abp.cli --version \"{templateVersion.Major}.{templateVersion.Minor}.*\""
                 : $"> dotnet tool install -g volo.abp.cli --version {templateVersion}");
 
-            if (!userSpecifiedVersion)
+            if (userSpecifiedVersion)
             {
-                version = currentCliVersion.ToString();
                 Logger.LogWarning($"We have changed the template version as the cli version.");
                 Logger.LogWarning($"New version: {version}");
             }
