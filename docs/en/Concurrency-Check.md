@@ -76,8 +76,8 @@ public class BookAppService : ApplicationService, IBookAppService
         book.ConcurrencyStamp = input.ConcurrencyStamp;
 
         //set other input values to the entity ...
-
-        await BookRepository.UpdateAsync(book);
+        //use autoSave: true to get the latest ConcurrencyStamp
+        await BookRepository.UpdateAsync(book, autoSave: true);
     }
 }
 ```
@@ -136,8 +136,8 @@ public class BookAppService : ApplicationService, IBookAppService
         book.ConcurrencyStamp = input.ConcurrencyStamp;
 
         //set other input values to the entity ...
-
-        await BookRepository.UpdateAsync(book);
+        //use autoSave: true to get the latest ConcurrencyStamp
+        await BookRepository.UpdateAsync(book, autoSave: true);
     }
 }
 ```
