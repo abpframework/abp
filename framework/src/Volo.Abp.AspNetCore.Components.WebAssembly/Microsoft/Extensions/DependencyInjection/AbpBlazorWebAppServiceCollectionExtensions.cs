@@ -20,4 +20,15 @@ public static class AbpBlazorWebAppServiceCollectionExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddBlazorWebAppTieredServices([NotNull] this IServiceCollection services)
+    {
+        Check.NotNull(services, nameof(services));
+
+        services.AddScoped<AuthenticationStateProvider, RemoteAuthenticationStateProvider>();
+        services.Replace(ServiceDescriptor.Singleton<IAbpAccessTokenProvider, PersistentComponentStateAbpAccessTokenProvider>());
+        services.Replace(ServiceDescriptor.Transient<ICurrentPrincipalAccessor, RemoteCurrentPrincipalAccessor>());
+
+        return services;
+    }
 }
