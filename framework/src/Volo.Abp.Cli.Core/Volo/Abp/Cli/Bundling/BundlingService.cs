@@ -104,40 +104,11 @@ public class BundlingService : IBundlingService, ITransientDependency
             scriptDefinitions = GenerateScriptDefinitions(scriptContext);
         }
 
-        string fileName = null;
+        string fileName;
         if (bundleConfig.IsBlazorWebApp)
         {
-            var projectDirectory = directory.RemovePostFix(".Client")!;
-            if (File.Exists(Path.Combine(projectDirectory, "Components", "App.razor")))
-            {
-                fileName = Path.Combine(projectDirectory, "Components", "App.razor");
-            }
-            else if (File.Exists(Path.Combine(projectDirectory, "App.razor")))
-            {
-                fileName = Path.Combine(projectDirectory, "App.razor");
-            }
-
-            if (fileName.IsNullOrEmpty())
-            {
-                // Single Template
-                var serverProjectDirectory = Path.Combine(Path.GetDirectoryName(directory), "Server");
-                if (Directory.Exists(serverProjectDirectory))
-                {
-                    if (File.Exists(Path.Combine(serverProjectDirectory, "Components", "App.razor")))
-                    {
-                        fileName = Path.Combine(serverProjectDirectory, "Components", "App.razor");
-                    }
-                    else if (File.Exists(Path.Combine(serverProjectDirectory, "App.razor")))
-                    {
-                        fileName = Path.Combine(projectDirectory, "App.razor");
-                    }
-                }
-            }
-
-            if (projectDirectory.IsNullOrWhiteSpace())
-            {
-                throw new BundlingException($"App.razor file could not be found on the {projectDirectory} project.");
-            }
+            var projectDirectory = Path.GetDirectoryName(directory);
+            fileName = Directory.GetFiles(projectDirectory!, "App.razor", SearchOption.AllDirectories).FirstOrDefault();
         }
         else
         {
