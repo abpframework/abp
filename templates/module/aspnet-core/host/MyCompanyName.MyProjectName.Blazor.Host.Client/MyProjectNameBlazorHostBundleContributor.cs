@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Bundling;
 
-namespace MyCompanyName.MyProjectName.Blazor.Host;
+namespace MyCompanyName.MyProjectName.Blazor.Host.Client;
 
 public class MyProjectNameBlazorHostBundleContributor : IBundleContributor
 {

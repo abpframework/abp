@@ -46,3 +46,7 @@
         -webkit-transform: scale(1.0);
     }
 }
+
+#ApplicationContainer > div:first-child:not(:only-child) {
+    display: none !important;
+}

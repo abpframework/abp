@@ -104,9 +104,24 @@ public class BundlingService : IBundlingService, ITransientDependency
             scriptDefinitions = GenerateScriptDefinitions(scriptContext);
         }
 
-        var fileName = bundleConfig.IsBlazorWebApp
-            ? Path.Combine(directory.RemovePostFix(".Client")!, "Components", "App.razor")
-            : Path.Combine(PathHelper.GetWwwRootPath(directory), "index.html");
+        var fileName = Path.Combine(PathHelper.GetWwwRootPath(directory), "index.html");
+
+        if (bundleConfig.IsBlazorWebApp)
+        {
+            var projectDirectory = directory.RemovePostFix(".Client")!;
+            if (File.Exists(Path.Combine(projectDirectory, "Components", "App.razor")))
+            {
+                fileName = Path.Combine(projectDirectory, "Components", "App.razor");
+            }
+            else if (File.Exists(Path.Combine(projectDirectory, "App.razor")))
+            {
+                fileName = Path.Combine(projectDirectory, "App.razor");
+            }
+            else
+            {
+                throw new BundlingException($"App.razor file could not be found on the {projectDirectory} project.");
+            }
+        }
 
         await UpdateDependenciesInBlazorFileAsync(fileName, styleDefinitions, scriptDefinitions);
 
