@@ -117,18 +117,25 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return Redirect(decodedUrl);
             }
-            try
-            {
-                return await SetPageAsync();
-            }
-            catch (DocumentNotFoundException exception)
-            {
-                Logger.LogWarning(exception.Message);
+            var documentNameFallback = DocumentName ?? "";
 
-                DocumentFound = false;
-                Response.StatusCode = 404;
-                return Page();
+            var documentNames = new[] { DocumentName, documentNameFallback.EnsureEndsWith('/') + "Index", documentNameFallback.EnsureEndsWith('/') + "index" };
+
+            foreach (var documentName in documentNames)
+            {
+                DocumentName = documentName;
+                try
+                {
+                    return await SetPageAsync();
+                }
+                catch (DocumentNotFoundException exception)
+                {
+                    Logger.LogWarning(exception.Message);
+                }
             }
+            DocumentFound = false;
+            Response.StatusCode = 404;
+            return Page();
         }
 
         private async Task<IActionResult> SetPageAsync()
