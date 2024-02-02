@@ -233,6 +233,8 @@ public abstract class ProjectCreationCommandBase
 
         var skipCache = commandLineArgs.Options.ContainsKey(Options.SkipCache.Long) || commandLineArgs.Options.ContainsKey(Options.SkipCache.Short);
 
+        var trustUserVersion = !version.IsNullOrEmpty() && commandLineArgs.Options.ContainsKey(Options.TrustUserVersion.Long) || commandLineArgs.Options.ContainsKey(Options.TrustUserVersion.Short);
+
         return new ProjectBuildArgs(
             solutionName,
             template,
@@ -251,7 +253,8 @@ public abstract class ProjectCreationCommandBase
             pwa,
             theme,
             themeStyle,
-            skipCache
+            skipCache,
+            trustUserVersion
         );
     }
 
@@ -902,6 +905,11 @@ public abstract class ProjectCreationCommandBase
             public const string Long = "skip-cache";
         }
 
+        public static class TrustUserVersion
+        {
+            public const string Short = "tv";
+            public const string Long = "trust-version";
+        }
 
         public static class Tiered
         {
