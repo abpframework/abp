@@ -67,7 +67,6 @@ public class MyProjectNameBlazorClientModule : AbpModule
 
     private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
     {
-        builder.Services.AddCascadingAuthenticationState();
         builder.Services.AddOidcAuthentication(options =>
         {
             builder.Configuration.Bind("AuthServer", options.ProviderOptions);

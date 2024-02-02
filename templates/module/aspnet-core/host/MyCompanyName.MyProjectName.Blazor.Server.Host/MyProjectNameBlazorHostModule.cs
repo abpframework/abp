@@ -273,7 +273,6 @@ public class MyProjectNameBlazorHostModule : AbpModule
                 .AddInteractiveServerRenderMode()
                 .AddAdditionalAssemblies(builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies.ToArray());
         });
-        app.UseConfiguredEndpoints();
 
         using (var scope = context.ServiceProvider.CreateScope())
         {

@@ -70,9 +70,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Components\Pages\_ViewImports.cshtml" />
-    <_ContentIncludedByDefault Remove="Components\Pages\Index.razor" />
-  </ItemGroup>
-
 </Project>

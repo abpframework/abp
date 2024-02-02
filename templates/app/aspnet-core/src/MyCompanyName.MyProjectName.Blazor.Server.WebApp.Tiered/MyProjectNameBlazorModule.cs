@@ -7,7 +7,6 @@ using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -173,7 +172,6 @@ public class MyProjectNameBlazorModule : AbpModule
 
     private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        context.Services.TryAddScoped<ProtectedLocalStorage>();
         context.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
