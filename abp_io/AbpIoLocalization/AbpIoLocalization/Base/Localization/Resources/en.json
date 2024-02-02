@@ -57,7 +57,7 @@
     "TrialLicensePeriodHasExpired": "Your trial license period expired {0} days ago.",
     "TrialLicensePeriodWillExpire": "Your trial license period will be expired in {0} days.",
     "TrialLicensePeriodExpireToday": "Your trial license period will be expired today.",
-    "PurchaseNow":  "Purchase Now!",
+    "PurchaseNow": "Purchase Now!",
     "LatestReleaseLogs": "Latest Release Logs",
     "RoadMap": "Road Map",
     "FAQ": "FAQ",
@@ -216,7 +216,7 @@
     "AboutUs": "About Us",
     "HowItWorks": "How it Works?",
     "ReleaseNotes": "Release Notes",
-    "DetailedChangeNotes" : "Detailed Change Notes",
+    "DetailedChangeNotes": "Detailed Change Notes",
     "SeeTrainings": "See Trainings",
     "NoContent": "No content",
     "More": "More",
@@ -237,6 +237,7 @@
     "Video Courses": "Video Courses",
     "Packages": "Packages",
     "Trainings": "Trainings",
+    "MeetTheABPCommunity": "Meet the ABP <span class=\"gradient-community\">Community</span>",
     "DisplayName:CommunityIndexPagePoll": "Community Index Page Poll"
   }
 }

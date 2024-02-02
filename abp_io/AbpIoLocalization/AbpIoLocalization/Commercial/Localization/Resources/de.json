@@ -389,6 +389,8 @@
     "BlackFridayDiscount": "Black Friday Rabatt",
     "MultipleOrganizationInfo": "Alle Ihre Organisationen anzeigen",
     "PaymentFailedInfo": "Entschuldigung, die Zahlung ist fehlgeschlagen! ",
-    "UsedPayment": "Diese Zahlung wurde bereits verwendet"
+    "UsedPayment": "Diese Zahlung wurde bereits verwendet",
+    "ManageLicense": "Lizenz verwalten",
+    "AbpPlatformLeptonXTheme": "LeptonX-Theme für Ihr Admin-Dashboard von <span class=\"gradient-commercial\">ABP Platform</span>"
   }
 }
