@@ -179,7 +179,10 @@
                         <Tabs @bind-SelectedTab="@EditModalSelectedTab">
                             <Items>
                                 <Tab Name="UserInformations">@L["UserInformations"]</Tab>
-                                <Tab Name="Roles">@L["Roles"]</Tab>
+                                @if (EditUserRoles != null && EditUserRoles.Any())
+                                {
+                                    <Tab Name="Roles">@L["Roles"]</Tab>
+                                }
                             </Items>
                             <Content>
                                 <TabPanel Name="UserInformations">
@@ -258,18 +261,21 @@
                                     </Field>
                                     <ExtensionProperties TEntityType="IdentityUserUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH" ModalType="ExtensionPropertyModalType.EditModal" />
                                 </TabPanel>
-                                <TabPanel Name="Roles">
-                                    @if (EditUserRoles != null)
-                                    {
-                                        @foreach (var role in EditUserRoles)
+                                @if (EditUserRoles != null && EditUserRoles.Any())
+                                {
+                                    <TabPanel Name="Roles">
+                                        @if (EditUserRoles != null)
                                         {
-                                            <Field>
-                                                <input type="hidden" @bind-value="@role.Name" />
-                                                <Check TValue="bool" @bind-Checked="@role.IsAssigned">@role.Name</Check>
-                                            </Field>
+                                            @foreach (var role in EditUserRoles)
+                                            {
+                                                <Field>
+                                                    <input type="hidden" @bind-value="@role.Name" />
+                                                    <Check TValue="bool" @bind-Checked="@role.IsAssigned">@role.Name</Check>
+                                                </Field>
+                                            }
                                         }
-                                    }
-                                </TabPanel>
+                                    </TabPanel>
+                                }
                             </Content>
                         </Tabs>
                     </Validations>
