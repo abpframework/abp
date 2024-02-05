@@ -48,10 +48,6 @@
       "inputs": ["default", "^production"],
       "cache": true
     },
-    "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
-      "cache": true
-    },
     "@nx/jest:jest": {
       "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
       "cache": true,
@@ -64,6 +60,10 @@
           "codeCoverage": true
         }
       }
+    },
+    "@nx/eslint:lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "cache": true
     }
   },
   "namedInputs": {
@@ -77,5 +77,6 @@
       "!{projectRoot}/.eslintrc.json"
     ]
   },
-  "parallel": 3
+  "parallel": 3,
+  "nxCloudAccessToken": "NjEzZTliYmMtYmU1MC00ZmI4LWFhOTAtYWY0ZDhiMjhiNzQ0fHJlYWQtd3JpdGU="
 }

@@ -1108,6 +1108,8 @@
     "PaymentRequestIdIsNotProvided": "Payment request id is not provided.",
     "PaymentFailedInfo": "Sorry, payment failed! This could be due to insufficient funds, invalid credit card numbers or invalid pin",
     "UsedPayment": "This payment has been already used",
+    "ManageLicense": "Manage License",
+    "AbpPlatformLeptonXTheme": "LeptonX Theme for Your Admin Dashboard by <span class=\"gradient-commercial\">ABP Platform</span>",
     "NoActiveLicence": "You are not eligible for this action! You have no active license.",
     "ABPStudioBetaTester": "To be able to submit your request, you must sign in",
     "ABPStudioBetaAccess": "ABP Studio Beta Access",
@@ -1133,13 +1135,13 @@
     "BillingDetails": "Billing Details",
     "ThereIsNoDeveloper": "There is no developer.",
     "CardDetails": "Debit/Credit Card Details",
-    "NoActiveLicence": "You are not eligible for this action! You have no active license.",
     "YearCantBeNull": "Year field cannot be empty.",
     "CardHolderName": "Name on Card",
     "ExpireDate": "Expiration Date",
     "DisplayName:ExpireDate": "Expiration Date",
     "DisplayName:CardHolderName": "Name on Card",
     "CreditCardNumberLengthWarning": "Invalid card number",
-    "ExpirationWarning": "Invalid expiration date"
+    "ExpirationWarning": "Invalid expiration date",
+    "CreateCreditCardModal_Description": "When saving your debit/credit card, a temporary $1 charge will be authorized for verification and promptly refunded."
   }
 }
