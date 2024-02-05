@@ -22,7 +22,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
         var steps = base.GetCustomSteps(context).ToList();
-        
+
         SwitchDatabaseProvider(context, steps);
         DeleteUnrelatedProjects(context, steps);
         RemoveMigrations(context, steps);
@@ -89,6 +89,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
                 break;
 
             case UiFramework.Blazor:
+            case UiFramework.BlazorWebApp:
                 context.Symbols.Add("ui:blazor");
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
@@ -130,7 +131,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
                 throw new AbpException("Unkown UI framework: " + context.BuildArgs.UiFramework);
         }
     }
-    
+
     protected void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ExtraProperties.ContainsKey("no-random-port"))
@@ -157,7 +158,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             )
         );
     }
-    
+
     protected void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
@@ -165,7 +166,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
         }
     }
-    
+
     protected void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName/Migrations"));
@@ -202,12 +203,12 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
                 break;
         }
     }
-    
+
     protected void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RandomizeStringEncryptionStep());
     }
-    
+
     protected static void RandomizeAuthServerPassPhrase(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RandomizeAuthServerPassPhraseStep());
@@ -217,7 +218,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
     {
         steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
     }
-    
+
     protected void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ConnectionString != null)
@@ -230,7 +231,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             steps.Add(new ConnectionStringRenameStep());
         }
     }
-    
+
     protected void ConfigureTheme(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (!context.BuildArgs.Theme.HasValue)
@@ -258,7 +259,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
         steps.Add(new ChangeThemeStep());
         RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework);
     }
-    
+
     private static void RemoveBlazorWasmProjects(List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server",
@@ -269,7 +270,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             projectFolderPath: "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared"));
         steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
     }
-    
+
     private void RemoveThemeLogoFolders(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.Theme != Theme.Lepton && IsPro())
@@ -282,7 +283,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             steps.Add(new RemoveFilesStep("/wwwroot/images/logo/leptonx/"));
         }
     }
-    
+
     protected void SetDbmsSymbols(ProjectBuildContext context)
     {
         switch (context.BuildArgs.DatabaseManagementSystem)

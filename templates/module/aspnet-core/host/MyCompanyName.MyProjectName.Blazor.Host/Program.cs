@@ -8,6 +8,7 @@ using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//https://github.com/dotnet/aspnetcore/issues/52530
 builder.Services.Configure<RouteOptions>(options =>
 {
     options.SuppressCheckForUnhandledSecurityMetadata = true;

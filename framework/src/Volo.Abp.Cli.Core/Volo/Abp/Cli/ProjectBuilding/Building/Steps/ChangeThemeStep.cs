@@ -14,7 +14,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     private const string LeptonXLite = "LeptonXLite";
     private const string LeptonX = "LeptonX";
     private const string Lepton = "Lepton";
-    
+
     public override void Execute(ProjectBuildContext context)
     {
         if (!context.BuildArgs.Theme.HasValue)
@@ -59,7 +59,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ChangeThemeToLeptonForNoLayersBlazorServerProjects(context);
         ChangeThemeToLeptonForMauiBlazorProjects(context);
     }
-    
+
     private static string GetAngularPackageName(Theme theme)
     {
         return theme switch
@@ -71,7 +71,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             _ => string.Empty
         };
     }
-    
+
     private static void ChangeThemeToBasicForBlazorProjects(ProjectBuildContext context, string defaultThemeName)
     {
         ReplacePackageReferenceWithProjectReference(
@@ -80,21 +80,21 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             $"Volo.Abp.AspNetCore.Components.WebAssembly.{defaultThemeName}Theme",
             @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj"
         );
-        
+
         ReplaceAllKeywords(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             $"{defaultThemeName}Theme.Components",
             "BasicTheme.Themes.Basic"
         );
-        
+
         ReplaceAllKeywords(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             defaultThemeName,
             Basic
         );
-        
+
         ReplacePackageReferenceWithProjectReference(
             context,
             "/MyCompanyName.MyProjectName.Host/MyCompanyName.MyProjectName.Host.csproj",
@@ -105,7 +105,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ReplaceAllKeywords(
             context,
             "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
-            defaultThemeName, 
+            defaultThemeName,
             Basic
         );
     }
@@ -116,20 +116,20 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             return;
         }
-        
+
         ReplaceImportPackage(
             context,
             "/angular/src/app/app.module.ts",
             oldPackageName,
             newPackageName
         );
-        
+
         RemoveLinesByStatement(
             context,
             "/angular/src/app/app.module.ts",
             "SideMenuLayoutModule"
         );
-        
+
         ReplaceAllKeywords(
             context,
             "/angular/src/app/app.module.ts",
@@ -166,7 +166,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXTheme",
             @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.WebAssembly.LeptonTheme\Volo.Abp.AspNetCore.Components.WebAssembly.LeptonTheme.csproj"
         );
-        
+
         ReplaceAllKeywords(
             context,
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
@@ -180,7 +180,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
             @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
         );
-        
+
         ReplaceAllKeywords(
             context,
             "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
@@ -239,7 +239,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
                 @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
             );
-            
+
             ReplaceAllKeywords(
                 context,
                 moduleFile.Name,
@@ -309,6 +309,9 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 break;
             case UiFramework.BlazorServer:
                 projects["Blazor.Server"] = "MyCompanyName.MyProjectName.Blazor.csproj";
+                break;
+            case UiFramework.BlazorWebApp:
+                projects["Blazor.WebApp"] = "MyCompanyName.MyProjectName.Blazor.csproj";
                 break;
         }
     }
@@ -385,7 +388,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         }
 
         file.NormalizeLineEndings();
-        
+
         var lines = file.GetLines();
         var lineIndex = lines.FindIndex(line => line.Contains($"from '{oldImportPackage}'"));
         if (lineIndex == -1)
@@ -447,7 +450,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         file.SetLines(lines.Where(x => x != null));
     }
-    
+
     private static void AddProjectReference(FileEntry file, string reference)
     {
         if (!file.Name.Contains(".csproj"))
@@ -558,7 +561,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             {
                 continue;;
             }
-            
+
             lines[i] = lines[i].Replace(oldKeyword, newKeyword);
         }
 
@@ -630,21 +633,21 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
                 @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
             );
-            
+
             ReplaceAllKeywords(
                 context,
                 $"/Pages/_Host.cshtml",
                 $"{defaultThemeName}Theme.Components",
                 Basic
             );
-            
+
             ReplaceAllKeywords(
                 context,
                 $"/MyCompanyName.MyProjectName{project.Key}/{project.Value}.cs",
                 defaultThemeName,
                 Basic + "Theme"
             );
-            
+
             ReplaceAllKeywords(
                 context,
                 $"/Pages/_Host.cshtml",
@@ -657,7 +660,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     private static void ChangeThemeToLeptonForBlazorServerProjects(ProjectBuildContext context)
     {
         var projectNames = new[] { "Blazor", "Blazor.Server.Tiered" };
-        
+
         foreach (var projectName in projectNames)
         {
             ReplacePackageReferenceWithProjectReference(
@@ -673,14 +676,14 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
                 @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.Server.LeptonTheme\Volo.Abp.AspNetCore.Components.Server.LeptonTheme.csproj"
             );
-            
+
             ReplaceAllKeywords(
                 context,
                 $"/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
                 LeptonX,
                 Lepton
             );
-            
+
             ReplaceAllKeywords(
                 context,
                 $"/Pages/_Host.cshtml",
@@ -700,7 +703,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     {
         var blazorServerProjects = new[] { "Blazor.Server", "HttpApi", "Application" };
         var projectNames = new[] { "Blazor.Server", "Blazor.Server.Mongo" };
-        
+
         foreach (var projectName in projectNames)
         {
             ReplacePackageReferenceWithProjectReference(
@@ -722,14 +725,14 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 $@"/MyCompanyName.MyProjectName.{projectName}/MyCompanyName.MyProjectName.{projectName}.csproj",
                 blazorServerProjects
             );
-            
+
             ReplaceAllKeywords(
                 context,
                 $"/MyCompanyName.MyProjectName.{projectName}/MyProjectNameModule.cs",
                 LeptonX,
                 Lepton
             );
-            
+
             ReplaceAllKeywords(
                 context,
                 $"/Pages/_Host.cshtml",
@@ -747,7 +750,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             "Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonXTheme",
             @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme\Volo.Abp.AspNetCore.Components.MauiBlazor.LeptonTheme.csproj"
         );
-        
+
         ReplaceAllKeywords(
             context,
             "/MyCompanyName.MyProjectName.MauiBlazor/MainPage.xaml",

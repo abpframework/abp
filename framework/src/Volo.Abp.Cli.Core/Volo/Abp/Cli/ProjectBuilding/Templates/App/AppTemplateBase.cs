@@ -115,6 +115,26 @@ public abstract class AppTemplateBase : TemplateInfo
 
     protected void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
+        if (context.BuildArgs.UiFramework != UiFramework.Blazor)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Client"));
+        }
+
+        if (context.BuildArgs.UiFramework != UiFramework.BlazorServer)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
+        }
+
+        if (context.BuildArgs.UiFramework != UiFramework.BlazorWebApp)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Client"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client"));
+        }
+
         switch (context.BuildArgs.UiFramework)
         {
             case UiFramework.None:
@@ -145,26 +165,6 @@ public abstract class AppTemplateBase : TemplateInfo
             case UiFramework.NotSpecified:
                 ConfigureWithMvcUi(context, steps);
                 break;
-        }
-
-        if (context.BuildArgs.UiFramework != UiFramework.Blazor)
-        {
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Client"));
-        }
-
-        if (context.BuildArgs.UiFramework != UiFramework.BlazorServer)
-        {
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
-        }
-
-        if (context.BuildArgs.UiFramework != UiFramework.BlazorWebApp)
-        {
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp"));
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Client"));
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered"));
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client"));
         }
 
         if (context.BuildArgs.UiFramework != UiFramework.MauiBlazor)
@@ -321,7 +321,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
         }
 
-        if (uiFramework == UiFramework.BlazorServer)
+        if (uiFramework == UiFramework.BlazorServer || uiFramework == UiFramework.BlazorWebApp)
         {
             var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
             var blazorServerPackageJsonFilePaths = new List<string>
@@ -735,6 +735,7 @@ public abstract class AppTemplateBase : TemplateInfo
         if ((context.BuildArgs.UiFramework == UiFramework.Mvc
              || context.BuildArgs.UiFramework == UiFramework.Blazor
              || context.BuildArgs.UiFramework == UiFramework.BlazorServer
+             || context.BuildArgs.UiFramework == UiFramework.BlazorWebApp
              || context.BuildArgs.UiFramework == UiFramework.MauiBlazor) &&
             context.BuildArgs.MobileApp == MobileApp.None)
         {
@@ -769,6 +770,7 @@ public abstract class AppTemplateBase : TemplateInfo
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
             case UiFramework.BlazorServer:
+            case UiFramework.BlazorWebApp:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));

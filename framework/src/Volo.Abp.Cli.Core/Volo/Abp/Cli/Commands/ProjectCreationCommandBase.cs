@@ -43,7 +43,7 @@ public abstract class ProjectCreationCommandBase
     public ThemePackageAdder ThemePackageAdder { get; }
 
     public AngularThemeConfigurer AngularThemeConfigurer { get; }
-    
+
     public CliVersionService CliVersionService { get; }
 
     public ProjectCreationCommandBase(
@@ -433,15 +433,14 @@ public abstract class ProjectCreationCommandBase
 
         var isModuleTemplate = ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName);
         var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
-        
-        var message = isWebassembly || isModuleTemplate 
-            ? "Generating bundles for Blazor Wasm" 
+        var message = isWebassembly || isModuleTemplate
+            ? "Generating bundles for Blazor Wasm"
             : "Generating bundles for MAUI Blazor";
-        
+
         var projectType = isWebassembly || isModuleTemplate
-            ? BundlingConsts.WebAssembly 
+            ? BundlingConsts.WebAssembly
             : BundlingConsts.MauiBlazor;
-        
+
         Logger.LogInformation(message + "...");
 
         await EventBus.PublishAsync(new ProjectCreationProgressEvent
@@ -451,7 +450,11 @@ public abstract class ProjectCreationCommandBase
 
         var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
         var path = projectArgs.OutputFolder;
-        
+        if (isWebassembly && Directory.GetFiles(path, "*.Blazor.Client.csproj", SearchOption.AllDirectories).Any())
+        {
+            searchPattern = "*.Blazor.Client.csproj";
+        }
+
         if (isModuleTemplate)
         {
             path = Path.Combine(path, "host");
@@ -468,7 +471,7 @@ public abstract class ProjectCreationCommandBase
 
         await _bundlingService.BundleAsync(directory, true, projectType);
     }
-    
+
     protected virtual bool ShouldRunBundleCommand(ProjectBuildArgs projectArgs)
     {
         if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
@@ -666,6 +669,8 @@ public abstract class ProjectCreationCommandBase
                 return UiFramework.Blazor;
             case "blazor-server":
                 return UiFramework.BlazorServer;
+            case "blazor-webapp":
+                return UiFramework.BlazorWebApp;
             case "maui-blazor" when template == AppProTemplate.TemplateName:
                 return UiFramework.MauiBlazor;
             default:
@@ -761,6 +766,11 @@ public abstract class ProjectCreationCommandBase
             ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.components.server.basictheme", projectArgs.Version);
         }
 
+        if (projectArgs.UiFramework is UiFramework.BlazorWebApp)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.components.server.basictheme", projectArgs.Version);
+        }
+
         if (projectArgs.UiFramework is UiFramework.Angular)
         {
             ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
@@ -775,6 +785,12 @@ public abstract class ProjectCreationCommandBase
         }
 
         if (projectArgs.UiFramework is UiFramework.BlazorServer)
+        {
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.components.server.leptontheme", projectArgs.Version);
+            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);
+        }
+
+        if (projectArgs.UiFramework is UiFramework.BlazorWebApp)
         {
             ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.components.server.leptontheme", projectArgs.Version);
             ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);

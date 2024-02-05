@@ -68,7 +68,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
             steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
         }
 
-        if (uiFramework == UiFramework.BlazorServer)
+        if (uiFramework == UiFramework.BlazorServer || uiFramework == UiFramework.BlazorWebApp)
         {
             var blazorServerUiPackageName = "@volo/aspnetcore.components.server.leptonxtheme";
             var blazorServerPackageJsonFilePaths = new List<string>
