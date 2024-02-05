@@ -130,7 +130,6 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
 
         if (outputWarning)
         {
-            version = currentCliVersion.ToString();
             Logger.LogWarning(userSpecifiedVersion
                 ? $"The specified template version ({templateVersion}) is different than the CLI version ({currentCliVersion}). This may cause compatibility issues."
                 : $"The latest template version ({templateVersion}) is different than the CLI version ({currentCliVersion}). This may cause compatibility issues.");

@@ -57,13 +57,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.Client", "src\MyCompanyName.MyProjectName.Blazor.Client\MyCompanyName.MyProjectName.Blazor.Client.csproj", "{188A64AD-A1A7-4F95-85D1-C935594611B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.Server.WebApp", "src\MyCompanyName.MyProjectName.Blazor.Server.WebApp\MyCompanyName.MyProjectName.Blazor.Server.WebApp.csproj", "{14882ABF-1EEF-430C-8E72-812B3EE810C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.WebApp", "src\MyCompanyName.MyProjectName.Blazor.WebApp\MyCompanyName.MyProjectName.Blazor.WebApp.csproj", "{14882ABF-1EEF-430C-8E72-812B3EE810C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.Server.WebApp.Client", "src\MyCompanyName.MyProjectName.Blazor.Server.WebApp.Client\MyCompanyName.MyProjectName.Blazor.Server.WebApp.Client.csproj", "{648460F4-3ECC-4751-9D87-EE25D0B8B2BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.WebApp.Client", "src\MyCompanyName.MyProjectName.Blazor.WebApp.Client\MyCompanyName.MyProjectName.Blazor.WebApp.Client.csproj", "{648460F4-3ECC-4751-9D87-EE25D0B8B2BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.Server.WebApp.Tiered", "src\MyCompanyName.MyProjectName.Blazor.Server.WebApp.Tiered\MyCompanyName.MyProjectName.Blazor.Server.WebApp.Tiered.csproj", "{8A3E5E20-F162-4321-8AD5-23DD7B2B0E74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.WebApp.Tiered", "src\MyCompanyName.MyProjectName.Blazor.WebApp.Tiered\MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.csproj", "{8A3E5E20-F162-4321-8AD5-23DD7B2B0E74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.Server.WebApp.Tiered.Client", "src\MyCompanyName.MyProjectName.Blazor.Server.WebApp.Tiered.Client\MyCompanyName.MyProjectName.Blazor.Server.WebApp.Tiered.Client.csproj", "{834C6A10-7562-427C-8771-B0588C35873D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client", "src\MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client\MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client.csproj", "{834C6A10-7562-427C-8771-B0588C35873D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
