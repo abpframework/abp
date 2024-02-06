@@ -10,9 +10,10 @@ public class BlazorGlobalScriptContributor : BundleContributor
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreComponentsWebOptions>>().Value;
-        context.Files.AddIfNotContains(options.IsBlazorWebApp
-            ? "/_framework/blazor.web.js"
-            : "/_framework/blazor.server.js");
+        if (!options.IsBlazorWebApp)
+        {
+            context.Files.AddIfNotContains("/_framework/blazor.server.js");
+        }
         context.Files.AddIfNotContains("/_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js");
     }
 }

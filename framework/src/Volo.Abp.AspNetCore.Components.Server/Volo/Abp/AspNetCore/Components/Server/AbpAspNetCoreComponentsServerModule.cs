@@ -79,6 +79,7 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
         context.GetEnvironment().WebRootFileProvider =
             new CompositeFileProvider(
                 new ManifestEmbeddedFileProvider(typeof(IServerSideBlazorBuilder).Assembly),
+                new ManifestEmbeddedFileProvider(typeof(RazorComponentsEndpointRouteBuilderExtensions).Assembly),
                 context.GetEnvironment().WebRootFileProvider
             );
     }

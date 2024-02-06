@@ -1,0 +1,26 @@
+@using Volo.Abp
+@inject IComponentBundleManager BundleManager
+
+@if (ScriptFiles != null)
+{
+    foreach (var file in ScriptFiles)
+    {
+        <script src="@file"></script>
+    }
+}
+
+@code {
+    private IReadOnlyList<string>? ScriptFiles { get; set; }
+
+    [Parameter]
+    public string? BundleName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (BundleName == null)
+        {
+            throw new AbpException("The BundleName parameter of the AbpScripts component can not be null!");
+        }
+        ScriptFiles = await BundleManager.GetScriptBundleFilesAsync(BundleName!);
+    }
+}

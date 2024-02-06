@@ -3,8 +3,8 @@
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Http
 @using Microsoft.Extensions.Hosting
-@using Volo.Abp.AspNetCore.Components.Server.Theming.Bundling
 @using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Bundling
 @using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp
 @inject IHostEnvironment Env
 @{
@@ -20,12 +20,7 @@
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="/" />
 
-    <!--ABP:Styles-->
-    <link href="global.css?_v=638417120185267609" rel="stylesheet"/>
-    <link href="main.css" rel="stylesheet"/>
-    <!--/ABP:Styles-->
-
-    <AbpStyles BundleName="@BlazorLeptonXLiteThemeBundles.Styles.Global" />
+    <AbpStyles BundleName="@BlazorLeptonXLiteThemeBundles.Styles.Global" @rendermode="InteractiveAuto" />
 
     <HeadOutlet @rendermode="InteractiveAuto" />
 
@@ -34,11 +29,9 @@
 
     <Routes @rendermode="InteractiveAuto" />
 
-    <AbpScripts BundleName="@BlazorLeptonXLiteThemeBundles.Scripts.Global" />
+    <AbpScripts BundleName="@BlazorLeptonXLiteThemeBundles.Scripts.Global" @rendermode="InteractiveAuto" />
 
-    <!--ABP:Scripts-->
-    <script src="global.js?_v=638417120186975895"></script>
-    <!--/ABP:Scripts-->
+    <script src="_framework/blazor.web.js"></script>
 
     <div id="blazor-error-ui">
         @if (Env.IsDevelopment())
