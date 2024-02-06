@@ -229,6 +229,7 @@
     "CommunityProfile": "Community-Profil",
     "BlogProfile": "Blog-Profil",
     "Tickets": "Tickets",
+    "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">Community</span> kennenlernen",
     "DisplayName:CommunityIndexPagePoll": "Community-Indexseite-Umfrage"
   }
 }

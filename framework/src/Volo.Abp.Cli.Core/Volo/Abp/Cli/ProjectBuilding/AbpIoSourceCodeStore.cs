@@ -65,7 +65,8 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         string version = null,
         string templateSource = null,
         bool includePreReleases = false,
-        bool skipCache = false)
+        bool skipCache = false,
+        bool trustUserVersion = false)
     {
         DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
         var userSpecifiedVersion = version != null;
@@ -96,33 +97,36 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         var templateVersion = SemanticVersion.Parse(version);
 
         var outputWarning = false;
-        if (currentCliVersion.Major != templateVersion.Major || currentCliVersion.Minor != templateVersion.Minor)
+        if (!trustUserVersion)
         {
-            // major and minor version are different
-            outputWarning = true;
-        }
-        else if (currentCliVersion.Major == templateVersion.Major &&
-                 currentCliVersion.Minor == templateVersion.Minor &&
-                 currentCliVersion.Patch < templateVersion.Patch)
-        {
-            // major and minor version are same but patch version is lower
-            outputWarning = true;
-        }
-        else if(currentCliVersion.Major == templateVersion.Major &&
-                currentCliVersion.Minor == templateVersion.Minor &&
-                currentCliVersion.Patch == templateVersion.Patch &&
-                currentCliVersion.IsPrerelease && templateVersion.IsPrerelease)
-        {
-            // major and minor and patch version are same but prerelease version may be lower
-            var cliRcVersion = currentCliVersion.ReleaseLabels.LastOrDefault();
-            var templateRcVersion = templateVersion.ReleaseLabels.LastOrDefault();
-            if (cliRcVersion != null && templateRcVersion != null)
+            if (currentCliVersion.Major != templateVersion.Major || currentCliVersion.Minor != templateVersion.Minor)
             {
-                if (int.TryParse(cliRcVersion, out var cliRcVersionNumber) && int.TryParse(templateRcVersion, out var templateRcVersionNumber))
+                // major and minor version are different
+                outputWarning = true;
+            }
+            else if (currentCliVersion.Major == templateVersion.Major &&
+                     currentCliVersion.Minor == templateVersion.Minor &&
+                     currentCliVersion.Patch < templateVersion.Patch)
+            {
+                // major and minor version are same but patch version is lower
+                outputWarning = true;
+            }
+            else if(currentCliVersion.Major == templateVersion.Major &&
+                    currentCliVersion.Minor == templateVersion.Minor &&
+                    currentCliVersion.Patch == templateVersion.Patch &&
+                    currentCliVersion.IsPrerelease && templateVersion.IsPrerelease)
+            {
+                // major and minor and patch version are same but prerelease version may be lower
+                var cliRcVersion = currentCliVersion.ReleaseLabels.LastOrDefault();
+                var templateRcVersion = templateVersion.ReleaseLabels.LastOrDefault();
+                if (cliRcVersion != null && templateRcVersion != null)
                 {
-                    if (cliRcVersionNumber < templateRcVersionNumber)
+                    if (int.TryParse(cliRcVersion, out var cliRcVersionNumber) && int.TryParse(templateRcVersion, out var templateRcVersionNumber))
                     {
-                        outputWarning = true;
+                        if (cliRcVersionNumber < templateRcVersionNumber)
+                        {
+                            outputWarning = true;
+                        }
                     }
                 }
             }
@@ -139,20 +143,19 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                 ? $"> dotnet tool install -g volo.abp.cli --version \"{templateVersion.Major}.{templateVersion.Minor}.*\""
                 : $"> dotnet tool install -g volo.abp.cli --version {templateVersion}");
 
-            if (!userSpecifiedVersion)
+            if (userSpecifiedVersion)
             {
-                version = currentCliVersion.ToString();
                 Logger.LogWarning($"We have changed the template version as the cli version.");
                 Logger.LogWarning($"New version: {version}");
             }
         }
 
-        if (!await IsVersionExists(name, version))
+        if (!trustUserVersion && !await IsVersionExists(name, version))
         {
             throw new Exception("There is no version found with given version: " + version);
         }
 
-        var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
+        var nugetVersion = await GetTemplateNugetVersionAsync(name, type, version) ?? version;
 
         if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
         {

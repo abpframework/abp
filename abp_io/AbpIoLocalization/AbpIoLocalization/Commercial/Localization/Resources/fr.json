@@ -408,6 +408,8 @@
     "BlazoriseLicenseExplanation": "Nous avons conclu un accord entre Volosoft et Megabit, dans le cadre duquel la licence Blazorise est intégrée aux produits ABP Commercial, de sorte que nos clients n'ont pas besoin d'acheter une licence Blazorise supplémentaire.",
     "MultipleOrganizationInfo": "Voir toutes vos organisations",
     "PaymentFailedInfo": "Désolé, le paiement a échoué! ",
-    "UsedPayment": "Ce paiement a déjà été utilisé"
+    "UsedPayment": "Ce paiement a déjà été utilisé",
+    "ManageLicense": "Gérer la licence",
+    "AbpPlatformLeptonXTheme": "Thème LeptonX pour votre tableau de bord administrateur par <span class=\"gradient-commercial\">ABP Platform</span>"
   }
 }
