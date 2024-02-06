@@ -17,6 +17,7 @@ namespace Volo.Docs.HtmlConverting
         private const string JsonCloser = "````";
         private const string DocsParam = "//[doc-params]";
         private const string DocsTemplates = "//[doc-template]";
+        private const string DocsNav = "//[doc-nav]";
 
         public ILogger<ScribanDocumentSectionRenderer> Logger { get; set; }
 
@@ -41,7 +42,7 @@ namespace Volo.Docs.HtmlConverting
 
             var result = await scribanTemplate.RenderAsync(parameters);
 
-            return RemoveOptionsJson(result);
+            return RemoveOptionsJson(result, DocsParam, DocsNav);
         }
 
         public async Task<Dictionary<string, List<string>>> GetAvailableParametersAsync(string document)
@@ -53,7 +54,7 @@ namespace Volo.Docs.HtmlConverting
                     return new Dictionary<string, List<string>>();
                 }
 
-                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document);
+                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document, DocsParam);
 
                 if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
                 {
@@ -76,36 +77,42 @@ namespace Volo.Docs.HtmlConverting
             }
         }
 
-        private static string RemoveOptionsJson(string document)
+        private static string RemoveOptionsJson(string document, params string[] sectionNames)
         {
-            var orgDocument = document;
 
-            try
+            foreach (var sectionName in sectionNames)
             {
-                if (!document.Contains(JsonOpener) || !document.Contains(DocsParam))
+                var orgDocument = document;
+
+                try
                 {
-                    return orgDocument;
+                    if (!document.Contains(JsonOpener) || !document.Contains(sectionName))
+                    {
+                        continue;
+                    }
+
+                    var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document, sectionName);
+
+                    if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
+                    {
+                        continue;
+                    }
+
+                    document = document.Remove(
+                        jsonBeginningIndex - JsonOpener.Length,
+                        (jsonEndingIndex + JsonCloser.Length) - (jsonBeginningIndex - JsonOpener.Length)
+                    );
                 }
-
-                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document);
-
-                if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
+                catch (Exception)
                 {
-                    return orgDocument;
+                    document = orgDocument;
                 }
-
-                return document.Remove(
-                    jsonBeginningIndex - JsonOpener.Length,
-                    (jsonEndingIndex + JsonCloser.Length) - (jsonBeginningIndex - JsonOpener.Length)
-                );
             }
-            catch (Exception)
-            {
-                return orgDocument;
-            }
+            
+            return document;
         }
 
-        private static (int, int, string) GetJsonBeginEndIndexesAndPureJson(string document)
+        private static (int, int, string) GetJsonBeginEndIndexesAndPureJson(string document, string sectionName)
         {
             var searchedIndex = 0;
 
@@ -121,7 +128,7 @@ namespace Volo.Docs.HtmlConverting
                 var jsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(JsonCloser, StringComparison.Ordinal) + jsonBeginningIndex;
                 var insideJsonSection = document[jsonBeginningIndex..jsonEndingIndex];
 
-                if (insideJsonSection.IndexOf(DocsParam, StringComparison.Ordinal) < 0)
+                if (insideJsonSection.IndexOf(sectionName, StringComparison.Ordinal) < 0)
                 {
                     searchedIndex = jsonEndingIndex + JsonCloser.Length;
                     continue;
@@ -167,6 +174,30 @@ namespace Volo.Docs.HtmlConverting
             }
 
             return await Task.FromResult(templates);
+        }
+
+        public Task<DocumentNavigationsDto> GetDocumentNavigationsAsync(string documentContent)
+        {
+            if (!documentContent.Contains(JsonOpener) || !documentContent.Contains(DocsNav))
+            {
+                return Task.FromResult(new DocumentNavigationsDto());
+            }
+
+            var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(documentContent, DocsNav);
+
+            if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
+            {
+                return Task.FromResult(new DocumentNavigationsDto());
+            }
+
+            var pureJson = insideJsonSection.Replace(DocsNav, "").Trim();
+
+            if (!DocsJsonSerializerHelper.TryDeserialize<DocumentNavigationsDto>(pureJson, out var navigationDocumentNames))
+            {
+                throw new UserFriendlyException("ERROR-20200327: Cannot validate JSON content for `NavigationDocumentNames`!");
+            }
+
+            return Task.FromResult(navigationDocumentNames);
         }
 
         private static string SetPartialTemplates(string document, IReadOnlyCollection<DocumentPartialTemplateContent> templates)
