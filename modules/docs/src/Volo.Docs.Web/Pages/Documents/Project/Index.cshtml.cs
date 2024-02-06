@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -117,9 +117,16 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return Redirect(decodedUrl);
             }
-            var documentNameFallback = DocumentName ?? "";
+            var documentPath = DocumentName ?? "";
 
-            var documentNames = new[] { DocumentName, documentNameFallback.EnsureEndsWith('/') + "Index", documentNameFallback.EnsureEndsWith('/') + "index" };
+            string[] documentNames;
+
+            if (displayUrl.EndsWith("/index", StringComparison.OrdinalIgnoreCase))
+            {
+                documentPath = documentPath.Substring(0, documentPath.LastIndexOf('/') + 1);
+            }
+
+            documentNames = new[] { DocumentName, documentPath.EnsureEndsWith('/') + "Index", documentPath.EnsureEndsWith('/') + "index" };
 
             foreach (var documentName in documentNames)
             {
