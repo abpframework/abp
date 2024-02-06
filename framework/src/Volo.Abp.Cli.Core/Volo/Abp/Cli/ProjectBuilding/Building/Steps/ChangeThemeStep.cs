@@ -41,6 +41,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ChangeThemeToBasicForMvcProjects(context, defaultThemeName);
         ChangeThemeToBasicForBlazorProjects(context, defaultThemeName);
         ChangeThemeToBasicForBlazorServerProjects(context, defaultThemeName);
+        ChangeThemeToBasicForBlazorWebAppProjects(context, defaultThemeName);
         ChangeThemeForAngularProjects(context, defaultThemeName, Basic, GetAngularPackageName(context.BuildArgs.Theme!.Value), GetAngularPackageName(Theme.Basic));
     }
 
@@ -53,6 +54,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         ChangeThemeToLeptonForMvcProjects(context);
         ChangeThemeToLeptonForBlazorProjects(context);
         ChangeThemeToLeptonForBlazorServerProjects(context);
+        ChangeThemeToLeptonForBlazorWebAppProjects(context);
         ChangeThemeForAngularProjects(context, oldThemeName: LeptonX, Lepton, GetAngularPackageName(Theme.LeptonX), GetAngularPackageName(Theme.Lepton));
 
         ConfigureLeptonManagementPackagesForNoLayersMvc(context, "/MyCompanyName.MyProjectName.Mvc/MyCompanyName.MyProjectName.csproj", new[] { "Web", "HttpApi", "Application" });
@@ -76,35 +78,70 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     {
         ReplacePackageReferenceWithProjectReference(
             context,
-            "/MyCompanyName.MyProjectName.Blazor/MyCompanyName.MyProjectName.Blazor.csproj",
+            "MyCompanyName.MyProjectName.Blazor.csproj",
+            $"Volo.Abp.AspNetCore.Components.WebAssembly.{defaultThemeName}Theme",
+            @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj"
+        );
+
+        ReplacePackageReferenceWithProjectReference(
+            context,
+            "MyCompanyName.MyProjectName.Blazor.Client.csproj",
             $"Volo.Abp.AspNetCore.Components.WebAssembly.{defaultThemeName}Theme",
             @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj"
         );
 
         ReplaceAllKeywords(
             context,
-            "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
+            "MyProjectNameBlazorModule.cs",
             $"{defaultThemeName}Theme.Components",
             "BasicTheme.Themes.Basic"
         );
 
         ReplaceAllKeywords(
             context,
-            "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
+            "MyProjectNameBlazorClientModule.cs",
+            $"{defaultThemeName}Theme.Components",
+            "BasicTheme.Themes.Basic"
+        );
+
+        ReplaceAllKeywords(
+            context,
+            "MyProjectNameBlazorModule.cs",
+            defaultThemeName,
+            Basic
+        );
+
+        ReplaceAllKeywords(
+            context,
+            "MyProjectNameBlazorClientModule.cs",
+            defaultThemeName,
+            Basic
+        );
+
+        ReplaceAllKeywords(
+            context,
+            "Routes.razor",
+            defaultThemeName,
+            Basic
+        );
+
+        ReplaceAllKeywords(
+            context,
+            "App.razor",
             defaultThemeName,
             Basic
         );
 
         ReplacePackageReferenceWithProjectReference(
             context,
-            "/MyCompanyName.MyProjectName.Host/MyCompanyName.MyProjectName.Host.csproj",
+            "MyCompanyName.MyProjectName.Host.csproj",
             $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
             @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
         );
 
         ReplaceAllKeywords(
             context,
-            "/MyCompanyName.MyProjectName.Host/MyProjectNameHostModule.cs",
+            "MyProjectNameHostModule.cs",
             defaultThemeName,
             Basic
         );
@@ -622,21 +659,21 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             ReplacePackageReferenceWithProjectReference(
                 context,
-                $"/MyCompanyName.MyProjectName{project.Key}/MyCompanyName.MyProjectName{project.Key}.csproj",
+                $"MyCompanyName.MyProjectName{project.Key}.csproj",
                 $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}",
                 @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj"
             );
 
             ReplacePackageReferenceWithProjectReference(
                 context,
-                $"/MyCompanyName.MyProjectName{project.Key}/MyCompanyName.MyProjectName{project.Key}.csproj",
+                $"MyCompanyName.MyProjectName{project.Key}.csproj",
                 $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
                 @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
             );
 
             ReplaceAllKeywords(
                 context,
-                $"/Pages/_Host.cshtml",
+                $"_Host.cshtml",
                 $"{defaultThemeName}Theme.Components",
                 Basic
             );
@@ -650,7 +687,68 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
             ReplaceAllKeywords(
                 context,
-                $"/Pages/_Host.cshtml",
+                $"_Host.cshtml",
+                defaultThemeName,
+                Basic
+            );
+
+            ReplaceAllKeywords(
+                context,
+                "Routes.razor",
+                defaultThemeName,
+                Basic
+            );
+
+            ReplaceAllKeywords(
+                context,
+                "App.razor",
+                defaultThemeName,
+                Basic
+            );
+        }
+    }
+
+    private static void ChangeThemeToBasicForBlazorWebAppProjects(ProjectBuildContext context, string defaultThemeName)
+    {
+        var projects = new Dictionary<string, string>
+        {
+            {".Blazor.WebApp", "MyProjectNameBlazorModule"},
+            {".Blazor.WebApp.Client", "MyProjectNameBlazorClientModule"}
+        };
+
+        foreach (var project in projects)
+        {
+            ReplacePackageReferenceWithProjectReference(
+                context,
+                $"MyCompanyName.MyProjectName{project.Key}.csproj",
+                $"Volo.Abp.AspNetCore.Components.Server.{defaultThemeName}",
+                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj"
+            );
+
+            ReplacePackageReferenceWithProjectReference(
+                context,
+                $"MyCompanyName.MyProjectName{project.Key}.csproj",
+                $"Volo.Abp.AspNetCore.Mvc.UI.Theme.{defaultThemeName}",
+                @"..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj"
+            );
+
+            ReplaceAllKeywords(
+                context,
+                $"{project.Value}.cs",
+                defaultThemeName,
+                Basic + "Theme"
+            );
+
+            ReplaceAllKeywords(
+                context,
+                "Routes.razor",
+                defaultThemeName,
+                Basic
+            );
+
+            ReplaceAllKeywords(
+                context,
+                "App.razor",
                 defaultThemeName,
                 Basic
             );
@@ -694,6 +792,68 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             RemoveLinesByStatement(
                 context,
                 $"/MyCompanyName.MyProjectName.{projectName}/MyProjectNameBlazorModule.cs",
+                "Volo.Abp.LeptonX.Shared;"
+            );
+        }
+    }
+
+    private static void ChangeThemeToLeptonForBlazorWebAppProjects(ProjectBuildContext context)
+    {
+        var projectNames = new[] { "Blazor.WebApp", "Blazor.WebApp.Client", "Blazor.WebApp.Tiered",  "Blazor.WebApp.Tiered.Client" };
+
+        foreach (var projectName in projectNames)
+        {
+            ReplacePackageReferenceWithProjectReference(
+                context,
+                $"MyCompanyName.MyProjectName.{projectName}.csproj",
+                "Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX",
+                @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj"
+            );
+
+            ReplacePackageReferenceWithProjectReference(
+                context,
+                $"MyCompanyName.MyProjectName.{projectName}.csproj",
+                "Volo.Abp.AspNetCore.Components.Server.LeptonXTheme",
+                @"..\..\..\..\..\lepton-theme\src\Volo.Abp.AspNetCore.Components.Server.LeptonTheme\Volo.Abp.AspNetCore.Components.Server.LeptonTheme.csproj"
+            );
+
+            ReplaceAllKeywords(
+                context,
+                $"MyProjectNameBlazorModule.cs",
+                LeptonX,
+                Lepton
+            );
+
+            ReplaceAllKeywords(
+                context,
+                $"MyProjectNameBlazorClientModule.cs",
+                LeptonX,
+                Lepton
+            );
+
+            ReplaceAllKeywords(
+                context,
+                "Routes.razor",
+                LeptonX,
+                Lepton
+            );
+
+            ReplaceAllKeywords(
+                context,
+                "App.razor",
+                LeptonX,
+                Lepton
+            );
+
+            RemoveLinesByStatement(
+                context,
+                $"MyProjectNameBlazorModule.cs",
+                "Volo.Abp.LeptonX.Shared;"
+            );
+
+            RemoveLinesByStatement(
+                context,
+                $"MyProjectNameBlazorClientModule.cs",
                 "Volo.Abp.LeptonX.Shared;"
             );
         }
