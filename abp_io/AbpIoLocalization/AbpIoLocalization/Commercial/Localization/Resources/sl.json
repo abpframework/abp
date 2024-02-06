@@ -388,6 +388,7 @@
     "PaymentFailedInfo": "Žal plačilo ni uspelo! ",
     "UsedPayment": "To plačilo je že bilo uporabljeno",
     "ManageLicense": "Upravljanje licenco",
-    "AbpPlatformLeptonXTheme": "LeptonX Tema za vaš upraviteljski nadzorni pult s strani <span class=\"gradient-commercial\">ABP Platform</span>"
+    "AbpPlatformLeptonXTheme": "LeptonX Tema za vaš upraviteljski nadzorni pult s strani <span class=\"gradient-commercial\">ABP Platform</span>",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} ura"
   }
 }

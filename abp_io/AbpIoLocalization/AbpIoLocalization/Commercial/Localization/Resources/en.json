@@ -1142,6 +1142,7 @@
     "DisplayName:CardHolderName": "Name on Card",
     "CreditCardNumberLengthWarning": "Invalid card number",
     "ExpirationWarning": "Invalid expiration date",
-    "CreateCreditCardModal_Description": "When saving your debit/credit card, a temporary $1 charge will be authorized for verification and promptly refunded."
+    "CreateCreditCardModal_Description": "When saving your debit/credit card, a temporary $1 charge will be authorized for verification and promptly refunded.",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hour"
   }
 }
