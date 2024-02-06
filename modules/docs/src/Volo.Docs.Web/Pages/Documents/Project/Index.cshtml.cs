@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -117,18 +117,32 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return Redirect(decodedUrl);
             }
-            try
-            {
-                return await SetPageAsync();
-            }
-            catch (DocumentNotFoundException exception)
-            {
-                Logger.LogWarning(exception.Message);
+            var documentPath = DocumentName ?? "";
 
-                DocumentFound = false;
-                Response.StatusCode = 404;
-                return Page();
+            string[] documentNames;
+
+            if (displayUrl.EndsWith("/index", StringComparison.OrdinalIgnoreCase))
+            {
+                documentPath = documentPath.Substring(0, documentPath.LastIndexOf('/') + 1);
             }
+
+            documentNames = new[] { DocumentName, documentPath.EnsureEndsWith('/') + "Index", documentPath.EnsureEndsWith('/') + "index" };
+
+            foreach (var documentName in documentNames)
+            {
+                DocumentName = documentName;
+                try
+                {
+                    return await SetPageAsync();
+                }
+                catch (DocumentNotFoundException exception)
+                {
+                    Logger.LogWarning(exception.Message);
+                }
+            }
+            DocumentFound = false;
+            Response.StatusCode = 404;
+            return Page();
         }
 
         private async Task<IActionResult> SetPageAsync()
