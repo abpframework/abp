@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -11,8 +10,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
-using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.Utils;
@@ -84,7 +81,7 @@ public class NpmPackagesUpdater : ITransientDependency
                 switchToStable,
                 version,
                 includePreRc);
-            
+
             packagesUpdated.TryAdd(file, updated);
         }
 
@@ -94,14 +91,7 @@ public class NpmPackagesUpdater : ITransientDependency
         {
             var fileDirectory = Path.GetDirectoryName(file.Key).EnsureEndsWith(Path.DirectorySeparatorChar);
 
-            if (await NpmrcFileExistAsync(fileDirectory))
-            {
-                RunNpmInstall(fileDirectory);
-            }
-            else
-            {
-                RunYarn(fileDirectory);
-            }
+            RunYarn(fileDirectory);
 
             if (!IsAngularProject(fileDirectory))
             {
@@ -128,6 +118,7 @@ public class NpmPackagesUpdater : ITransientDependency
         var fileName = Path.Combine(directoryName, ".npmrc");
         var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
         var voloRegistry = "@volo:registry=https://www.myget.org/F/abp-commercial-npm-nightly/npm";
+        var volosoftRegistry = "@volosoft:registry=https://www.myget.org/F/abp-commercial-npm-nightly/npm";
 
         if (await NpmrcFileExistAsync(directoryName))
         {
@@ -138,9 +129,14 @@ public class NpmPackagesUpdater : ITransientDependency
                 fileContent += Environment.NewLine + abpRegistry;
             }
 
-            if(!fileContent.Contains(voloRegistry))
+            if (!fileContent.Contains(voloRegistry))
             {
                 fileContent += Environment.NewLine + voloRegistry;
+            }
+
+            if (!fileContent.Contains(volosoftRegistry))
+            {
+                fileContent += volosoftRegistry;
             }
 
             File.WriteAllText(fileName, fileContent);
@@ -152,6 +148,7 @@ public class NpmPackagesUpdater : ITransientDependency
 
         sw.WriteLine(abpRegistry);
         sw.WriteLine(voloRegistry);
+        sw.WriteLine(volosoftRegistry);
     }
 
     private static bool IsAngularProject(string fileDirectory)
@@ -272,7 +269,7 @@ public class NpmPackagesUpdater : ITransientDependency
 
     protected virtual async Task<string> GetLatestVersion(JProperty package, bool includeReleaseCandidates = false, bool includePreviews = false, string workingDirectory = null, bool includePreRc = false)
     {
-        var postfix = includePreviews ? "(preview)" : (includePreRc ? "(prerc)" : string.Empty);
+        var postfix = includePreviews || includePreRc ? "(preview)" : string.Empty;
         var key = package.Name + postfix;
 
         if (_fileVersionStorage.ContainsKey(key))
@@ -286,7 +283,8 @@ public class NpmPackagesUpdater : ITransientDependency
 
         if (includePreRc)
         {
-            newVersion = versionList.FirstOrDefault(v => v.Contains("-prerc"));
+            var filterKey = $"-preview{DateTime.Now.ToString("yyyyMMdd")}";
+            newVersion = versionList.Where(f => f.Contains(filterKey)).OrderBy(o => o).FirstOrDefault();
         }
         else if (includePreviews)
         {
@@ -329,8 +327,12 @@ public class NpmPackagesUpdater : ITransientDependency
             var properties = dependencies.Properties().ToList();
 
             abpPackages
-                .AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/"))
-                    .ToList());
+                .AddRange(
+                properties.Where(
+                      p => p.Name.StartsWith("@abp/")
+                        || p.Name.StartsWith("@volo/")
+                        || p.Name.StartsWith("@volosoft/")).ToList()
+                );
         }
 
         return abpPackages;
