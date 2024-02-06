@@ -334,7 +334,7 @@ using TodoApp.Entities;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 {{else}}
-using TodoApp.Entities;
+using TodoAppEntities;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 {{end}}
