@@ -108,6 +108,88 @@ public class PackageSourceManager : ITransientDependency
         }
     }
 
+    public void AddPackageSourceMapping(string solutionFolder, string sourceKey, string sourceValue)
+    {
+        var nugetConfigPath = GetNugetConfigPath(solutionFolder);
+        if (!File.Exists(nugetConfigPath))
+        {
+            return;
+        }
+        
+        var fileContent = File.ReadAllText(nugetConfigPath);
+        if (fileContent.Contains($"<packageSource key=\"{sourceKey}\">"))
+        {
+            return;
+        }
+        
+        try
+        {
+            var doc = new XmlDocument() { PreserveWhitespace = true };
+
+            doc.Load(GenerateStreamFromString(fileContent));
+
+            var sourceNodes = doc.SelectNodes("/configuration/packageSourceMapping");
+
+            var newNode = doc.CreateElement("packageSource");
+
+            var keyAttr = doc.CreateAttribute("key");
+            keyAttr.Value = sourceKey;
+            newNode.Attributes.Append(keyAttr);
+
+            var packageNode = doc.CreateElement("package");
+            
+            var patternAttr = doc.CreateAttribute("pattern");
+            patternAttr.Value = sourceValue;
+            packageNode.Attributes.Append(patternAttr);
+
+            newNode.AppendChild(packageNode);
+
+            sourceNodes?[0]?.AppendChild(newNode);
+
+            File.WriteAllText(nugetConfigPath, doc.OuterXml);
+        }
+        catch
+        {
+            Logger.LogWarning($"Adding \"{sourceValue}\" ({sourceKey}) to package source mapping FAILED.");
+        }
+    }
+
+    public void RemovePackageSourceMapping(string solutionFolder, string sourceKey)
+    {
+        var nugetConfigPath = GetNugetConfigPath(solutionFolder);
+        if (!File.Exists(nugetConfigPath))
+        {
+            return;
+        }
+
+        var fileContent = File.ReadAllText(nugetConfigPath);
+        if (!fileContent.Contains($"<packageSource key=\"{sourceKey}\">"))
+        {
+            return;
+        }
+
+        Logger.LogInformation($"Removing \"{sourceKey}\" from nuget package source mappings...");
+
+        try
+        {
+            var doc = new XmlDocument() { PreserveWhitespace = true };
+
+            doc.Load(GenerateStreamFromString(fileContent));
+
+            var nodes = doc.SelectNodes($"/configuration/packageSourceMapping/packageSource[@key='{sourceKey}']");
+            if (nodes != null && nodes.Count > 0)
+            {
+                nodes[0]!.ParentNode?.RemoveChild(nodes[0]);
+            }
+
+            File.WriteAllText(nugetConfigPath, doc.OuterXml);
+        }
+        catch
+        {
+            Logger.LogWarning($"Removing \"{sourceKey}\" from package source mappings FAILED.");
+        }
+    }
+
     private static string GetNugetConfigPath(string solutionFolder)
     {
         return Path.Combine(solutionFolder, "NuGet.Config");
