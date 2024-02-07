@@ -9,11 +9,11 @@ public class WebAssemblyComponentBundleManager : IComponentBundleManager, ITrans
 {
     public virtual Task<IReadOnlyList<string>> GetStyleBundleFilesAsync(string bundleName)
     {
-        return Task.FromResult<IReadOnlyList<string>>(new List<string> {"global.css", "main.css"});
+        return Task.FromResult<IReadOnlyList<string>>(new List<string>());
     }
 
     public virtual Task<IReadOnlyList<string>> GetScriptBundleFilesAsync(string bundleName)
     {
-        return Task.FromResult<IReadOnlyList<string>>(new List<string> {"global.js"});
+        return Task.FromResult<IReadOnlyList<string>>(new List<string>());
     }
 }

@@ -20,7 +20,7 @@
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="/" />
 
-    <AbpStyles BundleName="@BlazorLeptonXLiteThemeBundles.Styles.Global" @rendermode="InteractiveAuto" />
+    <AbpStyles BundleName="@BlazorLeptonXLiteThemeBundles.Styles.Global" WebAssemblyStyleFiles="GlobalStyles" @rendermode="InteractiveAuto" />
 
     <HeadOutlet @rendermode="InteractiveAuto" />
 
@@ -29,7 +29,7 @@
 
     <Routes @rendermode="InteractiveAuto" />
 
-    <AbpScripts BundleName="@BlazorLeptonXLiteThemeBundles.Scripts.Global" @rendermode="InteractiveAuto" />
+    <AbpScripts BundleName="@BlazorLeptonXLiteThemeBundles.Scripts.Global" WebAssemblyScriptFiles="GlobalScripts" @rendermode="InteractiveAuto" />
 
     <script src="_framework/blazor.web.js"></script>
 
@@ -50,6 +50,19 @@
 </html>
 
 @code{
+    private List<string> GlobalStyles =>
+    [
+        "global.css",
+        "main.css",
+        "blazor-global-styles.css"
+    ];
+
+    private List<string> GlobalScripts =>
+    [
+        "global.js",
+        "global.js"
+    ];
+
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
 

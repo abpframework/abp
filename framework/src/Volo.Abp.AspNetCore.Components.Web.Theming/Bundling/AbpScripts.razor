@@ -10,17 +10,26 @@
 }
 
 @code {
-    private IReadOnlyList<string>? ScriptFiles { get; set; }
+    [Parameter]
+    public List<string>? WebAssemblyScriptFiles { get; set; }
 
     [Parameter]
     public string? BundleName { get; set; }
 
+    private List<string>? ScriptFiles { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
+        {
+            ScriptFiles = WebAssemblyScriptFiles;
+            return;
+        }
+
         if (BundleName == null)
         {
             throw new AbpException("The BundleName parameter of the AbpScripts component can not be null!");
         }
-        ScriptFiles = await BundleManager.GetScriptBundleFilesAsync(BundleName!);
+        ScriptFiles = (await BundleManager.GetScriptBundleFilesAsync(BundleName!)).ToList();
     }
 }
