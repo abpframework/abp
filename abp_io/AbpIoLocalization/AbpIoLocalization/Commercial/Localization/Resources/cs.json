@@ -411,6 +411,7 @@
     "UsedPayment": "Tato platba již byla použita",
     "ManageLicense": "Správa licence",
     "AbpPlatformLeptonXTheme": "LeptonX téma pro váš správce účtu od <span class=\"gradient-commercial\">ABP Platform</span>",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hodina"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hodina",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hodina"
   }
 }

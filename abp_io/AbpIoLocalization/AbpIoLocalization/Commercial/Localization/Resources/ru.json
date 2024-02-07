@@ -611,7 +611,7 @@
     "StartupTemplates_Page_Description": "ABP Commercial позволяет создавать решения любого уровня сложности. ",
     "MicroserviceStartupSolutionForDotnet": "Решение для запуска микросервисов для .NET",
     "MonolithSolutionForDotnet": "Монолитное (модульное) решение для .NET",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} час(а)",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} часа",
     "Trainings_Content": "Содержание обучения",
     "Trial_Page_StartYourFreeTrial": "Начните свой <span class=\"gradient-commercial\">Бесплатная пробная версия</span>",
     "TrialLicenseFeatures": "Вы сможете воспользоваться всеми коммерческими функциями ABP.",

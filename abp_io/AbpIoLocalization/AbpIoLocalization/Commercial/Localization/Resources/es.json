@@ -392,6 +392,7 @@
     "UsedPayment": "Este pago ya ha sido utilizado.",
     "ManageLicense": "Gestionar licencia",
     "AbpPlatformLeptonXTheme": "Tema LeptonX para su panel de administración por <span class=\"gradient-commercial\">ABP Platform</span>",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hora"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hora",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hora"
   }
 }
