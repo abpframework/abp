@@ -409,6 +409,6 @@
     "ManageLicense": "Spravovať licenciu",
     "AbpPlatformLeptonXTheme": "Téma LeptonX pre váš administratívny panel od <span class=\"gradient-commercial\">ABP Platform</span>",
     "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hodina",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hodina"
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hodín"
   }
 }

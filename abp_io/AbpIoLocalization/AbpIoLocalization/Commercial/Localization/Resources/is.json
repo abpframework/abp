@@ -390,6 +390,6 @@
     "ManageLicense": "Stjórna leyfi",
     "AbpPlatformLeptonXTheme": "LeptonX Þema fyrir stjórnborð stjórnanda þíns af <span class=\"gradient-commercial\">ABP Platform</span>",
     "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} klukkustund",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} klukkustund"
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} klukkustundir"
   }
 }
