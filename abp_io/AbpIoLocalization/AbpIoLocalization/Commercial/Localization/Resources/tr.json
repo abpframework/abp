@@ -620,7 +620,7 @@
     "StartupTemplates_Page_Description": "ABP Commercial, her düzeyde karmaşıklığa sahip projeler oluşturmanıza olanak tanır. Önceden oluşturulmuş iki ana başlangıç projesi sunar. Gereksinimlerinize yakın olanı seçebilir ve bunun üzerine kendi özel projenizi oluşturabilirsiniz.",
     "MicroserviceStartupSolutionForDotnet": ".NET için Mikroservis Başlatma Projesi",
     "MonolithSolutionForDotnet": ".NET için Monolith (modüler) Proje",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} saat(ler)",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} saat",
     "Trainings_Content": "Eğitim İçeriği",
     "Trial_Page_StartYourFreeTrial": "<span class=\"gradient-commercial\">Ücretsiz Denemenizi</span> Başlatın",
     "TrialLicenseFeatures": "Tüm ABP Commercial özelliklerinden yararlanabileceksiniz",
