@@ -21,6 +21,7 @@ public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
         usersPermission.AddChild(IdentityPermissions.Users.Update, L("Permission:Edit"));
         usersPermission.AddChild(IdentityPermissions.Users.Delete, L("Permission:Delete"));
         usersPermission.AddChild(IdentityPermissions.Users.ManagePermissions, L("Permission:ChangePermissions"));
+        usersPermission.AddChild(IdentityPermissions.Users.ManageRoles, L("Permission:ManageRoles"));
 
         identityGroup
             .AddPermission(IdentityPermissions.UserLookup.Default, L("Permission:UserLookup"))

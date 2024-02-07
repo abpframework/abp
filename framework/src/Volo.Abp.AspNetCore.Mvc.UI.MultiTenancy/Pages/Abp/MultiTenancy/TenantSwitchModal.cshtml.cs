@@ -18,13 +18,16 @@ public class TenantSwitchModalModel : AbpPageModel
     public TenantInfoModel Input { get; set; } = default!;
 
     protected ITenantStore TenantStore { get; }
+    protected ITenantNormalizer TenantNormalizer { get; }
     protected AbpAspNetCoreMultiTenancyOptions Options { get; }
 
     public TenantSwitchModalModel(
         ITenantStore tenantStore,
+        ITenantNormalizer tenantNormalizer,
         IOptions<AbpAspNetCoreMultiTenancyOptions> options)
     {
         TenantStore = tenantStore;
+        TenantNormalizer = tenantNormalizer;
         Options = options.Value;
         LocalizationResourceType = typeof(AbpUiMultiTenancyResource);
     }
@@ -45,7 +48,7 @@ public class TenantSwitchModalModel : AbpPageModel
         Guid? tenantId = null;
         if (!Input.Name.IsNullOrEmpty())
         {
-            var tenant = await TenantStore.FindAsync(Input.Name!);
+            var tenant = await TenantStore.FindAsync(TenantNormalizer.NormalizeName(Input.Name!)!);
             if (tenant == null)
             {
                 throw new UserFriendlyException(L["GivenTenantIsNotExist", Input.Name!]);

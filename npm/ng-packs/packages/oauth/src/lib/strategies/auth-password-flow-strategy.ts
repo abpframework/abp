@@ -1,31 +1,23 @@
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { OAuthInfoEvent } from 'angular-oauth2-oidc';
 import { Params, Router } from '@angular/router';
-import { from, Observable, pipe } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import { AuthFlowStrategy } from './auth-flow-strategy';
-import { pipeToLogin, removeRememberMe } from '../utils/auth-utils';
+import { isTokenExpired, pipeToLogin } from '../utils/auth-utils';
 import { LoginParams } from '@abp/ng.core';
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 
-function getCookieValueByName(name: string) {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return match ? match[2] : '';
-}
-
 export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = true;
-  private cookieKey = 'rememberMe';
-  private storageKey = 'passwordFlow';
 
   private listenToTokenExpiration() {
     this.oAuthService.events
       .pipe(
         filter(
-          event =>
-            event instanceof OAuthInfoEvent &&
+          event => event instanceof OAuthInfoEvent &&
             event.type === 'token_expires' &&
-            event.info === 'access_token',
+            event.info === 'access_token'
         ),
       )
       .subscribe(() => {
@@ -33,18 +25,26 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
           this.refreshToken();
         } else {
           this.oAuthService.logOut();
-          removeRememberMe(this.localStorageService);
+          this.rememberMeService.remove();
           this.configState.refreshAppState().subscribe();
         }
       });
   }
 
   async init() {
-    if (!getCookieValueByName(this.cookieKey) && localStorage.getItem(this.storageKey)) {
-      this.oAuthService.logOut();
-    }
+    this.checkRememberMeOption();
 
     return super.init().then(() => this.listenToTokenExpiration());
+  }
+
+  private checkRememberMeOption() {
+    const accessToken = this.oAuthService.getAccessToken();
+    const isTokenExpire = isTokenExpired(this.oAuthService.getAccessTokenExpiration());
+    const rememberMe = this.rememberMeService.get();
+    if (accessToken && isTokenExpire && !rememberMe) {
+      this.rememberMeService.remove();
+      this.oAuthService.logOut();
+    }
   }
 
   navigateToLogin(queryParams?: Params) {
@@ -67,14 +67,15 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       ),
     ).pipe(pipeToLogin(params, this.injector));
   }
+
   logout() {
     const router = this.injector.get(Router);
     const noRedirectToLogoutUrl = true;
     return from(this.oAuthService.revokeTokenAndLogout(noRedirectToLogoutUrl)).pipe(
       switchMap(() => this.configState.refreshAppState()),
       tap(() => {
+        this.rememberMeService.remove();
         router.navigateByUrl('/');
-        removeRememberMe(this.localStorageService);
       }),
     );
   }
@@ -82,7 +83,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   protected refreshToken() {
     return this.oAuthService.refreshToken().catch(() => {
       clearOAuthStorage();
-      removeRememberMe(this.localStorageService);
+      this.rememberMeService.remove();
     });
   }
 }

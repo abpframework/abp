@@ -31,9 +31,13 @@ public class AbpDatePickerOptions : IAbpDatePickerOptions
     public bool? LinkedCalendars { get; set; }
     public bool? AutoUpdateInput { get; set; }
     public string? ParentEl { get; set; }
+    
+    [Obsolete("Use VisibleDateFormat instead.")]
     public string? DateFormat { get; set; }
+    public string? VisibleDateFormat { get; set; }
+    public string? InputDateFormat { get; set; }
     public bool OpenButton { get; set; } = true;
-    public bool ClearButton { get; set; } = true;
+    public bool? ClearButton { get; set; }
     public bool SingleOpenAndClearButton { get; set; } = true;
     public bool? IsUtc { get; set; }
     public bool? IsIso { get; set; }

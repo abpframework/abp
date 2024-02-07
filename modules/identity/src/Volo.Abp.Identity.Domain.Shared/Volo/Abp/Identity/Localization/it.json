@@ -85,6 +85,7 @@
     "Permission:Edit": "Modifica",
     "Permission:Delete": "Elimina",
     "Permission:ChangePermissions": "Modifica le autorizzazioni",
+    "Permission:ManageRoles": "Gestione ruoli",
     "Permission:UserManagement": "Gestione utenti",
     "Permission:UserLookup": "Ricerca utente",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Lunghezza richiesta",

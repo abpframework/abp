@@ -43,10 +43,17 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
         );
     }
 
-    public virtual async Task<MenuItemDto> GetAsync(Guid id)
+    public virtual async Task<MenuItemWithDetailsDto> GetAsync(Guid id)
     {
-        var menu = await MenuItemRepository.GetAsync(id);
-        return ObjectMapper.Map<MenuItem, MenuItemDto>(menu);
+        var menuItem = await MenuItemRepository.GetAsync(id);
+        var dto = ObjectMapper.Map<MenuItem, MenuItemWithDetailsDto>(menuItem);
+
+        if (menuItem.PageId.HasValue)
+        {
+            dto.PageTitle = await PageRepository.FindTitleAsync(menuItem.PageId.Value);
+        }
+
+        return dto;
     }
 
     [Authorize(CmsKitAdminPermissions.Menus.Create)]
@@ -87,7 +94,7 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
         }
         else
         {
-            menuItem.SetUrl(input.Url);
+            MenuManager.SetPageUrl(menuItem, input.Url);
         }
 
         menuItem.SetDisplayName(input.DisplayName);
