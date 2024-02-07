@@ -39,7 +39,6 @@ Here, is the list of all available commands before explaining their details:
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`remove-proxy`**: Removes previously generated client side proxies.
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
-* **`switch-to-prerc`**: Updates npm packages in the projects to prerc period version with `preview` tag.
 * **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`switch-to-local`**: Changes NuGet package references on a solution to local project references.
@@ -444,19 +443,6 @@ Usage:
 abp switch-to-nightly [options]
 ````
 
-#### Options
-
-* `--directory` or `-d`: Specifies the directory. The solution or project should be in that directory or in any of its sub directories. If not specified, default is the current directory.
-
-### switch-to-prerc
-
-You can use this command to switch your solution or project to latest `prerc` preview version of the ABP framework packages.
-
-Usage:
-
-````bash
-abp switch-to-nightly [options]
-````
 #### Options
 
 * `--directory` or `-d`: Specifies the directory. The solution or project should be in that directory or in any of its sub directories. If not specified, default is the current directory.
