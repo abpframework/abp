@@ -175,7 +175,25 @@ private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
 
 ## ABP Bundle
 
-You need set `IsBlazorWebApp` to `true` in the `appsettings.json` file of the `MyCompanyName.MyProjectName.Blazor.WebApp.Client` project.
+You need set `IsBlazorWebApp` and `InteractiveAuto` to `true` in the `appsettings.json` file of the `MyCompanyName.MyProjectName.Blazor.WebApp.Client` project.
+
+````json
+{
+  "AbpCli": {
+    "Bundle": {
+      "Mode": "BundleAndMinify", /* Options: None, Bundle, BundleAndMinify */
+      "Name": "global",
+      "IsBlazorWebApp": true,
+      "InteractiveAuto": true,
+      "Parameters": {
+
+      }
+    }
+  }
+}
+````
+
+For Blazor wasm and Blazor Server applications, you need to set `IsBlazorWebApp` to `true` and not need change the `InteractiveAuto`.
 
 ````json
 {
