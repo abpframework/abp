@@ -39,6 +39,30 @@ public class ObjectHelper_Tests
         testClass.ChildClass.Name.ShouldBe("NewChildName");
     }
 
+    [Fact]
+    public void TrySetPropertyWithValueType_SetsCorrectly()
+    {
+        // Arrange
+        var testClass = new MyClass();
+        const long newValue = 10;
+
+        // Act & Assert
+        ObjectHelper.TrySetProperty(testClass, x => x.Number, () => newValue);
+        testClass.Number.ShouldBe(newValue);
+
+        ObjectHelper.TrySetProperty(testClass, x => x.Number2, () => newValue);
+        testClass.Number2.ShouldBe(newValue);
+
+        ObjectHelper.TrySetProperty(testClass, x => x.Number3, () => newValue);
+        testClass.Number3.ShouldBe(newValue);
+
+        ObjectHelper.TrySetProperty(testClass, x => x.Number4, () => newValue);
+        testClass.Number4.ShouldBe(0); // readonly
+
+        ObjectHelper.TrySetProperty(testClass, x => x.Number5, () => newValue, ignoreAttributeTypes: typeof(IgnoreDataMemberAttribute));
+        testClass.Number5.ShouldNotBe(newValue); // ignore by attribute
+    }
+
     class MyClass
     {
         public string Name { get; set; }
@@ -51,6 +75,17 @@ public class ObjectHelper_Tests
 
         [IgnoreDataMember]
         public string Name5 { get; }
+
+        public long Number { get; set; }
+
+        public long Number2 { get; protected set; }
+
+        public long Number3 { get; private set; }
+
+        public long Number4 { get; }
+
+        [IgnoreDataMember]
+        public long Number5 { get; }
 
         public MyChildClass ChildClass { get; set; }
 
