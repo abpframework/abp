@@ -20,16 +20,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (OperatingSystem.IsBrowser() && WebAssemblyStyleFiles != null)
-        {
-            StyleFiles = WebAssemblyStyleFiles;
-            return;
-        }
-
         if (BundleName == null)
         {
             throw new AbpException("The BundleName parameter of the AbpStyles component can not be null!");
         }
         StyleFiles = (await BundleManager.GetStyleBundleFilesAsync(BundleName!)).ToList();
+        if (OperatingSystem.IsBrowser() && WebAssemblyStyleFiles != null)
+        {
+            StyleFiles.AddRange(WebAssemblyStyleFiles);
+        }
     }
 }

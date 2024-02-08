@@ -20,16 +20,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
-        {
-            ScriptFiles = WebAssemblyScriptFiles;
-            return;
-        }
-
         if (BundleName == null)
         {
             throw new AbpException("The BundleName parameter of the AbpScripts component can not be null!");
         }
         ScriptFiles = (await BundleManager.GetScriptBundleFilesAsync(BundleName!)).ToList();
+        if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
+        {
+            ScriptFiles.AddRange(WebAssemblyScriptFiles);
+        }
     }
 }

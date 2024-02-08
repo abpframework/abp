@@ -104,27 +104,31 @@ public class BundlingService : IBundlingService, ITransientDependency
             scriptDefinitions = GenerateScriptDefinitions(scriptContext);
         }
 
-        string fileName;
-        if (bundleConfig.IsBlazorWebApp)
+        if (!bundleConfig.InteractiveAuto)
         {
-            var projectDirectory = Path.GetDirectoryName(directory);
-            fileName = Directory.GetFiles(projectDirectory!, "App.razor", SearchOption.AllDirectories).FirstOrDefault();
-        }
-        else
-        {
-            fileName = Path.Combine(PathHelper.GetWwwRootPath(directory), "index.html");
-        }
+            string fileName;
+            if (bundleConfig.IsBlazorWebApp)
+            {
+                var projectDirectory = Path.GetDirectoryName(directory);
+                fileName = Directory.GetFiles(projectDirectory!, "App.razor", SearchOption.AllDirectories).FirstOrDefault();
+            }
+            else
+            {
+                fileName = Path.Combine(PathHelper.GetWwwRootPath(directory), "index.html");
+            }
 
-        await UpdateDependenciesInBlazorFileAsync(fileName, styleDefinitions, scriptDefinitions);
+            await UpdateDependenciesInBlazorFileAsync(fileName, styleDefinitions, scriptDefinitions);
 
-        Logger.LogInformation($"Script and style references in the {fileName} file have been updated.");
+            Logger.LogInformation($"Script and style references in the {fileName} file have been updated.");
+        }
     }
 
     private BundleContext GetScriptContext(List<BundleTypeDefinition> bundleDefinitions, BundleConfig bundleConfig, string projectType)
     {
         var scriptContext = new BundleContext
         {
-            Parameters = bundleConfig.Parameters
+            Parameters = bundleConfig.Parameters,
+            InteractiveAuto = bundleConfig.InteractiveAuto
         };
 
         if (projectType == BundlingConsts.WebAssembly && !bundleConfig.IsBlazorWebApp)
@@ -147,7 +151,8 @@ public class BundlingService : IBundlingService, ITransientDependency
     {
         var styleContext = new BundleContext
         {
-            Parameters = bundleConfig.Parameters
+            Parameters = bundleConfig.Parameters,
+            InteractiveAuto = bundleConfig.InteractiveAuto
         };
 
         foreach (var bundleDefinition in bundleDefinitions)
