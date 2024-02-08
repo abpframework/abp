@@ -1,16 +1,23 @@
 @if (form) {
   @for (groupedProp of groupedPropList.items; track $index) {
     <ng-container *abpPropData="let data; fromList: groupedProp.formPropList; withRecord: record">
-      <div
-        [ngClass]="groupedProp.group?.className ? groupedProp.group?.className : ''"
-        [attr.data-name]="groupedProp.group?.name ? groupedProp.group?.name : ''"
-      >
-        <ng-container
-          [ngTemplateOutlet]="propListTemplate"
-          [ngTemplateOutletContext]="{ groupedProp: groupedProp, data: data }"
+      @if(groupedProp.group?.className) {
+        <div [ngClass]="groupedProp.group?.className"
+             [attr.data-name]="groupedProp.group?.name || groupedProp.group?.className"
         >
-        </ng-container>
-      </div>
+          <ng-container
+            [ngTemplateOutlet]="propListTemplate"
+            [ngTemplateOutletContext]="{ groupedProp: groupedProp, data: data }"
+          >
+          </ng-container>
+        </div>
+      } @else {
+          <ng-container
+            [ngTemplateOutlet]="propListTemplate"
+            [ngTemplateOutletContext]="{ groupedProp: groupedProp, data: data }"
+          >
+          </ng-container>
+      }
     </ng-container>
   } 
 }
