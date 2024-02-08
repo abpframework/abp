@@ -40,27 +40,88 @@ public class ObjectHelper_Tests
     }
 
     [Fact]
-    public void TrySetPropertyWithValueType_SetsCorrectly()
+    public void TrySetProperty_WithNullableNewValueType_SetsCorrectly()
     {
         // Arrange
-        var testClass = new MyClass();
-        const long newValue = 10;
+        var sut = new AbstractParentImpl();
+        long? newValue = 10;
+
 
         // Act & Assert
-        ObjectHelper.TrySetProperty(testClass, x => x.Number, () => newValue);
-        testClass.Number.ShouldBe(newValue);
+        var sutAsIFirst = (IFirst)sut;
 
-        ObjectHelper.TrySetProperty(testClass, x => x.Number2, () => newValue);
-        testClass.Number2.ShouldBe(newValue);
+        ObjectHelper.TrySetProperty(sutAsIFirst, x => x.ValueProp1FromIFirst, () => newValue);
+        sutAsIFirst.ValueProp1FromIFirst.ShouldBe(newValue.Value);
 
-        ObjectHelper.TrySetProperty(testClass, x => x.Number3, () => newValue);
-        testClass.Number3.ShouldBe(newValue);
+        ObjectHelper.TrySetProperty(sutAsIFirst, x => x.ValueProp2FromIFirst, () => newValue);
+        sutAsIFirst.ValueProp2FromIFirst.ShouldBe(newValue.Value);
 
-        ObjectHelper.TrySetProperty(testClass, x => x.Number4, () => newValue);
-        testClass.Number4.ShouldBe(0); // readonly
+        ObjectHelper.TrySetProperty(sutAsIFirst, x => x.ValueProp3FromIFirst, () => newValue);
+        sutAsIFirst.ValueProp3FromIFirst.ShouldNotBe(newValue.Value); // private set on implementation not accessible
 
-        ObjectHelper.TrySetProperty(testClass, x => x.Number5, () => newValue, ignoreAttributeTypes: typeof(IgnoreDataMemberAttribute));
-        testClass.Number5.ShouldNotBe(newValue); // ignore by attribute
+        ObjectHelper.TrySetProperty(sutAsIFirst, x => x.ValueProp4FromIFirst, () => newValue);
+        sutAsIFirst.ValueProp4FromIFirst.ShouldNotBe(newValue.Value); // readonly
+
+        ObjectHelper.TrySetProperty(sutAsIFirst, x => x.ValueProp5FromIFirst, () => newValue,
+            ignoreAttributeTypes: typeof(IgnoreDataMemberAttribute));
+        sutAsIFirst.ValueProp5FromIFirst.ShouldNotBe(newValue.Value); // ignore by attribute
+
+        var sutAsISecond = (ISecond)sut;
+        ObjectHelper.TrySetProperty(sutAsISecond, x => x.ValueProp1FromISecond, () => newValue);
+        sutAsISecond.ValueProp1FromISecond.ShouldNotBe(newValue.Value); // readonly
+    }
+
+    internal interface IFirst
+    {
+        public long ValueProp1FromIFirst { get; }
+
+        public long ValueProp2FromIFirst { get; }
+
+        public long ValueProp3FromIFirst { get; }
+
+        public long ValueProp4FromIFirst { get; }
+
+        public long ValueProp5FromIFirst { get; }
+    }
+
+    internal interface ISecond
+    {
+        public long ValueProp1FromISecond { get; }
+    }
+
+    internal interface IHasKey<out TKey>
+    {
+        TKey Id { get; }
+    }
+
+    internal interface IHaveMixedProps : IFirst, ISecond
+    {
+    }
+
+    abstract internal class GenericBase<TKey> : IHasKey<TKey>
+    {
+        public virtual TKey Id { get; protected set; }
+    }
+
+    abstract internal class AbstractParent<TKey> : GenericBase<TKey>, IHaveMixedProps
+    {
+        public long ValueProp1FromIFirst { get; set; }
+
+        public long ValueProp2FromIFirst { get; protected set; }
+
+        public long ValueProp3FromIFirst { get; private set; }
+
+        public long ValueProp4FromIFirst { get; }
+
+        [IgnoreDataMember] public long ValueProp5FromIFirst { get; }
+
+        public long ValueProp1FromISecond { get; }
+    }
+
+    internal class AbstractParentImpl : AbstractParent<long>
+    {
+        public long OwnProp1 { get; set; }
+        public string OwnProp2 { get; set; }
     }
 
     class MyClass

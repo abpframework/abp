@@ -57,12 +57,17 @@ public static class ObjectHelper
                 return null;
             }
 
-
             var propertyInfo = obj?.GetType()
                 .GetProperties()
-                .FirstOrDefault(x => x.Name == memberExpression.Member.Name && x.GetSetMethod(true) != null);
+                .FirstOrDefault(x => x.Name == memberExpression.Member.Name);
 
             if (propertyInfo == null)
+            {
+                return null;
+            }
+
+            var propPrivateSetMethod = propertyInfo.GetSetMethod(true);
+            if (propPrivateSetMethod == null)
             {
                 return null;
             }
