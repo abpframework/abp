@@ -49,6 +49,7 @@ $toastClass: abp-toast;
     position: relative;
     display: flex;
     align-self: center;
+    flex-direction: column;
     word-break: break-word;
     .#{$toastClass}-close-button {
       position: absolute;
