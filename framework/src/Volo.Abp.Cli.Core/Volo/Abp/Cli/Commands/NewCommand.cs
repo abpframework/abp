@@ -104,7 +104,6 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
         await CheckCreatedRequirements(projectArgs);
 
-        ConfigureNpmPackagesForTheme(projectArgs);
         await CreateOpenIddictPfxFilesAsync(projectArgs);
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);

@@ -720,67 +720,6 @@ public abstract class ProjectCreationCommandBase
         };
     }
 
-    protected void ConfigureNpmPackagesForTheme(ProjectBuildArgs projectArgs)
-    {
-        if (!projectArgs.Theme.HasValue)
-        {
-            return;
-        }
-
-        switch (projectArgs.Theme)
-        {
-            case Theme.Basic:
-                ConfigureNpmPackagesForBasicTheme(projectArgs);
-                break;
-            case Theme.Lepton:
-                ConfigureNpmPackagesForLeptonTheme(projectArgs);
-                break;
-            case Theme.NotSpecified:
-            case Theme.LeptonXLite:
-            case Theme.LeptonX:
-                break;
-            default:
-                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage(Options.Theme.Long));
-        }
-    }
-
-    private void ConfigureNpmPackagesForBasicTheme(ProjectBuildArgs projectArgs)
-    {
-        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
-        {
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.mvc.ui.theme.basic", projectArgs.Version);
-        }
-
-        if (projectArgs.UiFramework is UiFramework.BlazorServer)
-        {
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.components.server.basictheme", projectArgs.Version);
-        }
-
-        if (projectArgs.UiFramework is UiFramework.Angular)
-        {
-            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
-        }
-    }
-
-    private void ConfigureNpmPackagesForLeptonTheme(ProjectBuildArgs projectArgs)
-    {
-        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
-        {
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);
-        }
-
-        if (projectArgs.UiFramework is UiFramework.BlazorServer)
-        {
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.components.server.leptontheme", projectArgs.Version);
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);
-        }
-
-        if (projectArgs.UiFramework is UiFramework.Angular)
-        {
-            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@volo/abp.ng.theme.lepton", projectArgs.Version);
-        }
-    }
-
     protected void ConfigureAngularJsonForThemeSelection(ProjectBuildArgs projectArgs)
     {
         if (projectArgs.TemplateName == ModuleTemplate.TemplateName)
