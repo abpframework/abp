@@ -232,7 +232,7 @@ public abstract class AppTemplateBase : TemplateInfo
         }
 
         steps.Add(new ChangeThemeStep());
-        ReplaceLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework, theme: context.BuildArgs.Theme, version: context.BuildArgs.Version);
+        ReplaceLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework, theme: context.BuildArgs.Theme, version: context.BuildArgs.Version ?? context.TemplateFile.Version);
     }
 
     protected void SetDbmsSymbols(ProjectBuildContext context)
@@ -264,7 +264,7 @@ public abstract class AppTemplateBase : TemplateInfo
                 throw new AbpException("Unknown Dbms: " + context.BuildArgs.DatabaseManagementSystem);
         }
     }
-    
+
     private void RemoveThemeLogoFolders(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.Theme != Theme.Lepton && IsPro())

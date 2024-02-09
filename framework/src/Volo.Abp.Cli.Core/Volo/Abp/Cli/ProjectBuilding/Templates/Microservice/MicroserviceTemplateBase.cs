@@ -51,7 +51,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
         }
 
         steps.Add(new ChangeThemeStep());
-        ReplaceLeptonXThemePackagesFromPackageJsonFiles(steps, uiFramework: context.BuildArgs.UiFramework, theme: context.BuildArgs.Theme, version: context.BuildArgs.Version);
+        ReplaceLeptonXThemePackagesFromPackageJsonFiles(steps, uiFramework: context.BuildArgs.UiFramework, theme: context.BuildArgs.Theme, version: context.BuildArgs.Version ?? context.TemplateFile.Version);
     }
 
     private static void ReplaceLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, UiFramework uiFramework, Theme? theme, string version)
