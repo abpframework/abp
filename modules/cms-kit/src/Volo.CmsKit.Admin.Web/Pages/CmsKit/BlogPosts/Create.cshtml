@@ -132,7 +132,7 @@
 
     </abp-card-body>
     <abp-card-footer>
-        <abp-button button-type="Primary" type="button" text="@L["SaveAsDraft"].Value" id="button-blog-post-create" />
+        <abp-button button-type="Outline_Primary" type="button" text="@L["SaveAsDraft"].Value" id="button-blog-post-create" />
         @if ((await AuthorizationService.AuthorizeAsync(CmsKitAdminPermissions.BlogPosts.Publish)).Succeeded)
         {
             <abp-button button-type="Primary" type="button" text="@L["Publish"].Value" id="button-blog-post-publish"/>

@@ -2,7 +2,6 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using System.Linq;
 
 namespace Volo.Abp.Swashbuckle;
 
@@ -13,11 +12,12 @@ public class AbpSwashbuckleEnumSchemaFilter : ISchemaFilter
         if (context.Type.IsEnum)
         {
             schema.Enum.Clear();
-            schema.Type = nameof(String);
-            schema.Format = nameof(String);
-            Enum.GetNames(context.Type)
-                .ToList()
-                .ForEach(name => schema.Enum.Add(new OpenApiString($"{name}")));
+            schema.Type = "string";
+            schema.Format = null;
+            foreach (var name in Enum.GetNames(context.Type))
+            {
+                schema.Enum.Add(new OpenApiString($"{name}"));
+            }
         }
     }
 }
