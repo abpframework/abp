@@ -3,11 +3,11 @@
 
 ![Error Handling](error_handling.jpg)
 
-Error handling is how we deal with errors that go wrong when we are running a program. There is no code that runs perfectly forever :) Things can go wrong and your application might be crush. **So, in order to run your program smoothly you must handle errors.** It just not for to keep your application in running state. It is also usefull to show messages about the error to client. Like what went wrong, why it is not allowed to access this page etc.
+Error handling is how we deal with errors that go wrong when we are running a program. There is no code that runs perfectly forever :) Things can go wrong and your application might crash. **So, in order to run your program smoothly you must handle errors.** It is just not for keeping your application in a running state. It is also useful to show messages about the error to the client. Like what went wrong, why it is not allowed to access this page etc.
 
 ### How to handle errors
 
--   First of all you have to catch them 😀. You can catch them via **try-catch block**. See an example;
+-   First of all, you have to catch them 😀. You can catch them via **try-catch block**. See an example;
 #### Create an basic error
 ```ts
 ({} as any).doSomething()
@@ -27,10 +27,10 @@ try {
 ![toast-gif](show-toast-2.gif)
 
 -   See, we catch the error and handle it.
--   In this case we know where the error will be throwed. Most of the time we wont know where the error will be appear. Should we cover entire application with try-catch blocks? of course not 😀
--   **We are going to handle errors globally**. Angular provides a great way to do it. Lets do it step by step;
+-   In this case, we know where the error will be thrown. Most of the time we won't know where the error will appear. Should we cover the entire application with try-catch blocks? Of course not 😀
+-   **We are going to handle errors globally**. Angular provides a great way to do it. Let's do it step by step;
 
-### 1.Create an **service** and implements the **`ErrorHandler`** interface.
+### 1.Create a **service** and implement the **`ErrorHandler`** interface.
 
 ```ts
 import { ErrorHandler, Injectable, inject } from '@angular/core';
@@ -42,7 +42,7 @@ import { ToastService } from './toast.service';
 export class CustomErrorHandlerService implements ErrorHandler {
   toastService = inject(ToastService);
   
-  //This method is comes from interface
+  //This method comes from interface
   handleError(error: any): void {
     this.toastService.showError(error.message);
   }
@@ -50,7 +50,7 @@ export class CustomErrorHandlerService implements ErrorHandler {
 
 ```
 
-### 2.Provide the service by using **`ErrorHandler`** class from **`@angular/core`**.
+### 2.Provide the service by using the **`ErrorHandler`** class from **`@angular/core`**.
 
 ```ts
 import { ErrorHandler } from '@angular/core';
@@ -64,10 +64,10 @@ providers: [
 ![toast-gif](show-toast-2.gif)
 
 -  It behaves exactly the same. Nice, now we catch the entire errors in one simple service.
--  Is it that simple? I wish it is but it's not 😀. This handling mechanism is only works synchronously. When we start to making http requests, our **`CustomErrorHandlerService`** wont catch the errors.
+-  Is it that simple? I wish it is but it's not 😀. This handling mechanism only works synchronously. When we start making http requests, our **`CustomErrorHandlerService`** won't catch the errors.
 
 ## How to handle HTTP Requests
-Make an http request and check is it working.
+Make an HTTP request and check if it's working.
     
 ![http-request](http-request-4.gif)
     
@@ -90,7 +90,7 @@ getTodo(id: number) {
 ![http-request](http-request-5.gif)
 
 - So are we going to add this **`catchError()`** operator to the entire http requests? **NO, we will use HTTP Interceptors!**
-- Lets do it step by step.
+- Let's do it step by step.
 
 ### 1.Remove catchError pipe
 
@@ -100,7 +100,7 @@ getTodo(id: number) {
 }
 ```
 
-### 2.Create an Http Interceptor
+### 2.Create an HTTP Interceptor
 
 ```ts
 import { Injectable, inject } from '@angular/core';
@@ -132,7 +132,7 @@ providers: [
   { provide: HTTP_INTERCEPTORS, useExisting: ToastInterceptor, multi: true }
 ]
 ```
-Now everything has setted up. lets make an http request and try.
+Now everything has set up. Let's make an HTTP request and try again.
 
 ![http-request](http-request-5.gif)
 
@@ -241,7 +241,7 @@ getTodo() {
 
 ![http-request](http-request-7.gif)
 
-Now lets pass  **true to `skipHandleError` parameter**, let's see is **errorHandler** going to skip this error.
+Now let's pass **true to the `skipHandleError` parameter**, let's see if the **errorHandler** going to skip this error or not.
 
 ```ts
 restService = inject(RestService);
@@ -261,6 +261,6 @@ getTodo() {
 
 ### Conclusion
 - To handle synchronous errors globally, you can use [Error Handler](https://angular.io/api/core/ErrorHandler).
-- To handle http errors globally, you can use [HTTP - interceptor](https://angular.io/guide/http-interceptor-use-cases). But in this method you won't able to skip spesific cases. I recommend you to use ABP Framework solution
+- To handle http errors globally, you can use [HTTP - interceptor](https://angular.io/guide/http-interceptor-use-cases). But in this method, you won't be able to skip specific cases. I recommend you use the ABP Framework's solution.
 
-Thanks for reading, if you have any advice please share with me in the comments.
+Thanks for reading, if you have any advice please share it with me in the comments.
