@@ -457,9 +457,9 @@
             .each(function () {
                 var $this = $(this);
                 var $input = $this.find('.input-group input[type="text"]')
-                var $startDateInput = $this.find('input[data-start-date]');
-                var $endDateInput = $this.find('input[data-end-date]');
-                var $dateInput = $this.find('input[data-date]');
+                var $startDateInput = $this.find('input[type="hidden"][data-start-date]');
+                var $endDateInput = $this.find('input[type="hidden"][data-end-date]');
+                var $dateInput = $this.find('input[type="hidden"][data-date]');
                 if ($input.data('daterangepicker')) {
                     return;
                 }
