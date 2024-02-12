@@ -14,10 +14,6 @@
   "Next": {
     "Name": "Running the solution",
     "Path": "Getting-Started-Running-Solution-Single-Layer"
-  },
-  "Previous": {
-    "Name": "Introduction",
-    "Path": "Introduction"
   }
 }
 ````
