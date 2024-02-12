@@ -15,7 +15,7 @@
 -   Create an basic error;
 
 ```ts
-	({} as any).doSomething()
+({} as any).doSomething()
 ```
 
 ![Error Image](error-image-1.png)
@@ -32,8 +32,8 @@ try {
 
 ![toast-gif](show-toast-2.gif)
 
--   See, we handle the error.
--   In this case we know where the error will be throwed. Most of the time we wont know where the error will be appear. Should we cover entire application with try-catch blocks? of course not 😀.
+-   See, we catch the error and handle it.
+-   In this case we know where the error will be throwed. Most of the time we wont know where the error will be appear. Should we cover entire application with try-catch blocks? of course not 😀
 -   **We are going to handle errors globally**. Angular provides a great way to do it. Lets do it step by step;
 
 1.  Create an **service** and implements the **`ErrorHandler`** interface.
@@ -75,13 +75,13 @@ providers: [
 -   It behaves the exactly the same. Nice, now we catch the entire errors in one simple service.
 -   Is it that simple? I wish it is but it's not 😀. This handling mechanism is only works synchronously. When we start to making http requests, our **`CustomErrorHandlerService`** wont catch the errors.
 
-### How to handle HTTP Requests
+## How to handle HTTP Requests
 
 -   Make an http request and check is it working.
     
     ![http-request](http-request-4.gif)
     
--   As you can see it doesn’t work. So how can we catch the http errors? with `**catchError()**` operator in rxjs or **`observer object`**. I will go with **`catchError()`** operator.
+-   As you can see it doesn’t work. So how can we catch the http errors? with **`catchError()`** operator in rxjs or **`observer object`**. I will go with **`catchError()`** operator.
     
 
 ```ts
@@ -265,7 +265,7 @@ getTodo() {
 
 ![http-request](http-request-7.gif)
 
-Now lets pass  **true to `skipHandleError` parameter**, let's see is **errorHandler** going to work  :)
+Now lets pass  **true to `skipHandleError` parameter**, let's see is **errorHandler** going to pass this error.
 
 ```ts
 restService = inject(RestService);
