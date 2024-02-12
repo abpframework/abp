@@ -45,35 +45,45 @@ namespace Volo.Docs.HtmlConverting
             return RemoveOptionsJson(result, DocsParam, DocsNav);
         }
 
-        public async Task<Dictionary<string, List<string>>> GetAvailableParametersAsync(string document)
+        public Task<Dictionary<string, List<string>>> GetAvailableParametersAsync(string document)
+        {
+            return GetSectionAsync<Dictionary<string, List<string>>>(document, DocsParam);
+        }
+        
+        public Task<DocumentNavigationsDto> GetDocumentNavigationsAsync(string documentContent)
+        {
+            return GetSectionAsync<DocumentNavigationsDto>(documentContent, DocsNav);
+        }
+
+        protected virtual async Task<T> GetSectionAsync<T>(string document, string sectionName) where T : new()
         {
             try
             {
-                if (!document.Contains(JsonOpener) || !document.Contains(DocsParam))
+                if (!document.Contains(JsonOpener) || !document.Contains(sectionName))
                 {
-                    return new Dictionary<string, List<string>>();
+                    return new T();
                 }
 
-                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document, DocsParam);
+                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document, sectionName);
 
                 if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
                 {
-                    return new Dictionary<string, List<string>>();
+                    return new T();
                 }
 
-                var pureJson = insideJsonSection.Replace(DocsParam, "").Trim();
+                var pureJson = insideJsonSection.Replace(sectionName, "").Trim();
 
-                if (!DocsJsonSerializerHelper.TryDeserialize<Dictionary<string, List<string>>>(pureJson, out var availableParameters))
+                if (!DocsJsonSerializerHelper.TryDeserialize<T>(pureJson, out var section))
                 {
-                    throw new UserFriendlyException("ERROR-20200327: Cannot validate JSON content for `AvailableParameters`!");
+                    throw new UserFriendlyException($"ERROR-20200327: Cannot validate JSON content for `{sectionName}`!");
                 }
 
-                return await Task.FromResult(availableParameters);
+                return await Task.FromResult(section);
             }
             catch (Exception)
             {
                 Logger.LogWarning("Unable to parse parameters of document.");
-                return new Dictionary<string, List<string>>();
+                return new T();
             }
         }
 
@@ -174,30 +184,6 @@ namespace Volo.Docs.HtmlConverting
             }
 
             return await Task.FromResult(templates);
-        }
-
-        public Task<DocumentNavigationsDto> GetDocumentNavigationsAsync(string documentContent)
-        {
-            if (!documentContent.Contains(JsonOpener) || !documentContent.Contains(DocsNav))
-            {
-                return Task.FromResult(new DocumentNavigationsDto());
-            }
-
-            var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(documentContent, DocsNav);
-
-            if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
-            {
-                return Task.FromResult(new DocumentNavigationsDto());
-            }
-
-            var pureJson = insideJsonSection.Replace(DocsNav, "").Trim();
-
-            if (!DocsJsonSerializerHelper.TryDeserialize<DocumentNavigationsDto>(pureJson, out var navigationDocumentNames))
-            {
-                throw new UserFriendlyException("ERROR-20200327: Cannot validate JSON content for `NavigationDocumentNames`!");
-            }
-
-            return Task.FromResult(navigationDocumentNames);
         }
 
         private static string SetPartialTemplates(string document, IReadOnlyCollection<DocumentPartialTemplateContent> templates)
