@@ -63,7 +63,7 @@ providers: [
 
 ![toast-gif](show-toast-2.gif)
 
--  It behaves the exactly the same. Nice, now we catch the entire errors in one simple service.
+-  It behaves exactly the same. Nice, now we catch the entire errors in one simple service.
 -  Is it that simple? I wish it is but it's not 😀. This handling mechanism is only works synchronously. When we start to making http requests, our **`CustomErrorHandlerService`** wont catch the errors.
 
 ## How to handle HTTP Requests
@@ -94,7 +94,7 @@ getTodo(id: number) {
 
 ### 1.Remove catchError pipe
 
-```tsx
+```ts
 getTodo(id: number) {
   this.http.get('https://jsonplaceholder.typicode.com/todos/${id}').subscribe(todo => this.todo = todo);
 }
@@ -241,7 +241,7 @@ getTodo() {
 
 ![http-request](http-request-7.gif)
 
-Now lets pass  **true to `skipHandleError` parameter**, let's see is **errorHandler** going to pass this error.
+Now lets pass  **true to `skipHandleError` parameter**, let's see is **errorHandler** going to skip this error.
 
 ```ts
 restService = inject(RestService);
@@ -258,5 +258,9 @@ getTodo() {
 ```
 
 ![http-request](http-request-8.gif)
+
+### Conclusion
+- To handle synchronous errors globally, you can use [Error Handler](https://angular.io/api/core/ErrorHandler).
+- To handle http errors globally, you can use [HTTP - interceptor](https://angular.io/guide/http-interceptor-use-cases). But in this method you won't able to skip spesific cases. I recommend you to use ABP Framework solution
 
 Thanks for reading, if you have any advice please share with me in the comments.
