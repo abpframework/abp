@@ -388,6 +388,30 @@
                                 </abp-alert>
                             }
                             @Html.Raw(Model.Document.Content)
+                            
+                            @if (Model.DocumentNavigationsDto.HasValues)
+                            {
+                                <hr/>
+                                <div class="navigation">
+                                    @if (Model.DocumentNavigationsDto.HasPrevious)
+                                    {
+                                        <a class="prev-link" href="@Model.CreateDocumentLink(Model.DocumentNavigationsDto.Previous.Path)">
+                                            <span class="desc">
+                                                <i class="fa fa-chevron-left"></i>
+                                                @L["Previous"]
+                                            </span>
+                                            <span class="title">@Model.DocumentNavigationsDto.Previous.Name</span>
+                                        </a>
+                                    }
+                                    @if (Model.DocumentNavigationsDto.HasNext)
+                                    {
+                                        <a class="next-link" href="@Model.CreateDocumentLink(Model.DocumentNavigationsDto.Next.Path)">
+                                            <span class="desc">@L["Next"]  <i class="fa fa-chevron-right"></i></span>
+                                            <span class="title">@Model.DocumentNavigationsDto.Next.Name</span>
+                                        </a>
+                                    }
+                                </div>
+                            }
                         </article>
 
                         <div id="crawler_link" style="display:none;">

@@ -8,6 +8,20 @@
 }
 ````
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Running the solution",
+    "Path": "Getting-Started-Running-Solution-Single-Layer"
+  },
+  "Previous": {
+    "Name": "Introduction",
+    "Path": "Introduction"
+  }
+}
+````
+
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
 ## Create a New Project
@@ -46,7 +60,3 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 > Or you can delete that code since `Auto` is already the default behavior.
 
 {{ end }}
-
-## Next Step
-
-* [Running the solution](Getting-Started-Running-Solution-Single-Layer.md)
