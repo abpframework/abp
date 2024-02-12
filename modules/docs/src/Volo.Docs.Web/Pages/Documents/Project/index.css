@@ -8,27 +8,16 @@
   background-color: transparent !important;
 }
 
-.navigation {
-  display: flex;
-  justify-content: space-between;
-}
-.navigation .next-link, .navigation .prev-link {
-  display: inline-block;
-  max-width: 48%;
-}
 .navigation .next-link .desc, .navigation .prev-link .desc {
-  font-size: 16px;
   color: #0D6EFD;
-  display: block;
+}
+.navigation .next-link .desc .fa, .navigation .prev-link .desc .fa {
+  font-size: 12px;
 }
 .navigation .next-link .title, .navigation .prev-link .title {
   font-weight: 600;
   font-size: 18px;
   color: #0B1621;
-}
-.navigation .next-link {
-  margin-left: auto;
-  text-align: right;
 }
 
 /*# sourceMappingURL=Index.css.map */

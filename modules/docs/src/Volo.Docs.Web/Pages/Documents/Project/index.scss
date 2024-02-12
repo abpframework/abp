@@ -13,28 +13,17 @@
 }
 
 .navigation {
-    display: flex;
-    justify-content: space-between;
-
     .next-link, .prev-link {
-        display: inline-block;
-        max-width: 48%;
-
         .desc {
-            font-size: 16px;
             color: #0D6EFD;
-            display: block;
+            .fa{
+                font-size: 12px;
+            }
         }
-
         .title {
             font-weight: 600;
             font-size: 18px;
             color: #0B1621;
         }
-    }
-
-    .next-link {
-        margin-left: auto;
-        text-align: right;
     }
 }
