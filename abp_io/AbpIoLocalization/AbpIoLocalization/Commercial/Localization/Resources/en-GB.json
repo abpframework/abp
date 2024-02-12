@@ -113,6 +113,7 @@
     "BlackFridayDiscount": "Black Friday Discount",
     "MultipleOrganizationInfo": "See All Your Organizations",
     "PaymentFailedInfo": "Sorry, payment failed! This could be due to insufficient funds, invalid credit card numbers or invalid pin",
-    "UsedPayment": "This payment has been already used"
+    "UsedPayment": "This payment has been already used",
+    "Previous": "Previous"
   }
 }
