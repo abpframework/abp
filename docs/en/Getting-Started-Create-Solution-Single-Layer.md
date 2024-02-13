@@ -14,6 +14,10 @@
   "Next": {
     "Name": "Running the solution",
     "Path": "Getting-Started-Running-Solution-Single-Layer"
+  },
+  "Previous": {
+    "Name": "Setup Your Development Environment",
+    "Path": "Getting-Started-Setup-Environment-Single-Layer"
   }
 }
 ````
