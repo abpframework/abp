@@ -1169,14 +1169,15 @@
     "DevelopingApplicationFeatures_Description5": "Apply cross-cutting concerns in every use case (DB transactions, authorization, validation, exception handling, etc...)",
     "DevelopingApplicationFeatures_Description6": "Develop common base classes and utility services",
     "DevelopingApplicationFeatures_Description7": "Develop common non-business requirements (audit logging, soft-delete, background jobs, permission system, etc.)",
-    "UseABPDevelopingApplicationFeatures_Description": "Develop your own business logic",
+    "UseABPDevelopingApplicationFeatures_Description1": "Develop your own business logic",
     "UseABPDevelopingApplicationFeatures_Description2": "Use ABP Suite to automatically generate CRUD-like pages",
     "UseABPDevelopingApplicationFeatures_Description3": "Directly use ABP's pre-built common application modules and customize based on your unique requirements",
     "ReduceCostsBy_2": "40% to 60%",
     "WhyABPIoPlatform": "Why ABP.IO Platform?",
     "WhyShouldYouUsetheABPIOPlatform": "Why should you use the ABP.IO Platform instead of creating a new solution from scratch?",
     "ExploreMore": "Explore More",
-    "DocumentIntroducesDescription": " The document introduces the challenges of building a modern software solution and explains how ABP addresses these challenges.",
-    "ReturnOfInvestmentPageAbout": "This page covers the fundamental steps of developing a software solution and explains how the ABP.IO Platform reduces your development costs at each step."
+    "DocumentIntroducesDescription": "If you want to <b>learn more details</b> about why should you use the ABP.IO Platform instead of creating a new solution from scratch, read the following document: ",
+    "ReturnOfInvestmentPageAbout": "This page covers the fundamental steps of developing a software solution and explains how the ABP.IO Platform reduces your development costs at each step.",
+    "LearnMore": "Learn More"
   }
 }
