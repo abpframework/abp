@@ -1176,6 +1176,7 @@
     "WhyABPIoPlatform": "Why ABP.IO Platform?",
     "WhyShouldYouUsetheABPIOPlatform": "Why should you use the ABP.IO Platform instead of creating a new solution from scratch?",
     "ExploreMore": "Explore More",
-    "DocumentIntroducesDescription": " The document introduces the challenges of building a modern software solution and explains how ABP addresses these challenges."
+    "DocumentIntroducesDescription": " The document introduces the challenges of building a modern software solution and explains how ABP addresses these challenges.",
+    "ReturnOfInvestmentPageAbout": "This page covers the fundamental steps of developing a software solution and explains how the ABP.IO Platform reduces your development costs at each step."
   }
 }
