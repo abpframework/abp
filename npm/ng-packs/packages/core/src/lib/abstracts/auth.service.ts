@@ -16,6 +16,15 @@ export class AuthService implements IAuthService {
     console.error('You should add @abp/ng-oauth packages or create your own auth packages.');
   }
 
+  get oidc(): boolean {
+    this.warningMessage();
+    return false;
+  }
+
+  set oidc(value: boolean) {
+    this.warningMessage();
+  }
+
   init(): Promise<any> {
     this.warningMessage();
     return Promise.resolve(undefined);
@@ -73,6 +82,8 @@ export class AuthService implements IAuthService {
 }
 
 export interface IAuthService {
+  oidc: boolean;
+
   get isInternalAuth(): boolean;
 
   get isAuthenticated(): boolean;
