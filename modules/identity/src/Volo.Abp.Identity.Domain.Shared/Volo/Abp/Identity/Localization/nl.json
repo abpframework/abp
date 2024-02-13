@@ -85,6 +85,7 @@
     "Permission:Edit": "Verander",
     "Permission:Delete": "Verwijder",
     "Permission:ChangePermissions": "Wijzig de rechten",
+    "Permission:ManageRoles": "Beheer rollen",
     "Permission:UserManagement": "Gebruikersbeheer",
     "Permission:UserLookup": "Gebruiker opzoeken",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Vereiste lengte",

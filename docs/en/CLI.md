@@ -48,8 +48,9 @@ Here, is the list of all available commands before explaining their details:
 * **`logout`**: Logouts from your computer if you've authenticated before.
 * **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
-* **`clear-download-cache`** Clears the templates download cache.
-
+* **`clear-download-cache`**: Clears the templates download cache.
+* **`trust-version`**: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
+ 
 ### help
 
 Shows basic usages of the ABP CLI.
