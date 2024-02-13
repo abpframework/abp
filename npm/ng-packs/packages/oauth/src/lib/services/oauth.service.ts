@@ -16,6 +16,14 @@ export class AbpOAuthService implements IAuthService {
   private strategy!: AuthFlowStrategy;
   private readonly oAuthService: OAuthService;
 
+  get oidc() {
+    return this.oAuthService.oidc;
+  }
+
+  set oidc(value) {
+    this.oAuthService.oidc = value;
+  }
+
   get isInternalAuth() {
     return this.strategy.isInternalAuth;
   }
