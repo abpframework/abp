@@ -304,6 +304,9 @@
 
     function setOptions(options, $datePickerElement, singleDatePicker) {
         options.singleDatePicker = singleDatePicker;
+
+        var $modal = $datePickerElement.closest('.modal.fade');
+
         var defaultOptions = {
             showDropdowns: true,
             opens: "center",
@@ -320,7 +323,8 @@
                 clearLabel: abp.localization.localize('Clear', 'AbpUi'),
                 applyLabel: abp.localization.localize('Apply', 'AbpUi'),
             },
-            singleOpenAndClearButton: true
+            singleOpenAndClearButton: true,
+            parentEl: $modal.length > 0 ? $modal : 'body'
         };
         var locale = defaultOptions.locale;
         $.extend(options, defaultOptions);
