@@ -132,7 +132,6 @@ public class PackagePreviewSwitcher : ITransientDependency
             var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
             _packageSourceManager.Remove(solutionFolder, "ABP Nightly");
-            _packageSourceManager.RemovePackageSourceMapping(solutionFolder, "ABP Nightly");
 
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
                 solutionPath,
@@ -178,13 +177,10 @@ public class PackagePreviewSwitcher : ITransientDependency
         foreach (var project in projects)
         {
             var folder = Path.GetDirectoryName(project);
-            var solutionFolder = FindSolutionFolder(project) ?? folder;
 
-            _packageSourceManager.Add(solutionFolder, "ABP Nightly",
+            _packageSourceManager.Add(FindSolutionFolder(project) ?? folder, "ABP Nightly",
                 "https://www.myget.org/F/abp-nightly/api/v3/index.json");
 
-            _packageSourceManager.AddPackageSourceMapping(solutionFolder, "ABP Nightly", "Volo.*");
-            
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
                 project,
                 true);
@@ -204,8 +200,6 @@ public class PackagePreviewSwitcher : ITransientDependency
 
             _packageSourceManager.Add(solutionFolder, "ABP Nightly",
                 "https://www.myget.org/F/abp-nightly/api/v3/index.json");
-            
-            _packageSourceManager.AddPackageSourceMapping(solutionFolder, "ABP Nightly", "Volo.*");
 
             if (solutionPath != null)
             {
