@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement.Blazor.Components;
@@ -42,6 +44,9 @@ public partial class UserManagement
     private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
     private TextRole _passwordTextRole = TextRole.Password;
     public bool IsEditCurrentUser { get; set; }
+
+    [Inject]
+    protected IPermissionChecker PermissionChecker { get; set; }
 
     public UserManagement()
     {
@@ -121,15 +126,19 @@ public partial class UserManagement
         {
             EditModalSelectedTab = DefaultSelectedTab;
             IsEditCurrentUser = entity.Id == CurrentUser.Id;
-            var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
 
-            EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
+            if (await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
             {
-                Name = x.Name,
-                IsAssigned = userRoleNames.Contains(x.Name)
-            }).ToArray();
+                var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
 
-            ChangePasswordTextRole(TextRole.Password);
+                EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
+                {
+                    Name = x.Name,
+                    IsAssigned = userRoleNames.Contains(x.Name)
+                }).ToArray();
+
+                ChangePasswordTextRole(TextRole.Password);
+            }
             await base.OpenEditModalAsync(entity);
         }
         catch (Exception ex)
@@ -141,8 +150,10 @@ public partial class UserManagement
     protected override Task OnUpdatingEntityAsync()
     {
         // apply roles before saving
-        EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
-
+        if (EditUserRoles != null)
+        {
+            EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
+        }
         return base.OnUpdatingEntityAsync();
     }
 

@@ -159,6 +159,10 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
                 StringComparison.OrdinalIgnoreCase
             ).ShouldBeGreaterThan(0);
         }
+        
+        users = await UserRepository.GetListAsync(null, 5, 0, null, roleId: TestData.RoleManagerId);
+        users.ShouldContain(x => x.UserName == "john.nash");
+        users.ShouldContain(x => x.UserName == "neo");
 
         users = await UserRepository.GetListAsync(null, 999, 0, "undefined-username");
         users.Count.ShouldBe(0);

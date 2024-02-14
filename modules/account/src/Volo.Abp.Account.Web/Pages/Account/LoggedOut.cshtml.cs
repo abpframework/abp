@@ -18,28 +18,28 @@ public class LoggedOutModel : AccountPageModel
     [BindProperty(SupportsGet = true)]
     public string PostLogoutRedirectUri { get; set; }
 
-    public virtual Task<IActionResult> OnGetAsync()
+    public virtual async Task<IActionResult> OnGetAsync()
     {
-        NormalizeUrl();
-        return Task.FromResult<IActionResult>(Page());
+        await NormalizeUrlAsync();
+        return Page();
     }
 
-    public virtual Task<IActionResult> OnPostAsync()
+    public virtual async Task<IActionResult> OnPostAsync()
     {
-        NormalizeUrl();
-        return Task.FromResult<IActionResult>(Page());
+        await NormalizeUrlAsync();
+        return Page();
     }
     
-    protected virtual void NormalizeUrl()
+    protected virtual async Task NormalizeUrlAsync()
     {
         if (!PostLogoutRedirectUri.IsNullOrWhiteSpace())
         {
-            PostLogoutRedirectUri = Url.Content(GetRedirectUrl(PostLogoutRedirectUri));
+            PostLogoutRedirectUri = Url.Content(await GetRedirectUrlAsync(PostLogoutRedirectUri));
         }
         
         if(!SignOutIframeUrl.IsNullOrWhiteSpace())
         {
-            SignOutIframeUrl = Url.Content(GetRedirectUrl(SignOutIframeUrl));
+            SignOutIframeUrl = Url.Content(await GetRedirectUrlAsync(SignOutIframeUrl));
         }
     }
 }

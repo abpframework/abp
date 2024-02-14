@@ -1,5 +1,4 @@
-﻿@using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Navigation;
-@using Volo.Abp.UI.Navigation
+﻿@using Volo.Abp.UI.Navigation
 @{
     var elementId = MenuItem.ElementId ?? "MenuItem_" + MenuItem.Name.Replace(".", "_");
     var cssClass = string.IsNullOrEmpty(MenuItem.CssClass) ? string.Empty : MenuItem.CssClass;
@@ -9,7 +8,7 @@
 }
 @if (MenuItem.IsLeaf)
 {
-    if (customComponentType != null)
+    if (customComponentType != null && typeof(ComponentBase).IsAssignableFrom(customComponentType))
     {
         <DynamicComponent Type="@customComponentType" />
     }
@@ -29,7 +28,7 @@
 else
 {
     <div class="dropdown-submenu">
-        @if (customComponentType != null)
+        @if (customComponentType != null && typeof(ComponentBase).IsAssignableFrom(customComponentType))
         {
             <DynamicComponent Type="@customComponentType" />
         }

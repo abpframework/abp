@@ -229,6 +229,7 @@
     "ManageAccount": "Beheer account",
     "CommunityProfile": "Gemeenschapsprofiel",
     "BlogProfile": "Blogprofiel",
-    "Tickets": "Kaartjes"
+    "Tickets": "Kaartjes",
+    "DisplayName:CommunityIndexPagePoll": "Gemeenschapsindexpagina-enquête"
   }
 }

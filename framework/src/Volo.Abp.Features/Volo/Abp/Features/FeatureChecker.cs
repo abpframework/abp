@@ -12,34 +12,26 @@ public class FeatureChecker : FeatureCheckerBase
     protected AbpFeatureOptions Options { get; }
     protected IServiceProvider ServiceProvider { get; }
     protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
-    protected List<IFeatureValueProvider> Providers => _providers.Value;
-
-    private readonly Lazy<List<IFeatureValueProvider>> _providers;
+    protected IFeatureValueProviderManager FeatureValueProviderManager { get; }
 
     public FeatureChecker(
         IOptions<AbpFeatureOptions> options,
         IServiceProvider serviceProvider,
-        IFeatureDefinitionManager featureDefinitionManager)
+        IFeatureDefinitionManager featureDefinitionManager,
+        IFeatureValueProviderManager featureValueProviderManager)
     {
         ServiceProvider = serviceProvider;
         FeatureDefinitionManager = featureDefinitionManager;
+        FeatureValueProviderManager = featureValueProviderManager;
 
         Options = options.Value;
-
-        _providers = new Lazy<List<IFeatureValueProvider>>(
-            () => Options
-                .ValueProviders
-                .Select(type => (ServiceProvider.GetRequiredService(type) as IFeatureValueProvider)!)
-                .ToList(),
-            true
-        );
     }
 
     public override async Task<string?> GetOrNullAsync(string name)
     {
         var featureDefinition = await FeatureDefinitionManager.GetAsync(name);
-        var providers = Enumerable
-            .Reverse(Providers);
+        var providers = FeatureValueProviderManager.ValueProviders
+            .Reverse();
 
         if (featureDefinition.AllowedProviders.Any())
         {
