@@ -12,9 +12,9 @@ ABP可以按照惯例 **自动** 将你的应用程序服务配置为API控制�
 [DependsOn(BookStoreApplicationModule)]
 public class BookStoreWebModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpAspNetCoreMvcOptions>(options =>
+        PreConfigure<AbpAspNetCoreMvcOptions>(options =>
         {
             options
                 .ConventionalControllers
