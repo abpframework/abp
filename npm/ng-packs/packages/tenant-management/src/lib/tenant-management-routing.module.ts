@@ -31,7 +31,6 @@ const routes: Routes = [
             defaultComponent: TenantsComponent,
           } as ReplaceableComponents.RouteData<TenantsComponent>,
         },
-        title: 'AbpTenantManagement::Tenants',
       },
     ],
   },
@@ -41,4 +40,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TenantManagementRoutingModule { }
+export class TenantManagementRoutingModule {}

@@ -35,7 +35,6 @@ const routes: Routes = [
             defaultComponent: LoginComponent,
           } as ReplaceableComponents.RouteData<LoginComponent>,
         },
-        title: 'AbpAccount::Login',
       },
       {
         path: 'register',
@@ -47,7 +46,6 @@ const routes: Routes = [
             defaultComponent: RegisterComponent,
           } as ReplaceableComponents.RouteData<RegisterComponent>,
         },
-        title: 'AbpAccount::Register',
       },
       {
         path: 'forgot-password',
@@ -60,7 +58,6 @@ const routes: Routes = [
             defaultComponent: ForgotPasswordComponent,
           } as ReplaceableComponents.RouteData<ForgotPasswordComponent>,
         },
-        title: 'AbpAccount::ForgotPassword',
       },
       {
         path: 'reset-password',
@@ -73,7 +70,6 @@ const routes: Routes = [
             defaultComponent: ResetPasswordComponent,
           } as ReplaceableComponents.RouteData<ResetPasswordComponent>,
         },
-        title: 'AbpAccount::ResetPassword',
       },
       {
         path: 'manage',
@@ -86,7 +82,6 @@ const routes: Routes = [
             defaultComponent: ManageProfileComponent,
           } as ReplaceableComponents.RouteData<ManageProfileComponent>,
         },
-        title: 'AbpAccount::Menu:Account',
       },
     ],
   },
@@ -96,4 +91,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AccountRoutingModule { }
+export class AccountRoutingModule {}

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, TitleStrategy } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
 import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
@@ -42,7 +42,6 @@ import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.tok
 import { AuthErrorFilterService } from './abstracts';
 import { DYNAMIC_LAYOUTS_TOKEN } from "./tokens/dynamic-layout.token";
 import { DEFAULT_DYNAMIC_LAYOUTS } from "./constants";
-import { CustomTitleStrategy } from './services/title-strategy.service';
 
 
 const standaloneDirectives = [
@@ -195,10 +194,6 @@ export class CoreModule {
         {
           provide: DYNAMIC_LAYOUTS_TOKEN,
           useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS
-        },
-        {
-          provide: TitleStrategy,
-          useExisting: CustomTitleStrategy
         }
       ],
     };
