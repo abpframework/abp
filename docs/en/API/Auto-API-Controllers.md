@@ -12,9 +12,9 @@ Basic configuration is simple. Just configure `AbpAspNetCoreMvcOptions` and use 
 [DependsOn(BookStoreApplicationModule)]
 public class BookStoreWebModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpAspNetCoreMvcOptions>(options =>
+        PreConfigure<AbpAspNetCoreMvcOptions>(options =>
         {
             options
                 .ConventionalControllers

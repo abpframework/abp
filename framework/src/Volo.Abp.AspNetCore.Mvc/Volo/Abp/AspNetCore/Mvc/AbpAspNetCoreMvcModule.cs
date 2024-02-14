@@ -215,6 +215,17 @@ public class AbpAspNetCoreMvcModule : AbpModule
             context.Services.GetSingletonInstance<ApplicationPartManager>(),
             context.Services.GetSingletonInstance<IModuleContainer>()
         );
+
+        var preConfigureActions = context.Services.GetPreConfigureActions<AbpAspNetCoreMvcOptions>();
+
+        DynamicProxyIgnoreTypes.Add(preConfigureActions.Configure()
+            .ConventionalControllers
+            .ConventionalControllerSettings.SelectMany(x => x.ControllerTypes).ToArray());
+
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            preConfigureActions.Configure(options);
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
