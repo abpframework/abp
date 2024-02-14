@@ -1,17 +1,31 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'i18n-js';
-import { Avatar, Button, Divider, FormControl, List, Select, Stack, Text, View } from 'native-base';
+import {
+  Avatar,
+  Button,
+  Divider,
+  FormControl,
+  List,
+  Select,
+  Stack,
+  Text,
+  View,
+} from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useCallback, useState } from 'react';
 import { getProfileDetail } from '../../api/IdentityAPI';
 import AppActions from '../../store/actions/AppActions';
 import {
   createLanguageSelector,
-  createLanguagesSelector
+  createLanguagesSelector,
 } from '../../store/selectors/AppSelectors';
 import { createTenantSelector } from '../../store/selectors/PersistentStorageSelectors';
 import { connectToRedux } from '../../utils/ReduxConnect';
+import { store } from '../../store/index';
+import { getEnvVars } from '../../../Environment';
+
+const env = getEnvVars();
 
 function SettingsScreen({
   navigation,
@@ -22,6 +36,7 @@ function SettingsScreen({
   tenant = {},
 }) {
   const [user, setUser] = useState({});
+  const [token, setToken] = useState(store.getState().persistentStorage.token);
 
   const fetchUser = () => {
     getProfileDetail().then(data => {
@@ -34,6 +49,17 @@ function SettingsScreen({
       fetchUser();
     }, []),
   );
+
+  const logout = () => {
+    const { clientId } = env.oAuthConfig;
+    const { access_token, refresh_token } = token;
+
+    logoutAsync({
+      client_id: clientId,
+      token: access_token,
+      refresh_token: refresh_token,
+    });
+  };
 
   return (
     <View>
@@ -100,7 +126,7 @@ function SettingsScreen({
           bg="danger.500"
           style={{ borderRadius: 0 }}
           onPress={() => {
-            logoutAsync();
+            logout();
           }}>
           {i18n.t('AbpAccount::Logout')}
         </Button>
