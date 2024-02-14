@@ -42,7 +42,7 @@ import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.tok
 import { AuthErrorFilterService } from './abstracts';
 import { DYNAMIC_LAYOUTS_TOKEN } from "./tokens/dynamic-layout.token";
 import { DEFAULT_DYNAMIC_LAYOUTS } from "./constants";
-import { CustomTitleStrategy } from './services/title-strategy.service';
+import { AbpTitleStrategy } from './services/title-strategy.service';
 
 
 const standaloneDirectives = [
@@ -198,7 +198,7 @@ export class CoreModule {
         },
         {
           provide: TitleStrategy,
-          useExisting: CustomTitleStrategy
+          useExisting: AbpTitleStrategy
         }
       ],
     };

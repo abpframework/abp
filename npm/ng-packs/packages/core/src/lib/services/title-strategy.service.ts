@@ -1,15 +1,14 @@
-import { Injectable, effect, inject, signal } from "@angular/core";
+import { Injectable, effect, inject } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { TitleStrategy, RouterStateSnapshot } from "@angular/router";
 import { ConfigStateService } from "./config-state.service";
 import { LocalizationService } from "./localization.service";
-import { tap } from "rxjs";
 import { toSignal } from "@angular/core/rxjs-interop";
 
 @Injectable({
     providedIn: 'root'
 })
-export class CustomTitleStrategy extends TitleStrategy {
+export class AbpTitleStrategy extends TitleStrategy {
     protected readonly title = inject(Title);
     protected readonly configState = inject(ConfigStateService);
     protected readonly localizationService = inject(LocalizationService);
