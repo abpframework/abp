@@ -32,7 +32,6 @@ const routes: Routes = [
             defaultComponent: RolesComponent,
           } as ReplaceableComponents.RouteData<RolesComponent>,
         },
-        title: 'AbpIdentity::Roles',
       },
       {
         path: 'users',
@@ -44,7 +43,6 @@ const routes: Routes = [
             defaultComponent: UsersComponent,
           } as ReplaceableComponents.RouteData<UsersComponent>,
         },
-        title: 'AbpIdentity::Users',
       },
     ],
   },
