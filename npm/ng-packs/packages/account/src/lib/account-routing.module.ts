@@ -86,7 +86,7 @@ const routes: Routes = [
             defaultComponent: ManageProfileComponent,
           } as ReplaceableComponents.RouteData<ManageProfileComponent>,
         },
-        title: 'AbpAccount::Menu:Account',
+        title: 'AbpAccount::MyAccount',
       },
     ],
   },

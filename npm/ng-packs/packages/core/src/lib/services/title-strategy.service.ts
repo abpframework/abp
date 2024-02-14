@@ -38,4 +38,3 @@ export class AbpTitleStrategy extends TitleStrategy {
         });
     }
 }
-// .pipe(tap(() => this.updateTitle(this.routerState))).subscribe();
