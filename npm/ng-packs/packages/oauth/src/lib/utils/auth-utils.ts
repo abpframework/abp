@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { pipe } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import {
+  AuthService,
   ConfigStateService,
   LoginParams,
   PipeToLoginFn,
@@ -16,10 +17,15 @@ export const pipeToLogin: PipeToLoginFn = function (
   const configState = injector.get(ConfigStateService);
   const router = injector.get(Router);
   const rememberMeService = injector.get(RememberMeService);
+  const authService = injector.get(AuthService);
   return pipe(
     switchMap(() => configState.refreshAppState()),
     tap(() => {
-      rememberMeService.set(params.rememberMe);
+      rememberMeService.set(
+        params.rememberMe ||
+        rememberMeService.get() ||
+        rememberMeService.getFromToken(authService.getAccessToken())
+      );
       if (params.redirectUrl) router.navigate([params.redirectUrl]);
     }),
   );
