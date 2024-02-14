@@ -9,6 +9,14 @@ public static class ProxyHelper
     private const string ProxyNamespace = "Castle.Proxies";
 
     /// <summary>
+    /// Checks if given object is a dynamic proxy.
+    /// </summary>
+    public static bool IsProxy(object obj)
+    {
+        return obj.GetType().Namespace == ProxyNamespace;
+    }
+
+    /// <summary>
     /// Returns dynamic proxy target object if this is a proxied object, otherwise returns the given object.
     /// It supports Castle Dynamic Proxies.
     /// </summary>
