@@ -59,9 +59,9 @@ The `AuthErrorFilterService` is an abstract service that needs to be replaced wi
 
 > By default, this service is replaced in the `@abp/ng.oauth` package
 
-**Usage**
+### Usage
 
-1.Create an auth-filter.provider
+#### 1.Create an auth-filter.provider
 
 ```js
 import { APP_INITIALIZER, inject } from '@angular/core';
@@ -96,12 +96,11 @@ function configureAuthFilter() {
 ```
 
 - `AuthErrorFilter:` is a model for filter object and it have 3 properties
-
   - `id:` a unique key in the list for the filter object
   - `executable:` a status for the filter object. If it's false then it won't work, yet it'll stay in the list
   - `execute:` a function that stores the skip logic
 
-    2.Add to the FeatureConfigModule
+#### 2.Add to the FeatureConfigModule
 
 ```js
 import { ModuleWithProviders, NgModule } from "@angular/core";
@@ -120,11 +119,11 @@ export class CustomersConfigModule {
 
 Now it'll skip the clearing of OAuth storage keys for `LinkedUser` grant_type if any `OAuthErrorEvent` occurs
 
-**Replace with custom implementation**
+#### Replace with custom implementation
 
-- Use the `AbstractAuthErrorFilter<T,E>` class for signs of process.
+Use the `AbstractAuthErrorFilter<T,E>` class for signs of process.
 
-**Example**
+#### Example
 
 `my-auth-error-filter.service.ts`
 
