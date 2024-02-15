@@ -11,12 +11,12 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "# Web Application Development Tutorial - Part 4: Integration Tests",
-    "Path": "Part-4"
+    "Name": "Part 4: Integration Tests",
+    "Path": "Tutorials/Part-4"
   },
   "Previous": {
-    "Name": "# Web Application Development Tutorial - Part 2: The Book List Page",
-    "Path": "Part-2"
+    "Name": "Part 2: The Book List Page",
+    "Path": "Tutorials/Part-2"
   }
 }
 ````
@@ -1569,6 +1569,3 @@ Here's the complete code to create the book management CRUD page, that has been 
 
 {{end}}
 
-## The Next Part
-
-Check out the [next part](Part-4.md) of this tutorial.

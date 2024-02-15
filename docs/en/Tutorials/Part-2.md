@@ -10,12 +10,12 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "# Web Application Development Tutorial - Part 3: Creating, Updating and Deleting Books",
-    "Path": "Part-3"
+    "Name": "Part 3: Creating, Updating and Deleting Books",
+    "Path": "Tutorials/Part-3"
   },
   "Previous": {
-    "Name": "# Web Application Development Tutorial - Part 1: Creating the Server Side",
-    "Path": "Part-1"
+    "Name": "Part 1: Creating the Server Side",
+    "Path": "Tutorials/Part-1"
   }
 }
 ````
@@ -682,7 +682,3 @@ You can run the application! The final UI of this part is shown below:
 This is a fully working, server side paged, sorted and localized table of books.
 
 {{end # UI }}
-
-## The Next Part
-
-Check the [next part](Part-3.md) of this tutorial.

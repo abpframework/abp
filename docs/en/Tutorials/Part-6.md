@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Part 7: Authors: Database Integration",
+    "Path": "Tutorials/Part-7"
+  },
+  "Previous": {
+    "Name": "Part 5: Authorization",
+    "Path": "Tutorials/Part-5"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -264,7 +279,3 @@ We will implement this repository in the next part.
 This part covered the domain layer of the authors functionality of the book store application. The main files created/updated in this part was highlighted in the picture below:
 
 ![bookstore-author-domain-layer](images/bookstore-author-domain-layer.png)
-
-## The Next Part
-
-See the [next part](Part-7.md) of this tutorial.

@@ -269,8 +269,3 @@ It may take a longer time for the first build. Once it finishes, it opens the An
 {{ end }}
 
 Enter **admin** as the username and **1q2w3E*** as the password to login to the application. The application is up and running. You can start developing your application based on this startup template.
-
-## See Also
-
-* [Web Application Development Tutorial](Tutorials/Part-1.md)
-* [Application Startup Template](Startup-Templates/Application.md)

@@ -46,7 +46,3 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 > Or you can delete that code since `Auto` is already the default behavior.
 
 {{ end }}
-
-## Next Step
-
-* [Running the solution](Getting-Started-Running-Solution-Single-Layer.md)

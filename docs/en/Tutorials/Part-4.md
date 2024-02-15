@@ -11,12 +11,12 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "# Web Application Development Tutorial - Part 5: Authorization",
-    "Path": "Part-5"
+    "Name": "Part 5: Authorization",
+    "Path": "Tutorials/Part-5"
   },
   "Previous": {
-    "Name": "# Web Application Development Tutorial - Part 3: Creating, Updating and Deleting Books",
-    "Path": "Part-3"
+    "Name": "Part 3: Creating, Updating and Deleting Books",
+    "Path": "Tutorials/Part-3"
   }
 }
 ````
@@ -298,7 +298,3 @@ Open the **Test Explorer Window** (use Test -> Windows -> Test Explorer menu if 
 ![bookstore-appservice-tests](./images/bookstore-appservice-tests.png)
 
 Congratulations, the **green icons** indicates that the tests have been successfully passed!
-
-## The Next Part
-
-See the [next part](Part-5.md) of this tutorial.
