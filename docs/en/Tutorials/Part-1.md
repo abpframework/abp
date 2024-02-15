@@ -10,8 +10,8 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "# Web Application Development Tutorial - Part 2: The Book List Page",
-    "Path": "Part-2"
+    "Name": "Part 2: The Book List Page",
+    "Path": "Tutorials/Part-2"
   }
 }
 ````
@@ -521,7 +521,3 @@ If you try to execute the `[GET] /api/app/book` API to get a list of books, the 
 ````
 
 That's pretty cool since we haven't written a single line of code to create the API controller, but now we have a fully working REST API!
-
-## The Next Part
-
-See the [next part](Part-2.md) of this tutorial.
