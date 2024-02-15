@@ -8,6 +8,28 @@
 }
 ````
 
+````json
+//[doc-params]
+{
+    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
+    "DB": ["EF", "Mongo"],
+    "Tiered": ["Yes", "No"]
+}
+````
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Running the solution",
+    "Path": "Getting-Started-Running-Solution-Single-Layer"
+  },
+  "Previous": {
+    "Name": "Setup Your Development Environment",
+    "Path": "Getting-Started-Setup-Environment-Single-Layer"
+  }
+}
+````
+
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
 ## Create a New Project
