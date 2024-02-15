@@ -71,6 +71,10 @@ export class ConfigStateService {
   }
 
   refreshLocalization(lang: string): Observable<null> {
+    if(this.includeLocalizationResources){
+      return this.refreshAppState().pipe(map(() => null));
+    }
+    
     return this.getlocalizationResource(lang)
       .pipe(
         tap(result =>
