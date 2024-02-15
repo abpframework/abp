@@ -1,5 +1,5 @@
 
-export interface NameValue<T = string> {
+export interface NameValue<T = "string"> {
   name?: string;
   value: T;
 }
