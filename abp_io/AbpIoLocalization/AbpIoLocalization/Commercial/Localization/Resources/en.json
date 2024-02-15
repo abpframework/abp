@@ -1179,6 +1179,7 @@
     "DocumentIntroducesDescription": "If you want to <b>learn more details</b> about why should you use the ABP.IO Platform instead of creating a new solution from scratch, read the following document: ",
     "ReturnOfInvestmentPageAbout": "This page covers the fundamental steps of developing a software solution and explains how the ABP.IO Platform reduces your development costs at each step.",
     "LearnMore": "Learn More",
-    "ReturnOfInvestment": "Return Of Investment"
+    "ReturnOfInvestment": "Return of Investment",
+    "ReturnOfInvestment_Description": "Learn how to reduce your development costs by more than %50."
   }
 }
