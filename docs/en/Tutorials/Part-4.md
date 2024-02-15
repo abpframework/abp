@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "# Web Application Development Tutorial - Part 5: Authorization",
+    "Path": "Part-5"
+  },
+  "Previous": {
+    "Name": "# Web Application Development Tutorial - Part 3: Creating, Updating and Deleting Books",
+    "Path": "Part-3"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:

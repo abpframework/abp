@@ -8,6 +8,19 @@
     "Tiered": ["Yes", "No"]
 }
 ````
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Running the solution",
+    "Path": "Getting-Started-Running-Solution"
+  },
+  "Previous": {
+    "Name": "Setup Your Development Environment",
+    "Path": "Getting-Started-Setup-Environment"
+  }
+}
+````
 
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
