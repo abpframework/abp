@@ -144,7 +144,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         if (!providers.Any())
         {
-            return;
+            throw new AbpException($"Unknown feature value provider: {providerName}");
         }
 
         if (providers.Count > 1 && !forceToSet && value != null)

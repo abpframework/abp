@@ -9,14 +9,6 @@
 ````
 
 ````json
-//[doc-params]
-{
-    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
-    "DB": ["EF", "Mongo"],
-    "Tiered": ["Yes", "No"]
-}
-````
-````json
 //[doc-nav]
 {
   "Next": {

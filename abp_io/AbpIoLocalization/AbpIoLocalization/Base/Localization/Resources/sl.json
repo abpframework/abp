@@ -229,6 +229,8 @@
     "ManageAccount": "Upravljanje računa",
     "CommunityProfile": "Profil skupnosti",
     "BlogProfile": "Blog profil",
-    "Tickets": "Vstopnice"
+    "Tickets": "Vstopnice",
+    "MeetTheABPCommunity": "Spoznajte ABP z <span class=\"gradient-community\">Skupnostjo</span>",
+    "DisplayName:CommunityIndexPagePoll": "Anketa na strani z indeksom skupnosti"
   }
 }

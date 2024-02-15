@@ -85,6 +85,7 @@
     "Permission:Edit": "Breyta",
     "Permission:Delete": "Eyða",
     "Permission:ChangePermissions": "Breyta heimildum",
+    "Permission:ManageRoles": "Hlutverka umsjón",
     "Permission:UserManagement": "Notanda umsjón",
     "Permission:UserLookup": "Leita að notanda",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Nauðsynleg lengdh",

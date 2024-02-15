@@ -53,9 +53,9 @@
     "Yes": "Evet",
     "No": "Hayır",
     "UserNameFilter": "Kullanıcı Filtresi",
-    "AverageExecutionDurationInLogsPerDay": "Ortalama işlem süresi",
+    "AverageExecutionDurationInLogsPerDay": "Ortalama İşlem Süresi",
     "AverageExecutionDurationInMilliseconds": "Milisaniye cinsinden ortalama işlem süresi",
-    "ErrorRateInLogs": "Loglardaki hata oranı",
+    "ErrorRateInLogs": "Loglardaki Hata Oranı",
     "Success": "Başarılı",
     "Fault": "Hatalı",
     "NoChanges": "Değişiklik yok",
@@ -77,6 +77,7 @@
     "EndDate": "Bitiş Tarihi",
     "Feature:AuditLoggingGroup": "İşlem Kayıtları",
     "Feature:AuditLoggingEnable": "İşlem kayıtları sayfasını etkinleştirin",
-    "Feature:AuditLoggingEnableDescription": "Uygulamadanızdaki işlem kayıtları sayfasını etkinleştirir."
+    "Feature:AuditLoggingEnableDescription": "Uygulamadanızdaki işlem kayıtları sayfasını etkinleştirir.",
+    "MinMaxDuration": "Süre (Min. - Max.)"
   }
 }
