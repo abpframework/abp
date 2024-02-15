@@ -113,7 +113,7 @@ this.localizationService.get({
 
 ## UI Localizations
 
-Localizations can be determined on backend side. Angular UI gets the localizations from the `application-configuration` API's response. You can also determine localizations on the UI side.
+Localizations can be determined on backend side. Angular UI gets the localization resources from the `application-localization` API's response and merges these resources with `configuration state` in [`ConfigStateService`](Config-State-Service.md). You can also determine localizations on the UI side.
 
 See an example:
 
