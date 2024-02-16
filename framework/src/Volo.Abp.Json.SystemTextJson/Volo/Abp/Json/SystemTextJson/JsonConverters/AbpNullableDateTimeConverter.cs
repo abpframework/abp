@@ -46,6 +46,15 @@ public class AbpNullableDateTimeConverter : JsonConverter<DateTime?>, ITransient
             return _clock.Normalize(d2);
         }
 
+        var dateText = reader.GetString();
+        if (!dateText.IsNullOrWhiteSpace())
+        {
+            if (DateTime.TryParse(dateText, CultureInfo.CurrentUICulture, DateTimeStyles.None, out var d3))
+            {
+                return _clock.Normalize(d3);
+            }
+        }
+
         return null;
     }
 
