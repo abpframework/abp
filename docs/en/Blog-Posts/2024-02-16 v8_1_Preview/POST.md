@@ -45,7 +45,77 @@ Please see the following migration documents, if you are upgrading from v8.x or 
 In this section, I will introduce some major features released in this version.
 Here is a brief list of titles explained in the next sections:
 
-//TODO:!!!
+* Introducing the `ExposeKeyedServiceAttribute`
+* Custom Menu Component Support for MVC UI
+* Introducing the `DisableAbpFeaturesAttribute`
+
+### Introducing the `ExposeKeyedServiceAttribute`
+
+[Keyed dependency injection (DI) services](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-8.0#keyed-services) were added to the built-in DI container as a new feature with .NET 8.0. This is an important feature, which allows for registering and retrieving DI services using keys/names.
+
+In this version, we have introduced the `ExposeKeyedServiceAttribute` to allow you to automatically register keyed services by conventions.
+
+**Example:**
+
+```csharp
+[ExposeKeyedService<ITaxCalculator>("taxCalculator")]
+[ExposeKeyedService<ICalculator>("calculator")]
+public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+{
+}
+```
+
+In the example above, the `TaxCalculator` class exposes the `ITaxCalculator` interface with the key `taxCalculator` and the `ICalculator` interface with the key `calculator`. 
+
+Thanks to that, you can use the [`FromKeyedServicesAttribute`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.fromkeyedservicesattribute?view=dotnet-plat-ext-8.0) to resolve a certain keyed service in the constructor:
+
+```csharp
+public class MyClass
+{
+    //...
+    public MyClass([FromKeyedServices("taxCalculator")] ITaxCalculator taxCalculator)
+    {
+        TaxCalculator = taxCalculator;
+    }
+}
+```
+
+> Notice that the `ExposeKeyedServiceAttribute` only exposes the keyed services. So, you can not inject the `ITaxCalculator` or `ICalculator` interfaces in your application without using the `FromKeyedServicesAttribute` as shown in the example above.
+
+> If you want to learn more about the keyed dependency injection services, please refer to the [Microsoft's documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-8.0#keyed-services) and [ABP Framework's Dependency Injection document](https://docs.abp.io/en/abp/8.1/Dependency-Injection#exposekeyedservice-attribute).
+
+### Custom Menu Component Support for MVC UI
+
+In this version, we have introduced the **custom menu component support**, which allows you to use a custom component for a certain menu item.
+
+You can use the `UseComponent` extension method while defining menu items to use your custom component for the related menu item:
+
+```csharp
+context.Menu.Items.Add(
+  new ApplicationMenuItem("Custom.1", "My Custom Menu", "#")
+    .UseComponent(typeof(MyMenuComponent)));
+```
+
+Then, for the related menu item, your custom component will be rendered on the UI.
+
+### Introducing the `DisableAbpFeaturesAttribute`
+
+In this version, we have introduced the `DisableAbpFeaturesAttribute` to allow you to disable interceptors, middlewares, and MVC filters for a specific controller.
+
+For example, you may want to disable interceptors for a certain controller, but you may also don't want to disable middlewares and mvc filters, in that case, you can use the `DisableAbpFeaturesAttribute` as follows:
+
+```csharp
+[Route("api/my-endpoint")]
+[DisableAbpFeatures(DisableInterceptors = true, DisableMiddleware = false, DisableMvcFilters = false)]
+public class MyController : AbpController
+{
+
+}
+```
+
+This can be useful if you have some APIs that are used frequently but you don't need all the features of ABP Framework.
+
+> **Note:** If you want to disable all interceptors, middlewares, and filters for a certain controller, then you can use the `[DisableAbpFeatures]` without the need to specify the parameters, they are disabled by default.
 
 ## What's New with ABP Commercial 8.1?
 
@@ -57,15 +127,25 @@ We've also worked on ABP Commercial to align the features and changes made in th
 
 ### .NET Conf China 2023 Watch Party 
 
-//TODO:!!!
+![](dotnet-conf-china-2023-watch-party.jpg)
 
-https://blog.abp.io/abp/2024-First-Community-Event
+ABP.IO was thrilled to sponsor the first .NET Community event in 2024 held in Shenzen on January 14, 2024.
 
-### NDC London 2024
+The event included four wonderful technical lectures to reveal big data and AI's potential opportunities and innovations. It was a transfer of knowledge and a platform for communication and cooperation among technology enthusiasts and we are happy to being attended.
 
-//TODO:!!!
+> If you want to learn more about the .NET Conf China 2023 Watch Party event, please check [the blog post](https://blog.abp.io/abp/2024-First-Community-Event).
 
-https://blog.abp.io/abp/NDC-London-2024-ABP.IO-Key-Highlights
+### Volosoft Attended NDC London 2024
+
+![](ndc-london-2024.png)
+
+Core team members of the ABP Framework, [Halil Ibrahim Kalkan](https://twitter.com/hibrahimkalkan), [Alper Ebicoglu](https://twitter.com/alperebicoglu), [Engincan Veske](https://twitter.com/EngincanVeske), and [Bige Beşikci Yaman](https://twitter.com/bigedediki) attended [NDC London 2024](https://ndclondon.com/) from the 31st of January to the 2nd of February.  
+
+It was the 5th time in a row we were a proud sponsor of NDC London. It, now, basically feels like home spending 3 days in Queen Elizabeth Centre II with NDC London for the [ABP.IO](https://abp.io/) team to be there.
+
+These 3 days with the team was all about chatting and having fun with amazing attendees and speakers. We met with talented and passionate software developers and introduced the [open source ABP Framework](https://github.com/abpframework/abp) - web application framework built on ASP.NET Core and [ABP Commercial](https://commercial.abp.io/) - the complete web application development platform built on open source ABP Framework - to them.
+
+> We shared our insights and key highlights from the NDC London 2024 event, which you can find at [https://blog.abp.io/abp/NDC-London-2024-ABP.IO-Key-Highlights](https://blog.abp.io/abp/NDC-London-2024-ABP.IO-Key-Highlights).
 
 ### New ABP Community Articles
 
