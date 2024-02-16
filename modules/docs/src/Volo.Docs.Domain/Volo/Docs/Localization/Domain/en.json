@@ -39,6 +39,7 @@
     "SearchResults": "Search Results",
     "SearchInTheAllDocuments": "Search in the all documents",
     "Next": "Next",
-    "Previous": "Previous"
+    "Previous": "Previous",
+    "ProjectDeletionWarningMessage": "Are you sure you want to delete ?"
   }
 }
