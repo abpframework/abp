@@ -83,23 +83,23 @@ public partial class Add_NormalizedName : Migration
 
 See https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/managing?tabs=dotnet-core-cli#adding-raw-sql to learn how to add raw SQL to migrations.
 
-## Use `Asp.Versioning.Mvc` to replace `Microsoft.AspNetCore.Mvc.Versioning`.
+## Use `Asp.Versioning.Mvc` to replace `Microsoft.AspNetCore.Mvc.Versioning`
 
 The Microsoft.AspNetCore.Mvc.Versioning packages are now deprecated and superseded by Asp.Versioning.Mvc.
 See the announcement here: https://github.com/dotnet/aspnet-api-versioning/discussions/807
 
-The namespace of [ControllerName] attribute has changed to `using Asp.Versioning`, Please update your code to use the new namespace.
+The namespace of the `[ControllerName]` attribute has changed to `using Asp.Versioning`, Please update your code to use the new namespace.
 
 Related PR: https://github.com/abpframework/abp/pull/18380
 
-## Make `IsRedirectAllowedUrlAsync` of `IAppUrlProvider` async.
+## New asynchronous methods for `IAppUrlProvider`
 
 The `IsRedirectAllowedUrl` method of `IAppUrlProvider` has been changed to `IsRedirectAllowedUrlAsync` and it is now an async method. 
-You should update your usages of `IAppUrlProvider` to use the new method.
+You should update your usage of `IAppUrlProvider` to use the new method.
 
 Related PR: https://github.com/abpframework/abp/pull/18492
 
-## New `ExposeKeyedServiceAttribute`
+## New attribute: `ExposeKeyedServiceAttribute`
 
 The new `ExposeKeyedServiceAttribute` is used to control which keyed services are provided by the related class. Example:
 
@@ -141,6 +141,6 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 }
 ````
 
-This is a small **Breaking Change** because `IOnServiceExposingContext` has changed. You should update your usages of `IOnServiceExposingContext` if you related code.
+This is a small **Breaking Change** because `IOnServiceExposingContext` has changed. You should update your usage of `IOnServiceExposingContext` if you have related code.
 
 Related PR: https://github.com/abpframework/abp/pull/18819
