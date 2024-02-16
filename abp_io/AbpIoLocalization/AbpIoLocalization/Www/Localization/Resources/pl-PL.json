@@ -467,6 +467,7 @@
     "Title": "Tytuł",
     "TitlePlaceholder": "Programista, CTO itp.",
     "Characters": "znaki",
-    "ABPTestimonialDescription": "Struktura ABP: Posłuchajmy Twojej opinii"
+    "ABPTestimonialDescription": "Struktura ABP: Posłuchajmy Twojej opinii",
+    "LeaveUsReview": "Zostaw nam recenzję"
   }
 }
