@@ -82,6 +82,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public bool FullSearchEnabled { get; set; }
 
         public bool IsLatestVersion { get; private set; } 
+        
+        public DocumentNavigationsDto DocumentNavigationsDto { get; private set; }
 
         private const int MaxDescriptionMetaTagLength = 200;
         private readonly IDocumentAppService _documentAppService;
@@ -252,6 +254,20 @@ namespace Volo.Docs.Pages.Documents.Project
             return Request.Scheme + "://" + Request.Host.Value + Request.PathBase +
                    DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" +
                    DocsAppConsts.Latest + "/" + DocumentName;
+        }
+        
+        public string CreateDocumentLink(string documentName)
+        {
+            return new StringBuilder()
+                .Append(DocumentsUrlPrefix)
+                .Append(LanguageCode)
+                .Append('/')
+                .Append(ProjectName)
+                .Append('/')
+                .Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version)
+                .Append('/')
+                .Append(documentName)
+                .ToString();
         }
 
         private IActionResult RedirectToDefaultLanguage()
@@ -522,6 +538,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 SetUserPreferences();
 
                 var partialTemplates = await GetDocumentPartialTemplatesAsync();
+                
+                DocumentNavigationsDto = await _documentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
 
                 Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
             }
