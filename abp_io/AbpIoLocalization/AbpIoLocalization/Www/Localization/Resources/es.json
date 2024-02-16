@@ -467,6 +467,7 @@
     "Title": "Título",
     "TitlePlaceholder": "Desarrollador de software, CTO, etc.",
     "Characters": "caracteres",
-    "ABPTestimonialDescription": "ABP Framework: Escuchemos tu testimonio"
+    "ABPTestimonialDescription": "ABP Framework: Escuchemos tu testimonio",
+    "LeaveUsReview": "Déjanos tu reseña"
   }
 }
