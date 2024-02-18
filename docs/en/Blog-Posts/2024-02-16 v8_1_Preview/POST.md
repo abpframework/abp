@@ -65,7 +65,7 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 
 In the example above, the `TaxCalculator` class exposes the `ITaxCalculator` interface with the key `taxCalculator` and the `ICalculator` interface with the key `calculator`. 
 
-Thanks to that, you can use the [`FromKeyedServicesAttribute`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.fromkeyedservicesattribute?view=dotnet-plat-ext-8.0) to resolve a certain keyed service in the constructor:
+Thanks to that, then you can use the [`FromKeyedServicesAttribute`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.fromkeyedservicesattribute?view=dotnet-plat-ext-8.0) to resolve a certain keyed service in the constructor:
 
 ```csharp
 public class MyClass
@@ -80,7 +80,7 @@ public class MyClass
 
 > Notice that the `ExposeKeyedServiceAttribute` only exposes the keyed services. So, you can not inject the `ITaxCalculator` or `ICalculator` interfaces in your application without using the `FromKeyedServicesAttribute` as shown in the example above.
 
-> If you want to learn more about the keyed dependency injection services, please refer to the [Microsoft's documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-8.0#keyed-services) and [ABP Framework's Dependency Injection document](https://docs.abp.io/en/abp/8.1/Dependency-Injection#exposekeyedservice-attribute).
+> If you want to learn more about the keyed dependency injection services, please refer to [Microsoft's documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-8.0#keyed-services) and [ABP Framework's Dependency Injection document](https://docs.abp.io/en/abp/8.1/Dependency-Injection#exposekeyedservice-attribute).
 
 ### Custom Menu Component Support for MVC UI
 
@@ -121,41 +121,41 @@ We've also worked on ABP Commercial to align the features and changes made in th
 
 ### Suite: New Features
 
-In this version, we mostly worked on ABP Suite and implemented some wanted features, such as *bulk delete*, *filterable properties*, *customizable page title*, *allowing establishing relationships with installed ABP modules' entities* and *supporting the `BasicAggregateRoot` as base class*.
+In this version, we mostly worked on ABP Suite and implemented some wanted features, such as *bulk delete*, *filterable properties*, *customizable page title*, *allowing establishing relationships with installed ABP modules' entities* and *supporting the `BasicAggregateRoot` as the base class*.
 
 #### Bulk Delete
 
-With this version on, ABP Suite allows you to perform bulk deletion of records based on specified criteria.
+From this version on, ABP Suite allows you to perform bulk deletion of records based on specified criteria.
 
 ![](bulk-delete.png)
 
-To enable *bulk delete support*, you should check the *Bulk delete* option in the CRUD page generation page, along with the *Create user interface* option. When you enable the *bulk delete support*, you will see the checkboxes for each line in the datatable:
+To enable *bulk delete support*, you should enable the *Bulk delete* option in the CRUD page generation page, along with the *Create user interface* option (they are enabled by default). When you enable the *bulk delete support*, you will see the checkboxes for each line in the datatable:
 
 ![](bulk-delete-datatable.png)
 
-By checking these checkboxes, you can delete all records in the current datatable (10 records by default), or delete all records in the database (by selecting *select all xx items* selection), or delete any records you want selecting them one by one.
+By selecting these checkboxes, you can delete all records in the current datatable (10 records by default), or delete all records in the database (by selecting *select all xx items* selection), or delete any records you want by selecting them one by one.
 
-> **Note:** This feature has already implemented for MVC & Blazor UIs, but not implemented for Angular UI yet. We aim to implement it for Angular UI with *v8.1.0-rc.2*.
+> **Note:** This feature has already been implemented for MVC & Blazor UIs, but not implemented for Angular UI yet. We aim to implement it for Angular UI with *v8.1.0-rc.2*.
 
 #### Filterable Properties
 
-ABP Suite being generating advanced filters for entities for a while and prior to this version, if you are enabled the **create user interface** option, then all of the properties that you specified was included in the advanced filter section automatically.
+ABP Suite has been generating advanced filters for entities for a while and before this version, if you enabled the *create user interface* option, then all of the properties that you specified were included in the advanced filter section automatically.
 
 In this version, we have introduced the **filterable properties** feature to allow you to select which properties should be filterable and which are not:
 
 ![](filterable-properties.png)
 
-Now, you have full control to select which properties should be included as filter inputs and shown on the advanced filters section on your generated pages. In another words, once, you selected a property as *not filterable*, then the property will not be included in the filter inputs and in the advanced filter section.
+Now, you have full control to select which properties should be included as filter inputs and shown on the advanced filters section on your generated pages. 
+
+In other words, once, you select a property as *not filterable*, then the property will not be included in the filter inputs and in the advanced filter section. Also, if there are not any filterable properties for an entity, then the advanced filters section will not be generated.
 
 #### Customizable Page Title
 
 In this version on, ABP Suite allows you to specify the page title for the current entity. 
 
-You just need to specify the *page title* on the CRUD page generation page for a specific entity and then it will be used as localization key in the application (and also will be localized - for example, if you specify it as 'MyPageTitle', then it will be localized in English as 'My Page Title'), so you can localize it for different languages later on.
-
-Here is an example output that demonstrates this feature:
-
 ![](page-title.png)
+
+You just need to specify the *page title* on the CRUD page generation page for a specific entity and then it will be used as a localization key in the application (and also will be localized - for example, if you specify it as 'MyPageTitle', then it will be localized in English as 'My Page Title'), so you can localize it for different languages later on.
 
 #### Allowing Establishing Relationships with Installed ABP Modules' Entities
 
@@ -177,7 +177,7 @@ In this version on, ABP Suite allows you to choose the `BasicAggregateRoot` as t
 
 ### ABP Studio v0.6.5 Has Been Released!
 
-We have just released v0.6.5 for ABP Studio and with this version, we fixed many minor bugs reported by you, started supporting running multiple ABP Studio instances and added important features, such as adding a public website to the new microservice template and so on...
+We have just released v0.6.5 for ABP Studio and with this version, we fixed many minor bugs reported by you, started supporting running multiple ABP Studio instances, and added important features, such as adding a public website to the new microservice template, and so on...
 
 In addition to all of this, we continue to enrich ABP Studio's documentation as always and you can read them at [https://docs.abp.io/en/commercial/latest/studio/overview](https://docs.abp.io/en/commercial/latest/studio/overview).
 
@@ -191,7 +191,7 @@ Please try ABP Studio v0.6.5 and [provide feedback](https://support.abp.io/QA/Qu
 
 ABP.IO was thrilled to sponsor the first .NET Community event in 2024 held in Shenzen on January 14, 2024.
 
-The event included four wonderful technical lectures to reveal big data and AI's potential opportunities and innovations. It was a transfer of knowledge and a platform for communication and cooperation among technology enthusiasts and we are happy to being attended.
+The event included four wonderful technical lectures to reveal big data and AI's potential opportunities and innovations. It was a transfer of knowledge and a platform for communication and cooperation among technology enthusiasts and we are happy to be attended.
 
 > If you want to learn more about the .NET Conf China 2023 Watch Party event, please check [the blog post](https://blog.abp.io/abp/2024-First-Community-Event).
 
@@ -203,7 +203,7 @@ Core team members of the ABP Framework, [Halil Ibrahim Kalkan](https://twitter.c
 
 It was the 5th time in a row we were a proud sponsor of NDC London. It, now, basically feels like home spending 3 days in Queen Elizabeth Centre II with NDC London for the [ABP.IO](https://abp.io/) team to be there.
 
-These 3 days with the team was all about chatting and having fun with amazing attendees and speakers. We met with talented and passionate software developers and introduced the [open source ABP Framework](https://github.com/abpframework/abp) - web application framework built on ASP.NET Core and [ABP Commercial](https://commercial.abp.io/) - the complete web application development platform built on open source ABP Framework - to them.
+These 3 days with the team were all about chatting and having fun with amazing attendees and speakers. We met with talented and passionate software developers and introduced the [open source ABP Framework](https://github.com/abpframework/abp) - web application framework built on ASP.NET Core and [ABP Commercial](https://commercial.abp.io/) - the complete web application development platform built on open source ABP Framework - to them.
 
 > We shared our insights and key highlights from the NDC London 2024 event, which you can find at [https://blog.abp.io/abp/NDC-London-2024-ABP.IO-Key-Highlights](https://blog.abp.io/abp/NDC-London-2024-ABP.IO-Key-Highlights).
 
