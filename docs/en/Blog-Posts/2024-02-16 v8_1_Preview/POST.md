@@ -2,7 +2,7 @@
 
 Today, we are happy to release the [ABP Framework](https://abp.io/) and [ABP Commercial](https://commercial.abp.io/) version **8.1 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
 
-Try this version and provide feedback for a more stable version of ABP v8.0! Thanks to all of you.
+Try this version and provide feedback for a more stable version of ABP v8.1! Thanks to all of you.
 
 ## Get Started with the 8.1 RC
 
@@ -53,9 +53,7 @@ Here is a brief list of titles explained in the next sections:
 
 [Keyed dependency injection (DI) services](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-8.0#keyed-services) were added to the built-in DI container as a new feature with .NET 8.0. This is an important feature, which allows for registering and retrieving DI services using keys/names.
 
-In this version, we have introduced the `ExposeKeyedServiceAttribute` to allow you to automatically register keyed services by conventions.
-
-**Example:**
+In this version, we have introduced the `ExposeKeyedServiceAttribute` to allow you to automatically register keyed services by conventions:
 
 ```csharp
 [ExposeKeyedService<ITaxCalculator>("taxCalculator")]
@@ -121,7 +119,69 @@ This can be useful if you have some APIs that are used frequently but you don't 
 
 We've also worked on ABP Commercial to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 8.1.
 
-//TODO:!!!
+### Suite: New Features
+
+In this version, we mostly worked on ABP Suite and implemented some wanted features, such as *bulk delete*, *filterable properties*, *customizable page title*, *allowing establishing relationships with installed ABP modules' entities* and *supporting the `BasicAggregateRoot` as base class*.
+
+#### Bulk Delete
+
+With this version on, ABP Suite allows you to perform bulk deletion of records based on specified criteria.
+
+![](bulk-delete.png)
+
+To enable *bulk delete support*, you should check the *Bulk delete* option in the CRUD page generation page, along with the *Create user interface* option. When you enable the *bulk delete support*, you will see the checkboxes for each line in the datatable:
+
+![](bulk-delete-datatable.png)
+
+By checking these checkboxes, you can delete all records in the current datatable (10 records by default), or delete all records in the database (by selecting *select all xx items* selection), or delete any records you want selecting them one by one.
+
+> **Note:** This feature has already implemented for MVC & Blazor UIs, but not implemented for Angular UI yet. We aim to implement it for Angular UI with *v8.1.0-rc.2*.
+
+#### Filterable Properties
+
+ABP Suite being generating advanced filters for entities for a while and prior to this version, if you are enabled the **create user interface** option, then all of the properties that you specified was included in the advanced filter section automatically.
+
+In this version, we have introduced the **filterable properties** feature to allow you to select which properties should be filterable and which are not:
+
+![](filterable-properties.png)
+
+Now, you have full control to select which properties should be included as filter inputs and shown on the advanced filters section on your generated pages. In another words, once, you selected a property as *not filterable*, then the property will not be included in the filter inputs and in the advanced filter section.
+
+#### Customizable Page Title
+
+In this version on, ABP Suite allows you to specify the page title for the current entity. 
+
+You just need to specify the *page title* on the CRUD page generation page for a specific entity and then it will be used as localization key in the application (and also will be localized - for example, if you specify it as 'MyPageTitle', then it will be localized in English as 'My Page Title'), so you can localize it for different languages later on.
+
+Here is an example output that demonstrates this feature:
+
+![](page-title.png)
+
+#### Allowing Establishing Relationships with Installed ABP Modules' Entities
+
+In this version, ABP Suite allows you to establish one-to-many relationship with pre-installed ABP Modules. You can add any entity from pre-installed ABP modules as a navigation property, by checking the **Include entities from ABP modules** checkbox in the navigation property model and choosing the related module entity as in the following figure:
+
+![](suite-include-entities-from-abp-modules.png)
+
+In the example above, the `IdentityUser` entity is selected as the navigation property but you can also choose any entity from the installed ABP modules in the navigation property model.
+
+> **Note:** Ensure that your solution is built properly before establishing relationship between your own entity and a module entity because ABP Suite scans assemblies and finds which ABP modules you are using and lists their entities in the navigation property model if you have checked the **Include entities from ABP modules** checkbox.
+
+#### Support `BasicAggregateRoot` Base Class
+
+In this version on, ABP Suite allows you to choose the `BasicAggregateRoot` as the base class while generating an entity:
+
+![](basic-aggregate-root.png)
+
+> You can choose the [BasicAggregateRoot](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Ddd.Domain/Volo/Abp/Domain/Entities/BasicAggregateRoot.cs) if you want to create an aggregate root without the `IHasExtraProperties` and `IHasConcurrencyStamp` interfaces implemented (extra properties & concurrency check).
+
+### ABP Studio v0.6.5 Has Been Released!
+
+We have just released v0.6.5 for ABP Studio and with this version, we fixed many minor bugs reported by you, started supporting running multiple ABP Studio instances and added important features, such as adding a public website to the new microservice template and so on...
+
+In addition to all of this, we continue to enrich ABP Studio's documentation as always and you can read them at [https://docs.abp.io/en/commercial/latest/studio/overview](https://docs.abp.io/en/commercial/latest/studio/overview).
+
+Please try ABP Studio v0.6.5 and [provide feedback](https://support.abp.io/QA/Questions/6416/ABP-Studio-Bugs--Issues) to help us release more stable versions. Thanks in advance!
 
 ## Community News
 
