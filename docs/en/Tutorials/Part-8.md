@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Authors: User Interface",
+    "Path": "Tutorials/Part-9"
+  },
+  "Previous": {
+    "Name": "Authors: Database Integration",
+    "Path": "Tutorials/Part-7"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -589,7 +604,3 @@ public class MongoDBAuthorAppService_Tests : AuthorAppService_Tests<BookStoreMon
 {{end}}
 
 Created some tests for the application service methods, which should be clear to understand.
-
-## The Next Part
-
-See the [next part](Part-9.md) of this tutorial.
