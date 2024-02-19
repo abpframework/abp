@@ -5,6 +5,7 @@ using System.Reflection;
 
 namespace Volo.Abp.DependencyInjection;
 
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class ExposeServicesAttribute : Attribute, IExposedServiceTypesProvider
 {
     public Type[] ServiceTypes { get; }

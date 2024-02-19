@@ -85,6 +85,7 @@
     "Permission:Edit": "Urejanje",
     "Permission:Delete": "Brisanje",
     "Permission:ChangePermissions": "Spreminjanje dovoljenj",
+    "Permission:ManageRoles": "Upravljanje vlog",
     "Permission:UserManagement": "Upravljanje uporabnikov",
     "Permission:UserLookup": "Iskanje uporabnikov",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Zahtevana dolžina",

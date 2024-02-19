@@ -24,7 +24,7 @@
     "prop-types": "^15.8.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-native": "0.70.5",
+    "react-native": "0.70.8",
     "react-native-chart-kit": "^6.11.0",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-reanimated": "~2.12.0",

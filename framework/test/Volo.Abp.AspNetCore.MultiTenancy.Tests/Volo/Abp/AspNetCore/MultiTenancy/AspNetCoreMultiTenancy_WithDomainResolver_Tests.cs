@@ -16,6 +16,7 @@ public class AspNetCoreMultiTenancy_WithDomainResolver_Tests : AspNetCoreMultiTe
 {
     private readonly Guid _testTenantId = Guid.NewGuid();
     private readonly string _testTenantName = "acme";
+    private readonly string _testTenantNormalizedName = "ACME";
 
     private readonly AbpAspNetCoreMultiTenancyOptions _options;
 
@@ -30,7 +31,7 @@ public class AspNetCoreMultiTenancy_WithDomainResolver_Tests : AspNetCoreMultiTe
         {
             options.Tenants = new[]
             {
-                new TenantConfiguration(_testTenantId, _testTenantName)
+                new TenantConfiguration(_testTenantId, _testTenantName, _testTenantNormalizedName)
             };
         });
 

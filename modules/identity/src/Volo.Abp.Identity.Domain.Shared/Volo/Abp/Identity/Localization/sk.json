@@ -85,6 +85,7 @@
     "Permission:Edit": "Upraviť",
     "Permission:Delete": "Zmazať",
     "Permission:ChangePermissions": "Zmeniť oprávnenia",
+    "Permission:ManageRoles": "Správa rolí",
     "Permission:UserManagement": "Správa používateľov",
     "Permission:UserLookup": "Vyhľadať používateľov",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Požadovaná dĺžka",

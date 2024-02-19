@@ -5,10 +5,16 @@
     var cssClass = string.IsNullOrEmpty(Model.CssClass) ? string.Empty : Model.CssClass;
     var disabled = Model.IsDisabled ? "disabled" : string.Empty;
     var url = string.IsNullOrEmpty(Model.Url) ? "#" : Url.IsLocalUrl(Model.Url) ? Url.Content(Model.Url.EnsureStartsWith('~')) : Model.Url;
+    var customComponentType = Model.GetComponentTypeOrDefault();
+    
 }
 @if (Model.IsLeaf)
 {
-    if (Model.Url != null)
+    if (customComponentType != null && typeof(ViewComponent).IsAssignableFrom(customComponentType))
+    {
+        @(await Component.InvokeAsync(customComponentType))
+    }
+    else if (Model.Url != null)
     {
         <a class="dropdown-item @cssClass @disabled" href="@url" target="@Model.Target" @Html.Raw(elementId)>
             @if (Model.Icon != null)
@@ -25,20 +31,27 @@
 else
 {
     <div class="dropdown-submenu">
-        <a role="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-            <span class="lp-icon">
-                <i class="@(Model.Icon ?? "")"></i>
-            </span>
-            <span class="lp-text">
-                @Model.DisplayName
-            </span>
-        </a>
-        <div class="dropdown-menu border-0 shadow-sm">
-            @foreach (var childMenuItem in Model.Items)
-            {
-                @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
-            }
-        </div>
+        @if (customComponentType != null && typeof(ViewComponent).IsAssignableFrom(customComponentType))
+        {
+             @(await Component.InvokeAsync(customComponentType))
+        }
+        else
+        {
+            <a role="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <span class="lp-icon">
+                    <i class="@(Model.Icon ?? "")"></i>
+                </span>
+                <span class="lp-text">
+                    @Model.DisplayName
+                </span>
+            </a>
+            <div class="dropdown-menu border-0 shadow-sm">
+                @foreach (var childMenuItem in Model.Items)
+                {
+                    @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
+                }
+            </div>
+        }
     </div>
 }

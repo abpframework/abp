@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
+using Volo.Abp.AspNetCore.Filters;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
 
 namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
 
-public class GlobalFeatureActionFilter : IAsyncActionFilter, ITransientDependency
+public class GlobalFeatureActionFilter : IAsyncActionFilter, IAbpFilter, ITransientDependency
 {
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
