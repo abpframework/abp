@@ -230,6 +230,8 @@
     "BlogProfile": "Hồ sơ blog",
     "Tickets": "Vé",
     "MeetTheABPCommunity": "Gặp gỡ ABP với <span class=\"gradient-community\">Cộng đồng</span>",
-    "DisplayName:CommunityIndexPagePoll": "Bình chọn trang chủ cộng đồng"
+    "DisplayName:CommunityIndexPagePoll": "Bình chọn trang chủ cộng đồng",
+    "EmailPreferences": "Tuỳ chọn email",
+    "DoYouAgreePrivacyPolicy": "Bằng cách nhấp chuột <i>Đặt mua</i> nút bạn đồng ý với <a href=\"https://account.abp.io/Account/TermsConditions\">Điều kiện</a> Và <a href=\"https://account.abp.io/Account/Privacy\">Chính sách bảo mật</a>."
   }
 }

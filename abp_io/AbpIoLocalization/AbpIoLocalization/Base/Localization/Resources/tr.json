@@ -181,6 +181,8 @@
     "Raffles": "Çekilişler",
     "HowItWorks": "Nasıl Çalışıyor?",
     "WhyABPIOPlatform": "Neden ABP.IO Platform?",
-    "ReleaseNotes": "Sürüm Notları"
+    "ReleaseNotes": "Sürüm Notları",
+    "EmailPreferences": "E-posta Tercihleri",
+    "DoYouAgreePrivacyPolicy": "<i>Abone Ol</i> butonuna tıklayarak <a href=\"https://account.abp.io/Account/TermsConditions\">Şartlar</a> ve <a href=\"https://account.abp.io/Account/Privacy\">Gizlilik Politikası</a> kurallarımızı kabul etmiş olursunuz."
   }
 }

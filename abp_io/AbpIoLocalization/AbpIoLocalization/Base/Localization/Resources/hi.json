@@ -231,6 +231,8 @@
     "BlogProfile": "ब्लॉग प्रोफ़ाइल",
     "Tickets": "टिकट",
     "MeetTheABPCommunity": "ABP से मिलें <span class=\"gradient-community\">समुदाय</span>",
-    "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान"
+    "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान",
+    "EmailPreferences": "ईमेल प्राथमिकताएं",
+    "DoYouAgreePrivacyPolicy": "क्लिक करके <i>सदस्यता लें</i> जिस बटन से आप सहमत हैं <a href=\"https://account.abp.io/Account/TermsConditions\">शर्तें</a> और <a href=\"https://account.abp.io/Account/Privacy\">गोपनीयता नीति</a>."
   }
 }

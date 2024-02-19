@@ -231,6 +231,8 @@
     "BlogProfile": "Profil blog",
     "Tickets": "bilete",
     "MeetTheABPCommunity": "Cunoaște ABP cu <span class=\"gradient-community\">Comunitatea</span>",
-    "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității"
+    "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității",
+    "EmailPreferences": "preferinte de email",
+    "DoYouAgreePrivacyPolicy": "Dând clicuri <i>Abonati-va</i> butonul sunteți de acord cu <a href=\"https://account.abp.io/Account/TermsConditions\">Termeni</a> și <a href=\"https://account.abp.io/Account/Privacy\">Politica de confidențialitate</a>."
   }
 }

@@ -231,6 +231,8 @@
     "BlogProfile": "الملف الشخصي للمدونة",
     "Tickets": "التذاكر",
     "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">المجتمع</span> معرفة",
-    "DisplayName:CommunityIndexPagePoll": "استطلاع"
+    "DisplayName:CommunityIndexPagePoll": "استطلاع",
+    "EmailPreferences": "تفضيلات البريد الإلكتروني",
+    "DoYouAgreePrivacyPolicy": "بالضغط <i>يشترك</i> الزر الذي توافق عليه <a href=\"https://account.abp.io/Account/TermsConditions\">شروط</a> و <a href=\"https://account.abp.io/Account/Privacy\">سياسة الخصوصية</a>."
   }
 }

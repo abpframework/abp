@@ -231,6 +231,8 @@
     "BlogProfile": "Perfil do blog",
     "Tickets": "Ingressos",
     "MeetTheABPCommunity": "Conheça a ABP com a <span class=\"gradient-community\">Comunidade</span>",
-    "DisplayName:CommunityIndexPagePoll": "Enquete da página inicial da comunidade"
+    "DisplayName:CommunityIndexPagePoll": "Enquete da página inicial da comunidade",
+    "EmailPreferences": "Preferências de Email",
+    "DoYouAgreePrivacyPolicy": "Clicando <i>Se inscrever</i> botão você concorda com o <a href=\"https://account.abp.io/Account/TermsConditions\">Termos</a> e <a href=\"https://account.abp.io/Account/Privacy\">política de Privacidade</a>."
   }
 }

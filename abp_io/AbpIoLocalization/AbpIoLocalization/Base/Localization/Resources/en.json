@@ -239,6 +239,8 @@
     "Trainings": "Trainings",
     "MeetTheABPCommunity": "Meet the ABP <span class=\"gradient-community\">Community</span>",
     "DisplayName:CommunityIndexPagePoll": "Community Index Page Poll",
-    "ReturnOfInvestment": "Return Of Investment"
+    "ReturnOfInvestment": "Return Of Investment",
+    "EmailPreferences": "Email Preferences",
+    "DoYouAgreePrivacyPolicy": "By clicking <i>Subscribe</i> button you agree to the <a href=\"https://account.abp.io/Account/TermsConditions\">Terms & Conditions</a> and <a href=\"https://account.abp.io/Account/Privacy\">Privacy Policy</a>."
   }
 }
