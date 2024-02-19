@@ -11,11 +11,11 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Part 7: Authors: Database Integration",
+    "Name": "Authors: Database Integration",
     "Path": "Tutorials/Part-7"
   },
   "Previous": {
-    "Name": "Part 5: Authorization",
+    "Name": "Authorization",
     "Path": "Tutorials/Part-5"
   }
 }

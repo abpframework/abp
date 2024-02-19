@@ -11,11 +11,11 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Part 4: Integration Tests",
+    "Name": "Integration Tests",
     "Path": "Tutorials/Part-4"
   },
   "Previous": {
-    "Name": "Part 2: The Book List Page",
+    "Name": "The Book List Page",
     "Path": "Tutorials/Part-2"
   }
 }

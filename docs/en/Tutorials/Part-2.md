@@ -10,11 +10,11 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Part 3: Creating, Updating and Deleting Books",
+    "Name": "Creating, Updating and Deleting Books",
     "Path": "Tutorials/Part-3"
   },
   "Previous": {
-    "Name": "Part 1: Creating the Server Side",
+    "Name": "Creating the Server Side",
     "Path": "Tutorials/Part-1"
   }
 }

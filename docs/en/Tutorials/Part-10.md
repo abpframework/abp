@@ -11,7 +11,7 @@
 //[doc-nav]
 {
   "Previous": {
-    "Name": "Part 9: Authors: User Interface",
+    "Name": "Authors: User Interface",
     "Path": "Tutorials/Part-9"
   }
 }
