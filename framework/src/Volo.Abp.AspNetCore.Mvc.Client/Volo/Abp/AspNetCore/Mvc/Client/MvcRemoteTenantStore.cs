@@ -40,9 +40,9 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         }
 
         var tenantConfiguration = await Cache.GetAsync(cacheKey);
-        if (tenantConfiguration == null)
+        if (tenantConfiguration?.Value == null)
         {
-            await TenantAppService.FindTenantByNameAsync(normalizedName);
+            var tenant = await TenantAppService.FindTenantByNameAsync(normalizedName);
             tenantConfiguration = await Cache.GetAsync(cacheKey);
         }
 
@@ -65,7 +65,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         }
 
         var tenantConfiguration = await Cache.GetAsync(cacheKey);
-        if (tenantConfiguration == null)
+        if (tenantConfiguration?.Value == null)
         {
             await TenantAppService.FindTenantByIdAsync(id);
             tenantConfiguration = await Cache.GetAsync(cacheKey);
@@ -90,7 +90,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         }
 
         var tenantConfiguration = Cache.Get(cacheKey);
-        if (tenantConfiguration == null)
+        if (tenantConfiguration?.Value == null)
         {
             AsyncHelper.RunSync(async () => await TenantAppService.FindTenantByNameAsync(normalizedName));
             tenantConfiguration = Cache.Get(cacheKey);
@@ -115,7 +115,7 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         }
 
         var tenantConfiguration = Cache.Get(cacheKey);
-        if (tenantConfiguration == null)
+        if (tenantConfiguration?.Value == null)
         {
             AsyncHelper.RunSync(async () => await TenantAppService.FindTenantByIdAsync(id));
             tenantConfiguration = Cache.Get(cacheKey);
