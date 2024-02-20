@@ -23,9 +23,9 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => 
-                x.Name.Contains(filter) ||
-                x.DisplayName.Contains(filter) ||
-                x.Description.Contains(filter))
+                x.Name.ToLower().Contains(filter.ToLower()) ||
+                x.DisplayName.ToLower().Contains(filter.ToLower()) ||
+                x.Description.ToLower().Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictScope.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
             .As<IMongoQueryable<OpenIddictScope>>()
@@ -36,9 +36,9 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => 
-                x.Name.Contains(filter) ||
-                x.DisplayName.Contains(filter) ||
-                x.Description.Contains(filter))
+                x.Name.ToLower().Contains(filter.ToLower()) ||
+                x.DisplayName.ToLower().Contains(filter.ToLower()) ||
+                x.Description.ToLower().Contains(filter.ToLower()))
             .As<IMongoQueryable<OpenIddictScope>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }

@@ -184,16 +184,16 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
                 u =>
                     u.NormalizedUserName.Contains(upperFilter) ||
                     u.NormalizedEmail.Contains(upperFilter) ||
-                    (u.Name != null && u.Name.Contains(filter)) ||
-                    (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                    (u.Name != null && u.Name.ToLower().Contains(filter.ToLower())) ||
+                    (u.Surname != null && u.Surname.ToLower().Contains(filter.ToLower())) ||
+                    (u.PhoneNumber != null && u.PhoneNumber.ToLower().Contains(filter.ToLower()))
             )
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName.Contains(userName))
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName.ToLower().Contains(userName.ToLower()))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber.Contains(phoneNumber))
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email.Contains(emailAddress))
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(name), x => x.Name.Contains(name))
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(surname), x => x.Surname.Contains(surname))
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email.ToLower().Contains(emailAddress.ToLower()))
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(name), x => x.Name.ToLower().Contains(name.ToLower()))
+            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(surname), x => x.Surname.ToLower().Contains(surname.ToLower()))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isLockedOut.HasValue && isLockedOut.Value, x => x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(isLockedOut.HasValue && !isLockedOut.Value, x =>  !(x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(notActive.HasValue, x => x.IsActive == !notActive.Value)
@@ -269,8 +269,8 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
                 u =>
                     u.NormalizedUserName.Contains(upperFilter) ||
                     u.NormalizedEmail.Contains(upperFilter) ||
-                    (u.Name != null && u.Name.Contains(filter)) ||
-                    (u.Surname != null && u.Surname.Contains(filter)) ||
+                    (u.Name != null && u.Name.ToLower().Contains(filter.ToLower())) ||
+                    (u.Surname != null && u.Surname.ToLower().Contains(filter.ToLower())) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))

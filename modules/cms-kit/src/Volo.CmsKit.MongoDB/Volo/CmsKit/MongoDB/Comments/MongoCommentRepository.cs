@@ -186,7 +186,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             queryable = queryable.Where(x => x.CreatorId == authorId);
         }
 
-        return queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
+        return queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.ToLower().Contains(filter.ToLower()))
             .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
             .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
             .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)

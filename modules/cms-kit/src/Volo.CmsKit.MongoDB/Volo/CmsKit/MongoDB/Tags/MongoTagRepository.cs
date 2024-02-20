@@ -134,7 +134,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
         {
             mongoQueryable = mongoQueryable.Where(x =>
                     x.Name.ToLower().Contains(filter.ToLower()) ||
-                    x.EntityType.ToLower().Contains(filter));
+                    x.EntityType.ToLower().Contains(filter.ToLower()));
         }
 
         return mongoQueryable;

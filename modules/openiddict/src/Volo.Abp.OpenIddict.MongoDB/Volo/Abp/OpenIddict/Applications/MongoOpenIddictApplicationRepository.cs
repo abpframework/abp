@@ -22,7 +22,7 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
         CancellationToken cancellationToken = default)
     {
         return await ((await GetMongoQueryableAsync(cancellationToken)))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.ToLower().Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictApplication.ClientId) : sorting)
             .PageBy(skipCount, maxResultCount)
             .As<IMongoQueryable<OpenIddictApplication>>()
@@ -32,7 +32,7 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
     public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await ((await GetMongoQueryableAsync(cancellationToken)))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.ToLower().Contains(filter.ToLower()))
             .As<IMongoQueryable<OpenIddictApplication>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }

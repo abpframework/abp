@@ -40,7 +40,7 @@ public class MongoClientRepository : MongoDbRepository<IAbpIdentityServerMongoDb
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.ToLower().Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(Client.ClientName) : sorting)
             .As<IMongoQueryable<Client>>()
             .PageBy<Client, IMongoQueryable<Client>>(skipCount, maxResultCount)
@@ -51,7 +51,7 @@ public class MongoClientRepository : MongoDbRepository<IAbpIdentityServerMongoDb
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<Client, IMongoQueryable<Client>>(!filter.IsNullOrWhiteSpace(),
-                x => x.ClientId.Contains(filter))
+                x => x.ClientId.ToLower().Contains(filter.ToLower()))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 

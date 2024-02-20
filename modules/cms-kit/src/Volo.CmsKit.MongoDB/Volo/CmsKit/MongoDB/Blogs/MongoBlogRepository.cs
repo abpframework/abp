@@ -67,6 +67,6 @@ public class MongoBlogRepository : MongoDbRepository<ICmsKitMongoDbContext, Blog
     protected virtual async Task<IQueryable<Blog>> GetListQueryAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return (await GetMongoQueryableAsync(cancellationToken))
-                .WhereIf(!filter.IsNullOrWhiteSpace(), b => b.Name.Contains(filter));
+                .WhereIf(!filter.IsNullOrWhiteSpace(), b => b.Name.ToLower().Contains(filter.ToLower()));
     }
 }

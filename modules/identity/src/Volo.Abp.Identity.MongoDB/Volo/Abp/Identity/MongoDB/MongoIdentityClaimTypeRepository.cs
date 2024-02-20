@@ -47,7 +47,7 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
             .WhereIf<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Name.Contains(filter)
+                    u.Name.ToLower().Contains(filter.ToLower())
             )
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
             .As<IMongoQueryable<IdentityClaimType>>()
@@ -63,7 +63,7 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
             .WhereIf<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Name.Contains(filter)
+                    u.Name.ToLower().Contains(filter.ToLower())
             )
             .As<IMongoQueryable<IdentityClaimType>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));

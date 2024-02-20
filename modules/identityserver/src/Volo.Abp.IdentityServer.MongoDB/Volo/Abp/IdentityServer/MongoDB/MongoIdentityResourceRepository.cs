@@ -21,9 +21,9 @@ public class MongoIdentityResourceRepository : MongoDbRepository<IAbpIdentitySer
     public virtual async Task<List<IdentityResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
-                     x.Description.Contains(filter) ||
-                     x.DisplayName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.ToLower().Contains(filter.ToLower()) ||
+                     x.Description.ToLower().Contains(filter.ToLower()) ||
+                     x.DisplayName.ToLower().Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityResource.Name) : sorting)
             .As<IMongoQueryable<IdentityResource>>()
             .PageBy<IdentityResource, IMongoQueryable<IdentityResource>>(skipCount, maxResultCount)
@@ -34,9 +34,9 @@ public class MongoIdentityResourceRepository : MongoDbRepository<IAbpIdentitySer
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<IdentityResource, IMongoQueryable<IdentityResource>>(!filter.IsNullOrWhiteSpace(),
-                x => x.Name.Contains(filter) ||
-                     x.Description.Contains(filter) ||
-                     x.DisplayName.Contains(filter))
+                x => x.Name.ToLower().Contains(filter.ToLower()) ||
+                     x.Description.ToLower().Contains(filter.ToLower()) ||
+                     x.DisplayName.ToLower().Contains(filter.ToLower()))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 

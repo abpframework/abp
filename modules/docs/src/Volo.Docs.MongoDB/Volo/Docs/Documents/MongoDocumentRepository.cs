@@ -195,7 +195,7 @@ namespace Volo.Docs.Documents
 
             if (name != null)
             {
-                query = query.Where(d => d.Name != null && d.Name.Contains(name));
+                query = query.Where(d => d.Name != null && d.Name.ToLower().Contains(name.ToLower()));
             }
 
             if (version != null)
@@ -210,7 +210,7 @@ namespace Volo.Docs.Documents
 
             if (fileName != null)
             {
-                query = query.Where(d => d.FileName != null && d.FileName.Contains(fileName));
+                query = query.Where(d => d.FileName != null && d.FileName.ToLower().Contains(fileName.ToLower()));
             }
             
             if (format != null)

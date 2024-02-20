@@ -41,9 +41,9 @@ public class MongoApiScopeRepository : MongoDbRepository<IAbpIdentityServerMongo
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                x => x.Name.Contains(filter) ||
-                     x.Description.Contains(filter) ||
-                     x.DisplayName.Contains(filter))
+                x => x.Name.ToLower().Contains(filter.ToLower()) ||
+                     x.Description.ToLower().Contains(filter.ToLower()) ||
+                     x.DisplayName.ToLower().Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(ApiScope.Name) : sorting)
             .As<IMongoQueryable<ApiScope>>()
             .PageBy<ApiScope, IMongoQueryable<ApiScope>>(skipCount, maxResultCount)
@@ -54,9 +54,9 @@ public class MongoApiScopeRepository : MongoDbRepository<IAbpIdentityServerMongo
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<ApiScope, IMongoQueryable<ApiScope>>(!filter.IsNullOrWhiteSpace(),
-                x => x.Name.Contains(filter) ||
-                     x.Description.Contains(filter) ||
-                     x.DisplayName.Contains(filter))
+                x => x.Name.ToLower().Contains(filter.ToLower()) ||
+                     x.Description.ToLower().Contains(filter.ToLower()) ||
+                     x.DisplayName.ToLower().Contains(filter.ToLower()))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 

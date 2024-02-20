@@ -46,9 +46,9 @@ public class MongoApiResourceRepository : MongoDbRepository<IAbpIdentityServerMo
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                     x => x.Name.Contains(filter) ||
-                     x.Description.Contains(filter) ||
-                     x.DisplayName.Contains(filter))
+                     x => x.Name.ToLower().Contains(filter.ToLower()) ||
+                     x.Description.ToLower().Contains(filter.ToLower()) ||
+                     x.DisplayName.ToLower().Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(ApiResource.Name) : sorting)
             .As<IMongoQueryable<ApiResource>>()
             .PageBy<ApiResource, IMongoQueryable<ApiResource>>(skipCount, maxResultCount)
@@ -59,9 +59,9 @@ public class MongoApiResourceRepository : MongoDbRepository<IAbpIdentityServerMo
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf<ApiResource, IMongoQueryable<ApiResource>>(!filter.IsNullOrWhiteSpace(),
-            x => x.Name.Contains(filter) ||
-                 x.Description.Contains(filter) ||
-                 x.DisplayName.Contains(filter))
+            x => x.Name.ToLower().Contains(filter.ToLower()) ||
+                 x.Description.ToLower().Contains(filter.ToLower()) ||
+                 x.DisplayName.ToLower().Contains(filter.ToLower()))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 

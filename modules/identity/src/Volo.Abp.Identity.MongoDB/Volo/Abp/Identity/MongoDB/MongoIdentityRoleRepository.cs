@@ -93,8 +93,8 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                x => x.Name.Contains(filter) ||
-                     x.NormalizedName.Contains(filter))
+                x => x.Name.ToLower().Contains(filter.ToLower()) ||
+                     x.NormalizedName.ToLower().Contains(filter.ToLower()))
             .As<IMongoQueryable<IdentityRole>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
@@ -109,8 +109,8 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                x => x.Name.Contains(filter) ||
-                     x.NormalizedName.Contains(filter))
+                x => x.Name.ToLower().Contains(filter.ToLower()) ||
+                     x.NormalizedName.ToLower().Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.Name) : sorting)
             .As<IMongoQueryable<IdentityRole>>()
             .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)

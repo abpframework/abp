@@ -54,7 +54,7 @@ public class MongoTenantRepository : MongoDbRepository<ITenantManagementMongoDbC
             .WhereIf<Tenant, IMongoQueryable<Tenant>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Name.Contains(filter)
+                    u.Name.ToLower().Contains(filter.ToLower())
             )
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
             .As<IMongoQueryable<Tenant>>()
@@ -68,7 +68,7 @@ public class MongoTenantRepository : MongoDbRepository<ITenantManagementMongoDbC
             .WhereIf<Tenant, IMongoQueryable<Tenant>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Name.Contains(filter)
+                    u.Name.ToLower().Contains(filter.ToLower())
             ).CountAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

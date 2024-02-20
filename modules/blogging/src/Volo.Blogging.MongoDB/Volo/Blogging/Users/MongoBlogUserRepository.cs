@@ -21,7 +21,7 @@ namespace Volo.Blogging.Users
 
             if (!string.IsNullOrWhiteSpace(filter))
             {
-                query = query.Where(x => x.UserName.Contains(filter));
+                query = query.Where(x => x.UserName.ToLower().Contains(filter.ToLower()));
             }
 
             return await query.Take(maxCount).ToListAsync(GetCancellationToken(cancellationToken));

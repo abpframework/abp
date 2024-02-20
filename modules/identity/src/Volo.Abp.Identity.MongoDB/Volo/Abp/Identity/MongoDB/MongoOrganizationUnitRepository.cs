@@ -152,7 +152,7 @@ public class MongoOrganizationUnitRepository
 
         return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => !roleIds.Contains(r.Id))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.ToLower().Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
             .As<IMongoQueryable<IdentityRole>>()
             .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
@@ -168,7 +168,7 @@ public class MongoOrganizationUnitRepository
 
         return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => !roleIds.Contains(r.Id))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.ToLower().Contains(filter.ToLower()))
             .As<IMongoQueryable<IdentityRole>>()
             .CountAsync(GetCancellationToken(cancellationToken));
     }
@@ -224,8 +224,8 @@ public class MongoOrganizationUnitRepository
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.UserName.ToLower().Contains(filter.ToLower()) ||
+                    u.Email.ToLower().Contains(filter.ToLower()) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.UserName) : sorting)
@@ -242,8 +242,8 @@ public class MongoOrganizationUnitRepository
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u..ToLower().Contains(filter.ToLower()) ||
+                    u.Email.ToLower().Contains(filter.ToLower()) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
             .As<IMongoQueryable<IdentityUser>>()
@@ -283,8 +283,8 @@ public class MongoOrganizationUnitRepository
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
+                    u.UserName.ToLower().Contains(filter.ToLower()) ||
+                    u.Email.ToLower().Contains(filter.ToLower()) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             );
     }

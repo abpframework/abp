@@ -30,7 +30,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
             .WhereIf<Page, IMongoQueryable<Page>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Title.ToLower().Contains(filter.ToLower()) || u.Slug.Contains(filter)
+                    u.Title.ToLower().Contains(filter.ToLower()) || u.Slug.ToLower().Contains(filter.ToLower())
             ).CountAsync(cancellation);
     }
 
@@ -46,7 +46,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
         return await (await GetMongoQueryableAsync(cancellation))
             .WhereIf<Page, IMongoQueryable<Page>>(
                 !filter.IsNullOrWhiteSpace(),
-                u => u.Title.ToLower().Contains(filter) || u.Slug.Contains(filter))
+                u => u.Title.ToLower().Contains(filter.ToLower()) || u.Slug.ToLower().Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Page.Title) : sorting)
             .As<IMongoQueryable<Page>>()
             .PageBy<Page, IMongoQueryable<Page>>(skipCount, maxResultCount)

@@ -129,7 +129,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
             .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null && auditLog.Exceptions != "")
             .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null || auditLog.Exceptions == "")
             .WhereIf(!httpMethod.IsNullOrEmpty(), auditLog => auditLog.HttpMethod == httpMethod)
-            .WhereIf(!url.IsNullOrEmpty(), auditLog => auditLog.Url != null && auditLog.Url.Contains(url))
+            .WhereIf(!url.IsNullOrEmpty(), auditLog => auditLog.Url != null && auditLog.Url.ToLower().Contains(url.ToLower()))
             .WhereIf(userId != null, auditLog => auditLog.UserId == userId)
             .WhereIf(!userName.IsNullOrEmpty(), auditLog => auditLog.UserName == userName)
             .WhereIf(!applicationName.IsNullOrEmpty(), auditLog => auditLog.ApplicationName == applicationName)
@@ -265,6 +265,6 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
                 .WhereIf(changeType.HasValue, e => e.ChangeType == changeType.Value)
                 .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityId == entityId)
                 .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
-                    e => e.EntityTypeFullName.Contains(entityTypeFullName));
+                    e => e.EntityTypeFullName.ToLower().Contains(entityTypeFullName.ToLower()));
     }
 }
