@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 
 namespace Microsoft.AspNetCore.RequestLocalization;
 
-public class AbpRequestLocalizationMiddleware : IMiddleware, ITransientDependency
+public class AbpRequestLocalizationMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     public const string HttpContextItemName = "__AbpSetCultureCookie";
 
@@ -23,7 +24,7 @@ public class AbpRequestLocalizationMiddleware : IMiddleware, ITransientDependenc
         _loggerFactory = loggerFactory;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var middleware = new RequestLocalizationMiddleware(
             next,

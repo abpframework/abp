@@ -229,6 +229,7 @@
     "ManageAccount": "Upravljaj računom",
     "CommunityProfile": "Profil zajednice",
     "BlogProfile": "Blog profil",
-    "Tickets": "Ulaznice"
+    "Tickets": "Ulaznice",
+    "DisplayName:CommunityIndexPagePoll": "Anketa na stranici indeksa zajednice"
   }
 }

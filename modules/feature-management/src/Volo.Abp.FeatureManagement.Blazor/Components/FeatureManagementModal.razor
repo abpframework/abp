@@ -95,8 +95,8 @@
                 </Tabs>
             </ModalBody>
             <ModalFooter>
-                <Button Color="Color.Primary" Clicked="@(async () => await DeleteAsync(ProviderName,ProviderKey))">@L["ResetToDefault"]</Button>
-                <Button Color="Color.Secondary" Clicked="CloseModal">@L["Cancel"]</Button>
+                <Button class="btn btn-link" Clicked="CloseModal">@L["Cancel"]</Button>
+                <Button Color="Color.Primary" Outline Clicked="@(async () => await DeleteAsync(ProviderName,ProviderKey))">@L["ResetToDefault"]</Button>
                 <Button Color="Color.Primary" Clicked="SaveAsync">@L["Save"]</Button>
             </ModalFooter>
         }

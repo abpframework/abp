@@ -20,7 +20,7 @@ export class RestService {
     protected externalHttp: ExternalHttpClient,
     protected environment: EnvironmentService,
     protected httpErrorReporter: HttpErrorReporterService,
-  ) {}
+  ) { }
 
   protected getApiFromStore(apiName: string | undefined): string {
     return this.environment.getApiUrl(apiName);
@@ -28,7 +28,7 @@ export class RestService {
 
   handleError(err: any): Observable<any> {
     this.httpErrorReporter.reportError(err);
-    return throwError(err);
+    return throwError(() => err);
   }
 
   request<T, R>(
@@ -51,7 +51,7 @@ export class RestService {
         }),
         ...options,
       } as any)
-      .pipe(catchError(err => (skipHandleError ? throwError(err) : this.handleError(err))));
+      .pipe(catchError(err => (skipHandleError ? throwError(() => err) : this.handleError(err))));
   }
   private getHttpClient(isExternal: boolean) {
     return isExternal ? this.externalHttp : this.http;

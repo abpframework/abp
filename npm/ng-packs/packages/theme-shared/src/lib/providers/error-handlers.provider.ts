@@ -5,25 +5,25 @@ import { AbpFormatErrorHandlerService } from '../services/abp-format-error-handl
 import { StatusCodeErrorHandlerService } from '../services/status-code-error-handler.service';
 import { UnknownStatusCodeErrorHandlerService } from '../services/unknown-status-code-error-handler.service';
 
-export const ERROR_HANDLERS_PROVIDERS: Provider[] = [
+export const DEFAULT_HANDLERS_PROVIDERS: Provider[] = [
   {
     provide: CUSTOM_ERROR_HANDLERS,
     multi: true,
-    useClass: TenantResolveErrorHandlerService,
+    useExisting: TenantResolveErrorHandlerService,
   },
   {
     provide: CUSTOM_ERROR_HANDLERS,
     multi: true,
-    useClass: AbpFormatErrorHandlerService,
+    useExisting: AbpFormatErrorHandlerService,
   },
   {
     provide: CUSTOM_ERROR_HANDLERS,
     multi: true,
-    useClass: StatusCodeErrorHandlerService,
+    useExisting: StatusCodeErrorHandlerService,
   },
   {
     provide: CUSTOM_ERROR_HANDLERS,
     multi: true,
-    useClass: UnknownStatusCodeErrorHandlerService,
+    useExisting: UnknownStatusCodeErrorHandlerService,
   },
 ];

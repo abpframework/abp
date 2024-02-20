@@ -90,13 +90,13 @@ public class AbpModalFooterTagHelperService : AbpTagHelperService<AbpModalFooter
         return element.ToHtmlString();
     }
 
-    protected virtual string GetCancelButton()
+    protected virtual string GetCancelButton(bool isDestructive = false)
     {
         var element = new TagBuilder("button");
         element.Attributes.Add("type", "button");
         element.Attributes.Add("data-bs-dismiss", "modal");
         element.AddCssClass("btn");
-        element.AddCssClass("btn-secondary");
+        element.AddCssClass("btn-outline-primary");
         element.InnerHtml.Append(_localizer["Cancel"]);
 
         return element.ToHtmlString();

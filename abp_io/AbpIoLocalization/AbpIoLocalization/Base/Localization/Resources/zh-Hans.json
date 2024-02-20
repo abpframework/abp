@@ -86,12 +86,12 @@
     "Themes": "主题",
     "Premium": "高级",
     "PrivacyPolicy": "隐私政策",
-    "TermsAndConditions": "条款和条件",
-    "WouldLikeToReceiveMarketingMaterials": "我希望收到营销资料，如产品优惠和特价。",
-    "JoinOurMarketingNewsletter": "加入我们的营销通讯",
-    "CommunityPrivacyPolicyConfirmation": "我同意条款和条件以及 <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">隐私政策</a>。",
-    "WouldLikeToReceiveNotification": "我希望收到来自 abp.io 网站的最新消息。",
-    "CommercialNewsletterConfirmationMessage": "我同意<a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">条款和条件</a>以及<a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">隐私政策</a>。",
+    "TermsAndConditions": "条款 & 条件",
+    "WouldLikeToReceiveMarketingMaterials": "我想收到产品交易和特别优惠等市场推广材料。",
+    "JoinOurMarketingNewsletter": "加入我们市场推广时事通讯",
+    "CommunityPrivacyPolicyConfirmation": "我同意条款 & 条件和<a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">隐私政策 </a>。",
+    "WouldLikeToReceiveNotification": "我想从 abp.io 网站接收最新消息。",
+    "CommercialNewsletterConfirmationMessage": "我同意<a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/TermsConditions\">条款 & 条件</a > 和 <a class=\"text-white fw-bolder text-decoration-underline\" href=\"https://commercial.abp.io/Privacy\">隐私政策</a>。",
     "FreeDDDEBook": "免费 DDD 电子书",
     "AdditionalServices": "附加服务",
     "Learn": "学习",
@@ -229,6 +229,7 @@
     "ManageAccount": "管理账户",
     "CommunityProfile": "社区概况",
     "BlogProfile": "博客简介",
-    "Tickets": "门票"
+    "Tickets": "门票",
+    "DisplayName:CommunityIndexPagePoll": "社区首页投票"
   }
 }
