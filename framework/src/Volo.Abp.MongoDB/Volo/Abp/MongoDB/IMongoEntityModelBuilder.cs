@@ -15,7 +15,7 @@ public interface IMongoEntityModelBuilder<TEntity>
     
     CreateCollectionOptions<TEntity> CreateCollectionOptions { get; }
     
-    Action<IMongoIndexManager<BsonDocument>>? IndexesAction { get; set; }
+    void ConfigureIndexes(Action<IMongoIndexManager<BsonDocument>> action);
 }
 
 public interface IMongoEntityModelBuilder
@@ -28,5 +28,5 @@ public interface IMongoEntityModelBuilder
     
     CreateCollectionOptions CreateCollectionOptions { get; }
     
-    Action<IMongoIndexManager<BsonDocument>>? IndexesAction { get; set; }
+    void ConfigureIndexes(Action<IMongoIndexManager<BsonDocument>> action);
 }

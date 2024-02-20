@@ -48,4 +48,9 @@ public class MongoEntityModelBuilder<TEntity> :
     {
         return _createCollectionOptions;
     }
+    
+    public void ConfigureIndexes(Action<IMongoIndexManager<BsonDocument>>? indexesAction)
+    {
+        IndexesAction = indexesAction;
+    }
 }
