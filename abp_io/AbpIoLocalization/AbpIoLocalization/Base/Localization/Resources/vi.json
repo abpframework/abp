@@ -228,6 +228,7 @@
     "ManageAccount": "Quản lý tài khoản",
     "CommunityProfile": "Hồ sơ cộng đồng",
     "BlogProfile": "Hồ sơ blog",
-    "Tickets": "Vé"
+    "Tickets": "Vé",
+    "DisplayName:CommunityIndexPagePoll": "Bình chọn trang chủ cộng đồng"
   }
 }

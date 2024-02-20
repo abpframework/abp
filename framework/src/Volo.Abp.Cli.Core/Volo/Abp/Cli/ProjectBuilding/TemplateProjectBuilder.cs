@@ -68,7 +68,8 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
             SourceCodeTypes.Template,
             args.Version,
             args.TemplateSource,
-            args.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long)
+            args.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long),
+            trustUserVersion: args.TrustUserVersion
         );
 
         ConfigureThemeOptions(args, templateFile.Version);

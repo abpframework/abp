@@ -68,4 +68,9 @@ public class EfCorePageRepository : EfCoreRepository<ICmsKitDbContext, Page, Gui
     {
         return GetListAsync(x => x.IsHomePage, cancellationToken: GetCancellationToken(cancellationToken));
     }
+
+    public async Task<string?> FindTitleAsync(Guid pageId, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync()).Where(x => x.Id == pageId).Select(x => x.Title).FirstOrDefaultAsync(cancellationToken);
+    }
 }

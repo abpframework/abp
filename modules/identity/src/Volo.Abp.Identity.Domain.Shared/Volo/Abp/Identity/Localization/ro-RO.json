@@ -85,6 +85,7 @@
     "Permission:Edit": "Editează",
     "Permission:Delete": "Şterge",
     "Permission:ChangePermissions": "Schimbă permisiunile",
+    "Permission:ManageRoles": "Administrarea rolurilor",
     "Permission:UserManagement": "Administrarea utilizatorilor",
     "Permission:UserLookup": "Căutarea utilizatorilor",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Lungimea necesară",

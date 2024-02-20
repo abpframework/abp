@@ -27,6 +27,7 @@ const routes: Routes = [
         },
       },
     ],
+    title: 'AbpSettingManagement::Settings',
   },
 ];
 
@@ -34,4 +35,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SettingManagementRoutingModule {}
+export class SettingManagementRoutingModule { }

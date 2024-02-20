@@ -2,7 +2,7 @@
 
 A new .NET version was released on November 14, 2023 and ABP 8.0 RC.1 shipped based on .NET 8.0 just after Microsoft's .NET 8.0 release. Therefore, it's a good time to see what we need to do to upgrade our existing projects to .NET 8.0. 
 
-Despite all the related dependency upgrades and changes made on ABP Framework and ABP Commercial sides, we still need to make some changes. Let's see the required actions that need to be taken in the following sections.
+Despite all the related dependency upgrades and changes made on the ABP Framework and ABP Commercial sides, we still need to make some changes. Let's see the required actions that need to be taken in the following sections.
 
 ## Installing the .NET 8.0 SDK
 
@@ -52,7 +52,7 @@ For example, you can update the ASP.NET Core image as follows:
 
 ```diff
 - FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim AS base
-+ FROM mcr.microsoft.com/dotnet/aspnet:8.0-bullseye-slim AS base
++ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 ```
 
 You can check the related images from Docker Hub and update them accordingly:
@@ -63,22 +63,28 @@ You can check the related images from Docker Hub and update them accordingly:
 
 ## Upgrading Your Existing Projects to ABP 8.0
 
-Updating your application to ABP 8.0 is pretty straight-forward. You first need to upgrade the ABP CLI to version `8.0.0-rc.1` using a command line terminal:
+Updating your application to ABP 8.0 is pretty straight-forward. You first need to upgrade the ABP CLI to version `8.0.0` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 8.0.0-rc.1
+dotnet tool update Volo.Abp.Cli -g --version 8.0.0
 ````
 
 **or install** it if you haven't before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 8.0.0-rc.1
+dotnet tool install Volo.Abp.Cli -g --version 8.0.0
 ````
 
 Then, you can use the `abp update` command to update all the ABP related NuGet and NPM packages in your solution:
 
 ```bash
-abp update --version 8.0.0-rc.1
+abp update --version 8.0.0
+```
+
+Also, if you are using ABP Commercial, you can update the ABP Suite version with the following command:
+
+```bash
+abp suite update --version 8.0.0
 ```
 
 After that, you need to check the migration guide documents, listed below:

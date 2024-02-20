@@ -15,9 +15,12 @@ public abstract class AbpInterceptionTestBase<TStartupModule> : AbpAsyncIntegrat
         services.AddTransient<SimpleAsyncInterceptor>();
         services.AddTransient<SimpleAsyncInterceptor2>();
         services.AddTransient<SimpleInterceptionTargetClass>();
+        services.AddTransient<DisableInterceptionTargetClass>();
 
         services.AddTransient<SimpleResultCacheTestInterceptor>();
         services.AddTransient<CachedTestObject>();
+
+        services.AddTransient<AlwaysExceptionAsyncInterceptor>();
 
         services.OnRegistered(registration =>
         {
@@ -25,11 +28,20 @@ public abstract class AbpInterceptionTestBase<TStartupModule> : AbpAsyncIntegrat
             {
                 registration.Interceptors.Add<SimpleAsyncInterceptor>();
                 registration.Interceptors.Add<SimpleAsyncInterceptor2>();
+                registration.Interceptors.Add<SimpleResultCacheTestInterceptor>();
             }
 
             if (typeof(CachedTestObject) == registration.ImplementationType)
             {
                 registration.Interceptors.Add<SimpleResultCacheTestInterceptor>();
+            }
+
+            if (typeof(DisableInterceptionTargetClass) == registration.ImplementationType)
+            {
+                registration.Interceptors.Add<SimpleAsyncInterceptor>();
+                registration.Interceptors.Add<SimpleAsyncInterceptor2>();
+                registration.Interceptors.Add<SimpleResultCacheTestInterceptor>();
+                registration.Interceptors.Add<AlwaysExceptionAsyncInterceptor>();
             }
         });
 
@@ -95,5 +107,24 @@ public abstract class AbpInterceptionTestBase<TStartupModule> : AbpAsyncIntegrat
         (await target.GetValueAsync(42)).ShouldBe(42); //First run, not cached yet
         (await target.GetValueAsync(43)).ShouldBe(42); //First run, cached previous value
         (await target.GetValueAsync(44)).ShouldBe(42); //First run, cached previous value
+    }
+
+    [Fact]
+    public async Task Should_Disable_Interceptors()
+    {
+        //Arrange
+
+        var target = ServiceProvider.GetService<DisableInterceptionTargetClass>();
+
+        //Act
+
+        await target.DoItAsync();
+
+        //Assert
+
+        target.Logs.Count.ShouldBe(3);
+        target.Logs[0].ShouldBe("EnterDoItAsync");
+        target.Logs[1].ShouldBe("MiddleDoItAsync");
+        target.Logs[2].ShouldBe("ExitDoItAsync");
     }
 }

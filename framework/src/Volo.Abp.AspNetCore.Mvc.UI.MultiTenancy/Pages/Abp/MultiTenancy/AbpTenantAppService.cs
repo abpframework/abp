@@ -9,15 +9,17 @@ namespace Pages.Abp.MultiTenancy;
 public class AbpTenantAppService : ApplicationService, IAbpTenantAppService
 {
     protected ITenantStore TenantStore { get; }
+    protected ITenantNormalizer TenantNormalizer { get; }
 
-    public AbpTenantAppService(ITenantStore tenantStore)
+    public AbpTenantAppService(ITenantStore tenantStore, ITenantNormalizer tenantNormalizer)
     {
         TenantStore = tenantStore;
+        TenantNormalizer = tenantNormalizer;
     }
 
     public virtual async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
     {
-        var tenant = await TenantStore.FindAsync(name);
+        var tenant = await TenantStore.FindAsync(TenantNormalizer.NormalizeName(name)!);
 
         if (tenant == null)
         {
@@ -29,6 +31,7 @@ public class AbpTenantAppService : ApplicationService, IAbpTenantAppService
             Success = true,
             TenantId = tenant.Id,
             Name = tenant.Name,
+            NormalizedName = tenant.NormalizedName,
             IsActive = tenant.IsActive
         };
     }
@@ -47,6 +50,7 @@ public class AbpTenantAppService : ApplicationService, IAbpTenantAppService
             Success = true,
             TenantId = tenant.Id,
             Name = tenant.Name,
+            NormalizedName = tenant.NormalizedName,
             IsActive = tenant.IsActive
         };
     }
