@@ -13,7 +13,7 @@ public interface IMongoEntityModelBuilder<TEntity>
 
     BsonClassMap<TEntity> BsonMap { get; }
     
-    CreateCollectionOptions<TEntity> CreateCollectionOptions { get; }
+    CreateCollectionOptions<BsonDocument> CreateCollectionOptions { get; }
     
     void ConfigureIndexes(Action<IMongoIndexManager<BsonDocument>> action);
 }
@@ -26,7 +26,7 @@ public interface IMongoEntityModelBuilder
 
     BsonClassMap BsonMap { get; }
     
-    CreateCollectionOptions CreateCollectionOptions { get; }
+    CreateCollectionOptions<BsonDocument> CreateCollectionOptions { get; }
     
     void ConfigureIndexes(Action<IMongoIndexManager<BsonDocument>> action);
 }

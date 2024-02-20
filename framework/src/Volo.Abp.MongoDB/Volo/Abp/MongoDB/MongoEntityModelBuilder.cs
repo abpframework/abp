@@ -18,35 +18,26 @@ public class MongoEntityModelBuilder<TEntity> :
     public string CollectionName { get; set; } = default!;
     
     public Action<IMongoIndexManager<BsonDocument>>? IndexesAction { get; set; }
+    
+    public CreateCollectionOptions<BsonDocument> CreateCollectionOptions { get; }
 
     BsonClassMap IMongoEntityModelBuilder.BsonMap => _bsonClassMap;
 
     BsonClassMap<TEntity> IMongoEntityModelBuilder<TEntity>.BsonMap => _bsonClassMap;
 
     private readonly BsonClassMap<TEntity> _bsonClassMap;
-    
-    CreateCollectionOptions<TEntity> IMongoEntityModelBuilder<TEntity>.CreateCollectionOptions => _createCollectionOptions;
-
-    CreateCollectionOptions IMongoEntityModelBuilder.CreateCollectionOptions => _createCollectionOptions;
-
-    private readonly CreateCollectionOptions<TEntity> _createCollectionOptions;
 
     public MongoEntityModelBuilder()
     {
         EntityType = typeof(TEntity);
         _bsonClassMap = new BsonClassMap<TEntity>();
-        _createCollectionOptions = new CreateCollectionOptions<TEntity>();
         _bsonClassMap.ConfigureAbpConventions();
+        CreateCollectionOptions = new CreateCollectionOptions<BsonDocument>();
     }
 
     public BsonClassMap GetMap()
     {
         return _bsonClassMap;
-    }
-
-    public CreateCollectionOptions GetCreateCollectionOptions()
-    {
-        return _createCollectionOptions;
     }
     
     public void ConfigureIndexes(Action<IMongoIndexManager<BsonDocument>>? indexesAction)

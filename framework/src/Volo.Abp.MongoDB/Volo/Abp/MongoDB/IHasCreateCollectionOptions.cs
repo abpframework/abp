@@ -1,8 +1,9 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Volo.Abp.MongoDB;
 
 public interface IHasCreateCollectionOptions
 {
-    CreateCollectionOptions GetCreateCollectionOptions();
+    CreateCollectionOptions<BsonDocument> CreateCollectionOptions { get; }
 }

@@ -74,7 +74,7 @@ public class MongoModelBuilder : IMongoModelBuilder
 
                 baseClasses.AddRange(entityModel.EntityType.GetBaseClasses(includeObject: false));
 
-                var createCollectionOptions = entityModel.As<IHasCreateCollectionOptions>().GetCreateCollectionOptions();
+                var createCollectionOptions = entityModel.As<IHasCreateCollectionOptions>().CreateCollectionOptions;
                 var indexesAction = entityModel.As<IHasMongoIndexManagerAction>().IndexesAction;
                 CreateCollectionIfNotExists(dbContext, entityModel.CollectionName, createCollectionOptions);
                 CreateCollectionIndexes(dbContext, entityModel.CollectionName, indexesAction);
