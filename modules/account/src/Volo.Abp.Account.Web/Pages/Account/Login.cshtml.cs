@@ -143,7 +143,7 @@ public class LoginModel : AccountPageModel
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-        return RedirectSafely(ReturnUrl, ReturnUrlHash);
+        return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
     }
 
     /// <summary>
@@ -237,7 +237,7 @@ public class LoginModel : AccountPageModel
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
             }
 
-            return RedirectSafely(returnUrl, returnUrlHash);
+            return await RedirectSafelyAsync(returnUrl, returnUrlHash);
         }
 
         //TODO: Handle other cases for result!
@@ -279,7 +279,7 @@ public class LoginModel : AccountPageModel
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-        return RedirectSafely(returnUrl, returnUrlHash);
+        return await RedirectSafelyAsync(returnUrl, returnUrlHash);
     }
 
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds()

@@ -29,10 +29,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["packages/oauth/**/*.ts", "packages/oauth/**/*.html"]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": [],

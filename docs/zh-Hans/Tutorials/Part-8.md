@@ -497,77 +497,112 @@ namespace Acme.BookStore
 using System;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Acme.BookStore.Authors
-{ {{if DB=="Mongo"}}
-    [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
-    public class AuthorAppService_Tests : BookStoreApplicationTestBase
+namespace Acme.BookStore.Authors;
+
+public abstract class AuthorAppService_Tests<TStartupModule> : BookStoreApplicationTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
+{
+    private readonly IAuthorAppService _authorAppService;
+
+    protected AuthorAppService_Tests()
     {
-        private readonly IAuthorAppService _authorAppService;
+        _authorAppService = GetRequiredService<IAuthorAppService>();
+    }
 
-        public AuthorAppService_Tests()
+    [Fact]
+    public async Task Should_Get_All_Authors_Without_Any_Filter()
+    {
+        var result = await _authorAppService.GetListAsync(new GetAuthorListDto());
+
+        result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
+        result.Items.ShouldContain(author => author.Name == "George Orwell");
+        result.Items.ShouldContain(author => author.Name == "Douglas Adams");
+    }
+
+    [Fact]
+    public async Task Should_Get_Filtered_Authors()
+    {
+        var result = await _authorAppService.GetListAsync(
+            new GetAuthorListDto {Filter = "George"});
+
+        result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
+        result.Items.ShouldContain(author => author.Name == "George Orwell");
+        result.Items.ShouldNotContain(author => author.Name == "Douglas Adams");
+    }
+
+    [Fact]
+    public async Task Should_Create_A_New_Author()
+    {
+        var authorDto = await _authorAppService.CreateAsync(
+            new CreateAuthorDto
+            {
+                Name = "Edward Bellamy",
+                BirthDate = new DateTime(1850, 05, 22),
+                ShortBio = "Edward Bellamy was an American author..."
+            }
+        );
+        
+        authorDto.Id.ShouldNotBe(Guid.Empty);
+        authorDto.Name.ShouldBe("Edward Bellamy");
+    }
+
+    [Fact]
+    public async Task Should_Not_Allow_To_Create_Duplicate_Author()
+    {
+        await Assert.ThrowsAsync<AuthorAlreadyExistsException>(async () =>
         {
-            _authorAppService = GetRequiredService<IAuthorAppService>();
-        }
-
-        [Fact]
-        public async Task Should_Get_All_Authors_Without_Any_Filter()
-        {
-            var result = await _authorAppService.GetListAsync(new GetAuthorListDto());
-
-            result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
-            result.Items.ShouldContain(author => author.Name == "George Orwell");
-            result.Items.ShouldContain(author => author.Name == "Douglas Adams");
-        }
-
-        [Fact]
-        public async Task Should_Get_Filtered_Authors()
-        {
-            var result = await _authorAppService.GetListAsync(
-                new GetAuthorListDto {Filter = "George"});
-
-            result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
-            result.Items.ShouldContain(author => author.Name == "George Orwell");
-            result.Items.ShouldNotContain(author => author.Name == "Douglas Adams");
-        }
-
-        [Fact]
-        public async Task Should_Create_A_New_Author()
-        {
-            var authorDto = await _authorAppService.CreateAsync(
+            await _authorAppService.CreateAsync(
                 new CreateAuthorDto
                 {
-                    Name = "Edward Bellamy",
-                    BirthDate = new DateTime(1850, 05, 22),
-                    ShortBio = "Edward Bellamy was an American author..."
+                    Name = "Douglas Adams",
+                    BirthDate = DateTime.Now,
+                    ShortBio = "..."
                 }
             );
-
-            authorDto.Id.ShouldNotBe(Guid.Empty);
-            authorDto.Name.ShouldBe("Edward Bellamy");
-        }
-
-        [Fact]
-        public async Task Should_Not_Allow_To_Create_Duplicate_Author()
-        {
-            await Assert.ThrowsAsync<AuthorAlreadyExistsException>(async () =>
-            {
-                await _authorAppService.CreateAsync(
-                    new CreateAuthorDto
-                    {
-                        Name = "Douglas Adams",
-                        BirthDate = DateTime.Now,
-                        ShortBio = "..."
-                    }
-                );
-            });
-        }
-
-        //TODO: Test other methods...
+        });
     }
+
+    //TODO: Test other methods...
 }
 ````
+
+{{if DB == "EF"}}
+添加 `AuthorAppService_Tests` 的实现类,命名为 `EfCoreAuthorAppService_Tests` ,并放置在 `EntityFrameworkCore\Applications\Authors` 命名空间 (文件夹)下,在 `Acme.BookStore.EntityFrameworkCore.Tests` 项目中:
+
+````csharp
+using Acme.BookStore.Authors;
+using Xunit;
+
+namespace Acme.BookStore.EntityFrameworkCore.Applications.Authors;
+
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+public class EfCoreAuthorAppService_Tests : AuthorAppService_Tests<BookStoreEntityFrameworkCoreTestModule>
+{
+
+}
+````
+{{end}}
+
+{{if DB == "Mongo"}}
+添加 `AuthorAppService_Tests` 的实现类,命名为 `MongoDBAuthorAppService_Tests` ,并放置在 `MongoDb\Applications\Authors` 命名空间 (文件夹)下,在 `Acme.BookStore.MongoDB.Tests` 项目中:
+
+````csharp
+using Acme.BookStore.MongoDB;
+using Acme.BookStore.Authors;
+using Xunit;
+
+namespace Acme.BookStore.MongoDb.Applications.Authors;
+
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+public class MongoDBAuthorAppService_Tests : AuthorAppService_Tests<BookStoreMongoDbTestModule>
+{
+
+}
+````
+{{end}}
 
 完成应用服务方法的测试, 它们应该很容易理解.
 
