@@ -242,7 +242,7 @@ public class MongoOrganizationUnitRepository
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u..ToLower().Contains(filter.ToLower()) ||
+                    u.UserName.ToLower().Contains(filter.ToLower()) ||
                     u.Email.ToLower().Contains(filter.ToLower()) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
