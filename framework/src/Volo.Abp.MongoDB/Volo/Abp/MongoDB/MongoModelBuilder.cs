@@ -74,7 +74,10 @@ public class MongoModelBuilder : IMongoModelBuilder
 
                 baseClasses.AddRange(entityModel.EntityType.GetBaseClasses(includeObject: false));
 
-                CreateCollectionIfNotExists(dbContext, entityModel.CollectionName);
+                var createCollectionOptions = entityModel.As<IHasCreateCollectionOptions>().CreateCollectionOptions;
+                var indexesAction = entityModel.As<IHasMongoIndexManagerAction>().IndexesAction;
+                CreateCollectionIfNotExists(dbContext, entityModel.CollectionName, createCollectionOptions);
+                CreateCollectionIndexes(dbContext, entityModel.CollectionName, indexesAction);
             }
 
             baseClasses = baseClasses.Distinct().ToList();
@@ -141,7 +144,7 @@ public class MongoModelBuilder : IMongoModelBuilder
                 typeof(MongoEntityModelBuilder<>).MakeGenericType(entityType)
             )!
         );
-
+        
         buildAction?.Invoke(model);
     }
 
@@ -150,14 +153,24 @@ public class MongoModelBuilder : IMongoModelBuilder
         return _entityModelBuilders.Values.Cast<IMongoEntityModel>().ToImmutableList();
     }
 
-    protected virtual void CreateCollectionIfNotExists(AbpMongoDbContext dbContext, string collectionName)
+    protected virtual void CreateCollectionIfNotExists(AbpMongoDbContext dbContext, string collectionName, CreateCollectionOptions createCollectionOptions)
     {
         var filter = new BsonDocument("name", collectionName);
-        var options = new ListCollectionNamesOptions { Filter = filter };
+        var options = new ListCollectionsOptions { Filter = filter };
 
-        if (!dbContext.Database.ListCollectionNames(options).Any())
+        if (!dbContext.Database.ListCollections(options).Any())
         {
-            dbContext.Database.CreateCollection(collectionName);
+            dbContext.Database.CreateCollection(collectionName, createCollectionOptions);
+        }
+    }
+
+    protected virtual void CreateCollectionIndexes(AbpMongoDbContext dbContext, string collectionName, Action<IMongoIndexManager<BsonDocument>>? indexesAction = null)
+    {
+        var collection = dbContext.Database.GetCollection<BsonDocument>(collectionName);
+   
+        if (collection != null)
+        {
+            indexesAction?.Invoke(collection.Indexes);
         }
     }
 }
