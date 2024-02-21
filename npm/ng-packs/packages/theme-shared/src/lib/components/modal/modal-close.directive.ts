@@ -13,9 +13,4 @@ export class ModalCloseDirective {
   onClick() {
     this.modal?.close();
   }
-
-  @HostListener('document:keydown.escape') 
-  handleKeyboardEvent(event: KeyboardEvent) {
-    this.modal?.close();
-  }
 }
