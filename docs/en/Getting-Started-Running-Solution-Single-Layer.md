@@ -8,6 +8,16 @@
 }
 ````
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Creating a new solution",
+    "Path": "Getting-Started-Create-Solution-Single-Layer"
+  }
+}
+````
+
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
 ## Create the Database
