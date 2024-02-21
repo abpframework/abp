@@ -108,7 +108,11 @@
             "inject": false,
             "bundleName": "ng-zorro-antd-tree"
           },
-          "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+          {
+            "input": "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+            "inject": true,
+            "bundleName": "bootstrap-icons"
+          },
           "apps/dev-app/src/styles.scss"
         ],
         "scripts": []
@@ -166,10 +170,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["apps/dev-app/src/**/*.ts", "apps/dev-app/src/**/*.html"]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
@@ -79,6 +80,29 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
         GetRequiredService<GenericServiceWithDisablePropertyInjectionOnProperty<string>>().DisablePropertyInjectionService.ShouldBeNull();
     }
 
+
+    [Fact]
+    public void ExposeKeyedServices_Should_Expose_Correct_Services()
+    {
+        GetService<IMyExposingKeyedServices>().ShouldBeNull();
+        GetService<MyExposingKeyedService1>().ShouldBeNull();
+        GetService<MyExposingKeyedService2>().ShouldBeNull();
+
+        GetRequiredKeyedService<IMyExposingKeyedServices>("k1").ShouldNotBeNull();
+        GetRequiredKeyedService<MyExposingKeyedService1>("k1").ShouldNotBeNull();
+
+        GetRequiredKeyedService<IMyExposingKeyedServices>("k2").ShouldNotBeNull();
+        GetRequiredKeyedService<MyExposingKeyedService2>("k2").ShouldNotBeNull();
+
+        GetService<MyExposingKeyedService3>().ShouldNotBeNull();
+        GetRequiredKeyedService<IMyExposingKeyedServices>("k3").ShouldNotBeNull();
+        GetRequiredKeyedService<MyExposingKeyedService3>("k3").ShouldNotBeNull();
+        
+        //resolving multiple keyed services
+        GetKeyedServices<IEnumerable<IMyExposingKeyedServices>>("k1").ShouldNotBeEmpty();
+        GetKeyedServices<IEnumerable<IMyExposingKeyedServices>>("k1").Count().ShouldBeGreaterThanOrEqualTo(2);
+    }
+
     [Fact]
     public void Singletons_Exposing_Multiple_Services_Should_Returns_The_Same_Instance()
     {
@@ -86,6 +110,30 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
         var objectByClassRef = GetRequiredService<MySingletonExposingMultipleServices>();
 
         ReferenceEquals(objectByInterfaceRef, objectByClassRef).ShouldBeTrue();
+
+        objectByInterfaceRef = GetRequiredKeyedService<IMySingletonExposingMultipleServices>("k1");
+        objectByClassRef = GetRequiredKeyedService<MySingletonExposingMultipleServices>("k1");
+
+        ReferenceEquals(objectByInterfaceRef, objectByClassRef).ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Should_Get_Keyed_Services()
+    {
+        var bigCache = GetRequiredKeyedService<ICache>("big");
+        var bigInstanceCache = GetRequiredKeyedService<ICache>("bigInstance");
+        var smallCache = GetRequiredKeyedService<ICache>("small");
+        var smallFactoryCache = GetRequiredKeyedService<ICache>("smallFactory");
+
+        bigCache.GetType().ShouldBe(typeof(BigCache));
+        bigInstanceCache.GetType().ShouldBe(typeof(BigCache));
+        smallCache.GetType().ShouldBe(typeof(SmallCache));
+        smallFactoryCache.GetType().ShouldBe(typeof(SmallCache));
+
+        bigCache.Get("key").ShouldBe("Resolving key from big cache.");
+        bigInstanceCache.Get("key").ShouldBe("Resolving key from big cache.");
+        smallCache.Get("key").ShouldBe("Resolving key from small cache.");
+        smallFactoryCache.Get("key").ShouldBe("Resolving key from small cache.");
     }
 
     public class MySingletonService : ISingletonDependency
@@ -147,9 +195,44 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
     }
 
     [ExposeServices(typeof(IMySingletonExposingMultipleServices), typeof(MySingletonExposingMultipleServices))]
+    [ExposeKeyedService<IMySingletonExposingMultipleServices>("k1")]
+    [ExposeKeyedService<MySingletonExposingMultipleServices>("k1")]
     public class MySingletonExposingMultipleServices : IMySingletonExposingMultipleServices, ISingletonDependency
     {
 
+    }
+
+    public interface IMyExposingKeyedServices
+    {
+
+    }
+
+    [ExposeKeyedService<IMyExposingKeyedServices>("k1")]
+    [ExposeKeyedService<MyExposingKeyedService1>("k1")]
+    public class MyExposingKeyedService1 : IMyExposingKeyedServices, ITransientDependency
+    {
+
+    }
+
+    [ExposeKeyedService<IMyExposingKeyedServices>("k2")]
+    [ExposeKeyedService<MyExposingKeyedService2>("k2")]
+    public class MyExposingKeyedService2 : IMyExposingKeyedServices, ITransientDependency
+    {
+
+    }
+
+    [ExposeServices(typeof(MyExposingKeyedService3))]
+    [ExposeKeyedService<IMyExposingKeyedServices>("k3")]
+    [ExposeKeyedService<MyExposingKeyedService3>("k3")]
+    public class MyExposingKeyedService3 : IMyExposingKeyedServices, ITransientDependency
+    {
+
+    }
+    
+    [ExposeKeyedService<IMyExposingKeyedServices>("k1")]
+    public class MyExposingKeyedService4 : IMyExposingKeyedServices, ITransientDependency
+    {
+        
     }
 
     public class TestModule : AbpModule
@@ -164,6 +247,10 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
             context.Services.AddTransient(typeof(GenericServiceWithPropertyInject<>));
             context.Services.AddTransient(typeof(GenericServiceWithDisablePropertyInjectionOnClass<>));
             context.Services.AddTransient(typeof(GenericServiceWithDisablePropertyInjectionOnProperty<>));
+            context.Services.AddKeyedSingleton<ICache, BigCache>("big");
+            context.Services.AddKeyedSingleton<ICache, SmallCache>("small");
+            context.Services.AddKeyedSingleton<ICache>("bigInstance", new BigCache());
+            context.Services.AddKeyedSingleton<ICache>("smallFactory", (sp, key) => new SmallCache());
         }
     }
 
@@ -214,5 +301,19 @@ public abstract class DependencyInjection_Standard_Tests : AbpIntegratedTest<Dep
         public MyEmptyTransientService DisablePropertyInjectionService { get; set; }
 
         public T Value { get; set; }
+    }
+
+    public interface ICache
+    {
+        object Get(string key);
+    }
+    public class BigCache : ICache
+    {
+        public object Get(string key) => $"Resolving {key} from big cache.";
+    }
+
+    public class SmallCache : ICache
+    {
+        public object Get(string key) => $"Resolving {key} from small cache.";
     }
 }

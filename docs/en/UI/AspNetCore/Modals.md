@@ -186,7 +186,7 @@ For this example, creating a new Razor Page, named `ProductCreateModal.cshtml`, 
 ````
 
 * The `abp-modal` has been wrapped by the `form`. This is needed to place the `Save` and the `Cancel` buttons into the form. In this way, the `Save` button acts as the `submit` button for the `form`.
-* Used the [abp-input tag helpers](Tag-Helpers/Form-Elements.md) to simplify to create the form elements. Otherwise, you need to write more HTML.
+* Used the [abp-input tag helpers](Tag-Helpers/Form-elements.md) to simplify to create the form elements. Otherwise, you need to write more HTML.
 
 **ProductCreateModal.cshtml.cs Content:**
 
@@ -247,7 +247,7 @@ namespace MyProject.Web.Pages.Products
 }
 ````
 
-* `abp-input` Tag Helper can understand the data annotation attributes and uses them to shape and validate the form elements. See the [abp-input tag helpers](Tag-Helpers/Form-Elements.md) document to learn more.
+* `abp-input` Tag Helper can understand the data annotation attributes and uses them to shape and validate the form elements. See the [abp-input tag helpers](Tag-Helpers/Form-elements.md) document to learn more.
 
 #### Defining the Modal Manager
 

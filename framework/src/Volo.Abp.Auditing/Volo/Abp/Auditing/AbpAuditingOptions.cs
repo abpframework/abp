@@ -53,6 +53,12 @@ public class AbpAuditingOptions
 
     public IEntityHistorySelectorList EntityHistorySelectors { get; }
 
+    /// <summary>
+    /// Default: true.
+    /// Save entity changes to audit log when any navigation property changes.
+    /// </summary>
+    public bool SaveEntityHistoryWhenNavigationChanges { get; set; } = true;
+
     //TODO: Move this to asp.net core layer or convert it to a more dynamic strategy?
     /// <summary>
     /// Default: false.

@@ -13,29 +13,22 @@ namespace Volo.Abp.UI.Navigation.Urls;
 
 public class AppUrlProvider : IAppUrlProvider, ITransientDependency
 {
-    public const string TenantIdPlaceHolder = "{{tenantId}}";
-    public const string TenantNamePlaceHolder = "{{tenantName}}";
-
     protected AppUrlOptions Options { get; }
-    protected ICurrentTenant CurrentTenant { get; }
-    protected ITenantStore TenantStore { get; }
-
+    protected IMultiTenantUrlProvider MultiTenantUrlProvider { get; }
     public ILogger<AppUrlProvider> Logger { get; set; }
 
     public AppUrlProvider(
         IOptions<AppUrlOptions> options,
-        ICurrentTenant currentTenant,
-        ITenantStore tenantStore)
+        IMultiTenantUrlProvider multiTenantUrlProvider)
     {
-        CurrentTenant = currentTenant;
-        TenantStore = tenantStore;
+        MultiTenantUrlProvider = multiTenantUrlProvider;
         Options = options.Value;
         Logger = NullLogger<AppUrlProvider>.Instance;
     }
 
     public virtual async Task<string> GetUrlAsync(string appName, string? urlName = null)
     {
-        return await ReplacePlaceHoldersAsync(
+        return await MultiTenantUrlProvider.GetUrlAsync(
             await GetConfiguredUrl(
                 appName,
                 urlName
@@ -43,9 +36,14 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         );
     }
 
-    public bool IsRedirectAllowedUrl(string url)
+    public virtual async Task<bool> IsRedirectAllowedUrlAsync(string url)
     {
-        var allow = Options.RedirectAllowedUrls.Any(x => url.StartsWith(x, StringComparison.CurrentCultureIgnoreCase));
+        var redirectAllowedUrls = new List<string>();
+        foreach (var redirectAllowedUrl in Options.RedirectAllowedUrls)
+        {
+            redirectAllowedUrls.Add((await NormalizeUrlAsync(redirectAllowedUrl))!);
+        }
+        var allow = redirectAllowedUrls.Any(x => url.StartsWith(x, StringComparison.CurrentCultureIgnoreCase));
         if (!allow)
         {
             Logger.LogError($"Invalid RedirectUrl: {url}, Use {nameof(AppUrlProvider)} to configure it!");
@@ -59,8 +57,8 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         {
             return url;
         }
-        
-        return await ReplacePlaceHoldersAsync(url!);
+
+        return await MultiTenantUrlProvider.GetUrlAsync(url!);
     }
 
     protected virtual async Task<string> GetConfiguredUrl(string appName, string? urlName)
@@ -81,51 +79,6 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
         throw new AbpException(
             $"RootUrl for the application '{appName}' was not configured. Use {nameof(AppUrlOptions)} to configure it!"
         );
-    }
-
-    protected virtual async Task<string> ReplacePlaceHoldersAsync(string url)
-    {
-        url = url.Replace(
-            TenantIdPlaceHolder,
-            CurrentTenant.Id.HasValue ? CurrentTenant.Id.Value.ToString() : ""
-        );
-
-        if (!url.Contains(TenantNamePlaceHolder))
-        {
-            return url;
-        }
-
-        var tenantNamePlaceHolder = TenantNamePlaceHolder;
-
-        if (url.Contains(TenantNamePlaceHolder + '.'))
-        {
-            tenantNamePlaceHolder = TenantNamePlaceHolder + '.';
-        }
-
-        if (url.Contains(tenantNamePlaceHolder))
-        {
-            if (CurrentTenant.Id.HasValue)
-            {
-                url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync() + ".");
-            }
-            else
-            {
-                url = url.Replace(tenantNamePlaceHolder, "");
-            }
-        }
-
-        return url;
-    }
-
-    private async Task<string> GetCurrentTenantNameAsync()
-    {
-        if (CurrentTenant.Id.HasValue && CurrentTenant.Name.IsNullOrEmpty())
-        {
-            var tenantConfiguration = await TenantStore.FindAsync(CurrentTenant.Id.Value);
-            return tenantConfiguration!.Name;
-        }
-
-        return CurrentTenant.Name!;
     }
 
     public Task<string?> GetUrlOrNullAsync([NotNull] string appName, string? urlName = null)

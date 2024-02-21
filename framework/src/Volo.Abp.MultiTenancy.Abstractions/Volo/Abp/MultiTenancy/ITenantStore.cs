@@ -5,12 +5,12 @@ namespace Volo.Abp.MultiTenancy;
 
 public interface ITenantStore
 {
-    Task<TenantConfiguration?> FindAsync(string name);
+    Task<TenantConfiguration?> FindAsync(string normalizedName);
 
     Task<TenantConfiguration?> FindAsync(Guid id);
 
     [Obsolete("Use FindAsync method.")]
-    TenantConfiguration? Find(string name);
+    TenantConfiguration? Find(string normalizedName);
 
     [Obsolete("Use FindAsync method.")]
     TenantConfiguration? Find(Guid id);

@@ -3,7 +3,7 @@
   "texts": {
     "Features": "Funkciók",
     "NoFeatureFoundMessage": "Nincs elérhető funkció.",
-    "ManageHostFeatures": "Host funkciók kezelése",
+    "ManageHostFeatures": "Host Funkciók Kezelése",
     "ManageHostFeaturesText": "A gazdaoldali funkciókat a következő gombra kattintva kezelheti.",
     "Permission:FeatureManagement": "Funkciókezelés",
     "Permission:FeatureManagement.ManageHostFeatures": "Host funkciók kezelése",

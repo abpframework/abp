@@ -7,5 +7,5 @@ public interface IOnServiceExposingContext
 {
     Type ImplementationType { get; }
 
-    List<Type> ExposedTypes { get; }
+    List<ServiceIdentifier> ExposedTypes { get; }
 }

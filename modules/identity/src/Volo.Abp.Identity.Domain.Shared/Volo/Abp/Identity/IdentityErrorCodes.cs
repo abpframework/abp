@@ -11,4 +11,5 @@ public static class IdentityErrorCodes
     public const string UsersCanNotChangeTwoFactor = "Volo.Abp.Identity:010007";
     public const string CanNotChangeTwoFactor = "Volo.Abp.Identity:010008";
     public const string YouCannotDelegateYourself = "Volo.Abp.Identity:010009";
+    public const string ClaimNameExist = "Volo.Abp.Identity:010021";
 }

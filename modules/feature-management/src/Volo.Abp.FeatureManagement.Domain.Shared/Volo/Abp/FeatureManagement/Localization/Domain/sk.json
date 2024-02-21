@@ -3,9 +3,9 @@
   "texts": {
     "Features": "Funkcie",
     "NoFeatureFoundMessage": "Nie je k dispozícii žiadna funkcia.",
-    "ManageHostFeatures": "Spravovať funkcie poskytovateľa",
+    "ManageHostFeatures": "Spravovať Funkcie Poskytovateľa",
     "ManageHostFeaturesText": "Funkcie na strane hostiteľa môžete spravovať kliknutím na nasledujúce tlačidlo.",
-    "Permission:FeatureManagement": "Správa funkcií",
+    "Permission:FeatureManagement": "Správa Funkcií",
     "Permission:FeatureManagement.ManageHostFeatures": "Správa funkcií poskytovateľa",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Hodnota funkcie {0} nie je platná!",
     "Menu:FeatureManagement": "Správa funkcií",

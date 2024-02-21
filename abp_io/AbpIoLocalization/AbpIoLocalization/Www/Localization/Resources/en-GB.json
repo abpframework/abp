@@ -121,7 +121,7 @@
     "MultiTenancyExplanation4": "You focus on your business code and let the framework to handle multi-tenancy on behalf of you.",
     "BootstrapTagHelpersExplanation": "Instead of manually writing the repeating details of bootstrap components, use ABP's tag helpers to simplify and take advantage of intellisense. You can use Bootstrap whenever you need it.",
     "DynamicFormsExplanation": "Dynamic form & input tag helpers can create the complete form from a C# class as the model.",
-    "AuthenticationAuthorizationExplanation": "Rich authentication & authorization options integrated to ASP.NET Core Identity & IdentityServer4. Provides an extensible & detailed permission system.",
+    "AuthenticationAuthorizationExplanation": "Rich authentication & authorization options integrated to ASP.NET Core Identity & OpenIddict. Provides an extensible & detailed permission system.",
     "CrossCuttingConcernsExplanation": "Don't repeat yourself when implementing common features. Instead, focus on your business logic and let ABP automate by convention.",
     "DatabaseConnectionTransactionManagement": "Database Connection & Transaction Management",
     "CorrelationIdTracking": "Correlation-Id Tracking",
@@ -271,6 +271,7 @@
     "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
     "SubscribeToNewsletter": "Subscribe to the newsletter to get information about happenings in the ABP.IO Platform, like new releases, posts, offers, and more.",
     "FirstEdition": "First Edition",
-    "SelectUITheme": "Select UI Theme"
+    "SelectUITheme": "Select UI Theme",
+    "LeaveUsReview": "Leave us review"
   }
 }

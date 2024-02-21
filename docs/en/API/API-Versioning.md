@@ -1,6 +1,6 @@
 # API Versioning System
 
-ABP Framework integrates the [ASPNET-API-Versioning](https://github.com/dotnet/aspnet-api-versioning/wiki) feature and adapts to C# and JavaScript Static Client Proxies and [Auto API Controller](API/Auto-API-Controllers.md).
+ABP Framework integrates the [ASPNET-API-Versioning](https://github.com/dotnet/aspnet-api-versioning/wiki) feature and adapts to C# and JavaScript Static Client Proxies and [Auto API Controller](../API/Auto-API-Controllers.md).
 
 
 ## Enable API Versioning

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -66,6 +66,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public string DocumentsUrlPrefix { get; set; }
 
         public bool ShowProjectsCombobox { get; set; }
+        
+        public bool ShowProjectsComboboxLabel { get; set; }
 
         public bool IsVersionPreview { get; set; }
 
@@ -80,6 +82,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public bool FullSearchEnabled { get; set; }
 
         public bool IsLatestVersion { get; private set; } 
+        
+        public DocumentNavigationsDto DocumentNavigationsDto { get; private set; }
 
         private const int MaxDescriptionMetaTagLength = 200;
         private readonly IDocumentAppService _documentAppService;
@@ -115,24 +119,39 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return Redirect(decodedUrl);
             }
-            try
-            {
-                return await SetPageAsync();
-            }
-            catch (DocumentNotFoundException exception)
-            {
-                Logger.LogWarning(exception.Message);
+            var documentPath = DocumentName ?? "";
 
-                DocumentFound = false;
-                Response.StatusCode = 404;
-                return Page();
+            string[] documentNames;
+
+            if (displayUrl.EndsWith("/index", StringComparison.OrdinalIgnoreCase))
+            {
+                documentPath = documentPath.Substring(0, documentPath.LastIndexOf('/') + 1);
             }
+
+            documentNames = new[] { DocumentName, documentPath.EnsureEndsWith('/') + "Index", documentPath.EnsureEndsWith('/') + "index" };
+
+            foreach (var documentName in documentNames)
+            {
+                DocumentName = documentName;
+                try
+                {
+                    return await SetPageAsync();
+                }
+                catch (DocumentNotFoundException exception)
+                {
+                    Logger.LogWarning(exception.Message);
+                }
+            }
+            DocumentFound = false;
+            Response.StatusCode = 404;
+            return Page();
         }
 
         private async Task<IActionResult> SetPageAsync()
         {
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
+            ShowProjectsComboboxLabel = ShowProjectsCombobox && _uiOptions.ShowProjectsComboboxLabel;
             FullSearchEnabled = await _documentAppService.FullSearchEnabledAsync();
 
             try
@@ -235,6 +254,20 @@ namespace Volo.Docs.Pages.Documents.Project
             return Request.Scheme + "://" + Request.Host.Value + Request.PathBase +
                    DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" +
                    DocsAppConsts.Latest + "/" + DocumentName;
+        }
+        
+        public string CreateDocumentLink(string documentName)
+        {
+            return new StringBuilder()
+                .Append(DocumentsUrlPrefix)
+                .Append(LanguageCode)
+                .Append('/')
+                .Append(ProjectName)
+                .Append('/')
+                .Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version)
+                .Append('/')
+                .Append(documentName)
+                .ToString();
         }
 
         private IActionResult RedirectToDefaultLanguage()
@@ -505,6 +538,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 SetUserPreferences();
 
                 var partialTemplates = await GetDocumentPartialTemplatesAsync();
+                
+                DocumentNavigationsDto = await _documentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
 
                 Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
             }

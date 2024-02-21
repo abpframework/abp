@@ -16,9 +16,9 @@ public class DefaultTenantStore : ITenantStore, ITransientDependency
         _options = options.CurrentValue;
     }
 
-    public Task<TenantConfiguration?> FindAsync(string name)
+    public Task<TenantConfiguration?> FindAsync(string normalizedName)
     {
-        return Task.FromResult(Find(name));
+        return Task.FromResult(Find(normalizedName));
     }
 
     public Task<TenantConfiguration?> FindAsync(Guid id)
@@ -26,9 +26,9 @@ public class DefaultTenantStore : ITenantStore, ITransientDependency
         return Task.FromResult(Find(id));
     }
 
-    public TenantConfiguration? Find(string name)
+    public TenantConfiguration? Find(string normalizedName)
     {
-        return _options.Tenants?.FirstOrDefault(t => t.Name == name);
+        return _options.Tenants?.FirstOrDefault(t => t.NormalizedName == normalizedName);
     }
 
     public TenantConfiguration? Find(Guid id)

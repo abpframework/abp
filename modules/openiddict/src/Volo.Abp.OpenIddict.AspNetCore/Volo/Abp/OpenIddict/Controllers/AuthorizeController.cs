@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.OpenIddict.ViewModels.Authorization;
+using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.OpenIddict.Controllers;
 
@@ -123,6 +125,12 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
             case OpenIddictConstants.ConsentTypes.Explicit when authorizations.Any() && !request.HasPrompt(OpenIddictConstants.Prompts.Consent):
                 var principal = await SignInManager.CreateUserPrincipalAsync(user);
 
+                if (result.Properties != null && result.Properties.IsPersistent)
+                {
+                    var claim = new Claim(AbpClaimTypes.RememberMe, true.ToString()).SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+                    principal.Identities.FirstOrDefault()?.AddClaim(claim);
+                }
+
                 // Note: in this sample, the granted scopes match the requested scope
                 // but you may want to allow the user to uncheck specific scopes.
                 // For that, simply restrict the list of scopes before calling SetScopes.
@@ -215,6 +223,13 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         }
 
         var principal = await SignInManager.CreateUserPrincipalAsync(user);
+
+        var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
+        if (result.Succeeded && result.Properties != null && result.Properties.IsPersistent)
+        {
+            var claim = new Claim(AbpClaimTypes.RememberMe, true.ToString()).SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+            principal.Identities.FirstOrDefault()?.AddClaim(claim);
+        }
 
         // Note: in this sample, the granted scopes match the requested scope
         // but you may want to allow the user to uncheck specific scopes.

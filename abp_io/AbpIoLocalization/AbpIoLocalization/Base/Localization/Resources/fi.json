@@ -229,6 +229,8 @@
     "ManageAccount": "Hallitse tiliä",
     "CommunityProfile": "Yhteisön profiili",
     "BlogProfile": "Blogin profiili",
-    "Tickets": "Liput"
+    "Tickets": "Liput",
+    "MeetTheABPCommunity": "Tutustu ABP<span class=\"gradient-community\">Yhteisö</span>:n kanssa",
+    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely"
   }
 }

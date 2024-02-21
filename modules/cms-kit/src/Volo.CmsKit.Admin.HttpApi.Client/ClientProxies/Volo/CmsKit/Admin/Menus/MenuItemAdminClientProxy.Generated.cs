@@ -23,9 +23,9 @@ public partial class MenuItemAdminClientProxy : ClientProxyBase<IMenuItemAdminAp
         return await RequestAsync<ListResultDto<MenuItemDto>>(nameof(GetListAsync));
     }
 
-    public virtual async Task<MenuItemDto> GetAsync(Guid id)
+    public virtual async Task<MenuItemWithDetailsDto> GetAsync(Guid id)
     {
-        return await RequestAsync<MenuItemDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<MenuItemWithDetailsDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
             { typeof(Guid), id }
         });

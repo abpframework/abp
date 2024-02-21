@@ -279,7 +279,7 @@ public class BookService
 
 ### Transactions
 
-O MongoDB oferece suporte multi-document transactions a partir da versão 4.0 e o ABP Framework oferece suporte para isso. No entanto, o [startup template](Startup-templates/Index.md) **desativa** transactions por padrão. Se o seu **servidor** MongoDB suportar transactions, você pode habilitar esse recurso na classe *YourProjectMongoDbModule*:
+O MongoDB oferece suporte multi-document transactions a partir da versão 4.0 e o ABP Framework oferece suporte para isso. No entanto, o [startup template](Startup-Templates/Index.md) **desativa** transactions por padrão. Se o seu **servidor** MongoDB suportar transactions, você pode habilitar esse recurso na classe *YourProjectMongoDbModule*:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>

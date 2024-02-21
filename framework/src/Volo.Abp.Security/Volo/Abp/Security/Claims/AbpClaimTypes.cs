@@ -93,9 +93,12 @@ public static class AbpClaimTypes
     /// </summary>
     public static string Picture { get; set; } = "picture";
 
+    /// Default: "remember_me".
+    /// </summary>
+    public static string RememberMe { get; set; } = "remember_me";
+
     /// <summary>
     /// Default: "session_id".
     /// </summary>
     public static string SessionId { get; set; } = "session_id";
-
 }

@@ -8,6 +8,20 @@
 }
 ````
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Running the solution",
+    "Path": "Getting-Started-Running-Solution-Single-Layer"
+  },
+  "Previous": {
+    "Name": "Setup Your Development Environment",
+    "Path": "Getting-Started-Setup-Environment-Single-Layer"
+  }
+}
+````
+
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
 ## Create a New Project
@@ -34,7 +48,7 @@ The solution structure is based on the [Single-Layer Startup Template](Startup-T
 
 ## MongoDB Transactions
 
-The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectModule* class's `ConfigureMongoDB` method:
+The [startup template](Startup-Templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectModule* class's `ConfigureMongoDB` method:
 
   ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
@@ -46,7 +60,3 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 > Or you can delete that code since `Auto` is already the default behavior.
 
 {{ end }}
-
-## Next Step
-
-* [Running the solution](Getting-Started-Running-Solution-Single-Layer.md)

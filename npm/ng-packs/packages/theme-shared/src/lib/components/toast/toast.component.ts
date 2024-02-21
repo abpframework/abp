@@ -17,6 +17,12 @@ export class ToastComponent implements OnInit {
   }
 
   get iconClass(): string {
+    const { iconClass } = this.toast.options || {};
+    
+    if (iconClass) {
+      return iconClass;
+    }
+
     switch (this.toast.severity) {
       case 'success':
         return 'fa-check-circle';

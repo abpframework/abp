@@ -258,7 +258,7 @@ var abp = abp || {};
                         var cells = $(nRow).children("td");
                         for (var i = 0; i < cells.length; i++) {
                             var cell = cells[i];
-                            if (cell._DT_CellIndex && cell._DT_CellIndex.row === iDisplayIndex && cell._DT_CellIndex.column === colIndex) {
+                            if (cell._DT_CellIndex && cell._DT_CellIndex.column === colIndex) {
                                 var $actionButton = $(cell).find(".abp-action-button");
                                 if ($actionButton.length === 0) {
                                     $(cell).empty().append($actionContainer);

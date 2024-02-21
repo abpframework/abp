@@ -1,7 +1,10 @@
-<p class="text-wrap">{{ 'AbpFeatureManagement::ManageHostFeaturesText' | abpLocalization }}</p>
+<h2>{{ 'AbpFeatureManagement::Menu:FeatureManagement' | abpLocalization }}</h2>
+
+<hr class="my-2" />
+<p class="pt-2 text-wrap">{{ 'AbpFeatureManagement::ManageHostFeaturesText' | abpLocalization }}</p>
 
 <button class="btn btn-primary" type="button" (click)="openFeaturesModal()">
-  <i class="fa fa-cog" aria-hidden="true"></i>
+  <i class="me-1 fa fa-cog" aria-hidden="true"></i>
   {{ 'AbpFeatureManagement::ManageHostFeatures' | abpLocalization }}
 </button>
 <ng-container *ngIf="visibleFeatures">

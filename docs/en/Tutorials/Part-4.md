@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Authorization",
+    "Path": "Tutorials/Part-5"
+  },
+  "Previous": {
+    "Name": "Creating, Updating and Deleting Books",
+    "Path": "Tutorials/Part-3"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -64,7 +79,7 @@ Each project is used to test the related project. Test projects use the followin
 
 {{else if DB=="Mongo"}}
 
-> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
+> **[EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
 
 {{end}}
 
@@ -283,7 +298,3 @@ Open the **Test Explorer Window** (use Test -> Windows -> Test Explorer menu if 
 ![bookstore-appservice-tests](./images/bookstore-appservice-tests.png)
 
 Congratulations, the **green icons** indicates that the tests have been successfully passed!
-
-## The Next Part
-
-See the [next part](Part-5.md) of this tutorial.

@@ -22,7 +22,7 @@
         <ModalFooter class="d-flex justify-content-center">
                 @if ( IsConfirmation )
                 {
-                    <Button Color="Color.Danger" Padding="Padding.Is3.OnX" Margin="Margin.Is1.OnX" Clicked="@OnCancelClicked">
+                    <Button Color="Color.Primary" Outline Padding="Padding.Is3.OnX" Margin="Margin.Is1.OnX" Clicked="@OnCancelClicked">
                         @if ( Options?.CancelButtonIcon != null )
                         {
                             <Icon Name="@Options.CancelButtonIcon" Margin="Margin.Is2.FromEnd" />

@@ -51,6 +51,34 @@ public class MyDbContext : AbpMongoDbContext
 * 为每一个mongo集合添加一个公共的 `IMongoCollection<TEntity>` 属性.ABP默认使用这些属性创建默认的仓储
 * 重写 `CreateModel` 方法,可以在方法中配置集合(如设置集合在数据库中的名字)
 
+### 为集合配置索引和 CreateCollectionOptions
+
+你可以在 `CreateModel` 方法中配置集合的索引和 `CreateCollectionOptions`:
+
+````csharp
+protected override void CreateModel(IMongoModelBuilder modelBuilder)
+{
+    base.CreateModel(modelBuilder);
+
+    modelBuilder.Entity<Question>(b =>
+    {
+        b.CreateCollectionOptions.Collation = new Collation(locale:"en_US", strength: CollationStrength.Secondary);
+        b.ConfigureIndexes(indexes =>
+            {
+                indexes.CreateOne(
+                    new CreateIndexModel<BsonDocument>(
+                        Builders<BsonDocument>.IndexKeys.Ascending("MyProperty"),
+                        new CreateIndexOptions { Unique = true }
+                    )
+                );
+            }
+        );
+    });
+}
+````
+
+在这个例子中,我们设置了集合的排序规则和一个唯一的索引.
+
 ### 将 Db Context 注入到依赖注入中
 
 在你的模块中使用 `AddAbpDbContext` 方法将Db Context注入到[依赖注入](Dependency-Injection.md)系统中.
@@ -238,7 +266,7 @@ public class BookService
 
 MongoDB在4.0版本开始支持事务, ABP在3.2版本加入了对MongoDb事务的支持. 如果你升级到3.2版本,需要将[MongoDbSchemaMigrator](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.MongoDB/MongoDb/MongoDbMyProjectNameDbSchemaMigrator.cs)添加到你的 `.MongoDB` 项目中.
 
-[启动模板](Startup-templates/Index.md)默认在 `.MongoDB` 项目中**禁用**了工作单元事务. 如果你的MongoDB服务器支持事务,你可以手动启用工作单元的事务:
+[启动模板](Startup-Templates/Index.md)默认在 `.MongoDB` 项目中**禁用**了工作单元事务. 如果你的MongoDB服务器支持事务,你可以手动启用工作单元的事务:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>

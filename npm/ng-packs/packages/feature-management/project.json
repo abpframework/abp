@@ -30,12 +30,6 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": [
-          "packages/feature-management/src/**/*.ts",
-          "packages/feature-management/src/**/*.html"
-        ]
-      },
       "outputs": ["{options.outputFile}"]
     }
   },

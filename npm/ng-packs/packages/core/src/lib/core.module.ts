@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, TitleStrategy } from '@angular/router';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
 import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
@@ -39,8 +39,11 @@ import { QUEUE_MANAGER } from './tokens/queue.token';
 import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
-import {DYNAMIC_LAYOUTS_TOKEN} from "./tokens/dynamic-layout.token";
-import {DEFAULT_DYNAMIC_LAYOUTS} from "./constants";
+import { AuthErrorFilterService } from './abstracts';
+import { DYNAMIC_LAYOUTS_TOKEN } from "./tokens/dynamic-layout.token";
+import { DEFAULT_DYNAMIC_LAYOUTS } from "./constants";
+import { AbpTitleStrategy } from './services/title-strategy.service';
+
 
 const standaloneDirectives = [
   AutofocusDirective,
@@ -187,10 +190,15 @@ export class CoreModule {
           provide: OTHERS_GROUP,
           useValue: options.othersGroup || 'AbpUi::OthersGroup',
         },
+        AuthErrorFilterService,
         IncludeLocalizationResourcesProvider,
         {
           provide: DYNAMIC_LAYOUTS_TOKEN,
           useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS
+        },
+        {
+          provide: TitleStrategy,
+          useExisting: AbpTitleStrategy
         }
       ],
     };

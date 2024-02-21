@@ -4,14 +4,15 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.AspNetCore.Security.Claims;
 
-public class AbpDynamicClaimsMiddleware : IMiddleware, ITransientDependency
+public class AbpDynamicClaimsMiddleware : AbpMiddlewareBase, ITransientDependency
 {
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         if (context.User.Identity?.IsAuthenticated == true)
         {

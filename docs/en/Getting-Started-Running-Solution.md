@@ -9,6 +9,16 @@
 }
 ````
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Creating a new solution",
+    "Path": "Getting-Started-Create-Solution"
+  }
+}
+````
+
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
 ## Create the Database
@@ -127,6 +137,29 @@ abp bundle
 
 > **Note**: Before starting the application, run `abp install-libs` command in your Web directory to restore the client-side libraries. This will populate the `libs` folder.
 
+{{ if UI == "BlazorServer" }}
+
+> **Important:**  The `.AuthServer` application serves as the **Authentication Server** for the `.Blazor` application. It is essential to have the `.AuthServer` application running in the background to ensure the proper functioning of the `.Blazor` application.
+
+To do this, open terminal in `.AuthServer` project folder and run the following command.
+
+````bash
+dotnet run
+````
+
+Once the `.AuthServer`application has started, it is time to run `.HttpApi.Host` application.
+
+> **Important:** Prior to launching the `.Blazor` project, it is essential to execute the `.HttpApi.Host` application as well.
+
+To do this, open terminal in `.HttpApi.Host` project folder and run the following command.
+
+````bash
+dotnet run
+````
+Once the `.AuthServer` and `.HttpApi.Host` applications has started, you can proceed to run the `.Blazor` project.
+
+{{ end # UI }}
+
 {{ if Tiered == "Yes" }}
 
 > Tiered solutions use **Redis** as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
@@ -195,6 +228,16 @@ You can see the application APIs and test them here. Get [more info](https://swa
 
 ### Running the Blazor Application (Client Side)
 
+> **Important:**  The `.HttpApi.Host` application serves as the **Authentication Server** for the `.Blazor` application. It is essential to have the `.HttpApi.Host` application running in the background to ensure the proper functioning of the `.Blazor` application.
+
+To do this, you can open terminal in `.HttpApi.Host` project folder and run the following command.
+
+````bash
+dotnet run
+````
+
+Once the `.HttpApi.Host` application has started, you can proceed to run the `.Blazor` application.
+
 Ensure that the `.Blazor` project is the startup project and run the application.
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
@@ -226,8 +269,3 @@ It may take a longer time for the first build. Once it finishes, it opens the An
 {{ end }}
 
 Enter **admin** as the username and **1q2w3E*** as the password to login to the application. The application is up and running. You can start developing your application based on this startup template.
-
-## See Also
-
-* [Web Application Development Tutorial](Tutorials/Part-1.md)
-* [Application Startup Template](Startup-Templates/Application.md)
