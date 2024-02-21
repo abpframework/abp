@@ -9,6 +9,16 @@
 }
 ````
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Creating a new solution",
+    "Path": "Getting-Started-Create-Solution"
+  }
+}
+````
+
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
 ## Create the Database
@@ -259,8 +269,3 @@ It may take a longer time for the first build. Once it finishes, it opens the An
 {{ end }}
 
 Enter **admin** as the username and **1q2w3E*** as the password to login to the application. The application is up and running. You can start developing your application based on this startup template.
-
-## See Also
-
-* [Web Application Development Tutorial](Tutorials/Part-1.md)
-* [Application Startup Template](Startup-Templates/Application.md)

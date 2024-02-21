@@ -427,7 +427,7 @@
     "PasswordLength": "Şifre alanı maksimum 32 karakter olmalıdır.",
     "PasswordRequired": "Şifre alanı zorunludur.",
     "AddressLength": "Adres alanı maksimum uzunluğu 255 karakter olmalıdır.",
-    "GenderRequired": "Cinsiyet alanı zorunludur."
-
+    "GenderRequired": "Cinsiyet alanı zorunludur.",
+    "LeaveUsReview": "Yorumunuzu paylaşın"
   }
 }

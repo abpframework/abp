@@ -93,7 +93,7 @@ Configure<AbpAuditingOptions>(options =>
 You can filter integration services (or non-integration services) while creating [Auto API Controllers](API/Auto-API-Controllers.md), using the `ApplicationServiceTypes` option of the `ConventionalControllerSetting` by configuring the `AbpAspNetCoreMvcOptions` as shown below:
 
 ```csharp
-Configure<AbpAspNetCoreMvcOptions>(options =>
+PreConfigure<AbpAspNetCoreMvcOptions>(options =>
 {
     options.ConventionalControllers.Create(
         typeof(MyApplicationModule).Assembly,

@@ -467,6 +467,7 @@
     "Title": "Titteli",
     "TitlePlaceholder": "Ohjelmistokehittäjä, CTO, jne.",
     "Characters": "hahmot",
-    "ABPTestimonialDescription": "ABP Framework: Kuunnellaanpa sinun suosittelua"
+    "ABPTestimonialDescription": "ABP Framework: Kuunnellaanpa sinun suosittelua",
+    "LeaveUsReview": "Jätä meille arvostelu"
   }
 }

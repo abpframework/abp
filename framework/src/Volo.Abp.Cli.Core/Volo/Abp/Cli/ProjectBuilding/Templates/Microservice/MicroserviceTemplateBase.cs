@@ -131,6 +131,14 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
 
     private static void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
+        if (!context.BuildArgs.PublicWebSite)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.PublicWeb", null, "apps/public-web/src/MyCompanyName.MyProjectName.PublicWeb"));
+            steps.Add(new RemoveFolderStep("/apps/public-web"));
+            steps.Add(new RemoveProjectFromTyeStep("public-web"));
+            steps.Add(new RemoveProjectFromPrometheusStep("public-web"));
+        }
+
         //TODO: move common tasks to methods
         switch (context.BuildArgs.UiFramework)
         {

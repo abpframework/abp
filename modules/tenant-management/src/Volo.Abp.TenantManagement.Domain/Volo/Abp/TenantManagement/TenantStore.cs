@@ -54,7 +54,7 @@ public class TenantStore : ITenantStore, ITransientDependency
         var cacheKey = CalculateCacheKey(id, normalizedName);
 
         var cacheItem = await Cache.GetAsync(cacheKey, considerUow: true);
-        if (cacheItem != null)
+        if (cacheItem?.Value != null)
         {
             return cacheItem;
         }
@@ -94,7 +94,7 @@ public class TenantStore : ITenantStore, ITransientDependency
         var cacheKey = CalculateCacheKey(id, normalizedName);
 
         var cacheItem = Cache.Get(cacheKey, considerUow: true);
-        if (cacheItem != null)
+        if (cacheItem?.Value != null)
         {
             return cacheItem;
         }
