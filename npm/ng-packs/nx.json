@@ -77,6 +77,5 @@
       "!{projectRoot}/.eslintrc.json"
     ]
   },
-  "parallel": 3,
-  "nxCloudAccessToken": "NjEzZTliYmMtYmU1MC00ZmI4LWFhOTAtYWY0ZDhiMjhiNzQ0fHJlYWQtd3JpdGU="
+  "parallel": 3
 }
