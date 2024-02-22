@@ -411,6 +411,7 @@
     "PaymentFailedInfo": "Desculpe, o pagamento falhou! ",
     "UsedPayment": "Este pagamento já foi usado",
     "ManageLicense": "Gerenciar Licença",
-    "AbpPlatformLeptonXTheme": "Tema LeptonX para o seu Painel de Administração por <span class=\"gradient-commercial\">ABP Platform</span>"
+    "AbpPlatformLeptonXTheme": "Tema LeptonX para o seu Painel de Administração por <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Anterior"
   }
 }

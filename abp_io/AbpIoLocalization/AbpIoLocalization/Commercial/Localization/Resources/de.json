@@ -391,6 +391,7 @@
     "PaymentFailedInfo": "Entschuldigung, die Zahlung ist fehlgeschlagen! ",
     "UsedPayment": "Diese Zahlung wurde bereits verwendet",
     "ManageLicense": "Lizenz verwalten",
-    "AbpPlatformLeptonXTheme": "LeptonX-Theme für Ihr Admin-Dashboard von <span class=\"gradient-commercial\">ABP Platform</span>"
+    "AbpPlatformLeptonXTheme": "LeptonX-Theme für Ihr Admin-Dashboard von <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Vorherige"
   }
 }
