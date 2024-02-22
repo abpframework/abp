@@ -1,8 +1,8 @@
-# New Blazor Web App Template in ABP 8.2
+# Migrating to Blazor Web App
 
 ASP.NET Blazor in .NET 8 allows you to use a single powerful component model to handle all of your web UI needs, including server-side rendering, client-side rendering, streaming rendering, progressive enhancement, and much more!
 
-ABP 8.2 supports the new Blazor Web App template, In this guide, we will introduce some new changes and features in the new Blazor Web App template.
+ABP v8.2.x supports the new Blazor Web App template, in this guide, we will introduce some new changes and features in the new Blazor Web App template.
 
 ## Create a new Blazor Web App
 
@@ -10,7 +10,7 @@ ABP 8.2 supports the new Blazor Web App template, In this guide, we will introdu
 
 You can create a new Blazor Web App using the `abp new BookStore -t app -u blazor-webapp` command. The `-u blazor-webapp` option is used to select the Blazor Web App template.
 
-Of course, you can also create Blazor wasm and Blazor Server applications. We have changed them to use the new Blazor Web App mode.
+Of course, you can also create Blazor WASM and Blazor Server applications. We have changed them to use the new Blazor Web App mode:
 
 ````csharp
 abp new BookStore -t app -u blazor
@@ -29,18 +29,18 @@ The template project use different render modes for different types of projects 
 
 ## The key changes of the new Blazor Web App template
 
-The new Web App template has two project, each of them contains a system of abp modules. 
+The new Web App template has two projects, each containing a system of [ABP modules](https://docs.abp.io/en/abp/latest/Modules/Index).
 
 - MyCompanyName.MyProjectName.Blazor.WebApp
 - MyCompanyName.MyProjectName.Blazor.WebApp.Client
 
 ### MyCompanyName.MyProjectName.Blazor.WebApp
 
-The `Blazor.WebApp` is the startup project, There is a `App.razor` component in the `Blazor.WebApp` project, which is the root component of the Blazor application.
+The `Blazor.WebApp` is the startup project, and there is an `App.razor` component in the `Blazor.WebApp` project, which is the root component of the Blazor application.
 
-The main differences between it and a regular blazor server project are:
+The main differences between it, and a regular Blazor server project are:
 
-1. You need to `PreConfigure` the `AbpAspNetCoreComponentsWebOptions's IsBlazorWebApp` to `true`.
+1. You need to `PreConfigure` the `IsBlazorWebApp` to `true` in `AbpAspNetCoreComponentsWebOptions`:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -52,7 +52,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
-2. Add related services to the container. Add `MyProjectNameBlazorClientModule's` assembly to the `AbpRouterOptions's AdditionalAssemblies`.
+2. Add related services to the container. Add assembly of `MyProjectNameBlazorClientModule` to the `AdditionalAssemblies` by configuring `AbpRouterOptions`:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -96,9 +96,9 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
 
 There is a `Routers.razor` component in the `Blazor.WebApp.Client` project, which is used by the `App.razor` component.
 
-The main differences between it and a regular blazor wasm project are:
+The main differences between it and a regular Blazor WASM project are:
 
-1. You need to `PreConfigure` the `AbpAspNetCoreComponentsWebOptions's IsBlazorWebApp` to `true`.
+1. You need to `PreConfigure` the `IsBlazorWebApp` to `true` in `AbpAspNetCoreComponentsWebOptions`:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -110,7 +110,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
-2. Use `AddBlazorWebAppServices` to replace `Authentication` code. 
+2. Use `AddBlazorWebAppServices` to replace `Authentication` code:
 
 ````csharp
 private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
@@ -127,7 +127,7 @@ The tiered projects are the same as the WebApp projects, but the authentication 
 
 We need share the `access_token` to `Client` project.
 
-`App.rzor` of `MyCompanyName.MyProjectName.Blazor.WebApp.Tiered`:
+Add code block to `App.razor` of `MyCompanyName.MyProjectName.Blazor.WebApp.Tiered` as below:
 
 ````csharp
 @code{
@@ -164,7 +164,7 @@ We need share the `access_token` to `Client` project.
 }
 ````
 
-`MyProjectNameBlazorClientModule` of `MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client`:
+Add `ConfigureAuthentication` to `MyProjectNameBlazorClientModule` of `MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client` as below:
 
 ````csharp
 private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
@@ -175,7 +175,7 @@ private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
 
 ## ABP Bundle
 
-You need set `IsBlazorWebApp` and `InteractiveAuto` to `true` in the `appsettings.json` file of the `MyCompanyName.MyProjectName.Blazor.WebApp.Client` project.
+You need set `IsBlazorWebApp` and `InteractiveAuto` to `true` in the `appsettings.json` file of the `MyCompanyName.MyProjectName.Blazor.WebApp.Client` project:
 
 ````json
 {
@@ -193,7 +193,7 @@ You need set `IsBlazorWebApp` and `InteractiveAuto` to `true` in the `appsetting
 }
 ````
 
-For Blazor wasm and Blazor Server applications, you need to set `IsBlazorWebApp` to `true` and not need change the `InteractiveAuto`.
+For Blazor WASM and Blazor Server applications, you need to set `IsBlazorWebApp` to `true` and not need to change the `InteractiveAuto`:
 
 ````json
 {
