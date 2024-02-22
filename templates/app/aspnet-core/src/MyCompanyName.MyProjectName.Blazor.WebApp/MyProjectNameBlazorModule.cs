@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
@@ -34,13 +35,14 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity.Blazor.Server;
+using Volo.Abp.Identity.Blazor;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.Blazor.Server;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.TenantManagement.Blazor.Server;
+using Volo.Abp.TenantManagement.Blazor;
+using Volo.Abp.TenantManagement.Blazor.WebAssembly;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
@@ -58,8 +60,6 @@ namespace MyCompanyName.MyProjectName.Blazor.WebApp;
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
-    typeof(AbpIdentityBlazorServerModule),
-    typeof(AbpTenantManagementBlazorServerModule),
     typeof(AbpSettingManagementBlazorServerModule)
    )]
 public class MyProjectNameBlazorModule : AbpModule
@@ -296,10 +296,16 @@ public class MyProjectNameBlazorModule : AbpModule
 
         app.UseConfiguredEndpoints(builder =>
         {
+            var assemblies = builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies.ToList();
+
+            // TODO: Somehow they're not added to the list, so we add them manually
+            assemblies.Add(typeof(AbpTenantManagementBlazorModule).Assembly);
+            assemblies.Add(typeof(AbpIdentityBlazorModule).Assembly);
+
             builder.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode()
                 .AddInteractiveWebAssemblyRenderMode()
-                .AddAdditionalAssemblies(builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies.ToArray());
+                .AddAdditionalAssemblies(assemblies.ToArray());
         });
     }
 }

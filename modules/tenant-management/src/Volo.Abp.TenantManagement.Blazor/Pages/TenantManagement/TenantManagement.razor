@@ -10,6 +10,8 @@
 @inject AbpBlazorMessageLocalizerHelper<AbpTenantManagementResource> LH
 @inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
 
+@rendermode RenderMode.InteractiveAuto
+
 <Card>
     <CardHeader>
         @* ************************* PAGE HEADER ************************* *@
@@ -131,3 +133,8 @@
 {
     <FeatureManagementModal @ref="FeatureManagementModal"/>
 }
+
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>

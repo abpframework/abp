@@ -14,6 +14,13 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement;
 
 public partial class TenantManagement
 {
+     private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+    
     protected const string FeatureProviderName = "T";
 
     protected bool HasManageFeaturesPermission;
