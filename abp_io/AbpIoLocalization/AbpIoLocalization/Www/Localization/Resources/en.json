@@ -442,7 +442,7 @@
     "Index_Page_Testimonial_2": "ABP Framework is not only a framework, it is also a guidance for project development/management, because it provides DDD, GenericRepository, DI, Microservice, Modularity trainings. Even if you are not going to use framework itself, you can develop yourself with docs.abp.io which is well and professionally prepared. (OpenIddict, Redis, Quartz etc.)\nBecause many thing pre-built, it shortens project development time significantly. (Such as login page, exception handling, data filtering-seeding, audit logging, localization, auto api controller etc.)\nAs an example from our app, i have used Local Event Bus for stock control. So, I am able to manage order movements by writing stock handler.\nIt is wonderful not to lose time for CreationTime, CreatorId. They are filled automatically.",
     "VideosLoginAndRegisterMessage": "To be able to watch videos, you must sign in.",
     "Filter": "Filter",
-    "VideoCourses": "Video Courses",
+    "VideoCourses": "Essential Videos",
     "TestimonialText": "Your testimonial",
     "Position": "Position",
     "ExperienceYear": "Years of experience",
@@ -479,6 +479,8 @@
     "PasswordRequired": "The Password field is required.",
     "AddressLength": "The field Address must be a string with a maximum length of 255.",
     "GenderRequired": "The Gender field is required.",
-    "LeaveUsReview": "Leave us review"
+    "LeaveUsReview": "Leave us review",
+    "ABPVideoCoursesDescription": "Learn the basics of the ABP Framework through video courses created by the ABP team.",
+    "ABPVideoCoursesPageDescription": "Learn the basics of the ABP Framework through video courses created by the ABP team. In this video series, you will learn the essential topics of the ABP Framework.  The numbers on each video are written according to the learning flow."
   }
 }
