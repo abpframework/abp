@@ -154,7 +154,7 @@
     "AndMore": "ve dahası...",
     "Code": "Kod",
     "Result": "Sonuç",
-    "SeeTheDocumentForMoreInformation": "Daha fazlası için <a href=\"{1}\">{0} dökümantasyonuna</a> göz atın.",
+    "SeeTheDocumentForMoreInformation": "Daha fazlası için <a href=\"{1}\">{0} dokümantasyonuna</a> göz atın.",
     "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>open source</strong></span><span class=\"second-line text-uppercase\">Web Application<br />Framework </span><span class=\"third-line shine2\"><strong>for asp.net core</strong></span>",
     "UiFramework": "UI Framework",
     "EmailAddress": "E-Posta Adresi",
@@ -178,7 +178,7 @@
     "ProgressiveWebApplication": "Progresif Web Uygulaması",
     "UseslatestPreVersion": "En son yayın öncesi sürümünü kullanır",
     "ReadTheDocumentation": "<span class=\"text-primary\">Belgeleri okuyun</span><span class=\"text-success\"></span>",
-    "Documentation": "Dökümanlar",
+    "Documentation": "Dokümanlar",
     "GettingStartedTutorial": "Başlarken Eğitimi",
     "ApplicationDevelopmentTutorial": "Uygulama Geliştirme Eğitimi",
     "TheStartupTemplate": "Başlangıç Şablonu",
@@ -214,7 +214,7 @@
     "Packages": "Paketler",
     "NugetPackages": "Nuget Paketleri",
     "NPMPackages": "NPM Paketleri",
-    "SeeDocs": "Dökümanı Görüntüle",
+    "SeeDocs": "Dokümanı Görüntüle",
     "None": "Hiçbiri",
     "Application": "Uygulama",
     "ApplicationExplanation": "Domain Driven Design pratikleri üzerine oluşturulmuş çok katmanlı bir çözüm oluşturur. Bakıma ve geliştirmeye açık kod tabanına ihtiyaç duyan uzun süreli projeler için önerilir.",
@@ -227,7 +227,7 @@
     "License": "Lisans",
     "ProjectCreationSuccessMessage": "Projeniz başarıyla oluşturulmuştur",
     "HowToRunSolution": "Uygulamayı Nasıl Çalıştırabiliriz?",
-    "GettingStartedMessage": "Uygulamanızı  nasıl yapılandıracağınızı ve çalıştıracağınızı öğrenmek için başlanıç dökümanına bakınız.",
+    "GettingStartedMessage": "Uygulamanızı  nasıl yapılandıracağınızı ve çalıştıracağınızı öğrenmek için başlanıç dokümanına bakınız.",
     "WebAppDevTutorial": "Web Uygulaması Geliştirme Öğreticisi",
     "WebAppDevTutorialMessage": "Adım adım web uygulaması geliştirme örneği için web uygulaması geliştirme öğreticisine bakınız.",
     "CommunityPosts": "Topluluk Makaleleri",
@@ -428,6 +428,7 @@
     "PasswordRequired": "Şifre alanı zorunludur.",
     "AddressLength": "Adres alanı maksimum uzunluğu 255 karakter olmalıdır.",
     "GenderRequired": "Cinsiyet alanı zorunludur.",
-    "LeaveUsReview": "Yorumunuzu paylaşın"
+    "LeaveUsReview": "Yorumunuzu paylaşın",
+    "BuildingMicroserviceSolutionsShortDescription": "Bu kitap, ABP Framework kullanarak mikroservis tabanlı uygulamalar geliştirmek ve yönetmek için bir başvuru rehberidir."
   }
 }
