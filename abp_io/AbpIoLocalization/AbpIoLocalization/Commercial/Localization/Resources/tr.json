@@ -998,6 +998,7 @@
     "MyOrganizations_Detail_LicenseStartDate": "Lisans Başlangıç Tarihi",
     "MyOrganizations_Detail_LicenseExpiryDate": "Bitiş Tarihi",
     "ManageLicense": "Lisansı Yönet",
-    "AbpPlatformLeptonXTheme": "<span class=\"gradient-commercial\">ABP Platform</span> Yönetici Kontrol Paneliniz için LeptonX Teması"
+    "AbpPlatformLeptonXTheme": "<span class=\"gradient-commercial\">ABP Platform</span> Yönetici Kontrol Paneliniz için LeptonX Teması",
+    "Previous": "Önceki"
   }
 }

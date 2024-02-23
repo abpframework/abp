@@ -29,14 +29,13 @@ export class AbpTitleStrategy extends TitleStrategy {
   }
 
   override updateTitle(routerState: RouterStateSnapshot) {
+    this.routerState = routerState;
     let title = this.buildTitle(routerState);
 
     if (!title) {
       this.title.setTitle(this.projectName());
       return;
     }
-
-    this.routerState = routerState;
 
     const localizedTitle = this.localizationService.instant({ key: title, defaultValue: title });
     this.title.setTitle(`${localizedTitle} | ${this.projectName()}`);

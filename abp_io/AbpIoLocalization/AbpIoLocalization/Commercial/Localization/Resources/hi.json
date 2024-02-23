@@ -409,6 +409,7 @@
     "PaymentFailedInfo": "क्षमा करें, भुगतान विफल रहा! ",
     "UsedPayment": "इस भुगतान का उपयोग पहले ही किया जा चुका है",
     "ManageLicense": "लाइसेंस प्रबंधन",
-    "AbpPlatformLeptonXTheme": "ABP Platform द्वारा आपके व्यवस्थापक डैशबोर्ड के लिए LeptonX थीम"
+    "AbpPlatformLeptonXTheme": "ABP Platform द्वारा आपके व्यवस्थापक डैशबोर्ड के लिए LeptonX थीम",
+    "Previous": "पहले का"
   }
 }

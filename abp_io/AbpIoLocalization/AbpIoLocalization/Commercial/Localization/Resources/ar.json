@@ -796,6 +796,7 @@
     "PaymentFailedInfo": "عذرا، فشل الدفع! ",
     "UsedPayment": "لقد تم استخدام هذه الدفعة بالفعل",
     "ManageLicense": "التحكم في الترخيص",
-    "AbpPlatformLeptonXTheme": "سمة LeptonX للوحة تحكم المشرف الخاصة بك من قبل <span class=\"gradient-commercial\">ABP Platform</span>" 
+    "AbpPlatformLeptonXTheme": "سمة LeptonX للوحة تحكم المشرف الخاصة بك من قبل <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "سابق"
   }
 }

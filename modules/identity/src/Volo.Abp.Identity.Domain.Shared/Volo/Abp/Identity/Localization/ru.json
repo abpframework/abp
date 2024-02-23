@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Номер телефона",
     "DisplayName:TwoFactorEnabled": "Двухфакторная проверка подлинности",
     "DisplayName:IsActive": "Активный",
-    "DisplayName:LockoutEnabled": "Заблокировать учетную запись после неудачных попыток входа",
+    "DisplayName:LockoutEnabled": "Блокировка учетной записи",
     "NewRole": "Новая роль",
     "RoleName": "Имя роли",
     "CreationTime": "Время создания",
