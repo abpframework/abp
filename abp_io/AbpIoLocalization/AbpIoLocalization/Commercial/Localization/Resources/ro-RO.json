@@ -389,6 +389,7 @@
     "UsedPayment": "Această plată a fost deja utilizată",
     "ManageLicense": "Administrare licență",
     "AbpPlatformLeptonXTheme": "Tema LeptonX pentru panoul tău de administrare de la <span class=\"gradient-commercial\">ABP Platform</span>",
-    "Previous": "Anterior"
+    "Previous": "Anterior",
+    "PricingDiscount": "Reducere"
   }
 }

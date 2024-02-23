@@ -831,8 +831,9 @@
     "MultipleOrganizationInfo": "Katso kaikki organisaatiosi",
     "PaymentFailedInfo": "Anteeksi, maksu epäonnistui! ",
     "UsedPayment": "Tämä maksu on jo käytetty",
-    "ManageLicense": "Hallinnoi lisenssiä",  
+    "ManageLicense": "Hallinnoi lisenssiä",
     "AbpPlatformLeptonXTheme": "LeptonX-teema hallintapaneelillesi ABP Platformin toimesta <span class=\"gradient-commercial\">ABP Platform</span>",
-    "Previous": "Edellinen"
+    "Previous": "Edellinen",
+    "PricingDiscount": "Alennus"
   }
 }
