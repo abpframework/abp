@@ -10,7 +10,8 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 
 [DependsOn(
     typeof(BlobStoringDatabaseTestBaseModule),
-    typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
+    typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreSqliteModule)
     )]
 public class BlobStoringDatabaseEntityFrameworkCoreTestModule : AbpModule
 {
