@@ -28,14 +28,14 @@ public class AbpUnitTestSqliteConnection : SqliteConnection
 
 internal class AbpSqliteCommand : SqliteCommand
 {
-    private readonly static SemaphoreSlim SyncSemaphore = new SemaphoreSlim(1, 1);
+    private readonly static SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
 
     public override SqliteConnection? Connection
     {
         get => base.Connection;
         set
         {
-            using (SyncSemaphore.Lock())
+            using (Semaphore.Lock())
             {
                 base.Connection = value;
             }
@@ -44,7 +44,7 @@ internal class AbpSqliteCommand : SqliteCommand
 
     protected override void Dispose(bool disposing)
     {
-        using (SyncSemaphore.Lock())
+        using (Semaphore.Lock())
         {
             base.Dispose(disposing);
         }
