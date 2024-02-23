@@ -578,7 +578,7 @@ namespace MyProject.Issues
 }
 ````
 
-> The `IssueManager_Integration_Tests` class is abstract, See the **Implementing unit tests in EF Core and MongoDB** section below.
+> The `IssueManager_Integration_Tests` class is an abstract class, and tests in this class are not seen on the tests explorer, see the **Implementing unit tests in EF Core and MongoDB** section below to learn how to list tests in the test explorer and run them.
 
 * First test method assigns the issue to the User 1, which has already assigned to 3 issues in the Data Seed code. So, it throws a `BusinessException`.
 * Second test method assigns the issue to User 2, which has only 1 issue assigned. So, the method succeeds.
@@ -651,7 +651,7 @@ namespace MyProject.Issues
 }
 ````
 
-> The `IssueAppService_Tests` class is abstract, See the **Implementing unit tests in EF Core and MongoDB** section below.
+> The `IssueAppService_Tests` class is an abstract, and tests in this class are not seen on the tests explorer, see the **Implementing unit tests in EF Core and MongoDB** section below to learn how to list tests in the test explorer and run them.
 
 It's that simple. This test method tests everything, including the application service, EF Core mapping, object to object mapping and the repository implementation. In this way, you can fully test the Application Layer and the Domain Layer of your solution.
 
@@ -683,7 +683,7 @@ public abstract class IssueRepository_Tests<TStartupModule> : MyProjectDomainTes
 }
 ````
 
-> The `IssueRepository_Tests` class is abstract, See the **Implementing unit tests in EF Core and MongoDB** section below.
+> The `IssueRepository_Tests` class is an abstract, and tests in this class are not seen on the tests explorer, see the **Implementing unit tests in EF Core and MongoDB** section below to learn how to list tests in the test explorer and run them.
 
 We are using `_issueRepository.GetQueryableAsync` to obtain an `IQueryable<Issue>` object. Then, we are using the `FirstOrDefaultAsync` method to query an issue by its title. The database query is executed at this point, and you get an exception indicating that there is no active unit of work.
 
@@ -751,7 +751,7 @@ public abstract class MyDbContext_Tests<TStartupModule> : MyProjectDomainTestBas
 }
 ````
 
-> The `MyDbContext_Tests` class is abstract, See the **Implementing unit tests in EF Core and MongoDB** section below.
+> The `MyDbContext_Tests` class is an abstract, and tests in this class are not seen on the tests explorer, see the **Implementing unit tests in EF Core and MongoDB** section below to learn how to list tests in the test explorer and run them.
 
 Just like we've done in the *Dealing with Unit of Work in Integration Tests* section, we should perform `DbContext` operations inside an active unit of work.
 
@@ -759,9 +759,9 @@ For [MongoDB](MongoDB.md), you can use the `IMongoDbContextProvider<T>` service 
 
 ## Implementing unit tests in EF Core and MongoDB
 
-The unit test classes in `.Domain.Test` and `.Application.Tests` above are abstract classes, We need to implement the test classes in EF Core or MongoDB test projects to run the tests.
+The unit test classes in the `.Domain.Test` and `.Application.Tests` projects are all abstract classes. Therefore, we need to implement the test classes in EF Core or MongoDB test projects to run the tests, otherwise they will be ignored.
 
-A example implementation for the `IssueManager_Integration_Tests` class in the `.EntityFrameworkCore.Tests` project is shown below:
+An example implementation for the `IssueManager_Integration_Tests` class in the `.EntityFrameworkCore.Tests` project is shown below:
 
 ````csharp
 namespace MyProject.EntityFrameworkCore.Applications;
@@ -772,7 +772,11 @@ public class EfCoreIssueAppService_Tests : IssueAppService_Tests<MyProjectEntity
 }
 ````
 
+> By deriving from the related abstract classes, now we can see the all tests in the test explorers and run them.
+
 ![unitest-efcore-mongodb](images/unitest-efcore-mongodb.png)
+
+As you can see from the folder structure, all tests are clearly placed into the related subfolders, and they will be seen in the test explorer with this separation. Thus, you can clearly see which tests are related to which layers and projects.
 
 ## UI Tests
 
