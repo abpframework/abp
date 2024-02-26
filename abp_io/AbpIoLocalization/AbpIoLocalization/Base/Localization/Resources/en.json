@@ -239,6 +239,12 @@
     "Trainings": "Trainings",
     "MeetTheABPCommunity": "Meet the ABP <span class=\"gradient-community\">Community</span>",
     "DisplayName:CommunityIndexPagePoll": "Community Index Page Poll",
-    "ReturnOfInvestment": "Return Of Investment"
+    "ReturnOfInvestment": "Return Of Investment",
+    "PromotionalOffers": "Promotional Offers",
+    "PromotionalOffersDefinition": "Discounts, seasonal campaigns, etc.",
+    "EventsDefinition": "Community Talks, Webinars, ABP .NET Conference, etc.",
+    "ReleaseNotesDefinition": "ABP.IO Platform releases, new products, etc.",
+    "Newsletter": "Newsletter",
+    "NewsletterDefinition": "Blog posts, community news, etc."
   }
 }
