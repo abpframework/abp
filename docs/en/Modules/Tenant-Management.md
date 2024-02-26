@@ -56,7 +56,7 @@ This module defines the following ETOs (Event Transfer Objects) to allow you to 
 
 **Example: Get notified when a new tenant has been created**
 
-```
+```cs
 public class MyHandler :
     IDistributedEventHandler<EntityCreatedEto<TenantEto>>,
     ITransientDependency
