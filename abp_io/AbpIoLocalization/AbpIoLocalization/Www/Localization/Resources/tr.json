@@ -238,7 +238,6 @@
     "ClientSideDevelopmentDocumentationMessage": "Kullanıcı arayüzü (istemci tarafı) geliştirmeyle ilgili temel noktaları öğrenmek için {0} belgesine bakın.",
     "DatabaseProviderDocumentationMessage": "Veritabanı katmanı geliştirmeyle ilgili temel noktaları öğrenmek için {0} belgesine bakın.",
     "ABPCommercialExplanationMessage": "ABP Commercial, ABP Framework için premium modüller, temalar, araçlar ve destek sağlar.",
-    "ImplementingDDD": "Domain Driven Design'ı Uygulayın",
     "DDDBookExplanation": "ABP Framework ile Domain Driven Design'ın uygulanması için pratik bir kılavuz.",
     "Overview": "Genel Bakış",
     "DDDBookPracticalGuide": "Bu kitap Domain Driven Design'ın uygulanması için pratik bir kılavuz görevi görür. Uygulama ayrıntıları ABP Framework altyapısına dayanırken, temel kavramlar, prensipler ve modeller bir .NET çözümü olmasa bile her türlü çözümde uygulanabilir.",
@@ -429,6 +428,7 @@
     "AddressLength": "Adres alanı maksimum uzunluğu 255 karakter olmalıdır.",
     "GenderRequired": "Cinsiyet alanı zorunludur.",
     "LeaveUsReview": "Yorumunuzu paylaşın",
-    "BuildingMicroserviceSolutionsShortDescription": "Bu kitap, ABP Framework kullanarak mikroservis tabanlı uygulamalar geliştirmek ve yönetmek için bir başvuru rehberidir."
+    "BuildingMicroserviceSolutionsShortDescription": "Bu kitap, ABP Framework kullanarak mikroservis tabanlı uygulamalar geliştirmek ve yönetmek için bir başvuru rehberidir.",
+    "VideoCourses": "Video Kurslar"
   }
 }
