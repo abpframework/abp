@@ -4,7 +4,7 @@ namespace Volo.Abp.OpenIddict;
 
 public class AbpOpenIddictStoreOptions
 {
-    public IsolationLevel DefaultIsolationLevel { get; set; }
+    public IsolationLevel? DefaultIsolationLevel { get; set; }
 
     public AbpOpenIddictStoreOptions()
     {
