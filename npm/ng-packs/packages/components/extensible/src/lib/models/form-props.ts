@@ -29,6 +29,7 @@ export interface FormPropGroup {
 
 export class GroupedFormPropList<R = any> {
   public readonly items: GroupedFormPropItem[] = [];
+  count = 1;
   addItem(item: FormProp<R>) {
     const groupName = item.group?.name;
     let group = this.items.find(i => i.group?.name === groupName);
@@ -37,7 +38,7 @@ export class GroupedFormPropList<R = any> {
     } else {
       group = {
         formPropList: new FormPropList(),
-        group: item.group,
+        group: item.group || { name: `default${this.count++}`, className: item.group?.className },
       };
       group.formPropList.addHead(item);
       this.items.push(group);
