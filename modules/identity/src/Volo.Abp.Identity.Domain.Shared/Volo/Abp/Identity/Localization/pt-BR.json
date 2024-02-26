@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Telefone",
     "DisplayName:TwoFactorEnabled": "Verificação em dois fatores",
     "DisplayName:IsActive": "Ativo",
-    "DisplayName:LockoutEnabled": "Bloquear conta após falhas ao entrar",
+    "DisplayName:LockoutEnabled": "Bloqueio de Conta",
     "NewRole": "Novo Perfil",
     "RoleName": "Perfil",
     "CreationTime": "Data de Criação",

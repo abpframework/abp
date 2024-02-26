@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "फ़ोन नंबर",
     "DisplayName:TwoFactorEnabled": "दो कारक सत्यापन",
     "DisplayName:IsActive": "सक्रिय",
-    "DisplayName:LockoutEnabled": "असफल लॉगिन प्रयासों के बाद लॉक खाता",
+    "DisplayName:LockoutEnabled": "खाता लॉकआउट",
     "NewRole": "नयी भूमिका",
     "RoleName": "भूमिका का नाम",
     "CreationTime": "रचना समय",
