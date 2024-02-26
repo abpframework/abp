@@ -75,6 +75,12 @@ public class MyClientAppModule : AbpModule
         context.Services.AddStaticHttpClientProxies(
             typeof(MyClientAppModule).Assembly
         );
+
+        // Include the generated app-generate-proxy.json in the virtual file system
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<MyClientAppModule>();
+        });
     }
 }
 ````
@@ -94,6 +100,12 @@ public class MyClientAppModule : AbpModule
         context.Services.AddStaticHttpClientProxies(
             typeof(BookStoreApplicationContractsModule).Assembly
         );
+
+        // Include the generated app-generate-proxy.json in the virtual file system
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<MyClientAppModule>();
+        });
     }
 }
 ````
@@ -139,7 +151,7 @@ This command should generate the following files under the `ClientProxies` folde
 * `BookClientProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class * where you can write your custom code (ABP won't override it). 
 * `IBookAppService.cs` is the app service.
 * `BookDto.cs` is the Dto class which uses by app service.
-* `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests.
+* `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests. This file must be configured as an embedded resource in your project, so that it can be found by the virtual file system.
 
 #### Without Contracts
 
@@ -152,7 +164,7 @@ This command should generate the following files under the `ClientProxies` folde
 ![generated-static-client-proxies](../images/generated-static-client-proxies-without-contracts.png)
 
 * `BookClientProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class where you can write your custom code (ABP won't override it). 
-* `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests.
+* `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests. This file must be configured as an embedded resource in your project, so that it can be found by the virtual file system.
 
 > `generate-proxy` command generates proxies for only the APIs you've defined in your application. If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../CLI.md) documentation for other options.
 
