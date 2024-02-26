@@ -61,7 +61,7 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
 
         try
         {
-            using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: StoreOptions.Value.DefaultIsolationLevel))
+            using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: StoreOptions.Value.DeleteIsolationLevel))
             {
                 await TokenRepository.DeleteManyByApplicationIdAsync(application.Id, cancellationToken: cancellationToken);
 

@@ -4,10 +4,13 @@ namespace Volo.Abp.OpenIddict;
 
 public class AbpOpenIddictStoreOptions
 {
-    public IsolationLevel? DefaultIsolationLevel { get; set; }
+    public IsolationLevel? PruneIsolationLevel { get; set; }
+
+    public IsolationLevel? DeleteIsolationLevel { get; set; }
 
     public AbpOpenIddictStoreOptions()
     {
-        DefaultIsolationLevel = IsolationLevel.RepeatableRead;
+        PruneIsolationLevel = IsolationLevel.RepeatableRead;
+        DeleteIsolationLevel = IsolationLevel.Serializable;
     }
 }
