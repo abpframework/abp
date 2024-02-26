@@ -615,7 +615,7 @@
     "TotalDeveloperPrice": "Toplam Geliştirici Fiyatı",
     "Purchase_PricePerDeveloper": "<span>{0}</span> geliştirici başına",
     "Purchase_IncludedDeveloperInfo": "{0} {1} dahil.",
-    "Purchase_LicenseExtraDeveloperPurchaseMessage": "<span class=\"fw-6\">{0} lisansı</span> {1} geliştirici(ler) içerir. Şimdi veya daha sonra ek geliştiriciler ekleyebilirsiniz.",
+    "Purchase_LicenseExtraDeveloperPurchaseMessage": "<span class=\"fw-6\">{0} lisansı</span> {1} geliştirici içerir. Şimdi veya daha sonra ek geliştirici ekleyebilirsiniz.",
     "StartupTemplates_Page_Title": "ABP Başlangıç Şablonları",
     "StartupTemplates_Page_Description": "ABP Commercial, her düzeyde karmaşıklığa sahip projeler oluşturmanıza olanak tanır. Önceden oluşturulmuş iki ana başlangıç projesi sunar. Gereksinimlerinize yakın olanı seçebilir ve bunun üzerine kendi özel projenizi oluşturabilirsiniz.",
     "MicroserviceStartupSolutionForDotnet": ".NET için Mikroservis Başlatma Projesi",
