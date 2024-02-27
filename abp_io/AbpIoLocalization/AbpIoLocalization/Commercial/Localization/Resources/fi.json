@@ -833,6 +833,7 @@
     "UsedPayment": "Tämä maksu on jo käytetty",
     "ManageLicense": "Hallinnoi lisenssiä",  
     "AbpPlatformLeptonXTheme": "LeptonX-teema hallintapaneelillesi ABP Platformin toimesta <span class=\"gradient-commercial\">ABP Platform</span>",
-    "Previous": "Edellinen"
+    "Previous": "Edellinen",
+    "YourOrganizationOverview": "Organisaation yleiskatsaus"
   }
 }

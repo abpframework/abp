@@ -410,6 +410,7 @@
     "UsedPayment": "इस भुगतान का उपयोग पहले ही किया जा चुका है",
     "ManageLicense": "लाइसेंस प्रबंधन",
     "AbpPlatformLeptonXTheme": "ABP Platform द्वारा आपके व्यवस्थापक डैशबोर्ड के लिए LeptonX थीम",
-    "Previous": "पहले का"
+    "Previous": "पहले का",
+    "YourOrganizationOverview": "आपके संगठन का अवलोकन"
   }
 }

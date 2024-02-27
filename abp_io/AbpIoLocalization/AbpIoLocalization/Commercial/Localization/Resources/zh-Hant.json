@@ -1080,6 +1080,7 @@
     "UsedPayment": "该付款已被使用",
     "ManageLicense": "管理許可證",
     "AbpPlatformLeptonXTheme": "由 <span class=\"gradient-commercial\">ABP Platform</span> 提供的您的管理儀表板的 LeptonX 主題",
-    "Previous": "以前的"
+    "Previous": "以前的",
+    "YourOrganizationOverview": "您的组织概览"
   }
 }

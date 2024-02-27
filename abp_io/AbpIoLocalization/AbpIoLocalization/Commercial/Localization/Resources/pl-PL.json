@@ -389,6 +389,7 @@
     "UsedPayment": "Ta płatność została już wykorzystana",
     "ManageLicense": "Zarządzaj licencją",
     "AbpPlatformLeptonXTheme": "Motyw LeptonX dla Twojej konsoli administracyjnej od <span class=\"gradient-commercial\">ABP Platform</span>",
-    "Previous": "Poprzedni"
+    "Previous": "Poprzedni",
+    "YourOrganizationOverview": "Przegląd Twojej organizacji"
   }
 }
