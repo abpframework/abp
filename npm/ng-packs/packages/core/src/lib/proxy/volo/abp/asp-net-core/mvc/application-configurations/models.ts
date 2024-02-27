@@ -46,6 +46,7 @@ export interface ApplicationLocalizationConfigurationDto {
 
 export interface ApplicationLocalizationDto {
   resources: Record<string, ApplicationLocalizationResourceDto>;
+  currentCulture: CurrentCultureDto;
 }
 
 export interface ApplicationLocalizationRequestDto {
