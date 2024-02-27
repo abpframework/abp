@@ -184,7 +184,9 @@
     "ReleaseNotes": "Sürüm Notları",
     "Resources": "Kaynaklar",
     "VideoCourses": "Video Kurslar",
+    "OrganizationOverview": "Organizasyon Detayı",
     "EmailPreferences": "E-posta Tercihleri",
     "DoYouAgreePrivacyPolicy": "<i>Abone Ol</i> butonuna tıklayarak <a href=\"https://account.abp.io/Account/TermsConditions\">Şartlar</a> ve <a href=\"https://account.abp.io/Account/Privacy\">Gizlilik Politikası</a> kurallarımızı kabul etmiş olursunuz."
+
   }
 }

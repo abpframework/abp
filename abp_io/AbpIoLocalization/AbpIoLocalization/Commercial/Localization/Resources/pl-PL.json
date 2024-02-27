@@ -390,6 +390,7 @@
     "ManageLicense": "Zarządzaj licencją",
     "AbpPlatformLeptonXTheme": "Motyw LeptonX dla Twojej konsoli administracyjnej od <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Poprzedni",
-    "PricingDiscount": "Rabat"
+    "PricingDiscount": "Rabat",
+    "YourOrganizationOverview": "Przegląd Twojej organizacji"
   }
 }

@@ -798,6 +798,7 @@
     "ManageLicense": "التحكم في الترخيص",
     "AbpPlatformLeptonXTheme": "سمة LeptonX للوحة تحكم المشرف الخاصة بك من قبل <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "سابق",
-    "PricingDiscount": "تخفيض"
+    "PricingDiscount": "تخفيض",
+    "YourOrganizationOverview": "Your Organization Overview"
   }
 }

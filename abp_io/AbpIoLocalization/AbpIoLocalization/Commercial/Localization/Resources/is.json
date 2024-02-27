@@ -390,6 +390,7 @@
     "ManageLicense": "Stjórna leyfi",
     "AbpPlatformLeptonXTheme": "LeptonX Þema fyrir stjórnborð stjórnanda þíns af <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Fyrri",
-    "PricingDiscount": "Afsláttur"
+    "PricingDiscount": "Afsláttur",
+    "YourOrganizationOverview": "Yfirlit yfir stofnunina þína"
   }
 }

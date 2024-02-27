@@ -1090,6 +1090,7 @@
     "ManageLicense": "Upravljanje licencom",
     "AbpPlatformLeptonXTheme": "LeptonX Tema za vašu administratorsku nadzornu ploču od strane <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Prethodno",
-    "PricingDiscount": "Popust"
+    "PricingDiscount": "Popust",
+    "YourOrganizationOverview": "Pregled vaše organizacije"
   }
 }
