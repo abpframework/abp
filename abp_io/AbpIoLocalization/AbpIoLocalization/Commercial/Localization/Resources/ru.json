@@ -1090,6 +1090,7 @@
     "UsedPayment": "Этот платеж уже использован",
     "ManageLicense": "Управление лицензией",
     "AbpPlatformLeptonXTheme": "Тема LeptonX для вашей панели администратора от <span class=\"gradient-commercial\">ABP Platform</span>",
-    "Previous": "Предыдущий"
+    "Previous": "Предыдущий",
+    "PricingDiscount": "Скидка"
   }
 }

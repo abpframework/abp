@@ -389,6 +389,7 @@
     "UsedPayment": "Þessi greiðsla hefur þegar verið notuð",
     "ManageLicense": "Stjórna leyfi",
     "AbpPlatformLeptonXTheme": "LeptonX Þema fyrir stjórnborð stjórnanda þíns af <span class=\"gradient-commercial\">ABP Platform</span>",
-    "Previous": "Fyrri"
+    "Previous": "Fyrri",
+    "PricingDiscount": "Afsláttur"
   }
 }
