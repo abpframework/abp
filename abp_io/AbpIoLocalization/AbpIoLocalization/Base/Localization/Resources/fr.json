@@ -231,6 +231,7 @@
     "BlogProfile": "Profil du blog",
     "Tickets": "Des billets",
     "MeetTheABPCommunity": "Découvrez ABP avec la <span class=\"gradient-community\">Communauté</span>",
-    "DisplayName:CommunityIndexPagePoll": "Sondage de la page d&#39;accueil de la communauté"
+    "DisplayName:CommunityIndexPagePoll": "Sondage de la page d&#39;accueil de la communauté",
+    "OrganizationOverview": "Aperçu de l'organisation"
   }
 }

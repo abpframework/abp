@@ -231,6 +231,7 @@
     "BlogProfile": "Blog profil",
     "Tickets": "Jegyek",
     "MeetTheABPCommunity": "Ismerd meg az ABP-t a <span class=\"gradient-community\">Közösséggel</span>",
-    "DisplayName:CommunityIndexPagePoll": "Közösségi Indexoldal Szavazás"
+    "DisplayName:CommunityIndexPagePoll": "Közösségi Indexoldal Szavazás",
+    "OrganizationOverview": "Szervezet áttekintése"
   }
 }

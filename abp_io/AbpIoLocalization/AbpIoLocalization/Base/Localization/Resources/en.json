@@ -245,6 +245,7 @@
     "EventsDefinition": "Community Talks, Webinars, ABP .NET Conference, etc.",
     "ReleaseNotesDefinition": "ABP.IO Platform releases, new products, etc.",
     "Newsletter": "Newsletter",
-    "NewsletterDefinition": "Blog posts, community news, etc."
+    "NewsletterDefinition": "Blog posts, community news, etc.",
+    "OrganizationOverview": "Organization Overview"
   }
 }

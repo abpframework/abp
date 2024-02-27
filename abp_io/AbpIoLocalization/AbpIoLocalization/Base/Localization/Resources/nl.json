@@ -231,6 +231,7 @@
     "BlogProfile": "Blogprofiel",
     "Tickets": "Kaartjes",
     "MeetTheABPCommunity": "Maak kennis met ABP <span class=\"gradient-community\">Gemeenschap</span>",
-    "DisplayName:CommunityIndexPagePoll": "Gemeenschapsindexpagina-enquête"
+    "DisplayName:CommunityIndexPagePoll": "Gemeenschapsindexpagina-enquête",
+    "OrganizationOverview": "Organisatieoverzicht"
   }
 }

@@ -231,6 +231,7 @@
     "BlogProfile": "الملف الشخصي للمدونة",
     "Tickets": "التذاكر",
     "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">المجتمع</span> معرفة",
-    "DisplayName:CommunityIndexPagePoll": "استطلاع"
+    "DisplayName:CommunityIndexPagePoll": "استطلاع",
+    "OrganizationOverview": "نظرة عامة على المنظمة"
   }
 }
