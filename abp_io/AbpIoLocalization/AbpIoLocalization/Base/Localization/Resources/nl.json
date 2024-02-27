@@ -232,6 +232,9 @@
     "Tickets": "Kaartjes",
     "MeetTheABPCommunity": "Maak kennis met ABP <span class=\"gradient-community\">Gemeenschap</span>",
     "DisplayName:CommunityIndexPagePoll": "Gemeenschapsindexpagina-enquête",
-    "OrganizationOverview": "Organisatieoverzicht"
+    "OrganizationOverview": "Organisatieoverzicht",
+    "EmailPreferences": "e-mail voorkeuren",
+    "DoYouAgreePrivacyPolicy": "Door te klikken <i>Abonneren</i> knop waarmee u akkoord gaat <a href=\"https://account.abp.io/Account/TermsConditions\">Voorwaarden</a> En <a href=\"https://account.abp.io/Account/Privacy\">Privacybeleid</a>."
+
   }
 }

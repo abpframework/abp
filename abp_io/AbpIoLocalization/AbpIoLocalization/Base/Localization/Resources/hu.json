@@ -232,6 +232,9 @@
     "Tickets": "Jegyek",
     "MeetTheABPCommunity": "Ismerd meg az ABP-t a <span class=\"gradient-community\">Közösséggel</span>",
     "DisplayName:CommunityIndexPagePoll": "Közösségi Indexoldal Szavazás",
-    "OrganizationOverview": "Szervezet áttekintése"
+    "OrganizationOverview": "Szervezet áttekintése",
+    "EmailPreferences": "E-mail beállítások",
+    "DoYouAgreePrivacyPolicy": "Kattintással <i>Iratkozz fel</i> gombbal elfogadja a <a href=\"https://account.abp.io/Account/TermsConditions\">Feltételek</a> és <a href=\"https://account.abp.io/Account/Privacy\">Adatvédelmi irányelvek</a>."
+
   }
 }

@@ -232,6 +232,9 @@
     "Tickets": "门票",
     "MeetTheABPCommunity": "与 ABP 一起认识 <span class=\"gradient-community\">社区</span>",
     "DisplayName:CommunityIndexPagePoll": "社区首页投票",
-    "OrganizationOverview": "组织概况"
+    "OrganizationOverview": "组织概况",
+    "EmailPreferences": "电子邮件首选项",
+    "DoYouAgreePrivacyPolicy": "通过点击 <i>订阅</i> 按钮表示您同意 <a href=\"https://account.abp.io/Account/TermsConditions\">条款</a> 和 <a href=\"https://account.abp.io/Account/Privacy\">隐私政策</a>。"
+
   }
 }
