@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
@@ -19,23 +20,29 @@ public class EditModalModel : IdentityPageModel
 
     [BindProperty]
     public AssignedRoleViewModel[] Roles { get; set; }
-    
+
     public DetailViewModel Detail { get; set; }
 
     protected IIdentityUserAppService IdentityUserAppService { get; }
 
+    protected IPermissionChecker PermissionChecker { get; }
+
     public bool IsEditCurrentUser { get; set; }
 
-    public EditModalModel(IIdentityUserAppService identityUserAppService)
+    public EditModalModel(IIdentityUserAppService identityUserAppService, IPermissionChecker permissionChecker)
     {
         IdentityUserAppService = identityUserAppService;
+        PermissionChecker = permissionChecker;
     }
 
     public virtual async Task<IActionResult> OnGetAsync(Guid id)
     {
         var user = await IdentityUserAppService.GetAsync(id);
         UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(user);
-        Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityUserAppService.GetAssignableRolesAsync()).Items);
+        if (await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
+        {
+            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityUserAppService.GetAssignableRolesAsync()).Items);
+        }
         IsEditCurrentUser = CurrentUser.Id == id;
 
         var userRoleNames = (await IdentityUserAppService.GetRolesAsync(UserInfo.Id)).Items.Select(r => r.Name).ToList();
@@ -46,15 +53,15 @@ public class EditModalModel : IdentityPageModel
                 role.IsAssigned = true;
             }
         }
-        
+
         Detail = ObjectMapper.Map<IdentityUserDto, DetailViewModel>(user);
-        
+
         Detail.CreatedBy = await GetUserNameOrNullAsync(user.CreatorId);
         Detail.ModifiedBy = await GetUserNameOrNullAsync(user.LastModifierId);
 
         return Page();
     }
-    
+
     private async Task<string> GetUserNameOrNullAsync(Guid? userId)
     {
         if (!userId.HasValue)
@@ -126,14 +133,14 @@ public class EditModalModel : IdentityPageModel
     {
         public string CreatedBy { get; set; }
         public DateTime? CreationTime { get; set; }
-        
+
         public string ModifiedBy { get; set; }
         public DateTime? LastModificationTime { get; set; }
-        
+
         public DateTimeOffset? LastPasswordChangeTime { get; set; }
 
         public DateTimeOffset? LockoutEnd { get; set; }
-        
+
         public int AccessFailedCount { get; set; }
     }
 }

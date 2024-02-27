@@ -9,13 +9,13 @@ namespace Volo.Abp.TenantManagement;
 public interface ITenantRepository : IBasicRepository<Tenant, Guid>
 {
     Task<Tenant> FindByNameAsync(
-        string name,
+        string normalizedName,
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
 
     [Obsolete("Use FindByNameAsync method.")]
     Tenant FindByName(
-        string name,
+        string normalizedName,
         bool includeDetails = true
     );
 

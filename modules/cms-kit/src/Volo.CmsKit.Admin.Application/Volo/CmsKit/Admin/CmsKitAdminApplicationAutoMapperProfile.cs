@@ -46,5 +46,8 @@ public class CmsKitAdminApplicationAutoMapperProfile : Profile
         CreateMap<MediaDescriptor, MediaDescriptorDto>().MapExtraProperties();
 
         CreateMap<MenuItem, MenuItemDto>().MapExtraProperties();
+        CreateMap<MenuItem, MenuItemWithDetailsDto>()
+            .Ignore(x => x.PageTitle)
+            .MapExtraProperties();
     }
 }

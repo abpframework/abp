@@ -51,6 +51,34 @@ public class MyDbContext : AbpMongoDbContext
 * 为每一个mongo集合添加一个公共的 `IMongoCollection<TEntity>` 属性.ABP默认使用这些属性创建默认的仓储
 * 重写 `CreateModel` 方法,可以在方法中配置集合(如设置集合在数据库中的名字)
 
+### 为集合配置索引和 CreateCollectionOptions
+
+你可以在 `CreateModel` 方法中配置集合的索引和 `CreateCollectionOptions`:
+
+````csharp
+protected override void CreateModel(IMongoModelBuilder modelBuilder)
+{
+    base.CreateModel(modelBuilder);
+
+    modelBuilder.Entity<Question>(b =>
+    {
+        b.CreateCollectionOptions.Collation = new Collation(locale:"en_US", strength: CollationStrength.Secondary);
+        b.ConfigureIndexes(indexes =>
+            {
+                indexes.CreateOne(
+                    new CreateIndexModel<BsonDocument>(
+                        Builders<BsonDocument>.IndexKeys.Ascending("MyProperty"),
+                        new CreateIndexOptions { Unique = true }
+                    )
+                );
+            }
+        );
+    });
+}
+````
+
+在这个例子中,我们设置了集合的排序规则和一个唯一的索引.
+
 ### 将 Db Context 注入到依赖注入中
 
 在你的模块中使用 `AddAbpDbContext` 方法将Db Context注入到[依赖注入](Dependency-Injection.md)系统中.

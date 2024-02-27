@@ -54,19 +54,22 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             LeaveOnlyGroupAttributes(context, output);
-            if (TagHelper.FloatingLabel && !isCheckBox)
+            if (!IsOutputHidden(output))
             {
-                output.Attributes.AddClass("form-floating");
-            }
-            if (TagHelper.AddMarginBottomClass)
-            {
-                output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
-            }
-            if (isCheckBox)
-            {
-                output.Attributes.AddClass("custom-checkbox");
-                output.Attributes.AddClass("custom-control");
-                output.Attributes.AddClass("form-check");
+                if (TagHelper.FloatingLabel && !isCheckBox)
+                {
+                    output.Attributes.AddClass("form-floating");
+                }
+                if (TagHelper.AddMarginBottomClass)
+                {
+                    output.Attributes.AddClass(isCheckBox ? "mb-2" : "mb-3");
+                }
+                if (isCheckBox)
+                {
+                    output.Attributes.AddClass("custom-checkbox");
+                    output.Attributes.AddClass("custom-control");
+                    output.Attributes.AddClass("form-check");
+                }
             }
             output.Content.AppendHtml(innerHtml);
         }
@@ -263,7 +266,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
-    {
+    {        
         if (IsOutputHidden(inputTag) || TagHelper.SuppressLabel)
         {
             return string.Empty;
@@ -271,7 +274,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         if (string.IsNullOrEmpty(TagHelper.Label))
         {
-            return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox) + GetRequiredSymbol(context, output);
+            return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox);
         }
 
         var label = new TagBuilder("label");
@@ -392,6 +395,8 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             }
             innerOutput.Content.AppendHtml($" <i class=\"{iconClass}\"></i>");
         }
+        
+        innerOutput.Content.AppendHtml(GetRequiredSymbol(context, output));
 
         return innerOutput.Render(_encoder);
     }

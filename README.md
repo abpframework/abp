@@ -42,6 +42,16 @@ Create a new solution:
 
 <img width="500" src="docs/en/images/db-options.png">
 
+## The Book: Mastering ABP Framework
+
+Written by the creator of ABP Framework, this book will help you to gain a complete understanding of the ABP Framework and modern web application development techniques.
+
+* [Buy on Amazon](https://www.amazon.com/gp/product/B097Z2DM8Q)
+* [Buy on Packt Publishing](https://www.packtpub.com/product/mastering-abp-framework/9781801079242)
+* [More details about the book](https://abp.io/books/mastering-abp-framework)
+
+![book-mastering-abp-framework](docs/en/images/book-mastering-abp-framework.png)
+
 ## What ABP Provides?
 
 ABP provides a **full stack developer experience**.

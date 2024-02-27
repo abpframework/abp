@@ -229,6 +229,8 @@
     "ManageAccount": "खाते का प्रबंधन करें",
     "CommunityProfile": "सामुदायिक प्रोफ़ाइल",
     "BlogProfile": "ब्लॉग प्रोफ़ाइल",
-    "Tickets": "टिकट"
+    "Tickets": "टिकट",
+    "MeetTheABPCommunity": "ABP से मिलें <span class=\"gradient-community\">समुदाय</span>",
+    "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान"
   }
 }
