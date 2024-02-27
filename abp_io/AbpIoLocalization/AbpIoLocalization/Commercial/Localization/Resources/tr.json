@@ -274,7 +274,7 @@
     "LiveTrainingSupport": "Canlı eğitim ve destek",
     "AndMore": "ve dahası",
     "AdditionalDeveloperLicense": "Ek geliştirici lisansı",
-    "ProjectCount": "proje sayısı",
+    "ProjectCount": "Proje sayısı",
     "AllProModules": "Tüm profesyonel modüller",
     "AllProThemes": "Tüm profesyonel temalar",
     "AllProStartupTemplates": "Tüm profesyonel başlangıç şablonları",
@@ -999,6 +999,7 @@
     "MyOrganizations_Detail_LicenseExpiryDate": "Bitiş Tarihi",
     "ManageLicense": "Lisansı Yönet",
     "AbpPlatformLeptonXTheme": "<span class=\"gradient-commercial\">ABP Platform</span> Yönetici Kontrol Paneliniz için LeptonX Teması",
-    "Previous": "Önceki"
+    "Previous": "Önceki",
+    "PricingDiscount": "İndirim"
   }
 }

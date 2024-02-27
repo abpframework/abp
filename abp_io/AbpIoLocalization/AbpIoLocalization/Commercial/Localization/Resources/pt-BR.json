@@ -412,6 +412,7 @@
     "UsedPayment": "Este pagamento já foi usado",
     "ManageLicense": "Gerenciar Licença",
     "AbpPlatformLeptonXTheme": "Tema LeptonX para o seu Painel de Administração por <span class=\"gradient-commercial\">ABP Platform</span>",
-    "Previous": "Anterior"
+    "Previous": "Anterior",
+    "PricingDiscount": "Desconto"
   }
 }
