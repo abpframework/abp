@@ -65,8 +65,9 @@ Now, it's ready to configure the application for the static client proxy generat
 
 ````csharp
 [DependsOn(
-    typeof(AbpHttpClientModule) //used to create client proxies
-    )]
+    typeof(AbpHttpClientModule), //used to create client proxies
+    typeof(AbpVirtualFileSystemModule) //virtual file system
+)]
 public class MyClientAppModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -90,8 +91,9 @@ public class MyClientAppModule : AbpModule
 ````csharp
 [DependsOn(
     typeof(AbpHttpClientModule), //used to create client proxies
+    typeof(AbpVirtualFileSystemModule), //virtual file system
     typeof(BookStoreApplicationContractsModule) //contains the application service interfaces
-    )]
+)]
 public class MyClientAppModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
