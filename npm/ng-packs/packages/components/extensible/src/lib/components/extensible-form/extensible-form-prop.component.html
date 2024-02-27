@@ -179,4 +179,7 @@
     }
     {{ asterisk }}
   </label>
+  @if (prop.tooltip) {
+    <i [ngbTooltip]="prop.tooltip.text | abpLocalization" [placement]="prop.tooltip.placement || 'auto'"  container="body" class="bi bi-info-circle ms-1"></i>
+  }
 </ng-template>
