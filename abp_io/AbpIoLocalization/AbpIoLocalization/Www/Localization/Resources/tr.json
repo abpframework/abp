@@ -289,7 +289,7 @@
     "AbpNewCommandExplanation": "ABP başlangıç şablonlarını kullanarak yeni çözümler oluşturur.",
     "AbpAddModuleCommandExplanation": "Çözümünüze önceden oluşturulmuş uygulama modülleri yükler",
     "ExploreAllCLICommands": "Tüm CLI komutlarını keşfedin",
-    "ExploreDocumentationAndGuides": "Kapsamlı belge ve kılavuzları keşfedin.",
+    "ExploreDocumentationAndGuides": "Kapsamlı doküman ve kılavuzları keşfedin.",
     "Documentations": "Belgeler",
     "Views": "Görünümler",
     "ReadMore": "Daha fazla oku",
@@ -429,6 +429,8 @@
     "GenderRequired": "Cinsiyet alanı zorunludur.",
     "LeaveUsReview": "Yorumunuzu paylaşın",
     "BuildingMicroserviceSolutionsShortDescription": "Bu kitap, ABP Framework kullanarak mikroservis tabanlı uygulamalar geliştirmek ve yönetmek için bir başvuru rehberidir.",
-    "VideoCourses": "Video Kurslar"
+    "VideoCourses": "Video Kurslar",
+    "DocumentationButtonTitle": "Dokümantasyon"
+
   }
 }
