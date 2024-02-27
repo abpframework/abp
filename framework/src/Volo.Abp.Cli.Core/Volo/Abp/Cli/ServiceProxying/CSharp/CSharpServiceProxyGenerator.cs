@@ -558,7 +558,8 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
                     if (x < s2.Length - 1)
                     {
                         type.Append(", ");
-                    }else if(!s3.Contains(">"))
+                    }
+                    else if(!s3.Contains(">"))
                     {
                         type.Append("<");
                     }
