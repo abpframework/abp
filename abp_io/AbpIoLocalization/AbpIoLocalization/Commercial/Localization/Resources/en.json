@@ -1186,6 +1186,7 @@
     "PricingTeamTitle": "Team",
     "PricingBusinessTitle": "Business",
     "PricingEnterpriseTitle": "Enterprise",
-    "SpecialDiscount": "Special Discount"
+    "SpecialDiscount": "Special Discount",
+    "YourOrganizationOverview": "Your Organization Overview"
   }
 }

@@ -231,6 +231,7 @@
     "BlogProfile": "Profil blog",
     "Tickets": "bilete",
     "MeetTheABPCommunity": "Cunoaște ABP cu <span class=\"gradient-community\">Comunitatea</span>",
-    "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității"
+    "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității",
+    "OrganizationOverview": "Prezentare a organizației"
   }
 }

@@ -1000,6 +1000,7 @@
     "ManageLicense": "Lisansı Yönet",
     "AbpPlatformLeptonXTheme": "<span class=\"gradient-commercial\">ABP Platform</span> Yönetici Kontrol Paneliniz için LeptonX Teması",
     "Previous": "Önceki",
-    "PricingDiscount": "İndirim"
+    "PricingDiscount": "İndirim",
+    "YourOrganizationOverview": "Organizasyon Detayı"
   }
 }

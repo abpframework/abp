@@ -390,6 +390,7 @@
     "ManageLicense": "Licentie beheren",
     "AbpPlatformLeptonXTheme": "LeptonX-thema voor uw beheerdersdashboard door <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Vorig",
-    "PricingDiscount": "Korting"
+    "PricingDiscount": "Korting",
+    "YourOrganizationOverview": "Uw organisatieoverzicht"
   }
 }

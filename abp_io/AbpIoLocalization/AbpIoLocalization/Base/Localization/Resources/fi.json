@@ -231,6 +231,7 @@
     "BlogProfile": "Blogin profiili",
     "Tickets": "Liput",
     "MeetTheABPCommunity": "Tutustu ABP<span class=\"gradient-community\">Yhteisö</span>:n kanssa",
-    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely"
+    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely",
+    "OrganizationOverview": "Organisaation yleiskatsaus"
   }
 }

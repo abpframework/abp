@@ -231,6 +231,7 @@
     "BlogProfile": "部落格簡介",
     "Tickets": "門票",
     "MeetTheABPCommunity": "與 ABP 一起認識 <span class=\"gradient-community\">社群</span>",
-    "DisplayName:CommunityIndexPagePoll": "社區首頁調查"
+    "DisplayName:CommunityIndexPagePoll": "社區首頁調查",
+    "OrganizationOverview": "组织概况"
   }
 }

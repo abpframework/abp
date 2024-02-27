@@ -231,6 +231,7 @@
     "BlogProfile": "ब्लॉग प्रोफ़ाइल",
     "Tickets": "टिकट",
     "MeetTheABPCommunity": "ABP से मिलें <span class=\"gradient-community\">समुदाय</span>",
-    "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान"
+    "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान",
+    "OrganizationOverview": "संगठन अवलोकन"
   }
 }

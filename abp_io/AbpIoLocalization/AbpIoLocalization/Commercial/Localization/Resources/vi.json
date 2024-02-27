@@ -390,6 +390,7 @@
     "ManageLicense": "Quản lý Giấy phép",
     "AbpPlatformLeptonXTheme": "Chủ đề LeptonX cho Bảng điều khiển quản trị của bạn bởi <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Trước",
-    "PricingDiscount": "Popust"
+    "PricingDiscount": "Popust",
+    "YourOrganizationOverview": "Tổng quan về tổ chức của bạn"
   }
 }

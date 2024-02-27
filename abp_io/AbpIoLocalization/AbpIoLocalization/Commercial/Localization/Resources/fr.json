@@ -412,6 +412,7 @@
     "ManageLicense": "Gérer la licence",
     "AbpPlatformLeptonXTheme": "Thème LeptonX pour votre tableau de bord administrateur par <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Précédent",
-    "PricingDiscount": "Rabais"
+    "PricingDiscount": "Rabais",
+    "YourOrganizationOverview": "Aperçu de votre organisation"
   }
 }

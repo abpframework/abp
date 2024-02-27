@@ -231,6 +231,7 @@
     "BlogProfile": "Blog profil",
     "Tickets": "Vstopnice",
     "MeetTheABPCommunity": "Spoznajte ABP z <span class=\"gradient-community\">Skupnostjo</span>",
-    "DisplayName:CommunityIndexPagePoll": "Anketa na strani z indeksom skupnosti"
+    "DisplayName:CommunityIndexPagePoll": "Anketa na strani z indeksom skupnosti",
+    "OrganizationOverview": "Pregled organizacije"
   }
 }

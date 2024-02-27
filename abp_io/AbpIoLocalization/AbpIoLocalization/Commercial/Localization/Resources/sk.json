@@ -409,6 +409,7 @@
     "ManageLicense": "Spravovať licenciu",
     "AbpPlatformLeptonXTheme": "Téma LeptonX pre váš administratívny panel od <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Predchádzajúce",
-    "PricingDiscount": "Zľava"
+    "PricingDiscount": "Zľava",
+    "YourOrganizationOverview": "Prehľad vašej organizácie"
   }
 }

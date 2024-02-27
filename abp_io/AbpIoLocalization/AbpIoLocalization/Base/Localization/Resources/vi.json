@@ -230,6 +230,7 @@
     "BlogProfile": "Hồ sơ blog",
     "Tickets": "Vé",
     "MeetTheABPCommunity": "Gặp gỡ ABP với <span class=\"gradient-community\">Cộng đồng</span>",
-    "DisplayName:CommunityIndexPagePoll": "Bình chọn trang chủ cộng đồng"
+    "DisplayName:CommunityIndexPagePoll": "Bình chọn trang chủ cộng đồng",
+    "OrganizationOverview": "Tổng quan về tổ chức"
   }
 }

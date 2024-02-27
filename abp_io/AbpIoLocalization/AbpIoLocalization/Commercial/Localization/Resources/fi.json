@@ -834,6 +834,7 @@
     "ManageLicense": "Hallinnoi lisenssiä",
     "AbpPlatformLeptonXTheme": "LeptonX-teema hallintapaneelillesi ABP Platformin toimesta <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Edellinen",
-    "PricingDiscount": "Alennus"
+    "PricingDiscount": "Alennus",
+    "YourOrganizationOverview": "Organisaation yleiskatsaus"
   }
 }
