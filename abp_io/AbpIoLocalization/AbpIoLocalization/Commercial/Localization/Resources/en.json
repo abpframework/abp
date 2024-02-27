@@ -1181,8 +1181,12 @@
     "LearnMore": "Learn More",
     "ReturnOfInvestment": "Return of Investment",
     "ReturnOfInvestment_Description": "Learn how to reduce your development costs by more than %50.",
-    "SpecialDiscount": "Special Discount",
     "Previous": "Previous",
+    "PricingDiscount": "Save",
+    "PricingTeamTitle": "Team",
+    "PricingBusinessTitle": "Business",
+    "PricingEnterpriseTitle": "Enterprise",
+    "SpecialDiscount": "Special Discount",
     "YourOrganizationOverview": "Your Organization Overview"
   }
 }

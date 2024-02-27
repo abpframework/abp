@@ -393,6 +393,7 @@
     "ManageLicense": "Gestionar licencia",
     "AbpPlatformLeptonXTheme": "Tema LeptonX para su panel de administración por <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Anterior",
+    "PricingDiscount": "Descuento",
     "YourOrganizationOverview": "Descripción general de su organización"
   }
 }

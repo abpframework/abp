@@ -412,6 +412,7 @@
     "ManageLicense": "Správa licence",
     "AbpPlatformLeptonXTheme": "LeptonX téma pro váš správce účtu od <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Předchozí",
+    "PricingDiscount": "Sleva",
     "YourOrganizationOverview": "Přehled vaší organizace"
   }
 }
