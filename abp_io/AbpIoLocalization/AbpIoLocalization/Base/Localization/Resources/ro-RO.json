@@ -234,7 +234,9 @@
     "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității",
     "OrganizationOverview": "Prezentare a organizației",
     "EmailPreferences": "preferinte de email",
-    "DoYouAgreePrivacyPolicy": "Dând clicuri <i>Abonati-va</i> butonul sunteți de acord cu <a href=\"https://account.abp.io/Account/TermsConditions\">Termeni</a> și <a href=\"https://account.abp.io/Account/Privacy\">Politica de confidențialitate</a>."
+    "DoYouAgreePrivacyPolicy": "Dând clicuri <i>Abonati-va</i> butonul sunteți de acord cu <a href=\"https://account.abp.io/Account/TermsConditions\">Termeni</a> și <a href=\"https://account.abp.io/Account/Privacy\">Politica de confidențialitate</a>.",
+    "VideoCourses": "Cursuri video",
+    "Resources": "Resurse"
 
   }
 }
