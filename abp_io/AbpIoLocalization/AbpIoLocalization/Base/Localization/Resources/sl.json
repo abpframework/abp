@@ -234,7 +234,7 @@
     "DisplayName:CommunityIndexPagePoll": "Anketa na strani z indeksom skupnosti",
     "OrganizationOverview": "Pregled organizacije",
     "EmailPreferences": "E-poštne nastavitve",
-    "DoYouAgreePrivacyPolicy": "S klikom <i>Naročite se</i> gumb se strinjate z <a href=\"https://account.abp.io/Account/TermsConditions\">Pogoji</a> in <a href=\"https://account.abp.io/Account/Privacy\">Politika zasebnosti</a>."
-
+    "DoYouAgreePrivacyPolicy": "S klikom <i>Naročite se</i> gumb se strinjate z <a href=\"https://account.abp.io/Account/TermsConditions\">Pogoji</a> in <a href=\"https://account.abp.io/Account/Privacy\">Politika zasebnosti</a>.",
+    "VideoCourses": "Video tečaji"
   }
 }

@@ -233,6 +233,9 @@
     "DisplayName:CommunityIndexPagePoll": "Encuesta de la página de índice de la comunidad",
     "OrganizationOverview": "Descripción de la organización",
     "EmailPreferences": "Preferencias de correo electrónico",
-    "DoYouAgreePrivacyPolicy": "Haciendo click <i>Suscribir</i> botón estás de acuerdo con el <a href=\"https://account.abp.io/Account/TermsConditions\">Términos</a> y <a href=\"https://account.abp.io/Account/Privacy\">política de privacidad</a>."
+    "DoYouAgreePrivacyPolicy": "Haciendo click <i>Suscribir</i> botón estás de acuerdo con el <a href=\"https://account.abp.io/Account/TermsConditions\">Términos</a> y <a href=\"https://account.abp.io/Account/Privacy\">política de privacidad</a>.",
+    "VideoCourses": "Cursos en vídeo",
+    "Resources": "Recursos"
+
   }
 }
