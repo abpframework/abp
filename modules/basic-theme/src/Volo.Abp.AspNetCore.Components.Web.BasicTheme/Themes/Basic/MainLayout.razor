@@ -3,6 +3,11 @@
 @using Volo.Abp.AspNetCore.Components.Web.Theming.Components
 @using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
 @inherits LayoutComponentBase
+
+@*
+ * If a component use `prerender: true` it should use same references with the client app. (MenuContributor, etc.)
+ *@
+
 <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4" id="main-navbar" style="min-height: 4rem;">
     <div class="container">
         <Branding />
@@ -13,19 +18,21 @@
         </button>
         <div class="collapse navbar-collapse @(IsCollapseShown ? "show" : "")" id="main-navbar-collapse">
             <ul class="navbar-nav mx-auto">
-                <NavMenu />
+                @* Use same menu contributor with the client app *@
+                <NavMenu @rendermode="new InteractiveAutoRenderMode(prerender: false)" />
             </ul>
-            <NavToolbar />
+            <NavToolbar @rendermode="new InteractiveAutoRenderMode(prerender: false)" />
         </div>
     </div>
 </nav>
 <div class="container">
-    <PageAlert />
+    <PageAlert @rendermode="new InteractiveAutoRenderMode(prerender: false)" />
     <LayoutHook Name="@LayoutHooks.Body.First" Layout="@StandardLayouts.Application" />
     @Body
     <LayoutHook Name="@LayoutHooks.Body.Last" Layout="@StandardLayouts.Application" />
-    <DynamicLayoutComponent />
-    <UiMessageAlert />
-    <UiNotificationAlert />
-    <UiPageProgress />
+    <DynamicLayoutComponent @rendermode="new InteractiveAutoRenderMode(prerender: true)"/>
+
+    <UiMessageAlert @rendermode="new InteractiveAutoRenderMode(prerender: false)"/>
+    <UiNotificationAlert @rendermode="new InteractiveAutoRenderMode(prerender: false)"/>
+    <UiPageProgress @rendermode="new InteractiveAutoRenderMode(prerender: false)" />
 </div>

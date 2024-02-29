@@ -1,6 +1,10 @@
 ﻿@page "/"
 @inherits MyProjectNameComponentBase
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
+
+@rendermode RenderMode.InteractiveAuto
+
 <div class="container">
     <div class="p-5 text-center">
         <Badge Color="Color.Success" class="mb-4">
@@ -21,7 +25,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-auto text-center">
-                    <img src="https://abp.io/assets/png/mastering-abp-framework.webp" style="max-width: 400px;" class="w-100 mb-5 my-md-3">
+                    @* <img src="https://abp.io/assets/png/mastering-abp-framework.webp" style="max-width: 400px;" class="w-100 mb-5 my-md-3"> *@
                 </div>
                 <div class="col-md d-flex align-items-center">
                     <div class="pe-0 pe-md-4">

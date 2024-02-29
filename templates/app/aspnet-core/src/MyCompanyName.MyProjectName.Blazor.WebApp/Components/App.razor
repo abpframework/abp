@@ -1,7 +1,6 @@
 ﻿@using Volo.Abp.Localization
 @using System.Globalization
 @using Microsoft.Extensions.Hosting
-@using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
 @using Volo.Abp.AspNetCore.Components.Web.Theming.Bundling
 @inject IHostEnvironment Env
 @{
@@ -17,7 +16,9 @@
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="/" />
 
-    <AbpStyles BundleName="@BlazorLeptonXLiteThemeBundles.Styles.Global" WebAssemblyStyleFiles="GlobalStyles" />
+    <style  ></style>
+    @* <AbpStyles BundleName="@BlazorBasicThemeBundles.Styles.Global" /> *@
+        <link rel="stylesheet" href="global.css"/>
 
     <HeadOutlet />
 
@@ -26,8 +27,10 @@
 
     <Routes />
 
-    <AbpScripts BundleName="@BlazorLeptonXLiteThemeBundles.Scripts.Global" WebAssemblyScriptFiles="GlobalScripts" />
+    @* <AbpScripts BundleName="@BlazorBasicThemeBundles.Scripts.Global" /> *@
 
+
+    <script src="global.js"></script>
     <script src="_framework/blazor.web.js"></script>
 
     <div id="blazor-error-ui">
