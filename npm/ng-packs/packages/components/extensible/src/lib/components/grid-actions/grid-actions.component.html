@@ -42,10 +42,10 @@
 
 <ng-template #buttonContentTmp let-action>
   <i [ngClass]="action.icon" [class.me-1]="action.icon && !action.showOnlyIcon"></i>
-  @if(!action.showOnlyIcon){
+  @if (!action.showOnlyIcon) {
     @if (action.icon) {
       <span>{{ action.text | abpLocalization }}</span>
-    }@else {
+    } @else {
       <div abpEllipsis>{{ action.text | abpLocalization }}</div>
     }
   }
@@ -53,16 +53,16 @@
 
 <ng-template #btnTmp let-action>
   @if (action.visible(data)) {
-  <button
-    *abpPermission="action.permission; runChangeDetection: false"
-    (click)="action.action(data)"
-    type="button"
-    [class]="action.btnClass"
-    [style]="action.btnStyle"
-  >
-    <ng-container
-      *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
-    ></ng-container>
-  </button>
+    <button
+      *abpPermission="action.permission; runChangeDetection: false"
+      (click)="action.action(data)"
+      type="button"
+      [class]="action.btnClass"
+      [style]="action.btnStyle"
+    >
+      <ng-container
+        *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
+      ></ng-container>
+    </button>
   }
 </ng-template>
