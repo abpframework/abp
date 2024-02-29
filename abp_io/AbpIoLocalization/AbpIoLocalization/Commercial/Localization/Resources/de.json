@@ -394,6 +394,8 @@
     "AbpPlatformLeptonXTheme": "LeptonX-Theme für Ihr Admin-Dashboard von <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Vorherige",
     "PricingDiscount": "Rabatt",
-    "YourOrganizationOverview": "Ihre Organisationsübersicht"
+    "YourOrganizationOverview": "Ihre Organisationsübersicht",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} Stunde",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} Stunden"
   }
 }

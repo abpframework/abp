@@ -391,6 +391,8 @@
     "AbpPlatformLeptonXTheme": "LeptonX-thema voor uw beheerdersdashboard door <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Vorig",
     "PricingDiscount": "Korting",
-    "YourOrganizationOverview": "Uw organisatieoverzicht"
+    "YourOrganizationOverview": "Uw organisatieoverzicht",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} uur",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} uur"
   }
 }

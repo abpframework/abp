@@ -1093,6 +1093,7 @@
     "AbpPlatformLeptonXTheme": "由 <span class=\"gradient-commercial\">ABP Platform</span> 提供的您的管理仪表板的 LeptonX 主题",
     "Previous": "以前的",
     "PricingDiscount": "折扣",
-    "YourOrganizationOverview": "您的组织概览"
+    "YourOrganizationOverview": "您的组织概览",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} 小时"
   }
 }

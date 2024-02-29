@@ -391,6 +391,8 @@
     "AbpPlatformLeptonXTheme": "Tema LeptonX pentru panoul tău de administrare de la <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Anterior",
     "PricingDiscount": "Reducere",
-    "YourOrganizationOverview": "Prezentare generală a organizației dvs"
+    "YourOrganizationOverview": "Prezentare generală a organizației dvs",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} oră",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} ore"
   }
 }

@@ -115,6 +115,8 @@
     "PaymentFailedInfo": "Sorry, payment failed! This could be due to insufficient funds, invalid credit card numbers or invalid pin",
     "UsedPayment": "This payment has been already used",
     "Previous": "Previous",
-    "YourOrganizationOverview": "Your Organization Overview"
+    "YourOrganizationOverview": "Your Organization Overview",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hour",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hours"
   }
 }

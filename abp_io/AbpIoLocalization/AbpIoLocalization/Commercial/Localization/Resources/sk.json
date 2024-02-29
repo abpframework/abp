@@ -410,6 +410,8 @@
     "AbpPlatformLeptonXTheme": "Téma LeptonX pre váš administratívny panel od <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Predchádzajúce",
     "PricingDiscount": "Zľava",
-    "YourOrganizationOverview": "Prehľad vašej organizácie"
+    "YourOrganizationOverview": "Prehľad vašej organizácie",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hodina",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hodín"
   }
 }

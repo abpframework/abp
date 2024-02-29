@@ -607,7 +607,7 @@
     "StartupTemplates_Page_Description": "ABP Commercialin avulla voit rakentaa minkä tahansa monimutkaisia ratkaisuja. Se tarjoaa kaksi pääasiallista valmiiksi rakennettua käynnistysratkaisua. Voit valita tarpeitasi vastaavan ja rakentaa oman mukautetun ratkaisun sen päälle.",
     "MicroserviceStartupSolutionForDotnet": "Mikropalvelu käynnistysmalli .NET:ille",
     "MonolithSolutionForDotnet": "Monoliitti (modulaarinen) Ratkaisu .NET:ille",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} tunti(a)",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} tuntia",
     "Trainings_Content": "Koulutuksen sisältö",
     "Trial_Page_StartYourFreeTrial": "Aloita <span class=\"gradient-commercial\">ilmainen kokeilujaksosi</span>",
     "TrialLicenseFeatures": "Voit hyötyä kaikista ABP:n kaupallisista ominaisuuksista",
@@ -835,6 +835,7 @@
     "AbpPlatformLeptonXTheme": "LeptonX-teema hallintapaneelillesi ABP Platformin toimesta <span class=\"gradient-commercial\">ABP Platform</span>",
     "Previous": "Edellinen",
     "PricingDiscount": "Alennus",
-    "YourOrganizationOverview": "Organisaation yleiskatsaus"
+    "YourOrganizationOverview": "Organisaation yleiskatsaus",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} tunti"
   }
 }
