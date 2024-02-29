@@ -20,7 +20,7 @@
 @inject ICurrentUser CurrentUser
 
 @{
-    string dummyImageSource = "https://dummyimage.com/1280x720/a3a3a3/fff.png?text=" + Model.ViewModel.Title;
+    const string dummyImageSource = "/cms-kit/dummy-placeholder-1280x720.png";
     var isScrollIndexEnabled = GlobalFeatureManager.Instance.IsEnabled<BlogPostScrollIndexFeature>() && Model.BlogPostScrollIndexFeature?.IsEnabled == true;
 }
 
