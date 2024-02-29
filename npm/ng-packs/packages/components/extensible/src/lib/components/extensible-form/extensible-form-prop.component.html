@@ -1,7 +1,4 @@
-<ng-container
-  [ngSwitch]="getComponent(prop)"
-  *abpPermission="prop.permission; runChangeDetection: false"
->
+<ng-container [ngSwitch]="getComponent(prop)" *abpPermission="prop.permission; runChangeDetection: false">
   <ng-template ngSwitchCase="template">
     <ng-container *ngComponentOutlet="prop.template; injector: injectorForCustomComponent">
     </ng-container>
@@ -178,8 +175,8 @@
       {{ prop.displayName | abpLocalization }}
     }
     {{ asterisk }}
+    @if (prop.tooltip) {
+      <i [ngbTooltip]="prop.tooltip.text | abpLocalization" [placement]="prop.tooltip.placement || 'auto'"  container="body" class="bi bi-info-circle"></i>
+    }
   </label>
-  @if (prop.tooltip) {
-    <i [ngbTooltip]="prop.tooltip.text | abpLocalization" [placement]="prop.tooltip.placement || 'auto'"  container="body" class="bi bi-info-circle ms-1"></i>
-  }
 </ng-template>
