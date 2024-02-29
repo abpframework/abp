@@ -44,7 +44,7 @@ public class MyWorker : BackgroundWorkerBase
 public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 {
     public PassiveUserCheckerWorker(
-            AbpTimer timer,
+            AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory
         ) : base(
             timer, 
