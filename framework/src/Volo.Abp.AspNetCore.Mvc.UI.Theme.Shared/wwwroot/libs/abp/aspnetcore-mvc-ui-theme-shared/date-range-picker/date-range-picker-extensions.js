@@ -304,6 +304,9 @@
 
     function setOptions(options, $datePickerElement, singleDatePicker) {
         options.singleDatePicker = singleDatePicker;
+
+        var $modal = $datePickerElement.closest('.modal.fade');
+
         var defaultOptions = {
             showDropdowns: true,
             opens: "center",
@@ -320,7 +323,8 @@
                 clearLabel: abp.localization.localize('Clear', 'AbpUi'),
                 applyLabel: abp.localization.localize('Apply', 'AbpUi'),
             },
-            singleOpenAndClearButton: true
+            singleOpenAndClearButton: true,
+            parentEl: $modal.length > 0 ? $modal : 'body'
         };
         var locale = defaultOptions.locale;
         $.extend(options, defaultOptions);
@@ -457,9 +461,9 @@
             .each(function () {
                 var $this = $(this);
                 var $input = $this.find('.input-group input[type="text"]')
-                var $startDateInput = $this.find('input[data-start-date]');
-                var $endDateInput = $this.find('input[data-end-date]');
-                var $dateInput = $this.find('input[data-date]');
+                var $startDateInput = $this.find('input[type="hidden"][data-start-date]');
+                var $endDateInput = $this.find('input[type="hidden"][data-end-date]');
+                var $dateInput = $this.find('input[type="hidden"][data-date]');
                 if ($input.data('daterangepicker')) {
                     return;
                 }

@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Telefon numarası",
     "DisplayName:TwoFactorEnabled": "İki aşamalı doğrulama",
     "DisplayName:IsActive": "Aktif",
-    "DisplayName:LockoutEnabled": "Başarısız giriş denemeleri sonrası hesabı kilitleme",
+    "DisplayName:LockoutEnabled": "Hesap kilitlenmesi",
     "NewRole": "Yeni rol",
     "RoleName": "Rol adı",
     "CreationTime": "Oluşturma zamanı",

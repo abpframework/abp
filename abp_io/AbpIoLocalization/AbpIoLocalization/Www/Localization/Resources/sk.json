@@ -467,6 +467,8 @@
     "Title": "Názov",
     "TitlePlaceholder": "Vývojár softvéru, CTO atď.",
     "Characters": "znaky",
-    "ABPTestimonialDescription": "Rámec ABP: Vypočujme si vaše svedectvo"
+    "ABPTestimonialDescription": "Rámec ABP: Vypočujme si vaše svedectvo",
+    "LeaveUsReview": "Zanechajte nám recenziu",
+    "DocumentationButtonTitle": "Dokumentácia"
   }
 }

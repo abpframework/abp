@@ -410,6 +410,9 @@
     "UsedPayment": "Questo pagamento è già stato utilizzato",
     "ManageLicense": "Gestisci la licenza",
     "AbpPlatformLeptonXTheme": "Tema LeptonX per la tua bacheca amministrativa di <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Precedente",
+    "PricingDiscount": "Sconto",
+    "YourOrganizationOverview": "Panoramica della tua organizzazione",
     "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} ora",
     "TrainingDetailsHeaderInfo_TrainingHour": "{0} ore"
   }

@@ -93,61 +93,63 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             version = latestVersion;
         }
 
-        var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
-        var templateVersion = SemanticVersion.Parse(version);
-
-        var outputWarning = false;
-        if (!trustUserVersion)
+        if (type == SourceCodeTypes.Template)
         {
-            if (currentCliVersion.Major != templateVersion.Major || currentCliVersion.Minor != templateVersion.Minor)
+            var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
+            var templateVersion = SemanticVersion.Parse(version);
+
+            var outputWarning = false;
+            if (!trustUserVersion)
             {
-                // major and minor version are different
-                outputWarning = true;
-            }
-            else if (currentCliVersion.Major == templateVersion.Major &&
-                     currentCliVersion.Minor == templateVersion.Minor &&
-                     currentCliVersion.Patch < templateVersion.Patch)
-            {
-                // major and minor version are same but patch version is lower
-                outputWarning = true;
-            }
-            else if(currentCliVersion.Major == templateVersion.Major &&
-                    currentCliVersion.Minor == templateVersion.Minor &&
-                    currentCliVersion.Patch == templateVersion.Patch &&
-                    currentCliVersion.IsPrerelease && templateVersion.IsPrerelease)
-            {
-                // major and minor and patch version are same but prerelease version may be lower
-                var cliRcVersion = currentCliVersion.ReleaseLabels.LastOrDefault();
-                var templateRcVersion = templateVersion.ReleaseLabels.LastOrDefault();
-                if (cliRcVersion != null && templateRcVersion != null)
+                if (currentCliVersion.Major != templateVersion.Major || currentCliVersion.Minor != templateVersion.Minor)
                 {
-                    if (int.TryParse(cliRcVersion, out var cliRcVersionNumber) && int.TryParse(templateRcVersion, out var templateRcVersionNumber))
+                    // major and minor version are different
+                    outputWarning = true;
+                }
+                else if (currentCliVersion.Major == templateVersion.Major &&
+                         currentCliVersion.Minor == templateVersion.Minor &&
+                         currentCliVersion.Patch < templateVersion.Patch)
+                {
+                    // major and minor version are same but patch version is lower
+                    outputWarning = true;
+                }
+                else if(currentCliVersion.Major == templateVersion.Major &&
+                        currentCliVersion.Minor == templateVersion.Minor &&
+                        currentCliVersion.Patch == templateVersion.Patch &&
+                        currentCliVersion.IsPrerelease && templateVersion.IsPrerelease)
+                {
+                    // major and minor and patch version are same but prerelease version may be lower
+                    var cliRcVersion = currentCliVersion.ReleaseLabels.LastOrDefault();
+                    var templateRcVersion = templateVersion.ReleaseLabels.LastOrDefault();
+                    if (cliRcVersion != null && templateRcVersion != null)
                     {
-                        if (cliRcVersionNumber < templateRcVersionNumber)
+                        if (int.TryParse(cliRcVersion, out var cliRcVersionNumber) && int.TryParse(templateRcVersion, out var templateRcVersionNumber))
                         {
-                            outputWarning = true;
+                            if (cliRcVersionNumber < templateRcVersionNumber)
+                            {
+                                outputWarning = true;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (outputWarning)
-        {
-            version = currentCliVersion.ToString();
-            Logger.LogWarning(userSpecifiedVersion
-                ? $"The specified template version ({templateVersion}) is different than the CLI version ({currentCliVersion}). This may cause compatibility issues."
-                : $"The latest template version ({templateVersion}) is different than the CLI version ({currentCliVersion}). This may cause compatibility issues.");
-            Logger.LogWarning("Please upgrade/downgrade the CLI version to the template version.");
-            Logger.LogWarning($"> dotnet tool uninstall -g volo.abp.cli");
-            Logger.LogWarning(!templateVersion.IsPrerelease
-                ? $"> dotnet tool install -g volo.abp.cli --version \"{templateVersion.Major}.{templateVersion.Minor}.*\""
-                : $"> dotnet tool install -g volo.abp.cli --version {templateVersion}");
-
-            if (userSpecifiedVersion)
+            if (outputWarning)
             {
-                Logger.LogWarning($"We have changed the template version as the cli version.");
-                Logger.LogWarning($"New version: {version}");
+                Logger.LogWarning(userSpecifiedVersion
+                    ? $"The specified template version ({templateVersion}) is different than the CLI version ({currentCliVersion}). This may cause compatibility issues."
+                    : $"The latest template version ({templateVersion}) is different than the CLI version ({currentCliVersion}). This may cause compatibility issues.");
+                Logger.LogWarning("Please upgrade/downgrade the CLI version to the template version.");
+                Logger.LogWarning($"> dotnet tool uninstall -g volo.abp.cli");
+                Logger.LogWarning(!templateVersion.IsPrerelease
+                    ? $"> dotnet tool install -g volo.abp.cli --version \"{templateVersion.Major}.{templateVersion.Minor}.*\""
+                    : $"> dotnet tool install -g volo.abp.cli --version {templateVersion}");
+
+                if (userSpecifiedVersion)
+                {
+                    Logger.LogWarning($"We have changed the template version as the cli version.");
+                    Logger.LogWarning($"New version: {version}");
+                }
             }
         }
 

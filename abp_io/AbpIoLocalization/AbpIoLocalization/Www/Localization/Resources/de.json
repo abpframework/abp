@@ -467,6 +467,8 @@
     "Title": "Titel",
     "TitlePlaceholder": "Softwareentwickler, CTO usw.",
     "Characters": "zeichen",
-    "ABPTestimonialDescription": "ABP Framework: Lass uns deine Bewertung hören"
+    "ABPTestimonialDescription": "ABP Framework: Lass uns deine Bewertung hören",
+    "LeaveUsReview": "Hinterlassen Sie uns eine Bewertung",
+    "DocumentationButtonTitle": "Dokumentation"
   }
 }

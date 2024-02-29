@@ -465,6 +465,8 @@
     "Title": "Заголовок",
     "TitlePlaceholder": "Разработчик программного обеспечения, технический директор и т. д.",
     "Characters": "Символы",
-    "ABPTestimonialDescription": "ABP Framework: давайте послушаем ваш отзыв"
+    "ABPTestimonialDescription": "ABP Framework: давайте послушаем ваш отзыв",
+    "LeaveUsReview": "Оставьте нам отзыв",
+    "DocumentationButtonTitle": "Документация"
   }
 }

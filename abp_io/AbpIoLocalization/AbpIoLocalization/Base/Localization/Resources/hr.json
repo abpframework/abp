@@ -231,6 +231,12 @@
     "BlogProfile": "Blog profil",
     "Tickets": "Ulaznice",
     "MeetTheABPCommunity": "Upoznaj ABP <span class=\"gradient-community\">Zajednicu</span>",
-    "DisplayName:CommunityIndexPagePoll": "Anketa na stranici indeksa zajednice"
+    "DisplayName:CommunityIndexPagePoll": "Anketa na stranici indeksa zajednice",
+    "OrganizationOverview": "Pregled organizacije",
+    "EmailPreferences": "Postavke e-pošte",
+    "DoYouAgreePrivacyPolicy": "Klikom <i>Pretplatite se</i> gumb slažete se s <a href=\"https://account.abp.io/Account/TermsConditions\">Pojmovi</a> i <a href=\"https://account.abp.io/Account/Privacy\">Politika privatnosti</a>.",
+    "VideoCourses": "Video tečajevi",
+    "Resources": "Resursi"
+
   }
 }

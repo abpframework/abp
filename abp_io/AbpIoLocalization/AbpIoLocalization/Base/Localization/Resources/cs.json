@@ -231,6 +231,12 @@
     "BlogProfile": "Profil blogu",
     "Tickets": "Vstupenky",
     "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">Komunita</span> poznat",
-    "DisplayName:CommunityIndexPagePoll": "Anketa na stránce s indexem komunity"
+    "DisplayName:CommunityIndexPagePoll": "Anketa na stránce s indexem komunity",
+    "OrganizationOverview": "Přehled organizace",
+    "EmailPreferences": "Předvolby e-mailu",
+    "DoYouAgreePrivacyPolicy": "Kliknutím <i>předplatit</i> souhlasíte s <a href=\"https://account.abp.io/Account/TermsConditions\">Podmínky</a> a <a href=\"https://account.abp.io/Account/Privacy\">Zásady ochrany osobních údajů</a>.",
+    "VideoCourses": "Video kurzy",
+    "Resources": "Zdroje"
+
   }
 }

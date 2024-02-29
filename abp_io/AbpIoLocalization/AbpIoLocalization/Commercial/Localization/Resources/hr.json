@@ -1089,6 +1089,9 @@
     "UsedPayment": "Ovo plaćanje je već iskorišteno",
     "ManageLicense": "Upravljanje licencom",
     "AbpPlatformLeptonXTheme": "LeptonX Tema za vašu administratorsku nadzornu ploču od strane <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Prethodno",
+    "PricingDiscount": "Popust",
+    "YourOrganizationOverview": "Pregled vaše organizacije",
     "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} sat"
   }
 }

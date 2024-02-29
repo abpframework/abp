@@ -6,6 +6,20 @@
     "DB": ["EF","Mongo"]
 }
 ````
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Creating, Updating and Deleting Books",
+    "Path": "Tutorials/Part-3"
+  },
+  "Previous": {
+    "Name": "Creating the Server Side",
+    "Path": "Tutorials/Part-1"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -668,7 +682,3 @@ You can run the application! The final UI of this part is shown below:
 This is a fully working, server side paged, sorted and localized table of books.
 
 {{end # UI }}
-
-## The Next Part
-
-Check the [next part](Part-3.md) of this tutorial.

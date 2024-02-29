@@ -467,6 +467,8 @@
     "Title": "العنوان",
     "TitlePlaceholder": "مطور برامج، مدير تكنولوجيا المعلومات، إلخ.",
     "Characters": "الأحرف",
-    "ABPTestimonialDescription": "ABP Framework: دعونا نسمع شهادتك"
+    "ABPTestimonialDescription": "ABP Framework: دعونا نسمع شهادتك",
+    "LeaveUsReview": "ترك لنا المراجعة",
+    "DocumentationButtonTitle": "توثيق"
   }
 }

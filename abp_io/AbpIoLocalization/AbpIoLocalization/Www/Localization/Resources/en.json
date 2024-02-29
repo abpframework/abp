@@ -478,6 +478,9 @@
     "PasswordLength": "The field Password must be a string with a maximum length of 32.",
     "PasswordRequired": "The Password field is required.",
     "AddressLength": "The field Address must be a string with a maximum length of 255.",
-    "GenderRequired": "The Gender field is required."
+    "GenderRequired": "The Gender field is required.",
+    "LeaveUsReview": "Leave us review",
+    "DocumentationButtonTitle": "Documentation"
+
   }
 }

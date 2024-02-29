@@ -2,6 +2,7 @@ import { LinkedList } from '@abp/utils';
 import { InjectFlags, InjectionToken, InjectOptions, Type } from '@angular/core';
 import { O } from 'ts-toolbelt';
 import { ePropType } from '../enums/props.enum';
+import { FormPropTooltip } from './form-props';
 
 export abstract class PropList<R = any, A = Prop<R>> extends LinkedList<A> {}
 
@@ -36,6 +37,7 @@ export abstract class Prop<R = any> {
     public readonly template?: Type<any>,
     public readonly className?: string,
     public readonly formText?: string,
+    public readonly tooltip?: FormPropTooltip,
     public readonly displayTextResolver?: PropDisplayTextResolver<R>,
   ) {
     this.displayName = this.displayName || this.name;
