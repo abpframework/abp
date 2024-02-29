@@ -1,7 +1,7 @@
 @if (form) {
   @for (groupedProp of groupedPropList.items; track $index) {
     <ng-container *abpPropData="let data; fromList: groupedProp.formPropList; withRecord: record">
-      @if(groupedProp.group?.className) {
+      @if(isAnyGroupMemberVisible($index, data) && groupedProp.group?.className){
         <div [ngClass]="groupedProp.group?.className"
              [attr.data-name]="groupedProp.group?.name || groupedProp.group?.className"
         >

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {ControlContainer, ReactiveFormsModule, UntypedFormGroup} from '@angular/forms';
 import {EXTRA_PROPERTIES_KEY} from '../../constants/extra-properties';
-import {FormPropList, GroupedFormPropList} from '../../models/form-props';
+import {FormProp, FormPropList, GroupedFormPropList} from '../../models/form-props';
 import {ExtensionsService} from '../../services/extensions.service';
 import {EXTENSIONS_IDENTIFIER} from '../../tokens/extensions.token';
 import {selfFactory} from '../../utils/factory.util';
@@ -44,11 +44,13 @@ export class ExtensibleFormComponent<R = any> {
         const type = !record || JSON.stringify(record) === '{}' ? 'create' : 'edit';
         const propList = this.extensions[`${type}FormProps`].get(this.identifier).props;
         this.groupedPropList = this.createGroupedList(propList);
+        this.groupedPropListOfArray = this.groupedPropList.items.map(i => i.formPropList.toArray());
         this.record = record;
     }
 
     extraPropertiesKey = EXTRA_PROPERTIES_KEY;
     groupedPropList!: GroupedFormPropList;
+    groupedPropListOfArray: FormProp<any>[][];
     record!: R;
 
     public readonly cdRef = inject(ChangeDetectorRef)
@@ -63,6 +65,11 @@ export class ExtensibleFormComponent<R = any> {
             groupedFormPropList.addItem(item.value);
         });
         return groupedFormPropList;
+    }
+
+    isAnyGroupMemberVisible(index: number, data){
+        const isVisible = this.groupedPropListOfArray[index].find(prop => prop.visible(data));
+        return isVisible;
     }
 
     get form(): UntypedFormGroup {
