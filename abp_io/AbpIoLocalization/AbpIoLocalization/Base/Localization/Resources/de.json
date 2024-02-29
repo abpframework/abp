@@ -229,6 +229,13 @@
     "CommunityProfile": "Community-Profil",
     "BlogProfile": "Blog-Profil",
     "Tickets": "Tickets",
-    "DisplayName:CommunityIndexPagePoll": "Community-Indexseite-Umfrage"
+    "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">Community</span> kennenlernen",
+    "DisplayName:CommunityIndexPagePoll": "Community-Indexseite-Umfrage",
+    "OrganizationOverview": "Organisationsübersicht",
+    "EmailPreferences": "E-Mail Einstellungen",
+    "DoYouAgreePrivacyPolicy": "Beim Klicken <i>Abonnieren</i> Mit der Schaltfläche stimmen Sie dem zu <a href=\"https://account.abp.io/Account/TermsConditions\">Bedingungen</a> Und <a href=\"https://account.abp.io/Account/Privacy\">Datenschutzrichtlinie</a>.",
+    "VideoCourses": "Videokurse",
+    "Resources": "Ressourcen"
+
   }
 }

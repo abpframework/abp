@@ -17,7 +17,7 @@ export class RememberMeService {
   }
 
   get() {
-    return Boolean(JSON.parse(this.localStorageService.getItem(this.#rememberMe)));
+    return Boolean(JSON.parse(this.localStorageService.getItem(this.#rememberMe) || 'false'));
   }
 
   getFromToken(accessToken: string) {

@@ -409,6 +409,11 @@
     "WhatHappensWhenLicenseEndsExplanation7": "Você pode estender (renovar) sua licença se quiser continuar obtendo esses benefícios. Se você estender sua licença dentro de <strong>{3} dias</strong> após a expiração de sua licença, os seguintes descontos serão aplicados: Licença de equipe {0}; Licença Comercial {1}; Licença empresarial {2}.",
     "MultipleOrganizationInfo": "Veja todas as suas organizações",
     "PaymentFailedInfo": "Desculpe, o pagamento falhou! ",
-    "UsedPayment": "Este pagamento já foi usado"
+    "UsedPayment": "Este pagamento já foi usado",
+    "ManageLicense": "Gerenciar Licença",
+    "AbpPlatformLeptonXTheme": "Tema LeptonX para o seu Painel de Administração por <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Anterior",
+    "PricingDiscount": "Desconto",
+    "YourOrganizationOverview": "Visão geral da sua organização"
   }
 }

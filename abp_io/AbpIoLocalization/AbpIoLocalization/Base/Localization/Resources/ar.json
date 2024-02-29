@@ -230,6 +230,12 @@
     "CommunityProfile": "ملف تعريف المجتمع",
     "BlogProfile": "الملف الشخصي للمدونة",
     "Tickets": "التذاكر",
-    "DisplayName:CommunityIndexPagePoll": "استطلاع"
+    "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">المجتمع</span> معرفة",
+    "DisplayName:CommunityIndexPagePoll": "استطلاع",
+    "OrganizationOverview": "نظرة عامة على المنظمة",
+    "EmailPreferences": "تفضيلات البريد الإلكتروني",
+    "DoYouAgreePrivacyPolicy": "بالضغط <i>يشترك</i> الزر الذي توافق عليه <a href=\"https://account.abp.io/Account/TermsConditions\">شروط</a> و <a href=\"https://account.abp.io/Account/Privacy\">سياسة الخصوصية</a>.",
+    "VideoCourses": "دورات الفيديو",
+    "Resources": "موارد"
   }
 }

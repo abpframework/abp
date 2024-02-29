@@ -230,6 +230,13 @@
     "CommunityProfile": "Közösségi profil",
     "BlogProfile": "Blog profil",
     "Tickets": "Jegyek",
-    "DisplayName:CommunityIndexPagePoll": "Közösségi Indexoldal Szavazás"
+    "MeetTheABPCommunity": "Ismerd meg az ABP-t a <span class=\"gradient-community\">Közösséggel</span>",
+    "DisplayName:CommunityIndexPagePoll": "Közösségi Indexoldal Szavazás",
+    "OrganizationOverview": "Szervezet áttekintése",
+    "EmailPreferences": "E-mail beállítások",
+    "DoYouAgreePrivacyPolicy": "Kattintással <i>Iratkozz fel</i> gombbal elfogadja a <a href=\"https://account.abp.io/Account/TermsConditions\">Feltételek</a> és <a href=\"https://account.abp.io/Account/Privacy\">Adatvédelmi irányelvek</a>.",
+    "VideoCourses": "Videó tanfolyamok",
+    "Resources": "Erőforrások"
+
   }
 }

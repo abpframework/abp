@@ -230,6 +230,13 @@
     "CommunityProfile": "Profil społeczności",
     "BlogProfile": "Profil bloga",
     "Tickets": "Bilety",
-    "DisplayName:CommunityIndexPagePoll": "Ankieta na stronie głównej społeczności"
+    "MeetTheABPCommunity": "Maak kennis met ABP <span class=\"gradient-community\">Gemeenschap</span>",
+    "DisplayName:CommunityIndexPagePoll": "Ankieta na stronie głównej społeczności",
+    "OrganizationOverview": "Przegląd organizacji",
+    "EmailPreferences": "Preferencje poczty e-mail",
+    "DoYouAgreePrivacyPolicy": "Klikając <i>Subskrybuj</i> przycisk, na który wyrażasz zgodę <a href=\"https://account.abp.io/Account/TermsConditions\">Warunki</a> I <a href=\"https://account.abp.io/Account/Privacy\">Polityka prywatności</a>.",
+    "VideoCourses": "Kursy wideo",
+    "Resources": "Zasoby"
+
   }
 }

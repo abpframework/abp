@@ -467,6 +467,8 @@
     "Title": "Titul",
     "TitlePlaceholder": "Vývojář softwaru, CTO atd.",
     "Characters": "znaky",
-    "ABPTestimonialDescription": "ABP Framework: Pojďme slyšet vaši referenci"
+    "ABPTestimonialDescription": "ABP Framework: Pojďme slyšet vaši referenci",
+    "LeaveUsReview": "Zanechte nám recenzi",
+    "DocumentationButtonTitle": "Dokumentace"
   }
 }

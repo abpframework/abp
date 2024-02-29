@@ -756,6 +756,11 @@
     "BlackFridayDiscount": "Black Friday Kedvezmény",
     "MultipleOrganizationInfo": "Tekintse meg az összes szervezetét",
     "PaymentFailedInfo": "Sajnos a fizetés sikertelen! ",
-    "UsedPayment": "Ezt a fizetést már felhasználták"
+    "UsedPayment": "Ezt a fizetést már felhasználták",
+    "ManageLicense": "Licenc kezelése",
+    "AbpPlatformLeptonXTheme": "LeptonX téma az Adminisztrációs Vezérlőpultjához az <span class=\"gradient-commercial\">ABP Platform</span> által",
+    "Previous": "Előző",
+    "PricingDiscount": "Kedvezmény",
+    "YourOrganizationOverview": "Az Ön szervezetének áttekintése"
   }
 }

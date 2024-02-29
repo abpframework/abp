@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Puhelinnumero",
     "DisplayName:TwoFactorEnabled": "Kahden tekijän todentaminen",
     "DisplayName:IsActive": "Aktiivinen",
-    "DisplayName:LockoutEnabled": "Lukitse tili epäonnistuneiden kirjautumisyritysten jälkeen",
+    "DisplayName:LockoutEnabled": "Tilin lukitus",
     "NewRole": "Uusi rooli",
     "RoleName": "Roolinimi",
     "CreationTime": "Luomisaika",

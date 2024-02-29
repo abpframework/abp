@@ -469,8 +469,18 @@
     "TitlePlaceholder": "Software Developer, CTO etc.",
     "Characters": "characters",
     "Testimonial_YourProfilePicture": "Your profile picture (only {0})",
-    "ABPTestimonialDescription": "ABP Framework: Let's hear your testimonial"
+    "BootstrapCardTitle": "This is a sample card component built by ABP bootstrap card tag helper.",
+    "GoSomewhere": "Go somewhere →",
+    "ABPTestimonialDescription": "ABP Framework: Let's hear your testimonial",
+    "NotValidEmailAddress": "The Email field is not a valid e-mail address.",
+    "EmailAddressMaxLength": "The field Email must be a string with a maximum length of 255.",
+    "EmailAddressRequired": "The Email field is required.",
+    "PasswordLength": "The field Password must be a string with a maximum length of 32.",
+    "PasswordRequired": "The Password field is required.",
+    "AddressLength": "The field Address must be a string with a maximum length of 255.",
+    "GenderRequired": "The Gender field is required.",
+    "LeaveUsReview": "Leave us review",
+    "DocumentationButtonTitle": "Documentation"
+
   }
 }
-
-

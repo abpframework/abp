@@ -386,6 +386,11 @@
     "BlackFridayDiscount": "Popust Black Friday",
     "MultipleOrganizationInfo": "Oglejte si vse svoje organizacije",
     "PaymentFailedInfo": "Žal plačilo ni uspelo! ",
-    "UsedPayment": "To plačilo je že bilo uporabljeno"
+    "UsedPayment": "To plačilo je že bilo uporabljeno",
+    "ManageLicense": "Upravljanje licenco",
+    "AbpPlatformLeptonXTheme": "LeptonX Tema za vaš upraviteljski nadzorni pult s strani <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Prejšnja",
+    "PricingDiscount": "Popust",
+    "YourOrganizationOverview": "Pregled vaše organizacije"
   }
 }
