@@ -44,7 +44,6 @@ export class ExtensibleFormComponent<R = any> {
         const type = !record || JSON.stringify(record) === '{}' ? 'create' : 'edit';
         const propList = this.extensions[`${type}FormProps`].get(this.identifier).props;
         this.groupedPropList = this.createGroupedList(propList);
-        this.groupedPropListOfArray = this.groupedPropList.items.map(i => i.formPropList.toArray());
         this.record = record;
     }
 
@@ -68,7 +67,7 @@ export class ExtensibleFormComponent<R = any> {
     }
 
     isAnyGroupMemberVisible(index: number, data){
-        const isVisible = this.groupedPropListOfArray[index].find(prop => prop.visible(data));
+        const isVisible = this.groupedPropList.items.map(i => i.formPropList.toArray())[index].find(prop => prop.visible(data));
         return isVisible;
     }
 
