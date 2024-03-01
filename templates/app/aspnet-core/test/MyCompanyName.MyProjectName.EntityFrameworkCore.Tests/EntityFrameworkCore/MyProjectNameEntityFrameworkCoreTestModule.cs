@@ -9,6 +9,7 @@ using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Uow;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore;
@@ -33,6 +34,11 @@ public class MyProjectNameEntityFrameworkCoreTestModule : AbpModule
         {
             options.SaveStaticPermissionsToDatabase = false;
             options.IsDynamicPermissionStoreEnabled = false;
+        });
+        Configure<SettingManagementOptions>(options =>
+        {
+            options.SaveStaticSettingsToDatabase = false;
+            options.IsDynamicSettingStoreEnabled = false;
         });
         context.Services.AddAlwaysDisableUnitOfWorkTransaction();
 
