@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Logging;
@@ -9,7 +8,6 @@ namespace Volo.Abp.Authorization;
 /// <summary>
 /// This exception is thrown on an unauthorized request.
 /// </summary>
-[Serializable]
 public class AbpAuthorizationException : AbpException, IHasLogLevel, IHasErrorCode
 {
     /// <summary>
@@ -29,15 +27,6 @@ public class AbpAuthorizationException : AbpException, IHasLogLevel, IHasErrorCo
     public AbpAuthorizationException()
     {
         LogLevel = LogLevel.Warning;
-    }
-
-    /// <summary>
-    /// Creates a new <see cref="AbpAuthorizationException"/> object.
-    /// </summary>
-    public AbpAuthorizationException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
-    {
-
     }
 
     /// <summary>
