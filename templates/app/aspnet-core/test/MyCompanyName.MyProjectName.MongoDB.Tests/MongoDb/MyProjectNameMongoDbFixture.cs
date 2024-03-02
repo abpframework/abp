@@ -1,34 +1,27 @@
 using System;
-using EphemeralMongo;
+using System.Threading.Tasks;
+using Testcontainers.MongoDb;
+using Xunit;
 
 namespace MyCompanyName.MyProjectName.MongoDB;
 
-public class MyProjectNameMongoDbFixture : IDisposable
+public class MyProjectNameMongoDbFixture : IAsyncLifetime
 {
-    public readonly static IMongoRunner MongoDbRunner;
+    private readonly static MongoDbContainer _mongoDbContainer = new MongoDbBuilder().WithCommand().Build();
 
-    static MyProjectNameMongoDbFixture()
+    public async Task InitializeAsync()
     {
-        MongoDbRunner = MongoRunner.Run(new MongoRunnerOptions
-        {
-            UseSingleNodeReplicaSet = true
-        });
+        await _mongoDbContainer.StartAsync();
     }
 
     public static string GetRandomConnectionString()
     {
-        return GetConnectionString("Db_" + Guid.NewGuid().ToString("N"));
+        var randomDbName = "Db_" + Guid.NewGuid().ToString("N");
+        return _mongoDbContainer.GetConnectionString().EnsureEndsWith('/') + randomDbName + "?authSource=admin";
     }
 
-    public static string GetConnectionString(string databaseName)
+    public async Task DisposeAsync()
     {
-        var stringArray = MongoDbRunner.ConnectionString.Split('?');
-        var connectionString = stringArray[0].EnsureEndsWith('/') + databaseName + "/?" + stringArray[1];
-        return connectionString;
-    }
-
-    public void Dispose()
-    {
-        MongoDbRunner?.Dispose();
+        await _mongoDbContainer.DisposeAsync().AsTask();
     }
 }
