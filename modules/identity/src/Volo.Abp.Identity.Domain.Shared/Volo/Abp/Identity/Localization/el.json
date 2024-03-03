@@ -26,7 +26,7 @@
     "DisplayName:PhoneNumber": "Τηλεφωνικό νούμερο",
     "DisplayName:TwoFactorEnabled": "Επαλήθευση δύο παραγόντων",
     "DisplayName:IsActive": "Ενεργός",
-    "DisplayName:LockoutEnabled": "Κλείδωμα λογαριασμού μετά από αποτυχημένες προσπάθειες σύνδεσης",
+    "DisplayName:LockoutEnabled": "Κλείδωμα λογαριασμού",
     "NewRole": "Νέος ρόλος",
     "RoleName": "Όνομα ρόλου",
     "CreationTime": "Χρόνος δημιουργίας",

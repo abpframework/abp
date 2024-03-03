@@ -71,17 +71,17 @@ export class ConfigStateService {
   }
 
   refreshLocalization(lang: string): Observable<null> {
-    if (this.includeLocalizationResources) {
+    if(this.includeLocalizationResources){
       return this.refreshAppState().pipe(map(() => null));
-    } else {
-      return this.getlocalizationResource(lang)
-        .pipe(
-          tap(result =>
-            this.store.patch({ localization: { ...this.store.state.localization, ...result } }),
-          ),
-        )
-        .pipe(map(() => null));
     }
+    
+    return this.getlocalizationResource(lang)
+      .pipe(
+        tap(result =>
+          this.store.patch({ localization: { ...this.store.state.localization, ...result } }),
+        ),
+      )
+      .pipe(map(() => null));
   }
 
   getOne$<K extends keyof ApplicationConfigurationDto>(key: K) {
@@ -145,7 +145,7 @@ export class ConfigStateService {
     return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
   }
 
-  getFeatures$(keys: string[]): Observable<{ [key: string]: string } | undefined> {
+  getFeatures$(keys: string[]): Observable<{ [key: string]: string; } | undefined> {
     return this.store.sliceState(({ features }) => {
       if (!features?.values) return;
 

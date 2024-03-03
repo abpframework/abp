@@ -51,7 +51,9 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     this._busy = value;
   }
 
-  @Input() options: NgbModalOptions = {};
+  @Input() options: NgbModalOptions = {
+    keyboard: true,
+  };
 
   @Input() suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
 

@@ -610,7 +610,7 @@
     "StartupTemplates_Page_Description": "ABP Commercial allows you to build solutions with any level of complexity. It provides two main pre-built startup solutions. You can select the one close to your requirements and build your own custom solution on top of it.",
     "MicroserviceStartupSolutionForDotnet": "Microservice Startup Solution for .NET",
     "MonolithSolutionForDotnet": "Monolith (modular) Solution for .NET",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hour(s)",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hours",
     "Trainings_Content": "Content of Training",
     "Trial_Page_StartYourFreeTrial": "Start Your <span class=\"gradient-commercial\">Free Trial</span>",
     "TrialLicenseFeatures": "You'll be able to benefit from all ABP commercial features",
@@ -1180,6 +1180,14 @@
     "ReturnOfInvestmentPageAbout": "This page covers the fundamental steps of developing a software solution and explains how the ABP.IO Platform reduces your development costs at each step.",
     "LearnMore": "Learn More",
     "ReturnOfInvestment": "Return of Investment",
-    "ReturnOfInvestment_Description": "Learn how to reduce your development costs by more than %50."
+    "ReturnOfInvestment_Description": "Learn how to reduce your development costs by more than %50.",
+    "Previous": "Previous",
+    "PricingDiscount": "Save",
+    "PricingTeamTitle": "Team",
+    "PricingBusinessTitle": "Business",
+    "PricingEnterpriseTitle": "Enterprise",
+    "SpecialDiscount": "Special Discount",
+    "YourOrganizationOverview": "Your Organization Overview",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hour"
   }
 }
