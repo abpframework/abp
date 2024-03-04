@@ -469,6 +469,7 @@
     "Characters": "caracteres",
     "ABPTestimonialDescription": "ABP Framework: Escuchemos tu testimonio",
     "LeaveUsReview": "Déjanos tu reseña",
-    "DocumentationButtonTitle": "Documentación"
+    "DocumentationButtonTitle": "Documentación",
+    "ABPVideoCoursesDescription": "Aprenda los conceptos básicos del Marco ABP a través de cursos en vídeo creados por el equipo de ABP."    
   }
 }

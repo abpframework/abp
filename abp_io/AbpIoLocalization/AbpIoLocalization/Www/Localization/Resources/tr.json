@@ -430,7 +430,7 @@
     "LeaveUsReview": "Yorumunuzu paylaşın",
     "BuildingMicroserviceSolutionsShortDescription": "Bu kitap, ABP Framework kullanarak mikroservis tabanlı uygulamalar geliştirmek ve yönetmek için bir başvuru rehberidir.",
     "VideoCourses": "Video Kurslar",
-    "DocumentationButtonTitle": "Dokümantasyon"
-
+    "DocumentationButtonTitle": "Dokümantasyon",
+    "ABPVideoCoursesDescription": "ABP ekibi tarafından oluşturulan video kursları aracılığıyla ABP Framework temellerini öğrenin."
   }
 }

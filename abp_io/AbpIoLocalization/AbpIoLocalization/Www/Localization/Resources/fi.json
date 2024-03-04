@@ -469,6 +469,7 @@
     "Characters": "hahmot",
     "ABPTestimonialDescription": "ABP Framework: Kuunnellaanpa sinun suosittelua",
     "LeaveUsReview": "Jätä meille arvostelu",
-    "DocumentationButtonTitle": "Dokumentointi"
+    "DocumentationButtonTitle": "Dokumentointi",
+    "ABPVideoCoursesDescription": "Opi ABP Frameworkin perusteet ABP-tiimin luomilla videokursseilla."
   }
 }

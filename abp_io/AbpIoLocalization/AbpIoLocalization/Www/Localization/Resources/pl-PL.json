@@ -469,6 +469,7 @@
     "Characters": "znaki",
     "ABPTestimonialDescription": "Struktura ABP: Posłuchajmy Twojej opinii",
     "LeaveUsReview": "Zostaw nam recenzję",
-    "DocumentationButtonTitle": "Dokumentacja"
+    "DocumentationButtonTitle": "Dokumentacja",
+    "ABPVideoCoursesDescription": "Naucz się podstaw ABP Framework dzięki kursom wideo stworzonym przez zespół ABP."
   }
 }
