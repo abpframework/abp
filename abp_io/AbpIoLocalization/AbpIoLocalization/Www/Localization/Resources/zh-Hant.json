@@ -472,6 +472,7 @@
     "ABPTestimonialDescription": "ABP 框架：让我们听听您的感言",
     "LeaveUsReview": "给我们留下评论",
     "DocumentationButtonTitle": "文档",
-    "ABPVideoCoursesDescription": "通过 ABP 团队创建的视频课程了解 ABP 框架的基础知识。"
+    "ABPVideoCoursesDescription": "通过 ABP 团队创建的视频课程了解 ABP 框架的基础知识。",
+    "ABPVideoCoursesPageDescription": "通过ABP团队创建的视频课程学习ABP框架的基础知识。在本视频系列中，您将学习ABP框架的基本主题。每个视频上的数字都是根据学习流程编写的。"
   }
 }

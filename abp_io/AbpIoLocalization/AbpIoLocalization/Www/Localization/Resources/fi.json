@@ -470,6 +470,7 @@
     "ABPTestimonialDescription": "ABP Framework: Kuunnellaanpa sinun suosittelua",
     "LeaveUsReview": "Jätä meille arvostelu",
     "DocumentationButtonTitle": "Dokumentointi",
-    "ABPVideoCoursesDescription": "Opi ABP Frameworkin perusteet ABP-tiimin luomilla videokursseilla."
+    "ABPVideoCoursesDescription": "Opi ABP Frameworkin perusteet ABP-tiimin luomilla videokursseilla.",
+    "ABPVideoCoursesPageDescription": "Opi ABP Frameworkin perusteet ABP-tiimin luomilla videokursseilla.Tässä videosarjassa opit ABP Frameworkin keskeiset aiheet. Jokaisen videon numerot on kirjoitettu oppimiskulun mukaan."
   }
 }

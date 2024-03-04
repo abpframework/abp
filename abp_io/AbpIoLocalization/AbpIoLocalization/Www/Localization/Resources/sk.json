@@ -470,6 +470,7 @@
     "ABPTestimonialDescription": "Rámec ABP: Vypočujme si vaše svedectvo",
     "LeaveUsReview": "Zanechajte nám recenziu",
     "DocumentationButtonTitle": "Dokumentácia",
-    "ABPVideoCoursesDescription": "Naučte sa základy rámca ABP prostredníctvom video kurzov vytvorených tímom ABP."
+    "ABPVideoCoursesDescription": "Naučte sa základy rámca ABP prostredníctvom video kurzov vytvorených tímom ABP.",
+    "ABPVideoCoursesPageDescription": "Naučte sa základy rámca ABP prostredníctvom video kurzov vytvorených tímom ABP. V tejto sérii videí sa naučíte základné témy rámca ABP. Čísla na každom videu sú napísané podľa toku učenia."
   }
 }

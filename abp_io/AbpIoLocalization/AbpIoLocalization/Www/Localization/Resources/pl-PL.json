@@ -470,6 +470,7 @@
     "ABPTestimonialDescription": "Struktura ABP: Posłuchajmy Twojej opinii",
     "LeaveUsReview": "Zostaw nam recenzję",
     "DocumentationButtonTitle": "Dokumentacja",
-    "ABPVideoCoursesDescription": "Naucz się podstaw ABP Framework dzięki kursom wideo stworzonym przez zespół ABP."
+    "ABPVideoCoursesDescription": "Naucz się podstaw ABP Framework dzięki kursom wideo stworzonym przez zespół ABP.",
+    "ABPVideoCoursesPageDescription": "Naucz się podstaw Ramy ABP poprzez kursy wideo stworzone przez zespół ABP. W tej serii filmów poznasz podstawowe tematy Ramy ABP. Liczby na każdym filmie są zapisane zgodnie z procesem uczenia się."
   }
 }

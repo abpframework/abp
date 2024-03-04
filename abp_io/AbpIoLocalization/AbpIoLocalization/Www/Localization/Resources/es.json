@@ -470,6 +470,7 @@
     "ABPTestimonialDescription": "ABP Framework: Escuchemos tu testimonio",
     "LeaveUsReview": "Déjanos tu reseña",
     "DocumentationButtonTitle": "Documentación",
-    "ABPVideoCoursesDescription": "Aprenda los conceptos básicos del Marco ABP a través de cursos en vídeo creados por el equipo de ABP."    
+    "ABPVideoCoursesDescription": "Aprenda los conceptos básicos del Marco ABP a través de cursos en vídeo creados por el equipo de ABP.",
+    "ABPVideoCoursesPageDescription": "Aprenda los conceptos básicos del Marco ABP a través de cursos en video creados por el equipo de ABP. En esta serie de videos, aprenderá los temas esenciales del Marco ABP. Los números en cada video están escritos de acuerdo con el flujo de aprendizaje."
   }
 }

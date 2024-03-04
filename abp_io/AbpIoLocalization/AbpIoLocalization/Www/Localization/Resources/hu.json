@@ -470,6 +470,7 @@
     "ABPTestimonialDescription": "ABP Framework: Halljuk az Ön beszámolóját",
     "LeaveUsReview": "Hagyjon véleményt nekünk",
     "DocumentationButtonTitle": "Dokumentáció",
-    "ABPVideoCoursesDescription": "Tanulja meg az ABP Framework alapjait az ABP csapata által készített videó tanfolyamokon."
+    "ABPVideoCoursesDescription": "Tanulja meg az ABP Framework alapjait az ABP csapata által készített videó tanfolyamokon.",
+    "ABPVideoCoursesPageDescription": "Tanulja meg az ABP-keretrendszer alapjait az ABP csapata által készített videotanfolyamokon. Ebben a videósorozatban megismerheti az ABP-keretrendszer alapvető témáit. Az egyes videókon található számok a tanulási folyamatnak megfelelően vannak felírva."
   }
 }
