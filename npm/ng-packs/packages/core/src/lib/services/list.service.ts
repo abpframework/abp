@@ -150,7 +150,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     this._query$.next({
       filter: this._filter || undefined,
       maxResultCount: this._maxResultCount,
-      skipCount: this._filter ? 0 : this._page * this._maxResultCount,
+      skipCount: this._page * this._maxResultCount,
       sorting: this._sortOrder ? `${this._sortKey} ${this._sortOrder}` : undefined,
     } as any as QueryParamsType);
   }

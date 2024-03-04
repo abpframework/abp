@@ -175,7 +175,19 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     );
   }
 
-  ngOnChanges({ data }: SimpleChanges) {
+  ngOnChanges({ data, recordsTotal }: SimpleChanges) {
+    if (data?.currentValue.length === 0 && recordsTotal?.currentValue) {
+      console.log(recordsTotal?.currentValue);
+      let maxPage = Number(Number(recordsTotal?.currentValue / this.list.maxResultCount).toFixed());
+
+      if(recordsTotal?.currentValue % this.list.maxResultCount === 0){
+        maxPage -= 1;
+      }
+
+      this.list.page = maxPage;
+      return;
+    }
+
     if (!data?.currentValue) return;
 
     if (data.currentValue.length < 1) {
