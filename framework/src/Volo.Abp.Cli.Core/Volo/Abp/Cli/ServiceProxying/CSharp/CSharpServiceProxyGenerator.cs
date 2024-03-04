@@ -553,10 +553,15 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
                 var s2 = s1[i].Split(",");
                 for (var x = 0; x < s2.Length; x++)
                 {
-                    type.Append(s2[x].Split(".").Last());
+                    var s3 = s2[x].Split(".").Last();
+                    type.Append(s3);
                     if (x < s2.Length - 1)
                     {
                         type.Append(", ");
+                    }
+                    else if(!s3.Contains(">"))
+                    {
+                        type.Append("<");
                     }
                 }
             }

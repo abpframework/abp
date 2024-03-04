@@ -481,6 +481,8 @@
     "GenderRequired": "The Gender field is required.",
     "LeaveUsReview": "Leave us review",
     "ABPVideoCoursesDescription": "Learn the basics of the ABP Framework through video courses created by the ABP team.",
-    "ABPVideoCoursesPageDescription": "Learn the basics of the ABP Framework through video courses created by the ABP team. In this video series, you will learn the essential topics of the ABP Framework.  The numbers on each video are written according to the learning flow."
+    "ABPVideoCoursesPageDescription": "Learn the basics of the ABP Framework through video courses created by the ABP team. In this video series, you will learn the essential topics of the ABP Framework.  The numbers on each video are written according to the learning flow.",
+    "DocumentationButtonTitle": "Documentation"
+
   }
 }

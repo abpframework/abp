@@ -240,6 +240,15 @@
     "MeetTheABPCommunity": "Meet the ABP <span class=\"gradient-community\">Community</span>",
     "DisplayName:CommunityIndexPagePoll": "Community Index Page Poll",
     "ReturnOfInvestment": "Return Of Investment",
-    "VideoCourses" :  "Video Courses"
+    "PromotionalOffers": "Promotional Offers",
+    "PromotionalOffersDefinition": "Discounts, seasonal campaigns, etc.",
+    "EventsDefinition": "Community Talks, Webinars, ABP .NET Conference, etc.",
+    "ReleaseNotesDefinition": "ABP.IO Platform releases, new products, etc.",
+    "Newsletter": "Newsletter",
+    "NewsletterDefinition": "Blog posts, community news, etc.",
+    "OrganizationOverview": "Organization Overview",
+    "EmailPreferences": "Email Preferences",
+    "DoYouAgreePrivacyPolicy": "By clicking <i>Subscribe</i> button you agree to the <a href=\"https://account.abp.io/Account/TermsConditions\">Terms & Conditions</a> and <a href=\"https://account.abp.io/Account/Privacy\">Privacy Policy</a>.",
+    "VideoCourses" : "Video Courses"
   }
 }

@@ -24,6 +24,7 @@ export class EntityAction<R = any> extends Action<R> {
   readonly icon: string;
   readonly btnClass?: string;
   readonly btnStyle?: string;
+  readonly showOnlyIcon?: boolean;
 
   constructor(options: EntityActionOptions<R>) {
     super(options.permission || '', options.visible, options.action);
@@ -31,6 +32,7 @@ export class EntityAction<R = any> extends Action<R> {
     this.icon = options.icon || '';
     this.btnClass = options.btnClass || 'btn btn-primary text-center';
     this.btnStyle = options.btnStyle;
+    this.showOnlyIcon = options.showOnlyIcon || false;
   }
 
   static create<R = any>(options: EntityActionOptions<R>) {

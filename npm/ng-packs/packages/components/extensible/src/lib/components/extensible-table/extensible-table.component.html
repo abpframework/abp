@@ -31,9 +31,10 @@
   >
     <ng-template ngx-datatable-header-template let-column="column">
       @if (prop.tooltip) {
-      <span [ngbTooltip]="prop.tooltip | abpLocalization" container="body">
-        {{ column.name }} <i class="fa fa-info-circle" aria-hidden="true"></i>
-      </span>
+      <span [ngbTooltip]="prop.tooltip.text | abpLocalization" [placement]="prop.tooltip.placement || 'auto'"
+      container="body">
+      {{ column.name }} <i class="fa fa-info-circle" aria-hidden="true"></i>
+    </span>
       }@else{
       {{ column.name }}
       }
