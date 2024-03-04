@@ -53,16 +53,31 @@
 
 <ng-template #btnTmp let-action>
   @if (action.visible(data)) {
-    <button
-      *abpPermission="action.permission; runChangeDetection: false"
-      (click)="action.action(data)"
-      type="button"
-      [class]="action.btnClass"
-      [style]="action.btnStyle"
-    >
-      <ng-container
-        *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
-      ></ng-container>
-    </button>
+    @if (action.tooltip) {
+      <button
+        *abpPermission="action.permission; runChangeDetection: false"
+        (click)="action.action(data)"
+        type="button"
+        [class]="action.btnClass"
+        [style]="action.btnStyle"
+        [ngbTooltip]="action.tooltip.text | abpLocalization" [placement]="action.tooltip.placement || 'auto'"  container="body" 
+      >
+        <ng-container
+          *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
+        ></ng-container>
+      </button>
+    } @else {
+      <button
+        *abpPermission="action.permission; runChangeDetection: false"
+        (click)="action.action(data)"
+        type="button"
+        [class]="action.btnClass"
+        [style]="action.btnStyle"
+      >
+        <ng-container
+          *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
+        ></ng-container>
+      </button>
+    }
   }
 </ng-template>
