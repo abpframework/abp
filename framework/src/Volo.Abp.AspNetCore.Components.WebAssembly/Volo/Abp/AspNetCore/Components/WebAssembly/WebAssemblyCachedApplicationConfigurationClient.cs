@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Authorization;
 using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
@@ -20,18 +21,22 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
 
     protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; }
 
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; }
+
     public WebAssemblyCachedApplicationConfigurationClient(
         AbpApplicationConfigurationClientProxy applicationConfigurationClientProxy,
         ApplicationConfigurationCache cache,
         ICurrentTenantAccessor currentTenantAccessor,
         AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
-        ApplicationConfigurationChangedService applicationConfigurationChangedService)
+        ApplicationConfigurationChangedService applicationConfigurationChangedService,
+        AuthenticationStateProvider authenticationStateProvider)
     {
         ApplicationConfigurationClientProxy = applicationConfigurationClientProxy;
         Cache = cache;
         CurrentTenantAccessor = currentTenantAccessor;
         ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
         ApplicationConfigurationChangedService = applicationConfigurationChangedService;
+        AuthenticationStateProvider = authenticationStateProvider;
     }
 
     public virtual async Task InitializeAsync()

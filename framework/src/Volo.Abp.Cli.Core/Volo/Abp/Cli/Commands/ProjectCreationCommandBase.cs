@@ -43,7 +43,7 @@ public abstract class ProjectCreationCommandBase
     public ThemePackageAdder ThemePackageAdder { get; }
 
     public AngularThemeConfigurer AngularThemeConfigurer { get; }
-
+    
     public CliVersionService CliVersionService { get; }
 
     public ProjectCreationCommandBase(
@@ -436,14 +436,15 @@ public abstract class ProjectCreationCommandBase
 
         var isModuleTemplate = ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName);
         var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
-        var message = isWebassembly || isModuleTemplate
-            ? "Generating bundles for Blazor Wasm"
+        
+        var message = isWebassembly || isModuleTemplate 
+            ? "Generating bundles for Blazor Wasm" 
             : "Generating bundles for MAUI Blazor";
-
+        
         var projectType = isWebassembly || isModuleTemplate
-            ? BundlingConsts.WebAssembly
+            ? BundlingConsts.WebAssembly 
             : BundlingConsts.MauiBlazor;
-
+        
         Logger.LogInformation(message + "...");
 
         await EventBus.PublishAsync(new ProjectCreationProgressEvent
@@ -453,19 +454,11 @@ public abstract class ProjectCreationCommandBase
 
         var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
         var path = projectArgs.OutputFolder;
-        if (isWebassembly && Directory.GetFiles(path, "*.Blazor.Client.csproj", SearchOption.AllDirectories).Any())
-        {
-            searchPattern = "*.Blazor.Client.csproj";
-        }
-
+        
         if (isModuleTemplate)
         {
             path = Path.Combine(path, "host");
             searchPattern = "*.Blazor.Host.csproj";
-            if (Directory.GetFiles(path, "*.Blazor.Host.Client.csproj", SearchOption.AllDirectories).Any())
-            {
-                searchPattern = "*.Blazor.Host.Client.csproj";
-            }
         }
         else if (MicroserviceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
@@ -478,7 +471,7 @@ public abstract class ProjectCreationCommandBase
 
         await _bundlingService.BundleAsync(directory, true, projectType);
     }
-
+    
     protected virtual bool ShouldRunBundleCommand(ProjectBuildArgs projectArgs)
     {
         if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
@@ -676,8 +669,6 @@ public abstract class ProjectCreationCommandBase
                 return UiFramework.Blazor;
             case "blazor-server":
                 return UiFramework.BlazorServer;
-            case "blazor-webapp":
-                return UiFramework.BlazorWebApp;
             case "maui-blazor" when template == AppProTemplate.TemplateName:
                 return UiFramework.MauiBlazor;
             default:

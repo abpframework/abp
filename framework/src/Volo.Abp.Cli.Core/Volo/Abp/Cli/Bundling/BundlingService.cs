@@ -32,7 +32,7 @@ public class BundlingService : IBundlingService, ITransientDependency
 
     public async Task BundleAsync(string directory, bool forceBuild, string projectType = BundlingConsts.WebAssembly)
     {
-        if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && projectType == BundlingConsts.MauiBlazor)
+        if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && projectType == BundlingConsts.MauiBlazor) 
         {
             Logger.LogWarning("ABP bundle command does not support OSX for MAUI Blazor");
             return;
@@ -59,7 +59,7 @@ public class BundlingService : IBundlingService, ITransientDependency
                     new DotNetProjectInfo(string.Empty, projectFilePath, true)
                 };
 
-            DotNetProjectBuilder.BuildProjects(projects, string.Empty);
+            DotNetProjectBuilder.BuildProjects(projects, string.Empty); 
         }
 
         var frameworkVersion = GetTargetFrameworkVersion(projectFilePath, projectType);
@@ -71,8 +71,8 @@ public class BundlingService : IBundlingService, ITransientDependency
         FindBundleContributorsRecursively(startupModule, 0, bundleDefinitions);
         bundleDefinitions = bundleDefinitions.OrderByDescending(t => t.Level).ToList();
 
-        var styleContext = GetStyleContext(bundleDefinitions, bundleConfig);
-        var scriptContext = GetScriptContext(bundleDefinitions, bundleConfig, projectType);
+        var styleContext = GetStyleContext(bundleDefinitions, bundleConfig.Parameters);
+        var scriptContext = GetScriptContext(bundleDefinitions, bundleConfig.Parameters, projectType);
         string styleDefinitions;
         string scriptDefinitions;
 
@@ -104,40 +104,25 @@ public class BundlingService : IBundlingService, ITransientDependency
             scriptDefinitions = GenerateScriptDefinitions(scriptContext);
         }
 
-        if (!bundleConfig.InteractiveAuto)
-        {
-            string fileName;
-            if (bundleConfig.IsBlazorWebApp)
-            {
-                var projectDirectory = Path.GetDirectoryName(directory);
-                fileName = Directory.GetFiles(projectDirectory!, "App.razor", SearchOption.AllDirectories).FirstOrDefault();
-            }
-            else
-            {
-                fileName = Path.Combine(PathHelper.GetWwwRootPath(directory), "index.html");
-            }
-
-            await UpdateDependenciesInBlazorFileAsync(fileName, styleDefinitions, scriptDefinitions);
-
-            Logger.LogInformation($"Script and style references in the {fileName} file have been updated.");
-        }
+        await UpdateDependenciesInHtmlFileAsync(directory, styleDefinitions, scriptDefinitions);
+        Logger.LogInformation("Script and style references in the index.html file have been updated.");
     }
 
-    private BundleContext GetScriptContext(List<BundleTypeDefinition> bundleDefinitions, BundleConfig bundleConfig, string projectType)
+    private BundleContext GetScriptContext(List<BundleTypeDefinition> bundleDefinitions,
+        BundleParameterDictionary parameters, string projectType)
     {
         var scriptContext = new BundleContext
         {
-            Parameters = bundleConfig.Parameters,
-            InteractiveAuto = bundleConfig.InteractiveAuto
+            Parameters = parameters
         };
 
-        if (projectType == BundlingConsts.WebAssembly && !bundleConfig.IsBlazorWebApp)
+        if (projectType == BundlingConsts.WebAssembly)
         {
             scriptContext.BundleDefinitions.AddIfNotContains(
-                x => x.Source == "_framework/blazor.webassembly.js",
+                x => x.Source == "_framework/blazor.webassembly.js", 
                 () => new BundleDefinition { Source = "_framework/blazor.webassembly.js" });
         }
-
+        
         foreach (var bundleDefinition in bundleDefinitions)
         {
             var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
@@ -147,12 +132,12 @@ public class BundlingService : IBundlingService, ITransientDependency
         return scriptContext;
     }
 
-    private BundleContext GetStyleContext(List<BundleTypeDefinition> bundleDefinitions, BundleConfig bundleConfig)
+    private BundleContext GetStyleContext(List<BundleTypeDefinition> bundleDefinitions,
+        BundleParameterDictionary parameters)
     {
         var styleContext = new BundleContext
         {
-            Parameters = bundleConfig.Parameters,
-            InteractiveAuto = bundleConfig.InteractiveAuto
+            Parameters = parameters
         };
 
         foreach (var bundleDefinition in bundleDefinitions)
@@ -164,16 +149,18 @@ public class BundlingService : IBundlingService, ITransientDependency
         return styleContext;
     }
 
-    private async Task UpdateDependenciesInBlazorFileAsync(string fileName, string styleDefinitions, string scriptDefinitions)
+    private async Task UpdateDependenciesInHtmlFileAsync(string directory, string styleDefinitions,
+        string scriptDefinitions)
     {
-        if (!File.Exists(fileName))
+        var htmlFilePath = Path.Combine(PathHelper.GetWwwRootPath(directory), "index.html");
+        if (!File.Exists(htmlFilePath))
         {
-            throw new BundlingException($"{fileName} file could not be found.");
+            throw new BundlingException($"index.html file could not be found in the following path:{htmlFilePath}");
         }
 
         Encoding fileEncoding;
         string content;
-        using (var reader = new StreamReader(fileName, true))
+        using (var reader = new StreamReader(htmlFilePath, true))
         {
             fileEncoding = reader.CurrentEncoding;
             content = await reader.ReadToEndAsync();
@@ -184,7 +171,7 @@ public class BundlingService : IBundlingService, ITransientDependency
         content = UpdatePlaceholders(content, BundlingConsts.ScriptPlaceholderStart,
             BundlingConsts.ScriptPlaceholderEnd, scriptDefinitions);
 
-        using (var writer = new StreamWriter(fileName, false, fileEncoding))
+        using (var writer = new StreamWriter(htmlFilePath, false, fileEncoding))
         {
             await writer.WriteAsync(content);
             await writer.FlushAsync();
@@ -325,7 +312,7 @@ public class BundlingService : IBundlingService, ITransientDependency
         document.Load(projectFilePath);
 
         var sdk = document.DocumentElement.GetAttribute("Sdk");
-
+        
         switch (projectType)
         {
             case BundlingConsts.WebAssembly:

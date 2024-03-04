@@ -11,7 +11,6 @@ public static class UiFrameworkExtensions
             case UiFramework.Angular: return "angular";
             case UiFramework.Blazor: return "blazor";
             case UiFramework.BlazorServer: return "blazor-server";
-            case UiFramework.BlazorWebApp: return "blazor-webapp";
             case UiFramework.NotSpecified: return "NotSpecified";
             default: return "NotSpecified";
         }

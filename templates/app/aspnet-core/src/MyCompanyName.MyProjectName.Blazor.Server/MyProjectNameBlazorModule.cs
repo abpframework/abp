@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using MyCompanyName.MyProjectName.Blazor.Server.Components;
 using MyCompanyName.MyProjectName.Blazor.Server.Menus;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
@@ -18,7 +16,6 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Components.Server;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
@@ -30,10 +27,12 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Blazor.Server;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.Blazor.Server;
@@ -102,21 +101,12 @@ public class MyProjectNameBlazorModule : AbpModule
                 serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
             });
         }
-
-        PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
-        {
-            options.IsBlazorWebApp = true;
-        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
-
-        // Add services to the container.
-        context.Services.AddRazorComponents()
-            .AddInteractiveServerComponents();
 
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
@@ -282,7 +272,6 @@ public class MyProjectNameBlazorModule : AbpModule
         }
         app.UseUnitOfWork();
         app.UseDynamicClaims();
-        app.UseAntiforgery();
         app.UseAuthorization();
 
         app.UseSwagger();
@@ -291,11 +280,6 @@ public class MyProjectNameBlazorModule : AbpModule
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
         });
 
-        app.UseConfiguredEndpoints(builder =>
-        {
-            builder.MapRazorComponents<App>()
-                .AddInteractiveServerRenderMode()
-                .AddAdditionalAssemblies(builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies.ToArray());
-        });
+        app.UseConfiguredEndpoints();
     }
 }

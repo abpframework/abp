@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Middleware;
 
 public abstract class AbpMiddlewareBase : IMiddleware
 {
-    protected virtual Task<bool> ShouldSkipAsync(HttpContext context, RequestDelegate next)
+    protected Task<bool> ShouldSkipAsync(HttpContext context, RequestDelegate next)
     {
         var endpoint = context.GetEndpoint();
         var controllerActionDescriptor = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();

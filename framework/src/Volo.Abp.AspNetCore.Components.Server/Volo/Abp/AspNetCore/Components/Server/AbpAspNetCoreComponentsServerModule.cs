@@ -57,21 +57,18 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
             options.IgnoredUrls.AddIfNotContains("/_blazor");
         });
 
-        if (!context.Services.ExecutePreConfiguredActions<AbpAspNetCoreComponentsWebOptions>().IsBlazorWebApp)
+        var preConfigureActions = context.Services.GetPreConfigureActions<HttpConnectionDispatcherOptions>();
+        Configure<AbpEndpointRouterOptions>(options =>
         {
-            var preConfigureActions = context.Services.GetPreConfigureActions<HttpConnectionDispatcherOptions>();
-            Configure<AbpEndpointRouterOptions>(options =>
+            options.EndpointConfigureActions.Add(endpointContext =>
             {
-                options.EndpointConfigureActions.Add(endpointContext =>
+                endpointContext.Endpoints.MapBlazorHub(httpConnectionDispatcherOptions =>
                 {
-                    endpointContext.Endpoints.MapBlazorHub(httpConnectionDispatcherOptions =>
-                    {
-                        preConfigureActions.Configure(httpConnectionDispatcherOptions);
-                    });
-                    endpointContext.Endpoints.MapFallbackToPage("/_Host");
+                    preConfigureActions.Configure(httpConnectionDispatcherOptions);
                 });
+                endpointContext.Endpoints.MapFallbackToPage("/_Host");
             });
-        }
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -79,7 +76,6 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
         context.GetEnvironment().WebRootFileProvider =
             new CompositeFileProvider(
                 new ManifestEmbeddedFileProvider(typeof(IServerSideBlazorBuilder).Assembly),
-                new ManifestEmbeddedFileProvider(typeof(RazorComponentsEndpointRouteBuilderExtensions).Assembly),
                 context.GetEnvironment().WebRootFileProvider
             );
     }

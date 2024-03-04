@@ -89,7 +89,6 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
                 break;
 
             case UiFramework.Blazor:
-            case UiFramework.BlazorWebApp:
                 context.Symbols.Add("ui:blazor");
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));

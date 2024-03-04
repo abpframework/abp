@@ -66,6 +66,7 @@ public class MyProjectNameBlazorModule : AbpModule
         ConfigureHttpClient(context, environment);
         ConfigureBlazorise(context);
         ConfigureRouter(context);
+        ConfigureUI(builder);
         ConfigureMenu(context);
         ConfigureAutoMapper(context);
         ConfigureHttpClientProxies(context);
@@ -115,6 +116,12 @@ public class MyProjectNameBlazorModule : AbpModule
             options.ProviderOptions.DefaultScopes.Add("email");
             options.ProviderOptions.DefaultScopes.Add("phone");
         });
+    }
+
+    private static void ConfigureUI(WebAssemblyHostBuilder builder)
+    {
+        builder.RootComponents.Add<App>("#ApplicationContainer");
+
     }
 
     private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)
