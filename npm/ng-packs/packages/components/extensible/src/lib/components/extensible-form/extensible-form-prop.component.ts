@@ -49,6 +49,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { ExtensibleFormPropService } from '../../services/extensible-form-prop.service';
 import { CreateInjectorPipe } from '../../pipes/create-injector.pipe';
 import { CommonModule } from '@angular/common';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'abp-extensible-form-prop',
@@ -61,6 +62,7 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     DisabledDirective,
     NgxValidateCoreModule,
+    NgbTooltip,
     NgbTypeaheadModule,
     CreateInjectorPipe,
     ShowPasswordDirective,

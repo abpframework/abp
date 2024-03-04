@@ -231,6 +231,12 @@
     "BlogProfile": "Blogin profiili",
     "Tickets": "Liput",
     "MeetTheABPCommunity": "Tutustu ABP<span class=\"gradient-community\">Yhteisö</span>:n kanssa",
-    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely"
+    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely",
+    "OrganizationOverview": "Organisaation yleiskatsaus",
+    "EmailPreferences": "Sähköpostiasetukset",
+    "DoYouAgreePrivacyPolicy": "Klikkaamalla <i>Tilaa</i> -painiketta hyväksyt <a href=\"https://account.abp.io/Account/TermsConditions\">Ehdot</a> ja <a href=\"https://account.abp.io/Account/Privacy\">Tietosuojakäytäntö</a>.",
+    "VideoCourses": "Videokurssit",
+    "Resources": "Resurssit"
+
   }
 }

@@ -231,6 +231,12 @@
     "BlogProfile": "Profil du blog",
     "Tickets": "Des billets",
     "MeetTheABPCommunity": "Découvrez ABP avec la <span class=\"gradient-community\">Communauté</span>",
-    "DisplayName:CommunityIndexPagePoll": "Sondage de la page d&#39;accueil de la communauté"
+    "DisplayName:CommunityIndexPagePoll": "Sondage de la page d&#39;accueil de la communauté",
+    "OrganizationOverview": "Aperçu de l'organisation",
+    "EmailPreferences": "Préférences de messagerie",
+    "DoYouAgreePrivacyPolicy": "En cliquant <i>S'abonner</i> bouton, vous acceptez le <a href=\"https://account.abp.io/Account/TermsConditions\">Termes</a> et <a href=\"https://account.abp.io/Account/Privacy\">politique de confidentialité</a>.",
+    "VideoCourses": "Cours vidéo",
+    "Resources": "Ressources"
+
   }
 }

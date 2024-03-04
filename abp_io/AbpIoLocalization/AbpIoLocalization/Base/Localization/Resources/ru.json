@@ -237,6 +237,11 @@
     "Packages": "Пакеты",
     "Trainings": "Тренинги",
     "MeetTheABPCommunity": "Познакомьтесь с ABP с <span class=\"gradient-community\">Сообществом</span>",
-    "DisplayName:CommunityIndexPagePoll": "Опрос на главной странице сообщества"
+    "DisplayName:CommunityIndexPagePoll": "Опрос на главной странице сообщества",
+    "OrganizationOverview": "Обзор организации",
+    "EmailPreferences": "Настройки электронной почты",
+    "DoYouAgreePrivacyPolicy": "Кликнув <i>Подписаться</i> кнопку вы соглашаетесь с <a href=\"https://account.abp.io/Account/TermsConditions\">Условия</a> и <a href=\"https://account.abp.io/Account/Privacy\">политика конфиденциальности</a>.",
+    "VideoCourses": "Видео курсы",
+
   }
 }

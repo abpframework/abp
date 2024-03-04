@@ -410,6 +410,11 @@
     "PaymentFailedInfo": "Désolé, le paiement a échoué! ",
     "UsedPayment": "Ce paiement a déjà été utilisé",
     "ManageLicense": "Gérer la licence",
-    "AbpPlatformLeptonXTheme": "Thème LeptonX pour votre tableau de bord administrateur par <span class=\"gradient-commercial\">ABP Platform</span>"
+    "AbpPlatformLeptonXTheme": "Thème LeptonX pour votre tableau de bord administrateur par <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Précédent",
+    "PricingDiscount": "Rabais",
+    "YourOrganizationOverview": "Aperçu de votre organisation",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} heure",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} heures"
   }
 }

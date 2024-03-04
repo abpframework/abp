@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Símanúmer",
     "DisplayName:TwoFactorEnabled": "Tvíþætt sannprófun",
     "DisplayName:IsActive": "Virkur",
-    "DisplayName:LockoutEnabled": "Læsa notandareikning eftir misheppnaðar innskráningar",
+    "DisplayName:LockoutEnabled": "Loka reikningi",
     "NewRole": "Nýtt hlutverk",
     "RoleName": "Nafn hlutverks",
     "CreationTime": "Búið til",

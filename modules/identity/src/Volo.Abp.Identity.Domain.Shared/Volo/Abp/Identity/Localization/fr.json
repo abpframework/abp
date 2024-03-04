@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Numéro de téléphone",
     "DisplayName:TwoFactorEnabled": "Vérification de deux facteurs",
     "DisplayName:IsActive": "actif",
-    "DisplayName:LockoutEnabled": "Verrouiller le compte après l’échec des tentatives de connexion",
+    "DisplayName:LockoutEnabled": "Verrouillage du compte",
     "NewRole": "Nouveau rôle",
     "RoleName": "Nom du rôle",
     "CreationTime": "Temps de création",

@@ -468,6 +468,7 @@
     "TitlePlaceholder": "Développeur de logiciels, CTO, etc.",
     "Characters": "caractères",
     "ABPTestimonialDescription": "ABP Framework : Écoutons votre témoignage",
-    "LeaveUsReview": "Laissez-nous votre avis"
+    "LeaveUsReview": "Laissez-nous votre avis",
+    "DocumentationButtonTitle": "Documentation"
   }
 }
