@@ -133,3 +133,7 @@ While both of [Application Services](Application-Services.md) and Domain Service
 ## Lifetime
 
 Lifetime of Domain Services are [transient](https://docs.abp.io/en/abp/latest/Dependency-Injection) and they are automatically registered to the dependency injection system.
+
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/domain-services)

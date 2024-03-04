@@ -438,3 +438,4 @@ You typically **don't need** to use this system for your own entities, because i
 ## See Also
 
 * [Best practice guide to design the entities](Best-Practices/Entities.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/entities)

@@ -506,3 +506,6 @@ This method is suggested;
 * If you want to **completely isolate** your domain & application layers from the database provider.
 * If you develop a **reusable [application module](Modules/Index.md)** and don't want to force to a specific database provider, which should be done as a [best practice](Best-Practices/Index.md).
 
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/generic-repositories)

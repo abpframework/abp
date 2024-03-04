@@ -278,3 +278,7 @@ You are free to design your DTO classes. However, there are some best practices 
 ### Output DTO Principles
 
 * You can **reuse output DTOs** if you **fill all the properties** on all the cases.
+
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/data-transfer-objects)
