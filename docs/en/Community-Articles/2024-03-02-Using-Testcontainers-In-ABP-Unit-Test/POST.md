@@ -10,13 +10,13 @@ Get more information about Testcontainers from [https://testcontainers.com/](htt
 
 ## How to Use Testcontainers in ABP Unit Test?
 
-ABP Framework provides a built-in unit test infrastructure, which easily allows you to add your unit tests and integration tests.
+ABP Framework provides a built-in unit test infrastructure, allowing you to add your unit and integration tests easily.
 
-It use [SQLite in-memory](https://learn.microsoft.com/en-us/ef/core/testing/testing-without-the-database#sqlite-in-memory) and [EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)  as the default database for unit tests and it's enough for most of the cases. However, sometimes you may need to test your code with a real database like PostgreSQL, MySQL, SQL Server, etc.
+It uses [SQLite in-memory](https://learn.microsoft.com/en-us/ef/core/testing/testing-without-the-database#sqlite-in-memory) and [EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)  as the default database for unit tests and it's enough for most of the cases. However, you may need to test your code with a real database like PostgreSQL, MySQL, SQL Server, etc.
 
 In this article, I will show you how to use Testcontainers in ABP unit tests to test your code with a real database from a Docker container.
 
-> The Testcontainers will pull the Docker images of the databases you want to use. You can pull them manually before running the tests to speed up the tests.
+> The Testcontainers will pull the Docker images of the databases you want to use. You can pull them manually before running the tests to speed them up.
 
 ```bash
 docker pull mcr.microsoft.com/mssql/server:2019-CU18-ubuntu-20.04
@@ -53,7 +53,7 @@ docker pull mongo:6.0
 
 2. Update `MyProjectNameEntityFrameworkCoreFixture` class as shown below:
 
-We start a SQL Server container in the `InitializeAsync` method and dispose of it in the `DisposeAsync` method. The `GetRandomConnectionString` method sets a random database for each test.
+We start an SQL Server container in the `InitializeAsync` method and dispose of it in the `DisposeAsync` method. The `GetRandomConnectionString` method sets a random database for each test.
 
 ```csharp
 using System;
@@ -136,7 +136,7 @@ The EF Core unit tests results will be like the following:
 
 ### Code Changes For MongoDB Tests
 
-1. Remove `EphemeralMongo` related packagesand add the `Testcontainers.MongoDb` package to the `MyProjectName.EntityFrameworkCore.Tests` project.
+1. Remove `EphemeralMongo` related packages and add the `Testcontainers.MongoDb` package to the `MyProjectName.EntityFrameworkCore.Tests` project.
 
 ```csharp
 <Project Sdk="Microsoft.NET.Sdk">
@@ -164,7 +164,7 @@ The EF Core unit tests results will be like the following:
 
 2. Update `MyProjectNameMongoDbFixture` class as shown below:
 
-We start a MongoDb container in the `InitializeAsync` method and dispose of it in the `DisposeAsync` method. The `GetRandomConnectionString` method sets a random database for each test.
+We start a MongoDB container in the `InitializeAsync` method and dispose of it in the `DisposeAsync` method. The `GetRandomConnectionString` method sets a random database for each test.
 
 ```csharp
 using System;
@@ -196,7 +196,7 @@ public class MyProjectNameMongoDbFixture : IAsyncLifetime
 }
 ```
 
-The MongoDb unit tests results will be like the following:
+The MongoDB unit tests results will be like the following:
 
 ![mongodb](mongodb.png)
 
@@ -204,6 +204,6 @@ The MongoDb unit tests results will be like the following:
 
 The Testcontainers works well with ABP Framework and it's easy to use. If you need to test your code with a real database, Testcontainers is a good choice for you. 
 
-It's still a little slow compared to in-memory databases. Of course, its advantages are obvious.
+While it still needs to be faster than in-memory databases, but its advantages are obvious.
 
 Enjoy testing with Testcontainers!
