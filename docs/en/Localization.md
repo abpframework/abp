@@ -255,3 +255,4 @@ See the following documents to learn how to reuse the same localization texts in
 * [Localization for the MVC / Razor Pages UI](UI/AspNetCore/JavaScript-API/Localization.md)
 * [Localization for the Blazor UI](UI/Blazor/Localization.md)
 * [Localization for the Angular UI](UI/Angular/Localization.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/localization)
