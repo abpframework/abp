@@ -25,32 +25,15 @@ export class DateTimeAdapter {
   }
 
   toModel(value: Partial<NgbDateTimeStruct> | null): string {
-    if (!value) return '';
-
-    const now = new Date();
-
-    const newValue = {
-      // TODO look for strict mode errors
-      year: now.getUTCFullYear(),
-      month: now.getMonth() + 1,
-      day: now.getDate(),
-      hour: 0,
-      minute: 0,
-      second: 0,
-      ...this.value,
-      ...value,
-    } as NgbDateTimeStruct;
+    if (!value) {
+      return '';
+    }
 
     const date = new Date(
-      newValue.year,
-      newValue.month - 1,
-      newValue.day,
-      newValue.hour,
-      newValue.minute,
-      newValue.second,
+      Date.UTC(value.year, value.month - 1, value.day, value.hour, value.minute, value.second),
     );
 
-    return new Date(date).toISOString();
+    return date.toISOString();
   }
 }
 
