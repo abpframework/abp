@@ -3,6 +3,8 @@
   [rows]="data"
   [count]="recordsTotal"
   [list]="list"
+  [offset]="list?.page"
+  (page)="setPage($event)"
   (activate)="tableActivate.emit($event)"
 >
   @if (actionsTemplate || (actionList.length && hasAtLeastOnePermittedAction)) {
