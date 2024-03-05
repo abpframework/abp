@@ -762,6 +762,19 @@
     "Previous": "Előző",
     "PricingDiscount": "Kedvezmény",
     "YourOrganizationOverview": "Az Ön szervezetének áttekintése",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} óra"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} óra",
+    "ContactPageError": "Kérjük, küldje el üzenetét e-mailben a címre <a href=\"{0}\"> info@abp.io </a><br /> Íme, amit írtál:",
+    "GoBack": "Menjen vissza",
+    "HereWhatYouWrote": "Íme, amit írtál:",
+    "Sales": "Értékesítés",
+    "LicensingPricing": "Engedélyezés / árképzés",
+    "TrialDemo": "Próba / Demo",
+    "TrainingOnboarding": "Képzés / Bevezetés",
+    "Resellers": "Viszonteladók",
+    "Others": "Mások",
+    "Characters": "Karakterek",
+    "Topic": "Téma",
+    "SendUsEmail": "Küldjön nekünk e-mailt",
+    "ErrorExceptionMessage": "Hiba történt a kérése feldolgozása során"
   }
 }
