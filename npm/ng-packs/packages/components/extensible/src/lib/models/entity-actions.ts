@@ -8,6 +8,7 @@ import {
   Actions,
   ActionsFactory,
 } from './actions';
+import { FormPropTooltip } from './form-props';
 
 export class EntityActionList<R = any> extends ActionList<R, EntityAction<R>> {}
 
@@ -25,6 +26,7 @@ export class EntityAction<R = any> extends Action<R> {
   readonly btnClass?: string;
   readonly btnStyle?: string;
   readonly showOnlyIcon?: boolean;
+  readonly tooltip?: FormPropTooltip;
 
   constructor(options: EntityActionOptions<R>) {
     super(options.permission || '', options.visible, options.action);
@@ -33,6 +35,7 @@ export class EntityAction<R = any> extends Action<R> {
     this.btnClass = options.btnClass || 'btn btn-primary text-center';
     this.btnStyle = options.btnStyle;
     this.showOnlyIcon = options.showOnlyIcon || false;
+    this.tooltip = options.tooltip;
   }
 
   static create<R = any>(options: EntityActionOptions<R>) {
