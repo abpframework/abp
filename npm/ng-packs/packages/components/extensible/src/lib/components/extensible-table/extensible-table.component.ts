@@ -1,7 +1,6 @@
 import {
   ABP,
-  ConfigStateService,
-  CoreModule,
+  ConfigStateService, 
   getShortDateFormat,
   getShortDateShortTimeFormat,
   getShortTimeFormat,
@@ -13,9 +12,7 @@ import {
 import {
   AsyncPipe,
   formatDate,
-  NgComponentOutlet,
-  NgFor,
-  NgIf,
+  NgComponentOutlet, 
   NgTemplateOutlet,
 } from '@angular/common';
 import {
@@ -175,12 +172,21 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     );
   }
 
+  setPage({ offset }) {
+    this.list.page = offset;
+  }
+
   ngOnChanges({ data, recordsTotal }: SimpleChanges) {
-    if (data?.currentValue.length === 0 && recordsTotal?.currentValue) {
+    if (data?.currentValue.length < 1 && recordsTotal?.currentValue > 0) {
       let maxPage = Number(Number(recordsTotal?.currentValue / this.list.maxResultCount).toFixed());
 
-      if(recordsTotal?.currentValue % this.list.maxResultCount === 0){
+      if (recordsTotal?.currentValue % this.list.maxResultCount === 0) {
         maxPage -= 1;
+      }
+
+      if (this.list.page < maxPage) {
+        this.list.page = this.list.page;
+        return;
       }
 
       this.list.page = maxPage;
