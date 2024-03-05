@@ -30,7 +30,14 @@ export class DateTimeAdapter {
     }
 
     const date = new Date(
-      Date.UTC(value.year, value.month - 1, value.day, value.hour, value.minute, value.second),
+      Date.UTC(
+        value.year,
+        value.month - 1,
+        value.day,
+        value?.hour || 0,
+        value?.minute || 0,
+        value?.second || 0,
+      ),
     );
 
     return date.toISOString();
