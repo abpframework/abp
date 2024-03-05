@@ -234,9 +234,15 @@
     "DisplayName:CommunityIndexPagePoll": "Anketa na stránce s indexem komunity",
     "OrganizationOverview": "Přehled organizace",
     "EmailPreferences": "Předvolby e-mailu",
-    "DoYouAgreePrivacyPolicy": "Kliknutím <i>předplatit</i> souhlasíte s <a href=\"https://account.abp.io/Account/TermsConditions\">Podmínky</a> a <a href=\"https://account.abp.io/Account/Privacy\">Zásady ochrany osobních údajů</a>.",
+    "DoYouAgreePrivacyPolicy": "Kliknutím <b>předplatit</b> souhlasíte s <a href=\"https://account.abp.io/Account/TermsConditions\">Podmínky</a> a <a href=\"https://account.abp.io/Account/Privacy\">Zásady ochrany osobních údajů</a>.",
     "VideoCourses": "Video kurzy",
-    "Resources": "Zdroje"
+    "Resources": "Zdroje",
+    "PromotionalOffers": "Propagační nabídky",
+    "PromotionalOffersDefinition": "Slevy, sezónní akce atd.",
+    "EventsDefinition": "Komunitní rozhovory, webové semináře, konference ABP .NET atd.",
+    "ReleaseNotesDefinition": "Vydání platformy ABP.IO, nové produkty atd.",
+    "Newsletter": "Zpravodaj",
+    "NewsletterDefinition": "Blogové příspěvky, zprávy z komunity atd."
 
   }
 }

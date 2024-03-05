@@ -234,9 +234,14 @@
     "DisplayName:CommunityIndexPagePoll": "Ankieta na stronie głównej społeczności",
     "OrganizationOverview": "Przegląd organizacji",
     "EmailPreferences": "Preferencje poczty e-mail",
-    "DoYouAgreePrivacyPolicy": "Klikając <i>Subskrybuj</i> przycisk, na który wyrażasz zgodę <a href=\"https://account.abp.io/Account/TermsConditions\">Warunki</a> I <a href=\"https://account.abp.io/Account/Privacy\">Polityka prywatności</a>.",
+    "DoYouAgreePrivacyPolicy": "Klikając <b>Subskrybuj</b> przycisk, na który wyrażasz zgodę <a href=\"https://account.abp.io/Account/TermsConditions\">Warunki</a> I <a href=\"https://account.abp.io/Account/Privacy\">Polityka prywatności</a>.",
     "VideoCourses": "Kursy wideo",
-    "Resources": "Zasoby"
-
+    "Resources": "Zasoby",
+    "PromotionalOffers": "Oferty promocyjne",
+    "PromotionalOffersDefinition": "Rabaty, akcje sezonowe itp.",
+    "EventsDefinition": "Rozmowy społecznościowe, seminaria internetowe, konferencja ABP .NET itp.",
+    "ReleaseNotesDefinition": "Wersje platformy ABP.IO, nowe produkty itp.",
+    "Newsletter": "Biuletyn",
+    "NewsletterDefinition": "Posty na blogu, aktualności społeczności itp."
   }
 }

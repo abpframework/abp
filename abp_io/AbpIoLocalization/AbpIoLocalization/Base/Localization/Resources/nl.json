@@ -234,9 +234,14 @@
     "DisplayName:CommunityIndexPagePoll": "Gemeenschapsindexpagina-enquête",
     "OrganizationOverview": "Organisatieoverzicht",
     "EmailPreferences": "e-mail voorkeuren",
-    "DoYouAgreePrivacyPolicy": "Door te klikken <i>Abonneren</i> knop waarmee u akkoord gaat <a href=\"https://account.abp.io/Account/TermsConditions\">Voorwaarden</a> En <a href=\"https://account.abp.io/Account/Privacy\">Privacybeleid</a>.",
+    "DoYouAgreePrivacyPolicy": "Door te klikken <b>Abonneren</b> knop waarmee u akkoord gaat <a href=\"https://account.abp.io/Account/TermsConditions\">Voorwaarden</a> En <a href=\"https://account.abp.io/Account/Privacy\">Privacybeleid</a>.",
     "VideoCourses": "Videocursussen",
-    "Resources": "Bronnen"
-
+    "Resources": "Bronnen",
+    "PromotionalOffers": "Reclame aanbiedingen",
+    "PromotionalOffersDefinition": "Kortingen, seizoenscampagnes, etc.",
+    "EventsDefinition": "Community Talks, webinars, ABP .NET-conferentie, etc.",
+    "ReleaseNotesDefinition": "ABP.IO Platform-releases, nieuwe producten, enz.",
+    "Newsletter": "Nieuwsbrief",
+    "NewsletterDefinition": "Blogposts, gemeenschapsnieuws, enz."
   }
 }

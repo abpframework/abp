@@ -37,6 +37,6 @@
     "DisplayName:CommunityIndexPagePoll": "Community Index Page Poll",
     "OrganizationOverview": "Organization Overview",
     "EmailPreferences": "Email Preferences",
-    "DoYouAgreePrivacyPolicy": "By clicking <i>Subscribe</i> button you agree to the <a href=\"https://account.abp.io/Account/TermsConditions\">Terms & Conditions</a> and <a href=\"https://account.abp.io/Account/Privacy\">Privacy Policy</a>."
+    "DoYouAgreePrivacyPolicy": "By clicking <b>Subscribe</b> button you agree to the <a href=\"https://account.abp.io/Account/TermsConditions\">Terms & Conditions</a> and <a href=\"https://account.abp.io/Account/Privacy\">Privacy Policy</a>."
   }
 }

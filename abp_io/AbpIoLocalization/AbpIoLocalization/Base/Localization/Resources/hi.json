@@ -234,9 +234,14 @@
     "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान",
     "OrganizationOverview": "संगठन अवलोकन",
     "EmailPreferences": "ईमेल प्राथमिकताएं",
-    "DoYouAgreePrivacyPolicy": "क्लिक करके <i>सदस्यता लें</i> जिस बटन से आप सहमत हैं <a href=\"https://account.abp.io/Account/TermsConditions\">शर्तें</a> और <a href=\"https://account.abp.io/Account/Privacy\">गोपनीयता नीति</a>.",
+    "DoYouAgreePrivacyPolicy": "क्लिक करके <b>सदस्यता लें</b> जिस बटन से आप सहमत हैं <a href=\"https://account.abp.io/Account/TermsConditions\">शर्तें</a> और <a href=\"https://account.abp.io/Account/Privacy\">गोपनीयता नीति</a>.",
     "VideoCourses": "वीडियो पाठ्यक्रम",
-    "Resources": "संसाधन"
-
+    "Resources": "संसाधन",
+    "PromotionalOffers": "प्रोमोशनल ऑफ़र",
+    "PromotionalOffersDefinition": "छूट, मौसमी अभियान, आदि।",
+    "EventsDefinition": "सामुदायिक वार्ता, वेबिनार, ABP .NET सम्मेलन, आदि।",
+    "ReleaseNotesDefinition": "ABP.IO प्लेटफ़ॉर्म रिलीज़, नए उत्पाद, आदि।",
+    "Newsletter": "समाचार पत्रिका",
+    "NewsletterDefinition": "ब्लॉग पोस्ट, सामुदायिक समाचार, आदि।"
   }
 }
