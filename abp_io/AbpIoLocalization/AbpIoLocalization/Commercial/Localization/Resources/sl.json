@@ -393,6 +393,19 @@
     "PricingDiscount": "Popust",
     "YourOrganizationOverview": "Pregled vaše organizacije",
     "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} ura",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} ur"
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} ur",
+    "ContactPageError": "Prosimo, pošljite sporočilo po e-pošti na naslov <a href=\"mailto:info@abp.io?subject=Abp.Io ${Model.ContactRequest.Topic} / ${fullName} / ${email}\"> info@abp.io </a><br /> Evo, kar si napisal:",
+    "GoBack": "Pojdi nazaj",
+    "HereWhatYouWrote": "Evo, kar si napisal:",
+    "Sales": "Prodaja",
+    "LicensingPricing": "Licenciranje / Cene",
+    "TrialDemo": "Preizkus / Demo",
+    "TrainingOnboarding": "Usposabljanje/uvajanje",
+    "Resellers": "Preprodajalci",
+    "Others": "drugi",
+    "Characters": "Znaki",
+    "Topic": "Tema",
+    "SendUsEmail": "Pošljite nam e-pošto",
+    "ErrorExceptionMessage": "Pri obdelavi vaše zahteve je prišlo do napake"
   }
 }

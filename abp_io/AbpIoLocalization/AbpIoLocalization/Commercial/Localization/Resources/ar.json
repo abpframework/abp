@@ -800,6 +800,19 @@
     "Previous": "سابق",
     "PricingDiscount": "تخفيض",
     "YourOrganizationOverview": "Your Organization Overview",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} ساعة"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} ساعة",
+    "ContactPageError": "الرجاء إرسال رسالتك عبر البريد الإلكتروني إلى <a href=\"mailto:info@abp.io?subject=Abp.Io ${Model.ContactRequest.Topic} / ${fullName} / ${email}\"> info@abp.io </a><br /> إليك ما كتبته:",
+    "GoBack": "عُد",
+    "HereWhatYouWrote": "إليك ما كتبته:",
+    "Sales": "مبيعات",
+    "LicensingPricing": "الترخيص / التسعير",
+    "TrialDemo": "المحاكمة / التجريبي",
+    "TrainingOnboarding": "التدريب / الإعداد",
+    "Resellers": "الموزعين",
+    "Others": "آحرون",
+    "Characters": "الشخصيات",
+    "Topic": "عنوان",
+    "SendUsEmail": "أرسل لنا البريد الإلكتروني",
+    "ErrorExceptionMessage": "حدث خطأ أثناء معالجة طلبك"
   }
 }

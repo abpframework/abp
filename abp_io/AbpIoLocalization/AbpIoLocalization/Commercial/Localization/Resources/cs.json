@@ -415,6 +415,19 @@
     "PricingDiscount": "Sleva",
     "YourOrganizationOverview": "Přehled vaší organizace",
     "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hodina",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hodin"
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hodin",
+    "ContactPageError": "Pošlete prosím svou zprávu e-mailem na adresu <a href=\"mailto:info@abp.io?subject=Abp.Io ${Model.ContactRequest.Topic} / ${fullName} / ${email}\"> info@abp.io </a><br /> Zde je to, co jste napsal:",
+    "GoBack": "Vraťte se",
+    "HereWhatYouWrote": "Zde je to, co jste napsal:",
+    "Sales": "Odbyt",
+    "LicensingPricing": "Licence / Ceny",
+    "TrialDemo": "Zkušební / Demo",
+    "TrainingOnboarding": "Školení / Onboarding",
+    "Resellers": "Prodejci",
+    "Others": "Ostatní",
+    "Characters": "Postavy",
+    "Topic": "Téma",
+    "SendUsEmail": "Pošlete nám e-mail",
+    "ErrorExceptionMessage": "Při zpracování vašeho požadavku nastala chyba"
   }
 }

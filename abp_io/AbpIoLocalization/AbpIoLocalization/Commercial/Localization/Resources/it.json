@@ -414,6 +414,19 @@
     "PricingDiscount": "Sconto",
     "YourOrganizationOverview": "Panoramica della tua organizzazione",
     "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} ora",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} ore"
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} ore",
+    "ContactPageError": "Si prega di inviare il messaggio tramite e-mail a <a href=\"mailto:info@abp.io?subject=Abp.Io ${Model.ContactRequest.Topic} / ${fullName} / ${email}\"> info@abp.io </a><br /> Ecco cosa hai scritto:",
+    "GoBack": "Torna indietro",
+    "HereWhatYouWrote": "Ecco cosa hai scritto:",
+    "Sales": "Saldi",
+    "LicensingPricing": "Licenza/Prezzi",
+    "TrialDemo": "Prova/Dimostrazione",
+    "TrainingOnboarding": "Formazione/inserimento",
+    "Resellers": "Rivenditori",
+    "Others": "Altri",
+    "Characters": "Caratteri",
+    "Topic": "Argomento",
+    "SendUsEmail": "Inviaci un'e-mail",
+    "ErrorExceptionMessage": "Si è verificato un errore durante l'elaborazione della richiesta",
   }
 }

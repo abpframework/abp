@@ -1188,6 +1188,19 @@
     "PricingEnterpriseTitle": "Enterprise",
     "SpecialDiscount": "Special Discount",
     "YourOrganizationOverview": "Your Organization Overview",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hour"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hour",
+    "ContactPageError": "Please send your message via email to <a href=\"{0}\"> info@abp.io </a><br /> Here's what you wrote :",
+    "GoBack": "Go back",
+    "HereWhatYouWrote": "Here's what you wrote :",
+    "Sales": "Sales",
+    "LicensingPricing": "Licensing / Pricing",
+    "TrialDemo": "Trial / Demo",
+    "TrainingOnboarding": "Training / Onboarding",
+    "Resellers": "Resellers",
+    "Others": "Others",
+    "Characters": "Characters",
+    "Topic": "Topic",
+    "SendUsEmail": "Send us email",
+    "ErrorExceptionMessage": "An error occurred while processing your request"
   }
 }

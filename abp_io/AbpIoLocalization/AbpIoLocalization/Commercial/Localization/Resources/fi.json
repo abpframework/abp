@@ -836,6 +836,19 @@
     "Previous": "Edellinen",
     "PricingDiscount": "Alennus",
     "YourOrganizationOverview": "Organisaation yleiskatsaus",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} tunti"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} tunti",
+    "ContactPageError": "Lähetä viestisi sähköpostitse osoitteeseen <a href=\"mailto:info@abp.io?subject=Abp.Io ${Model.ContactRequest.Topic} / ${fullName} / ${email}\"> info@abp.io </a><br /> Tässä on mitä kirjoitit:",
+    "GoBack": "Mene takaisin",
+    "HereWhatYouWrote": "Tässä on mitä kirjoitit:",
+    "Sales": "Myynti",
+    "LicensingPricing": "Lisensointi / hinnoittelu",
+    "TrialDemo": "Kokeilu / Demo",
+    "TrainingOnboarding": "Koulutus / perehdytys",
+    "Resellers": "Jälleenmyyjät",
+    "Others": "muut",
+    "Characters": "Hahmot",
+    "Topic": "Aihe",
+    "SendUsEmail": "Lähetä meille sähköpostia",
+    "ErrorExceptionMessage": "Virhe pyynnön käsittelyn yhteydessä"
   }
 }
