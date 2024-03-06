@@ -68,11 +68,11 @@ public class EfCoreIdentitySessionRepository : EfCoreRepository<IIdentityDbConte
 
     public virtual async  Task DeleteAllAsync(Guid userId, Guid? exceptSessionId = null, CancellationToken cancellationToken = default)
     {
-        await DeleteDirectAsync(x => x.UserId == userId && x.Id != exceptSessionId, cancellationToken);
+        await DeleteAsync(x => x.UserId == userId && x.Id != exceptSessionId, cancellationToken: cancellationToken);
     }
 
     public virtual async Task DeleteAllAsync(Guid userId, string device, Guid? exceptSessionId = null, CancellationToken cancellationToken = default)
     {
-        await DeleteDirectAsync(x => x.UserId == userId && x.Device == device && x.Id != exceptSessionId, cancellationToken);
+        await DeleteAsync(x => x.UserId == userId && x.Device == device && x.Id != exceptSessionId, cancellationToken: cancellationToken);
     }
 }
