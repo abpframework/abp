@@ -33,14 +33,27 @@ export class DateTimeAdapter {
       return '';
     }
 
+    const now = new Date();
+
+    const newValue = {
+      year: now.getUTCFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+      hour: 0,
+      minute: 0,
+      second: 0,
+      ...this.value,
+      ...value,
+    } as NgbDateTimeStruct;
+
     const date = new Date(
       Date.UTC(
-        value.year,
-        value.month - 1,
-        value.day,
-        value?.hour || 0,
-        value?.minute || 0,
-        value?.second || 0,
+        newValue.year,
+        newValue.month - 1,
+        newValue.day,
+        newValue.hour,
+        newValue.minute,
+        newValue.second,
       ),
     );
 
