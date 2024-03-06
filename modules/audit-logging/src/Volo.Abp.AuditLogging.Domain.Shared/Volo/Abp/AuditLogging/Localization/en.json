@@ -80,6 +80,11 @@
     "Feature:AuditLoggingEnable": "Enabled audit logging page",
     "Feature:AuditLoggingEnableDescription": "Enable audit logging page in the application.",
     "Feature:AuditLoggingSettingManagementEnable": "Enable audit log setting management",
-    "Feature:AuditLoggingSettingManagementEnableDescription": "Enable the configuration of the audit log setting management within the application."
+    "Feature:AuditLoggingSettingManagementEnableDescription": "Enable the configuration of the audit log setting management within the application.",
+    "DisplayName:IsExpiredDeleterEnabled": "Enable expired deleter",
+    "Description:IsExpiredDeleterEnabled": "Toggle to enable or disable the automatic deletion of expired items.",
+    "DisplayName:ExpiredDeleterPeriod": "Expired item deletion period",
+    "Description:ExpiredDeleterPeriod": "Set the period after which expired items will be automatically deleted.",
+    "InvalidAuditLogDeletionSettings": "Invalid audit log deletion settings. If deletion is enabled, the period should be greater than 0 days."
   }
 }
