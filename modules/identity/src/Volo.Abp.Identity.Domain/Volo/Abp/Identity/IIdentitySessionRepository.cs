@@ -30,4 +30,6 @@ public interface IIdentitySessionRepository : IBasicRepository<IdentitySession, 
     Task DeleteAllAsync(Guid userId, Guid? exceptSessionId = null, CancellationToken cancellationToken = default);
 
     Task DeleteAllAsync(Guid userId, string device, Guid? exceptSessionId = null, CancellationToken cancellationToken = default);
+
+    Task DeleteAllAsync(TimeSpan inactiveTimeSpan, CancellationToken cancellationToken = default);
 }

@@ -75,4 +75,9 @@ public class EfCoreIdentitySessionRepository : EfCoreRepository<IIdentityDbConte
     {
         await DeleteAsync(x => x.UserId == userId && x.Device == device && x.Id != exceptSessionId, cancellationToken: cancellationToken);
     }
+
+    public virtual async Task DeleteAllAsync(TimeSpan inactiveTimeSpan, CancellationToken cancellationToken = default)
+    {
+        await DeleteDirectAsync(x => x.LastAccessed == null || x.LastAccessed < DateTime.UtcNow.Subtract(inactiveTimeSpan), cancellationToken: cancellationToken);
+    }
 }
