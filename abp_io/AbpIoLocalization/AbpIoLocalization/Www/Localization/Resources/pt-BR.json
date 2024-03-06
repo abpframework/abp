@@ -469,6 +469,8 @@
     "Characters": "caracteres",
     "ABPTestimonialDescription": "Estrutura ABP: vamos ouvir seu depoimento",
     "LeaveUsReview": "Deixe-nos uma avaliação",
-    "DocumentationButtonTitle": "Documentação"
+    "DocumentationButtonTitle": "Documentação",
+    "ABPVideoCoursesDescription": "Aprenda os fundamentos do ABP Framework através de cursos em vídeo criados pela equipe ABP.",
+    "ABPVideoCoursesPageDescription": "Aprenda os fundamentos do Framework ABP por meio de cursos em vídeo criados pela equipe ABP.Nesta série de vídeos, você aprenderá os tópicos essenciais do Framework ABP.Os números em cada vídeo são escritos de acordo com o fluxo de aprendizagem."
   }
 }

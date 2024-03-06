@@ -467,6 +467,8 @@
     "Characters": "Символы",
     "ABPTestimonialDescription": "ABP Framework: давайте послушаем ваш отзыв",
     "LeaveUsReview": "Оставьте нам отзыв",
-    "DocumentationButtonTitle": "Документация"
+    "DocumentationButtonTitle": "Документация",
+    "ABPVideoCoursesDescription": "Изучите основы ABP Framework с помощью видеокурсов, созданных командой ABP.",
+    "ABPVideoCoursesPageDescription": "Изучите основы ABP Framework с помощью видеокурсов, созданных командой ABP. В этой серии видео вы изучите основные темы ABP Framework. Числа в каждом видео написаны в соответствии с потоком обучения."
   }
 }

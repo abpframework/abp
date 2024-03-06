@@ -209,6 +209,8 @@
     "RaffleSubscriptionCodeInputErrorMessage": "Kayıt kodu hatalı. Lütfen tekrar deneyin.",
     "GoodJob!": "İyi iş!",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> destekleniyor.",
-    "Preview": "Ön izleme"
+    "Preview": "Ön izleme",
+    "VisitPage": "Sayfayı ziyaret et",
+    "VisitVideoCourseDescription": "ABP Framework temellerini öğrenmek için ABP Essentials Video kurslarına göz atın."
   }
 }

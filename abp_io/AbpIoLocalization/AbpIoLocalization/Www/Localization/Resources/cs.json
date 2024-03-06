@@ -469,6 +469,8 @@
     "Characters": "znaky",
     "ABPTestimonialDescription": "ABP Framework: Pojďme slyšet vaši referenci",
     "LeaveUsReview": "Zanechte nám recenzi",
-    "DocumentationButtonTitle": "Dokumentace"
+    "DocumentationButtonTitle": "Dokumentace",
+    "ABPVideoCoursesDescription": "Naučte se základy rámce ABP prostřednictvím videokurzů vytvořených týmem ABP.",
+    "ABPVideoCoursesPageDescription": "Naučte se základy rámce ABP prostřednictvím videokurzů vytvořených týmem ABP. V této sérii videí se naučíte základní témata rámce ABP. Čísla na každém videu jsou napsána podle postupu učení."
   }
 }
