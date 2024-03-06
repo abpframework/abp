@@ -469,6 +469,8 @@
     "Characters": "zeichen",
     "ABPTestimonialDescription": "ABP Framework: Lass uns deine Bewertung hören",
     "LeaveUsReview": "Hinterlassen Sie uns eine Bewertung",
-    "DocumentationButtonTitle": "Dokumentation"
+    "DocumentationButtonTitle": "Dokumentation",
+    "ABPVideoCoursesDescription": "Lernen Sie die Grundlagen des ABP-Frameworks durch vom ABP-Team erstellte Videokurse.",
+    "ABPVideoCoursesPageDescription": "Lernen Sie die Grundlagen des ABP-Frameworks durch Videokurse, die vom ABP-Team erstellt wurden. In dieser Videoserie lernen Sie die wesentlichen Themen des ABP-Frameworks kennen. Die Zahlen in jedem Video werden entsprechend dem Lernfluss geschrieben."
   }
 }

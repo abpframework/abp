@@ -1002,6 +1002,19 @@
     "Previous": "Önceki",
     "PricingDiscount": "İndirim",
     "YourOrganizationOverview": "Organizasyon Detayı",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} saat"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} saat",
+    "ContactPageError": "Lütfen mesajınızı e-posta yoluyla şu adrese gönderin: <a href=\"{0}\"> info@abp.io </a><br /> İşte yazdıklarınız:",
+    "GoBack": "Geri dönün",
+    "HereWhatYouWrote": "İşte yazdıklarınız:",
+    "Sales": "Satış",
+    "LicensingPricing": "Lisanslama / Fiyatlandırma",
+    "TrialDemo": "Deneme / Demo",
+    "TrainingOnboarding": "Eğitim / İşe Alım",
+    "Resellers": "Bayiler",
+    "Others": "Diğerleri",
+    "Characters": "Karakter",
+    "Topic": "Başlık",
+    "SendUsEmail": "E-posta gönder",
+    "ErrorExceptionMessage": "İşleminiz gerçekleştirilirken bir hata oluştu"
   }
 }
