@@ -78,6 +78,8 @@
     "EndDate": "End date",
     "Feature:AuditLoggingGroup": "Audit logging",
     "Feature:AuditLoggingEnable": "Enabled audit logging page",
-    "Feature:AuditLoggingEnableDescription": "Enable audit logging page in the application."
+    "Feature:AuditLoggingEnableDescription": "Enable audit logging page in the application.",
+    "Feature:AuditLoggingSettingManagementEnable": "Enable audit log setting management",
+    "Feature:AuditLoggingSettingManagementEnableDescription": "Enable the configuration of the audit log setting management within the application."
   }
 }
