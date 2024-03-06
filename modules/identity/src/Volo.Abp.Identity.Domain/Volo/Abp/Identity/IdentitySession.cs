@@ -10,7 +10,7 @@ public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
     public virtual string SessionId { get; protected set; }
 
     /// <summary>
-    /// Web, OAuth ...
+    /// Web, Mobile ...
     /// </summary>
     public virtual string Device { get; protected set; }
 
