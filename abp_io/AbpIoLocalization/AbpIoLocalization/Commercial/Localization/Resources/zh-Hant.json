@@ -1083,6 +1083,19 @@
     "Previous": "以前的",
     "PricingDiscount": "折扣",
     "YourOrganizationOverview": "您的组织概览",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} 小时"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} 小时",
+    "ContactPageError": "请将您的信息通过电子邮件发送至 <a href=\"{0}\"> 信息@abp.io </a><br /> 这是你写的：",
+    "GoBack": "回去",
+    "HereWhatYouWrote": "这是你写的：",
+    "Sales": "销售量",
+    "LicensingPricing": "许可/定价",
+    "TrialDemo": "试用/演示",
+    "TrainingOnboarding": "培训/入职",
+    "Resellers": "经销商",
+    "Others": "其他的",
+    "Characters": "人物",
+    "Topic": "话题",
+    "SendUsEmail": "给我们发送电子邮件",
+    "ErrorExceptionMessage": "处理您的请求时发生错误"
   }
 }

@@ -1092,6 +1092,19 @@
     "Previous": "Prethodno",
     "PricingDiscount": "Popust",
     "YourOrganizationOverview": "Pregled vaše organizacije",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} sat"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} sat",
+    "ContactPageError": "Pošaljite svoju poruku e-poštom na <a href=\"{0}\"> info@abp.io </a><br /> Evo što si napisao:",
+    "GoBack": "Idi natrag",
+    "HereWhatYouWrote": "Evo što si napisao:",
+    "Sales": "Prodajni",
+    "LicensingPricing": "Licenciranje / Cijene",
+    "TrialDemo": "Probno / Demo",
+    "TrainingOnboarding": "Obuka/uvođenje",
+    "Resellers": "Preprodavači",
+    "Others": "Drugi",
+    "Characters": "Likovi",
+    "Topic": "Tema",
+    "SendUsEmail": "Pošaljite nam e-mail",
+    "ErrorExceptionMessage": "Pojavila se greška prilikom obrade Vašeg zahtjeva"
   }
 }

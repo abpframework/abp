@@ -1093,6 +1093,19 @@
     "Previous": "Предыдущий",
     "PricingDiscount": "Скидка",
     "YourOrganizationOverview": "Обзор вашей организации",
-    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} час"
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} час",
+    "ContactPageError": "Пожалуйста, отправьте ваше сообщение по электронной почте на адрес <a href=\"{0}\"> info@abp.io </a><br /> Вот что вы написали:",
+    "GoBack": "Возвращаться",
+    "HereWhatYouWrote": "Вот что вы написали:",
+    "Sales": "Продажи",
+    "LicensingPricing": "Лицензирование/Цены",
+    "TrialDemo": "Пробная версия/Демо",
+    "TrainingOnboarding": "Обучение/адаптация",
+    "Resellers": "Реселлеры",
+    "Others": "Другие",
+    "Characters": "Персонажи",
+    "Topic": "Тема",
+    "SendUsEmail": "Отправьте нам электронное письмо",
+    "ErrorExceptionMessage": "Во время обработки Вашего запроса произошла ошибка"
   }
 }
