@@ -242,6 +242,7 @@
     "EventsDefinition": "Community Talks, webinars, conferência ABP .NET, etc.",
     "ReleaseNotesDefinition": "Lançamentos da plataforma ABP.IO, novos produtos, etc.",
     "Newsletter": "Boletim de Notícias",
-    "NewsletterDefinition": "Postagens de blog, notícias da comunidade, etc."
+    "NewsletterDefinition": "Postagens de blog, notícias da comunidade, etc.",
+    "AbpConferenceDescription": "ABP Conference é um evento virtual para desenvolvedores .NET aprenderem e se conectarem com a comunidade."
   }
 }

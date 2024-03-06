@@ -242,7 +242,8 @@
     "EventsDefinition": "Community Talks, webové semináře, konference ABP .NET atd.",
     "ReleaseNotesDefinition": "Vydání platformy ABP.IO, nové produkty atd.",
     "Newsletter": "Zpravodaj",
-    "NewsletterDefinition": "Blogové příspěvky, zprávy z komunity atd."
+    "NewsletterDefinition": "Blogové příspěvky, zprávy z komunity atd.",
+    "AbpConferenceDescription": "ABP Conference je virtuální událost pro vývojáře .NET, kde se mohou učit a spojit se s komunitou."
 
   }
 }

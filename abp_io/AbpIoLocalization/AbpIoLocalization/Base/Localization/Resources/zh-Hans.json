@@ -242,6 +242,7 @@
     "EventsDefinition": "社区讲座、网络研讨会、ABP .NET 会议等。",
     "ReleaseNotesDefinition": "ABP.IO平台发布、新产品等",
     "Newsletter": "通讯",
-    "NewsletterDefinition": "博客文章、社区新闻等。"
+    "NewsletterDefinition": "博客文章、社区新闻等。",
+    "AbpConferenceDescription": "ABP Conference .NET 开发人员学习和与社区联系的虚拟活动。"
   }
 }

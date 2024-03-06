@@ -241,6 +241,7 @@
     "EventsDefinition": "Community Talks, Hội thảo trên web, Hội nghị ABP .NET, v.v.",
     "ReleaseNotesDefinition": "Các bản phát hành nền tảng ABP.IO, sản phẩm mới, v.v.",
     "Newsletter": "Bản tin",
-    "NewsletterDefinition": "Bài đăng trên blog, tin tức cộng đồng, v.v."
+    "NewsletterDefinition": "Bài đăng trên blog, tin tức cộng đồng, v.v.",
+    "AbpConferenceDescription": "Hội ABP Conference là một sự kiện ảo dành cho các nhà phát triển .NET tìm hiểu và kết nối với cộng đồng."
   }
 }

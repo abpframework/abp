@@ -192,6 +192,7 @@
     "EventsDefinition": "Community Talks, Webinars, ABP .NET konferansları, vb.",
     "ReleaseNotesDefinition": "ABP.IO Platform sürümleri, yeni ürünler, vb.",
     "Newsletter": "Bülten",
-    "NewsletterDefinition": "Blog paylaşımları, topluluk haberleri, vb."
+    "NewsletterDefinition": "Blog paylaşımları, topluluk haberleri, vb.",
+    "AbpConferenceDescription": "ABP Conference, .NET geliştiricilerinin gelişmesi ve toplulukla bağlantı kurması için düzenlenen sanal bir etkinliktir."
   }
 }

@@ -241,6 +241,7 @@
     "EventsDefinition": "Community Talks, webinars, konferenca ABP .NET itd.",
     "ReleaseNotesDefinition": "Izdaje platforme ABP.IO, novi izdelki itd.",
     "Newsletter": "Glasilo",
-    "NewsletterDefinition": "Objave v spletnem dnevniku, novice skupnosti itd."
+    "NewsletterDefinition": "Objave v spletnem dnevniku, novice skupnosti itd.",
+    "AbpConferenceDescription": "Conference ABP je virtualni dogodek za razvijalce .NET, kjer se lahko učijo in povezujejo s skupnostjo."
   }
 }

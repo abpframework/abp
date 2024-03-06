@@ -242,6 +242,7 @@
     "EventsDefinition": "محادثات مجتمعية، وندوات عبر الإنترنت، ومؤتمر ABP .NET، وما إلى ذلك.",
     "ReleaseNotesDefinition": "إصدارات منصة ABP.IO والمنتجات الجديدة وما إلى ذلك.",
     "Newsletter": "النشرة الإخبارية",
-    "NewsletterDefinition": "منشورات المدونة وأخبار المجتمع وما إلى ذلك."
+    "NewsletterDefinition": "منشورات المدونة وأخبار المجتمع وما إلى ذلك.",
+    "AbpConferenceDescription": "يعد مؤتمر ABP Conference افتراضيًا لمطوري .NET للتعلم والتواصل مع المجتمع."
   }
 }
