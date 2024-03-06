@@ -6,11 +6,15 @@ export class DateTimeAdapter {
   value!: Partial<NgbDateTimeStruct>;
 
   fromModel(value: string | Date): Partial<NgbDateTimeStruct> | null {
-    if (!value) return null;
+    if (!value) {
+      return null;
+    }
 
     const date = new Date(value);
 
-    if (isNaN(date as unknown as number)) return null;
+    if (isNaN(date as unknown as number)) {
+      return null;
+    }
 
     this.value = {
       year: date.getFullYear(),
