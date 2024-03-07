@@ -118,10 +118,14 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
         
         var abpDbContextOptions = LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>().Value;
+
+        var actions = abpDbContextOptions.ModelBuilderActions
+            .Where(x => x.Key == typeof(TDbContext) || x.Key == typeof(AbpDbContext<>))
+            .SelectMany(x => x.Value)
+            .OrderBy(a => a.Key)
+            .Select(a => a.Value)
+            .ToList();
         
-        var modelBuilderActions = abpDbContextOptions.ModelBuilderActions.Where(x => x.Key == typeof(TDbContext) || x.Key == typeof(AbpDbContext<>)).SelectMany(x => x.Value).ToList();
-        
-        var actions = modelBuilderActions.OrderBy(a => a.Key).Select(a => a.Value).ToList();
         foreach (var action in actions)
         {
             if(action is Action<ModelBuilder, DbContext> modelBuilderAction)
@@ -142,9 +146,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         var abpDbContextOptions = LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>().Value;
 
-        var conventions = abpDbContextOptions.Conventions.Where(x => x.Key == typeof(TDbContext) || x.Key == typeof(AbpDbContext<>)).SelectMany(x => x.Value).ToList();
-        
-        var actions = conventions.OrderBy(a => a.Key).Select(a => a.Value).ToList();
+        var actions = abpDbContextOptions.Conventions
+            .Where(x => x.Key == typeof(TDbContext) || x.Key == typeof(AbpDbContext<>))
+            .SelectMany(x => x.Value)
+            .OrderBy(a => a.Key)
+            .Select(a => a.Value)
+            .ToList();
         
         foreach (var action in actions)
         {
