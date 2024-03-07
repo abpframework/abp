@@ -277,7 +277,7 @@ public static class AbpClaimsIdentityExtensions
         return principal;
     }
 
-    public static Guid? FindSessionId([NotNull] this IIdentity identity)
+    public static string? FindSessionId([NotNull] this IIdentity identity)
     {
         Check.NotNull(identity, nameof(identity));
 
@@ -289,12 +289,7 @@ public static class AbpClaimsIdentityExtensions
             return null;
         }
 
-        if (Guid.TryParse(sessionIdOrNull.Value, out var guid))
-        {
-            return guid;
-        }
-
-        return null;
+        return sessionIdOrNull.Value;
     }
 
     public static string? FindSessionId([NotNull] this ClaimsPrincipal principal)

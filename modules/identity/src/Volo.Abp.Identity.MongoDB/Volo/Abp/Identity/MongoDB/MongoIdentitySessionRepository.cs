@@ -9,6 +9,7 @@ using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Identity.MongoDB;
 
@@ -83,6 +84,7 @@ public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMong
 
     public virtual async Task DeleteAllAsync(TimeSpan inactiveTimeSpan, CancellationToken cancellationToken = default)
     {
-        await DeleteDirectAsync(x => x.LastAccessed == null || x.LastAccessed < DateTime.UtcNow.Subtract(inactiveTimeSpan), cancellationToken: cancellationToken);
+        var now = LazyServiceProvider.LazyGetRequiredService<IClock>().Now;
+        await DeleteDirectAsync(x => x.LastAccessed == null || x.LastAccessed < now.Subtract(inactiveTimeSpan), cancellationToken: cancellationToken);
     }
 }

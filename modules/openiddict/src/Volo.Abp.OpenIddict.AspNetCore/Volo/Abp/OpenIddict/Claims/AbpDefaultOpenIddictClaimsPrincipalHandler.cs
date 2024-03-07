@@ -28,7 +28,7 @@ public class AbpDefaultOpenIddictClaimsPrincipalHandler : IAbpOpenIddictClaimsPr
 
             if (claim.Type == AbpClaimTypes.SessionId)
             {
-                claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+                claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
                 continue;
             }
 

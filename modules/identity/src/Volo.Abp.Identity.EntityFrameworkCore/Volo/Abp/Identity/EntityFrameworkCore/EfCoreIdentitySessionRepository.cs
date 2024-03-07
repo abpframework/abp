@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore;
 
@@ -78,6 +79,7 @@ public class EfCoreIdentitySessionRepository : EfCoreRepository<IIdentityDbConte
 
     public virtual async Task DeleteAllAsync(TimeSpan inactiveTimeSpan, CancellationToken cancellationToken = default)
     {
-        await DeleteDirectAsync(x => x.LastAccessed == null || x.LastAccessed < DateTime.UtcNow.Subtract(inactiveTimeSpan), cancellationToken: cancellationToken);
+        var now = LazyServiceProvider.LazyGetRequiredService<IClock>().Now;
+        await DeleteDirectAsync(x => x.LastAccessed == null || x.LastAccessed < now.Subtract(inactiveTimeSpan), cancellationToken: cancellationToken);
     }
 }
