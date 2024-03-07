@@ -414,6 +414,19 @@
     "PricingDiscount": "छूट",
     "YourOrganizationOverview": "आपके संगठन का अवलोकन",
     "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} घंटा",
-    "TrainingDetailsHeaderInfo_TrainingHour": "{0} घंटे"
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} घंटे",
+    "ContactPageError": "कृपया अपना संदेश ईमेल द्वारा भेजें <a href=\"{0}\"> info@abp.io </a><br /> यहाँ आपने क्या लिखा है:",
+    "GoBack": "वापस जाओ",
+    "HereWhatYouWrote": "यहाँ आपने क्या लिखा है:",
+    "Sales": "बिक्री",
+    "LicensingPricing": "लाइसेंसिंग/मूल्य निर्धारण",
+    "TrialDemo": "परीक्षण/डेमो",
+    "TrainingOnboarding": "प्रशिक्षण/ऑनबोर्डिंग",
+    "Resellers": "पुनर्विक्रेताओं",
+    "Others": "अन्य",
+    "Characters": "पात्र",
+    "Topic": "विषय",
+    "SendUsEmail": "हमें ईमेल भेजें",
+    "ErrorExceptionMessage": "आपका अनुरोध संसाधित करते समय एक त्रुटि पाई गई"
   }
 }

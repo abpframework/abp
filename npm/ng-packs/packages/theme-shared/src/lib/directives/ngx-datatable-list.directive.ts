@@ -53,14 +53,6 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
     };
   }
 
-  private subscribeToPage() {
-    const sub = this.table.page.subscribe(({ offset }) => {
-      this.list.page = offset;
-      this.table.offset = offset;
-    });
-    this.subscription.add(sub);
-  }
-
   private subscribeToSort() {
     const sub = this.table.sort.subscribe(({ sorts: [{ prop, dir }] }) => {
       if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
@@ -101,7 +93,6 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.subscribeToPage();
     this.subscribeToSort();
   }
 }

@@ -469,6 +469,8 @@
     "Characters": "stafir",
     "ABPTestimonialDescription": "ABP Framework: Við skulum heyra vitnisburð þinn",
     "LeaveUsReview": "Skildu eftir okkur umsögn",
-    "DocumentationButtonTitle": "Skjöl"
+    "DocumentationButtonTitle": "Skjöl",
+    "ABPVideoCoursesDescription": "Lærðu grunnatriði ABP Framework í gegnum myndbandsnámskeið búin til af ABP teyminu.",
+    "ABPVideoCoursesPageDescription": "Lærðu grunnatriði ABP Framework í gegnum myndbandsnámskeið sem ABP teymið bjó til. Í þessari myndbandsseríu muntu læra helstu efni ABP Framework. Tölurnar á hverju myndbandi eru skrifaðar í samræmi við námsflæðið."
   }
 }
