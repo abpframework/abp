@@ -93,6 +93,7 @@ public static class AbpClaimTypes
     /// </summary>
     public static string Picture { get; set; } = "picture";
 
+    /// <summary>
     /// Default: "remember_me".
     /// </summary>
     public static string RememberMe { get; set; } = "remember_me";
