@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -20,12 +21,18 @@ public class AbpDbContextOptions
 
     internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
 
+    internal Dictionary<Type, List<KeyValuePair<int?, object>>> Conventions { get; }
+    
+    internal Dictionary<Type, List<KeyValuePair<int?, object>>> ModelBuilderActions { get; }
+
     public AbpDbContextOptions()
     {
         DefaultPreConfigureActions = new List<Action<AbpDbContextConfigurationContext>>();
         PreConfigureActions = new Dictionary<Type, List<object>>();
         ConfigureActions = new Dictionary<Type, object>();
         DbContextReplacements = new Dictionary<MultiTenantDbContextType, Type>();
+        Conventions = new Dictionary<Type, List<KeyValuePair<int?, object>>>();
+        ModelBuilderActions = new Dictionary<Type, List<KeyValuePair<int?, object>>>();
     }
 
     public void PreConfigure([NotNull] Action<AbpDbContextConfigurationContext> action)
@@ -40,6 +47,60 @@ public class AbpDbContextOptions
         Check.NotNull(action, nameof(action));
 
         DefaultConfigureAction = action;
+    }
+    
+    public void ConfigureConventions([NotNull] Action<ModelConfigurationBuilder, DbContext> action, Type? dbContextType = null, int? order = null)
+    {
+        Check.NotNull(action, nameof(action));
+
+        var actions = Conventions.GetOrDefault(dbContextType ?? typeof(AbpDbContext<>));
+        if (actions == null)
+        {
+            Conventions[dbContextType ?? typeof(AbpDbContext<>)] = actions = new List<KeyValuePair<int?, object>>();
+        }
+        
+        actions.Add(new KeyValuePair<int?, object>(order, action));
+    }
+    
+    public void ConfigureConventions<TDbContext>([NotNull] Action<ModelConfigurationBuilder, TDbContext> action, int? order = null)
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        Check.NotNull(action, nameof(action));
+
+        var actions = Conventions.GetOrDefault(typeof(TDbContext));
+        if (actions == null)
+        {
+            Conventions[typeof(TDbContext)] = actions = new List<KeyValuePair<int?, object>>();
+        }
+        
+        actions.Add(new KeyValuePair<int?, object>(order, action));
+    }
+
+    public void OnModelCreating([NotNull] Action<ModelBuilder, DbContext> action, Type? dbContextType = null, int? order = null)
+    {
+        Check.NotNull(action, nameof(action));
+
+        var actions = ModelBuilderActions.GetOrDefault(dbContextType ?? typeof(AbpDbContext<>));
+        if (actions == null)
+        {
+            ModelBuilderActions[dbContextType ?? typeof(AbpDbContext<>)] = actions = new List<KeyValuePair<int?, object>>();
+        }
+        
+        actions.Add(new KeyValuePair<int?, object>(order, action));
+    }
+    
+    public void OnModelCreating<TDbContext>([NotNull] Action<ModelBuilder, TDbContext> action, int? order = null)
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        Check.NotNull(action, nameof(action));
+
+        var actions = ModelBuilderActions.GetOrDefault(typeof(TDbContext));
+        if (actions == null)
+        {
+            ModelBuilderActions[typeof(TDbContext)] = actions = new List<KeyValuePair<int?, object>>();
+        }
+        
+        actions.Add(new KeyValuePair<int?, object>(order, action));
     }
 
     public bool IsConfiguredDefault()
