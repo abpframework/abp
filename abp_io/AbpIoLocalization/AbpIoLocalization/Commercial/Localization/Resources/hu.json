@@ -775,6 +775,7 @@
     "Characters": "Karakterek",
     "Topic": "Téma",
     "SendUsEmail": "Küldjön nekünk e-mailt",
-    "ErrorExceptionMessage": "Hiba történt a kérése feldolgozása során"
+    "ErrorExceptionMessage": "Hiba történt a kérése feldolgozása során",
+    "WatchTakeCodeGeneration": "Nézze meg a \"Fedezze fel a kódgenerálás lehetőségét: ABP Suite\" videót!"
   }
 }

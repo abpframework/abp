@@ -248,7 +248,8 @@
     "NewsletterDefinition": "Blog posts, community news, etc.",
     "OrganizationOverview": "Organization Overview",
     "EmailPreferences": "Email Preferences",
-    "DoYouAgreePrivacyPolicy": "By clicking <i>Subscribe</i> button you agree to the <a href=\"https://account.abp.io/Account/TermsConditions\">Terms & Conditions</a> and <a href=\"https://account.abp.io/Account/Privacy\">Privacy Policy</a>.",
-    "VideoCourses" : "Video Courses"
+    "DoYouAgreePrivacyPolicy": "By clicking <b>Subscribe</b> button you agree to the <a href=\"https://account.abp.io/Account/TermsConditions\">Terms & Conditions</a> and <a href=\"https://account.abp.io/Account/Privacy\">Privacy Policy</a>.",
+    "VideoCourses" : "Video Courses",
+    "AbpConferenceDescription": "ABP Conference is a virtual event for .NET developers to learn and connect with the community."
   }
 }
