@@ -44,7 +44,7 @@ public class MyWorker : BackgroundWorkerBase
 public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 {
     public PassiveUserCheckerWorker(
-            AbpTimer timer,
+            AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory
         ) : base(
             timer, 
@@ -71,7 +71,7 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 }
 ````
 
-* `AsyncPeriodicBackgroundWorkerBase` 使用 `AbpTimer`(线程安全定时器)对象来确定**时间段**. 我们可以在构造函数中设置了`Period` 属性.
+* `AsyncPeriodicBackgroundWorkerBase` 使用 `AbpAsyncTimer`(线程安全定时器)对象来确定**时间段**. 我们可以在构造函数中设置了`Period` 属性.
 * 它需要实现 `DoWorkAsync` 方法**执行**定期任务.
 * 最好使用 `PeriodicBackgroundWorkerContext` **解析依赖** 而不是构造函数. 因为 `AsyncPeriodicBackgroundWorkerBase` 使用 `IServiceScope` 在你的任务执行结束时会对其 **disposed**.
 * `AsyncPeriodicBackgroundWorkerBase` **捕获并记录** 由 `DoWorkAsync` 方法抛出的 **异常**.

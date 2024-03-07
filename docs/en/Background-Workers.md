@@ -72,7 +72,7 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 }
 ````
 
-* `AsyncPeriodicBackgroundWorkerBase` uses the `AbpTimer` (a thread-safe timer) object to determine **the period**. We can set its `Period` property in the constructor.
+* `AsyncPeriodicBackgroundWorkerBase` uses the `AbpAsyncTimer` (a thread-safe timer) object to determine **the period**. We can set its `Period` property in the constructor.
 * It required to implement the `DoWorkAsync` method to **execute** the periodic work.
 * It is a good practice to **resolve dependencies** from the `PeriodicBackgroundWorkerContext` instead of constructor injection. Because `AsyncPeriodicBackgroundWorkerBase` uses a `IServiceScope` that is **disposed** when your work finishes.
 * `AsyncPeriodicBackgroundWorkerBase` **catches and logs exceptions** thrown by the `DoWorkAsync` method.
