@@ -116,7 +116,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 .MakeGenericMethod(entityType.ClrType)
                 .Invoke(this, new object[] { modelBuilder, entityType });
         }
-        
+
+        if (LazyServiceProvider is null)
+        {
+            return;
+        }
         var abpDbContextOptions = LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>().Value;
 
         var actions = abpDbContextOptions.ModelBuilderActions
@@ -144,6 +148,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     {
         base.ConfigureConventions(configurationBuilder);
 
+        if (LazyServiceProvider is null)
+        {
+            return;
+        }
+        
         var abpDbContextOptions = LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>().Value;
 
         var actions = abpDbContextOptions.Conventions
