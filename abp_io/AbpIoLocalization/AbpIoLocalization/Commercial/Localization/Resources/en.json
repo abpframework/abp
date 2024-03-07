@@ -1201,6 +1201,7 @@
     "Characters": "Characters",
     "Topic": "Topic",
     "SendUsEmail": "Send us email",
-    "ErrorExceptionMessage": "An error occurred while processing your request"
+    "ErrorExceptionMessage": "An error occurred while processing your request",
+    "WatchTakeCodeGeneration": "Watch the \"Explore the Potential of Code Generation: ABP Suite\" Video!"
   }
 }
