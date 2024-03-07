@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.EntityFrameworkCore;
+using MyCompanyName.MyProjectName.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
 namespace MyCompanyName.MyProjectName.Migrations
 {
-    [DbContext(typeof(AuthServerDbContext))]
-    [Migration("20240221053228_Initial")]
+    [DbContext(typeof(MyProjectNameDbContext))]
+    [Migration("20240307064033_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
