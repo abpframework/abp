@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -114,6 +115,55 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             ConfigureValueGeneratedMethodInfo
                 .MakeGenericMethod(entityType.ClrType)
                 .Invoke(this, new object[] { modelBuilder, entityType });
+        }
+        
+        var abpDbContextOptions = LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>().Value;
+        
+        var modelBuilderActions = abpDbContextOptions.ModelBuilderActions.GetOrDefault(typeof(TDbContext));
+        if(modelBuilderActions == null)
+        {
+            return;
+        }
+        var actions = modelBuilderActions.OrderBy(a => a.Key).Select(a => a.Value).ToList();
+        foreach (var action in actions)
+        {
+            if(action is Action<ModelBuilder, DbContext> modelBuilderAction)
+            {
+                modelBuilderAction.Invoke(modelBuilder, this);
+            }
+            
+            if(this is TDbContext dbContext && action is Action<ModelBuilder, TDbContext> dbContextAction)
+            {
+                dbContextAction.Invoke(modelBuilder, dbContext);
+            }
+        }
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        base.ConfigureConventions(configurationBuilder);
+
+        var abpDbContextOptions = LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>().Value;
+        var conventions = abpDbContextOptions.Conventions.GetOrDefault(typeof(TDbContext));
+        
+        if(conventions == null)
+        {
+            return;
+        }
+        
+        var actions = conventions.OrderBy(a => a.Key).Select(a => a.Value).ToList();
+        
+        foreach (var action in actions)
+        {
+            if(action is Action<ModelConfigurationBuilder, DbContext> modelBuilderAction)
+            {
+                modelBuilderAction.Invoke(configurationBuilder, this);
+            }
+            
+            if(this is TDbContext dbContext && action is Action<ModelConfigurationBuilder, TDbContext> dbContextAction)
+            {
+                dbContextAction.Invoke(configurationBuilder, dbContext);
+            }
         }
     }
 
