@@ -141,8 +141,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         base.ConfigureConventions(configurationBuilder);
 
         var abpDbContextOptions = LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>().Value;
+
         var conventions = abpDbContextOptions.Conventions.Where(x => x.Key == typeof(TDbContext) || x.Key == typeof(AbpDbContext<>)).SelectMany(x => x.Value).ToList();
-        
         
         var actions = conventions.OrderBy(a => a.Key).Select(a => a.Value).ToList();
         
