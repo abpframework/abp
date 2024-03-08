@@ -57,7 +57,7 @@ export class DateTimeAdapter {
       ),
     );
 
-    return date.toISOString();
+    return date.toISOString().replace('Z', '');
   }
 }
 
