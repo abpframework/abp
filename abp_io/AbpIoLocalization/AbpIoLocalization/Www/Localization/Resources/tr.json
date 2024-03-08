@@ -429,9 +429,10 @@
     "GenderRequired": "Cinsiyet alanı zorunludur.",
     "LeaveUsReview": "Yorumunuzu paylaşın",
     "BuildingMicroserviceSolutionsShortDescription": "Bu kitap, ABP Framework kullanarak mikroservis tabanlı uygulamalar geliştirmek ve yönetmek için bir başvuru rehberidir.",
-    "VideoCourses": "Video Kurslar",
+    "VideoCourses": "Başlangıç Videoları",
     "DocumentationButtonTitle": "Dokümantasyon",
     "ABPVideoCoursesDescription": "ABP ekibi tarafından oluşturulan video kursları aracılığıyla ABP Framework temellerini öğrenin.",
-    "ABPVideoCoursesPageDescription": "ABP ekibi tarafından oluşturulan video kursları aracılığıyla ABP Framewok temellerini öğrenin. Bu video serisinde ABP Framewokünün temel konularını öğreneceksiniz. Her videodaki sayılar öğrenme akışına göre yazılmıştır."
+    "ABPVideoCoursesPageDescription": "ABP ekibi tarafından oluşturulan video kursları aracılığıyla ABP Framewok temellerini öğrenin. Bu video serisinde ABP Framework'ün temel konularını öğreneceksiniz. Videolardaki sayılar, öğrenme sırasına göre yazılmıştır.",
+    "ABPVideoCoursesTitle": "ABP Başlangıç Videoları"
   }
 }
