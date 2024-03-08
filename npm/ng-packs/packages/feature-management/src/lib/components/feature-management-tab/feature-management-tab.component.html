@@ -4,7 +4,7 @@
   <i class="me-1 fa fa-cog" aria-hidden="true"></i>
   {{ 'AbpFeatureManagement::ManageHostFeatures' | abpLocalization }}
 </button>
-<ng-container *ngIf="visibleFeatures">
+@if (visibleFeatures) {
   <abp-feature-management
     *abpReplaceableTemplate="{
       inputs: {
@@ -20,4 +20,4 @@
     [providerKey]="providerKey"
   >
   </abp-feature-management>
-</ng-container>
+}
