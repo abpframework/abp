@@ -185,8 +185,8 @@ public class MyProjectNameBlazorHostModule : AbpModule
             options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
             options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
             options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-            options.Languages.Add(new LanguageInfo("it", "it", "Italian", "it"));
+            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi"));
+            options.Languages.Add(new LanguageInfo("it", "it", "Italian"));
             options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
             options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português (Brasil)"));
             options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
