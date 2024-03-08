@@ -1,6 +1,3 @@
-<h2>{{ 'AbpFeatureManagement::Menu:FeatureManagement' | abpLocalization }}</h2>
-
-<hr class="my-2" />
 <p class="pt-2 text-wrap">{{ 'AbpFeatureManagement::ManageHostFeaturesText' | abpLocalization }}</p>
 
 <button class="btn btn-primary" type="button" (click)="openFeaturesModal()">
@@ -9,18 +6,18 @@
 </button>
 <ng-container *ngIf="visibleFeatures">
   <abp-feature-management
-  *abpReplaceableTemplate="{
-    inputs: {
-      providerName: { value: 'T' },
-      providerKey: { value: providerKey },
-      visible: { value: visibleFeatures, twoWay: true }
-    },
-    outputs: { visibleChange: onVisibleFeaturesChange },
-    componentKey: 'FeatureManagement.FeatureManagementComponent'
-  }"
-  [(visible)]="visibleFeatures"
-  providerName="T"
-  [providerKey]="providerKey"
+    *abpReplaceableTemplate="{
+      inputs: {
+        providerName: { value: 'T' },
+        providerKey: { value: providerKey },
+        visible: { value: visibleFeatures, twoWay: true }
+      },
+      outputs: { visibleChange: onVisibleFeaturesChange },
+      componentKey: 'FeatureManagement.FeatureManagementComponent'
+    }"
+    [(visible)]="visibleFeatures"
+    providerName="T"
+    [providerKey]="providerKey"
   >
-</abp-feature-management>
+  </abp-feature-management>
 </ng-container>

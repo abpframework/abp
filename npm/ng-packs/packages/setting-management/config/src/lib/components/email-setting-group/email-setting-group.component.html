@@ -1,8 +1,10 @@
-<h2>{{ 'AbpSettingManagement::Menu:Emailing' | abpLocalization }}</h2>
-
-<hr class="my-2" />
-
-<form *ngIf="form" [formGroup]="form" class="py-2 abp-md-form"  (ngSubmit)="submit()" [validateOnSubmit]="true">
+<form
+  *ngIf="form"
+  [formGroup]="form"
+  class="py-2 abp-md-form"
+  (ngSubmit)="submit()"
+  [validateOnSubmit]="true"
+>
   <div class="mb-3 form-group">
     <label class="form-label"
       >{{ 'AbpSettingManagement::DefaultFromDisplayName' | abpLocalization
