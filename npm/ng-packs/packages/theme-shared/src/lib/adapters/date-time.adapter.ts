@@ -6,11 +6,15 @@ export class DateTimeAdapter {
   value!: Partial<NgbDateTimeStruct>;
 
   fromModel(value: string | Date): Partial<NgbDateTimeStruct> | null {
-    if (!value) return null;
+    if (!value) {
+      return null;
+    }
 
     const date = new Date(value);
 
-    if (isNaN(date as unknown as number)) return null;
+    if (isNaN(date as unknown as number)) {
+      return null;
+    }
 
     this.value = {
       year: date.getFullYear(),
@@ -25,12 +29,13 @@ export class DateTimeAdapter {
   }
 
   toModel(value: Partial<NgbDateTimeStruct> | null): string {
-    if (!value) return '';
+    if (!value) {
+      return '';
+    }
 
     const now = new Date();
 
     const newValue = {
-      // TODO look for strict mode errors
       year: now.getUTCFullYear(),
       month: now.getMonth() + 1,
       day: now.getDate(),
@@ -42,15 +47,17 @@ export class DateTimeAdapter {
     } as NgbDateTimeStruct;
 
     const date = new Date(
-      newValue.year,
-      newValue.month - 1,
-      newValue.day,
-      newValue.hour,
-      newValue.minute,
-      newValue.second,
+      Date.UTC(
+        newValue.year,
+        newValue.month - 1,
+        newValue.day,
+        newValue.hour,
+        newValue.minute,
+        newValue.second,
+      ),
     );
 
-    return new Date(date).toISOString();
+    return date.toISOString().replace('Z', '');
   }
 }
 
