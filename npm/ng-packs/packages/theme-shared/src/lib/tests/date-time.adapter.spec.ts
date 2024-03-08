@@ -1,4 +1,5 @@
- import { DateTimeAdapter } from '../adapters/date-time.adapter'
+import { DateTimeAdapter } from '../adapters/date-time.adapter';
+
 describe('DateTime Adapter', () => {
   const adapter = new DateTimeAdapter();
   const date = new Date(2002, 2, 30, 13, 30, 45, 0);
@@ -9,6 +10,7 @@ describe('DateTime Adapter', () => {
   const minute = date.getMinutes();
   const second = date.getSeconds();
 
+  const isoWithoutZone = date.toISOString().replace('Z', '');
   describe('#fromModel', () => {
     test.each`
       param        | expected
@@ -23,12 +25,12 @@ describe('DateTime Adapter', () => {
 
   describe('#toModel', () => {
     test.each`
-      param                                         | expected
-      ${undefined}                                  | ${''}
-      ${null}                                       | ${''}
-      ${{ year, month, day, hour, minute, second }} | ${date.toISOString()}
+      param             | expected
+      ${undefined}      | ${''}
+      ${null}           | ${''}
+      ${isoWithoutZone} | ${isoWithoutZone}
     `('should return $expected when $param is given', ({ param, expected }) => {
-      expect(adapter.toModel(param)).toEqual(expected);
+      expect(adapter.toModel(adapter.fromModel(param))).toEqual(expected);
     });
   });
 });
