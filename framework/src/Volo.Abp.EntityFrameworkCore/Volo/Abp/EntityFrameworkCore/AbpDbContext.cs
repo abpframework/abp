@@ -70,6 +70,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     public ILogger<AbpDbContext<TDbContext>> Logger => LazyServiceProvider.LazyGetService<ILogger<AbpDbContext<TDbContext>>>(NullLogger<AbpDbContext<TDbContext>>.Instance);
 
+    public IOptions<AbpDbContextOptions> Options => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>();
+
     private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
         = typeof(AbpDbContext<TDbContext>)
             .GetMethod(
@@ -117,19 +119,15 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 .Invoke(this, new object[] { modelBuilder, entityType });
         }
 
-        var abpDbContextOptions = LazyServiceProvider?.LazyGetRequiredService<IOptions<AbpDbContextOptions>>().Value;
-        if (abpDbContextOptions != null)
+        if (LazyServiceProvider == null || Options == null)
         {
-            abpDbContextOptions.DefaultOnModelCreatingAction?.Invoke(this, modelBuilder);
+            return;
+        }
 
-            var onModelCreatingActions = abpDbContextOptions.OnModelCreatingActions.GetOrDefault(typeof(TDbContext));
-            if (!onModelCreatingActions.IsNullOrEmpty())
-            {
-                foreach (var onModelCreatingAction in onModelCreatingActions!)
-                {
-                    onModelCreatingAction.As<Action<DbContext, ModelBuilder>>().Invoke(this, modelBuilder);
-                }
-            }
+        Options.Value.DefaultOnModelCreatingAction?.Invoke(this, modelBuilder);
+        foreach (var onModelCreatingAction in Options.Value.OnModelCreatingActions.GetOrDefault(typeof(TDbContext)) ?? [])
+        {
+            onModelCreatingAction.As<Action<DbContext, ModelBuilder>>().Invoke(this, modelBuilder);
         }
     }
 
@@ -137,19 +135,15 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     {
         base.ConfigureConventions(configurationBuilder);
 
-        var abpDbContextOptions = LazyServiceProvider?.LazyGetRequiredService<IOptions<AbpDbContextOptions>>().Value;
-        if (abpDbContextOptions != null)
+        if (LazyServiceProvider == null || Options == null)
         {
-            abpDbContextOptions.DefaultConventionAction?.Invoke(this, configurationBuilder);
+            return;
+        }
 
-            var conventionActions = abpDbContextOptions.ConventionActions.GetOrDefault(typeof(TDbContext));
-            if (!conventionActions.IsNullOrEmpty())
-            {
-                foreach (var conventionAction in conventionActions!)
-                {
-                    conventionAction.As<Action<DbContext, ModelConfigurationBuilder>>().Invoke(this, configurationBuilder);
-                }
-            }
+        Options.Value.DefaultConventionAction?.Invoke(this, configurationBuilder);
+        foreach (var conventionAction in Options.Value.ConventionActions.GetOrDefault(typeof(TDbContext)) ?? [])
+        {
+            conventionAction.As<Action<DbContext, ModelConfigurationBuilder>>().Invoke(this, configurationBuilder);
         }
     }
 
