@@ -35,4 +35,13 @@ public class TenantStore_Tests : AbpTenantManagementDomainTestBase
 
         (await _tenantStore.FindAsync(acme.Id)).ShouldNotBeNull();
     }
+
+    [Fact]
+    public async Task GetListAsync()
+    {
+        var tenants = await _tenantRepository.GetListAsync();
+
+        tenants.ShouldNotBeNull();
+        tenants.Count.ShouldBe(3);
+    }
 }

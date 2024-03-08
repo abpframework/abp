@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Pages.Abp.MultiTenancy.ClientProxies;
@@ -55,6 +56,11 @@ public class MauiBlazorRemoteTenantStore : ITenantStore, ITransientDependency
         );
 
         return tenantConfiguration;
+    }
+
+    public Task<IReadOnlyList<TenantConfiguration>> GetListAsync(bool includeDetails = false)
+    {
+        return Task.FromResult<IReadOnlyList<TenantConfiguration>>(Array.Empty<TenantConfiguration>());
     }
 
     public TenantConfiguration? Find(string normalizedName)
