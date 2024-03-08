@@ -306,10 +306,12 @@ public abstract class AbpCrudPageBase<
 
     protected virtual async Task SearchEntitiesAsync()
     {
+        var currentPage = CurrentPage;
         CurrentPage = 1;
-
-        await GetEntitiesAsync();
-
+        if (currentPage == 1)
+        {
+            await GetEntitiesAsync();
+        }
         await InvokeAsync(StateHasChanged);
     }
 
@@ -596,12 +598,12 @@ public abstract class AbpCrudPageBase<
 
         await SetEntityActionsAsync();
     }
-    
+
     protected virtual ValueTask SetEntityActionsAsync()
     {
         return ValueTask.CompletedTask;
     }
-    
+
     private async ValueTask TrySetTableColumnsAsync()
     {
         if (IsDisposed)
@@ -614,7 +616,7 @@ public abstract class AbpCrudPageBase<
 
     protected virtual ValueTask SetTableColumnsAsync()
     {
-        
+
         return ValueTask.CompletedTask;
     }
 

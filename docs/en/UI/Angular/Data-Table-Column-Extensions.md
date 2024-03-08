@@ -220,6 +220,7 @@ type EntityPropOptions<R = any> = {
   permission?: string;
   visible?: PropPredicate<R>;
   columnVisible?: ColumnPredicate;
+  tooltip?: FormPropTooltip;
 };
 ```
 
@@ -234,6 +235,7 @@ As you see, passing `type` and `name` is enough to create an entity prop. Here i
 - **permission** is the permission context which will be used to decide if a column for this entity prop should be displayed to the user or not. (_default:_ `undefined`)
 - **visible** is a predicate that will be used to decide if the cell content of this entity prop should be displayed on the table or not based on the data record. (_default:_ `() => true`)
 - **columnVisible** is a predicate that will be used to decide if the column of this entity prop should be displayed on the table or not. (_default:_ `() => true`)
+- **tooltip** . is a tooltip for table column (_default:_ `undefined`)
 
 > Important Note: Do not use record in visibility predicates. First of all, the table header checks it too and the record will be `undefined`. Second, if some cells are displayed and others are not, the table will be broken. Use the `valueResolver` and render an empty cell when you need to hide a specific cell.
 >
@@ -272,6 +274,7 @@ const options: EntityPropOptions<IdentityUserDto> = {
     const sessionStateService = getInjected(SessionStateService);
     return !sessionStateService.getTenant()?.isAvailable; // hide this column when the tenant is available.
   },
+  tooltip: { text: 'AbpIdentity::EmailAddress_Tooltip', placement: 'top' }
 };
 
 const prop = new EntityProp(options);
