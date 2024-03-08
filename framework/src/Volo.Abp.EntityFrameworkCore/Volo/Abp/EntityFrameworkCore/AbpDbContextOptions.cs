@@ -21,9 +21,13 @@ public class AbpDbContextOptions
 
     internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
 
-    internal Dictionary<Type, List<KeyValuePair<int?, object>>> Conventions { get; }
-    
-    internal Dictionary<Type, List<KeyValuePair<int?, object>>> ModelBuilderActions { get; }
+    internal Action<DbContext, ModelConfigurationBuilder>? DefaultConventionAction { get; set; }
+
+    internal Dictionary<Type, List<object>> ConventionActions { get; }
+
+    internal Action<DbContext, ModelBuilder>? DefaultOnModelCreatingAction { get; set; }
+
+    internal Dictionary<Type, List<object>> OnModelCreatingActions { get; }
 
     public AbpDbContextOptions()
     {
@@ -31,8 +35,8 @@ public class AbpDbContextOptions
         PreConfigureActions = new Dictionary<Type, List<object>>();
         ConfigureActions = new Dictionary<Type, object>();
         DbContextReplacements = new Dictionary<MultiTenantDbContextType, Type>();
-        Conventions = new Dictionary<Type, List<KeyValuePair<int?, object>>>();
-        ModelBuilderActions = new Dictionary<Type, List<KeyValuePair<int?, object>>>();
+        ConventionActions = new Dictionary<Type, List<object>>();
+        OnModelCreatingActions = new Dictionary<Type, List<object>>();
     }
 
     public void PreConfigure([NotNull] Action<AbpDbContextConfigurationContext> action)
@@ -48,27 +52,55 @@ public class AbpDbContextOptions
 
         DefaultConfigureAction = action;
     }
-    
-    public void ConfigureConventions([NotNull] Action<ModelConfigurationBuilder, DbContext> action, Type? dbContextType = null, int? order = null)
+
+    public void ConfigureDefaultConvention([NotNull] Action<DbContext, ModelConfigurationBuilder> action)
     {
-        InternalConfigureConventions(action, dbContextType, order);
-    }
-    
-    public void ConfigureConventions<TDbContext>([NotNull] Action<ModelConfigurationBuilder, TDbContext> action, int? order = null)
-        where TDbContext : AbpDbContext<TDbContext>
-    {
-        InternalConfigureConventions(action, typeof(TDbContext), order);
+        Check.NotNull(action, nameof(action));
+
+        DefaultConventionAction = action;
     }
 
-    public void OnModelCreating([NotNull] Action<ModelBuilder, DbContext> action, Type? dbContextType = null, int? order = null)
-    {
-        InternalOnModelCreating(action, dbContextType, order);
-    }
-    
-    public void OnModelCreating<TDbContext>([NotNull] Action<ModelBuilder, TDbContext> action, int? order = null)
+    public void ConfigureConventions<TDbContext>([NotNull] Action<TDbContext, ModelConfigurationBuilder> action)
         where TDbContext : AbpDbContext<TDbContext>
     {
-        InternalOnModelCreating(action, typeof(TDbContext), order);
+        Check.NotNull(action, nameof(action));
+
+        var actions = ConventionActions.GetOrDefault(typeof(TDbContext));
+        if (actions == null)
+        {
+            ConventionActions[typeof(TDbContext)] = new List<object>
+            {
+                new Action<DbContext, ModelConfigurationBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder))
+            };
+            return;
+        }
+
+        actions.Add(action);
+    }
+
+    public void ConfigureDefaultOnModelCreating([NotNull] Action<DbContext, ModelBuilder> action)
+    {
+        Check.NotNull(action, nameof(action));
+
+        DefaultOnModelCreatingAction = action;
+    }
+
+    public void ConfigureOnModelCreating<TDbContext>([NotNull] Action<TDbContext, ModelBuilder> action)
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        Check.NotNull(action, nameof(action));
+
+        var actions = OnModelCreatingActions.GetOrDefault(typeof(TDbContext));
+        if (actions == null)
+        {
+            OnModelCreatingActions[typeof(TDbContext)] = new List<object>
+            {
+                new Action<DbContext, ModelBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder))
+            };
+            return;
+        }
+
+        actions.Add(action);
     }
 
     public bool IsConfiguredDefault()
@@ -130,31 +162,5 @@ public class AbpDbContextOptions
                 return replacementType;
             }
         }
-    }
-    
-    private void InternalConfigureConventions(object action, Type? dbContextType = null, int? order = null)
-    {
-        Check.NotNull(action, nameof(action));
-
-        var actions = Conventions.GetOrDefault(dbContextType ?? typeof(AbpDbContext<>));
-        if (actions == null)
-        {
-            Conventions[dbContextType ?? typeof(AbpDbContext<>)] = actions = new List<KeyValuePair<int?, object>>();
-        }
-        
-        actions.Add(new KeyValuePair<int?, object>(order, action));
-    }
-    
-    private void InternalOnModelCreating(object action, Type? dbContextType = null, int? order = null)
-    {
-        Check.NotNull(action, nameof(action));
-
-        var actions = ModelBuilderActions.GetOrDefault(dbContextType ?? typeof(AbpDbContext<>));
-        if (actions == null)
-        {
-            ModelBuilderActions[dbContextType ?? typeof(AbpDbContext<>)] = actions = new List<KeyValuePair<int?, object>>();
-        }
-        
-        actions.Add(new KeyValuePair<int?, object>(order, action));
     }
 }
