@@ -1105,6 +1105,7 @@
     "Characters": "Likovi",
     "Topic": "Tema",
     "SendUsEmail": "Pošaljite nam e-mail",
-    "ErrorExceptionMessage": "Pojavila se greška prilikom obrade Vašeg zahtjeva"
+    "ErrorExceptionMessage": "Pojavila se greška prilikom obrade Vašeg zahtjeva",
+    "WatchTakeCodeGeneration": "Pogledajte video \"Istražite potencijal generiranja koda: ABP Suite\"!"
   }
 }

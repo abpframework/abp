@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -77,6 +78,11 @@ public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
         }
 
         return tenantConfiguration?.Value;
+    }
+
+    public Task<IReadOnlyList<TenantConfiguration>> GetListAsync(bool includeDetails = false)
+    {
+        return Task.FromResult<IReadOnlyList<TenantConfiguration>>(Array.Empty<TenantConfiguration>());
     }
 
     public TenantConfiguration? Find(string normalizedName)

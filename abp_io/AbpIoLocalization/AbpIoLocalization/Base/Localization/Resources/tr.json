@@ -186,7 +186,13 @@
     "VideoCourses": "Başlangıç Videoları",
     "OrganizationOverview": "Organizasyon Detayı",
     "EmailPreferences": "E-posta Tercihleri",
-    "DoYouAgreePrivacyPolicy": "<i>Abone Ol</i> butonuna tıklayarak <a href=\"https://account.abp.io/Account/TermsConditions\">Şartlar</a> ve <a href=\"https://account.abp.io/Account/Privacy\">Gizlilik Politikası</a> kurallarımızı kabul etmiş olursunuz."
-
+    "DoYouAgreePrivacyPolicy": "<b>Abone Ol</b> butonuna tıklayarak <a href=\"https://account.abp.io/Account/TermsConditions\">Şartlar</a> ve <a href=\"https://account.abp.io/Account/Privacy\">Gizlilik Politikası</a> kurallarımızı kabul etmiş olursunuz.",
+    "PromotionalOffers": "Promosyon teklifleri",
+    "PromotionalOffersDefinition": "İndirimler, dönemsel kampanyalar, vb.",
+    "EventsDefinition": "Community Talks, Webinars, ABP .NET konferansları, vb.",
+    "ReleaseNotesDefinition": "ABP.IO Platform sürümleri, yeni ürünler, vb.",
+    "Newsletter": "Bülten",
+    "NewsletterDefinition": "Blog paylaşımları, topluluk haberleri, vb.",
+    "AbpConferenceDescription": "ABP Conference, .NET geliştiricilerinin gelişmesi ve toplulukla bağlantı kurması için düzenlenen sanal bir etkinliktir."
   }
 }

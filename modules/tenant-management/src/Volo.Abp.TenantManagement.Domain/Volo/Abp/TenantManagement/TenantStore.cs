@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Caching;
@@ -35,6 +36,12 @@ public class TenantStore : ITenantStore, ITransientDependency
     public virtual async Task<TenantConfiguration> FindAsync(Guid id)
     {
         return (await GetCacheItemAsync(id, null)).Value;
+    }
+
+    public virtual async Task<IReadOnlyList<TenantConfiguration>> GetListAsync(bool includeDetails = false)
+    {
+        return ObjectMapper.Map<List<Tenant>, List<TenantConfiguration>>(
+            await TenantRepository.GetListAsync(includeDetails));
     }
 
     [Obsolete("Use FindAsync method.")]
