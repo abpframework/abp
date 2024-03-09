@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Share cookies between subdomains is a common requirement in web development. For example, you have a website with multiple subdomains, and you want to share the login status between these subdomains.
+Share cookies between subdomains is a common requirement in web development. For example, you have a website with multiple subdomains, and you want to share the login status between these subdomains. Once a user logs in to one subdomain, the user should be logged in to all subdomains. 
 
-Once a user logs in to one subdomain, the user should be logged in to all subdomains. This article will show you how to achieve this in an ASP.NET Core application.
+This article will show you how to achieve this in an ASP.NET Core application.
 
 ## Implementation principle
 
@@ -77,6 +77,8 @@ Set-Cookie: .AspNetCore.Culture=c%3Den%7Cuic%3Den; expires=Mon, 09 Mar 2026 02:0
 ```
 
 The subdomains can share the `.AspNetCore.Culture` cookie now.
+
+In another community article we use same middleware to [fix the Chrome login issue for the IdentityServer4](https://community.abp.io/posts/patch-for-chrome-login-issue-identityserver4-samesite-cookie-problem-weypwp3n)
 
 ## Summary
 
