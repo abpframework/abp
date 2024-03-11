@@ -8,33 +8,38 @@
 @inject IStringLocalizer<AbpUiResource> UiLocalizer
 @inject IOptions<AuthenticationOptions> AuthenticationOptions
 @inject IOptions<AbpAspNetCoreComponentsWebOptions> AbpAspNetCoreComponentsWebOptions
-<AuthorizeView>
-    <Authorized>
-        <Dropdown RightAligned="true">
-            <DropdownToggle Color="Color.Default">
-                @if (CurrentTenant.Name != null)
-                {
-                    <span><i>@CurrentTenant.Name</i>\@CurrentUser.UserName</span>
-                }
-                else
-                {
-                    <span>@CurrentUser.UserName</span>
-                }
-            </DropdownToggle>
-            <DropdownMenu>
-                @if (Menu != null)
-                {
-                    @foreach (var menuItem in Menu.Items)
-                    {
-                        <DropdownItem Clicked="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</DropdownItem>
-                    }
-                }
-                <DropdownDivider />
-                <DropdownItem Clicked="BeginSignOut">@UiLocalizer["Logout"]</DropdownItem>
-            </DropdownMenu>
-        </Dropdown>
-    </Authorized>
-    <NotAuthorized>
-        <a class="nav-link" href="@AuthenticationOptions.Value.LoginUrl">@UiLocalizer["Login"]</a>
-    </NotAuthorized>
-</AuthorizeView>
+
+    <CascadingAuthenticationState>
+
+        <AuthorizeView>
+            <Authorized>
+                <Dropdown RightAligned="true">
+                    <DropdownToggle Color="Color.Default">
+                        @if (CurrentTenant.Name != null)
+                        {
+                            <span><i>@CurrentTenant.Name</i>\@CurrentUser.UserName</span>
+                        }
+                        else
+                        {
+                            <span>@CurrentUser.UserName</span>
+                        }
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        @if (Menu != null)
+                        {
+                            @foreach (var menuItem in Menu.Items)
+                            {
+                                <DropdownItem Clicked="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</DropdownItem>
+                            }
+                        }
+                        <DropdownDivider />
+                        <DropdownItem Clicked="BeginSignOut">@UiLocalizer["Logout"]</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </Authorized>
+            <NotAuthorized>
+                <a class="nav-link" href="@AuthenticationOptions.Value.LoginUrl">@UiLocalizer["Login"]</a>
+            </NotAuthorized>
+        </AuthorizeView>
+    </CascadingAuthenticationState>
+
