@@ -3,7 +3,6 @@
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Http
 @using Microsoft.Extensions.Hosting
-@using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
 @using Volo.Abp.AspNetCore.Components.Web.Theming.Bundling
 @using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp
 @inject IHostEnvironment Env
@@ -20,16 +19,23 @@
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="/" />
 
-    <AbpStyles BundleName="@BlazorLeptonXLiteThemeBundles.Styles.Global" WebAssemblyStyleFiles="GlobalStyles" @rendermode="InteractiveAuto" />
+    @* TODO: Use single common bundle for Blazor WebApp (client-server)*@
+    @foreach (var style in GlobalStyles)
+    {
+        <link href="@style" rel="stylesheet" />
+    }
 
     <HeadOutlet @rendermode="InteractiveAuto" />
 
 </head>
 <body>
 
-    <Routes @rendermode="InteractiveAuto" />
+    <Routes />
 
-    <AbpScripts BundleName="@BlazorLeptonXLiteThemeBundles.Scripts.Global" WebAssemblyScriptFiles="GlobalScripts" @rendermode="InteractiveAuto" />
+    @foreach (var script in GlobalScripts)
+    {
+        <script src="@script"></script>
+    }
 
     <script src="_framework/blazor.web.js"></script>
 
@@ -59,37 +65,7 @@
 
     private List<string> GlobalScripts =>
     [
-        "global.js"
+        "global.js",
+        "cookie-test.js"
     ];
-
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
-
-    [Inject]
-    private PersistentComponentState PersistentComponentState { get; set; }
-
-    private string? Token { get; set; } = default!;
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (HttpContext.User?.Identity?.IsAuthenticated == true)
-        {
-            Token = await HttpContext.GetTokenAsync("access_token");
-        }
-
-        PersistentComponentState.RegisterOnPersisting(OnPersistingAsync, RenderMode.InteractiveWebAssembly);
-    }
-
-    async Task OnPersistingAsync()
-    {
-        if (!Token.IsNullOrWhiteSpace())
-        {
-            PersistentComponentState.PersistAsJson(PersistentAccessToken.Key, new PersistentAccessToken
-            {
-                AccessToken = Token
-            });
-        }
-
-        await Task.CompletedTask;
-    }
 }
