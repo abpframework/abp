@@ -482,3 +482,4 @@ public class MyCustomMongoDbBulkOperationProvider
 
 * [Entities](Entities.md)
 * [Repositories](Repositories.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/abp-mongodb)

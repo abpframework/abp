@@ -338,3 +338,6 @@ Here, a list of the options you can configure:
 * `SendExceptionsDetailsToClients` (default: `false`): You can enable or disable sending exception details to the client.
 * `SendStackTraceToClients` (default: `true`): You can enable or disable sending the stack trace of exception to the client. If you want to send the stack trace to the client, you must set both `SendStackTraceToClients` and `SendExceptionsDetailsToClients` options to `true` otherwise, the stack trace will not be sent to the client.
 
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/exception-handling)

@@ -141,3 +141,6 @@ Used to get list of all **available languages** in the application. An example v
 ]
 ````
 
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/localization)

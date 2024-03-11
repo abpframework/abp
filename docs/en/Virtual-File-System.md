@@ -182,3 +182,7 @@ So, if you need to replace a file of a module, just create the file in the exact
 ### Physical Files
 
 Physical files always override the virtual files. That means if you put a file under the `/wwwroot/my-folder/my-file.css`, it will override the file in the same location of the virtual file system. So, you need to know the file paths defined in the modules to override them.
+
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/virtual-file-system)

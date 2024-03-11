@@ -473,3 +473,4 @@ Configure<AbpClaimsServiceOptions>(options =>
 * [Permission Management Module](Modules/Permission-Management.md)
 * [ASP.NET Core MVC / Razor Pages JavaScript Auth API](UI/AspNetCore/JavaScript-API/Auth.md)
 * [Permission Management in Angular UI](UI/Angular/Permission-Management.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/authorization)

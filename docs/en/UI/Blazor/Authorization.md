@@ -72,4 +72,4 @@ There are some useful extension methods for the `IAuthorizationService`:
 * [Authorization](../../Authorization.md) (server side)
 * [Blazor Security](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/) (Microsoft documentation)
 * [ICurrentUser Service](CurrentUser.md)
-
+* [Video tutorial](https://abp.io/video-courses/essentials/authorization)
