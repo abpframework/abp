@@ -104,3 +104,7 @@ The server-side is similar to the solution described in the *Solution Structure*
 The client-side application consumes the HTTP APIs as mentioned. You can see the folder structure of the Angular project shown below:
 
 ![](../images/single-layer-angular-folder-structure.png)
+
+  ## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/app-template)
