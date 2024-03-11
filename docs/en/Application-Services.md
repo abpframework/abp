@@ -565,4 +565,4 @@ Lifetime of application services are [transient](Dependency-Injection.md) and th
 ## See Also
 
 * [Video tutorial Part-1](https://abp.io/video-courses/essentials/application-services-part-1)
-* [Video tutorial Part-1](https://abp.io/video-courses/essentials/application-services-part-2)
+* [Video tutorial Part-2](https://abp.io/video-courses/essentials/application-services-part-2)

@@ -175,3 +175,7 @@ export class OAuthErrorFilterService extends AbstractAuthErrorFilter<
 }
 
 ```
+
+## See Also
+
+* [Video tutorials](https://abp.io/video-courses/essentials/authorization)

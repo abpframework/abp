@@ -392,3 +392,4 @@ Which locale files you add to `webpackInclude` magic comment, they will be inclu
 ## See Also
 
 - [Localization in ASP.NET Core](../../Localization.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/localization)
