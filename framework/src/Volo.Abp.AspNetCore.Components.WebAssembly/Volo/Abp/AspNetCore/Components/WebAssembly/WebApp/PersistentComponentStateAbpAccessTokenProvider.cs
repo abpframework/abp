@@ -1,32 +1,27 @@
 using System.Threading.Tasks;
+using System;
 using Microsoft.AspNetCore.Components;
 using Volo.Abp.Http.Client.Authentication;
+using Microsoft.JSInterop;
+using System.Reflection.Metadata;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
 
 public class PersistentComponentStateAbpAccessTokenProvider : IAbpAccessTokenProvider
 {
-    private string? AccessToken { get; set; }
+    private readonly IJSRuntime jSRuntime;
 
-    private readonly PersistentComponentState _persistentComponentState;
-
-    public PersistentComponentStateAbpAccessTokenProvider(PersistentComponentState persistentComponentState)
+    public PersistentComponentStateAbpAccessTokenProvider(IJSRuntime jSRuntime)
     {
-        _persistentComponentState = persistentComponentState;
-        AccessToken = null;
+        this.jSRuntime = jSRuntime;
     }
 
-    public virtual Task<string?> GetTokenAsync()
+    public virtual async Task<string?> GetTokenAsync()
     {
-        if (AccessToken != null)
-        {
-            return Task.FromResult<string?>(AccessToken);
-        }
+        var token = await jSRuntime.InvokeAsync<string>("getCookie", "access_token"); // TODO: localstorage.getItem('access_token')
 
-        AccessToken = _persistentComponentState.TryTakeFromJson<PersistentAccessToken>(PersistentAccessToken.Key, out var token)
-            ? token?.AccessToken
-            : null;
+        Console.WriteLine("PersistentComponentStateAbpAccessTokenProvider.GetTokenAsync: " + token);
 
-        return Task.FromResult(AccessToken);
+        return token;
     }
 }
