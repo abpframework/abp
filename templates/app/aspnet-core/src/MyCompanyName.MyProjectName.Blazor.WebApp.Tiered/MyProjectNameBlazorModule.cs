@@ -23,9 +23,7 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
-using Volo.Abp.AspNetCore.Components.Server;
-using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
-using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
+using Volo.Abp.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -33,8 +31,6 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Serilog;
@@ -44,17 +40,24 @@ using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Http.Client.IdentityModel.Web;
-using Volo.Abp.Identity.Blazor.Server;
+using Volo.Abp.Identity.Blazor;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.SettingManagement.Blazor.Server;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.TenantManagement.Blazor.Server;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.TenantManagement.Blazor;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.Identity.Blazor;
+using Volo.Abp.SettingManagement.Blazor;
+using Volo.Abp.AspNetCore.Components.Server;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
+using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 
 namespace MyCompanyName.MyProjectName.Blazor.WebApp.Tiered;
 
@@ -65,14 +68,13 @@ namespace MyCompanyName.MyProjectName.Blazor.WebApp.Tiered;
     typeof(AbpAspNetCoreMvcClientModule),
     typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
     typeof(AbpHttpClientIdentityModelWebModule),
-    typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule),
-    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpIdentityBlazorServerModule),
-    typeof(AbpTenantManagementBlazorServerModule),
-    typeof(AbpSettingManagementBlazorServerModule)
+    typeof(AbpIdentityBlazorModule),
+    typeof(AbpTenantManagementBlazorModule),
+    typeof(AbpSettingManagementBlazorModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule)
    )]
 public class MyProjectNameBlazorModule : AbpModule
 {
@@ -104,6 +106,7 @@ public class MyProjectNameBlazorModule : AbpModule
             .AddInteractiveServerComponents()
             .AddInteractiveWebAssemblyComponents();
 
+        context.Services.AddScoped<WebAppAccessTokenStore>();
         ConfigureUrls(configuration);
         ConfigureCache();
         ConfigureBundles();
@@ -141,21 +144,10 @@ public class MyProjectNameBlazorModule : AbpModule
         {
             // MVC UI
             options.StyleBundles.Configure(
-                LeptonXLiteThemeBundles.Styles.Global,
+                BasicThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
-                }
-            );
-
-            //BLAZOR UI
-            options.StyleBundles.Configure(
-                BlazorLeptonXLiteThemeBundles.Styles.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/blazor-global-styles.css");
-                    //You can remove the following line if you don't use Blazor CSS isolation for components
-                    bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client.styles.css");
                 }
             );
         });
@@ -380,6 +372,19 @@ public class MyProjectNameBlazorModule : AbpModule
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
         });
         app.UseAbpSerilogEnrichers();
+
+        app.Use(async (httpContext, next) =>
+        {
+            var token = await httpContext.GetTokenAsync("access_token");
+
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                httpContext.Response.Cookies.Append("access_token", token);
+            }
+
+            await next();
+        });
+
         app.UseConfiguredEndpoints(builder =>
         {
             builder.MapRazorComponents<App>()
