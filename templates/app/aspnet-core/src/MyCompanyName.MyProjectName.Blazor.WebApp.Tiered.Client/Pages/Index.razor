@@ -2,6 +2,10 @@
 @using Volo.Abp.MultiTenancy
 @inherits MyProjectNameComponentBase
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject PersistentComponentState ApplicationState
+
+@rendermode RenderMode.InteractiveAuto
+
 <div class="container">
     <div class="p-5 text-center">
         <Badge Color="Color.Success" class="mb-4">
