@@ -84,7 +84,7 @@
     "DisplayName:IsExpiredDeleterEnabled": "Enable expired deleter",
     "Description:IsExpiredDeleterEnabled": "Toggle to enable or disable the automatic deletion of expired items.",
     "DisplayName:ExpiredDeleterPeriod": "Expired item deletion period",
-    "Description:ExpiredDeleterPeriod": "Set the period after which expired items will be automatically deleted.",
+    "Description:ExpiredDeleterPeriod": "Set the period of days after which expired items will be automatically deleted.",
     "InvalidAuditLogDeletionSettings": "Invalid audit log deletion settings. If deletion is enabled, the period should be greater than 0 days.",
     "AuditLogSettingsGeneral": "General",
     "AuditLogSettingsGlobal": "Global",
