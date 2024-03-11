@@ -459,3 +459,6 @@ If you want to configure social/external logins for your application, please fol
 
 - [The getting started document](../Getting-Started.md) explains how to create a new application in a few minutes.
 - [The application development tutorial](../Tutorials/Part-1.md) explains step by step application development.
+
+## See Also
+* [Video tutorial](https://abp.io/video-courses/essentials/app-template)

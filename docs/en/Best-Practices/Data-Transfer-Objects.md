@@ -7,3 +7,7 @@
 * **Do** use **data annotations** for **validation** on the properties of DTOs those are inputs of the service.
 * **Do** not add any **logic** into DTOs except implementing `IValidatableObject` when necessary.
 * **Do** mark all DTOs as **[Serializable]** since they are already serializable and developers may want to binary serialize them.
+
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/data-transfer-objects)

@@ -155,3 +155,7 @@ public class IssueLabel : Entity
 
 * Effective Aggregate Design by Vaughn Vernon
   http://dddcommunity.org/library/vernon_2011
+
+  ## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/entities)

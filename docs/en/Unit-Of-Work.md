@@ -354,3 +354,7 @@ app.UseUnitOfWork();
 app.UseConfiguredEndpoints();
 ````
 
+## See Also
+
+* [Video tutorial Code](https://abp.io/video-courses/essentials/unit-of-work-code)
+* [Video tutorial Presentation](https://abp.io/video-courses/essentials/unit-of-work-presentation)

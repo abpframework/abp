@@ -507,3 +507,4 @@ Startup templates come with Autofac installed. See [Autofac integration](Autofac
 ## See Also
 
 * [ASP.NET Core Dependency Injection Best Practices, Tips & Tricks](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96)
+* [Video tutorial](https://abp.io/video-courses/essentials/dependency-injection)

@@ -76,3 +76,4 @@ Format arguments can be passed after the localization key. If your message is `H
 ## See Also
 
 * [Localization](../../Localization.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/localization)

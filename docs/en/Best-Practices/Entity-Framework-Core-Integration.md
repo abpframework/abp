@@ -191,3 +191,7 @@ public class AbpIdentityEntityFrameworkCoreModule : AbpModule
     }
 }
 ````
+
+  ## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/abp-ef-core)

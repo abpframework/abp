@@ -598,3 +598,4 @@ abp install-libs [options]
 ## See Also
 
 * [Examples for the new command](CLI-New-Command-Samples.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/abp-cli)

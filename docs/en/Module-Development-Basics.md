@@ -189,3 +189,6 @@ There are **two types of modules.** They don't have any structural difference bu
 
 - **Framework modules**: These are **core modules of the framework** like caching, emailing, theming, security, serialization, validation, EF Core integration, MongoDB integration... etc. They do not have application/business functionalities but makes your daily development easier by providing common infrastructure, integration and abstractions.
 - **Application modules**: These modules implement **specific application/business functionalities** like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components. See [pre-built application modules](Modules/Index.md).
+
+## See Also
+* [Video tutorial](https://abp.io/video-courses/essentials/modularity)
