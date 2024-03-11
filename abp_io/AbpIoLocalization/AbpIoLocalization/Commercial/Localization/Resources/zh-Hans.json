@@ -405,7 +405,7 @@
     "RemoveCurrentUserFromOrganizationWarningMessage": "你将从自己的组织中除名。你将不再能够管理这个组织，你确认吗？",
     "RenewExistingOrganizationOrCreateNewOneMessage": "您可以通过点击下面的 \"立即延期 \"按钮为您的组织续签许可证，这样您就可以将许可证到期日延长一年。如果您继续结账，您将拥有一个新的组织。您想继续使用新机构吗？",
     "PurchaseTrialOrganizationOrCreateNewOneMessage": "您拥有试用许可证。要购买试用许可证，请单击 \"立即购买 \"按钮。如果继续结账，您将拥有一个新的组织。您想继续使用新机构吗？",
-    "ExtendNow": "立即扩展",
+    "ExtendNow": "延长 / 续订",
     "CreateNewOrganization": "创建新组织",
     "RenewLicenseEarly": "如果我提前更新执照，我可以获得全年的执照吗？",
     "RenewLicenseEarylExplanation": "如果您在许可证到期日之前更新许可证，许可证到期日将增加 1 年。例如，如果您的许可证到期日为 {0}-06-06，而您在 {0}-01-01 续费，则新的许可证到期日为 {1}-06-06。",

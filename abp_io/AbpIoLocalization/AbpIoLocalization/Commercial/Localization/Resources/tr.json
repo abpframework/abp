@@ -390,7 +390,7 @@
     "CommercialNewsletterConfirmationMessage": "<a href=\"https://commercial.abp.io/TermsConditions\">Şartlar, Koşullar</a> ve <a href=\"https://commercial.abp.io/Privacy\">Gizlilik politikasını</a> kabul ediyorum.",
     "RemoveCurrentUserFromOrganizationWarningMessage": "Organizasyondan kendinizi kaldırıyorsunuz. Artık bu organizasyonu yönetemeyeceksiniz, onaylıyor musunuz? ",
     "RenewExistingOrganizationOrCreateNewOneMessage": "Aşağıdaki \"Şimdi Uzat\" buton(lar)una tıklayarak organizasyon(lar)ınızın lisansını yenileyebilir ve böylece lisans geçerlilik süresini 1 yıl uzatabilirsiniz. Ödemeye devam ederseniz, yeni bir organizasyonunuz olacak. Yeni bir organizasyonla devam etmek istiyor musunuz? ",
-    "ExtendNow": "Şimdi Uzat",
+    "ExtendNow": "Uzat / Yenile",
     "ContinueWithNewOrganization": "Yeni bir organizasyon ile devam et",
     "Owner": "sahip",
     "AddNewOwner": "Yeni sahip ekle",

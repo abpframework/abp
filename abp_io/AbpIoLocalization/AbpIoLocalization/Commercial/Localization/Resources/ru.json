@@ -406,7 +406,7 @@
     "RemoveCurrentUserFromOrganizationWarningMessage": "Вы удаляете себя из своей организации. ",
     "RenewExistingOrganizationOrCreateNewOneMessage": "Вы можете продлить лицензию вашей организации(й), нажав кнопку(и) «Продлить сейчас» ниже, и, таким образом, вы можете продлить срок действия лицензии на 1 год. ",
     "PurchaseTrialOrganizationOrCreateNewOneMessage": "У вас есть пробная лицензия. ",
-    "ExtendNow": "Продлить сейчас",
+    "ExtendNow": "Продлить/обновить",
     "CreateNewOrganization": "Создать новую организацию",
     "RenewLicenseEarly": "Если я продлю лицензию досрочно, получу ли я полный год?",
     "RenewLicenseEarylExplanation": "Если вы продлите лицензию до истечения срока ее действия, к дате истечения срока действия лицензии будет добавлен 1 год. ",
