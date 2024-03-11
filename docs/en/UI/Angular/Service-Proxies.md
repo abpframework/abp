@@ -175,3 +175,7 @@ yarn nx g @abp/nx.generators:generate-proxy
 ### Known Limitations
 
 When you run a project on Visual Studio using IIS Express as the web server, there will be no remote access to your endpoints. This is the default behavior of IIS Express since it explicitly protects you from the security risks of running over the network. However, that will cause the proxy generator to fail because it needs a response from the `/api/abp/api-definition` endpoint. You may serve your endpoints via Kestrel to avoid this. Running `dotnet run` in your command line (at your project folder) will do that for you.
+
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/generating-client-proxies)
