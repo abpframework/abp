@@ -89,6 +89,6 @@
     "AuditLogSettingsGeneral": "General",
     "AuditLogSettingsGlobal": "Global",
     "DisplayName:IsPeriodicDeleterEnabled": "Enable periodic deleter",
-    "Description:IsPeriodicDeleterEnabled": "Toggle to enable or disable the periodically deletion of old items."
+    "Description:IsPeriodicDeleterEnabled": "Toggle to enable the periodic deletion worker. If this option disabled the periodic deleter will not work."
   }
 }
