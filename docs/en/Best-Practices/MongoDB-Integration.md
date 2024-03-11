@@ -149,3 +149,7 @@ public class AbpIdentityMongoDbModule : AbpModule
 ```
 
 Notice that this module class also calls the static `BsonClassMap` configuration method defined above.
+
+  ## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/abp-mongodb)
