@@ -20,8 +20,6 @@ using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Components.Server;
-using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
-using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -29,8 +27,6 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -45,6 +41,10 @@ using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
+using Volo.Abp.AspNetCore.Components.Server.BasicTheme;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using  Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling;
 
 namespace MyCompanyName.MyProjectName.Blazor.WebApp;
 
@@ -56,8 +56,8 @@ namespace MyCompanyName.MyProjectName.Blazor.WebApp;
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountWebOpenIddictModule),
-    typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule),
-    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpIdentityBlazorServerModule),
     typeof(AbpTenantManagementBlazorServerModule),
     typeof(AbpSettingManagementBlazorServerModule)
@@ -156,7 +156,7 @@ public class MyProjectNameBlazorModule : AbpModule
         {
             // MVC UI
             options.StyleBundles.Configure(
-                LeptonXLiteThemeBundles.Styles.Global,
+                BasicThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
@@ -165,7 +165,7 @@ public class MyProjectNameBlazorModule : AbpModule
 
             //BLAZOR UI
             options.StyleBundles.Configure(
-                BlazorLeptonXLiteThemeBundles.Styles.Global,
+                BlazorBasicThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/blazor-global-styles.css");
