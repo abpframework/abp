@@ -1,8 +1,55 @@
 # HTTP Error Handling
 
-When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./HTTP-Error-Reporter-Service), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
+## Configurations for Errors
+ABP offers a configurations for errors handling. You can set these configuration in **`ThemeSharedModule.forRoot()`** method in app.module.ts
+
+See the configuration interface;
+
+```ts
+export type ErrorScreenErrorCodes = 0 | 401 | 403 | 404 | 500;
+
+export interface HttpErrorConfig {
+  skipHandledErrorCodes?: ErrorScreenErrorCodes[] | number[];  // 
+  errorScreen?: {
+    component: Type<any>;
+    forWhichErrors?: ErrorScreenErrorCodes[];
+    hideCloseIcon?: boolean;
+  };
+}
+```
+
+- **`ErrorScreenErrorCodes`** The error codes that you can pass to **`skipHandledErrorCodes`** and **`forWhichErrors`**.
+- **`skipHandledErrorCodes`** Error codes those you don't want to handle it.
+- **`errorScreen`** The screen that you want to show when a route error occurs.
+  - **`component`** Component that you want to show.
+  - **`forWhichErrors`** same as **`ErrorScreenErrorCodes`**
+  - **`hideCloseIcon`** Hides close icon in default ABP component.
+
+### Example Usage
+```ts
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { MyCustomRouteErrorComponent } from './my-custom-route.component';
+
+@NgModule({
+  imports: [
+    ThemeSharedModule.forRoot({
+      httpErrorConfig: {
+        skipHandledErrorCodes: [403],
+        errorScreen: {
+          forWhichErrors: [404],
+          component: MyCustomRouteErrorComponent,
+          hideCloseIcon: false
+        }
+      }
+    }),
+    ...
+  ],
+})
+export class AppModule {}
+```
 
 ## Custom HTTP Error Handler
+When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./HTTP-Error-Reporter-Service), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
 
 ### Function Method `Deprecated`
 
