@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCompanyName.MyProjectName.EntityFrameworkCore;
+using MyCompanyName.MyProjectName.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
 {
-    [DbContext(typeof(AuthServerDbContext))]
-    [Migration("20240307063923_Initial")]
+    [DbContext(typeof(MyProjectNameDbContext))]
+    [Migration("20240312033651_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
