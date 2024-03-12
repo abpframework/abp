@@ -23,7 +23,7 @@ const LEPTON_X_PACKAGE_NAMES = [
   "@abp/aspnetcore.components.server.leptonxlitetheme",
 ];
 
-function validteVersion(targetVersion) {
+function validateVersion(targetVersion) {
   if (!targetVersion) {
     console.log("\x1b[31m", "Error: lepton-x targetVersion is not defined");
     process.exit(1);
@@ -44,7 +44,7 @@ function initCommander() {
 
   const { targetVersion } = program.opts();
 
-  validteVersion(targetVersion);
+  validateVersion(targetVersion);
 
   LEPTON_X_PACKAGE_NAMES.forEach((packageName) => {
     const command = `yarn change-package-version -n ${packageName} -v ${targetVersion}`;
