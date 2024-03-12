@@ -562,3 +562,7 @@ namespace MyProject.Test
 
 Lifetime of application services are [transient](Dependency-Injection.md) and they are automatically registered to the dependency injection system.
 
+## See Also
+
+* [Video tutorial Part-1](https://abp.io/video-courses/essentials/application-services-part-1)
+* [Video tutorial Part-2](https://abp.io/video-courses/essentials/application-services-part-2)

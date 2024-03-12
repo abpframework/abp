@@ -210,7 +210,7 @@
     "discountForYears": "{0}% de remise pendant {1} an(s)",
     "WhatHappensWhenLicenseEndsExplanation8": "Luomiasi ABP-projekteja ei tallenneta palvelimillemme. Siksi on sinun vastuullasi säilyttää lataamasi lähdekoodi. Kun lisenssisi vanhenee, luotua ABP-projektin lähdekoodia ei ole mahdollista saada.",
     "WhenShouldIRenewMyLicense": "Milloin minun pitäisi uusia lisenssini?",
-    "WhenShouldIRenewMyLicenseExplanation": "Jos uusit lisenssisi <strong>1 kuukauden</strong> kuluessa lisenssin vanhenemisesta, seuraavat alennukset sovelletaan: Team License {0} ; Business License {1} ; Enterprise License {2} ; . Jos uusit lisenssisi <strong>1 kuukauden</strong> lisenssin päättymispäivän jälkeen, uusimishinta on sama kuin lisenssin ostohinta, eikä uusimisesta saa alennusta.",
+    "WhenShouldIRenewMyLicenseExplanation": "Jos uusit lisenssisi <strong>{3} kuukauden</strong> kuluessa lisenssin vanhenemisesta, seuraavat alennukset sovelletaan: Team License {0} ; Business License {1} ; Enterprise License {2} ; . Jos uusit lisenssisi <strong>{3} kuukauden</strong> lisenssin päättymispäivän jälkeen, uusimishinta on sama kuin lisenssin ostohinta, eikä uusimisesta saa alennusta.",
     "TrialPlan": "Onko sinulla kokeilusuunnitelma?",
     "TrialPlanExplanation": "Ei, ABP Commercialille ei ole kokeiluversiota. Voit tarkistaa yhteisön versiosta ymmärtääksesi koodin laadun ja lähestymistavat. Tarjoamme myös 30 päivän rahat takaisin -takuun Team-lisenssille ilman kysymyksiä! Voit pyytää hyvitystä ensimmäisten 30 päivän sisällä. Tarjoamme 60 %:n hyvityksen 30 päivän kuluessa Business- ja Enterprise-lisensseistä. Tämä johtuu siitä, että Business- ja Enterprise-lisenssit sisältävät kaikkien moduulien ja teemojen täyden lähdekoodin.",
     "DoYouAcceptBankWireTransfer": "Hyväksytkö pankkisiirron?",
@@ -849,6 +849,7 @@
     "Characters": "Hahmot",
     "Topic": "Aihe",
     "SendUsEmail": "Lähetä meille sähköpostia",
-    "ErrorExceptionMessage": "Virhe pyynnön käsittelyn yhteydessä"
+    "ErrorExceptionMessage": "Virhe pyynnön käsittelyn yhteydessä",
+    "WatchTakeCodeGeneration": "Katso \"Tutki koodin luomisen potentiaalia: ABP Suite\" -video!"
   }
 }

@@ -139,6 +139,30 @@ Configure<AbpDbContextOptions>(options =>
 });
 ````
 
+Add actions for the `ConfigureConventions` and `OnModelCreating` methods of the `DbContext` as shown below:
+
+````csharp
+options.DefaultConventionAction = (dbContext, builder) =>
+{
+    // This action is called for ConfigureConventions method of all DbContexts.
+};
+
+options.ConfigureConventions<YourDbContext>((dbContext, builder) =>
+{
+    // This action is called for ConfigureConventions method of specific DbContext.
+});
+
+options.DefaultOnModelCreatingAction = (dbContext, builder) =>
+{
+    // This action is called for OnModelCreating method of all DbContexts.
+};
+
+options.ConfigureOnModelCreating<YourDbContext>((dbContext, builder) =>
+{
+    // This action is called for OnModelCreating method of specific DbContext.
+});
+````
+
 If you have a single `DbContext` or you have multiple `DbContext`s but want to use the same DBMS and configuration for all, you can leave it as is. However, if you need to configure a different DBMS or customize the configuration for a specific `DbContext`, you can specify it as shown below:
 
 ````csharp
@@ -936,3 +960,4 @@ public class MyCustomEfCoreBulkOperationProvider
 
 * [Entities](Entities.md)
 * [Repositories](Repositories.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/abp-ef-core)

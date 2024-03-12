@@ -214,3 +214,6 @@ services.Configure<AbpAspNetCoreMvcOptions>(options =>
     options.ControllersToRemove.Add(typeof(AbpLanguagesController));
 });
 ````
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/auto-api-controllers)
