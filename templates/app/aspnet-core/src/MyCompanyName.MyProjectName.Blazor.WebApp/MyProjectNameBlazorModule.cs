@@ -44,7 +44,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Components.Server.BasicTheme;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using  Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling;
+using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling;
 
 namespace MyCompanyName.MyProjectName.Blazor.WebApp;
 

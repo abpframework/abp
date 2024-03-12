@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client.Menus;
 using Volo.Abp.AspNetCore.Components.Server;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
-using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme;
 using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Blazor.WebAssembly;
@@ -17,13 +16,14 @@ using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Blazor.WebAssembly;
 using Volo.Abp.TenantManagement.Blazor.WebAssembly;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
 
 namespace MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client;
 
 [DependsOn(
     typeof(AbpAutofacWebAssemblyModule),
     typeof(MyProjectNameHttpApiClientModule),
-    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
     typeof(AbpIdentityBlazorWebAssemblyModule),
     typeof(AbpTenantManagementBlazorWebAssemblyModule),
     typeof(AbpSettingManagementBlazorWebAssemblyModule)
