@@ -1,31 +1,9 @@
 # HTTP Error Handling
 
-## Configurations for Errors
-ABP offers a configurations for errors handling. You can set these configuration in **`ThemeSharedModule.forRoot()`** method in app.module.ts
+### Error Configurations
 
-See the configuration interface;
+ABP offers a configurations for errors handling like below
 
-```ts
-export type ErrorScreenErrorCodes = 0 | 401 | 403 | 404 | 500;
-
-export interface HttpErrorConfig {
-  skipHandledErrorCodes?: ErrorScreenErrorCodes[] | number[];  // 
-  errorScreen?: {
-    component: Type<any>;
-    forWhichErrors?: ErrorScreenErrorCodes[];
-    hideCloseIcon?: boolean;
-  };
-}
-```
-
-- **`ErrorScreenErrorCodes`** The error codes that you can pass to **`skipHandledErrorCodes`** and **`forWhichErrors`**.
-- **`skipHandledErrorCodes`** Error codes those you don't want to handle it.
-- **`errorScreen`** The screen that you want to show when a route error occurs.
-  - **`component`** Component that you want to show.
-  - **`forWhichErrors`** same as **`ErrorScreenErrorCodes`**
-  - **`hideCloseIcon`** Hides close icon in default ABP component.
-
-### Example Usage
 ```ts
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { MyCustomRouteErrorComponent } from './my-custom-route.component';
@@ -37,7 +15,7 @@ import { MyCustomRouteErrorComponent } from './my-custom-route.component';
         skipHandledErrorCodes: [403],
         errorScreen: {
           forWhichErrors: [404],
-          component: MyCustomRouteErrorComponent,
+          component: CustomErrorComponent,
           hideCloseIcon: false
         }
       }
@@ -47,6 +25,13 @@ import { MyCustomRouteErrorComponent } from './my-custom-route.component';
 })
 export class AppModule {}
 ```
+
+- `ErrorScreenErrorCodes` the error codes that you can pass to `skipHandledErrorCodes` and `forWhichErrors`.
+- `skipHandledErrorCodes` the error codes those you don't want to handle it.
+- `errorScreen` the screen that you want to show when a route error occurs.
+  - `component` component that you want to show.
+  - `forWhichErrors` same as `ErrorScreenErrorCodes`
+  - `hideCloseIcon` hides close icon in default ABP component.
 
 ## Custom HTTP Error Handler
 When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./HTTP-Error-Reporter-Service), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
