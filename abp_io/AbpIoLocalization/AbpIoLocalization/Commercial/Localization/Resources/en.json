@@ -1202,6 +1202,9 @@
     "Topic": "Topic",
     "SendUsEmail": "Send us email",
     "ErrorExceptionMessage": "An error occurred while processing your request",
-    "WatchTakeCodeGeneration": "Watch the \"Explore the Potential of Code Generation: ABP Suite\" Video!"
+    "WatchTakeCodeGeneration": "Watch the \"Explore the Potential of Code Generation: ABP Suite\" Video!",
+    "StartupTemplatesUser": "User",
+    "StartupSingleSignOn": "Single Sign On",
+    "Application{0}": "Application {0}"
   }
 }

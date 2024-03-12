@@ -25,7 +25,7 @@
     "MostRead": "En çok okunan",
     "Latest": "En sonuncu",
     "ContributeAbpCommunity": "ABP Topluluğuna Katkıda Bulunun",
-    "SubmitYourPost": "Gönderinizi Gönderin",
+    "SubmitYourPost": "Gönderinizi Paylaşın",
     "ContributionGuide": "Katkı Kılavuzu",
     "BugReport": "Hata raporu",
     "SeeAllPosts": "Tüm Gönderileri Gör",
@@ -211,6 +211,15 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> destekleniyor.",
     "Preview": "Ön izleme",
     "VisitPage": "Sayfayı ziyaret et",
-    "VisitVideoCourseDescription": "ABP Framework temellerini öğrenmek için ABP Başlangıç Video kurslarına göz atın."
+    "VisitVideoCourseDescription": "ABP Framework temellerini öğrenmek için ABP Başlangıç Video kurslarına göz atın.",
+    "OtherLiveEvents": "Diğer Canlı Etkinlikler",
+    "SponsoredConferences": "Sponsorlu Konferanslar",
+    "SponsoredConferencesDescription": "Yazılım geliştiricilere yönelik .NET topluluklarını ve etkinliklerini desteklemekten onur duyuyoruz.",
+    "LastOneYear": "Son 1 Yıl",
+    "AllTimes": "Tüm Zamanlar",
+    "Articles({0})": "Makaleler ({0})",
+    "Videos({0})": "Videolar ({0})",
+    "EditProfile": "Profili Güncelle",
+    "MEMBERSINCE{0}": "ÜYELİK TARİHİ {0}"
   }
 }
