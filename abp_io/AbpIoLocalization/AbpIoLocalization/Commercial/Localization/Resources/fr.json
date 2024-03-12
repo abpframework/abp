@@ -429,6 +429,7 @@
     "Topic": "Sujet",
     "SendUsEmail": "Envoyez-nous un email",
     "ErrorExceptionMessage": "Une erreur s'est produite lors du traitement de votre demande",
-    "WatchTakeCodeGeneration": "Regardez la vidéo « Explorez le potentiel de la génération de code : ABP Suite » !"
+    "WatchTakeCodeGeneration": "Regardez la vidéo « Explorez le potentiel de la génération de code : ABP Suite » !",
+    "ExtendNow": "Prolonger / Renouveler"
   }
 }

@@ -850,6 +850,7 @@
     "Topic": "Aihe",
     "SendUsEmail": "Lähetä meille sähköpostia",
     "ErrorExceptionMessage": "Virhe pyynnön käsittelyn yhteydessä",
-    "WatchTakeCodeGeneration": "Katso \"Tutki koodin luomisen potentiaalia: ABP Suite\" -video!"
+    "WatchTakeCodeGeneration": "Katso \"Tutki koodin luomisen potentiaalia: ABP Suite\" -video!",
+    "ExtendNow": "Laajenna / Uusi"
   }
 }
