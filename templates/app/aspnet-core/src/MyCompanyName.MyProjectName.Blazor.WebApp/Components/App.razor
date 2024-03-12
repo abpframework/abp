@@ -18,7 +18,11 @@
 
     <style  ></style>
     @* <AbpStyles BundleName="@BlazorBasicThemeBundles.Styles.Global" /> *@
-        <link rel="stylesheet" href="global.css"/>
+
+    @foreach (var item in GlobalStyles)
+    {
+        <link rel="stylesheet" href="@item" />
+    }
 
     <HeadOutlet />
 
