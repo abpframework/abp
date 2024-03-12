@@ -1,5 +1,6 @@
+import { RestService } from '../../../../services';
+import { Rest } from '../../../../models';
 import { Injectable } from '@angular/core';
-import { RestService } from '../../../../services/rest.service';
 import type { FindTenantResultDto } from '../../../volo/abp/asp-net-core/mvc/multi-tenancy/models';
 
 @Injectable({
@@ -7,24 +8,22 @@ import type { FindTenantResultDto } from '../../../volo/abp/asp-net-core/mvc/mul
 })
 export class AbpTenantService {
   apiName = 'abp';
+  
 
-  findTenantById = (id: string) =>
-    this.restService.request<any, FindTenantResultDto>(
-      {
-        method: 'GET',
-        url: `/api/abp/multi-tenancy/tenants/by-id/${id}`,
-      },
-      { apiName: this.apiName },
-    );
+  findTenantById = (id: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, FindTenantResultDto>({
+      method: 'GET',
+      url: `/api/abp/multi-tenancy/tenants/by-id/${id}`,
+    },
+    { apiName: this.apiName,...config });
+  
 
-  findTenantByName = (name: string) =>
-    this.restService.request<any, FindTenantResultDto>(
-      {
-        method: 'GET',
-        url: `/api/abp/multi-tenancy/tenants/by-name/${name}`,
-      },
-      { apiName: this.apiName },
-    );
+  findTenantByName = (name: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, FindTenantResultDto>({
+      method: 'GET',
+      url: `/api/abp/multi-tenancy/tenants/by-name/${name}`,
+    },
+    { apiName: this.apiName,...config });
 
   constructor(private restService: RestService) {}
 }

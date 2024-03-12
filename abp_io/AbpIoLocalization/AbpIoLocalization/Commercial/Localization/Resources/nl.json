@@ -386,6 +386,27 @@
     "BlackFridayDiscount": "Black Friday korting",
     "MultipleOrganizationInfo": "Bekijk al uw organisaties",
     "PaymentFailedInfo": "Excuses, betaling mislukt! ",
-    "UsedPayment": "Deze betaling is al gebruikt"
+    "UsedPayment": "Deze betaling is al gebruikt",
+    "ManageLicense": "Licentie beheren",
+    "AbpPlatformLeptonXTheme": "LeptonX-thema voor uw beheerdersdashboard door <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Vorig",
+    "PricingDiscount": "Korting",
+    "YourOrganizationOverview": "Uw organisatieoverzicht",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} uur",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} uur",
+    "ContactPageError": "Stuur uw bericht per e-mail naar <a href=\"{0}\"> info@abp.io </a><br /> Dit is wat je schreef:",
+    "GoBack": "Ga terug",
+    "HereWhatYouWrote": "Dit is wat je schreef:",
+    "Sales": "verkoop",
+    "LicensingPricing": "Licenties / prijzen",
+    "TrialDemo": "Proef / demo",
+    "TrainingOnboarding": "Opleiding / Onboarding",
+    "Resellers": "Wederverkopers",
+    "Others": "Anderen",
+    "Characters": "Karakters",
+    "Topic": "Onderwerp",
+    "SendUsEmail": "Stuur ons een e-mail",
+    "ErrorExceptionMessage": "Er is een fout opgetreden bij het verwerken van uw verzoek",
+    "WatchTakeCodeGeneration": "Bekijk de video 'Ontdek het potentieel van codegeneratie: ABP Suite'!"
   }
 }

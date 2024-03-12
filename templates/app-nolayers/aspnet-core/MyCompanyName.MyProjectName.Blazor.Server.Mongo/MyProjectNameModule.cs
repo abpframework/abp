@@ -2,7 +2,9 @@ using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using MyCompanyName.MyProjectName.Blazor.Server.Mongo.Components;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.Menus;
@@ -10,6 +12,7 @@ using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Components.Server;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
@@ -146,6 +149,11 @@ public class MyProjectNameModule : AbpModule
                 serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
             });
         }
+
+        PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
+        {
+            options.IsBlazorWebApp = true;
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -157,6 +165,10 @@ public class MyProjectNameModule : AbpModule
         {
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
         }
+
+        // Add services to the container.
+        context.Services.AddRazorComponents()
+            .AddInteractiveServerComponents();
 
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
@@ -210,7 +222,7 @@ public class MyProjectNameModule : AbpModule
                 {
                     bundle.AddFiles("/blazor-global-styles.css");
                     //You can remove the following line if you don't use Blazor CSS isolation for components
-                    bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.styles.css");
+                    bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.Mongo.styles.css");
                 }
             );
         });
@@ -235,16 +247,16 @@ public class MyProjectNameModule : AbpModule
             options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
             options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
             options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
-            options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi"));
+            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic"));
+            options.Languages.Add(new LanguageInfo("it", "it", "Italiano"));
             options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
             options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
             options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
             options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
             options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
+            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch"));
             options.Languages.Add(new LanguageInfo("es", "es", "Español"));
             options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
         });
@@ -364,6 +376,7 @@ public class MyProjectNameModule : AbpModule
 
         app.UseUnitOfWork();
         app.UseDynamicClaims();
+        app.UseAntiforgery();
         app.UseAuthorization();
 
         app.UseSwagger();
@@ -374,6 +387,11 @@ public class MyProjectNameModule : AbpModule
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
-        app.UseConfiguredEndpoints();
+        app.UseConfiguredEndpoints(builder =>
+        {
+            builder.MapRazorComponents<App>()
+                .AddInteractiveServerRenderMode()
+                .AddAdditionalAssemblies(builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies.ToArray());
+        });
     }
 }

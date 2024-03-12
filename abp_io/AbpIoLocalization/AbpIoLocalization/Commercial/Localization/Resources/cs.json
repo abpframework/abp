@@ -408,6 +408,27 @@
     "BlazoriseLicenseExplanation": "Máme dohodu mezi společnostmi Volosoft a Megabit, na základě této dohody je licence Blazorise přibalena k produktům ABP Commercial, proto si naši zákazníci nemusí kupovat další licenci Blazorise.",
     "MultipleOrganizationInfo": "Podívejte se na všechny vaše organizace",
     "PaymentFailedInfo": "Omlouváme se, platba se nezdařila! ",
-    "UsedPayment": "Tato platba již byla použita"
+    "UsedPayment": "Tato platba již byla použita",
+    "ManageLicense": "Správa licence",
+    "AbpPlatformLeptonXTheme": "LeptonX téma pro váš správce účtu od <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Předchozí",
+    "PricingDiscount": "Sleva",
+    "YourOrganizationOverview": "Přehled vaší organizace",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} hodina",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} hodin",
+    "ContactPageError": "Pošlete prosím svou zprávu e-mailem na adresu <a href=\"{0}\"> info@abp.io </a><br /> Zde je to, co jste napsal:",
+    "GoBack": "Vraťte se",
+    "HereWhatYouWrote": "Zde je to, co jste napsal:",
+    "Sales": "Odbyt",
+    "LicensingPricing": "Licence / Ceny",
+    "TrialDemo": "Zkušební / Demo",
+    "TrainingOnboarding": "Školení / Onboarding",
+    "Resellers": "Prodejci",
+    "Others": "Ostatní",
+    "Characters": "Postavy",
+    "Topic": "Téma",
+    "SendUsEmail": "Pošlete nám e-mail",
+    "ErrorExceptionMessage": "Při zpracování vašeho požadavku nastala chyba",
+    "WatchTakeCodeGeneration": "Podívejte se na video „Prozkoumejte potenciál generování kódu: ABP Suite“!"
   }
 }

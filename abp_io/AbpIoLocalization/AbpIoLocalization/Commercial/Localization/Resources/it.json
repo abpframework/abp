@@ -407,6 +407,27 @@
     "BlazoriseLicenseExplanation": "Abbiamo un accordo tra Volosoft e Megabit, con il quale la licenza di Blazorise viene fornita in bundle con i prodotti commerciali ABP, pertanto i nostri clienti non hanno bisogno di acquistare una licenza Blazorise aggiuntiva.",
     "MultipleOrganizationInfo": "Visualizza tutte le tue organizzazioni",
     "PaymentFailedInfo": "Siamo spiacenti, pagamento non riuscito! ",
-    "UsedPayment": "Questo pagamento è già stato utilizzato"
+    "UsedPayment": "Questo pagamento è già stato utilizzato",
+    "ManageLicense": "Gestisci la licenza",
+    "AbpPlatformLeptonXTheme": "Tema LeptonX per la tua bacheca amministrativa di <span class=\"gradient-commercial\">ABP Platform</span>",
+    "Previous": "Precedente",
+    "PricingDiscount": "Sconto",
+    "YourOrganizationOverview": "Panoramica della tua organizzazione",
+    "TrainingDetailsHeaderInfo_TrainingHourSingular": "{0} ora",
+    "TrainingDetailsHeaderInfo_TrainingHour": "{0} ore",
+    "ContactPageError": "Si prega di inviare il messaggio tramite e-mail a <a href=\"{0}\"> info@abp.io </a><br /> Ecco cosa hai scritto:",
+    "GoBack": "Torna indietro",
+    "HereWhatYouWrote": "Ecco cosa hai scritto:",
+    "Sales": "Saldi",
+    "LicensingPricing": "Licenza/Prezzi",
+    "TrialDemo": "Prova/Dimostrazione",
+    "TrainingOnboarding": "Formazione/inserimento",
+    "Resellers": "Rivenditori",
+    "Others": "Altri",
+    "Characters": "Caratteri",
+    "Topic": "Argomento",
+    "SendUsEmail": "Inviaci un'e-mail",
+    "ErrorExceptionMessage": "Si è verificato un errore durante l'elaborazione della richiesta",
+    "WatchTakeCodeGeneration": "Guarda il video \"Esplora il potenziale della generazione di codice: ABP Suite\"!"
   }
 }

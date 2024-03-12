@@ -230,6 +230,19 @@
     "CommunityProfile": "Profil zajednice",
     "BlogProfile": "Blog profil",
     "Tickets": "Ulaznice",
-    "DisplayName:CommunityIndexPagePoll": "Anketa na stranici indeksa zajednice"
+    "MeetTheABPCommunity": "Upoznaj ABP <span class=\"gradient-community\">Zajednicu</span>",
+    "DisplayName:CommunityIndexPagePoll": "Anketa na stranici indeksa zajednice",
+    "OrganizationOverview": "Pregled organizacije",
+    "EmailPreferences": "Postavke e-pošte",
+    "VideoCourses": "Osnovni videozapisi",
+    "Resources": "Resursi",
+    "DoYouAgreePrivacyPolicy": "Klikom <b>Pretplatite se</b> gumb slažete se s <a href=\"https://account.abp.io/Account/TermsConditions\">Pojmovi</a> i <a href=\"https://account.abp.io/Account/Privacy\">Politika privatnosti</a>.",
+    "PromotionalOffers": "Promotivne ponude",
+    "PromotionalOffersDefinition": "Popusti, sezonske akcije i sl.",
+    "EventsDefinition": "Community Talks, webinari, ABP .NET konferencija itd.",
+    "ReleaseNotesDefinition": "Izdanja platforme ABP.IO, novi proizvodi itd.",
+    "Newsletter": "Newsletter",
+    "NewsletterDefinition": "Postovi na blogu, vijesti zajednice itd.",
+    "AbpConferenceDescription": "ABP Conference je virtualni događaj za .NET programere za učenje i povezivanje sa zajednicom."
   }
 }

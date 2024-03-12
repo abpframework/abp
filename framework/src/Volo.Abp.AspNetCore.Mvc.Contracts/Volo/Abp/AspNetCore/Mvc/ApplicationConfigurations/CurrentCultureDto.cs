@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
@@ -22,4 +23,32 @@ public class CurrentCultureDto
     public string NativeName { get; set; } = default!;
 
     public DateTimeFormatDto DateTimeFormat { get; set; } = default!;
+
+    /// <summary>
+    /// Creates a new <see cref="CurrentCultureDto"/> object based on the current CultureInfo.
+    /// </summary>
+    public static CurrentCultureDto Create()
+    {
+        return new CurrentCultureDto
+        {
+            Name = CultureInfo.CurrentUICulture.Name,
+            DisplayName = CultureInfo.CurrentUICulture.DisplayName,
+            EnglishName = CultureInfo.CurrentUICulture.EnglishName,
+            NativeName = CultureInfo.CurrentUICulture.NativeName,
+            IsRightToLeft = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft,
+            CultureName = CultureInfo.CurrentUICulture.TextInfo.CultureName,
+            TwoLetterIsoLanguageName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
+            ThreeLetterIsoLanguageName = CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName,
+            DateTimeFormat = new DateTimeFormatDto
+            {
+                CalendarAlgorithmType = CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType.ToString(),
+                DateTimeFormatLong = CultureInfo.CurrentUICulture.DateTimeFormat.LongDatePattern,
+                ShortDatePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern,
+                FullDateTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern,
+                DateSeparator = CultureInfo.CurrentUICulture.DateTimeFormat.DateSeparator,
+                ShortTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern,
+                LongTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.LongTimePattern,
+            }
+        };
+    }
 }
