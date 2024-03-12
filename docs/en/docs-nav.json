@@ -1059,7 +1059,7 @@
                       "path": "UI/Angular/HTTP-Requests.md"
                     },
                     { 
-                      "text": "HTTP Error Handling / Customization",
+                      "text": "Customize Error Handling",
                       "path": "UI/Angular/HTTP-Error-Handling.md"
                     }
                   ]
