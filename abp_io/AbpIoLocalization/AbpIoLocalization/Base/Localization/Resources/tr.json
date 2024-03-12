@@ -62,7 +62,7 @@
     "WebApplication": "Web Uygulaması",
     "MeetTheABP": "ABP'yi Tanıyın",
     "CompleteWebDevelopment": "Eksiksiz Bir Web Geliştirme",
-    "Platform": "Platform",
+    "Platform": "Platformu",
     "ABPDescription": "ABP Framework, en iyi yazılım geliştirme uygulamalarını ve kurallarını takip ederek modern web uygulamaları oluşturmak için eksiksiz bir altyapıdır.",
     "StrongInfrastructure": "Güçlü Altyapı",
     "CompleteArchitecture": "Eksiksiz Mimari",
@@ -196,6 +196,7 @@
     "AbpConferenceDescription": "ABP Conference, .NET geliştiricilerinin gelişmesi ve toplulukla bağlantı kurması için düzenlenen sanal bir etkinliktir.",
     "Packages": "Paketler",
     "Mobile": "Mobil",
-    "ReturnOfInvestment": "Yatırımın Geri Dönüşü"
+    "ReturnOfInvestment": "Yatırımın Geri Dönüşü",
+    "Trainings": "Eğitimler"
   }
 }
