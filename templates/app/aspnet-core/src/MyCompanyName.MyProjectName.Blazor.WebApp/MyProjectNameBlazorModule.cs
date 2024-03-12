@@ -45,6 +45,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.SettingManagement.Blazor;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Identity.Blazor;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 
 namespace MyCompanyName.MyProjectName.Blazor.WebApp;
 
@@ -156,7 +157,7 @@ public class MyProjectNameBlazorModule : AbpModule
         {
             // MVC UI
             options.StyleBundles.Configure(
-                LeptonXLiteThemeBundles.Styles.Global,
+                BasicThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
