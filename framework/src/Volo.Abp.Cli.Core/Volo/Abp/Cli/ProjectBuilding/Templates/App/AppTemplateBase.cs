@@ -6,7 +6,6 @@ using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Maui;
-using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
@@ -116,6 +115,26 @@ public abstract class AppTemplateBase : TemplateInfo
 
     protected void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
+        if (context.BuildArgs.UiFramework != UiFramework.Blazor)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Client"));
+        }
+
+        if (context.BuildArgs.UiFramework != UiFramework.BlazorServer)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
+        }
+
+        if (context.BuildArgs.UiFramework != UiFramework.BlazorWebApp)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Client"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client"));
+        }
+
         switch (context.BuildArgs.UiFramework)
         {
             case UiFramework.None:
@@ -134,6 +153,10 @@ public abstract class AppTemplateBase : TemplateInfo
                 ConfigureWithBlazorServerUi(context, steps);
                 break;
 
+            case UiFramework.BlazorWebApp:
+                ConfigureWithBlazorWebAppUi(context, steps);
+                break;
+
             case UiFramework.MauiBlazor:
                 ConfigureWithMauiBlazorUi(context, steps);
                 break;
@@ -142,17 +165,6 @@ public abstract class AppTemplateBase : TemplateInfo
             case UiFramework.NotSpecified:
                 ConfigureWithMvcUi(context, steps);
                 break;
-        }
-
-        if (context.BuildArgs.UiFramework != UiFramework.Blazor && context.BuildArgs.UiFramework != UiFramework.BlazorServer)
-        {
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
-        }
-
-        if (context.BuildArgs.UiFramework != UiFramework.BlazorServer)
-        {
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
-            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
         }
 
         if (context.BuildArgs.UiFramework != UiFramework.MauiBlazor)
@@ -321,7 +333,7 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new ReplaceDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName, newMvcUiPackageName, version));
         }
 
-        if (uiFramework == UiFramework.BlazorServer)
+        if (uiFramework == UiFramework.BlazorServer || uiFramework == UiFramework.BlazorWebApp)
         {
             var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
             var newBlazorServerUiPackageName = theme switch
@@ -531,6 +543,38 @@ public abstract class AppTemplateBase : TemplateInfo
         }
     }
 
+    protected void ConfigureWithBlazorWebAppUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        context.Symbols.Add("ui:blazor-webapp");
+
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Client"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
+        {
+            steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered", "MyCompanyName.MyProjectName.Blazor"));
+            steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client", "MyCompanyName.MyProjectName.Blazor.Client"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Client"));
+            steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
+        }
+        else
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client"));
+            steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebApp", "MyCompanyName.MyProjectName.Blazor"));
+            steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.WebApp.Client", "MyCompanyName.MyProjectName.Blazor.Client"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.AuthServer"));
+            steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44313"));
+        }
+    }
+
     protected void ConfigureWithMvcUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         context.Symbols.Add("ui:mvc");
@@ -722,6 +766,7 @@ public abstract class AppTemplateBase : TemplateInfo
         if ((context.BuildArgs.UiFramework == UiFramework.Mvc
              || context.BuildArgs.UiFramework == UiFramework.Blazor
              || context.BuildArgs.UiFramework == UiFramework.BlazorServer
+             || context.BuildArgs.UiFramework == UiFramework.BlazorWebApp
              || context.BuildArgs.UiFramework == UiFramework.MauiBlazor) &&
             context.BuildArgs.MobileApp == MobileApp.None)
         {
@@ -756,6 +801,7 @@ public abstract class AppTemplateBase : TemplateInfo
                 steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
                 break;
             case UiFramework.BlazorServer:
+            case UiFramework.BlazorWebApp:
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
                 steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));

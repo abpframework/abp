@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>Toto je stránka žrebovania venovaná na vyjadrenie nášho uznania vám za to, že ste aktívnym členom komunity. Robíme <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">, ABP .NET konferenciu</a> , zúčastňujeme sa alebo sponzorujeme podujatia súvisiace s .NET, na ktorých rozdávame nejaké darčeky.<br><br> Na tejto stránke si môžete pozrieť pripravované tomboly, zúčastniť sa ich alebo si pozrieť predchádzajúce žrebovanie, ktoré vyžrebujeme vrátane výhercov.<br><br> Ďakujeme, že ste aktívnym členom! Vidíme sa v najbližšom žrebovaní.",
     "RafflesInfoTitle": "Komunitné <span class=\"gradient-community\">tomboly</span> ABP",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> podporované.",
-    "Preview": "Náhľad"
+    "Preview": "Náhľad",
+    "VisitPage": "Navštívte stránku",
+    "VisitVideoCourseDescription": "Ak sa chcete naučiť základy rámca ABP, pozrite si video kurzy ABP Essentials."
   }
 }

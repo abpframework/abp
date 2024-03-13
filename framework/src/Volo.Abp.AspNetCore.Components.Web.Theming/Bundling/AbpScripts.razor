@@ -1,0 +1,33 @@
+@using Volo.Abp
+@inject IComponentBundleManager BundleManager
+
+@if (ScriptFiles != null)
+{
+    foreach (var file in ScriptFiles)
+    {
+        <script src="@file"></script>
+    }
+}
+
+@code {
+    [Parameter]
+    public List<string>? WebAssemblyScriptFiles { get; set; }
+
+    [Parameter]
+    public string? BundleName { get; set; }
+
+    private List<string>? ScriptFiles { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (BundleName == null)
+        {
+            throw new AbpException("The BundleName parameter of the AbpScripts component can not be null!");
+        }
+        ScriptFiles = (await BundleManager.GetScriptBundleFilesAsync(BundleName!)).ToList();
+        if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
+        {
+            ScriptFiles.AddRange(WebAssemblyScriptFiles);
+        }
+    }
+}
