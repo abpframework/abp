@@ -1,5 +1,6 @@
 ﻿using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MyCompanyName.MyProjectName.Menus;
 using MyCompanyName.MyProjectName;
@@ -121,7 +122,7 @@ public class MyProjectNameBlazorModule : AbpModule
     private static void ConfigureUI(WebAssemblyHostBuilder builder)
     {
         builder.RootComponents.Add<App>("#ApplicationContainer");
-
+        builder.RootComponents.Add<HeadOutlet>("head::after");
     }
 
     private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)
