@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>To je stran za nagradno igro, namenjena izkazovanju naše hvaležnosti do vas, ker ste aktivni član skupnosti. Izvajamo <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">, ABP .NET Conference</a> , se udeležujemo ali sponzoriramo dogodke, povezane z .NET, na katerih podarimo nekaj daril.<br><br> To stran lahko spremljate in si ogledate prihajajoče nagradne igre, se jih udeležite ali si ogledate prejšnje nagradne igre, ki smo jih izžrebali, vključno z zmagovalci.<br><br> Hvala, ker ste aktivni član! Se vidimo na prihajajočih nagradnih igrah.",
     "RafflesInfoTitle": "<span class=\"gradient-community\">Žrebanje</span> skupnosti ABP",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> podprt.",
-    "Preview": "Predogled"
+    "Preview": "Predogled",
+    "VisitPage": "Obiščite stran",
+    "VisitVideoCourseDescription": "Če se želite naučiti osnov ogrodja ABP, si oglejte video tečaje ABP Essentials."
   }
 }

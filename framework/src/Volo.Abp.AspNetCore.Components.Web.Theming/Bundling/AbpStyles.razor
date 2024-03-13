@@ -1,0 +1,33 @@
+@using Volo.Abp
+@inject IComponentBundleManager BundleManager
+
+@if (StyleFiles != null)
+{
+    foreach (var file in StyleFiles)
+    {
+        <link rel="stylesheet" href="@file"/>
+    }
+}
+
+@code {
+    [Parameter]
+    public List<string>? WebAssemblyStyleFiles { get; set; }
+
+    [Parameter]
+    public string? BundleName { get; set; }
+
+    private List<string>? StyleFiles { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (BundleName == null)
+        {
+            throw new AbpException("The BundleName parameter of the AbpStyles component can not be null!");
+        }
+        StyleFiles = (await BundleManager.GetStyleBundleFilesAsync(BundleName!)).ToList();
+        if (OperatingSystem.IsBrowser() && WebAssemblyStyleFiles != null)
+        {
+            StyleFiles.AddRange(WebAssemblyStyleFiles);
+        }
+    }
+}

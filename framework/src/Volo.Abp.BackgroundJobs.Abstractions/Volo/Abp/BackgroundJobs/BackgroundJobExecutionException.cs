@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Volo.Abp.BackgroundJobs;
 
-[Serializable]
 public class BackgroundJobExecutionException : AbpException
 {
     public string JobType { get; set; } = default!;
@@ -11,15 +9,6 @@ public class BackgroundJobExecutionException : AbpException
     public object JobArgs { get; set; } = default!;
 
     public BackgroundJobExecutionException()
-    {
-
-    }
-
-    /// <summary>
-    /// Creates a new <see cref="BackgroundJobExecutionException"/> object.
-    /// </summary>
-    public BackgroundJobExecutionException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
     {
 
     }

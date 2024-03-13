@@ -78,6 +78,17 @@
     "EndDate": "End date",
     "Feature:AuditLoggingGroup": "Audit logging",
     "Feature:AuditLoggingEnable": "Enabled audit logging page",
-    "Feature:AuditLoggingEnableDescription": "Enable audit logging page in the application."
+    "Feature:AuditLoggingEnableDescription": "Enable audit logging page in the application.",
+    "Feature:AuditLoggingSettingManagementEnable": "Enable audit log setting management",
+    "Feature:AuditLoggingSettingManagementEnableDescription": "Enable the configuration of the audit log setting management within the application.",
+    "DisplayName:IsExpiredDeleterEnabled": "Enable expired deleter",
+    "Description:IsExpiredDeleterEnabled": "Toggle to enable or disable the automatic deletion of expired items.",
+    "DisplayName:ExpiredDeleterPeriod": "Expired item deletion period",
+    "Description:ExpiredDeleterPeriod": "Set the period of days after which expired items will be automatically deleted.",
+    "InvalidAuditLogDeletionSettings": "Invalid audit log deletion settings. If deletion is enabled, the period should be greater than 0 days.",
+    "AuditLogSettingsGeneral": "General",
+    "AuditLogSettingsGlobal": "Global",
+    "DisplayName:IsPeriodicDeleterEnabled": "Enable periodic deleter",
+    "Description:IsPeriodicDeleterEnabled": "Toggle to enable the periodic deletion worker. If this option disabled the periodic deleter will not work."
   }
 }
