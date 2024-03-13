@@ -1,11 +1,22 @@
 ﻿@using Blazorise
 @using Microsoft.Extensions.Options
 @using Microsoft.AspNetCore.Components.Web
+@using Volo.Abp.Ui.Branding
 
 @inject IOptions<PageHeaderOptions> Options
+@inject IBrandingProvider BrandingProvider
 
 <Row Class="entry-row">
-    <PageTitle>@PageLayout.Title</PageTitle>
+
+    @if (PageLayout.Title.IsNullOrEmpty())
+    {
+        <PageTitle>@BrandingProvider.AppName</PageTitle>
+    }
+    else
+    {
+        <PageTitle>@PageLayout.Title | @BrandingProvider.AppName</PageTitle>
+    }
+
     @if(Options.Value.RenderPageTitle)
     {
         <Column ColumnSize="ColumnSize.IsAuto">
