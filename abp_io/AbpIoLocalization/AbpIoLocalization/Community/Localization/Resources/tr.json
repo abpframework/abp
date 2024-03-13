@@ -220,6 +220,7 @@
     "Articles({0})": "Makaleler ({0})",
     "Videos({0})": "Videolar ({0})",
     "EditProfile": "Profili Güncelle",
-    "MEMBERSINCE{0}": "ÜYELİK TARİHİ {0}"
+    "MEMBERSINCE{0}": "ÜYELİK TARİHİ {0}",
+    "UpcomingEvents": "<span class=\"text-info\">Yaklaşan</span> Etkinlikler"
   }
 }
