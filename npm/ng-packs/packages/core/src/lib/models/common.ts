@@ -73,6 +73,7 @@ export namespace ABP {
     layout?: eLayoutType;
     iconClass?: string;
     group?: string;
+    breadcrumbText?: string;
   }
 
   export interface Tab extends Nav {
