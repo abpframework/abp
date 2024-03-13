@@ -6,6 +6,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.WebClientInfo;
 
+[Dependency(ReplaceServices = true)]
 public class HttpContextWebClientInfoProvider : IWebClientInfoProvider, ITransientDependency
 {
     protected ILogger<HttpContextWebClientInfoProvider> Logger { get; }
