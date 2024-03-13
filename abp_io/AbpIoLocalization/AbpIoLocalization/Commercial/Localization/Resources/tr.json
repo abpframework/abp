@@ -104,12 +104,6 @@
     "LeptonTheme": "Lepton Teması",
     "ProfessionalModernUIThemes": "Profesyonel, modern UI temaları",
     "LeptonThemeExplanation": "Lepton, yönetici panosu gerektiren herhangi bir proje için sağlam bir temel görevi gören bir dizi Bootstrap yönetici teması sağlar.",
-    "DefaultTheme": "Varsayılan tema",
-    "MaterialTheme": "Malzeme Tema",
-    "Default2Theme": "Varsayılan 2 Tema",
-    "DarkTheme": "Karanlık Tema",
-    "DarkBlueTheme": "Koyu Mavi Tema",
-    "LightTheme": "Açık Tema",
     "ProudToWorkWith": "Birlikte Çalışmaktan Gurur Duyarız",
     "OurConsumers": "Dünya çapında 70'ten fazla ülkede binlerce işletme ve geliştirici ABP Commercial'a güveniyor.",
     "JoinOurConsumers": "Onlara katılın ve hızlı bir şekilde harika ürünler oluşturun.",
@@ -267,7 +261,6 @@
     "Team": "Takım",
     "Business": "İşletme",
     "Enterprise": "Girişim",
-    "Custom": "Gelenek",
     "IncludedDeveloperLicenses": "Dahil edilen geliştirici lisansları",
     "CustomLicenceOrAdditionalServices": "Özel lisansa veya ek hizmetlere mi ihtiyacınız var?",
     "CustomOrVolumeLicense": "Özel veya toplu lisans",
@@ -750,9 +743,9 @@
     "Landing_Page_PaymentModuleDescription_2": "Bu modül ödeme ağ geçitleri için entegrasyon sağlar, böylece müşterilerinizden kolayca ödeme alabilirsiniz.",
     "Landing_Page_PaymentModuleDescription_3": "Bu modül aşağıdaki ödeme ağ geçitlerini destekler",
     "Welcome_Page_UseSameCredentialForCommercialWebsites": "Hem <a href=\"https://commercial.abp.io\" class=\"text-primary\">commercial.abp.io</a> hem de <a href=\"https://support.abp.io\" class=\"text-primary\">support.abp.io</a> için aynı kimlik bilgilerini kullanın.",
-    "WatchCrudPagesVideo": "\"ABP Suite ile CRUD Sayfaları Oluşturma\" Videosunu İzleyin!",
-    "WatchGeneratingFromDatabaseVideo": "\"ABP Suite: Mevcut Veritabanı Tablolarından CRUD Sayfaları Oluşturma\" Videosunu izleyin!",
-    "WatchTakeCloserLookVideo": "\"Kod üretimine daha yakından bakın: ABP Suite\" videosunu izleyin!",
+    "WatchCrudPagesVideo": "\"Creating CRUD pages with ABP Suite\" Videosunu İzleyin!",
+    "WatchGeneratingFromDatabaseVideo": "\"ABP Suite - Generating CRUD Pages From Existing Database Tables \" Videosunu İzleyin!",
+    "WatchTakeCloserLookVideo": "\"Take a closer look at the code generation: ABP Suite\" Videosunu İzleyin!",
     "ConfirmedEmailAddressRequiredToStartTrial": "Deneme lisansı başlatmak için onaylanmış bir e -posta adresiniz olmalı.",
     "EmailVerificationMailNotSent": "E-posta doğrulama postası gönderilemedi.",
     "GetConfirmationEmail": "Daha önce bir onay e-postası almadıysanız <a href=\"javascript:void(0);\" id=\"{0}\" class=\"text-decoration-underline\"> almak için buraya tıklayın.</a>",
@@ -1018,7 +1011,7 @@
     "Topic": "Başlık",
     "SendUsEmail": "E-posta gönder",
     "ErrorExceptionMessage": "İşleminiz gerçekleştirilirken bir hata oluştu",
-    "WatchTakeCodeGeneration": "\"Explore the Potential of Code Generation: ABP Suite\" Videosunu izleyin!",
+    "WatchTakeCodeGeneration": "\"Explore the Potential of Code Generation: ABP Suite\" Videosunu İzleyin!",
     "StartupTemplatesUser": "Kullanıcı",
     "StartupSingleSignOn": "Tek Oturum Açma",
     "Application{0}": "Uygulama {0}",
@@ -1124,7 +1117,7 @@
     "AutoLicenseRenewalIsNotEnabled": "Otomatik lisans yenileme etkin değil.",
     "SetAsDefaultPaymentMethod": "Varsayılan ödeme yöntemi olarak ayarla",
     "ExpirationDate": "Son Kullanma Tarihi",
-    "EditBillingInformation": "Ödeme Bilgilerini Güncelle"
-
+    "EditBillingInformation": "Ödeme Bilgilerini Güncelle",
+    "PreBuiltApplicationModulesTitle": "Önceden Oluşturulmuş Uygulama <span class=\"gradient-commercial\">Modülleri</span>"
   }
 }

@@ -1205,6 +1205,7 @@
     "WatchTakeCodeGeneration": "Watch the \"Explore the Potential of Code Generation: ABP Suite\" Video!",
     "StartupTemplatesUser": "User",
     "StartupSingleSignOn": "Single Sign On",
-    "Application{0}": "Application {0}"
+    "Application{0}": "Application {0}",
+    "PreBuiltApplicationModulesTitle": "Pre-Built Application <span class=\"gradient-commercial\">Modules</span>"
   }
 }
