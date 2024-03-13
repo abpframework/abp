@@ -2,7 +2,7 @@
   "culture": "hu",
   "texts": {
     "Settings": "Beállítások",
-    "SuccessfullySaved": "Sikeresen mentve",
+    "SavedSuccessfully": "Sikeresen mentve",
     "Permission:SettingManagement": "Beállításkezelés",
     "Permission:Emailing": "E-mailezés",
     "Permission:EmailingTest": "E-mail teszt",

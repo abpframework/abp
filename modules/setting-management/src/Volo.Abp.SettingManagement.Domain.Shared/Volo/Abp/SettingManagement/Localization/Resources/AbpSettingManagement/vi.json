@@ -2,7 +2,7 @@
   "culture": "vi",
   "texts": {
     "Settings": "Cài đặt",
-    "SuccessfullySaved": "Lưu thành công",
+    "SavedSuccessfully": "Lưu thành công",
     "Permission:SettingManagement": "Cài đặt quản lý",
     "Permission:Emailing": "Gửi email",
     "Permission:EmailingTest": "Kiểm tra gửi email",
