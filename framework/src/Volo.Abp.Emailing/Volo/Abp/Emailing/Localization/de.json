@@ -18,6 +18,8 @@
     "Description:Abp.Mailing.Smtp.Password": "Das Passwort für den Benutzernamen, der mit den Anmeldeinformationen verknüpft ist.",
     "Description:Abp.Mailing.Smtp.Domain": "Die Domäne oder der Computername, der die Anmeldeinformationen verifiziert.",
     "Description:Abp.Mailing.Smtp.EnableSsl": "Bestimmt, ob der SmptClient Secure Sockets Layer (SSL) zur Verschlüsselung der Verbindung verwendet.",
-    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Bestimmt, ob die DefaultCredentials mit Anfragen gesendet werden."
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Bestimmt, ob die DefaultCredentials mit Anfragen gesendet werden.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Standard-E-Mail-Layoutvorlage",
+    "TextTemplate:StandardEmailTemplates.Message": "Einfache Nachrichtenvorlage für E-Mails"
   }
 }

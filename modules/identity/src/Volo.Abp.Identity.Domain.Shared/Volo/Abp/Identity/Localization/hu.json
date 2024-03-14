@@ -8,7 +8,7 @@
     "Surname": "Vezetéknév",
     "EmailAddress": "Email cím",
     "PhoneNumber": "Telefonszám",
-    "UserInformations": "Felhasználói információ",
+    "UserInformations": "Felhasználói Információ",
     "DisplayName:IsDefault": "Alapértelmezett",
     "DisplayName:IsStatic": "Statikus",
     "DisplayName:IsPublic": "Publikus",
@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Telefonszám",
     "DisplayName:TwoFactorEnabled": "Kétlépcsős azonosítás",
     "DisplayName:IsActive": "Aktív",
-    "DisplayName:LockoutEnabled": "Fiók zárolása sikertelen bejelentkezési kísérletek után",
+    "DisplayName:LockoutEnabled": "Fiók zárolása",
     "NewRole": "Új szerepkör",
     "RoleName": "Szerepkör neve",
     "CreationTime": "Létrehozás időpontja",
@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "Nem változtathatja meg a kétlépcsős bejelentkezés beállítását.",
     "Volo.Abp.Identity:010008": "Kétlépcsős bejelentkezés beállítás megváltoztatása nem megengedett.",
     "Volo.Abp.Identity:010009": "Nem adhatja át a saját jogosultságait.",
+    "Volo.Abp.Identity:010021" : "'{0}' nevű már létezik.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "A maximálisan megengedett szervezeti egység tagsági szám egy felhasználó számára",
     "ThisUserIsNotActiveMessage": "Ez a felhasználó nem aktív.",
     "Permission:IdentityManagement": "Identitáskezelés",
@@ -84,6 +85,7 @@
     "Permission:Edit": "Szerkesztés",
     "Permission:Delete": "Törlés",
     "Permission:ChangePermissions": "Engedélyek módosítása",
+    "Permission:ManageRoles": "Szerepkörök kezelése",
     "Permission:UserManagement": "Felhasználókezelés",
     "Permission:UserLookup": "Felhaszáló keresés",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Szükséges hossz",
@@ -117,6 +119,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Meg tudja-e erősíteni a telefonszámot a felhasználó.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Szükség van-e megerősített telefonszámra a bejelentkezéshez.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Meg tudja e módosítani a felhasználónevet a felhasználó?.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Meg tudja-e módosítani az e-mail címét a felhasználó."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Meg tudja-e módosítani az e-mail címét a felhasználó.",
+    "Details": "Részletek",
+    "CreatedBy": "Készítette",
+    "ModifiedBy": "Módosította",
+    "ModificationTime": "Módosítási idő",
+    "PasswordUpdateTime": "A jelszó frissítési ideje",
+    "LockoutEndTime": "A zárolás befejezési ideje",
+    "FailedAccessCount": "Sikertelen hozzáférések száma"
   }
 }

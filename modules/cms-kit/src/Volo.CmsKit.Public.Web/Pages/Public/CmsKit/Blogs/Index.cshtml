@@ -19,7 +19,7 @@
 }
 
 @{
-    const string dummyImageSource = "https://dummyimage.com/320x180/a3a3a3/fff.png";
+    const string dummyImageSource = "/cms-kit/dummy-placeholder-320x180.png";
 }
 
 @if (Model.AuthorId.HasValue)
@@ -59,38 +59,48 @@
     <hr />
 }
 
-<abp-row id="blogs-container">
-    @foreach (var blog in Model.Blogs.Items)
-    {
-        <abp-column size="_12" size-md="_6" size-lg="_4">
-            <abp-card>
-                @if (blog.CoverImageMediaId != null)
-                {
-                    <img src="/api/cms-kit/media/@blog.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
-                }
-                else
-                {
-                    <img src="@(dummyImageSource)?text=@blog.Title" class="card-img-top" />
-                }
-                <abp-card-body class="p-4">
-                    <h5>@blog.Title</h5>
-                    <p class="mb-2">
-                        <span class="font-weight-bold author-name-span" data-author-id="@blog.Author.Id">@@@blog.Author?.UserName</span>
-                        <small style="opacity:.65;">@blog.CreationTime</small>
-                    </p>
-                    <p style="min-height: 60px;">@blog.ShortDescription</p>
-                    <div class="d-grid gap-2">
-                        <a href="/@CmsBlogsWebConsts.BlogsRoutePrefix/@Model.BlogSlug/@blog.Slug" class="btn btn-light">
-                            @L["Read"]
-                        </a>
-                    </div>
-                </abp-card-body>
-            </abp-card>
+@if (Model.Blogs.TotalCount > 0)
+{
+    <abp-row id="blogs-container">
+        @foreach (var blog in Model.Blogs.Items)
+        {
+            <abp-column size="_12" size-md="_6" size-lg="_4">
+                <abp-card>
+                    @if (blog.CoverImageMediaId != null)
+                    {
+                        <img src="/api/cms-kit/media/@blog.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
+                    }
+                    else
+                    {
+                        <img src="@(dummyImageSource)?text=@blog.Title" class="card-img-top" />
+                    }
+                    <abp-card-body class="p-4">
+                        <h5>@blog.Title</h5>
+                        <p class="mb-2">
+                            <span class="font-weight-bold author-name-span" data-author-id="@blog.Author.Id">@@@blog.Author?.UserName</span>
+                            <small style="opacity:.65;">@blog.CreationTime</small>
+                        </p>
+                        <p style="min-height: 60px;">@blog.ShortDescription</p>
+                        <div class="d-grid gap-2">
+                            <a href="/@CmsBlogsWebConsts.BlogsRoutePrefix/@Model.BlogSlug/@blog.Slug" class="btn btn-light">
+                                @L["Read"]
+                            </a>
+                        </div>
+                    </abp-card-body>
+                </abp-card>
+            </abp-column>
+        }
+    </abp-row>
+    <abp-row>
+        <abp-column>
+            <abp-paginator model="Model.PagerModel" />
         </abp-column>
-    }
-</abp-row>
-<abp-row>
-    <abp-column>
-        <abp-paginator model="Model.PagerModel" />
-    </abp-column>
-</abp-row>
+    </abp-row>
+}
+else
+{
+    <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center py-5">
+        <h1><i class="fa fa-ban"></i></h1>
+        <h3>@L["NoBlogPostYet"]</h3>
+    </div>
+}

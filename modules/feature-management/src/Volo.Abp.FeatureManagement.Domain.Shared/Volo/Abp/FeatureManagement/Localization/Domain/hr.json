@@ -1,15 +1,17 @@
 {
-    "culture": "hr",
-    "texts": {
-        "Features": "Značajke",
-        "NoFeatureFoundMessage": "Ne postoji nijedna dostupna značajka.",
-        "ManageHostFeatures": "Upravljanje značajkama domaćina",
-        "Permission:FeatureManagement": "Upravljanje značajkama",
-        "Permission:FeatureManagement.ManageHostFeatures": "Upravljanje značajkama domaćina",
-        "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Vrijednost značajke {0} nije važeća!",
-        "Menu:FeatureManagement": "Upravljanje značajkama",
-        "ResetToDefault": "Vrati na zadano",
-        "ResetedToDefault": "Vraćeno na zadano",
-        "AreYouSureToResetToDefault": "Jeste li sigurni da želite vratiti na zadane postavke?"
-    }
+  "culture": "hr",
+  "texts": {
+    "Features": "Značajke",
+    "NoFeatureFoundMessage": "Ne postoji nijedna dostupna značajka.",
+    "ManageHostFeatures": "Upravljanje Značajkama Domaćina",
+    "ManageHostFeaturesText": "Možete upravljati značajkama strane domaćina klikom na sljedeći gumb.",
+    "Permission:FeatureManagement": "Upravljanje Značajkama",
+    "Permission:FeatureManagement.ManageHostFeatures": "Upravljanje značajkama domaćina",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Vrijednost značajke {0} nije važeća!",
+    "Menu:FeatureManagement": "Upravljanje značajkama",
+    "ResetToDefault": "Vrati na zadano",
+    "ResetedToDefault": "Vraćeno na zadano",
+    "AreYouSure": "Jesi li siguran?",
+    "AreYouSureToResetToDefault": "Jeste li sigurni da želite vratiti na zadane postavke?"
+  }
 }

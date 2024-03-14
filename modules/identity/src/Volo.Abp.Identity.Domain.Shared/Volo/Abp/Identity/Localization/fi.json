@@ -8,7 +8,7 @@
     "Surname": "Sukunimi",
     "EmailAddress": "Sähköpostiosoite",
     "PhoneNumber": "Puhelinnumero",
-    "UserInformations": "Käyttäjän tiedot",
+    "UserInformations": "Käyttäjän Tiedot",
     "DisplayName:IsDefault": "Oletus",
     "DisplayName:IsStatic": "Staattinen",
     "DisplayName:IsPublic": "Julkinen",
@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Puhelinnumero",
     "DisplayName:TwoFactorEnabled": "Kahden tekijän todentaminen",
     "DisplayName:IsActive": "Aktiivinen",
-    "DisplayName:LockoutEnabled": "Lukitse tili epäonnistuneiden kirjautumisyritysten jälkeen",
+    "DisplayName:LockoutEnabled": "Tilin lukitus",
     "NewRole": "Uusi rooli",
     "RoleName": "Roolinimi",
     "CreationTime": "Luomisaika",
@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "Et voi muuttaa kahden tekijän asetusta.",
     "Volo.Abp.Identity:010008": "Kahden tekijän asetusta ei saa muuttaa.",
     "Volo.Abp.Identity:010009": "Et voi delegoida itseäsi.",
+    "Volo.Abp.Identity:010021": "{0} on jo olemassa.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Suurin sallittu organisaatioyksikön jäsenmäärä käyttäjälle",
     "ThisUserIsNotActiveMessage": "Tämä käyttäjä ei ole aktiivinen.",
     "Permission:IdentityManagement": "Identiteetin hallinta",
@@ -84,6 +85,7 @@
     "Permission:Edit": "Muokkaus",
     "Permission:Delete": "Poisto",
     "Permission:ChangePermissions": "Muuta käyttöoikeuksia",
+    "Permission:ManageRoles": "Hallitse rooleja",
     "Permission:UserManagement": "Käyttäjien hallinta",
     "Permission:UserLookup": "Käyttäjähaku",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Vaadittu pituus",
@@ -117,6 +119,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Voiko käyttäjä vahvistaa puhelinnumeron.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Tarvitaanko sisäänkirjautumisen yhteydessä vahvistettu puhelinnumero.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Voiko käyttäjä päivittää käyttäjänimen?",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Voiko käyttäjä päivittää sähköpostin."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Voiko käyttäjä päivittää sähköpostin.",
+    "Details": "Yksityiskohdat",
+    "CreatedBy": "Luonut",
+    "ModifiedBy": "Muokannut",
+    "ModificationTime": "Muutosaika",
+    "PasswordUpdateTime": "Salasanan päivityksen aika",
+    "LockoutEndTime": "Lukituksen päättymisaika",
+    "FailedAccessCount": "Epäonnistuneet käyttöoikeudet"
   }
 }

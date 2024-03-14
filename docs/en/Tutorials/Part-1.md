@@ -6,6 +6,16 @@
     "DB": ["EF","Mongo"]
 }
 ````
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "The Book List Page",
+    "Path": "Tutorials/Part-2"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -368,7 +378,7 @@ public class CreateUpdateBookDto
 {
     [Required]
     [StringLength(128)]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Required]
     public BookType Type { get; set; } = BookType.Undefined;
@@ -511,7 +521,3 @@ If you try to execute the `[GET] /api/app/book` API to get a list of books, the 
 ````
 
 That's pretty cool since we haven't written a single line of code to create the API controller, but now we have a fully working REST API!
-
-## The Next Part
-
-See the [next part](Part-2.md) of this tutorial.

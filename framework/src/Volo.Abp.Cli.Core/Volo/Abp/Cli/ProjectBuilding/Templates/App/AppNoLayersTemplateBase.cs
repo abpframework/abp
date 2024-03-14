@@ -22,7 +22,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
         var steps = base.GetCustomSteps(context).ToList();
-        
+
         SwitchDatabaseProvider(context, steps);
         DeleteUnrelatedProjects(context, steps);
         RemoveMigrations(context, steps);
@@ -89,6 +89,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
                 break;
 
             case UiFramework.Blazor:
+            case UiFramework.BlazorWebApp:
                 context.Symbols.Add("ui:blazor");
                 steps.Add(new RemoveFolderStep("/angular"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Mvc"));
@@ -130,7 +131,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
                 throw new AbpException("Unkown UI framework: " + context.BuildArgs.UiFramework);
         }
     }
-    
+
     protected void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ExtraProperties.ContainsKey("no-random-port"))
@@ -157,7 +158,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             )
         );
     }
-    
+
     protected void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.UiFramework != UiFramework.Angular)
@@ -165,7 +166,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
         }
     }
-    
+
     protected void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName/Migrations"));
@@ -202,12 +203,12 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
                 break;
         }
     }
-    
+
     protected void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RandomizeStringEncryptionStep());
     }
-    
+
     protected static void RandomizeAuthServerPassPhrase(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RandomizeAuthServerPassPhraseStep());
@@ -217,7 +218,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
     {
         steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
     }
-    
+
     protected void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ConnectionString != null)
@@ -230,7 +231,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             steps.Add(new ConnectionStringRenameStep());
         }
     }
-    
+
     protected void ConfigureTheme(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (!context.BuildArgs.Theme.HasValue)
@@ -256,9 +257,9 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
         }
 
         steps.Add(new ChangeThemeStep());
-        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework);
+        ReplaceLeptonXThemePackagesFromPackageJsonFiles(steps, isProTemplate: IsPro(), uiFramework: context.BuildArgs.UiFramework, theme: context.BuildArgs.Theme, version: context.BuildArgs.Version ?? context.TemplateFile.Version);
     }
-    
+
     private static void RemoveBlazorWasmProjects(List<ProjectBuildPipelineStep> steps)
     {
         steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.WebAssembly.Server",
@@ -269,7 +270,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             projectFolderPath: "/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared"));
         steps.Add(new RemoveFolderStep("/aspnet-core/MyCompanyName.MyProjectName.Blazor.WebAssembly"));
     }
-    
+
     private void RemoveThemeLogoFolders(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.Theme != Theme.Lepton && IsPro())
@@ -282,7 +283,7 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             steps.Add(new RemoveFilesStep("/wwwroot/images/logo/leptonx/"));
         }
     }
-    
+
     protected void SetDbmsSymbols(ProjectBuildContext context)
     {
         switch (context.BuildArgs.DatabaseManagementSystem)
@@ -324,9 +325,21 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
         return templateThemes.TryGetValue(args.TemplateName!, out var templateTheme) && templateTheme == args.Theme;
     }
 
-    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate, UiFramework uiFramework)
+    private static void ReplaceLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, bool isProTemplate, UiFramework uiFramework, Theme? theme, string version)
     {
         var mvcUiPackageName = isProTemplate ? "@volo/abp.aspnetcore.mvc.ui.theme.leptonx" : "@abp/aspnetcore.mvc.ui.theme.leptonxlite";
+        var newMvcUiPackageName = theme switch
+        {
+            Theme.Basic => "@abp/aspnetcore.mvc.ui.theme.basic",
+            Theme.Lepton => "@volo/abp.aspnetcore.mvc.ui.theme.lepton",
+            Theme.LeptonXLite => "@abp/aspnetcore.mvc.ui.theme.leptonxlite",
+            Theme.LeptonX => "@volo/abp.aspnetcore.mvc.ui.theme.leptonx",
+            _ => throw new AbpException("Unknown theme: " + theme?.ToString())
+        };
+        if (theme == Theme.LeptonX || theme == Theme.LeptonXLite)
+        {
+            version = null;
+        }
         var packageJsonFilePaths = new List<string>
         {
             "/MyCompanyName.MyProjectName.Web/package.json",
@@ -338,27 +351,44 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
 
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
+            steps.Add(new ReplaceDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName, newMvcUiPackageName, version));
         }
 
         if (uiFramework == UiFramework.BlazorServer)
         {
             var blazorServerUiPackageName = isProTemplate ? "@volo/aspnetcore.components.server.leptonxtheme" : "@abp/aspnetcore.components.server.leptonxlitetheme";
+            var newBlazorServerUiPackageName = theme switch
+            {
+                Theme.Basic => "@abp/aspnetcore.components.server.basictheme",
+                Theme.Lepton => "@volo/abp.aspnetcore.components.server.leptontheme",
+                Theme.LeptonXLite => "@abp/aspnetcore.components.server.leptonxlitetheme",
+                Theme.LeptonX => "@volo/aspnetcore.components.server.leptonxtheme",
+                _ => throw new AbpException("Unknown theme: " + theme?.ToString())
+            };
             var blazorServerPackageJsonFilePaths = new List<string>
             {
+                "/MyCompanyName.MyProjectName/package.json",
                 "/MyCompanyName.MyProjectName.Blazor/package.json",
                 "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/package.json"
             };
 
             foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
             {
-                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
-                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
+                steps.Add(new ReplaceDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName, newMvcUiPackageName, version));
+                steps.Add(new ReplaceDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName, newBlazorServerUiPackageName, version));
             }
         }
         else if (uiFramework == UiFramework.Angular)
         {
             var ngUiPackageName = isProTemplate ? "@volosoft/abp.ng.theme.lepton-x" : "@abp/ng.theme.lepton-x";
+            var newNgUiPackageName = theme switch
+            {
+                Theme.Basic => "@abp/ng.theme.basic",
+                Theme.Lepton => "@volo/abp.ng.theme.lepton",
+                Theme.LeptonXLite => "@abp/ng.theme.lepton-x",
+                Theme.LeptonX => "@volosoft/abp.ng.theme.lepton-x",
+                _ => throw new AbpException("Unknown theme: " + theme?.ToString())
+            };
             var angularPackageJsonFilePaths = new List<string>
             {
                 "/angular/package.json"
@@ -366,8 +396,11 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
 
             foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
             {
-                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
-                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+                steps.Add(new ReplaceDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName, newNgUiPackageName, version));
+                if (theme == Theme.Basic || theme == Theme.Lepton)
+                {
+                    steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+                }
             }
         }
     }

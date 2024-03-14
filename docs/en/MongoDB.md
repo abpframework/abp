@@ -82,6 +82,34 @@ If you only need to configure the collection name, you can also use `[MongoColle
 public IMongoCollection<Question> Questions => Collection<Question>();
 ````
 
+### Configure Indexes and CreateCollectionOptions for a Collection
+
+You can configure indexes and `CreateCollectionOptions` for your collections by overriding the `CreateModel` method. Example:
+
+````csharp
+protected override void CreateModel(IMongoModelBuilder modelBuilder)
+{
+    base.CreateModel(modelBuilder);
+
+    modelBuilder.Entity<Question>(b =>
+    {
+        b.CreateCollectionOptions.Collation = new Collation(locale:"en_US", strength: CollationStrength.Secondary);
+        b.ConfigureIndexes(indexes =>
+            {
+                indexes.CreateOne(
+                    new CreateIndexModel<BsonDocument>(
+                        Builders<BsonDocument>.IndexKeys.Ascending("MyProperty"),
+                        new CreateIndexOptions { Unique = true }
+                    )
+                );
+            }
+        );
+    });
+}
+````
+
+This example sets a collation for the collection and creates a unique index for the `MyProperty` property.
+
 ### Configure the Connection String Selection
 
 If you have multiple databases in your application, you can configure the connection string name for your DbContext using the `[ConnectionStringName]` attribute. Example:
@@ -281,7 +309,7 @@ public class BookService
 
 ### Transactions
 
-MongoDB supports multi-document transactions starting from the version 4.0 and the ABP Framework supports it. However, the [startup template](Startup-templates/Index.md) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
+MongoDB supports multi-document transactions starting from the version 4.0 and the ABP Framework supports it. However, the [startup template](Startup-Templates/Index.md) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
@@ -482,3 +510,4 @@ public class MyCustomMongoDbBulkOperationProvider
 
 * [Entities](Entities.md)
 * [Repositories](Repositories.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/abp-mongodb)

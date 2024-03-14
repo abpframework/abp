@@ -1,13 +1,13 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "Volo.Abp.TenantManagement:DuplicateTenantName": "租户名称已存在: {Name}",
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "租户名称已存在：{Name}",
     "Menu:TenantManagement": "租户管理",
     "Tenants": "租户",
     "NewTenant": "新租户",
     "TenantName": "租户名称",
     "DisplayName:TenantName": "租户名称",
-    "TenantDeletionConfirmationMessage": "租户 '{0}' 将被删除. 你确定吗?",
+    "TenantDeletionConfirmationMessage": "租户'{0}'将被删除。您确认吗？",
     "ConnectionStrings": "连接字符串",
     "DisplayName:DefaultConnectionString": "默认连接字符串",
     "DisplayName:UseSharedDatabase": "使用共享数据库",

@@ -8,7 +8,7 @@
     "Surname": "Apellido",
     "EmailAddress": "Dirección e-mail",
     "PhoneNumber": "Número de teléfono",
-    "UserInformations": "Información de usuario",
+    "UserInformations": "Información de Usuario",
     "DisplayName:IsDefault": "Predeterminado",
     "DisplayName:IsStatic": "Estático",
     "DisplayName:IsPublic": "Público",
@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Número de teléfono",
     "DisplayName:TwoFactorEnabled": "Autenticación en dos pasos",
     "DisplayName:IsActive": "Activo",
-    "DisplayName:LockoutEnabled": "Bloquear la cuenta después de intentos de inicio de sesión fallidos",
+    "DisplayName:LockoutEnabled": "Bloqueo de cuenta",
     "NewRole": "Nuevo rol",
     "RoleName": "Nombre de rol",
     "CreationTime": "Fecha de creación",
@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "No puedes cambiar tu configuración de autentificación de dos pasos.",
     "Volo.Abp.Identity:010008": "No está permitido cambiar la configuración de autenticación de dos pasos.",
     "Volo.Abp.Identity:010009": "No puedes delegar tu propia cuenta!",
+    "Volo.Abp.Identity:010021": "Ya existe un con el nombre '{0}'",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Número máximo de unidades organizativas por usuario",
     "ThisUserIsNotActiveMessage": "Este usuario no está activo.",
     "Permission:IdentityManagement": "Gestión de identidades",
@@ -84,6 +85,7 @@
     "Permission:Edit": "Editar",
     "Permission:Delete": "Borrar",
     "Permission:ChangePermissions": "Cambiar permisos",
+    "Permission:ManageRoles": "Gestionar roles",
     "Permission:UserManagement": "Gestión de usuarios",
     "Permission:UserLookup": "Busqueda de usuario",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Longitud requerida",
@@ -117,6 +119,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Si el número de teléfono puede ser confirmado por el usuario. ",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Sí un número de teléfono confirmado es requerido para iniciar sesión.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Si el nombre de usuario puede ser actualizado por el usuario.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Si el e-mail puede ser actualizado por el usuario."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Si el e-mail puede ser actualizado por el usuario.",
+    "Details": "Detalles",
+    "CreatedBy": "Creado por",
+    "ModifiedBy": "Modificado por",
+    "ModificationTime": "tiempo de modificación",
+    "PasswordUpdateTime": "Hora de actualización de contraseña",
+    "LockoutEndTime": "Hora de finalización del bloqueo",
+    "FailedAccessCount": "Recuento de acceso fallido"
   }
 }

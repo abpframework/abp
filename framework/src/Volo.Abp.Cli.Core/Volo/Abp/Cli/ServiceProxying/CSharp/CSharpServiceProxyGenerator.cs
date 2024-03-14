@@ -220,7 +220,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         }
 
         classTemplate.Replace($"{UsingPlaceholder}", string.Join(Environment.NewLine, classUsingNamespaceList.Distinct().OrderBy(x => x).Select(x => x)));
-        classTemplate.Replace($"{Environment.NewLine}{Environment.NewLine}    {MethodPlaceholder}", string.Empty);
+        classTemplate.Replace($"{Environment.NewLine}{Environment.NewLine}    {MethodPlaceholder}", string.Empty).Replace(MethodPlaceholder, string.Empty);
 
         filePath = Path.Combine(args.WorkDirectory, folder, $"{clientProxyName}.Generated.cs");
         Directory.CreateDirectory(Path.GetDirectoryName(filePath));
@@ -553,10 +553,15 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
                 var s2 = s1[i].Split(",");
                 for (var x = 0; x < s2.Length; x++)
                 {
-                    type.Append(s2[x].Split(".").Last());
+                    var s3 = s2[x].Split(".").Last();
+                    type.Append(s3);
                     if (x < s2.Length - 1)
                     {
                         type.Append(", ");
+                    }
+                    else if(!s3.Contains(">"))
+                    {
+                        type.Append("<");
                     }
                 }
             }

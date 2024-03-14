@@ -48,8 +48,9 @@ Here, is the list of all available commands before explaining their details:
 * **`logout`**: Logouts from your computer if you've authenticated before.
 * **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
-* **`clear-download-cache`** Clears the templates download cache.
-
+* **`clear-download-cache`**: Clears the templates download cache.
+* **`trust-version`**: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
+ 
 ### help
 
 Shows basic usages of the ABP CLI.
@@ -527,6 +528,16 @@ Then review changes on your source control system to be sure that it has changed
 
 * `--file` or `-f`: Default: `abp-translation.json`. The translation file (use only if you've used the `--output` option before).
 
+#### Online DeepL translate
+
+The `translate` command also supports online translation. You need to provide your [DeepL Authentication Key](https://support.deepl.com/hc/en-us/articles/360020695820-Authentication-Key).
+
+It will search all the `en.json(reference-culture)` files in the directory and sub-directory and then translate and generate the corresponding `zh-Hans.json(culture)` files.
+
+````bash
+abp translate -c zh-Hans --online --deepl-auth-key <auth-key>
+````
+
 ### login
 
 Some features of the CLI requires to be logged in to abp.io platform. To login with your username write:
@@ -598,3 +609,4 @@ abp install-libs [options]
 ## See Also
 
 * [Examples for the new command](CLI-New-Command-Samples.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/abp-cli)

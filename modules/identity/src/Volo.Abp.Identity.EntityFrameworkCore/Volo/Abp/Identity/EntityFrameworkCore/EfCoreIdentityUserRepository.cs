@@ -197,9 +197,19 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
+        
         var upperFilter = filter?.ToUpperInvariant();
-        return await (await GetDbSetAsync())
-            .IncludeDetails(includeDetails)
+        var query = (await GetDbSetAsync())
+            .IncludeDetails(includeDetails);
+        
+        if (roleId.HasValue)
+        {
+            var dbContext = await GetDbContextAsync();
+            var organizationUnitIds = await dbContext.Set<OrganizationUnitRole>().Where(q => q.RoleId == roleId.Value).Select(q => q.OrganizationUnitId).ToArrayAsync(cancellationToken: cancellationToken);
+            query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value) || identityUser.OrganizationUnits.Any(x => organizationUnitIds.Contains(x.OrganizationUnitId)));
+        }
+        
+        return await query
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
@@ -209,7 +219,6 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
-            .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName.Contains(userName))
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber.Contains(phoneNumber))

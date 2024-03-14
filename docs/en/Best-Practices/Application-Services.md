@@ -228,4 +228,9 @@ This method votes a question and returns the current score of the question.
   * The current module has only reference to the application contracts of the used module.
 
 
+## See Also
+
+* [Video tutorial Part-1](https://abp.io/video-courses/essentials/application-services-part-1)
+* [Video tutorial Part-2](https://abp.io/video-courses/essentials/application-services-part-2)
+
 

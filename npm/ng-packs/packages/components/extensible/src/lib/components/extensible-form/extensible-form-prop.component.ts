@@ -1,5 +1,11 @@
-import {EXTENSIONS_FORM_PROP, EXTENSIONS_FORM_PROP_DATA} from './../../tokens/extensions.token';
-import {ABP, LocalizationModule, PermissionDirective, ShowPasswordDirective, TrackByService} from '@abp/ng.core';
+import { EXTENSIONS_FORM_PROP, EXTENSIONS_FORM_PROP_DATA } from './../../tokens/extensions.token';
+import {
+  ABP,
+  LocalizationModule,
+  PermissionDirective,
+  ShowPasswordDirective,
+  TrackByService,
+} from '@abp/ng.core';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -9,15 +15,15 @@ import {
   inject,
   Injector,
   Input,
-  OnChanges,
-  Optional,
+  OnChanges, Optional,
   SimpleChanges,
   SkipSelf,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import {
   ControlContainer,
   FormGroupDirective,
+  FormsModule,
   ReactiveFormsModule,
   ValidatorFn,
 } from '@angular/forms';
@@ -28,20 +34,21 @@ import {
   NgbTimepickerModule,
   NgbTypeaheadModule,
 } from '@ng-bootstrap/ng-bootstrap';
-import {Observable, of} from 'rxjs';
-import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
-import {DateAdapter, DisabledDirective, TimeAdapter} from '@abp/ng.theme.shared';
-import {EXTRA_PROPERTIES_KEY} from '../../constants/extra-properties';
-import {FormProp} from '../../models/form-props';
-import {PropData} from '../../models/props';
-import {selfFactory} from '../../utils/factory.util';
-import {addTypeaheadTextSuffix} from '../../utils/typeahead.util';
-import {eExtensibleComponents} from '../../enums/components';
-import {ExtensibleDateTimePickerComponent} from '../date-time-picker/extensible-date-time-picker.component';
-import {NgxValidateCoreModule} from '@ngx-validate/core';
-import {ExtensibleFormPropService} from '../../services/extensible-form-prop.service';
-import {CreateInjectorPipe} from '../../pipes/create-injector.pipe';
-import { CommonModule} from '@angular/common';
+import { Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { DateAdapter, DisabledDirective, TimeAdapter } from '@abp/ng.theme.shared';
+import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
+import { FormProp } from '../../models/form-props';
+import { PropData } from '../../models/props';
+import { selfFactory } from '../../utils/factory.util';
+import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
+import { eExtensibleComponents } from '../../enums/components';
+import { ExtensibleDateTimePickerComponent } from '../date-time-picker/extensible-date-time-picker.component';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { ExtensibleFormPropService } from '../../services/extensible-form-prop.service';
+import { CreateInjectorPipe } from '../../pipes/create-injector.pipe';
+import { CommonModule } from '@angular/common';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'abp-extensible-form-prop',
@@ -54,12 +61,14 @@ import { CommonModule} from '@angular/common';
     ReactiveFormsModule,
     DisabledDirective,
     NgxValidateCoreModule,
+    NgbTooltip,
     NgbTypeaheadModule,
     CreateInjectorPipe,
     ShowPasswordDirective,
     PermissionDirective,
     LocalizationModule,
     CommonModule,
+    FormsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ExtensibleFormPropService],
@@ -69,8 +78,8 @@ import { CommonModule} from '@angular/common';
       useFactory: selfFactory,
       deps: [[new Optional(), new SkipSelf(), ControlContainer]],
     },
-    {provide: NgbDateAdapter, useClass: DateAdapter},
-    {provide: NgbTimeAdapter, useClass: TimeAdapter},
+    { provide: NgbDateAdapter, useClass: DateAdapter },
+    { provide: NgbTimeAdapter, useClass: TimeAdapter },
   ],
 })
 export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
@@ -84,6 +93,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   @Input() data!: PropData;
   @Input() prop!: FormProp;
   @Input() first?: boolean;
+  @Input() isFirstGroup?: boolean;
   @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
   injectorForCustomComponent?: Injector;
@@ -103,8 +113,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   }
 
   setTypeaheadValue(selectedOption: ABP.Option<string>) {
-    this.typeaheadModel = selectedOption || {key: null, value: null};
-    const {key, value} = this.typeaheadModel;
+    this.typeaheadModel = selectedOption || { key: null, value: null };
+    const { key, value } = this.typeaheadModel;
     const [keyControl, valueControl] = this.getTypeaheadControls();
     if (valueControl?.value && !value) valueControl.markAsDirty();
     keyControl?.setValue(key);
@@ -130,7 +140,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   }
 
   private getTypeaheadControls() {
-    const {name} = this.prop;
+    const { name } = this.prop;
     const extraPropName = `${EXTRA_PROPERTIES_KEY}.${name}`;
     const keyControl =
       this.form.get(addTypeaheadTextSuffix(extraPropName)) ||
@@ -144,9 +154,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.first && this.fieldRef) {
+    if (this.isFirstGroup && this.first && this.fieldRef) {
       this.fieldRef.nativeElement.focus();
-      this.cdRef.detectChanges();
     }
   }
 
@@ -158,9 +167,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     return this.service.getType(prop);
   }
 
-  ngOnChanges({prop, data}: SimpleChanges) {
+  ngOnChanges({ prop, data }: SimpleChanges) {
     const currentProp = prop?.currentValue as FormProp;
-    const {options, readonly, disabled, validators, className, template} = currentProp || {};
+    const { options, readonly, disabled, validators, className, template } = currentProp || {};
     if (template) {
       this.injectorForCustomComponent = Injector.create({
         providers: [
@@ -172,7 +181,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
             provide: EXTENSIONS_FORM_PROP_DATA,
             useValue: (data?.currentValue as PropData)?.record,
           },
-          {provide: ControlContainer, useExisting: FormGroupDirective},
+          { provide: ControlContainer, useExisting: FormGroupDirective },
         ],
         parent: this.injector,
       });
@@ -194,6 +203,6 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
     const [keyControl, valueControl] = this.getTypeaheadControls();
     if (keyControl && valueControl)
-      this.typeaheadModel = {key: keyControl.value, value: valueControl.value};
+      this.typeaheadModel = { key: keyControl.value, value: valueControl.value };
   }
 }

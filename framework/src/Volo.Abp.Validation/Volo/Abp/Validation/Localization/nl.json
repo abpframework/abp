@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Dit veld moet een tekenreeks- of arraytype zijn met een minimale lengte van '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "Dit veld is geen geldig telefoonnummer.",
     "ThisFieldMustBeBetween{0}And{1}": "Dit veld moet tussen {0} en {1} liggen.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Dit veld moet groter zijn dan of gelijk zijn aan {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "Dit veld moet kleiner dan of gelijk zijn aan {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "Dit veld moet overeenkomen met de reguliere expressie '{0}'.",
     "ThisFieldIsRequired.": "Dit veld is verplicht.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Dit veld moet een tekenreeks zijn met een maximale lengte van {0}.",

@@ -12,6 +12,8 @@ public class RandomizeAuthServerPassPhraseStep : ProjectBuildPipelineStep
     private const string LocalhostPfx = "localhost.pfx -p 00000000-0000-0000-0000-000000000000";
     private const string DotnetDevCerts = "openiddict.pfx -p 00000000-0000-0000-0000-000000000000";
     private const string ProductionEncryptionAndSigningCertificate = "AddProductionEncryptionAndSigningCertificate(\"openiddict.pfx\", \"00000000-0000-0000-0000-000000000000\");";
+    private const string ReadmeCallout = "`00000000-0000-0000-0000-000000000000`";
+
     private readonly static string RandomPassword = Guid.NewGuid().ToString("D");
     public readonly static string RandomOpenIddictPassword = Guid.NewGuid().ToString("D");
 
@@ -56,6 +58,13 @@ public class RandomizeAuthServerPassPhraseStep : ProjectBuildPipelineStep
                 {
                     lines[i] = lines[i].Replace(DotnetDevCerts,
                         DotnetDevCerts.Replace(DefaultPassword,
+                            RandomOpenIddictPassword));
+                }
+
+                if (lines[i].Contains(ReadmeCallout))
+                {
+                    lines[i] = lines[i].Replace(ReadmeCallout,
+                        ReadmeCallout.Replace(DefaultPassword,
                             RandomOpenIddictPassword));
                 }
 

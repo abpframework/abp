@@ -8,6 +8,15 @@
     "Tiered": ["Yes", "No"]
 }
 ````
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Creating a new solution",
+    "Path": "Getting-Started-Create-Solution"
+  }
+}
+````
 
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
@@ -21,7 +30,7 @@ The following tools should be installed on your development machine:
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 8.0+](https://dotnet.microsoft.com/download/dotnet) development.
 {{ if UI != "Blazor" }}
-* [Node v16 or v18](https://nodejs.org/)
+* [Node v16+](https://nodejs.org/)
 * [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[1](#f-yarn)</sup> or npm v6+ (already installed with Node)
 {{ end }}
 {{ if Tiered == "Yes" }}
@@ -47,7 +56,3 @@ If you've already installed, you can update it using the following command:
 ````shell
 dotnet tool update -g Volo.Abp.Cli
 ````
-
-## Next Step
-
-* [Creating a new solution](Getting-Started-Create-Solution.md)

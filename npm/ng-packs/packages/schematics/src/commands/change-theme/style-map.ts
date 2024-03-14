@@ -191,6 +191,11 @@ styleMap.set(ThemeOptionsEnum.LeptonX, [
     inject: false,
     bundleName: 'abp-bundle.rtl',
   },
+  {
+    input: 'node_modules/bootstrap-icons/font/bootstrap-icons.css',
+    inject: true,
+    bundleName: 'bootstrap-icons',
+  },
 ]);
 styleMap.set(ThemeOptionsEnum.LeptonXLite, [
   {
@@ -243,6 +248,11 @@ styleMap.set(ThemeOptionsEnum.LeptonXLite, [
     inject: false,
     bundleName: 'abp-bundle.rtl',
   },
+  {
+    input: 'node_modules/bootstrap-icons/font/bootstrap-icons.css',
+    inject: true,
+    bundleName: 'bootstrap-icons',
+  },
 ]);
 // the code written by Github co-pilot. thank go-pilot. You are the best sidekick.
 export const allStyles = Array.from(styleMap.values()).reduce((acc, val) => [...acc, ...val], []);
@@ -286,9 +296,5 @@ importMap.set(ThemeOptionsEnum.LeptonX, [
   {
     path: '@volosoft/abp.ng.theme.lepton-x/layouts',
     importName: 'SideMenuLayoutModule.forRoot()',
-  },
-  {
-    path: '@volosoft/abp.ng.theme.lepton-x/account',
-    importName: 'AccountLayoutModule.forRoot()',
   },
 ]);

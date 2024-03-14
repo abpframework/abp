@@ -8,7 +8,7 @@ import {
 import { EntityAction, EntityActionList } from '../../models/entity-actions';
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { LocalizationModule, PermissionDirective } from '@abp/ng.core';
 import { EllipsisDirective } from '@abp/ng.theme.shared';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
@@ -23,6 +23,7 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
     NgClass,
     LocalizationModule,
     NgTemplateOutlet,
+    NgbTooltipModule
   ],
   selector: 'abp-grid-actions',
   templateUrl: './grid-actions.component.html',

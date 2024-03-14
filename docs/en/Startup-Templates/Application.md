@@ -197,7 +197,7 @@ In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an a
 Test projects are prepared for integration testing;
 
 * It is fully integrated into the ABP framework and all services in your application.
-* It uses SQLite in-memory database for EF Core. For MongoDB, it uses the [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library.
+* It uses SQLite in-memory database for EF Core. For MongoDB, it uses the [EphemeralMongo](https://github.com/asimmon/ephemeral-mongo) library.
 * Authorization is disabled, so any application service can be easily used in tests.
 
 You can still create unit tests for your classes which will be harder to write (because you will need to prepare mock/fake objects), but faster to run (because it only tests a single class and skips all the initialization processes).
@@ -329,7 +329,7 @@ You should add `routes` property in the `data` object to add a link on the menu 
 ```
 In the above example;
 *  If the user is not logged in, authGuard blocks access and redirects to the login page.
-*  PermissionGuard checks the user's permission with the `requiredPolicy` property of the `routes` object. If the user is not authorized to access the page, the 403 page appears.
+*  permissionGuard checks the user's permission with the `requiredPolicy` property of the `routes` object. If the user is not authorized to access the page, the 403 page appears.
 *  The `name` property of `routes` is the menu link label. A localization key can be defined.
 *  The `iconClass` property of the `routes` object is the menu link icon class.
 *  The `requiredPolicy` property of the `routes` object is the required policy key to access the page.
@@ -459,3 +459,6 @@ If you want to configure social/external logins for your application, please fol
 
 - [The getting started document](../Getting-Started.md) explains how to create a new application in a few minutes.
 - [The application development tutorial](../Tutorials/Part-1.md) explains step by step application development.
+
+## See Also
+* [Video tutorial](https://abp.io/video-courses/essentials/app-template)

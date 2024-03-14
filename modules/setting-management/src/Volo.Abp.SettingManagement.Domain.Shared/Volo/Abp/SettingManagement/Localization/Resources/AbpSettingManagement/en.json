@@ -2,7 +2,7 @@
   "culture": "en",
   "texts": {
     "Settings": "Settings",
-    "SuccessfullySaved": "Successfully saved",
+    "SavedSuccessfully": "Saved successfully",
     "Permission:SettingManagement": "Setting management",
     "Permission:Emailing": "Emailing",
     "Permission:EmailingTest": "Emailing test",
@@ -17,7 +17,7 @@
     "SuccessfullySent": "Successfully sent",
     "Send": "Send",
     "Menu:Emailing": "Emailing",
-    "Menu:TimeZone": "Time zone",
+    "Menu:TimeZone": "Time Zone",
     "DisplayName:Timezone": "Time zone",
     "TimezoneHelpText": "This setting is used for application-wide or tenant-based.",
     "SmtpHost": "Host",

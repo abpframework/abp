@@ -46,6 +46,15 @@ public class AbpDateTimeConverter : JsonConverter<DateTime>, ITransientDependenc
             return _clock.Normalize(d3);
         }
 
+        var dateText = reader.GetString();
+        if (!dateText.IsNullOrWhiteSpace())
+        {
+            if (DateTime.TryParse(dateText, CultureInfo.CurrentUICulture, DateTimeStyles.None, out var d4))
+            {
+                return _clock.Normalize(d4);
+            }
+        }
+
         throw new JsonException("Can't get datetime from the reader!");
     }
 

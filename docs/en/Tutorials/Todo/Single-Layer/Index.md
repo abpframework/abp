@@ -327,21 +327,21 @@ public interface ITodoAppService : IApplicationService
 Create a `TodoAppService` class under the `Services` folder of {{if UI=="Blazor"}}your `TodoApp.Host` project{{else}}your project{{end}}, as shown below:
 
 ```csharp
-{{if UI=="Blazor"}}
 using TodoApp.Services;
+{{if UI=="Blazor"}}
 using TodoApp.Services.Dtos;
 using TodoApp.Entities;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 {{else}}
-using TodoApp.Entities;
+using TodoAppEntities;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 {{end}}
 
 namespace TodoApp.Services;
 
-public class TodoAppService : ApplicationService{{if UI=="Blazor"}}, ITodoAppService{{end}}
+public class TodoAppService : TodoAppAppService{{if UI=="Blazor"}}, ITodoAppService{{end}}
 {
     private readonly IRepository<TodoItem, Guid> _todoItemRepository;
     
@@ -354,7 +354,7 @@ public class TodoAppService : ApplicationService{{if UI=="Blazor"}}, ITodoAppSer
 }
 ```
 
-This class inherits from the `ApplicationService` class of the ABP Framework and implements our use-cases. ABP provides default generic [repositories](../../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement our use cases.
+This class inherits from the `TodoAppAppService`, which inherits from the `ApplicationService` class of the ABP Framework and implements our use-cases. ABP provides default generic [repositories](../../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement our use cases.
 
 #### Getting the Todo Items
 

@@ -2,13 +2,13 @@
 
 "*Mediates between the domain and data mapping layers using a collection-like interface for accessing domain objects*" (Martin Fowler).
 
-Repositories, in practice, are used to perform database operations for domain objects (see [Entities](Entities.md)). Generally, a separated repository is used for each **aggregate root** or entity.
+Repositories, in practice, are used to perform database operations for domain objects (see [Entities](Entities.md)). Generally, a separate repository is used for each **aggregate root** or entity.
 
 ## Generic Repositories
 
 ABP can provide a **default generic repository** for each aggregate root or entity. You can [inject](Dependency-Injection.md) `IRepository<TEntity, TKey>` into your service and perform standard **CRUD** operations.
 
-> Database provider layer should be properly configured to be able to use the default generic repositories. It is **already done** if you've created your project using the startup templates. If not, refer to the database provider documents ([EF Core](Entity-Framework-Core.md) / [MongoDB](MongoDB.md)) to configure it.
+> The database provider layer should be properly configured to be able to use the default generic repositories. It is **already done** if you've created your project using the startup templates. If not, refer to the database provider documents ([EF Core](Entity-Framework-Core.md) / [MongoDB](MongoDB.md)) to configure it.
 
 **Example usage of a default generic repository:**
 
@@ -52,25 +52,25 @@ In this example;
 
 ### Standard Repository Methods
 
-Generic Repositories provides some standard CRUD features out of the box:
+Generic Repositories provide some standard CRUD features out of the box:
 
 * `GetAsync`: Returns a single entity by its `Id` or a predicate (lambda expression).
   * Throws `EntityNotFoundException` if the requested entity was not found.
-  * Throws `InvalidOperationException` if there are multiple entities with given predicate.
+  * Throws `InvalidOperationException` if there are multiple entities with the given predicate.
 * `FindAsync`: Returns a single entity by its `Id` or a predicate (lambda expression).
   * Returns `null` if the requested entity was not found.
-  * Throws `InvalidOperationException` if there are multiple entities with given predicate.
-* `InsertAsync`: Inserts a new entity to the database.
+  * Throws `InvalidOperationException` if there are multiple entities with the given predicate.
+* `InsertAsync`: Inserts a new entity into the database.
 * `UpdateAsync`: Updates an existing entity in the database.
-* `DeleteAsync`: Deletes the given entity from database.
-  * This method has an overload that takes a predicate (lambda expression) to delete multiple entities satisfies the given condition.
+* `DeleteAsync`: Deletes the given entity from the database.
+  * This method has an overload that takes a predicate (lambda expression) to delete multiple entities to satisfy the given condition.
 * `GetListAsync`: Returns the list of all entities in the database.
-* `GetPagedListAsync`: Returns a limited list of entities. Gets `skipCount`, `maxResultCount` and `sorting` parameters.
-* `GetCountAsync`: Gets count of all entities in the database.
+* `GetPagedListAsync`: Returns a limited list of entities. Gets `skipCount`, `maxResultCount`, and `sorting` parameters.
+* `GetCountAsync`: Gets the count of all entities in the database.
 
 There are overloads of these methods.
 
-* Provides `UpdateAsync` and `DeleteAsync` methods to update or delete an entity by entity object or it's id.
+* Provides `UpdateAsync` and `DeleteAsync` methods to update or delete an entity by entity object or its id.
 * Provides `DeleteAsync` method to delete multiple entities by a filter.
 
 ### Querying / LINQ over the Repositories
@@ -142,7 +142,7 @@ Any standard LINQ method can be used over the `IQueryable` returned from the rep
 
 > This sample uses `ToList()` method, but it is **strongly suggested to use the asynchronous methods** to perform database queries, like `ToListAsync()` for this example. See the **`IQueryable` & Async Operations** section to learn how you can do it.
 
-> **Exposing `IQueryable` to outside of a repository** class may leak your data access logic to the application layer. If you want to strictly follow the **layered architecture** principles, you can consider to implement a custom repository class and wrap your data access logic inside your repository class. You can see the ***Custom Repositories*** section to learn how to create custom repository classes for your application.
+> **Exposing `IQueryable` outside of a repository** class may leak your data access logic to the application layer. If you want to strictly follow the **layered architecture** principles, you can consider to implement a custom repository class and wrap your data access logic inside your repository class. You can see the ***Custom Repositories*** section to learn how to create custom repository classes for your application.
 
 ### Bulk Operations
 
@@ -158,27 +158,27 @@ These methods work with multiple entities and can take advantage of bulk operati
 
 ### Soft / Hard Delete
 
-`DeleteAsync` method of the repository doesn't delete the entity if the entity is a **soft-delete** entity (that implements `ISoftDelete`). Soft-delete entities are marked as "deleted" in the database. Data Filter system ensures that the soft deleted entities are not retrieved from database normally.
+`DeleteAsync` method of the repository doesn't delete the entity if the entity is a **soft-delete** entity (that implements `ISoftDelete`). Soft-delete entities are marked as "deleted" in the database. The Data Filter system ensures that the soft deleted entities are not retrieved from the database normally.
 
-If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method to physically delete the entity from database in case of you need it.
+If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method to physically delete the entity from the database in case you need it.
 
 > See the [Data Filtering](Data-Filtering.md) documentation for more about soft-delete.
 
 ### Delete Direct
 
-`DeleteDirectAsync` method of the repository deletes all entities those fit to the given predicate. It directly deletes entities from database, without fetching them. 
+`DeleteDirectAsync` method of the repository deletes all entities that fit to the given predicate. It directly deletes entities from the database, without fetching them. 
 
-Some features (like soft-delete, multi-tenancy and audit logging) won't work, so use this method carefully when you need it. Use the `DeleteAsync` method if you need to these features.
+Some features (like soft-delete, multi-tenancy, and audit logging) won't work, so use this method carefully when you need it. Use the `DeleteAsync` method if you need these features.
 
-> Currently only [EF Core supports it](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#basic-executedelete-examples), For the ORMs that don't support direct delete, we will fallback to the existing `DeleteAsync` method.
+> Currently only [EF Core supports it](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew#basic-executedelete-examples), For the ORMs that don't support direct delete, we will fall back to the existing `DeleteAsync` method.
 
-### Ensure Entities Exists
+### Ensure Entities Exist
 
 The `EnsureExistsAsync` extension method accepts entity id or entities query expression to ensure entities exist, otherwise, it will throw `EntityNotFoundException`.
 
 ### Enabling / Disabling the Change Tracking
 
-ABP provides repository extension methods and attributes those can be used to control the change tracking behavior for queried entities in the underlying database provider.
+ABP provides repository extension methods and attributes that can be used to control the change-tracking behavior for queried entities in the underlying database provider.
 
 Disabling change tracking can gain performance if you query many entities from the database for read-only purposes. Querying single or a few entities won't make much performance difference, but you are free to use it whenever you like.
 
@@ -215,13 +215,13 @@ public class MyDemoService : ApplicationService
 }
 ````
 
-> `DisableTracking` extension method returns a `IDisposable` object, so you can safely **restore** the change tracking behavior to the **previous state** one the `using` block ends. Basically, `DisableTracking` method ensures that the change tracking is disabled inside the `using` block, but doesn't affect outside of the `using` block. That means, if change tracking was already disabled, `DisableTracking` and the disposable return value do nothing. 
+> `DisableTracking` extension method returns an `IDisposable` object, so you can safely **restore** the change tracking behavior to the **previous state** once the `using` block ends. Basically, `DisableTracking` method ensures that the change tracking is disabled inside the `using` block, but doesn't affect outside of the `using` block. That means, if change tracking was already disabled, `DisableTracking` and the disposable return value do nothing. 
 
-`EnableTracking()` method works exactly opposite to the `DisableTracking()` method. You typically won't use it (because the change tracking is already enabled by default), but it is there in case of you need that.
+`EnableTracking()` method works exactly opposite to the `DisableTracking()` method. You typically won't use it (because the change tracking is already enabled by default), but it is there in case you need that.
 
 #### Attributes for Change Tracking
 
-You typically use the `DisableTracking()` method for the application service methods those only returns data, but doesn't make any change on entities. For such cases, you can use the `DisableEntityChangeTracking` attribute on your method/class as a shortcut to disable the change tracking for whole method body.
+You typically use the `DisableTracking()` method for the application service methods that only return data, but don't make any change to entities. For such cases, you can use the `DisableEntityChangeTracking` attribute on your method/class as a shortcut to disable the change tracking for the whole method body.
 
 **Example: Using the `DisableEntityChangeTracking` attribute on a method**
 
@@ -240,12 +240,12 @@ public virtual async Task<List<PersonDto>> GetListAsync()
 
 `DisableEntityChangeTracking` and `EnableEntityChangeTracking` attributes can be used on a **method** or on a **class** (which affects all of the class methods).
 
-ABP uses dynamic proxying to make these attributes working. There are some rules here:
+ABP uses dynamic proxying to make these attributes work. There are some rules here:
 
 * If you are **not injecting** the service over an interface (like `IPersonAppService`), then the methods of the service must be `virtual`. Otherwise, [dynamic proxy / interception](Dynamic-Proxying-Interceptors.md) system can not work.
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted.
 
-> Change tracking behavior doesn't affect tracking entity objects returned from `InsertAsync` and `UpdateAsync` methods. The objects returned from these methods are always tracked (if the underlying provider has the change tracking feature) and any change you made to these objects are saved into the database.
+> Change tracking behavior doesn't affect tracking entity objects returned from `InsertAsync` and `UpdateAsync` methods. The objects returned from these methods are always tracked (if the underlying provider has the change tracking feature) and any change you make to these objects are saved into the database.
 
 ## Other Generic Repository Types
 
@@ -255,13 +255,13 @@ Standard `IRepository<TEntity, TKey>` interface exposes the standard `IQueryable
 
 ABP provides `IBasicRepository<TEntity, TPrimaryKey>` and `IBasicRepository<TEntity>` interfaces to support such scenarios. You can extend these interfaces (and optionally derive from `BasicRepositoryBase`) to create custom repositories for your entities.
 
-Depending on `IBasicRepository` but not depending on `IRepository` has an advantage to make possible to work with all data sources even if they don't support `IQueryable`.
+Depending on `IBasicRepository` but not depending on `IRepository` has the advantage of making it possible to work with all data sources even if they don't support `IQueryable`.
 
-Major vendors, like Entity Framework, NHibernate or MongoDB already support `IQueryable`. So, working with `IRepository` is the **suggested** way for typical applications. But reusable module developers may consider `IBasicRepository` to support a wider range of data sources.
+Major vendors, like Entity Framework, NHibernate, or MongoDB already support `IQueryable`. So, working with `IRepository` is the **suggested** way for typical applications. However reusable module developers may consider `IBasicRepository` to support a wider range of data sources.
 
 ### Read Only Repositories
 
-There are also `IReadOnlyRepository<TEntity, TKey>` and `IReadOnlyBasicRepository<Tentity, TKey>` interfaces for who only want to depend on querying capabilities of the repositories.
+There are also `IReadOnlyRepository<TEntity, TKey>` and `IReadOnlyBasicRepository<Tentity, TKey>` interfaces for those who only want to depend on the querying capabilities of the repositories.
 
 The `IReadOnlyRepository<TEntity, TKey>` derives the `IReadOnlyBasicRepository<Tentity, TKey>` and provides the following properties and methods as well:
 
@@ -276,27 +276,27 @@ Methods:
 - `WithDetails()` 1 overload
 - `WithDetailsAsync()` 1 overload
 
-Where as the `IReadOnlyBasicRepository<Tentity, TKey>` provides the following methods:
+Whereas the `IReadOnlyBasicRepository<Tentity, TKey>` provides the following methods:
 
 - `GetCountAsync()`
 - `GetListAsync()`
 - `GetPagedListAsync()`
 
-They can all be seen as below:
+They can all be seen below:
 
 ![generic-repositories](images/generic-repositories.png)
 
 #### Read Only Repositories behavior in Entity Framework Core
 
-Entity Framework Core read-only repository implementation uses [EF Core's No-Tracking feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries). That means the entities returned from the repository will not be tracked by the EF Core [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/), because it is expected that you won't update entities queried from a read-only repository. If you need to track the entities, you can still use the [AsTracking()](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.entityframeworkqueryableextensions.astracking) extension method on the LINQ expression, or `EnableTracking()` extension method on the repository object (See *Enabling / Disabling the Change Tracking* section in this document).
+Entity Framework Core read-only repository implementation uses [EF Core's No-Tracking feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries). That means the entities returned from the repository will not be tracked by the EF Core [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/) because it is expected that you won't update entities queried from a read-only repository. If you need to track the entities, you can still use the [AsTracking()](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.entityframeworkqueryableextensions.astracking) extension method on the LINQ expression, or `EnableTracking()` extension method on the repository object (See *Enabling / Disabling the Change Tracking* section in this document).
 
-> This behavior works only if the repository object is injected with one of the read-only repository interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`). It won't work if you have injected a standard repository (e.g. `IRepository<...>`) then casted it to a read-only repository interface.
+> This behavior works only if the repository object is injected with one of the read-only repository interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`). It won't work if you have injected a standard repository (e.g. `IRepository<...>`) and then cast it to a read-only repository interface.
 
 ### Generic Repository without a Primary Key
 
 If your entity does not have an Id primary key (it may have a composite primary key for instance) then you cannot use the `IRepository<TEntity, TKey>` (or basic/readonly versions) defined above. In that case, you can inject and use `IRepository<TEntity>` for your entity.
 
-> `IRepository<TEntity>` has a few missing methods those normally works with the `Id` property of an entity. Because of the entity has no `Id` property in that case, these methods are not available. One example is the `Get` method that gets an id and returns the entity with given id. However, you can still use `IQueryable<TEntity>` features to query entities by standard LINQ methods.
+> `IRepository<TEntity>` has a few missing methods that normally work with the `Id` property of an entity. Because the entity has no `Id` property in that case, these methods are not available. One example is the `Get` method which gets an id and returns the entity with the given id. However, you can still use `IQueryable<TEntity>` features to query entities by standard LINQ methods.
 
 ## Custom Repositories
 
@@ -304,7 +304,7 @@ Default generic repositories will be sufficient for most cases. However, you may
 
 ### Custom Repository Example
 
-ABP does not force you to implement any interface or inherit from any base class for a repository. It can be just a simple POCO class. However, it's suggested to inherit existing repository interface and classes to make your work easier and get the standard methods out of the box.
+ABP does not force you to implement any interface or inherit from any base class for a repository. It can be just a simple POCO class. However, it's suggested to inherit existing repository interfaces and classes to make your work easier and get the standard methods out of the box.
 
 #### Custom Repository Interface
 
@@ -348,7 +348,7 @@ You can directly access the data access provider (`DbContext` in this case) to p
 
 ## IQueryable & Async Operations
 
-`IRepository` provides `GetQueryableAsync()` to obtain an `IQueryable`, that means you can **directly use LINQ extension methods** on it, as shown in the example of the "*Querying / LINQ over the Repositories*" section above.
+`IRepository` provides `GetQueryableAsync()` to obtain an `IQueryable`, which means you can **directly use LINQ extension methods** on it, as shown in the example of the "*Querying / LINQ over the Repositories*" section above.
 
 **Example: Using the `Where(...)` and the `ToList()` extension methods**
 
@@ -376,7 +376,7 @@ Based on your requirements and development model, you have the following options
 
 **The easiest solution** is to directly add the EF Core package from the project you want to use these async methods.
 
-> Add the [Volo.Abp.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore) NuGet package to your project, which indirectly reference to the EF Core package. This ensures that you use the correct version of the EF Core compatible to the rest of your application.
+> Add the [Volo.Abp.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore) NuGet package to your project, which indirectly references the EF Core package. This ensures that you use the correct version of the EF Core compatible with the rest of your application.
 
 When you add the NuGet package to your project, you can take full power of the EF Core extension methods.
 
@@ -391,7 +391,7 @@ var people = queryable
 
 This method is suggested;
 
-* If you are developing an application and you **don't plan to change** EF Core in the future, or you can **tolerate** it if you need to change later. We believe that's reasonable if you are developing a final application.
+* If you are developing an application and you **don't plan to change** EF Core in the future, or you can **tolerate** it if you need to change it later. We believe that's reasonable if you are developing a final application.
 
 #### MongoDB Case
 
@@ -432,7 +432,7 @@ var queryable = await _bookRepository.GetQueryableAsync();
 var count = await queryable.Where(x => x.Name.Contains("A")).CountAsync();
 ```
 
-This is because the `CountAsync()` method in this example is called on a `IQueryable` interface, not on the repository object. See the other options for such cases.
+This is because the `CountAsync()` method in this example is called on an `IQueryable` interface, not on the repository object. See the other options for such cases.
 
 This method is suggested **wherever possible**.
 
@@ -488,7 +488,7 @@ namespace AbpDemo
 
 > `ApplicationService` and `DomainService` base classes already have `AsyncExecuter` properties pre-injected and usable without needing an explicit constructor injection.
 
-ABP Framework executes the query asynchronously using the actual database provider's API. While that is not a usual way to execute a query, it is the best way to use the async API without depending on the database provider.
+ABP Framework executes the query asynchronously using the actual database provider's API. While that is not the usual way to execute a query, it is the best way to use the async API without depending on the database provider.
 
 This method is suggested;
 
@@ -499,10 +499,13 @@ For example, ABP Framework uses the `IAsyncQueryableExecuter` in the `CrudAppSer
 
 ### Option-4: Custom Repository Methods
 
-You can always create custom repository methods and use the database provider specific APIs, like async extension methods here. See [EF Core](Entity-Framework-Core.md) or [MongoDb](MongoDB.md) document for more info about the custom repositories.
+You can always create custom repository methods and use the database provider-specific APIs, like async extension methods here. See [EF Core](Entity-Framework-Core.md) or [MongoDb](MongoDB.md) document for more info about the custom repositories.
 
 This method is suggested;
 
 * If you want to **completely isolate** your domain & application layers from the database provider.
 * If you develop a **reusable [application module](Modules/Index.md)** and don't want to force to a specific database provider, which should be done as a [best practice](Best-Practices/Index.md).
 
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/generic-repositories)

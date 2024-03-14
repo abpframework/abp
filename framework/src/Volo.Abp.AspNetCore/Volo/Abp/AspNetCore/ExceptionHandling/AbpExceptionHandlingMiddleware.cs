@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
@@ -14,7 +15,7 @@ using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.ExceptionHandling;
 
-public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
+public class AbpExceptionHandlingMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     private readonly ILogger<AbpExceptionHandlingMiddleware> _logger;
 
@@ -27,7 +28,7 @@ public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
         _clearCacheHeadersDelegate = ClearCacheHeaders;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {

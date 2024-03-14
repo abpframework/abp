@@ -179,7 +179,31 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         }
         //</TEMPLATE-REMOVE>
 
-        //<TEMPLATE-REMOVE IF-NOT='HostWithIds'>
+        //<TEMPLATE-REMOVE IF-NOT='ui:blazor-webapp&&TIERED'>
+        // Blazor WebApp Tiered Client
+        var blazorWebAppTieredClientId = configurationSection["MyProjectName_BlazorWebAppTiered:ClientId"];
+        if (!blazorWebAppTieredClientId.IsNullOrWhiteSpace())
+        {
+            var blazorWebAppTieredRootUrl = configurationSection["MyProjectName_BlazorWebAppTiered:RootUrl"]!.EnsureEndsWith('/');
+
+            await CreateApplicationAsync(
+                name: blazorWebAppTieredClientId!,
+                type: OpenIddictConstants.ClientTypes.Confidential,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
+                displayName: "Blazor Server Application",
+                secret: configurationSection["MyProjectName_BlazorWebAppTiered:ClientSecret"] ?? "1q2w3e*",
+                grantTypes: new List<string> //Hybrid flow
+                {
+                    OpenIddictConstants.GrantTypes.AuthorizationCode, OpenIddictConstants.GrantTypes.Implicit
+                },
+                scopes: commonScopes,
+                redirectUri: $"{blazorWebAppTieredRootUrl}signin-oidc",
+                clientUri: blazorWebAppTieredRootUrl,
+                postLogoutRedirectUri: $"{blazorWebAppTieredRootUrl}signout-callback-oidc"
+            );
+        }
+        //</TEMPLATE-REMOVE>
+
         // Swagger Client
         var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
         if (!swaggerClientId.IsNullOrWhiteSpace())
@@ -198,7 +222,6 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 clientUri: swaggerRootUrl
             );
         }
-        //</TEMPLATE-REMOVE>
     }
 
     private async Task CreateApplicationAsync(

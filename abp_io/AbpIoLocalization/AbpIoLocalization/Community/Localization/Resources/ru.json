@@ -226,7 +226,7 @@
     "AllAttendees": "Все участники",
     "SeeRaffleDetail": "См. подробную информацию о розыгрыше",
     "SeeRaffle": "Посмотреть лотерею",
-    "ParticipationIsComplete!": "Участие завершено!",
+    "ParticipationIsComplete": "Участие завершено.",
     "ABPCoreDevelopmentTeam": "Основная группа разработчиков ABP",
     "RegisterTheEvent": "Зарегистрировать мероприятие",
     "GoToConferencePage": "Перейти на страницу конференции",
@@ -258,6 +258,10 @@
     "LatestArticles": "Последние статьи",
     "RaffleHeader": "Привет, участник сообщества ABP!",
     "RafflesInfo": "<br>Эта страница розыгрыша посвящена тому, чтобы выразить нашу признательность вам за то, что вы являетесь активным членом сообщества.  <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">Обсуждения сообщества ABP</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">,Конференция ABP .NET</a>, посещать или спонсировать мероприятия, связанные с .NET, на которых мы раздаем подарки. <br><br>Вы можете подписаться на эту страницу, чтобы увидеть предстоящие розыгрыши, посетить их или просмотреть предыдущие розыгрыши, которые мы проводим, включая победителей. <br><br>Спасибо за активное участие! ",
-    "RafflesInfoTitle": "Сообщество АБП <span class=\"gradient-community\">Розыгрыши</span>"
+    "RafflesInfoTitle": "Сообщество АБП <span class=\"gradient-community\">Розыгрыши</span>",
+    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> поддерживается.",
+    "Preview": "Предварительный просмотр",
+    "VisitPage": "Посетите страницу",
+    "VisitVideoCourseDescription": "Если вы хотите изучить основы ABP Framework, ознакомьтесь с видеокурсами ABP Essentials."
   }
 }

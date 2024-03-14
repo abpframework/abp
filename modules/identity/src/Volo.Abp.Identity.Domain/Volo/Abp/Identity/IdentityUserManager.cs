@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -82,7 +83,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return await CreateAsync(user);
     }
-    
+
     public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
     {
         user.Claims.Clear();
@@ -396,5 +397,127 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         await UserRepository.UpdateOrganizationAsync(sourceOrganizationId, targetOrganizationId, CancellationToken);
+    }
+
+    public virtual async Task<bool> ValidateUserNameAsync(string userName, Guid? userId = null)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrEmpty(Options.User.AllowedUserNameCharacters) && userName.Any(c => !Options.User.AllowedUserNameCharacters.Contains(c)))
+        {
+            return false;
+        }
+
+        var owner = await FindByNameAsync(userName);
+        if (owner != null && owner.Id != userId)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public virtual Task<string> GetRandomUserNameAsync(int length)
+    {
+        var allowedUserNameCharacters = Options.User.AllowedUserNameCharacters;
+        if (allowedUserNameCharacters.IsNullOrWhiteSpace())
+        {
+            allowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        }
+
+        var randomUserName = string.Empty;
+        var random = new Random();
+        while (randomUserName.Length < length)
+        {
+            randomUserName += allowedUserNameCharacters[random.Next(0, allowedUserNameCharacters.Length)];
+        }
+
+        return Task.FromResult(randomUserName);
+    }
+
+    public virtual async Task<string> GetUserNameFromEmailAsync(string email)
+    {
+        const int maxTryCount = 20;
+        var tryCount = 0;
+
+        var userName = email.Split('@')[0];
+
+        if (await ValidateUserNameAsync(userName))
+        {
+            // The username is valid.
+            return userName;
+        }
+
+        if (Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace())
+        {
+            // The AllowedUserNameCharacters is not set. So, we are generating a random username.
+            tryCount = 0;
+            do
+            {
+                var randomUserName = userName + RandomHelper.GetRandom(1000, 9999);
+                if ( await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+        else if (!userName.All(Options.User.AllowedUserNameCharacters.Contains))
+        {
+            // The username contains not allowed characters. So, we are generating a random username.
+            do
+            {
+                var randomUserName = await GetRandomUserNameAsync(userName.Length);
+                if ( await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+        else if (Options.User.AllowedUserNameCharacters.Where(char.IsDigit).Distinct().Count() >= 4)
+        {
+            // The AllowedUserNameCharacters includes 4 numbers. So, we are generating 4 random numbers and appending to the username.
+            var numbers = Options.User.AllowedUserNameCharacters.Where(char.IsDigit).OrderBy(x => Guid.NewGuid()).Take(4).ToArray();
+            var minArray = numbers.OrderBy(x => x).ToArray();
+            if (minArray[0] == '0')
+            {
+                var secondItem = minArray[1];
+                minArray[0] = secondItem;
+                minArray[1] = '0';
+            }
+            var min = int.Parse(new string(minArray));
+            var max = int.Parse(new string(numbers.OrderByDescending(x => x).ToArray()));
+            tryCount = 0;
+            do
+            {
+                var randomUserName = userName + RandomHelper.GetRandom(min, max);
+                if ( await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+        else
+        {
+            tryCount = 0;
+            do
+            {
+                // The AllowedUserNameCharacters does not include numbers. So, we are generating 4 random characters and appending to the username.
+                var randomUserName = userName + await GetRandomUserNameAsync(4);
+                if (await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+
+        Logger.LogError($"Could not get a valid user name for the given email address: {email}, allowed characters: {Options.User.AllowedUserNameCharacters}, tried {maxTryCount} times.");
+        throw new AbpIdentityResultException(IdentityResult.Failed(new IdentityErrorDescriber().InvalidUserName(userName)));
     }
 }

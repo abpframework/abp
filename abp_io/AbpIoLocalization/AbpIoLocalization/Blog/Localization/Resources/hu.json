@@ -2,6 +2,7 @@
   "culture": "hu",
   "texts": {
     "AbpTitle": "ABP Framework – Nyílt forráskódú webalkalmazás-keretrendszer",
-    "AbpDescription": "Az ABP egy nyílt forráskódú alkalmazáskeret, amely az AspNet Core alapú webalkalmazások fejlesztésére összpontosít. Ne ismételje magát, összpontosítson saját üzleti kódjára."
+    "AbpDescription": "Az ABP egy nyílt forráskódú alkalmazáskeret, amely az AspNet Core alapú webalkalmazások fejlesztésére összpontosít. Ne ismételje magát, összpontosítson saját üzleti kódjára.",
+    "AbpDefinition": "ABP blog .NET fejlesztéshez, többplatformos, ASP.NET alkalmazássablonokhoz, ABP-vel kapcsolatos hírekhez és egyebekhez..."
   }
 }

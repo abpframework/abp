@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Book to Author Relation",
+    "Path": "Tutorials/Part-10"
+  },
+  "Previous": {
+    "Name": "Authors: Application Layer",
+    "Path": "Tutorials/Part-8"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -331,14 +346,14 @@ public class CreateModalModel : BookStorePageModel
     {
         [Required]
         [StringLength(AuthorConsts.MaxNameLength)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
         [TextArea]
-        public string ShortBio { get; set; }
+        public string? ShortBio { get; set; }
     }
 }
 ```
@@ -454,14 +469,14 @@ public class EditModalModel : BookStorePageModel
 
         [Required]
         [StringLength(AuthorConsts.MaxNameLength)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
         [TextArea]
-        public string ShortBio { get; set; }
+        public string? ShortBio { get; set; }
     }
 }
 ```
@@ -1243,7 +1258,3 @@ That's all! This is a fully working CRUD page, you can create, edit and delete t
 > **Tip**: If you run the `.DbMigrator` console application after defining a new permission, it automatically grants these new permissions to the admin role and you don't need to manually grant the permissions yourself.
 
 {{end}}
-
-## The Next Part
-
-See the [next part](Part-10.md) of this tutorial.

@@ -1,5 +1,5 @@
 {
-  "culture": "en",
+    "culture": "en",
     "texts": {
         "AddSubMenuItem": "Add Sub Menu Item",
         "AreYouSure": "Are You Sure?",
@@ -147,7 +147,7 @@
         "SubjectPlaceholder": "Please type a subject",
         "Submit": "Submit",
         "Subscribe": "Subscribe",
-        "SuccessfullySaved": "Successfully saved!",
+        "SavedSuccessfully": "Saved successfully!",
         "TagDeletionConfirmationMessage": "Are you sure to delete '{0}' tag?",
         "Tags": "Tags",
         "Text": "Text",
@@ -227,6 +227,7 @@
         "CssClass": "CSS Class",
         "TagsHelpText": "Tags should be comma-separated (e.g.: tag1, tag2, tag3)",
         "ThisPartOfContentCouldntBeLoaded": "This part of content couldn't be loaded.",
-        "DuplicateCommentAttemptMessage": "Duplicate comment post attempt detected. Your comment has already been submitted."
+        "DuplicateCommentAttemptMessage": "Duplicate comment post attempt detected. Your comment has already been submitted.",
+        "NoBlogPostYet": "No blog post yet!"
     }
 }

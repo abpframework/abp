@@ -18,9 +18,22 @@ public static class DynamicProxyIgnoreTypes
 
     public static void Add<T>()
     {
+        Add(typeof(T));
+    }
+
+    public static void Add(Type type)
+    {
         lock (IgnoredTypes)
         {
-            IgnoredTypes.AddIfNotContains(typeof(T));
+            IgnoredTypes.AddIfNotContains(type);
+        }
+    }
+
+    public static void Add(params Type[] types)
+    {
+        lock (IgnoredTypes)
+        {
+            IgnoredTypes.AddIfNotContains(types);
         }
     }
 

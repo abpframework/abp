@@ -1,0 +1,15 @@
+{
+  "culture": "de",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Die OpenID Connect-Anfrage kann nicht abgerufen werden.",
+    "TheUserDetailsCannotBbeRetrieved": "Die Benutzerdaten können nicht abgerufen werden.",
+    "TheApplicationDetailsCannotBeFound": "Die Bewerbungsdetails können nicht gefunden werden.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Details zur aufrufenden Clientanwendung können nicht gefunden werden.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Der angegebene Gewährungstyp {0} ist nicht implementiert.",
+    "Authorization": "Genehmigung",
+    "DoYouWantToGrantAccessToYourData": "Möchten Sie {0} Zugriff auf Ihre Daten gewähren?",
+    "ScopesRequested": "Umfänge angefordert",
+    "Accept": "Akzeptieren",
+    "Deny": "Leugnen"
+  }
+}

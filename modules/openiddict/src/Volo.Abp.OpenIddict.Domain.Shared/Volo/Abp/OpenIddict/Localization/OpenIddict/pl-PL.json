@@ -1,0 +1,15 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Nie można pobrać żądania OpenID Connect.",
+    "TheUserDetailsCannotBbeRetrieved": "Nie można odzyskać danych użytkownika.",
+    "TheApplicationDetailsCannotBeFound": "Nie można znaleźć szczegółów aplikacji.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Nie można znaleźć szczegółów dotyczących wywołującej aplikacji klienckiej.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Określony typ przyznania {0} nie jest zaimplementowany.",
+    "Authorization": "Upoważnienie",
+    "DoYouWantToGrantAccessToYourData": "Czy chcesz przyznać firmie {0} dostęp do swoich danych?",
+    "ScopesRequested": "Poproszono o zakresy",
+    "Accept": "Zaakceptować",
+    "Deny": "Zaprzeczyć"
+  }
+}

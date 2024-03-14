@@ -52,7 +52,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     return this._page;
   }
 
-  private _totalCount = 0
+  private _totalCount = 0;
   set totalCount(value: number) {
     if (value === this._totalCount) return;
 

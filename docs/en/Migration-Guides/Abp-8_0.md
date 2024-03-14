@@ -4,6 +4,12 @@ This document is a guide for upgrading ABP v7.x solutions to ABP v8.0. There are
 
 > ABP Framework upgraded to .NET 8.0, so you need to move your solutions to .NET 8.0 if you want to use the ABP 8.0. You can check the [Migrate from ASP.NET Core 7.0 to 8.0](https://learn.microsoft.com/en-us/aspnet/core/migration/70-80) documentation.
 
+## Upgraded to OpenIddict to 5.0.0
+
+The 5.0 release of OpenIddict is a major release that introduces breaking changes.
+
+See [OpenIddict 4.x to 5.x Migration Guide](OpenIddict4-to-5.md) for more information.
+
 ## Injected the `IDistributedEventBus` Dependency into the `IdentityUserManager`
 
 In this version, `IDistributedEventBus` service has been injected to the `IdentityUserManager` service, to publish a distributed event when the email or username is changed for a user, this was needed because sometimes there may be scenarios where the old email/username is needed for the synchronization purposes. 
@@ -119,9 +125,17 @@ From this version on, instead of injecting the `DaprClient` directly, using the 
 
 The documentation is already updated according to this suggestion and can be found at https://docs.abp.io/en/abp/8.0/Dapr/Index. So, if you want to learn more you can check the documentation or see the PR: https://github.com/abpframework/abp/pull/18117.
 
+## Use Newer Versions of the SQL Server (SQL Server 14+)
+
+Starting with EF Core 8.0, EF now generates SQL that is more efficient, but is unsupported on SQL Server 2014 and below. Therefore, if your database provider is SQL Server, then ensure that it's newer than SQL Server 2014. Otherwise, you may get errors due to database creation or while seeding initial data.
+
+The error is similar to: `Microsoft.Data.SqlClient.SqlException (0x80131904)`.
+
+> Check the [Entity Framework Core's Breaking Changes](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/breaking-changes#high-impact-changes) documentation for more info.
+
 ## Angular UI
 
-# Guards
+### Guards
 
 From Angular Documentation;
 
@@ -149,24 +163,25 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | ------------------- | ----------- | ----------- |
 | aliyun-net-sdk-sts | 3.1.0 |  3.1.2 |
 | AsyncKeyedLock | 6.2.1 |  6.2.2 |
-| Autofac | 7.0.0 |  7.1.0 |
+| Autofac | 7.0.0 |  8.0.0 |
+| Autofac.Extensions.DependencyInjection | 8.0.0 |  9.0.0 |
 | Autofac.Extras.DynamicProxy | 6.0.1 |  7.1.0 |
 | AutoMapper | 12.0.0 |  12.0.1 |
 | AWSSDK.S3 | 3.7.9.2 |  3.7.300.2 |
 | AWSSDK.SecurityToken | 3.7.1.151 |  3.7.300.2 |
 | Azure.Messaging.ServiceBus | 7.8.1 |  7.17.0 |
 | Azure.Storage.Blobs | 12.15.0 |  12.19.1 |
-| Blazorise | 1.3.1 |  1.3.2 |
-| Blazorise.Bootstrap5 | 1.3.1 |  1.3.2 |
-| Blazorise.Icons.FontAwesome | 1.3.1 |  1.3.2 |
-| Blazorise.Components | 1.3.1 |  1.3.2 |
-| Blazorise.DataGrid | 1.3.1 |  1.3.2 |
-| Blazorise.Snackbar | 1.3.1 |  1.3.2 |
+| Blazorise | 1.3.1 |  1.4.1 |
+| Blazorise.Bootstrap5 | 1.3.1 |  1.4.1 |
+| Blazorise.Icons.FontAwesome | 1.3.1 |  1.4.1 |
+| Blazorise.Components | 1.3.1 |  1.4.1 |
+| Blazorise.DataGrid | 1.3.1 |  1.4.1 |
+| Blazorise.Snackbar | 1.3.1 |  1.4.1 |
 | Confluent.Kafka | 1.8.2 |  2.3.0 |
 | Dapper | 2.0.123 |  2.1.21 |
 | Dapr.AspNetCore | 1.9.0 |  1.12.0 |
 | Dapr.Client | 1.9.0 |  1.12.0 |
-| Devart.Data.Oracle.EFCore | 10.1.134.7 |  10.1.151.7 |
+| Devart.Data.Oracle.EFCore | 10.1.134.7 |  10.3.10.8 |
 | DistributedLock.Core | 1.0.4 |  1.0.5 |
 | DistributedLock.Redis | 1.0.1 |  1.0.2 |
 | EphemeralMongo.Core | 1.1.0 |  1.1.3 |
@@ -247,14 +262,14 @@ You can see the following list of NuGet libraries that have been upgraded with .
 | Npgsql.EntityFrameworkCore.PostgreSQL | 7.0.0 |  8.0.0 |
 | NSubstitute.Analyzers.CSharp | 1.0.15 |  1.0.16 |
 | Octokit | 0.50.0 |  9.0.0 |
-| OpenIddict.Abstractions | 4.8.0 |  4.10.0 |
-| OpenIddict.Core | 4.8.0 |  4.10.0 |
-| OpenIddict.Server.AspNetCore | 4.8.0 |  4.10.0 |
-| OpenIddict.Validation.AspNetCore | 4.8.0 |  4.10.0 |
-| OpenIddict.Validation.ServerIntegration | 4.8.0 |  4.10.0 |
+| OpenIddict.Abstractions | 4.8.0 |  5.0.0 |
+| OpenIddict.Core | 4.8.0 |  5.0.0 |
+| OpenIddict.Server.AspNetCore | 4.8.0 |  5.0.0 |
+| OpenIddict.Validation.AspNetCore | 4.8.0 |  5.0.0 |
+| OpenIddict.Validation.ServerIntegration | 4.8.0 |  5.0.0 |
 | Oracle.EntityFrameworkCore | 7.21.8 |  8.21.121 |
 | Polly | 7.2.3 |  8.2.0 |
-| Pomelo.EntityFrameworkCore.MySql | 7.0.0 |  8.0.0-beta.2 |
+| Pomelo.EntityFrameworkCore.MySql | 7.0.0 |  8.0.0 |
 | Quartz | 3.4.0 |  3.7.0 |
 | Quartz.Extensions.DependencyInjection | 3.4.0 |  3.7.0 |
 | Quartz.Plugins.TimeZoneConverter | 3.4.0 |  3.7.0 |

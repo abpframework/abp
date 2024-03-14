@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Telefonnummer",
     "DisplayName:TwoFactorEnabled": "Zwei-Faktor-Überprüfung",
     "DisplayName:IsActive": "Aktiv",
-    "DisplayName:LockoutEnabled": "Benutzerkonto nach fehlgeschlagenen Anmeldeversuchen sperren",
+    "DisplayName:LockoutEnabled": "Konto-Sperrung",
     "NewRole": "Neue Rolle",
     "RoleName": "Rollenname",
     "CreationTime": "Erstellungszeitpunkt",
@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "Sie können Ihre Zwei-Faktor-Einstellung nicht ändern.",
     "Volo.Abp.Identity:010008": "Die Zwei-Faktor-Einstellung dürfen nicht geändert werden.",
     "Volo.Abp.Identity:010009": "Sie können sich nicht selbst delegieren.",
+    "Volo.Abp.Identity:010021": "Der Name existiert bereits {0}",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximal zulässige Anzahl an Mitgliedschaften in Organisationseinheiten für einen Benutzer",
     "ThisUserIsNotActiveMessage": "Dieser Benutzer ist nicht aktiv.",
     "Permission:IdentityManagement": "Identitätsverwaltung",
@@ -84,6 +85,7 @@
     "Permission:Edit": "Bearbeiten",
     "Permission:Delete": "Löschen",
     "Permission:ChangePermissions": "Berechtigungen ändern",
+    "Permission:ManageRoles": "Rollen verwalten",
     "Permission:UserManagement": "Benutzerverwaltung",
     "Permission:UserLookup": "Benutzersuche",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Erforderliche Länge",
@@ -117,6 +119,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Gibt an, ob die Telefonnummer vom Benutzer bestätigt werden kann.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Gibt an, ob eine bestätigte Telefonnummer erforderlich ist, um sich anzumelden.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Gibt an, ob der Benutzername vom Benutzer aktualisiert werden kann.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Gibt an, ob die E-Mail-Adresse vom Benutzer aktualisiert werden kann."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Gibt an, ob die E-Mail-Adresse vom Benutzer aktualisiert werden kann.",
+    "Details": "Einzelheiten",
+    "CreatedBy": "Erstellt von",
+    "ModifiedBy": "Angepasst von",
+    "ModificationTime": "Änderungszeit",
+    "PasswordUpdateTime": "Zeit der Passwortaktualisierung",
+    "LockoutEndTime": "Endzeit der Sperrung",
+    "FailedAccessCount": "Anzahl der fehlgeschlagenen Zugriffe"
   }
 }

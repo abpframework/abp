@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using NuGet.Versioning;
 using Volo.Abp.Cli.GitHub;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
@@ -19,6 +20,7 @@ using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Maui;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.IO;
@@ -37,18 +39,21 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
     private readonly CliHttpClientFactory _cliHttpClientFactory;
+    protected CliVersionService CliVersionService { get; }
 
     public AbpIoSourceCodeStore(
         IOptions<AbpCliOptions> options,
         IJsonSerializer jsonSerializer,
         IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
         ICancellationTokenProvider cancellationTokenProvider,
-        CliHttpClientFactory cliHttpClientFactory)
+        CliHttpClientFactory cliHttpClientFactory,
+        CliVersionService cliVersionService)
     {
         JsonSerializer = jsonSerializer;
         RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
         CancellationTokenProvider = cancellationTokenProvider;
         _cliHttpClientFactory = cliHttpClientFactory;
+        CliVersionService = cliVersionService;
         Options = options.Value;
 
         Logger = NullLogger<AbpIoSourceCodeStore>.Instance;
@@ -60,11 +65,12 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         string version = null,
         string templateSource = null,
         bool includePreReleases = false,
-        bool skipCache = false)
+        bool skipCache = false,
+        bool trustUserVersion = false)
     {
         DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
+        var userSpecifiedVersion = version != null;
         var latestVersion = version ?? await GetLatestSourceCodeVersionAsync(name, type, null, includePreReleases);
-
         if (version == null)
         {
             if (latestVersion == null)
@@ -86,24 +92,76 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
 
             version = latestVersion;
         }
-        else
+
+        if (type == SourceCodeTypes.Template)
         {
-            if (!await IsVersionExists(name, version))
+            var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
+            var templateVersion = SemanticVersion.Parse(version);
+
+            var outputWarning = false;
+            if (!trustUserVersion)
             {
-                throw new Exception("There is no version found with given version: " + version);
+                if (currentCliVersion.Major != templateVersion.Major || currentCliVersion.Minor != templateVersion.Minor)
+                {
+                    // major and minor version are different
+                    outputWarning = true;
+                }
+                else if (currentCliVersion.Major == templateVersion.Major &&
+                         currentCliVersion.Minor == templateVersion.Minor &&
+                         currentCliVersion.Patch < templateVersion.Patch)
+                {
+                    // major and minor version are same but patch version is lower
+                    outputWarning = true;
+                }
+                else if(currentCliVersion.Major == templateVersion.Major &&
+                        currentCliVersion.Minor == templateVersion.Minor &&
+                        currentCliVersion.Patch == templateVersion.Patch &&
+                        currentCliVersion.IsPrerelease && templateVersion.IsPrerelease)
+                {
+                    // major and minor and patch version are same but prerelease version may be lower
+                    var cliRcVersion = currentCliVersion.ReleaseLabels.LastOrDefault();
+                    var templateRcVersion = templateVersion.ReleaseLabels.LastOrDefault();
+                    if (cliRcVersion != null && templateRcVersion != null)
+                    {
+                        if (int.TryParse(cliRcVersion, out var cliRcVersionNumber) && int.TryParse(templateRcVersion, out var templateRcVersionNumber))
+                        {
+                            if (cliRcVersionNumber < templateRcVersionNumber)
+                            {
+                                outputWarning = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (outputWarning)
+            {
+                Logger.LogWarning(userSpecifiedVersion
+                    ? $"The specified template version ({templateVersion}) is different than the CLI version ({currentCliVersion}). This may cause compatibility issues."
+                    : $"The latest template version ({templateVersion}) is different than the CLI version ({currentCliVersion}). This may cause compatibility issues.");
+                Logger.LogWarning("Please upgrade/downgrade the CLI version to the template version.");
+                Logger.LogWarning($"> dotnet tool uninstall -g volo.abp.cli");
+                Logger.LogWarning(!templateVersion.IsPrerelease
+                    ? $"> dotnet tool install -g volo.abp.cli --version \"{templateVersion.Major}.{templateVersion.Minor}.*\""
+                    : $"> dotnet tool install -g volo.abp.cli --version {templateVersion}");
+
+                if (userSpecifiedVersion)
+                {
+                    Logger.LogWarning($"We have changed the template version as the cli version.");
+                    Logger.LogWarning($"New version: {version}");
+                }
             }
         }
 
-        var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
-
-        if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
+        if (!trustUserVersion && !await IsVersionExists(name, version))
         {
-            Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
-            return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")),
-                version, latestVersion, nugetVersion);
+            throw new Exception("There is no version found with given version: " + version);
         }
 
-        var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + "-" + version + ".zip");
+        var nugetVersion = version;
+
+
+        var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + ".zip");
 
 #if DEBUG
         if (File.Exists(localCacheFile))

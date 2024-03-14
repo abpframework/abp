@@ -129,6 +129,7 @@ If you do not specify which services to expose, ABP expose services by conventio
 
 * The class itself is exposed by default. That means you can inject it by ``TaxCalculator`` class.
 * Default interfaces are exposed by default. Default interfaces are determined by naming convention. In this example, ``ICalculator`` and ``ITaxCalculator`` are default interfaces of ``TaxCalculator``, but ``ICanCalculate`` is not. A generic interface (e.g. `ICalculator<string>`) is also considered as a default interface if the naming convention is satisfied.
+* The resolved instances will be the same if multiple services are exposed for **Singleton** and **Scoped** services. This behavior requires exposing the class itself.
 
 ### Combining All Together
 
@@ -140,6 +141,50 @@ Combining attributes and interfaces is possible as long as it's meaningful.
 public class TaxCalculator : ITaxCalculator, ITransientDependency
 {
 
+}
+````
+
+### ExposeKeyedService Attribute 
+
+`ExposeKeyedServiceAttribute` is used to control which keyed services are provided by the related class. Example:
+
+````C#
+[ExposeKeyedService<ITaxCalculator>("taxCalculator")]
+[ExposeKeyedService<ICalculator>("calculator")]
+public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+{
+}
+````
+
+In the example above, the `TaxCalculator` class exposes the `ITaxCalculator` interface with the key `taxCalculator` and the `ICalculator` interface with the key `calculator`. That means you can get keyed services from the `IServiceProvider` as shown below:
+
+````C#
+var taxCalculator = ServiceProvider.GetRequiredKeyedService<ITaxCalculator>("taxCalculator");
+var calculator = ServiceProvider.GetRequiredKeyedService<ICalculator>("calculator");
+````
+
+Also, you can use the [`FromKeyedServicesAttribute`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.fromkeyedservicesattribute?view=dotnet-plat-ext-8.0) to resolve a certain keyed service in the constructor:
+
+```csharp
+public class MyClass
+{
+    //...
+
+    public MyClass([FromKeyedServices("taxCalculator")] ITaxCalculator taxCalculator)
+    {
+        TaxCalculator = taxCalculator;
+    }
+}
+```
+
+> Notice that the `ExposeKeyedServiceAttribute` only exposes the keyed services. So, you can not inject the `ITaxCalculator` or `ICalculator` interfaces in your application without using the `FromKeyedServicesAttribute` as shown in the example above. If you want to expose both keyed and non-keyed services, you can use the `ExposeServicesAttribute` and `ExposeKeyedServiceAttribute` attributes together as shown below:
+
+````C#
+[ExposeKeyedService<ITaxCalculator>("taxCalculator")]
+[ExposeKeyedService<ICalculator>("calculator")]
+[ExposeServices(typeof(ITaxCalculator), typeof(ICalculator))]
+public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+{
 }
 ````
 
@@ -522,3 +567,4 @@ Startup templates come with Autofac installed. See [Autofac integration](Autofac
 ## See Also
 
 * [ASP.NET Core Dependency Injection Best Practices, Tips & Tricks](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96)
+* [Video tutorial](https://abp.io/video-courses/essentials/dependency-injection)

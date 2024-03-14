@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "Skammnefni {ShortName} er þegar til. “",
     "Preview": "forskoðun",
     "Search": "Leit",
-    "SearchResults": "Leitar niðurstöður"
+    "SearchResults": "Leitar niðurstöður",
+    "SearchInTheAllDocuments": "Leitaðu í öllum skjölum"
   }
 }

@@ -1,6 +1,7 @@
 {
   "culture": "ro-RO",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Numele chiriașului există deja: {Name}",
     "Menu:TenantManagement": "Administrarea clienţilor",
     "Tenants": "Clienţi",
     "NewTenant": "Client nou",

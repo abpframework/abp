@@ -547,7 +547,7 @@
     "RaffleDeletionConfirmationMessage": "Вы уверены, что хотите удалить этот розыгрыш?",
     "CreateRaffle": "Создать лотерею",
     "RemoveImage": "Удалить изображение",
-    "SuccessfullySaved": "Успешно сохранено",
+    "SavedSuccessfully": "Успешно сохранено",
     "Menu:CommunityTalks": "Обсуждения сообщества",
     "Menu:Conferences": "Конференции",
     "Menu:OtherLiveEvents": "Другие живые события",

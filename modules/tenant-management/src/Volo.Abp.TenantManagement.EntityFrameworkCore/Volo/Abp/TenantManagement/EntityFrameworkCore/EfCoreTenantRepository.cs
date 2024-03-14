@@ -19,23 +19,23 @@ public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContex
     }
 
     public virtual async Task<Tenant> FindByNameAsync(
-        string name,
+        string normalizedName,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(t => t.Id)
-            .FirstOrDefaultAsync(t => t.Name == name, GetCancellationToken(cancellationToken));
+            .FirstOrDefaultAsync(t => t.NormalizedName == normalizedName, GetCancellationToken(cancellationToken));
     }
 
     [Obsolete("Use FindByNameAsync method.")]
-    public virtual Tenant FindByName(string name, bool includeDetails = true)
+    public virtual Tenant FindByName(string normalizedName, bool includeDetails = true)
     {
         return DbSet
             .IncludeDetails(includeDetails)
             .OrderBy(t => t.Id)
-            .FirstOrDefault(t => t.Name == name);
+            .FirstOrDefault(t => t.NormalizedName == normalizedName);
     }
 
     [Obsolete("Use FindAsync method.")]

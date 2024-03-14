@@ -11,9 +11,19 @@ public abstract class AbpTestBaseWithServiceProvider
     {
         return ServiceProvider.GetService<T>();
     }
- 
+
     protected virtual T GetRequiredService<T>() where T : notnull
     {
         return ServiceProvider.GetRequiredService<T>();
+    }
+
+    protected virtual T? GetKeyedServices<T>(object? serviceKey)
+    {
+        return ServiceProvider.GetKeyedService<T>(serviceKey);
+    }
+
+    protected virtual T GetRequiredKeyedService<T>(object? serviceKey) where T : notnull
+    {
+        return ServiceProvider.GetRequiredKeyedService<T>(serviceKey);
     }
 }

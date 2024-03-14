@@ -8,7 +8,7 @@
     "Surname": "Nom",
     "EmailAddress": "Adresse e-mail",
     "PhoneNumber": "Numéro de téléphone",
-    "UserInformations": "Informations utilisateur",
+    "UserInformations": "Informations Utilisateur",
     "DisplayName:IsDefault": "Par défaut",
     "DisplayName:IsStatic": "Statique",
     "DisplayName:IsPublic": "Public",
@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Numéro de téléphone",
     "DisplayName:TwoFactorEnabled": "Vérification de deux facteurs",
     "DisplayName:IsActive": "actif",
-    "DisplayName:LockoutEnabled": "Verrouiller le compte après l’échec des tentatives de connexion",
+    "DisplayName:LockoutEnabled": "Verrouillage du compte",
     "NewRole": "Nouveau rôle",
     "RoleName": "Nom du rôle",
     "CreationTime": "Temps de création",
@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "Vous ne pouvez pas modifier votre paramètre à deux facteurs.",
     "Volo.Abp.Identity:010008": "Il n’est pas permis de changer deux facteurs de réglage.",
     "Volo.Abp.Identity:010009": "Vous ne pouvez pas vous déléguer vous-même.",
+    "Volo.Abp.Identity:010021" : "Le nom '{0}' existe déjà.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Nombre maximal d’adhésions autorisées à l’unité d’organisation pour un utilisateur",
     "ThisUserIsNotActiveMessage": "Cet utilisateur n'est pas actif.",
     "Permission:IdentityManagement": "Gestion de l’identité",
@@ -84,6 +85,7 @@
     "Permission:Edit": "Modifier",
     "Permission:Delete": "Supprimer",
     "Permission:ChangePermissions": "Modifier les autorisations",
+    "Permission:ManageRoles": "Gérer les rôles",
     "Permission:UserManagement": "Gestion des utilisateurs",
     "Permission:UserLookup": "Recherche utilisateur",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Longueur requise",
@@ -117,6 +119,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Si le téléphoneNumber peut être confirmé par l’utilisateur.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Si un numéro de téléphone confirmé est nécessaire pour se connecter.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Si le nom d’utilisateur peut être mis à jour par l’utilisateur.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Si l’e-mail peut être mis à jour par l’utilisateur."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Si l’e-mail peut être mis à jour par l’utilisateur.",
+    "Details": "Détails",
+    "CreatedBy": "Créé par",
+    "ModifiedBy": "Modifié par",
+    "ModificationTime": "Temps de modification",
+    "PasswordUpdateTime": "Temps de mise à jour du mot de passe",
+    "LockoutEndTime": "Heure de fin du verrouillage",
+    "FailedAccessCount": "Nombre d&#39;accès ayant échoué"
   }
 }

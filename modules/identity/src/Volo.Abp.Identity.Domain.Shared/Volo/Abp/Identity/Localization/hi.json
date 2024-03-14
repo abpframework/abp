@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "फ़ोन नंबर",
     "DisplayName:TwoFactorEnabled": "दो कारक सत्यापन",
     "DisplayName:IsActive": "सक्रिय",
-    "DisplayName:LockoutEnabled": "असफल लॉगिन प्रयासों के बाद लॉक खाता",
+    "DisplayName:LockoutEnabled": "खाता लॉकआउट",
     "NewRole": "नयी भूमिका",
     "RoleName": "भूमिका का नाम",
     "CreationTime": "रचना समय",
@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "आप अपनी दो कारक सेटिंग नहीं बदल सकते।",
     "Volo.Abp.Identity:010008": "इसे दो कारक सेटिंग बदलने की अनुमति नहीं है।",
     "Volo.Abp.Identity:010009": "आप अपने आप को अधिकृत नहीं कर सकते हैं!",
+    "Volo.Abp.Identity:010021" : "नाम '{0}' पहले से ही लिया गया है।",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "उपयोगकर्ता के लिए अधिकतम अनुमत संगठन इकाई सदस्यता गणना",
     "ThisUserIsNotActiveMessage": "यह उपयोगकर्ता सक्रिय नहीं है।",
     "Permission:IdentityManagement": "पहचान प्रबंधन",
@@ -84,6 +85,7 @@
     "Permission:Edit": "संपादित करें",
     "Permission:Delete": "हटाएं",
     "Permission:ChangePermissions": "अनुमतियाँ बदलें",
+    "Permission:ManageRoles": "भूमिकाएँ प्रबंधित करें",
     "Permission:UserManagement": "उपयोगकर्ता प्रबंधन",
     "Permission:UserLookup": "उपयोगकर्ता की खोज",
     "DisplayName:Abp.Identity.Password.RequiredLength": "आवश्यक लंबाई",
@@ -117,6 +119,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "क्या उपयोगकर्ता द्वारा फोननंबर की पुष्टि की जा सकती है।",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "साइन इन करने के लिए एक पुष्टिकरण टेलीफोन नंबर की आवश्यकता है या नहीं।",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "उपयोगकर्ता द्वारा उपयोगकर्ता नाम अपडेट किया जा सकता है या नहीं।",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "क्या उपयोगकर्ता द्वारा ईमेल को अपडेट किया जा सकता है।"
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "क्या उपयोगकर्ता द्वारा ईमेल को अपडेट किया जा सकता है।",
+    "Details": "विवरण",
+    "CreatedBy": "के द्वारा बनाई गई",
+    "ModifiedBy": "द्वारा संशोधित",
+    "ModificationTime": "संशोधन का समय",
+    "PasswordUpdateTime": "पासवर्ड अद्यतन समय",
+    "LockoutEndTime": "तालाबंदी समाप्ति समय",
+    "FailedAccessCount": "विफल पहुंच गणना"
   }
 }

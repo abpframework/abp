@@ -1,5 +1,9 @@
 {
   "culture": "zh-Hant",
   "texts": {
+    "Buy": "買",
+    "SeeBookDetails": "查看書籍詳情",
+    "MasteringAbpFrameworkEBookDescription": "本書將幫助您全面了解框架和現代 Web 應用程式開發技術。",
+    "Feedback": "回饋"
   }
 }

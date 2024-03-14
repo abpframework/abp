@@ -235,6 +235,19 @@
     "Resources": "Ресурсы",
     "Video Courses": "Видео курсы",
     "Packages": "Пакеты",
-    "Trainings": "Тренинги"
+    "Trainings": "Тренинги",
+    "MeetTheABPCommunity": "Познакомьтесь с ABP с <span class=\"gradient-community\">Сообществом</span>",
+    "DisplayName:CommunityIndexPagePoll": "Опрос на главной странице сообщества",
+    "OrganizationOverview": "Обзор организации",
+    "EmailPreferences": "Настройки электронной почты",
+    "VideoCourses": "Основные видео",
+    "DoYouAgreePrivacyPolicy": "Кликнув <b>Подписаться</b> кнопку вы соглашаетесь с <a href=\"https://account.abp.io/Account/TermsConditions\">Условия</a> и <a href=\"https://account.abp.io/Account/Privacy\">политика конфиденциальности</a>.",
+    "PromotionalOffers": "Рекламные предложения",
+    "PromotionalOffersDefinition": "Скидки, сезонные акции и т. д.",
+    "EventsDefinition": "Обсуждения с сообществом, вебинары, конференция ABP .NET и т. д.",
+    "ReleaseNotesDefinition": "Релизы платформы ABP.IO, новые продукты и т. д.",
+    "Newsletter": "Новостная рассылка",
+    "NewsletterDefinition": "Сообщения в блогах, новости сообщества и т. д.",
+    "AbpConferenceDescription": "ABP Conference — это виртуальное мероприятие, на котором разработчики .NET могут учиться и общаться с сообществом."
   }
 }

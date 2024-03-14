@@ -43,9 +43,6 @@
                         @foreach (var group in _groups)
                         {
                             <TabPanel Name="@GetNormalizedGroupName(group.Name)">
-                                <h4>@group.DisplayName</h4>
-                                
-                                <Divider />
                                 
                                 <Field>
                                     <Check
@@ -62,7 +59,7 @@
                                 
                                 @foreach (var permission in group.Permissions)
                                 {
-                                    <Field Style="@($"margin-inline-start: {_permissionDepths[permission.Name] * 20}px")">
+                                    <Field Style="@($"margin-inline-start: {GetPermissionDepthOrDefault(permission.Name) * 20}px")">
                                         <Check
                                             Disabled="@(IsDisabledPermission(permission))"
                                             Cursor="Cursor.Pointer"
@@ -81,7 +78,7 @@
             }
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="CloseModal">@L["Cancel"]</Button>
+            <Button Color="Color.Primary" Outline Clicked="CloseModal">@L["Cancel"]</Button>
             <Button Color="Color.Primary" Clicked="SaveAsync">@L["Save"]</Button>
         </ModalFooter>
     </ModalContent>

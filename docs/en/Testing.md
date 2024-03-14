@@ -36,7 +36,7 @@ There are more than one test project, organized by the layers;
 
 * `Domain.Tests` is used to test your Domain Layer objects (like [Domain Services](Domain-Services.md) and [Entities](Entities.md)).
 * `Application.Tests` is used to test your Application Layer (like [Application Services](Application-Services.md)).
-* `EntityFrameworkCore.Tests` is used to test your custom repository implementations or EF Core mappings (this project will be different if you use another [Database Provider](Data-Access.md)).
+* `EntityFrameworkCore.Tests` is used to implement abstract test classes and test your custom repository implementations or EF Core mappings (this project will be different if you use another [Database Provider](Data-Access.md)).
 * `Web.Tests` is used to test the UI Layer (like Pages, Controllers and View Components). This project does exists only for MVC / Razor Page applications.
 * `TestBase` contains some classes those are shared/used by the other projects.
 
@@ -122,7 +122,7 @@ namespace MyProject.Issues
                 throw new IssueStateException("You can not open a locked issue!");
             }
 
-            IsClosed = true;
+            IsClosed = false;
             CloseDate = null;
         }
     }
@@ -431,7 +431,7 @@ ABP Provides a complete infrastructure to write integration tests. All the ABP i
 
 #### The Database
 
-The startup template is configured to use **in-memory SQLite** database for the EF Core (for MongoDB, it uses [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library). So, all the configuration and queries are performed against a real database and you can even test database transactions.
+The startup template is configured to use **in-memory SQLite** database for the EF Core (for MongoDB, it uses [EphemeralMongo](https://github.com/asimmon/ephemeral-mongo) library). So, all the configuration and queries are performed against a real database and you can even test database transactions.
 
 Using in-memory SQLite database has two main advantages;
 
@@ -537,12 +537,13 @@ using Xunit;
 
 namespace MyProject.Issues
 {
-    public class IssueManager_Integration_Tests : MyProjectDomainTestBase
+    public abstract class IssueManager_Integration_Tests<TStartupModule> : MyProjectDomainTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
         private readonly IssueManager _issueManager;
         private readonly Issue _issue;
 
-        public IssueManager_Integration_Tests()
+        protected IssueManager_Integration_Tests()
         {
             _issueManager = GetRequiredService<IssueManager>();
             _issue = new Issue
@@ -576,6 +577,8 @@ namespace MyProject.Issues
     }
 }
 ````
+
+> The `IssueManager_Integration_Tests` class is an abstract class, and tests in this class are not seen on the tests explorer, see the **Implementing unit tests in EF Core and MongoDB** section below to learn how to list tests in the test explorer and run them.
 
 * First test method assigns the issue to the User 1, which has already assigned to 3 issues in the Data Seed code. So, it throws a `BusinessException`.
 * Second test method assigns the issue to User 2, which has only 1 issue assigned. So, the method succeeds.
@@ -625,11 +628,12 @@ using Xunit;
 
 namespace MyProject.Issues
 {
-    public class IssueAppService_Tests : MyProjectApplicationTestBase
+    public abstract class IssueAppService_Tests<TStartupModule> : MyProjectApplicationTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
         private readonly IIssueAppService _issueAppService;
 
-        public IssueAppService_Tests()
+        protected IssueAppService_Tests()
         {
             _issueAppService = GetRequiredService<IIssueAppService>();
         }
@@ -647,6 +651,8 @@ namespace MyProject.Issues
 }
 ````
 
+> The `IssueAppService_Tests` class is an abstract, and tests in this class are not seen on the tests explorer, see the **Implementing unit tests in EF Core and MongoDB** section below to learn how to list tests in the test explorer and run them.
+
 It's that simple. This test method tests everything, including the application service, EF Core mapping, object to object mapping and the repository implementation. In this way, you can fully test the Application Layer and the Domain Layer of your solution.
 
 ### Dealing with Unit of Work in Integration Tests
@@ -658,11 +664,12 @@ In the ABP Framework, all the database operations must be performed inside a uni
 In some cases, you may need to manually control the unit of work scope. Consider the following test method:
 
 ````csharp
-public class IssueRepository_Tests : MyProjectDomainTestBase
+public abstract class IssueRepository_Tests<TStartupModule> : MyProjectDomainTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
     private readonly IRepository<Issue, Guid> _issueRepository;
 
-    public IssueRepository_Tests()
+    protected IssueRepository_Tests()
     {
         _issueRepository = GetRequiredService<IRepository<Issue, Guid>>();
     }
@@ -676,17 +683,20 @@ public class IssueRepository_Tests : MyProjectDomainTestBase
 }
 ````
 
+> The `IssueRepository_Tests` class is an abstract, and tests in this class are not seen on the tests explorer, see the **Implementing unit tests in EF Core and MongoDB** section below to learn how to list tests in the test explorer and run them.
+
 We are using `_issueRepository.GetQueryableAsync` to obtain an `IQueryable<Issue>` object. Then, we are using the `FirstOrDefaultAsync` method to query an issue by its title. The database query is executed at this point, and you get an exception indicating that there is no active unit of work.
 
 To make that test properly working, you should manually start a unit of work scope as shown in the following example:
 
 ````csharp
-public class IssueRepository_Tests : MyProjectDomainTestBase
+public abstract class IssueRepository_Tests<TStartupModule> : MyProjectDomainTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
     private readonly IRepository<Issue, Guid> _issueRepository;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-    public IssueRepository_Tests()
+    protected IssueRepository_Tests()
     {
         _issueRepository = GetRequiredService<IRepository<Issue, Guid>>();
         _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
@@ -716,12 +726,13 @@ In some cases, you may want to directory work with the Entity Framework's `DbCon
 The following example shows how you can create a `DbContext` object in a test method:
 
 ````csharp
-public class MyDbContext_Tests : MyProjectDomainTestBase
+public abstract class MyDbContext_Tests<TStartupModule> : MyProjectDomainTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
     private readonly IDbContextProvider<MyProjectDbContext> _dbContextProvider;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-    public IssueRepository_Tests()
+    protected IssueRepository_Tests()
     {
         _dbContextProvider = GetRequiredService<IDbContextProvider<MyProjectDbContext>>();
         _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
@@ -740,9 +751,32 @@ public class MyDbContext_Tests : MyProjectDomainTestBase
 }
 ````
 
+> The `MyDbContext_Tests` class is an abstract, and tests in this class are not seen on the tests explorer, see the **Implementing unit tests in EF Core and MongoDB** section below to learn how to list tests in the test explorer and run them.
+
 Just like we've done in the *Dealing with Unit of Work in Integration Tests* section, we should perform `DbContext` operations inside an active unit of work.
 
 For [MongoDB](MongoDB.md), you can use the `IMongoDbContextProvider<T>` service to obtain a `DbContext` object and directly use MongoDB APIs in your test methods.
+
+## Implementing unit tests in EF Core and MongoDB
+
+The unit test classes in the `.Domain.Test` and `.Application.Tests` projects are all abstract classes. Therefore, we need to implement the test classes in EF Core or MongoDB test projects to run the tests, otherwise they will be ignored.
+
+An example implementation for the `IssueManager_Integration_Tests` class in the `.EntityFrameworkCore.Tests` project is shown below:
+
+````csharp
+namespace MyProject.EntityFrameworkCore.Applications;
+
+public class EfCoreIssueAppService_Tests : IssueAppService_Tests<MyProjectEntityFrameworkCoreTestModule>
+{
+
+}
+````
+
+> By deriving from the related abstract classes, now we can see the all tests in the test explorers and run them.
+
+![unitest-efcore-mongodb](images/unitest-efcore-mongodb.png)
+
+As you can see from the folder structure, all tests are clearly placed into the related subfolders, and they will be seen in the test explorer with this separation. Thus, you can clearly see which tests are related to which layers and projects.
 
 ## UI Tests
 

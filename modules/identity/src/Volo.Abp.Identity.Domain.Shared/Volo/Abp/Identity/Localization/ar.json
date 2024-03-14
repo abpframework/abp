@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "رقم الهاتف",
     "DisplayName:TwoFactorEnabled": "التحقق من عاملين",
     "DisplayName:IsActive": "نشيط",
-    "DisplayName:LockoutEnabled": "تأمين الحساب بعد محاولات تسجيل الدخول الفاشلة",
+    "DisplayName:LockoutEnabled": "تأمين الحساب",
     "NewRole": "دور جديد",
     "RoleName": "اسم الدور",
     "CreationTime": "وقت الإنشاء",
@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "لا يمكنك تغيير إعداد العاملين.",
     "Volo.Abp.Identity:010008": "لا يجوز تغيير إعداد عاملين.",
     "Volo.Abp.Identity:010009": "لا يمكنك تفويض نفسك.",
+    "Volo.Abp.Identity:010021": "الاسم {0} موجود بالفعل.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "العدد الأقصى المسموح به لعضوية الوحدة التنظيمية للمستخدم",
     "ThisUserIsNotActiveMessage": "هذا المستخدم غير نشط.",
     "Permission:IdentityManagement": "إدارة الهوية",
@@ -84,6 +85,7 @@
     "Permission:Edit": "تحرير",
     "Permission:Delete": "حذف",
     "Permission:ChangePermissions": "تغيير الأذونات",
+    "Permission:ManageRoles": "إدارة الأدوار",
     "Permission:UserManagement": "إدارة المستخدم",
     "Permission:UserLookup": "بحث المستخدم",
     "DisplayName:Abp.Identity.Password.RequiredLength": "الطول المطلوب",
@@ -117,6 +119,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "ما إذا كان بإمكان المستخدم تأكيد رقم الهاتف.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "ما إذا كان رقم الهاتف المؤكد مطلوبًا لتسجيل الدخول.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "ما إذا كان يمكن تحديث اسم المستخدم بواسطة المستخدم.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "ما إذا كان يمكن تحديث البريد الإلكتروني من قبل المستخدم."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "ما إذا كان يمكن تحديث البريد الإلكتروني من قبل المستخدم.",
+    "Details": "تفاصيل",
+    "CreatedBy": "انشأ من قبل",
+    "ModifiedBy": "تم التعديل بواسطة",
+    "ModificationTime": "وقت التعديل",
+    "PasswordUpdateTime": "وقت تحديث كلمة المرور",
+    "LockoutEndTime": "وقت انتهاء القفل",
+    "FailedAccessCount": "فشل عدد الوصول"
   }
 }

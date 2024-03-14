@@ -36,18 +36,27 @@
 }
 
 @section scripts {
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
-        <abp-script type="@typeof(ClipboardScriptBundleContributor)"/>
-        <abp-script type="@typeof(AnchorJsScriptBundleContributor)"/>
-        <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
-        <abp-script type="@typeof(PopperJsScriptBundleContributor)"/>
-        <abp-script src="/client-proxies/docs-proxy.js"/>
-        <abp-script src="/Pages/Documents/Project/bootstrap-toc.js"/>
-        <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
-        <abp-script src="/Pages/Documents/Project/index.js"/>
-        <abp-script src="/Pages/Documents/Shared/ErrorComponent/error.js"/>
-    </abp-script-bundle>
+    
+    @if (Model.LoadSuccess)
+    {
+        <abp-script-bundle name="@typeof(IndexModel).FullName">
+            <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
+            <abp-script type="@typeof(ClipboardScriptBundleContributor)"/>
+            <abp-script type="@typeof(AnchorJsScriptBundleContributor)"/>
+            <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
+            <abp-script type="@typeof(PopperJsScriptBundleContributor)"/>
+            <abp-script src="/client-proxies/docs-proxy.js"/>
+            <abp-script src="/Pages/Documents/Project/bootstrap-toc.js"/>
+            <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
+            <abp-script src="/Pages/Documents/Project/index.js"/>
+        </abp-script-bundle>
+    }
+    else
+    {
+        <abp-script-bundle name="@typeof(ErrorViewComponent).FullName">
+            <abp-script src="/Pages/Documents/Shared/ErrorComponent/error.js"/>
+        </abp-script-bundle>
+    }
 }
 
 @if (Model.LoadSuccess)
@@ -92,18 +101,31 @@
                     <div class="col-12 mb-2">
 
                         <div class="docs-version">
-                            <span>Project</span>
+                            @if (Model.ShowProjectsComboboxLabel)
+                            {
+                                <span>@L["Project"]</span>
+                            }
                             <div class="version-select">
-                                <div class="input-group">
-                                    <span class="input-group-text d-none">
-                                        <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
-                                    </span>
+                                @if (Model.ShowProjectsComboboxLabel)
+                                {
+                                    <div class="input-group">
+                                        <span class="input-group-text d-none">
+                                            <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
+                                        </span>
 
+                                        <select asp-items="Model.ProjectSelectItems"
+                                                class="form-select"
+                                                onchange="window.location.pathname = this.value">
+                                        </select>
+                                    </div>
+                                }
+                                else
+                                {
                                     <select asp-items="Model.ProjectSelectItems"
                                             class="form-select"
                                             onchange="window.location.pathname = this.value">
                                     </select>
-                                </div>
+                                }
                             </div>
                         </div>
 
@@ -310,28 +332,46 @@
                                     </abp-column>
                                 </abp-row>
                                 <abp-row class="gx-2">
-                                    @foreach (var parameter in Model.DocumentPreferences.Parameters)
-                                    {
-                                        <div class="col">
-                                            <div class="custom-input-group">
-                                                <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
-                                                <select class="doc-section-combobox form-select"
-                                                        aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
-                                                        id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
-                                                    @foreach (var value in parameter.Values.OrderBy(p => p.Value))
-                                                    {
-                                                        @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
+                                    @{
+                                        const int maxCellCount = 3;
+                                        var count = Model.DocumentPreferences.Parameters.Count;
+                                        var rowCount = count / maxCellCount + (count % maxCellCount > 0 ? 1 : 0);
+                                        var cellSize = 12 / (count > maxCellCount ? maxCellCount : count);
+                                        var latestCellSize = 12 / count - (rowCount - 1) * maxCellCount;
+                                        
+                                        string BuildParameterDivClass(int index)
+                                        {
+                                            var row = index / maxCellCount;
+                                            var isLastRow = row == rowCount - 1;
+                                            var currentCellSize = isLastRow ? latestCellSize : cellSize;
+                                            return $"col-12 col-lg-{currentCellSize} mb-lg-{(isLastRow ? "0" : "2")} {(index == count - 1 ? "" : "mb-2")}";
+                                        }
+                                        
+                                        for (var i = 0; i < count; ++i)
+                                        {
+                                            var parameter = Model.DocumentPreferences.Parameters[i];
+
+                                            <div class="@BuildParameterDivClass(i)">
+                                                <div class="custom-input-group">
+                                                    <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
+                                                    <select class="doc-section-combobox form-select"
+                                                            aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
+                                                            id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
+                                                        @foreach (var value in parameter.Values.OrderBy(p => p.Value))
                                                         {
-                                                            <option value="@value.Key" selected="selected">@value.Value</option>
+                                                            @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
+                                                            {
+                                                                <option value="@value.Key" selected="selected">@value.Value</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@value.Key">@value.Value</option>
+                                                            }
                                                         }
-                                                        else
-                                                        {
-                                                            <option value="@value.Key">@value.Value</option>
-                                                        }
-                                                    }
-                                                </select>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
                                 </abp-row>
                             </div>
@@ -348,6 +388,40 @@
                                 </abp-alert>
                             }
                             @Html.Raw(Model.Document.Content)
+                            
+                            @if (Model.DocumentNavigationsDto.HasValues)
+                            {
+                                <hr class="my-4"/>
+                                
+                                <div class="row navigation">
+                                    <div class="col-6">
+                                        @if (Model.DocumentNavigationsDto.HasPrevious)
+                                        {
+                                            <a class="prev-link" href="@Model.CreateDocumentLink(Model.DocumentNavigationsDto.Previous.Path)">
+                                                <span class="desc">
+                                                    <i class="fa fa-chevron-left me-1"></i>
+                                                    @L["Previous"]
+                                                </span>
+                                                <br />
+                                                <span class="title">@Model.DocumentNavigationsDto.Previous.Name</span>
+                                            </a>
+                                        }
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        @if (Model.DocumentNavigationsDto.HasNext)
+                                        {
+                                            <a class="next-link" href="@Model.CreateDocumentLink(Model.DocumentNavigationsDto.Next.Path)">
+                                                <span class="desc">
+                                                    @L["Next"]
+                                                    <i class="fa fa-chevron-right ms-1"></i>
+                                                </span>
+                                                <br />
+                                                <span class="title">@Model.DocumentNavigationsDto.Next.Name</span>
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
                         </article>
 
                         <div id="crawler_link" style="display:none;">

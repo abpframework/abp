@@ -2,7 +2,7 @@
 
 The 5.0 release of OpenIddict is a major release that introduces breaking changes.
 
-Check this blog [Introducing native applications, per-client token lifetimes and client assertions support in OpenIddict 5.0 preview1](https://kevinchalet.com/2023/10/20/introducing-native-applications-per-client-token-lifetimes-and-client-assertions-support-in-openiddict-5-0-preview1/) for the new features introduced in OpenIddict 5.0.
+Check this blog [OpenIddict 5.0 general availability](https://kevinchalet.com/2023/12/18/openiddict-5-0-general-availability/) for the new features introduced in OpenIddict 5.0.
 
 I will show the changes you need to make to do the migration.
 

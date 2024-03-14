@@ -24,6 +24,7 @@ export default function (_options: ChangeThemeOptions): Rule {
   return async () => {
     const targetThemeName = _options.name;
     const selectedProject = _options.targetProject;
+
     if (!targetThemeName) {
       throw new SchematicsException('The theme name does not selected');
     }

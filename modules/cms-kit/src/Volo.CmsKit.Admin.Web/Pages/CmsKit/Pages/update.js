@@ -35,7 +35,7 @@ $(function () {
 
             $formUpdate.ajaxSubmit({
                 success: function (result) {
-                    abp.notify.success(l('SuccessfullySaved'));
+                    abp.notify.success(l('SavedSuccessfully'));
                     abp.ui.clearBusy();
                     location.href = "../../Pages";
                 }
@@ -116,9 +116,9 @@ $(function () {
             headers: getUppyHeaders()
         };
 
-        var UPPY = Uppy.Core().use(Uppy.XHRUpload, UPPY_OPTIONS);
+        var UPPY = new Uppy.Uppy().use(Uppy.XHRUpload, UPPY_OPTIONS);
 
-        UPPY.reset();
+        UPPY.cancelAll();
 
         UPPY.addFile({
             id: "content-file",

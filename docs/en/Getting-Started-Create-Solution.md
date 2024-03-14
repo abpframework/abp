@@ -8,6 +8,19 @@
     "Tiered": ["Yes", "No"]
 }
 ````
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Running the solution",
+    "Path": "Getting-Started-Running-Solution"
+  },
+  "Previous": {
+    "Name": "Setup Your Development Environment",
+    "Path": "Getting-Started-Setup-Environment"
+  }
+}
+````
 
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
@@ -55,7 +68,7 @@ The solution has a layered structure (based on the [Domain Driven Design](Domain
 
 ## MongoDB Transactions
 
-The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectMongoDbModule* class's `ConfigureServices` method:
+The [startup template](Startup-Templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectMongoDbModule* class's `ConfigureServices` method:
 
   ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
@@ -67,7 +80,3 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 > Or you can delete that code since `Auto` is already the default behavior.
 
 {{ end }}
-
-## Next Step
-
-* [Running the solution](Getting-Started-Running-Solution.md)

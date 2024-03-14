@@ -594,10 +594,11 @@ public class SolutionModuleAdder : ITransientDependency
     {
         var args = new CommandLineArgs("new", module.Name);
 
-        args.Options.Add("t", newProTemplate ? ModuleProTemplate.TemplateName : ModuleTemplate.TemplateName);
-        args.Options.Add("v", version);
-        args.Options.Add("o", Path.Combine(modulesFolderInSolution, module.Name));
-        args.Options.Add("sib", true.ToString());
+        args.Options.Add(ProjectCreationCommandBase.Options.Template.Short, newProTemplate ? ModuleProTemplate.TemplateName : ModuleTemplate.TemplateName);
+        args.Options.Add(ProjectCreationCommandBase.Options.Version.Short, version);
+        args.Options.Add(ProjectCreationCommandBase.Options.OutputFolder.Short, Path.Combine(modulesFolderInSolution, module.Name));
+        args.Options.Add(ProjectCreationCommandBase.Options.SkipInstallingLibs.Short, true.ToString());
+        args.Options.Add(ProjectCreationCommandBase.Options.SkipBundling.Long, true.ToString());
 
         await NewCommand.ExecuteAsync(args);
     }
