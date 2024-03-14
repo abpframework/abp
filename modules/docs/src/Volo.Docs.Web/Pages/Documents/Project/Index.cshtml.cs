@@ -328,7 +328,7 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var output = await _projectAppService.GetVersionsAsync(Project.ShortName);
-            var versions = output.Items.ToList()
+            var versions = output.Items
                 .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
                 .ToList();
 

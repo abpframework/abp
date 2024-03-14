@@ -129,6 +129,7 @@ If you do not specify which services to expose, ABP expose services by conventio
 
 * The class itself is exposed by default. That means you can inject it by ``TaxCalculator`` class.
 * Default interfaces are exposed by default. Default interfaces are determined by naming convention. In this example, ``ICalculator`` and ``ITaxCalculator`` are default interfaces of ``TaxCalculator``, but ``ICanCalculate`` is not. A generic interface (e.g. `ICalculator<string>`) is also considered as a default interface if the naming convention is satisfied.
+* The resolved instances will be the same if multiple services are exposed for **Singleton** and **Scoped** services. This behavior requires exposing the class itself.
 
 ### Combining All Together
 

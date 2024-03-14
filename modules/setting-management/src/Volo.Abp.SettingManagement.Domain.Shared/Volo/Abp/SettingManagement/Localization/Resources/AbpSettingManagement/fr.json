@@ -2,7 +2,7 @@
   "culture": "fr",
   "texts": {
     "Settings": "Paramètres",
-    "SuccessfullySaved": "Enregistré avec succès",
+    "SavedSuccessfully": "Enregistré avec succès",
     "Permission:SettingManagement": "Gestion des paramètres",
     "Permission:Emailing": "Envoi par e-mail",
     "Permission:EmailingTest": "Test d&#39;emailing",
