@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.TenantManagement;
@@ -9,14 +10,17 @@ namespace Volo.Abp.TenantManagement;
 public class TenantManager : DomainService, ITenantManager
 {
     protected ITenantRepository TenantRepository { get; }
-    protected IDistributedCache<TenantConfigurationCacheItem> Cache { get; }
     protected ITenantNormalizer TenantNormalizer { get; }
+    protected ILocalEventBus LocalEventBus { get; }
 
-    public TenantManager(ITenantRepository tenantRepository, IDistributedCache<TenantConfigurationCacheItem> cache, ITenantNormalizer tenantNormalizer)
+    public TenantManager(
+        ITenantRepository tenantRepository,
+        ITenantNormalizer tenantNormalizer,
+        ILocalEventBus localEventBus)
     {
         TenantRepository = tenantRepository;
-        Cache = cache;
         TenantNormalizer = tenantNormalizer;
+        LocalEventBus = localEventBus;
     }
 
     public virtual async Task<Tenant> CreateAsync(string name)
@@ -36,7 +40,7 @@ public class TenantManager : DomainService, ITenantManager
         var normalizedName = TenantNormalizer.NormalizeName(name);
 
         await ValidateNameAsync(normalizedName, tenant.Id);
-        await Cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenant.NormalizedName));
+        await LocalEventBus.PublishAsync(new TenantChangedEvent(tenant.Id, tenant.NormalizedName));
         tenant.SetName(name);
         tenant.SetNormalizedName(normalizedName);
     }
