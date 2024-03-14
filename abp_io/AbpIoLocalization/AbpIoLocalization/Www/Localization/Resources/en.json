@@ -484,6 +484,8 @@
     "ABPVideoCoursesPageDescription": "Learn the basics of the ABP Framework through video courses created by the ABP team. In this video series, you will learn the essential topics of the ABP Framework.  The numbers on each video are written according to the learning flow.",
     "DocumentationButtonTitle": "Documentation",
     "ABPVideoCoursesTitle": "ABP Essential Videos",
-    "LovedDevelopers": "Loved by thousands of <span class=\"gradient-framework\">developers</span><br> around the world"
+    "LovedDevelopers": "Loved by thousands of <span class=\"gradient-framework\">developers</span><br> around the world",
+    "ABPIOPlatformPackages": "ABP.IO Platform Packages",
+    "AbpPackagesDescription":"ABP templates are being distributed as NuGet and NPM packages. Here are all the official NuGet and NPM packages used by the ABP.IO Platform."
   }
 }

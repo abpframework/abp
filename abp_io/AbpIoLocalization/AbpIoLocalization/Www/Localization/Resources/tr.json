@@ -92,7 +92,7 @@
     "Modularity": "Modülerlik",
     "BootstrapTagHelpers": "Bootstrap Tag Helpers",
     "DynamicForms": "Dinamik Formlar",
-    "BundlingMinification": "Paketleme & Küçültme",
+    "BundlingMinification": "Paketleme & Minify Etme",
     "BackgroundJobs": "Arkaplan İşleri",
     "BackgroundJobsExplanation": "İşleri arka planda sıraya alınmış olarak yürütmek için basit sınıflar tanımlayın. Yerleşik iş yöneticisini kullanın veya kendinizinkini entegre edin. <a href=\"{0}\">Hangfire</a> ve <a href=\"{1}\">RabbitMQ</a> entegrasyonları zaten mevcut.",
     "DDDInfrastructure": "DDD altyapısı",
@@ -435,6 +435,8 @@
     "ABPVideoCoursesPageDescription": "ABP ekibi tarafından oluşturulan video kursları aracılığıyla ABP Framewok temellerini öğrenin. Bu video serisinde ABP Framework'ün temel konularını öğreneceksiniz. Videolardaki sayılar, öğrenme sırasına göre yazılmıştır.",
     "ABPVideoCoursesTitle": "ABP Başlangıç Videoları",
     "UIOptions": "UI Seçenekleri",
-    "LovedDevelopers": "Dünya çapında binlerce <span class=\"gradient-framework\">geliştirici</span><br> tarafından sevildi"
+    "LovedDevelopers": "Dünya çapında binlerce <span class=\"gradient-framework\">geliştirici</span><br> tarafından sevildi",
+    "ABPIOPlatformPackages": "ABP.IO Platform Paketleri",
+    "AbpPackagesDescription": "ABP şablonları NuGet ve NPM paketleri olarak dağıtılmaktadır. İşte ABP.IO Platformu tarafından kullanılan tüm resmi NuGet ve NPM paketleri."
   }
 }
