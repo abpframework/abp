@@ -35,6 +35,7 @@ using Volo.Abp.Account;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.Validation.Localization;
 using Volo.Docs.Documents.FullSearch.Elastic;
+using Volo.Abp.Caching.StackExchangeRedis;
 
 namespace VoloDocs.Web
 {
@@ -57,6 +58,7 @@ namespace VoloDocs.Web
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        ,typeof(AbpCachingStackExchangeRedisModule)
     )]
     public class VoloDocsWebModule : AbpModule
     {
