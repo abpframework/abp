@@ -597,6 +597,9 @@
     "DontSendEmailForLicenseExpire": "Don't Send Email For License Expire",
     "SuccessfullyChanged": "Successfully changed",
     "WinnerCountMustBeLessThanMaxWinnerCount": "Winner count must be less than max winner count",
-    "NoChangesDetected": "No changes detected"
+    "NoChangesDetected": "No changes detected",
+    "ProductCount": "Product Count",
+    "Actions": "Actions",
+    "CreateInvoice": "Create Invoice"
   }
 }
