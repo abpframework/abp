@@ -1109,6 +1109,7 @@
     "SendUsEmail": "给我们发送电子邮件",
     "ErrorExceptionMessage": "处理您的请求时发生错误",
     "WatchTakeCodeGeneration": "观看“探索代码生成的潜力：ABP Suite”视频！",
-    "PreBuiltApplicationModulesTitle": "预构建应用程序 <span class=\"gradient-commercial\">模块</span>"
+    "PreBuiltApplicationModulesTitle": "预构建应用程序 <span class=\"gradient-commercial\">模块</span>",
+    "RegisterDemo": "登记"
   }
 }
