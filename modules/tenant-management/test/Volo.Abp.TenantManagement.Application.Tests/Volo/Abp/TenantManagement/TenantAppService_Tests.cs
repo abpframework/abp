@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Caching;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.TenantManagement;
@@ -9,10 +12,20 @@ namespace Volo.Abp.TenantManagement;
 public class TenantAppService_Tests : AbpTenantManagementApplicationTestBase
 {
     private readonly ITenantAppService _tenantAppService;
+    private readonly IUnitOfWorkManager _unitOfWorkManager;
+    private readonly IDistributedCache<TenantConfigurationCacheItem> _cache;
+    private readonly ITenantStore _tenantStore;
+    private readonly ITenantRepository _tenantRepository;
+    private readonly ITenantNormalizer _tenantNormalizer;
 
     public TenantAppService_Tests()
     {
         _tenantAppService = GetRequiredService<ITenantAppService>();
+        _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+        _cache = GetRequiredService<IDistributedCache<TenantConfigurationCacheItem>>();
+        _tenantStore = GetRequiredService<ITenantStore>();
+        _tenantRepository = GetRequiredService<ITenantRepository>();
+        _tenantNormalizer = GetRequiredService<ITenantNormalizer>();
     }
 
     [Fact]
@@ -107,5 +120,47 @@ public class TenantAppService_Tests : AbpTenantManagementApplicationTestBase
         {
             dbContext.Tenants.Any(t => t.Id == acme.Id).ShouldBeFalse();
         });
+    }
+
+    [Fact]
+    public async Task Cache_Should_Invalidator_When_Tenant_ConnectionString_Changed()
+    {
+        var acme = await _tenantRepository.FindByNameAsync(_tenantNormalizer.NormalizeName("acme"));
+
+        // UpdateDefaultConnectionStringAsync
+
+        // FindAsync will cache tenant.
+        await _tenantStore.FindAsync(acme.Id);
+        await _tenantStore.FindAsync(acme.NormalizedName);
+
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(acme.Id, null))).ShouldNotBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, acme.NormalizedName))).ShouldNotBeNull();
+
+        using (var uow = _unitOfWorkManager.Begin(requiresNew: true))
+        {
+            await _tenantAppService.UpdateDefaultConnectionStringAsync(acme.Id, Guid.NewGuid().ToString());
+            await uow.CompleteAsync();
+        }
+
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(acme.Id, null))).ShouldBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, acme.NormalizedName))).ShouldBeNull();
+
+        // DeleteDefaultConnectionStringAsync
+
+        // FindAsync will cache tenant.
+        await _tenantStore.FindAsync(acme.Id);
+        await _tenantStore.FindAsync(acme.NormalizedName);
+
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(acme.Id, null))).ShouldNotBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, acme.NormalizedName))).ShouldNotBeNull();
+
+        using (var uow = _unitOfWorkManager.Begin(requiresNew: true))
+        {
+            await _tenantAppService.DeleteDefaultConnectionStringAsync(acme.Id);
+            await uow.CompleteAsync();
+        }
+
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(acme.Id, null))).ShouldBeNull();
+        (await _cache.GetAsync(TenantConfigurationCacheItem.CalculateCacheKey(null, acme.NormalizedName))).ShouldBeNull();
     }
 }
