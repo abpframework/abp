@@ -152,4 +152,14 @@ Configure<AbpRabbitMqEventBusOptions>(options =>
 });
 ````
 
+**Example: Configure the queue and exchange optional arguments**
+
+```csharp
+Configure<AbpRabbitMqEventBusOptions>(options =>
+{
+    options.ExchangeArguments["x-delayed-type"] = "direct";
+    options.QueueArguments["x-message-ttl"] = 60000;
+});
+```
+
 Using these options classes can be combined with the `appsettings.json` way. Configuring an option property in the code overrides the value in the configuration file.

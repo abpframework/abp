@@ -144,6 +144,50 @@ public class TaxCalculator : ITaxCalculator, ITransientDependency
 }
 ````
 
+### ExposeKeyedService Attribute 
+
+`ExposeKeyedServiceAttribute` is used to control which keyed services are provided by the related class. Example:
+
+````C#
+[ExposeKeyedService<ITaxCalculator>("taxCalculator")]
+[ExposeKeyedService<ICalculator>("calculator")]
+public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+{
+}
+````
+
+In the example above, the `TaxCalculator` class exposes the `ITaxCalculator` interface with the key `taxCalculator` and the `ICalculator` interface with the key `calculator`. That means you can get keyed services from the `IServiceProvider` as shown below:
+
+````C#
+var taxCalculator = ServiceProvider.GetRequiredKeyedService<ITaxCalculator>("taxCalculator");
+var calculator = ServiceProvider.GetRequiredKeyedService<ICalculator>("calculator");
+````
+
+Also, you can use the [`FromKeyedServicesAttribute`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.fromkeyedservicesattribute?view=dotnet-plat-ext-8.0) to resolve a certain keyed service in the constructor:
+
+```csharp
+public class MyClass
+{
+    //...
+
+    public MyClass([FromKeyedServices("taxCalculator")] ITaxCalculator taxCalculator)
+    {
+        TaxCalculator = taxCalculator;
+    }
+}
+```
+
+> Notice that the `ExposeKeyedServiceAttribute` only exposes the keyed services. So, you can not inject the `ITaxCalculator` or `ICalculator` interfaces in your application without using the `FromKeyedServicesAttribute` as shown in the example above. If you want to expose both keyed and non-keyed services, you can use the `ExposeServicesAttribute` and `ExposeKeyedServiceAttribute` attributes together as shown below:
+
+````C#
+[ExposeKeyedService<ITaxCalculator>("taxCalculator")]
+[ExposeKeyedService<ICalculator>("calculator")]
+[ExposeServices(typeof(ITaxCalculator), typeof(ICalculator))]
+public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+{
+}
+````
+
 ### Manually Registering
 
 In some cases, you may need to register a service to the `IServiceCollection` manually, especially if you need to use custom factory methods or singleton instances. In that case, you can directly add services just as [Microsoft documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) describes. Example:
@@ -268,6 +312,21 @@ public class MyService : ITransientDependency
     [DisablePropertyInjection]
     public ITaxCalculator TaxCalculator { get; set; }
 }
+````
+
+#### IInjectPropertiesService
+
+You can use the `IInjectPropertiesService` service to inject properties of an object. Generally, it is a service outside of DI, such as manually created services.
+
+````C#
+var injectPropertiesService = serviceProvider.GetRequiredService<IInjectPropertiesService>();
+var instance = new TestService();
+
+// Set any properties on instance that can be resolved by IServiceProvider.
+injectPropertiesService.InjectProperties(instance);
+
+// Set any null-valued properties on instance that can be resolved by the IServiceProvider.
+injectPropertiesService.InjectUnsetProperties(instance);
 ````
 
 ### Resolve Service from IServiceProvider

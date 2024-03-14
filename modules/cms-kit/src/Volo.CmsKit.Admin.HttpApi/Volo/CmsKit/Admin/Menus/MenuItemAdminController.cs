@@ -36,7 +36,7 @@ public class MenuItemAdminController : CmsKitAdminController, IMenuItemAdminAppS
 
     [HttpGet]
     [Route("{id}")]
-    public virtual Task<MenuItemDto> GetAsync(Guid id)
+    public virtual Task<MenuItemWithDetailsDto> GetAsync(Guid id)
     {
         return MenuItemAdminAppService.GetAsync(id);
     }

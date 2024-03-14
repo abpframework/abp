@@ -1,7 +1,5 @@
 # How to Make HTTP Requests
 
-
-
 ## About HttpClient
 
 Angular has the amazing [HttpClient](https://angular.io/guide/http) for communication with backend services. It is a layer on top and a simplified representation of [XMLHttpRequest Web API](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest). It also is the recommended agent by Angular for any HTTP request. There is nothing wrong with using the `HttpClient` in your ABP project.
@@ -23,13 +21,9 @@ Although clear and flexible, handling errors this way is repetitive work, even w
 
 An `HttpInterceptor` is able to catch `HttpErrorResponse` and can be used for a centralized error handling. Nevertheless, cases where default error handler, therefore the interceptor, must be disabled require additional work and comprehension of Angular internals. Check [this issue](https://github.com/angular/angular/issues/20203) for details.
 
-
-
 ## RestService
 
 ABP core module has a utility service for HTTP requests: `RestService`. Unless explicitly configured otherwise, it catches HTTP errors and dispatches a `RestOccurError` action. This action is then captured by the `ErrorHandler` introduced by the `ThemeSharedModule`. Since you should already import this module in your app, when the `RestService` is used, all HTTP errors get automatically handled by default.
-
-
 
 ### Getting Started with RestService
 
@@ -48,11 +42,9 @@ class DemoService {
 
 You do not have to provide the `RestService` at module or component/directive level, because it is already **provided in root**.
 
-
-
 ### How to Make a Request with RestService
 
-You can use the `request` method of the  `RestService` is for HTTP requests. Here is an example:
+You can use the `request` method of the `RestService` is for HTTP requests. Here is an example:
 
 ```js
 getFoo(id: number) {
@@ -64,8 +56,6 @@ getFoo(id: number) {
   return this.rest.request<null, FooResponse>(request);
 }
 ```
-
-
 
 The `request` method always returns an `Observable<T>`. Therefore you can do the following wherever you use `getFoo` method:
 
@@ -79,11 +69,7 @@ doSomethingWithFoo(id: number) {
 }
 ```
 
-
-
 **You do not have to worry about unsubscription.** The `RestService` uses `HttpClient` behind the scenes, so every observable it returns is a finite observable, i.e. it closes subscriptions automatically upon success or error.
-
-
 
 As you see, `request` method gets a request options object with `Rest.Request<T>` type. This generic type expects the interface of the request body. You may pass `null` when there is no body, like in a `GET` or a `DELETE` request. Here is an example where there is one:
 
@@ -99,11 +85,7 @@ postFoo(body: Foo) {
 }
 ```
 
-
-
-You may [check here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L23) for complete  `Rest.Request<T>` type, which has only a few changes compared to [HttpRequest](https://angular.io/api/common/http/HttpRequest) class in Angular.
-
-
+You may [check here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L23) for complete `Rest.Request<T>` type, which has only a few changes compared to [HttpRequest](https://angular.io/api/common/http/HttpRequest) class in Angular.
 
 ### How to Disable Default Error Handler of RestService
 
@@ -120,8 +102,6 @@ deleteFoo(id: number) {
 }
 ```
 
-
-
 `skipHandleError` config option, when set to `true`, disables the error handler and the returned observable starts throwing an error that you can catch in your subscription.
 
 ```js
@@ -137,13 +117,9 @@ removeFooFromList(id: number) {
 }
 ```
 
-
-
 ### How to Get a Specific API Endpoint From Application Config
 
 Another nice config option that `request` method receives is `apiName` (available as of v2.4), which can be used to get a specific module endpoint from application configuration.
-
-
 
 ```js
 putFoo(body: Foo, id: string) {
@@ -157,8 +133,6 @@ putFoo(body: Foo, id: string) {
 }
 ```
 
-
-
 `putFoo` above will request `https://localhost:44305/api/some/path/to/foo/{id}` as long as the environment variables are as follows:
 
 ```js
@@ -167,18 +141,16 @@ putFoo(body: Foo, id: string) {
 export const environment = {
   apis: {
     default: {
-      url: 'https://localhost:44305',
+      url: "https://localhost:44305",
     },
     foo: {
-      url: 'https://localhost:44305/api/some/path/to/foo',
+      url: "https://localhost:44305/api/some/path/to/foo",
     },
   },
-  
+
   /* rest of the environment variables here */
-}
+};
 ```
-
-
 
 ### How to Observe Response Object or HTTP Events Instead of Body
 
@@ -202,104 +174,6 @@ getSomeCustomHeaderValue() {
 
 You may find `Rest.Observe` enum [here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L10).
 
-
-## HTTP Error Handling
-
-When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./HTTP-Error-Reporter-Service), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
-
-### Custom HTTP Error Handler
-
-A custom HTTP error handler can be registered to an injection token named `HTTP_ERROR_HANDLER`. If a custom handler function is registered, the `ErrorHandler` executes that function.
-
-See an example:
-
-```js
-// http-error-handler.ts
-import { ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
-import { ToasterService } from '@abp/ng.theme.shared';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Injector } from '@angular/core';
-import { throwError } from 'rxjs';
-import { Error404Component } from './error404/error404.component';
-
-export function handleHttpErrors(injector: Injector, httpError: HttpErrorResponse) {
-  if (httpError.status === 400) {
-    const toaster = injector.get(ToasterService);
-    toaster.error(httpError.error?.error?.message || 'Bad request!', '400');
-    return;
-  }
-
-  if (httpError.status === 404) {
-    const contentProjection = injector.get(ContentProjectionService);
-    contentProjection.projectContent(PROJECTION_STRATEGY.AppendComponentToBody(Error404Component));
-    return;
-  }
-
-  return throwError(httpError);
-}
-
-// app.module.ts
-import { Error404Component } from './error404/error404.component';
-import { handleHttpErrors } from './http-error-handling';
-import { HTTP_ERROR_HANDLER, ... } from '@abp/ng.theme.shared';
-
-@NgModule({
-  // ...
-  providers: [
-    // ...
-    { provide: HTTP_ERROR_HANDLER, useValue: handleHttpErrors }
-  ],
-  declarations: [
-   //...
-   Error404Component],
-})
-export class AppModule {}
-```
-
-In the example above:
-
- - Created a function named `handleHttpErrors` and defined as value of the `HTTP_ERROR_HANDLER` provider in app.module. After this, the function executes when an HTTP error occurs.
- - 400 bad request errors is handled. When a 400 error occurs, backend error message will be displayed as shown below:
-  
-  ![custom-error-handler-toaster-message](images/custom-error-handler-toaster-message.jpg)
-
- - 404 not found errors is handled. When a 404 error occurs, `Error404Component` will be appended to the `<body>` as shown below:
-
-![custom-error-handler-404-component](images/custom-error-handler-404-component.jpg)
-
- - Since `throwError(httpError)` is returned at bottom of the `handleHttpErrors`, the `ErrorHandler` will handle the HTTP errors except 400 and 404 errors.
-
-
-**Note 1:** If you put `return` to next line of handling an error, default error handling will not work for that error.
-
-```js
-export function handleHttpErrors(injector: Injector, httpError: HttpErrorResponse) {
-  if (httpError.status === 403) {
-    // handle 403 errors here
-    return; // put return to skip default error handling
-  }
-}
-```
-
-**Note 2:** If you put `return throwError(httpError)`, default error handling will work.
-  - `throwError` is a function. It can be imported from `rxjs`.
-  - `httpError` is the second parameter of the error handler function which is registered to the `HTTP_ERROR_HANDLER` provider. Type of the `httpError` is `HttpErrorResponse`.
-
-```js
-import { throwError } from 'rxjs';
-
-export function handleHttpErrors(injector: Injector, httpError: HttpErrorResponse) {
-  if (httpError.status === 500) {
-    // handle 500 errors here
-    return;
-  }
-
-  // you can return the throwError(httpError) at bottom of the function to run the default handler of ABP for HTTP errors that you didn't handle above.
-  return throwError(httpError)
-}
-```
-
-
 ### How to Skip HTTP interceptors and ABP headers
 
 The ABP Framework adds several HTTP headers to the HttpClient, such as the "Auth token" or "tenant Id".
@@ -309,4 +183,8 @@ The ABP Http interceptors check the value of the `IS_EXTERNAL_REQUEST` token. If
 The `ExternalHttpClient` extends from `HTTPClient` and sets the `IS_EXTERNAL_REQUEST` context token to true.
 When you are using `ExternalHttpClient` as HttpClient in your components, it does not add ABP-specific headers.
 
-Note: With `IS_EXTERNAL_REQUEST` or without it, ABP loading service works. 
+Note: With `IS_EXTERNAL_REQUEST` or without it, ABP loading service works.
+
+## See Also
+
+- [HTTP Error Handling / Customization](./HTTP-Error-Handling)

@@ -11,6 +11,8 @@ public class TenantConfiguration
 
     public string Name { get; set; } = default!;
 
+    public string NormalizedName { get; set; } = default!;
+
     public ConnectionStrings? ConnectionStrings { get; set; }
 
     public bool IsActive { get; set; }
@@ -29,5 +31,13 @@ public class TenantConfiguration
         Name = name;
 
         ConnectionStrings = new ConnectionStrings();
+    }
+
+    public TenantConfiguration(Guid id, [NotNull] string name, [NotNull] string normalizedName)
+        : this(id, name)
+    {
+        Check.NotNull(normalizedName, nameof(normalizedName));
+
+        NormalizedName = normalizedName;
     }
 }

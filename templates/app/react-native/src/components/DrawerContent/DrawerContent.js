@@ -66,7 +66,7 @@ function DrawerContent({
           © MyProjectName
         </Text>
         <Text note style={styles.version}>
-          v{Constants.manifest.version}
+          v{Constants.expoConfig.version}
         </Text>
       </View>
     </View>

@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Aspects;
+using Volo.Abp.AspNetCore.Filters;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Auditing;
 
-public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
+public class AbpAuditPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependency
 {
     public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
     {

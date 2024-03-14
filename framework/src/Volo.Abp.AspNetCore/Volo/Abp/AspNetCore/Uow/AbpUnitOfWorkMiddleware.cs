@@ -3,12 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Uow;
 
-public class AbpUnitOfWorkMiddleware : IMiddleware, ITransientDependency
+public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     private readonly IUnitOfWorkManager _unitOfWorkManager;
     private readonly AbpAspNetCoreUnitOfWorkOptions _options;
@@ -21,9 +22,9 @@ public class AbpUnitOfWorkMiddleware : IMiddleware, ITransientDependency
         _options = options.Value;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        if (IsIgnoredUrl(context))
+        if (await ShouldSkipAsync(context, next) || IsIgnoredUrl(context))
         {
             await next(context);
             return;
