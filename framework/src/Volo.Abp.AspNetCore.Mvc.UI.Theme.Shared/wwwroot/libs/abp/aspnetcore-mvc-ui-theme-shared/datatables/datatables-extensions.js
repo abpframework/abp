@@ -32,6 +32,18 @@ var abp = abp || {};
         }
 
         var _createDropdownItem = function (record, fieldItem, tableInstance) {
+            if (fieldItem.divider) {
+                if (abp.utils.isFunction(fieldItem.divider)) {
+                    return $(fieldItem.divider(record, tableInstance));
+                }
+
+                if (fieldItem.divider === true) {
+                    return $('<li><hr class="dropdown-divider"></li>');
+                }
+
+                return $(fieldItem.divider);
+            }
+
             var $li = $('<li/>');
             var $a = $('<a/>').addClass('dropdown-item');
 
@@ -236,8 +248,6 @@ var abp = abp || {};
                 return;
             }
 
-            var cells = $(nRow).children("td");
-
             for (var colIndex = 0; colIndex < columns.length; colIndex++) {
                 var column = columns[colIndex];
                 if (column.rowAction) {
@@ -245,9 +255,16 @@ var abp = abp || {};
                     hideEmptyColumn($actionContainer, tableInstance, colIndex);
 
                     if ($actionContainer) {
-                        var $actionButton = $(cells[colIndex]).find(".abp-action-button");
-                        if ($actionButton.length === 0) {
-                            $(cells[colIndex]).empty().append($actionContainer);
+                        var cells = $(nRow).children("td");
+                        for (var i = 0; i < cells.length; i++) {
+                            var cell = cells[i];
+                            if (cell._DT_CellIndex && cell._DT_CellIndex.column === colIndex) {
+                                var $actionButton = $(cell).find(".abp-action-button");
+                                if ($actionButton.length === 0) {
+                                    $(cell).empty().append($actionContainer);
+                                };
+                                break;
+                            }
                         }
                     }
                 }

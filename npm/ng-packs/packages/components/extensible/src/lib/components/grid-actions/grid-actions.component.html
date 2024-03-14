@@ -41,26 +41,43 @@
 </ng-template>
 
 <ng-template #buttonContentTmp let-action>
-  <i [ngClass]="action.icon" [class.me-1]="action.icon"></i>
-  @if (action.icon) {
-  <span>{{ action.text | abpLocalization }}</span>
-  }@else {
-  <div abpEllipsis>{{ action.text | abpLocalization }}</div>
+  <i [ngClass]="action.icon" [class.me-1]="action.icon && !action.showOnlyIcon"></i>
+  @if (!action.showOnlyIcon) {
+    @if (action.icon) {
+      <span>{{ action.text | abpLocalization }}</span>
+    } @else {
+      <div abpEllipsis>{{ action.text | abpLocalization }}</div>
+    }
   }
 </ng-template>
 
 <ng-template #btnTmp let-action>
   @if (action.visible(data)) {
-  <button
-    *abpPermission="action.permission; runChangeDetection: false"
-    (click)="action.action(data)"
-    type="button"
-    [class]="action.btnClass"
-    [style]="action.btnStyle"
-  >
-    <ng-container
-      *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
-    ></ng-container>
-  </button>
+    @if (action.tooltip) {
+      <button
+        *abpPermission="action.permission; runChangeDetection: false"
+        (click)="action.action(data)"
+        type="button"
+        [class]="action.btnClass"
+        [style]="action.btnStyle"
+        [ngbTooltip]="action.tooltip.text | abpLocalization" [placement]="action.tooltip.placement || 'auto'"  container="body" 
+      >
+        <ng-container
+          *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
+        ></ng-container>
+      </button>
+    } @else {
+      <button
+        *abpPermission="action.permission; runChangeDetection: false"
+        (click)="action.action(data)"
+        type="button"
+        [class]="action.btnClass"
+        [style]="action.btnStyle"
+      >
+        <ng-container
+          *ngTemplateOutlet="buttonContentTmp; context: { $implicit: action }"
+        ></ng-container>
+      </button>
+    }
   }
 </ng-template>

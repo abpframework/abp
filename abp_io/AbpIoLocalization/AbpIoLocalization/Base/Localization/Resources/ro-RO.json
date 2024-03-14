@@ -229,6 +229,7 @@
     "ManageAccount": "Gestionează contul",
     "CommunityProfile": "Profilul comunității",
     "BlogProfile": "Profil blog",
-    "Tickets": "bilete"
+    "Tickets": "bilete",
+    "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității"
   }
 }

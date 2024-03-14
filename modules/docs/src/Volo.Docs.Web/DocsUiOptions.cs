@@ -20,6 +20,12 @@ namespace Volo.Docs
         /// Default value: True;
         /// </summary>
         public bool ShowProjectsCombobox = true;
+        
+        /// <summary>
+        /// Allows user to see a label in user interface for projects combobox
+        /// Default value: True;
+        /// </summary>
+        public bool ShowProjectsComboboxLabel = true;
 
         /// <summary>
         /// If true, allows to create sections in document and show/hide sections according to user preferences.

@@ -229,6 +229,7 @@
     "ManageAccount": "Zarządzać kontem",
     "CommunityProfile": "Profil społeczności",
     "BlogProfile": "Profil bloga",
-    "Tickets": "Bilety"
+    "Tickets": "Bilety",
+    "DisplayName:CommunityIndexPagePoll": "Ankieta na stronie głównej społeczności"
   }
 }

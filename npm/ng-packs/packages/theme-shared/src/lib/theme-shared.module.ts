@@ -29,10 +29,10 @@ import { NgxDatatableListDirective } from './directives/ngx-datatable-list.direc
 import { DocumentDirHandlerService } from './handlers/document-dir.handler';
 import { ErrorHandler } from './handlers/error.handler';
 import { RootParams } from './models/common';
-import { ERROR_HANDLERS_PROVIDERS, NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
+import { DEFAULT_HANDLERS_PROVIDERS, NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
-import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
+import { HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from './tokens/confirmation-icons.token';
 import { PasswordComponent } from './components/password/password.component';
@@ -112,11 +112,6 @@ export class ThemeSharedModule {
           useFactory: noop,
         },
         { provide: HTTP_ERROR_CONFIG, useValue: httpErrorConfig },
-        {
-          provide: 'HTTP_ERROR_CONFIG',
-          useFactory: httpErrorConfigFactory,
-          deps: [HTTP_ERROR_CONFIG],
-        },
         { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
         NG_BOOTSTRAP_CONFIG_PROVIDERS,
         {
@@ -149,7 +144,7 @@ export class ThemeSharedModule {
           },
         },
         tenantNotFoundProvider,
-        ERROR_HANDLERS_PROVIDERS,
+        DEFAULT_HANDLERS_PROVIDERS,
       ],
     };
   }

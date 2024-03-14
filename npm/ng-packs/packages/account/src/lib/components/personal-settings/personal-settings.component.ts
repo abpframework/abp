@@ -5,7 +5,7 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { finalize, filter } from 'rxjs/operators';
 import { Account } from '../../models/account';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
-import { AuthService } from '@abp/ng.core';
+import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { RE_LOGIN_CONFIRMATION_TOKEN } from '../../tokens';
 import {
   EXTENSIONS_IDENTIFIER,
@@ -44,6 +44,7 @@ export class PersonalSettingsComponent
     private manageProfileState: ManageProfileStateService,
     private readonly authService: AuthService,
     private confirmationService: ConfirmationService,
+    private configState: ConfigStateService,
     @Inject(RE_LOGIN_CONFIRMATION_TOKEN)
     private isPersonalSettingsChangedConfirmationActive: boolean,
     protected injector: Injector,
@@ -65,13 +66,20 @@ export class PersonalSettingsComponent
   submit() {
     if (this.form.invalid) return;
     const isLogOutConfirmMessageVisible = this.isLogoutConfirmMessageActive();
+    const isRefreshTokenExists = this.authService.getRefreshToken();
     this.inProgress = true;
     this.profileService
       .update(this.form.value)
       .pipe(finalize(() => (this.inProgress = false)))
       .subscribe(profile => {
         this.manageProfileState.setProfile(profile);
+        this.configState.refreshAppState();
         this.toasterService.success('AbpAccount::PersonalSettingsSaved', 'Success', { life: 5000 });
+
+        if(isRefreshTokenExists){
+          return this.authService.refreshToken();
+        }
+  
         if (isLogOutConfirmMessageVisible) {
           this.showLogoutConfirmMessage();
         }
