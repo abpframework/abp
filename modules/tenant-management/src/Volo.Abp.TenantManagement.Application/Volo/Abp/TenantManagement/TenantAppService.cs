@@ -149,6 +149,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     {
         var tenant = await TenantRepository.GetAsync(id);
         tenant.RemoveDefaultConnectionString();
+        await LocalEventBus.PublishAsync(new TenantChangedEvent(tenant.Id, tenant.NormalizedName));
         await TenantRepository.UpdateAsync(tenant);
     }
 }
