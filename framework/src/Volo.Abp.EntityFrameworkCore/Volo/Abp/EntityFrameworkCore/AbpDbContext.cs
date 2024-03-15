@@ -53,6 +53,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     public IEntityChangeEventHelper EntityChangeEventHelper => LazyServiceProvider.LazyGetService<IEntityChangeEventHelper>(NullEntityChangeEventHelper.Instance);
 
+    public IOptions<AbpEntityChangeOptions> EntityChangeOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpEntityChangeOptions>>();
+
     public IAuditPropertySetter AuditPropertySetter => LazyServiceProvider.LazyGetRequiredService<IAuditPropertySetter>();
 
     public IEntityHistoryHelper EntityHistoryHelper => LazyServiceProvider.LazyGetService<IEntityHistoryHelper>(NullEntityHistoryHelper.Instance);
@@ -306,14 +308,15 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
     }
 
-    private void PublishEventsForTrackedEntity(EntityEntry entry)
+    protected virtual void PublishEventsForTrackedEntity(EntityEntry entry)
     {
-        switch (entry.State)
+       switch (entry.State)
         {
             case EntityState.Added:
                 ApplyAbpConceptsForAddedEntity(entry);
                 EntityChangeEventHelper.PublishEntityCreatedEvent(entry.Entity);
                 break;
+
             case EntityState.Modified:
                 ApplyAbpConceptsForModifiedEntity(entry);
                 if (entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
@@ -327,13 +330,52 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                         EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
                     }
                 }
-
                 break;
+
             case EntityState.Deleted:
                 ApplyAbpConceptsForDeletedEntity(entry);
                 EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                 break;
         }
+
+        foreach (var entityEntry in new[] { entry }.Where(HasEntityEntryChanged).Concat(ChangeTracker.Entries().Where(HasEntityEntryChanged)).DistinctBy(x => x.Entity))
+        {
+            ApplyAbpConceptsForModifiedEntity(entry);
+
+            if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
+            {
+                EntityChangeEventHelper.PublishEntityDeletedEvent(entityEntry.Entity);
+            }
+            else
+            {
+                EntityChangeEventHelper.PublishEntityUpdatedEvent(entityEntry.Entity);
+            }
+        }
+    }
+
+    protected virtual bool HasEntityEntryChanged(EntityEntry entry)
+    {
+        if (entry.State != EntityState.Modified && entry.State != EntityState.Unchanged)
+        {
+            return false;
+        }
+
+        var changed = entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd));
+        if (changed)
+        {
+            return true;
+        }
+
+        if (!changed &&
+            EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
+        {
+            if (entry.Navigations.Any(navigation => navigation.IsModified || (navigation is ReferenceEntry && navigation.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified)))
+            {
+                changed = true;
+            }
+        }
+
+        return changed;
     }
 
     protected virtual void HandlePropertiesBeforeSave()
