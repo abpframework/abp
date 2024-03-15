@@ -11,7 +11,7 @@ import {
   LocaleDirection,
   ToasterService,
 } from '@abp/ng.theme.shared';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
 
@@ -127,6 +127,7 @@ export class FeatureManagementComponent
       .subscribe(() => {
         this.visible = false;
 
+        this.toasterService.success('AbpFeatureManagement::Saved');
         if (!this.providerKey) {
           // to refresh host's features
           this.configState.refreshAppState().subscribe();

@@ -1,6 +1,6 @@
 import { ProfileDto, ProfileService } from '@abp/ng.account.core/proxy';
 import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
-import { Component, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { finalize, filter } from 'rxjs/operators';
 import { Account } from '../../models/account';
@@ -76,10 +76,10 @@ export class PersonalSettingsComponent
         this.configState.refreshAppState();
         this.toasterService.success('AbpAccount::PersonalSettingsSaved', 'Success', { life: 5000 });
 
-        if(isRefreshTokenExists){
+        if (isRefreshTokenExists) {
           return this.authService.refreshToken();
         }
-  
+
         if (isLogOutConfirmMessageVisible) {
           this.showLogoutConfirmMessage();
         }

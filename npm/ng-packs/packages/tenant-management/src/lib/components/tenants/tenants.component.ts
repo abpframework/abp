@@ -1,7 +1,7 @@
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 import { GetTenantsInput, TenantDto, TenantService } from '@abp/ng.tenant-management/proxy';
-import {Confirmation, ConfirmationService, ToasterService} from '@abp/ng.theme.shared';
+import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
@@ -93,6 +93,7 @@ export class TenantsComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.toasterService.success('AbpUi::SuccessfullySaved');
         this.list.get();
       });
   }

@@ -1,7 +1,7 @@
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import {Confirmation, ConfirmationService, ToasterService} from '@abp/ng.theme.shared';
+import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
@@ -90,6 +90,7 @@ export class RolesComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.toasterService.success('AbpUi::SuccessfullySaved');
         this.list.get();
       });
   }

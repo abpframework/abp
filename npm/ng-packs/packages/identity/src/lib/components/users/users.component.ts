@@ -6,7 +6,12 @@ import {
   IdentityUserService,
 } from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import {Confirmation, ConfirmationService, eFormComponets, ToasterService} from '@abp/ng.theme.shared';
+import {
+  Confirmation,
+  ConfirmationService,
+  eFormComponets,
+  ToasterService,
+} from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
@@ -20,7 +25,12 @@ import {
   TrackByFunction,
   ViewChild,
 } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
 
@@ -61,7 +71,7 @@ export class UsersComponent implements OnInit {
 
   entityDisplayName: string;
 
-  inputKey=eFormComponets.FormCheckboxComponent
+  inputKey = eFormComponets.FormCheckboxComponent;
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
@@ -158,6 +168,7 @@ export class UsersComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.toasterService.success('AbpUi::SuccessfullySaved');
         this.list.get();
       });
   }
