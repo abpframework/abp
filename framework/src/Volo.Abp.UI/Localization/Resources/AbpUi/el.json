@@ -13,6 +13,7 @@
     "SavingWithThreeDot": "Αποθηκεύεται...",
     "Actions": "Ενέργειες",
     "Delete": "Διαγραφή",
+    "SucessfullySaved": "Αποθηκεύτηκε με επιτυχία",
     "SuccessfullyDeleted": "Διαγράφηκε με επιτυχία",
     "Edit": "Επεξεργασία",
     "Refresh": "Ανανέωση",
@@ -49,7 +50,7 @@
     "ItemWillBeDeletedMessageWithFormat": "Το {0} θα διαγραφεί",
     "ItemWillBeDeletedMessage": "Αυτό το στοιχείο θα διαγραφεί!",
     "ManageYourAccount": "Διαχείριση Λογαριασμού",
-    "OthersGroup":"άλλος",
+    "OthersGroup": "άλλος",
     "Today": "Σήμερα",
     "Apply": "Ισχύουν"
   }
