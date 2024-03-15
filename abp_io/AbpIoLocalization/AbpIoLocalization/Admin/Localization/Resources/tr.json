@@ -450,6 +450,7 @@
     "FullName": "Ad soyad",
     "TestimonialText": "Tecrübe yazısı",
     "ExperienceYear": "Sektörel deneyim",
-    "Position": "Başlık"
+    "Position": "Başlık",
+    "Actions": "İşlemler"
   }
 }
