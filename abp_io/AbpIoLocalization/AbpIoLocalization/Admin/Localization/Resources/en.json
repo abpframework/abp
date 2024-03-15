@@ -600,6 +600,13 @@
     "NoChangesDetected": "No changes detected",
     "ProductCount": "Product Count",
     "Actions": "Actions",
-    "CreateInvoice": "Create Invoice"
+    "CreateInvoice": "Create Invoice",
+    "IsVisible": "Is visible",
+    "Menu:Testimonials": "Testimonials",
+    "TestimonialDeletionConfirmationMessage": "Are you sure you want to delete this testimonial ?",
+    "FullName": "Full name",
+    "TestimonialText": "Testimonial text",
+    "ExperienceYear": "Experience year",
+    "Position": "Position"
   }
 }
