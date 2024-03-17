@@ -239,8 +239,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             entity.OneToOne = null;
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
-        // https://github.com/dotnet/efcore/issues/24076#issuecomment-1996623874
-        // entityUpdatedEventTriggered.ShouldBeTrue();
+        entityUpdatedEventTriggered.ShouldBeTrue();
 
         // Test with one to many
         entityUpdatedEventTriggered = false;
@@ -266,8 +265,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             entity.OneToMany.Clear();
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
-        // https://github.com/dotnet/efcore/issues/24076#issuecomment-1996623874
-        // entityUpdatedEventTriggered.ShouldBeTrue();
+        entityUpdatedEventTriggered.ShouldBeTrue();
 
         // Test with many to many
         entityUpdatedEventTriggered = false;

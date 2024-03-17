@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -338,7 +339,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 break;
         }
 
-        foreach (var entityEntry in new[] { entry }.Where(HasEntityEntryChanged).Concat(ChangeTracker.Entries().Where(HasEntityEntryChanged)).DistinctBy(x => x.Entity))
+        foreach (var entityEntry in ChangeTracker.Entries().Where(HasEntityEntryChanged))
         {
             ApplyAbpConceptsForModifiedEntity(entry);
 
@@ -355,6 +356,41 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual bool HasEntityEntryChanged(EntityEntry entry)
     {
+        if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges && entry.State == EntityState.Unchanged)
+        {
+            var entryId = entry.Entity is IEntity entryEntity && entryEntity.GetKeys().Length == 1 ? entryEntity.GetKeys().FirstOrDefault()?.ToString() : null;
+            if (entryId != null)
+            {
+                var entity = NavigationPropertyValues.GetOrAdd(entryId, () => new Dictionary<int, object?>());
+                var index = 0;
+                foreach (var navigationEntry in entry.Navigations.Where(navigation => !navigation.IsModified && navigation.IsLoaded))
+                {
+                    var navigationEntryValue = entity.GetOrAdd(index, () => navigationEntry.CurrentValue);
+
+                    if (navigationEntryValue != null &&
+                        navigationEntryValue is not ICollection &&
+                        navigationEntryValue != navigationEntry.CurrentValue)
+                    {
+                        return true;
+                    }
+
+                    if (navigationEntryValue is ICollection navigationEntryValueCollection &&
+                        navigationEntry.CurrentValue is ICollection navigationEntryCurrentValueCollection &&
+                        navigationEntryValueCollection.Count != 0 &&
+                        navigationEntryCurrentValueCollection.Count == 0)
+                    {
+                        return true;
+                    }
+
+                    entity[index] = navigationEntry.CurrentValue is ICollection
+                        ? navigationEntry.CurrentValue.As<ICollection>().Cast<object?>().ToList()
+                        : navigationEntry.CurrentValue;
+
+                    index++;
+                }
+            }
+        }
+
         if (entry.State != EntityState.Modified && entry.State != EntityState.Unchanged)
         {
             return false;
