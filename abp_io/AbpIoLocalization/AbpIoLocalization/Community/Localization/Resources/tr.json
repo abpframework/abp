@@ -221,6 +221,20 @@
     "Videos({0})": "Videolar ({0})",
     "EditProfile": "Profili Güncelle",
     "MEMBERSINCE{0}": "ÜYELİK TARİHİ {0}",
-    "UpcomingEvents": "<span class=\"text-info\">Yaklaşan</span> Etkinlikler"
+    "UpcomingEvents": "<span class=\"text-info\">Yaklaşan</span> Etkinlikler",
+    "Join": "Katıl",
+    "ParticipationIsComplete": "Katılım tamamlanmıştır.",
+    "WaitingForTheDraw": "Çekilişi bekleyin!",
+    "Leave": "Ayrıl",
+    "LoginToJoin": "Katılmak için giriş yapın",
+    "ToEnd:": "Bitiş:",
+    "ToStart:": "Başlangıç:",
+    "days": "gün",
+    "hrs": "saat",
+    "min": "dk.",
+    "sec": "sn.",
+    "Winners": "Kazananlar",
+    "To{0}LuckyWinners": "{0} şanslı kazanan",
+    "ToLuckyWinner": "1 şanslı kazanan"
   }
 }
