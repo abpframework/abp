@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Czy chcesz przyznać firmie {0} dostęp do swoich danych?",
     "ScopesRequested": "Poproszono o zakresy",
     "Accept": "Zaakceptować",
-    "Deny": "Zaprzeczyć"
+    "Deny": "Zaprzeczyć",
+    "SuccessfullyDeleted": "Pomyślnie usunięto",
+    "SuccessfullySaved": "Pomyślnie zapisano"
   }
 }

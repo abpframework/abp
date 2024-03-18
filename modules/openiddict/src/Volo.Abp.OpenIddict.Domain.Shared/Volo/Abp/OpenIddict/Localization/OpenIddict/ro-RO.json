@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Doriți să acordați acces {0} la datele dvs.?",
     "ScopesRequested": "Domenii de aplicare solicitate",
     "Accept": "Accept",
-    "Deny": "Negați"
+    "Deny": "Negați",
+    "SuccessfullyDeleted": "S-a șters cu succes",
+    "SuccessfullySaved": "Salvat cu succes"
   }
 }

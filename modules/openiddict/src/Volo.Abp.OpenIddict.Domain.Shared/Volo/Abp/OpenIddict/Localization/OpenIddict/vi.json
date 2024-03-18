@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Bạn có muốn cấp cho {0} quyền truy cập vào dữ liệu của mình không?",
     "ScopesRequested": "Phạm vi được yêu cầu",
     "Accept": "Chấp nhận",
-    "Deny": "Từ chối"
+    "Deny": "Từ chối",
+    "SuccessfullyDeleted": "Đã xóa thành công",
+    "SuccessfullySaved": "Lưu thành công"
   }
 }

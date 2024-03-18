@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Hozzáférést szeretne adni a(z) {0} számára az adataihoz?",
     "ScopesRequested": "Kért hatókörök",
     "Accept": "Elfogad",
-    "Deny": "Tiltás"
+    "Deny": "Tiltás",
+    "SuccessfullyDeleted": "Sikeresen törölve",
+    "SuccessfullySaved": "Sikeresen mentve"
   }
 }

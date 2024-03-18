@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Θέλετε να παραχωρήσετε στον χρήστη {0} πρόσβαση στα δεδομένα σας;",
     "ScopesRequested": "Ζητούνται πεδία εφαρμογής",
     "Accept": "Αποδοχή",
-    "Deny": "Άρνηση"
+    "Deny": "Άρνηση",
+    "SuccessfullyDeleted": "Διαγράφηκε με επιτυχία",
+    "SuccessfullySaved": "Αποθηκεύτηκε με επιτυχία"
   }
 }

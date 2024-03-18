@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Viltu veita {0} aðgang að gögnunum þínum?",
     "ScopesRequested": "Umfang óskað",
     "Accept": "Samþykkja",
-    "Deny": "Neita"
+    "Deny": "Neita",
+    "SuccessfullyDeleted": "Tókst eytt",
+    "SuccessfullySaved": "Vistað"
   }
 }

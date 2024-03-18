@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Do you want to grant {0} access to your data?",
     "ScopesRequested": "İstenen kapsamlar",
     "Accept": "Kabul etmek",
-    "Deny": "Reddetmek"
+    "Deny": "Reddetmek",
+    "SuccessfullyDeleted": "Başarıyla Silindi",
+    "SuccessfullySaved": "Başarıyla kaydedildi"
   }
 }

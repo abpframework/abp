@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "¿Quieres otorgarle a {0} acceso a tus datos?",
     "ScopesRequested": "Alcances solicitados",
     "Accept": "Aceptar",
-    "Deny": "Denegar"
+    "Deny": "Denegar",
+    "SuccessfullyDeleted": "Eliminado con éxito",
+    "SuccessfullySaved": "Guardado con éxito"
   }
 }

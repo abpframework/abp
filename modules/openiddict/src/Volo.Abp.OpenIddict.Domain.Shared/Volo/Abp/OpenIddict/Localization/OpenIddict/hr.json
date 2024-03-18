@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Želite li {0} odobriti pristup vašim podacima?",
     "ScopesRequested": "Traženi dometi",
     "Accept": "Prihvatiti",
-    "Deny": "poreći"
+    "Deny": "poreći",
+    "SuccessfullyDeleted": "Uspješno izbrisano",
+    "SuccessfullySaved": "Uspješno spremljeno"
   }
 }

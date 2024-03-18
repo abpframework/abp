@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Wilt u {0} toegang verlenen tot uw gegevens?",
     "ScopesRequested": "Scopes gevraagd",
     "Accept": "Aanvaarden",
-    "Deny": "Ontkennen"
+    "Deny": "Ontkennen",
+    "SuccessfullyDeleted": "Succesvol verwijderd",
+    "SuccessfullySaved": "Succesvol opgeslagen"
   }
 }

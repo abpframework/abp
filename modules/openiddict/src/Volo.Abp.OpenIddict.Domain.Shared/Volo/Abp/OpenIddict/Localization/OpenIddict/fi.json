@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Haluatko myöntää käyttäjälle {0} pääsyn tietoihisi?",
     "ScopesRequested": "Laajuudet pyydetty",
     "Accept": "Hyväksy",
-    "Deny": "Kiellä"
+    "Deny": "Kiellä",
+    "SuccessfullyDeleted": "Poistettu onnistuneesti",
+    "SuccessfullySaved": "Tallennettu onnistuneesti"
   }
 }

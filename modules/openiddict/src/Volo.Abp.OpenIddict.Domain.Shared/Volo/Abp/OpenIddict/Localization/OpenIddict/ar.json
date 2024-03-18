@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "هل تريد منح {0} حق الوصول إلى بياناتك؟",
     "ScopesRequested": "النطاقات المطلوبة",
     "Accept": "يقبل",
-    "Deny": "ينكر"
+    "Deny": "ينكر",
+    "SuccessfullyDeleted": "تم الحذف بنجاح",
+    "SuccessfullySaved": "تم الحفظ بنجاح"
   }
 }

@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Chcete uživateli {0} udělit přístup ke svým datům?",
     "ScopesRequested": "Požadované rozsahy",
     "Accept": "Akceptovat",
-    "Deny": "Odmítnout"
+    "Deny": "Odmítnout",
+    "SuccessfullyDeleted": "Úspěšně smazáno",
+    "SuccessfullySaved": "Úspěšně uloženo"
   }
 }

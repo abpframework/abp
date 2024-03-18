@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "क्या आप {0} को अपने डेटा तक पहुंच प्रदान करना चाहते हैं?",
     "ScopesRequested": "दायरे का अनुरोध किया गया",
     "Accept": "स्वीकार करना",
-    "Deny": "अस्वीकार करना"
+    "Deny": "अस्वीकार करना",
+    "SuccessfullyDeleted": "सफलतापूर्वक हटा दिया गया",
+    "SuccessfullySaved": "सफलतापूर्वक संचित कर लिया गया है"
   }
 }

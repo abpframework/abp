@@ -10,6 +10,8 @@
     "DoYouWantToGrantAccessToYourData": "Вы хотите предоставить пользователю {0} доступ к вашим данным?",
     "ScopesRequested": "Запрошенные объемы",
     "Accept": "Принимать",
-    "Deny": "Отрицать"
+    "Deny": "Отрицать",
+    "SuccessfullyDeleted": "Успешно удалено",
+    "SuccessfullySaved": "Успешно сохранено"
   }
 }
