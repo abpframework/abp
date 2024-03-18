@@ -283,6 +283,7 @@
     "ChooseCoverImage": "Choose a cover image...",
     "Menu:Quotation": "Quotation",
     "Menu:Invoice": "Invoice",
+    "Menu:Quotation/Invoice": "Quotation/Invoice",
     "Menu:PaymentRequests": "Payment Requests",
     "Permission:PaymentRequests": "Payment Requests",
     "PaymentRequests": "Payment Requests",
