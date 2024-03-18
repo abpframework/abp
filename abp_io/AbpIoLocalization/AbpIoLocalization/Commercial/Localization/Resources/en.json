@@ -1207,6 +1207,7 @@
     "StartupSingleSignOn": "Single Sign On",
     "Application{0}": "Application {0}",
     "PreBuiltApplicationModulesTitle": "Pre-Built Application <span class=\"gradient-commercial\">Modules</span>",
-    "RegisterDemo":"Register" 
+    "RegisterDemo": "Register",
+    "TrainingDescription": "We are offering the following training packages for who want to get expertise on the ABP Framework and the ABP Commercial."
   }
 }
