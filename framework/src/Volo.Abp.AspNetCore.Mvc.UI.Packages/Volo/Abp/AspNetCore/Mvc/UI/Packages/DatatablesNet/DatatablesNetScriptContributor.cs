@@ -10,6 +10,6 @@ public class DatatablesNetScriptContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddIfNotContains("/libs/datatables.net/js/jquery.dataTables.js");
+        context.Files.AddIfNotContains("/libs/datatables.net/js/dataTables.min.js");
     }
 }

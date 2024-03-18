@@ -11,10 +11,6 @@ var abp = abp || {};
      * RECORD-ACTIONS extension for datatables                               *
      *************************************************************************/
     (function () {
-        if (!$.fn.dataTableExt) {
-            return;
-        }
-
         var getVisibilityValue = function (visibilityField, record, tableInstance) {
             if (visibilityField === undefined) {
                 return true;
@@ -238,10 +234,9 @@ var abp = abp || {};
         var renderRowActions = function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             var columns;
 
-            if (tableInstance.aoColumns) {
-                columns = tableInstance.aoColumns;
-            } else {
-                columns = tableInstance.fnSettings().aoColumns;
+            var settings = tableInstance.api().settings();
+            if (settings.length === 1 && settings[0].aoColumns) {
+                columns = settings[0].aoColumns;
             }
 
             if (!columns) {
@@ -270,16 +265,6 @@ var abp = abp || {};
                 }
             }
         };
-
-        var _existingApiRenderRowActionsFunction = $.fn.dataTableExt.oApi.renderRowActions;
-        $.fn.dataTableExt.oApi.renderRowActions =
-            function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                if (_existingApiRenderRowActionsFunction) {
-                    _existingApiRenderRowActionsFunction(tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull);
-                }
-
-                renderRowActions(tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull);
-            };
 
         if (!$.fn.dataTable) {
             return;
@@ -465,6 +450,10 @@ var abp = abp || {};
 
                 if (column.rowAction) {
                     customizeRowActionColumn(column);
+                }
+
+                if (!column.type) {
+                    column.type = "string";
                 }
             }
 
