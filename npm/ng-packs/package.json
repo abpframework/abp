@@ -93,7 +93,7 @@
     "autoprefixer": "^10.0.0",
     "bootstrap": "^5.0.0",
     "bootstrap-icons": "^1.0.0",
-    "chart.js": "^3.0.0",
+    "chart.js": "^4.0.0",
     "cypress": "^7.0.0",
     "dotenv": "10.0.0",
     "eslint": "8.48.0",
