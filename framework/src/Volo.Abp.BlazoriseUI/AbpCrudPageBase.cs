@@ -480,6 +480,7 @@ public abstract class AbpCrudPageBase<
         await GetEntitiesAsync();
 
         await InvokeAsync(CreateModal!.Hide);
+        await Notify.Success(L["SavedSuccessfully"]);
     }
 
     protected virtual async Task UpdateEntityAsync()
@@ -518,6 +519,7 @@ public abstract class AbpCrudPageBase<
         await GetEntitiesAsync();
 
         await InvokeAsync(EditModal!.Hide);
+        await Notify.Success(L["SavedSuccessfully"]);
     }
 
     protected virtual async Task DeleteEntityAsync(TListViewModel entity)
