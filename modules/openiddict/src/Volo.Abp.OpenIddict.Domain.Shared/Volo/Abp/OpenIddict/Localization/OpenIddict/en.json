@@ -11,7 +11,7 @@
     "ScopesRequested": "Scopes requested",
     "Accept": "Accept",
     "Deny": "Deny",
-    "SuccessfullyDeleted": "Successfully Deleted",
-    "SuccessfullySaved": "Successfully Saved"
+    "SuccessfullyDeleted": "Deleted Successfully",
+    "SuccessfullySaved": "Saved Successfully"
   }
 }
