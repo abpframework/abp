@@ -338,7 +338,7 @@ export class PermissionManagementComponent
       )
       .subscribe(() => {
         this.visible = false;
-        this.toasterService.success('AbpPermissionManagement::SuccessfullySaved');
+        this.toasterService.success('AbpUi::SavedSuccessfully');
       });
   }
 
