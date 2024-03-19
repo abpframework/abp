@@ -1120,7 +1120,7 @@
     "EditBillingInformation": "Ödeme Bilgilerini Güncelle",
     "PreBuiltApplicationModulesTitle": "Önceden Oluşturulmuş Uygulama <span class=\"gradient-commercial\">Modülleri</span>",
     "Organization": "Organizasyon",
-    "RegisterDemo": "kaydolun",
+    "RegisterDemo": "Kaydolun",
     "Purchase_DeveloperSeatCount": "Geliştirici koltuğu sayısı",
     "Purchase_OnboardingTraining_Description": "Bu canlı eğitim 8 kişilik sınıf için geçerlidir ve bu indirim yalnızca yeni lisans ile satın alındığında geçerlidir. <a href=\"{0}\" class=\"text-white\">Daha fazla bilgi edin <i class=\"fa fa-external-link ms-1\"></i></a>",
     "Purchase_DevelopersAlreadyIncluded": "{0} geliştirici zaten dahil edildi",
@@ -1135,6 +1135,10 @@
     "Purchase_Save": "{0}% <span class=\"save ms-1\">İndirim {1}</span>",
     "Total": "Toplam",
     "MultipleYearDiscount": "Çoklu Yıl İndirimi",
-    "TrainingDescription": "ABP Framework ve ABP Commercial konusunda uzmanlık kazanmak isteyenler için aşağıdaki eğitim paketlerini sunuyoruz."
+    "TrainingDescription": "ABP Framework ve ABP Commercial konusunda uzmanlık kazanmak isteyenler için aşağıdaki eğitim paketlerini sunuyoruz.",
+    "PurchaseDevelopers": "geliştirici",
+    "RemoveBasket": "Sepetten kaldır",
+    "TrainingPack": "Eğitim paketi",
+    "TrainingPackDiscount": "Eğitim paketi indirimi"
   }
 }

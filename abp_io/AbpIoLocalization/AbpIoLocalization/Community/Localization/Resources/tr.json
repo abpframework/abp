@@ -235,6 +235,13 @@
     "sec": "sn.",
     "Winners": "Kazananlar",
     "To{0}LuckyWinners": "{0} şanslı kazanan",
-    "ToLuckyWinner": "1 şanslı kazanan"
+    "ToLuckyWinner": "1 şanslı kazanan",
+    "AllAttendees": "Tüm katılımcılar",
+    "RaffleJoinSuccessMessage": "Çekilişe başarıyla kaydoldunuz. ",
+    "RaffleLoginAndRegisterMessage": "Bu çekilişe katılmak için giriş yapmalısınız!",
+    "RegisterTheEvent": "Etkinliğe Kaydol",
+    "GoToConferencePage": "Konferans Sayfasına Git",
+    "BuyTicket": "Bilet al",
+    "SeeEvent": "Etkinliği Gör"
   }
 }

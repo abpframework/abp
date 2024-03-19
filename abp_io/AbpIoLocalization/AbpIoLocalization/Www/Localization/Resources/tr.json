@@ -437,6 +437,7 @@
     "UIOptions": "UI Seçenekleri",
     "LovedDevelopers": "Dünya çapında binlerce <span class=\"gradient-framework\">geliştirici</span><br> tarafından sevildi",
     "ABPIOPlatformPackages": "ABP.IO Platform Paketleri",
-    "AbpPackagesDescription": "ABP şablonları NuGet ve NPM paketleri olarak dağıtılmaktadır. İşte ABP.IO Platformu tarafından kullanılan tüm resmi NuGet ve NPM paketleri."
+    "AbpPackagesDescription": "ABP şablonları NuGet ve NPM paketleri olarak dağıtılmaktadır. İşte ABP.IO Platformu tarafından kullanılan tüm resmi NuGet ve NPM paketleri.",
+    "VideosLoginAndRegisterMessage": "Videoları izleyebilmek için giriş yapmalısınız"
   }
 }
