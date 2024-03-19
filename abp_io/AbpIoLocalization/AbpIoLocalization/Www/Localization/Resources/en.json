@@ -486,6 +486,8 @@
     "ABPVideoCoursesTitle": "ABP Essential Videos",
     "LovedDevelopers": "Loved by thousands of <span class=\"gradient-framework\">developers</span><br> around the world",
     "ABPIOPlatformPackages": "ABP.IO Platform Packages",
-    "AbpPackagesDescription":"ABP templates are being distributed as NuGet and NPM packages. Here are all the official NuGet and NPM packages used by the ABP.IO Platform."
+    "AbpPackagesDescription": "ABP templates are being distributed as NuGet and NPM packages. Here are all the official NuGet and NPM packages used by the ABP.IO Platform.",
+    "Cancel": "Cancel",
+    "Continue": "Continue"
   }
 }

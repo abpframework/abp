@@ -242,6 +242,8 @@
     "RegisterTheEvent": "Etkinliğe Kaydol",
     "GoToConferencePage": "Konferans Sayfasına Git",
     "BuyTicket": "Bilet al",
-    "SeeEvent": "Etkinliği Gör"
+    "SeeEvent": "Etkinliği Gör",
+    "Cancel": "Vazgeç",
+    "Continue": "Devam"
   }
 }
