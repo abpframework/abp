@@ -1202,6 +1202,13 @@
     "Topic": "Topic",
     "SendUsEmail": "Send us email",
     "ErrorExceptionMessage": "An error occurred while processing your request",
-    "WatchTakeCodeGeneration": "Watch the \"Explore the Potential of Code Generation: ABP Suite\" Video!"
+    "WatchTakeCodeGeneration": "Watch the \"Explore the Potential of Code Generation: ABP Suite\" Video!",
+    "StartupTemplatesUser": "User",
+    "StartupSingleSignOn": "Single Sign On",
+    "Application{0}": "Application {0}",
+    "PreBuiltApplicationModulesTitle": "Pre-Built Application <span class=\"gradient-commercial\">Modules</span>",
+    "RegisterDemo": "Register",
+    "TrainingDescription": "We are offering the following training packages for who want to get expertise on the ABP Framework and the ABP Commercial.",
+    "PurchaseDevelopers": "developers"
   }
 }
