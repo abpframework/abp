@@ -283,6 +283,7 @@
     "ChooseCoverImage": "Choose a cover image...",
     "Menu:Quotation": "Quotation",
     "Menu:Invoice": "Invoice",
+    "Menu:Quotation/Invoice": "Quotation/Invoice",
     "Menu:PaymentRequests": "Payment Requests",
     "Permission:PaymentRequests": "Payment Requests",
     "PaymentRequests": "Payment Requests",
@@ -600,6 +601,10 @@
     "NoChangesDetected": "No changes detected",
     "ProductCount": "Product Count",
     "Actions": "Actions",
-    "CreateInvoice": "Create Invoice"
+    "CreateInvoice": "Create Invoice",
+    "AllowedLicenses": "Allowed Licenses",
+    "AllowedModules": "Allowed Modules",
+    "ModuleName": "Module name",
+    "NonYet": "Non yet"
   }
 }
