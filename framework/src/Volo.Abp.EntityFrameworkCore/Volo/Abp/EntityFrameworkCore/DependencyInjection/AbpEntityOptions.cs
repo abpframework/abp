@@ -11,7 +11,7 @@ public class AbpEntityOptions<TEntity>
 {
     public static AbpEntityOptions<TEntity> Empty { get; } = new AbpEntityOptions<TEntity>();
 
-    public Func<IQueryable<TEntity>, IQueryable<TEntity>> DefaultWithDetailsFunc { get; set; }
+    public Func<IQueryable<TEntity>, IQueryable<TEntity>>? DefaultWithDetailsFunc { get; set; }
 }
 
 public class AbpEntityOptions
@@ -23,7 +23,7 @@ public class AbpEntityOptions
         _options = new Dictionary<Type, object>();
     }
 
-    public AbpEntityOptions<TEntity> GetOrNull<TEntity>()
+    public AbpEntityOptions<TEntity>? GetOrNull<TEntity>()
         where TEntity : IEntity
     {
         return _options.GetOrDefault(typeof(TEntity)) as AbpEntityOptions<TEntity>;
@@ -35,10 +35,10 @@ public class AbpEntityOptions
         Check.NotNull(optionsAction, nameof(optionsAction));
 
         optionsAction(
-            _options.GetOrAdd(
+            (_options.GetOrAdd(
                 typeof(TEntity),
                 () => new AbpEntityOptions<TEntity>()
-            ) as AbpEntityOptions<TEntity>
+            ) as AbpEntityOptions<TEntity>)!
         );
     }
 }

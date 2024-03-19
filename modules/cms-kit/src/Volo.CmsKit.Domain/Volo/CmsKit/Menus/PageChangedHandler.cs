@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -30,6 +31,11 @@ public class PageChangedHandler :
         var affectedMenuItems = allMenuItems
                                 .Where(x => x.PageId == eventData.Entity.Id)
                                 .ToArray();
+
+        if (affectedMenuItems.IsNullOrEmpty())
+        {
+            return;
+        }
 
         foreach (var menuItem in affectedMenuItems)
         {

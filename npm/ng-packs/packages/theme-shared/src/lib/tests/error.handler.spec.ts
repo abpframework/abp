@@ -7,7 +7,8 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of, Subject } from 'rxjs';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
-import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
+import { ErrorHandler } from '../handlers';
+import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/default-errors';
 import { ConfirmationService } from '../services';
 import { httpErrorConfigFactory } from '../tokens/http-error.token';
 
@@ -16,7 +17,7 @@ const reporter$ = new Subject();
 @NgModule({
   exports: [HttpErrorWrapperComponent],
   declarations: [HttpErrorWrapperComponent],
-  entryComponents: [HttpErrorWrapperComponent],
+  //entryComponents: [HttpErrorWrapperComponent],
   imports: [CoreTestingModule],
 })
 class MockModule {}

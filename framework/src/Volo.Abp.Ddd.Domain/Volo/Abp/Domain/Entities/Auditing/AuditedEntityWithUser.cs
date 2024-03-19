@@ -12,10 +12,10 @@ public abstract class AuditedEntityWithUser<TUser> : AuditedEntity, IAuditedObje
     where TUser : IEntity<Guid>
 {
     /// <inheritdoc />
-    public virtual TUser Creator { get; protected set; }
+    public virtual TUser? Creator { get; protected set; }
 
     /// <inheritdoc />
-    public virtual TUser LastModifier { get; set; }
+    public virtual TUser? LastModifier { get; set; }
 }
 
 /// <summary>
@@ -28,10 +28,10 @@ public abstract class AuditedEntityWithUser<TKey, TUser> : AuditedEntity<TKey>, 
     where TUser : IEntity<Guid>
 {
     /// <inheritdoc />
-    public virtual TUser Creator { get; protected set; }
+    public virtual TUser? Creator { get; protected set; }
 
     /// <inheritdoc />
-    public virtual TUser LastModifier { get; set; }
+    public virtual TUser? LastModifier { get; set; }
 
     protected AuditedEntityWithUser()
     {

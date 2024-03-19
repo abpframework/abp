@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -12,7 +13,7 @@ public class AbpDbContextOptions
 {
     internal List<Action<AbpDbContextConfigurationContext>> DefaultPreConfigureActions { get; }
 
-    internal Action<AbpDbContextConfigurationContext> DefaultConfigureAction { get; set; }
+    internal Action<AbpDbContextConfigurationContext>? DefaultConfigureAction { get; set; }
 
     internal Dictionary<Type, List<object>> PreConfigureActions { get; }
 
@@ -20,12 +21,22 @@ public class AbpDbContextOptions
 
     internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
 
+    internal Action<DbContext, ModelConfigurationBuilder>? DefaultConventionAction { get; set; }
+
+    internal Dictionary<Type, List<object>> ConventionActions { get; }
+
+    internal Action<DbContext, ModelBuilder>? DefaultOnModelCreatingAction { get; set; }
+
+    internal Dictionary<Type, List<object>> OnModelCreatingActions { get; }
+
     public AbpDbContextOptions()
     {
         DefaultPreConfigureActions = new List<Action<AbpDbContextConfigurationContext>>();
         PreConfigureActions = new Dictionary<Type, List<object>>();
         ConfigureActions = new Dictionary<Type, object>();
         DbContextReplacements = new Dictionary<MultiTenantDbContextType, Type>();
+        ConventionActions = new Dictionary<Type, List<object>>();
+        OnModelCreatingActions = new Dictionary<Type, List<object>>();
     }
 
     public void PreConfigure([NotNull] Action<AbpDbContextConfigurationContext> action)
@@ -40,6 +51,56 @@ public class AbpDbContextOptions
         Check.NotNull(action, nameof(action));
 
         DefaultConfigureAction = action;
+    }
+
+    public void ConfigureDefaultConvention([NotNull] Action<DbContext, ModelConfigurationBuilder> action)
+    {
+        Check.NotNull(action, nameof(action));
+
+        DefaultConventionAction = action;
+    }
+
+    public void ConfigureConventions<TDbContext>([NotNull] Action<TDbContext, ModelConfigurationBuilder> action)
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        Check.NotNull(action, nameof(action));
+
+        var actions = ConventionActions.GetOrDefault(typeof(TDbContext));
+        if (actions == null)
+        {
+            ConventionActions[typeof(TDbContext)] = new List<object>
+            {
+                new Action<DbContext, ModelConfigurationBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder))
+            };
+            return;
+        }
+
+        actions.Add(action);
+    }
+
+    public void ConfigureDefaultOnModelCreating([NotNull] Action<DbContext, ModelBuilder> action)
+    {
+        Check.NotNull(action, nameof(action));
+
+        DefaultOnModelCreatingAction = action;
+    }
+
+    public void ConfigureOnModelCreating<TDbContext>([NotNull] Action<TDbContext, ModelBuilder> action)
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        Check.NotNull(action, nameof(action));
+
+        var actions = OnModelCreatingActions.GetOrDefault(typeof(TDbContext));
+        if (actions == null)
+        {
+            OnModelCreatingActions[typeof(TDbContext)] = new List<object>
+            {
+                new Action<DbContext, ModelBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder))
+            };
+            return;
+        }
+
+        actions.Add(action);
     }
 
     public bool IsConfiguredDefault()

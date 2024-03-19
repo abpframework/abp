@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.Json.SystemTextJson</AssemblyName>
@@ -20,7 +20,7 @@
         <ProjectReference Include="..\Volo.Abp.Json.Abstractions\Volo.Abp.Json.Abstractions.csproj" />
         <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
         <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
-        <PackageReference Include="System.Text.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
+        <PackageReference Include="System.Text.Json" />
     </ItemGroup>
 
 </Project>

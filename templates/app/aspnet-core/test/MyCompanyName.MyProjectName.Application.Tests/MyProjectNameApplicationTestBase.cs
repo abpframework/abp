@@ -1,6 +1,9 @@
-﻿namespace MyCompanyName.MyProjectName;
+﻿using Volo.Abp.Modularity;
 
-public abstract class MyProjectNameApplicationTestBase : MyProjectNameTestBase<MyProjectNameApplicationTestModule>
+namespace MyCompanyName.MyProjectName;
+
+public abstract class MyProjectNameApplicationTestBase<TStartupModule> : MyProjectNameTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
 
 }

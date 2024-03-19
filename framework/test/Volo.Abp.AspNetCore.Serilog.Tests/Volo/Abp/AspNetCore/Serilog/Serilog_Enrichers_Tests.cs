@@ -20,6 +20,7 @@ public class Serilog_Enrichers_Tests : AbpSerilogTestBase
 
     private readonly Guid _testTenantId = Guid.NewGuid();
     private readonly string _testTenantName = "acme";
+    private readonly string _testTenantNormalizedName = "ACME";
 
     private readonly AbpAspNetCoreMultiTenancyOptions _tenancyOptions;
     private readonly AbpAspNetCoreSerilogOptions _serilogOptions;
@@ -33,18 +34,16 @@ public class Serilog_Enrichers_Tests : AbpSerilogTestBase
         _logger = ServiceProvider.GetRequiredService<ILogger<Serilog_Enrichers_Tests>>();
     }
 
-    protected override IHostBuilder CreateHostBuilder()
+    protected override void ConfigureServices(IServiceCollection services)
     {
-        return base.CreateHostBuilder().ConfigureServices(services =>
+        services.Configure<AbpDefaultTenantStoreOptions>(options =>
         {
-            services.Configure<AbpDefaultTenantStoreOptions>(options =>
+            options.Tenants = new[]
             {
-                options.Tenants = new[]
-                {
-                        new TenantConfiguration(_testTenantId, _testTenantName)
-                };
-            });
+                new TenantConfiguration(_testTenantId, _testTenantName, _testTenantNormalizedName)
+            };
         });
+        base.ConfigureServices(services);
     }
 
     [Fact]

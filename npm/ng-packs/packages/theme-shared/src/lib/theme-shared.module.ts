@@ -22,24 +22,25 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { DEFAULT_VALIDATION_BLUEPRINTS } from './constants/validation';
-import { EllipsisModule } from './directives/ellipsis.directive';
+import { EllipsisDirective } from './directives/ellipsis.directive';
 import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
 import { DocumentDirHandlerService } from './handlers/document-dir.handler';
 import { ErrorHandler } from './handlers/error.handler';
 import { RootParams } from './models/common';
-import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
+import { DEFAULT_HANDLERS_PROVIDERS, NG_BOOTSTRAP_CONFIG_PROVIDERS } from './providers';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
-import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
+import { HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from './tokens/confirmation-icons.token';
 import { PasswordComponent } from './components/password/password.component';
 import { CardModule } from './components/card/card.module';
-import { AbpVisibleDirective } from './directives';
+import { AbpVisibleDirective, DisabledDirective } from './directives';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormCheckboxComponent } from './components/checkbox/checkbox.component';
+import { tenantNotFoundProvider } from './providers/tenant-not-found.provider';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -51,14 +52,10 @@ const declarationsWithExports = [
   ModalComponent,
   ToastComponent,
   ToastContainerComponent,
-  PasswordComponent,
-  NgxDatatableDefaultDirective,
-  NgxDatatableListDirective,
   LoadingDirective,
   ModalCloseDirective,
-  AbpVisibleDirective,
   FormInputComponent,
-  FormCheckboxComponent
+  FormCheckboxComponent,
 ];
 
 @NgModule({
@@ -67,21 +64,28 @@ const declarationsWithExports = [
     NgxDatatableModule,
     NgxValidateCoreModule,
     NgbPaginationModule,
-    EllipsisModule,
+    EllipsisDirective,
     CardModule,
-
+    PasswordComponent,
+    NgxDatatableDefaultDirective,
+    NgxDatatableListDirective,
+    DisabledDirective,
+    AbpVisibleDirective,
   ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent],
   exports: [
     NgxDatatableModule,
-    EllipsisModule,
     NgxValidateCoreModule,
     CardModule,
-    ...declarationsWithExports
+    DisabledDirective,
+    AbpVisibleDirective,
+    NgxDatatableListDirective,
+    NgxDatatableDefaultDirective,
+    ...declarationsWithExports,
   ],
   providers: [DatePipe],
 })
-export class BaseThemeSharedModule { }
+export class BaseThemeSharedModule {}
 
 @NgModule({
   imports: [BaseThemeSharedModule],
@@ -108,11 +112,6 @@ export class ThemeSharedModule {
           useFactory: noop,
         },
         { provide: HTTP_ERROR_CONFIG, useValue: httpErrorConfig },
-        {
-          provide: 'HTTP_ERROR_CONFIG',
-          useFactory: httpErrorConfigFactory,
-          deps: [HTTP_ERROR_CONFIG],
-        },
         { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
         NG_BOOTSTRAP_CONFIG_PROVIDERS,
         {
@@ -144,6 +143,8 @@ export class ThemeSharedModule {
             ...(confirmationIcons || {}),
           },
         },
+        tenantNotFoundProvider,
+        DEFAULT_HANDLERS_PROVIDERS,
       ],
     };
   }

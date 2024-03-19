@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Questo campo deve essere una stringa o un tipo di matrice con una lunghezza minima di '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "Questo campo non è un numero di telefono valido.",
     "ThisFieldMustBeBetween{0}And{1}": "Questo campo deve essere compreso tra {0} e {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "Questo campo deve essere maggiore o uguale a {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "Questo campo deve essere minore o uguale a {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "Questo campo deve corrispondere all'espressione regolare '{0}'.",
     "ThisFieldIsRequired.": "Questo campo è obbligatorio.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Questo campo deve essere una stringa con una lunghezza massima di {0}.",

@@ -27,23 +27,23 @@ public abstract class EntityCacheBase<TEntity, TEntityCacheItem, TKey> :
         UnitOfWorkManager = unitOfWorkManager;
     }
     
-    public virtual async Task<TEntityCacheItem> FindAsync(TKey id)
+    public virtual async Task<TEntityCacheItem?> FindAsync(TKey id)
     {
         return await Cache.GetOrAddAsync(
             id,
-            async () => MapToCacheItem(await Repository.FindAsync(id))
+            async () => MapToCacheItem(await Repository.FindAsync(id))!
         );
     }
 
     public virtual async Task<TEntityCacheItem> GetAsync(TKey id)
     {
-        return await Cache.GetOrAddAsync(
+        return (await Cache.GetOrAddAsync(
             id,
-            async () => MapToCacheItem(await Repository.GetAsync(id))
-        );
+            async () => MapToCacheItem(await Repository.GetAsync(id))!
+        ))!;
     }
 
-    protected abstract TEntityCacheItem MapToCacheItem(TEntity entity);
+    protected abstract TEntityCacheItem? MapToCacheItem(TEntity? entity);
     
     public async Task HandleEventAsync(EntityChangedEventData<TEntity> eventData)
     {

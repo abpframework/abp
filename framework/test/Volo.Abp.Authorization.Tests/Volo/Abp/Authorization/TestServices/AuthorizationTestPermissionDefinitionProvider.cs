@@ -22,6 +22,8 @@ public class AuthorizationTestPermissionDefinitionProvider : PermissionDefinitio
         group.AddPermission("MyPermission3");
         group.AddPermission("MyPermission4");
         group.AddPermission("MyPermission5");
+        group.AddPermission("MyPermission6").WithProviders(nameof(TestPermissionValueProvider1));
+        group.AddPermission("MyPermission7").WithProviders(nameof(TestPermissionValueProvider2));
 
         group.GetPermissionOrNull("MyAuthorizedService1").ShouldNotBeNull();
 

@@ -12,7 +12,7 @@ This document is for who wants to better understand how the ABP Framework is ini
 
 A .NET Console application is the minimalist .NET application. So, it is best to show the installing of the ABP Framework to a console application as a minimalist example.
 
-If you [create a new console application with Visual Studio](https://learn.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio) (for .NET 7.0 or later), you will see the following solution structure (I named the solution as `MyConsoleDemo`):
+If you [create a new console application with Visual Studio](https://learn.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio) (for .NET 8.0 or later), you will see the following solution structure (I named the solution as `MyConsoleDemo`):
 
 ![app-startup-console-initial](images/app-startup-console-initial.png)
 
@@ -144,7 +144,7 @@ AbpApplicationFactory.CreateAsync(typeof(MyConsoleDemoModule));
 
 Both overloads work exactly the same. So, you can use the second one if you don't know the module class type on development time and you (somehow) calculate it on runtime.    
 
-If you create one of the methods above, ABP creates an internal service collection (`IServiceCollection`) and an internal service provider (`IServiceProvider`) to setup the [dependency injection](Dependency-Injection.md) system internally. Notice that we've used the `application.ServiceProvider` property in the *Installing a Framework Package* section to resolve the `IEmailSender` service from the dependency injection system.
+If you use one of the methods above, ABP creates an internal service collection (`IServiceCollection`) and an internal service provider (`IServiceProvider`) to setup the [dependency injection](Dependency-Injection.md) system internally. Notice that we've used the `application.ServiceProvider` property in the *Installing a Framework Package* section to resolve the `IEmailSender` service from the dependency injection system.
 
 The next overload gets an `IServiceCollection` parameter from you to allow you to setup the dependency injection system yourself, or integrate to another framework (like ASP.NET Core) that also sets up the dependency injection system internally.
 
@@ -258,7 +258,7 @@ The `IAbpApplication` interface extends the `IApplicationInfoAccessor` interface
 
 ## IAbpHostEnvironment
 
-Sometimes, while creating an application, we need to get the current hosting environment and take actions according to that. In such cases, we can use some services such as [IWebHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.iwebhostenvironment?view=aspnetcore-7.0) or [IWebAssemblyHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.webassembly.hosting.iwebassemblyhostenvironment) provided by .NET, in the final application. 
+Sometimes, while creating an application, we need to get the current hosting environment and take actions according to that. In such cases, we can use some services such as [IWebHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.iwebhostenvironment?view=aspnetcore-8.0) or [IWebAssemblyHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.webassembly.hosting.iwebassemblyhostenvironment) provided by .NET, in the final application. 
 
 However, we can not use these services in a class library, which is used by the final application. ABP Framework provides the `IAbpHostEnvironment` service, which allows you to get the current environment name whenever you want. `IAbpHostEnvironment` is used by the ABP Framework in several places to perform specific actions by the environment. For example, ABP Framework reduces the cache duration on the **Development** environment for some services.
 

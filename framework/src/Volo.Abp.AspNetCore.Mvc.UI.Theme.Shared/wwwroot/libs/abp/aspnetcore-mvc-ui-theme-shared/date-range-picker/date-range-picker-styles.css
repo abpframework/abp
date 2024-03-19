@@ -1,0 +1,11 @@
+.daterangepicker .calendar-table th, .daterangepicker .calendar-table td {
+    color: #1b1b1b;
+}
+
+.daterangepicker td.active, .daterangepicker td.active:hover {
+    color: #fff;
+}
+
+.daterangepicker td.off, .daterangepicker td.off.in-range, .daterangepicker td.off.start-date, .daterangepicker td.off.end-date{
+    color: #999;
+}

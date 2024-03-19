@@ -15,7 +15,7 @@ public class MultiTenantDbContextType
         MultiTenancySide = multiTenancySide;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         var other = obj as MultiTenantDbContextType;
 

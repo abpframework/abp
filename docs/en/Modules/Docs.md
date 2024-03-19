@@ -22,21 +22,15 @@ When you use GitHub to store your docs, Docs Module supports versioning. If you 
 
 ## Installation
 
-### 1- Download
+This document covers `Entity Framework Core` provider but you can also select `MongoDB` as your database provider.
 
-If you do not have an existing ABP project, this step shows you how to create a new project from [abp.io](https://abp.io) to add the Docs Module. If you already have an ABP project, you can skip this step.
+### 1- Creating an application
 
-It is recommended to use ABP CLI to create new projects. Use the following command:
+If you do not have an existing ABP project, you can either [generate a CLI command from the get started page of the abp.io website](https://abp.io/get-started) and runs it or run the command below:
 
 ```bash
 abp new Acme.MyProject
 ```
-
-You can also generate a CLI command from [get started page](https://abp.io/get-started). Enter your project name as `Acme.MyProject`, other use default options.
-
-Note that this document covers `Entity Framework Core` provider but you can also select `MongoDB` as your database provider.
-
-![Create new project](../images/docs-module_download-new-abp-project.png)
 
 ### 2- Running The Empty Application
 
@@ -373,7 +367,7 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
 For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}', N'/', N'dev', N'')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName], [ConcurrencyStamp]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP framework (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'', N'12f21123e08e4f15bedbae0b2d939659')
 ```
 
 Be aware that `GitHubAccessToken` is masked. It's a private token and you must get your own token and replace the `***` string.

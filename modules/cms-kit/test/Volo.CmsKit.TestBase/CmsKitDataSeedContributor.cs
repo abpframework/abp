@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -194,7 +195,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             "comment",
             null,
             _cmsKitTestData.User1Id
-        ));
+        )
+        { IdempotencyToken = _cmsKitTestData.IdempotencyToken_1 });
 
         await _commentRepository.InsertAsync(new Comment(_guidGenerator.Create(),
             _cmsKitTestData.EntityType1,
@@ -416,6 +418,13 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
 
     private async Task SeedMenusAsync()
     {
+        var menuItem4 = new MenuItem(
+                       _cmsKitTestData.MenuItem_4_With_Page_1_Id,
+                        _cmsKitTestData.MenuItem_4_With_Page_1_Name,
+                        _cmsKitTestData.Page_1_Slug.EnsureStartsWith('/'));
+
+        menuItem4.SetPageId(_cmsKitTestData.Page_1_Id);
+
         await _menuItemRepository.InsertManyAsync(new[]
         {
                 new MenuItem(
@@ -429,8 +438,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
                 new MenuItem(
                     _cmsKitTestData.MenuItem_3_Id,
                     _cmsKitTestData.MenuItem_3_Name,
-                    _cmsKitTestData.MenuItem_3_Url)
-
+                    _cmsKitTestData.MenuItem_3_Url),
+                menuItem4
             });
     }
 }

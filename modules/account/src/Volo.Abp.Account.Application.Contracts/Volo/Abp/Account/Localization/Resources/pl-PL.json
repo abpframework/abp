@@ -1,6 +1,7 @@
 {
   "culture": "pl-PL",
   "texts": {
+    "Menu:Account": "Konto",
     "UserName": "Nazwa użytkownika",
     "EmailAddress": "Adres email",
     "UserNameOrEmailAddress": "Nazwa użytkownia lub adres email",
@@ -33,6 +34,8 @@
     "DisplayName:PhoneNumber": "Numer telefonu",
     "PersonalSettings": "Ustawienia osobiste",
     "PersonalSettingsSaved": "Zapisano ustawienia osobiste",
+    "PersonalSettingsChangedConfirmationModalTitle": "Dane osobowe uległy zmianie",
+    "PersonalSettingsChangedConfirmationModalDescription": "Jeżeli chcesz zastosować te zmiany musisz się zalogować. Czy chcesz się wylogować?",
     "PasswordChanged": "Hasło zostało zmienione",
     "NewPasswordConfirmFailed": "Potwierdź nowe hasło.",
     "NewPasswordSameAsOld": "Nowe hasło musi być inne niż poprzednie.",
@@ -63,6 +66,8 @@
     "PasswordResetInfoInEmail": "Otrzymaliśmy prośbę o odzyskanie konta! Jeśli zainicjowałeś to żądanie, kliknij poniższy link, aby zresetować hasło.",
     "ResetMyPassword": "Zresetować moje hasło",
     "AccessDenied": "Brak dostępu!",
-    "AccessDeniedMessage": "Nie masz dostępu do tego zasobu."
+    "AccessDeniedMessage": "Nie masz dostępu do tego zasobu.",
+    "OrRegisterWith": "Lub zarejestruj się za pomocą:",
+    "RegisterUsingYourProviderAccount": "Zarejestruj się za pomocą konta {0}"
   }
 }

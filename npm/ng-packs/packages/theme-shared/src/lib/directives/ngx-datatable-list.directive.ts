@@ -21,6 +21,7 @@ import {
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'ngx-datatable[list]',
+  standalone: true,
   exportAs: 'ngxDatatableList',
 })
 export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
@@ -50,14 +51,6 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
       totalMessage: this.localizationService.instant(totalMessage),
       selectedMessage: this.localizationService.instant(selectedMessage),
     };
-  }
-
-  private subscribeToPage() {
-    const sub = this.table.page.subscribe(({ offset }) => {
-      this.list.page = offset;
-      this.table.offset = offset;
-    });
-    this.subscription.add(sub);
   }
 
   private subscribeToSort() {
@@ -100,7 +93,6 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.subscribeToPage();
     this.subscribeToSort();
   }
 }

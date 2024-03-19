@@ -47,8 +47,13 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
     [Fact]
     public async Task GetAllChildrenWithParentCodeAsync()
     {
-        (await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(0),
-            _guidGenerator.Create())).ShouldNotBeNull();
+        var allChildren = await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(0), _guidGenerator.Create());
+        allChildren.ShouldNotBeNull();
+        allChildren.ShouldBeEmpty();
+
+        allChildren = (await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(1), null));
+        allChildren.ShouldNotBeNull();
+        allChildren.ShouldNotBeEmpty();
     }
 
     [Fact]
@@ -59,6 +64,23 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
         var ous = await _organizationUnitRepository.GetListAsync(ouIds);
         ous.Count.ShouldBe(2);
         ous.ShouldContain(ou => ou.Id == ouIds.First());
+    }
+
+    [Fact]
+    public async Task GetListByRoleIdAsync()
+    {
+        var ous = await _organizationUnitRepository.GetListByRoleIdAsync(_testData.RoleManagerId);
+        ous.Count.ShouldBe(2);
+        ous.ShouldContain(ou => ou.DisplayName == "OU111");
+        ous.ShouldContain(ou => ou.DisplayName == "OU222");
+
+        ous = await _organizationUnitRepository.GetListByRoleIdAsync(_testData.RoleModeratorId);
+        ous.Count.ShouldBe(2);
+        ous.ShouldContain(ou => ou.DisplayName == "OU111");
+        ous.ShouldContain(ou => ou.DisplayName == "OU222");
+
+        ous = await _organizationUnitRepository.GetListByRoleIdAsync(_testData.RoleSaleId);
+        ous.Count.ShouldBe(0);
     }
 
     [Fact]
@@ -185,6 +207,11 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
             maxResultCount: 1, includeDetails: true);
         ou111Roles.Count.ShouldBe(1);
         ou111Roles.ShouldContain(n => n.Name == "moderator");
+
+        ou111Roles = await _organizationUnitRepository.GetRolesAsync(new []{ ou.Id }, sorting: "name desc",
+            maxResultCount: 1, includeDetails: true);
+        ou111Roles.Count.ShouldBe(1);
+        ou111Roles.ShouldContain(n => n.Name == "moderator");
     }
 
     [Fact]
@@ -220,6 +247,17 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
 
         users = await _organizationUnitRepository.GetMembersAsync(ou, null, 999, 0, "undefined-username");
         users.Count.ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task GetMemberIdsAsync()
+    {
+        var ou = await _organizationUnitRepository.GetAsync("OU111");
+        var users = await _organizationUnitRepository.GetMemberIdsAsync(ou.Id);
+
+        users.Count.ShouldBe(2);
+        users.ShouldContain(x => x == _testData.UserJohnId);
+        users.ShouldContain(x => x == _testData.UserNeoId);
     }
 
     [Fact]

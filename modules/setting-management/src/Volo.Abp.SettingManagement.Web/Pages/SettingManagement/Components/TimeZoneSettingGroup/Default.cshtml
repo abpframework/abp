@@ -9,7 +9,7 @@
     <abp-row>
         <abp-column size-md="_12">
             <div>
-                <abp-select asp-for="Timezone" asp-items="@Model.TimeZoneItems"/>
+                <abp-select asp-for="Timezone" asp-items="@Model.TimeZoneItems" info="@L["TimezoneHelpText"].Value" />
             </div>
             <div>
                 <abp-button button-type="Primary" type="submit">

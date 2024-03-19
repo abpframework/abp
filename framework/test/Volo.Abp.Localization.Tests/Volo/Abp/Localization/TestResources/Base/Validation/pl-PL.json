@@ -2,6 +2,11 @@
   "culture": "pl-PL",
   "texts": {
     "ThisFieldIsRequired": "To pole jest wymagane",
-    "MaxLenghtErrorMessage": "To pole może mieć maksymalnie '{0}' znaków"
+    "MaxLenghtErrorMessage": "To pole może mieć maksymalnie '{0}' znaków",
+    "Enum:BookType.Undefined": "Niezdefiniowany z ValidationResource",
+    "Enum:BookType.0": "Niezdefiniowany z wartością 0 z ValidationResource",
+    "BookType.Adventure": "Przygoda z ValidationResource",
+    "BookType.1": "Przygoda o wartości 1 z ValidationResource",
+    "Biography": "Biografia z ValidationResource"
   }
 }

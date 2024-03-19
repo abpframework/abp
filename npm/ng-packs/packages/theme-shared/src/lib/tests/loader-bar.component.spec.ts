@@ -7,7 +7,7 @@ import { LoaderBarComponent } from '../components/loader-bar/loader-bar.componen
 
 describe('LoaderBarComponent', () => {
   let spectator: Spectator<LoaderBarComponent>;
-  let router: SpyObject<Router>;
+  let router: Router;
   const events$ = new Subject();
 
   const createComponent = createComponentFactory({

@@ -9,6 +9,16 @@
 }
 ````
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Creating a new solution",
+    "Path": "Getting-Started-Create-Solution"
+  }
+}
+````
+
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
 ## Create the Database
@@ -21,7 +31,7 @@ Check the **connection string** in the `appsettings.json` file under the {{if Ti
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=(LocalDb)\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True"
+  "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True"
 }
 ````
 
@@ -89,11 +99,66 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
 {{ end }}
 
+## Before Running the Application
+
+### Installing the Client-Side Packages
+
+[ABP CLI](CLI.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+
+However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
+
+For such cases, run the `abp install-libs` command on the root directory of your solution to install all required NPM packages:
+
+```bash
+abp install-libs
+```
+
+> We suggest you install [Yarn](https://classic.yarnpkg.com/) to prevent possible package inconsistencies, if you haven't installed it yet.
+
+{{if UI=="Blazor" || UI=="BlazorServer"}}
+
+### Bundling and Minification
+
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](CLI.md).
+
+However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
+
+```bash
+abp bundle
+```
+
+> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md).
+
+{{end}}
+
 ## Run the Application
 
 {{ if UI == "MVC" || UI == "BlazorServer" }}
 
-> Before starting the application, run `abp install-libs` command in your Web directory to restore the client-side libraries. This will populate the `libs` folder.
+> **Note**: Before starting the application, run `abp install-libs` command in your Web directory to restore the client-side libraries. This will populate the `libs` folder.
+
+{{ if UI == "BlazorServer" }}
+
+> **Important:**  The `.AuthServer` application serves as the **Authentication Server** for the `.Blazor` application. It is essential to have the `.AuthServer` application running in the background to ensure the proper functioning of the `.Blazor` application.
+
+To do this, open terminal in `.AuthServer` project folder and run the following command.
+
+````bash
+dotnet run
+````
+
+Once the `.AuthServer`application has started, it is time to run `.HttpApi.Host` application.
+
+> **Important:** Prior to launching the `.Blazor` project, it is essential to execute the `.HttpApi.Host` application as well.
+
+To do this, open terminal in `.HttpApi.Host` project folder and run the following command.
+
+````bash
+dotnet run
+````
+Once the `.AuthServer` and `.HttpApi.Host` applications has started, you can proceed to run the `.Blazor` project.
+
+{{ end # UI }}
 
 {{ if Tiered == "Yes" }}
 
@@ -163,7 +228,15 @@ You can see the application APIs and test them here. Get [more info](https://swa
 
 ### Running the Blazor Application (Client Side)
 
-Go to the Blazor project folder, open a command line terminal, type the `abp bundle -f` command (If the project was created by ABP Cli tool, you don't need to do this).
+> **Important:**  The `.HttpApi.Host` application serves as the **Authentication Server** for the `.Blazor` application. It is essential to have the `.HttpApi.Host` application running in the background to ensure the proper functioning of the `.Blazor` application.
+
+To do this, you can open terminal in `.HttpApi.Host` project folder and run the following command.
+
+````bash
+dotnet run
+````
+
+Once the `.HttpApi.Host` application has started, you can proceed to run the `.Blazor` application.
 
 Ensure that the `.Blazor` project is the startup project and run the application.
 
@@ -196,8 +269,3 @@ It may take a longer time for the first build. Once it finishes, it opens the An
 {{ end }}
 
 Enter **admin** as the username and **1q2w3E*** as the password to login to the application. The application is up and running. You can start developing your application based on this startup template.
-
-## See Also
-
-* [Web Application Development Tutorial](Tutorials/Part-1.md)
-* [Application Startup Template](Startup-Templates/Application.md)

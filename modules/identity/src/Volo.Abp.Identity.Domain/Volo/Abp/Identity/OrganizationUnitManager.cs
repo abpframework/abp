@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity.Localization;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
@@ -18,17 +21,20 @@ public class OrganizationUnitManager : DomainService
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
     protected IStringLocalizer<IdentityResource> Localizer { get; }
     protected IIdentityRoleRepository IdentityRoleRepository { get; }
+    protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
     public OrganizationUnitManager(
         IOrganizationUnitRepository organizationUnitRepository,
         IStringLocalizer<IdentityResource> localizer,
         IIdentityRoleRepository identityRoleRepository,
+        IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
         ICancellationTokenProvider cancellationTokenProvider)
     {
         OrganizationUnitRepository = organizationUnitRepository;
         Localizer = localizer;
         IdentityRoleRepository = identityRoleRepository;
+        DynamicClaimCache = dynamicClaimCache;
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
@@ -44,6 +50,7 @@ public class OrganizationUnitManager : DomainService
     {
         await ValidateOrganizationUnitAsync(organizationUnit);
         await OrganizationUnitRepository.UpdateAsync(organizationUnit);
+        await RemoveDynamicClaimCacheAsync(organizationUnit);
     }
 
     public virtual async Task<string> GetNextChildCodeAsync(Guid? parentId)
@@ -77,6 +84,7 @@ public class OrganizationUnitManager : DomainService
 
         foreach (var child in children)
         {
+            await RemoveDynamicClaimCacheAsync(child);
             await OrganizationUnitRepository.RemoveAllMembersAsync(child);
             await OrganizationUnitRepository.RemoveAllRolesAsync(child);
             await OrganizationUnitRepository.DeleteAsync(child);
@@ -84,6 +92,7 @@ public class OrganizationUnitManager : DomainService
 
         var organizationUnit = await OrganizationUnitRepository.GetAsync(id);
 
+        await RemoveDynamicClaimCacheAsync(organizationUnit);
         await OrganizationUnitRepository.RemoveAllMembersAsync(organizationUnit);
         await OrganizationUnitRepository.RemoveAllRolesAsync(organizationUnit);
         await OrganizationUnitRepository.DeleteAsync(id);
@@ -169,16 +178,17 @@ public class OrganizationUnitManager : DomainService
             );
     }
 
-    public virtual Task AddRoleToOrganizationUnitAsync(IdentityRole role, OrganizationUnit ou)
+    public virtual async Task AddRoleToOrganizationUnitAsync(IdentityRole role, OrganizationUnit ou)
     {
         var currentRoles = ou.Roles;
 
         if (currentRoles.Any(r => r.OrganizationUnitId == ou.Id && r.RoleId == role.Id))
         {
-            return Task.FromResult(0);
+            return;
         }
         ou.AddRole(role.Id);
-        return OrganizationUnitRepository.UpdateAsync(ou);
+        await OrganizationUnitRepository.UpdateAsync(ou);
+        await RemoveDynamicClaimCacheAsync(ou);
     }
 
     public virtual async Task RemoveRoleFromOrganizationUnitAsync(Guid roleId, Guid ouId)
@@ -189,9 +199,17 @@ public class OrganizationUnitManager : DomainService
             );
     }
 
-    public virtual Task RemoveRoleFromOrganizationUnitAsync(IdentityRole role, OrganizationUnit organizationUnit)
+    public virtual async Task RemoveRoleFromOrganizationUnitAsync(IdentityRole role, OrganizationUnit organizationUnit)
     {
         organizationUnit.RemoveRole(role.Id);
-        return OrganizationUnitRepository.UpdateAsync(organizationUnit);
+        await OrganizationUnitRepository.UpdateAsync(organizationUnit);
+        await RemoveDynamicClaimCacheAsync(organizationUnit);
+    }
+
+    public virtual async Task RemoveDynamicClaimCacheAsync(OrganizationUnit organizationUnit)
+    {
+        Logger.LogDebug($"Remove dynamic claims cache for users of organization: {organizationUnit.Id}");
+        var userIds = await OrganizationUnitRepository.GetMemberIdsAsync(organizationUnit.Id);
+        await DynamicClaimCache.RemoveManyAsync(userIds.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, organizationUnit.TenantId)));
     }
 }

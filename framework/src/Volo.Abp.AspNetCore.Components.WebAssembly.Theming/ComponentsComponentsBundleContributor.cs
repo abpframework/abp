@@ -13,18 +13,22 @@ public class ComponentsComponentsBundleContributor : IBundleContributor
 
     public void AddStyles(BundleContext context)
     {
-        context.BundleDefinitions.Insert(0, new BundleDefinition
+        if (!context.InteractiveAuto)
         {
-            Source = "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/bootstrap/css/bootstrap.min.css"
-        });
-        context.BundleDefinitions.Insert(1, new BundleDefinition
-        {
-            Source = "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/fontawesome/css/all.css"
-        });
+            context.BundleDefinitions.Insert(0, new BundleDefinition
+            {
+                Source = "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/bootstrap/css/bootstrap.min.css"
+            });
+            context.BundleDefinitions.Insert(1, new BundleDefinition
+            {
+                Source = "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/fontawesome/css/all.css"
+            });
+        }
 
         context.Add("_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/flag-icon/css/flag-icon.css");
         context.Add("_content/Blazorise/blazorise.css");
         context.Add("_content/Blazorise.Bootstrap5/blazorise.bootstrap5.css");
         context.Add("_content/Blazorise.Snackbar/blazorise.snackbar.css");
+        context.Add("_content/Volo.Abp.BlazoriseUI/volo.abp.blazoriseui.css");
     }
 }

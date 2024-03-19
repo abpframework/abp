@@ -16,13 +16,13 @@ public abstract class AbpCommonDbContextRegistrationOptions : IAbpCommonDbContex
 
     public IServiceCollection Services { get; }
 
-    public Dictionary<MultiTenantDbContextType, Type> ReplacedDbContextTypes { get; }
+    public Dictionary<MultiTenantDbContextType, Type?> ReplacedDbContextTypes { get; }
 
     public Type DefaultRepositoryDbContextType { get; protected set; }
 
-    public Type DefaultRepositoryImplementationType { get; private set; }
+    public Type? DefaultRepositoryImplementationType { get; private set; }
 
-    public Type DefaultRepositoryImplementationTypeWithoutKey { get; private set; }
+    public Type? DefaultRepositoryImplementationTypeWithoutKey { get; private set; }
 
     public bool RegisterDefaultRepositories { get; private set; }
 
@@ -40,7 +40,7 @@ public abstract class AbpCommonDbContextRegistrationOptions : IAbpCommonDbContex
         Services = services;
         DefaultRepositoryDbContextType = originalDbContextType;
         CustomRepositories = new Dictionary<Type, Type>();
-        ReplacedDbContextTypes = new Dictionary<MultiTenantDbContextType, Type>();
+        ReplacedDbContextTypes = new Dictionary<MultiTenantDbContextType, Type?>();
         SpecifiedDefaultRepositories = new List<Type>();
     }
 
@@ -54,7 +54,7 @@ public abstract class AbpCommonDbContextRegistrationOptions : IAbpCommonDbContex
         return ReplaceDbContext(typeof(TOtherDbContext), typeof(TTargetDbContext), multiTenancySides);
     }
 
-    public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null, MultiTenancySides multiTenancySides = MultiTenancySides.Both)
+    public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type? targetDbContextType = null, MultiTenancySides multiTenancySides = MultiTenancySides.Both)
     {
         if (!otherDbContextType.IsAssignableFrom(OriginalDbContextType))
         {

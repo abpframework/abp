@@ -24,14 +24,14 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
         DistributedLockDaprOptions = distributedLockDaprOptions.Value;
     }
 
-    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
+    public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)
     {
         name = DistributedLockKeyNormalizer.NormalizeKey(name);
 
-        var daprClient = DaprClientFactory.Create();
+        var daprClient = await DaprClientFactory.CreateAsync();
         var lockResponse = await daprClient.Lock(
             DistributedLockDaprOptions.StoreName,
             name,

@@ -9,13 +9,13 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class PropertyApiDescriptionModel
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string JsonName { get; set; }
+    public string? JsonName { get; set; }
 
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
 
-    public string TypeSimple { get; set; }
+    public string TypeSimple { get; set; } = default!;
 
     public bool IsRequired { get; set; }
 
@@ -23,11 +23,11 @@ public class PropertyApiDescriptionModel
 
     public int? MaxLength { get; set; }
 
-    public string Minimum { get; set; }
+    public string? Minimum { get; set; }
 
-    public string Maximum { get; set; }
+    public string? Maximum { get; set; }
 
-    public string Regex { get; set; }
+    public string? Regex { get; set; }
 
     public static PropertyApiDescriptionModel Create(PropertyInfo propertyInfo)
     {

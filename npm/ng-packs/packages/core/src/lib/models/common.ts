@@ -13,6 +13,7 @@ export namespace ABP {
     tenantKey?: string;
     localizations?: Localization[];
     othersGroup?: string;
+    dynamicLayouts?: Map<string, string>;
   }
 
   export interface Child {
@@ -72,6 +73,7 @@ export namespace ABP {
     layout?: eLayoutType;
     iconClass?: string;
     group?: string;
+    breadcrumbText?: string;
   }
 
   export interface Tab extends Nav {

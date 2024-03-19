@@ -97,7 +97,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                 CmsKitAdminMenus.GlobalResources.GlobalResourcesMenu,
                 l["GlobalResources"],
                 "/Cms/GlobalResources",
-                "bi bi-code-slash",
+                "fa fa-code",
                 order: 4)
             .RequireFeatures(CmsKitFeatures.GlobalResourceEnable)
             .RequireGlobalFeatures(typeof(GlobalResourcesFeature))
@@ -114,7 +114,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                     l["Cms"],
                     icon: "far fa-newspaper");
 
-                context.Menu.AddItem(cmsMenu);
+                context.Menu.GetAdministration().AddItem(cmsMenu);
             }
 
             foreach (var menu in cmsMenus)

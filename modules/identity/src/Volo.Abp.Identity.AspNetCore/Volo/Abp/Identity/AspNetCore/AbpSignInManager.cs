@@ -42,7 +42,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         _identityUserManager = userManager;
     }
 
-    public override async Task<SignInResult> PasswordSignInAsync(
+    public async override Task<SignInResult> PasswordSignInAsync(
         string userName,
         string password,
         bool isPersistent,
@@ -86,7 +86,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
     }
 
-    protected override async Task<SignInResult> PreSignInCheck(IdentityUser user)
+    protected async override Task<SignInResult> PreSignInCheck(IdentityUser user)
     {
         if (!user.IsActive)
         {
@@ -106,5 +106,18 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         }
 
         return await base.PreSignInCheck(user);
+    }
+
+    /// <summary>
+    /// This is to call the protection method SignInOrTwoFactorAsync
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="isPersistent"></param>
+    /// <param name="loginProvider"></param>
+    /// <param name="bypassTwoFactor"></param>
+    /// <returns></returns>
+    public virtual async Task<SignInResult> CallSignInOrTwoFactorAsync(IdentityUser user, bool isPersistent, string loginProvider = null, bool bypassTwoFactor = false)
+    {
+        return await base.SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);
     }
 }

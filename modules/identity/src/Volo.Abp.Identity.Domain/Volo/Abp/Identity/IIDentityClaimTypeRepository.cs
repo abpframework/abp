@@ -35,4 +35,9 @@ public interface IIdentityClaimTypeRepository : IBasicRepository<IdentityClaimTy
         string filter = null,
         CancellationToken cancellationToken = default
     );
+    
+    Task<List<IdentityClaimType>> GetListByNamesAsync(
+        IEnumerable<string> names,
+        CancellationToken cancellationToken = default
+    );
 }

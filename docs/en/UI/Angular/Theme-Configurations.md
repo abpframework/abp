@@ -70,6 +70,7 @@ Theme packages no longer import styles as CSS modules as of ABP version 6.0. The
 ```
 
 ## Lepton X [commercial](https://docs.abp.io/en/commercial)
+If you want to use top-menu, You need to switch the following 2 **`side-menu`** imports to **`top-menu`**.
 ```json
 {
     "input": "node_modules/@volosoft/ngx-lepton-x/assets/css/dark.css",

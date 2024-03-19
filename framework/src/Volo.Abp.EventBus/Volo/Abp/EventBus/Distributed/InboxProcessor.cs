@@ -21,13 +21,13 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
     protected IAbpDistributedLock DistributedLock { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IClock Clock { get; }
-    protected IEventInbox Inbox { get; private set; }
-    protected InboxConfig InboxConfig { get; private set; }
+    protected IEventInbox Inbox { get; private set; } = default!;
+    protected InboxConfig InboxConfig { get; private set; } = default!;
     protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
 
     protected DateTime? LastCleanTime { get; set; }
 
-    protected string DistributedLockName => "AbpInbox_" + InboxConfig.Name;
+    protected string DistributedLockName { get; private set; } = default!;
     public ILogger<InboxProcessor> Logger { get; set; }
     protected CancellationTokenSource StoppingTokenSource { get; }
     protected CancellationToken StoppingToken { get; }
@@ -64,6 +64,7 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
     {
         InboxConfig = inboxConfig;
         Inbox = (IEventInbox)ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
+        DistributedLockName = $"AbpInbox_{InboxConfig.DatabaseName}";
         Timer.Start(cancellationToken);
         return Task.CompletedTask;
     }

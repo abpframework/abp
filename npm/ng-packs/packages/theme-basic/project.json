@@ -25,18 +25,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/theme-basic"],
       "options": {
-        "jestConfig": "packages/theme-basic/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/theme-basic/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "packages/theme-basic/src/**/*.ts",
-          "packages/theme-basic/src/**/*.html"
-        ]
-      },
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
   },

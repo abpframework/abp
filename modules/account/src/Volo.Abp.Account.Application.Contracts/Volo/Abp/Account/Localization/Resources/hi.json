@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "फ़ोन नंबर",
     "PersonalSettings": "व्यक्तिगत सेटिंग",
     "PersonalSettingsSaved": "व्यक्तिगत सेटिंग्स सहेजे गए",
+    "PersonalSettingsChangedConfirmationModalTitle": "व्यक्तिगत जानकारी बदल दी गई",
+    "PersonalSettingsChangedConfirmationModalDescription": "अगर आप इन बदलावों को लागू करना चाहते हैं तो आपको लॉगइन करना होगा। क्या आप लॉग आउट करना चाहते हैं?",
     "PasswordChanged": "पासवर्ड बदला गया",
     "NewPasswordConfirmFailed": "कृपया नए पासवर्ड की पुष्टि करें।",
     "NewPasswordSameAsOld": "नया पासवर्ड वर्तमान पासवर्ड से एक ही होना चाहिए।",
@@ -64,6 +66,8 @@
     "PasswordResetInfoInEmail": "हमें एक खाता पुनर्प्राप्ति अनुरोध प्राप्त हुआ! यदि आपने यह अनुरोध किया है, तो अपना पासवर्ड रीसेट करने के लिए निम्न लिंक पर क्लिक करें।",
     "ResetMyPassword": "अपना पासवर्ड रीसेट करें",
     "AccessDenied": "पहुंच अस्वीकृत!",
-    "AccessDeniedMessage": "आपके पास इस संसाधन तक पहुँच नहीं है।"
+    "AccessDeniedMessage": "आपके पास इस संसाधन तक पहुँच नहीं है।",
+    "OrRegisterWith": "या इसके साथ पंजीकरण करें:",
+    "RegisterUsingYourProviderAccount": "अपने {0} खाते का उपयोग करके पंजीकरण करें"
   }
 }

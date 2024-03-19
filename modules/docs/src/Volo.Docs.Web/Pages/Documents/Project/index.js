@@ -74,7 +74,10 @@
             });
             
             function fullSearch(filterText){
-                window.open($('#fullsearch').data('fullsearch-url') + "?keyword=" + encodeURIComponent(filterText));
+                var url = $('#fullsearch').data('fullsearch-url');
+                if(url){
+                    window.open(url + "?keyword=" + encodeURIComponent(filterText));
+                }
             }
 
             $('#fullsearch').keyup(function (e) {
@@ -278,5 +281,22 @@
         initSections();
 
         initDocumentNodeBreadcrumb();
+        
+        Element.prototype.querySelector = function (selector) {
+            var result = $(this).find(decodeURI(selector));
+            if(result.length > 0){
+                return result[0];
+            }
+            return null;
+        };
+        
+        var originalSet = Map.prototype.set;
+        Map.prototype.set = function (key, value) {
+            if(typeof key === 'string'){
+                key = decodeURI(key);
+            }
+            return originalSet.call(this, key, value);
+        };
+        
     });
 })(jQuery);

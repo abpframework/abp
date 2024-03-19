@@ -1,17 +1,14 @@
-import { inject, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { OAuthStorage, TokenResponse } from 'angular-oauth2-oidc';
 import { pipe } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import {
+  AuthService,
   ConfigStateService,
   LoginParams,
   PipeToLoginFn,
-  AbpLocalStorageService,
 } from '@abp/ng.core';
-
-const cookieKey = 'rememberMe';
-const storageKey = 'passwordFlow';
+import { RememberMeService } from '../services/remember-me.service';
 
 export const pipeToLogin: PipeToLoginFn = function (
   params: Pick<LoginParams, 'redirectUrl' | 'rememberMe'>,
@@ -19,28 +16,23 @@ export const pipeToLogin: PipeToLoginFn = function (
 ) {
   const configState = injector.get(ConfigStateService);
   const router = injector.get(Router);
-  const localStorage = injector.get(AbpLocalStorageService);
+  const rememberMeService = injector.get(RememberMeService);
+  const authService = injector.get(AuthService);
   return pipe(
     switchMap(() => configState.refreshAppState()),
     tap(() => {
-      setRememberMe(params.rememberMe, localStorage);
+      rememberMeService.set(
+        params.rememberMe ||
+        rememberMeService.get() ||
+        rememberMeService.getFromToken(authService.getAccessToken())
+      );
       if (params.redirectUrl) router.navigate([params.redirectUrl]);
     }),
   );
 };
 
-export function setRememberMe(
-  remember: boolean | undefined,
-  localStorageService: AbpLocalStorageService,
-) {
-  removeRememberMe(localStorageService);
-  localStorageService.setItem(storageKey, 'true');
-  document.cookie = `${cookieKey}=true; path=/${
-    remember ? ' ;expires=Fri, 31 Dec 9999 23:59:59 GMT' : ''
-  }`;
-}
-
-export function removeRememberMe(localStorageService: AbpLocalStorageService) {
-  localStorageService.removeItem(storageKey);
-  document.cookie = cookieKey + '= ; path=/; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+//Ref: https://github.com/manfredsteyer/angular-oauth2-oidc/issues/1214
+export function isTokenExpired(expireDate: number): boolean {
+  const currentDate = new Date().getTime();
+  return expireDate < currentDate;
 }

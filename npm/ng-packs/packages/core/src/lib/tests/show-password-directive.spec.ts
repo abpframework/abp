@@ -13,7 +13,7 @@ import { By } from '@angular/platform-browser';
   imports:[ShowPasswordDirective]
 })
 class TestComponent {
-  showPassword:boolean = false
+  showPassword = false
 }
 
 describe('ShowPasswordDirective',()=>{
@@ -46,7 +46,7 @@ describe('ShowPasswordDirective',()=>{
     });
 
     it('should have three input has ShowPasswordDirective elements', () => {
-      let input = des[2].nativeElement
+      const input = des[2].nativeElement
       expect(input.type).toBe('password')
       fixture.componentInstance.showPassword = true
       fixture.detectChanges()

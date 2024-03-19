@@ -72,3 +72,4 @@ Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
 
 * [Entity Framework Core Integration](Entity-Framework-Core-Integration.md)
 * [MongoDB Integration](MongoDB-Integration.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/generic-repositories)

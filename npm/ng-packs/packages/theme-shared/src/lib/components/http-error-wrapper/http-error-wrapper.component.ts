@@ -1,19 +1,22 @@
-import { LocalizationParam, SubscriptionService } from '@abp/ng.core';
 import {
-  AfterViewInit,
   ApplicationRef,
   Component,
+  Injector,
+  inject,
+  OnInit,
   ComponentFactoryResolver,
   ElementRef,
   EmbeddedViewRef,
-  Injector,
-  OnDestroy,
-  OnInit,
   Type,
   ViewChild,
+  AfterViewInit,
+  OnDestroy,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
+import { LocalizationParam, SubscriptionService } from '@abp/ng.core';
+import { ErrorScreenErrorCodes } from '../../models';
 
 @Component({
   selector: 'abp-http-error-wrapper',
@@ -21,14 +24,17 @@ import { debounceTime, filter } from 'rxjs/operators';
   styleUrls: ['http-error-wrapper.component.scss'],
   providers: [SubscriptionService],
 })
-export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnInit {
+export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestroy {
+  protected readonly document = inject(DOCUMENT);
+  protected readonly window = this.document.defaultView;
+
   appRef!: ApplicationRef;
 
   cfRes!: ComponentFactoryResolver;
 
   injector!: Injector;
 
-  status = 0;
+  status: ErrorScreenErrorCodes = 0;
 
   title: LocalizationParam = 'Oops!';
 
@@ -53,12 +59,12 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
 
   constructor(private subscription: SubscriptionService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.backgroundColor =
-      window.getComputedStyle(document.body)?.getPropertyValue('background-color') || '#fff';
+      this.window.getComputedStyle(this.document.body)?.getPropertyValue('background-color') || '#fff';
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     if (this.customComponent) {
       const customComponentRef = this.cfRes
         .resolveComponentFactory(this.customComponent)
@@ -74,18 +80,18 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
       customComponentRef.changeDetectorRef.detectChanges();
     }
 
-    const keyup$ = fromEvent<KeyboardEvent>(document, 'keyup').pipe(
+    const keyup$ = fromEvent<KeyboardEvent>(this.document, 'keyup').pipe(
       debounceTime(150),
       filter((key: KeyboardEvent) => key && key.key === 'Escape'),
     );
     this.subscription.addOne(keyup$, () => this.destroy());
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy();
   }
 
-  destroy() {
+  destroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }

@@ -6,6 +6,11 @@
     "CarPlural": "汽車",
     "MaxLenghtErrorMessage": "此欄位的長度最多'{0}'個字元",
     "Universe": "宇宙",
-    "FortyTwo": "四十二"
+    "FortyTwo": "四十二",
+    "Enum:BookType.Undefined": "不明確的",
+    "Enum:BookType.0": "未定義，值為 0",
+    "BookType.Adventure": "冒險",
+    "BookType.1": "冒險價值1",
+    "Biography": "傳"
   }
 }

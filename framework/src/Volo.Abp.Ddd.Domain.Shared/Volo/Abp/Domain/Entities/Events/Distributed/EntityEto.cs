@@ -5,9 +5,9 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed;
 [Serializable]
 public class EntityEto : EtoBase
 {
-    public string EntityType { get; set; }
+    public string EntityType { get; set; } = default!;
 
-    public string KeysAsString { get; set; }
+    public string KeysAsString { get; set; } = default!;
 
     public EntityEto()
     {
@@ -23,5 +23,5 @@ public class EntityEto : EtoBase
 
 public abstract class EntityEto<TKey> : IEntityEto<TKey>
 {
-    public TKey Id { get; set; }
+    public TKey Id { get; set; } = default!;
 }

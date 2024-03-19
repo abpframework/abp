@@ -49,6 +49,14 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} будет удален!",
     "ItemWillBeDeletedMessage": "Этот предмет будет удален!",
     "ManageYourAccount": "Настройте свой аккаунт",
-    "OthersGroup": "Другой"
+    "OthersGroup": "Другой",
+    "Today": "Сегодня",
+    "Apply": "Применять",
+    "InternetConnectionInfo": "Операцию выполнить не удалось. Ваше интернет-соединение в данный момент недоступно.",
+    "CopiedToTheClipboard": "Скопировано в буфер обмена",
+    "AddNew": "Добавить новое",
+    "ProfilePicture": "Изображение профиля",
+    "Theme": "Тема",
+    "NotAssigned": "Не назначен"
   }
 }

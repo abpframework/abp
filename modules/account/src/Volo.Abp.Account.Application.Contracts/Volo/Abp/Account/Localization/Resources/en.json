@@ -10,7 +10,7 @@
     "UseAnotherServiceToLogin": "Use another service to log in",
     "UserLockedOutMessage": "The user account has been locked out due to invalid login attempts. Please wait a while and try again.",
     "InvalidUserNameOrPassword": "Invalid username or password!",
-    "LoginIsNotAllowed": "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.",
+    "LoginIsNotAllowed": "You are not allowed to log in! Your account is inactive or needs to confirm your email/phone number.",
     "SelfRegistrationDisabledMessage": "Self-registration is disabled for this application. Please contact the application administrator to register a new user.",
     "LocalLoginDisabledMessage": "Local login is disabled for this application.",
     "Login": "Login",
@@ -35,7 +35,7 @@
     "PersonalSettings": "Personal settings",
     "PersonalSettingsSaved": "Personal settings saved",
     "PersonalSettingsChangedConfirmationModalTitle": "Personal info changed",
-    "PersonalSettingsChangedConfirmationModalDescription": "If you want to apply these changes, you have to login. Do you want to log out?",
+    "PersonalSettingsChangedConfirmationModalDescription": "The changes will be reflected after logging in again. Do you want to log out now?",
     "PasswordChanged": "Password changed",
     "NewPasswordConfirmFailed": "Please confirm the new password.",
     "NewPasswordSameAsOld": "New password must be different from the old one.",
@@ -66,6 +66,8 @@
     "PasswordResetInfoInEmail": "We received an account recovery request! If you initiated this request, click the following link to reset your password.",
     "ResetMyPassword": "Reset my password",
     "AccessDenied": "Access denied!",
-    "AccessDeniedMessage": "You do not have access to this resource."
+    "AccessDeniedMessage": "You do not have access to this resource.",
+    "OrRegisterWith": "Or register with",
+    "RegisterUsingYourProviderAccount": "Register using your {0} account"
   }
 }

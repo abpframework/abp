@@ -113,7 +113,7 @@ this.localizationService.get({
 
 ## UI Localizations
 
-Localizations can be determined on backend side. Angular UI gets the localizations from the `application-configuration` API's response. You can also determine localizations on the UI side.
+Localizations can be determined on backend side. Angular UI gets the localization resources from the `application-localization` API's response and merges these resources with `configuration state` in [`ConfigStateService`](Config-State-Service.md). You can also determine localizations on the UI side.
 
 See an example:
 
@@ -391,4 +391,5 @@ Which locale files you add to `webpackInclude` magic comment, they will be inclu
 
 ## See Also
 
-- [Localization in ASP.NET Core](../../Localization.md)
+* [Localization in ASP.NET Core](../../Localization.md)
+* [Video tutorial](https://abp.io/video-courses/essentials/localization)

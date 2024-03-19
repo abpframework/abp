@@ -70,12 +70,16 @@
                 <select asp-for="ViewModel.BlogId" id="BlogSelectionSelect" class="form-control"></select>
                 <span asp-validation-for="ViewModel.BlogId"></span>
             </div>
+            
+            <abp-input asp-for="ViewModel.CoverImageMediaId" type="hidden" />
 
             <abp-input asp-for="ViewModel.Title" />
 
             <abp-input asp-for="ViewModel.Slug" />
             
             <abp-input asp-for="ViewModel.ShortDescription" />
+
+            <abp-input asp-for="ViewModel.Content" type="hidden" />
 
             <div class="content-editor cms-kit-editor"
                  id="ContentEditor"
@@ -128,7 +132,7 @@
 
     </abp-card-body>
     <abp-card-footer>
-        <abp-button button-type="Primary" type="button" text="@L["SaveAsDraft"].Value" id="button-blog-post-create" />
+        <abp-button button-type="Outline_Primary" type="button" text="@L["SaveAsDraft"].Value" id="button-blog-post-create" />
         @if ((await AuthorizationService.AuthorizeAsync(CmsKitAdminPermissions.BlogPosts.Publish)).Succeeded)
         {
             <abp-button button-type="Primary" type="button" text="@L["Publish"].Value" id="button-blog-post-publish"/>

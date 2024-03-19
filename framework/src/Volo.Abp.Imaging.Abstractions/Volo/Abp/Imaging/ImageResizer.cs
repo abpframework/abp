@@ -31,16 +31,31 @@ public class ImageResizer : IImageResizer, ITransientDependency
     public virtual async Task<ImageResizeResult<Stream>> ResizeAsync(
         [NotNull] Stream stream, 
         ImageResizeArgs resizeArgs, 
-        [CanBeNull] string mimeType = null, 
+        string? mimeType = null, 
         CancellationToken cancellationToken = default)
     {
         Check.NotNull(stream, nameof(stream));
         
         ChangeDefaultResizeMode(resizeArgs);
         
+        if(!stream.CanRead)
+        {
+            return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
+        }
+        
+        if(!stream.CanSeek)
+        {
+            var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream, CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            SeekToBegin(memoryStream);
+            stream = memoryStream;
+        }
+        
         foreach (var imageResizerContributor in ImageResizerContributors)
         {
             var result = await imageResizerContributor.TryResizeAsync(stream, resizeArgs, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
+
+            SeekToBegin(stream);
             
             if (result.State == ImageProcessState.Unsupported)
             {
@@ -56,7 +71,7 @@ public class ImageResizer : IImageResizer, ITransientDependency
     public virtual async Task<ImageResizeResult<byte[]>> ResizeAsync(
         [NotNull] byte[] bytes, 
         ImageResizeArgs resizeArgs, 
-        [CanBeNull] string mimeType = null, 
+        string? mimeType = null, 
         CancellationToken cancellationToken = default)
     {
         Check.NotNull(bytes, nameof(bytes));
@@ -83,6 +98,14 @@ public class ImageResizer : IImageResizer, ITransientDependency
         if (resizeArgs.Mode == ImageResizeMode.Default)
         {
             resizeArgs.Mode = ImageResizeOptions.DefaultResizeMode;
+        }
+    }
+    
+    protected virtual void SeekToBegin(Stream stream)
+    {
+        if (stream.CanSeek)
+        {
+            stream.Seek(0, SeekOrigin.Begin);
         }
     }
 }

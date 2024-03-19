@@ -1,21 +1,23 @@
-<p class="text-wrap">{{ 'AbpFeatureManagement::ManageHostFeaturesText' | abpLocalization }}</p>
+<p class="pt-2 text-wrap">{{ 'AbpFeatureManagement::ManageHostFeaturesText' | abpLocalization }}</p>
 
 <button class="btn btn-primary" type="button" (click)="openFeaturesModal()">
-  <i class="fa fa-cog" aria-hidden="true"></i>
+  <i class="me-1 fa fa-cog" aria-hidden="true"></i>
   {{ 'AbpFeatureManagement::ManageHostFeatures' | abpLocalization }}
 </button>
-<abp-feature-management
-  *abpReplaceableTemplate="{
-    inputs: {
-      providerName: { value: 'T' },
-      providerKey: { value: providerKey },
-      visible: { value: visibleFeatures, twoWay: true }
-    },
-    outputs: { visibleChange: onVisibleFeaturesChange },
-    componentKey: 'FeatureManagement.FeatureManagementComponent'
-  }"
-  [(visible)]="visibleFeatures"
-  providerName="T"
-  [providerKey]="providerKey"
->
-</abp-feature-management>
+@if (visibleFeatures) {
+  <abp-feature-management
+    *abpReplaceableTemplate="{
+      inputs: {
+        providerName: { value: 'T' },
+        providerKey: { value: providerKey },
+        visible: { value: visibleFeatures, twoWay: true }
+      },
+      outputs: { visibleChange: onVisibleFeaturesChange },
+      componentKey: 'FeatureManagement.FeatureManagementComponent'
+    }"
+    [(visible)]="visibleFeatures"
+    providerName="T"
+    [providerKey]="providerKey"
+  >
+  </abp-feature-management>
+}

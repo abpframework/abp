@@ -7,9 +7,9 @@ namespace Volo.Abp.IdentityModel;
 [IgnoreMultiTenancy]
 public class IdentityModelDiscoveryDocumentCacheItem
 {
-    public string TokenEndpoint { get; set; }
+    public string TokenEndpoint { get; set; } = default!;
 
-    public string DeviceAuthorizationEndpoint { get; set; }
+    public string DeviceAuthorizationEndpoint { get; set; } = default!;
 
     public IdentityModelDiscoveryDocumentCacheItem()
     {

@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Volo.Abp.Content;
+using Volo.Abp.Swashbuckle;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -88,10 +89,10 @@ public static class AbpSwaggerGenServiceCollectionExtensions
         Action<SwaggerGenOptions>? setupAction = null)
     {
         var discoveryUrl = discoveryEndpoint != null ?
-            new Uri(discoveryEndpoint) :
+            new Uri($"{discoveryEndpoint.TrimEnd('/')}/.well-known/openid-configuration") :
             new Uri($"{authority.TrimEnd('/')}/.well-known/openid-configuration");
         
-        flows ??= new [] { "authorization_code" };
+        flows ??= new [] { AbpSwaggerOidcFlows.AuthorizationCode };
 
         services.Configure<SwaggerUIOptions>(swaggerUiOptions =>
         {

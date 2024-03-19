@@ -12,12 +12,12 @@ public class DaprApiTokenProvider : IDaprApiTokenProvider, ISingletonDependency
         Options = options.Value;
     }
 
-    public virtual string GetDaprApiToken()
+    public virtual string? GetDaprApiToken()
     {
         return Options.DaprApiToken;
     }
 
-    public virtual string GetAppApiToken()
+    public virtual string? GetAppApiToken()
     {
         return Options.AppApiToken;
     }

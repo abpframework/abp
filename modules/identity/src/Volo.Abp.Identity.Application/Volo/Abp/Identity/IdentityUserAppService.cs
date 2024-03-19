@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
 
@@ -16,17 +17,19 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     protected IIdentityUserRepository UserRepository { get; }
     protected IIdentityRoleRepository RoleRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
-
+    protected IPermissionChecker PermissionChecker { get; }
     public IdentityUserAppService(
         IdentityUserManager userManager,
         IIdentityUserRepository userRepository,
         IIdentityRoleRepository roleRepository,
-        IOptions<IdentityOptions> identityOptions)
+        IOptions<IdentityOptions> identityOptions,
+        IPermissionChecker permissionChecker)
     {
         UserManager = userManager;
         UserRepository = userRepository;
         RoleRepository = roleRepository;
         IdentityOptions = identityOptions;
+        PermissionChecker = permissionChecker;
     }
 
     //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
@@ -140,6 +143,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     [Authorize(IdentityPermissions.Users.Update)]
     public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
     {
+        await IdentityOptions.SetAsync();
         var user = await UserManager.GetByIdAsync(id);
         (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
         await UserRepository.UpdateAsync(user);
@@ -168,18 +172,22 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
             (await UserManager.SetEmailAsync(user, input.Email)).CheckErrors();
         }
 
+
         if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
         {
             (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
         }
 
-        (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
+        if (user.Id != CurrentUser.Id)
+        {
+            (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
+        }
 
         user.Name = input.Name;
         user.Surname = input.Surname;
         (await UserManager.UpdateAsync(user)).CheckErrors();
         user.SetIsActive(input.IsActive);
-        if (input.RoleNames != null)
+        if (input.RoleNames != null && await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
         {
             (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
         }

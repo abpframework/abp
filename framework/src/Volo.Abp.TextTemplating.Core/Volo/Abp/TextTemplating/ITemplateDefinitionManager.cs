@@ -12,6 +12,5 @@ public interface ITemplateDefinitionManager
     [ItemNotNull]
     Task<IReadOnlyList<TemplateDefinition>> GetAllAsync();
 
-    [ItemCanBeNull]
-    Task<TemplateDefinition> GetOrNullAsync(string name);
+    Task<TemplateDefinition?> GetOrNullAsync(string name);
 }

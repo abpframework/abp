@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Authorization",
+    "Path": "Tutorials/Part-5"
+  },
+  "Previous": {
+    "Name": "Creating, Updating and Deleting Books",
+    "Path": "Tutorials/Part-3"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -64,7 +79,7 @@ Each project is used to test the related project. Test projects use the followin
 
 {{else if DB=="Mongo"}}
 
-> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
+> **[EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
 
 {{end}}
 
@@ -82,19 +97,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books;
 
-{{if DB=="Mongo"}}
-[Collection(BookStoreTestConsts.CollectionDefinitionName)]
-{{end}}
-public class BookAppService_Tests : BookStoreApplicationTestBase
+public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicationTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
     private readonly IBookAppService _bookAppService;
 
-    public BookAppService_Tests()
+    protected BookAppService_Tests()
     {
         _bookAppService = GetRequiredService<IBookAppService>();
     }
@@ -113,6 +127,41 @@ public class BookAppService_Tests : BookStoreApplicationTestBase
     }
 }
 ````
+
+{{if DB == "EF"}}
+Add a new implementation class of `BookAppService_Tests` class, named `EfCoreBookAppService_Tests` in the `EntityFrameworkCore\Applications\Books` namespace (folder) of the `Acme.BookStore.EntityFrameworkCore.Tests` project:
+
+````csharp
+using Acme.BookStore.Books;
+using Xunit;
+
+namespace Acme.BookStore.EntityFrameworkCore.Applications.Books;
+
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+public class EfCoreBookAppService_Tests : BookAppService_Tests<BookStoreEntityFrameworkCoreTestModule>
+{
+
+}
+````
+{{end}}
+
+{{if DB == "Mongo"}}
+Add a new implementation class of `BookAppService_Tests` class, named `MongoDBBookAppService_Tests` in the `MongoDb\Applications\Books` namespace (folder) of the `Acme.BookStore.MongoDB.Tests` project:
+
+````csharp
+using Acme.BookStore.MongoDB;
+using Acme.BookStore.Books;
+using Xunit;
+
+namespace Acme.BookStore.MongoDb.Applications.Books;
+
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]
+public class MongoDBBookAppService_Tests : BookAppService_Tests<BookStoreMongoDbTestModule>
+{
+
+}
+````
+{{end}}
 
 * `Should_Get_List_Of_Books` test simply uses `BookAppService.GetListAsync` method to get and check the list of books.
 * We can safely check the book "1984" by its name, because we know that this books is available in the database since we've added it in the seed data.
@@ -174,19 +223,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books;
 
-{{if DB=="Mongo"}}
-[Collection(BookStoreTestConsts.CollectionDefinitionName)]
-{{end}}
-public class BookAppService_Tests : BookStoreApplicationTestBase
+public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicationTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
     private readonly IBookAppService _bookAppService;
 
-    public BookAppService_Tests()
+    protected BookAppService_Tests()
     {
         _bookAppService = GetRequiredService<IBookAppService>();
     }
@@ -203,7 +251,7 @@ public class BookAppService_Tests : BookStoreApplicationTestBase
         result.TotalCount.ShouldBeGreaterThan(0);
         result.Items.ShouldContain(b => b.Name == "1984");
     }
-    
+
     [Fact]
     public async Task Should_Create_A_Valid_Book()
     {
@@ -250,7 +298,3 @@ Open the **Test Explorer Window** (use Test -> Windows -> Test Explorer menu if 
 ![bookstore-appservice-tests](./images/bookstore-appservice-tests.png)
 
 Congratulations, the **green icons** indicates that the tests have been successfully passed!
-
-## The Next Part
-
-See the [next part](Part-5.md) of this tutorial.

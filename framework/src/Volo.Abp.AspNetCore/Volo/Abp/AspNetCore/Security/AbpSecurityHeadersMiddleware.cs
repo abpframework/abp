@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Security;
 
-public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
+public class AbpSecurityHeadersMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     public IOptions<AbpSecurityHeadersOptions> Options { get; set; }
     protected const string ScriptSrcKey = "script-src";
@@ -20,7 +21,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         Options = options;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         /*X-Content-Type-Options header tells the browser to not try and “guess” what a mimetype of a resource might be, and to just take what mimetype the server has returned as fact.*/
         AddHeader(context, "X-Content-Type-Options", "nosniff");
@@ -33,7 +34,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
 
         var requestAcceptTypeHtml = context.Request.Headers["Accept"].Any(x =>
             x!.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
-            
+
         var endpoint = context.GetEndpoint();
 
         if (endpoint?.Metadata.GetMetadata<IgnoreAbpSecurityHeaderAttribute>() != null)
@@ -42,11 +43,11 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
             return;
         }
 
-        if (!requestAcceptTypeHtml 
-            || !Options.Value.UseContentSecurityPolicyHeader 
-            || await AlwaysIgnoreContentTypes(context) 
+        if (!requestAcceptTypeHtml
+            || !Options.Value.UseContentSecurityPolicyHeader
+            || await AlwaysIgnoreContentTypes(context)
             || endpoint == null
-            || Options.Value.IgnoredScriptNoncePaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'))))
+            || Options.Value.IgnoredScriptNoncePaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'), StringComparison.OrdinalIgnoreCase)))
         {
             AddOtherHeaders(context);
             await next.Invoke(context);
@@ -71,7 +72,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
             {
                 return Task.CompletedTask;
             }
-            
+
             if (context.Response.StatusCode is < 200 or > 299)
             {
                 return Task.CompletedTask;
@@ -85,7 +86,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         AddOtherHeaders(context);
         await next.Invoke(context);
     }
-    
+
     private async Task<bool> AlwaysIgnoreContentTypes(HttpContext context)
     {
         foreach (var selector in Options.Value.IgnoredScriptNonceSelectors)
@@ -95,7 +96,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -130,7 +131,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         var newScriptSrcValue = scriptSrcValue + nonceStr;
         return Options.Value.ContentSecurityPolicyValue!.Replace(scriptSrcValue!, newScriptSrcValue);
     }
-    
+
 
     protected virtual void AddHeader(HttpContext context, string key, string value, bool overrideIfExists = false)
     {

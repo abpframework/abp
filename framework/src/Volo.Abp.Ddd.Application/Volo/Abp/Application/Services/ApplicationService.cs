@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -36,12 +35,12 @@ public abstract class ApplicationService :
     IGlobalFeatureCheckingEnabled,
     ITransientDependency
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
     [Obsolete("Use LazyServiceProvider instead.")]
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
-    public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "IntService", "IntegrationService", "Service" };
+    public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
 
     public List<string> AppliedCrossCuttingConcerns { get; } = new();
 
@@ -49,7 +48,7 @@ public abstract class ApplicationService :
 
     protected IAsyncQueryableExecuter AsyncExecuter => LazyServiceProvider.LazyGetRequiredService<IAsyncQueryableExecuter>();
 
-    protected Type ObjectMapperContext { get; set; }
+    protected Type? ObjectMapperContext { get; set; }
     protected IObjectMapper ObjectMapper => LazyServiceProvider.LazyGetService<IObjectMapper>(provider =>
         ObjectMapperContext == null
             ? provider.GetRequiredService<IObjectMapper>()
@@ -85,34 +84,34 @@ public abstract class ApplicationService :
             return _localizer;
         }
     }
-    private IStringLocalizer _localizer;
+    private IStringLocalizer? _localizer;
 
-    protected Type LocalizationResource {
+    protected Type? LocalizationResource {
         get => _localizationResource;
         set {
             _localizationResource = value;
             _localizer = null;
         }
     }
-    private Type _localizationResource = typeof(DefaultResource);
+    private Type? _localizationResource = typeof(DefaultResource);
 
-    protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
+    protected IUnitOfWork? CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
     /// <summary>
     /// Checks for given <paramref name="policyName"/>.
     /// Throws <see cref="AbpAuthorizationException"/> if given policy has not been granted.
     /// </summary>
     /// <param name="policyName">The policy name. This method does nothing if given <paramref name="policyName"/> is null or empty.</param>
-    protected virtual async Task CheckPolicyAsync([CanBeNull] string policyName)
+    protected virtual async Task CheckPolicyAsync(string? policyName)
     {
         if (string.IsNullOrEmpty(policyName))
         {
             return;
         }
 
-        await AuthorizationService.CheckAsync(policyName);
+        await AuthorizationService.CheckAsync(policyName!);
     }
 
     protected virtual IStringLocalizer CreateLocalizer()

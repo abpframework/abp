@@ -25,18 +25,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/permission-management"],
       "options": {
-        "jestConfig": "packages/permission-management/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/permission-management/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "packages/permission-management/src/**/*.ts",
-          "packages/permission-management/src/**/*.html"
-        ]
-      },
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
   },

@@ -1,0 +1,15 @@
+{
+  "culture": "is",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "Ekki er hægt að sækja OpenID Connect beiðnina.",
+    "TheUserDetailsCannotBbeRetrieved": "Ekki er hægt að ná í notendaupplýsingarnar.",
+    "TheApplicationDetailsCannotBeFound": "Ekki er hægt að finna upplýsingar um umsóknina.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Ekki er hægt að finna upplýsingar um forritið sem hringir í.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Tilgreinda styrktegundin {0} er ekki útfærð.",
+    "Authorization": "Heimild",
+    "DoYouWantToGrantAccessToYourData": "Viltu veita {0} aðgang að gögnunum þínum?",
+    "ScopesRequested": "Umfang óskað",
+    "Accept": "Samþykkja",
+    "Deny": "Neita"
+  }
+}

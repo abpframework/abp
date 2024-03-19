@@ -13,6 +13,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.TestBase;
 
+[Obsolete("Use AbpWebApplicationFactoryIntegratedTest instead.")]
 public class AbpAspNetCoreAsyncIntegratedTestBase<TModule>
     where TModule : IAbpModule
 {
@@ -32,6 +33,16 @@ public class AbpAspNetCoreAsyncIntegratedTestBase<TModule>
     protected virtual T GetRequiredService<T>() where T : notnull
     {
         return ServiceProvider.GetRequiredService<T>();
+    }
+
+    protected virtual T? GetKeyedServices<T>(object? serviceKey)
+    {
+        return ServiceProvider.GetKeyedService<T>(serviceKey);
+    }
+
+    protected virtual T GetRequiredKeyedService<T>(object? serviceKey) where T : notnull
+    {
+        return ServiceProvider.GetRequiredKeyedService<T>(serviceKey);
     }
 
     public virtual async Task InitializeAsync()

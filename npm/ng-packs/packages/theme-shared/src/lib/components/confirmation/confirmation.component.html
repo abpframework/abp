@@ -25,14 +25,14 @@
     <div class="footer">
       <button
         id="cancel"
-        class="confirmation-button confirmation-button--reject"
+        class="btn btn-outline-primary me-2"
         [innerHTML]="data.options?.cancelText || 'AbpUi::Cancel' | abpLocalization"
         *ngIf="!data?.options?.hideCancelBtn"
         (click)="close(reject)"
       ></button>
       <button
         id="confirm"
-        class="confirmation-button confirmation-button--approve"
+        class="btn btn-primary"
         [innerHTML]="data.options?.yesText || 'AbpUi::Yes' | abpLocalization"
         *ngIf="!data?.options?.hideYesBtn"
         (click)="close(confirm)"

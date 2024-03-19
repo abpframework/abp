@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
   </PropertyGroup>
@@ -16,10 +16,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise" Version="1.2.3" />
-        <PackageReference Include="Blazorise.DataGrid" Version="1.2.3" />
-        <PackageReference Include="Blazorise.Snackbar" Version="1.2.3" />
-        <PackageReference Include="Blazorise.Components" Version="1.2.3" />
+        <PackageReference Include="Blazorise" />
+        <PackageReference Include="Blazorise.DataGrid" />
+        <PackageReference Include="Blazorise.Snackbar" />
+        <PackageReference Include="Blazorise.Components" />
     </ItemGroup>
 
 </Project>

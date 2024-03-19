@@ -1,41 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using Volo.Abp;
 using Volo.CmsKit.Localization;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
-using Color = SixLabors.ImageSharp.Color;
-using PointF = SixLabors.ImageSharp.PointF;
+using Volo.Abp.Caching;
+using Microsoft.Extensions.Caching.Distributed;
+using ImageMagick;
 
 namespace Volo.CmsKit.Public.Web.Security.Captcha;
 
-public class SimpleMathsCaptchaGenerator : ISingletonDependency
+public class SimpleMathsCaptchaGenerator : ITransientDependency
 {
-    private readonly IStringLocalizer<CmsKitResource> _localizer;
+    protected IStringLocalizer<CmsKitResource> Localizer { get; }
+    protected IDistributedCache<CaptchaOutput> Cache { get; }
 
-    public SimpleMathsCaptchaGenerator(IStringLocalizer<CmsKitResource> localizer)
+    public SimpleMathsCaptchaGenerator(IStringLocalizer<CmsKitResource> localizer, IDistributedCache<CaptchaOutput> cache)
     {
-        _localizer = localizer;
-    }
-    private static Dictionary<Guid, CaptchaRequest> Session { get; set; } = new Dictionary<Guid, CaptchaRequest>();
-
-    public CaptchaOutput Generate()
-    {
-        return Generate(options: null, number1: null, number2: null);
+        Localizer = localizer;
+        Cache = cache;
     }
 
-    public CaptchaOutput Generate(CaptchaOptions options)
+    public virtual Task<CaptchaOutput> GenerateAsync()
     {
-        return Generate(options, number1: null, number2: null);
+        return GenerateAsync(options: null, number1: null, number2: null);
+    }
+
+    public virtual Task<CaptchaOutput> GenerateAsync(CaptchaOptions options)
+    {
+        return GenerateAsync(options, number1: null, number2: null);
     }
 
     /// <summary>
@@ -45,7 +39,7 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
     /// <param name="number1">First number for maths operation</param>
     /// <param name="number2">Second number for maths operation</param>
     /// <returns></returns>
-    public CaptchaOutput Generate(CaptchaOptions options, int? number1, int? number2)
+    public virtual async Task<CaptchaOutput> GenerateAsync(CaptchaOptions options, int? number1, int? number2)
     {
         var random = new Random();
         options ??= new CaptchaOptions();
@@ -65,11 +59,15 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
             {
                 Text = text,
                 Result = Calculate(number1.Value, number2.Value),
-                ImageBytes =  GenerateInternal(text, options)
+                ImageBytes = GenerateInternal(text, options)
             }
         };
 
-        Session[request.Output.Id] = request;
+        await Cache.SetAsync(request.Output.Id.ToString("N"), request.Output, new DistributedCacheEntryOptions 
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.Add(options.DurationOfValidity)
+        });
+
         return request.Output;
     }
 
@@ -78,108 +76,103 @@ public class SimpleMathsCaptchaGenerator : ISingletonDependency
         return number1 + number2;
     }
 
-    public void Validate(Guid requestId, int value)
+    public virtual async Task ValidateAsync(Guid requestId, int value)
     {
-        var request = Session[requestId];
-        if (request.Output.Result != value)
+        var request = await Cache.GetAsync(requestId.ToString("N"));
+        
+        if(request == null || request.Result != value) 
         {
-            throw new UserFriendlyException(_localizer["CaptchaCodeErrorMessage"]);
+            throw new UserFriendlyException(Localizer["CaptchaCodeErrorMessage"]);
         }
     }
 
-    public void Validate(Guid requestId, string value)
+    public virtual async Task ValidateAsync(Guid requestId, string value)
     {
         if (int.TryParse(value, out var captchaInput))
         {
-            Validate(requestId, captchaInput);
+            await ValidateAsync(requestId, captchaInput);
         }
         else
         {
-            throw new UserFriendlyException(_localizer["CaptchaCodeMissingMessage"]);
+            throw new UserFriendlyException(Localizer["CaptchaCodeMissingMessage"]);
         }
     }
 
     private byte[] GenerateInternal(string stringText, CaptchaOptions options)
     {
-        byte[] result;
+        var random = new Random();
+        var family = MagickNET.FontFamilies.First();
+        
+        var drawables = new Drawables()
+            .Font(family, options.FontStyle, FontWeight.Normal, FontStretch.Normal)
+            .FontPointSize(options.FontSize)
+            .StrokeColor(MagickColors.Transparent);
 
-        using (var image = new Image<Rgba32>(options.Width, options.Height))
+        var size = (ushort)(drawables.FontTypeMetrics(stringText)?.TextWidth ?? 0);
+        using var image = new MagickImage(MagickColors.White, size + 15, options.Height);
+
+        double position = 0;
+        var startWith = (byte)random.Next(5, 10);
+
+        foreach (var character in stringText)
         {
-            float position = 0;
-            var random = new Random();
-            var startWith = (byte)random.Next(5, 10);
-            image.Mutate(ctx => ctx.BackgroundColor(Color.Transparent));
-            var fontFamily = SystemFonts.Families.FirstOrDefault(x => x.IsStyleAvailable(options.FontStyle))?.Name ?? SystemFonts.Families.First().Name;
-            var font = SystemFonts.CreateFont(fontFamily, options.FontSize, options.FontStyle);
-            
-            foreach (var character in stringText)
-            {
-                var text = character.ToString();
-                var color = options.TextColor[random.Next(0, options.TextColor.Length)];
-                var location = new PointF(startWith + position, random.Next(6, 13));
-                image.Mutate(ctx => ctx.DrawText(text, font, color, location));
-                position += TextMeasurer.Measure(character.ToString(), new RendererOptions(font, location)).Width;
-            }
+            var text = character.ToString();
+            var color = options.TextColor[random.Next(0, options.TextColor.Length)];
+            drawables.FillColor(new MagickColor(color.R, color.G, color.B, color.A))
+                .Text(startWith + position,
+                    RandomTextGenerator.GenerateNextFloat(image.BaseHeight / 2.3, image.BaseHeight / 1.7), text);
 
-            //add rotation
-            var rotation = GetRotation(options);
-            image.Mutate(ctx => ctx.Transform(rotation));
-
-            // add the dynamic image to original image
-            var size = (ushort)TextMeasurer.Measure(stringText, new RendererOptions(font)).Width;
-            var img = new Image<Rgba32>(size + 15, options.Height);
-            img.Mutate(ctx => ctx.BackgroundColor(Color.White));
-
-            Parallel.For(0, options.DrawLines, i =>
-            {
-                var x0 = random.Next(0, random.Next(0, 30));
-                var y0 = random.Next(10, img.Height);
-
-                var x1 = random.Next(30, img.Width);
-                var y1 = random.Next(0, img.Height);
-
-                img.Mutate(ctx =>
-                    ctx.DrawLines(options.TextColor[random.Next(0, options.TextColor.Length)],
-                                  RandomTextGenerator.GenerateNextFloat(options.MinLineThickness, options.MaxLineThickness),
-                                  new PointF[] { new PointF(x0, y0), new PointF(x1, y1) })
-                    );
-            });
-
-            img.Mutate(ctx => ctx.DrawImage(image, 0.80f));
-
-            Parallel.For(0, options.NoiseRate, i =>
-            {
-                var x0 = random.Next(0, img.Width);
-                var y0 = random.Next(0, img.Height);
-                img.Mutate(
-                        ctx => ctx
-                            .DrawLines(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)],
-                            RandomTextGenerator.GenerateNextFloat(0.5, 1.5), new PointF[] { new Vector2(x0, y0), new Vector2(x0, y0) })
-                    );
-            });
-
-            img.Mutate(x =>
-            {
-                x.Resize(options.Width, options.Height);
-            });
-
-            using (var ms = new MemoryStream())
-            {
-                img.Save(ms, options.Encoder);
-                result = ms.ToArray();
-            }
+            position += drawables.FontTypeMetrics(text)?.TextWidth ?? 0;
         }
 
-        return result;
+        // add rotation
+        var rotation = GetRotation(options);
+        drawables.Rotation(rotation);
+
+        drawables.Draw(image);
+
+        Parallel.For(0, options.DrawLines, _ =>
+        {
+            // ReSharper disable once AccessToDisposedClosure
+            if (image is { IsDisposed: false })
+            {
+                var x0 = random.Next(0, random.Next(0, 30));
+                var y0 = random.Next(10, image.Height);
+
+                var x1 = random.Next(30, image.Width);
+                var y1 = random.Next(0, image.Height);
+
+                image.Draw(new Drawables()
+                    .StrokeColor(options.DrawLinesColor[random.Next(0, options.DrawLinesColor.Length)])
+                    .StrokeWidth(RandomTextGenerator.GenerateNextFloat(options.MinLineThickness,
+                        options.MaxLineThickness))
+                    .Line(x0, y0, x1, y1));
+            }
+        });
+
+        Parallel.For(0, options.NoiseRate, _ =>
+        {
+            if (image is { IsDisposed: false })
+            {
+                var x = random.Next(0, image.Width);
+                var y = random.Next(0, image.Height);
+                image.Draw(new Drawables()
+                    .FillColor(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)])
+                    .Point(x, y)
+                );
+            }
+        });
+
+        image.Resize(new MagickGeometry(options.Width, options.Height) { IgnoreAspectRatio = true });
+
+        return image.ToByteArray(options.Encoder);
     }
 
-    private static AffineTransformBuilder GetRotation(CaptchaOptions options)
+    private double GetRotation(CaptchaOptions options)
     {
         var random = new Random();
-        var width = random.Next(10, options.Width);
-        var height = random.Next(10, options.Height);
-        var pointF = new PointF(width, height);
         var rotationDegrees = random.Next(0, options.MaxRotationDegrees);
-        return new AffineTransformBuilder().PrependRotationDegrees(rotationDegrees, pointF);
+        return rotationDegrees;
     }
+
 }

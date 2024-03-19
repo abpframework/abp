@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { Params } from '@angular/router';
-import { from, Observable, lastValueFrom } from 'rxjs';
+import { from, Observable, lastValueFrom, EMPTY } from 'rxjs';
 import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { AbpAuthResponse, IAuthService, LoginParams } from '@abp/ng.core';
 import { AuthFlowStrategy } from '../strategies';
@@ -15,6 +15,14 @@ import { HttpHeaders } from '@angular/common/http';
 export class AbpOAuthService implements IAuthService {
   private strategy!: AuthFlowStrategy;
   private readonly oAuthService: OAuthService;
+
+  get oidc() {
+    return this.oAuthService.oidc;
+  }
+
+  set oidc(value) {
+    this.oAuthService.oidc = value;
+  }
 
   get isInternalAuth() {
     return this.strategy.isInternalAuth;
@@ -44,6 +52,10 @@ export class AbpOAuthService implements IAuthService {
   }
 
   logout(queryParams?: Params): Observable<any> {
+    if (!this.strategy) {
+      return EMPTY;
+    }
+
     return this.strategy.logout(queryParams);
   }
 
@@ -78,5 +90,21 @@ export class AbpOAuthService implements IAuthService {
     }
 
     return this.oAuthService.fetchTokenUsingGrant(grantType, p, headers);
+  }
+
+  getRefreshToken(): string {
+    return this.oAuthService.getRefreshToken();
+  }
+
+  getAccessToken(): string {
+    return this.oAuthService.getAccessToken();
+  }
+
+  refreshToken(): Promise<AbpAuthResponse> {
+    return this.oAuthService.refreshToken();
+  }
+
+  getAccessTokenExpiration(): number {
+    return this.oAuthService.getAccessTokenExpiration();
   }
 }

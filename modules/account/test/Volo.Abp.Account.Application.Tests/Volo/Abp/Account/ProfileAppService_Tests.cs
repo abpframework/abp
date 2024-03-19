@@ -74,6 +74,36 @@ public class ProfileAppService_Tests : AbpAccountApplicationTestBase
     }
 
     [Fact]
+    public async Task Should_Not_UpdatePhoneNumber_If_Input_PhoneNumber_IsNullOrWhiteSpace_Test()
+    {
+        //Arrange
+        _currentUser.Id.Returns(_testData.UserJohnId);
+        _currentUser.IsAuthenticated.Returns(true);
+
+        //Act
+        var result = await _profileAppService.UpdateAsync(new UpdateProfileDto
+        {
+            UserName = CreateRandomString(),
+            Email = CreateRandomEmail(),
+            PhoneNumber = ""
+        });
+
+        //Assert
+        result.PhoneNumber.ShouldBe(null);
+
+        //Act
+        result = await _profileAppService.UpdateAsync(new UpdateProfileDto
+        {
+            UserName = CreateRandomString(),
+            Email = CreateRandomEmail(),
+            PhoneNumber = "123"
+        });
+
+        //Assert
+        result.PhoneNumber.ShouldBe("123");
+    }
+
+    [Fact]
     public async Task ChangePasswordAsync_FailsForSamePassword()
     {
         //Arrange

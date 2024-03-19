@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -37,7 +38,7 @@ namespace Volo.Abp.EntityFrameworkCore;
 public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, ITransientDependency
     where TDbContext : DbContext
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
     protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
@@ -69,26 +70,28 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     public ILogger<AbpDbContext<TDbContext>> Logger => LazyServiceProvider.LazyGetService<ILogger<AbpDbContext<TDbContext>>>(NullLogger<AbpDbContext<TDbContext>>.Instance);
 
+    public IOptions<AbpDbContextOptions> Options => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>();
+
     private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
         = typeof(AbpDbContext<TDbContext>)
             .GetMethod(
                 nameof(ConfigureBaseProperties),
                 BindingFlags.Instance | BindingFlags.NonPublic
-            );
+            )!;
 
     private static readonly MethodInfo ConfigureValueConverterMethodInfo
         = typeof(AbpDbContext<TDbContext>)
             .GetMethod(
                 nameof(ConfigureValueConverter),
                 BindingFlags.Instance | BindingFlags.NonPublic
-            );
+            )!;
 
     private static readonly MethodInfo ConfigureValueGeneratedMethodInfo
         = typeof(AbpDbContext<TDbContext>)
             .GetMethod(
                 nameof(ConfigureValueGenerated),
                 BindingFlags.Instance | BindingFlags.NonPublic
-            );
+            )!;
 
     protected AbpDbContext(DbContextOptions<TDbContext> options)
         : base(options)
@@ -114,6 +117,33 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             ConfigureValueGeneratedMethodInfo
                 .MakeGenericMethod(entityType.ClrType)
                 .Invoke(this, new object[] { modelBuilder, entityType });
+        }
+
+        if (LazyServiceProvider == null || Options == null)
+        {
+            return;
+        }
+
+        Options.Value.DefaultOnModelCreatingAction?.Invoke(this, modelBuilder);
+        foreach (var onModelCreatingAction in Options.Value.OnModelCreatingActions.GetOrDefault(typeof(TDbContext)) ?? [])
+        {
+            onModelCreatingAction.As<Action<DbContext, ModelBuilder>>().Invoke(this, modelBuilder);
+        }
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        base.ConfigureConventions(configurationBuilder);
+
+        if (LazyServiceProvider == null || Options == null)
+        {
+            return;
+        }
+
+        Options.Value.DefaultConventionAction?.Invoke(this, configurationBuilder);
+        foreach (var conventionAction in Options.Value.ConventionActions.GetOrDefault(typeof(TDbContext)) ?? [])
+        {
+            conventionAction.As<Action<DbContext, ModelConfigurationBuilder>>().Invoke(this, configurationBuilder);
         }
     }
 
@@ -157,7 +187,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         try
         {
             var auditLog = AuditingManager?.Current?.Log;
-            List<EntityChangeInfo> entityChangeList = null;
+            List<EntityChangeInfo>? entityChangeList = null;
             if (auditLog != null)
             {
                 entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
@@ -174,7 +204,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             if (entityChangeList != null)
             {
                 EntityHistoryHelper.UpdateChangeList(entityChangeList);
-                auditLog.EntityChanges.AddRange(entityChangeList);
+                auditLog!.EntityChanges.AddRange(entityChangeList);
                 Logger.LogDebug($"Added {entityChangeList.Count} entity changes to the current audit log");
             }
 
@@ -249,13 +279,13 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
     }
 
-    protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
+    protected virtual void ChangeTracker_Tracked(object? sender, EntityTrackedEventArgs e)
     {
         FillExtraPropertiesForTrackedEntities(e);
         PublishEventsForTrackedEntity(e.Entry);
     }
 
-    protected virtual void ChangeTracker_StateChanged(object sender, EntityStateChangedEventArgs e)
+    protected virtual void ChangeTracker_StateChanged(object? sender, EntityStateChangedEventArgs e)
     {
         PublishEventsForTrackedEntity(e.Entry);
     }
@@ -316,7 +346,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 break;
             case EntityState.Modified:
                 ApplyAbpConceptsForModifiedEntity(entry);
-                if (entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
+                if (entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
                 {
                     if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                     {
@@ -453,11 +483,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
                     if (conversionType == typeof(Guid))
                     {
-                        entryProperty.CurrentValue = TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(entityProperty.ToString());
+                        entryProperty.CurrentValue = TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(entityProperty.ToString()!);
                     }
                     else if (conversionType.IsEnum)
                     {
-                        entryProperty.CurrentValue = Enum.Parse(conversionType, entityProperty.ToString(), ignoreCase: true);
+                        entryProperty.CurrentValue = Enum.Parse(conversionType, entityProperty.ToString()!, ignoreCase: true);
                     }
                     else
                     {
@@ -560,7 +590,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             return;
         }
 
-        var idProperty = entry.Property("Id").Metadata.PropertyInfo;
+        var idProperty = entry.Property("Id").Metadata.PropertyInfo!;
 
         //Check for DatabaseGeneratedAttribute
         var dbGeneratedAttr = ReflectionHelper
@@ -669,7 +699,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         var idPropertyBuilder = modelBuilder.Entity<TEntity>().Property(x => ((IEntity<Guid>)x).Id);
-        if (idPropertyBuilder.Metadata.PropertyInfo.IsDefined(typeof(DatabaseGeneratedAttribute), true))
+        if (idPropertyBuilder.Metadata.PropertyInfo!.IsDefined(typeof(DatabaseGeneratedAttribute), true))
         {
             return;
         }
@@ -692,10 +722,10 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         return false;
     }
 
-    protected virtual Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
+    protected virtual Expression<Func<TEntity, bool>>? CreateFilterExpression<TEntity>()
         where TEntity : class
     {
-        Expression<Func<TEntity, bool>> expression = null;
+        Expression<Func<TEntity, bool>>? expression = null;
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
         {

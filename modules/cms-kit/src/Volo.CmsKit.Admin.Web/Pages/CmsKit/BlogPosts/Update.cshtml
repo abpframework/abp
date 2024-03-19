@@ -74,13 +74,16 @@
 
         <form asp-page="/CmsKit/BlogPosts/Update" id="form-blog-post-update">
             <abp-input asp-for="Id" />
-            <abp-input asp-for="ViewModel.ConcurrencyStamp" hidden />
+            <abp-input asp-for="ViewModel.ConcurrencyStamp"  type="hidden" />
+            <abp-input asp-for="ViewModel.CoverImageMediaId" type="hidden" />
             
             <abp-input asp-for="ViewModel.Title" />
 
             <abp-input asp-for="ViewModel.Slug" />
 
             <abp-input asp-for="ViewModel.ShortDescription" />
+
+            <abp-input asp-for="ViewModel.Content" type="hidden" />
 
             <div class="content-editor cms-kit-editor"
                  id="ContentEditor"

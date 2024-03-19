@@ -26,7 +26,7 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
 
     public virtual async Task<ImageCompressResult<Stream>> TryCompressAsync(
         Stream stream, 
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
@@ -34,14 +34,14 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
             return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
-        var (image, format) = await Image.LoadWithFormatAsync(stream, cancellationToken);
+        var image = await Image.LoadAsync(stream, cancellationToken);
 
-        if (!CanCompress(format.DefaultMimeType))
+        if (!CanCompress(image.Metadata.DecodedImageFormat!.DefaultMimeType))
         {
             return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
-        var memoryStream = await GetStreamFromImageAsync(image, format, cancellationToken);
+        var memoryStream = await GetStreamFromImageAsync(image, image.Metadata.DecodedImageFormat, cancellationToken);
 
         if (memoryStream.Length < stream.Length)
         {
@@ -54,7 +54,7 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
 
     public virtual async Task<ImageCompressResult<byte[]>> TryCompressAsync(
         byte[] bytes, 
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanCompress(mimeType))
@@ -75,7 +75,7 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         return new ImageCompressResult<byte[]>(newBytes, result.State);
     }
 
-    protected virtual bool CanCompress(string mimeType)
+    protected virtual bool CanCompress(string? mimeType)
     {
         return mimeType switch {
             MimeTypes.Image.Jpeg => true,

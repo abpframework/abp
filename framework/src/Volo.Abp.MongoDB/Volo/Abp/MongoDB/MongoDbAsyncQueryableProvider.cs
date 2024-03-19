@@ -74,15 +74,15 @@ public class MongoDbAsyncQueryableProvider : IAsyncQueryableProvider, ISingleton
         return GetMongoQueryable(queryable).FirstAsync(predicate, cancellationToken);
     }
 
-    public Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
-        return GetMongoQueryable(queryable).FirstOrDefaultAsync(cancellationToken);
+        return GetMongoQueryable(queryable).FirstOrDefaultAsync(cancellationToken)!;
     }
 
-    public Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+    public Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
-        return GetMongoQueryable(queryable).FirstOrDefaultAsync(predicate, cancellationToken);
+        return GetMongoQueryable(queryable).FirstOrDefaultAsync(predicate, cancellationToken)!;
     }
 
     public Task<T> LastAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
@@ -95,15 +95,15 @@ public class MongoDbAsyncQueryableProvider : IAsyncQueryableProvider, ISingleton
         return Task.FromResult(GetMongoQueryable(queryable).Last(predicate));
     }
 
-    public Task<T> LastOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T?> LastOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(GetMongoQueryable(queryable).LastOrDefault());
+        return Task.FromResult<T?>(GetMongoQueryable(queryable).LastOrDefault());
     }
 
-    public Task<T> LastOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+    public Task<T?> LastOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(GetMongoQueryable(queryable).LastOrDefault(predicate));
+        return Task.FromResult<T?>(GetMongoQueryable(queryable).LastOrDefault(predicate));
     }
 
     public Task<T> SingleAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
@@ -116,15 +116,15 @@ public class MongoDbAsyncQueryableProvider : IAsyncQueryableProvider, ISingleton
         return GetMongoQueryable(queryable).SingleAsync(predicate, cancellationToken);
     }
 
-    public Task<T> SingleOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
-        return GetMongoQueryable(queryable).SingleOrDefaultAsync(cancellationToken);
+        return GetMongoQueryable(queryable).SingleOrDefaultAsync(cancellationToken)!;
     }
 
-    public Task<T> SingleOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+    public Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
-        return GetMongoQueryable(queryable).SingleOrDefaultAsync(predicate, cancellationToken);
+        return GetMongoQueryable(queryable).SingleOrDefaultAsync(predicate, cancellationToken)!;
     }
 
     public Task<T> MinAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)

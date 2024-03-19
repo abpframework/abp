@@ -53,14 +53,10 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
-        List<string> entityIdFilters = null;
-        if (tagId.HasValue)
-        {
-            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
-        }
+        var entityIdFilters = await GetEntityIdsByTagId(tagId, cancellationToken);
         
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
+            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(entityIdFilters.Any(), x => entityIdFilters.Contains(x.Id))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(authorId.HasValue, x => x.AuthorId == authorId)
@@ -83,16 +79,12 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         var dbContext = await GetDbContextAsync(cancellationToken);
         var blogPostQueryable = await GetQueryableAsync();
         
-        List<string> entityIdFilters = null;
-        if (tagId.HasValue)
-        {
-            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
-        }
-        
+        var entityIdFilters = await GetEntityIdsByTagId(tagId, cancellationToken);
+
         var usersQueryable = dbContext.Collection<CmsUser>().AsQueryable();
 
         var queryable = blogPostQueryable
-            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
+            .WhereIf(entityIdFilters.Any(), x => entityIdFilters.Contains(x.Id))
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
@@ -116,6 +108,28 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
                                         s.blogPost.Author = s.user;
                                         return s.blogPost;
                                     }).ToList();
+    }
+
+    protected virtual async Task<List<Guid>> GetEntityIdsByTagId(Guid? tagId, CancellationToken cancellationToken)
+    {
+        var entityIdFilters = new List<Guid>();
+        if (!tagId.HasValue)
+        {
+            return entityIdFilters;
+        }
+
+        var entityIds =
+            await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
+            
+        foreach (var entityId in entityIds)
+        {
+            if (Guid.TryParse(entityId, out var parsedEntityId))
+            {
+                entityIdFilters.Add(parsedEntityId);
+            }
+        }
+
+        return entityIdFilters;
     }
 
     public virtual async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,

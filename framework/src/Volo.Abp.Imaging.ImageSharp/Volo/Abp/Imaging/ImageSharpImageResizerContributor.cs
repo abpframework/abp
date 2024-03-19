@@ -16,7 +16,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
     public virtual async Task<ImageResizeResult<Stream>> TryResizeAsync(
         Stream stream,
         ImageResizeArgs resizeArgs,
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
@@ -24,9 +24,9 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
             return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
-        var (image, format) = await Image.LoadWithFormatAsync(stream, cancellationToken);
+        var image = await Image.LoadAsync(stream, cancellationToken);
 
-        if (!CanResize(format.DefaultMimeType))
+        if (!CanResize(image.Metadata.DecodedImageFormat!.DefaultMimeType))
         {
             return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
         }
@@ -44,7 +44,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
 
         try
         {
-            await image.SaveAsync(memoryStream, format, cancellationToken: cancellationToken);
+            await image.SaveAsync(memoryStream, image.Metadata.DecodedImageFormat, cancellationToken: cancellationToken);
             memoryStream.Position = 0;
             return new ImageResizeResult<Stream>(memoryStream, ImageProcessState.Done);
         }
@@ -58,7 +58,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
     public virtual async Task<ImageResizeResult<byte[]>> TryResizeAsync(
         byte[] bytes, 
         ImageResizeArgs resizeArgs,
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(mimeType) && !CanResize(mimeType))
@@ -82,7 +82,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
         return new ImageResizeResult<byte[]>(newBytes, result.State);
     }
 
-    protected virtual bool CanResize(string mimeType)
+    protected virtual bool CanResize(string? mimeType)
     {
         return mimeType switch {
             MimeTypes.Image.Jpeg => true,

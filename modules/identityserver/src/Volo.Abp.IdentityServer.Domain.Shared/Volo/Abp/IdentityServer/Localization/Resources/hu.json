@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "A bejelentkezés nem engedélyezett! Fiókja inaktív, vagy meg kell erősítenie e -mail címét/telefonszámát.",
     "InvalidUsername": "Érvénytelen felhasználónév vagy jelszó!",
     "InvalidAuthenticatorCode": "Érvénytelen hitelesítő kód!",
+    "InvalidRecoveryCode": "Érvénytelen helyreállítási kód!",
     "TheTargetUserIsNotLinkedToYou": "A célfelhasználó nincs hozzád kapcsolódva!"
   }
 }

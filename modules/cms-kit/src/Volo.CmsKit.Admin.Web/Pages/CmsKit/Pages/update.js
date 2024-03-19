@@ -35,7 +35,7 @@ $(function () {
 
             $formUpdate.ajaxSubmit({
                 success: function (result) {
-                    abp.notify.success(l('SuccessfullySaved'));
+                    abp.notify.success(l('SavedSuccessfully'));
                     abp.ui.clearBusy();
                     location.href = "../../Pages";
                 }
@@ -62,11 +62,14 @@ $(function () {
     initEditor();
 
     var editor;
+    var addWidgetButton;
     function initEditor() {
         var $editorContainer = $("#ContentEditor");
         var inputName = $editorContainer.data('input-id');
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
+
+        addWidgetButton = createAddWidgetButton();
 
         editor = new toastui.Editor({
             el: $editorContainer[0],
@@ -87,7 +90,7 @@ $(function () {
                 ['code', 'codeblock'],
                 // Using Option: Customize the last button
                 [{
-                    el: createAddWidgetButton(),
+                    el: addWidgetButton,
                     command: 'bold',
                     tooltip: 'Add Widget'
                 }]
@@ -113,9 +116,9 @@ $(function () {
             headers: getUppyHeaders()
         };
 
-        var UPPY = Uppy.Core().use(Uppy.XHRUpload, UPPY_OPTIONS);
+        var UPPY = new Uppy.Uppy().use(Uppy.XHRUpload, UPPY_OPTIONS);
 
-        UPPY.reset();
+        UPPY.cancelAll();
 
         UPPY.addFile({
             id: "content-file",
@@ -141,24 +144,44 @@ $(function () {
         editor.insertText(txt);
     });
 
+    var $previewArea;
     $('.tab-item').on('click', function () {
         if ($(this).attr("aria-label") == 'Preview' && editor.isMarkdownMode()) {
 
+            if(!$previewArea){
+                $previewArea = $("#ContentEditor .toastui-editor-md-preview");
+                $previewArea.replaceWith("<iframe id='previewArea' style='height: 100%; width: 100%; border: 0px; display: inline;'></iframe>");
+            }
+
+            $previewArea.attr("srcdoc", '');
+            addWidgetButton.disabled = true;
+            
             let content = editor.getMarkdown();
             localStorage.setItem('content', content);
 
             $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
 
-                let style = styleEditor.getValue();
+                var style = styleEditor.getValue();
+                var script = scriptEditor.getValue();
 
-                $('#editor-preview-style').remove();
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(result, 'text/html');
 
-                $('head').append('<style id="editor-preview-style">' + style + '</style>');
+                var head = doc.querySelector('head');
+                var styleElement = doc.createElement('style');
+                styleElement.type = 'text/css';
+                styleElement.innerHTML = style;
+                head.append(styleElement);
 
-                editor.setHTML(result);
+                var body = doc.querySelector('body');
+                var scriptElement = doc.createElement('script');
+                scriptElement.type = 'text/javascript';
+                scriptElement.innerHTML = script;
+                body.append(scriptElement);
 
-                var highllightedText = $('#ContentEditor').find('.toastui-editor-md-preview-highlight');
-                highllightedText.removeClass('toastui-editor-md-preview-highlight');
+                result = new XMLSerializer().serializeToString(doc);
+                $previewArea = $("#previewArea");
+                $previewArea.attr("srcdoc", result);
             });
         }
         else if ($(this).attr("aria-label") == 'Write') {

@@ -8,11 +8,18 @@ public class InboxConfig
     [NotNull]
     public string Name { get; }
 
-    public Type ImplementationType { get; set; }
+    [NotNull]
+    public string DatabaseName {
+        get => _databaseName;
+        set => _databaseName = Check.NotNullOrWhiteSpace(value, nameof(DatabaseName));
+    }
+    [NotNull] private string _databaseName = default!;
 
-    public Func<Type, bool> EventSelector { get; set; }
+    public Type ImplementationType { get; set; } = default!;
 
-    public Func<Type, bool> HandlerSelector { get; set; }
+    public Func<Type, bool>? EventSelector { get; set; }
+
+    public Func<Type, bool>? HandlerSelector { get; set; }
 
     /// <summary>
     /// Used to enable/disable processing incoming events.

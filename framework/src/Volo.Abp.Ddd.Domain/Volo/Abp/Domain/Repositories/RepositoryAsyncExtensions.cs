@@ -120,7 +120,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.FirstAsync(queryable, predicate, cancellationToken);
     }
 
-    public static async Task<T> FirstOrDefaultAsync<T>(
+    public static async Task<T?> FirstOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -129,7 +129,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.FirstOrDefaultAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T> FirstOrDefaultAsync<T>(
+    public static async Task<T?> FirstOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -162,7 +162,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.LastAsync(queryable, predicate, cancellationToken);
     }
 
-    public static async Task<T> LastOrDefaultAsync<T>(
+    public static async Task<T?> LastOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -171,7 +171,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.LastOrDefaultAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T> LastOrDefaultAsync<T>(
+    public static async Task<T?> LastOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
@@ -204,7 +204,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SingleAsync(queryable, predicate, cancellationToken);
     }
 
-    public static async Task<T> SingleOrDefaultAsync<T>(
+    public static async Task<T?> SingleOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         CancellationToken cancellationToken = default)
         where T : class, IEntity
@@ -213,7 +213,7 @@ public static class RepositoryAsyncExtensions
         return await repository.AsyncExecuter.SingleOrDefaultAsync(queryable, cancellationToken);
     }
 
-    public static async Task<T> SingleOrDefaultAsync<T>(
+    public static async Task<T?> SingleOrDefaultAsync<T>(
         [NotNull] this IReadOnlyRepository<T> repository,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)

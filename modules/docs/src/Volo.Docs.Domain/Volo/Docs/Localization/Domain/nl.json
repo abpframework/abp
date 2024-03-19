@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "KorteNaam {ShortName} bestaat al.",
     "Preview": "voorbeeld",
     "Search": "Zoeken",
-    "SearchResults": "Zoekresultaten"
+    "SearchResults": "Zoekresultaten",
+    "SearchInTheAllDocuments": "Zoek in alle documenten"
   }
 }

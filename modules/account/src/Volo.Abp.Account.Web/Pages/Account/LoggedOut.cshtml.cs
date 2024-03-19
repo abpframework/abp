@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NUglify.Helpers;
 
 namespace Volo.Abp.Account.Web.Pages.Account;
 
@@ -17,13 +18,28 @@ public class LoggedOutModel : AccountPageModel
     [BindProperty(SupportsGet = true)]
     public string PostLogoutRedirectUri { get; set; }
 
-    public virtual Task<IActionResult> OnGetAsync()
+    public virtual async Task<IActionResult> OnGetAsync()
     {
-        return Task.FromResult<IActionResult>(Page());
+        await NormalizeUrlAsync();
+        return Page();
     }
 
-    public virtual Task<IActionResult> OnPostAsync()
+    public virtual async Task<IActionResult> OnPostAsync()
     {
-        return Task.FromResult<IActionResult>(Page());
+        await NormalizeUrlAsync();
+        return Page();
+    }
+    
+    protected virtual async Task NormalizeUrlAsync()
+    {
+        if (!PostLogoutRedirectUri.IsNullOrWhiteSpace())
+        {
+            PostLogoutRedirectUri = Url.Content(await GetRedirectUrlAsync(PostLogoutRedirectUri));
+        }
+        
+        if(!SignOutIframeUrl.IsNullOrWhiteSpace())
+        {
+            SignOutIframeUrl = Url.Content(await GetRedirectUrlAsync(SignOutIframeUrl));
+        }
     }
 }

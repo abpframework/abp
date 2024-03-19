@@ -69,8 +69,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         return list;
     }
 
-    [CanBeNull]
-    protected virtual EntityChangeInfo CreateEntityChangeOrNull(EntityEntry entityEntry)
+    protected virtual EntityChangeInfo? CreateEntityChangeOrNull(EntityEntry entityEntry)
     {
         var entity = entityEntry.Entity;
 
@@ -86,8 +85,10 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             case EntityState.Modified:
                 changeType = IsDeleted(entityEntry) ? EntityChangeType.Deleted : EntityChangeType.Updated;
                 break;
+            case EntityState.Unchanged when HasNavigationPropertiesChanged(entityEntry):
+                changeType = EntityChangeType.Updated; // Navigation property changes.
+                break;
             case EntityState.Detached:
-            case EntityState.Unchanged:
             default:
                 return null;
         }
@@ -138,7 +139,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         }
     }
 
-    protected virtual string GetEntityId(object entityAsObj)
+    protected virtual string? GetEntityId(object entityAsObj)
     {
         if ((entityAsObj is IEntity entity))
         {
@@ -185,6 +186,21 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             }
         }
 
+        if (Options.SaveEntityHistoryWhenNavigationChanges && entityEntry.State == EntityState.Unchanged)
+        {
+            foreach (var navigation in entityEntry.Navigations)
+            {
+                if (navigation.IsModified || (navigation is ReferenceEntry && navigation.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified))
+                {
+                    propertyChanges.Add(new EntityPropertyChangeInfo
+                    {
+                        PropertyName = navigation.Metadata.Name,
+                        PropertyTypeFullName = navigation.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!
+                    });
+                }
+            }
+        }
+
         return propertyChanges;
     }
 
@@ -206,8 +222,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
     protected virtual bool ShouldSaveEntityHistory(EntityEntry entityEntry, bool defaultValue = false)
     {
-        if (entityEntry.State == EntityState.Detached ||
-            entityEntry.State == EntityState.Unchanged)
+        if (entityEntry.State == EntityState.Detached)
         {
             return false;
         }
@@ -219,12 +234,20 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             return false;
         }
 
-        if (AuditingHelper.IsEntityHistoryEnabled(entityType))
+        var isEntityHistoryEnabled = AuditingHelper.IsEntityHistoryEnabled(entityType);
+        if (isEntityHistoryEnabled && HasNavigationPropertiesChanged(entityEntry))
         {
             return true;
         }
 
-        return defaultValue;
+        return isEntityHistoryEnabled || defaultValue;
+    }
+
+    protected virtual bool HasNavigationPropertiesChanged(EntityEntry entityEntry)
+    {
+        return Options.SaveEntityHistoryWhenNavigationChanges && entityEntry.State == EntityState.Unchanged &&
+               (entityEntry.Navigations.Any(navigationEntry => navigationEntry.IsModified) ||
+                entityEntry.Navigations.Where(x => x is ReferenceEntry).Cast<ReferenceEntry>().Any(x => x.TargetEntry != null && x.TargetEntry.State == EntityState.Modified));
     }
 
     protected virtual bool ShouldSavePropertyHistory(PropertyEntry propertyEntry, bool defaultValue)
@@ -370,10 +393,10 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
                             // Add foreign key
                             entityChange.PropertyChanges.Add(new EntityPropertyChangeInfo
                             {
-                                NewValue = JsonSerializer.Serialize(propertyEntry.CurrentValue),
-                                OriginalValue = JsonSerializer.Serialize(propertyEntry.OriginalValue),
+                                NewValue = JsonSerializer.Serialize(propertyEntry.CurrentValue!),
+                                OriginalValue = JsonSerializer.Serialize(propertyEntry.OriginalValue!),
                                 PropertyName = property.Name,
-                                PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName
+                                PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName!
                             });
                         }
 
@@ -382,7 +405,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
                     if (propertyChange.OriginalValue == propertyChange.NewValue)
                     {
-                        var newValue = JsonSerializer.Serialize(propertyEntry.CurrentValue);
+                        var newValue = JsonSerializer.Serialize(propertyEntry.CurrentValue!);
                         if (newValue == propertyChange.NewValue)
                         {
                             // No change

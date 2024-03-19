@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Authors: Domain Layer",
+    "Path": "Tutorials/Part-6"
+  },
+  "Previous": {
+    "Name": "Integration Tests",
+    "Path": "Tutorials/Part-4"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -323,11 +338,11 @@ Open the `/src/app/book/book-routing.module.ts` and replace with the following c
 ````js
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard, PermissionGuard } from '@abp/ng.core';
+import { authGuard, permissionGuard } from '@abp/ng.core';
 import { BookComponent } from './book.component';
 
 const routes: Routes = [
-  { path: '', component: BookComponent, canActivate: [AuthGuard, PermissionGuard] },
+  { path: '', component: BookComponent, canActivate: [authGuard, permissionGuard] },
 ];
 
 @NgModule({
@@ -337,8 +352,8 @@ const routes: Routes = [
 export class BookRoutingModule {}
 ````
 
-* Imported `AuthGuard` and `PermissionGuard` from the `@abp/ng.core`.
-* Added `canActivate: [AuthGuard, PermissionGuard]` to the route definition.
+* Imported `authGuard` and `permissionGuard` from the `@abp/ng.core`.
+* Added `canActivate: [authGuard, permissionGuard]` to the route definition.
 
 Open the `/src/app/route.provider.ts` and add `requiredPolicy: 'BookStore.Books'` to the `/books` route. The `/books` route block should be following:
 
@@ -563,7 +578,3 @@ private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
 ````
 
 {{end}}
-
-## The Next Part
-
-See the [next part](Part-6.md) of this tutorial.

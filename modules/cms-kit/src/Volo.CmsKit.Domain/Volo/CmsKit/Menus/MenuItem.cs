@@ -41,6 +41,10 @@ public class MenuItem : AuditedAggregateRoot<Guid>, IMultiTenant
 
     public Guid? TenantId { get; protected set; }
 
+    protected MenuItem()
+    {
+    }
+
     public MenuItem(Guid id,
                     [NotNull] string displayName,
                     [NotNull] string url,
@@ -76,7 +80,7 @@ public class MenuItem : AuditedAggregateRoot<Guid>, IMultiTenant
         Url = Check.NotNullOrEmpty(url, nameof(url), MenuItemConsts.MaxUrlLength);
     }
 
-    internal void SetPageId(Guid pageId)
+    internal void SetPageId(Guid? pageId)
     {
         PageId = pageId;
     }

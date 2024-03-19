@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
@@ -19,7 +20,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        var steps = new List<ProjectBuildPipelineStep>();
+        var steps = base.GetCustomSteps(context).ToList();
 
         DeleteUnrelatedProjects(context, steps);
         RandomizeStringEncryption(context, steps);
@@ -50,12 +51,24 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
         }
 
         steps.Add(new ChangeThemeStep());
-        RemoveLeptonXThemePackagesFromPackageJsonFiles(steps, uiFramework: context.BuildArgs.UiFramework);
+        ReplaceLeptonXThemePackagesFromPackageJsonFiles(steps, uiFramework: context.BuildArgs.UiFramework, theme: context.BuildArgs.Theme, version: context.BuildArgs.Version ?? context.TemplateFile.Version);
     }
 
-    private static void RemoveLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, UiFramework uiFramework)
+    private static void ReplaceLeptonXThemePackagesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps, UiFramework uiFramework, Theme? theme, string version)
     {
         var mvcUiPackageName = "@volo/abp.aspnetcore.mvc.ui.theme.leptonx";
+        var newMvcUiPackageName = theme switch
+        {
+            Theme.Basic => "@abp/aspnetcore.mvc.ui.theme.basic",
+            Theme.Lepton => "@volo/abp.aspnetcore.mvc.ui.theme.lepton",
+            Theme.LeptonXLite => "@abp/aspnetcore.mvc.ui.theme.leptonxlite",
+            Theme.LeptonX => "@volo/abp.aspnetcore.mvc.ui.theme.leptonx",
+            _ => throw new AbpException("Unknown theme: " + theme?.ToString())
+        };
+        if (theme == Theme.LeptonX || theme == Theme.LeptonXLite)
+        {
+            version = null;
+        }
         var packageJsonFilePaths = new List<string>
         {
             "/MyCompanyName.MyProjectName.AuthServer/package.json",
@@ -64,12 +77,20 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
 
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
-            steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName));
+            steps.Add(new ReplaceDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName, newMvcUiPackageName, version));
         }
 
-        if (uiFramework == UiFramework.BlazorServer)
+        if (uiFramework == UiFramework.BlazorServer || uiFramework == UiFramework.BlazorWebApp)
         {
             var blazorServerUiPackageName = "@volo/aspnetcore.components.server.leptonxtheme";
+            var newBlazorServerUiPackageName = theme switch
+            {
+                Theme.Basic => "@abp/aspnetcore.components.server.basictheme",
+                Theme.Lepton => "@volo/abp.aspnetcore.components.server.leptontheme",
+                Theme.LeptonXLite => "@abp/aspnetcore.components.server.leptonxlitetheme",
+                Theme.LeptonX => "@volo/aspnetcore.components.server.leptonxtheme",
+                _ => throw new AbpException("Unknown theme: " + theme?.ToString())
+            };
             var blazorServerPackageJsonFilePaths = new List<string>
             {
                 "/MyCompanyName.MyProjectName.Blazor/package.json"
@@ -77,13 +98,21 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
 
             foreach (var blazorServerPackageJsonFilePath in blazorServerPackageJsonFilePaths)
             {
-                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName));
-                steps.Add(new RemoveDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName));
+                steps.Add(new ReplaceDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, mvcUiPackageName, newMvcUiPackageName, version));
+                steps.Add(new ReplaceDependencyFromPackageJsonFileStep(blazorServerPackageJsonFilePath, blazorServerUiPackageName, newBlazorServerUiPackageName, version));
             }
         }
         else if (uiFramework == UiFramework.Angular)
         {
             var ngUiPackageName = "@volosoft/abp.ng.theme.lepton-x";
+            var newNgUiPackageName = theme switch
+            {
+                Theme.Basic => "@abp/ng.theme.basic",
+                Theme.Lepton => "@volo/abp.ng.theme.lepton",
+                Theme.LeptonXLite => "@abp/ng.theme.lepton-x",
+                Theme.LeptonX => "@volosoft/abp.ng.theme.lepton-x",
+                _ => throw new AbpException("Unknown theme: " + theme?.ToString())
+            };
             var angularPackageJsonFilePaths = new List<string>
             {
                 "/angular/package.json"
@@ -91,14 +120,25 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
 
             foreach (var angularPackageJsonFilePath in angularPackageJsonFilePaths)
             {
-                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName));
-                steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+                steps.Add(new ReplaceDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, ngUiPackageName, newNgUiPackageName, version));
+                if (theme == Theme.Basic || theme == Theme.Lepton)
+                {
+                    steps.Add(new RemoveDependencyFromPackageJsonFileStep(angularPackageJsonFilePath, "bootstrap-icons"));
+                }
             }
         }
     }
 
     private static void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
+        if (!context.BuildArgs.PublicWebSite)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.PublicWeb", null, "apps/public-web/src/MyCompanyName.MyProjectName.PublicWeb"));
+            steps.Add(new RemoveFolderStep("/apps/public-web"));
+            steps.Add(new RemoveProjectFromTyeStep("public-web"));
+            steps.Add(new RemoveProjectFromPrometheusStep("public-web"));
+        }
+
         //TODO: move common tasks to methods
         switch (context.BuildArgs.UiFramework)
         {

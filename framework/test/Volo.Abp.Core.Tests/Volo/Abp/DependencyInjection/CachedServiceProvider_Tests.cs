@@ -21,7 +21,11 @@ public class CachedServiceProvider_Tests
             var transientTestService1 = cachedServiceProvider1.GetRequiredService<TransientTestService>();
             var transientTestService2 = cachedServiceProvider2.GetRequiredService<TransientTestService>();
             transientTestService1.ShouldBeSameAs(transientTestService2);
-            
+
+            var transientKeyedTestService1 = cachedServiceProvider1.GetRequiredKeyedService<TransientKeyedTestService>("key1");
+            var transientKeyedTestService2 = cachedServiceProvider2.GetRequiredKeyedService<TransientKeyedTestService>("key1");
+            transientKeyedTestService1.ShouldBeSameAs(transientKeyedTestService2);
+
             var cachedServiceProvider3 = cachedServiceProvider1.GetRequiredService<IServiceProvider>().GetRequiredService<ICachedServiceProvider>();
             cachedServiceProvider3.ShouldBeSameAs(cachedServiceProvider1);
         }
@@ -36,18 +40,18 @@ public class CachedServiceProvider_Tests
                 var testCounter = scope1.ServiceProvider.GetRequiredService<ITestCounter>();
                 testCounter.GetValue(nameof(TransientTestService)).ShouldBe(1);
             }
-            
+
             using (var scope2 = application.ServiceProvider.CreateScope())
             {
                 TestResolvingServices(scope2);
                 var testCounter = scope2.ServiceProvider.GetRequiredService<ITestCounter>();
-                
+
                 //Resolved in a different scope, so should not cache the service!
                 testCounter.GetValue(nameof(TransientTestService)).ShouldBe(2);
             }
         }
     }
-    
+
     [Fact]
     public void TransientCachedServiceProvider_Should_Cache_Services()
     {
@@ -58,15 +62,26 @@ public class CachedServiceProvider_Tests
             var transientTestService1_1 = transientCachedServiceProvider1.GetRequiredService<TransientTestService>();
             var transientTestService1_2 = transientCachedServiceProvider1.GetRequiredService<TransientTestService>();
             transientTestService1_1.ShouldBeSameAs(transientTestService1_2);
-            
+
+            var transientKeyedTestService1 = transientCachedServiceProvider1.GetRequiredKeyedService<TransientKeyedTestService>("key1");
+            var transientKeyedTestService2 = transientCachedServiceProvider1.GetRequiredKeyedService<TransientKeyedTestService>("key1");
+            transientKeyedTestService1.ShouldBeSameAs(transientKeyedTestService2);
+            var transientKeyedTestService3 = transientCachedServiceProvider1.GetRequiredKeyedService<TransientKeyedTestService>("key2");
+            transientKeyedTestService2.ShouldNotBeSameAs(transientKeyedTestService3);
+
             var transientCachedServiceProvider2 = scope.ServiceProvider.GetRequiredService<ITransientCachedServiceProvider>();
             transientCachedServiceProvider1.ShouldNotBeSameAs(transientCachedServiceProvider2);
 
             var transientTestService2_1 = transientCachedServiceProvider2.GetRequiredService<TransientTestService>();
             var transientTestService2_2 = transientCachedServiceProvider2.GetRequiredService<TransientTestService>();
             transientTestService2_1.ShouldBeSameAs(transientTestService2_2);
-            
+
+            var transientKeyedTestService1_1 = transientCachedServiceProvider2.GetRequiredKeyedService<TransientKeyedTestService>("key1");
+            var transientKeyedTestService2_1 = transientCachedServiceProvider2.GetRequiredKeyedService<TransientKeyedTestService>("key1");
+            transientKeyedTestService1_1.ShouldBeSameAs(transientKeyedTestService2_1);
+
             transientTestService1_1.ShouldNotBeSameAs(transientTestService2_1);
+            transientKeyedTestService1.ShouldNotBeSameAs(transientKeyedTestService1_1);
 
             var transientCachedServiceProvider1_1 = transientCachedServiceProvider1.GetRequiredService<IServiceProvider>().GetRequiredService<ITransientCachedServiceProvider>();
             var transientCachedServiceProvider1_2 = transientCachedServiceProvider1.GetRequiredService<IServiceProvider>().GetRequiredService<ITransientCachedServiceProvider>();
@@ -87,7 +102,7 @@ public class CachedServiceProvider_Tests
             }
         }
     }
-    
+
     [DependsOn(typeof(AbpTestBaseModule))]
     private class TestModule : AbpModule
     {
@@ -99,6 +114,8 @@ public class CachedServiceProvider_Tests
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddType<TransientTestService>();
+            context.Services.AddKeyedTransient<TransientKeyedTestService>("key1");
+            context.Services.AddKeyedTransient<TransientKeyedTestService>("key2");
         }
     }
 
@@ -108,5 +125,10 @@ public class CachedServiceProvider_Tests
         {
             counter.Increment(nameof(TransientTestService));
         }
+    }
+
+    private class TransientKeyedTestService
+    {
+
     }
 }

@@ -176,7 +176,7 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
             e => !IsActiveFilterEnabled || EF.Property<bool>(e, "IsActive");
         expression = expression == null 
             ? isActiveFilter 
-            : CombineExpressions(expression, isActiveFilter);
+            : QueryFilterExpressionHelper.CombineExpressions(expression, isActiveFilter);
     }
 
     return expression;

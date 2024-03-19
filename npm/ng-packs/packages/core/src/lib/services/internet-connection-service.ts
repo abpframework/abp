@@ -1,18 +1,32 @@
 import { DOCUMENT } from '@angular/common';
-import { Injectable, inject } from '@angular/core';
-import { fromEvent, merge, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InternetConnectionService{
-  protected readonly window = inject(DOCUMENT).defaultView;
-  protected readonly navigator = this.window.navigator;
+  readonly document = inject(DOCUMENT)
+  readonly window = this.document.defaultView;
+  readonly navigator = this.window.navigator;
 
-  networkStatus$ = merge(
-    of(navigator.onLine),
-    fromEvent(window, 'offline'),
-    fromEvent(window, 'online')
-  ).pipe(map(() => navigator.onLine))
+  private status$ = new BehaviorSubject<boolean>(this.navigator.onLine)
+
+  private status = signal(this.navigator.onLine);
+
+  networkStatus = computed(() => this.status())
+  
+  constructor(){
+    this.window.addEventListener('offline', () => this.setStatus(false));
+    this.window.addEventListener('online', () => this.setStatus(true));
+  }
+
+  setStatus(val:boolean){
+    this.status.set(val)
+    this.status$.next(val)
+  }
+
+  get networkStatus$(){
+    return this.status$.asObservable()
+  }
 }

@@ -17,6 +17,10 @@ public class DatabaseBlob : AggregateRoot<Guid>, IMultiTenant
     [DisableAuditing]
     public virtual byte[] Content { get; protected set; }
 
+    protected DatabaseBlob()
+    {
+    }
+
     public DatabaseBlob(Guid id, Guid containerId, [NotNull] string name, [NotNull] byte[] content, Guid? tenantId = null)
         : base(id)
     {

@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefónne číslo",
     "PersonalSettings": "Osobné nastavenia",
     "PersonalSettingsSaved": "Osobné nastavenia boli uložené",
+    "PersonalSettingsChangedConfirmationModalTitle": "Osobné údaje zmenené",
+    "PersonalSettingsChangedConfirmationModalDescription": "Ak chcete použiť tieto zmeny, musíte sa prihlásiť. Chcete sa odhlásiť?",
     "PasswordChanged": "Heslo bolo zmenené",
     "NewPasswordConfirmFailed": "Prosím potvrďte nové heslo.",
     "NewPasswordSameAsOld": "Nové heslo musí byť odlišné od aktuálneho.",
@@ -64,6 +66,8 @@
     "PasswordResetInfoInEmail": "Dostali sme žiadosť na obnovenie účtu! Ak ste o zmenu žiadali vy, kliknite na nasledujúci link a obnovte svoje heslo.",
     "ResetMyPassword": "Obnovte moje heslo",
     "AccessDenied": "Prístup zamietnutý!",
-    "AccessDeniedMessage": "K tomuto zdroju nemáte prístup."
+    "AccessDeniedMessage": "K tomuto zdroju nemáte prístup.",
+    "OrRegisterWith": "Alebo sa zaregistrujte pomocou:",
+    "RegisterUsingYourProviderAccount": "Zaregistrujte sa pomocou svojho {0} účtu"
   }
 }

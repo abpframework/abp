@@ -1,11 +1,24 @@
 ﻿@using Blazorise
 @using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Components.Web
+@using Volo.Abp.Ui.Branding
 
 @inject IOptions<PageHeaderOptions> Options
+@inject IBrandingProvider BrandingProvider
 
 <Row Class="entry-row">
+
+    @if (PageLayout.Title.IsNullOrEmpty())
+    {
+        <PageTitle>@BrandingProvider.AppName</PageTitle>
+    }
+    else
+    {
+        <PageTitle>@PageLayout.Title | @BrandingProvider.AppName</PageTitle>
+    }
+
     @if(Options.Value.RenderPageTitle)
-    {   
+    {
         <Column ColumnSize="ColumnSize.IsAuto">
             <h1 class="content-header-title">@PageLayout.Title</h1>
         </Column>
@@ -50,7 +63,7 @@
             
                 @foreach (var toolbarItemRender in ToolbarItemRenders)
                 {
-                    <Column ColumnSize="ColumnSize.IsAuto" Class="px-1 pt-2">
+                    <Column ColumnSize="ColumnSize.IsAuto" Class="px-1 py-2">
                         @toolbarItemRender
                     </Column>
                 }

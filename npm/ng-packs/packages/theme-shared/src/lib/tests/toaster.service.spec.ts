@@ -1,14 +1,13 @@
 import { CoreTestingModule } from '@abp/ng.core/testing';
 import { NgModule } from '@angular/core';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { timer } from 'rxjs';
+import { firstValueFrom, timer } from 'rxjs';
 import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
 import { ToastComponent } from '../components/toast/toast.component';
 import { ToasterService } from '../services/toaster.service';
 
 @NgModule({
   exports: [ToastContainerComponent],
-  entryComponents: [ToastContainerComponent],
   declarations: [ToastContainerComponent, ToastComponent],
   imports: [CoreTestingModule.withConfig()],
 })
@@ -35,7 +34,7 @@ describe('ToasterService', () => {
   test('should display a toast', async () => {
     service.show('MESSAGE', 'TITLE');
 
-    await timer(0).toPromise();
+    await firstValueFrom(timer(0));
     service['containerComponentRef'].changeDetectorRef.detectChanges();
 
     expect(selectToasterElement('.fa-exclamation-circle')).toBeTruthy();
@@ -52,7 +51,7 @@ describe('ToasterService', () => {
   `('should display $type toast', async ({ type, selector, icon }) => {
     service[type]('MESSAGE', 'TITLE');
 
-    await timer(0).toPromise();
+    await firstValueFrom(timer(0));
     service['containerComponentRef'].changeDetectorRef.detectChanges();
     expect(selectToasterContent(`.${toastClassPrefix}-title`)).toBe('TITLE');
     expect(selectToasterContent(`.${toastClassPrefix}-message`)).toBe('MESSAGE');
@@ -64,7 +63,7 @@ describe('ToasterService', () => {
     service.show('MESSAGE_1', 'TITLE_1');
     service.show('MESSAGE_2', 'TITLE_2');
 
-    await timer(0).toPromise();
+    await firstValueFrom(timer(0));
     service['containerComponentRef'].changeDetectorRef.detectChanges();
 
     const titles = document.querySelectorAll(`.${toastClassPrefix}-title`);
@@ -78,7 +77,7 @@ describe('ToasterService', () => {
     service.show('MESSAGE');
     service.remove(0);
 
-    await timer(0).toPromise();
+    await firstValueFrom(timer(0));
     service['containerComponentRef'].changeDetectorRef.detectChanges();
 
     expect(selectToasterElement()).toBeNull();
@@ -88,7 +87,7 @@ describe('ToasterService', () => {
     service.show('MESSAGE');
     service.clear();
 
-    await timer(0).toPromise();
+    await firstValueFrom(timer(0));
     service['containerComponentRef'].changeDetectorRef.detectChanges();
 
     expect(selectToasterElement()).toBeNull();
@@ -99,12 +98,21 @@ describe('ToasterService', () => {
     service.show('MESSAGE_2', 'TITLE_2', 'neutral', { containerKey: 'y' });
     service.clear('x');
 
-    await timer(0).toPromise();
+    await firstValueFrom(timer(0));
     service['containerComponentRef'].changeDetectorRef.detectChanges();
 
     expect(selectToasterElement('.fa-exclamation-circle')).toBeTruthy();
     expect(selectToasterContent(`.${toastClassPrefix}-title`)).toBe('TITLE_2');
     expect(selectToasterContent(`.${toastClassPrefix}-message`)).toBe('MESSAGE_2');
+  });
+
+  test('should display custom icon when iconClass is provided', async () => {
+    service.show('MESSAGE', 'TITLE', 'neutral', { iconClass: 'custom-icon' });
+
+    await firstValueFrom(timer(0));
+    service['containerComponentRef'].changeDetectorRef.detectChanges();
+
+    expect(selectToasterElement('.custom-icon')).toBeTruthy();
   });
 });
 

@@ -43,7 +43,8 @@ public class IdentityUserDelegationManager : DomainService
                 sourceUserId,
                 targetUserId,
                 startTime,
-                endTime
+                endTime,
+                CurrentTenant.Id
             ),
             cancellationToken: cancellationToken
         );

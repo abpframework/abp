@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
@@ -65,6 +66,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public string DocumentsUrlPrefix { get; set; }
 
         public bool ShowProjectsCombobox { get; set; }
+        
+        public bool ShowProjectsComboboxLabel { get; set; }
 
         public bool IsVersionPreview { get; set; }
 
@@ -79,6 +82,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public bool FullSearchEnabled { get; set; }
 
         public bool IsLatestVersion { get; private set; } 
+        
+        public DocumentNavigationsDto DocumentNavigationsDto { get; private set; }
 
         private const int MaxDescriptionMetaTagLength = 200;
         private readonly IDocumentAppService _documentAppService;
@@ -108,24 +113,45 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
-            try
+            var displayUrl = Request.GetDisplayUrl();
+            var decodedUrl = HttpUtility.UrlDecode(displayUrl);
+            if (decodedUrl != displayUrl)
             {
-                return await SetPageAsync();
+                return Redirect(decodedUrl);
             }
-            catch (DocumentNotFoundException exception)
-            {
-                Logger.LogWarning(exception.Message);
+            var documentPath = DocumentName ?? "";
 
-                DocumentFound = false;
-                Response.StatusCode = 404;
-                return Page();
+            string[] documentNames;
+
+            if (displayUrl.EndsWith("/index", StringComparison.OrdinalIgnoreCase))
+            {
+                documentPath = documentPath.Substring(0, documentPath.LastIndexOf('/') + 1);
             }
+
+            documentNames = new[] { DocumentName, documentPath.EnsureEndsWith('/') + "Index", documentPath.EnsureEndsWith('/') + "index" };
+
+            foreach (var documentName in documentNames)
+            {
+                DocumentName = documentName;
+                try
+                {
+                    return await SetPageAsync();
+                }
+                catch (DocumentNotFoundException exception)
+                {
+                    Logger.LogWarning(exception.Message);
+                }
+            }
+            DocumentFound = false;
+            Response.StatusCode = 404;
+            return Page();
         }
 
         private async Task<IActionResult> SetPageAsync()
         {
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
+            ShowProjectsComboboxLabel = ShowProjectsCombobox && _uiOptions.ShowProjectsComboboxLabel;
             FullSearchEnabled = await _documentAppService.FullSearchEnabledAsync();
 
             try
@@ -229,6 +255,20 @@ namespace Volo.Docs.Pages.Documents.Project
                    DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" +
                    DocsAppConsts.Latest + "/" + DocumentName;
         }
+        
+        public string CreateDocumentLink(string documentName)
+        {
+            return new StringBuilder()
+                .Append(DocumentsUrlPrefix)
+                .Append(LanguageCode)
+                .Append('/')
+                .Append(ProjectName)
+                .Append('/')
+                .Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version)
+                .Append('/')
+                .Append(documentName)
+                .ToString();
+        }
 
         private IActionResult RedirectToDefaultLanguage()
         {
@@ -288,7 +328,7 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var output = await _projectAppService.GetVersionsAsync(Project.ShortName);
-            var versions = output.Items.ToList()
+            var versions = output.Items
                 .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
                 .ToList();
 
@@ -498,6 +538,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 SetUserPreferences();
 
                 var partialTemplates = await GetDocumentPartialTemplatesAsync();
+                
+                DocumentNavigationsDto = await _documentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
 
                 Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
             }

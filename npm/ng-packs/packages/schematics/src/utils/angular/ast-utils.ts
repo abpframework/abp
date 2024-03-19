@@ -446,7 +446,6 @@ export function addSymbolToNgModuleMetadata(
       toInsert = `, ${symbolName}`;
     }
   }
-
   if (importPath !== null) {
     return [
       new InsertChange(ngModulePath, position, toInsert),

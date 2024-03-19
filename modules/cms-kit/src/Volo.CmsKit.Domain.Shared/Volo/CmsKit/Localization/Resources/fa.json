@@ -142,7 +142,7 @@
     "SubjectPlaceholder": "لطفا یک موضوع را تایپ کنید",
     "Submit": "ارسال",
     "Subscribe": "اشتراک",
-    "SuccessfullySaved": "با موفقیت ذخیره گردید!",
+    "SavedSuccessfully": "با موفقیت ذخیره گردید!",
     "TagDeletionConfirmationMessage": "آیا مطمئن هستید که برچسب '{0}' را حذف می کنید؟",
     "Tags": "برچسب ها",
     "Text": "متن",
@@ -181,6 +181,8 @@
     "HasBlogPostWaitingForReviewMessage": "شما یک پست وبلاگ دارید که منتظر بررسی است. برای لیست کلیک کنید.",
     "SelectAStatus": "انتخاب وضعیت",
     "Status": "وضعیت",
-    "CmsKit.BlogPost.ScrollIndex": "نوار پیمایش سریع در پست های وبلاگ"
+    "CmsKit.BlogPost.ScrollIndex": "نوار پیمایش سریع در پست های وبلاگ",
+    "CmsKit.BlogPost.PreventXssFeature": "جلوگیری از XSS",
+    "ThisPartOfContentCouldntBeLoaded": "این قسمت از محتوا قابل بارگیری نیست."
   }
 }

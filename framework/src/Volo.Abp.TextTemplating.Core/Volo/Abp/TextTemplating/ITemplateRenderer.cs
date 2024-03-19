@@ -17,8 +17,8 @@ public interface ITemplateRenderer
     /// <returns></returns>
     Task<string> RenderAsync(
         [NotNull] string templateName,
-        [CanBeNull] object model = null,
-        [CanBeNull] string cultureName = null,
-        [CanBeNull] Dictionary<string, object> globalContext = null
+        object? model = null,
+        string? cultureName = null,
+        Dictionary<string, object>? globalContext = null
     );
 }

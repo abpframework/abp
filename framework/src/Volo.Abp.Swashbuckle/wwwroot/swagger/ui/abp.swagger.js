@@ -9,11 +9,12 @@ var abp = abp || {};
         var oidcSupportedFlows = configObject.oidcSupportedFlows || [];
         var oidcSupportedScopes = configObject.oidcSupportedScopes || [];
         var oidcDiscoveryEndpoint = configObject.oidcDiscoveryEndpoint || [];
+        var tenantPlaceHolders = ["{{tenantId}}", "{{tenantName}}" , "{0}"]
         abp.appPath = configObject.baseUrl || abp.appPath;
 
         var requestInterceptor = configObject.requestInterceptor;
         var responseInterceptor = configObject.responseInterceptor;
-
+        
         configObject.requestInterceptor = async function (request) {
 
             if (request.url.includes(excludeUrl[1])) {
@@ -26,9 +27,21 @@ var abp = abp || {};
                 });
                 firstRequest = false;
             }
+            
             // Intercept .well-known request when the discoveryEndpoint is provided
             if (!firstRequest && oidcDiscoveryEndpoint.length !== 0 && request.url.includes(".well-known/openid-configuration")) {
-                request.url = oidcDiscoveryEndpoint;
+                
+                if (oidcDiscoveryEndpoint.endsWith(".well-known/openid-configuration")) {
+                    request.url = await replaceTenantPlaceHolder(oidcDiscoveryEndpoint);
+                    console.log(request.url);
+                    return;
+                }
+                if (!oidcDiscoveryEndpoint.endsWith("/")) {
+                    oidcDiscoveryEndpoint += "/"
+                }
+                request.url = await replaceTenantPlaceHolder(oidcDiscoveryEndpoint) + ".well-known/openid-configuration";
+                
+                console.log(request.url);
             }
 
             var antiForgeryToken = abp.security.antiForgery.getToken();
@@ -70,6 +83,30 @@ var abp = abp || {};
             }
             return response;
         };
+        
+        async function replaceTenantPlaceHolder(url) {
+            
+            if(!abp.currentTenant){
+                await getAbpApplicationConfiguration();
+            }
+            
+            url.replace(tenantPlaceHolders[0], abp.currentTenant.id);
+            url.replace(tenantPlaceHolders[1], abp.currentTenant.name);
+            
+            if(abp.currentTenant.name != null){
+                url.replace(tenantPlaceHolders[2], abp.currentTenant.name);
+            }else if (abp.currentTenant.id != null){
+                url.replace(tenantPlaceHolders[2], abp.currentTenant.id);
+            }
+            
+            return url;
+        }
+        
+        function getAbpApplicationConfiguration() {
+            return fetch(`${abp.appPath}api/abp/application-configuration`).then(response => response.json()).then(data => {
+                abp.currentTenant = data.currentTenant; 
+            });
+        }
 
         return SwaggerUIBundle(configObject);
     }

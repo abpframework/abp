@@ -45,13 +45,13 @@ public class ProductAppService : ApplicationService, IProductAppService
 }
 ```
 
-> Note that we've used the `ObjectMapper` service to map from `Product` to `ProductDto`. You should configure that [object mapping](Object-To-Object-Mapping.md) to make that example service properly works.
+> Note that we've used the `ObjectMapper` service to map from `Product` to `ProductDto`. You should configure that [object mapping](Object-To-Object-Mapping.md) to make that example service properly work.
 
-That's all. The cache name (in the distributed cache server) will be full name (with namespace) of the `Product` class. You can use the `[CacheName]` attribute to change it. Please refer to the [caching document](Caching.md) for details.
+That's all. The cache name (in the distributed cache server) will be the full name (with namespace) of the `Product` class. You can use the `[CacheName]` attribute to change it. Please refer to the [caching document](Caching.md) for details.
 
 ## Using a Cache Item Class
 
-In the previous section, we've directly cached the `Product` entity. In that case, the `Product` class must be serializable to JSON (and deserializable from JSON). Sometimes that might not be possible or you may want to use another class to store the cache data. For example, we may want to use the `ProductDto` class instead of the `Product` class for the cached object if the `Product` entity.
+In the previous section, we've directly cached the `Product` entity. In that case, the `Product` class must be serializable to JSON (and deserializable from JSON). Sometimes that might not be possible or you may want to use another class to store the cache data. For example, we may want to use the `ProductDto` class instead of the `Product` class for the cached object of the `Product` entity.
 
 Assume that we've created a `ProductDto` class as shown below:
 
@@ -102,7 +102,7 @@ public class ProductAppService : ApplicationService, IProductAppService
 }
 ```
 
-Notice that the `_productCache.GetAsync` method already returns a `ProductDto` object, so we could directly return it from out application service.
+Notice that the `_productCache.GetAsync` method already returns a `ProductDto` object, so we could directly return it from our application service.
 
 ## Configuration
 
@@ -122,7 +122,7 @@ context.Services.AddEntityCache<Product, ProductDto, Guid>(
 ## Additional Notes
 
 * Entity classes should be serializable/deserializable to/from JSON to be cached (because it's serialized to JSON when saving in the [Distributed Cache](Caching.md)). If your entity class is not serializable, you can consider using a cache-item/DTO class instead, as explained before.
-* Entity Caching System is designed as **read-only**. You should use the standard [repository](Repositories.md) methods to manipulate the entity if you need. If you need to manipulate (update) the entity, do not get it from the entity cache. Instead, read it from the repository, change it and update using the repository.
+* Entity Caching System is designed as **read-only**. You should use the standard [repository](Repositories.md) methods to manipulate the entity if you need to. If you need to manipulate (update) the entity, do not get it from the entity cache. Instead, read it from the repository, change it and update using the repository.
 
 ## See Also
 

@@ -52,17 +52,19 @@ public class LoginModel : AccountPageModel
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
     protected AbpAccountOptions AccountOptions { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
-
+    protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
     public bool ShowCancelButton { get; set; }
 
     public LoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
-        IOptions<IdentityOptions> identityOptions)
+        IOptions<IdentityOptions> identityOptions,
+        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
     {
         SchemeProvider = schemeProvider;
         IdentityOptions = identityOptions;
         AccountOptions = accountOptions.Value;
+        IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
@@ -138,7 +140,10 @@ public class LoginModel : AccountPageModel
 
         Debug.Assert(user != null, nameof(user) + " != null");
 
-        return RedirectSafely(ReturnUrl, ReturnUrlHash);
+        // Clear the dynamic claims cache.
+        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+
+        return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
     }
 
     /// <summary>
@@ -222,14 +227,22 @@ public class LoginModel : AccountPageModel
             throw new UserFriendlyException("Cannot proceed because user is not allowed!");
         }
 
+        IdentityUser user;
         if (result.Succeeded)
         {
-            return RedirectSafely(returnUrl, returnUrlHash);
+            user = await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
+            if (user != null)
+            {
+                // Clear the dynamic claims cache.
+                await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+            }
+
+            return await RedirectSafelyAsync(returnUrl, returnUrlHash);
         }
 
         //TODO: Handle other cases for result!
 
-        var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email);
+        var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email) ?? loginInfo.Principal.FindFirstValue(ClaimTypes.Email);
         if (email.IsNullOrWhiteSpace())
         {
             return RedirectToPage("./Register", new {
@@ -239,17 +252,19 @@ public class LoginModel : AccountPageModel
             });
         }
 
-        var user = await UserManager.FindByEmailAsync(email);
+        user = await UserManager.FindByEmailAsync(email);
         if (user == null)
         {
-            user = await CreateExternalUserAsync(loginInfo);
+            return RedirectToPage("./Register", new {
+                IsExternalLogin = true,
+                ExternalLoginAuthSchema = loginInfo.LoginProvider,
+                ReturnUrl = returnUrl
+            });
         }
-        else
+
+        if (await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey) == null)
         {
-            if (await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey) == null)
-            {
-                CheckIdentityErrors(await UserManager.AddLoginAsync(user, loginInfo));
-            }
+            CheckIdentityErrors(await UserManager.AddLoginAsync(user, loginInfo));
         }
 
         await SignInManager.SignInAsync(user, false);
@@ -261,35 +276,10 @@ public class LoginModel : AccountPageModel
             UserName = user.Name
         });
 
-        return RedirectSafely(returnUrl, returnUrlHash);
-    }
+        // Clear the dynamic claims cache.
+        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-    protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
-    {
-        await IdentityOptions.SetAsync();
-
-        var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
-
-        var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
-
-        CheckIdentityErrors(await UserManager.CreateAsync(user));
-        CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
-        CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
-        CheckIdentityErrors(await UserManager.AddDefaultRolesAsync(user));
-
-        user.Name = info.Principal.FindFirstValue(AbpClaimTypes.Name);
-        user.Surname = info.Principal.FindFirstValue(AbpClaimTypes.SurName);
-
-        var phoneNumber = info.Principal.FindFirstValue(AbpClaimTypes.PhoneNumber);
-        if (!phoneNumber.IsNullOrWhiteSpace())
-        {
-            var phoneNumberConfirmed = string.Equals(info.Principal.FindFirstValue(AbpClaimTypes.PhoneNumberVerified), "true", StringComparison.InvariantCultureIgnoreCase);
-            user.SetPhoneNumber(phoneNumber, phoneNumberConfirmed);
-        }
-
-        await UserManager.UpdateAsync(user);
-
-        return user;
+        return await RedirectSafelyAsync(returnUrl, returnUrlHash);
     }
 
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds()

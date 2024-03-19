@@ -1,16 +1,16 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "Account": "账户",
+    "Account": "ABP 账户 - 登录和注册 | ABP.IO",
     "Welcome": "欢迎",
-    "UseOneOfTheFollowingLinksToContinue": "使用下面的链接继续",
-    "FrameworkHomePage": "框架首页",
+    "UseOneOfTheFollowingLinksToContinue": "使用以下链接之一继续",
+    "FrameworkHomePage": "框架主页",
     "FrameworkDocumentation": "框架文档",
     "OfficialBlog": "官方博客",
-    "CommercialHomePage": "商业版首页",
-    "CommercialSupportWebSite": "商业版支持网站",
-    "CommunityWebSite": "ABP社区网站",
-    "ManageAccount": "我的帐户 | ABP.IO",
+    "CommercialHomePage": "商业主页",
+    "CommercialSupportWebSite": "商业支持网站",
+    "CommunityWebSite": "ABP 社区网站",
+    "ManageAccount": "我的账户 | ABP.IO",
     "ManageYourProfile": "管理您的个人资料",
     "ReturnToApplication": "返回应用"
   }

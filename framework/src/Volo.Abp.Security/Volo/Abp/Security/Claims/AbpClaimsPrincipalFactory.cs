@@ -23,6 +23,16 @@ public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientD
 
     public virtual async Task<ClaimsPrincipal> CreateAsync(ClaimsPrincipal? existsClaimsPrincipal = null)
     {
+        return await InternalCreateAsync(Options, existsClaimsPrincipal, false);
+    }
+
+    public virtual async Task<ClaimsPrincipal> CreateDynamicAsync(ClaimsPrincipal? existsClaimsPrincipal = null)
+    {
+        return await InternalCreateAsync(Options, existsClaimsPrincipal, true);
+    }
+
+    public virtual async Task<ClaimsPrincipal> InternalCreateAsync(AbpClaimsPrincipalFactoryOptions options, ClaimsPrincipal? existsClaimsPrincipal = null, bool isDynamic = false)
+    {
         using (var scope = ServiceScopeFactory.CreateScope())
         {
             var claimsPrincipal = existsClaimsPrincipal ?? new ClaimsPrincipal(new ClaimsIdentity(
@@ -32,13 +42,24 @@ public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientD
 
             var context = new AbpClaimsPrincipalContributorContext(claimsPrincipal, scope.ServiceProvider);
 
-            foreach (var contributorType in Options.Contributors)
+            if (!isDynamic)
             {
-                var contributor = (IAbpClaimsPrincipalContributor)scope.ServiceProvider.GetRequiredService(contributorType);
-                await contributor.ContributeAsync(context);
+                foreach (var contributorType in options.Contributors)
+                {
+                    var contributor = (IAbpClaimsPrincipalContributor)scope.ServiceProvider.GetRequiredService(contributorType);
+                    await contributor.ContributeAsync(context);
+                }
+            }
+            else
+            {
+                foreach (var contributorType in options.DynamicContributors)
+                {
+                    var contributor = (IAbpDynamicClaimsPrincipalContributor)scope.ServiceProvider.GetRequiredService(contributorType);
+                    await contributor.ContributeAsync(context);
+                }
             }
 
-            return claimsPrincipal;
+            return context.ClaimsPrincipal;
         }
     }
 }

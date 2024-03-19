@@ -178,7 +178,13 @@
         },
         {
           "text": "Authorization",
-          "path": "Authorization.md"
+          "path": "Authorization.md",
+          "items": [
+            {
+              "text": "Dynamic Claims",
+              "path": "Dynamic-Claims.md"
+            }
+          ]
         },
         {
           "text": "Caching",
@@ -873,6 +879,10 @@
               "path": "UI/Blazor/Navigation-Menu.md"
             },
             {
+              "text": "Forms & Validation",
+              "path": "UI/Blazor/Forms-Validation.md"
+            },
+            {
               "text": "Localization",
               "path": "UI/Blazor/Localization.md"
             },
@@ -1043,7 +1053,16 @@
                 },
                 {
                   "text": "HTTP Requests",
-                  "path": "UI/Angular/HTTP-Requests.md"
+                  "items": [
+                    { 
+                      "text": "How to Make HTTP Requests",
+                      "path": "UI/Angular/HTTP-Requests.md"
+                    },
+                    { 
+                      "text": "Customize Error Handling",
+                      "path": "UI/Angular/HTTP-Error-Handling.md"
+                    }
+                  ]
                 },
                 {
                   "text": "Localization",
@@ -1075,7 +1094,7 @@
                 },
                 {
                   "text": "Account Module",
-                  "path": "UI/Angular/Account-Module"
+                  "path": "UI/Angular/Account-Module.md"
                 }
               ]
             },
@@ -1123,6 +1142,14 @@
                   "path": "UI/Angular/Loading-Directive.md"
                 },
                 {
+                  "text": "Show Password Directive",
+                  "path": "UI/Angular/Show-Password-Directive.md"
+                },
+                {
+                  "text": "Caps Lock Directive",
+                  "path": "UI/Angular/Caps-Lock-Directive.md"
+                },
+                {
                   "text": "Toast Overlay",
                   "path": "UI/Angular/Toaster-Service.md"
                 },
@@ -1153,6 +1180,10 @@
                 {
                   "text": "Content Security Strategy",
                   "path": "UI/Angular/Content-Security-Strategy.md"
+                },
+                {
+                  "text": "Abp Window Service",
+                  "path": "UI/Angular/Abp-Window-Service.md"
                 }
               ]
             },
@@ -1187,6 +1218,10 @@
                 {
                   "text": "Modifying the Menu",
                   "path": "UI/Angular/Modifying-the-Menu.md"
+                },
+                {
+                  "text": "Sorting Navigation Elements",
+                  "path": "UI/Angular/Sorting-Navigation-Elements.md"
                 },
                 {
                   "text": "Component Replacement",
@@ -1355,6 +1390,10 @@
       "text": "Deployment",
       "path": "Deployment/Index.md",
       "items": [
+        {
+          "text": "Configuring SSL certificate(HTTPS)",
+          "path": "Deployment/SSL.md"
+        },
         {
           "text": "Configuring OpenIddict",
           "path": "Deployment/Configuring-OpenIddict.md"

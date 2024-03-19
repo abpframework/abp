@@ -33,6 +33,11 @@
     "Samples": "Samples",
     "FreeDDDBook": "Free DDD E-book",
     "New": "New",
-    "Volo.AbpIo.Domain:020005": "License extend year can not be lower than {MinExtendLicenseYear} year and greater than {MaxExtendLicenseYear} years "
+    "Volo.AbpIo.Domain:020005": "License extend year can not be lower than {MinExtendLicenseYear} year and greater than {MaxExtendLicenseYear} years ",
+    "DisplayName:CommunityIndexPagePoll": "Community Index Page Poll",
+    "OrganizationOverview": "Organization Overview",
+    "EmailPreferences": "Email Preferences",
+    "DoYouAgreePrivacyPolicy": "By clicking <b>Subscribe</b> button you agree to the <a href=\"https://account.abp.io/Account/TermsConditions\">Terms & Conditions</a> and <a href=\"https://account.abp.io/Account/Privacy\">Privacy Policy</a>.",
+    "AbpConferenceDescription": "ABP Conference is a virtual event for .NET developers to learn and connect with the community."
   }
 }

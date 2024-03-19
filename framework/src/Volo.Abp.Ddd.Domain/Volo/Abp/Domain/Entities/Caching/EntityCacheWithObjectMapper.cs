@@ -23,7 +23,7 @@ public class EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey> :
         ObjectMapper = objectMapper;
     }
 
-    protected override TEntityCacheItem MapToCacheItem(TEntity entity)
+    protected override TEntityCacheItem? MapToCacheItem(TEntity? entity)
     {
         if (entity == null)
         {

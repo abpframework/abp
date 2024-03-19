@@ -143,6 +143,27 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             CancellationToken cancellationToken = default)
         {
             ValidateElasticSearchEnabled();
+            
+            FieldNameQueryBase query;
+            // if context starts with " or ends with " then we search for exact match
+            if (context.StartsWith("\"") && context.EndsWith("\""))
+            {
+                context = context.Trim('"');
+                
+                query = new MatchPhraseQuery
+                {
+                    Query = context
+                };
+            }
+            else
+            {
+                query = new MatchQuery
+                {
+                    Query = context
+                };
+            }
+
+            query.Field = "content";
 
             var request = new SearchRequest
             {
@@ -152,11 +173,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 {
                     Must = new QueryContainer[]
                     {
-                        new MatchQuery
-                        {
-                            Field = "content",
-                            Query = context
-                        }
+                        query,
                     },
                     Filter = new QueryContainer[]
                     {
@@ -204,11 +221,18 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             foreach (var hit in response.Hits)
             {
                 var doc = hit.Source;
+                if(docs.Any(x => x.Id == doc.Id))
+                {
+                    continue;
+                }
+
+
                 if (hit.Highlight.ContainsKey("content"))
                 {
                     doc.Highlight = new List<string>();
                     doc.Highlight.AddRange(hit.Highlight["content"]);
                 }
+
                 docs.Add(doc);
             }
 

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import {
-  AuthGuard,
+  authGuard,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
@@ -14,9 +14,10 @@ import { ManageProfileComponent } from './components/manage-profile/manage-profi
 import { RegisterComponent } from './components/register/register.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { eAccountComponents } from './enums/components';
-import { AccountExtensionsGuard, AuthenticationFlowGuard } from './guards';
+import { authenticationFlowGuard } from './guards';
+import { accountExtensionsResolver } from './resolvers';
 
-const canActivate = mapToCanActivate([AuthenticationFlowGuard]);
+const canActivate = [authenticationFlowGuard];
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -34,6 +35,7 @@ const routes: Routes = [
             defaultComponent: LoginComponent,
           } as ReplaceableComponents.RouteData<LoginComponent>,
         },
+        title: 'AbpAccount::Login',
       },
       {
         path: 'register',
@@ -45,6 +47,7 @@ const routes: Routes = [
             defaultComponent: RegisterComponent,
           } as ReplaceableComponents.RouteData<RegisterComponent>,
         },
+        title: 'AbpAccount::Register',
       },
       {
         path: 'forgot-password',
@@ -57,6 +60,7 @@ const routes: Routes = [
             defaultComponent: ForgotPasswordComponent,
           } as ReplaceableComponents.RouteData<ForgotPasswordComponent>,
         },
+        title: 'AbpAccount::ForgotPassword',
       },
       {
         path: 'reset-password',
@@ -69,17 +73,20 @@ const routes: Routes = [
             defaultComponent: ResetPasswordComponent,
           } as ReplaceableComponents.RouteData<ResetPasswordComponent>,
         },
+        title: 'AbpAccount::ResetPassword',
       },
       {
         path: 'manage',
         component: ReplaceableRouteContainerComponent,
-        canActivate: mapToCanActivate([AuthGuard, AccountExtensionsGuard]),
+        canActivate: [authGuard],
+        resolve: [accountExtensionsResolver],
         data: {
           replaceableComponent: {
             key: eAccountComponents.ManageProfile,
             defaultComponent: ManageProfileComponent,
           } as ReplaceableComponents.RouteData<ManageProfileComponent>,
         },
+        title: 'AbpAccount::MyAccount',
       },
     ],
   },
@@ -89,4 +96,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AccountRoutingModule {}
+export class AccountRoutingModule { }

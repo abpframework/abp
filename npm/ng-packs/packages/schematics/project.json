@@ -9,15 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/schematics"],
       "options": {
-        "jestConfig": "packages/schematics/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/schematics/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["packages/schematics/src/**/*.ts", "packages/schematics/src/**/*.html"]
-      },
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
   },

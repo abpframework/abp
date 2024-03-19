@@ -114,14 +114,14 @@ export class CreationAuditedEntityDto<TPrimaryKey = string> extends EntityDto<TP
   }
 }
 
-export class CreationAuditedEntityWithUserDto<
-  TUserDto,
+export class CreationAuditedEntityWithUserDto<  
   TPrimaryKey = string,
+  TUserDto = any
 > extends CreationAuditedEntityDto<TPrimaryKey> {
   creator?: TUserDto;
 
   constructor(
-    initialValues: Partial<CreationAuditedEntityWithUserDto<TUserDto, TPrimaryKey>> = {},
+    initialValues: Partial<CreationAuditedEntityWithUserDto<TPrimaryKey,TUserDto>> = {},
   ) {
     super(initialValues);
   }
@@ -136,14 +136,15 @@ export class AuditedEntityDto<TPrimaryKey = string> extends CreationAuditedEntit
   }
 }
 
+/** @deprecated the class signature will change in v8.0 */ 
 export class AuditedEntityWithUserDto<
-  TUserDto,
   TPrimaryKey = string,
+  TUserDto = any,
 > extends AuditedEntityDto<TPrimaryKey> {
   creator?: TUserDto;
   lastModifier?: TUserDto;
 
-  constructor(initialValues: Partial<AuditedEntityWithUserDto<TUserDto, TPrimaryKey>> = {}) {
+  constructor(initialValues: Partial<AuditedEntityWithUserDto< TPrimaryKey,TUserDto>> = {}) {
     super(initialValues);
   }
 }
@@ -157,16 +158,16 @@ export class FullAuditedEntityDto<TPrimaryKey = string> extends AuditedEntityDto
     super(initialValues);
   }
 }
-
+/** @deprecated the class signature will change in v8.0 */ 
 export class FullAuditedEntityWithUserDto<
-  TUserDto,
   TPrimaryKey = string,
+  TUserDto = any
 > extends FullAuditedEntityDto<TPrimaryKey> {
   creator?: TUserDto;
   lastModifier?: TUserDto;
   deleter?: TUserDto;
 
-  constructor(initialValues: Partial<FullAuditedEntityWithUserDto<TUserDto, TPrimaryKey>> = {}) {
+  constructor(initialValues: Partial<FullAuditedEntityWithUserDto< TPrimaryKey,TUserDto>> = {}) {
     super(initialValues);
   }
 }

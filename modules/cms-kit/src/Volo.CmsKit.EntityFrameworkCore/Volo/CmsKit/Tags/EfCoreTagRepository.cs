@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -96,9 +97,16 @@ public class EfCoreTagRepository : EfCoreRepository<ICmsKitDbContext, Tag, Guid>
             .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
     
-    public virtual async Task<List<Tag>> GetListAsync(string filter, CancellationToken cancellationToken = default)
+    public virtual async Task<List<Tag>> GetListAsync(
+        string filter, 
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        string sorting = null,
+        CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableByFilterAsync(filter)).ToListAsync(GetCancellationToken(cancellationToken));
+        return await (await GetQueryableByFilterAsync(filter))
+            .OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(Tag.CreationTime)}" : sorting)
+            .PageBy(skipCount, maxResultCount).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<int> GetCountAsync(string filter, CancellationToken cancellationToken = default)

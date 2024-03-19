@@ -14,17 +14,17 @@ public class AbpDbContextConfigurationContext : IServiceProviderAccessor
 
     public string ConnectionString { get; }
 
-    public string ConnectionStringName { get; }
+    public string? ConnectionStringName { get; }
 
-    public DbConnection ExistingConnection { get; }
+    public DbConnection? ExistingConnection { get; }
 
     public DbContextOptionsBuilder DbContextOptions { get; protected set; }
 
     public AbpDbContextConfigurationContext(
         [NotNull] string connectionString,
         [NotNull] IServiceProvider serviceProvider,
-        [CanBeNull] string connectionStringName,
-        [CanBeNull] DbConnection existingConnection)
+        string? connectionStringName,
+        DbConnection? existingConnection)
     {
         ConnectionString = connectionString;
         ServiceProvider = serviceProvider;
@@ -45,8 +45,8 @@ public class AbpDbContextConfigurationContext<TDbContext> : AbpDbContextConfigur
     public AbpDbContextConfigurationContext(
         string connectionString,
         [NotNull] IServiceProvider serviceProvider,
-        [CanBeNull] string connectionStringName,
-        [CanBeNull] DbConnection existingConnection)
+        string? connectionStringName,
+        DbConnection? existingConnection)
         : base(
               connectionString,
               serviceProvider,

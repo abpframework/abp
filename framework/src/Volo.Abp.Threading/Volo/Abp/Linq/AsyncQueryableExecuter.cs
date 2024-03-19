@@ -209,7 +209,7 @@ public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDepende
         return Task.FromResult(queryable.SingleOrDefault(predicate))!;
     }
 
-    public Task<T?> MinAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T> MinAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
         
@@ -221,7 +221,7 @@ public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDepende
         return Task.FromResult(queryable.Min())!;
     }
 
-    public Task<TResult?> MinAsync<T, TResult>(IQueryable<T> queryable, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
+    public Task<TResult> MinAsync<T, TResult>(IQueryable<T> queryable, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
         
@@ -233,7 +233,7 @@ public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDepende
         return Task.FromResult(queryable.Min(selector))!;
     }
 
-    public Task<T?> MaxAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T> MaxAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
         
@@ -245,7 +245,7 @@ public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDepende
         return Task.FromResult(queryable.Max())!;
     }
 
-    public Task<TResult?> MaxAsync<T, TResult>(IQueryable<T> queryable, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
+    public Task<TResult> MaxAsync<T, TResult>(IQueryable<T> queryable, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
     {
         var provider = FindProvider(queryable);
         

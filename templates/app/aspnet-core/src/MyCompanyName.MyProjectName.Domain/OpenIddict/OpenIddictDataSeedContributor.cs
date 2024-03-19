@@ -79,11 +79,12 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
         var configurationSection = _configuration.GetSection("OpenIddict:Applications");
 
+        //<TEMPLATE-REMOVE IF-NOT='ui:mvc'>
         //Web Client
         var webClientId = configurationSection["MyProjectName_Web:ClientId"];
         if (!webClientId.IsNullOrWhiteSpace())
         {
-            var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"].EnsureEndsWith('/');
+            var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"]!.EnsureEndsWith('/');
 
             /* MyProjectName_Web client is only needed if you created a tiered
              * solution. Otherwise, you can delete this client. */
@@ -103,7 +104,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
             );
         }
+        //</TEMPLATE-REMOVE>
 
+        //<TEMPLATE-REMOVE IF-NOT='ui:angular'>
         //Console Test / Angular Client
         var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
         if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
@@ -127,7 +130,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 postLogoutRedirectUri: consoleAndAngularClientRootUrl
             );
         }
+        //</TEMPLATE-REMOVE>
 
+        //<TEMPLATE-REMOVE IF-NOT='ui:blazor'>
         // Blazor Client
         var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
         if (!blazorClientId.IsNullOrWhiteSpace())
@@ -147,13 +152,14 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
             );
         }
+        //</TEMPLATE-REMOVE>
 
+        //<TEMPLATE-REMOVE IF-NOT='ui:blazor-server&&TIERED'>
         // Blazor Server Tiered Client
         var blazorServerTieredClientId = configurationSection["MyProjectName_BlazorServerTiered:ClientId"];
         if (!blazorServerTieredClientId.IsNullOrWhiteSpace())
         {
-            var blazorServerTieredRootUrl =
-                configurationSection["MyProjectName_BlazorServerTiered:RootUrl"].EnsureEndsWith('/');
+            var blazorServerTieredRootUrl = configurationSection["MyProjectName_BlazorServerTiered:RootUrl"]!.EnsureEndsWith('/');
 
             await CreateApplicationAsync(
                 name: blazorServerTieredClientId!,
@@ -171,6 +177,32 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 postLogoutRedirectUri: $"{blazorServerTieredRootUrl}signout-callback-oidc"
             );
         }
+        //</TEMPLATE-REMOVE>
+
+        //<TEMPLATE-REMOVE IF-NOT='ui:blazor-webapp&&TIERED'>
+        // Blazor WebApp Tiered Client
+        var blazorWebAppTieredClientId = configurationSection["MyProjectName_BlazorWebAppTiered:ClientId"];
+        if (!blazorWebAppTieredClientId.IsNullOrWhiteSpace())
+        {
+            var blazorWebAppTieredRootUrl = configurationSection["MyProjectName_BlazorWebAppTiered:RootUrl"]!.EnsureEndsWith('/');
+
+            await CreateApplicationAsync(
+                name: blazorWebAppTieredClientId!,
+                type: OpenIddictConstants.ClientTypes.Confidential,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
+                displayName: "Blazor Server Application",
+                secret: configurationSection["MyProjectName_BlazorWebAppTiered:ClientSecret"] ?? "1q2w3e*",
+                grantTypes: new List<string> //Hybrid flow
+                {
+                    OpenIddictConstants.GrantTypes.AuthorizationCode, OpenIddictConstants.GrantTypes.Implicit
+                },
+                scopes: commonScopes,
+                redirectUri: $"{blazorWebAppTieredRootUrl}signin-oidc",
+                clientUri: blazorWebAppTieredRootUrl,
+                postLogoutRedirectUri: $"{blazorWebAppTieredRootUrl}signout-callback-oidc"
+            );
+        }
+        //</TEMPLATE-REMOVE>
 
         // Swagger Client
         var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
@@ -218,10 +250,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         }
 
         var client = await _openIddictApplicationRepository.FindByClientIdAsync(name);
-        
+
         var application = new AbpApplicationDescriptor {
             ClientId = name,
-            Type = type,
+            ClientType = type,
             ClientSecret = secret,
             ConsentType = consentType,
             DisplayName = displayName,

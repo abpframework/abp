@@ -1,6 +1,7 @@
 {
   "culture": "cs",
   "texts": {
+    "Menu:Account": "Účet",
     "UserName": "Uživatelské jméno",
     "EmailAddress": "Email",
     "UserNameOrEmailAddress": "Uživatelské jméno nebo email",
@@ -33,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefonní číslo",
     "PersonalSettings": "Osobní nastavení",
     "PersonalSettingsSaved": "Osobní nastavení uloženo",
+    "PersonalSettingsChangedConfirmationModalTitle": "Osobní údaje změněny",
+    "PersonalSettingsChangedConfirmationModalDescription": "Pokud chcete tyto změny použít, musíte se přihlásit. Chcete se odhlásit?",
     "PasswordChanged": "Heslo změněno",
     "NewPasswordConfirmFailed": "Potvrďte nové heslo.",
     "NewPasswordSameAsOld": "Nové heslo musí být odlišné od současného.",
@@ -63,6 +66,8 @@
     "PasswordResetInfoInEmail": "Obdrželi jsme žádost o obnovení účtu! Pokud jste tento požadavek iniciovali, klikněte na následující odkaz a obnovte své heslo.",
     "ResetMyPassword": "Obnovit moje heslo",
     "AccessDenied": "Přístup odepřen!",
-    "AccessDeniedMessage": "K tomuto zdroji nemáte přístup."
+    "AccessDeniedMessage": "K tomuto zdroji nemáte přístup.",
+    "OrRegisterWith": "Nebo se registrujte pomocí:",
+    "RegisterUsingYourProviderAccount": "Registrovat pomocí vašeho účtu {0}"
   }
 }

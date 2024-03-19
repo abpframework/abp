@@ -55,6 +55,8 @@
     "LanguageCode": "Mật ngữ",
     "FileName": "Tên tệp",
     "LastCachedTime": "Thời gian lưu vào bộ nhớ đệm",
-    "Project": "Dự án"
+    "Project": "Dự án",
+    "AdvancedFilters": "Bộ lọc nâng cao",
+    "RemoveCacheAndReIndexConfirmation": "Tài liệu &quot;{0}&quot; sẽ bị xóa khỏi bộ đệm và được lập chỉ mục lại. Bạn có xác nhận không?"
   }
 }

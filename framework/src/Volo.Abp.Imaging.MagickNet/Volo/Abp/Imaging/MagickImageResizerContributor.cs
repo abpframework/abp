@@ -16,7 +16,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     public virtual async Task<ImageResizeResult<Stream>> TryResizeAsync(
         Stream stream,
         ImageResizeArgs resizeArgs,
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!mimeType.IsNullOrWhiteSpace() && !CanResize(mimeType))
@@ -54,7 +54,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     public virtual Task<ImageResizeResult<byte[]>> TryResizeAsync(
         byte[] bytes,
         ImageResizeArgs resizeArgs,
-        [CanBeNull] string mimeType = null,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         if (!mimeType.IsNullOrWhiteSpace() && !CanResize(mimeType))
@@ -74,7 +74,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
         return Task.FromResult(new ImageResizeResult<byte[]>(image.ToByteArray(), ImageProcessState.Done));
     }
 
-    protected virtual bool CanResize(string mimeType)
+    protected virtual bool CanResize(string? mimeType)
     {
         return mimeType switch {
             MimeTypes.Image.Jpeg => true,

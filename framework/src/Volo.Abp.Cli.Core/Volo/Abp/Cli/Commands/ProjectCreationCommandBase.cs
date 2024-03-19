@@ -16,11 +16,13 @@ using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Events;
+using Volo.Abp.Cli.ProjectBuilding.Templates;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.Utils;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.EventBus.Local;
 
 namespace Volo.Abp.Cli.Commands;
@@ -42,6 +44,8 @@ public abstract class ProjectCreationCommandBase
 
     public AngularThemeConfigurer AngularThemeConfigurer { get; }
 
+    public CliVersionService CliVersionService { get; }
+
     public ProjectCreationCommandBase(
         ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
@@ -53,7 +57,8 @@ public abstract class ProjectCreationCommandBase
         ThemePackageAdder themePackageAdder,
         ILocalEventBus eventBus,
         IBundlingService bundlingService,
-        AngularThemeConfigurer angularThemeConfigurer)
+        AngularThemeConfigurer angularThemeConfigurer,
+        CliVersionService cliVersionService)
     {
         _bundlingService = bundlingService;
         ConnectionStringProvider = connectionStringProvider;
@@ -66,6 +71,7 @@ public abstract class ProjectCreationCommandBase
         EventBus = eventBus;
         ThemePackageAdder = themePackageAdder;
         AngularThemeConfigurer = angularThemeConfigurer;
+        CliVersionService = cliVersionService;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
@@ -85,7 +91,7 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("Preview: yes");
 
 #if !DEBUG
-            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+            var cliVersion = await CliVersionService.GetCurrentCliVersionAsync();
 
             if (!cliVersion.IsPrerelease)
             {
@@ -227,6 +233,8 @@ public abstract class ProjectCreationCommandBase
 
         var skipCache = commandLineArgs.Options.ContainsKey(Options.SkipCache.Long) || commandLineArgs.Options.ContainsKey(Options.SkipCache.Short);
 
+        var trustUserVersion = !version.IsNullOrEmpty() && commandLineArgs.Options.ContainsKey(Options.TrustUserVersion.Long) || commandLineArgs.Options.ContainsKey(Options.TrustUserVersion.Short);
+
         return new ProjectBuildArgs(
             solutionName,
             template,
@@ -245,7 +253,8 @@ public abstract class ProjectCreationCommandBase
             pwa,
             theme,
             themeStyle,
-            skipCache
+            skipCache,
+            trustUserVersion
         );
     }
 
@@ -418,26 +427,77 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected async Task RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(ProjectBuildArgs projectArgs)
+    protected virtual async Task RunBundleInternalAsync(ProjectBuildArgs projectArgs)
+    {
+        if (!ShouldRunBundleCommand(projectArgs))
+        {
+            return;
+        }
+
+        var isModuleTemplate = ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName);
+        var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
+        var message = isWebassembly || isModuleTemplate
+            ? "Generating bundles for Blazor Wasm"
+            : "Generating bundles for MAUI Blazor";
+
+        var projectType = isWebassembly || isModuleTemplate
+            ? BundlingConsts.WebAssembly
+            : BundlingConsts.MauiBlazor;
+
+        Logger.LogInformation(message + "...");
+
+        await EventBus.PublishAsync(new ProjectCreationProgressEvent
+        {
+            Message = message
+        }, false);
+
+        var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
+        var path = projectArgs.OutputFolder;
+        if (isWebassembly && Directory.GetFiles(path, "*.Blazor.Client.csproj", SearchOption.AllDirectories).Any())
+        {
+            searchPattern = "*.Blazor.Client.csproj";
+        }
+
+        if (isModuleTemplate)
+        {
+            path = Path.Combine(path, "host");
+            searchPattern = "*.Blazor.Host.csproj";
+            if (Directory.GetFiles(path, "*.Blazor.Host.Client.csproj", SearchOption.AllDirectories).Any())
+            {
+                searchPattern = "*.Blazor.Host.Client.csproj";
+            }
+        }
+        else if (MicroserviceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
+        {
+            path = Path.Combine(path, "apps");
+        }
+
+        var directory = Path.GetDirectoryName(
+            Directory.GetFiles(path, searchPattern, SearchOption.AllDirectories).First()
+        );
+
+        await _bundlingService.BundleAsync(directory, true, projectType);
+    }
+
+    protected virtual bool ShouldRunBundleCommand(ProjectBuildArgs projectArgs)
     {
         if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
             && projectArgs.UiFramework is UiFramework.Blazor or UiFramework.MauiBlazor)
         {
-            var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
-            var message = isWebassembly ? "Generating bundles for Blazor Wasm" : "Generating bundles for MAUI Blazor";
-            Logger.LogInformation($"{message}...");
-
-            await EventBus.PublishAsync(new ProjectCreationProgressEvent
-            {
-                Message = message
-            }, false);
-
-            var directory = Path.GetDirectoryName(
-                Directory.GetFiles(projectArgs.OutputFolder, isWebassembly? "*.Blazor.csproj" :"*.MauiBlazor.csproj", SearchOption.AllDirectories).First()
-                );
-
-            await _bundlingService.BundleAsync(directory, true, projectType: isWebassembly ? BundlingConsts.WebAssembly : BundlingConsts.MauiBlazor);
+            return true;
         }
+
+        if (MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName) && projectArgs.UiFramework is UiFramework.Blazor)
+        {
+            return true;
+        }
+
+        if (ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) && projectArgs.UiFramework != UiFramework.None)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     protected async Task CreateInitialMigrationsAsync(ProjectBuildArgs projectArgs)
@@ -449,7 +509,7 @@ public abstract class ProjectCreationCommandBase
 
         var efCoreProjectPath = string.Empty;
         bool isLayeredTemplate;
-
+        var isModuleTemplate = false;
         switch (projectArgs.TemplateName)
         {
             case AppTemplate.TemplateName:
@@ -463,11 +523,16 @@ public abstract class ProjectCreationCommandBase
                     ?? Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
                 isLayeredTemplate = false;
                 break;
+            case ModuleTemplate.TemplateName:
+            case ModuleProTemplate.TemplateName:
+                isModuleTemplate = true;
+                isLayeredTemplate = false;
+                break;
             default:
                 return;
         }
 
-        if (string.IsNullOrWhiteSpace(efCoreProjectPath))
+        if (string.IsNullOrWhiteSpace(efCoreProjectPath) && !isModuleTemplate)
         {
             Logger.LogWarning("Couldn't find the project to create initial migrations!");
             return;
@@ -478,7 +543,55 @@ public abstract class ProjectCreationCommandBase
             Message = "Creating the initial DB migration"
         }, false);
 
-        await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+        if (!isModuleTemplate)
+        {
+            await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(efCoreProjectPath), isLayeredTemplate);
+        }
+        else
+        {
+            var hostProjectsWithEfCore = Directory.GetFiles(projectArgs.OutputFolder, "*.csproj", SearchOption.AllDirectories)
+                .Where(x => File.ReadAllText(x).Contains("Microsoft.EntityFrameworkCore.Tools"))
+                .ToList();
+            foreach (var project in hostProjectsWithEfCore)
+            {
+                await InitialMigrationCreator.CreateAsync(Path.GetDirectoryName(project));
+            }
+        }
+    }
+
+    protected Task CreateOpenIddictPfxFilesAsync(ProjectBuildArgs projectArgs)
+    {
+        if (!projectArgs.ExtraProperties.ContainsKey(nameof(RandomizeAuthServerPassPhraseStep)))
+        {
+            return Task.CompletedTask;
+        }
+
+        var module = projectArgs.ExtraProperties[nameof(RandomizeAuthServerPassPhraseStep)];
+        if (string.IsNullOrWhiteSpace(module))
+        {
+            return Task.CompletedTask;
+        }
+
+        var moduleDirectory = projectArgs.OutputFolder + module;
+        if (projectArgs.UiFramework != UiFramework.Angular)
+        {
+            moduleDirectory = moduleDirectory.Replace("/aspnet-core/", "/");
+        }
+
+        moduleDirectory = Path.GetDirectoryName(projectArgs.SolutionName.CompanyName == null
+            ? moduleDirectory.Replace("MyCompanyName.MyProjectName", projectArgs.SolutionName.ProjectName)
+            : moduleDirectory.Replace("MyCompanyName", projectArgs.SolutionName.CompanyName).Replace("MyProjectName", projectArgs.SolutionName.ProjectName));
+
+        if (Directory.Exists(moduleDirectory))
+        {
+            Logger.LogInformation($"Creating openiddict.pfx file on {moduleDirectory}");
+            CmdHelper.RunCmd($"dotnet dev-certs https -ep openiddict.pfx -p {RandomizeAuthServerPassPhraseStep.RandomOpenIddictPassword}", moduleDirectory);
+        }
+        else
+        {
+            Logger.LogWarning($"Couldn't find the module directory to create openiddict.pfx file: {moduleDirectory}");
+        }
+        return Task.CompletedTask;
     }
 
     protected async Task ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
@@ -563,6 +676,8 @@ public abstract class ProjectCreationCommandBase
                 return UiFramework.Blazor;
             case "blazor-server":
                 return UiFramework.BlazorServer;
+            case "blazor-webapp":
+                return UiFramework.BlazorWebApp;
             case "maui-blazor" when template == AppProTemplate.TemplateName:
                 return UiFramework.MauiBlazor;
             default:
@@ -620,67 +735,6 @@ public abstract class ProjectCreationCommandBase
             "dark" => ThemeStyle.Dark,
             _ => null
         };
-    }
-
-    protected void ConfigureNpmPackagesForTheme(ProjectBuildArgs projectArgs)
-    {
-        if (!projectArgs.Theme.HasValue)
-        {
-            return;
-        }
-
-        switch (projectArgs.Theme)
-        {
-            case Theme.Basic:
-                ConfigureNpmPackagesForBasicTheme(projectArgs);
-                break;
-            case Theme.Lepton:
-                ConfigureNpmPackagesForLeptonTheme(projectArgs);
-                break;
-            case Theme.NotSpecified:
-            case Theme.LeptonXLite:
-            case Theme.LeptonX:
-                break;
-            default:
-                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage(Options.Theme.Long));
-        }
-    }
-
-    private void ConfigureNpmPackagesForBasicTheme(ProjectBuildArgs projectArgs)
-    {
-        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
-        {
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.mvc.ui.theme.basic", projectArgs.Version);
-        }
-
-        if (projectArgs.UiFramework is UiFramework.BlazorServer)
-        {
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@abp/aspnetcore.components.server.basictheme", projectArgs.Version);
-        }
-
-        if (projectArgs.UiFramework is UiFramework.Angular)
-        {
-            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@abp/ng.theme.basic", projectArgs.Version);
-        }
-    }
-
-    private void ConfigureNpmPackagesForLeptonTheme(ProjectBuildArgs projectArgs)
-    {
-        if (projectArgs.UiFramework is not UiFramework.None or UiFramework.Angular)
-        {
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);
-        }
-
-        if (projectArgs.UiFramework is UiFramework.BlazorServer)
-        {
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.components.server.leptontheme", projectArgs.Version);
-            ThemePackageAdder.AddNpmPackage(projectArgs.OutputFolder, "@volo/abp.aspnetcore.mvc.ui.theme.lepton", projectArgs.Version);
-        }
-
-        if (projectArgs.UiFramework is UiFramework.Angular)
-        {
-            ThemePackageAdder.AddAngularPackage(projectArgs.OutputFolder, "@volo/abp.ng.theme.lepton", projectArgs.Version);
-        }
     }
 
     protected void ConfigureAngularJsonForThemeSelection(ProjectBuildArgs projectArgs)
@@ -799,6 +853,11 @@ public abstract class ProjectCreationCommandBase
             public const string Long = "skip-cache";
         }
 
+        public static class TrustUserVersion
+        {
+            public const string Short = "tv";
+            public const string Long = "trust-version";
+        }
 
         public static class Tiered
         {
@@ -829,6 +888,11 @@ public abstract class ProjectCreationCommandBase
         public static class ThemeStyle
         {
             public const string Long = "theme-style";
+        }
+
+        public static class NoOpenWebPage
+        {
+            public const string Long = "no-open";
         }
     }
 }

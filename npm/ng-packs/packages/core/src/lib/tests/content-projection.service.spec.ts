@@ -10,7 +10,6 @@ describe('ContentProjectionService', () => {
   // createServiceFactory does not accept entryComponents directly
   @NgModule({
     declarations: [TestComponent],
-    entryComponents: [TestComponent],
   })
   class TestModule {}
 

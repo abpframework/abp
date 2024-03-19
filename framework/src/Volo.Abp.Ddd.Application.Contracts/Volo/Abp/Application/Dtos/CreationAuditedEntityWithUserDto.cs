@@ -11,7 +11,7 @@ namespace Volo.Abp.Application.Dtos;
 [Serializable]
 public abstract class CreationAuditedEntityWithUserDto<TUserDto> : CreationAuditedEntityDto, ICreationAuditedObject<TUserDto>
 {
-    public TUserDto Creator { get; set; }
+    public TUserDto? Creator { get; set; }
 }
 
 /// <summary>
@@ -23,5 +23,5 @@ public abstract class CreationAuditedEntityWithUserDto<TUserDto> : CreationAudit
 [Serializable]
 public abstract class CreationAuditedEntityWithUserDto<TPrimaryKey, TUserDto> : CreationAuditedEntityDto<TPrimaryKey>, ICreationAuditedObject<TUserDto>
 {
-    public TUserDto Creator { get; set; }
+    public TUserDto? Creator { get; set; }
 }

@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Telefonszám",
     "PersonalSettings": "Személyes beállítások",
     "PersonalSettingsSaved": "Személyes beállítások mentve",
+    "PersonalSettingsChangedConfirmationModalTitle": "Személyes adatok megváltoztak",
+    "PersonalSettingsChangedConfirmationModalDescription": "Ha alkalmazni szeretné ezeket a változtatásokat, be kell jelentkeznie. Ki akar jelentkezni?",
     "PasswordChanged": "Jelszó megváltoztatva",
     "NewPasswordConfirmFailed": "Kérjük, erősítse meg az új jelszót.",
     "NewPasswordSameAsOld": "Az új jelszó nem lehet azonos a régi jelszóval.",
@@ -64,6 +66,8 @@
     "PasswordResetInfoInEmail": "Fiók-helyreállítási kérelmet kaptunk! Ha Ön kezdeményezte ezt a kérést, kattintson a következő hivatkozásra jelszava visszaállításához.",
     "ResetMyPassword": "Jelszavam visszaállítása",
     "AccessDenied": "Hozzáférés megtagadva!",
-    "AccessDeniedMessage": "Nincs hozzáférése ehhez az erőforráshoz."
+    "AccessDeniedMessage": "Nincs hozzáférése ehhez az erőforráshoz.",
+    "OrRegisterWith": "Vagy regisztráljon:",
+    "RegisterUsingYourProviderAccount": "Regisztráljon a(z) {0} fiókjával"
   }
 }

@@ -9,7 +9,7 @@ public abstract class ExtensibleEntityDto<TKey> : ExtensibleObject, IEntityDto<T
     /// <summary>
     /// Id of the entity.
     /// </summary>
-    public TKey Id { get; set; }
+    public TKey Id { get; set; } = default!;
 
     protected ExtensibleEntityDto()
         : this(true)

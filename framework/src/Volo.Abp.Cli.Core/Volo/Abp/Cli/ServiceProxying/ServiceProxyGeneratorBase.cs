@@ -47,7 +47,7 @@ public abstract class ServiceProxyGeneratorBase<T> : IServiceProxyGenerator wher
         switch (serviceType)
         {
             case ServiceType.Application:
-                moduleDefinition.Controllers.RemoveAll(x => !x.Value.IsRemoteService);
+                moduleDefinition.Controllers.RemoveAll(x => x.Value.IsIntegrationService);
                 break;
             case ServiceType.Integration:
                 moduleDefinition.Controllers.RemoveAll(x => !x.Value.IsIntegrationService);

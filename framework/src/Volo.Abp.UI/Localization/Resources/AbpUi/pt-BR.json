@@ -49,6 +49,14 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} será excluído!",
     "ItemWillBeDeletedMessage": "Este item será excluído!",
     "ManageYourAccount": "Gerenciar sua conta",
-    "OthersGroup": "Outra"
+    "OthersGroup": "Outra",
+    "Today": "Hoje",
+    "Apply": "Aplicar",
+    "InternetConnectionInfo": "A operação não pôde ser executada. Sua conexão com a Internet não está disponível no momento.",
+    "CopiedToTheClipboard": "Copiado para a área de transferência",
+    "AddNew": "Adicionar novo",
+    "ProfilePicture": "Foto do perfil",
+    "Theme": "Tema",
+    "NotAssigned": "Não atribuído"
   }
 }

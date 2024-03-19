@@ -2,19 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+using Asp.Versioning;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Utils;
 using Volo.Abp.DependencyInjection;
@@ -79,6 +76,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             }
         }
 
+        model.NormalizeOrder();
         return model;
     }
 
@@ -145,7 +143,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             ActionApiDescriptionModel.Create(
                 uniqueMethodName,
                 method,
-                apiDescription.RelativePath,
+                apiDescription.RelativePath!,
                 apiDescription.HttpMethod,
                 GetSupportedVersions(controllerType, method, setting),
                 allowAnonymous,
@@ -214,6 +212,8 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             type == typeof(void) ||
             type == typeof(Enum) ||
             type == typeof(ValueType) ||
+            type == typeof(DateOnly) ||
+            type == typeof(TimeOnly) ||
             TypeHelper.IsPrimitiveExtended(type))
         {
             return;

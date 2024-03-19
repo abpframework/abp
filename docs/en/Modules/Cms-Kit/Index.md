@@ -33,7 +33,7 @@ All features are individually usable. If you disable a feature, it completely di
 [ABP CLI](../../CLI.md) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:
 
 ```bash
-abp add-module Volo.CmsKit
+abp add-module Volo.CmsKit --skip-db-migrations
 ```
 
 > By default, Cms-Kit is disabled by `GlobalFeature`. Because of that the initial migration will be empty. So you can skip the migration by adding `--skip-db-migrations` to command when installing if you are using Entity Framework Core. After enabling Cms-Kit global feture, please add new migration.
@@ -83,9 +83,9 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 
 ## Entity Extensions
 
-[Module entity extension](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) system is a **high-level** extension system that allows you to **define new properties** for existing entities of the dependent modules. It automatically **adds properties to the entity**, **database**, **HTTP API and user interface** in a single point.
+[Module entity extension](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) system is a **high-level** extension system that allows you to **define new properties** for existing entities of the dependent modules. It automatically **adds properties to the entity**, **database**, **HTTP API, and user interface** in a single point.
 
-To extend entities of the CMS Kit Pro module, open your `YourProjectNameModuleExtensionConfigurator` class inside of your `DomainShared` project and change the `ConfigureExtraProperties` method like shown below.
+To extend entities of the CMS Kit module, open your `YourProjectNameModuleExtensionConfigurator` class inside of your `DomainShared` project and change the `ConfigureExtraProperties` method like shown below.
 
 ```csharp
 public static void ConfigureExtraProperties()
@@ -132,14 +132,13 @@ public static void ConfigureExtraProperties()
  
 * `ConfigureCmsKit(...)` method is used to configure the entities of the CMS Kit module.
 
-* `cmsKit.ConfigureBlog(...)` is used to configure the **Blog** entity of the CMS Kit module. You can add or update your extra properties of the
-**Blog** entity. 
+* `cmsKit.ConfigureBlog(...)` is used to configure the **Blog** entity of the CMS Kit module. You can add or update your extra properties on the **Blog** entity. 
 
 * `cmsKit.ConfigureBlogPost(...)` is used to configure the **BlogPost** entity of the CMS Kit module. You can add or update your extra properties of the **BlogPost** entity.
 
 * You can also set some validation rules for the property that you defined. In the above sample, `RequiredAttribute` and `StringLengthAttribute` were added for the property named **"BlogPostDescription"**. 
 
-* When you define the new property, it will automatically add to **Entity**, **HTTP API** and **UI** for you. 
+* When you define the new property, it will automatically add to **Entity**, **HTTP API**, and **UI** for you. 
   * Once you define a property, it appears in the create and update forms of the related entity. 
   * New properties also appear in the datatable of the related page.
 

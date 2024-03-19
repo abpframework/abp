@@ -128,7 +128,13 @@ public class CmsKitTestData : ISingletonDependency
 
     public string MenuItem_3_Url { get; } = "/products";
 
+    public Guid MenuItem_4_With_Page_1_Id { get; } = Guid.NewGuid();
+
+    public string MenuItem_4_With_Page_1_Name { get; } = "Products";
+
     public string PollName { get; } = "Poll";
 
     public string WidgetName { get; } = "CmsPollByCode";
+
+    public string IdempotencyToken_1 { get; } = Guid.NewGuid().ToString("N");
 }

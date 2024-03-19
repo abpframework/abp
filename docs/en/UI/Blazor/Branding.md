@@ -24,6 +24,8 @@ namespace MyCompanyName.MyProjectName.Blazor
 }
 ````
 
+> Currently, setting the `AppName` is only applicable to the [Basic Theme](../../Themes/Basic.md), it does not have any effect on the other [official themes](../../Themes/Index.md).
+
 The result will be like shown below:
 
 ![branding-appname](../../images/branding-appname.png)

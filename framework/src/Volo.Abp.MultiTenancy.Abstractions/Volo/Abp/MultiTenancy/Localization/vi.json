@@ -1,0 +1,9 @@
+{
+  "culture": "vi",
+  "texts": {
+    "TenantNotFoundMessage": "Không tìm thấy người thuê nhà!",
+    "TenantNotFoundDetails": "Không có đối tượng thuê nào có id hoặc tên đối tượng thuê: {0}",
+    "TenantNotActiveMessage": "Người thuê nhà không hoạt động!",
+    "TenantNotActiveDetails": "Đối tượng thuê không hoạt động với id hoặc tên đối tượng thuê: {0}"
+  }
+}

@@ -46,6 +46,7 @@ Here, a list of the options you can configure:
 * `ApplicationName`: If multiple applications are saving audit logs into a single database, set this property to your application name, so you can distinguish the logs of different applications. If you don't set, it will set from the `IApplicationInfoAccessor.ApplicationName` value, which is the entry assembly name by default.
 * `IgnoredTypes`: A list of `Type`s to be ignored for audit logging. If this is an entity type, changes for this type of entities will not be saved. This list is also used while serializing the action parameters.
 * `EntityHistorySelectors`: A list of selectors those are used to determine if an entity type is selected for saving the entity change. See the section below for details.
+* `SaveEntityHistoryWhenNavigationChanges` (default: `true`): If you set to true, it will save entity changes to audit log when any navigation property changes.
 * `Contributors`: A list of `AuditLogContributor` implementations. A contributor is a way of extending the audit log system. See the "Audit Log Contributors" section below.
 * `AlwaysLogSelectors`: A list of selectors to save the audit logs for the matched criteria. 
 
@@ -91,6 +92,19 @@ Configure<AbpAuditingOptions>(options =>
 The condition `typeof(IEntity).IsAssignableFrom(type)` will be `true` for any class implements the `IEntity` interface (this is technically all the entities in your application). You can conditionally check and return `true` or `false` based on your preference.
 
 `options.EntityHistorySelectors` is a flexible and dynamic way of selecting the entities for audit logging. Another way is to use the `Audited` and `DisableAuditing` attributes per entity.
+
+## AbpAspNetCoreAuditingOptions
+
+`AbpAspNetCoreAuditingOptions` is the [options object](Options.md) to configure audit logging in the ASP.NET Core layer. You can configure it in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+
+````csharp
+Configure<AbpAspNetCoreAuditingOptions>(options =>
+{
+    options.IgnoredUrls.Add("/products");
+});
+````
+
+`IgnoredUrls` is the only option. It is a list of ignored URLs prefixes. In the preceding example, all URLs starting with `/products` will be ignored for audit logging.
 
 ## Enabling/Disabling Audit Logging for Services
 

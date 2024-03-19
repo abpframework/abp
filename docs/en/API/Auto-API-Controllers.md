@@ -12,9 +12,9 @@ Basic configuration is simple. Just configure `AbpAspNetCoreMvcOptions` and use 
 [DependsOn(BookStoreApplicationModule)]
 public class BookStoreWebModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpAspNetCoreMvcOptions>(options =>
+        PreConfigure<AbpAspNetCoreMvcOptions>(options =>
         {
             options
                 .ConventionalControllers
@@ -204,7 +204,7 @@ public class MyApplicationConfigurationDto : ApplicationConfigurationDto
 }
 ````
 
-### Remove contoller
+### Remove controller
 
 Configure `ControllersToRemove` of `AbpAspNetCoreMvcOptions` to remove the controllers.
 
@@ -214,3 +214,6 @@ services.Configure<AbpAspNetCoreMvcOptions>(options =>
     options.ControllersToRemove.Add(typeof(AbpLanguagesController));
 });
 ````
+## See Also
+
+* [Video tutorial](https://abp.io/video-courses/essentials/auto-api-controllers)
