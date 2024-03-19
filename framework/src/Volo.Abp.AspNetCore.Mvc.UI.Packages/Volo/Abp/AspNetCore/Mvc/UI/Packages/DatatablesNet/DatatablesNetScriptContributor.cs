@@ -10,6 +10,14 @@ public class DatatablesNetScriptContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddIfNotContains("/libs/datatables.net/js/dataTables.min.js");
+        if (context.FileProvider.GetFileInfo("/libs/datatables.net/js/dataTables.min.js").Exists)
+        {
+            context.Files.AddIfNotContains("/libs/datatables.net/js/dataTables.min.js");
+        }
+        else
+        {
+            //TODO: Compatibility code, Remove it after 8.2 rc1.
+            context.Files.AddIfNotContains("/libs/datatables.net/js/jquery.dataTables.js");
+        }
     }
 }
