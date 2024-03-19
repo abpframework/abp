@@ -100,7 +100,7 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
             b.OwnsOne(v => v.AppEntityWithValueObjectAddress);
             b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOne>(x => x.Id);
             b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationId);
-            b.HasMany(x => x.ManyToMany).WithMany();
+            b.HasMany(x => x.ManyToMany).WithMany(x => x.ManyToMany).UsingEntity<AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany>();
         });
 
         modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();

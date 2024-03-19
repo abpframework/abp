@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,6 +20,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EntityFrameworkCore.ChangeTrackers;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
@@ -246,6 +246,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         ChangeTracker.Tracked += ChangeTracker_Tracked;
         ChangeTracker.StateChanged += ChangeTracker_StateChanged;
 
+        EntityHistoryHelper.InitializeNavigationHelper(AbpEfCoreNavigationHelper);
+
         if (UnitOfWorkManager is AlwaysDisableTransactionsUnitOfWorkManager)
         {
             Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
@@ -254,12 +256,14 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual void ChangeTracker_Tracked(object? sender, EntityTrackedEventArgs e)
     {
+        AbpEfCoreNavigationHelper.ChangeTracker_Tracked(ChangeTracker, sender, e);
         FillExtraPropertiesForTrackedEntities(e);
         PublishEventsForTrackedEntity(e.Entry);
     }
 
     protected virtual void ChangeTracker_StateChanged(object? sender, EntityStateChangedEventArgs e)
     {
+        AbpEfCoreNavigationHelper.ChangeTracker_StateChanged(ChangeTracker, sender, e);
         PublishEventsForTrackedEntity(e.Entry);
     }
 
@@ -311,7 +315,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual void PublishEventsForTrackedEntity(EntityEntry entry)
     {
-       switch (entry.State)
+        switch (entry.State)
         {
             case EntityState.Added:
                 ApplyAbpConceptsForAddedEntity(entry);
@@ -320,7 +324,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
             case EntityState.Modified:
                 ApplyAbpConceptsForModifiedEntity(entry);
-                if (entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
+                if (entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
                 {
                     if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                     {
@@ -339,79 +343,20 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 break;
         }
 
-        foreach (var entityEntry in ChangeTracker.Entries().Where(HasEntityEntryChanged))
+        if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
         {
-            ApplyAbpConceptsForModifiedEntity(entry);
-
-            if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
+            foreach (var entityEntry in ChangeTracker.Entries().Where(x => x.State == EntityState.Unchanged && AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(x)))
             {
-                EntityChangeEventHelper.PublishEntityDeletedEvent(entityEntry.Entity);
-            }
-            else
-            {
-                EntityChangeEventHelper.PublishEntityUpdatedEvent(entityEntry.Entity);
-            }
-        }
-    }
-
-    protected virtual bool HasEntityEntryChanged(EntityEntry entry)
-    {
-        if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges && entry.State == EntityState.Unchanged)
-        {
-            var entryId = entry.Entity is IEntity entryEntity && entryEntity.GetKeys().Length == 1 ? entryEntity.GetKeys().FirstOrDefault()?.ToString() : null;
-            if (entryId != null)
-            {
-                var entity = NavigationPropertyValues.GetOrAdd(entryId, () => new Dictionary<int, object?>());
-                var index = 0;
-                foreach (var navigationEntry in entry.Navigations.Where(navigation => !navigation.IsModified && navigation.IsLoaded))
+                if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
                 {
-                    var navigationEntryValue = entity.GetOrAdd(index, () => navigationEntry.CurrentValue);
-
-                    if (navigationEntryValue != null &&
-                        navigationEntryValue is not ICollection &&
-                        navigationEntryValue != navigationEntry.CurrentValue)
-                    {
-                        return true;
-                    }
-
-                    if (navigationEntryValue is ICollection navigationEntryValueCollection &&
-                        navigationEntry.CurrentValue is ICollection navigationEntryCurrentValueCollection &&
-                        navigationEntryValueCollection.Count != 0 &&
-                        navigationEntryCurrentValueCollection.Count == 0)
-                    {
-                        return true;
-                    }
-
-                    entity[index] = navigationEntry.CurrentValue is ICollection
-                        ? navigationEntry.CurrentValue.As<ICollection>().Cast<object?>().ToList()
-                        : navigationEntry.CurrentValue;
-
-                    index++;
+                    EntityChangeEventHelper.PublishEntityDeletedEvent(entityEntry.Entity);
+                }
+                else
+                {
+                    EntityChangeEventHelper.PublishEntityUpdatedEvent(entityEntry.Entity);
                 }
             }
         }
-
-        if (entry.State != EntityState.Modified && entry.State != EntityState.Unchanged)
-        {
-            return false;
-        }
-
-        var changed = entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd));
-        if (changed)
-        {
-            return true;
-        }
-
-        if (!changed &&
-            EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
-        {
-            if (entry.Navigations.Any(navigation => navigation.IsModified || (navigation is ReferenceEntry && navigation.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified)))
-            {
-                changed = true;
-            }
-        }
-
-        return changed;
     }
 
     protected virtual void HandlePropertiesBeforeSave()

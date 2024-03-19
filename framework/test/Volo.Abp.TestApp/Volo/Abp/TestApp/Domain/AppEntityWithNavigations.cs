@@ -61,7 +61,16 @@ public class AppEntityWithNavigationChildOneToMany : Entity<Guid>
     public string ChildName { get; set; }
 }
 
-public class AppEntityWithNavigationChildManyToMany : Entity<Guid>
+public class AppEntityWithNavigationChildManyToMany : AggregateRoot<Guid>
 {
     public string ChildName { get; set; }
+
+    public virtual List<AppEntityWithNavigations> ManyToMany { get; set; }
+}
+
+public class AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany
+{
+    public Guid AppEntityWithNavigationsId { get; set; }
+
+    public Guid AppEntityWithNavigationChildManyToManyId { get; set; }
 }
