@@ -10,11 +10,7 @@
     "access": "public"
   },
   "dependencies": {
-    "ansi-colors": "^4.1.1",
-    "extend-object": "^1.0.0",
-    "glob": "^7.1.6",
-    "merge-stream": "^2.0.0",
-    "micromatch": "^4.0.2"
+    "ansi-colors": "^4.1.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",
