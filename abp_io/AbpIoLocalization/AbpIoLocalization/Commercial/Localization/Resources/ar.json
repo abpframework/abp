@@ -814,6 +814,8 @@
     "Topic": "عنوان",
     "SendUsEmail": "أرسل لنا البريد الإلكتروني",
     "ErrorExceptionMessage": "حدث خطأ أثناء معالجة طلبك",
-    "WatchTakeCodeGeneration": "شاهد فيديو \"استكشاف إمكانات إنشاء الأكواد البرمجية: ABP Suite\"!"
+    "WatchTakeCodeGeneration": "شاهد فيديو \"استكشاف إمكانات إنشاء الأكواد البرمجية: ABP Suite\"!",
+    "ExtendNow": "تمديد / تجديد",
+    "RegisterDemo": "يسجل"
   }
 }

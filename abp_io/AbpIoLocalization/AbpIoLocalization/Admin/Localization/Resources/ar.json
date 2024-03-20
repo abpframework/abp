@@ -533,7 +533,7 @@
     "RaffleDeletionConfirmationMessage": "هل أنت متأكد أنك تريد حذف هذا السحب؟",
     "CreateRaffle": "إنشاء السحب",
     "RemoveImage": "إزالة الصورة",
-    "SuccessfullySaved": "تم الحفظ بنجاح",
+    "SavedSuccessfully": "تم الحفظ بنجاح",
     "Menu:CommunityTalks": "محادثات المجتمع",
     "Menu:Conferences": "المؤتمرات",
     "Menu:OtherLiveEvents": "الأحداث المباشرة الأخرى",

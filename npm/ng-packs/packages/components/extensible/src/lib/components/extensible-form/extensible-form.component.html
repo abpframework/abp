@@ -1,5 +1,5 @@
 @if (form) {
-  @for (groupedProp of groupedPropList.items; track i; let i = $index) {
+  @for (groupedProp of groupedPropList.items; track i; let i = $index; let first = $first) {
     <ng-container *abpPropData="let data; fromList: groupedProp.formPropList; withRecord: record">
       @if (isAnyGroupMemberVisible(i, data) && groupedProp.group?.className) {
         <div
@@ -8,14 +8,14 @@
         >
           <ng-container
             [ngTemplateOutlet]="propListTemplate"
-            [ngTemplateOutletContext]="{ groupedProp: groupedProp, data: data }"
+            [ngTemplateOutletContext]="{ groupedProp: groupedProp, data: data, isFirstGroup: first}"
           >
           </ng-container>
         </div>
       } @else {
         <ng-container
           [ngTemplateOutlet]="propListTemplate"
-          [ngTemplateOutletContext]="{ groupedProp: groupedProp, data: data }"
+          [ngTemplateOutletContext]="{ groupedProp: groupedProp, data: data, isFirstGroup: first }"
         >
         </ng-container>
       }
@@ -23,8 +23,8 @@
   }
 }
 
-<ng-template let-groupedProp="groupedProp" let-data="data" #propListTemplate>
-  @for (prop of groupedProp.formPropList; let first = $first; track prop.name) {
+<ng-template let-groupedProp="groupedProp" let-data="data" let-isFirstGroup="isFirstGroup" #propListTemplate>
+  @for (prop of groupedProp.formPropList; let index = $index; let first = $first; track prop.name) {
     @if (prop.visible(data)) {
       @if (extraProperties.controls[prop.name]) {
         <ng-container [formGroupName]="extraPropertiesKey">
@@ -37,6 +37,7 @@
             [prop]="prop"
             [data]="data"
             [first]="first"
+            [isFirstGroup]="isFirstGroup"
           />
         }
       }

@@ -1,8 +1,40 @@
 # HTTP Error Handling
 
-When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./HTTP-Error-Reporter-Service), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
+### Error Configurations
+
+ABP offers a configurations for errors handling like below
+
+```ts
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { MyCustomRouteErrorComponent } from './my-custom-route.component';
+
+@NgModule({
+  imports: [
+    ThemeSharedModule.forRoot({
+      httpErrorConfig: {
+        skipHandledErrorCodes: [403],
+        errorScreen: {
+          forWhichErrors: [404],
+          component: CustomErrorComponent,
+          hideCloseIcon: false
+        }
+      }
+    }),
+    ...
+  ],
+})
+export class AppModule {}
+```
+
+- `ErrorScreenErrorCodes` the error codes that you can pass to `skipHandledErrorCodes` and `forWhichErrors`.
+- `skipHandledErrorCodes` the error codes those you don't want to handle it.
+- `errorScreen` the screen that you want to show when a route error occurs.
+  - `component` component that you want to show.
+  - `forWhichErrors` same as `ErrorScreenErrorCodes`
+  - `hideCloseIcon` hides close icon in default ABP component.
 
 ## Custom HTTP Error Handler
+When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./HTTP-Error-Reporter-Service), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
 
 ### Function Method `Deprecated`
 

@@ -407,6 +407,7 @@
     "Topic": "Umræðuefni",
     "SendUsEmail": "Sendu okkur tölvupóst",
     "ErrorExceptionMessage": "Villa kom upp við úrvinnslu beiðni þinnar",
-    "WatchTakeCodeGeneration": "Horfðu á \"Kannaðu möguleika kóðaframleiðslu: ABP Suite\" myndbandið!"
+    "WatchTakeCodeGeneration": "Horfðu á \"Kannaðu möguleika kóðaframleiðslu: ABP Suite\" myndbandið!",
+    "ExtendNow": "Framlengja / endurnýja"
   }
 }

@@ -776,6 +776,7 @@
     "Topic": "Téma",
     "SendUsEmail": "Küldjön nekünk e-mailt",
     "ErrorExceptionMessage": "Hiba történt a kérése feldolgozása során",
-    "WatchTakeCodeGeneration": "Nézze meg a \"Fedezze fel a kódgenerálás lehetőségét: ABP Suite\" videót!"
+    "WatchTakeCodeGeneration": "Nézze meg a \"Fedezze fel a kódgenerálás lehetőségét: ABP Suite\" videót!",
+    "ExtendNow": "Bővítés / Megújítás"
   }
 }
