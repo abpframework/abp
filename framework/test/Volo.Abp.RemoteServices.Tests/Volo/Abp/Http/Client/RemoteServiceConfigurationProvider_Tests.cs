@@ -32,10 +32,7 @@ public class RemoteServiceConfigurationProvider_Tests : AbpRemoteServicesTestBas
         
         services.Configure<AbpDefaultTenantStoreOptions>(options =>
         {
-            options.Tenants =
-            [
-                new TenantConfiguration(_tenantAId, "TenantA")
-            ];
+            options.Tenants = new[] { new TenantConfiguration(_tenantAId, "TenantA") };
         });
     }
 

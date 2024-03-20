@@ -125,7 +125,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         Options.Value.DefaultOnModelCreatingAction?.Invoke(this, modelBuilder);
-        foreach (var onModelCreatingAction in Options.Value.OnModelCreatingActions.GetOrDefault(typeof(TDbContext)) ?? [])
+        foreach (var onModelCreatingAction in Options.Value.OnModelCreatingActions.GetOrDefault(typeof(TDbContext)) ?? new List<object>())
         {
             onModelCreatingAction.As<Action<DbContext, ModelBuilder>>().Invoke(this, modelBuilder);
         }
@@ -141,7 +141,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         Options.Value.DefaultConventionAction?.Invoke(this, configurationBuilder);
-        foreach (var conventionAction in Options.Value.ConventionActions.GetOrDefault(typeof(TDbContext)) ?? [])
+        foreach (var conventionAction in Options.Value.ConventionActions.GetOrDefault(typeof(TDbContext)) ?? new List<object>())
         {
             conventionAction.As<Action<DbContext, ModelConfigurationBuilder>>().Invoke(this, configurationBuilder);
         }
