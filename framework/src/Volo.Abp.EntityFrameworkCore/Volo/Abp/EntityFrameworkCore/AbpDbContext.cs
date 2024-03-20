@@ -163,6 +163,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             List<EntityChangeInfo>? entityChangeList = null;
             if (auditLog != null)
             {
+                EntityHistoryHelper.InitializeNavigationHelper(AbpEfCoreNavigationHelper);
                 entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
             }
 
@@ -245,8 +246,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         ChangeTracker.Tracked += ChangeTracker_Tracked;
         ChangeTracker.StateChanged += ChangeTracker_StateChanged;
-
-        EntityHistoryHelper.InitializeNavigationHelper(AbpEfCoreNavigationHelper);
 
         if (UnitOfWorkManager is AlwaysDisableTransactionsUnitOfWorkManager)
         {
