@@ -8,7 +8,7 @@ using Volo.Blogging.Blogs;
 using Volo.Blogging.Members;
 using Volo.Blogging.Posts;
 
-namespace Volo.Blogging.Pages.Members;
+namespace Volo.Blogging.Pages.Blogs.Members;
 
 public class IndexModel : AbpPageModel
 {

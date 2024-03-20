@@ -60,13 +60,13 @@
                                             <div class="user-card">
                                                 <div class="row">
                                                     <div class="col-auto pe-1">
-                                                        <a href="/Members/@post.Writer.UserName">
+                                                        <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                             <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
                                                         </a>
                                                     </div>
                                                     <div class="col ps-1">
                                                         <h5 class="mt-2 mb-1">
-                                                            <a href="/Members/@post.Writer.UserName">
+                                                            <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                                 @post.Writer.UserName
                                                             </a>
                                                             <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
@@ -127,7 +127,7 @@
                                                             @if (post.Writer != null)
                                                             {
                                                                 <h5 class="mt-2 mb-1">
-                                                                    <a href="/Members/@post.Writer.UserName">
+                                                                    <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                                         @post.Writer.UserName
                                                                     </a>    
                                                                     <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
@@ -190,13 +190,13 @@
                                                         <div class="user-card">
                                                             <div class="row">
                                                                 <div class="col-auto pe-1">
-                                                                    <a href="/Members/@post.Writer.UserName">
+                                                                    <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                                         <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
                                                                     </a>
                                                                 </div>
                                                                 <div class="col ps-1">
                                                                     <h5 class="mt-2 mb-1">
-                                                                        <a href="/Members/@post.Writer.UserName">
+                                                                        <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                                             @post.Writer.UserName
                                                                         </a>
                                                                         <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
