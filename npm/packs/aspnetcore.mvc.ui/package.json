@@ -13,7 +13,6 @@
     "ansi-colors": "^4.1.1",
     "extend-object": "^1.0.0",
     "glob": "^7.1.6",
-    "gulp": "^4.0.2",
     "merge-stream": "^2.0.0",
     "micromatch": "^4.0.2"
   },
