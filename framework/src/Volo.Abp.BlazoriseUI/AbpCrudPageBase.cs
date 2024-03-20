@@ -546,7 +546,7 @@ public abstract class AbpCrudPageBase<
     {
         await GetEntitiesAsync();
         await InvokeAsync(StateHasChanged);
-        await Notify.Success(L["SuccessfullyDeleted"]);
+        await Notify.Success(L["DeletedSuccessfully"]);
     }
 
     protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)
