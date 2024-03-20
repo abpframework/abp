@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -13,7 +12,6 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.EventBus.Local;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
@@ -95,6 +93,18 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         await UpdateAsync(user);
 
         return await base.DeleteAsync(user);
+    }
+
+    protected async override Task<IdentityResult> UpdateUserAsync(IdentityUser user)
+    {
+        var result = await base.UpdateUserAsync(user);
+
+        if (result.Succeeded)
+        {
+            await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId), token: CancellationToken);
+        }
+
+        return result;
     }
 
     public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
