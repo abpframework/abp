@@ -197,7 +197,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
-        var query =  await GetFilteredQueryableAsync(
+        var query = await GetFilteredQueryableAsync(
             filter,
             roleId,
             organizationUnitId,
@@ -416,7 +416,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         }
     }
 
-    protected virtual async Task<IQueryable<IdentityUser> GetFilteredQueryableAsync(
+    protected virtual async Task<IQueryable<IdentityUser>> GetFilteredQueryableAsync(
         string filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
