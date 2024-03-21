@@ -263,7 +263,19 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         CancellationToken cancellationToken = default)
     {
         var upperFilter = filter?.ToUpperInvariant();
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        var query = await GetMongoQueryableAsync(cancellationToken);
+        
+        if (roleId.HasValue)
+        {
+            var organizationUnitIds = (await GetMongoQueryableAsync<OrganizationUnit>(cancellationToken))
+                .Where(ou => ou.Roles.Any(r => r.RoleId == roleId.Value))
+                .Select(userOrganizationUnit => userOrganizationUnit.Id)
+                .ToArray();
+            
+            query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value) || identityUser.OrganizationUnits.Any(x => organizationUnitIds.Contains(x.OrganizationUnitId)));
+        }
+        
+        return await query
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
@@ -273,7 +285,6 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
-            .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
