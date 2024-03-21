@@ -57,7 +57,7 @@ namespace Volo.Docs.Admin.Documents
             var versionCacheKey = CacheKeyGenerator.GenerateProjectVersionsCacheKey(project);
             await _versionCache.RemoveAsync(versionCacheKey, true);
 
-            var documents = await _documentRepository.GetListByProjectId(project.Id);
+            var documents = await _documentRepository.GetListWithoutDetailsByProjectId(project.Id);
             
             var documentUpdateInfoCacheKeys = documents.Select(document =>
                 CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
@@ -69,10 +69,8 @@ namespace Volo.Docs.Admin.Documents
             );
             
             await _documentUpdateCache.RemoveManyAsync(documentUpdateInfoCacheKeys);
-            
-            documents.ForEach(document => document.LastCachedTime = DateTime.MinValue);
 
-            await _documentRepository.UpdateManyAsync(documents);
+            await _documentRepository.ClearCachesAsync(project.Id);
         }
 
         public virtual async Task PullAllAsync(PullAllDocumentInput input)

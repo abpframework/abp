@@ -53,6 +53,16 @@ namespace Volo.Docs.Documents
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task ClearCachesAsync(Guid projectId, CancellationToken cancellationToken = default)
+        {
+            var collection = await GetCollectionAsync(cancellationToken);
+            await collection.UpdateManyAsync(
+                Builders<Document>.Filter.Eq(x => x.ProjectId, projectId),
+                Builders<Document>.Update.Set(x => x.LastCachedTime, DateTime.MinValue),
+                cancellationToken: GetCancellationToken(cancellationToken)
+            );
+        }
+
         public virtual async Task<Document> FindAsync(Guid projectId, string name, string languageCode, string version,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)

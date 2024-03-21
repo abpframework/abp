@@ -55,6 +55,11 @@ namespace Volo.Docs.Documents
             return await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task ClearCachesAsync(Guid projectId, CancellationToken cancellationToken = default)
+        {
+            await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ExecuteUpdateAsync(x => x.SetProperty(d => d.LastCachedTime, DateTime.MinValue), GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<List<Document>> GetListAsync(Guid? projectId, string version, string name, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
