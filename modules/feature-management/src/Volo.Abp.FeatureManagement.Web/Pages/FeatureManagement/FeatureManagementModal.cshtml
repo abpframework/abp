@@ -43,7 +43,6 @@
                                     @for (var j = 0; j < featureGroup.Features.Count; j++)
                                     {
                                         var feature = featureGroup.Features[j];
-                                        var disabled = Model.IsDisabled(feature.Provider.Name);
                                         <div class="mt-2">
 
                                             <input type="text" abp-id-name="@Model.FeatureGroups[i].Features[j].Type" value="@feature.ValueType?.Name" hidden/>
@@ -54,7 +53,6 @@
                                                            type="checkbox"
                                                            abp-id-name="@Model.FeatureGroups[i].Features[j].BoolValue"
                                                            label="@feature.DisplayName"
-                                                           disabled="@disabled"
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
                                                            group-style="margin-inline-start: @(feature.Depth * 20)px"/>
@@ -76,7 +74,6 @@
                                                 <abp-input asp-for="@feature.Value"
                                                            label="@feature.DisplayName"
                                                            abp-id-name="@Model.FeatureGroups[i].Features[j].Value"
-                                                           disabled="@disabled"
                                                            type="@type"
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
@@ -123,8 +120,8 @@
                 </abp-tabs>
             </abp-modal-body>
             <abp-modal-footer>
-                <abp-button button-type="Primary" id="ResetToDefaults"><i class="fa fa-refresh"></i> @L["ResetToDefault"]</abp-button>
-                <abp-button data-bs-dismiss="modal" button-type="Secondary">@L["Cancel"]</abp-button>
+                <abp-button data-bs-dismiss="modal" button-type="Link">@L["Cancel"]</abp-button>
+                <abp-button button-type="Outline_Primary" id="ResetToDefaults"><i class="fa fa-refresh"></i> @L["ResetToDefault"]</abp-button>
                 <abp-button button-type="Primary" type="submit"><i class="fa fa-check"></i> @L["Save"]</abp-button>
             </abp-modal-footer>
         }

@@ -44,6 +44,52 @@ public class PackagePreviewSwitcher : ITransientDependency
             await SwitchProjectsToPreview(projectPaths);
         }
     }
+    
+    public async Task SwitchToStable(CommandLineArgs commandLineArgs)
+    {
+        var solutionPaths = GetSolutionPaths(commandLineArgs);
+
+        if (solutionPaths.Any())
+        {
+            await SwitchSolutionsToStable(solutionPaths);
+        }
+        else
+        {
+            var projectPaths = GetProjectPaths(commandLineArgs);
+            
+            await SwitchProjectsToStable(projectPaths);
+        }
+    }
+    
+    public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
+    {
+        var solutionPaths = GetSolutionPaths(commandLineArgs);
+
+        if (solutionPaths.Any())
+        {
+            await SwitchSolutionsToNightlyPreview(solutionPaths);
+        }
+        else
+        {
+            var projectPaths = GetProjectPaths(commandLineArgs);
+            
+            await SwitchProjectsToNightlyPreview(projectPaths);
+        }
+    }
+
+    public async Task SwitchToPreRc(CommandLineArgs commandLineArgs)
+    {
+        var solutionPaths = GetSolutionPaths(commandLineArgs);
+
+        if (solutionPaths.Any())
+        {
+            await SwitchNpmPackageVersionsOfSolutionsToPreRc(solutionPaths);
+        }
+        else
+        {
+            await SwitchNpmPackageVersionsOfProjectsToPreRc(GetProjectPaths(commandLineArgs));
+        }
+    }
 
     private async Task SwitchProjectsToPreview(List<string> projects)
     {
@@ -85,22 +131,6 @@ public class PackagePreviewSwitcher : ITransientDependency
                     false,
                     true);
             }
-        }
-    }
-
-    public async Task SwitchToStable(CommandLineArgs commandLineArgs)
-    {
-        var solutionPaths = GetSolutionPaths(commandLineArgs);
-
-        if (solutionPaths.Any())
-        {
-            await SwitchSolutionsToStable(solutionPaths);
-        }
-        else
-        {
-            var projectPaths = GetProjectPaths(commandLineArgs);
-            
-            await SwitchProjectsToStable(projectPaths);
         }
     }
 
@@ -156,22 +186,6 @@ public class PackagePreviewSwitcher : ITransientDependency
         }
     }
 
-    public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
-    {
-        var solutionPaths = GetSolutionPaths(commandLineArgs);
-
-        if (solutionPaths.Any())
-        {
-            await SwitchSolutionsToNightlyPreview(solutionPaths);
-        }
-        else
-        {
-            var projectPaths = GetProjectPaths(commandLineArgs);
-            
-            await SwitchProjectsToNightlyPreview(projectPaths);
-        }
-    }
-
     private async Task SwitchProjectsToNightlyPreview(List<string> projects)
     {
         foreach (var project in projects)
@@ -217,6 +231,38 @@ public class PackagePreviewSwitcher : ITransientDependency
                 await _npmPackagesUpdater.Update(
                     solutionAngularFolder,
                     true);
+            }
+        }
+    }
+    
+    private async Task SwitchNpmPackageVersionsOfProjectsToPreRc(List<string> projects)
+    {
+        foreach (var project in projects)
+        {
+            var folder = Path.GetDirectoryName(project);
+
+            await _npmPackagesUpdater.Update(
+                folder,
+                includePreRc: true);
+        }
+    }
+
+    private async Task SwitchNpmPackageVersionsOfSolutionsToPreRc(List<string> solutionPaths)
+    {
+        foreach (var solutionPath in solutionPaths)
+        {
+            var solutionFolder = Path.GetDirectoryName(solutionPath);
+            var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
+
+            await _npmPackagesUpdater.Update(
+                solutionFolder,
+                includePreRc: true);
+
+            if (solutionAngularFolder != null)
+            {
+                await _npmPackagesUpdater.Update(
+                    solutionAngularFolder,
+                    includePreRc: true);
             }
         }
     }

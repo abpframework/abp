@@ -507,11 +507,21 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         var dbContext = await GetDbContextAsync(cancellationToken);
         var collection = dbContext.Collection<TEntity>();
 
-        await collection.DeleteManyAsync(
-            dbContext.SessionHandle,
-            Builders<TEntity>.Filter.Where(predicate),
-            cancellationToken: cancellationToken
-        );
+        if (dbContext.SessionHandle != null)
+        {
+            await collection.DeleteManyAsync(
+                dbContext.SessionHandle,
+                Builders<TEntity>.Filter.Where(predicate),
+                cancellationToken: cancellationToken
+            );
+        }
+        else
+        {
+            await collection.DeleteManyAsync(
+                Builders<TEntity>.Filter.Where(predicate),
+                cancellationToken: cancellationToken
+            );
+        }
     }
 
     [Obsolete("Use GetQueryableAsync method.")]

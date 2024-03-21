@@ -32,5 +32,8 @@ public class AbpTenantManagementTestDataBuilder : ITransientDependency
 
         var volosoft = await _tenantManager.CreateAsync("volosoft");
         await _tenantRepository.InsertAsync(volosoft);
+
+        var abp = await _tenantManager.CreateAsync("abp");
+        await _tenantRepository.InsertAsync(abp);
     }
 }

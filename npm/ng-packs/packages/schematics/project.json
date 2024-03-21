@@ -14,9 +14,6 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["packages/schematics/src/**/*.ts", "packages/schematics/src/**/*.html"]
-      },
       "outputs": ["{options.outputFile}"]
     }
   },

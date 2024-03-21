@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
 
@@ -10,12 +11,12 @@ public class AbpSerializationModule : AbpModule
     {
         context.Services.OnExposing(onServiceExposingContext =>
         {
-                //Register types for IObjectSerializer<T> if implements
-                onServiceExposingContext.ExposedTypes.AddRange(
+            //Register types for IObjectSerializer<T> if implements
+            onServiceExposingContext.ExposedTypes.AddRange(
                 ReflectionHelper.GetImplementedGenericTypes(
                     onServiceExposingContext.ImplementationType,
                     typeof(IObjectSerializer<>)
-                )
+                ).ConvertAll(t => new ServiceIdentifier(t))
             );
         });
     }

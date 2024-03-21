@@ -85,6 +85,7 @@
     "Permission:Edit": "Muokkaus",
     "Permission:Delete": "Poisto",
     "Permission:ChangePermissions": "Muuta käyttöoikeuksia",
+    "Permission:ManageRoles": "Hallitse rooleja",
     "Permission:UserManagement": "Käyttäjien hallinta",
     "Permission:UserLookup": "Käyttäjähaku",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Vaadittu pituus",

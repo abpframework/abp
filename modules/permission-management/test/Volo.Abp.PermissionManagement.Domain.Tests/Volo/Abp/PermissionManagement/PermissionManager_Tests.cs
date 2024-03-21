@@ -134,6 +134,21 @@ public class PermissionManager_Tests : PermissionTestBase
             "Test",
             true);
     }
+    
+    [Fact]
+    public async Task Set_Should_Throw_Exception_If_Provider_Not_Found()
+    {
+       var exception =  await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _permissionManager.SetAsync(
+                "MyPermission1",
+                "UndefinedProvider",
+                "Test",
+                true);
+        });
+       
+        exception.Message.ShouldBe("Unknown permission management provider: UndefinedProvider");
+    }
 
     [Fact]
     public async Task UpdateProviderKey()

@@ -1053,7 +1053,16 @@
                 },
                 {
                   "text": "HTTP Requests",
-                  "path": "UI/Angular/HTTP-Requests.md"
+                  "items": [
+                    { 
+                      "text": "How to Make HTTP Requests",
+                      "path": "UI/Angular/HTTP-Requests.md"
+                    },
+                    { 
+                      "text": "Customize Error Handling",
+                      "path": "UI/Angular/HTTP-Error-Handling.md"
+                    }
+                  ]
                 },
                 {
                   "text": "Localization",
@@ -1173,8 +1182,8 @@
                   "path": "UI/Angular/Content-Security-Strategy.md"
                 },
                 {
-                  "text":"Abp Window Service",
-                  "path":"UI/Angular/Abp-Window-Service.md"
+                  "text": "Abp Window Service",
+                  "path": "UI/Angular/Abp-Window-Service.md"
                 }
               ]
             },

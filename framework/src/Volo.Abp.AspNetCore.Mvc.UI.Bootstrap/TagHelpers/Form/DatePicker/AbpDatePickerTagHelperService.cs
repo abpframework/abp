@@ -77,11 +77,6 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
         return TagHelper.AspFor;
     }
 
-    protected async override Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        return DateTagHelper != null ? await GetValidationAsHtmlByInputAsync(context, output, DateTagHelper) : string.Empty;
-    }
-
     protected override string GetExtraInputHtml(TagHelperContext context, TagHelperOutput output)
     {
         return DateTagHelperOutput?.Render(Encoder)!;

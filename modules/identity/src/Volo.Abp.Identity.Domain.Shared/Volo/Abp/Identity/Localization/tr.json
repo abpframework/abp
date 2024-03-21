@@ -85,6 +85,7 @@
     "Permission:Edit": "Düzenleme",
     "Permission:Delete": "Silme",
     "Permission:ChangePermissions": "İzinleri değiştirme",
+    "Permission:ManageRoles": "Rolleri yönetme",
     "Permission:UserManagement": "Kullanıcı yönetimi",
     "Permission:UserLookup": "Kullanıcı sorgulama",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Uzunluk gerekli",

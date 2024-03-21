@@ -15,6 +15,11 @@ public class AbpTenantManagementDomainMappingProfile : Profile
                 {
                     var connStrings = new ConnectionStrings();
 
+                    if (tenant.ConnectionStrings == null)
+                    {
+                        return connStrings;
+                    }
+
                     foreach (var connectionString in tenant.ConnectionStrings)
                     {
                         connStrings[connectionString.Name] = connectionString.Value;
