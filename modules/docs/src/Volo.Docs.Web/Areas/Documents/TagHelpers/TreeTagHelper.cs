@@ -1,11 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Docs.Documents;
 using Volo.Docs.Localization;
+using Volo.Docs.Pages.Documents.Project;
 using Volo.Docs.Utils;
 
 namespace Volo.Docs.Areas.Documents.TagHelpers
@@ -18,6 +22,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         private readonly DocsUiOptions _uiOptions;
 
         private readonly IStringLocalizer<DocsResource> _localizer;
+        
+        private readonly LinkGenerator _linkGenerator;
 
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
@@ -45,10 +51,11 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
 
-        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer)
+        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer, LinkGenerator linkGenerator)
         {
             _localizer = localizer;
             _uiOptions = urlOptions.Value;
+            _linkGenerator = linkGenerator;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -172,11 +179,19 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             {
                 return "javascript:;";
             }
-
-            var prefix = _uiOptions.RoutePrefix;
             
-            var sb = new StringBuilder();
-            return sb.Append(prefix).Append(LanguageCode).Append("/").Append(ProjectName).Append("/").Append(Version).Append("/").Append(pathWithoutFileExtension).ToString();
+            var routeValues = new Dictionary<string, object> {
+                { nameof(IndexModel.LanguageCode), LanguageCode },
+                { nameof(IndexModel.Version), Version },
+                { nameof(IndexModel.DocumentName), pathWithoutFileExtension }
+            };
+
+            if (!_uiOptions.SingleProjectMode.Enable)
+            {
+                routeValues.Add(nameof(IndexModel.ProjectName), ProjectName);
+            }
+
+            return _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
         }
 
         private string RemoveFileExtensionFromPath(string path)

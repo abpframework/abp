@@ -78,6 +78,8 @@ namespace VoloDocs.Web
             Configure<DocsUiOptions>(options =>
             {
                 options.RoutePrefix = null;
+                options.SingleProjectMode.Enable = true;
+                options.SingleProjectMode.ProjectName = "abp";
             });
 
             Configure<DocsElasticSearchOptions>(options =>
