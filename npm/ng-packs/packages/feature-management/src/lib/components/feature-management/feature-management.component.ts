@@ -31,6 +31,12 @@ export class FeatureManagementComponent
     FeatureManagement.FeatureManagementComponentInputs,
     FeatureManagement.FeatureManagementComponentOutputs
 {
+  protected readonly trackByService = inject(TrackByService);
+  protected readonly toasterService = inject(ToasterService);
+  protected readonly service = inject(FeaturesService);
+  protected readonly configState = inject(ConfigStateService);
+  protected readonly confirmationService = inject(ConfirmationService);
+
   @Input()
   providerKey: string;
 
@@ -71,14 +77,6 @@ export class FeatureManagementComponent
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   modalBusy = false;
-
-  constructor(
-    public readonly track: TrackByService,
-    private toasterService: ToasterService,
-    protected service: FeaturesService,
-    protected configState: ConfigStateService,
-    protected confirmationService: ConfirmationService,
-  ) {}
 
   openModal() {
     if (!this.providerName) {

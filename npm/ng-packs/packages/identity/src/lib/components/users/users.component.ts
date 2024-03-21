@@ -19,6 +19,7 @@ import {
 } from '@abp/ng.components/extensible';
 import {
   Component,
+  inject,
   Injector,
   OnInit,
   TemplateRef,
@@ -46,6 +47,13 @@ import { eIdentityComponents } from '../../enums/components';
   ],
 })
 export class UsersComponent implements OnInit {
+  protected readonly list = inject(ListService<GetIdentityUsersInput>);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly service = inject(IdentityUserService);
+  protected readonly toasterService = inject(ToasterService);
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly injector = inject(Injector);
+
   data: PagedResultDto<IdentityUserDto> = { items: [], totalCount: 0 };
 
   @ViewChild('modalContent', { static: false })
@@ -82,15 +90,6 @@ export class UsersComponent implements OnInit {
   get roleGroups(): UntypedFormGroup[] {
     return ((this.form.get('roleNames') as UntypedFormArray)?.controls as UntypedFormGroup[]) || [];
   }
-
-  constructor(
-    public readonly list: ListService<GetIdentityUsersInput>,
-    protected confirmationService: ConfirmationService,
-    protected service: IdentityUserService,
-    private toasterService: ToasterService,
-    protected fb: UntypedFormBuilder,
-    protected injector: Injector,
-  ) {}
 
   ngOnInit() {
     this.hookToQuery();

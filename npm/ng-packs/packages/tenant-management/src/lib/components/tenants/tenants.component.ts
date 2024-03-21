@@ -7,7 +7,7 @@ import {
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, inject, Injector, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
@@ -24,6 +24,13 @@ import { eTenantManagementComponents } from '../../enums/components';
   ],
 })
 export class TenantsComponent implements OnInit {
+  protected readonly list = inject(ListService<GetTenantsInput>);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly service = inject(TenantService);
+  protected readonly toasterService = inject(ToasterService);
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly injector = inject(Injector);
+
   data: PagedResultDto<TenantDto> = { items: [], totalCount: 0 };
 
   selected!: TenantDto;
@@ -47,15 +54,6 @@ export class TenantsComponent implements OnInit {
   onVisibleFeaturesChange = (value: boolean) => {
     this.visibleFeatures = value;
   };
-
-  constructor(
-    public readonly list: ListService<GetTenantsInput>,
-    private injector: Injector,
-    private confirmationService: ConfirmationService,
-    private service: TenantService,
-    private toasterService: ToasterService,
-    private fb: UntypedFormBuilder,
-  ) {}
 
   ngOnInit() {
     this.hookToQuery();

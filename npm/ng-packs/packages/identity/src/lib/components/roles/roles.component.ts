@@ -7,7 +7,7 @@ import {
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, inject, Injector, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
@@ -24,6 +24,12 @@ import { eIdentityComponents } from '../../enums/components';
   ],
 })
 export class RolesComponent implements OnInit {
+  protected readonly list = inject(ListService<PagedAndSortedResultRequestDto>);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly toasterService = inject(ToasterService);
+  private readonly injector = inject(Injector);
+  protected readonly service = inject(IdentityRoleService);
+
   data: PagedResultDto<IdentityRoleDto> = { items: [], totalCount: 0 };
 
   form!: UntypedFormGroup;
@@ -43,14 +49,6 @@ export class RolesComponent implements OnInit {
   onVisiblePermissionChange = (event: boolean) => {
     this.visiblePermissions = event;
   };
-
-  constructor(
-    public readonly list: ListService<PagedAndSortedResultRequestDto>,
-    protected confirmationService: ConfirmationService,
-    private toasterService: ToasterService,
-    protected injector: Injector,
-    protected service: IdentityRoleService,
-  ) {}
 
   ngOnInit() {
     this.hookToQuery();

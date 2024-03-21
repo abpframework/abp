@@ -12,6 +12,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  inject,
   Input,
   Output,
   QueryList,
@@ -52,6 +53,10 @@ export class PermissionManagementComponent
     PermissionManagement.PermissionManagementComponentInputs,
     PermissionManagement.PermissionManagementComponentOutputs
 {
+  protected readonly service = inject(PermissionsService);
+  protected readonly configState = inject(ConfigStateService);
+  protected readonly toasterService = inject(ToasterService);
+
   @Input()
   readonly providerName!: string;
 
@@ -117,12 +122,6 @@ export class PermissionManagementComponent
   selectedGroupPermissions: PermissionWithStyle[] = [];
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
-
-  constructor(
-    protected service: PermissionsService,
-    protected configState: ConfigStateService,
-    private readonly toasterService: ToasterService,
-  ) {}
 
   getChecked(name: string) {
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
