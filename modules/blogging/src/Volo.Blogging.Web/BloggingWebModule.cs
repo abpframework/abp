@@ -92,15 +92,25 @@ namespace Volo.Blogging
 
                 var routePrefix = urlOptions.RoutePrefix;
 
-                if (!routePrefix.IsNullOrWhiteSpace())
+                if (urlOptions.SingleBlogMode.Enable)
                 {
-                    options.Conventions.AddPageRoute("/Blogs/Index", routePrefix);
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Index", routePrefix);
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Detail", routePrefix + "{postUrl}");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Edit", routePrefix + "posts/{postId}/edit");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/New", routePrefix + "posts/new");
                 }
-
-                options.Conventions.AddPageRoute("/Blogs/Posts/Index", routePrefix + "{blogShortName:blogNameConstraint}");
-                options.Conventions.AddPageRoute("/Blogs/Posts/Detail", routePrefix + "{blogShortName:blogNameConstraint}/{postUrl}");
-                options.Conventions.AddPageRoute("/Blogs/Posts/Edit", routePrefix + "{blogShortName}/posts/{postId}/edit");
-                options.Conventions.AddPageRoute("/Blogs/Posts/New", routePrefix + "{blogShortName}/posts/new");
+                else
+                {
+                    if (!routePrefix.IsNullOrWhiteSpace())
+                    {
+                        options.Conventions.AddPageRoute("/Blogs/Index", routePrefix);
+                    }
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Index", routePrefix + "{blogShortName:blogNameConstraint}");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Detail", routePrefix + "{blogShortName:blogNameConstraint}/{postUrl}");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Edit", routePrefix + "{blogShortName}/posts/{postId}/edit");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/New", routePrefix + "{blogShortName}/posts/new");
+                }
+                
                 options.Conventions.AddPageRoute("/Blogs/Members/Index", routePrefix + "members/{userName}");
             });
 
