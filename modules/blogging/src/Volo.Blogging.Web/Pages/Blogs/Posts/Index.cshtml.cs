@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 using Volo.Blogging.Blogs;
@@ -18,6 +19,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
         private readonly ITagAppService _tagAppService;
+        public BloggingUrlOptions BlogOptions { get; }
 
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
@@ -31,11 +33,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public IReadOnlyList<TagDto> PopularTags { get; set; }
 
-        public IndexModel(IPostAppService postAppService, IBlogAppService blogAppService, ITagAppService tagAppService)
+        public IndexModel(IPostAppService postAppService, IBlogAppService blogAppService, ITagAppService tagAppService, IOptions<BloggingUrlOptions> blogOptions)
         {
             _postAppService = postAppService;
             _blogAppService = blogAppService;
             _tagAppService = tagAppService;
+            BlogOptions = blogOptions.Value;
         }
 
         public virtual async Task<ActionResult> OnGetAsync()
@@ -47,7 +50,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
             try
             {
-                Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
+                Blog = await GetBlogAsync(_blogAppService, BlogOptions, BlogShortName);
+                BlogShortName = Blog.ShortName;
             }
             catch (EntityNotFoundException)
             { 
@@ -59,5 +63,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
             return Page();
         }
+
+        
     }
 }
