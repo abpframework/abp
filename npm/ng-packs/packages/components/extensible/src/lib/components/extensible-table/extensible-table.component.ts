@@ -1,6 +1,6 @@
 import {
   ABP,
-  ConfigStateService, 
+  ConfigStateService,
   getShortDateFormat,
   getShortDateShortTimeFormat,
   getShortTimeFormat,
@@ -9,12 +9,7 @@ import {
   PermissionDirective,
   PermissionService,
 } from '@abp/ng.core';
-import {
-  AsyncPipe,
-  formatDate,
-  NgComponentOutlet, 
-  NgTemplateOutlet,
-} from '@angular/common';
+import { AsyncPipe, formatDate, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -179,8 +174,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   ngOnChanges({ data, recordsTotal }: SimpleChanges) {
     if (data?.currentValue.length < 1 && recordsTotal?.currentValue > 0) {
       let maxPage = Math.floor(Number(recordsTotal?.currentValue / this.list.maxResultCount));
-      
-      if(recordsTotal?.currentValue < this.list.maxResultCount) {
+
+      if (recordsTotal?.currentValue < this.list.maxResultCount) {
         this.list.page = 0;
         return;
       }
@@ -202,6 +197,10 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
     if (data.currentValue.length < 1) {
       this.list.totalCount = this.recordsTotal;
+    }
+
+    if (data.currentValue.length !== this.recordsTotal) {
+      this.recordsTotal = data.currentValue.length;
     }
 
     this.data = data.currentValue.map((record: any, index: number) => {
