@@ -309,7 +309,7 @@ public class AngularSourceCodeAdder : ITransientDependency
         string pattern = "Routes\\s*=\\s*\\[";
         string newContent = $@"Routes = [
     {{
-        path: '{path}',
+        path: '{path.ToKebabCase()}',
         loadChildren: () => import('@{moduleNameAsConfigPath}')
             .then(m => m.{(moduleName.Split(".").Length > 1 ? moduleName.Split(".")[1] : moduleName)}Module.forLazy())
     }},
