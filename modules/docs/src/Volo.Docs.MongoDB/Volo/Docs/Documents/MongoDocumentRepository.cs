@@ -29,7 +29,8 @@ namespace Volo.Docs.Documents
                     Id = x.Id,
                     Version = x.Version,
                     LanguageCode = x.LanguageCode,
-                    Format = x.Format
+                    Format = x.Format,
+                    Name = x.Name
                 })
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
