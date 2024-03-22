@@ -612,6 +612,7 @@
     "AllowedLicenses": "Allowed Licenses",
     "AllowedModules": "Allowed Modules",
     "ModuleName": "Module name",
-    "NonYet": "Non yet"
+    "NonYet": "Non yet",
+    "Permission:Testimonials": "Testimonials"
   }
 }

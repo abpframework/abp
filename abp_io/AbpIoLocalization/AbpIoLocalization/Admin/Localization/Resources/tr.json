@@ -451,6 +451,7 @@
     "TestimonialText": "Tecrübe yazısı",
     "ExperienceYear": "Sektörel deneyim",
     "Position": "Başlık",
-    "Actions": "İşlemler"
+    "Actions": "İşlemler",
+    "Permission:Testimonials": "Referanslar"
   }
 }
