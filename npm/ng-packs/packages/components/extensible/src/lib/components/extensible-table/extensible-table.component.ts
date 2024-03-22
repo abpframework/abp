@@ -1,6 +1,6 @@
 import {
   ABP,
-  ConfigStateService, 
+  ConfigStateService,
   getShortDateFormat,
   getShortDateShortTimeFormat,
   getShortTimeFormat,
@@ -10,11 +10,11 @@ import {
   PermissionService,
 } from '@abp/ng.core';
 import {
-  AsyncPipe,
-  formatDate,
-  NgComponentOutlet, 
-  NgTemplateOutlet,
-} from '@angular/common';
+  AbpVisibleDirective,
+  NgxDatatableDefaultDirective,
+  NgxDatatableListDirective,
+} from '@abp/ng.theme.shared';
+import { AsyncPipe, formatDate, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -29,6 +29,8 @@ import {
   TemplateRef,
   TrackByFunction,
 } from '@angular/core';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ePropType } from '../../enums/props.enum';
@@ -41,14 +43,7 @@ import {
   EXTENSIONS_IDENTIFIER,
   PROP_DATA_STREAM,
 } from '../../tokens/extensions.token';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { GridActionsComponent } from '../grid-actions/grid-actions.component';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import {
-  AbpVisibleDirective,
-  NgxDatatableDefaultDirective,
-  NgxDatatableListDirective,
-} from '@abp/ng.theme.shared';
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
@@ -172,32 +167,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     );
   }
 
-  setPage({ offset }) {
-    this.list.page = offset;
-  }
-
-  ngOnChanges({ data, recordsTotal }: SimpleChanges) {
-    if (data?.currentValue.length < 1 && recordsTotal?.currentValue > 0) {
-      let maxPage = Math.floor(Number(recordsTotal?.currentValue / this.list.maxResultCount));
-      
-      if(recordsTotal?.currentValue < this.list.maxResultCount) {
-        this.list.page = 0;
-        return;
-      }
-
-      if (recordsTotal?.currentValue % this.list.maxResultCount === 0) {
-        maxPage -= 1;
-      }
-
-      if (this.list.page < maxPage) {
-        this.list.page = this.list.page;
-        return;
-      }
-
-      this.list.page = maxPage;
-      return;
-    }
-
+  ngOnChanges({ data }: SimpleChanges) {
     if (!data?.currentValue) return;
 
     if (data.currentValue.length < 1) {

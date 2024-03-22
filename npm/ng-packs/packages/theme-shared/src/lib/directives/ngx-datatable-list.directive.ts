@@ -8,6 +8,7 @@ import {
   OnDestroy,
   OnInit,
   Optional,
+  DoCheck,
   SimpleChanges,
 } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -24,7 +25,7 @@ import {
   standalone: true,
   exportAs: 'ngxDatatableList',
 })
-export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
+export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit, DoCheck {
   private subscription = new Subscription();
   private querySubscription = new Subscription();
 
@@ -37,6 +38,30 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
     @Optional() @Inject(NGX_DATATABLE_MESSAGES) private ngxDatatableMessages: NgxDatatableMessages,
   ) {
     this.setInitialValues();
+  }
+
+  ngDoCheck(): void {
+    this.refreshPageIfDataExist();
+  }
+
+  ngOnInit() {
+    this.subscribeToPage();
+    this.subscribeToSort();
+  }
+
+  ngOnChanges({ list }: SimpleChanges) {
+    this.subscribeToQuery();
+
+    if (!list.firstChange) return;
+
+    const { maxResultCount, page } = list.currentValue;
+    this.table.limit = maxResultCount;
+    this.table.offset = page;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this.querySubscription.unsubscribe();
   }
 
   private setInitialValues() {
@@ -68,6 +93,13 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
     this.subscription.add(sub);
   }
 
+  private subscribeToPage() {
+    const sub = this.table.page.subscribe(({ offset }) => {
+      this.setTablePage(offset);
+    });
+    this.subscription.add(sub);
+  }
+
   private subscribeToQuery() {
     if (!this.querySubscription.closed) this.querySubscription.unsubscribe();
 
@@ -77,22 +109,30 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
     });
   }
 
-  ngOnChanges({ list }: SimpleChanges) {
-    this.subscribeToQuery();
-
-    if (!list.firstChange) return;
-
-    const { maxResultCount, page } = list.currentValue;
-    this.table.limit = maxResultCount;
-    this.table.offset = page;
+  private setTablePage(pageNum: number) {
+    this.list.page = pageNum;
+    this.table.offset = pageNum;
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-    this.querySubscription.unsubscribe();
-  }
+  private refreshPageIfDataExist() {
+    if (this.table.rows.length < 1 && this.list.totalCount > 0) {
+      let maxPage = Math.floor(Number(this.list.totalCount / this.list.maxResultCount));
 
-  ngOnInit() {
-    this.subscribeToSort();
+      if (this.list.totalCount < this.list.maxResultCount) {
+        this.setTablePage(0);
+        return;
+      }
+
+      if (this.list.totalCount % this.list.maxResultCount === 0) {
+        maxPage -= 1;
+      }
+
+      if (this.list.page < maxPage) {
+        this.setTablePage(this.list.page);
+        return;
+      }
+
+      this.setTablePage(maxPage);
+    }
   }
 }
