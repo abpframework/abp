@@ -37,9 +37,9 @@ namespace Volo.Docs
         }
         
         [Fact]
-        public async Task ClearCachesAsync()
+        public async Task UpdateProjectLastCachedTimeAsync()
         {
-            await DocumentRepository.ClearCachesAsync(DocsTestData.ProjectId);
+            await DocumentRepository.UpdateProjectLastCachedTimeAsync(DocsTestData.ProjectId, DateTime.MinValue);
             var documentsAfterClear = await DocumentRepository.GetListByProjectId(DocsTestData.ProjectId);
             documentsAfterClear.ForEach(d => d.LastCachedTime.ShouldBe(DateTime.MinValue));
         }

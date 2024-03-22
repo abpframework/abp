@@ -70,7 +70,7 @@ namespace Volo.Docs.Admin.Documents
             
             await _documentUpdateCache.RemoveManyAsync(documentUpdateInfoCacheKeys);
 
-            await _documentRepository.ClearCachesAsync(project.Id);
+            await _documentRepository.UpdateProjectLastCachedTimeAsync(project.Id, DateTime.MinValue);
         }
 
         public virtual async Task PullAllAsync(PullAllDocumentInput input)

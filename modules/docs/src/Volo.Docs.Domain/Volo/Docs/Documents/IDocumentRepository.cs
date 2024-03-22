@@ -13,7 +13,8 @@ namespace Volo.Docs.Documents
 
         Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default);
         
-        Task ClearCachesAsync(Guid projectId, CancellationToken cancellationToken = default);
+        Task UpdateProjectLastCachedTimeAsync(Guid projectId, DateTime cachedTime,
+            CancellationToken cancellationToken = default);
 
         Task<Document> FindAsync(Guid projectId,
             string name,
