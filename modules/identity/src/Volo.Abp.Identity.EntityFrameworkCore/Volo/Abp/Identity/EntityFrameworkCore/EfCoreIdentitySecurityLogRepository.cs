@@ -10,9 +10,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore;
 
-public class EFCoreIdentitySecurityLogRepository : EfCoreRepository<IIdentityDbContext, IdentitySecurityLog, Guid>, IIdentitySecurityLogRepository
+public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<IIdentityDbContext, IdentitySecurityLog, Guid>, IIdentitySecurityLogRepository
 {
-    public EFCoreIdentitySecurityLogRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
+    public EfCoreIdentitySecurityLogRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
 
@@ -20,7 +20,7 @@ public class EFCoreIdentitySecurityLogRepository : EfCoreRepository<IIdentityDbC
 
     public virtual async Task<List<IdentitySecurityLog>> GetListAsync(
         string sorting = null,
-        int maxResultCount = 50,
+        int maxResultCount = int.MaxValue,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
