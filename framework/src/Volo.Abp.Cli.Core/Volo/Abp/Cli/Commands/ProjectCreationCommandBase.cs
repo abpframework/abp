@@ -43,7 +43,7 @@ public abstract class ProjectCreationCommandBase
     public ThemePackageAdder ThemePackageAdder { get; }
 
     public AngularThemeConfigurer AngularThemeConfigurer { get; }
-    
+
     public CliVersionService CliVersionService { get; }
 
     public ProjectCreationCommandBase(
@@ -436,15 +436,15 @@ public abstract class ProjectCreationCommandBase
 
         var isModuleTemplate = ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName);
         var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
-        
-        var message = isWebassembly || isModuleTemplate 
-            ? "Generating bundles for Blazor Wasm" 
+
+        var message = isWebassembly || isModuleTemplate
+            ? "Generating bundles for Blazor Wasm"
             : "Generating bundles for MAUI Blazor";
-        
+
         var projectType = isWebassembly || isModuleTemplate
-            ? BundlingConsts.WebAssembly 
+            ? BundlingConsts.WebAssembly
             : BundlingConsts.MauiBlazor;
-        
+
         Logger.LogInformation(message + "...");
 
         await EventBus.PublishAsync(new ProjectCreationProgressEvent
@@ -454,7 +454,7 @@ public abstract class ProjectCreationCommandBase
 
         var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
         var path = projectArgs.OutputFolder;
-        
+
         if (isModuleTemplate)
         {
             path = Path.Combine(path, "host");
@@ -471,7 +471,7 @@ public abstract class ProjectCreationCommandBase
 
         await _bundlingService.BundleAsync(directory, true, projectType);
     }
-    
+
     protected virtual bool ShouldRunBundleCommand(ProjectBuildArgs projectArgs)
     {
         if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
@@ -711,7 +711,7 @@ public abstract class ProjectCreationCommandBase
 
     protected virtual ThemeStyle? GetThemeStyleOrNull(CommandLineArgs commandLineArgs, Theme theme)
     {
-        if(theme != Theme.LeptonX)
+        if (theme != Theme.LeptonX)
         {
             return null;
         }
@@ -747,6 +747,53 @@ public abstract class ProjectCreationCommandBase
                 angularFolderPath: angularFolderPath
             ));
         }
+    }
+
+    protected virtual async Task ConfigureAngularLibraryAfterMicroserviceServiceCreatedAsync(ProjectBuildArgs projectArgs, string template)
+    {
+        if (!MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
+        {
+            return;
+        }
+
+        var projectRootpath = Directory.GetCurrentDirectory();
+        var projectUiFramework = FindMicroserviceSolutionUiFramework(projectRootpath);
+
+        if (projectUiFramework != UiFramework.Angular)
+        {
+            return;
+        }
+
+        Logger.LogInformation("Setting up the angular library...");
+
+        var libraryName = projectArgs.SolutionName.ProjectName.ToKebabCase();
+
+        var hostAppPath = Path.Combine(projectRootpath, "apps", "angular");
+        var angularLibraryPath = Path.Combine(hostAppPath, "projects", libraryName);
+
+        await GenerateAngularLibraryForNewMicroserviceAsync(libraryName, hostAppPath);
+
+        try
+        {
+            Directory.Delete(angularLibraryPath, true);
+            await MoveLibraryToHostAppAsync(projectArgs.OutputFolder, libraryName, angularLibraryPath);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e.Message);
+        }
+    }
+
+    protected virtual async Task<string> GenerateAngularLibraryForNewMicroserviceAsync(string libraryName, string workingDirectory)
+    {
+        var result = CmdHelper.RunCmdAndGetOutput($"npx ng g library {libraryName}", workingDirectory);
+        return await Task.FromResult(result);
+    }
+
+    protected virtual async Task MoveLibraryToHostAppAsync(string outputFolder, string libraryName, string angularLibraryPath)
+    {
+        var currentAngularLibPath = Path.Combine(outputFolder, "angular", libraryName);
+        Directory.Move(currentAngularLibPath, angularLibraryPath);
     }
 
     public static class Options
