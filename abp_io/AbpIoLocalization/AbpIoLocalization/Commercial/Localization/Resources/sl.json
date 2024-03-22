@@ -408,6 +408,7 @@
     "SendUsEmail": "Pošljite nam e-pošto",
     "ErrorExceptionMessage": "Pri obdelavi vaše zahteve je prišlo do napake",
     "WatchTakeCodeGeneration": "Oglejte si video »Raziščite potencial generiranja kode: zbirka ABP«!",
-    "ExtendNow": "Podaljšaj / obnovi"
+    "ExtendNow": "Podaljšaj / obnovi",
+    "RegisterDemo": "Registrirajte se"
   }
 }

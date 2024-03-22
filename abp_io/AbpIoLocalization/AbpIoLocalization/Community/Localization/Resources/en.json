@@ -260,6 +260,7 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> supported.",
     "Preview": "Preview",
     "VisitPage": "Visit Page",
-    "VisitVideoCourseDescription": "If you want to learn the basics of the ABP Framework, check out the ABP Essentials Video courses."
+    "VisitVideoCourseDescription": "If you want to learn the basics of the ABP Framework, check out the ABP Essentials Video courses.",
+    "EditProfile": "Edit Profile"
   }
 }

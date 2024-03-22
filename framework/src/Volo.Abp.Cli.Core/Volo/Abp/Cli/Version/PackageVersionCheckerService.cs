@@ -1,5 +1,5 @@
 using System;
-using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using NuGet.Versioning;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
-using System.Net.Mail;
+using System.Text.Json.Serialization;
 
 namespace Volo.Abp.Cli.Version;
 
@@ -66,7 +66,7 @@ public class PackageVersionCheckerService : ITransientDependency
         {
             return await GetLatestStableVersionFromGithubAsync();
         }
-        
+
         var versionList = await GetPackageVersionListAsync(packageId, includeNightly);
         if (versionList == null)
         {
@@ -79,8 +79,8 @@ public class PackageVersionCheckerService : ITransientDependency
             .Select(SemanticVersion.Parse)
             .OrderByDescending(v => v, new VersionComparer()).ToList();
 
-        return versions.Any() 
-            ? new LatestVersionInfo(versions.Max()) 
+        return versions.Any()
+            ? new LatestVersionInfo(versions.Max())
             : null;
 
     }
@@ -96,7 +96,7 @@ public class PackageVersionCheckerService : ITransientDependency
         {
             return await GetPackageVersionsFromAbpCommercialNuGetAsync(packageId);
         }
-        
+
         return await GetPackageVersionsFromNuGetOrgAsync(packageId) ?? new List<string>();
     }
 
@@ -113,21 +113,32 @@ public class PackageVersionCheckerService : ITransientDependency
             : null;
     }
 
+    private static ConcurrentDictionary<string, bool> CommercialPackagesCache { get; } = new ();
+
     private async Task<bool> IsCommercialPackageAsync(string packageId)
     {
+        if (CommercialPackagesCache.TryGetValue(packageId, out var isCommercial))
+        {
+            return isCommercial;
+        }
+
         if (CommercialPackages.IsCommercial(packageId))
         {
+            CommercialPackagesCache.TryAdd(packageId, true);
             return true;
         }
 
         await SetApiKeyResultAsync();
         if (_apiKeyResult?.ApiKey == null)
         {
+            CommercialPackagesCache.TryAdd(packageId, false);
             return false;
         }
 
         var searchUrl = CliUrls.GetNuGetPackageSearchUrl(_apiKeyResult.ApiKey, packageId);
-        return await HasAnyPackageAsync(searchUrl, packageId);
+        isCommercial = await HasAnyPackageAsync(searchUrl, packageId);
+        CommercialPackagesCache.TryAdd(packageId, isCommercial);
+        return isCommercial;
     }
 
     private async Task<bool> HasAnyPackageAsync(string url, string packageId)
@@ -147,7 +158,7 @@ public class PackageVersionCheckerService : ITransientDependency
                 var responseContent = await responseMessage.Content.ReadAsStringAsync();
                 var nugetSearchResult = JsonSerializer.Deserialize<NuGetSearchResultDto>(responseContent);
 
-                return nugetSearchResult.TotalHits > 0 && nugetSearchResult.Packages.Any(package => package.Id.ToLowerInvariant() == packageId.ToLowerInvariant());
+                return nugetSearchResult.TotalHits > 0 && nugetSearchResult.Data.Any(package => package.Id.ToLowerInvariant() == packageId.ToLowerInvariant());
             }
         }
         catch (Exception)
@@ -191,7 +202,7 @@ public class PackageVersionCheckerService : ITransientDependency
                     //the package doesn't exist...
                     return new List<string>();
                 }
-                
+
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 var responseContent = await responseMessage.Content.ReadAsStringAsync();
@@ -231,7 +242,7 @@ public class PackageVersionCheckerService : ITransientDependency
 
                 var content = await responseMessage.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<List<LatestStableVersionResult>>(content);
-                
+
                 return result.FirstOrDefault(x => x.Type.ToLowerInvariant() == "stable");
             }
         }
@@ -243,25 +254,20 @@ public class PackageVersionCheckerService : ITransientDependency
 
     public class NuGetSearchResultDto
     {
-        [JsonProperty("totalHits")]
         public int TotalHits { get; set; }
 
-        [JsonProperty("data")]
-        public NuGetSearchResultPackagesDto[] Packages { get; set; }
+        public NuGetSearchResultPackagesDto[] Data { get; set; }
     }
 
-    public class NuGetSearchResultPackagesDto 
+    public class NuGetSearchResultPackagesDto
     {
-        [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("version")]
         public string Version { get; set; }
     }
-    
+
     public class NuGetVersionResultDto
     {
-        [JsonProperty("versions")]
         public List<string> Versions { get; set; }
     }
 
@@ -272,7 +278,7 @@ public class PackageVersionCheckerService : ITransientDependency
         public DateTime? ReleaseDate { get; set; }
 
         public string Type { get; set; }
-        
+
         public string Message { get; set; }
     }
 }
