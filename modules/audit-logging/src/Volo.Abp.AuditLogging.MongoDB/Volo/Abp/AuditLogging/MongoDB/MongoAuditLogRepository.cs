@@ -30,6 +30,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
         DateTime? endTime = null,
         string httpMethod = null,
         string url = null,
+        string clientId = null,
         Guid? userId = null,
         string userName = null,
         string applicationName = null,
@@ -47,6 +48,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
             endTime,
             httpMethod,
             url,
+            clientId,
             userId,
             userName,
             applicationName,
@@ -72,6 +74,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
         DateTime? endTime = null,
         string httpMethod = null,
         string url = null,
+        string clientId = null,
         Guid? userId = null,
         string userName = null,
         string applicationName = null,
@@ -88,6 +91,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
             endTime,
             httpMethod,
             url,
+            clientId,
             userId,
             userName,
             applicationName,
@@ -111,6 +115,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
         DateTime? endTime = null,
         string httpMethod = null,
         string url = null,
+        string clientId = null,
         Guid? userId = null,
         string userName = null,
         string applicationName = null,
@@ -130,6 +135,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
             .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null || auditLog.Exceptions == "")
             .WhereIf(!httpMethod.IsNullOrEmpty(), auditLog => auditLog.HttpMethod == httpMethod)
             .WhereIf(!url.IsNullOrEmpty(), auditLog => auditLog.Url != null && auditLog.Url.Contains(url))
+            .WhereIf(!clientId.IsNullOrEmpty(), auditLog => auditLog.ClientId == clientId)
             .WhereIf(userId != null, auditLog => auditLog.UserId == userId)
             .WhereIf(!userName.IsNullOrEmpty(), auditLog => auditLog.UserName == userName)
             .WhereIf(!applicationName.IsNullOrEmpty(), auditLog => auditLog.ApplicationName == applicationName)

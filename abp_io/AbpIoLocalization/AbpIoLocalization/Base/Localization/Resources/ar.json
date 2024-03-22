@@ -230,6 +230,19 @@
     "CommunityProfile": "ملف تعريف المجتمع",
     "BlogProfile": "الملف الشخصي للمدونة",
     "Tickets": "التذاكر",
-    "DisplayName:CommunityIndexPagePoll": "استطلاع"
+    "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">المجتمع</span> معرفة",
+    "DisplayName:CommunityIndexPagePoll": "استطلاع",
+    "OrganizationOverview": "نظرة عامة على المنظمة",
+    "EmailPreferences": "تفضيلات البريد الإلكتروني",
+    "VideoCourses": "فيديوهات أساسية",
+    "Resources": "موارد",
+    "DoYouAgreePrivacyPolicy": "بالضغط <b>يشترك</b> الزر الذي توافق عليه <a href=\"https://account.abp.io/Account/TermsConditions\">شروط</a> و <a href=\"https://account.abp.io/Account/Privacy\">سياسة الخصوصية</a>.",
+    "PromotionalOffers": "عروض ترويجية",
+    "PromotionalOffersDefinition": "الخصومات والحملات الموسمية وما إلى ذلك.",
+    "EventsDefinition": "محادثات مجتمعية، وندوات عبر الإنترنت، ومؤتمر ABP .NET، وما إلى ذلك.",
+    "ReleaseNotesDefinition": "إصدارات منصة ABP.IO والمنتجات الجديدة وما إلى ذلك.",
+    "Newsletter": "النشرة الإخبارية",
+    "NewsletterDefinition": "منشورات المدونة وأخبار المجتمع وما إلى ذلك.",
+    "AbpConferenceDescription": "يعد مؤتمر ABP Conference افتراضيًا لمطوري .NET للتعلم والتواصل مع المجتمع."
   }
 }

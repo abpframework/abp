@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework er ekki aðeins rammi, það er líka leiðsögn fyrir þróun/stjórnun verkefna, vegna þess að það veitir DDD, GenericRepository, DI, Microservice, Modularity þjálfun. Jafnvel þó þú ætlir ekki að nota ramma sjálfan þig geturðu þróað sjálfan þig með docs.abp.io sem er vel og faglega undirbúið. (OpenIddict, Redis, Quartz o.s.frv.) \n Þar sem margt er forsmíðað styttir það þróunartíma verkefna verulega. (Svo sem innskráningarsíðu, undantekningarmeðferð, gagnasíun-sáningu, endurskoðunarskráningu, staðfærslu, sjálfvirkan API stjórnandi o.s.frv.) \n Sem dæmi úr appinu okkar hef ég notað Local Event Bus fyrir lagerstýringu. Þannig að ég get stjórnað pöntunarhreyfingum með því að skrifa lager meðhöndlun. \n Það er dásamlegt að missa ekki tíma fyrir CreationTime, CreatorId. Þau fyllast sjálfkrafa.",
     "VideosLoginAndRegisterMessage": "Þú verður að skrá þig inn til að horfa á myndbönd. Þú getur búið til reikning fyrir úrið ef þú hefur ekki gert það.",
     "Filter": "Sía",
-    "VideoCourses": "Vídeónámskeið",
+    "VideoCourses": "Nauðsynleg myndbönd",
     "TestimonialText": "Viðmiðun þín",
     "Position": "Staða",
     "ExperienceYear": "Reynsluár",
@@ -448,7 +448,7 @@
     "CompanySize": "Fyrirtækisstærð",
     "Image": "Prófílmynd þín",
     "TestimonialTitle": "Hlýtur að heyra viðmiðu þína",
-    "TestimonialInfo": "Það sem viðskiptavinir okkar segja skiptir máli! Segið okkur frá reynslu þinni með vörum okkar og þjónustu.",
+    "TestimonialInfo": "Það sem viðskiptavinir okkar segja skiptir máli!Segðu okkur frá reynslu þinni af vörunni okkar og þjónustu. Mælt er með því að skrifa vitnisburðinn á ensku til að ná til breiðari markhóps.",
     "Country": "Land",
     "TestimonialTextPlaceholder": "Skrifið stutta sögu um hvernig ABP hjálpaði yður að byggja og afhenda verkefnið ykkar.",
     "PositionPlaceholder": "Staða þín í fyrirtækinu þínu.",
@@ -467,6 +467,11 @@
     "Title": "Titill",
     "TitlePlaceholder": "Hugbúnaðarþróunarmiðill, CTO o.s.frv.",
     "Characters": "stafir",
-    "ABPTestimonialDescription": "ABP Framework: Við skulum heyra vitnisburð þinn"
+    "ABPTestimonialDescription": "ABP Framework: Við skulum heyra vitnisburð þinn",
+    "LeaveUsReview": "Skildu eftir okkur umsögn",
+    "DocumentationButtonTitle": "Skjöl",
+    "ABPVideoCoursesDescription": "Lærðu grunnatriði ABP Framework í gegnum myndbandsnámskeið búin til af ABP teyminu.",
+    "ABPVideoCoursesPageDescription": "Lærðu grunnatriði ABP Framework í gegnum myndbandsnámskeið sem ABP teymið bjó til. Í þessari myndbandsseríu muntu læra helstu efni ABP Framework. Tölurnar á hverju myndbandi eru skrifaðar í samræmi við námsflæðið.",
+    "ABPVideoCoursesTitle": "ABP nauðsynleg myndbönd"
   }
 }

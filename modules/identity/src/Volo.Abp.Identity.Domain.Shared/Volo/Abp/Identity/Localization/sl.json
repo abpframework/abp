@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Telefonska številka",
     "DisplayName:TwoFactorEnabled": "Dvostopenjsko preverjanje",
     "DisplayName:IsActive": "Aktiven",
-    "DisplayName:LockoutEnabled": "Zaklepanje računa po neuspelih poskusih prijave",
+    "DisplayName:LockoutEnabled": "Zaklepanje računa",
     "NewRole": "Nova vloga",
     "RoleName": "Naziv vloge",
     "CreationTime": "Čas nastanka",

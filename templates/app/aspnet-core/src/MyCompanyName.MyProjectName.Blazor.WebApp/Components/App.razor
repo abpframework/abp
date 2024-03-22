@@ -1,0 +1,60 @@
+﻿@using Volo.Abp.Localization
+@using System.Globalization
+@using Microsoft.Extensions.Hosting
+@using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Bundling
+@inject IHostEnvironment Env
+@{
+    var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
+}
+
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyCompanyName.MyProjectName.Blazor.Server</title>
+    <base href="/" />
+
+    <AbpStyles BundleName="@BlazorLeptonXLiteThemeBundles.Styles.Global" WebAssemblyStyleFiles="GlobalStyles" @rendermode="InteractiveAuto" />
+
+    <HeadOutlet @rendermode="InteractiveAuto" />
+
+</head>
+<body>
+
+    <Routes @rendermode="InteractiveAuto" />
+
+    <AbpScripts BundleName="@BlazorLeptonXLiteThemeBundles.Scripts.Global" WebAssemblyScriptFiles="GlobalScripts" @rendermode="InteractiveAuto" />
+
+    <script src="_framework/blazor.web.js"></script>
+
+    <div id="blazor-error-ui">
+        @if (Env.IsDevelopment())
+        {
+            <text>An unhandled exception has occurred. See browser dev tools for details.</text>
+        }
+        else if (Env.IsStaging() || Env.IsProduction())
+        {
+            <text>An error has occurred. This application may no longer respond until reloaded.</text>
+        }
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+</body>
+</html>
+@code{
+    private List<string> GlobalStyles =>
+    [
+        "global.css",
+        "main.css",
+        "blazor-global-styles.css"
+    ];
+
+    private List<string> GlobalScripts =>
+    [
+        "global.js"
+    ];
+}

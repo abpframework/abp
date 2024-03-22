@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Volo.Abp;
 
 namespace Volo.CmsKit.Blogs;
 
 public class BlogPostSlugAlreadyExistException : BusinessException
 {
-    public BlogPostSlugAlreadyExistException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
-    {
-    }
-
     public BlogPostSlugAlreadyExistException(Guid blogId, string slug)
     {
         Slug = slug;

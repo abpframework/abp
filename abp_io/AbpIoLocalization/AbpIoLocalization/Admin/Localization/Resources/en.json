@@ -283,6 +283,7 @@
     "ChooseCoverImage": "Choose a cover image...",
     "Menu:Quotation": "Quotation",
     "Menu:Invoice": "Invoice",
+    "Menu:Quotation/Invoice": "Quotation/Invoice",
     "Menu:PaymentRequests": "Payment Requests",
     "Permission:PaymentRequests": "Payment Requests",
     "PaymentRequests": "Payment Requests",
@@ -533,7 +534,7 @@
     "RaffleDeletionConfirmationMessage": "Are you sure you want to delete this raffle?",
     "CreateRaffle": "Create Raffle",
     "RemoveImage": "Remove Image",
-    "SuccessfullySaved": "Successfully saved",
+    "SavedSuccessfully": "Saved successfully",
     "Menu:CommunityTalks": "Community Talks",
     "Menu:Conferences": "Conferences",
     "Menu:OtherLiveEvents": "Other Live Events",
@@ -594,6 +595,16 @@
     "AutoRenewals": "Auto Renewals",
     "OrganizationHasCreditCard": "Organization has credit card. Please remove credit card first!",
     "DisplayName:DontSendEmailForLicenseExpire": "Don't Send Email For License Expire",
-    "DontSendEmailForLicenseExpire": "Don't Send Email For License Expire"
+    "DontSendEmailForLicenseExpire": "Don't Send Email For License Expire",
+    "SuccessfullyChanged": "Successfully changed",
+    "WinnerCountMustBeLessThanMaxWinnerCount": "Winner count must be less than max winner count",
+    "NoChangesDetected": "No changes detected",
+    "ProductCount": "Product Count",
+    "Actions": "Actions",
+    "CreateInvoice": "Create Invoice",
+    "AllowedLicenses": "Allowed Licenses",
+    "AllowedModules": "Allowed Modules",
+    "ModuleName": "Module name",
+    "NonYet": "Non yet"
   }
 }
