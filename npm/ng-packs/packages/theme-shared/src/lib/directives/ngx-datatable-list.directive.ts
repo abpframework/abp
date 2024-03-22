@@ -2,22 +2,20 @@ import { ListService, LocalizationService } from '@abp/ng.core';
 import {
   ChangeDetectorRef,
   Directive,
-  Inject,
   Input,
   OnChanges,
-  OnDestroy,
   OnInit,
-  Optional,
   DoCheck,
   SimpleChanges,
+  inject,
+  DestroyRef
 } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { Subscription } from 'rxjs';
 import {
   defaultNgxDatatableMessages,
-  NgxDatatableMessages,
   NGX_DATATABLE_MESSAGES,
 } from '../tokens/ngx-datatable-messages.token';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
@@ -25,18 +23,16 @@ import {
   standalone: true,
   exportAs: 'ngxDatatableList',
 })
-export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit, DoCheck {
-  private subscription = new Subscription();
-  private querySubscription = new Subscription();
-
+export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
   @Input() list!: ListService;
 
-  constructor(
-    private table: DatatableComponent,
-    private cdRef: ChangeDetectorRef,
-    private localizationService: LocalizationService,
-    @Optional() @Inject(NGX_DATATABLE_MESSAGES) private ngxDatatableMessages: NgxDatatableMessages,
-  ) {
+  private readonly table = inject(DatatableComponent);
+  private readonly cdRef = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly localizationService = inject(LocalizationService);
+  private readonly ngxDatatableMessages = inject(NGX_DATATABLE_MESSAGES, { optional: true });
+
+  constructor() {
     this.setInitialValues();
   }
 
@@ -59,11 +55,6 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit, 
     this.table.offset = page;
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-    this.querySubscription.unsubscribe();
-  }
-
   private setInitialValues() {
     this.table.externalPaging = true;
     this.table.externalSorting = true;
@@ -79,7 +70,7 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit, 
   }
 
   private subscribeToSort() {
-    const sub = this.table.sort.subscribe(({ sorts: [{ prop, dir }] }) => {
+    this.table.sort.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ sorts: [{ prop, dir }] }) => {
       if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
         this.list.sortKey = '';
         this.list.sortOrder = '';
@@ -90,20 +81,16 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit, 
         this.list.sortOrder = dir;
       }
     });
-    this.subscription.add(sub);
   }
 
   private subscribeToPage() {
-    const sub = this.table.page.subscribe(({ offset }) => {
+    this.table.page.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ offset }) => {
       this.setTablePage(offset);
     });
-    this.subscription.add(sub);
   }
 
   private subscribeToQuery() {
-    if (!this.querySubscription.closed) this.querySubscription.unsubscribe();
-
-    this.querySubscription = this.list.query$.subscribe(() => {
+    this.list.query$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       const offset = this.list.page;
       if (this.table.offset !== offset) this.table.offset = offset;
     });
