@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace MyCompanyName.MyProjectName.Mvc.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -43,27 +43,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpAuditLogs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpBackgroundJobs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    JobName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    JobArgs = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: false),
-                    TryCount = table.Column<short>(type: "smallint", nullable: false, defaultValue: (short)0),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NextTryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastTryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsAbandoned = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    Priority = table.Column<byte>(type: "tinyint", nullable: false, defaultValue: (byte)15),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -274,6 +253,26 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpSecurityLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpSessions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SessionId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Device = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    DeviceInfo = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClientId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    IpAddresses = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    SignedIn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpSessions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -803,11 +802,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 columns: new[] { "TenantId", "UserId", "ExecutionTime" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpBackgroundJobs_IsAbandoned_NextTryTime",
-                table: "AbpBackgroundJobs",
-                columns: new[] { "IsAbandoned", "NextTryTime" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
                 table: "AbpEntityChanges",
                 column: "AuditLogId");
@@ -923,6 +917,21 @@ namespace MyCompanyName.MyProjectName.Migrations
                 columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpSessions_Device",
+                table: "AbpSessions",
+                column: "Device");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpSessions_SessionId",
+                table: "AbpSessions",
+                column: "SessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpSessions_TenantId_UserId",
+                table: "AbpSessions",
+                columns: new[] { "TenantId", "UserId" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpSettingDefinitions_Name",
                 table: "AbpSettingDefinitions",
                 column: "Name",
@@ -1023,9 +1032,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "AbpAuditLogActions");
 
             migrationBuilder.DropTable(
-                name: "AbpBackgroundJobs");
-
-            migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
 
             migrationBuilder.DropTable(
@@ -1060,6 +1066,9 @@ namespace MyCompanyName.MyProjectName.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpSecurityLogs");
+
+            migrationBuilder.DropTable(
+                name: "AbpSessions");
 
             migrationBuilder.DropTable(
                 name: "AbpSettingDefinitions");
