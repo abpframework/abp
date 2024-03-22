@@ -31,7 +31,7 @@ export class FeatureManagementComponent
     FeatureManagement.FeatureManagementComponentInputs,
     FeatureManagement.FeatureManagementComponentOutputs
 {
-  protected readonly trackByService = inject(TrackByService);
+  protected readonly track = inject(TrackByService);
   protected readonly toasterService = inject(ToasterService);
   protected readonly service = inject(FeaturesService);
   protected readonly configState = inject(ConfigStateService);
