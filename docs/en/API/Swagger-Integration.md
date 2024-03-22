@@ -74,6 +74,10 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
 
     //... other configurations.
 
+    app.UseStaticFiles();
+
+    app.UseSwagger();
+
     app.UseAbpSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API");
