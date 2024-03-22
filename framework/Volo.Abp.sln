@@ -457,13 +457,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.MagickNet.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.AspNetCore.Tests", "test\Volo.Abp.Imaging.AspNetCore.Tests\Volo.Abp.Imaging.AspNetCore.Tests.csproj", "{983B0136-384B-4439-B374-31111FFAA286}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Maui.Client", "src\Volo.Abp.Maui.Client\Volo.Abp.Maui.Client.csproj", "{F19A6E0C-F719-4ED9-A024-14E4B8D40883}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Maui.Client", "src\Volo.Abp.Maui.Client\Volo.Abp.Maui.Client.csproj", "{F19A6E0C-F719-4ED9-A024-14E4B8D40883}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.SkiaSharp", "src\Volo.Abp.Imaging.SkiaSharp\Volo.Abp.Imaging.SkiaSharp.csproj", "{198683D0-7DC6-40F2-B81B-8E446E70A9DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.SkiaSharp", "src\Volo.Abp.Imaging.SkiaSharp\Volo.Abp.Imaging.SkiaSharp.csproj", "{198683D0-7DC6-40F2-B81B-8E446E70A9DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Imaging.SkiaSharp.Tests", "test\Volo.Abp.Imaging.SkiaSharp.Tests\Volo.Abp.Imaging.SkiaSharp.Tests.csproj", "{DFAF8763-D1D6-4EB4-B459-20E31007FE2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Imaging.SkiaSharp.Tests", "test\Volo.Abp.Imaging.SkiaSharp.Tests\Volo.Abp.Imaging.SkiaSharp.Tests.csproj", "{DFAF8763-D1D6-4EB4-B459-20E31007FE2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.RemoteServices.Tests", "test\Volo.Abp.RemoteServices.Tests\Volo.Abp.RemoteServices.Tests.csproj", "{DACD4485-61BE-4DE5-ACAE-4FFABC122500}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.RemoteServices.Tests", "test\Volo.Abp.RemoteServices.Tests\Volo.Abp.RemoteServices.Tests.csproj", "{DACD4485-61BE-4DE5-ACAE-4FFABC122500}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiQueue", "src\Volo.Abp.MultiQueue\Volo.Abp.MultiQueue.csproj", "{E61D87D0-2E95-4182-A2CF-34457873E7F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MultiQueue.Kafka", "src\Volo.Abp.MultiQueue.Kafka\Volo.Abp.MultiQueue.Kafka.csproj", "{12E20B84-E2F3-48AD-8696-A3191ED1AD7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MultiQueue.Tests", "test\Volo.Abp.MultiQueue.Tests\Volo.Abp.MultiQueue.Tests.csproj", "{46405A27-6C12-473D-ACA7-A7EC8D00CBAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1387,6 +1393,18 @@ Global
 		{DACD4485-61BE-4DE5-ACAE-4FFABC122500}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DACD4485-61BE-4DE5-ACAE-4FFABC122500}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DACD4485-61BE-4DE5-ACAE-4FFABC122500}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E61D87D0-2E95-4182-A2CF-34457873E7F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E61D87D0-2E95-4182-A2CF-34457873E7F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E61D87D0-2E95-4182-A2CF-34457873E7F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E61D87D0-2E95-4182-A2CF-34457873E7F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12E20B84-E2F3-48AD-8696-A3191ED1AD7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12E20B84-E2F3-48AD-8696-A3191ED1AD7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12E20B84-E2F3-48AD-8696-A3191ED1AD7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12E20B84-E2F3-48AD-8696-A3191ED1AD7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46405A27-6C12-473D-ACA7-A7EC8D00CBAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46405A27-6C12-473D-ACA7-A7EC8D00CBAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46405A27-6C12-473D-ACA7-A7EC8D00CBAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46405A27-6C12-473D-ACA7-A7EC8D00CBAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1621,6 +1639,9 @@ Global
 		{198683D0-7DC6-40F2-B81B-8E446E70A9DE} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{DFAF8763-D1D6-4EB4-B459-20E31007FE2F} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{DACD4485-61BE-4DE5-ACAE-4FFABC122500} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{E61D87D0-2E95-4182-A2CF-34457873E7F6} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{12E20B84-E2F3-48AD-8696-A3191ED1AD7E} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{46405A27-6C12-473D-ACA7-A7EC8D00CBAE} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
