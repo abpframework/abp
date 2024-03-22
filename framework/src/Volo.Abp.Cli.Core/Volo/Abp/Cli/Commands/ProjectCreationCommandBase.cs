@@ -756,10 +756,10 @@ public abstract class ProjectCreationCommandBase
             return;
         }
 
-        var projectRootpath = Directory.GetCurrentDirectory();
-        var projectUiFramework = FindMicroserviceSolutionUiFramework(projectRootpath);
+        var rootPath = Directory.GetCurrentDirectory();
+        var uiFramework = FindMicroserviceSolutionUiFramework(rootPath);
 
-        if (projectUiFramework != UiFramework.Angular)
+        if (uiFramework != UiFramework.Angular)
         {
             return;
         }
@@ -768,10 +768,10 @@ public abstract class ProjectCreationCommandBase
 
         var libraryName = projectArgs.SolutionName.ProjectName.ToKebabCase();
 
-        var hostAppPath = Path.Combine(projectRootpath, "apps", "angular");
-        var angularLibraryPath = Path.Combine(hostAppPath, "projects", libraryName);
+        var angularAppPath = Path.Combine(rootPath, "apps", "angular");
+        var angularLibraryPath = Path.Combine(angularAppPath, "projects", libraryName);
 
-        await GenerateAngularLibraryForNewMicroserviceAsync(libraryName, hostAppPath);
+        await GenerateAngularLibraryForNewMicroserviceAsync(libraryName, angularAppPath);
 
         try
         {
