@@ -10,7 +10,7 @@ import { LayoutService } from '../../services/layout.service';
   providers: [LayoutService, SubscriptionService],
 })
 export class ApplicationLayoutComponent implements AfterViewInit {
-  public service = inject(LayoutService);
+  public readonly service = inject(LayoutService);
   // required for dynamic component
   static type = eLayoutType.application;
 

@@ -17,19 +17,19 @@ import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
   template: ` <ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container> `,
   providers: [SubscriptionService],
 })
-export class DynamicLayoutComponent implements OnInit {
+export class DynamicLayoutComponent {
   layout?: Type<any>;
   layoutKey?: eLayoutType;
   readonly layouts = inject(DYNAMIC_LAYOUTS_TOKEN);
   isLayoutVisible = true;
 
-  private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
-  private readonly routes = inject(RoutesService);
-  private localizationService = inject(LocalizationService);
-  private replaceableComponents = inject(ReplaceableComponentsService);
-  private subscription = inject(SubscriptionService);
-  private routerEvents = inject(RouterEvents);
+  protected readonly router = inject(Router);
+  protected readonly route = inject(ActivatedRoute);
+  protected readonly routes = inject(RoutesService);
+  protected readonly localizationService = inject(LocalizationService);
+  protected readonly replaceableComponents = inject(ReplaceableComponentsService);
+  protected readonly subscription = inject(SubscriptionService);
+  protected readonly routerEvents = inject(RouterEvents);
 
   constructor(@Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent) {
     if (dynamicLayoutComponent) {
@@ -38,13 +38,6 @@ export class DynamicLayoutComponent implements OnInit {
     }
     this.checkLayoutOnNavigationEnd();
     this.listenToLanguageChange();
-  }
-
-  ngOnInit(): void {
-    if (this.layout) {
-      return;
-    }
-    // this.getLayout();
   }
 
   private checkLayoutOnNavigationEnd() {

@@ -6,7 +6,7 @@ import { Component, inject } from '@angular/core';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-  private authService = inject(AuthService);
+  protected readonly authService = inject(AuthService);
 
   loading = false;
   get hasLoggedIn(): boolean {
