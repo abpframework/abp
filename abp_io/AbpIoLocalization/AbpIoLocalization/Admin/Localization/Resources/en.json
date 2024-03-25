@@ -613,6 +613,9 @@
     "AllowedModules": "Allowed Modules",
     "ModuleName": "Module name",
     "NonYet": "Non yet",
-    "Permission:Testimonials": "Testimonials"
+    "Permission:Testimonials": "Testimonials",
+    "SelectCompanySizePlaceholder": "Company Size",
+    "SelectExperienceYearPlaceholder": "Experience year",
+    "SelectCountryPlaceholder": "Country"
   }
 }

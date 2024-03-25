@@ -452,6 +452,9 @@
     "ExperienceYear": "Sektörel deneyim",
     "Position": "Başlık",
     "Actions": "İşlemler",
-    "Permission:Testimonials": "Referanslar"
+    "Permission:Testimonials": "Referanslar",
+    "SelectCompanySizePlaceholder": "Şirket  Büyüklüğü",
+    "SelectExperienceYearPlaceholder": "Sektörel deneyim",
+    "SelectCountryPlaceholder": "Ülke"
   }
 }
