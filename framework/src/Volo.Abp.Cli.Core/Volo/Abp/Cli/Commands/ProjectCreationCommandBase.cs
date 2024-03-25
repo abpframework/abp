@@ -793,9 +793,9 @@ public abstract class ProjectCreationCommandBase
 
         var commandBuilder = new StringBuilder($"npx ng g @abp/ng.schematics:create-lib --package-name {libraryName}");
 
-        commandBuilder.Append($" --is-secondary-entrypoint {(isSecondaryEndpoint ? "true" : "false")} ");
-        commandBuilder.Append($" --is-module-template {(isModuleTemplate ? "true" : "false")} ");
-        commandBuilder.Append($" --override {(isOverride ? "true" : "false")} ");
+        commandBuilder.Append($" --is-secondary-entrypoint {isSecondaryEndpoint.ToString().ToLower()}");
+        commandBuilder.Append($" --is-module-template {isModuleTemplate.ToString().ToLower()}");
+        commandBuilder.Append($" --override {isOverride.ToString().ToLower()}");
 
         var result = CmdHelper.RunCmdAndGetOutput(commandBuilder.ToString(), workingDirectory);
         return await Task.FromResult(result);
