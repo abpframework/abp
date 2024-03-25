@@ -1,10 +1,11 @@
 using System;
 using JetBrains.Annotations;
+using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.Users;
 
-public interface IUserData : IHasExtraProperties
+public interface IUserData : IHasExtraProperties, IHasEntityVersion
 {
     Guid Id { get; }
 

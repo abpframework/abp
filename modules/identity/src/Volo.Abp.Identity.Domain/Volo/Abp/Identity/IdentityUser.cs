@@ -12,7 +12,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity;
 
-public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVersion
+public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
 {
     public virtual Guid? TenantId { get; protected set; }
 

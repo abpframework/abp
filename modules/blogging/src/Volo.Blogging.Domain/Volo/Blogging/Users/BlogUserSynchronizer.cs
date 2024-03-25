@@ -1,42 +1,30 @@
-﻿using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
+﻿using System;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities.Events.Distributed;
-using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 
 namespace Volo.Blogging.Users
 {
-    public class BlogUserSynchronizer :
-        IDistributedEventHandler<EntityUpdatedEto<UserEto>>,
-        ITransientDependency
+    public class BlogUserSynchronizer : EntitySynchronizer<BlogUser, Guid, UserEto>
     {
-        protected IBlogUserRepository UserRepository { get; }
-        protected IBlogUserLookupService UserLookupService { get; }
-
-        public BlogUserSynchronizer(
-            IBlogUserRepository userRepository, 
-            IBlogUserLookupService userLookupService)
+        public BlogUserSynchronizer([NotNull] IObjectMapper objectMapper,
+            [NotNull] IRepository<BlogUser, Guid> repository) : base(objectMapper, repository)
         {
-            UserRepository = userRepository;
-            UserLookupService = userLookupService;
         }
 
-        public async Task HandleEventAsync(EntityUpdatedEto<UserEto> eventData)
+        protected override Task<BlogUser> MapToEntityAsync(UserEto eto)
         {
-            var user = await UserRepository.FindAsync(eventData.Entity.Id);
-            if (user == null)
-            {
-                user = await UserLookupService.FindByIdAsync(eventData.Entity.Id);
-                if (user == null)
-                {
-                    return;
-                }
-            }
+            return Task.FromResult(new BlogUser(eto));
+        }
 
-            if (user.Update(eventData.Entity))
-            {
-                await UserRepository.UpdateAsync(user);
-            }
+        protected override Task MapToEntityAsync(UserEto eto, BlogUser localEntity)
+        {
+            localEntity.Update(eto);
+
+            return Task.CompletedTask;
         }
     }
 }

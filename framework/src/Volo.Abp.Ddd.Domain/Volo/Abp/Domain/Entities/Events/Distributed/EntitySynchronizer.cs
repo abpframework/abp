@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -12,7 +12,7 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed;
 public abstract class EntitySynchronizer<TEntity, TKey, TSourceEntityEto> :
     EntitySynchronizer<TEntity, TSourceEntityEto>
     where TEntity : class, IEntity<TKey>
-    where TSourceEntityEto : IEntityEto<TKey> 
+    where TSourceEntityEto : IEntityEto<TKey>
 {
     protected new IRepository<TEntity, TKey> Repository { get; }
 
@@ -32,6 +32,7 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
     IDistributedEventHandler<EntityCreatedEto<TSourceEntityEto>>,
     IDistributedEventHandler<EntityUpdatedEto<TSourceEntityEto>>,
     IDistributedEventHandler<EntityDeletedEto<TSourceEntityEto>>,
+    IEntitySynchronizer<TSourceEntityEto>,
     ITransientDependency
     where TEntity : class, IEntity
 {
@@ -77,11 +78,13 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
             return;
         }
 
+        // todo: if it fails, create the entity and try to delete it again.
         await TryDeleteEntityAsync(eventData.Entity);
     }
 
     [UnitOfWork]
-    protected virtual async Task<bool> TryCreateOrUpdateEntityAsync(TSourceEntityEto eto)
+    public virtual async Task<bool> TryCreateOrUpdateEntityAsync(TSourceEntityEto eto,
+        CancellationToken cancellationToken = default)
     {
         var localEntity = await FindLocalEntityAsync(eto);
 
@@ -103,7 +106,7 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
                 );
             }
 
-            await Repository.InsertAsync(localEntity);
+            await Repository.InsertAsync(localEntity, cancellationToken: cancellationToken);
         }
         else
         {
@@ -122,7 +125,7 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
                 );
             }
 
-            await Repository.UpdateAsync(localEntity);
+            await Repository.UpdateAsync(localEntity, cancellationToken: cancellationToken);
         }
 
         return true;
@@ -140,7 +143,8 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
     }
 
     [UnitOfWork]
-    protected virtual async Task<bool> TryDeleteEntityAsync(TSourceEntityEto eto)
+    public virtual async Task<bool> TryDeleteEntityAsync(TSourceEntityEto eto,
+        CancellationToken cancellationToken = default)
     {
         var localEntity = await FindLocalEntityAsync(eto);
 
@@ -149,7 +153,7 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
             return false;
         }
 
-        await Repository.DeleteAsync(localEntity, true);
+        await Repository.DeleteAsync(localEntity, true, cancellationToken);
 
         return true;
     }

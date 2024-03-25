@@ -1,12 +1,13 @@
 using System;
 using JetBrains.Annotations;
+using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Users;
 
-public interface IUser : IAggregateRoot<Guid>, IMultiTenant, IHasExtraProperties
+public interface IUser : IAggregateRoot<Guid>, IMultiTenant, IHasExtraProperties, IHasEntityVersion
 {
     string UserName { get; }
 
