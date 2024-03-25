@@ -20,7 +20,7 @@
     "GetStartedUpper": "BAŞLAYIN",
     "ForkMeOnGitHub": "Fork me on GitHub",
     "Features": "Özellikler",
-    "GetStarted": "Başlayın",
+    "GetStarted": "Başlangıç Şablonları",
     "Documents": "Dokümanlar",
     "ContributionGuide": "Katkı Rehberi",
     "Blog": "Blog",
@@ -62,7 +62,7 @@
     "WebApplication": "Web Uygulaması",
     "MeetTheABP": "ABP'yi Tanıyın",
     "CompleteWebDevelopment": "Eksiksiz Bir Web Geliştirme",
-    "Platform": "Platform",
+    "Platform": "Platformu",
     "ABPDescription": "ABP Framework, en iyi yazılım geliştirme uygulamalarını ve kurallarını takip ederek modern web uygulamaları oluşturmak için eksiksiz bir altyapıdır.",
     "StrongInfrastructure": "Güçlü Altyapı",
     "CompleteArchitecture": "Eksiksiz Mimari",
@@ -95,7 +95,7 @@
     "Home": "Ana Sayfa",
     "Posts": "Gönderiler",
     "JoinTheABPCommunity": "ABP Topluluğuna Katılın",
-    "SubmitYourPost": "Gönderinizi Gönderin",
+    "SubmitYourPost": "Gönderinizi Paylaşın",
     "Modules": "Modüller",
     "Tools": "Araçlar",
     "Pricing": "Fiyatlandırma",
@@ -193,6 +193,10 @@
     "ReleaseNotesDefinition": "ABP.IO Platform sürümleri, yeni ürünler, vb.",
     "Newsletter": "Bülten",
     "NewsletterDefinition": "Blog paylaşımları, topluluk haberleri, vb.",
-    "AbpConferenceDescription": "ABP Conference, .NET geliştiricilerinin gelişmesi ve toplulukla bağlantı kurması için düzenlenen sanal bir etkinliktir."
+    "AbpConferenceDescription": "ABP Conference, .NET geliştiricilerinin gelişmesi ve toplulukla bağlantı kurması için düzenlenen sanal bir etkinliktir.",
+    "Packages": "Paketler",
+    "Mobile": "Mobil",
+    "ReturnOfInvestment": "Yatırımın Geri Dönüşü",
+    "Trainings": "Eğitimler"
   }
 }

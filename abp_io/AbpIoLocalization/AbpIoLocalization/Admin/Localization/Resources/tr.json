@@ -443,6 +443,6 @@
     "QuotationTemplate.Tax/VAT:": "Vergiler (%{0}) :",
     "QuotationTemplate.TotalDiscount:": "Toplam İndirim :",
     "QuotationTemplate.TOTALDUE:": "NET TOPLAM :",
-    "QuotationTemplate.BankAccount": "Banka hesabı bilgilerimiz {0} adresinde bulunabilir."
+    "QuotationTemplate.BankAccount": "Banka hesap bilgilerimize {0} adresinden erişebilirsiniz."
   }
 }
