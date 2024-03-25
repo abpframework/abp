@@ -83,25 +83,25 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
     });
   }
 
-  private subscribeToPage() {
+  protected subscribeToPage() {
     this.table.page.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ offset }) => {
       this.setTablePage(offset);
     });
   }
 
-  private subscribeToQuery() {
+  protected subscribeToQuery() {
     this.list.query$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       const offset = this.list.page;
       if (this.table.offset !== offset) this.table.offset = offset;
     });
   }
 
-  private setTablePage(pageNum: number) {
+  protected setTablePage(pageNum: number) {
     this.list.page = pageNum;
     this.table.offset = pageNum;
   }
 
-  private refreshPageIfDataExist() {
+  protected refreshPageIfDataExist() {
     if (this.table.rows.length < 1 && this.list.totalCount > 0) {
       let maxPage = Math.floor(Number(this.list.totalCount / this.list.maxResultCount));
 
