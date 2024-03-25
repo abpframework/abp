@@ -111,7 +111,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         await RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
         await CreateInitialMigrationsAsync(projectArgs);
 
-        await ConfigureAngularLibraryAfterMicroserviceServiceCreatedAsync(projectArgs, template);
+        await ConfigureAngularAfterMicroserviceServiceCreatedAsync(projectArgs, template);
 
         var skipInstallLibs = commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Long) || commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Short);
         if (!skipInstallLibs)

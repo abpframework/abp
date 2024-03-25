@@ -1,13 +1,12 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using NuGet.Versioning;
-using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Bundling;
@@ -749,7 +748,7 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected virtual async Task ConfigureAngularLibraryAfterMicroserviceServiceCreatedAsync(ProjectBuildArgs projectArgs, string template)
+    protected virtual async Task ConfigureAngularAfterMicroserviceServiceCreatedAsync(ProjectBuildArgs projectArgs, string template)
     {
         if (!MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
         {
@@ -767,33 +766,39 @@ public abstract class ProjectCreationCommandBase
         Logger.LogInformation("Setting up the angular library...");
 
         var libraryName = projectArgs.SolutionName.ProjectName.ToKebabCase();
-
         var angularAppPath = Path.Combine(rootPath, "apps", "angular");
-        var angularLibraryPath = Path.Combine(angularAppPath, "projects", libraryName);
 
-        await GenerateAngularLibraryForNewMicroserviceAsync(libraryName, angularAppPath);
+        var result = await CreateAngularLibraryAsync(libraryName, angularAppPath);
 
-        try
-        {
-            Directory.Delete(angularLibraryPath, true);
-            await MoveLibraryToHostAppAsync(projectArgs.OutputFolder, libraryName, angularLibraryPath);
-        }
-        catch (Exception e)
-        {
-            Logger.LogError(e.Message);
-        }
+        Logger.LogInformation(result);
     }
 
-    protected virtual async Task<string> GenerateAngularLibraryForNewMicroserviceAsync(string libraryName, string workingDirectory)
+    protected virtual async Task<string> CreateAngularLibraryAsync(
+        string libraryName,
+        string workingDirectory,
+        bool isSecondaryEndpoint = false,
+        bool isModuleTemplate = true,
+        bool isOverride = true)
     {
-        var result = CmdHelper.RunCmdAndGetOutput($"npx ng g library {libraryName}", workingDirectory);
+        //TODO: Can we improve this validations ?
+        if (string.IsNullOrWhiteSpace(libraryName))
+        {
+            throw new CliUsageException("Angular library name can not be empty");
+        }
+
+        if (string.IsNullOrWhiteSpace(workingDirectory))
+        {
+            throw new CliUsageException("Angular project path can not be empty");
+        }
+
+        var commandBuilder = new StringBuilder($"npx ng g @abp/ng.schematics:create-lib --package-name {libraryName}");
+
+        commandBuilder.Append($" --is-secondary-entrypoint {(isSecondaryEndpoint ? "true" : "false")} ");
+        commandBuilder.Append($" --is-module-template {(isModuleTemplate ? "true" : "false")} ");
+        commandBuilder.Append($" --override {(isOverride ? "true" : "false")} ");
+
+        var result = CmdHelper.RunCmdAndGetOutput(commandBuilder.ToString(), workingDirectory);
         return await Task.FromResult(result);
-    }
-
-    protected virtual async Task MoveLibraryToHostAppAsync(string outputFolder, string libraryName, string angularLibraryPath)
-    {
-        var currentAngularLibPath = Path.Combine(outputFolder, "angular", libraryName);
-        Directory.Move(currentAngularLibPath, angularLibraryPath);
     }
 
     public static class Options
