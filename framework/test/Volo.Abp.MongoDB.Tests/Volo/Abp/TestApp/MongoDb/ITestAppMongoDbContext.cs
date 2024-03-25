@@ -14,4 +14,6 @@ public interface ITestAppMongoDbContext : IAbpMongoDbContext
     IMongoCollection<City> Cities { get; }
 
     IMongoCollection<Product> Products { get; }
+
+    IMongoCollection<AppEntityWithNavigations> AppEntityWithNavigations { get; }
 }

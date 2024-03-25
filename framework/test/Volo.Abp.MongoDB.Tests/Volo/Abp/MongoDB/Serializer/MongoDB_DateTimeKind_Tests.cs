@@ -21,9 +21,6 @@ public abstract class MongoDB_DateTimeKind_Tests : DateTimeKind_Tests<AbpMongoDb
         // We must reconfigure it in the new unit test.
         foreach (var registeredClassMap in BsonClassMap.GetRegisteredClassMaps())
         {
-            var frozen = registeredClassMap.GetType().BaseType?.GetField("_frozen", BindingFlags.NonPublic | BindingFlags.Instance);
-            frozen?.SetValue(registeredClassMap, false);
-
             foreach (var declaredMemberMap in registeredClassMap.DeclaredMemberMaps)
             {
                 var serializer = declaredMemberMap.GetSerializer();
@@ -46,8 +43,6 @@ public abstract class MongoDB_DateTimeKind_Tests : DateTimeKind_Tests<AbpMongoDb
                         }
                 }
             }
-
-            frozen?.SetValue(registeredClassMap, true);
         }
     }
 }
@@ -62,6 +57,7 @@ public class DateTimeKindTests_Unspecified : MongoDB_DateTimeKind_Tests
     }
 }
 
+[Collection(MongoTestCollection.Name)]
 public class DateTimeKindTests_Local : MongoDB_DateTimeKind_Tests
 {
     protected override void AfterAddApplication(IServiceCollection services)
@@ -72,6 +68,7 @@ public class DateTimeKindTests_Local : MongoDB_DateTimeKind_Tests
     }
 }
 
+[Collection(MongoTestCollection.Name)]
 public class DateTimeKindTests_Utc : MongoDB_DateTimeKind_Tests
 {
     protected override void AfterAddApplication(IServiceCollection services)

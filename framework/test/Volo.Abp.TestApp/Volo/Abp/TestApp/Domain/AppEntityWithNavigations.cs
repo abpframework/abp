@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Values;
 
-namespace Volo.Abp.Auditing.App.Entities;
+namespace Volo.Abp.TestApp.Domain;
 
-[Audited]
 public class AppEntityWithNavigations : AggregateRoot<Guid>
 {
     protected AppEntityWithNavigations()
@@ -32,13 +32,28 @@ public class AppEntityWithNavigations : AggregateRoot<Guid>
     public virtual List<AppEntityWithNavigationChildManyToMany> ManyToMany { get; set; }
 }
 
-[Audited]
+public class AppEntityWithValueObjectAddress : ValueObject
+{
+    public AppEntityWithValueObjectAddress(string country)
+    {
+
+        Country = country;
+    }
+
+    public string Country { get; set; }
+
+    protected override IEnumerable<object> GetAtomicValues()
+    {
+        yield return Country;
+    }
+}
+
+
 public class AppEntityWithNavigationChildOneToOne : Entity<Guid>
 {
     public string ChildName { get; set; }
 }
 
-[Audited]
 public class AppEntityWithNavigationChildOneToMany : Entity<Guid>
 {
     public Guid AppEntityWithNavigationId { get; set; }
@@ -46,7 +61,6 @@ public class AppEntityWithNavigationChildOneToMany : Entity<Guid>
     public string ChildName { get; set; }
 }
 
-[Audited]
 public class AppEntityWithNavigationChildManyToMany : AggregateRoot<Guid>
 {
     public string ChildName { get; set; }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Auditing;
@@ -20,6 +21,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EntityFrameworkCore.ChangeTrackers;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
@@ -53,6 +55,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     public IEntityChangeEventHelper EntityChangeEventHelper => LazyServiceProvider.LazyGetService<IEntityChangeEventHelper>(NullEntityChangeEventHelper.Instance);
 
+    public IOptions<AbpEntityChangeOptions> EntityChangeOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpEntityChangeOptions>>();
+
     public IAuditPropertySetter AuditPropertySetter => LazyServiceProvider.LazyGetRequiredService<IAuditPropertySetter>();
 
     public IEntityHistoryHelper EntityHistoryHelper => LazyServiceProvider.LazyGetService<IEntityHistoryHelper>(NullEntityHistoryHelper.Instance);
@@ -68,6 +72,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     public ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
 
     public ILogger<AbpDbContext<TDbContext>> Logger => LazyServiceProvider.LazyGetService<ILogger<AbpDbContext<TDbContext>>>(NullLogger<AbpDbContext<TDbContext>>.Instance);
+
+    public AbpEfCoreNavigationHelper AbpEfCoreNavigationHelper => LazyServiceProvider.LazyGetRequiredService<AbpEfCoreNavigationHelper>();
 
     private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
         = typeof(AbpDbContext<TDbContext>)
@@ -160,6 +166,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             List<EntityChangeInfo>? entityChangeList = null;
             if (auditLog != null)
             {
+                EntityHistoryHelper.InitializeNavigationHelper(AbpEfCoreNavigationHelper);
                 entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
             }
 
@@ -251,12 +258,14 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual void ChangeTracker_Tracked(object? sender, EntityTrackedEventArgs e)
     {
+        AbpEfCoreNavigationHelper.ChangeTracker_Tracked(ChangeTracker, sender, e);
         FillExtraPropertiesForTrackedEntities(e);
         PublishEventsForTrackedEntity(e.Entry);
     }
 
     protected virtual void ChangeTracker_StateChanged(object? sender, EntityStateChangedEventArgs e)
     {
+        AbpEfCoreNavigationHelper.ChangeTracker_StateChanged(ChangeTracker, sender, e);
         PublishEventsForTrackedEntity(e.Entry);
     }
 
@@ -306,7 +315,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
     }
 
-    private void PublishEventsForTrackedEntity(EntityEntry entry)
+    protected virtual void PublishEventsForTrackedEntity(EntityEntry entry)
     {
         switch (entry.State)
         {
@@ -314,9 +323,10 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 ApplyAbpConceptsForAddedEntity(entry);
                 EntityChangeEventHelper.PublishEntityCreatedEvent(entry.Entity);
                 break;
+
             case EntityState.Modified:
                 ApplyAbpConceptsForModifiedEntity(entry);
-                if (entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
+                if (entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
                 {
                     if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                     {
@@ -327,12 +337,27 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                         EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
                     }
                 }
-
                 break;
+
             case EntityState.Deleted:
                 ApplyAbpConceptsForDeletedEntity(entry);
                 EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                 break;
+        }
+
+        if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
+        {
+            foreach (var entityEntry in ChangeTracker.Entries().Where(x => x.State == EntityState.Unchanged && AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(x)))
+            {
+                if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
+                {
+                    EntityChangeEventHelper.PublishEntityDeletedEvent(entityEntry.Entity);
+                }
+                else
+                {
+                    EntityChangeEventHelper.PublishEntityUpdatedEvent(entityEntry.Entity);
+                }
+            }
         }
     }
 
