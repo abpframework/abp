@@ -1,4 +1,3 @@
-import { ListService, LocalizationService } from '@abp/ng.core';
 import {
   ChangeDetectorRef,
   Directive,
@@ -10,12 +9,13 @@ import {
   inject,
   DestroyRef
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { ListService, LocalizationService } from '@abp/ng.core';
 import {
   defaultNgxDatatableMessages,
   NGX_DATATABLE_MESSAGES,
 } from '../tokens/ngx-datatable-messages.token';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
@@ -26,11 +26,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
   @Input() list!: ListService;
 
-  private readonly table = inject(DatatableComponent);
-  private readonly cdRef = inject(ChangeDetectorRef);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly localizationService = inject(LocalizationService);
-  private readonly ngxDatatableMessages = inject(NGX_DATATABLE_MESSAGES, { optional: true });
+  protected readonly table = inject(DatatableComponent);
+  protected readonly cdRef = inject(ChangeDetectorRef);
+  protected readonly destroyRef = inject(DestroyRef);
+  protected readonly localizationService = inject(LocalizationService);
+  protected readonly ngxDatatableMessages = inject(NGX_DATATABLE_MESSAGES, { optional: true });
 
   constructor() {
     this.setInitialValues();
@@ -55,7 +55,7 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
     this.table.offset = page;
   }
 
-  private setInitialValues() {
+  protected setInitialValues() {
     this.table.externalPaging = true;
     this.table.externalSorting = true;
 
@@ -69,7 +69,7 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
     };
   }
 
-  private subscribeToSort() {
+  protected subscribeToSort() {
     this.table.sort.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ sorts: [{ prop, dir }] }) => {
       if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
         this.list.sortKey = '';
