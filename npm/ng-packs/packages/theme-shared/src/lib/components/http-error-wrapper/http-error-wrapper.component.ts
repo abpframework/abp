@@ -17,6 +17,7 @@ import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { LocalizationParam, SubscriptionService } from '@abp/ng.core';
 import { ErrorScreenErrorCodes } from '../../models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'abp-http-error-wrapper',
@@ -27,6 +28,8 @@ import { ErrorScreenErrorCodes } from '../../models';
 export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly document = inject(DOCUMENT);
   protected readonly window = this.document.defaultView;
+  protected readonly router = inject(Router);
+  protected readonly subscription = inject(SubscriptionService);
 
   appRef!: ApplicationRef;
 
@@ -57,11 +60,10 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
     return this.status ? `[${this.status}]` : '';
   }
 
-  constructor(private subscription: SubscriptionService) {}
-
   ngOnInit(): void {
     this.backgroundColor =
-      this.window.getComputedStyle(this.document.body)?.getPropertyValue('background-color') || '#fff';
+      this.window.getComputedStyle(this.document.body)?.getPropertyValue('background-color') ||
+      '#fff';
   }
 
   ngAfterViewInit(): void {
@@ -85,6 +87,11 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
       filter((key: KeyboardEvent) => key && key.key === 'Escape'),
     );
     this.subscription.addOne(keyup$, () => this.destroy());
+  }
+
+  goHome() {
+    this.router.navigate(['/']);
+    this.destroy();
   }
 
   ngOnDestroy(): void {

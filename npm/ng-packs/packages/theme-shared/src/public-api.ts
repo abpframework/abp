@@ -2,7 +2,7 @@
  * Public API Surface of theme-shared
  */
 
-export * from './lib/adapters'
+export * from './lib/adapters';
 export * from './lib/animations';
 export * from './lib/components';
 export * from './lib/constants/validation';
@@ -16,3 +16,4 @@ export * from './lib/services';
 export * from './lib/theme-shared.module';
 export * from './lib/tokens';
 export * from './lib/utils';
+export * from './lib/constants';
