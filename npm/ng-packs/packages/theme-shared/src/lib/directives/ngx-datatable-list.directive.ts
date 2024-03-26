@@ -102,7 +102,7 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
   }
 
   protected refreshPageIfDataExist() {
-    if (this.table.rows.length < 1 && this.list.totalCount > 0) {
+    if (this.table.rows.length < 1 && this.table.count > 0) {
       let maxPage = Math.floor(Number(this.list.totalCount / this.list.maxResultCount));
 
       if (this.list.totalCount < this.list.maxResultCount) {
