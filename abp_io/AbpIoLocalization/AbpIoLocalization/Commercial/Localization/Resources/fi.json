@@ -851,6 +851,7 @@
     "SendUsEmail": "Lähetä meille sähköpostia",
     "ErrorExceptionMessage": "Virhe pyynnön käsittelyn yhteydessä",
     "WatchTakeCodeGeneration": "Katso \"Tutki koodin luomisen potentiaalia: ABP Suite\" -video!",
-    "ExtendNow": "Laajenna / Uusi"
+    "ExtendNow": "Laajenna / Uusi",
+    "RegisterDemo": "Rekisteröidy"
   }
 }

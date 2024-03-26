@@ -83,6 +83,10 @@
     "EditProfile": "Edit Profile",
     "MoreFromBlog": "More From Blog",
     "MoreFromUser": "More From {0}",
-    "BlogPosts": "Posts"
+    "BlogPosts": "Posts",
+    "Views": "views",
+    "Biography": "biography",
+    "Social": "Social",
+    "NewBlogPost" : "New Blog Post"
   }
 }
