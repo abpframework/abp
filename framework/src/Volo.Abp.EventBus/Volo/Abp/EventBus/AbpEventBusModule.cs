@@ -49,6 +49,11 @@ public class AbpEventBusModule : AbpModule
 
         services.OnRegistered(context =>
         {
+            if (context.ImplementationType.IsGenericTypeDefinition)
+            {
+                return;
+            }
+
             if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(ILocalEventHandler<>)))
             {
                 localHandlers.Add(context.ImplementationType);
