@@ -1,4 +1,6 @@
 import { LocalizationParam } from '@abp/ng.core';
+import { HttpInterceptor, HttpInterceptorFn } from '@angular/common/http';
+import { Type } from '@angular/core';
 
 export namespace Toaster {
   export interface ToastOptions {
@@ -20,9 +22,26 @@ export namespace Toaster {
     options?: ToastOptions;
   }
 
+  export interface ToasterInterceptorConfig {
+    methods: HttpMethod[];
+    defaults: Partial<ToasterDefaults>;
+    customInterceptor: Type<HttpInterceptor>;
+  }
+
+  export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  export type StatusCode = 200 | 201 | 204 | 400 | 401 | 403 | 404 | 500 | 503 | 504 | 0;
+
   export type Severity = 'neutral' | 'success' | 'info' | 'warning' | 'error';
   export type ToasterId = string | number;
 
+  export type ToasterDefaults = {
+    [key in StatusCode]: {
+      message: LocalizationParam;
+      title: LocalizationParam | undefined;
+      severity: Toaster.Severity;
+      options: Partial<Toaster.ToastOptions>;
+    };
+  };
   export interface Service {
     show: (
       message: LocalizationParam,
