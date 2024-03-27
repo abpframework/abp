@@ -172,6 +172,66 @@ describe('Routes Service', () => {
     });
   });
 
+  describe('#disableFiltering', () => {
+    it('should allow to duplicate routes', () => {
+      service.disableFiltering();
+
+      service.add(routes);
+
+      const flat = service.flat;
+
+      expect(flat.length).toBe(routes.length);
+    });
+
+    it('should allow to duplicate routes with the same name', () => {
+      service.disableFiltering();
+
+      service.add([...routes, { path: '/foo/bar/test', name: 'bar', parentName: 'foo', order: 2 }]);
+
+      const flat = service.flat;
+
+      expect(flat.length).toBe(routes.length + 1);
+    });
+
+    it('should allow to routes with the same name but different parentName', () => {
+      service.disableFiltering();
+
+      service.add([
+        { path: '/foo/bar', name: 'bar', parentName: 'foo', order: 2 },
+        { path: '/foo/bar', name: 'bar', parentName: 'baz', order: 1 },
+      ]);
+
+      const flat = service.flat;
+
+      expect(flat.length).toBe(2);
+    });
+  });
+
+  describe('#enableFiltering', () => {
+    it('should not allow to duplicate routes', () => {
+      service.disableFiltering();
+
+      service.add(routes);
+
+      service.enableFiltering();
+
+      service.add(routes);
+
+      const flat = service.flat;
+
+      expect(flat.length).toBe(5);
+    });
+
+    it('should not allow to duplicate routes with the same name', () => {
+      service.enableFiltering();
+      service.add([...routes, { path: '/foo/bar/test', name: 'bar', parentName: 'any', order: 2 }]);
+
+      const flat = service.flat;
+
+      expect(flat.length).toBe(5);
+    });
+  });
+
   describe('#find', () => {
     it('should return node found based on query', () => {
       service.add(routes);
@@ -239,6 +299,82 @@ describe('Routes Service', () => {
       expect(visible[0].children.length).toBe(1);
       expect(visible[0].children[0].name).toBe('x');
       expect(visible[0].children[0].breadcrumbText).toBe('X Breadcrumb');
+    });
+  });
+
+  describe('#delete', () => {
+    it('should remove route based on given route', () => {
+      service.add(routes);
+
+      service.delete({
+        name: 'bar',
+        parentName: 'foo',
+      });
+
+      const flat = service.flat;
+
+      expect(flat.length).toBe(2);
+
+      const notFound = service.find(route => route.name === 'bar');
+
+      expect(notFound).toBe(null);
+    });
+
+    it('should remove if more than one route has the same properties', () => {
+      service.disableFiltering();
+
+      service.add([
+        ...routes,
+        {
+          path: '/foo/bar',
+          name: 'bar',
+          parentName: 'foo',
+          invisible: true,
+          order: 2,
+          breadcrumbText: 'Bar Breadcrumb',
+        },
+      ]);
+
+      service.delete({
+        path: '/foo/bar',
+        name: 'bar',
+        parentName: 'foo',
+        invisible: true,
+        order: 2,
+        breadcrumbText: 'Bar Breadcrumb',
+      });
+
+      const flat = service.flat;
+      console.log(flat);
+      expect(flat.length).toBe(5);
+
+      const notFound = service.search({
+        path: '/foo/bar',
+        name: 'bar',
+        parentName: 'foo',
+        invisible: true,
+        order: 2,
+        breadcrumbText: 'Bar Breadcrumb',
+      });
+      expect(notFound).toBe(null);
+    });
+
+    it("shouldn't remove if there is no route with the given properties", () => {
+      service.add(routes);
+      const flatLengthBeforeRemove = service.flat.length;
+
+      service.delete({
+        name: 'bar',
+        parentName: 'baz',
+      });
+
+      const flat = service.flat;
+
+      expect(flatLengthBeforeRemove - flat.length).toBe(0);
+
+      const notFound = service.find(route => route.name === 'bar');
+
+      expect(notFound).not.toBe(null);
     });
   });
 
