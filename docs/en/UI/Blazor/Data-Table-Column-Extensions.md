@@ -73,6 +73,7 @@ This section explains how to customize data table columns using the properties i
 * `Sortable`: A boolean field indicating whether the column is sortable or not.
 * `DisplayFormat`: You can specify a custom format for the column.
 * `DisplayFormatProvider` : You can provide a custom `IFormatProvider` for the column. Default value is `CultureInfo.CurrentCulture`.
+* `Visible`: A boolean field indicating whether the column is visible or not.
 
 ## Rendering Custom Components In The Data Table Columns
 
