@@ -1,13 +1,12 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using NuGet.Versioning;
-using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Bundling;
@@ -43,7 +42,7 @@ public abstract class ProjectCreationCommandBase
     public ThemePackageAdder ThemePackageAdder { get; }
 
     public AngularThemeConfigurer AngularThemeConfigurer { get; }
-    
+
     public CliVersionService CliVersionService { get; }
 
     public ProjectCreationCommandBase(
@@ -436,15 +435,15 @@ public abstract class ProjectCreationCommandBase
 
         var isModuleTemplate = ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName);
         var isWebassembly = projectArgs.UiFramework == UiFramework.Blazor;
-        
-        var message = isWebassembly || isModuleTemplate 
-            ? "Generating bundles for Blazor Wasm" 
+
+        var message = isWebassembly || isModuleTemplate
+            ? "Generating bundles for Blazor Wasm"
             : "Generating bundles for MAUI Blazor";
-        
+
         var projectType = isWebassembly || isModuleTemplate
-            ? BundlingConsts.WebAssembly 
+            ? BundlingConsts.WebAssembly
             : BundlingConsts.MauiBlazor;
-        
+
         Logger.LogInformation(message + "...");
 
         await EventBus.PublishAsync(new ProjectCreationProgressEvent
@@ -454,7 +453,7 @@ public abstract class ProjectCreationCommandBase
 
         var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
         var path = projectArgs.OutputFolder;
-        
+
         if (isModuleTemplate)
         {
             path = Path.Combine(path, "host");
@@ -471,7 +470,7 @@ public abstract class ProjectCreationCommandBase
 
         await _bundlingService.BundleAsync(directory, true, projectType);
     }
-    
+
     protected virtual bool ShouldRunBundleCommand(ProjectBuildArgs projectArgs)
     {
         if ((AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) || AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName))
@@ -711,7 +710,7 @@ public abstract class ProjectCreationCommandBase
 
     protected virtual ThemeStyle? GetThemeStyleOrNull(CommandLineArgs commandLineArgs, Theme theme)
     {
-        if(theme != Theme.LeptonX)
+        if (theme != Theme.LeptonX)
         {
             return null;
         }
@@ -747,6 +746,59 @@ public abstract class ProjectCreationCommandBase
                 angularFolderPath: angularFolderPath
             ));
         }
+    }
+
+    protected virtual async Task ConfigureAngularAfterMicroserviceServiceCreatedAsync(ProjectBuildArgs projectArgs, string template)
+    {
+        if (!MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(projectArgs.TemplateName))
+        {
+            return;
+        }
+
+        var rootPath = Directory.GetCurrentDirectory();
+        var uiFramework = FindMicroserviceSolutionUiFramework(rootPath);
+
+        if (uiFramework != UiFramework.Angular)
+        {
+            return;
+        }
+
+        Logger.LogInformation("Setting up the angular library...");
+
+        var libraryName = projectArgs.SolutionName.ProjectName.ToKebabCase();
+        var angularAppPath = Path.Combine(rootPath, "apps", "angular");
+
+        var result = await CreateAngularLibraryAsync(libraryName, angularAppPath);
+
+        Logger.LogInformation(result);
+    }
+
+    protected virtual async Task<string> CreateAngularLibraryAsync(
+        string libraryName,
+        string workingDirectory,
+        bool isSecondaryEndpoint = false,
+        bool isModuleTemplate = true,
+        bool isOverride = true)
+    {
+        //TODO: Can we improve this validations ?
+        if (string.IsNullOrWhiteSpace(libraryName))
+        {
+            throw new CliUsageException("Angular library name can not be empty");
+        }
+
+        if (string.IsNullOrWhiteSpace(workingDirectory))
+        {
+            throw new CliUsageException("Angular project path can not be empty");
+        }
+
+        var commandBuilder = new StringBuilder($"npx ng g @abp/ng.schematics:create-lib --package-name {libraryName}");
+
+        commandBuilder.Append($" --is-secondary-entrypoint {isSecondaryEndpoint.ToString().ToLower()}");
+        commandBuilder.Append($" --is-module-template {isModuleTemplate.ToString().ToLower()}");
+        commandBuilder.Append($" --override {isOverride.ToString().ToLower()}");
+
+        var result = CmdHelper.RunCmdAndGetOutput(commandBuilder.ToString(), workingDirectory);
+        return await Task.FromResult(result);
     }
 
     public static class Options
