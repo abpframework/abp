@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,11 +48,16 @@ namespace VoloDocs.Web.Pages
         //Eg: "/en/abp/latest"
         public string GetUrlForProject(ProjectDto project, string language = "en", string version = null)
         {
-            return "." +
-                   _urlUiOptions.RoutePrefix.EnsureStartsWith('/').EnsureEndsWith('/') +
-                   language.EnsureEndsWith('/') +
-                   project.ShortName.EnsureEndsWith('/') +
-                   (version ?? DocsAppConsts.Latest);
+            var routeValues = new Dictionary<string, object> {
+                { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.LanguageCode), language },
+                { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.Version), version ?? DocsAppConsts.Latest },
+            };
+
+            if (!_urlUiOptions.SingleProjectMode.Enable)
+            {
+                routeValues.Add(nameof(Volo.Docs.Pages.Documents.Project.IndexModel.ProjectName), project.ShortName);
+            }
+            return Url.Page("/Documents/Project/Index", routeValues);
         }
     }
 }

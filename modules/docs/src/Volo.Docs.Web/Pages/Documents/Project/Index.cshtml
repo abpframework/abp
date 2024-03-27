@@ -480,7 +480,7 @@ else
         {
             model = new ErrorPageModel
             {
-                RedirectUrl = Model.DocumentsUrlPrefix,
+                RedirectUrl = Url.Page("/Projects/Index"),
                 ErrorCode = "404",
                 ErrorMessage = L.GetString("ProjectNotFound")
             }
@@ -493,8 +493,7 @@ else
         {
             model = new ErrorPageModel
             {
-                RedirectUrl = Model.DocumentsUrlPrefix + Model.LanguageCode + "/" + Model.ProjectName + "/"
-                              + (Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version),
+                RedirectUrl = Model.BuildDocumentUrl(Model.ProjectName, Model.LanguageCode, Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version, null),
                 ErrorCode = "404",
                 ErrorMessage = L.GetString("DocumentNotFound"),
                 AutoRedirect = !Model.DocumentName.IsNullOrWhiteSpace()

@@ -61,10 +61,23 @@ namespace Volo.Docs
 
                 var routePrefix = docsOptions.RoutePrefix;
 
-                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
-                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
-                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
-                options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/{languageCode}/{projectName}/{version}");
+                if (docsOptions.SingleProjectMode.Enable)
+                {
+                    if (routePrefix != "/")
+                    {
+                        options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix);
+                    }
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}");
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{version}/{*documentName}");
+                    options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/{languageCode}/{version}");
+                }
+                else
+                {
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
+                    options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/{languageCode}/{projectName}/{version}");
+                }
             });
 
             context.Services.AddAutoMapperObjectMapper<DocsWebModule>();

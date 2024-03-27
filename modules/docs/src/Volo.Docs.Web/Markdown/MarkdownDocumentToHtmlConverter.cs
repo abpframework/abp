@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
+using Volo.Docs.Pages.Documents.Project;
 using Volo.Docs.Projects;
 using Volo.Docs.Utils;
 
@@ -16,15 +18,17 @@ namespace Volo.Docs.Markdown
 
         private readonly IMarkdownConverter _markdownConverter;
         private readonly DocsUiOptions _uiOptions;
+        private readonly LinkGenerator _linkGenerator;
 
         public MarkdownDocumentToHtmlConverter(IMarkdownConverter markdownConverter,
-            IOptions<DocsUiOptions> urlOptions)
+            IOptions<DocsUiOptions> urlOptions, LinkGenerator linkGenerator)
         {
             _markdownConverter = markdownConverter;
+            _linkGenerator = linkGenerator;
             _uiOptions = urlOptions.Value;
         }
 
-        private const string MdLinkFormat = "[{0}]({1}{2}/{3}/{4}{5}/{6})";
+        private const string MdLinkFormat = "[{0}]({1})";
         private const string MarkdownLinkRegExp = @"\[(.*?)\]\(((.*?)(\?(.*?))*?)\)";
         private const string AnchorLinkRegExp = @"<a[^>]+href=\""(.*?)\""[^>]*>(.*)?</a>";
 
@@ -117,12 +121,7 @@ namespace Volo.Docs.Markdown
                 return string.Format(
                     MdLinkFormat,
                     displayText,
-                    _uiOptions.RoutePrefix,
-                    languageCode,
-                    projectShortName,
-                    version,
-                    documentLocalDirectoryNormalized,
-                    documentName
+                    GenerateUrl(languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName, projectShortName)
                 );
             });
         }
@@ -149,12 +148,7 @@ namespace Volo.Docs.Markdown
                 return string.Format(
                     MdLinkFormat,
                     displayText,
-                    _uiOptions.RoutePrefix,
-                    languageCode,
-                    projectShortName,
-                    version,
-                    documentLocalDirectoryNormalized,
-                    documentName
+                    GenerateUrl(languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName, projectShortName)
                 );
             });
         }
@@ -177,6 +171,22 @@ namespace Volo.Docs.Markdown
             }
 
             return documentName.Left(documentName.Length - Type.Length - 1);
+        }
+        
+        private string GenerateUrl(string languageCode, string version, string documentName, string projectShortName)
+        {
+            var routeValues = new Dictionary<string, object> {
+                { nameof(IndexModel.LanguageCode), languageCode },
+                { nameof(IndexModel.Version), version },
+                { nameof(IndexModel.DocumentName), documentName }
+            };
+
+            if (!_uiOptions.SingleProjectMode.Enable)
+            {
+                routeValues.Add(nameof(IndexModel.ProjectName), projectShortName);
+            }
+
+            return _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
         }
     }
 }
