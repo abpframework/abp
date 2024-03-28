@@ -13,11 +13,11 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Router } from '@angular/router';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { LocalizationParam, SubscriptionService } from '@abp/ng.core';
 import { ErrorScreenErrorCodes } from '../../models';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'abp-http-error-wrapper',
@@ -61,19 +61,21 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   ngOnInit(): void {
-    this.backgroundColor =
-      this.window.getComputedStyle(this.document.body)?.getPropertyValue('background-color') ||
-      '#fff';
+    const computedStyle = this.window.getComputedStyle(this.document.body);
+    const backgroundColor = computedStyle?.getPropertyValue('background-color');
+    this.backgroundColor = backgroundColor || '#fff';
   }
 
   ngAfterViewInit(): void {
     if (this.customComponent) {
-      const customComponentRef = this.cfRes
-        .resolveComponentFactory(this.customComponent)
-        .create(this.injector);
+      const compFactory = this.cfRes.resolveComponentFactory(this.customComponent);
+      const customComponentRef = compFactory.create(this.injector);
+
       customComponentRef.instance.errorStatus = this.status;
       customComponentRef.instance.destroy$ = this.destroy$;
+
       this.appRef.attachView(customComponentRef.hostView);
+
       if (this.containerRef) {
         this.containerRef.nativeElement.appendChild(
           (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0],
@@ -90,7 +92,7 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   goHome() {
-    this.router.navigate(['/']);
+    this.router.navigateByUrl('/');
     this.destroy();
   }
 

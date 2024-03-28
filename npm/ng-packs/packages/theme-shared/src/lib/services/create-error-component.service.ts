@@ -2,7 +2,9 @@ import {
   ApplicationRef,
   ComponentFactoryResolver,
   ComponentRef,
+  createComponent,
   EmbeddedViewRef,
+  EnvironmentInjector,
   inject,
   Injectable,
   Injector,
@@ -24,6 +26,7 @@ export class CreateErrorComponentService {
   protected readonly cfRes = inject(ComponentFactoryResolver);
   protected readonly routerEvents = inject(RouterEvents);
   protected readonly injector = inject(Injector);
+  protected readonly envInjector = inject(EnvironmentInjector);
   protected readonly httpErrorConfig = inject(HTTP_ERROR_CONFIG);
 
   componentRef: ComponentRef<HttpErrorWrapperComponent> | null = null;
@@ -65,9 +68,9 @@ export class CreateErrorComponentService {
     const hostElement = this.getErrorHostElement();
     const host = renderer.selectRootElement(hostElement, true);
 
-    this.componentRef = this.cfRes
-      .resolveComponentFactory(HttpErrorWrapperComponent)
-      .create(this.injector);
+    this.componentRef = createComponent(HttpErrorWrapperComponent, {
+      environmentInjector: this.envInjector,
+    });
 
     for (const key in instance) {
       /* istanbul ignore else */
@@ -91,6 +94,7 @@ export class CreateErrorComponentService {
 
     const destroy$ = new Subject<void>();
     this.componentRef.instance.destroy$ = destroy$;
+
     destroy$.subscribe(() => {
       this.componentRef?.destroy();
       this.componentRef = null;
