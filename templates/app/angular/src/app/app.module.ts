@@ -6,7 +6,7 @@ import { SettingManagementConfigModule } from '@abp/ng.setting-management/config
 import { TenantManagementConfigModule } from '@abp/ng.tenant-management/config';
 import { ThemeLeptonXModule } from '@abp/ng.theme.lepton-x';
 import { SideMenuLayoutModule } from '@abp/ng.theme.lepton-x/layouts';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { InternetConnectionStatusComponent, ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,6 +36,7 @@ import { AccountLayoutModule } from '@abp/ng.theme.lepton-x/account';
     ThemeLeptonXModule.forRoot(),
     SideMenuLayoutModule.forRoot(),
     FeatureManagementModule.forRoot(),
+    InternetConnectionStatusComponent
   ],
   declarations: [AppComponent],
   providers: [APP_ROUTE_PROVIDER],
