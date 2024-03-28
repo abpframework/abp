@@ -73,7 +73,7 @@ After you have installed these NuGet packages, you need to configure your projec
 2. If you want to use hangfire's dashboard, you can add `UseAbpHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class:
 
 ````csharp
- public override void OnApplicationInitialization(ApplicationInitializationContext context)
+ public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
  {
     var app = context.GetApplicationBuilder();
             
