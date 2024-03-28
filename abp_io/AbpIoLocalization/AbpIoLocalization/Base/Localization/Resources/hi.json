@@ -230,6 +230,19 @@
     "CommunityProfile": "सामुदायिक प्रोफ़ाइल",
     "BlogProfile": "ब्लॉग प्रोफ़ाइल",
     "Tickets": "टिकट",
-    "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान"
+    "MeetTheABPCommunity": "ABP से मिलें <span class=\"gradient-community\">समुदाय</span>",
+    "DisplayName:CommunityIndexPagePoll": "सामुदायिक अनुभाग मतदान",
+    "OrganizationOverview": "संगठन अवलोकन",
+    "EmailPreferences": "ईमेल प्राथमिकताएं",
+    "VideoCourses": "आवश्यक वीडियो",
+    "Resources": "संसाधन",
+    "DoYouAgreePrivacyPolicy": "क्लिक करके <b>सदस्यता लें</b> जिस बटन से आप सहमत हैं <a href=\"https://account.abp.io/Account/TermsConditions\">शर्तें</a> और <a href=\"https://account.abp.io/Account/Privacy\">गोपनीयता नीति</a>.",
+    "PromotionalOffers": "प्रोमोशनल ऑफ़र",
+    "PromotionalOffersDefinition": "छूट, मौसमी अभियान, आदि।",
+    "EventsDefinition": "सामुदायिक वार्ता, वेबिनार, ABP .NET सम्मेलन, आदि।",
+    "ReleaseNotesDefinition": "ABP.IO प्लेटफ़ॉर्म रिलीज़, नए उत्पाद, आदि।",
+    "Newsletter": "समाचार पत्रिका",
+    "NewsletterDefinition": "ब्लॉग पोस्ट, सामुदायिक समाचार, आदि।",
+    "AbpConferenceDescription": "ABP Conference .NET डेवलपर्स के लिए समुदाय से सीखने और जुड़ने के लिए एक आभासी कार्यक्रम है।"
   }
 }

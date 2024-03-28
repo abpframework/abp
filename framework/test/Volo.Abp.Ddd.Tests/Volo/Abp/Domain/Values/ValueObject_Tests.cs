@@ -37,4 +37,20 @@ public class ValueObject_Tests
 
         emailAddress1.ValueEquals(emailAddress2).ShouldBeFalse();
     }
+
+    [Fact]
+    public void ValueObjects_Recursively_ValueEquals()
+    {
+        var cityId = Guid.NewGuid();
+
+        var address1 = new AddressWithZipCode(cityId, "Baris Manco", 42, new ZipCode("0000001"), "home", "office");
+        var address2 = new AddressWithZipCode(cityId, "Baris Manco", 42, new ZipCode("0000001"), "home", "office");
+
+        address1.ValueEquals(address2).ShouldBeTrue();
+
+        address1 = new AddressWithZipCode(cityId, "Baris Manco", 42, new ZipCode("0000001"), "home", "office");
+        address2 = new AddressWithZipCode(cityId, "Baris Manco", 42, new ZipCode("0000002"), "home", "office");
+
+        address1.ValueEquals(address2).ShouldBeFalse();
+    }
 }
