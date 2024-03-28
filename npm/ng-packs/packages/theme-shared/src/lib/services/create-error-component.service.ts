@@ -1,6 +1,5 @@
 import {
   ApplicationRef,
-  ComponentFactoryResolver,
   ComponentRef,
   createComponent,
   EmbeddedViewRef,
@@ -23,7 +22,6 @@ import { ErrorScreenErrorCodes } from '../models/common';
 export class CreateErrorComponentService {
   protected readonly document = inject(DOCUMENT);
   protected readonly rendererFactory = inject(RendererFactory2);
-  protected readonly cfRes = inject(ComponentFactoryResolver);
   protected readonly routerEvents = inject(RouterEvents);
   protected readonly injector = inject(Injector);
   protected readonly envInjector = inject(EnvironmentInjector);
@@ -83,9 +81,8 @@ export class CreateErrorComponentService {
     const appRef = this.injector.get(ApplicationRef);
 
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
-      this.componentRef.instance.cfRes = this.cfRes;
       this.componentRef.instance.appRef = appRef;
-      this.componentRef.instance.injector = this.injector;
+      this.componentRef.instance.environmentInjector = this.envInjector;
       this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen?.component;
     }
 

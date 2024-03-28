@@ -1,41 +1,40 @@
 import {
   ApplicationRef,
   Component,
-  Injector,
   inject,
   OnInit,
-  ComponentFactoryResolver,
   ElementRef,
   EmbeddedViewRef,
   Type,
   ViewChild,
   AfterViewInit,
   OnDestroy,
+  createComponent,
+  EnvironmentInjector,
+  DestroyRef,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { LocalizationParam, SubscriptionService } from '@abp/ng.core';
+import { LocalizationParam } from '@abp/ng.core';
 import { ErrorScreenErrorCodes } from '../../models';
 
 @Component({
   selector: 'abp-http-error-wrapper',
   templateUrl: './http-error-wrapper.component.html',
   styleUrls: ['http-error-wrapper.component.scss'],
-  providers: [SubscriptionService],
 })
 export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestroy {
+  protected readonly destroyRef = inject(DestroyRef);
   protected readonly document = inject(DOCUMENT);
   protected readonly window = this.document.defaultView;
   protected readonly router = inject(Router);
-  protected readonly subscription = inject(SubscriptionService);
 
   appRef!: ApplicationRef;
 
-  cfRes!: ComponentFactoryResolver;
-
-  injector!: Injector;
+  environmentInjector!: EnvironmentInjector;
 
   status: ErrorScreenErrorCodes = 0;
 
@@ -68,8 +67,9 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
 
   ngAfterViewInit(): void {
     if (this.customComponent) {
-      const compFactory = this.cfRes.resolveComponentFactory(this.customComponent);
-      const customComponentRef = compFactory.create(this.injector);
+      const customComponentRef = createComponent(this.customComponent, {
+        environmentInjector: this.environmentInjector,
+      });
 
       customComponentRef.instance.errorStatus = this.status;
       customComponentRef.instance.destroy$ = this.destroy$;
@@ -84,24 +84,26 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
       customComponentRef.changeDetectorRef.detectChanges();
     }
 
-    const keyup$ = fromEvent<KeyboardEvent>(this.document, 'keyup').pipe(
-      debounceTime(150),
-      filter((key: KeyboardEvent) => key && key.key === 'Escape'),
-    );
-    this.subscription.addOne(keyup$, () => this.destroy());
+    fromEvent<KeyboardEvent>(this.document, 'keyup')
+      .pipe(
+        debounceTime(150),
+        filter((key: KeyboardEvent) => key && key.key === 'Escape'),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.destroy());
   }
 
-  goHome() {
+  goHome(): void {
     this.router.navigateByUrl('/', { onSameUrlNavigation: 'reload' });
-    this.destroy();
-  }
-
-  ngOnDestroy(): void {
     this.destroy();
   }
 
   destroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy();
   }
 }
