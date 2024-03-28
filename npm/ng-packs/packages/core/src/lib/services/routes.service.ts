@@ -26,6 +26,7 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
   private _visible$ = new BehaviorSubject<TreeNode<T>[]>([]);
 
   protected othersGroup: string;
+  private filterRoutesEnabled = true;
 
   get flat(): T[] {
     return this._flat$.value;
@@ -90,16 +91,54 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
   }
 
   add(items: T[]): T[] {
-    const map = new Map<string, T>();
-    items.forEach(item => map.set(item[this.id], item));
+    if (this.filterRoutesEnabled) {
+      const map = new Map<string, T>();
+      items.forEach(item => map.set(item[this.id], item));
 
-    const flatItems = this.filterWith(map);
-    map.forEach(pushValueTo(flatItems));
+      const flatItems = this.filterWith(map);
+      map.forEach(pushValueTo(flatItems));
 
-    flatItems.sort(this.sort);
-    const visibleItems = flatItems.filter(item => !this.hide(item));
+      flatItems.sort(this.sort);
+      const visibleItems = flatItems.filter(item => !this.hide(item));
+      return this.publish(flatItems, visibleItems);
+    } else {
+      const flatItems = this.flat.concat(items);
+      flatItems.sort(this.sort);
+      const visibleItems = flatItems.filter(item => !this.hide(item));
+      return this.publish(flatItems, visibleItems);
+    }
+  }
 
-    return this.publish(flatItems, visibleItems);
+  delete(params: Partial<T>): T[] {
+    const willRemoveItems = this.flat.filter(item => {
+      const keys = Object.keys(params) as Array<keyof Partial<T>>;
+      const isValid = keys.every(key => item[key] === params[key]);
+
+      return isValid;
+    });
+
+    if (willRemoveItems?.length) {
+      willRemoveItems.forEach(item => {
+        this.delete({
+          [this.parentId]: item[this.id],
+        } as Partial<T>);
+      });
+
+      const flatItems = this.flat.filter(item => !willRemoveItems.includes(item));
+      const visibleItems = flatItems.filter(item => !this.hide(item));
+
+      return this.publish(flatItems, visibleItems);
+    }
+
+    return this.flat;
+  }
+
+  disableFiltering(): void {
+    this.filterRoutesEnabled = false;
+  }
+
+  enableFiltering(): void {
+    this.filterRoutesEnabled = true;
   }
 
   find(predicate: (item: TreeNode<T>) => boolean, tree = this.tree): TreeNode<T> | null {
@@ -145,8 +184,8 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
         acc
           ? acc
           : searchKeys.every(key => node[key] === params[key])
-          ? node
-          : this.search(params, node.children),
+            ? node
+            : this.search(params, node.children),
       null,
     );
   }
@@ -164,7 +203,7 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
   readonly parentId = 'parentName';
   readonly hide = (item: T) => item.invisible || !this.isGranted(item);
   readonly sort = (a: T, b: T) => {
-    return this.compareFunc(a,b)
+    return this.compareFunc(a, b);
   };
 
   constructor(protected injector: Injector) {

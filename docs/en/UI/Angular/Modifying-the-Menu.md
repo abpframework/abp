@@ -152,6 +152,21 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
 export class AppModule {}
 ```
 
+**Note:**
+Route items's `name` property is must be a unique key. If there are multiple items with the same name, the last one will be displayed in the menu. If you want to display multiple items with the same name, you can call the `disableFiltering` method of the `RoutesService` to disable the filtering.
+
+```typescript
+import { RoutesService } from '@abp/ng.core';
+import { Component } from '@angular/core';
+
+@Component(/* component metadata */)
+export class AppComponent {
+  constructor(private routes: RoutesService) {
+    routes.disableFiltering();
+  }
+}
+```
+
 Here is what every property works as:
 
 - `path` is the absolute path of the navigation element.
@@ -226,7 +241,7 @@ After adding the `routes` property as described above, the navigation menu looks
 
 ## How to Patch or Remove a Navigation Element
 
-The `patch` method of `RoutesService` finds a route by its name and replaces its configuration with the new configuration passed as the second parameter. Similarly, `remove` method finds a route and removes it along with its children.
+The `patch` method of `RoutesService` finds a route by its name and replaces its configuration with the new configuration passed as the second parameter. Similarly, `remove` method finds a route and removes it along with its children. Also you can use `delete` method to delete the routes with given properties.
 
 ```js
 // this.routes is instance of RoutesService
@@ -249,6 +264,9 @@ const newHomeRouteConfig: Partial<ABP.Route> = {
 this.routes.add([dashboardRouteConfig]);
 this.routes.patch('::Menu:Home', newHomeRouteConfig);
 this.routes.remove(['Your navigation']);
+
+// or
+this.routes.delete({ name: 'Your navigation' });
 ```
 
 - Moved the _Home_ navigation under the _Administration_ dropdown based on given `parentName`.
