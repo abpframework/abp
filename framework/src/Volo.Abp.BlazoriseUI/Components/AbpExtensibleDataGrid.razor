@@ -161,5 +161,9 @@
                 }
             }
         }
+        @if (!AutoGenerateColumns)
+        {
+            <DataGridColumn Displayable="false"/>
+        }
     </DataGridColumns>
 </DataGrid>
