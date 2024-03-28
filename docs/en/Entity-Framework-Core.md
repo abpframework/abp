@@ -753,6 +753,8 @@ public static class QADbContextModelCreatingExtensions
 
 > If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` and `ConfigureEfCoreEntity` methods. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
 
+> The `Object Extension` feature need the `Change Tracking`, which means you can't use the read-only repositories for the entities that have `extension properties(MapEfCoreProperty)`, Please see the [Repositories documentation](Repositories.md) to learn the change tracking behavior.
+
 See the "*ConfigureByConvention Method*" section above for more information.
 
 ## Advanced Topics
