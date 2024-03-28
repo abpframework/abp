@@ -11,13 +11,14 @@ import { SubscriptionService } from '../services/subscription.service';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { TreeNode } from '../utils/tree-utils';
 import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
+import { EnvironmentService } from '../services';
 
 @Component({
   selector: 'abp-dynamic-layout',
   template: ` <ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container> `,
   providers: [SubscriptionService],
 })
-export class DynamicLayoutComponent {
+export class DynamicLayoutComponent implements OnInit {
   layout?: Type<any>;
   layoutKey?: eLayoutType;
   readonly layouts = inject(DYNAMIC_LAYOUTS_TOKEN);
@@ -30,6 +31,18 @@ export class DynamicLayoutComponent {
   protected readonly replaceableComponents = inject(ReplaceableComponentsService);
   protected readonly subscription = inject(SubscriptionService);
   protected readonly routerEvents = inject(RouterEvents);
+  protected readonly environment = inject(EnvironmentService);
+
+  ngOnInit(): void {
+    if (this.layout) {
+      return;
+    }
+
+    const env = this.environment.getEnvironment();
+    if (env?.oAuthConfig?.responseType === 'code') {
+      this.getLayout();
+    }
+  }
 
   constructor(@Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent) {
     if (dynamicLayoutComponent) {
