@@ -89,7 +89,7 @@
     "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "6.13.2",
     "@typescript-eslint/parser": "6.13.2",
-    "angular-oauth2-oidc": "^15.0.0",
+    "angular-oauth2-oidc": "^17.0.0",
     "autoprefixer": "^10.0.0",
     "bootstrap": "^5.0.0",
     "bootstrap-icons": "^1.0.0",
