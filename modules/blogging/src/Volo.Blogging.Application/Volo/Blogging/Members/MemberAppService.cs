@@ -17,7 +17,7 @@ public class MemberAppService : BloggingAppServiceBase, IMemberAppService
     
     public virtual async Task<BlogUserDto> FindAsync(string username)
     {
-        var user = await _userRepository.FindAsync(x => x.UserName == username);
+        var user = await _userRepository.FindAsync(x => x.UserName == username && x.IsActive);
         
         if (user == null)
         {

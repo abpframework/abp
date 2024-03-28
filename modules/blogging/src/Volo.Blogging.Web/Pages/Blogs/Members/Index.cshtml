@@ -5,7 +5,7 @@
 @using Volo.Abp.Users
 @using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
 @using Volo.Blogging.Localization
-@model Volo.Blogging.Pages.Members.IndexModel
+@model Volo.Blogging.Pages.Blogs.Members.IndexModel
 @inject IStringLocalizer<BloggingResource> L
 @inject ICurrentUser CurrentUser
 @{
@@ -13,11 +13,11 @@
 }
 
 @section scripts {
-    <abp-script src="/Pages/Members/Index.js" />
+    <abp-script src="/Pages/Blogs/Members/Index.js" />
 }
 
 @section styles {
-    <abp-style src="/Pages/Members/Index.css"/>
+    <abp-style src="/Pages/Blogs/Members/Index.css"/>
 }
 
 <main>

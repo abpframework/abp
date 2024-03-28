@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
@@ -19,6 +20,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
         private readonly ICommentAppService _commentAppService;
+        private readonly BloggingUrlOptions _blogOptions;
 
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
@@ -47,11 +49,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty(SupportsGet = true)]
         public string TagName { get; set; }
 
-        public DetailModel(IPostAppService postAppService, IBlogAppService blogAppService, ICommentAppService commentAppService)
+        public DetailModel(IPostAppService postAppService, IBlogAppService blogAppService, ICommentAppService commentAppService, IOptions<BloggingUrlOptions> blogOptions)
         {
             _postAppService = postAppService;
             _blogAppService = blogAppService;
             _commentAppService = commentAppService;
+            _blogOptions = blogOptions.Value;
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
@@ -59,6 +62,11 @@ namespace Volo.Blogging.Pages.Blog.Posts
             if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
             {
                 return NotFound();
+            }
+            
+            if (_blogOptions.SingleBlogMode.Enable)
+            {
+                BlogShortName = _blogOptions.SingleBlogMode.BlogName;
             }
 
             await GetData();

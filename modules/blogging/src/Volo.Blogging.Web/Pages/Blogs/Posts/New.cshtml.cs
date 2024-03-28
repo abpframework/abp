@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
@@ -48,7 +49,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 return NotFound();
             }
 
-            Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
+            Blog = await GetBlogAsync(_blogAppService, _blogOptions, BlogShortName);
+            BlogShortName = Blog.ShortName;
+            
             Post = new CreatePostViewModel
             {
                 BlogId = Blog.Id
@@ -70,9 +73,17 @@ namespace Volo.Blogging.Pages.Blog.Posts
             
             var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel, CreatePostDto>(Post));
 
-            //TODO: Try Url.Page(...)
-            var urlPrefix = _blogOptions.RoutePrefix;
-            return Redirect(Url.Content($"~{urlPrefix}{WebUtility.UrlEncode(blog.ShortName)}/{WebUtility.UrlEncode(postWithDetailsDto.Url)}"));
+            Dictionary<string, object> routeValues = new()
+            {
+                { nameof(DetailModel.PostUrl), postWithDetailsDto.Url }
+            };
+
+            if (!_blogOptions.SingleBlogMode.Enable)
+            {
+                routeValues.Add(nameof(DetailModel.BlogShortName), blog.ShortName);
+            }
+            
+            return RedirectToPage("/Blogs/Posts/Detail", routeValues);
         }
 
         public class CreatePostViewModel
