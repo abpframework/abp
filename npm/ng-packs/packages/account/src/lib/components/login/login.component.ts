@@ -1,6 +1,6 @@
 import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
@@ -14,6 +14,12 @@ const { maxLength, required } = Validators;
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
+  protected injector = inject(Injector);
+  protected fb = inject(UntypedFormBuilder);
+  protected toasterService = inject(ToasterService);
+  protected authService = inject(AuthService);
+  protected configState = inject(ConfigStateService);
+
   form!: UntypedFormGroup;
 
   inProgress?: boolean;
@@ -21,14 +27,6 @@ export class LoginComponent implements OnInit {
   isSelfRegistrationEnabled = true;
 
   authWrapperKey = eAccountComponents.AuthWrapper;
-
-  constructor(
-    protected injector: Injector,
-    protected fb: UntypedFormBuilder,
-    protected toasterService: ToasterService,
-    protected authService: AuthService,
-    protected configState: ConfigStateService,
-  ) {}
 
   ngOnInit() {
     this.init();
