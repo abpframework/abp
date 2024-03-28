@@ -38,8 +38,9 @@ export class DynamicLayoutComponent implements OnInit {
       return;
     }
 
-    const env = this.environment.getEnvironment();
-    if (env?.oAuthConfig?.responseType === 'code') {
+    const { oAuthConfig } = this.environment.getEnvironment() || {};
+
+    if (oAuthConfig.responseType && oAuthConfig.responseType === 'code') {
       this.getLayout();
     }
   }
