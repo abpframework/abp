@@ -33,18 +33,6 @@ export class DynamicLayoutComponent implements OnInit {
   protected readonly routerEvents = inject(RouterEvents);
   protected readonly environment = inject(EnvironmentService);
 
-  ngOnInit(): void {
-    if (this.layout) {
-      return;
-    }
-
-    const { oAuthConfig } = this.environment.getEnvironment() || {};
-
-    if (oAuthConfig.responseType && oAuthConfig.responseType === 'code') {
-      this.getLayout();
-    }
-  }
-
   constructor(@Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent) {
     if (dynamicLayoutComponent) {
       if (isDevMode()) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
@@ -52,6 +40,17 @@ export class DynamicLayoutComponent implements OnInit {
     }
     this.checkLayoutOnNavigationEnd();
     this.listenToLanguageChange();
+  }
+  
+  ngOnInit(): void {
+    if (this.layout) {
+      return;
+    }
+
+    const { oAuthConfig } = this.environment.getEnvironment();
+    if (oAuthConfig.responseType === 'code') {
+      this.getLayout();
+    }
   }
 
   private checkLayoutOnNavigationEnd() {
