@@ -276,4 +276,32 @@ public static class AbpClaimsIdentityExtensions
 
         return principal;
     }
+
+    public static string? FindSessionId([NotNull] this IIdentity identity)
+    {
+        Check.NotNull(identity, nameof(identity));
+
+        var claimsIdentity = identity as ClaimsIdentity;
+
+        var sessionIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.SessionId);
+        if (sessionIdOrNull == null || sessionIdOrNull.Value.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        return sessionIdOrNull.Value;
+    }
+
+    public static string? FindSessionId([NotNull] this ClaimsPrincipal principal)
+    {
+        Check.NotNull(principal, nameof(principal));
+
+        var sessionIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.SessionId);
+        if (sessionIdOrNull == null || sessionIdOrNull.Value.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        return sessionIdOrNull.Value;
+    }
 }

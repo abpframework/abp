@@ -230,6 +230,19 @@
     "CommunityProfile": "Profil komunity",
     "BlogProfile": "Profil blogu",
     "Tickets": "Vstupenky",
-    "DisplayName:CommunityIndexPagePoll": "Anketa na stránce s indexem komunity"
+    "MeetTheABPCommunity": "ABP <span class=\"gradient-community\">Komunita</span> poznat",
+    "DisplayName:CommunityIndexPagePoll": "Anketa na stránce s indexem komunity",
+    "OrganizationOverview": "Přehled organizace",
+    "EmailPreferences": "Předvolby e-mailu",
+    "VideoCourses": "Základní videa",
+    "Resources": "Zdroje",
+    "DoYouAgreePrivacyPolicy": "Kliknutím <b>předplatit</b> souhlasíte s <a href=\"https://account.abp.io/Account/TermsConditions\">Podmínky</a> a <a href=\"https://account.abp.io/Account/Privacy\">Zásady ochrany osobních údajů</a>.",
+    "PromotionalOffers": "Propagační nabídky",
+    "PromotionalOffersDefinition": "Slevy, sezónní akce atd.",
+    "EventsDefinition": "Community Talks, webové semináře, konference ABP .NET atd.",
+    "ReleaseNotesDefinition": "Vydání platformy ABP.IO, nové produkty atd.",
+    "Newsletter": "Zpravodaj",
+    "NewsletterDefinition": "Blogové příspěvky, zprávy z komunity atd.",
+    "AbpConferenceDescription": "ABP Conference je virtuální událost pro vývojáře .NET, kde se mohou učit a spojit se s komunitou."
   }
 }

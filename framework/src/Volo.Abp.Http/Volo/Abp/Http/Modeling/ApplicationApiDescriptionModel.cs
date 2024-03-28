@@ -21,7 +21,7 @@ public class ApplicationApiDescriptionModel
     {
         return new ApplicationApiDescriptionModel
         {
-            Modules = new ConcurrentDictionary<string, ModuleApiDescriptionModel>(), //TODO: Why ConcurrentDictionary?
+            Modules = new Dictionary<string, ModuleApiDescriptionModel>(), 
             Types = new SortedDictionary<string, TypeApiDescriptionModel>()
         };
     }

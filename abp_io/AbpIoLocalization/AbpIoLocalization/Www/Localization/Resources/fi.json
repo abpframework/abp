@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework ei ole vain viitekehys, se on myös opastus projektien kehittämiseen/hallintaan, koska se tarjoaa DDD-, GenericRepository-, DI-, Microservice- ja Modularity-koulutuksia. Vaikka et itse käyttäisikään kehystä, voit kehittää itseäsi docs.abp.io:lla, joka on hyvin ja ammattimaisesti valmisteltu. (OpenIddict, Redis, Quartz jne.) \n Koska monet asiat on rakennettu valmiiksi, se lyhentää projektin kehitysaikaa merkittävästi. (Kuten kirjautumissivu, poikkeusten käsittely, tietojen suodatus-kylvö, tarkastusloki, lokalisointi, automaattinen api-ohjain jne.) \n Esimerkkinä sovelluksestamme, olen käyttänyt Local Event Busia varaston hallintaan. Pystyn siis hallitsemaan tilausliikkeitä kirjoittamalla varastokäsittelijäksi. \n On hienoa olla hukkaamatta aikaa CreationTime, CreatorId. Ne täytetään automaattisesti.",
     "VideosLoginAndRegisterMessage": "Sinun on kirjauduttava sisään katsoaksesi videoita. Voit luoda tilin kellolle, jos et ole vielä tehnyt sitä.",
     "Filter": "Suodattaa",
-    "VideoCourses": "Videokurssit",
+    "VideoCourses": "Tärkeitä videoita",
     "TestimonialText": "Arvostelusi",
     "Position": "Asema",
     "ExperienceYear": "Vuoden kokemus",
@@ -448,7 +448,7 @@
     "CompanySize": "Yrityksen koko",
     "Image": "Profiilikuvasi",
     "TestimonialTitle": "Kuunnellaan arvosteluasi",
-    "TestimonialInfo": "Mitä asiakkaamme sanovat, on tärkeää! Kerro meille kokemuksestasi tuotteemme ja palvelumme parissa.",
+    "TestimonialInfo": "Asiakkaidemme sanomilla on väliä!Kerro meille kokemuksistasi tuotteestamme ja palvelustamme.Suosittelemme kirjoittamaan arvostelun englanniksi, jotta tavoitat laajemman yleisön.",
     "Country": "Maa",
     "TestimonialTextPlaceholder": "Kirjoita lyhyt tarina siitä, miten ABP auttoi sinua rakentamaan ja toimittamaan projektisi.",
     "PositionPlaceholder": "Asemasi yrityksessäsi.",
@@ -467,6 +467,11 @@
     "Title": "Titteli",
     "TitlePlaceholder": "Ohjelmistokehittäjä, CTO, jne.",
     "Characters": "hahmot",
-    "ABPTestimonialDescription": "ABP Framework: Kuunnellaanpa sinun suosittelua"
+    "ABPTestimonialDescription": "ABP Framework: Kuunnellaanpa sinun suosittelua",
+    "LeaveUsReview": "Jätä meille arvostelu",
+    "DocumentationButtonTitle": "Dokumentointi",
+    "ABPVideoCoursesDescription": "Opi ABP Frameworkin perusteet ABP-tiimin luomilla videokursseilla.",
+    "ABPVideoCoursesPageDescription": "Opi ABP Frameworkin perusteet ABP-tiimin luomilla videokursseilla.Tässä videosarjassa opit ABP Frameworkin keskeiset aiheet. Jokaisen videon numerot on kirjoitettu oppimiskulun mukaan.",
+    "ABPVideoCoursesTitle": "ABP Essential Videos"
   }
 }

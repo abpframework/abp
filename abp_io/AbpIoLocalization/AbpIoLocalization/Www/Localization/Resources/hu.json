@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "Az ABP Framework nem csak keretrendszer, hanem útmutató is a projektfejlesztéshez/menedzsmenthez, mert DDD, GenericRepository, DI, Microservice, Modularity képzéseket biztosít. Még ha nem is magát a keretrendszert használja, fejlesztheti magát a docs.abp.io segítségével, amely jól és szakmailag felkészült. (OpenIddict, Redis, Quartz stb.) \n Mivel sok minden előre be van építve, jelentősen lerövidíti a projektfejlesztési időt. (Például bejelentkezési oldal, kivételkezelés, adatszűrés-seeding, audit naplózás, lokalizáció, automatikus api-vezérlő stb.) \n Alkalmazásunkból példaként a Local Event Bus-t használtam készletkezelésre. Így a rendelési mozgásokat készletkezelő írással tudom kezelni. \n Csodálatos, hogy nem veszít időt a CreationTime, CreatorId használatára. Automatikusan kitöltődnek.",
     "VideosLoginAndRegisterMessage": "A videók megtekintéséhez be kell jelentkeznie. Ha még nem tette meg, létrehozhat fiókot az órához.",
     "Filter": "Szűrő",
-    "VideoCourses": "Videó tanfolyamok",
+    "VideoCourses": "Alapvető videók",
     "TestimonialText": "Ajánlásod",
     "Position": "Pozíció",
     "ExperienceYear": "Tapasztalati év",
@@ -448,7 +448,7 @@
     "CompanySize": "Cég mérete",
     "Image": "Profilképed",
     "TestimonialTitle": "Halljuk ajánlásod",
-    "TestimonialInfo": "Ami ügyfeleinktől származik, az fontos! Mesélj nekünk tapasztalataidról a termékünkkel és szolgáltatásunkkal kapcsolatban.",
+    "TestimonialInfo": "Számít, amit ügyfeleink mondanak!Mondja el termékeinkkel és szolgáltatásainkkal kapcsolatos tapasztalatait. Javasoljuk, hogy az ajánlást angolul írja meg, hogy szélesebb közönséghez jusson el.",
     "Country": "Ország",
     "TestimonialTextPlaceholder": "Írj rövid történetet arról, hogyan segített neked az ABP projektépítésben és szállításban.",
     "PositionPlaceholder": "Pozíciód a vállalatodban.",
@@ -467,6 +467,11 @@
     "Title": "Cím",
     "TitlePlaceholder": "Szoftvertervező, CTO, stb.",
     "Characters": "karakterek",
-    "ABPTestimonialDescription": "ABP Framework: Halljuk az Ön beszámolóját"
+    "ABPTestimonialDescription": "ABP Framework: Halljuk az Ön beszámolóját",
+    "LeaveUsReview": "Hagyjon véleményt nekünk",
+    "DocumentationButtonTitle": "Dokumentáció",
+    "ABPVideoCoursesDescription": "Tanulja meg az ABP Framework alapjait az ABP csapata által készített videó tanfolyamokon.",
+    "ABPVideoCoursesPageDescription": "Tanulja meg az ABP-keretrendszer alapjait az ABP csapata által készített videotanfolyamokon. Ebben a videósorozatban megismerheti az ABP-keretrendszer alapvető témáit. Az egyes videókon található számok a tanulási folyamatnak megfelelően vannak felírva.",
+    "ABPVideoCoursesTitle": "ABP alapvető videók"
   }
 }
