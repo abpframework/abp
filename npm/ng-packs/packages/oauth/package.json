@@ -9,7 +9,7 @@
   "dependencies": {
     "@abp/ng.core": "~8.1.0-rc.3",
     "@abp/utils": "~8.1.0-rc.3",
-    "angular-oauth2-oidc": "^15.0.0",
+    "angular-oauth2-oidc": "^17.0.0",
     "just-clone": "^6.0.0",
     "just-compare": "^2.0.0",
     "tslib": "^2.0.0"
