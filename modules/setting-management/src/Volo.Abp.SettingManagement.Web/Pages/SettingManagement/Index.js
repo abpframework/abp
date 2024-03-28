@@ -21,7 +21,7 @@
            }).done(function (response) {
                $('#tab-content').children('.tab-pane').removeClass('show').removeClass('active');
                _this.attr('data-bs-target', '#' + tabId);
-               $('#tab-content').append('<div id=' + tabId + ' class="tab-pane fade active show abp-md-form">' + response + '</div>');
+               $('#tab-content').append('<div id=' + tabId + ' class="tab-pane fade active show">' + response + '</div>');
            })
         });
     }).first().click();
