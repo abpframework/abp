@@ -13,7 +13,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
           ngbTooltip="{{ 'AbpUi::InternetConnectionInfo' | abpLocalization }}"
           container="body"
           placement="left-top" 
-          class="fa fa-circle text-blinking blink"
+          class="fa fa-wifi text-blinking blink"
         >
         </i>
       </div>
@@ -29,29 +29,27 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
           color: #c1c1c1;
         }
         70% {
-          color: #dc3545;
+          color: #fa2379;
         }
         100% {
-          color: #dc3545;
+          color: #fa2379;
         }
       }
 
       .text-blinking {
-        font-size: 1.2rem;
+        font-size: 30px;
       }
 
       .status-icon {
         position: fixed;
         z-index: 999999;
-        top: 10px;
-        right: 10px;
-      }
-
-      @media (width < 768px) {
-        .status-icon {
-          top: 26px;
-          right: 134px;
-        }
+        top: 50%;
+        left: 50%;
+        width: 30px;
+        text-align: center;
+        margin-left: -15px;
+        margin-top: -15px;
+        translate: transform(-50%, -50%);
       }
     `,
   ],
