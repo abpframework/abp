@@ -18,7 +18,7 @@
           </div>
           <div class="error-actions">
             @if (isHomeShow) {
-              <a (click)="destroy()" routerLink="/" class="btn btn-primary btn-md mt-2"
+              <a (click)="goHome()" class="btn btn-primary btn-md mt-2"
                 ><span class="glyphicon glyphicon-home"></span>
                 {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}
               </a>
