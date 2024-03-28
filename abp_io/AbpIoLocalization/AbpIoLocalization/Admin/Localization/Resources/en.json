@@ -617,6 +617,9 @@
     "Permission:Testimonials": "Testimonials",
     "SelectCompanySizePlaceholder": "Company Size",
     "SelectExperienceYearPlaceholder": "Experience year",
-    "SelectCountryPlaceholder": "Country"
+    "SelectCountryPlaceholder": "Country",
+    "DeleteImageConfirmationMessage": "Are you sure you want to delete the image for \"{0}\"?",
+    "DeleteImageSuccessMessage": "Image successfully deleted",
+    "DeleteImage": "Delete Image"
   }
 }
