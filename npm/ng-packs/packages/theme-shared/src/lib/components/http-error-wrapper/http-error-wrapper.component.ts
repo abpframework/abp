@@ -92,7 +92,7 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   goHome() {
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/', { onSameUrlNavigation: 'reload' });
     this.destroy();
   }
 
