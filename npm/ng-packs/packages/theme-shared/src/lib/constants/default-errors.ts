@@ -51,3 +51,17 @@ export const CUSTOM_HTTP_ERROR_HANDLER_PRIORITY = Object.freeze({
   high: 9,
   veryHigh: 99,
 });
+
+export const HTTP_ERROR_STATUS = {
+  '401': 'AbpUi::401Message',
+  '403': 'AbpUi::403Message',
+  '404': 'AbpUi::404Message',
+  '500': 'AbpUi::500Message',
+};
+
+export const HTTP_ERROR_DETAIL = {
+  '401': 'AbpUi::DefaultErrorMessage401Detail',
+  '403': 'AbpUi::DefaultErrorMessage403Detail',
+  '404': 'AbpUi::DefaultErrorMessage404Detail',
+  '500': 'AbpUi::DefaultErrorMessage',
+};
