@@ -719,6 +719,37 @@ We've used the `IUnitOfWorkManager` service to create a unit of work scope, then
 
 > Note that we've tested the `FirstOrDefaultAsync` to demonstrate the unit of work problem. Normally, as a good principle, you should write tests only your own code.
 
+You could also use `WithUnitOfWorkAsync` to achieve the same functionality instead of writing the same using block in your tests.
+
+Here is the same test scenario using `WithUnitOfWorkAsync`:
+
+````csharp
+public abstract class IssueRepository_Tests<TStartupModule> : MyProjectDomainTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+    private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+    protected IssueRepository_Tests()
+    {
+        _issueRepository = GetRequiredService<IRepository<Issue, Guid>>();
+        _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+    }
+
+    public async Task Should_Query_By_Title()
+    {
+        await WithUnitOfWorkAsync(() =>
+        {
+            IQueryable<Issue> queryable = await _issueRepository.GetQueryableAsync();
+            var issue = queryable.FirstOrDefaultAsync(i => i.Title == "My issue title");
+            issue.ShouldNotBeNull();
+        });
+    }
+}
+````
+
+There are multiple overloads of the `WithUnitOfWorkAsync` method that you can use based on your specific needs.
+
 ### Working with DbContext
 
 In some cases, you may want to directory work with the Entity Framework's `DbContext` object to perform database operations in your test methods. In this case, you can use `IDbContextProvider<T>`service to obtain a `DbContext` instance inside a unit of work.
