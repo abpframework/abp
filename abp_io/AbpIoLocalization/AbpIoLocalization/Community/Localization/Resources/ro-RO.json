@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>Aceasta este pagina de tombolă dedicată pentru a arăta aprecierea noastră față de dvs. pentru că sunteți un membru activ al comunității. Facem <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">, ABP .NET Conference</a> , participăm sau sponsorizăm evenimentele legate de .NET în care oferim câteva cadouri.<br><br> Puteți urmări această pagină pentru a vedea tombolele viitoare, a participa la ele sau pentru a vedea tombolele anterioare pe care le extragem, inclusiv câștigătorii.<br><br> Vă mulțumim că sunteți un membru activ! Ne vedem la tombolele viitoare.",
     "RafflesInfoTitle": "<span class=\"gradient-community\">Tombole</span> comunitare ABP",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> sprijinit.",
-    "Preview": "previzualizare"
+    "Preview": "previzualizare",
+    "VisitPage": "Vizitați pagina",
+    "VisitVideoCourseDescription": "Dacă doriți să aflați elementele de bază ale cadrului ABP, consultați cursurile video ABP Essentials."
   }
 }

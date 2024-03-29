@@ -2,7 +2,7 @@
   "culture": "sk",
   "texts": {
     "Settings": "Nastavenia",
-    "SuccessfullySaved": "Úspešne uložené",
+    "SavedSuccessfully": "Úspešne uložené",
     "Permission:SettingManagement": "Správa nastavení",
     "Permission:Emailing": "Posielanie emailov",
     "Permission:EmailingTest": "Test odosielania e-mailov",
