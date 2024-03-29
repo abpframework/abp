@@ -620,6 +620,7 @@
     "SelectCountryPlaceholder": "Country",
     "DeleteImageConfirmationMessage": "Are you sure you want to delete the image for \"{0}\"?",
     "DeleteImageSuccessMessage": "Image successfully deleted",
-    "DeleteImage": "Delete Image"
+    "DeleteImage": "Delete Image",
+    "NetTerms": "Terms (Days)"
   }
 }
