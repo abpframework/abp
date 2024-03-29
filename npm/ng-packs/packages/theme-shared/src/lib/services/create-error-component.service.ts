@@ -1,8 +1,9 @@
 import {
   ApplicationRef,
-  ComponentFactoryResolver,
   ComponentRef,
+  createComponent,
   EmbeddedViewRef,
+  EnvironmentInjector,
   inject,
   Injectable,
   Injector,
@@ -21,9 +22,9 @@ import { ErrorScreenErrorCodes } from '../models/common';
 export class CreateErrorComponentService {
   protected readonly document = inject(DOCUMENT);
   protected readonly rendererFactory = inject(RendererFactory2);
-  protected readonly cfRes = inject(ComponentFactoryResolver);
   protected readonly routerEvents = inject(RouterEvents);
   protected readonly injector = inject(Injector);
+  protected readonly envInjector = inject(EnvironmentInjector);
   protected readonly httpErrorConfig = inject(HTTP_ERROR_CONFIG);
 
   componentRef: ComponentRef<HttpErrorWrapperComponent> | null = null;
@@ -65,9 +66,9 @@ export class CreateErrorComponentService {
     const hostElement = this.getErrorHostElement();
     const host = renderer.selectRootElement(hostElement, true);
 
-    this.componentRef = this.cfRes
-      .resolveComponentFactory(HttpErrorWrapperComponent)
-      .create(this.injector);
+    this.componentRef = createComponent(HttpErrorWrapperComponent, {
+      environmentInjector: this.envInjector,
+    });
 
     for (const key in instance) {
       /* istanbul ignore else */
@@ -80,9 +81,8 @@ export class CreateErrorComponentService {
     const appRef = this.injector.get(ApplicationRef);
 
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
-      this.componentRef.instance.cfRes = this.cfRes;
       this.componentRef.instance.appRef = appRef;
-      this.componentRef.instance.injector = this.injector;
+      this.componentRef.instance.environmentInjector = this.envInjector;
       this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen?.component;
     }
 
@@ -91,6 +91,7 @@ export class CreateErrorComponentService {
 
     const destroy$ = new Subject<void>();
     this.componentRef.instance.destroy$ = destroy$;
+
     destroy$.subscribe(() => {
       this.componentRef?.destroy();
       this.componentRef = null;

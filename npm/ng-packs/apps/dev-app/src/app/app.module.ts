@@ -39,7 +39,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     ThemeLeptonXModule.forRoot(),
     SideMenuLayoutModule.forRoot(),
     AccountLayoutModule.forRoot(),
-    InternetConnectionStatusComponent
+    InternetConnectionStatusComponent,
   ],
   providers: [APP_ROUTE_PROVIDER],
   declarations: [AppComponent],

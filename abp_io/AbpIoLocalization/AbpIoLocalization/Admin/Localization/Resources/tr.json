@@ -443,6 +443,18 @@
     "QuotationTemplate.Tax/VAT:": "Vergiler (%{0}) :",
     "QuotationTemplate.TotalDiscount:": "Toplam İndirim :",
     "QuotationTemplate.TOTALDUE:": "NET TOPLAM :",
-    "QuotationTemplate.BankAccount": "Banka hesap bilgilerimize {0} adresinden erişebilirsiniz."
+    "QuotationTemplate.BankAccount": "Banka hesap bilgilerimize {0} adresinden erişebilirsiniz.",
+    "Menu:Testimonials": "Referanslar",
+    "IsVisible": "Görünürlük",
+    "TestimonialDeletionConfirmationMessage": "Bu referansı silmek istediğinize emin misiniz ?",
+    "FullName": "Ad soyad",
+    "TestimonialText": "Tecrübe yazısı",
+    "ExperienceYear": "Sektörel deneyim",
+    "Position": "Başlık",
+    "Actions": "İşlemler",
+    "Permission:Testimonials": "Referanslar",
+    "SelectCompanySizePlaceholder": "Şirket  Büyüklüğü",
+    "SelectExperienceYearPlaceholder": "Sektörel deneyim",
+    "SelectCountryPlaceholder": "Ülke"
   }
 }
