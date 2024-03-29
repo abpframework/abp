@@ -25,6 +25,7 @@ public class ComponentsComponentsBundleContributor : IBundleContributor
             });
         }
 
+        context.Add("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/css/abp.css");
         context.Add("_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/flag-icon/css/flag-icon.css");
         context.Add("_content/Blazorise/blazorise.css");
         context.Add("_content/Blazorise.Bootstrap5/blazorise.bootstrap5.css");

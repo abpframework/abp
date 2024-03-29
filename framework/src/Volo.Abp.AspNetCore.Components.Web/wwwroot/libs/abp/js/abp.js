@@ -182,4 +182,52 @@ var abp = abp || {};
             }
         }
     }
+
+    /* UI *******************************************************/
+
+    abp.ui = abp.ui || {};
+
+    /* UI BLOCK */
+    //Defines UI Block API and implements basically
+
+    var $abpBlockArea = document.createElement('div');
+    $abpBlockArea.classList.add('abp-block-area');
+
+    /* opts: { //Can be an object with options or a string for query a selector
+     *  elm: a query selector (optional - default: document.body)
+     *  busy: boolean (optional - default: false)
+     * }
+     */
+    abp.ui.block = function (elm, busy) {
+        var $elm = document.querySelector(elm) || document.body;
+
+        if (busy) {
+            $abpBlockArea.classList.add('abp-block-area-busy');
+        } else {
+            $abpBlockArea.classList.remove('abp-block-area-busy');
+        }
+
+        if (document.querySelector(elm)) {
+            $abpBlockArea.style.position = 'absolute';
+        } else {
+            $abpBlockArea.style.position = 'fixed';
+        }
+
+        $elm.appendChild($abpBlockArea);
+    };
+
+    abp.ui.unblock = function () {
+        var element = document.querySelector('.abp-block-area');
+        if (element) {
+            element.classList.add('abp-block-area-disappearing');
+            setTimeout(function () {
+                if (element) {
+                    element.classList.remove('abp-block-area-disappearing');
+                    if (element.parentElement) {
+                        element.parentElement.removeChild(element);
+                    }
+                }
+            }, 250);
+        }
+    };
 })();
