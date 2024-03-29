@@ -20,11 +20,11 @@ namespace MyProject.Blazor.Pages
 
         public async Task BlockForm()
         {
-			/*
-				Parameters of Block method:
-					selectors: A string containing one or more selectors to match
-					busy : Set to true to show a progress indicator on the blocked area.
-			*/
+            /*
+              Parameters of Block method:
+                selectors: A string containing one or more selectors to match. https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#selectors
+                busy : Set to true to show a progress indicator on the blocked area.
+            */
             await _blockUiService.Block(selectors: "#MySelectors", busy: true);
         }
     }
