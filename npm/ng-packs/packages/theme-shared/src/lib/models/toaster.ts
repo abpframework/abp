@@ -1,8 +1,10 @@
 import { LocalizationParam } from '@abp/ng.core';
-import { HttpInterceptor, HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptor } from '@angular/common/http';
 import { Type } from '@angular/core';
 
 export namespace Toaster {
+  export const SKIP_TOASTER_INTERCEPTOR = 'X-Abp-Skip-Toaster-Interceptor';
+
   export interface ToastOptions {
     life?: number;
     sticky?: boolean;
@@ -26,6 +28,7 @@ export namespace Toaster {
     methods: HttpMethod[];
     defaults: Partial<ToasterDefaults>;
     customInterceptor: Type<HttpInterceptor>;
+    enabled: boolean;
   }
 
   export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';

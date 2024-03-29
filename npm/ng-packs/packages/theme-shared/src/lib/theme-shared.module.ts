@@ -94,7 +94,12 @@ export class BaseThemeSharedModule {}
 })
 export class ThemeSharedModule {
   static forRoot(
-    { httpErrorConfig, validation = {}, confirmationIcons = {}, toasterConfig } = {} as RootParams,
+    {
+      httpErrorConfig,
+      validation = {},
+      confirmationIcons = {},
+      toastInterceptorConfig: toasterConfig,
+    } = {} as RootParams,
   ): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,

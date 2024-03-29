@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injector, Type } from '@angular/core';
 import { Validation } from '@ngx-validate/core';
 import { Observable } from 'rxjs';
@@ -9,7 +9,7 @@ export interface RootParams {
   httpErrorConfig?: HttpErrorConfig;
   validation?: Partial<Validation.Config>;
   confirmationIcons?: Partial<ConfirmationIcons>;
-  toasterConfig?: Partial<Toaster.ToasterInterceptorConfig>;
+  toastInterceptorConfig?: Partial<Toaster.ToasterInterceptorConfig>;
 }
 
 export type ErrorScreenErrorCodes = 0 | 401 | 403 | 404 | 500;
@@ -33,3 +33,5 @@ export interface CustomHttpErrorHandlerService {
   canHandle(error: unknown): boolean;
   execute(): void;
 }
+
+export type HttpResponseEvent = HttpResponse<unknown> | HttpErrorResponse;

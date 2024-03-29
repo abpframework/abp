@@ -5,6 +5,7 @@ export namespace Rest {
     apiName: string;
     skipHandleError: boolean;
     skipAddingHeader: boolean;
+    skipToasterInterceptor: boolean;
     observe: Observe;
     httpParamEncoder?: HttpParameterCodec;
   }>;

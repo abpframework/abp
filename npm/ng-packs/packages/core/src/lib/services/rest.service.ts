@@ -1,4 +1,10 @@
-import { HttpClient, HttpParameterCodec, HttpParams, HttpRequest } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpParameterCodec,
+  HttpParams,
+  HttpRequest,
+} from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -20,7 +26,7 @@ export class RestService {
     protected externalHttp: ExternalHttpClient,
     protected environment: EnvironmentService,
     protected httpErrorReporter: HttpErrorReporterService,
-  ) { }
+  ) {}
 
   protected getApiFromStore(apiName: string | undefined): string {
     return this.environment.getApiUrl(apiName);
@@ -39,10 +45,22 @@ export class RestService {
     config = config || ({} as Rest.Config);
     api = api || this.getApiFromStore(config.apiName);
     const { method, params, ...options } = request;
-    const { observe = Rest.Observe.Body, skipHandleError } = config;
+    const {
+      observe = Rest.Observe.Body,
+      skipHandleError,
+      skipAddingHeader,
+      skipToasterInterceptor,
+    } = config;
     const url = this.removeDuplicateSlashes(api + request.url);
 
-    const httpClient: HttpClient = this.getHttpClient(config.skipAddingHeader);
+    const httpClient: HttpClient = this.getHttpClient(skipAddingHeader);
+
+    if (!skipToasterInterceptor) {
+      options.headers = options.headers
+        ? (options.headers as HttpHeaders).set('X-Abp-Skip-Toaster-Interceptor', 'true')
+        : new HttpHeaders().set('X-Abp-Skip-Toaster-Interceptor', 'true');
+    }
+
     return httpClient
       .request<R>(method, url, {
         observe,

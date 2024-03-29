@@ -4,28 +4,78 @@ import { ToasterInterceptor } from '../interceptors/toaster.interceptor';
 import { HTTP_TOASTER_INTERCEPTOR_CONFIG } from '../tokens/toaster-interceptor.token';
 import { Toaster } from '../models';
 
+const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+const defaults: Partial<Toaster.ToasterDefaults> = {
+  '200': {
+    message: 'AbpUi::SavedSuccessfully',
+    title: 'AbpUi::Saved',
+    severity: 'success',
+    options: {
+      life: 5000,
+      messageLocalizationParams: ['AbpUi::SavedSuccessfully'],
+    },
+  },
+  '201': {
+    message: 'AbpUi::CreatedSuccessfully',
+    title: 'AbpUi::Created',
+    severity: 'success',
+    options: {
+      life: 5000,
+      messageLocalizationParams: ['AbpUi::CreatedSuccessfully'],
+    },
+  },
+  '204': {
+    message: 'AbpUi::CompletedSuccessfully',
+    title: 'AbpUi::Completed',
+    severity: 'info',
+    options: {
+      life: 5000,
+      messageLocalizationParams: ['AbpUi::CompletedSuccessfully'],
+    },
+  },
+  '400': {
+    message: 'AbpUi::BadRequest',
+    title: 'AbpUi::BadRequest',
+    severity: 'error',
+    options: {
+      life: 5000,
+      messageLocalizationParams: ['AbpUi::BadRequest'],
+    },
+  },
+  '401': {
+    message: 'AbpUi::Unauthorized',
+    title: 'AbpUi::Unauthorized',
+    severity: 'error',
+    options: {
+      life: 5000,
+      messageLocalizationParams: ['AbpUi::Unauthorized'],
+    },
+  },
+  '403': {
+    message: 'AbpUi::Forbidden',
+    title: 'AbpUi::Forbidden',
+    severity: 'error',
+    options: {
+      life: 5000,
+      messageLocalizationParams: ['AbpUi::Forbidden'],
+    },
+  },
+  '500': {
+    message: 'AbpUi::InternalServerError',
+    title: 'AbpUi::Error',
+    severity: 'error',
+    options: {
+      life: 5000,
+      messageLocalizationParams: ['AbpUi::InternalServerError'],
+    },
+  },
+};
+
 export const DEFAULT_HTTP_TOASTER_INTERCEPTOR_CONFIG: Provider = {
   provide: HTTP_TOASTER_INTERCEPTOR_CONFIG,
   useValue: {
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    defaults: {
-      '200': {
-        message: 'Success',
-        title: 'adsasads',
-        severity: 'success',
-        options: {
-          life: 5000,
-        },
-      },
-      '500': {
-        message: 'Error',
-        title: 'undefined',
-        severity: 'error',
-        options: {
-          life: 5000,
-        },
-      },
-    },
+    methods,
+    defaults,
   },
 };
 
@@ -36,7 +86,15 @@ export const DEFAULT_HTTP_TOASTER_INTERCEPTOR_PROVIDER: Provider = {
 };
 
 export const provideToasterInterceptor = (config?: Partial<Toaster.ToasterInterceptorConfig>) => {
-  if (!config) {
+  if (!config || (!config?.enabled && !config?.customInterceptor)) {
+    return [];
+  }
+
+  if (config.enabled && !config.defaults && !config.methods) {
+    console.info(
+      'ToasterInterceptor is enabled but "defaults" and "methods" are not provided. Using default configuration.',
+    );
+
     return [DEFAULT_HTTP_TOASTER_INTERCEPTOR_CONFIG, DEFAULT_HTTP_TOASTER_INTERCEPTOR_PROVIDER];
   }
 
@@ -47,7 +105,7 @@ export const provideToasterInterceptor = (config?: Partial<Toaster.ToasterInterc
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useExisting: ToasterInterceptor,
+      useClass: config?.customInterceptor || ToasterInterceptor,
       multi: true,
     },
   ];
