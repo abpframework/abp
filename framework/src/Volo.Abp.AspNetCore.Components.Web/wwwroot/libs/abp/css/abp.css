@@ -15,7 +15,7 @@
     width: 100%;
     height: 100%;
     z-index: 102;
-    background-color: #fff;
+    background-color: #fff !important;
     opacity: .8;
     transition: opacity .25s;
 }
