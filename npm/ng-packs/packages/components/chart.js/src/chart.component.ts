@@ -101,6 +101,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy, OnChanges {
       type: this.type as any,
       data: this.data,
       options: this.options,
+      plugins: this.plugins
     });
   };
 

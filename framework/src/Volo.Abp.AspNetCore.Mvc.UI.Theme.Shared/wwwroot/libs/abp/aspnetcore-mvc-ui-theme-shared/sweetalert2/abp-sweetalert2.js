@@ -35,6 +35,8 @@ var abp = abp || {};
 
     /* MESSAGE **************************************************/
 
+    abp.utils = abp.utils || {};
+    abp.utils.htmlEscape = abp.utils.htmlEscape || function (str) { return str; };
     var showMessage = function (type, message, title) {
         var opts = $.extend(
             {},
@@ -42,7 +44,7 @@ var abp = abp || {};
             abp.libs.sweetAlert.config[type],
             {
                 title: title,
-                text: message
+                html: abp.utils.htmlEscape(message).replace(/\n/g, '<br>')
             }
         );
 

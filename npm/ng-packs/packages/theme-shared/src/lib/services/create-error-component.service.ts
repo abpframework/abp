@@ -23,7 +23,7 @@ export class CreateErrorComponentService {
   protected readonly rendererFactory = inject(RendererFactory2);
   protected readonly cfRes = inject(ComponentFactoryResolver);
   protected readonly routerEvents = inject(RouterEvents);
-  protected readonly injector = inject(Injector);
+  private readonly injector = inject(Injector);
   protected readonly httpErrorConfig = inject(HTTP_ERROR_CONFIG);
 
   componentRef: ComponentRef<HttpErrorWrapperComponent> | null = null;

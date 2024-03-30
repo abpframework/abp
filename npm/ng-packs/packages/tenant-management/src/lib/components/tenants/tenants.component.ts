@@ -1,13 +1,13 @@
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 import { GetTenantsInput, TenantDto, TenantService } from '@abp/ng.tenant-management/proxy';
-import {Confirmation, ConfirmationService, ToasterService} from '@abp/ng.theme.shared';
+import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, inject, Injector, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
@@ -24,6 +24,13 @@ import { eTenantManagementComponents } from '../../enums/components';
   ],
 })
 export class TenantsComponent implements OnInit {
+  protected readonly list = inject(ListService<GetTenantsInput>);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly service = inject(TenantService);
+  protected readonly toasterService = inject(ToasterService);
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly injector = inject(Injector);
+
   data: PagedResultDto<TenantDto> = { items: [], totalCount: 0 };
 
   selected!: TenantDto;
@@ -47,15 +54,6 @@ export class TenantsComponent implements OnInit {
   onVisibleFeaturesChange = (value: boolean) => {
     this.visibleFeatures = value;
   };
-
-  constructor(
-    public readonly list: ListService<GetTenantsInput>,
-    private injector: Injector,
-    private confirmationService: ConfirmationService,
-    private service: TenantService,
-    private toasterService: ToasterService,
-    private fb: UntypedFormBuilder,
-  ) {}
 
   ngOnInit() {
     this.hookToQuery();
@@ -93,6 +91,7 @@ export class TenantsComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
   }
@@ -108,7 +107,7 @@ export class TenantsComponent implements OnInit {
       )
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.toasterService.success('AbpUi::SuccessfullyDeleted');
+          this.toasterService.success('AbpUi::DeletedSuccessfully');
           this.service.delete(id).subscribe(() => this.list.get());
         }
       });

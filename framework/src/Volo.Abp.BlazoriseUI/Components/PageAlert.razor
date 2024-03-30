@@ -1,4 +1,4 @@
-﻿@foreach (var alert in Alerts)
+@foreach (var alert in Alerts)
 {
     <Alert Visible="@alert.IsVisible" Dismisable="@alert.AlertMessage.Dismissible" Color="@GetAlertColor(alert.AlertMessage.Type)">
         @if (!string.IsNullOrEmpty(alert.AlertMessage.Title))
@@ -12,5 +12,9 @@
             </Heading>
         }
         <Paragraph>@alert.AlertMessage.Text</Paragraph>
+        @if (alert.AlertMessage.Dismissible)
+        {
+            <CloseButton />
+        }
     </Alert>
 }
