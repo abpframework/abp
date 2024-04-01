@@ -1,4 +1,171 @@
-<ng-container
+<ng-container *abpPermission="prop.permission; runChangeDetection: false">
+  @switch (getComponent(prop)) {
+    @case ('template') {
+      <ng-container *ngComponentOutlet="prop.template; injector: injectorForCustomComponent">
+      </ng-container>
+    }
+  }
+
+  <div [ngClass]="containerClassName" class="mb-2">
+    @switch (getComponent(prop)) {
+      @case ('input') {
+        <ng-template [ngTemplateOutlet]="label"></ng-template>
+        <input
+          #field
+          [id]="prop.id"
+          [formControlName]="prop.name"
+          [autocomplete]="prop.autocomplete"
+          [type]="getType(prop)"
+          [abpDisabled]="disabled"
+          [readonly]="readonly"
+          class="form-control"
+        />
+      }
+
+      @case ('hidden') {
+        <input [formControlName]="prop.name" type="hidden" />
+      }
+
+      @case ('checkbox') {
+        <div class="form-check" validationTarget>
+          <input
+            #field
+            [id]="prop.id"
+            [formControlName]="prop.name"
+            [abpDisabled]="disabled"
+            type="checkbox"
+            class="form-check-input"
+          />
+          <ng-template
+            [ngTemplateOutlet]="label"
+            [ngTemplateOutletContext]="{ $implicit: 'form-check-label' }"
+          ></ng-template>
+        </div>
+      }
+
+      @case ('select') {
+        <ng-template [ngTemplateOutlet]="label"></ng-template>
+        <select
+          #field
+          [id]="prop.id"
+          [formControlName]="prop.name"
+          [abpDisabled]="disabled"
+          class="form-select form-control"
+        >
+          @for (option of options$ | async; track option.value) {
+            <option [ngValue]="option.value">
+              {{ option.key }}
+            </option>
+          }
+        </select>
+      }
+
+      @case ('multiselect') {
+        <ng-template [ngTemplateOutlet]="label"></ng-template>
+        <select
+          #field
+          [id]="prop.id"
+          [formControlName]="prop.name"
+          [abpDisabled]="disabled"
+          multiple="multiple"
+          class="form-select form-control"
+        >
+          @for (options of options$ | asnyc; track option.value) {
+            <option [ngValue]="option.value">
+              {{ option.key }}
+            </option>
+          }
+        </select>
+      }
+
+      @case ('typeahead') {
+        <ng-template [ngTemplateOutlet]="label"></ng-template>
+        <div #typeahead class="position-relative" validationStyle validationTarget>
+          <input
+            #field
+            [id]="prop.id"
+            [autocomplete]="prop.autocomplete"
+            [abpDisabled]="disabled"
+            [ngbTypeahead]="search"
+            [editable]="false"
+            [inputFormatter]="typeaheadFormatter"
+            [resultFormatter]="typeaheadFormatter"
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="typeaheadModel"
+            (selectItem)="setTypeaheadValue($event.item)"
+            (blur)="setTypeaheadValue(typeaheadModel)"
+            [class.is-invalid]="typeahead.classList.contains('is-invalid')"
+            class="form-control"
+          />
+          <input [formControlName]="prop.name" type="hidden" />
+        </div>
+      }
+
+      @case ('date') {
+        <ng-template [ngTemplateOutlet]="label"></ng-template>
+        <input
+          [id]="prop.id"
+          [formControlName]="prop.name"
+          (click)="datepicker.open()"
+          (keyup.space)="datepicker.open()"
+          ngbDatepicker
+          #datepicker="ngbDatepicker"
+          type="text"
+          class="form-control"
+        />
+      }
+      @case ('time') {
+        <ng-template [ngTemplateOutlet]="label"></ng-template>
+        <ngb-timepicker [formControlName]="prop.name"></ngb-timepicker>
+      }
+
+      @case ('dateTime') {
+        <ng-template [ngTemplateOutlet]="label"></ng-template>
+        <abp-extensible-date-time-picker [prop]="prop" [meridian]="meridian$ | async" />
+      }
+
+      @case ('textarea') {
+        <ng-template [ngTemplateOutlet]="label"></ng-template>
+        <textarea
+          #field
+          [id]="prop.id"
+          [formControlName]="prop.name"
+          [abpDisabled]="disabled"
+          [readonly]="readonly"
+          class="form-control"
+        ></textarea>
+      }
+
+      @case ('passwordinputgroup') {
+        <ng-template [ngTemplateOutlet]="label"></ng-template>
+        <div class="input-group form-group" validationTarget>
+          <input
+            class="form-control"
+            [id]="prop.id"
+            [formControlName]="prop.name"
+            [abpShowPassword]="showPassword"
+          />
+          <button class="btn btn-secondary" type="button" (click)="showPassword = !showPassword">
+            <i
+              class="fa"
+              aria-hidden="true"
+              [ngClass]="{
+                'fa-eye-slash': !showPassword,
+                'fa-eye': showPassword
+              }"
+            ></i>
+          </button>
+        </div>
+      }
+    }
+
+    @if (prop.formText) {
+      <small class="text-muted d-block">{{ prop.formText | abpLocalization }}</small>
+    }
+  </div>
+</ng-container>
+
+<!-- <ng-container
   [ngSwitch]="getComponent(prop)"
   *abpPermission="prop.permission; runChangeDetection: false"
 >
@@ -163,7 +330,7 @@
       <small class="text-muted d-block">{{ prop.formText | abpLocalization }}</small>
     }
   </div>
-</ng-container>
+</ng-container> -->
 
 <ng-template #label let-classes>
   <label [htmlFor]="prop.id" [ngClass]="classes || 'form-label'">
