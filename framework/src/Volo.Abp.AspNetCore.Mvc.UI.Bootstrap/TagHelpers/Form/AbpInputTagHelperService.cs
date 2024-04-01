@@ -111,7 +111,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             inputHtml + label :
             label + inputHtml;
 
-        return innerContent + infoHtml + validation;
+        return innerContent + validation + infoHtml;
     }
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
