@@ -9,6 +9,7 @@ import {
   Event,
   RouterState,
 } from '@angular/router';
+import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 export const NavigationEvent = {
@@ -22,25 +23,27 @@ export const NavigationEvent = {
 export class RouterEvents {
   protected readonly router = inject(Router);
 
-  readonly #lastNavigation = signal<string | undefined>(undefined);
-  lastNavigation = this.#lastNavigation.asReadonly();
+  readonly #previousNavigation = signal<string | undefined>(undefined);
+  previousNavigation = this.#previousNavigation.asReadonly();
+
+  readonly #currentNavigation = signal<string | undefined>(undefined);
+  currentNavigation = this.#currentNavigation.asReadonly();
 
   constructor() {
     this.listenToNavigation();
   }
 
   protected listenToNavigation(): void {
-    this.router.events.pipe(filter(e => e instanceof NavigationEvent.End)).subscribe(() => {
+    (
+      this.router.events.pipe(
+        filter(e => e instanceof NavigationEvent.End && !e.url.includes('error')),
+      ) as Observable<NavigationEnd>
+    ).subscribe(event => {
       // It must be "NavigationTransition" but it is not exported in Angular
       //https://github.com/angular/angular/blob/9c486c96827a9282cbdbff176761bc95554a260b/packages/router/src/navigation_transition.ts#L282
-      const lastNavigation = this.router.lastSuccessfulNavigation as unknown as any;
-      const curr = lastNavigation.targetRouterState as RouterState;
-      const currUrl = curr.snapshot.url;
 
-      //Todo: improve this logic. Maybe we can handle error status in a better way ?
-      if (!currUrl.includes('error')) {
-        this.#lastNavigation.set(currUrl);
-      }
+      this.#previousNavigation.set(this.#currentNavigation());
+      this.#currentNavigation.set(event.url);
     });
   }
 
