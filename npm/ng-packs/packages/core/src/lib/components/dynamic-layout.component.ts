@@ -11,6 +11,7 @@ import { SubscriptionService } from '../services/subscription.service';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { TreeNode } from '../utils/tree-utils';
 import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
+import { EnvironmentService } from '../services';
 
 @Component({
   selector: 'abp-dynamic-layout',
@@ -27,13 +28,15 @@ export class DynamicLayoutComponent implements OnInit {
   readonly layouts = inject(DYNAMIC_LAYOUTS_TOKEN);
   isLayoutVisible = true;
 
-  private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
-  private readonly routes = inject(RoutesService);
-  private localizationService = inject(LocalizationService);
-  private replaceableComponents = inject(ReplaceableComponentsService);
-  private subscription = inject(SubscriptionService);
-  private routerEvents = inject(RouterEvents);
+
+  protected readonly router = inject(Router);
+  protected readonly route = inject(ActivatedRoute);
+  protected readonly routes = inject(RoutesService);
+  protected readonly localizationService = inject(LocalizationService);
+  protected readonly replaceableComponents = inject(ReplaceableComponentsService);
+  protected readonly subscription = inject(SubscriptionService);
+  protected readonly routerEvents = inject(RouterEvents);
+  protected readonly environment = inject(EnvironmentService);
 
   constructor(@Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent) {
     if (dynamicLayoutComponent) {
@@ -43,12 +46,16 @@ export class DynamicLayoutComponent implements OnInit {
     this.checkLayoutOnNavigationEnd();
     this.listenToLanguageChange();
   }
-
+  
   ngOnInit(): void {
     if (this.layout) {
       return;
     }
-    this.getLayout();
+
+    const { oAuthConfig } = this.environment.getEnvironment();
+    if (oAuthConfig.responseType === 'code') {
+      this.getLayout();
+    }
   }
 
   private checkLayoutOnNavigationEnd() {
@@ -76,10 +83,6 @@ export class DynamicLayoutComponent implements OnInit {
   private getExtractedLayout() {
     const routeData = this.route.snapshot.data || {};
     let expectedLayout = routeData['layout'] as eLayoutType;
-
-    if (expectedLayout) {
-      return expectedLayout;
-    }
 
     let node = findRoute(this.routes, getRoutePath(this.router));
     node = { parent: node } as TreeNode<ABP.Route>;
