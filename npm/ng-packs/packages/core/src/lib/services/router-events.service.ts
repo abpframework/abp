@@ -1,4 +1,4 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Type, inject, signal } from '@angular/core';
 import {
   NavigationCancel,
   NavigationEnd,
@@ -6,7 +6,8 @@ import {
   NavigationStart,
   Router,
   RouterEvent,
-  Event
+  Event,
+  RouterState,
 } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -19,12 +20,32 @@ export const NavigationEvent = {
 
 @Injectable({ providedIn: 'root' })
 export class RouterEvents {
-  constructor(private router: Router) {}
+  protected readonly router = inject(Router);
+
+  readonly #lastNavigation = signal<string | undefined>(undefined);
+  lastNavigation = this.#lastNavigation.asReadonly();
+
+  constructor() {
+    this.listenToNavigation();
+  }
+
+  protected listenToNavigation(): void {
+    this.router.events.pipe(filter(e => e instanceof NavigationEvent.End)).subscribe(() => {
+      // It must be "NavigationTransition" but it is not exported in Angular
+      //https://github.com/angular/angular/blob/9c486c96827a9282cbdbff176761bc95554a260b/packages/router/src/navigation_transition.ts#L282
+      const lastNavigation = this.router.lastSuccessfulNavigation as unknown as any;
+      const curr = lastNavigation.targetRouterState as RouterState;
+      const currUrl = curr.snapshot.url;
+
+      //Todo: improve this logic. Maybe we can handle error status in a better way ?
+      if (!currUrl.includes('error')) {
+        this.#lastNavigation.set(currUrl);
+      }
+    });
+  }
 
   getEvents<T extends RouterEventConstructors>(...eventTypes: T) {
-
-    const filterRouterEvents = (event: Event) =>
-      eventTypes.some(type => event instanceof type);
+    const filterRouterEvents = (event: Event) => eventTypes.some(type => event instanceof type);
 
     return this.router.events.pipe(filter(filterRouterEvents));
   }

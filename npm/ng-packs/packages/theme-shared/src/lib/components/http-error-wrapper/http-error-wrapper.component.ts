@@ -72,6 +72,15 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
       });
 
       customComponentRef.instance.errorStatus = this.status;
+      
+      //In our custom "HttpErrorComponent", we have a "status" property.
+      //We used to have "errorStatus", but it wasn't signal type. "status" variable is signal type.
+      //I've checked because of backward compatibility. Developers might have their own custom HttpErrorComponent.
+      //We need to deprecated and remove "errorStatus" in the future.
+      if (customComponentRef.instance.status) {
+        customComponentRef.instance.status.set(this.status);
+      }
+      
       customComponentRef.instance.destroy$ = this.destroy$;
 
       this.appRef.attachView(customComponentRef.hostView);
