@@ -230,6 +230,19 @@
     "CommunityProfile": "社區簡介",
     "BlogProfile": "部落格簡介",
     "Tickets": "門票",
-    "DisplayName:CommunityIndexPagePoll": "社區首頁調查"
+    "MeetTheABPCommunity": "與 ABP 一起認識 <span class=\"gradient-community\">社群</span>",
+    "DisplayName:CommunityIndexPagePoll": "社區首頁調查",
+    "OrganizationOverview": "组织概况",
+    "EmailPreferences": "电子邮件首选项",
+    "DoYouAgreePrivacyPolicy": "通过点击 <i>订阅</i> 按钮表示您同意 <a href=\"https://account.abp.io/Account/TermsConditions\">条款</a> 和 <a href=\"https://account.abp.io/Account/Privacy\">隐私政策</a>。",
+    "VideoCourses": "必备视频",
+    "Resources": "资源",
+    "PromotionalOffers": "促销优惠",
+    "PromotionalOffersDefinition": "折扣、季节性活动等",
+    "EventsDefinition": "社区讲座、网络研讨会、ABP .NET 会议等。",
+    "ReleaseNotesDefinition": "ABP.IO平台发布、新产品等",
+    "Newsletter": "通讯",
+    "NewsletterDefinition": "博客文章、社区新闻等。",
+    "AbpConferenceDescription": "ABP Conference .NET 开发人员学习和与社区联系的虚拟活动。"
   }
 }

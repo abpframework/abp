@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Logging;
 
 namespace Volo.Abp;
 
-[Serializable]
 public class BusinessException : Exception,
     IBusinessException,
     IHasErrorCode,
@@ -30,15 +28,6 @@ public class BusinessException : Exception,
         Code = code;
         Details = details;
         LogLevel = logLevel;
-    }
-
-    /// <summary>
-    /// Constructor for serializing.
-    /// </summary>
-    public BusinessException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
-    {
-
     }
 
     public BusinessException WithData(string name, object value)

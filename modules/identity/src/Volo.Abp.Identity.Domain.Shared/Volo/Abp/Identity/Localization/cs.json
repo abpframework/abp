@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Telefonní číslo",
     "DisplayName:TwoFactorEnabled": "Dvoufázové ověřování",
     "DisplayName:IsActive": "Aktivní",
-    "DisplayName:LockoutEnabled": "Zamčení účtu po neúspěšných pokusech",
+    "DisplayName:LockoutEnabled": "Zamčení účtu",
     "NewRole": "Nová role",
     "RoleName": "Název role",
     "CreationTime": "Vytvořeno",

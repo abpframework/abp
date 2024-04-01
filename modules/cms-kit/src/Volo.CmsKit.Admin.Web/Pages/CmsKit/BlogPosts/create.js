@@ -165,7 +165,7 @@ $(function () {
     }
 
     function finishSaving() {
-        abp.notify.success(l('SuccessfullySaved'));
+        abp.notify.success(l('SavedSuccessfully'));
         abp.ui.clearBusy();
         location.href = "../BlogPosts";
     }

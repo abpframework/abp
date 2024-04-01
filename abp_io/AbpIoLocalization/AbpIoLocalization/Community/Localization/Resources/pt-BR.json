@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>Esta é a página do sorteio dedicada a mostrar nosso agradecimento por você ser um membro ativo da comunidade. Fazemos <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">, ABP .NET Conference</a> , participamos ou patrocinamos eventos relacionados ao .NET nos quais distribuímos alguns presentes.<br><br> Você pode seguir esta página para ver os próximos sorteios, participar deles ou ver os sorteios anteriores que sorteamos, incluindo os vencedores.<br><br> Obrigado por ser um membro ativo! Nos vemos nos próximos sorteios.",
     "RafflesInfoTitle": "<span class=\"gradient-community\">Sorteios</span> da Comunidade ABP",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> suportado.",
-    "Preview": "Visualização"
+    "Preview": "Visualização",
+    "VisitPage": "Visite a página",
+    "VisitVideoCourseDescription": "Se você quiser aprender o básico do ABP Framework, confira os cursos em vídeo ABP Essentials."
   }
 }

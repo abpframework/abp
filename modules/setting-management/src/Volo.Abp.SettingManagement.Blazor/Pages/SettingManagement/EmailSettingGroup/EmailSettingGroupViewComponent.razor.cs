@@ -72,7 +72,7 @@ public partial class EmailSettingGroupViewComponent
 
             await CurrentApplicationConfigurationCacheResetService.ResetAsync();
 
-            await UiMessageService.Success(L["SuccessfullySaved"]);
+            await Notify.Success(L["SavedSuccessfully"]);
         }
         catch (Exception ex)
         {

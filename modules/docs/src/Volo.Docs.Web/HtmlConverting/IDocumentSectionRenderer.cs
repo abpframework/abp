@@ -11,5 +11,7 @@ namespace Volo.Docs.HtmlConverting
         Task<Dictionary<string, List<string>>> GetAvailableParametersAsync(string document);
 
         Task<List<DocumentPartialTemplateWithValuesDto>> GetPartialTemplatesInDocumentAsync(string documentContent);
+        
+        Task<DocumentNavigationsDto> GetDocumentNavigationsAsync(string documentContent);
     }
 }
