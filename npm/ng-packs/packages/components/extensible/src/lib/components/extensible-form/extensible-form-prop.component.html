@@ -1,4 +1,7 @@
-<ng-container [ngSwitch]="getComponent(prop)" *abpPermission="prop.permission; runChangeDetection: false">
+<ng-container
+  [ngSwitch]="getComponent(prop)"
+  *abpPermission="prop.permission; runChangeDetection: false"
+>
   <ng-template ngSwitchCase="template">
     <ng-container *ngComponentOutlet="prop.template; injector: injectorForCustomComponent">
     </ng-container>
@@ -50,9 +53,7 @@
         class="form-select form-control"
       >
         @for (option of options$ | async; track option.value) {
-          <option
-            [ngValue]="option.value"
-          >
+          <option [ngValue]="option.value">
             {{ option.key }}
           </option>
         }
@@ -69,12 +70,11 @@
         multiple="multiple"
         class="form-select form-control"
       >
-        <option
-          *ngFor="let option of options$ | async; trackBy: track.by('value')"
-          [ngValue]="option.value"
-        >
-          {{ option.key }}
-        </option>
+        @for (options of options$ | asnyc; track option.value) {
+          <option [ngValue]="option.value">
+            {{ option.key }}
+          </option>
+        }
       </select>
     </ng-template>
 
@@ -160,9 +160,7 @@
     </ng-template>
 
     @if (prop.formText) {
-    <small class="text-muted d-block">{{
-      prop.formText | abpLocalization
-    }}</small>
+      <small class="text-muted d-block">{{ prop.formText | abpLocalization }}</small>
     }
   </div>
 </ng-container>
@@ -171,12 +169,17 @@
   <label [htmlFor]="prop.id" [ngClass]="classes || 'form-label'">
     @if (prop.displayTextResolver) {
       {{ prop.displayTextResolver(data) | abpLocalization }}
-    }@else{
+    } @else {
       {{ prop.displayName | abpLocalization }}
     }
     {{ asterisk }}
     @if (prop.tooltip) {
-      <i [ngbTooltip]="prop.tooltip.text | abpLocalization" [placement]="prop.tooltip.placement || 'auto'"  container="body" class="bi bi-info-circle"></i>
+      <i
+        [ngbTooltip]="prop.tooltip.text | abpLocalization"
+        [placement]="prop.tooltip.placement || 'auto'"
+        container="body"
+        class="bi bi-info-circle"
+      ></i>
     }
   </label>
 </ng-template>
