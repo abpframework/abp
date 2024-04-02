@@ -556,7 +556,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             if (!lines[i].Contains(oldKeyword))
             {
-                continue;;
+                continue;
             }
             
             lines[i] = lines[i].Replace(oldKeyword, newKeyword);
@@ -575,15 +575,10 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
         file.NormalizeLineEndings();
 
-        var lines = file.GetLines();
+        var lines = file.GetLines().ToList();
 
-        foreach (var @namespace in namespaces.Select(x => x.EnsureEndsWith(';')))
+        foreach (var @namespace in namespaces)
         {
-            if (lines.Any(x => x.Contains(@namespace)))
-            {
-                continue;
-            }
-            
             lines.AddFirst(@namespace);
         }
         
@@ -630,8 +625,8 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
             AddNamespaces(
                 context,
                 moduleFile.Name,
-                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
-                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling"
+                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;",
+                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;"
             );
         }
     }
