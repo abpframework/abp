@@ -565,6 +565,31 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         file.SetLines(lines);
     }
 
+    private static void AddNamespaces(ProjectBuildContext context, string targetModuleFilePath, params string[] namespaces)
+    {
+        var file = context.Files.FirstOrDefault(x => x.Name.Contains(targetModuleFilePath));
+        if (file == null)
+        {
+            return;
+        }
+
+        file.NormalizeLineEndings();
+
+        var lines = file.GetLines();
+
+        foreach (var @namespace in namespaces.Select(x => x.EnsureEndsWith(';')))
+        {
+            if (lines.Any(x => x.Contains(@namespace)))
+            {
+                continue;
+            }
+            
+            lines.AddFirst(@namespace);
+        }
+        
+        file.SetLines(lines);
+    }
+
     private static void ChangeThemeToBasicForMvcProjects(ProjectBuildContext context, string defaultThemeName)
     {
         var projectNames = new[]
@@ -600,6 +625,13 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 moduleFile.Name,
                 defaultThemeName,
                 Basic
+            );
+
+            AddNamespaces(
+                context,
+                moduleFile.Name,
+                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
+                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling"
             );
         }
     }
