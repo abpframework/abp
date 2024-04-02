@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
 using static Volo.Abp.Identity.AspNetCore.AbpSecurityStampValidatorCallback;
 
@@ -45,9 +47,11 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<SecurityStampValidatorOptions>(options =>
-        {
-            options.UpdatePrincipal();
-        });
+        context.Services.AddOptions<SecurityStampValidatorOptions>()
+            .Configure<IServiceProvider>((securityStampValidatorOptions, serviceProvider) =>
+            {
+                var abpRefreshingPrincipalOptions = serviceProvider.GetRequiredService<IOptions<AbpRefreshingPrincipalOptions>>().Value;
+                securityStampValidatorOptions.UpdatePrincipal(abpRefreshingPrincipalOptions);
+            });
     }
 }

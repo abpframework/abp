@@ -107,6 +107,7 @@ public partial class FeatureManagementModal
             await CurrentApplicationConfigurationCacheResetService.ResetAsync();
 
             await InvokeAsync(Modal.Hide);
+            await Notify.Success(L["SavedSuccessfully"]);
         }
         catch (Exception ex)
         {

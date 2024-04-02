@@ -958,6 +958,10 @@
                 {
                   "text": "Page Progress",
                   "path": "UI/Blazor/Page-Progress.md"
+                },
+                {
+                  "text": "Block/Busy",
+                  "path": "UI/Blazor/Block-Busy.md"
                 }
               ]
             },
@@ -1059,7 +1063,7 @@
                       "path": "UI/Angular/HTTP-Requests.md"
                     },
                     { 
-                      "text": "HTTP Error Handling / Customization",
+                      "text": "Customize Error Handling",
                       "path": "UI/Angular/HTTP-Error-Handling.md"
                     }
                   ]

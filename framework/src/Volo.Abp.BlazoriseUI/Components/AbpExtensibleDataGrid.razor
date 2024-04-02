@@ -23,7 +23,7 @@
     <EmptyTemplate>
         <Row Class="w-100 align-items-center" Style="height: 150px;">
             <Column>
-                <Heading Size="HeadingSize.Is4" Alignment="TextAlignment.Center">No data available</Heading>
+                <Heading Size="HeadingSize.Is4" TextAlignment="TextAlignment.Center">No data available</Heading>
             </Column>
         </Row>
     </EmptyTemplate>
@@ -74,7 +74,7 @@
                     {
                         @if (column.ValueConverter == null)
                         {
-                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" Sortable="@column.Sortable" DisplayFormat="@column.DisplayFormat" DisplayFormatProvider="@column.DisplayFormatProvider" >
+                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" Sortable="@column.Sortable" DisplayFormat="@column.DisplayFormat" DisplayFormatProvider="@column.DisplayFormatProvider" Displayable="column.Visible" >
                                 <DisplayTemplate>
                                     @RenderCustomTableColumnComponent(column.Component, context)
                                 </DisplayTemplate>
@@ -82,7 +82,7 @@
                         }
                         else
                         {
-                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" Sortable="@column.Sortable">
+                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" Sortable="@column.Sortable" Displayable="column.Visible">
                                 <DisplayTemplate>
                                     @RenderCustomTableColumnComponent(column.Component, context)
                                 </DisplayTemplate>
@@ -100,14 +100,16 @@
                                                 Caption="@column.Title"
                                                 Sortable="@column.Sortable"
                                                 DisplayFormat="@column.DisplayFormat"
-                                                DisplayFormatProvider="@column.DisplayFormatProvider"/>
+                                                DisplayFormatProvider="@column.DisplayFormatProvider"
+                                                Displayable="column.Visible"/>
                             }
                             else
                             {
                                 <DataGridColumn TItem="TItem"
                                                 Field="@column.Data"
                                                 Caption="@column.Title"
-                                                Sortable="@column.Sortable">
+                                                Sortable="@column.Sortable"
+                                                Displayable="column.Visible">
                                     <DisplayTemplate>
                                         @(GetConvertedFieldValue(context, column))
                                     </DisplayTemplate>
@@ -116,7 +118,7 @@
                         }
                         else
                         {
-                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Caption="@column.Title">
+                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Caption="@column.Title" Displayable="column.Visible">
                                 <DisplayTemplate>
                                     @{
                                         var entity = context as IHasExtraProperties;
@@ -158,6 +160,10 @@
                     }
                 }
             }
+        }
+        @if (!AutoGenerateColumns)
+        {
+            <DataGridColumn Displayable="false"/>
         }
     </DataGridColumns>
 </DataGrid>

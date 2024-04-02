@@ -109,7 +109,7 @@
                 <abp-tabs>
                     @if (Model.Posts is not null && Model.Posts.Any())
                     {
-                        <abp-tab name="all-posts" title="Posts">
+                        <abp-tab name="all-posts" title="@L["Posts"]">
                             <div class="mt-4 pt-3">
                                 @foreach (var post in Model.Posts)
                                 {

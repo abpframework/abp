@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
