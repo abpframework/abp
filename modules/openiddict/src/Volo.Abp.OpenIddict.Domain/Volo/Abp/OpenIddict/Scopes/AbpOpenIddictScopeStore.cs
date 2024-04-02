@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.Guids;
@@ -22,8 +23,9 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         IUnitOfWorkManager unitOfWorkManager,
         IGuidGenerator guidGenerator,
         AbpOpenIddictIdentifierConverter identifierConverter,
-        IOpenIddictDbConcurrencyExceptionHandler concurrencyExceptionHandler)
-        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter, concurrencyExceptionHandler)
+        IOpenIddictDbConcurrencyExceptionHandler concurrencyExceptionHandler,
+        IOptions<AbpOpenIddictStoreOptions> storeOptions)
+        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter, concurrencyExceptionHandler, storeOptions)
     {
 
     }

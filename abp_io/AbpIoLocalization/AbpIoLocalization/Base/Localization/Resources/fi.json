@@ -230,6 +230,19 @@
     "CommunityProfile": "Yhteisön profiili",
     "BlogProfile": "Blogin profiili",
     "Tickets": "Liput",
-    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely"
+    "MeetTheABPCommunity": "Tutustu ABP<span class=\"gradient-community\">Yhteisö</span>:n kanssa",
+    "DisplayName:CommunityIndexPagePoll": "Yhteisön indeksointisivun kysely",
+    "OrganizationOverview": "Organisaation yleiskatsaus",
+    "EmailPreferences": "Sähköpostiasetukset",
+    "VideoCourses": "Tärkeitä videoita",
+    "Resources": "Resurssit",
+    "DoYouAgreePrivacyPolicy": "Klikkaamalla <b>Tilaa</b> -painiketta hyväksyt <a href=\"https://account.abp.io/Account/TermsConditions\">Ehdot</a> ja <a href=\"https://account.abp.io/Account/Privacy\">Tietosuojakäytäntö</a>.",
+    "PromotionalOffers": "Kampanjatarjoukset",
+    "PromotionalOffersDefinition": "Alennukset, kausikampanjat jne.",
+    "EventsDefinition": "Community Talks, Webinars, ABP .NET -konferenssi jne.",
+    "ReleaseNotesDefinition": "ABP.IO Platform -julkaisut, uudet tuotteet jne.",
+    "Newsletter": "Uutiskirje",
+    "NewsletterDefinition": "Blogiviestit, yhteisöuutiset jne.",
+    "AbpConferenceDescription": "ABP Conference on virtuaalinen tapahtuma, jossa .NET-kehittäjät voivat oppia ja olla yhteydessä yhteisöön."
   }
 }

@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>这是一个抽奖页面，旨在感谢您成为活跃的社区成员。我们举办 <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP 社区讲座</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">、ABP .NET 会议</a>，参加或赞助与 .NET 相关的活动，并在活动中赠送一些礼品。<br><br>您可以关注此页面，查看即将举行的抽奖活动、参加这些活动或查看我们以前举行的抽奖活动（包括获奖者）。<br><br>感谢您成为我们的活跃成员！在即将举行的抽奖活动中再见。",
     "RafflesInfoTitle": "ABP 社区<span class=\"gradient-community\">来抽奖</span",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> 支持的。",
-    "Preview": "预览"
+    "Preview": "预览",
+    "VisitPage": "访问页面",
+    "VisitVideoCourseDescription": "如果您想学习 ABP 框架的基础知识，请查看 ABP Essentials 视频课程。"
   }
 }

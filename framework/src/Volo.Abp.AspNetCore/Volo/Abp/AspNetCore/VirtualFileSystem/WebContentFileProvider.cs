@@ -10,6 +10,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.VirtualFileSystem;
 
+[Dependency(ReplaceServices = true)]
 public class WebContentFileProvider : IWebContentFileProvider, ISingletonDependency
 {
     private readonly IVirtualFileProvider _virtualFileProvider;

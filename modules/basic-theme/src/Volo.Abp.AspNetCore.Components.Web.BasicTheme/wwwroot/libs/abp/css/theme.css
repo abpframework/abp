@@ -171,3 +171,8 @@ h1.content-header-title{
 form .table-responsive{
     min-height: 412px;
 }
+
+.tab-content {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}

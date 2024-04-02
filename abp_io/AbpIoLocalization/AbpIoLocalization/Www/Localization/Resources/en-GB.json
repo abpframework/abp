@@ -271,6 +271,7 @@
     "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
     "SubscribeToNewsletter": "Subscribe to the newsletter to get information about happenings in the ABP.IO Platform, like new releases, posts, offers, and more.",
     "FirstEdition": "First Edition",
-    "SelectUITheme": "Select UI Theme"
+    "SelectUITheme": "Select UI Theme",
+    "LeaveUsReview": "Leave us review"
   }
 }

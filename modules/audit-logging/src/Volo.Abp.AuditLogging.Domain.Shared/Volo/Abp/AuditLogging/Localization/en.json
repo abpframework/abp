@@ -77,7 +77,22 @@
     "StartDate": "Start date",
     "EndDate": "End date",
     "Feature:AuditLoggingGroup": "Audit logging",
-    "Feature:AuditLoggingEnable": "Enabled audit logging page",
-    "Feature:AuditLoggingEnableDescription": "Enable audit logging page in the application."
+    "Feature:AuditLoggingEnable": "Enable audit logging page",
+    "Feature:AuditLoggingEnableDescription": "Enable audit logging page in the application.",
+    "Feature:AuditLoggingSettingManagementEnable": "Enable audit log setting management",
+    "Feature:AuditLoggingSettingManagementEnableDescription": "Enable the configuration of the audit log setting management within the application.",
+    "InvalidAuditLogDeletionSettings": "Invalid audit log deletion settings. If deletion is enable, the period should be greater than 0 days.",
+    "AuditLogSettingsGeneral": "General",
+    "AuditLogSettingsGlobal": "Global",
+    "DisplayName:IsPeriodicDeleterEnabled": "Enable clean up service system wide",
+    "Description:IsPeriodicDeleterEnabled": "If this option is disable the periodic deleter won't work. Audit logs won't be deleted automatically.",
+    "DisplayName:GlobalIsExpiredDeleterEnabled": "Enable clean up service for all tenants and host",
+    "Description:GlobalIsExpiredDeleterEnabled": "If this option is enable all tenants and host expired items deleted automatically. Unless has a specific setting.",
+    "DisplayName:IsExpiredDeleterEnabled": "Enable clean up service",
+    "Description:IsExpiredDeleterEnabled": "If this option is enable expired items deleted automatically.",
+    "DisplayName:ExpiredDeleterPeriod": "Expired item deletion period",
+    "Description:ExpiredDeleterPeriod": "Set the number of days after which expired items will be automatically deleted.",
+    "ExpiredDeleterPeriodUnit": "day(s)",
+    "AuditLogsBeforeXWillBeDeleted": "Audit logs before {0} will be deleted."
   }
 }
