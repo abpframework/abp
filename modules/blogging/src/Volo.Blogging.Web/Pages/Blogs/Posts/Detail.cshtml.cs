@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Comments;
@@ -12,7 +11,7 @@ using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
-namespace Volo.Blogging.Pages.Blog.Posts
+namespace Volo.Blogging.Pages.Blogs.Posts
 {
     public class DetailModel : BloggingPageModel
     {
@@ -64,7 +63,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 return NotFound();
             }
             
-            if (_blogOptions.SingleBlogMode.Enable)
+            if (_blogOptions.SingleBlogMode.Enabled)
             {
                 BlogShortName = _blogOptions.SingleBlogMode.BlogName;
             }

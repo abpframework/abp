@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
@@ -12,7 +10,7 @@ using Volo.Blogging.Posts;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
 
-namespace Volo.Blogging.Pages.Blog.Posts
+namespace Volo.Blogging.Pages.Blogs.Posts
 {
     public class IndexModel : BloggingPageModel
     {
@@ -54,7 +52,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 BlogShortName = Blog.ShortName;
             }
             catch (EntityNotFoundException)
-            { 
+            {
+                if (BlogOptions.SingleBlogMode.Enabled)
+                {
+                    return NotFound();
+                }
+                
                 return RedirectToPage("/Blogs/Index");
             }
             

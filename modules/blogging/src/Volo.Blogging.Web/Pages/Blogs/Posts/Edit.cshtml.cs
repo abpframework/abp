@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
-namespace Volo.Blogging.Pages.Blog.Posts
+namespace Volo.Blogging.Pages.Blogs.Posts
 {
     public class EditModel : BloggingPageModel
     {
@@ -47,7 +46,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 return Redirect("/");
             }
 
-            if (_blogOptions.SingleBlogMode.Enable)
+            if (_blogOptions.SingleBlogMode.Enabled)
             {
                 BlogShortName = _blogOptions.SingleBlogMode.BlogName;
             }
@@ -88,7 +87,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 { nameof(DetailModel.PostUrl), editedPost.Url }
             };
 
-            if (!_blogOptions.SingleBlogMode.Enable)
+            if (!_blogOptions.SingleBlogMode.Enabled)
             {
                 routeValues.Add(nameof(DetailModel.BlogShortName), blog.ShortName);
             }

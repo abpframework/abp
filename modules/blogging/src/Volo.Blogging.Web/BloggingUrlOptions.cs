@@ -41,7 +41,7 @@ namespace Volo.Blogging
         /// Determines whether to enable single blog mode by removing the blog name from the routing.
         /// When enabled, only a single blog is allowed within the module.
         /// </summary>
-        public bool Enable { get; set; }
+        public bool Enabled { get; set; }
         
         public string BlogName { get; set; }
     }

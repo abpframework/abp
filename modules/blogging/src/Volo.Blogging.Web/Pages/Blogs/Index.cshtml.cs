@@ -6,7 +6,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 
-namespace Volo.Blogging.Pages.Blog
+namespace Volo.Blogging.Pages.Blogs
 {
     public class IndexModel : AbpPageModel
     {
@@ -23,7 +23,7 @@ namespace Volo.Blogging.Pages.Blog
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
-            if (_blogOptions.SingleBlogMode.Enable)
+            if (_blogOptions.SingleBlogMode.Enabled)
             {
                 return RedirectToPage("./Posts/Index");
             }
