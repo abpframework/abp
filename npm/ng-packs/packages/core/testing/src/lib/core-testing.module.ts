@@ -16,6 +16,7 @@ import { provideRoutes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockPermissionService } from './services/mock-permission.service';
 import { MockRestService } from './services/mock-rest.service';
+import { LocalizationPipe } from './mocks';
 
 /**
  * CoreTestingModule is the module that will be used in tests
@@ -24,6 +25,7 @@ import { MockRestService } from './services/mock-rest.service';
 @NgModule({
   exports: [RouterTestingModule, BaseCoreModule],
   imports: [NoopAnimationsModule, RouterTestingModule, BaseCoreModule],
+  declarations: [LocalizationPipe],
 })
 export class CoreTestingModule {
   static withConfig(
