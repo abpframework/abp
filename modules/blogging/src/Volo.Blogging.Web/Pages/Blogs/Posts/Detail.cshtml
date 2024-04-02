@@ -5,7 +5,6 @@
 @using Microsoft.Extensions.Options
 @using Volo.Abp.Users
 @using Volo.Blogging
-@using Volo.Blogging.Pages.Blog.Posts
 @using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Blogging.SocialMedia
@@ -14,11 +13,12 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Volo.Blogging.Localization
-@using Volo.Blogging.Pages.Blog
+@using Volo.Blogging.Pages.Blogs
+@using Volo.Blogging.Pages.Blogs.Posts
 @inject IHtmlLocalizer<BloggingResource> L
 @inject BloggingPageHelper BloggingPageHelper
 @inject ICurrentUser CurrentUser
-@model DetailModel
+@model Volo.Blogging.Pages.Blogs.Posts.DetailModel
 @{
     ViewBag.Title = Model.Post.Title;
     ViewBag.Description = Model.Post.Description;

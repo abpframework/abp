@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Validation;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
-namespace Volo.Blogging.Pages.Blog.Posts
+namespace Volo.Blogging.Pages.Blogs.Posts
 {
     public class NewModel : BloggingPageModel
     {
@@ -78,7 +77,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 { nameof(DetailModel.PostUrl), postWithDetailsDto.Url }
             };
 
-            if (!_blogOptions.SingleBlogMode.Enable)
+            if (!_blogOptions.SingleBlogMode.Enabled)
             {
                 routeValues.Add(nameof(DetailModel.BlogShortName), blog.ShortName);
             }

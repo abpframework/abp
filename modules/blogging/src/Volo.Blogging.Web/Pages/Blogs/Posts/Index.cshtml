@@ -4,17 +4,17 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.OwlCarousel
 @using Volo.Blogging
 @inject IAuthorizationService Authorization
-@model Volo.Blogging.Pages.Blog.Posts.IndexModel
+@model IndexModel
 @using Microsoft.Extensions.Localization
 @using Microsoft.Extensions.Options
 @using Volo.Blogging.Localization
-@using Volo.Blogging.Pages.Blog
-@using IndexModel = Volo.Blogging.Pages.Blog.Posts.IndexModel
+@using Volo.Blogging.Pages.Blogs
+@using IndexModel = Volo.Blogging.Pages.Blogs.Posts.IndexModel
 @inject IStringLocalizer<BloggingResource> L
 @inject BloggingPageHelper BloggingPageHelper
 @{
     ViewBag.Title = "Read All Blog Posts";
-    var blogShortNameRouteParam = Model.BlogOptions.SingleBlogMode.Enable ? null : Model.BlogShortName;
+    var blogShortNameRouteParam = Model.BlogOptions.SingleBlogMode.Enabled ? null : Model.BlogShortName;
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">

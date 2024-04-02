@@ -92,7 +92,7 @@ namespace Volo.Blogging
 
                 var routePrefix = urlOptions.RoutePrefix;
 
-                if (urlOptions.SingleBlogMode.Enable)
+                if (urlOptions.SingleBlogMode.Enabled)
                 {
                     options.Conventions.AddPageRoute("/Blogs/Posts/Index", routePrefix);
                     options.Conventions.AddPageRoute("/Blogs/Posts/Detail", routePrefix + "{postUrl}");
