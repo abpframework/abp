@@ -16,7 +16,7 @@ import { provideRoutes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockPermissionService } from './services/mock-permission.service';
 import { MockRestService } from './services/mock-rest.service';
-import { LocalizationPipe } from './mocks';
+import { LocalizationPipe } from './pipes';
 
 /**
  * CoreTestingModule is the module that will be used in tests
