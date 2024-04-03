@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Volo.Abp.Auditing;
+using Volo.Abp.EntityFrameworkCore.ChangeTrackers;
 
 namespace Volo.Abp.EntityFrameworkCore.EntityHistory;
 
@@ -9,6 +10,11 @@ public class NullEntityHistoryHelper : IEntityHistoryHelper
     public static NullEntityHistoryHelper Instance { get; } = new NullEntityHistoryHelper();
 
     private NullEntityHistoryHelper()
+    {
+
+    }
+
+    public void InitializeNavigationHelper(AbpEfCoreNavigationHelper abpEfCoreNavigationHelper)
     {
 
     }

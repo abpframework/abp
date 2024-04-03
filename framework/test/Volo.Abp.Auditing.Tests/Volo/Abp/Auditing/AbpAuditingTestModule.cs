@@ -24,6 +24,10 @@ public class AbpAuditingTestModule : AbpModule
         context.Services.AddAbpDbContext<AbpAuditingTestDbContext>(options =>
         {
             options.AddDefaultRepositories(true);
+            options.Entity<AppEntityWithNavigations>(opt =>
+            {
+                opt.DefaultWithDetailsFunc = q => q.Include(p => p.OneToOne).Include(p => p.OneToMany).Include(p => p.ManyToMany);
+            });
         });
 
         var sqliteConnection = CreateDatabaseAndGetConnection();
