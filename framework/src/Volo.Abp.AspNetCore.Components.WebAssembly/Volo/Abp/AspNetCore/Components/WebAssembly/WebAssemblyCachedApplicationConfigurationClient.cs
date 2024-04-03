@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.JSInterop;
 using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
@@ -20,18 +21,22 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
 
     protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; }
 
+    protected IJSRuntime JSRuntime { get; }
+
     public WebAssemblyCachedApplicationConfigurationClient(
         AbpApplicationConfigurationClientProxy applicationConfigurationClientProxy,
         ApplicationConfigurationCache cache,
         ICurrentTenantAccessor currentTenantAccessor,
         AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
-        ApplicationConfigurationChangedService applicationConfigurationChangedService)
+        ApplicationConfigurationChangedService applicationConfigurationChangedService,
+        IJSRuntime jsRuntime)
     {
         ApplicationConfigurationClientProxy = applicationConfigurationClientProxy;
         Cache = cache;
         CurrentTenantAccessor = currentTenantAccessor;
         ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
         ApplicationConfigurationChangedService = applicationConfigurationChangedService;
+        JSRuntime = jsRuntime;
     }
 
     public virtual async Task InitializeAsync()
@@ -52,6 +57,11 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
         configurationDto.Localization.Resources = localizationDto.Resources;
 
         Cache.Set(configurationDto);
+
+        if (!configurationDto.CurrentUser.IsAuthenticated)
+        {
+            await JSRuntime.InvokeVoidAsync("sessionStorage.clear");
+        }
 
         ApplicationConfigurationChangedService.NotifyChanged();
 

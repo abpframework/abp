@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Components.Web;
@@ -45,6 +47,23 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
         context.Services
             .GetHostBuilder().Logging
             .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        var msAuthenticationStateProvider = context.Services.FirstOrDefault(x => x.ServiceType == typeof(AuthenticationStateProvider));
+        if (msAuthenticationStateProvider != null && msAuthenticationStateProvider.ImplementationType != null)
+        {
+            var webAssemblyAuthenticationStateProviderType = typeof(WebAssemblyAuthenticationStateProvider<,,>).MakeGenericType(
+                    msAuthenticationStateProvider.ImplementationType.GenericTypeArguments[0],
+                    msAuthenticationStateProvider.ImplementationType.GenericTypeArguments[1],
+                    msAuthenticationStateProvider.ImplementationType.GenericTypeArguments[2]);
+
+            context.Services.AddScoped(webAssemblyAuthenticationStateProviderType, webAssemblyAuthenticationStateProviderType);
+
+            context.Services.Remove(msAuthenticationStateProvider);
+            context.Services.AddScoped(typeof(AuthenticationStateProvider), sp => sp.GetRequiredService(webAssemblyAuthenticationStateProviderType));
+        }
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
