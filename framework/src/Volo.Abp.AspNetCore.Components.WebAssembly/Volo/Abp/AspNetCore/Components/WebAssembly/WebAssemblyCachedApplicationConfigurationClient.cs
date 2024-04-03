@@ -60,7 +60,7 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
 
         if (!configurationDto.CurrentUser.IsAuthenticated)
         {
-            await JSRuntime.InvokeVoidAsync("sessionStorage.clear");
+            await JSRuntime.InvokeVoidAsync("abp.utils.removeOidcUser");
         }
 
         ApplicationConfigurationChangedService.NotifyChanged();
