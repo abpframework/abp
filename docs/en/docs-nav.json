@@ -958,6 +958,10 @@
                 {
                   "text": "Page Progress",
                   "path": "UI/Blazor/Page-Progress.md"
+                },
+                {
+                  "text": "Block/Busy",
+                  "path": "UI/Blazor/Block-Busy.md"
                 }
               ]
             },
