@@ -1,6 +1,5 @@
 @if ((currentUser$ | async)?.isAuthenticated) {
   <div
-    *ngIf="(currentUser$ | async)?.isAuthenticated"
     ngbDropdown
     class="dropdown"
     #currentUserDropdown="ngbDropdown"

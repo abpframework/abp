@@ -7,7 +7,6 @@ import { Component } from '@angular/core';
     <a class="navbar-brand" routerLink="/">
       @if (appInfo.logoUrl) {
         <img
-          *ngIf="appInfo.logoUrl"
           [src]="appInfo.logoUrl"
           [alt]="appInfo.name"
           width="100%"
