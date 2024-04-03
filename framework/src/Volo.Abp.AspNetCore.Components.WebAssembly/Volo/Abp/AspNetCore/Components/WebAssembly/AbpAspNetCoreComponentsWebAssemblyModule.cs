@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Components.Web;
@@ -52,7 +53,10 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         var msAuthenticationStateProvider = context.Services.FirstOrDefault(x => x.ServiceType == typeof(AuthenticationStateProvider));
-        if (msAuthenticationStateProvider != null && msAuthenticationStateProvider.ImplementationType != null)
+        if (msAuthenticationStateProvider != null &&
+            msAuthenticationStateProvider.ImplementationType != null &&
+            msAuthenticationStateProvider.ImplementationType.IsGenericType &&
+            msAuthenticationStateProvider.ImplementationType.GetGenericTypeDefinition() == typeof(RemoteAuthenticationService<,,>))
         {
             var webAssemblyAuthenticationStateProviderType = typeof(WebAssemblyAuthenticationStateProvider<,,>).MakeGenericType(
                     msAuthenticationStateProvider.ImplementationType.GenericTypeArguments[0],
