@@ -40,7 +40,7 @@
             ScriptFiles = (await BundleManager.GetScriptBundleFilesAsync(BundleName!)).ToList();
         }
 
-        if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
+        if (WebAssemblyScriptFiles != null)
         {
             ScriptFiles?.AddRange(WebAssemblyScriptFiles);
         }
