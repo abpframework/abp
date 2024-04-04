@@ -16,6 +16,10 @@ using Microsoft.JSInterop;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 
+/// <summary>
+/// Blazor requests a new token each time it is initialized/refreshed.
+/// This class is used to revoke a token that is no longer in use.
+/// </summary>
 public class WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, TAccount, TProviderOptions> : RemoteAuthenticationService<TRemoteAuthenticationState, TAccount, TProviderOptions>
     where TRemoteAuthenticationState : RemoteAuthenticationState
     where TProviderOptions : new()
@@ -78,13 +82,6 @@ public class WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, 
 
     public async override Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var state = await base.GetAuthenticationStateAsync();
-        var applicationConfigurationDto = await WebAssemblyCachedApplicationConfigurationClient.GetAsync();
-        if (state.User.Identity != null && state.User.Identity.IsAuthenticated && !applicationConfigurationDto.CurrentUser.IsAuthenticated)
-        {
-            await WebAssemblyCachedApplicationConfigurationClient.InitializeAsync();
-        }
-
         var accessToken = await FindAccessTokenAsync();
         if (!accessToken.IsNullOrWhiteSpace())
         {
@@ -92,6 +89,13 @@ public class WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, 
         }
 
         await TryRevokeOldAccessTokensAsync();
+
+        var state = await base.GetAuthenticationStateAsync();
+        var applicationConfigurationDto = await WebAssemblyCachedApplicationConfigurationClient.GetAsync();
+        if (state.User.Identity != null && state.User.Identity.IsAuthenticated && !applicationConfigurationDto.CurrentUser.IsAuthenticated)
+        {
+            await WebAssemblyCachedApplicationConfigurationClient.InitializeAsync();
+        }
 
         return state;
     }
@@ -124,6 +128,7 @@ public class WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, 
             return;
         }
 
+        var revoked = false;
         var revokeAccessTokens = AccessTokens.Select(x => x.Value);
         var currentAccessToken = await FindAccessTokenAsync();
         foreach (var accessToken in revokeAccessTokens)
@@ -144,11 +149,17 @@ public class WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, 
             if (!result.IsError)
             {
                 AccessTokens.TryRemove(accessToken, out _);
+                revoked = true;
             }
             else
             {
                 Logger.LogError(result.Raw);
             }
+        }
+
+        if (revoked)
+        {
+            await WebAssemblyCachedApplicationConfigurationClient.InitializeAsync();
         }
     }
 }
