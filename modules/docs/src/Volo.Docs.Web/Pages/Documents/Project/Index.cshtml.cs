@@ -117,32 +117,8 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return Redirect(decodedUrl);
             }
-            var documentPath = DocumentName ?? "";
-
-            string[] documentNames;
-
-            if (displayUrl.EndsWith("/index", StringComparison.OrdinalIgnoreCase))
-            {
-                documentPath = documentPath.Substring(0, documentPath.LastIndexOf('/') + 1);
-            }
-
-            documentNames = new[] { DocumentName, documentPath.EnsureEndsWith('/') + "Index", documentPath.EnsureEndsWith('/') + "index" };
-
-            foreach (var documentName in documentNames)
-            {
-                DocumentName = documentName;
-                try
-                {
-                    return await SetPageAsync();
-                }
-                catch (DocumentNotFoundException exception)
-                {
-                    Logger.LogWarning(exception.Message);
-                }
-            }
-            DocumentFound = false;
-            Response.StatusCode = 404;
-            return Page();
+            
+            return await SetPageAsync();
         }
 
         private async Task<IActionResult> SetPageAsync()
@@ -193,7 +169,13 @@ namespace Volo.Docs.Pages.Documents.Project
                 return ReloadPageWithCulture();
             }
 
-            await SetDocumentAsync();
+            if (await TrySetDocumentAsync())
+            {
+                DocumentFound = false;
+                Response.StatusCode = 404;
+                return Page();
+            }
+
             await SetNavigationAsync();
             SetLanguageSelectListItems();
 
@@ -485,31 +467,41 @@ namespace Volo.Docs.Pages.Documents.Project
                 RemoveVersionPrefix(Document.Version);
         }
 
-        private async Task SetDocumentAsync()
+        private async Task<bool> TrySetDocumentAsync()
         {
             var sb = new StringBuilder();
-            DocumentNameWithExtension = sb.Append(DocumentName).Append(".").Append(Project.Format).ToString();
+            
+            var documentPath = DocumentName ?? "";
 
-            try
+            if (Request.GetDisplayUrl().EndsWith("/index", StringComparison.OrdinalIgnoreCase))
             {
-                Document = await GetSpecificDocumentOrDefaultAsync(LanguageCode);
-                DocumentLanguageCode = LanguageCode;
-            }
-            catch (DocumentNotFoundException)
-            {
-                if (LanguageCode != DefaultLanguageCode)
-                {
-                    Document = await GetSpecificDocumentOrDefaultAsync(DefaultLanguageCode);
-
-                    DocumentLanguageCode = DefaultLanguageCode;
-                }
-                else
-                {
-                    throw;
-                }
+                documentPath = documentPath.Substring(0, documentPath.LastIndexOf('/') + 1);
             }
 
-            await ConvertDocumentContentToHtmlAsync();
+            var documentNames = new[] { DocumentName, documentPath.EnsureEndsWith('/') + "Index", documentPath.EnsureEndsWith('/') + "index" }.Distinct().ToArray();
+            var languages = new[] { LanguageCode, DefaultLanguageCode }.Distinct().ToArray();
+            
+            foreach (var documentName in documentNames)
+            {
+                DocumentName = documentName;
+                DocumentNameWithExtension = sb.Append(DocumentName).Append('.').Append(Project.Format).ToString();
+                foreach (var language in languages)
+                {
+                    try
+                    {
+                        Document = await GetSpecificDocumentOrDefaultAsync(language);
+                        DocumentLanguageCode = language;
+                        await ConvertDocumentContentToHtmlAsync();
+                        return true;
+                    }
+                    catch (DocumentNotFoundException e)
+                    {
+                        Logger.LogWarning(e.Message);
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void SetLanguageSelectListItems()
