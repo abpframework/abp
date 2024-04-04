@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 using Volo.Docs.Documents;
@@ -48,6 +49,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public ProjectDto Project { get; set; }
 
         public LanguageConfig LanguageConfig { get; set; }
+        
+        public ListResultDto<VersionInfoDto> Versions { get; set; }
 
         public List<SelectListItem> LanguageSelectListItems { get; set; }
 
@@ -163,6 +166,11 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return RedirectToDefaultLanguage();
             }
+            
+            if (!CheckVersion())
+            {
+                return RedirectToDefaultVersion();
+            }
 
             if (IsDocumentCultureDifferentThanCurrent())
             {
@@ -238,6 +246,11 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             return LanguageConfig.Languages.Any(l => l.Code.Equals(LanguageCode, StringComparison.OrdinalIgnoreCase));
         }
+        
+        private bool CheckVersion()
+        {
+            return Version == DocsAppConsts.Latest || Versions.Items.Any(v => v.Name.Equals(Version, StringComparison.OrdinalIgnoreCase));
+        }
 
         private IActionResult ReloadPageWithCulture()
         {
@@ -277,6 +290,16 @@ namespace Volo.Docs.Pages.Documents.Project
                 projectName : ProjectName,
                 version : (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
                 languageCode : DefaultLanguageCode,
+                documentName : DocumentName
+            ));
+        }
+        
+        private IActionResult RedirectToDefaultVersion()
+        {
+            return RedirectToPage(BuildDocumentUrl(
+                projectName : ProjectName,
+                version : DocsAppConsts.Latest,
+                languageCode : LanguageCode,
                 documentName : DocumentName
             ));
         }
@@ -320,8 +343,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 Version = DocsAppConsts.Latest;
             }
 
-            var output = await _projectAppService.GetVersionsAsync(Project.ShortName);
-            var versions = output.Items
+            Versions = await _projectAppService.GetVersionsAsync(Project.ShortName);
+            var versions = Versions.Items
                 .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
                 .ToList();
 
