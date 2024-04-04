@@ -75,6 +75,10 @@ public class WebAssemblyRemoteCurrentPrincipalAccessor : CurrentPrincipalAccesso
         {
             claims.Add(new Claim(AbpClaimTypes.PhoneNumberVerified, applicationConfiguration.CurrentUser.PhoneNumberVerified.ToString()));
         }
+        if (applicationConfiguration.CurrentUser.SessionId != null)
+        {
+            claims.Add(new Claim(AbpClaimTypes.SessionId, applicationConfiguration.CurrentUser.SessionId));
+        }
 
         if (!applicationConfiguration.CurrentUser.Roles.IsNullOrEmpty())
         {

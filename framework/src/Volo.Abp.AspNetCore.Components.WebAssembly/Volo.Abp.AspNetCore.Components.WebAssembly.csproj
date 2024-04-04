@@ -27,6 +27,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
+        <PackageReference Include="IdentityModel" />
     </ItemGroup>
 
 </Project>
