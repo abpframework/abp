@@ -45,8 +45,11 @@ public class Distributed_User_Change_Event_Tests : AbpIdentityDomainTestBase
     [Fact]
     public async Task Should_Trigger_Distributed_EntityUpdated_Event()
     {
+        _testCounter.ResetCount("EntityUpdatedEto<UserEto>");
         using (var uow = _unitOfWorkManager.Begin())
         {
+            _testCounter.GetValue("EntityUpdatedEto<UserEto>").ShouldBe(0);
+
             var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             await _userManager.SetEmailAsync(user, "john.nash_UPDATED@abp.io");
 

@@ -9,4 +9,6 @@ public interface ITestCounter
     int Increment(string name);
 
     int GetValue(string name);
+
+    void ResetCount(string name);
 }
