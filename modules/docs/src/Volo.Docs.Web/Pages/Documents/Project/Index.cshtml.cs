@@ -154,6 +154,13 @@ namespace Volo.Docs.Pages.Documents.Project
             try
             {
                 await SetProjectAsync();
+                if (Project == null)
+                {
+                    ProjectFound = false;
+                    Response.StatusCode = 404;
+                    return Page();
+                }
+                
             }
             catch (EntityNotFoundException e)
             {
@@ -220,11 +227,10 @@ namespace Volo.Docs.Pages.Documents.Project
                 return;
             }
             
-            var singleProjectName = _uiOptions.SingleProjectMode.ProjectName;
+            var singleProjectName = ProjectName ?? _uiOptions.SingleProjectMode.ProjectName;
             if (!singleProjectName.IsNullOrWhiteSpace())
             {
                 Project = await _projectAppService.GetAsync(singleProjectName);
-                ProjectName = singleProjectName;
                 return;
             }
             
@@ -232,17 +238,12 @@ namespace Volo.Docs.Pages.Documents.Project
             if (listResult.Items.Count == 1)
             {
                 Project = listResult.Items[0];
-                ProjectName = Project.ShortName;
-                return;
             }
-            
-            ProjectName = singleProjectName;
-            Project = await _projectAppService.GetAsync(ProjectName);
         }
 
         private async Task SetLanguageList()
         {
-            LanguageConfig = await _projectAppService.GetLanguageListAsync(ProjectName, Version);
+            LanguageConfig = await _projectAppService.GetLanguageListAsync(Project.ShortName, Version);
             SetDefaultLanguageCode();
         }
 
@@ -281,14 +282,10 @@ namespace Volo.Docs.Pages.Documents.Project
             var routeValues = new Dictionary<string, object> {
                 { nameof(LanguageCode), languageCode },
                 { nameof(Version), version },
-                { nameof(DocumentName), documentName }
+                { nameof(DocumentName), documentName },
+                { nameof(ProjectName), projectName }
             };
 
-            if (!_uiOptions.SingleProjectMode.Enable)
-            {
-                routeValues.Add(nameof(ProjectName), projectName);
-            }
-            
             return Url.Page("/Documents/Project/Index", routeValues);
         }
 
