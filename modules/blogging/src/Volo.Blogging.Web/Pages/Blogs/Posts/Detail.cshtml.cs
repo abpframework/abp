@@ -67,6 +67,12 @@ namespace Volo.Blogging.Pages.Blogs.Posts
             {
                 BlogShortName = _blogOptions.SingleBlogMode.BlogName;
             }
+            
+            Blog = await GetBlogAsync(_blogAppService, _blogOptions, BlogShortName);
+            if(Blog == null)
+            {
+                return NotFound();
+            }
 
             await GetData();
 
@@ -83,6 +89,12 @@ namespace Volo.Blogging.Pages.Blogs.Posts
             });
 
             FocusCommentId = comment.Id;
+            
+            Blog = await GetBlogAsync(_blogAppService, _blogOptions, BlogShortName);
+            if(Blog == null)
+            {
+                return NotFound();
+            }
 
             await GetData();
 
@@ -91,7 +103,6 @@ namespace Volo.Blogging.Pages.Blogs.Posts
 
         private async Task GetData()
         {
-            Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
             
             PostsList = Post.Writer != null
