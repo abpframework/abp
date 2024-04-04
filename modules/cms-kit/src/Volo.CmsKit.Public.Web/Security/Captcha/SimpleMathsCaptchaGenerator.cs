@@ -101,12 +101,16 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
     private byte[] GenerateInternal(string stringText, CaptchaOptions options)
     {
         var random = new Random();
-        var family = MagickNET.FontFamilies.First();
         
         var drawables = new Drawables()
-            .Font(family, options.FontStyle, FontWeight.Normal, FontStretch.Normal)
             .FontPointSize(options.FontSize)
             .StrokeColor(MagickColors.Transparent);
+            
+        var family = MagickNET.FontFamilies.FirstOrDefault();
+        if (!family.IsNullOrWhiteSpace())
+        {
+            drawables = drawables.Font(family, options.FontStyle, FontWeight.Normal, FontStretch.Normal);
+        }
 
         var size = (ushort)(drawables.FontTypeMetrics(stringText)?.TextWidth ?? 0);
         using var image = new MagickImage(MagickColors.White, size + 15, options.Height);
