@@ -13,7 +13,7 @@ import {
   noop,
   PIPE_TO_LOGIN_FN_KEY,
 } from '@abp/ng.core';
-import { AbpOAuthService, LocalStorageListenerService, OAuthErrorFilterService } from './services';
+import { AbpOAuthService, OAuthErrorFilterService } from './services';
 import { OAuthConfigurationHandler } from './handlers/oauth-configuration.handler';
 import { OAuthApiInterceptor } from './interceptors/api.interceptor';
 import { AbpOAuthGuard, abpOAuthGuard } from './guards/oauth.guard';
@@ -62,12 +62,6 @@ export class AbpOAuthModule {
           provide: APP_INITIALIZER,
           multi: true,
           deps: [OAuthConfigurationHandler],
-          useFactory: noop,
-        },
-        {
-          provide: APP_INITIALIZER,
-          multi: true,
-          deps: [LocalStorageListenerService],
           useFactory: noop,
         },
         OAuthModule.forRoot().providers as Provider[],
