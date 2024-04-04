@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using IdentityModel.Client;
@@ -60,6 +61,19 @@ public class WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, 
 
             await TryRevokeOldAccessTokensAsync();
         };
+    }
+
+    protected async override ValueTask<ClaimsPrincipal> GetAuthenticatedUser()
+    {
+        var accessToken = await FindAccessTokenAsync();
+        if (!accessToken.IsNullOrWhiteSpace())
+        {
+            AccessTokens.TryAdd(accessToken, accessToken);
+        }
+
+        await TryRevokeOldAccessTokensAsync();
+
+        return await base.GetAuthenticatedUser();
     }
 
     public async override Task<AuthenticationState> GetAuthenticationStateAsync()
