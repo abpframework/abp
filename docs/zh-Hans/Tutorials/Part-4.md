@@ -90,7 +90,8 @@ using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books;
-
+{ {{if DB=="Mongo"}}
+[Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
 public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicationTestBase<TStartupModule>
     where TStartupModule : IAbpModule
 {
@@ -216,7 +217,8 @@ using Xunit;
 namespace Acme.BookStore.Books
 { {{if DB=="Mongo"}}
     [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
-    public class BookAppService_Tests : BookStoreApplicationTestBase
+    public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicationTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
         private readonly IBookAppService _bookAppService;
 

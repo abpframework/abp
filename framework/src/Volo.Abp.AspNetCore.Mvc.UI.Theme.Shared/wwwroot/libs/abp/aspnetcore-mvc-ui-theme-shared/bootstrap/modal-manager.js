@@ -102,7 +102,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
                         _onOpenCallbacks.triggerAll(_publicApi);
 
-                        if ($firstVisibleInput.hasClass("datepicker")) {
+                        if ($firstVisibleInput.data("datepicker")) {
                             return; //don't pop-up date pickers...
                         }
 

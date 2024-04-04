@@ -234,7 +234,7 @@ public class SolutionModuleAdder : ITransientDependency
             appRoutingModuleFileContent = Regex.Replace(appRoutingModuleFileContent, "Routes\\s*=\\s*\\[",
                 "Routes = [" + Environment.NewLine +
                 "  " + "{" + Environment.NewLine +
-                "    " + "path: '" + moduleName.ToLower() + "'," + Environment.NewLine +
+                "    " + "path: '" + moduleName.ToKebabCase() + "'," + Environment.NewLine +
                 "    " + "loadChildren: () => " + $"import('{angularPackage.Name.EnsureStartsWith('@')}').then(m => m.{moduleName}Module.forLazy())," + Environment.NewLine +
                 "  " + "},");
         }

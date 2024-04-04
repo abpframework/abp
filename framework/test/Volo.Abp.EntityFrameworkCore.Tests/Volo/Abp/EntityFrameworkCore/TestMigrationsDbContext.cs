@@ -26,6 +26,8 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
 
     public DbSet<Category> Categories { get; set; }
 
+    public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
+
     public TestMigrationsDbContext(DbContextOptions<TestMigrationsDbContext> options)
         : base(options)
     {
@@ -63,6 +65,15 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         modelBuilder.Entity<Category>(b =>
         {
             b.HasAbpQueryFilter(e => e.Name.StartsWith("abp"));
+        });
+
+        modelBuilder.Entity<AppEntityWithNavigations>(b =>
+        {
+            b.ConfigureByConvention();
+            b.OwnsOne(v => v.AppEntityWithValueObjectAddress);
+            b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOne>(x => x.Id);
+            b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationId);
+            b.HasMany(x => x.ManyToMany).WithMany(x => x.ManyToMany).UsingEntity<AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany>();
         });
     }
 }

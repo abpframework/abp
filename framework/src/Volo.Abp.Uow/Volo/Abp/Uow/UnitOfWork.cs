@@ -272,6 +272,7 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
             }
             else
             {
+                eventRecord.SetOrder(eventRecords[foundIndex].EventOrder);
                 eventRecords[foundIndex] = eventRecord;
             }
         }
