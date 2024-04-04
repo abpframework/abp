@@ -118,18 +118,24 @@ namespace Volo.Docs.Documents
                 .Where(x => !x.Path.IsNullOrWhiteSpace())
                 .ToList();
 
+            var cacheKeys = leafs.Select(leaf =>
+                CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, leaf.Path, input.LanguageCode, input.Version)
+            );
+            var documentUpdateInfos = await DocumentUpdateCache.GetManyAsync(cacheKeys);
+
             foreach (var leaf in leafs)
             {
-                var cacheKey =
-                    CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, leaf.Path, input.LanguageCode,
-                        input.Version);
-                var documentUpdateInfo = await DocumentUpdateCache.GetAsync(cacheKey);
-                if (documentUpdateInfo != null)
+                var key = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, leaf.Path, input.LanguageCode, input.Version);
+                var (_, documentUpdateInfo) = documentUpdateInfos.FirstOrDefault(x => x.Key == key);
+
+                if (documentUpdateInfo == null)
                 {
-                    leaf.CreationTime = documentUpdateInfo.CreationTime;
-                    leaf.LastUpdatedTime = documentUpdateInfo.LastUpdatedTime;
-                    leaf.LastSignificantUpdateTime = documentUpdateInfo.LastSignificantUpdateTime;
+                    continue;
                 }
+
+                leaf.CreationTime = documentUpdateInfo.CreationTime;
+                leaf.LastUpdatedTime = documentUpdateInfo.LastUpdatedTime;
+                leaf.LastSignificantUpdateTime = documentUpdateInfo.LastSignificantUpdateTime;
             }
 
             await NavigationTreePostProcessor.ProcessAsync(

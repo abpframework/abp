@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Emailing;
 
@@ -84,6 +85,8 @@ public abstract class EmailSenderBase : IEmailSender
 
     public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
+        ValidateEmailAddress(to);
+
         if (!BackgroundJobManager.IsAvailable())
         {
             await SendAsync(to, subject, body, isBodyHtml, additionalEmailSendingArgs);
@@ -104,6 +107,8 @@ public abstract class EmailSenderBase : IEmailSender
 
     public virtual async Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
+        ValidateEmailAddress(to);
+
         if (!BackgroundJobManager.IsAvailable())
         {
             await SendAsync(from, to, subject, body, isBodyHtml, additionalEmailSendingArgs);
@@ -160,5 +165,15 @@ public abstract class EmailSenderBase : IEmailSender
         {
             mail.BodyEncoding = Encoding.UTF8;
         }
+    }
+
+    private static void ValidateEmailAddress(string emailAddress)
+    {
+        if(ValidationHelper.IsValidEmailAddress(emailAddress))
+        {
+            return;
+        }
+
+        throw new ArgumentException($"Email address '{emailAddress}' is not valid!");
     }
 }
