@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
@@ -53,8 +54,7 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         var msAuthenticationStateProvider = context.Services.FirstOrDefault(x => x.ServiceType == typeof(AuthenticationStateProvider));
-        if (msAuthenticationStateProvider != null &&
-            msAuthenticationStateProvider.ImplementationType != null &&
+        if (msAuthenticationStateProvider is {ImplementationType: not null} &&
             msAuthenticationStateProvider.ImplementationType.IsGenericType &&
             msAuthenticationStateProvider.ImplementationType.GetGenericTypeDefinition() == typeof(RemoteAuthenticationService<,,>))
         {
@@ -63,10 +63,7 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
                     msAuthenticationStateProvider.ImplementationType.GenericTypeArguments[1],
                     msAuthenticationStateProvider.ImplementationType.GenericTypeArguments[2]);
 
-            context.Services.AddScoped(webAssemblyAuthenticationStateProviderType, webAssemblyAuthenticationStateProviderType);
-
-            context.Services.Remove(msAuthenticationStateProvider);
-            context.Services.AddScoped(typeof(AuthenticationStateProvider), sp => sp.GetRequiredService(webAssemblyAuthenticationStateProviderType));
+            context.Services.Replace(ServiceDescriptor.Scoped(typeof(AuthenticationStateProvider), webAssemblyAuthenticationStateProviderType));
         }
     }
 
