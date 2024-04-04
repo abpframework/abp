@@ -24,8 +24,7 @@ import { LocalizationPipe } from './pipes';
  */
 @NgModule({
   exports: [RouterTestingModule, BaseCoreModule],
-  imports: [NoopAnimationsModule, RouterTestingModule, BaseCoreModule],
-  declarations: [LocalizationPipe],
+  imports: [NoopAnimationsModule, RouterTestingModule, BaseCoreModule, LocalizationPipe],
 })
 export class CoreTestingModule {
   static withConfig(
