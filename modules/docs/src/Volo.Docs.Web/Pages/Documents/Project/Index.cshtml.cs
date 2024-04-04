@@ -549,7 +549,7 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
-            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
+            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode, ProjectName);
 
             content = HtmlNormalizer.ReplaceImageSources(
                 content,

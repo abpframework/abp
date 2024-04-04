@@ -33,7 +33,7 @@ namespace Volo.Docs.Markdown
         private const string AnchorLinkRegExp = @"<a[^>]+href=\""(.*?)\""[^>]*>(.*)?</a>";
 
         public virtual string Convert(ProjectDto project, DocumentWithDetailsDto document, string version,
-            string languageCode)
+            string languageCode, string projectShortName = null)
         {
             if (document.Content.IsNullOrEmpty())
             {
@@ -42,7 +42,7 @@ namespace Volo.Docs.Markdown
 
             var content = NormalizeLinks(
                 document.Content,
-                project.ShortName,
+                _uiOptions.SingleProjectMode.Enable ? projectShortName : projectShortName ?? project.ShortName,
                 version,
                 document.LocalDirectory,
                 languageCode

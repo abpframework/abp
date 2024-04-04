@@ -262,7 +262,10 @@
                                     <input class="form-control"
                                            id="fullsearch"
                                            type="search"
-                                           data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/"
+                                           data-fullsearch-url="@Url.Page("/Documents/Search", new Dictionary<string, object> {
+                                                                    { nameof(Model.LanguageCode), Model.LanguageCode },
+                                                                    { nameof(Model.Version), Model.Version },
+                                                                    { nameof(Model.ProjectName), Model.ProjectName }})"
                                            placeholder="@L["FullSearch"].Value"
                                            aria-label="Filter">
                                 </div>
