@@ -94,6 +94,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
     {
         TagHelperOutput = TagHelperOutput = new TagHelperOutput("input", GetInputAttributes(context, output), (_, _) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
 
+        AddDataPickerAttribute(TagHelperOutput);
         AddDisabledAttribute(TagHelperOutput);
         AddAutoFocusAttribute(TagHelperOutput);
         AddFormControls(context, output, TagHelperOutput);
@@ -709,6 +710,11 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         {
             inputTagHelperOutput.Attributes.Add("data-auto-focus", "true");
         }
+    }
+
+    protected virtual void AddDataPickerAttribute(TagHelperOutput inputTagHelperOutput)
+    {
+        inputTagHelperOutput.Attributes.Add("data-datepicker", "true");
     }
 
     protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
