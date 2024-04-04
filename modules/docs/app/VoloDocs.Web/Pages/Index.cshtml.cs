@@ -25,6 +25,13 @@ namespace VoloDocs.Web.Pages
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
+            if (_urlUiOptions.SingleProjectMode.Enable)
+            {
+                return RedirectToPage("/Documents/Project/Index", new Dictionary<string, object> {
+                    { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.LanguageCode), "en" },
+                    { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.Version), DocsAppConsts.Latest }
+                });
+            }
             var projects = await _projectAppService.GetListAsync();
 
             if (projects.Items.Count == 1)
@@ -51,6 +58,7 @@ namespace VoloDocs.Web.Pages
             var routeValues = new Dictionary<string, object> {
                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.LanguageCode), language },
                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.Version), version ?? DocsAppConsts.Latest },
+                { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.ProjectName), project.ShortName }
             };
 
             if (!_urlUiOptions.SingleProjectMode.Enable)

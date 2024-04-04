@@ -178,13 +178,9 @@ namespace Volo.Docs.Markdown
             var routeValues = new Dictionary<string, object> {
                 { nameof(IndexModel.LanguageCode), languageCode },
                 { nameof(IndexModel.Version), version },
-                { nameof(IndexModel.DocumentName), documentName }
+                { nameof(IndexModel.DocumentName), documentName },
+                { nameof(IndexModel.ProjectName), projectShortName }
             };
-
-            if (!_uiOptions.SingleProjectMode.Enable)
-            {
-                routeValues.Add(nameof(IndexModel.ProjectName), projectShortName);
-            }
 
             return _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
         }

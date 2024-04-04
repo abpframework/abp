@@ -183,13 +183,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             var routeValues = new Dictionary<string, object> {
                 { nameof(IndexModel.LanguageCode), LanguageCode },
                 { nameof(IndexModel.Version), Version },
-                { nameof(IndexModel.DocumentName), pathWithoutFileExtension }
+                { nameof(IndexModel.DocumentName), pathWithoutFileExtension },
+                { nameof(IndexModel.ProjectName), ProjectName }
             };
-
-            if (!_uiOptions.SingleProjectMode.Enable)
-            {
-                routeValues.Add(nameof(IndexModel.ProjectName), ProjectName);
-            }
 
             return _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
         }
