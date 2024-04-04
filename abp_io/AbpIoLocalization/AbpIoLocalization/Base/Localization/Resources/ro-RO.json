@@ -230,6 +230,19 @@
     "CommunityProfile": "Profilul comunității",
     "BlogProfile": "Profil blog",
     "Tickets": "bilete",
-    "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității"
+    "MeetTheABPCommunity": "Cunoaște ABP cu <span class=\"gradient-community\">Comunitatea</span>",
+    "DisplayName:CommunityIndexPagePoll": "Sondajul de pe pagina de index a comunității",
+    "OrganizationOverview": "Prezentare a organizației",
+    "EmailPreferences": "preferinte de email",
+    "VideoCourses": "Videoclipuri esențiale",
+    "Resources": "Resurse",
+    "DoYouAgreePrivacyPolicy": "Dând clicuri <b>Abonati-va</b> butonul sunteți de acord cu <a href=\"https://account.abp.io/Account/TermsConditions\">Termeni</a> și <a href=\"https://account.abp.io/Account/Privacy\">Politica de confidențialitate</a>.",
+    "PromotionalOffers": "Oferte promotionale",
+    "PromotionalOffersDefinition": "Reduceri, campanii sezoniere etc.",
+    "EventsDefinition": "Community Talks, seminarii web, conferință ABP .NET etc.",
+    "ReleaseNotesDefinition": "Lansări ale platformei ABP.IO, produse noi etc.",
+    "Newsletter": "Buletin informativ",
+    "NewsletterDefinition": "Postări pe blog, știri ale comunității etc.",
+    "AbpConferenceDescription": "ABP Conference este un eveniment virtual pentru dezvoltatorii .NET pentru a învăța și a se conecta cu comunitatea."
   }
 }

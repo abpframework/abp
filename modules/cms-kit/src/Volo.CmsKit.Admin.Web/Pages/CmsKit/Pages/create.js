@@ -37,7 +37,7 @@ $(function () {
 
             $createForm.ajaxSubmit({
                 success: function (result) {
-                    abp.notify.success(l('SuccessfullySaved'));
+                    abp.notify.success(l('SavedSuccessfully'));
                     abp.ui.clearBusy();
                     location.href = "../Pages";
                 },

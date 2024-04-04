@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Modularity;
 using Volo.Docs.Documents;
@@ -33,6 +34,14 @@ namespace Volo.Docs
             await DocumentRepository.DeleteAsync(DocsTestData.ProjectId, "CLI.md", "en", "2.0.0");
 
             (await DocumentRepository.GetListAsync()).ShouldBeEmpty();
+        }
+        
+        [Fact]
+        public async Task UpdateProjectLastCachedTimeAsync()
+        {
+            await DocumentRepository.UpdateProjectLastCachedTimeAsync(DocsTestData.ProjectId, DateTime.MinValue);
+            var documentsAfterClear = await DocumentRepository.GetListByProjectId(DocsTestData.ProjectId);
+            documentsAfterClear.ForEach(d => d.LastCachedTime.ShouldBe(DateTime.MinValue));
         }
     }
 }
