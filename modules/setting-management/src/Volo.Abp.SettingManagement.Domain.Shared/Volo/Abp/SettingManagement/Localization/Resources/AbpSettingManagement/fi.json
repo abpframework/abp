@@ -2,7 +2,7 @@
   "culture": "fi",
   "texts": {
     "Settings": "Asetukset",
-    "SuccessfullySaved": "Tallennettu onnistuneesti",
+    "SavedSuccessfully": "Tallennettu onnistuneesti",
     "Permission:SettingManagement": "Asetusten hallinta",
     "Permission:Emailing": "Sähköpostiviestit",
     "Permission:EmailingTest": "Sähköpostitesti",

@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.Modularity;
 
-internal static class AbpModuleHelper
+public static class AbpModuleHelper
 {
-    public static List<Type> FindAllModuleTypes(Type startupModuleType, ILogger logger)
+    public static List<Type> FindAllModuleTypes(Type startupModuleType, ILogger? logger)
     {
         var moduleTypes = new List<Type>();
-        logger.Log(LogLevel.Information, "Loaded ABP modules:");
+        logger?.Log(LogLevel.Information, "Loaded ABP modules:");
         AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType, logger);
         return moduleTypes;
     }
@@ -36,7 +36,7 @@ internal static class AbpModuleHelper
 
         return dependencies;
     }
-    
+
     public static Assembly[] GetAllAssemblies(Type moduleType)
     {
         var assemblies = new List<Assembly>();
@@ -52,7 +52,7 @@ internal static class AbpModuleHelper
                 assemblies.AddIfNotContains(assembly);
             }
         }
-        
+
         assemblies.Add(moduleType.Assembly);
 
         return assemblies.ToArray();
@@ -61,7 +61,7 @@ internal static class AbpModuleHelper
     private static void AddModuleAndDependenciesRecursively(
         List<Type> moduleTypes,
         Type moduleType,
-        ILogger logger,
+        ILogger? logger,
         int depth = 0)
     {
         AbpModule.CheckAbpModuleType(moduleType);
@@ -72,7 +72,7 @@ internal static class AbpModuleHelper
         }
 
         moduleTypes.Add(moduleType);
-        logger.Log(LogLevel.Information, $"{new string(' ', depth * 2)}- {moduleType.FullName}");
+        logger?.Log(LogLevel.Information, $"{new string(' ', depth * 2)}- {moduleType.FullName}");
 
         foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
         {

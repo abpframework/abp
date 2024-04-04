@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework no es solo un marco, también es una guía para el desarrollo/gestión de proyectos, porque proporciona capacitaciones sobre DDD, GenericRepository, DI, Microservice y Modularity. Incluso si no va a utilizar el marco en sí, puede desarrollarlo usted mismo con docs.abp.io, que está bien preparado y profesionalmente. (OpenIddict, Redis, Quartz, etc.) \n Debido a que muchos elementos están prediseñados, acorta significativamente el tiempo de desarrollo del proyecto. (Como página de inicio de sesión, manejo de excepciones, filtrado y siembra de datos, registro de auditoría, localización, controlador de API automático, etc.) \n Como ejemplo de nuestra aplicación, he utilizado Local Event Bus para el control de existencias. Por lo tanto, puedo gestionar los movimientos de pedidos escribiendo el controlador de stock. \n Es maravilloso no perder tiempo con CreationTime, CreatorId. Se llenan automáticamente.",
     "VideosLoginAndRegisterMessage": "Debes iniciar sesión para ver videos. Puedes crear una cuenta para ver si aún no lo has hecho.",
     "Filter": "Filtrar",
-    "VideoCourses": "Cursos en vídeo",
+    "VideoCourses": "Vídeos esenciales",
     "TestimonialText": "Tu testimonio",
     "Position": "Cargo",
     "ExperienceYear": "Años de experiencia",
@@ -448,7 +448,7 @@
     "CompanySize": "Tamaño de la empresa",
     "Image": "Tu foto de perfil",
     "TestimonialTitle": "Escuchemos tu testimonio",
-    "TestimonialInfo": "¡Lo que dicen nuestros clientes es importante! Cuéntanos tu experiencia con nuestro producto y servicio.",
+    "TestimonialInfo": "¡Lo que dicen nuestros clientes importa! Cuéntanos tu experiencia con nuestro producto y servicio. Se recomienda escribir el testimonio en inglés para llegar a un público más amplio.",
     "Country": "País",
     "TestimonialTextPlaceholder": "Escribe una breve historia sobre cómo ABP te ayudó a construir y entregar tu proyecto.",
     "PositionPlaceholder": "Tu posición en tu empresa.",
@@ -467,6 +467,11 @@
     "Title": "Título",
     "TitlePlaceholder": "Desarrollador de software, CTO, etc.",
     "Characters": "caracteres",
-    "ABPTestimonialDescription": "ABP Framework: Escuchemos tu testimonio"
+    "ABPTestimonialDescription": "ABP Framework: Escuchemos tu testimonio",
+    "LeaveUsReview": "Déjanos tu reseña",
+    "DocumentationButtonTitle": "Documentación",
+    "ABPVideoCoursesDescription": "Aprenda los conceptos básicos del Marco ABP a través de cursos en vídeo creados por el equipo de ABP.",
+    "ABPVideoCoursesPageDescription": "Aprenda los conceptos básicos del Marco ABP a través de cursos en video creados por el equipo de ABP. En esta serie de videos, aprenderá los temas esenciales del Marco ABP. Los números en cada video están escritos de acuerdo con el flujo de aprendizaje.",
+    "ABPVideoCoursesTitle": "Vídeos esenciales de ABP"
   }
 }

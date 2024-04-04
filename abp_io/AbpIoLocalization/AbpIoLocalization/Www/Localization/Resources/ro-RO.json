@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework nu este doar un cadru, este și un ghid pentru dezvoltarea/managementul proiectelor, deoarece oferă cursuri DDD, GenericRepository, DI, Microservice, Modularity. Chiar dacă nu veți folosi framework-ul în sine, vă puteți dezvolta cu docs.abp.io, care este bine și pregătit profesional. (OpenIddict, Redis, Quartz etc.) \n Deoarece multe lucruri pre-construite, scurtează semnificativ timpul de dezvoltare a proiectului. (De exemplu, pagina de autentificare, gestionarea excepțiilor, filtrarea datelor, înregistrarea auditului, localizarea, controlerul auto api etc.) \n Ca exemplu din aplicația noastră, am folosit Local Event Bus pentru controlul stocurilor. Așadar, pot gestiona mișcările comenzilor scriind handler de stoc. \n Este minunat să nu pierzi timp pentru CreationTime, CreatorId. Acestea sunt completate automat.",
     "VideosLoginAndRegisterMessage": "Trebuie să vă conectați pentru a viziona videoclipuri. Puteți crea un cont pentru ceas dacă nu ați făcut-o.",
     "Filter": "Filtru",
-    "VideoCourses": "Cursuri video",
+    "VideoCourses": "Videoclipuri esențiale",
     "TestimonialText": "Marturia ta",
     "Position": "Poziţie",
     "ExperienceYear": "Ani de experienta",
@@ -448,7 +448,7 @@
     "CompanySize": "Marimea companiei",
     "Image": "Fotografia de profil",
     "TestimonialTitle": "Să auzim mărturia ta",
-    "TestimonialInfo": "Ceea ce spun clienții noștri contează! ",
+    "TestimonialInfo": "Ceea ce spun clienții noștri contează! Spuneți-ne despre experiența dvs. cu produsul și serviciul nostru. Este recomandat să scrieți mărturia în limba engleză pentru a ajunge la un public mai larg.",
     "Country": "Țară",
     "TestimonialTextPlaceholder": "Scrieți o scurtă poveste despre modul în care ABP v-a ajutat să vă construiți și să vă livrați proiectul. ",
     "PositionPlaceholder": "Poziția ta la compania ta.",
@@ -467,6 +467,11 @@
     "Title": "Titlu",
     "TitlePlaceholder": "Dezvoltator software, CTO etc.",
     "Characters": "caractere",
-    "ABPTestimonialDescription": "Cadrul ABP: Haideți să vă ascultăm mărturia"
+    "ABPTestimonialDescription": "Cadrul ABP: Haideți să vă ascultăm mărturia",
+    "LeaveUsReview": "Lasă-ne o recenzie",
+    "DocumentationButtonTitle": "Documentație",
+    "ABPVideoCoursesDescription": "Aflați elementele de bază ale Cadrului ABP prin cursuri video create de echipa ABP.",
+    "ABPVideoCoursesPageDescription": "Aflați elementele de bază ale Cadrului ABP prin cursuri video create de echipa ABP. În această serie de videoclipuri, veți învăța subiectele esențiale ale Cadrului ABP. Numerele de pe fiecare videoclip sunt scrise în funcție de fluxul de învățare.",
+    "ABPVideoCoursesTitle": "Videoclipuri esențiale ABP"
   }
 }
