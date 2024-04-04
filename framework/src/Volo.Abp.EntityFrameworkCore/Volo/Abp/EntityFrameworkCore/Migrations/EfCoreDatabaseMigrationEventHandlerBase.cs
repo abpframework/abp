@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
@@ -37,10 +38,16 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
     /// </summary>
     protected int MaxValueToWaitOnFailure { get; set; } = 15000;
 
+    /// <summary>
+    /// As minutes.
+    /// </summary>
+    protected TimeSpan DistributedLockAcquireTimeout { get; set; } = TimeSpan.FromMinutes(15);
+
     protected ICurrentTenant CurrentTenant { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected ITenantStore TenantStore { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
+    protected IAbpDistributedLock DistributedLock { get; }
     protected ILogger<EfCoreDatabaseMigrationEventHandlerBase<TDbContext>> Logger { get; }
 
     protected EfCoreDatabaseMigrationEventHandlerBase(
@@ -48,6 +55,7 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         ITenantStore tenantStore,
+        IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory)
     {
@@ -55,6 +63,7 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
         UnitOfWorkManager = unitOfWorkManager;
         TenantStore = tenantStore;
         DatabaseName = databaseName;
+        DistributedLock = abpDistributedLock;
         DistributedEventBus = distributedEventBus;
 
         Logger = loggerFactory.CreateLogger<EfCoreDatabaseMigrationEventHandlerBase<TDbContext>>();
@@ -186,16 +195,35 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
         {
             using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: false))
             {
+                async Task<IAsyncDisposable> WaitForDistributedLockAsync(TDbContext dbContext)
+                {
+                    var distributedLockHandle = await DistributedLock.TryAcquireAsync(
+                        "DatabaseMigrationEventHandler_" +
+                        dbContext.Database.GetConnectionString()!.ToUpperInvariant().ToMd5(),
+                        DistributedLockAcquireTimeout
+                    );
+
+                    if(distributedLockHandle == null)
+                    {
+                        throw new AbpException($"Distributed lock could not be acquired for database migration event handler: {DatabaseName}.");
+                    }
+
+                    return distributedLockHandle;
+                }
+
                 async Task<bool> MigrateDatabaseSchemaWithDbContextAsync()
                 {
                     var dbContext = await uow.ServiceProvider
                         .GetRequiredService<IDbContextProvider<TDbContext>>()
                         .GetDbContextAsync();
 
-                    if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
+                    await using (await WaitForDistributedLockAsync(dbContext))
                     {
-                        await dbContext.Database.MigrateAsync();
-                        return true;
+                        if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
+                        {
+                            await dbContext.Database.MigrateAsync();
+                            return true;
+                        }
                     }
 
                     return false;
