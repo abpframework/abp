@@ -44,7 +44,7 @@
       "items": [
         {
           "text": "TODO Application",
-          "path": "Tutorials/Todo/Overall.md",
+          "path": "tutorials/todo/index.md",
           "items": [
             {
               "text": "With single-layer solution",
