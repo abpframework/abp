@@ -1,74 +1,41 @@
 {
   "items": [
     {
-      "text": "Quick Start",
-      "path": "Tutorials/Todo/Overall.md",
+      "text": "Get Started",
+      "path": "get-started/index.md",
       "items": [
         {
-          "text": "With single-layer solution",
-          "path": "Tutorials/Todo/Single-Layer/Index.md"
+          "text": "Single-Layer Solution",
+          "path": "get-started/single-layer-web-application.md"
         },
         {
-          "text": "With layered architecture",
-          "path": "Tutorials/Todo/Index.md"
-        }
-      ]
-    },
-    {
-      "text": "Getting Started",
-      "path": "Getting-Started-Overall.md",
-      "items": [
+          "text": "Layered Solution",
+          "path": "get-started/layered-web-application.md"
+        },
         {
-          "text": "Web Application - Layered Architecture",
-          "path": "Getting-Started.md",
+          "text": "Microservice Solution",
+          "path": "get-started/microservice.md"
+        },
+        {
+          "text": "Others",
           "items": [
             {
-              "text": "1: Setup Your Development Environment",
-              "path": "Getting-Started-Setup-Environment.md"
+              "text": "Empty ASP.NET Core Application",
+              "path": "get-started/empty-aspnet-core-application.md"
+            }
+            {
+              "text": "MAUI Application",
+              "path": "get-started/MAUI.md"
             },
             {
-              "text": "2: Creating a New Solution",
-              "path": "Getting-Started-Create-Solution.md"
+              "text": "WPF Application",
+              "path": "get-started/WPF.md"
             },
             {
-              "text": "3: Running the Solution",
-              "path": "Getting-Started-Running-Solution.md"
+              "text": "Console Application",
+              "path": "get-started/console.md"
             }
           ]
-        },
-        {
-          "text": "Web Application - Single-Layered Architecture",
-          "path": "Getting-Started-Single-Layered.md",
-          "items": [
-            {
-              "text": "1: Setup Your Development Environment",
-              "path": "Getting-Started-Setup-Environment-Single-Layer.md"
-            },
-            {
-              "text": "2: Creating a New Solution",
-              "path": "Getting-Started-Create-Solution-Single-Layer.md"
-            },
-            {
-              "text": "3: Running the Solution",
-              "path": "Getting-Started-Running-Solution-Single-Layer.md"
-            }
-          ]
-        },
-        {
-          "text": "Console Application",
-          "path": "Startup-Templates/Console.md"
-        },
-        {
-          "text": "WPF Application",
-          "path": "Startup-Templates/WPF.md"
-        },
-        {
-          "text": "MAUI",
-          "path": "Startup-Templates/MAUI.md"
-        },
-        {
-          "text": "Empty Web Project",
-          "path": "Getting-Started-AspNetCore-Application.md"
         }
       ]
     },
@@ -76,7 +43,21 @@
       "text": "Tutorials",
       "items": [
         {
-          "text": "Web Application Development",
+          "text": "TODO Application",
+          "path": "Tutorials/Todo/Overall.md",
+          "items": [
+            {
+              "text": "With single-layer solution",
+              "path": "Tutorials/Todo/Single-Layer/Index.md"
+            },
+            {
+              "text": "With layered architecture",
+              "path": "Tutorials/Todo/Index.md"
+            }
+          ]
+        },
+        {
+          "text": "Book Store Application",
           "items": [
             {
               "text": "1: Creating the Server Side",
@@ -119,7 +100,7 @@
               "path": "Tutorials/Part-10.md"
             }
           ]
-        },
+        },        
         {
           "text": "Community Articles",
           "path": "https://community.abp.io/articles"
