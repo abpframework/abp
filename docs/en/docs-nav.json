@@ -1,38 +1,38 @@
 {
   "items": [
     {
-      "text": "Get Started",
+      "text": "Get started",
       "path": "get-started/index.md",
       "items": [
         {
-          "text": "Single-Layer Solution",
+          "text": "Single-layer solution",
           "path": "get-started/single-layer-web-application.md"
         },
         {
-          "text": "Layered Solution",
+          "text": "Layered solution",
           "path": "get-started/layered-web-application.md"
         },
         {
-          "text": "Microservice Solution",
+          "text": "Microservice solution",
           "path": "get-started/microservice.md"
         },
         {
           "text": "Others",
           "items": [
             {
-              "text": "Empty ASP.NET Core Application",
+              "text": "Empty ASP.NET Core application",
               "path": "get-started/empty-aspnet-core-application.md"
             }
             {
-              "text": "MAUI Application",
+              "text": "MAUI application",
               "path": "get-started/MAUI.md"
             },
             {
-              "text": "WPF Application",
+              "text": "WPF application",
               "path": "get-started/WPF.md"
             },
             {
-              "text": "Console Application",
+              "text": "Console application",
               "path": "get-started/console.md"
             }
           ]
@@ -43,71 +43,67 @@
       "text": "Tutorials",
       "items": [
         {
-          "text": "TODO Application",
+          "text": "TODO application",
           "path": "tutorials/todo/index.md",
           "items": [
             {
-              "text": "With single-layer solution",
-              "path": "Tutorials/Todo/Single-Layer/Index.md"
+              "text": "Single-layer solution",
+              "path": "tutorials/todo/single-layer/index.md"
             },
             {
-              "text": "With layered architecture",
-              "path": "Tutorials/Todo/Index.md"
+              "text": "Layered solution",
+              "path": "tutorials/todo/layered/index.md"
             }
           ]
         },
         {
-          "text": "Book Store Application",
+          "text": "Book Store application",
           "items": [
             {
-              "text": "1: Creating the Server Side",
-              "path": "Tutorials/Part-1.md"
+              "text": "01: Creating the server side",
+              "path": "tutorials/book-store/part-01.md"
             },
             {
-              "text": "2: The Book List Page",
-              "path": "Tutorials/Part-2.md"
+              "text": "2: The Book List page",
+              "path": "tutorials/book-store/part-02.md"
             },
             {
-              "text": "3: Creating, Updating and Deleting Books",
-              "path": "Tutorials/Part-3.md"
+              "text": "3: Creating, updating and deleting books",
+              "path": "tutorials/book-store/part-03.md"
             },
             {
-              "text": "4: Integration Tests",
-              "path": "Tutorials/Part-4.md"
+              "text": "4: Integration tests",
+              "path": "tutorials/book-store/part-04.md"
             },
             {
               "text": "5: Authorization",
-              "path": "Tutorials/Part-5.md"
+              "path": "tutorials/book-store/part-05.md"
             },
             {
               "text": "6: Authors: Domain layer",
-              "path": "Tutorials/Part-6.md"
+              "path": "tutorials/book-store/part-06.md"
             },
             {
-              "text": "7: Authors: Database Integration",
-              "path": "Tutorials/Part-7.md"
+              "text": "7: Authors: Database integration",
+              "path": "tutorials/book-store/part-07.md"
             },
             {
-              "text": "8: Authors: Application Layer",
-              "path": "Tutorials/Part-8.md"
+              "text": "8: Authors: Application layer",
+              "path": "tutorials/book-store/part-08.md"
             },
             {
-              "text": "9: Authors: User Interface",
-              "path": "Tutorials/Part-9.md"
+              "text": "9: Authors: User interface",
+              "path": "tutorials/book-store/part-09.md"
             },
             {
-              "text": "10: Book to Author Relation",
-              "path": "Tutorials/Part-10.md"
+              "text": "10: Book to author relation",
+              "path": "tutorials/book-store/part-10.md"
             }
           ]
         },        
         {
           "text": "Community Articles",
-          "path": "https://community.abp.io/articles"
-        },
-        {
-          "text": "Migrating from the ASP.NET Boilerplate",
-          "path": "AspNet-Boilerplate-Migration-Guide.md"
+          "path": "https://abp.io/en/community"
         }
       ]
     },
@@ -1553,6 +1549,15 @@
     {
       "text": "Contribution Guide",
       "path": "Contribution/Index.md"
+    },
+    {
+      "text": "Others",
+      "items": [
+        {
+          "text": "Migrating from the ASP.NET Boilerplate",
+          "path": "AspNet-Boilerplate-Migration-Guide.md"
+        }
+      ]
     }
   ]
 }
