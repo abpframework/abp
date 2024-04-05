@@ -389,7 +389,7 @@
     "ShowBetweenDayCount": "Show Between Days",
     "PurchaseOrder": "Purchase Order",
     "ShowCreateInvoiceOfOrganization": "Create Invoice",
-    "ShowCreateQuotationOfOrganization": "Create Quotation",
+    "ShowCreateQuotationOfOrganization": "Create Quotation/Invoice",
     "BookDiscounts": "Book Discounts",
     "Permission:BookDiscount": "Book Discount",
     "Menu:BookDiscounts": "Book Discounts",
