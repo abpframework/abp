@@ -3,9 +3,11 @@
     <i class="fa icon" [ngClass]="iconClass" aria-hidden="true"></i>
   </div>
   <div class="abp-toast-content">
-    <button class="abp-toast-close-button" (click)="close()" *ngIf="toast.options?.closable">
-      <i class="fa fa-times" aria-hidden="true"></i>
-    </button>
+    @if (toast.options?.closable) {
+      <button class="abp-toast-close-button" (click)="close()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+    }
     <div class="abp-toast-title">
       {{ toast.title | abpLocalization: toast.options?.titleLocalizationParams }}
     </div>
