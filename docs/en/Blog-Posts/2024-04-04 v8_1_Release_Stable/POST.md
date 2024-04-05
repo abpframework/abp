@@ -54,7 +54,7 @@ Please see the following migration documents, if you are upgrading from v8.x or 
 
 ### New ABP Community Posts
 
-There are exciting articles contributed by the ABP community, as always. I will highlight some of them here:
+As always, exciting articles have been contributed by the ABP community. I will highlight some of them here:
 
 * [Adding a Module to an ABP project made simple](https://community.abp.io/posts/adding-a-module-to-an-abp-project-made-simple-a8zw0j2m) by [Bart Van Hoey](https://twitter.com/@bartvanhoey)
 * [Getting started with Abp Vue UI](https://community.abp.io/posts/getting-started-with-abp-vue-ui-4vfiv5io) by [Sajankumar Vijayan](https://community.abp.io/members/Sajan)
