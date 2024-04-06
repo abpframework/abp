@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
+using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 
@@ -136,6 +138,17 @@ public class WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, 
             if (accessToken == currentAccessToken)
             {
                 continue;
+            }
+
+            if (!accessToken.IsNullOrWhiteSpace() && !currentAccessToken.IsNullOrWhiteSpace())
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var currentSessionId = handler.ReadJwtToken(currentAccessToken)?.Claims?.FirstOrDefault(x => x.Type == AbpClaimTypes.SessionId);
+                var sessionId = handler.ReadJwtToken(accessToken)?.Claims?.FirstOrDefault(x => x.Type == AbpClaimTypes.SessionId);
+                if (sessionId?.Value == currentSessionId?.Value)
+                {
+                    continue;
+                }
             }
 
             var httpClient = HttpClientFactory.CreateClient(nameof(WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, TAccount, TProviderOptions>));

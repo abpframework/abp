@@ -12,6 +12,10 @@ public interface IIdentitySessionRepository : IBasicRepository<IdentitySession, 
 
     Task<IdentitySession> GetAsync(string sessionId, CancellationToken cancellationToken = default);
 
+    Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<bool> ExistAsync(string sessionId, CancellationToken cancellationToken = default);
+
     Task<List<IdentitySession>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
