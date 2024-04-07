@@ -1,24 +1,26 @@
-<ng-container *ngFor="let alert of service.alerts$ | async; let i = index">
+@for (alert of service.alerts$ | async; track i; let i = $index) {
   <div
     class="alert alert-{{ alert.type }} fade show"
     [ngClass]="{ 'alert-dismissible fade show': alert.dismissible }"
     role="alert"
   >
-    <h4
-      class="alert-heading"
-      *ngIf="alert.title"
-      [innerHTML]="alert.title | abpSafeHtml | abpLocalization: alert.titleLocalizationParams"
-    ></h4>
+    @if (alert.title) {
+      <h4
+        class="alert-heading"
+        [innerHTML]="alert.title | abpSafeHtml | abpLocalization: alert.titleLocalizationParams"
+      ></h4>
+    }
     <span
       [innerHTML]="alert.message | abpSafeHtml | abpLocalization: alert.messageLocalizationParams"
     ></span>
-    <button
-      *ngIf="alert.dismissible"
-      type="button"
-      class="btn-close"
-      data-dismiss="alert"
-      aria-label="Close"
-      (click)="service.remove(i)"
-    ></button>
+    @if (alert.dismissible) {
+      <button
+        type="button"
+        class="btn-close"
+        data-dismiss="alert"
+        aria-label="Close"
+        (click)="service.remove(i)"
+      ></button>
+    }
   </div>
-</ng-container>
+}

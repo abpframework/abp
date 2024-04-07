@@ -15,7 +15,11 @@ import { EnvironmentService } from '../services';
 
 @Component({
   selector: 'abp-dynamic-layout',
-  template: ` <ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container> `,
+  template: `
+    @if (isLayoutVisible) {
+      <ng-container [ngComponentOutlet]="layout"></ng-container>
+    }
+  `,
   providers: [SubscriptionService],
 })
 export class DynamicLayoutComponent implements OnInit {
@@ -23,6 +27,7 @@ export class DynamicLayoutComponent implements OnInit {
   layoutKey?: eLayoutType;
   readonly layouts = inject(DYNAMIC_LAYOUTS_TOKEN);
   isLayoutVisible = true;
+
 
   protected readonly router = inject(Router);
   protected readonly route = inject(ActivatedRoute);
