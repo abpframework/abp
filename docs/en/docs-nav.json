@@ -108,12 +108,70 @@
       ]
     },
     {
-      "text": "CLI",
-      "path": "CLI.md",
+      "text": "Tools",
       "items": [
         {
-          "text": "Examples for the new command",
-          "path": "CLI-New-Command-Samples.md"
+          "text": "ABP CLI",
+          "path": "CLI.md",
+          "items": [
+            {
+              "text": "Examples for the new command",
+              "path": "CLI-New-Command-Samples.md"
+            }
+          ]
+        },
+        {
+          "text": "ABP Studio",
+          "path": "studio/index.md",
+          "items": [
+            {
+              "text": "Installation",
+              "path": "studio/installation.md"
+            },
+            {
+              "text": "Overview",
+              "path": "studio/overview.md"
+            },
+            {
+              "text": "Fundamentals",
+              "items": [
+                {
+                  "text": "Solution Explorer",
+                  "path": "studio/solution-explorer.md"
+                },
+                {
+                  "text": "Running Applications",
+                  "path": "studio/running-applications.md"
+                },
+                {
+                  "text": "Monitoring Applications",
+                  "path": "studio/monitoring-applications.md"
+                },
+                {
+                  "text": "Working with Kubernetes",
+                  "path": "studio/kubernetes.md"
+                },
+                {
+                  "text": "Working with ABP Suite",
+                  "path": "studio/working-with-suite.md"
+                }
+              ]
+            },
+            {
+              "text": "Concepts",
+              "path": "studio/concepts.md"
+            }
+          ]
+        },
+        {
+          "text": "ABP Suite",
+          "path": "suite/index.md",
+          "items": [
+            {
+              "text": "",
+              "path": ""
+            }
+          ]
         }
       ]
     },
