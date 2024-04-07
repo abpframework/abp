@@ -165,11 +165,68 @@
         },
         {
           "text": "ABP Suite",
-          "path": "suite/index.md",
           "items": [
             {
-              "text": "",
-              "path": ""
+              "text": "Overall",
+              "path": "suite/index.md"
+            },
+            {
+              "text": "How to Install",
+              "path": "suite/how-to-install.md"
+            },
+            {
+              "text": "How to Start",
+              "path": "suite/how-to-start.md"
+            },
+            {
+              "text": "Adding Existing ABP Solution",
+              "path": "suite/add-solution.md"
+            },
+            {
+              "text": "Creating new ABP solution",
+              "path": "suite/create-solution.md"
+            },
+            {
+              "text": "Generating CRUD Page",
+              "path": "suite/generating-crud-page.md",
+              "items": [
+                {
+                  "text": "Creating Many-To-Many Relationship",
+                  "path": "suite/creating-many-to-many-relationship.md"
+                },
+                {
+                  "text": "Generating from an Existing Database",
+                  "path": "suite/generating-entities-from-an-existing-database-table.md"
+                },
+                {
+                  "text": "Creating Master Detail Relationship",
+                  "path": "suite/creating-master-detail-relationship.md"
+                }
+              ]
+            },
+            {
+              "text": "Customizing the Generated Code",
+              "path": "suite/customizing-the-generated-code.md"
+            },
+            {
+              "text": "Accessing Source Code of Modules",
+              "path": "suite/source-code.md"
+            },
+            {
+              "text": "Updating Packages",
+              "path": "suite/updating-packages.md"
+            },
+            {
+              "text": "Configuration",
+              "path": "suite/configuration.md"
+            },
+            {
+              "text": "Editing Templates",
+              "path": "suite/editing-templates.md"
+            },
+            {
+              "text": "How to uninstall",
+              "path": "suite/how-to-uninstall.md"
             }
           ]
         }
