@@ -703,37 +703,37 @@
               "items": [
                 {
                   "text": "Application Configuration",
-                  "path": "API/Application-Configuration.md"
+                  "path": "framework/api-development/standard-apis/configuration.md"
                 },
                 {
                   "text": "Application Localization",
-                  "path": "API/Application-Localization.md"
+                  "path": "framework/api-development/standard-apis/localization.md"
                 }
               ]
             },
             {
               "text": "API Versioning",
-              "path": "API/API-Versioning.md"
+              "path": "framework/api-development/versioning.md"
             },
             {
               "text": "Auto API Controllers",
-              "path": "API/Auto-API-Controllers.md"
+              "path": "framework/api-development/auto-controllers.md"
             },
             {
               "text": "Dynamic C# API Clients",
-              "path": "API/Dynamic-CSharp-API-Clients.md"
+              "path": "framework/api-development/dynamic-csharp-clients.md"
             },
             {
               "text": "Integration Services",
-              "path": "Integration-Services.md"
+              "path": "framework/api-development/Integration-Services.md"
             },
             {
               "text": "Static C# API Clients",
-              "path": "API/Static-CSharp-API-Clients.md"
+              "path": "framework/api-development/static-csharp-clients.md"
             },
             {
               "text": "Swagger Integration",
-              "path": "API/Swagger-Integration.md"
+              "path": "framework/api-development/swagger.md"
             }
           ]
         },
