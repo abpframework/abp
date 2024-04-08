@@ -1,7 +1,4 @@
 {
-  "affected": {
-    "defaultBase": "dev"
-  },
   "workspaceLayout": {
     "libsDir": "packages",
     "appsDir": ""
@@ -77,5 +74,6 @@
       "!{projectRoot}/.eslintrc.json"
     ]
   },
-  "parallel": 3
+  "parallel": 3,
+  "defaultBase": "dev"
 }
