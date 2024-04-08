@@ -34,6 +34,8 @@ namespace Volo.Docs
         public bool SectionRendering = true;
         
         public SingleProjectModeOptions SingleProjectMode { get; } = new ();
+        
+        public Func<DocsUrlNormalizerContext, string> UrlNormalizer { get; set; }
 
         private string GetFormattedRoutePrefix()
         {
@@ -55,5 +57,20 @@ namespace Volo.Docs
         public bool Enable { get; set; }
         
         public string ProjectName { get; set; }
+    }
+    
+    public class DocsUrlNormalizerContext
+    {
+        public string ProjectName { get; set; }
+        
+        public string Version { get; set; }
+        
+        public string LanguageCode { get; set; }
+        
+        public string DocumentName { get; set; }
+        
+        public string Url { get; set; }
+        
+        public IServiceProvider ServiceProvider { get; set; }
     }
 }
