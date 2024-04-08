@@ -1384,45 +1384,45 @@
           "items": [
             {
               "text": "Overall",
-              "path": "Data-Access.md"
+              "path": "framework/data/index.md"
             },
             {
               "text": "Entity Framework Core",
-              "path": "Entity-Framework-Core.md",
+              "path": "framework/data/entity-framework-core/index.md",
               "items": [
                 {
                   "text": "Database Migrations",
-                  "path": "Entity-Framework-Core-Migrations.md"
+                  "path": "framework/data/entity-framework-core/Entity-Framework-Core-Migrations.md"
                 },
                 {
                   "text": "Switch DBMS",
-                  "path": "Entity-Framework-Core-Other-DBMS.md",
+                  "path": "framework/data/entity-framework-core/Entity-Framework-Core-Other-DBMS.md",
                   "items": [
                     {
                       "text": "To MySQL",
-                      "path": "Entity-Framework-Core-MySQL.md"
+                      "path": "framework/data/entity-framework-core/Entity-Framework-Core-MySQL.md"
                     },
                     {
                       "text": "To PostgreSQL",
-                      "path": "Entity-Framework-Core-PostgreSQL.md"
+                      "path": "framework/data/entity-framework-core/Entity-Framework-Core-PostgreSQL.md"
                     },
                     {
                       "text": "To Oracle",
-                      "path": "Entity-Framework-Core-Oracle.md",
+                      "path": "framework/data/entity-framework-core/Entity-Framework-Core-Oracle.md",
                       "items": [
                         {
                           "text": "Oracle (Official)",
-                          "path": "Entity-Framework-Core-Oracle-Official.md"
+                          "path": "framework/data/entity-framework-core/Entity-Framework-Core-Oracle-Official.md"
                         },
                         {
                           "text": "Oracle (Devart)",
-                          "path": "Entity-Framework-Core-Oracle-Devart.md"
+                          "path": "framework/data/entity-framework-core/Entity-Framework-Core-Oracle-Devart.md"
                         }
                       ]
                     },
                     {
                       "text": "To SQLite",
-                      "path": "Entity-Framework-Core-SQLite.md"
+                      "path": "framework/data/entity-framework-core/Entity-Framework-Core-SQLite.md"
                     }
                   ]
                 }
@@ -1430,11 +1430,11 @@
             },
             {
               "text": "MongoDB",
-              "path": "MongoDB.md"
+              "path": "framework/data/mongodb/index.md"
             },
             {
               "text": "Dapper",
-              "path": "Dapper.md"
+              "path": "framework/data/dapper/index.md"
             }
           ]
         },
@@ -1443,13 +1443,13 @@
           "items": [
             {
               "text": "SignalR Integration",
-              "path": "SignalR-Integration.md"
+              "path": "framework/real-time/SignalR-Integration.md"
             }
           ]
         },
         {
           "text": "Dapr Integration",
-          "path": "Dapr/Index.md"
+          "path": "framework/dapr/index.md"
         }
       ]
     },
