@@ -24,6 +24,10 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         private readonly IStringLocalizer<DocsResource> _localizer;
         
         private readonly LinkGenerator _linkGenerator;
+        
+        private readonly Func<DocsUrlNormalizerContext, string> _urlNormalizer;
+        
+        private readonly IServiceProvider _serviceProvider;
 
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
@@ -51,11 +55,13 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
 
-        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer, LinkGenerator linkGenerator)
+        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer, LinkGenerator linkGenerator, IServiceProvider serviceProvider)
         {
             _localizer = localizer;
             _uiOptions = urlOptions.Value;
             _linkGenerator = linkGenerator;
+            _urlNormalizer = _uiOptions.UrlNormalizer ?? (context => context.Url);
+            _serviceProvider = serviceProvider;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -168,26 +174,34 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
         private string NormalizePath(string path)
         {
-            if (UrlHelper.IsExternalLink(path))
-            {
-                return path;
-            }
-
             var pathWithoutFileExtension = RemoveFileExtensionFromPath(path);
 
             if (string.IsNullOrWhiteSpace(path))
             {
                 return "javascript:;";
             }
-            
-            var routeValues = new Dictionary<string, object> {
-                { nameof(IndexModel.LanguageCode), LanguageCode },
-                { nameof(IndexModel.Version), Version },
-                { nameof(IndexModel.DocumentName), pathWithoutFileExtension },
-                { nameof(IndexModel.ProjectName), ProjectName }
-            };
 
-            return _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
+            if (!UrlHelper.IsExternalLink(path))
+            {
+                var routeValues = new Dictionary<string, object> {
+                    { nameof(IndexModel.LanguageCode), LanguageCode },
+                    { nameof(IndexModel.Version), Version },
+                    { nameof(IndexModel.DocumentName), pathWithoutFileExtension },
+                    { nameof(IndexModel.ProjectName), ProjectName }
+                };
+
+                path = _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
+            }
+
+
+            return _urlNormalizer(new DocsUrlNormalizerContext {
+                Url = path,
+                Version = Version,
+                ProjectName = ProjectName,
+                LanguageCode = LanguageCode,
+                DocumentName = pathWithoutFileExtension,
+                ServiceProvider = _serviceProvider
+            });
         }
 
         private string RemoveFileExtensionFromPath(string path)

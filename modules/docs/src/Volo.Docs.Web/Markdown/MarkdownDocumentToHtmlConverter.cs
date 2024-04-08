@@ -19,13 +19,18 @@ namespace Volo.Docs.Markdown
         private readonly IMarkdownConverter _markdownConverter;
         private readonly DocsUiOptions _uiOptions;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly Func<DocsUrlNormalizerContext, string> _urlNormalizer;
 
         public MarkdownDocumentToHtmlConverter(IMarkdownConverter markdownConverter,
-            IOptions<DocsUiOptions> urlOptions, LinkGenerator linkGenerator)
+            IOptions<DocsUiOptions> urlOptions, LinkGenerator linkGenerator, 
+            IServiceProvider serviceProvider)
         {
             _markdownConverter = markdownConverter;
             _linkGenerator = linkGenerator;
+            _serviceProvider = serviceProvider;
             _uiOptions = urlOptions.Value;
+            _urlNormalizer = _uiOptions.UrlNormalizer ?? (context => context.Url);
         }
 
         private const string MdLinkFormat = "[{0}]({1})";
@@ -78,28 +83,27 @@ namespace Volo.Docs.Markdown
             return Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
             {
                 var link = match.Groups[3].Value;
+                var displayText = match.Groups[1].Value;
 
                 var hashPart = "";
+                var linkPart = link;
                 if (link.Contains("#"))
                 {
                     var linkSplitted = link.Split("#");
-                    link = linkSplitted[0];
+                    linkPart = linkSplitted[0];
                     hashPart = linkSplitted[1];
                 }
+                
+                var documentName = RemoveFileExtension(linkPart);
 
-                if (UrlHelper.IsExternalLink(link))
+                if (UrlHelper.IsExternalLink(link) || !linkPart.EndsWith(".md"))
                 {
-                    return match.Value;
+                    return NormalizeLink(displayText, MdLinkFormat, link, projectShortName,
+                        version,
+                        documentName,
+                        languageCode);
                 }
-
-                if (!link.EndsWith(".md"))
-                {
-                    return match.Value;
-                }
-
-                var displayText = match.Groups[1].Value;
-
-                var documentName = RemoveFileExtension(link);
+                
 
                 var hasUrlParameter = match.Groups.Count > 3 && !match.Groups[4].Value.IsNullOrEmpty();
                 if (hasUrlParameter)
@@ -117,11 +121,15 @@ namespace Volo.Docs.Markdown
                 {
                     documentName += $"#{hashPart}";
                 }
-
-                return string.Format(
-                    MdLinkFormat,
+                
+                return NormalizeLink(
                     displayText,
-                    GenerateUrl(languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName, projectShortName)
+                    MdLinkFormat,
+                    GenerateUrl(languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName, projectShortName),
+                    projectShortName,
+                    version,
+                    documentName,
+                    languageCode
                 );
             });
         }
@@ -132,25 +140,37 @@ namespace Volo.Docs.Markdown
             return Regex.Replace(normalized, AnchorLinkRegExp, delegate (Match match)
             {
                 var link = match.Groups[1].Value;
-                if (UrlHelper.IsExternalLink(link))
-                {
-                    return match.Value;
-                }
-
                 var displayText = match.Groups[2].Value;
                 var documentName = RemoveFileExtension(link);
-                var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
-                if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
-                {
-                    documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
-                }
 
-                return string.Format(
-                    MdLinkFormat,
-                    displayText,
-                    GenerateUrl(languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName, projectShortName)
-                );
+                if (UrlHelper.IsExternalLink(link))
+                {
+                    var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
+                    if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
+                    {
+                        documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
+                    }
+
+                    link = GenerateUrl(languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName, projectShortName);
+                }
+                
+                return NormalizeLink(displayText, MdLinkFormat, link,projectShortName,
+                    version,
+                    documentName,
+                    languageCode);
             });
+        }
+        
+        private string NormalizeLink(string displayText, string linkFormat, string link, string projectName, string version, string documentName, string languageCode)
+        {
+            return string.Format(linkFormat, displayText, _urlNormalizer(new DocsUrlNormalizerContext {
+                Url = link,
+                ProjectName = projectName,
+                Version = version,
+                DocumentName = documentName,
+                LanguageCode = languageCode,
+                ServiceProvider = _serviceProvider
+            }));
         }
 
         private static string RemoveFileExtension(string documentName)
