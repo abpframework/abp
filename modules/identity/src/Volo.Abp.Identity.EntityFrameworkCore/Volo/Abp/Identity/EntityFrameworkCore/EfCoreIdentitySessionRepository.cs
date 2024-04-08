@@ -36,6 +36,16 @@ public class EfCoreIdentitySessionRepository : EfCoreRepository<IIdentityDbConte
         return session;
     }
 
+    public virtual async Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync()).AnyAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<bool> ExistAsync(string sessionId, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync()).AnyAsync(x => x.SessionId == sessionId, GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<IdentitySession>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,

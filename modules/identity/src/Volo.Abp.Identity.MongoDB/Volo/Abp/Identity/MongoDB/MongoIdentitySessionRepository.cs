@@ -39,6 +39,20 @@ public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMong
         return session;
     }
 
+    public virtual async Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+            .As<IMongoQueryable<IdentitySession>>()
+            .AnyAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<bool> ExistAsync(string sessionId, CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+            .As<IMongoQueryable<IdentitySession>>()
+            .AnyAsync(x => x.SessionId == sessionId, GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<IdentitySession>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,

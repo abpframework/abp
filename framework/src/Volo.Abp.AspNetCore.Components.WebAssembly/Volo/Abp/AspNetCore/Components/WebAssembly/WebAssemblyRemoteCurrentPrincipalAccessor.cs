@@ -3,13 +3,13 @@ using System.Security.Claims;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
+namespace Volo.Abp.AspNetCore.Components.WebAssembly;
 
-public class RemoteCurrentPrincipalAccessor : CurrentPrincipalAccessorBase, ITransientDependency
+public class WebAssemblyRemoteCurrentPrincipalAccessor : CurrentPrincipalAccessorBase, ITransientDependency
 {
     protected ApplicationConfigurationCache ApplicationConfigurationCache { get; }
 
-    public RemoteCurrentPrincipalAccessor(ApplicationConfigurationCache applicationConfigurationCache)
+    public WebAssemblyRemoteCurrentPrincipalAccessor(ApplicationConfigurationCache applicationConfigurationCache)
     {
         ApplicationConfigurationCache = applicationConfigurationCache;
     }
@@ -75,6 +75,10 @@ public class RemoteCurrentPrincipalAccessor : CurrentPrincipalAccessorBase, ITra
         {
             claims.Add(new Claim(AbpClaimTypes.PhoneNumberVerified, applicationConfiguration.CurrentUser.PhoneNumberVerified.ToString()));
         }
+        if (applicationConfiguration.CurrentUser.SessionId != null)
+        {
+            claims.Add(new Claim(AbpClaimTypes.SessionId, applicationConfiguration.CurrentUser.SessionId));
+        }
 
         if (!applicationConfiguration.CurrentUser.Roles.IsNullOrEmpty())
         {
@@ -84,6 +88,6 @@ public class RemoteCurrentPrincipalAccessor : CurrentPrincipalAccessorBase, ITra
             }
         }
 
-        return new ClaimsPrincipal(new ClaimsIdentity(claims, authenticationType: nameof(RemoteCurrentPrincipalAccessor)));
+        return new ClaimsPrincipal(new ClaimsIdentity(claims, authenticationType: nameof(WebAssemblyRemoteCurrentPrincipalAccessor)));
     }
 }
