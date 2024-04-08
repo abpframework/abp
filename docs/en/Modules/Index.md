@@ -7,9 +7,9 @@ There are **two types of modules.** They don't have any structural difference bu
 * [**Framework modules**](https://github.com/abpframework/abp/tree/dev/framework/src): These are **core modules of the framework** like caching, emailing, theming, security, serialization, validation, EF Core integration, MongoDB integration... etc. They do not have application/business functionalities but makes your daily development easier by providing common infrastructure, integration and abstractions.
 * [**Application modules**](https://github.com/abpframework/abp/tree/dev/modules): These modules implement specific application/business functionalities like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components.
 
-## Open Source Application Modules
+## The Module List
 
-There are some **free and open source** application modules developed and maintained as a part of the ABP Framework.
+Here are all the free and pro application modules developed and maintained as a part of the ABP platform:
 
 * [**Account**](Account.md): Provides UI for the account management and allows user to login/register to the application.
 * **[Account (Pro)](account-pro.md)**: Login, register, forgot password, email activation, social logins and other account related functionalities.
@@ -25,12 +25,12 @@ There are some **free and open source** application modules developed and mainta
 * **[Forms (Pro)](forms.md)**: Create forms and surveys.
 * **[GDPR (Pro)](gdpr.md)**: Personal data management.
 * **[Identity](Identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
-* **[Identity (Pro)](identity.md)**: User, role, claims and permission management.
+* **[Identity (Pro)](identity-pro.md)**: User, role, claims and permission management.
 * [**IdentityServer**](IdentityServer.md): Integrates to IdentityServer4.
-* **[Identity Server (Pro)](identity-server.md)**: Managing the identity server objects like clients, API resources, identity resources, secrets, application URLs, claims and more.
+* **[Identity Server (Pro)](identity-server-pro.md)**: Managing the identity server objects like clients, API resources, identity resources, secrets, application URLs, claims and more.
 * **[Language management (Pro)](language-management.md)**: Add or remove languages and localize the application UI on the fly.
 * [**OpenIddict**](OpenIddict.md): Integrates to OpenIddict.
-* **[OpenIddict (Pro)](OpenIddict.md)**: Managing the openiddict objects like applications, scopes.
+* **[OpenIddict (Pro)](openiddict-pro.md)**: Managing the openiddict objects like applications, scopes.
 * **[Payment (Pro)](payment.md)**: Payment gateway integrations.
 * [**Permission Management**](Permission-Management.md): Used to persist permissions.
 * **[SaaS (Pro)](saas.md)**: Manage tenants, editions and features to create your multi-tenant / SaaS application.
@@ -39,9 +39,3 @@ There are some **free and open source** application modules developed and mainta
 * **[Text template management (Pro)](text-template-management.md)**: Manage text templates in the system.
 * **[Twilio SMS (Pro)](twilio-sms.md)**: Send SMS messages with [Twilio](https://www.twilio.com/) cloud service.
 * [**Virtual File Explorer**](Virtual-File-Explorer.md): Provided a simple UI to view files in [virtual file system](../Virtual-File-System.md).
-
-See [the GitHub repository](https://github.com/abpframework/abp/tree/dev/modules) for source code of all modules.
-
-## Commercial Application Modules
-
-[ABP Commercial](https://commercial.abp.io/) license provides **additional pre-built application modules** on top of the ABP framework. See the [module list](https://commercial.abp.io/modules) provided by the ABP Commercial.

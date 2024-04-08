@@ -1524,16 +1524,32 @@
           "path": "Modules/Account.md"
         },
         {
+          "text": "Account (Pro)",
+          "path": "Modules/account-pro.md"
+        },
+        {
           "text": "Audit Logging",
           "path": "Modules/Audit-Logging.md"
+        },
+        {
+          "text": "Audit Logging (Pro)",
+          "path": "Modules/audit-logging-pro.md"
         },
         {
           "text": "Background Jobs",
           "path": "Modules/Background-Jobs.md"
         },
         {
+          "text": "Chat (Pro)",
+          "path": "Modules/chat.md"
+        },
+        {
           "text": "CMS Kit",
           "path": "Modules/Cms-Kit/Index.md"
+        },
+        {
+          "text": "CMS Kit (Pro)",
+          "path": "Modules/cms-kit-pro/index.md"
         },
         {
           "text": "Docs",
@@ -1544,8 +1560,24 @@
           "path": "Modules/Feature-Management.md"
         },
         {
+          "text": "File Management (Pro)",
+          "path": "Modules/file-management.md"
+        },
+        {
+          "text": "Forms (Pro)",
+          "path": "Modules/forms.md"
+        },
+        {
+          "text": "GDPR (Pro)",
+          "path": "Modules/gdpr.md"
+        },
+        {
           "text": "Identity",
           "path": "Modules/Identity.md"
+        },
+        {
+          "text": "Identity (Pro)",
+          "path": "Modules/identity-pro.md"
         },
         {
           "text": "IdentityServer",
@@ -1558,18 +1590,38 @@
           ]
         },
         {
+          "text": "IdentityServer (Pro)",
+          "path": "Modules/identity-server-pro.md"
+        },
+        {
+          "text": "Language Management (Pro)",
+          "path": "Modules/language-management.md"
+        },
+        {
           "text": "OpenIddict",
+          "path": "Modules/OpenIddict.md",
           "items": [
             {
               "text": "OpenIddict Migration Guide",
               "path": "Migration-Guides/OpenIddict-Step-by-Step.md"
             }
-          ],
-          "path": "Modules/OpenIddict.md"
+          ]          
+        },
+        {
+          "text": "OpenIddict (Pro)",
+          "path": "Modules/openiddict-pro.md"
+        },
+        {
+          "text": "Payment (Pro)",
+          "path": "Modules/payment.md"
         },
         {
           "text": "Permission Management",
           "path": "Modules/Permission-Management.md"
+        },
+        {
+          "text": "SaaS (Pro)",
+          "path": "Modules/saas.md"
         },
         {
           "text": "Setting Management",
@@ -1578,6 +1630,14 @@
         {
           "text": "Tenant Management",
           "path": "Modules/Tenant-Management.md"
+        },
+        {
+          "text": "Text template management (Pro)",
+          "path": "Modules/text-template-management.md"
+        },
+        {
+          "text": "Twilio SMS (Pro)",
+          "path": "Modules/twilio-sms.md"
         },
         {
           "text": "Virtual File Explorer",
@@ -1589,6 +1649,10 @@
             {
               "text": "Database Tables",
               "path": "Modules/Database-Tables.md"
+            },
+            {
+              "text": "Database Tables (Pro modules)",
+              "path": "Modules/database-tables-pro.md"
             }
           ]
         }
