@@ -1350,8 +1350,8 @@
               "text": "React Native",
               "items": [
                 {
-                  "text": "Getting Started",
-                  "path": "Getting-Started-React-Native.md"
+                  "text": "Overall",
+                  "path": "framework/ui/react-native/index.md"
                 }
               ]
             },
@@ -1371,7 +1371,7 @@
                   "items": [
                     {
                       "text": "Linked List (Doubly)",
-                      "path": "UI/Common/Utils/Linked-List.md"
+                      "path": "framework/ui/common/utils/linked-list.md"
                     }
                   ]
                 }
