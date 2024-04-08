@@ -4,7 +4,7 @@ import { ToasterInterceptor } from '../interceptors/toaster.interceptor';
 import { HTTP_TOASTER_INTERCEPTOR_CONFIG } from '../tokens/toaster-interceptor.token';
 import { Toaster } from '../models';
 
-const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+const methods = ['POST', 'PUT', 'PATCH', 'DELETE'];
 const defaults: Partial<Toaster.ToasterDefaults> = {
   '200': {
     message: 'AbpUi::SavedSuccessfully',

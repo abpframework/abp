@@ -31,7 +31,7 @@ export namespace Toaster {
     enabled: boolean;
   }
 
-  export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  export type HttpMethod = 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   export type StatusCode = 200 | 201 | 204 | 400 | 401 | 403 | 404 | 500 | 503 | 504 | 0;
 
   export type Severity = 'neutral' | 'success' | 'info' | 'warning' | 'error';
