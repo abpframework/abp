@@ -52,6 +52,8 @@ export class ToasterInterceptor implements HttpInterceptor {
       console.error(`Toaster params not found for status code: ${status}`);
       return;
     }
-    this.toasterService.show({ ...toasterParams });
+
+    const { message, title, severity, options } = toasterParams;
+    this.toasterService.show(message, title, severity, options);
   }
 }

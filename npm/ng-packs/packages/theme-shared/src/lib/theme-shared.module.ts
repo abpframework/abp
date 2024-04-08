@@ -98,7 +98,7 @@ export class ThemeSharedModule {
       httpErrorConfig,
       validation = {},
       confirmationIcons = {},
-      toastInterceptorConfig: toasterConfig,
+      toastInterceptorConfig,
     } = {} as RootParams,
   ): ModuleWithProviders<ThemeSharedModule> {
     return {
@@ -151,7 +151,7 @@ export class ThemeSharedModule {
         },
         tenantNotFoundProvider,
         DEFAULT_HANDLERS_PROVIDERS,
-        ...provideToasterInterceptor(toasterConfig),
+        ...provideToasterInterceptor(toastInterceptorConfig),
       ],
     };
   }

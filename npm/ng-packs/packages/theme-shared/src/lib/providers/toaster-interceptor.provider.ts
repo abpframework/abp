@@ -12,6 +12,7 @@ const defaults: Partial<Toaster.ToasterDefaults> = {
     severity: 'success',
     options: {
       life: 5000,
+      titleLocalizationParams: ['AbpUi::Saved'],
       messageLocalizationParams: ['AbpUi::SavedSuccessfully'],
     },
   },
@@ -21,6 +22,7 @@ const defaults: Partial<Toaster.ToasterDefaults> = {
     severity: 'success',
     options: {
       life: 5000,
+      titleLocalizationParams: ['AbpUi::Created'],
       messageLocalizationParams: ['AbpUi::CreatedSuccessfully'],
     },
   },
@@ -30,6 +32,7 @@ const defaults: Partial<Toaster.ToasterDefaults> = {
     severity: 'info',
     options: {
       life: 5000,
+      titleLocalizationParams: ['AbpUi::Completed'],
       messageLocalizationParams: ['AbpUi::CompletedSuccessfully'],
     },
   },
@@ -39,6 +42,7 @@ const defaults: Partial<Toaster.ToasterDefaults> = {
     severity: 'error',
     options: {
       life: 5000,
+      titleLocalizationParams: ['AbpUi::BadRequest'],
       messageLocalizationParams: ['AbpUi::BadRequest'],
     },
   },
@@ -48,6 +52,7 @@ const defaults: Partial<Toaster.ToasterDefaults> = {
     severity: 'error',
     options: {
       life: 5000,
+      titleLocalizationParams: ['AbpUi::Unauthorized'],
       messageLocalizationParams: ['AbpUi::Unauthorized'],
     },
   },
@@ -57,6 +62,7 @@ const defaults: Partial<Toaster.ToasterDefaults> = {
     severity: 'error',
     options: {
       life: 5000,
+      titleLocalizationParams: ['AbpUi::Forbidden'],
       messageLocalizationParams: ['AbpUi::Forbidden'],
     },
   },
@@ -66,6 +72,7 @@ const defaults: Partial<Toaster.ToasterDefaults> = {
     severity: 'error',
     options: {
       life: 5000,
+      titleLocalizationParams: ['AbpUi::Error'],
       messageLocalizationParams: ['AbpUi::InternalServerError'],
     },
   },
@@ -91,7 +98,7 @@ export const provideToasterInterceptor = (config?: Partial<Toaster.ToasterInterc
   }
 
   if (config.enabled && !config.defaults && !config.methods) {
-    console.info(
+    console.warn(
       'ToasterInterceptor is enabled but "defaults" and "methods" are not provided. Using default configuration.',
     );
 
