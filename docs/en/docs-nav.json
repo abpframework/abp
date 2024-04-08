@@ -22,7 +22,7 @@
             {
               "text": "Empty ASP.NET Core application",
               "path": "get-started/empty-aspnet-core-application.md"
-            }
+            },
             {
               "text": "MAUI application",
               "path": "get-started/MAUI.md"
@@ -1450,9 +1450,9 @@
         {
           "text": "Dapr Integration",
           "path": "Dapr/Index.md"
-        },
+        }
       ]
-    }
+    },
     {
       "text": "Startup Templates",
       "items": [
