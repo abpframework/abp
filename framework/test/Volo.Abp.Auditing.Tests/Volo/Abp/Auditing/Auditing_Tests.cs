@@ -385,10 +385,10 @@ public class Auditing_Tests : AbpAuditingTestBase
 
 #pragma warning disable 4014
         AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 3 &&
-                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
-                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
-                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
-                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
                                                                      x.EntityChanges[2].ChangeType == EntityChangeType.Deleted &&
                                                                      x.EntityChanges[2].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName));
         AuditingStore.ClearReceivedCalls();
@@ -411,16 +411,16 @@ public class Auditing_Tests : AbpAuditingTestBase
 #pragma warning disable 4014
         AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 2 &&
                                                                      x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
-                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
                                                                      x.EntityChanges[0].PropertyChanges.Count == 1 &&
-                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithValueObjectAddress.Country) &&
-                                                                     x.EntityChanges[0].PropertyChanges[0].OriginalValue == "\"England\"" &&
-                                                                     x.EntityChanges[0].PropertyChanges[0].NewValue == "\"Germany\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithValueObject.AppEntityWithValueObjectAddress) &&
 
                                                                      x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
-                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
                                                                      x.EntityChanges[1].PropertyChanges.Count == 1 &&
-                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyName == nameof(AppEntityWithValueObject.AppEntityWithValueObjectAddress)));
+                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyName == nameof(AppEntityWithValueObjectAddress.Country) &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].OriginalValue == "\"England\"" &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].NewValue == "\"Germany\""));
         AuditingStore.ClearReceivedCalls();
 #pragma warning restore 4014
 
@@ -439,11 +439,16 @@ public class Auditing_Tests : AbpAuditingTestBase
         }
 
 #pragma warning disable 4014
-        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
-                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Deleted &&
-                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
-                                                                     x.EntityChanges[0].PropertyChanges.Count == 2 &&
-                                                                     x.EntityChanges[0].PropertyChanges.All(p => p.NewValue == null)));
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 2 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithValueObject.AppEntityWithValueObjectAddress) &&
+
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Deleted &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
+                                                                     x.EntityChanges[1].PropertyChanges.Count == 2 &&
+                                                                     x.EntityChanges[1].PropertyChanges.All(p => p.NewValue == null)));
 #pragma warning restore 4014
     }
 
@@ -517,6 +522,33 @@ public class Auditing_Tests : AbpAuditingTestBase
             {
                 var entity = await repository.GetAsync(entityId);
 
+                entity.OneToOne = null;
+
+                await repository.UpdateAsync(entity);
+
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 2 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Deleted &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigationChildOneToOne).FullName &&
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithNavigations).FullName &&
+                                                                     x.EntityChanges[1].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigations.OneToOne) &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyTypeFullName == typeof(AppEntityWithNavigationChildOneToOne).FullName));
+        AuditingStore.ClearReceivedCalls();
+#pragma warning restore 4014
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+
                 entity.OneToMany = new List<AppEntityWithNavigationChildOneToMany>()
                 {
                     new AppEntityWithNavigationChildOneToMany
@@ -535,6 +567,32 @@ public class Auditing_Tests : AbpAuditingTestBase
 #pragma warning disable 4014
         AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 2 &&
                                                                      x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigationChildOneToMany).FullName &&
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithNavigations).FullName &&
+                                                                     x.EntityChanges[1].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigations.OneToMany) &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyTypeFullName == typeof(List<AppEntityWithNavigationChildOneToMany>).FullName));
+        AuditingStore.ClearReceivedCalls();
+#pragma warning restore 4014
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+
+                entity.OneToMany = null;
+
+                await repository.UpdateAsync(entity);
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 2 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Deleted &&
                                                                      x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigationChildOneToMany).FullName &&
                                                                      x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
                                                                      x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithNavigations).FullName &&
@@ -573,6 +631,36 @@ public class Auditing_Tests : AbpAuditingTestBase
                                                                      x.EntityChanges[1].PropertyChanges.Count == 1 &&
                                                                      x.EntityChanges[1].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigations.ManyToMany) &&
                                                                      x.EntityChanges[1].PropertyChanges[0].PropertyTypeFullName == typeof(List<AppEntityWithNavigationChildManyToMany>).FullName));
+
+#pragma warning restore 4014
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+
+                entity.ManyToMany.Clear();
+
+                await repository.UpdateAsync(entity);
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 2 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigations).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigations.ManyToMany) &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyTypeFullName == typeof(List<AppEntityWithNavigationChildManyToMany>).FullName &&
+
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithNavigationChildManyToMany).FullName &&
+                                                                     x.EntityChanges[1].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigationChildManyToMany.ManyToMany) &&
+                                                                     x.EntityChanges[1].PropertyChanges[0].PropertyTypeFullName == typeof(List<AppEntityWithNavigations>).FullName));
 
 #pragma warning restore 4014
     }
@@ -648,10 +736,10 @@ public class Auditing_SaveEntityHistoryWhenNavigationChanges_Tests : AbpAuditing
 
 #pragma warning disable 4014
         AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 3 &&
-                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
-                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
-                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Updated &&
-                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithValueObject).FullName &&
+                                                                     x.EntityChanges[1].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[1].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName &&
                                                                      x.EntityChanges[2].ChangeType == EntityChangeType.Deleted &&
                                                                      x.EntityChanges[2].EntityTypeFullName == typeof(AppEntityWithValueObjectAddress).FullName));
         AuditingStore.ClearReceivedCalls();
@@ -773,6 +861,31 @@ public class Auditing_SaveEntityHistoryWhenNavigationChanges_Tests : AbpAuditing
             {
                 var entity = await repository.GetAsync(entityId);
 
+                entity.OneToOne = null;
+
+                await repository.UpdateAsync(entity);
+
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Deleted &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigationChildOneToOne).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigationChildOneToOne.ChildName) &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyTypeFullName == typeof(string).FullName));
+        AuditingStore.ClearReceivedCalls();
+#pragma warning restore 4014
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+
                 entity.OneToMany = new List<AppEntityWithNavigationChildOneToMany>()
                 {
                     new AppEntityWithNavigationChildOneToMany
@@ -791,6 +904,32 @@ public class Auditing_SaveEntityHistoryWhenNavigationChanges_Tests : AbpAuditing
 #pragma warning disable 4014
         AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
                                                                      x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigationChildOneToMany).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 2 &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigationChildOneToMany.AppEntityWithNavigationId) &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyTypeFullName == typeof(Guid).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges[1].PropertyName == nameof(AppEntityWithNavigationChildOneToMany.ChildName) &&
+                                                                     x.EntityChanges[0].PropertyChanges[1].PropertyTypeFullName == typeof(string).FullName));
+        AuditingStore.ClearReceivedCalls();
+#pragma warning restore 4014
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+
+                entity.OneToMany.Clear();
+
+                await repository.UpdateAsync(entity);
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Deleted &&
                                                                      x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigationChildOneToMany).FullName &&
                                                                      x.EntityChanges[0].PropertyChanges.Count == 2 &&
                                                                      x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigationChildOneToMany.AppEntityWithNavigationId) &&

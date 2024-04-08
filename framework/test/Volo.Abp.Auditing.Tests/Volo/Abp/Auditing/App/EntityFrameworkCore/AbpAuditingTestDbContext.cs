@@ -48,9 +48,10 @@ public class AbpAuditingTestDbContext : AbpDbContext<AbpAuditingTestDbContext>
         modelBuilder.Entity<AppEntityWithNavigations>(b =>
         {
             b.ConfigureByConvention();
+            b.OwnsOne(x => x.AppEntityWithValueObjectAddress);
             b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOne>(x => x.Id);
             b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationId);
-            b.HasMany(x => x.ManyToMany).WithMany();
+            b.HasMany(x => x.ManyToMany).WithMany(x => x.ManyToMany).UsingEntity<AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany>();
         });
 
     }
