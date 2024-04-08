@@ -55,7 +55,7 @@ export class RestService {
 
     const httpClient: HttpClient = this.getHttpClient(skipAddingHeader);
 
-    if (!skipToasterInterceptor) {
+    if (skipToasterInterceptor) {
       options.headers = options.headers
         ? (options.headers as HttpHeaders).set('X-Abp-Skip-Toaster-Interceptor', 'true')
         : new HttpHeaders().set('X-Abp-Skip-Toaster-Interceptor', 'true');
