@@ -745,97 +745,97 @@
               "items": [
                 {
                   "text": "Overall",
-                  "path": "UI/AspNetCore/Overall.md"
+                  "path": "framework/ui/mvc-razor-pages/Overall.md"
                 },
                 {
                   "text": "Navigation / Menus",
-                  "path": "UI/AspNetCore/Navigation-Menu.md"
+                  "path": "framework/ui/mvc-razor-pages/Navigation-Menu.md"
                 },
                 {
                   "text": "Forms & Validation",
-                  "path": "UI/AspNetCore/Forms-Validation.md"
+                  "path": "framework/ui/mvc-razor-pages/Forms-Validation.md"
                 },
                 {
                   "text": "Modals",
-                  "path": "UI/AspNetCore/Modals.md"
+                  "path": "framework/ui/mvc-razor-pages/Modals.md"
                 },
                 {
                   "text": "Data Tables",
-                  "path": "UI/AspNetCore/Data-Tables.md"
+                  "path": "framework/ui/mvc-razor-pages/Data-Tables.md"
                 },
                 {
                   "text": "Auto-Complete Select",
-                  "path": "UI/AspNetCore/AutoComplete-Select.md"
+                  "path": "framework/ui/mvc-razor-pages/AutoComplete-Select.md"
                 },
                 {
                   "text": "Page Alerts",
-                  "path": "UI/AspNetCore/Page-Alerts.md"
+                  "path": "framework/ui/mvc-razor-pages/Page-Alerts.md"
                 },
                 {
                   "text": "Dynamic JavaScript API Client Proxies",
-                  "path": "UI/AspNetCore/Dynamic-JavaScript-Proxies.md"
+                  "path": "framework/ui/mvc-razor-pages/Dynamic-JavaScript-Proxies.md"
                 },
                 {
                   "text": "Static JavaScript API Client Proxies",
-                  "path": "UI/AspNetCore/Static-JavaScript-Proxies.md"
+                  "path": "framework/ui/mvc-razor-pages/Static-JavaScript-Proxies.md"
                 },
                 {
                   "text": "Client Side Package Management",
-                  "path": "UI/AspNetCore/Client-Side-Package-Management.md"
+                  "path": "framework/ui/mvc-razor-pages/Client-Side-Package-Management.md"
                 },
                 {
                   "text": "Bundling & Minification",
-                  "path": "UI/AspNetCore/Bundling-Minification.md"
+                  "path": "framework/ui/mvc-razor-pages/Bundling-Minification.md"
                 },
                 {
                   "text": "Tag Helpers",
-                  "path": "UI/AspNetCore/Tag-Helpers/Index.md",
+                  "path": "framework/ui/mvc-razor-pages/Tag-Helpers/Index.md",
                   "items": [
                     {
                       "text": "Form Elements",
-                      "path": "UI/AspNetCore/Tag-Helpers/Form-elements.md"
+                      "path": "framework/ui/mvc-razor-pages/Tag-Helpers/Form-elements.md"
                     },
                     {
                       "text": "Dynamic Forms",
-                      "path": "UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md"
+                      "path": "framework/ui/mvc-razor-pages/Tag-Helpers/Dynamic-Forms.md"
                     }
                   ]
                 },
                 {
                   "text": "Widgets",
-                  "path": "UI/AspNetCore/Widgets.md"
+                  "path": "framework/ui/mvc-razor-pages/Widgets.md"
                 },
                 {
                   "text": "Toolbars",
-                  "path": "UI/AspNetCore/Toolbars.md"
+                  "path": "framework/ui/mvc-razor-pages/Toolbars.md"
                 },
                 {
                   "text": "Page Header",
-                  "path": "UI/AspNetCore/Page-Header.md"
+                  "path": "framework/ui/mvc-razor-pages/Page-Header.md"
                 },
                 {
                   "text": "Branding",
-                  "path": "UI/AspNetCore/Branding.md"
+                  "path": "framework/ui/mvc-razor-pages/Branding.md"
                 },
                 {
                   "text": "Layout Hooks",
-                  "path": "UI/AspNetCore/Layout-Hooks.md"
+                  "path": "framework/ui/mvc-razor-pages/Layout-Hooks.md"
                 },
                 {
                   "text": "Testing",
-                  "path": "UI/AspNetCore/Testing.md"
+                  "path": "framework/ui/mvc-razor-pages/Testing.md"
                 },
                 {
                   "text": "Theming",
-                  "path": "UI/AspNetCore/Theming.md",
+                  "path": "framework/ui/mvc-razor-pages/Theming.md",
                   "items": [
                     {
                       "text": "The Basic Theme",
-                      "path": "UI/AspNetCore/Basic-Theme.md"
+                      "path": "framework/ui/mvc-razor-pages/Basic-Theme.md"
                     },
                     {
-                      "text": "LeptonX Lite",
-                      "path": "Themes/LeptonXLite/AspNetCore.md"
+                      "text": "LeptonX",
+                      "path": "ui-themes/lepton-x/mvc.md"
                     }
                   ]
                 },
@@ -844,59 +844,59 @@
                   "items": [
                     {
                       "text": "Overall",
-                      "path": "UI/AspNetCore/JavaScript-API/Index.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Index.md"
                     },
                     {
                       "text": "Localization",
-                      "path": "UI/AspNetCore/JavaScript-API/Localization.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Localization.md"
                     },
                     {
                       "text": "Auth",
-                      "path": "UI/AspNetCore/JavaScript-API/Auth.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Auth.md"
                     },
                     {
                       "text": "Current User",
-                      "path": "UI/AspNetCore/JavaScript-API/CurrentUser.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/CurrentUser.md"
                     },
                     {
                       "text": "Settings",
-                      "path": "UI/AspNetCore/JavaScript-API/Settings.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Settings.md"
                     },
                     {
                       "text": "Features",
-                      "path": "UI/AspNetCore/JavaScript-API/Features.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Features.md"
                     },
                     {
                       "text": "AJAX",
-                      "path": "UI/AspNetCore/JavaScript-API/Ajax.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Ajax.md"
                     },
                     {
                       "text": "Message",
-                      "path": "UI/AspNetCore/JavaScript-API/Message.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Message.md"
                     },
                     {
                       "text": "Notify",
-                      "path": "UI/AspNetCore/JavaScript-API/Notify.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Notify.md"
                     },
                     {
                       "text": "Block/Busy",
-                      "path": "UI/AspNetCore/JavaScript-API/Block-Busy.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Block-Busy.md"
                     },
                     {
                       "text": "Events",
-                      "path": "UI/AspNetCore/JavaScript-API/Events.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Events.md"
                     },
                     {
                       "text": "DOM",
-                      "path": "UI/AspNetCore/JavaScript-API/DOM.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/DOM.md"
                     },
                     {
                       "text": "Logging",
-                      "path": "UI/AspNetCore/JavaScript-API/Logging.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/Logging.md"
                     },
                     {
                       "text": "Resource Loader",
-                      "path": "UI/AspNetCore/JavaScript-API/ResourceLoader.md"
+                      "path": "framework/ui/mvc-razor-pages/JavaScript-API/ResourceLoader.md"
                     }
                   ]
                 },
@@ -905,19 +905,19 @@
                   "items": [
                     {
                       "text": "Overall",
-                      "path": "UI/AspNetCore/Customization-User-Interface.md"
+                      "path": "framework/ui/mvc-razor-pages/Customization-User-Interface.md"
                     },
                     {
                       "text": "Entity Action Extensions",
-                      "path": "UI/AspNetCore/Entity-Action-Extensions.md"
+                      "path": "framework/ui/mvc-razor-pages/Entity-Action-Extensions.md"
                     },
                     {
                       "text": "Data Table Column Extensions",
-                      "path": "UI/AspNetCore/Data-Table-Column-Extensions.md"
+                      "path": "framework/ui/mvc-razor-pages/Data-Table-Column-Extensions.md"
                     },
                     {
                       "text": "Page Toolbar Extensions",
-                      "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
+                      "path": "framework/ui/mvc-razor-pages/Page-Toolbar-Extensions.md"
                     }
                   ]
                 },
@@ -926,7 +926,7 @@
                   "items": [
                     {
                       "text": "Security Headers",
-                      "path": "UI/AspNetCore/Security-Headers.md"
+                      "path": "framework/ui/mvc-razor-pages/Security-Headers.md"
                     }
                   ]
                 }
@@ -937,30 +937,30 @@
               "items": [
                 {
                   "text": "Overall",
-                  "path": "UI/Blazor/Overall.md"
+                  "path": "framework/ui/blazor/Overall.md"
                 },
                 {
                   "text": "Navigation / Menu",
-                  "path": "UI/Blazor/Navigation-Menu.md"
+                  "path": "framework/ui/blazor/Navigation-Menu.md"
                 },
                 {
                   "text": "Forms & Validation",
-                  "path": "UI/Blazor/Forms-Validation.md"
+                  "path": "framework/ui/blazor/Forms-Validation.md"
                 },
                 {
                   "text": "Localization",
-                  "path": "UI/Blazor/Localization.md"
+                  "path": "framework/ui/blazor/Localization.md"
                 },
                 {
                   "text": "Theming",
                   "items": [
                     {
                       "text": "Overall",
-                      "path": "UI/Blazor/Theming.md"
+                      "path": "framework/ui/blazor/Theming.md"
                     },
                     {
                       "text": "The Basic Theme",
-                      "path": "UI/Blazor/Basic-Theme.md"
+                      "path": "framework/ui/blazor/Basic-Theme.md"
                     },
                     {
                       "text": "LeptonX Lite",
@@ -968,19 +968,19 @@
                     },
                     {
                       "text": "Branding",
-                      "path": "UI/Blazor/Branding.md"
+                      "path": "framework/ui/blazor/Branding.md"
                     },
                     {
                       "text": "Page Header",
-                      "path": "UI/Blazor/Page-Header.md"
+                      "path": "framework/ui/blazor/Page-Header.md"
                     },
                     {
                       "text": "Page Layout",
-                      "path": "UI/Blazor/Page-Layout.md"
+                      "path": "framework/ui/blazor/Page-Layout.md"
                     },
                     {
                       "text": "Toolbars",
-                      "path": "UI/Blazor/Toolbars.md"
+                      "path": "framework/ui/blazor/Toolbars.md"
                     }
                   ]
                 },
@@ -989,11 +989,11 @@
                   "items": [
                     {
                       "text": "Authentication",
-                      "path": "UI/Blazor/Authentication.md"
+                      "path": "framework/ui/blazor/Authentication.md"
                     },
                     {
                       "text": "Authorization",
-                      "path": "UI/Blazor/Authorization.md"
+                      "path": "framework/ui/blazor/Authorization.md"
                     }
                   ]
                 },
@@ -1002,31 +1002,31 @@
                   "items": [
                     {
                       "text": "Current User",
-                      "path": "UI/Blazor/CurrentUser.md"
+                      "path": "framework/ui/blazor/CurrentUser.md"
                     },
                     {
                       "text": "Current Tenant",
-                      "path": "UI/Blazor/CurrentTenant.md"
+                      "path": "framework/ui/blazor/CurrentTenant.md"
                     },
                     {
                       "text": "Notification",
-                      "path": "UI/Blazor/Notification.md"
+                      "path": "framework/ui/blazor/Notification.md"
                     },
                     {
                       "text": "Message",
-                      "path": "UI/Blazor/Message.md"
+                      "path": "framework/ui/blazor/Message.md"
                     },
                     {
                       "text": "Page Alerts",
-                      "path": "UI/Blazor/Page-Alerts.md"
+                      "path": "framework/ui/blazor/Page-Alerts.md"
                     },
                     {
                       "text": "Page Progress",
-                      "path": "UI/Blazor/Page-Progress.md"
+                      "path": "framework/ui/blazor/Page-Progress.md"
                     },
                     {
                       "text": "Block/Busy",
-                      "path": "UI/Blazor/Block-Busy.md"
+                      "path": "framework/ui/blazor/Block-Busy.md"
                     }
                   ]
                 },
@@ -1035,41 +1035,41 @@
                   "items": [
                     {
                       "text": "SubmitButton",
-                      "path": "UI/Blazor/Components/SubmitButton.md"
+                      "path": "framework/ui/blazor/Components/SubmitButton.md"
                     }
                   ]
                 },
                 {
                   "text": "Settings",
-                  "path": "UI/Blazor/Settings.md"
+                  "path": "framework/ui/blazor/Settings.md"
                 },
                 {
                   "text": "Error Handling",
-                  "path": "UI/Blazor/Error-Handling.md"
+                  "path": "framework/ui/blazor/Error-Handling.md"
                 },
                 {
                   "text": "Customization / Overriding Components",
-                  "path": "UI/Blazor/Customization-Overriding-Components.md"
+                  "path": "framework/ui/blazor/Customization-Overriding-Components.md"
                 },
                 {
                   "text": "Global Scripts & Styles",
-                  "path": "UI/Blazor/Global-Scripts-Styles.md"
+                  "path": "framework/ui/blazor/Global-Scripts-Styles.md"
                 },
                 {
                   "text": "Global Features",
-                  "path": "UI/Blazor/Global-Features.md"
+                  "path": "framework/ui/blazor/Global-Features.md"
                 },
                 {
                   "text": "Routing",
-                  "path": "UI/Blazor/Routing.md"
+                  "path": "framework/ui/blazor/Routing.md"
                 },
                 {
                   "text": "PWA Configuration",
-                  "path": "UI/Blazor/Pwa-Configuration.md"
+                  "path": "framework/ui/blazor/Pwa-Configuration.md"
                 },
                 {
                   "text": "Layout Hooks",
-                  "path": "UI/Blazor/Layout-Hooks.md"
+                  "path": "framework/ui/blazor/Layout-Hooks.md"
                 }
               ]
             },
@@ -1078,30 +1078,30 @@
               "items": [
                 {
                   "text": "Quick Start",
-                  "path": "UI/Angular/Quick-Start.md"
+                  "path": "framework/ui/angular/Quick-Start.md"
                 },
                 {
                   "text": "Development",
                   "items": [
                     {
                       "text": "Environment Variables",
-                      "path": "UI/Angular/Environment.md"
+                      "path": "framework/ui/angular/Environment.md"
                     },
                     {
                       "text": "About Feature Libraries",
-                      "path": "UI/Angular/Feature-Libraries.md"
+                      "path": "framework/ui/angular/Feature-Libraries.md"
                     },
                     {
                       "text": "Service Proxies",
-                      "path": "UI/Angular/Service-Proxies.md"
+                      "path": "framework/ui/angular/Service-Proxies.md"
                     },
                     {
                       "text": "PWA Configuration",
-                      "path": "UI/Angular/PWA-Configuration.md"
+                      "path": "framework/ui/angular/PWA-Configuration.md"
                     },
                     {
                       "text": "Unit Testing",
-                      "path": "UI/Angular/Testing.md"
+                      "path": "framework/ui/angular/Testing.md"
                     }
                   ]
                 },
@@ -1110,60 +1110,60 @@
                   "items": [
                     {
                       "text": "Config State Service",
-                      "path": "UI/Angular/Config-State-Service.md"
+                      "path": "framework/ui/angular/Config-State-Service.md"
                     },
                     {
                       "text": "Authorization",
-                      "path": "UI/Angular/Authorization.md"
+                      "path": "framework/ui/angular/Authorization.md"
                     },
                     {
                       "text": "Current User",
-                      "path": "UI/Angular/Current-User.md"
+                      "path": "framework/ui/angular/Current-User.md"
                     },
                     {
                       "text": "HTTP Requests",
                       "items": [
                         { 
                           "text": "How to Make HTTP Requests",
-                          "path": "UI/Angular/HTTP-Requests.md"
+                          "path": "framework/ui/angular/HTTP-Requests.md"
                         },
                         { 
                           "text": "Customize Error Handling",
-                          "path": "UI/Angular/HTTP-Error-Handling.md"
+                          "path": "framework/ui/angular/HTTP-Error-Handling.md"
                         }
                       ]
                     },
                     {
                       "text": "Localization",
-                      "path": "UI/Angular/Localization.md"
+                      "path": "framework/ui/angular/Localization.md"
                     },
                     {
                       "text": "Form Validation",
-                      "path": "UI/Angular/Form-Validation.md"
+                      "path": "framework/ui/angular/Form-Validation.md"
                     },
                     {
                       "text": "Settings",
-                      "path": "UI/Angular/Settings.md"
+                      "path": "framework/ui/angular/Settings.md"
                     },
                     {
                       "text": "Features",
-                      "path": "UI/Angular/Features.md"
+                      "path": "framework/ui/angular/Features.md"
                     },
                     {
                       "text": "Global Features",
-                      "path": "UI/Angular/GlobalFeatures.md"
+                      "path": "framework/ui/angular/GlobalFeatures.md"
                     },
                     {
                       "text": "Permission Management",
-                      "path": "UI/Angular/Permission-Management.md"
+                      "path": "framework/ui/angular/Permission-Management.md"
                     },
                     {
                       "text": "Multi Tenancy",
-                      "path": "UI/Angular/Multi-Tenancy.md"
+                      "path": "framework/ui/angular/Multi-Tenancy.md"
                     },
                     {
                       "text": "Account Module",
-                      "path": "UI/Angular/Account-Module.md"
+                      "path": "framework/ui/angular/Account-Module.md"
                     }
                   ]
                 },
@@ -1172,87 +1172,87 @@
                   "items": [
                     {
                       "text": "Managing RxJS Subscriptions",
-                      "path": "UI/Angular/Subscription-Service.md"
+                      "path": "framework/ui/angular/Subscription-Service.md"
                     },
                     {
                       "text": "Working with Lists",
-                      "path": "UI/Angular/List-Service.md"
+                      "path": "framework/ui/angular/List-Service.md"
                     },
                     {
                       "text": "Easy *ngFor trackBy",
-                      "path": "UI/Angular/Track-By-Service.md"
+                      "path": "framework/ui/angular/Track-By-Service.md"
                     },
                     {
                       "text": "Router Events",
-                      "path": "UI/Angular/Router-Events.md"
+                      "path": "framework/ui/angular/Router-Events.md"
                     },
                     {
                       "text": "Inserting Scripts & Styles to DOM",
-                      "path": "UI/Angular/Dom-Insertion-Service.md"
+                      "path": "framework/ui/angular/Dom-Insertion-Service.md"
                     },
                     {
                       "text": "Lazy Loading Scripts & Styles",
-                      "path": "UI/Angular/Lazy-Load-Service.md"
+                      "path": "framework/ui/angular/Lazy-Load-Service.md"
                     },
                     {
                       "text": "Projecting Angular Content",
-                      "path": "UI/Angular/Content-Projection-Service.md"
+                      "path": "framework/ui/angular/Content-Projection-Service.md"
                     },
                     {
                       "text": "Modal",
-                      "path": "UI/Angular/Modal.md"
+                      "path": "framework/ui/angular/Modal.md"
                     },
                     {
                       "text": "Confirmation Popup",
-                      "path": "UI/Angular/Confirmation-Service.md"
+                      "path": "framework/ui/angular/Confirmation-Service.md"
                     },
                     {
                       "text": "Loading Directive",
-                      "path": "UI/Angular/Loading-Directive.md"
+                      "path": "framework/ui/angular/Loading-Directive.md"
                     },
                     {
                       "text": "Show Password Directive",
-                      "path": "UI/Angular/Show-Password-Directive.md"
+                      "path": "framework/ui/angular/Show-Password-Directive.md"
                     },
                     {
                       "text": "Caps Lock Directive",
-                      "path": "UI/Angular/Caps-Lock-Directive.md"
+                      "path": "framework/ui/angular/Caps-Lock-Directive.md"
                     },
                     {
                       "text": "Toast Overlay",
-                      "path": "UI/Angular/Toaster-Service.md"
+                      "path": "framework/ui/angular/Toaster-Service.md"
                     },
                     {
                       "text": "Page Alerts",
-                      "path": "UI/Angular/Page-Alerts.md"
+                      "path": "framework/ui/angular/Page-Alerts.md"
                     },
                     {
                       "text": "Ellipsis",
-                      "path": "UI/Angular/Ellipsis-Directive.md"
+                      "path": "framework/ui/angular/Ellipsis-Directive.md"
                     },
                     {
                       "text": "Context Strategy",
-                      "path": "UI/Angular/Context-Strategy.md"
+                      "path": "framework/ui/angular/Context-Strategy.md"
                     },
                     {
                       "text": "Cross Origin Strategy",
-                      "path": "UI/Angular/Cross-Origin-Strategy.md"
+                      "path": "framework/ui/angular/Cross-Origin-Strategy.md"
                     },
                     {
                       "text": "Dom Strategy",
-                      "path": "UI/Angular/Dom-Strategy.md"
+                      "path": "framework/ui/angular/Dom-Strategy.md"
                     },
                     {
                       "text": "Container Strategy",
-                      "path": "UI/Angular/Container-Strategy.md"
+                      "path": "framework/ui/angular/Container-Strategy.md"
                     },
                     {
                       "text": "Content Security Strategy",
-                      "path": "UI/Angular/Content-Security-Strategy.md"
+                      "path": "framework/ui/angular/Content-Security-Strategy.md"
                     },
                     {
                       "text": "Abp Window Service",
-                      "path": "UI/Angular/Abp-Window-Service.md"
+                      "path": "framework/ui/angular/Abp-Window-Service.md"
                     }
                   ]
                 },
@@ -1261,22 +1261,22 @@
                   "items": [
                     {
                       "text": "Customization Guide",
-                      "path": "UI/Angular/Customization-User-Interface.md"
+                      "path": "framework/ui/angular/Customization-User-Interface.md"
                     },
                     {
                       "text": "Theming",
                       "items": [
                         {
                           "text": "Overall",
-                          "path": "UI/Angular/Theming.md"
+                          "path": "framework/ui/angular/Theming.md"
                         },
                         {
                           "text": "Configuration",
-                          "path": "UI/Angular/Theme-Configurations.md"
+                          "path": "framework/ui/angular/Theme-Configurations.md"
                         },
                         {
                           "text": "The Basic Theme",
-                          "path": "UI/Angular/Basic-Theme.md"
+                          "path": "framework/ui/angular/Basic-Theme.md"
                         },
                         {
                           "text": "LeptonX Lite",
@@ -1286,42 +1286,42 @@
                     },
                     {
                       "text": "Modifying the Menu",
-                      "path": "UI/Angular/Modifying-the-Menu.md"
+                      "path": "framework/ui/angular/Modifying-the-Menu.md"
                     },
                     {
                       "text": "Sorting Navigation Elements",
-                      "path": "UI/Angular/Sorting-Navigation-Elements.md"
+                      "path": "framework/ui/angular/Sorting-Navigation-Elements.md"
                     },
                     {
                       "text": "Component Replacement",
-                      "path": "UI/Angular/Component-Replacement.md"
+                      "path": "framework/ui/angular/Component-Replacement.md"
                     },
                     {
                       "text": "Extensions",
                       "items": [
                         {
                           "text": "Overall",
-                          "path": "UI/Angular/Extensions-Overall.md"
+                          "path": "framework/ui/angular/Extensions-Overall.md"
                         },
                         {
                           "text": "Entity Action Extensions",
-                          "path": "UI/Angular/Entity-Action-Extensions.md"
+                          "path": "framework/ui/angular/Entity-Action-Extensions.md"
                         },
                         {
                           "text": "Data Table Column Extensions",
-                          "path": "UI/Angular/Data-Table-Column-Extensions.md"
+                          "path": "framework/ui/angular/Data-Table-Column-Extensions.md"
                         },
                         {
                           "text": "Page Toolbar Extensions",
-                          "path": "UI/Angular/Page-Toolbar-Extensions.md"
+                          "path": "framework/ui/angular/Page-Toolbar-Extensions.md"
                         },
                         {
                           "text": "Dynamic Form Extensions",
-                          "path": "UI/Angular/Dynamic-Form-Extensions.md"
+                          "path": "framework/ui/angular/Dynamic-Form-Extensions.md"
                         },
                         {
                           "text": "Date, time and datetime format pipes",
-                          "path": "UI/Angular/DateTime-Format-Pipe.md"
+                          "path": "framework/ui/angular/DateTime-Format-Pipe.md"
                         }
                       ]
                     }
@@ -1332,15 +1332,15 @@
                   "items": [
                     {
                       "text": "Page",
-                      "path": "UI/Angular/Page-Component.md"
+                      "path": "framework/ui/angular/Page-Component.md"
                     },
                     {
                       "text": "Chart",
-                      "path": "UI/Angular/Chart-Component.md"
+                      "path": "framework/ui/angular/Chart-Component.md"
                     },
                     {
                       "text": "Card",
-                      "path": "UI/Angular/Card-Component.md"
+                      "path": "framework/ui/angular/Card-Component.md"
                     }
                   ]
                 }
