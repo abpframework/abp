@@ -126,7 +126,7 @@ var abp = abp || {};
 
     // FULL SCREEN /////////////////
 
-    abp.utils.toggleFullscreen = function() {
+    abp.utils.toggleFullscreen = function () {
         var elem = document.documentElement;
         if (!document.fullscreenElement && !document.mozFullScreenElement &&
             !document.webkitFullscreenElement && !document.msFullscreenElement) {
@@ -152,7 +152,7 @@ var abp = abp || {};
         }
     }
 
-    abp.utils.requestFullscreen = function() {
+    abp.utils.requestFullscreen = function () {
         var elem = document.documentElement;
         if (!document.fullscreenElement && !document.mozFullScreenElement &&
             !document.webkitFullscreenElement && !document.msFullscreenElement) {
@@ -168,7 +168,7 @@ var abp = abp || {};
         }
     }
 
-    abp.utils.exitFullscreen = function() {
+    abp.utils.exitFullscreen = function () {
         if (!(!document.fullscreenElement && !document.mozFullScreenElement &&
             !document.webkitFullscreenElement && !document.msFullscreenElement)) {
             if (document.exitFullscreen) {
@@ -230,4 +230,19 @@ var abp = abp || {};
             }, 250);
         }
     };
+
+    abp.utils.removeOidcUser = function () {
+        for (var i = 0; i < sessionStorage.length; i++) {
+            var key = sessionStorage.key(i);
+            if (key.startsWith('oidc.user:')) {
+                sessionStorage.removeItem(key);
+            }
+        }
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            if (key.startsWith('oidc.user:')) {
+                localStorage.removeItem(key);
+            }
+        }
+    }
 })();
