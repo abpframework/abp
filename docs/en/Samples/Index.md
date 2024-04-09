@@ -1,22 +1,30 @@
 # Sample Applications
 
-Here, a list of official samples built with the ABP Framework. Most of these samples are located under the [abpframework/abp-samples](https://github.com/abpframework/abp-samples) GitHub repository.
+Here, a list of official samples built with ABP.
 
 ## eShopOnAbp
 
-Reference microservice solution built with the ABP Framework and .NET.
+Reference microservice solution built with ABP and .NET.
 
 * [Source code](https://github.com/abpframework/eShopOnAbp)
 
-## EventHub
+## Event Hub
 
-This is a reference application built with the ABP Framework. It implements the Domain Driven Design with multiple application layers.
+A reference application built with ABP. It implements the Domain Driven Design with multiple application layers.
 
 * [Source code](https://github.com/abpframework/eventhub)
 
+## Easy CRM
+
+A middle-size CRM application built with ABP. [Click here](easy-crm.md) to see the details.
+
 ## Book Store
 
-A simple CRUD application to show basic principles of developing an application with the ABP Framework. The same sample was implemented with different technologies:
+A simple CRUD application to show basic principles of developing an application with ABP. The same sample was implemented with different technologies and different modules.
+
+### With Open Source Modules
+
+The following samples uses only the open source (free) modules.
 
 * **Book Store: Razor Pages UI & Entity Framework Core**
   * [Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)
@@ -30,7 +38,19 @@ A simple CRUD application to show basic principles of developing an application 
 * **Book Store: Modular application (Razor Pages UI & EF Core)**
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Modular)
 
-While there is no Razor Pages & MongoDB combination, you can check both documents to understand it since DB & UI selection don't effect each other.
+### With Pro Modules
+
+The following samples uses the pro modules.
+
+- **Book Store: Razor Pages (MVC) UI & Entity Framework Core**
+  - [Tutorial](https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=MVC&DB=EF)
+  - [Download the source code](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-mvc-ef)
+- **Book Store: Blazor UI & Entity Framework Core**
+  - [Tutorial](https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=Blazor&DB=EF)
+  - [Download the source code](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-blazor-efcore)
+- **Book Store: Angular UI & MongoDB**
+  - [Tutorial](https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=NG&DB=Mongo)
+  - [Download the source code](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-angular-mongodb)
 
 ## Other Samples
 
@@ -67,25 +87,25 @@ While there is no Razor Pages & MongoDB combination, you can check both document
     * [Azure Active Directory Authentication](https://community.abp.io/articles/how-to-use-the-azure-active-directory-authentication-for-mvc-razor-page-applications-4603b9cf)
     * [Customize the Login Page](https://community.abp.io/articles/how-to-customize-the-login-page-for-mvc-razor-page-applications-9a40f3cd)
     * [Customize the SignIn Manager](https://community.abp.io/articles/how-to-customize-the-signin-manager-3e858753)
-* **GRPC Demo**: Shows how to add a gRPC service to an ABP Framework based web application and consume it from a console application.
+* **GRPC Demo**: Shows how to add a gRPC service to an ABP based web application and consume it from a console application.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo)
-* **Telerik Blazor Integration**: Shows how to install and use Telerik Blazor components with the ABP Framework.
+* **Telerik Blazor Integration**: Shows how to install and use Telerik Blazor components with ABP.
   * [Article](https://community.abp.io/articles/how-to-integrate-the-telerik-blazor-components-to-the-abp-blazor-ui-q8g31abb)
 * **Angular Material Integration**: Implemented the web application tutorial using the Angular Material library.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/AcmeBookStoreAngularMaterial)
   * [Article](https://community.abp.io/articles/using-angular-material-components-with-the-abp-framework-af8ft6t9)
-* **DevExtreme Angular Component Integration**: How to install and use DevExtreme components in the ABP Framework Angular UI.
+* **DevExtreme Angular Component Integration**: How to install and use DevExtreme components in the ABP Angular UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Angular)
   * [Article](https://community.abp.io/articles/using-devextreme-angular-components-with-the-abp-framework-x5nyvj3i)
-* **DevExtreme MVC / Razor Pages Component Integration**: How to install and use DevExtreme components in the ABP Framework MVC / Razor Pages UI.
+* **DevExtreme MVC / Razor Pages Component Integration**: How to install and use DevExtreme components in the ABP MVC / Razor Pages UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Mvc)
   * [Article](https://community.abp.io/articles/using-devextreme-components-with-the-abp-framework-zb8z7yqv)
-* **Syncfusion Blazor Integration**: Shows how to install and integrate Syncfusion UI with ABP Framework Blazor UI.
+* **Syncfusion Blazor Integration**: Shows how to install and integrate Syncfusion UI the ABP Blazor UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/SyncfusionSample)
   * [Article](https://community.abp.io/articles/using-syncfusion-components-with-the-abp-framework-5ccvi8kc)
-* **Empty ASP.NET Core Application**: The most basic ASP.NET Core application with the ABP Framework installed.
+* **Empty ASP.NET Core Application**: The most basic ASP.NET Core application with ABP installed.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)
   * [Documentation](../Getting-Started-AspNetCore-Application.md)
-* **Using Elsa Workflow with ABP Framework**: Shows how to use the Elsa Core workflow library within an ABP-based application. 
+* **Using Elsa Workflow with ABP**: Shows how to use the Elsa Core workflow library within an ABP-based application. 
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/ElsaDemo)
   * [Article](https://community.abp.io/articles/using-elsa-workflow-with-the-abp-framework-773siqi9)

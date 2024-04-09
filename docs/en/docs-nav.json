@@ -1687,8 +1687,8 @@
           "path": "https://github.com/abpframework/eventhub"
         },
         {
-          "text": "Microservice Demo (legacy)",
-          "path": "Samples/Microservice-Demo.md"
+          "text": "Easy CRM",
+          "path": "Samples/easy-crm.md"
         }
       ]
     },
