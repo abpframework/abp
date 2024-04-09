@@ -5,6 +5,6 @@ While you can start with an empty project and add needed packages manually, star
 * [**`app-nolayers`**](Application-Single-Layer.md): Application (single layer) template.
 * [**`app`**](Application.md): Application template.
 * [**`module`**](Module.md): Module/service template.
-* [**`console`**](Console.md): Console template.
-* [**`WPF`**](WPF.md): WPF template.
-* [**`MAUI`**](MAUI.md): MAUI template.
+* [**`console`**](../get-started/console.md): Console template.
+* [**`WPF`**](../get-started/WPF.md): WPF template.
+* [**`MAUI`**](../get-started/MAUI.md): MAUI template.
