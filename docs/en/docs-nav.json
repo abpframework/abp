@@ -1450,31 +1450,27 @@
       ]
     },
     {
-      "text": "Startup Templates",
+      "text": "Solution Templates",
       "items": [
         {
           "text": "Overall",
-          "path": "Startup-Templates/Index.md"
+          "path": "solution-templates/index.md"
         },
         {
-          "text": "Application",
-          "path": "Startup-Templates/Application.md"
+          "text": "Single-Layer Solution",
+          "path": "solution-templates/single-layer-web-application/index.md"
         },
         {
-          "text": "Application (Single Layer)",
-          "path": "Startup-Templates/Application-Single-Layer.md"
+          "text": "Layered Solution",
+          "path": "solution-templates/layered-web-application/index.md"
         },
         {
-          "text": "Module",
-          "path": "Startup-Templates/Module.md"
+          "text": "Microservice Solution",
+          "path": "solution-templates/microservice/index.md"
         },
         {
-          "text": "Console",
-          "path": "Startup-Templates/Console.md"
-        },
-        {
-          "text": "WPF",
-          "path": "Startup-Templates/WPF.md"
+          "text": "Application Module",
+          "path": "solution-templates/application-module/index.md"
         }
       ]
     },
