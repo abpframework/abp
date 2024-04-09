@@ -2,9 +2,9 @@
 
 ABP offers an **opinionated architecture** to build enterprise software solutions with **best practices** on top of the **.NET** and the **ASP.NET Core** platforms. It provides the fundamental infrastructure, production-ready startup templates, pre-built application modules, UI themes, tooling, guides and documentation to implement that architecture properly and **automate the details** and repetitive works as much as possible.
 
-## Getting Started
+## Get Started
 
-The [getting started](Getting-Started.md) guide can be used to create and run ABP based solutions with different options and details. Then you can follow the [todo tutorial](Tutorials/Todo/Overall.md) to create your first application with ABP, or build a full-featured and real-life web application by following the [web application development tutorial](Tutorials/Part-1.md).
+The [Getting Started](get-started/index.md) guide can be used to create and run ABP based solutions with different options and details. Then you can follow the [Todo Application Tutorial](tutorials/todo/index.md) to create your first application with ABP, or build a full-featured and real-life web application by following the [Book Store Application Tutorial](tutorials/book-store/part-01.md).
 
 ### UI Framework Options
 
@@ -63,14 +63,7 @@ The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio 
 
 ### Application Modules
 
-Application Modules provides pre-built application modules those implement common business requirements;
-
-* [**Account**](Modules/Account.md): Provides UI for the account management and allows user to login/register to the application.
-* **[Identity](Modules/Identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
-* [**OpenIddict**](Modules/OpenIddict.md): Integrates to OpenIddict.
-* [**Tenant Management**](Modules/Tenant-Management.md): Manages tenants for a [multi-tenant](Multi-Tenancy.md) (SaaS) application.
-
-See the [Application Modules](Modules/Index.md) document for all pre-built modules.
+Application Modules provides pre-built application modules those implement common business requirements. See the [Application Modules](Modules/Index.md) document for all pre-built modules.
 
 ## Books
 
@@ -80,7 +73,7 @@ See the [Application Modules](Modules/Index.md) document for all pre-built modul
 
 *Mastering ABP Framework* is an ultimate guide to get started and expertise with the ABP Framework. It is authored by Halil İbrahim Kalkan, the creator and the lead developer of the ABP Framework.
 
-**[You can order it from Amazon now](https://www.amazon.com/Mastering-ABP-Framework-maintainable-implementing-dp-1801079242/dp/1801079242)!**
+**[Click here to see the details and order the book](https://abp.io/books/mastering-abp-framework)**.
 
 ### Free E-Book: Implementing Domain Driven Design
 
@@ -90,23 +83,21 @@ A **practical guide** for implementing Domain Driven Design (DDD). While the imp
 
 **[Click here to get your free copy](https://abp.io/books/implementing-domain-driven-design?ref=doc).**
 
+## Samples
+
+See the [sample projects](Samples/Index.md) built with ABP.
+
 ## ABP Community
 
-### The Source Code
-
-ABP Framework's source code is hosted on GitHub. See [the source code](https://github.com/abpframework).
-
-### ABP Community Web Site
-
-The [ABP Community](https://community.abp.io/) is a website to publish articles and share knowledge about the ABP Framework. You can also create content for the community!
+The [ABP Community](https://community.abp.io/) website is a central place to publish articles and share knowledge about the ABP Framework.
 
 ### Blog
 
 Follow the [ABP Blog](https://blog.abp.io/) to learn the latest happenings in the ABP.IO Platform.
 
-### Samples
+## The Source Code
 
-See the [sample projects](Samples/Index.md) built with ABP.
+ABP Framework's source code is hosted on GitHub. See [the source code](https://github.com/abpframework).
 
 ### Want to Contribute?
 
