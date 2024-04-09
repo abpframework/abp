@@ -1739,16 +1739,16 @@
       ]
     },
     {
-      "text": "API Documentation",
-      "path": "{ApiDocumentationUrl}"
-    },
-    {
-      "text": "Contribution Guide",
-      "path": "Contribution/Index.md"
-    },
-    {
       "text": "Others",
       "items": [
+        {
+          "text": "API Documentation",
+          "path": "{ApiDocumentationUrl}"
+        },
+        {
+          "text": "Contribution Guide",
+          "path": "Contribution/Index.md"
+        },
         {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
