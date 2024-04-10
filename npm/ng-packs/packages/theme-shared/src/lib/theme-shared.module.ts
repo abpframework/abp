@@ -81,6 +81,7 @@ const declarationsWithExports = [
     AbpVisibleDirective,
     NgxDatatableListDirective,
     NgxDatatableDefaultDirective,
+    PasswordComponent,
     ...declarationsWithExports,
   ],
   providers: [DatePipe],
