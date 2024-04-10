@@ -96,6 +96,14 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 });
 
                 _$modal.on('shown.bs.modal', function () {
+                    var modalBackdrop = $('.modal-backdrop').last();
+                    if (modalBackdrop) {
+                        var zIndex = parseInt(_$modal.css('z-index'));
+                        if (!isNaN(zIndex)) {
+                            modalBackdrop.css("z-index", zIndex - 1);
+                        }
+                    }
+
                     if (!options.focusElement) {
                         //focuses first element if it's a typeable input.
                         var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
@@ -125,6 +133,12 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     _modalObject = new modalClass();
                     _modalObject.init && _modalObject.init(_publicApi, _args); //TODO: Remove later
                     _modalObject.initModal && _modalObject.initModal(_publicApi, _args);
+                }
+
+                var modalCount = $('.modal').length;
+                var zIndex = parseInt(_$modal.css('z-index'));
+                if (!isNaN(zIndex)) {
+                    _$modal.css("z-index", zIndex + modalCount - 1);
                 }
 
                 _$modal.modal('show');
