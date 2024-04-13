@@ -50,12 +50,6 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         var index = 0;
         foreach (var navigationEntry in entityEntry.Navigations.Where(navigation => !navigation.IsModified))
         {
-            if (!navigationEntry.IsLoaded)
-            {
-                index++;
-                continue;
-            }
-
             var currentValue = navigationEntry.CurrentValue;
             if (navigationEntry.CurrentValue is ICollection collection)
             {
