@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Docs.Documents;
 using Volo.Docs.Localization;
-using Volo.Docs.Pages.Documents.Project;
 using Volo.Docs.Utils;
 
 namespace Volo.Docs.Areas.Documents.TagHelpers
@@ -23,7 +19,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
         private readonly IStringLocalizer<DocsResource> _localizer;
         
-        private readonly LinkGenerator _linkGenerator;
+        private readonly IDocsLinkGenerator _docsLinkGenerator;
         
         private readonly Func<DocsUrlNormalizerContext, string> _urlNormalizer;
         
@@ -55,11 +51,11 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
 
-        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer, LinkGenerator linkGenerator, IServiceProvider serviceProvider)
+        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer, IDocsLinkGenerator docsLinkGenerator, IServiceProvider serviceProvider)
         {
             _localizer = localizer;
             _uiOptions = urlOptions.Value;
-            _linkGenerator = linkGenerator;
+            _docsLinkGenerator = docsLinkGenerator;
             _urlNormalizer = _uiOptions.UrlNormalizer ?? (context => context.Url);
             _serviceProvider = serviceProvider;
         }
@@ -183,14 +179,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
             if (!UrlHelper.IsExternalLink(path))
             {
-                var routeValues = new Dictionary<string, object> {
-                    { nameof(IndexModel.LanguageCode), LanguageCode },
-                    { nameof(IndexModel.Version), Version },
-                    { nameof(IndexModel.DocumentName), pathWithoutFileExtension },
-                    { nameof(IndexModel.ProjectName), ProjectName }
-                };
-
-                path = _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
+                path = _docsLinkGenerator.GenerateLink(ProjectName, LanguageCode, Version, pathWithoutFileExtension);
             }
 
 
