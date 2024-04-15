@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
@@ -202,7 +203,8 @@ namespace Volo.Docs.Markdown
                 { nameof(IndexModel.ProjectName), projectShortName }
             };
 
-            return _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
+            var encodedUrl = _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
+            return WebUtility.UrlDecode(encodedUrl); //Document name can contain path separators like /, so we need to decode it
         }
     }
 }
