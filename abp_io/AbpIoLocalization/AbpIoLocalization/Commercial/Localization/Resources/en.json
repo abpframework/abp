@@ -1210,7 +1210,7 @@
     "RegisterDemo": "Register",
     "TrainingDescription": "We are offering the following training packages for who want to get expertise on the ABP Framework and the ABP Commercial.",
     "PurchaseDevelopers": "developers",
-    "LinkExpiredMessage": "The payment link has expired. Please contact us and receive an updated payment link."
+    "LinkExpiredMessage": "The payment link has expired! Contact us at <a href='mailto:sales@volosoft.com'>sales@volosoft.com</a> to update the link or <a href='https://commercial.abp.io/contact'>click here</a> to navigate to the contact page."
 
   }
 }
