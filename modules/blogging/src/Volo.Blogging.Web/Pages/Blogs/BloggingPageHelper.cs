@@ -1,16 +1,14 @@
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Markdig;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
-using Markdig;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Localization;
 using Volo.Blogging.Localization;
 
-namespace Volo.Blogging.Pages.Blog
+namespace Volo.Blogging.Pages.Blogs
 {
     public class BloggingPageHelper : ITransientDependency
     {
