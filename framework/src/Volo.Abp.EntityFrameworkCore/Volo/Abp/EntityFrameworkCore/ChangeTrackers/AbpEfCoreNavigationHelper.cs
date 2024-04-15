@@ -50,7 +50,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         var index = 0;
         foreach (var navigationEntry in entityEntry.Navigations.Where(navigation => !navigation.IsModified))
         {
-            if (!navigationEntry.IsLoaded)
+            if (!navigationEntry.IsLoaded && navigationEntry.CurrentValue == null)
             {
                 index++;
                 continue;
