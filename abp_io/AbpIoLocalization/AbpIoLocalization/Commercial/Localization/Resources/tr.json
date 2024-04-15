@@ -1139,6 +1139,7 @@
     "PurchaseDevelopers": "geliştirici",
     "RemoveBasket": "Sepetten kaldır",
     "TrainingPack": "Eğitim paketi",
-    "TrainingPackDiscount": "Eğitim paketi indirimi"
+    "TrainingPackDiscount": "Eğitim paketi indirimi",
+    "LinkExpiredMessage": "Ödeme bağlantısı süresi doldu. Lütfen bizimle iletişime geçin ve güncel bir ödeme bağlantısı alın."
   }
 }
