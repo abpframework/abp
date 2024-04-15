@@ -200,6 +200,11 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
 
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithValueObjectAddress>>(data =>
+        {
+            throw new Exception("Should not trigger this event");
+        });
+
         // Test with value object
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
@@ -232,6 +237,11 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
 
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToOne>>(data =>
+        {
+            throw new Exception("Should not trigger this event");
+        });
+
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
         {
@@ -257,6 +267,11 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToMany>>(data =>
+        {
+            throw new Exception("Should not trigger this event");
+        });
 
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
