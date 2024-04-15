@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
 using Volo.Abp.Http.Client.Authentication;
-using Volo.Abp.Security.Claims;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +15,6 @@ public static class AbpBlazorWebAppServiceCollectionExtensions
 
         services.AddSingleton<AuthenticationStateProvider, RemoteAuthenticationStateProvider>();
         services.Replace(ServiceDescriptor.Transient<IAbpAccessTokenProvider, CookieBasedWebAssemblyAbpAccessTokenProvider>());
-        services.Replace(ServiceDescriptor.Transient<ICurrentPrincipalAccessor, RemoteCurrentPrincipalAccessor>());
 
         return services;
     }
@@ -27,7 +25,6 @@ public static class AbpBlazorWebAppServiceCollectionExtensions
 
         services.AddScoped<AuthenticationStateProvider, RemoteAuthenticationStateProvider>();
         services.Replace(ServiceDescriptor.Singleton<IAbpAccessTokenProvider, PersistentComponentStateAbpAccessTokenProvider>());
-        services.Replace(ServiceDescriptor.Transient<ICurrentPrincipalAccessor, RemoteCurrentPrincipalAccessor>());
 
         return services;
     }

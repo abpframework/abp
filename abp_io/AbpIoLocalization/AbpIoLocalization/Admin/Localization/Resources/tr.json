@@ -400,7 +400,7 @@
     "ShowBetweenDayCount": "Gün sayısını göster",
     "PurchaseOrder": "Satın alma siparişi",
     "ShowCreateInvoiceOfOrganization": "Fatura oluştur",
-    "ShowCreateQuotationOfOrganization": "Teklif oluştur",
+    "ShowCreateQuotationOfOrganization": "Teklif/Fatura oluştur",
     "BookDiscounts": "Kitap indirimleri",
     "Menu:BookDiscounts": "Kitap indirimleri",
     "BookType": "Kitap türü",

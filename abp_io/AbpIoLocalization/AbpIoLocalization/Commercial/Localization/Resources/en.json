@@ -581,7 +581,7 @@
     "InvoiceModal_EnterCompanyName": "Enter your legal company name...",
     "InvoiceModal_EnterCompanyAddress": "Enter your legal company address...",
     "InvoiceModal_EnterTaxNumber": "Enter your TAX/VAT number if available...",
-    "RequestInvoiceModal_EnterNotes": "Enter your extra message about your invoice...",
+    "RequestInvoiceModal_EnterNotes": "Additional information for your invoice... This note will be written in the notes section of the invoice.",
     "PrePayment_PayWithIyzico": "You will pay with Iyzico",
     "ContinueToCheckout": "Continue to Checkout",
     "PrePayment_IyzicoRedirectionInfo": "You will be redirected to Iyzico Payment Gateway to complete your purchase securely.",

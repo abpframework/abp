@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
@@ -13,6 +12,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Values;
+using Volo.Abp.EntityFrameworkCore.ChangeTrackers;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
@@ -30,6 +30,8 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
     protected IAuditingHelper AuditingHelper { get; }
     protected IClock Clock { get; }
 
+    protected AbpEfCoreNavigationHelper? AbpEfCoreNavigationHelper { get; set; }
+
     public EntityHistoryHelper(
         IAuditingStore auditingStore,
         IOptions<AbpAuditingOptions> options,
@@ -44,6 +46,11 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         Options = options.Value;
 
         Logger = NullLogger<EntityHistoryHelper>.Instance;
+    }
+
+    public void InitializeNavigationHelper(AbpEfCoreNavigationHelper abpEfCoreNavigationHelper)
+    {
+        AbpEfCoreNavigationHelper = abpEfCoreNavigationHelper;
     }
 
     public virtual List<EntityChangeInfo> CreateChangeList(ICollection<EntityEntry> entityEntries)
@@ -186,11 +193,12 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             }
         }
 
-        if (Options.SaveEntityHistoryWhenNavigationChanges && entityEntry.State == EntityState.Unchanged)
+        if (entityEntry.State == EntityState.Unchanged && Options.SaveEntityHistoryWhenNavigationChanges && AbpEfCoreNavigationHelper != null)
         {
+            var index = 0;
             foreach (var navigation in entityEntry.Navigations)
             {
-                if (navigation.IsModified || (navigation is ReferenceEntry && navigation.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified))
+                if (navigation.IsModified || AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(navigation, index))
                 {
                     propertyChanges.Add(new EntityPropertyChangeInfo
                     {
@@ -198,6 +206,8 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
                         PropertyTypeFullName = navigation.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!
                     });
                 }
+
+                index++;
             }
         }
 
@@ -245,9 +255,10 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
     protected virtual bool HasNavigationPropertiesChanged(EntityEntry entityEntry)
     {
-        return Options.SaveEntityHistoryWhenNavigationChanges && entityEntry.State == EntityState.Unchanged &&
-               (entityEntry.Navigations.Any(navigationEntry => navigationEntry.IsModified) ||
-                entityEntry.Navigations.Where(x => x is ReferenceEntry).Cast<ReferenceEntry>().Any(x => x.TargetEntry != null && x.TargetEntry.State == EntityState.Modified));
+        return entityEntry.State == EntityState.Unchanged &&
+               Options.SaveEntityHistoryWhenNavigationChanges &&
+               AbpEfCoreNavigationHelper != null &&
+               AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(entityEntry);
     }
 
     protected virtual bool ShouldSavePropertyHistory(PropertyEntry propertyEntry, bool defaultValue)

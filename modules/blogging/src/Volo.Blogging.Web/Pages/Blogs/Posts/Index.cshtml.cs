@@ -49,16 +49,17 @@ namespace Volo.Blogging.Pages.Blogs.Posts
             try
             {
                 Blog = await GetBlogAsync(_blogAppService, BlogOptions, BlogShortName);
+                
+                if(Blog == null)
+                {
+                    return BlogNotFoundResult();
+                }
+                
                 BlogShortName = Blog.ShortName;
             }
             catch (EntityNotFoundException)
             {
-                if (BlogOptions.SingleBlogMode.Enabled)
-                {
-                    return NotFound();
-                }
-                
-                return RedirectToPage("/Blogs/Index");
+                return BlogNotFoundResult();
             }
             
             Posts = (await _postAppService.GetListByBlogIdAndTagNameAsync(Blog.Id, TagName)).Items;
@@ -66,7 +67,15 @@ namespace Volo.Blogging.Pages.Blogs.Posts
 
             return Page();
         }
-
         
+        protected virtual ActionResult BlogNotFoundResult()
+        {
+            if (BlogOptions.SingleBlogMode.Enabled)
+            {
+                return NotFound();
+            }
+                
+            return RedirectToPage("/Blogs/Index");
+        }
     }
 }

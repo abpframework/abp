@@ -34,15 +34,12 @@ export class RouterEvents {
   }
 
   protected listenToNavigation(): void {
-    (
-      this.router.events.pipe(
-        filter(e => e instanceof NavigationEvent.End && !e.url.includes('error')),
-      ) as Observable<NavigationEnd>
-    ).subscribe(event => {
-      // It must be "NavigationTransition" but it is not exported in Angular
-      //https://github.com/angular/angular/blob/9c486c96827a9282cbdbff176761bc95554a260b/packages/router/src/navigation_transition.ts#L282
-
-      this.#previousNavigation.set(this.#currentNavigation());
+    const routerEvent$ = this.router.events.pipe(
+      filter(e => e instanceof NavigationEvent.End && !e.url.includes('error'))
+    ) as Observable<NavigationEnd>;
+    
+    routerEvent$.subscribe(event => {
+      this.#previousNavigation.set(this.currentNavigation());
       this.#currentNavigation.set(event.url);
     });
   }

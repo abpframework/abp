@@ -4,33 +4,15 @@ It is possible to load [modules](Module-Development-Basics.md) as plug-ins. That
 
 ## Basic Usage
 
-`IServiceCollection.AddApplication<T>()` extension method can get options to configure the plug-in sources.
+The `WebApplicationBuilder.AddApplicationAsync<T>()` extension method can get options to configure the plug-in sources.
 
 **Example: Load plugins from a folder**
 
 ````csharp
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Modularity.PlugIns;
-
-namespace MyPlugInDemo.Web
+await builder.AddApplicationAsync<MyPlugInDemoWebModule>(options =>
 {
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddApplication<MyPlugInDemoWebModule>(options =>
-            {
-                options.PlugInSources.AddFolder(@"D:\Temp\MyPlugIns");
-            });
-        }
-
-        public void Configure(IApplicationBuilder app)
-        {
-            app.InitializeApplication();
-        }
-    }
-}
+    options.PlugInSources.AddFolder(@"D:\Temp\MyPlugIns");
+});
 ````
 
 * This is the `Startup` class of a typical ASP.NET Core application.
@@ -232,3 +214,7 @@ If your module uses a relational database and [Entity Framework Core](Entity-Fra
 2. You can improve the `DbMigrator` application to find migrations of the plug-ins and execute them.
 
 There may be other solutions. For example, if your DB admin doesn't allow you to change the database schema in the application code, you may need to manually send a SQL file to the database admin to apply it to the database.
+
+### Plug In Sample
+
+We have a sample for this, You can download it from [abp-sample repository](https://github.com/abpframework/abp-samples/tree/master/DocumentationSamples/Plug-In)
