@@ -211,6 +211,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             if (entityChangeList != null)
             {
                 EntityHistoryHelper.UpdateChangeList(entityChangeList);
+                AbpEfCoreNavigationHelper.Clear();
                 auditLog!.EntityChanges.AddRange(entityChangeList);
                 Logger.LogDebug($"Added {entityChangeList.Count} entity changes to the current audit log");
             }
@@ -373,6 +374,18 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                         EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
                     }
                 }
+                else if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges &&
+                         (entry.Navigations.Any(x => x.IsModified) || AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(entry)))
+                {
+                    if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
+                    {
+                        EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
+                    }
+                    else
+                    {
+                        EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
+                    }
+                }
                 break;
 
             case EntityState.Deleted:
@@ -383,7 +396,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
         {
-            foreach (var entityEntry in ChangeTracker.Entries().Where(x => x.State == EntityState.Unchanged && AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(x)))
+            foreach (var entityEntry in AbpEfCoreNavigationHelper.GetChangedEntityEntries())
             {
                 if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
                 {

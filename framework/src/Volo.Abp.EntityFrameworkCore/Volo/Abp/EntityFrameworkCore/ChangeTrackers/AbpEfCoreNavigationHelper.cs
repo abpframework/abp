@@ -15,25 +15,21 @@ namespace Volo.Abp.EntityFrameworkCore.ChangeTrackers;
 /// </summary>
 public class AbpEfCoreNavigationHelper : ITransientDependency
 {
-    private Dictionary<string, List<AbpEntityEntryNavigationProperty>> EntityEntryNavigationProperties { get; } = new ();
+    protected Dictionary<string, List<AbpEntityEntryNavigationProperty>> EntityEntryNavigationProperties { get; } = new Dictionary<string, List<AbpEntityEntryNavigationProperty>>();
 
     public virtual void ChangeTracker_Tracked(ChangeTracker changeTracker, object? sender, EntityTrackedEventArgs e)
     {
-        foreach (var entry in changeTracker.Entries())
-        {
-            EntityEntryTrackedOrStateChanged(entry);
-        }
+        EntityEntryTrackedOrStateChanged(e.Entry);
+        DetectChanges();
     }
 
     public virtual void ChangeTracker_StateChanged(ChangeTracker changeTracker, object? sender, EntityStateChangedEventArgs e)
     {
-        foreach (var entry in changeTracker.Entries())
-        {
-            EntityEntryTrackedOrStateChanged(entry);
-        }
+        EntityEntryTrackedOrStateChanged(e.Entry);
+        DetectChanges();
     }
 
-    private void EntityEntryTrackedOrStateChanged(EntityEntry entityEntry)
+    protected virtual void EntityEntryTrackedOrStateChanged(EntityEntry entityEntry)
     {
         if (entityEntry.State != EntityState.Unchanged)
         {
@@ -50,44 +46,79 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         var index = 0;
         foreach (var navigationEntry in entityEntry.Navigations.Where(navigation => !navigation.IsModified))
         {
-            if (!navigationEntry.IsLoaded && navigationEntry.CurrentValue == null)
-            {
-                index++;
-                continue;
-            }
-
-            var currentValue = navigationEntry.CurrentValue;
-            if (navigationEntry.CurrentValue is ICollection collection)
-            {
-                currentValue = collection.Cast<object?>().ToList();
-            }
-
             var navigationProperty = navigationProperties.FirstOrDefault(x => x.Index == index);
             if (navigationProperty != null)
             {
-                if (!navigationProperty.IsChanged && (navigationProperty.Value == null || IsCollectionAndEmpty(navigationProperty.Value)))
+                if (navigationProperty.Value == null || IsCollectionAndEmpty(navigationProperty.Value))
                 {
-                    navigationProperty.Value = currentValue;
-                    navigationProperty.IsChanged = currentValue != null && !IsCollectionAndEmpty(currentValue);
-                }
-
-                if (!navigationProperty.IsChanged  && navigationProperty.Value != null && !IsCollectionAndEmpty(navigationProperty.Value))
-                {
-                    navigationProperty.Value = currentValue;
-                    navigationProperty.IsChanged = currentValue == null || IsCollectionAndEmpty(currentValue);
+                    navigationProperty.Value = navigationEntry.CurrentValue;
                 }
             }
             else
             {
-                navigationProperties.Add(new AbpEntityEntryNavigationProperty(index, navigationEntry.Metadata.Name, currentValue, false));
+                navigationProperties.Add(new AbpEntityEntryNavigationProperty(index, navigationEntry.Metadata.Name, navigationEntry.CurrentValue, false, entityEntry, navigationEntry));
             }
 
             index++;
         }
     }
 
-    public bool IsEntityEntryNavigationChanged(EntityEntry entityEntry)
+    protected virtual void DetectChanges()
     {
+        foreach (var entityEntryNavigationProperties in EntityEntryNavigationProperties)
+        {
+            foreach (var navigationProperty in entityEntryNavigationProperties.Value.Where(x => !x.IsChanged && x.EntityEntry.State == EntityState.Unchanged))
+            {
+                if (navigationProperty.NavigationEntry.IsModified)
+                {
+                    navigationProperty.IsChanged = true;
+                    continue;
+                }
+
+                if (navigationProperty.Value == null || IsCollectionAndEmpty(navigationProperty.Value))
+                {
+                    if (navigationProperty.NavigationEntry.CurrentValue != null || IsCollectionAndNotEmpty(navigationProperty.NavigationEntry.CurrentValue))
+                    {
+                        if (navigationProperty.NavigationEntry.CurrentValue is ICollection collection)
+                        {
+                            navigationProperty.Value = collection.Cast<object?>().ToList();
+                        }
+                        else
+                        {
+                            navigationProperty.Value = navigationProperty.NavigationEntry.CurrentValue;
+                        }
+                    }
+                }
+
+                if (navigationProperty.Value != null || IsCollectionAndNotEmpty(navigationProperty.Value))
+                {
+                    if (navigationProperty.NavigationEntry.CurrentValue == null || IsCollectionAndEmpty(navigationProperty.NavigationEntry.CurrentValue))
+                    {
+                        if (IsCollectionAndEmpty(navigationProperty.Value) && IsCollectionAndEmpty(navigationProperty.NavigationEntry.CurrentValue))
+                        {
+                            continue;
+                        }
+
+                        navigationProperty.IsChanged = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual List<EntityEntry> GetChangedEntityEntries()
+    {
+        DetectChanges();
+        return EntityEntryNavigationProperties
+            .SelectMany(x => x.Value)
+            .Where(x => x.NavigationEntry.IsModified || x.IsChanged)
+            .Select(x => x.EntityEntry)
+            .ToList();
+    }
+
+    public virtual bool IsEntityEntryNavigationChanged(EntityEntry entityEntry)
+    {
+        DetectChanges();
         if (entityEntry.State == EntityState.Modified)
         {
             return true;
@@ -99,32 +130,19 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
             return false;
         }
 
-        var index = 0;
-        foreach (var navigationEntry in entityEntry.Navigations)
+        if (EntityEntryNavigationProperties.TryGetValue(entryId, out var navigationProperties))
         {
-            if (navigationEntry.IsModified || (navigationEntry is ReferenceEntry && navigationEntry.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified))
-            {
-                return true;
-            }
-
-            EntityEntryTrackedOrStateChanged(entityEntry);
-
-            if (EntityEntryNavigationProperties.TryGetValue(entryId, out var navigationProperties))
-            {
-                var navigationProperty = navigationProperties.FirstOrDefault(x => x.Index == index);
-                if (navigationProperty != null && navigationProperty.IsChanged)
-                {
-                    return true;
-                }
-            }
-
-            index++;
+            return navigationProperties.Any(x => x.IsChanged) ||
+                   navigationProperties.Any(x => x.NavigationEntry.IsModified) ||
+                   navigationProperties.Any(x =>
+                       x.NavigationEntry is ReferenceEntry &&
+                       x.NavigationEntry.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified);
         }
 
         return false;
     }
 
-    public bool IsEntityEntryNavigationChanged(NavigationEntry navigationEntry, int index)
+    public virtual bool IsEntityEntryNavigationChanged(NavigationEntry navigationEntry, int index)
     {
         if (navigationEntry.IsModified || (navigationEntry is ReferenceEntry && navigationEntry.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified))
         {
@@ -149,6 +167,11 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         return false;
     }
 
+    public void Clear()
+    {
+        EntityEntryNavigationProperties.Clear();
+    }
+
     private string? GetEntityId(EntityEntry entityEntry)
     {
         return entityEntry.Entity is IEntity entryEntity && entryEntity.GetKeys().Length == 1
@@ -159,5 +182,10 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
     private bool IsCollectionAndEmpty(object? value)
     {
         return value is ICollection && value is ICollection collection && collection.Count == 0;
+    }
+
+    private bool IsCollectionAndNotEmpty(object? value)
+    {
+        return value is ICollection && value is ICollection collection && collection.Count != 0;
     }
 }
