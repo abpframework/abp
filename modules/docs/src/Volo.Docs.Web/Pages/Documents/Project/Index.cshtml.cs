@@ -21,6 +21,7 @@ using Volo.Docs.Models;
 using Volo.Docs.Projects;
 using Volo.Docs.GitHub.Documents.Version;
 using Volo.Docs.Localization;
+using Volo.Docs.Utils;
 
 namespace Volo.Docs.Pages.Documents.Project
 {
@@ -90,6 +91,8 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentSectionRenderer _documentSectionRenderer;
         private readonly DocsUiOptions _uiOptions;
+        
+        protected IDocsLinkGenerator DocsLinkGenerator => LazyServiceProvider.LazyGetRequiredService<IDocsLinkGenerator>();
 
         public IndexModel(
             IDocumentAppService documentAppService,
@@ -249,59 +252,52 @@ namespace Volo.Docs.Pages.Documents.Project
                 new StringBuilder()
                     .Append("/Abp/Languages/Switch?culture=")
                     .Append(LanguageCode).Append("&uiCulture=")
-                    .Append(LanguageCode).Append("&returnUrl=").Append(BuildDocumentUrl(ProjectName, LanguageCode,
+                    .Append(LanguageCode).Append("&returnUrl=").Append(DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode,
                         LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, DocumentName)).ToString());
         }
 
         public string GetFullUrlOfTheLatestDocument()
         {
-            return Request.Scheme + Uri.SchemeDelimiter + Request.Host.Value + Request.PathBase + BuildDocumentUrl(ProjectName, LanguageCode, DocsAppConsts.Latest, DocumentName);
+            return Request.Scheme + Uri.SchemeDelimiter + Request.Host.Value + Request.PathBase + DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode, DocsAppConsts.Latest, DocumentName);
         }
         
         public string CreateDocumentLink(string documentName)
         {
-            return BuildDocumentUrl(ProjectName, LanguageCode, LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, documentName);
+            return DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode, LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, documentName);
         }
         
         public string BuildDocumentUrl(string projectName, string languageCode, string version, string documentName)
         {
-            var routeValues = new Dictionary<string, object> {
-                { nameof(LanguageCode), languageCode },
-                { nameof(Version), version },
-                { nameof(DocumentName), documentName },
-                { nameof(ProjectName), projectName }
-            };
-
-            return Url.Page("/Documents/Project/Index", routeValues);
+            return DocsLinkGenerator.GenerateLink(projectName, languageCode, version, documentName);
         }
 
         private IActionResult RedirectToDefaultLanguage()
         {
-            return Redirect(BuildDocumentUrl(
-                projectName : ProjectName,
-                version : (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
-                languageCode : DefaultLanguageCode,
-                documentName : DocumentName
+            return Redirect(DocsLinkGenerator.GenerateLink(
+                ProjectName, 
+                DefaultLanguageCode, 
+                LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version,
+                DocumentName
             ));
         }
         
         private IActionResult RedirectToDefaultVersion()
         {
-            return Redirect(BuildDocumentUrl(
-                projectName : ProjectName,
-                version : DocsAppConsts.Latest,
-                languageCode : LanguageCode,
-                documentName : DocumentName
+            return Redirect(DocsLinkGenerator.GenerateLink(
+                ProjectName,
+                LanguageCode,
+                DocsAppConsts.Latest,
+                DocumentName
             ));
         }
 
         private IActionResult RedirectToDefaultDocument()
         {
-            return Redirect(BuildDocumentUrl (
-                projectName : ProjectName,
-                version : (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
-                documentName : "",
-                languageCode : DefaultLanguageCode
+            return Redirect(DocsLinkGenerator.GenerateLink (
+                ProjectName,
+                DefaultLanguageCode,
+                LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, 
+                ""
             ));
         }
 
@@ -323,7 +319,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return null;
             }
-            return BuildDocumentUrl(project.ShortName, LanguageCode, Version, null);
+            return DocsLinkGenerator.GenerateLink(project.ShortName, LanguageCode, Version, null);
         }
 
         private async Task<bool> TrySetVersionAsync()
@@ -467,7 +463,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 version = DocsAppConsts.Latest;
             }
             
-            return BuildDocumentUrl(ProjectName, LanguageCode, version, documentName);
+            return DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode, version, documentName);
         }
 
         public string GetSpecificVersionOrLatest()
@@ -526,7 +522,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 LanguageSelectListItems.Add(
                     new SelectListItem(
                         language.DisplayName,
-                        BuildDocumentUrl(ProjectName, language.Code, LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, DocumentName),
+                        DocsLinkGenerator.GenerateLink(ProjectName, language.Code, LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, DocumentName),
                         language.Code.Equals(LanguageCode, StringComparison.OrdinalIgnoreCase)
                     )
                 );

@@ -19,16 +19,16 @@ namespace Volo.Docs.Markdown
 
         private readonly IMarkdownConverter _markdownConverter;
         private readonly DocsUiOptions _uiOptions;
-        private readonly LinkGenerator _linkGenerator;
+        private readonly IDocsLinkGenerator _docsLinkGenerator;
         private readonly IServiceProvider _serviceProvider;
         private readonly Func<DocsUrlNormalizerContext, string> _urlNormalizer;
 
         public MarkdownDocumentToHtmlConverter(IMarkdownConverter markdownConverter,
-            IOptions<DocsUiOptions> urlOptions, LinkGenerator linkGenerator, 
+            IOptions<DocsUiOptions> urlOptions, IDocsLinkGenerator docsLinkGenerator, 
             IServiceProvider serviceProvider)
         {
             _markdownConverter = markdownConverter;
-            _linkGenerator = linkGenerator;
+            _docsLinkGenerator = docsLinkGenerator;
             _serviceProvider = serviceProvider;
             _uiOptions = urlOptions.Value;
             _urlNormalizer = _uiOptions.UrlNormalizer ?? (context => context.Url);
@@ -126,7 +126,7 @@ namespace Volo.Docs.Markdown
                 return NormalizeLink(
                     displayText,
                     MdLinkFormat,
-                    GenerateUrl(languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName, projectShortName),
+                    _docsLinkGenerator.GenerateLink(projectShortName, languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName),
                     projectShortName,
                     version,
                     documentName,
@@ -151,8 +151,8 @@ namespace Volo.Docs.Markdown
                     {
                         documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
                     }
-
-                    link = GenerateUrl(languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName, projectShortName);
+                    
+                    link = _docsLinkGenerator.GenerateLink(projectShortName, languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName);
                 }
                 
                 return NormalizeLink(displayText, MdLinkFormat, link,projectShortName,
@@ -192,19 +192,6 @@ namespace Volo.Docs.Markdown
             }
 
             return documentName.Left(documentName.Length - Type.Length - 1);
-        }
-        
-        private string GenerateUrl(string languageCode, string version, string documentName, string projectShortName)
-        {
-            var routeValues = new Dictionary<string, object> {
-                { nameof(IndexModel.LanguageCode), languageCode },
-                { nameof(IndexModel.Version), version },
-                { nameof(IndexModel.DocumentName), documentName },
-                { nameof(IndexModel.ProjectName), projectShortName }
-            };
-
-            var encodedUrl = _linkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
-            return WebUtility.UrlDecode(encodedUrl); //Document name can contain path separators like /, so we need to decode it
         }
     }
 }
