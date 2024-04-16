@@ -42,7 +42,7 @@ import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
   `
 })
 class DemoComponent {
-  libraryLoaded$ = this.lazyLoad.load(
+  libraryLoaded$ = this.lazyLoadService.load(
     LOADING_STRATEGY.AppendAnonymousScriptToHead('/assets/some-library.js'),
   );
 
@@ -71,7 +71,7 @@ import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
   `
 })
 class DemoComponent {
-  stylesLoaded$ = this.lazyLoad.load(
+  stylesLoaded$ = this.lazyLoadService.load(
     LOADING_STRATEGY.AppendAnonymousStyleToHead('/assets/some-styles.css'),
   );
 
