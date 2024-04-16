@@ -426,15 +426,15 @@
               "path": "framework/infrastructure/Distributed-Locking.md"
             },
             {
-              "text": "framework/infrastructure/Email Sending",
+              "text": "Email Sending",
               "items": [
                 {
                   "text": "Email Sending System",
-                  "path": "Emailing.md"
+                  "path": "framework/infrastructure/Emailing.md"
                 },
                 {
                   "text": "MailKit Integration",
-                  "path": "MailKit.md"
+                  "path": "framework/infrastructure/MailKit.md"
                 }
               ]
             },
