@@ -1,13 +1,13 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
-@using Volo.Blogging.Pages.Blog.Posts
 @using Volo.Blogging.Posts
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Blogging.Localization
+@using Volo.Blogging.Pages.Blogs.Posts
 @inject IHtmlLocalizer<BloggingResource> L
-@model NewModel
+@model Volo.Blogging.Pages.Blogs.Posts.NewModel
 @{
-    ViewBag.PageTitle = "New Blog Post";
+    ViewBag.PageTitle = @L["NewBlogPost"];
 }
 @section styles {
     <abp-style-bundle name="@typeof(NewModel).FullName">

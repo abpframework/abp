@@ -2,7 +2,7 @@
   "culture": "el",
   "texts": {
     "Settings": "Ρυθμίσεις",
-    "SuccessfullySaved": "Αποθηκεύτηκε με επιτυχία",
+    "SavedSuccessfully": "Αποθηκεύτηκε με επιτυχία",
     "Permission:SettingManagement": "Διαχείριση ρυθμίσεων",
     "Permission:Emailing": "Αποστολή email",
     "Permission:EmailingTest": "Αποστολή δοκιμαστικού email",

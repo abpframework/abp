@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Telefonnummer",
     "DisplayName:TwoFactorEnabled": "Zwei-Faktor-Überprüfung",
     "DisplayName:IsActive": "Aktiv",
-    "DisplayName:LockoutEnabled": "Benutzerkonto nach fehlgeschlagenen Anmeldeversuchen sperren",
+    "DisplayName:LockoutEnabled": "Konto-Sperrung",
     "NewRole": "Neue Rolle",
     "RoleName": "Rollenname",
     "CreationTime": "Erstellungszeitpunkt",

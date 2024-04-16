@@ -37,6 +37,9 @@
     "Preview": "preview",
     "Search": "Search",
     "SearchResults": "Search Results",
-    "SearchInTheAllDocuments": "Search in the all documents"
+    "SearchInTheAllDocuments": "Search in the all documents",
+    "Next": "Next",
+    "Previous": "Previous",
+    "ProjectDeletionWarningMessage": "Project will be deleted."
   }
 }

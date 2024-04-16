@@ -442,7 +442,7 @@
     "Index_Page_Testimonial_2": "ABP Framework 不仅仅是一个框架，它还是项目开发/管理的指南，因为它提供了 DDD、GenericRepository、DI、Microservice、Modularity 培训。即使你不打算使用框架本身，你也可以通过 docs.abp.io 进行自我开发，它为你提供了精心准备的专业培训。(OpenIddict、Redis、Quartz 等）。\n因为很多东西都是预置的，所以大大缩短了项目开发时间。(如登录页面、异常处理、数据过滤-播种、审计日志、本地化、自动 api 控制器等）。\n以我们的应用程序为例，我将本地事件总线用于库存控制。因此，我可以通过编写库存处理程序来管理订单的变动。\n创建时间、CreatorId 不会浪费时间，它们会自动填入。它们会自动填充。",
     "VideosLoginAndRegisterMessage": "您必须登录后才能观看视频。如果您还没有注册，可以创建一个账户进行观看。",
     "Filter": "筛选",
-    "VideoCourses": "视频课程",
+    "VideoCourses": "必备视频",
     "TestimonialText": "您的感言",
     "Position": "位置",
     "ExperienceYear": "多年经验",
@@ -450,7 +450,7 @@
     "CompanySize": "公司规模",
     "Image": "你的头像",
     "TestimonialTitle": "让我们听听您的感言",
-    "TestimonialInfo": "客户的评价很重要！",
+    "TestimonialInfo": "客户的评价很重要！告诉我们您对我们的产品和服务的体验。建议用英语撰写推荐，以覆盖更广泛的受众。",
     "Country": "国家",
     "TestimonialTextPlaceholder": "写一个关于 ABP 如何帮助您构建和交付项目的简短故事。 ",
     "PositionPlaceholder": "您在公司的职位。",
@@ -469,6 +469,11 @@
     "Title": "标题",
     "TitlePlaceholder": "软件开发人员、CTO等",
     "Characters": "字符",
-    "ABPTestimonialDescription": "ABP 框架：让我们听听您的感言"
+    "ABPTestimonialDescription": "ABP 框架：让我们听听您的感言",
+    "LeaveUsReview": "给我们留下评论",
+    "DocumentationButtonTitle": "文档",
+    "ABPVideoCoursesDescription": "通过 ABP 团队创建的视频课程了解 ABP 框架的基础知识",
+    "ABPVideoCoursesPageDescription": "通过ABP团队创建的视频课程学习ABP框架的基础知识。在本视频系列中，您将学习ABP框架的基本主题。每个视频上的数字都是根据学习流程编写的。",
+    "ABPVideoCoursesTitle": "ABP 基本视频"
   }
 }

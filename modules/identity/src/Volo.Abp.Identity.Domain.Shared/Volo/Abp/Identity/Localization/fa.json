@@ -26,7 +26,7 @@
     "DisplayName:PhoneNumber": "شماره تلفن",
     "DisplayName:TwoFactorEnabled": "احراز هویت دو مرحله ای",
     "DisplayName:IsActive": "فعال",
-    "DisplayName:LockoutEnabled": "قفل کردن حساب در صورت عدم موفقیت در ورود به سیستم",
+    "DisplayName:LockoutEnabled": "قفل کردن حساب",
     "NewRole": "نقش/وظیفه جدید",
     "RoleName": "نام نقش/وظیفه",
     "CreationTime": "زمان ایجاد",

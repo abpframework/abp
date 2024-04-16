@@ -2,7 +2,7 @@
   "culture": "sl",
   "texts": {
     "Settings": "Nastavitve",
-    "SuccessfullySaved": "Uspešno shranjeno",
+    "SavedSuccessfully": "Uspešno shranjeno",
     "Permission:SettingManagement": "Upravljanje nastavitev",
     "Permission:Emailing": "Pošiljanje po e-pošti",
     "Permission:EmailingTest": "Test pošiljanja po e-pošti",

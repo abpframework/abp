@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
@@ -21,7 +21,7 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
 
     protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; }
 
-    protected AuthenticationStateProvider AuthenticationStateProvider { get; }
+    protected IJSRuntime JSRuntime { get; }
 
     public WebAssemblyCachedApplicationConfigurationClient(
         AbpApplicationConfigurationClientProxy applicationConfigurationClientProxy,
@@ -29,14 +29,14 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
         ICurrentTenantAccessor currentTenantAccessor,
         AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
         ApplicationConfigurationChangedService applicationConfigurationChangedService,
-        AuthenticationStateProvider authenticationStateProvider)
+        IJSRuntime jsRuntime)
     {
         ApplicationConfigurationClientProxy = applicationConfigurationClientProxy;
         Cache = cache;
         CurrentTenantAccessor = currentTenantAccessor;
         ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
         ApplicationConfigurationChangedService = applicationConfigurationChangedService;
-        AuthenticationStateProvider = authenticationStateProvider;
+        JSRuntime = jsRuntime;
     }
 
     public virtual async Task InitializeAsync()
@@ -57,6 +57,11 @@ public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicatio
         configurationDto.Localization.Resources = localizationDto.Resources;
 
         Cache.Set(configurationDto);
+
+        if (!configurationDto.CurrentUser.IsAuthenticated)
+        {
+            await JSRuntime.InvokeVoidAsync("abp.utils.removeOidcUser");
+        }
 
         ApplicationConfigurationChangedService.NotifyChanged();
 
