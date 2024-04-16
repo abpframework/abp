@@ -35,6 +35,8 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
     [Parameter] public string? Class { get; set; }
 
     [Parameter] public bool Responsive { get; set; }
+    
+    [Parameter] public bool AutoGenerateColumns { get; set; }
 
     [Inject]
     public IStringLocalizerFactory StringLocalizerFactory { get; set; } = default!;

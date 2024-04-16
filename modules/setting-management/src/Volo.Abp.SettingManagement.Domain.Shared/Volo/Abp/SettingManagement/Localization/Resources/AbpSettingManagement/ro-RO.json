@@ -2,7 +2,7 @@
   "culture": "ro-RO",
   "texts": {
     "Settings": "Setări",
-    "SuccessfullySaved": "Salvat cu succes",
+    "SavedSuccessfully": "Salvat cu succes",
     "Permission:SettingManagement": "Administrarea setărilor",
     "Permission:Emailing": "Emailing",
     "Permission:EmailingTest": "Test de trimitere prin e-mail",

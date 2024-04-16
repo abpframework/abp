@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Số điện thoại",
     "DisplayName:TwoFactorEnabled": "Xác thực hai yếu tố",
     "DisplayName:IsActive": "Tích cực",
-    "DisplayName:LockoutEnabled": "Khóa tài khoản sau những lần đăng nhập thất bại",
+    "DisplayName:LockoutEnabled": "Khóa tài khoản",
     "NewRole": "Vai trò mới",
     "RoleName": "Tên vai trò",
     "CreationTime": "Thời gian tạo",

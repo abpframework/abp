@@ -80,7 +80,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
             steps.Add(new ReplaceDependencyFromPackageJsonFileStep(packageJsonFilePath, mvcUiPackageName, newMvcUiPackageName, version));
         }
 
-        if (uiFramework == UiFramework.BlazorServer)
+        if (uiFramework == UiFramework.BlazorServer || uiFramework == UiFramework.BlazorWebApp)
         {
             var blazorServerUiPackageName = "@volo/aspnetcore.components.server.leptonxtheme";
             var newBlazorServerUiPackageName = theme switch

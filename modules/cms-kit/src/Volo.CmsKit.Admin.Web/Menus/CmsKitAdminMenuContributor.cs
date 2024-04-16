@@ -114,7 +114,7 @@ public class CmsKitAdminMenuContributor : IMenuContributor
                     l["Cms"],
                     icon: "far fa-newspaper");
 
-                context.Menu.AddItem(cmsMenu);
+                context.Menu.GetAdministration().AddItem(cmsMenu);
             }
 
             foreach (var menu in cmsMenus)

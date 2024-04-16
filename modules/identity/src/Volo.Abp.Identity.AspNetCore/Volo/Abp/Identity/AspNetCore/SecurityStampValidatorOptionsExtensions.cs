@@ -5,12 +5,12 @@ namespace Volo.Abp.Identity.AspNetCore;
 
 public static class SecurityStampValidatorOptionsExtensions
 {
-    public static SecurityStampValidatorOptions UpdatePrincipal(this SecurityStampValidatorOptions options)
+    public static SecurityStampValidatorOptions UpdatePrincipal(this SecurityStampValidatorOptions options, AbpRefreshingPrincipalOptions abpRefreshingPrincipalOptions)
     {
         var previousOnRefreshingPrincipal = options.OnRefreshingPrincipal;
         options.OnRefreshingPrincipal = async context =>
         {
-            await SecurityStampValidatorCallback.UpdatePrincipal(context);
+            await SecurityStampValidatorCallback.UpdatePrincipal(context, abpRefreshingPrincipalOptions);
             if(previousOnRefreshingPrincipal != null)
             {
                 await previousOnRefreshingPrincipal.Invoke(context);

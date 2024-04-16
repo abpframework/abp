@@ -32,25 +32,26 @@
         ></ng-container>
       </div>
 
-      <div
-        #dropdown="ngbDropdown"
-        *ngIf="menu"
-        class="d-inline-block ms-1"
-        ngbDropdown
-        placement="bottom"
-        container="body"
-        (abpInit)="initDropdown(node.key, dropdown)"
-      >
-        <i
-          class="fas fa-caret-down text-muted"
-          ngbDropdownToggle
-          [class.dropdown-toggle]="false"
-          aria-hidden="true"
-        ></i>
-        <div ngbDropdownMenu>
-          <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }"></ng-template>
+      @if (menu) {
+        <div
+          #dropdown="ngbDropdown"
+          class="d-inline-block ms-1"
+          ngbDropdown
+          placement="bottom"
+          container="body"
+          (abpInit)="initDropdown(node.key, dropdown)"
+        >
+          <i
+            class="fas fa-caret-down text-muted"
+            ngbDropdownToggle
+            [class.dropdown-toggle]="false"
+            aria-hidden="true"
+          ></i>
+          <div ngbDropdownMenu>
+            <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }"></ng-template>
+          </div>
         </div>
-      </div>
+      }
     </ng-template>
 
     <ng-template #defaultNodeTemplate let-node>
