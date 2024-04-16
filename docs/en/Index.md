@@ -2,6 +2,10 @@
 
 ABP offers an **opinionated architecture** to build enterprise software solutions with **best practices** on top of the **.NET** and the **ASP.NET Core** platforms. It provides the fundamental infrastructure, production-ready startup templates, pre-built application modules, UI themes, tooling, guides and documentation to implement that architecture properly and **automate the details** and repetitive works as much as possible.
 
+### Why ABP.IO Platform?
+
+Wondering why you should use the ABP Platform instead of creating a new solution from scratch? [Continue reading here](others/why-abp-io-platform.md).
+
 ## Get Started
 
 The [Getting Started](get-started/index.md) guide can be used to create and run ABP based solutions with different options and details. Then you can follow the [Todo Application Tutorial](tutorials/todo/index.md) to create your first application with ABP, or build a full-featured and real-life web application by following the [Book Store Application Tutorial](tutorials/book-store/part-01.md).
