@@ -211,7 +211,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             if (entityChangeList != null)
             {
                 EntityHistoryHelper.UpdateChangeList(entityChangeList);
-                AbpEfCoreNavigationHelper.Clear();
                 auditLog!.EntityChanges.AddRange(entityChangeList);
                 Logger.LogDebug($"Added {entityChangeList.Count} entity changes to the current audit log");
             }
@@ -239,6 +238,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         finally
         {
             ChangeTracker.AutoDetectChangesEnabled = true;
+            AbpEfCoreNavigationHelper.Clear();
         }
     }
 
