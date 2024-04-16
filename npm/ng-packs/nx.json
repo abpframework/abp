@@ -74,6 +74,5 @@
       "!{projectRoot}/.eslintrc.json"
     ]
   },
-  "parallel": 3,
-  "defaultBase": "dev"
+  "parallel": 3
 }
