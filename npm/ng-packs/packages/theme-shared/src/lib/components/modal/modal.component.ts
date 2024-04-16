@@ -206,8 +206,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     fromEvent(window, 'beforeunload')
       .pipe(takeUntil(this.destroy$))
       .subscribe(event => {
-        // TODO: check this
-        if (!this.isFormDirty || this.suppressUnsavedChangesWarning) {
+        if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
           event.preventDefault();
         }
       });
