@@ -1,4 +1,6 @@
-# Account Module
+# Account Module (Pro)
+
+> You must have an ABP Team or a higher license to use this module.
 
 This module implements the Login, Register, Forgot Password, Email Confirmation, Password Reset, sending and confirming Two-Factor Authentication, user lockout, switch between tenants functionalities of an application;
 
