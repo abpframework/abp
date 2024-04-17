@@ -1,8 +1,6 @@
-# How to contribute to abp.io as a frontend developer
+# Contribution Guide for the Angular UI
 
-## How to setup development environment
-
-### Pre-requirements
+## Pre-requirements
 
 - Dotnet core SDK https://dotnet.microsoft.com/en-us/download
 - Nodejs LTS https://nodejs.org/en/
@@ -11,16 +9,17 @@
 - Abp CLI https://docs.abp.io/en/abp/latest/cli
 - A code editor
 
-Note: This article prepare Windows OS. You may change the path type of your OS. an Example
+Note: This article prepare Windows OS. You may change the path type of your OS.
 
-Windows: `templates\app\aspnet-core\src\MyCompanyName.MyProjectName.DbMigrator\appsettings.json`
+Examples:
 
-Unix: `templates/app/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json`
+* Windows: `templates\app\aspnet-core\src\MyCompanyName.MyProjectName.DbMigrator\appsettings.json`
+* Unix: `templates/app/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json`
 
-### Sample docker commands
+## Sample docker commands
 
-You need to install SQL Server and Redis. You can install these programs without docker, but my example uses docker containers. Your computer should have Docker Engine. Then open the terminal en execute the commands one by one.
-For the Sql Server
+You need to install SQL Server and Redis. You can install these programs without docker, but my example uses docker containers. Your computer should have Docker Engine. Then open the terminal and execute the commands one by one.
+For the SQL Server
 
 ```cmd
 docker run -v sqlvolume:/var/opt/mssql -e 'ACCEPT_EULA=Y' -e "SA_PASSWORD=yourpassword" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
@@ -38,7 +37,7 @@ Then we are ready to download and execute the code.
 
 The app has a backend written in .net core (c#) and an angular app. It would help if you ran both of them.
 
-### Running Backend App
+## Running Backend App
 
 The path of the Backend app is “templates\app\aspnet-core.” If you want to work with dockerized SQL Server, you should change connection strings for running with docker. The path of the connection string is
 `templates\app\aspnet-core\src\MyCompanyName.MyProjectName.DbMigrator\appsettings.json`.
@@ -51,7 +50,7 @@ Next step you should go to path of backend host project. The path is `templates\
 
 Your backend should be running successfully
 
-### Running Frontend App
+## Running Frontend App
 
 There is a demo app. The path of the demo app is `npm\ng-packs\apps\dev-app`. The demo app is connected to the packages with local references. Open the terminal in `npm\ng-packs\apps\dev-app` and execute `yarn` or `npm i` in terminal. After the package installed run `npm start` or `yarn start`.
 
