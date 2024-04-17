@@ -43,7 +43,7 @@ public class AbpAutoMapperModule : AbpModule
 
                 foreach (var profileType in options.ValidatingProfiles)
                 {
-                    mapperConfiguration.Internal().AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
+                    mapperConfiguration.Internal().AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)!).ProfileName);
                 }
 
                 return mapperConfiguration;
