@@ -5,7 +5,6 @@
 @using Microsoft.Extensions.Options
 @using Volo.Abp.Users
 @using Volo.Blogging
-@using Volo.Blogging.Pages.Blog.Posts
 @using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Blogging.SocialMedia
@@ -14,11 +13,12 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Volo.Blogging.Localization
-@using Volo.Blogging.Pages.Blog
+@using Volo.Blogging.Pages.Blogs
+@using Volo.Blogging.Pages.Blogs.Posts
 @inject IHtmlLocalizer<BloggingResource> L
 @inject BloggingPageHelper BloggingPageHelper
 @inject ICurrentUser CurrentUser
-@model DetailModel
+@model Volo.Blogging.Pages.Blogs.Posts.DetailModel
 @{
     ViewBag.Title = Model.Post.Title;
     ViewBag.Description = Model.Post.Description;
@@ -67,7 +67,7 @@
                                     <div class="col-auto pe-1">
                                         @if (Model.Post.Writer != null)
                                         {
-                                            <a href="/Members/@Model.Post.Writer.UserName" aria-label="Go to user profile">
+                                            <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})" aria-label="Go to user profile">
                                                 <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" alt="User Avatar"/>
                                             </a>
                                         }
@@ -76,7 +76,7 @@
                                         @if (Model.Post.Writer != null)
                                         {
                                             <h5 class="mt-2 mb-1">
-                                                <a href="/Members/@Model.Post.Writer.UserName">
+                                                <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})">
                                                     @(Model.Post.Writer.UserName)
                                                 </a>
                                                 <span>@BloggingPageHelper.GetLocalizedTimeAgoText(Model.Post.CreationTime)</span>
@@ -141,7 +141,7 @@
             <div class="col-auto pe-2">
                 @if (Model.Post.Writer != null)
                 {
-                    <a href="/Members/@Model.Post.Writer.UserName" aria-label="Go to user profile">
+                    <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})" aria-label="Go to user profile">
                         <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar rounded-circle" alt="User Avatar"/>
                     </a>
                 }
@@ -151,7 +151,7 @@
                 {
                     <h5 class="mt-2 mb-1">
 
-                        <a href="/Members/@Model.Post.Writer.UserName">
+                        <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})">
                             @if (Model.Post.Writer.Name != null && Model.Post.Writer.Surname != null)
                             {
                                 <p class="fw-bold pt-2 fs-5">@Model.Post.Writer.Name @Model.Post.Writer.Surname</p>
@@ -172,7 +172,7 @@
                 
                 @if (CurrentUser.Id.HasValue && CurrentUser.Id.Value == Model.Post.Writer?.Id)
                 {
-                    <a class="fw-lighter" href="/Members/@Model.Post.Writer?.UserName#edit-profile">@L["EditProfile"] <i class="fas fa-edit"></i></a>
+                    <a class="fw-lighter" href="@(Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName}))#edit-profile">@L["EditProfile"] <i class="fas fa-edit"></i></a>
                 }
             </div>
             @if (Model.LatestPosts.Count > 1)
@@ -194,14 +194,14 @@
                                             {
                                                 <div class="row">
                                                     <div class="col-auto pe-1">
-                                                        <a href="/Members/@post.Writer.UserName" aria-label="Go to user profile">
+                                                        <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})" aria-label="Go to user profile">
                                                             <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="last-post-image" alt="User Avatar"/>
                                                         </a>
                                                     </div>
                                                     
                                                     <div class="col">
                                                         <h5 class="last-post-name">
-                                                            <a href="/Members/@post.Writer!.UserName">
+                                                            <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})">
                                                                 @(post.Writer!.UserName)
                                                             </a>
                                                         </h5>
@@ -456,13 +456,13 @@ else
                     var post = Model.PostsList[index];
                     <div class="post-item">
                         <div class="post-type-cont">
-                            <a href="/members/@Model.Post.Writer.UserName" class="text-decoration-none">
+                            <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})" class="text-decoration-none">
                                 <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
                             </a>                           
                         </div>
                         <div class="post-detail-cont">
                             <div class="post-info fs-12 mb-2">
-                                <a href="/members/@Model.Post.Writer.UserName" class="text-decoration-none">
+                                <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})" class="text-decoration-none">
                                     <span class="text-dark dot">@Model.Post.Writer.UserName</span>
                                 </a>
                                 <span class="text-dark-200">@post.CreationTime.ToString("MMMM yyyy")</span>

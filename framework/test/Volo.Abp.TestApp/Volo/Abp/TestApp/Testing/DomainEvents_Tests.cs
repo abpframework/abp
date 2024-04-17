@@ -184,11 +184,19 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         await AppEntityWithNavigationsRepository.InsertAsync(new AppEntityWithNavigations(entityId, "TestEntity"));
 
         var entityUpdatedEventTriggered = false;
+        var personCreatedEventCount = 0;
+        var entityUpdatedEventTriggerCount = 0;
 
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigations>>(data =>
+        LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
+        {
+            personCreatedEventCount++;
+           return Task.CompletedTask;
+        });
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigations>>(async data =>
         {
             entityUpdatedEventTriggered = !entityUpdatedEventTriggered;
-            return Task.CompletedTask;
+            await PersonRepository.InsertAsync(new Person(Guid.NewGuid(), Guid.NewGuid().ToString(), new Random().Next(1, 100)));
         });
 
         // Test with simple property
@@ -199,6 +207,12 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithValueObjectAddress>>(data =>
+        {
+            throw new Exception("Should not trigger this event");
+        });
 
         // Test with value object
         entityUpdatedEventTriggered = false;
@@ -209,6 +223,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
@@ -218,6 +233,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
         // Test with one to one
         entityUpdatedEventTriggered = false;
@@ -231,6 +247,12 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToOne>>(data =>
+        {
+            throw new Exception("Should not trigger this event");
+        });
 
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
@@ -240,6 +262,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
         // Test with one to many
         entityUpdatedEventTriggered = false;
@@ -257,6 +280,12 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToMany>>(data =>
+        {
+            throw new Exception("Should not trigger this event");
+        });
 
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
@@ -266,6 +295,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
         // Test with many to many
         entityUpdatedEventTriggered = false;
@@ -282,6 +312,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
@@ -291,6 +322,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
     }
 
     private class MyCustomEventData

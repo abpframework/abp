@@ -255,7 +255,10 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
     protected virtual bool HasNavigationPropertiesChanged(EntityEntry entityEntry)
     {
-        return entityEntry.State == EntityState.Unchanged && Options.SaveEntityHistoryWhenNavigationChanges && AbpEfCoreNavigationHelper != null && AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(entityEntry);
+        return entityEntry.State == EntityState.Unchanged &&
+               Options.SaveEntityHistoryWhenNavigationChanges &&
+               AbpEfCoreNavigationHelper != null &&
+               AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(entityEntry);
     }
 
     protected virtual bool ShouldSavePropertyHistory(PropertyEntry propertyEntry, bool defaultValue)
