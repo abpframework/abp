@@ -1709,12 +1709,20 @@
       "text": "Release Information",
       "items": [
         {
-          "text": "Upgrading",
-          "path": "release-info/Upgrading.md"
+          "text": "Release Notes",
+          "path": "release-info/release-notes.md"
         },
         {
-          "text": "Official Packages",
-          "path": "https://abp.io/packages"
+          "text": "Migration Guides",
+          "path": "release-info/Migration-Guides/Index.md"
+        },
+        {
+          "text": "Road Map",
+          "path": "release-info/Road-Map.md"
+        },
+        {
+          "text": "Upgrading",
+          "path": "release-info/Upgrading.md"
         },
         {
           "text": "Preview Releases",
@@ -1725,12 +1733,8 @@
           "path": "release-info/Nightly-Builds.md"
         },
         {
-          "text": "Road Map",
-          "path": "release-info/Road-Map.md"
-        },
-        {
-          "text": "Migration Guides",
-          "path": "release-info/Migration-Guides/Index.md"
+          "text": "Official Packages",
+          "path": "https://abp.io/packages"
         }
       ]
     },

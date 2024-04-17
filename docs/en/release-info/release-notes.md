@@ -1,27 +1,25 @@
-# Version History
+# Release Notes
 
-This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version. **To see raw and detailed change logs for every release, please check [the full change logs document](https://commercial.abp.io/releases).**
+This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version. To see raw and detailed change logs for every release, please check [the related milestone](https://github.com/abpframework/abp/milestones?state=closed) and [the change logs page](https://commercial.abp.io/releases) (only for paid license holders).
 
-> Release notes in this document don't cover the features made in the open-source ABP Framework. For the ABP Framework features, check the blog post for the related version.
+> If you want to read detailed release posts for each version, please see the [official ABP blog](https://blog.abp.io).
 
-## 8.1 (2024-02-14)
-
-> This version is currently in preview. The final release date is planned for June, 2024.
+## 8.1 (2024-04-04)
 
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-1-release-candidate)** for the v8.1 release.
 
-* Suite: Bulk Delete
-* Suite: Filterable Properties
-* Suite: Customizable Page Title
-* Suite: Allowing Establishing Relationships with Installed ABP Modules' Entities
-* Suite: Support `BasicAggregateRoot` Base Class
-* ABP Studio v0.6.5 Has Been Released!
+* ABP Suite: Bulk delete
+* ABP Suite: Filterable properties
+* ABP Suite: Customizable page titles
+* ABP Suite: Establishing relationships with installed ABP modules' entities
+* ABP Suite: Support `BasicAggregateRoot` base class
+* ABP Studio v0.6.5
 
 ## 8.0 (2023-12-19)
 
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/abp-8-0-stable-release-with-dotnet-8-0)** for the v8.0 release.
 
-* Suite: Generating Master/Detail Relationship
+* ABP Suite: Generating Master/Detail Relationship
 * Getting profile picture from social/external logins.
 * Switch Ocelot to YARP for the API Gateway for Microservice Solution Template.
 * Password complexity indicators for MVC & Blazor UIs.
