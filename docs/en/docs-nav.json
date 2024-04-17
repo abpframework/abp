@@ -601,11 +601,11 @@
               "items": [
                 {
                   "text": "Basics",
-                  "path": "framework/architecture/modularity/Module-Development-Basics.md"
+                  "path": "framework/architecture/modularity/basics.md"
                 },
                 {
                   "text": "Plug-In Modules",
-                  "path": "framework/architecture/modularity/PlugIn-Modules.md"
+                  "path": "framework/architecture/modularity/plugin-modules.md"
                 },                
                 {
                   "text": "Customizing/Extending Modules",
