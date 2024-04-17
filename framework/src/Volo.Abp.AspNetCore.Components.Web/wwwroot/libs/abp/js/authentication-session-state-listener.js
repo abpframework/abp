@@ -1,6 +1,6 @@
 (function () {
     
-    var sessionKey = 'authentication-session-id';
+    const sessionKey = 'authentication-session-id';
     
     window.addEventListener('storage', function (event) {
         
