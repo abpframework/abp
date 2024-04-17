@@ -1,6 +1,6 @@
 # ABP Commercial vs ASP.NET Zero
 
-[ASP.NET Zero](https://aspnetzero.com/) is a startup project template which is also developed by [Volosoft](https://volosoft.com/). Here you can see the feature differences between ASP.NET Zero and ABP Commercial.
+[ASP.NET Zero](https://aspnetzero.com/) is a startup project template which is also developed by [Volosoft](https://volosoft.com/). Here you can see the feature differences between ASP.NET Zero and ABP Platform (with paid licenses).
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

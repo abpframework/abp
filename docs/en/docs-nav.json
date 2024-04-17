@@ -515,15 +515,15 @@
             },
             {
               "text": "Text Templating",
-              "path": "framework/infrastructure/Text-Templating.md",
+              "path": "framework/infrastructure/text-templating/index.md",
               "items": [
                 {
                   "text": "Razor Integration",
-                  "path": "framework/infrastructure/Text-Templating-Razor.md"
+                  "path": "framework/infrastructure/text-templating/razor.md"
                 },
                 {
                   "text": "Scriban Integration",
-                  "path": "framework/infrastructure/Text-Templating-Scriban.md"
+                  "path": "framework/infrastructure/text-templating/scriban.md"
                 }
               ]
             },
@@ -1439,7 +1439,7 @@
           "items": [
             {
               "text": "SignalR Integration",
-              "path": "framework/real-time/SignalR-Integration.md"
+              "path": "framework/real-time/signalR.md"
             }
           ]
         },
@@ -1750,8 +1750,24 @@
           "path": "Contribution/Index.md"
         },
         {
+          "text": "Why ABP Platform?",
+          "path": "others/why-abp-platform.md"
+        },
+        {
+          "text": "Free license vs Pro licenses?",
+          "path": "others/why-abp-platform.md"
+        },
+        {
+          "text": "Penetration Test Report",
+          "path": "others/penetration-test-report.md"
+        },
+        {
+          "text": "ASP.NET Zero vs ABP",
+          "path": "others/aspnet-zero-vs-abp.md"
+        },
+        {
           "text": "Migrating from the ASP.NET Boilerplate",
-          "path": "AspNet-Boilerplate-Migration-Guide.md"
+          "path": "others/aspnet-boilerplate-migration-guide.md"
         }
       ]
     }

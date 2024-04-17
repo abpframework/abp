@@ -1,16 +1,10 @@
-# ABP Framework vs ABP Commercial
-
-**ABP.IO Platform** consists of the open-source ABP Framework and the ABP Commercial.
-
-## Introduction
+# Free (Open Source) License vs Paid (Pro) Licenses
 
 [ABP Framework](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](https://docs.abp.io/en/abp/latest/Startup-Templates/Index), [CLI](https://docs.abp.io/en/abp/latest/CLI), theme called [LeptonX Lite](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/AspNetCore) and ready to use [application modules](https://docs.abp.io/en/abp/latest/Modules/Index). 
 
-[ABP Commercial](https://commercial.abp.io) adds important benefits on top of the open-source ABP framework with a set of professional [application modules](https://commercial.abp.io/modules), [UI themes](https://commercial.abp.io/themes), CRUD page generator: [ABP Suite](https://commercial.abp.io/tools/suite), [premium support](https://commercial.abp.io/support) and [additional services](https://commercial.abp.io/additional-services). 
+[ABP Pro licenses](https://commercial.abp.io) adds important benefits on top of the open-source ABP framework project with a set of professional [application modules](https://commercial.abp.io/modules), [UI themes](https://commercial.abp.io/themes), CRUD page generator: [ABP Suite](https://commercial.abp.io/tools/suite), [premium support](https://commercial.abp.io/support) and [additional services](https://commercial.abp.io/additional-services). 
 
-> This document only focuses the major differences between the ABP Framework and the ABP Commercial. It only covers some of the features.
-
-
+> This document only focuses the major differences between the open source ABP Framework license and the ABP Pro licenses. It only covers some of the features.
 
 ## Overall
 
@@ -31,15 +25,11 @@ The following table explains the major differences between the open-source ABP F
 | [Premium support](https://commercial.abp.io/support)         | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
 |                                                              | [Download](https://abp.io/get-started)     | [Pricing](https://commercial.abp.io/pricing) |
 
-
-
 ## The Framework
 
 **The ABP Framework** is completely open-source and developed in a community-driven manner. While it is mainly developed and maintained by the [Volosoft](https://volosoft.com/) Team, it is [getting contributions](https://github.com/abpframework/abp/graphs/contributors) from all over the world. It will always remain open-source and free.
 
 **The ABP Commercial** is not a replacement for the ABP Framework. It directly uses the ABP Framework under the hood and adds some benefits on top of it, which are described in this document.
-
-
 
 ## Startup Templates
 
@@ -54,8 +44,6 @@ Startup Templates are pre-built and configured solution templates that you can e
 <sup>[1]</sup> ABP Commercial application startup template has some additional features, like public website and separate tenant database schema support.
 
 >**Open source** startup templates use the **open-source LeptonX Lite theme and free modules** while **ABP Commercial** startup templates use the **PRO modules and themes**.
-
-
 
 ## Modules
 
@@ -85,8 +73,6 @@ ABP Commercial has many **additional modules** compared to the open-source ABP F
 
 Some modules have "Basic" (open-source) and "PRO" (commercial) versions. The next sections show the differences between the basic and the PRO versions.
 
-
-
 ### Identity Module: Basic vs PRO
 
 Identity module's domain layer is the same. But the application, HTTP API and UI layers have differences shown below:
@@ -100,8 +86,6 @@ Identity module's domain layer is the same. But the application, HTTP API and UI
 | Security Log Reporting                                 | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
 | Lock / Unlock a User                                   | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
 | Setting Management (like Password Complexity Settings) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
-
-
 
 ### Account Module: Basic vs PRO
 
@@ -126,8 +110,6 @@ Identity module's domain layer is the same. But the application, HTTP API and UI
 | Password Aging                    | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
 | Authenticator App (2FA)           | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
 
-
-
 ### Multi-Tenancy
 
 The open-source multi-tenancy module named as "Tenant Management" while the commercial one named as "SaaS". 
@@ -140,8 +122,6 @@ The "SaaS" module is aimed to be a complete SaaS solution while the free one is 
 | Separate tenant databases <sup>[1]</sup> | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
 
 <sup>[1]</sup> ABP Framework supports separate tenant databases at the framework level. However, only the commercial version SaaS module has a management UI, automatic database migration system and separate tenant database schema support.
-
-
 
 ## ABP CLI vs ABP Suite
 
@@ -162,13 +142,9 @@ A screenshot from the CRUD Page Generator:
 
 ![abp-suite-example](images/abp-suite-example.png)
 
-
-
 ## Is ABP Suite free?
 
 ABP Suite is a part of the ABP Commercial Platform that generates full source code from the backend to the client. ABP Suite is not a free tool for everyone. It is free for only the active ABP Commercial license holders.
-
-
 
 ## LeptonX Lite (Basic Theme) vs LeptonX (PRO Theme)
 
@@ -192,15 +168,11 @@ A screenshot of the LeptonX Theme (paid version):
 
 ![lepton-theme-users-page](images/leptonx-theme-users-page.png)
 
-
-
 ## Samples
 
 We provide many sample solutions based on the ABP Framework and ABP Commercial. All the [sample solutions](https://docs.abp.io/en/abp/latest/Samples/Index) built with the ABP Framework are also valid for the ABP Commercial. So, ABP Commercial users can benefit from these samples as well. For that reason, we create many samples on the open-source side to provide more value for everyone.
 
 However, there are some samples valid only for the ABP Commercial. See the [samples for the ABP Commercial](https://docs.abp.io/en/commercial/latest/samples/index).
-
-
 
 ## Support
 
