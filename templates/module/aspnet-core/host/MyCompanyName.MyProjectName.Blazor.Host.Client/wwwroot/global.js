@@ -5,3 +5,5 @@ var abp=abp||{};(function(){abp.utils=abp.utils||{};abp.domReady=function(n){doc
 
 var abp=abp||{};(function(){abp.utils=abp.utils||{};abp.utils.updateHTMLDirAndLangFromLocalStorage=function(){var i=JSON.parse(localStorage.getItem("Abp.IsRtl")),n=document.getElementsByTagName("html")[0],t;n&&(t=localStorage.getItem("Abp.SelectedLanguage"),t&&n.setAttribute("lang",t),i&&n.setAttribute("dir","rtl"))};abp.utils.updateHTMLDirAndLangFromLocalStorage()})();
 
+(function(){const n="authentication-session-id";window.addEventListener("storage",function(t){if(console.log(t),t.key===n){var i=t.oldValue,r=t.newValue;if(i!==r){if(i||!r){abp.utils.removeOidcUser();window.location.reload();return}location.assign("/")}}})})();
+
