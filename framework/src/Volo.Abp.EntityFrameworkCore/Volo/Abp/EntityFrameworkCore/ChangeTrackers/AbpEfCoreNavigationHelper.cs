@@ -156,7 +156,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         return EntityEntries.TryGetValue(entryId, out var abpEntityEntry) && abpEntityEntry.IsModified;
     }
 
-    public virtual bool IsNavigationEntryModified(EntityEntry entityEntry, NavigationEntry navigationEntry, int index)
+    public virtual bool IsNavigationEntryModified(EntityEntry entityEntry,  int navigationEntryIndex)
     {
         var entryId = GetEntityId(entityEntry);
         if (entryId == null)
@@ -169,7 +169,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
             return false;
         }
 
-        var navigationEntryProperty = abpEntityEntry.NavigationEntries.ElementAtOrDefault(index);
+        var navigationEntryProperty = abpEntityEntry.NavigationEntries.ElementAtOrDefault(navigationEntryIndex);
         return navigationEntryProperty != null && navigationEntryProperty.IsModified;
     }
 

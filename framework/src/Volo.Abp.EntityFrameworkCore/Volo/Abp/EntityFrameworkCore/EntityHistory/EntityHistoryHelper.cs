@@ -195,10 +195,9 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
         if (Options.SaveEntityHistoryWhenNavigationChanges && AbpEfCoreNavigationHelper != null)
         {
-            var index = 0;
-            foreach (var navigationEntry in entityEntry.Navigations)
+            foreach (var (navigationEntry, index) in entityEntry.Navigations.Select((value, i) => ( value, i )))
             {
-                if (AbpEfCoreNavigationHelper.IsNavigationEntryModified(entityEntry, navigationEntry, index))
+                if (AbpEfCoreNavigationHelper.IsNavigationEntryModified(entityEntry, index))
                 {
                     propertyChanges.Add(new EntityPropertyChangeInfo
                     {
@@ -206,8 +205,6 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
                         PropertyTypeFullName = navigationEntry.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!
                     });
                 }
-
-                index++;
             }
         }
 
