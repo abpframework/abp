@@ -325,33 +325,33 @@
             },
             {
               "text": "Background Jobs",
-              "path": "framework/infrastructure/Background-Jobs.md",
+              "path": "framework/infrastructure/background-jobs/index.md",
               "items": [
                 {
                   "text": "Hangfire Integration",
-                  "path": "framework/infrastructure/Background-Jobs-Hangfire.md"
+                  "path": "framework/infrastructure/background-jobs/hangfire.md"
                 },
                 {
                   "text": "RabbitMQ Integration",
-                  "path": "framework/infrastructure/Background-Jobs-RabbitMq.md"
+                  "path": "framework/infrastructure/background-jobs/rabbitmq.md"
                 },
                 {
                   "text": "Quartz Integration",
-                  "path": "framework/infrastructure/Background-Jobs-Quartz.md"
+                  "path": "framework/infrastructure/background-jobs/quartz.md"
                 }
               ]
             },
             {
               "text": "Background Workers",
-              "path": "framework/infrastructure/Background-Workers.md",
+              "path": "framework/infrastructure/background-workers/index.md",
               "items": [
                 {
                   "text": "Quartz Integration",
-                  "path": "framework/infrastructure/Background-Workers-Quartz.md"
+                  "path": "framework/infrastructure/background-workers/quartz.md"
                 },
                 {
                   "text": "Hangfire Integration",
-                  "path": "framework/infrastructure/Background-Workers-Hangfire.md"
+                  "path": "framework/infrastructure/background-workers/hangfire.md"
                 }
               ]
             },
@@ -360,38 +360,38 @@
               "items": [
                 {
                   "text": "BLOB Storing System",
-                  "path": "framework/infrastructure/Blob-Storing.md"
+                  "path": "framework/infrastructure/blob-storing/inded.md"
                 },
                 {
                   "text": "Storage Providers",
                   "items": [
                     {
                       "text": "File System Provider",
-                      "path": "framework/infrastructure/Blob-Storing-File-System.md"
+                      "path": "framework/infrastructure/blob-storing/file-system.md"
                     },
                     {
                       "text": "Database Provider",
-                      "path": "framework/infrastructure/Blob-Storing-Database.md"
+                      "path": "framework/infrastructure/blob-storing/database.md"
                     },
                     {
                       "text": "Azure Provider",
-                      "path": "framework/infrastructure/Blob-Storing-Azure.md"
+                      "path": "framework/infrastructure/blob-storing/azure.md"
                     },
                     {
                       "text": "Aliyun Provider",
-                      "path": "framework/infrastructure/Blob-Storing-Aliyun.md"
+                      "path": "framework/infrastructure/blob-storing/aliyun.md"
                     },
                     {
                       "text": "Minio Provider",
-                      "path": "framework/infrastructure/Blob-Storing-Minio.md"
+                      "path": "framework/infrastructure/blob-storing/minio.md"
                     },
                     {
                       "text": "AWS Provider",
-                      "path": "framework/infrastructure/Blob-Storing-Aws.md"
+                      "path": "framework/infrastructure/blob-storing/aws.md"
                     },
                     {
                       "text": "Create a Custom Provider",
-                      "path": "framework/infrastructure/Blob-Storing-Custom-Provider.md"
+                      "path": "framework/infrastructure/blob-storing/custom-provider.md"
                     }
                   ]
                 }
@@ -447,31 +447,31 @@
               "items": [
                 {
                   "text": "Overall",
-                  "path": "framework/infrastructure/Event-Bus.md"
+                  "path": "framework/infrastructure/index.md"
                 },
                 {
                   "text": "Local Event Bus",
-                  "path": "framework/infrastructure/Local-Event-Bus.md"
+                  "path": "framework/infrastructure/event-bus/local/index.md"
                 },
                 {
                   "text": "Distributed Event Bus",
-                  "path": "framework/infrastructure/Distributed-Event-Bus.md",
+                  "path": "framework/infrastructure/event-bus/distributed/index.md",
                   "items": [
                     {
                       "text": "Azure Service Bus Integration",
-                      "path": "framework/infrastructure/Distributed-Event-Bus-Azure-Integration.md"
+                      "path": "framework/infrastructure/event-bus/distributed/azure.md"
                     },
                     {
                       "text": "RabbitMQ Integration",
-                      "path": "framework/infrastructure/Distributed-Event-Bus-RabbitMQ-Integration.md"
+                      "path": "framework/infrastructure/event-bus/distributed/rabbitmq.md"
                     },
                     {
                       "text": "Kafka Integration",
-                      "path": "framework/infrastructure/Distributed-Event-Bus-Kafka-Integration.md"
+                      "path": "framework/infrastructure/event-bus/distributed/kafka.md"
                     },
                     {
                       "text": "Rebus Integration",
-                      "path": "framework/infrastructure/Distributed-Event-Bus-Rebus-Integration.md"
+                      "path": "framework/infrastructure/event-bus/distributed/rebus.md"
                     }
                   ]
                 }
