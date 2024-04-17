@@ -1,13 +1,14 @@
 # Preview Releases
 
-The preview versions are released **~4 weeks before** releasing a major or feature version of the ABP Framework. They are released for developers to try and provide feedback to have more stable versions.
+The preview versions are released **~4 weeks before** releasing a major or minor (feature) version of ABP. They are released for developers to try and provide feedback to have more stable versions.
 
 Versioning of a preview release is like that:
 
-* 3.1.0-rc.1
-* 4.0.0-rc.1
+* 7.1.0-rc.1
+* 8.0.0-rc.1
+* 8.0.0-rc.2
 
-More than one preview releases (like 3.1.0-rc.2 and 3.1.0-rc.3) might be published until the stable version (like 3.1.0).
+More than one preview releases (like 8.1.0-rc.2 and 8.1.0-rc.3) might be published until the stable version (like 8.1.0).
 
 ## Using the Preview Versions
 
@@ -16,12 +17,12 @@ More than one preview releases (like 3.1.0-rc.2 and 3.1.0-rc.3) might be publish
 Before creating or updating an existing solution make sure to update the CLI to the latest preview version, for example:
 
 ````bash
-dotnet tool update --global Volo.Abp.Cli --version 6.0.0-rc.2
+dotnet tool update --global Volo.Abp.Cli --version 8.2.0-rc.1
 ````
 
 ### New Solutions
 
-To create a project for testing the preview version, you can select the "**preview**" option on the [download page](https://abp.io/get-started) or use the "**--preview**" parameter with the [ABP CLI](CLI.md) new command:
+To create a project for testing the preview version, you can select the "**preview**" option on the [get started](https://abp.io/get-started) page or use the "**--preview**" parameter with the [ABP CLI](../CLI.md) new command:
 
 ````bash
 abp new Acme.BookStore --preview

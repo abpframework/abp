@@ -112,11 +112,11 @@
       "items": [
         {
           "text": "ABP CLI",
-          "path": "CLI.md",
+          "path": "cli/index.md",
           "items": [
             {
               "text": "Examples for the new command",
-              "path": "CLI-New-Command-Samples.md"
+              "path": "cli/new-command-samples.md"
             }
           ]
         },
@@ -1710,7 +1710,7 @@
       "items": [
         {
           "text": "Upgrading",
-          "path": "Upgrading.md"
+          "path": "release-info/Upgrading.md"
         },
         {
           "text": "Official Packages",
@@ -1718,19 +1718,19 @@
         },
         {
           "text": "Preview Releases",
-          "path": "Previews.md"
+          "path": "release-info/Previews.md"
         },
         {
           "text": "Nightly Builds",
-          "path": "Nightly-Builds.md"
+          "path": "release-info/Nightly-Builds.md"
         },
         {
           "text": "Road Map",
-          "path": "Road-Map.md"
+          "path": "release-info/Road-Map.md"
         },
         {
           "text": "Migration Guides",
-          "path": "Migration-Guides/Index.md"
+          "path": "release-info/Migration-Guides/Index.md"
         }
       ]
     },
