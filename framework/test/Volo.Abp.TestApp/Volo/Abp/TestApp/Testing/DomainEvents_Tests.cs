@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -209,11 +209,6 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         entityUpdatedEventTriggered.ShouldBeTrue();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithValueObjectAddress>>(data =>
-        {
-            throw new Exception("Should not trigger this event");
-        });
-
         // Test with value object
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
@@ -224,6 +219,21 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
+        entityUpdatedEventTriggered = false;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            entity.AppEntityWithValueObjectAddress.Country = "USA";
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+        });
+        entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithValueObjectAddress>>(data =>
+        {
+            throw new Exception("Should not trigger this event");
+        });
 
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
@@ -244,6 +254,16 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             {
                 ChildName = "ChildName"
             };
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+        });
+        entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
+        entityUpdatedEventTriggered = false;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            entity.OneToOne.ChildName = "ChildName2";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
@@ -282,6 +302,16 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         entityUpdatedEventTriggered.ShouldBeTrue();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
+        entityUpdatedEventTriggered = false;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            entity.OneToMany[0].ChildName = "ChildName2";
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+        });
+        entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
         LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToMany>>(data =>
         {
             throw new Exception("Should not trigger this event");
@@ -309,6 +339,16 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
                     ChildName = "ChildName1"
                 }
             };
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+        });
+        entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
+        entityUpdatedEventTriggered = false;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            entity.ManyToMany[0].ChildName = "ChildName2";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
