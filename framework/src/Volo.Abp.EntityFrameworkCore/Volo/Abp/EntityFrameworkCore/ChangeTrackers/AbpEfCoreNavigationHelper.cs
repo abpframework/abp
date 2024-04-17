@@ -120,7 +120,6 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                 }
 
                 abpEntityEntry.IsModified = true;
-                abpEntityEntry.IsModified = true;
                 var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == inverseForeignKey) ??
                                       abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == inverseForeignKey);
                 if (navigationEntry != null)
