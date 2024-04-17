@@ -1,6 +1,9 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Webp;
 using Xunit;
 
 namespace Volo.Abp.Imaging;
@@ -12,6 +15,24 @@ public class ImageSharpImageCompressor_Tests : AbpImagingImageSharpTestBase
     {
         ImageCompressor = GetRequiredService<IImageCompressor>();
     }
+    
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        services.Configure<ImageSharpCompressOptions>(options =>
+        {
+            options.JpegEncoder = new JpegEncoder
+            {
+                Quality = 50
+            };
+            options.WebpEncoder = new WebpEncoder
+            {
+                Quality = 50
+            };
+        });
+
+        base.AfterAddApplication(services);
+    }
+    
     [Fact]
     public async Task Should_Compress_Jpg()
     {
