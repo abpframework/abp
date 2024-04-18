@@ -1,0 +1,48 @@
+<script type="text/javascript">
+    (function () {
+        const stateKey = 'authentication-state-id';
+        
+        if (!abp || !abp.currentUser){
+            return;
+        }
+
+        abp.authenticationStateValidator = {
+            init: function () {
+                this.checkAuthenticationState();
+                this.setAuthenticationState()
+            },
+            setAuthenticationState: function () {
+                if (!abp.currentUser.isAuthenticated){
+                    localStorage.removeItem(stateKey);
+                    return;
+                }
+                localStorage.setItem(stateKey, abp.currentUser.id);
+            },
+            checkAuthenticationState: function () {
+                window.addEventListener('storage', function (event) {
+
+                    if (event.key !== stateKey) {
+                        return;
+                    }
+
+                    var previousState = event.oldValue
+                    var state = event.newValue;
+
+                    if(previousState === state) {
+                        return;
+                    }
+
+                    if(previousState || !state) {
+                        window.location.reload();
+                        return;
+                    }
+
+                    location.assign('/')
+                });
+            }
+        };
+
+        abp.authenticationStateValidator.init();
+        
+    })();
+</script>

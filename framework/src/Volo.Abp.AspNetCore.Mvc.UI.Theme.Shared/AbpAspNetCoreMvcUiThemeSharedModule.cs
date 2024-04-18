@@ -3,7 +3,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpAuthenticationSessionState;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpAuthenticationState;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Modularity;
@@ -36,7 +36,7 @@ public class AbpAspNetCoreMvcUiThemeSharedModule : AbpModule
         
         Configure<AbpLayoutHookOptions>(options =>
         {
-            options.Add(LayoutHooks.Body.Last, typeof(AbpAuthenticationSessionStateViewComponent));
+            options.Add(LayoutHooks.Body.Last, typeof(AbpAuthenticationStateViewComponent));
         });
 
         Configure<AbpBundlingOptions>(options =>
