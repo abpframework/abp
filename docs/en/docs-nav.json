@@ -539,6 +539,7 @@
         },
         {
           "text": "Architecture",
+          "path": "framework/architecture/index.md",
           "items": [
             {
               "text": "Best Practices",
@@ -687,7 +688,7 @@
             },
             {
               "text": "Multi Tenancy",
-              "path": "framework/architecture/multi-tenancy/Multi-Tenancy.md"
+              "path": "framework/architecture/multi-tenancy/index.md"
             },
             {
               "text": "Microservices",
