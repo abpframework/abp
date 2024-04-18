@@ -69,6 +69,10 @@ The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio 
 
 Application Modules provides pre-built application modules those implement common business requirements. See the [Application Modules](Modules/Index.md) document for all pre-built modules.
 
+### UI Themes
+
+ABP provides a UI theming system where you can use [pre-built themes](ui-themes/index.md) for your solution or build your own UI themes.
+
 ## Books
 
 ### Mastering ABP Framework
@@ -95,7 +99,7 @@ See the [sample projects](Samples/Index.md) built with ABP.
 
 The [ABP Community](https://community.abp.io/) website is a central place to publish articles and share knowledge about the ABP Framework.
 
-### Blog
+## Blog
 
 Follow the [ABP Blog](https://blog.abp.io/) to learn the latest happenings in the ABP.IO Platform.
 
