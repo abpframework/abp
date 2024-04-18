@@ -1,26 +1,17 @@
 (function () {
-    
-    const stateKey = 'authentication-state-id';
-    
-    window.addEventListener('storage', function (event) {
-        
-        if (event.key !== stateKey) {
-            return;
-        }
 
-        var previousState = event.oldValue
-        var state = event.newValue;
-        
-        if(previousState === state) {
+    const stateKey = 'authentication-state-id';
+
+    window.addEventListener('storage', function (event) {
+        if (event.key !== stateKey || event.oldValue === event.newValue) {
             return;
         }
         
-        if(previousState || !state) {
+        if (event.oldValue || !event.newValue) {
             abp.utils.removeOidcUser();
             window.location.reload();
-            return;
+        } else {
+            location.assign('/')
         }
-
-        location.assign('/')
     });
 }());
