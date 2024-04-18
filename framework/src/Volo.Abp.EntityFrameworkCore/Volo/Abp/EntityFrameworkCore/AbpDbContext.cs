@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -75,6 +76,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     public AbpEfCoreNavigationHelper AbpEfCoreNavigationHelper => LazyServiceProvider.LazyGetRequiredService<AbpEfCoreNavigationHelper>();
 
+    public IOptions<AbpDbContextOptions> Options => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>();
+
     private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
         = typeof(AbpDbContext<TDbContext>)
             .GetMethod(
@@ -120,6 +123,33 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             ConfigureValueGeneratedMethodInfo
                 .MakeGenericMethod(entityType.ClrType)
                 .Invoke(this, new object[] { modelBuilder, entityType });
+        }
+
+        if (LazyServiceProvider == null || Options == null)
+        {
+            return;
+        }
+
+        Options.Value.DefaultOnModelCreatingAction?.Invoke(this, modelBuilder);
+        foreach (var onModelCreatingAction in Options.Value.OnModelCreatingActions.GetOrDefault(typeof(TDbContext)) ?? [])
+        {
+            onModelCreatingAction.As<Action<DbContext, ModelBuilder>>().Invoke(this, modelBuilder);
+        }
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        base.ConfigureConventions(configurationBuilder);
+
+        if (LazyServiceProvider == null || Options == null)
+        {
+            return;
+        }
+
+        Options.Value.DefaultConventionAction?.Invoke(this, configurationBuilder);
+        foreach (var conventionAction in Options.Value.ConventionActions.GetOrDefault(typeof(TDbContext)) ?? [])
+        {
+            conventionAction.As<Action<DbContext, ModelConfigurationBuilder>>().Invoke(this, configurationBuilder);
         }
     }
 

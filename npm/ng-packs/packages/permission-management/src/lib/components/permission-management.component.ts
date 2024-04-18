@@ -7,11 +7,12 @@ import {
   ProviderInfoDto,
   UpdatePermissionDto,
 } from '@abp/ng.permission-management/proxy';
-import { LocaleDirection } from '@abp/ng.theme.shared';
+import { LocaleDirection, ToasterService } from '@abp/ng.theme.shared';
 import {
   Component,
   ElementRef,
   EventEmitter,
+  inject,
   Input,
   Output,
   QueryList,
@@ -41,16 +42,21 @@ type PermissionWithGroupName = PermissionGrantInfoDto & {
         overflow-y: scroll;
       }
       .scroll-in-modal {
-        overflow:auto;
-        max-height: calc(100vh - 15rem)
+        overflow: auto;
+        max-height: calc(100vh - 15rem);
       }
     `,
   ],
 })
 export class PermissionManagementComponent
   implements
-  PermissionManagement.PermissionManagementComponentInputs,
-  PermissionManagement.PermissionManagementComponentOutputs {
+    PermissionManagement.PermissionManagementComponentInputs,
+    PermissionManagement.PermissionManagementComponentOutputs
+{
+  protected readonly service = inject(PermissionsService);
+  protected readonly configState = inject(ConfigStateService);
+  protected readonly toasterService = inject(ToasterService);
+
   @Input()
   readonly providerName!: string;
 
@@ -117,8 +123,6 @@ export class PermissionManagementComponent
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
 
-  constructor(protected service: PermissionsService, protected configState: ConfigStateService) { }
-
   getChecked(name: string) {
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
   }
@@ -130,19 +134,20 @@ export class PermissionManagementComponent
       return;
     }
 
-    const margin = `margin-${(document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
-      }.px`;
+    const margin = `margin-${
+      (document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
+    }.px`;
 
     const permissions =
       (this.data.groups.find(group => group.name === this.selectedGroup?.name) || {}).permissions ||
       [];
     this.selectedGroupPermissions = permissions.map(
       permission =>
-      ({
-        ...permission,
-        style: { [margin]: findMargin(permissions, permission) },
-        isGranted: (this.permissions.find(per => per.name === permission.name) || {}).isGranted,
-      } as unknown as PermissionWithStyle),
+        ({
+          ...permission,
+          style: { [margin]: findMargin(permissions, permission) },
+          isGranted: (this.permissions.find(per => per.name === permission.name) || {}).isGranted,
+        }) as unknown as PermissionWithStyle,
     );
   }
 
@@ -199,19 +204,19 @@ export class PermissionManagementComponent
         if (per.name === clickedPermissions.parentName) {
           parentPermission = per;
         }
-      })
+      });
       this.permissions.forEach(per => {
         if (parentPermission.name === per.parentName) {
           per.isGranted && childPermissionGrantedCount++;
         }
-      })
+      });
       if (childPermissionGrantedCount === 1 && !parentPermission.isGranted) {
         this.permissions = this.permissions.map(per => {
           if (per.name === parentPermission.name) {
             per.isGranted = true;
           }
           return per;
-        })
+        });
       }
       return;
     }
@@ -220,16 +225,16 @@ export class PermissionManagementComponent
         per.isGranted = false;
       }
       return per;
-    })
+    });
   }
 
   updateSelectedGroupPermissions(clickedPermissions: PermissionGrantInfoDto) {
     this.selectedGroupPermissions = this.selectedGroupPermissions.map(per => {
       if (per.name === clickedPermissions.name) {
-        per.isGranted = !per.isGranted
+        per.isGranted = !per.isGranted;
       }
       return per;
-    })
+    });
   }
 
   setTabCheckboxState() {
@@ -310,7 +315,7 @@ export class PermissionManagementComponent
     const changedPermissions: UpdatePermissionDto[] = this.permissions
       .filter(per =>
         (unchangedPermissions.find(unchanged => unchanged.name === per.name) || {}).isGranted ===
-          per.isGranted
+        per.isGranted
           ? false
           : true,
       )
@@ -332,6 +337,7 @@ export class PermissionManagementComponent
       )
       .subscribe(() => {
         this.visible = false;
+        this.toasterService.success('AbpUi::SavedSuccessfully');
       });
   }
 

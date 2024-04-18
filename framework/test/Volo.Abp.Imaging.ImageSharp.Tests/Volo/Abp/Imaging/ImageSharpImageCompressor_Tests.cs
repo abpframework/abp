@@ -11,11 +11,12 @@ namespace Volo.Abp.Imaging;
 public class ImageSharpImageCompressor_Tests : AbpImagingImageSharpTestBase
 {
     public IImageCompressor ImageCompressor { get; }
+
     public ImageSharpImageCompressor_Tests()
     {
         ImageCompressor = GetRequiredService<IImageCompressor>();
     }
-    
+
     protected override void AfterAddApplication(IServiceCollection services)
     {
         services.Configure<ImageSharpCompressOptions>(options =>
@@ -32,7 +33,7 @@ public class ImageSharpImageCompressor_Tests : AbpImagingImageSharpTestBase
 
         base.AfterAddApplication(services);
     }
-    
+
     [Fact]
     public async Task Should_Compress_Jpg()
     {
@@ -80,21 +81,21 @@ public class ImageSharpImageCompressor_Tests : AbpImagingImageSharpTestBase
     {
         await using var jpegImage = ImageFileHelper.GetJpgTestFileStream();
         var byteArr = await jpegImage.GetAllBytesAsync();
-        
+
         var compressedImage1 = await ImageCompressor.CompressAsync(jpegImage);
         var compressedImage2 = await ImageCompressor.CompressAsync(byteArr);
-        
+
         compressedImage1.ShouldNotBeNull();
         compressedImage1.State.ShouldBe(ImageProcessState.Done);
-        
+
         compressedImage2.ShouldNotBeNull();
         compressedImage2.State.ShouldBe(ImageProcessState.Done);
-        
+
         compressedImage1.Result.Length.ShouldBeLessThan(jpegImage.Length);
         compressedImage2.Result.LongLength.ShouldBeLessThan(jpegImage.Length);
-        
+
         compressedImage1.Result.Length.ShouldBe(compressedImage2.Result.LongLength);
-        
+
         compressedImage1.Result.Dispose();
     }
 }

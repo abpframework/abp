@@ -10,17 +10,18 @@
 
     <p class="lead px-lg-5 mx-lg-5">{{ '::LongWelcomeMessage' | abpLocalization }}</p>
 
-    <abp-button
-      *ngIf="!hasLoggedIn"
-      [loading]="loading"
-      (click)="login()"
-      [disabled]="loading"
-      class="px-4 ml-1"
-      role="button"
-      iconClass="fa fa-sign-in"
-    >
-      {{ 'AbpAccount::Login' | abpLocalization }}
-    </abp-button>
+    @if (!hasLoggedIn) {
+      <abp-button
+        [loading]="loading"
+        (click)="login()"
+        [disabled]="loading"
+        class="px-4 ml-1"
+        role="button"
+        iconClass="fa fa-sign-in"
+      >
+        {{ 'AbpAccount::Login' | abpLocalization }}
+      </abp-button>
+    }
   </div>
   <div class="my-3 text-center">
     <h3>Let's improve your application!</h3>
@@ -299,17 +300,14 @@
         {{ context.title }}
       </h5>
       <p [innerHTML]="context.description"></p>
-      <ng-container
-        *ngIf="context.customTemplate"
-        [ngTemplateOutlet]="context.customTemplate"
-      ></ng-container>
-      <a
-        *ngFor="let link of context.links"
-        [href]="link.href"
-        target="_blank"
-        class="btn btn-link px-1"
-        >{{ link.label }} <i class="fas fa-chevron-right" aria-hidden="true"></i
-      ></a>
+      @if (context.customTemplate) {
+        <ng-container [ngTemplateOutlet]="context.customTemplate"></ng-container>
+      }
+      @for (link of context.links; track $index) {
+        <a [href]="link.href" target="_blank" class="btn btn-link px-1"
+          >{{ link.label }} <i class="fas fa-chevron-right" aria-hidden="true"></i
+        ></a>
+      }
     </div>
   </div>
 </ng-template>

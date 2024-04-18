@@ -20,6 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Abstractions\Volo.Abp.AspNetCore.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
     <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
     <ProjectReference Include="..\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj" />
@@ -30,6 +31,7 @@
     <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
     <PackageReference Include="IdentityModel" />
+    <PackageReference Include="DeviceDetector.NET" />
   </ItemGroup>
 
 </Project>

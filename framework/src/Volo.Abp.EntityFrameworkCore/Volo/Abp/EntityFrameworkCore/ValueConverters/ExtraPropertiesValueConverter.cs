@@ -18,6 +18,8 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
 
     }
 
+    public readonly static JsonSerializerOptions SerializeOptions = new JsonSerializerOptions();
+
     private static string SerializeObject(ExtraPropertyDictionary extraProperties, Type? entityType)
     {
         var copyDictionary = new Dictionary<string, object?>(extraProperties);
@@ -37,10 +39,10 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
             }
         }
 
-        return JsonSerializer.Serialize(copyDictionary);
+        return JsonSerializer.Serialize(copyDictionary, SerializeOptions);
     }
 
-    public static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
+    public readonly static JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
     {
         Converters =
         {

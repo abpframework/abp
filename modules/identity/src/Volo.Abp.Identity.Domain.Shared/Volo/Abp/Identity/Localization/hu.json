@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Telefonszám",
     "DisplayName:TwoFactorEnabled": "Kétlépcsős azonosítás",
     "DisplayName:IsActive": "Aktív",
-    "DisplayName:LockoutEnabled": "Fiók zárolása sikertelen bejelentkezési kísérletek után",
+    "DisplayName:LockoutEnabled": "Fiók zárolása",
     "NewRole": "Új szerepkör",
     "RoleName": "Szerepkör neve",
     "CreationTime": "Létrehozás időpontja",

@@ -2,7 +2,7 @@
   "culture": "ar",
   "texts": {
     "Settings": "الإعدادات",
-    "SuccessfullySaved": "تم الحفظ بنجاح",
+    "SavedSuccessfully": "تم الحفظ بنجاح",
     "Permission:SettingManagement": "إدارة الإعداد",
     "Permission:Emailing": "إرسال بالبريد الإلكتروني",
     "Permission:EmailingTest": "اختبار البريد الإلكتروني",

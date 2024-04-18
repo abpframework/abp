@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Logging;
@@ -12,7 +11,6 @@ namespace Volo.Abp.Validation;
 /// <summary>
 /// This exception type is used to throws validation exceptions.
 /// </summary>
-[Serializable]
 public class AbpValidationException : AbpException,
     IHasLogLevel,
     IHasValidationErrors,
@@ -33,16 +31,6 @@ public class AbpValidationException : AbpException,
     /// Constructor.
     /// </summary>
     public AbpValidationException()
-    {
-        ValidationErrors = new List<ValidationResult>();
-        LogLevel = LogLevel.Warning;
-    }
-
-    /// <summary>
-    /// Constructor for serializing.
-    /// </summary>
-    public AbpValidationException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
     {
         ValidationErrors = new List<ValidationResult>();
         LogLevel = LogLevel.Warning;

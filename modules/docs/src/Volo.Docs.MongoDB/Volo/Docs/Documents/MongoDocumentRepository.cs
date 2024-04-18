@@ -29,7 +29,8 @@ namespace Volo.Docs.Documents
                     Id = x.Id,
                     Version = x.Version,
                     LanguageCode = x.LanguageCode,
-                    Format = x.Format
+                    Format = x.Format,
+                    Name = x.Name
                 })
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -51,6 +52,17 @@ namespace Volo.Docs.Documents
         public virtual async Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task UpdateProjectLastCachedTimeAsync(Guid projectId, DateTime cachedTime,
+            CancellationToken cancellationToken = default)
+        {
+            var collection = await GetCollectionAsync(cancellationToken);
+            await collection.UpdateManyAsync(
+                Builders<Document>.Filter.Eq(x => x.ProjectId, projectId),
+                Builders<Document>.Update.Set(x => x.LastCachedTime, cachedTime),
+                cancellationToken: GetCancellationToken(cancellationToken)
+            );
         }
 
         public virtual async Task<Document> FindAsync(Guid projectId, string name, string languageCode, string version,
