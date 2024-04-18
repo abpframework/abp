@@ -15,7 +15,7 @@ public class AbpAspNetCoreComponentsWebThemingModule : AbpModule
     {
         Configure<AbpDynamicLayoutComponentOptions>(options =>
         {
-            options.Components.Add(typeof(AbpAuthenticationSessionState), null);
+            options.Components.Add(typeof(AbpAuthenticationState), null);
         });
     }
 }

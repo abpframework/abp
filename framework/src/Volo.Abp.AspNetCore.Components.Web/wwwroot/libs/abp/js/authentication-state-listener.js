@@ -1,22 +1,21 @@
 (function () {
     
-    const sessionKey = 'authentication-session-id';
+    const stateKey = 'authentication-state-id';
     
     window.addEventListener('storage', function (event) {
         
-        console.log(event);
-        if (event.key !== sessionKey) {
+        if (event.key !== stateKey) {
             return;
         }
 
-        var previousSessionId = event.oldValue
-        var sessionId = event.newValue;
+        var previousState = event.oldValue
+        var state = event.newValue;
         
-        if(previousSessionId === sessionId) {
+        if(previousState === state) {
             return;
         }
         
-        if(previousSessionId || !sessionId) {
+        if(previousState || !state) {
             abp.utils.removeOidcUser();
             window.location.reload();
             return;

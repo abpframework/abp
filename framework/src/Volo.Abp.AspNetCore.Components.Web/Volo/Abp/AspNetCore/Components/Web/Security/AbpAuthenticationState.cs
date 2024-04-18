@@ -7,9 +7,9 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Components.Web.Security;
 
-public class AbpAuthenticationSessionState : ComponentBase
+public class AbpAuthenticationState : ComponentBase
 {
-    private const string SessionKey = "authentication-session-id";
+    private const string StateKey = "authentication-state-id";
     
     [Inject]
     protected ILocalStorageService LocalStorage { get; set; } = default!;
@@ -49,17 +49,11 @@ public class AbpAuthenticationSessionState : ComponentBase
     
     protected virtual async Task SetAuthenticationStateAsync()
     {
-        var sessionId = await LocalStorage.GetItemAsync(SessionKey);
-        if (sessionId.IsNullOrWhiteSpace())
-        {
-            sessionId = CurrentUser.FindSessionId() ?? Guid.NewGuid().ToString();
-        }
-        
-        await LocalStorage.SetItemAsync(SessionKey, sessionId);
+        await LocalStorage.SetItemAsync(StateKey, CurrentUser.GetId().ToString());
     }
     
     protected virtual async Task ClearAuthenticationStateAsync()
     {
-        await LocalStorage.RemoveItemAsync(SessionKey);
+        await LocalStorage.RemoveItemAsync(StateKey);
     }
 }
