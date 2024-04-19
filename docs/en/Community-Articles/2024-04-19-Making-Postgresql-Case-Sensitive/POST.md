@@ -1,0 +1,126 @@
+# Performing Case-Insensitive Search in PostgreSQL: Using `citext` and Collation
+
+PostgreSQL, by default, is a case-sensitive database. This means that text data stored in the database is treated as case-sensitive. However, in many cases, users may need to perform searches regardless of case sensitivity.
+
+In this article, I will address two possible solutions to perform case-insensitive operations: **Using the `citext` data type for text fields** and **using collations**.
+
+## Using the `citext` Data Type
+
+`citext` is a PostgreSQL-specific data type that stands for "case-insensitive text". This data type stores text data while ignoring case differences, effectively making searches case-insensitive.
+
+To use the `citext` data type, you mainly need to do two things:
+
+1. The `citext` data type is available in a PostgreSQL-bundled extension, so you'll first have to install it. For that purpose, you should use the `HasPostgresExtension` method,
+2. Then, you should map all of your text fields to the `citext` datatype in your `*DbContext.cs` file as follows:
+
+```csharp
+[ReplaceDbContext(typeof(IIdentityDbContext))]
+[ReplaceDbContext(typeof(ITenantManagementDbContext))]
+[ConnectionStringName("Default")]
+public class MyProjectNameDbContext :
+    AbpDbContext<MyProjectNameDbContext>,
+    IIdentityDbContext,
+    ITenantManagementDbContext
+{
+    //...
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        //db configurations...
+
+        //👇 install the citext datatype 👇
+        builder.HasPostgresExtension("citext");
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        base.ConfigureConventions(configurationBuilder);
+
+        // 👇 configure all of the string property types as 'citext' data type 👇
+        configurationBuilder.Properties<string>().HaveColumnType("citext");
+    }    
+}
+```
+
+Since, ABP Framework merges all DbContext classes in the dependent modules of the final application, you should configure the `AbpDbContextOptions` in the module class of the `*.EntityFrameworkCore` project as follows:
+
+```csharp
+    public class MyProjectEntityFrameworkCoreModule : AbpModule
+    {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
+        
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+
+            //other configurations
+
+            Configure<AbpDbContextOptions>(options =>
+            {
+                options.UseNpgsql();
+
+                // 👇 configure all of the string property types as 'citext' data type for all of the dependent modules 👇
+                options.ConfigureDefaultConvention((_, builder) =>
+                {
+                    builder.Properties<string>().HaveColumnType("citext");
+                });
+            });
+
+        }
+
+        //...
+    }
+```
+ 
+After, you make these changes, you can create a new migration and apply it to your database. When you do that, all of the text based fields type will be changed as `citext` datatype. Then, you can write case-insensitive queries in your application without worry.
+
+## Using Collations
+
+Collation is a set of rules that determine how text data is sorted and compared in a dataset. PostgreSQL provides different collation settings for various languages and cultures. These settings can determine how text data is compared and can be configured to ignore case differences.
+
+To perform case-insensitive or accent-insensitive operations, you should choose one of the non-deterministic collations. For example, you can define a collation as follows (in your `*DbContext.cs` file):
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.HasCollation("my_collation", locale: "en-u-ks-primary", provider: "icu", deterministic: false);
+
+    //👇 using collations for a specific entity. -> entity level 👇
+    modelBuilder.Entity<Customer>()
+        .Property(c => c.Name)
+        .UseCollation("my_collation");
+
+    //👇 specify collations at the database level 👇
+    modelBuilder.UseCollation("my_collation");
+}
+```
+
+You can define collations both on entity level and database level like in the example above. If you want to use it in the database layer, you should also configure the collation usage in the `ConfigureConvention` method:
+
+```csharp
+protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+{
+    configurationBuilder.Properties<string>().UseCollation("my_collation");
+}
+```
+
+After these configurations, you should create a migration and apply it to your database as always. However, this solution comes with some problems, for example, with using non-deterministic collations, it's not yet possible to use pattern matching operators such as `LIKE` on columns. This is a huge problem, because it makes it hard to use LINQ. For example, you can't use `.EndsWith` or `.StartsWith` methods, because they are translated to `LIKE` command on the SQL level.
+
+## Conclusion
+
+In PostgreSQL, you can perform case-insensitive searches by using the citext data type or by utilizing collation settings. To make a decision to pick one of these options, you can follow the following points:
+
+* If the accent is not important for you and only thing you want to do, is making the postgresql queries as case-insensitive, using the `citext` data type option should be selected.
+* If the accent is really important for you, and you don't use LINQ methods (such as `StartsWith` and `EndsWith` methods), you can use collations. Note that, with this approach, queries that defined in the dependent modules also must not use these LINQ methods. Therefore, this approach, is not suitable with ABP Framework. Because, some of the modules uses LINQ methods (some pattern matching operators).
+
+Regardless of the method chosen, you can enable users to perform searches without worrying about case sensitivity. This is crucial for providing a user-friendly experience and making your database queries more flexible.
+
+## References
+
+* https://www.npgsql.org/efcore/misc/collations-and-case-sensitivity.html
+* 
