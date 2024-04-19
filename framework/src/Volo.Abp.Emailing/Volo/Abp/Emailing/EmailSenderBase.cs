@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Emailing;
 
@@ -17,6 +18,8 @@ public abstract class EmailSenderBase : IEmailSender
 {
     public ILogger<EmailSenderBase> Logger { get; set; }
 
+    protected ICurrentTenant CurrentTenant { get; }
+
     protected IEmailSenderConfiguration Configuration { get; }
 
     protected IBackgroundJobManager BackgroundJobManager { get; }
@@ -24,10 +27,14 @@ public abstract class EmailSenderBase : IEmailSender
     /// <summary>
     /// Constructor.
     /// </summary>
-    protected EmailSenderBase(IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
+    protected EmailSenderBase(
+        ICurrentTenant currentTenant,
+        IEmailSenderConfiguration configuration,
+        IBackgroundJobManager backgroundJobManager)
     {
         Logger = NullLogger<EmailSenderBase>.Instance;
 
+        CurrentTenant = currentTenant;
         Configuration = configuration;
         BackgroundJobManager = backgroundJobManager;
     }
@@ -93,6 +100,7 @@ public abstract class EmailSenderBase : IEmailSender
         await BackgroundJobManager.EnqueueAsync(
             new BackgroundEmailSendingJobArgs
             {
+                TenantId = CurrentTenant.Id,
                 To = to,
                 Subject = subject,
                 Body = body,
@@ -113,6 +121,7 @@ public abstract class EmailSenderBase : IEmailSender
         await BackgroundJobManager.EnqueueAsync(
             new BackgroundEmailSendingJobArgs
             {
+                TenantId = CurrentTenant.Id,
                 From = from,
                 To = to,
                 Subject = subject,
