@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Data;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Emailing;
 
 [Serializable]
-public class BackgroundEmailSendingJobArgs
+public class BackgroundEmailSendingJobArgs : IMultiTenant
 {
+    public Guid? TenantId { get; set; }
+
     public string? From { get; set; }
 
     public string To { get; set; } = default!;
