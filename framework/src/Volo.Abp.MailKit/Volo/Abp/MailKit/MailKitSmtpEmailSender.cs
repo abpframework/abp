@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Utils;
+using Volo.Abp.MultiTenancy;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace Volo.Abp.MailKit;
@@ -20,10 +21,12 @@ public class MailKitSmtpEmailSender : EmailSenderBase, IMailKitSmtpEmailSender
 
     protected ISmtpEmailSenderConfiguration SmtpConfiguration { get; }
 
-    public MailKitSmtpEmailSender(ISmtpEmailSenderConfiguration smtpConfiguration,
+    public MailKitSmtpEmailSender(
+        ICurrentTenant currentTenant,
+        ISmtpEmailSenderConfiguration smtpConfiguration,
         IBackgroundJobManager backgroundJobManager,
         IOptions<AbpMailKitOptions> abpMailKitConfiguration)
-        : base(smtpConfiguration, backgroundJobManager)
+        : base(currentTenant, smtpConfiguration, backgroundJobManager)
     {
         AbpMailKitOptions = abpMailKitConfiguration.Value;
         SmtpConfiguration = smtpConfiguration;
