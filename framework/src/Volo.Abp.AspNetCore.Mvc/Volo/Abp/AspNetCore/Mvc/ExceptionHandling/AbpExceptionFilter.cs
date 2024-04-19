@@ -36,6 +36,11 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, IAbpFilter, ITransientD
     {
         //TODO: Create DontWrap attribute to control wrapping..?
 
+        if (context.ExceptionHandled)
+        {
+            return false;
+        }
+
         if (context.ActionDescriptor.IsControllerAction() &&
             context.ActionDescriptor.HasObjectResult())
         {
@@ -78,7 +83,7 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, IAbpFilter, ITransientD
             context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
         }
 
-        context.Exception = null!; //Handled!
+        context.ExceptionHandled = true; //Handled!
     }
 
     protected virtual void LogException(ExceptionContext context, out RemoteServiceErrorInfo remoteServiceErrorInfo)

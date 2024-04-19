@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>Đây là trang xổ số dành riêng để thể hiện sự đánh giá cao của chúng tôi đối với bạn vì đã trở thành Thành viên cộng đồng tích cực. Chúng tôi tổ chức <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">các buổi nói chuyện cộng đồng ABP</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">, Hội nghị ABP .NET</a> , tham dự hoặc tài trợ cho các sự kiện liên quan đến .NET mà trong đó chúng tôi tặng một số quà tặng.<br><br> Bạn có thể theo dõi trang này để xem các cuộc xổ số sắp tới, tham dự hoặc xem các cuộc xổ số trước đây mà chúng tôi rút ra bao gồm cả những người chiến thắng.<br><br> Cảm ơn bạn đã là thành viên tích cực! Hẹn gặp lại các bạn trong đợt xổ số sắp tới.",
     "RafflesInfoTitle": "<span class=\"gradient-community\">Xổ</span> số cộng đồng ABP",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> được hỗ trợ.",
-    "Preview": "Xem trước"
+    "Preview": "Xem trước",
+    "VisitPage": "Ghé thăm trang",
+    "VisitVideoCourseDescription": "Nếu bạn muốn tìm hiểu những kiến ​​thức cơ bản về Khung ABP, hãy xem các khóa học Video Cơ bản về ABP."
   }
 }

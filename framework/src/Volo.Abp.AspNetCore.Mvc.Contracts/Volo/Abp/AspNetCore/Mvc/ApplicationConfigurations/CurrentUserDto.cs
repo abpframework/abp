@@ -34,4 +34,6 @@ public class CurrentUserDto
     public bool PhoneNumberVerified { get; set; }
 
     public string[] Roles { get; set; } = default!;
+
+    public string? SessionId { get; set; }
 }

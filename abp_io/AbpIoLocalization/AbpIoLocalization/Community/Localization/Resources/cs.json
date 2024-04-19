@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>Toto je stránka s losováním věnovaná tomu, abychom vám ukázali naše uznání za to, že jste aktivním členem komunity. Pořádáme <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">, ABP .NET Conference</a> , účastníme se nebo sponzorujeme akce související s .NET, ve kterých rozdáváme nějaké dárky.<br><br> Na této stránce můžete sledovat nadcházející tomboly, zúčastnit se jich nebo si prohlédnout předchozí tomboly, které losujeme, včetně výherců.<br><br> Děkujeme, že jste aktivním členem! Uvidíme se v nadcházejícím slosování.",
     "RafflesInfoTitle": "Komunitní <span class=\"gradient-community\">tomboly</span> ABP",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> podporováno.",
-    "Preview": "Náhled"
+    "Preview": "Náhled",
+    "VisitPage": "Navštivte stránku",
+    "VisitVideoCourseDescription": "Pokud se chcete naučit základy rámce ABP, podívejte se na videokurzy ABP Essentials."
   }
 }

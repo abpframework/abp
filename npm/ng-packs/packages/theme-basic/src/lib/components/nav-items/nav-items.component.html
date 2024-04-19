@@ -1,18 +1,16 @@
 <ul class="navbar-nav">
-  <ng-container *ngFor="let item of navItems.items$ | async; trackBy: trackByFn">
-    <ng-container  *abpVisible="!item.visible || item.visible(item)">
+  @for (item of navItems.items$ | async; track $index) {
+    <ng-container *abpVisible="!item.visible || item.visible(item)">
       <li class="nav-item d-flex align-items-center" *abpPermission="item.requiredPolicy">
-        <ng-container 
-        
-          *ngIf="item.component; else htmlTemplate" 
-          [ngComponentOutlet]="item.component"
-          [ngComponentOutletInjector]="item | toInjector"
-        ></ng-container>
-        
-        <ng-template #htmlTemplate>
+        @if (item.component) {
+          <ng-container
+            [ngComponentOutlet]="item.component"
+            [ngComponentOutletInjector]="item | toInjector"
+          ></ng-container>
+        } @else {
           <div [innerHTML]="item.html" (click)="item.action ? item.action() : null"></div>
-        </ng-template>
+        }
       </li>
     </ng-container>
-  </ng-container>
+  }
 </ul>

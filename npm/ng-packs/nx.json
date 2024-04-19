@@ -1,7 +1,4 @@
 {
-  "affected": {
-    "defaultBase": "dev"
-  },
   "workspaceLayout": {
     "libsDir": "packages",
     "appsDir": ""

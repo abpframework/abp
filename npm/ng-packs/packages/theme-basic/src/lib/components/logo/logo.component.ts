@@ -5,18 +5,17 @@ import { Component } from '@angular/core';
   selector: 'abp-logo',
   template: `
     <a class="navbar-brand" routerLink="/">
-      <img
-        *ngIf="appInfo.logoUrl; else appName"
-        [src]="appInfo.logoUrl"
-        [alt]="appInfo.name"
-        width="100%"
-        height="auto"
-      />
+      @if (appInfo.logoUrl) {
+        <img
+          [src]="appInfo.logoUrl"
+          [alt]="appInfo.name"
+          width="100%"
+          height="auto"
+        />
+      } @else {
+        {{ appInfo.name }}
+      }
     </a>
-
-    <ng-template #appName>
-      {{ appInfo.name }}
-    </ng-template>
   `,
 })
 export class LogoComponent {

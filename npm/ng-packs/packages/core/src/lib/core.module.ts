@@ -43,6 +43,7 @@ import { AuthErrorFilterService } from './abstracts';
 import { DYNAMIC_LAYOUTS_TOKEN } from "./tokens/dynamic-layout.token";
 import { DEFAULT_DYNAMIC_LAYOUTS } from "./constants";
 import { AbpTitleStrategy } from './services/title-strategy.service';
+import { LocalStorageListenerService } from './services/local-storage-listener.service';
 
 
 const standaloneDirectives = [
@@ -162,6 +163,12 @@ export class CoreModule {
           provide: APP_INITIALIZER,
           multi: true,
           deps: [LocalizationService],
+          useFactory: noop,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [LocalStorageListenerService],
           useFactory: noop,
         },
         {

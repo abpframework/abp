@@ -2,7 +2,7 @@
   "culture": "fa",
   "texts": {
     "Settings": "تنظیمات",
-    "SuccessfullySaved": "با موفقیت ذخیره شد",
+    "SavedSuccessfully": "با موفقیت ذخیره شد",
     "Permission:SettingManagement": "مدیریت تنظیمات",
     "Permission:Emailing": "تنظیمات ایمیل",
     "Menu:Emailing": "تنظیمات ایمیل",

@@ -24,6 +24,8 @@ public class TableColumn
     public Func<object, string>? ValueConverter { get; set; }
 
     public bool Sortable { get; set; }
+    
+    public bool Visible { get; set; } = true;
 
     public TableColumn()
     {

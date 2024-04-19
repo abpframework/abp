@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Telefoonnummer",
     "DisplayName:TwoFactorEnabled": "Tweefactor authenticatie",
     "DisplayName:IsActive": "Actief",
-    "DisplayName:LockoutEnabled": "Account vergrendelen na mislukte inlogpogingen",
+    "DisplayName:LockoutEnabled": "Account vergrendelen",
     "NewRole": "Nieuwe rol",
     "RoleName": "Rol naam",
     "CreationTime": "Creatie tijd",

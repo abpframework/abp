@@ -1,22 +1,25 @@
 <ul class="navbar-nav">
-  <ng-container
-    *ngFor="let route of routesService.visible$ | async; trackBy: trackByFn"
-    [ngTemplateOutlet]="isDropdown(route) ? dropdownLink : defaultLink"
-    [ngTemplateOutletContext]="{ $implicit: route }"
-  >
-  </ng-container>
+  @for (route of routesService.visible$ | async; track $index) {
+    <ng-container
+      [ngTemplateOutlet]="isDropdown(route) ? dropdownLink : defaultLink"
+      [ngTemplateOutletContext]="{ $implicit: route }"
+    >
+    </ng-container>
+  }
 
   <ng-template #defaultLink let-route>
     <li class="nav-item" *abpPermission="route.requiredPolicy">
-      <a class="nav-link" [routerLink]="[route.path]"
-        ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
-        {{ route.name | abpLocalization }}</a
-      >
+      <a class="nav-link" [routerLink]="[route.path]">
+        @if (route.iconClass) {
+          <i [ngClass]="route.iconClass"></i>
+        }
+        {{ route.name | abpLocalization }}
+      </a>
     </li>
   </ng-template>
 
   <ng-template #dropdownLink let-route>
-    <ng-container *ngIf="route.children?.length">
+    @if (route.children?.length) {
       <li
         class="nav-item dropdown"
         display="static"
@@ -34,7 +37,9 @@
           aria-expanded="false"
           href="javascript:void(0)"
         >
-          <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
+          @if (route.iconClass) {
+            <i [ngClass]="route.iconClass"></i>
+          }
           {{ route.name | abpLocalization }}
         </a>
         <div
@@ -48,27 +53,29 @@
           ></ng-container>
         </div>
       </li>
-    </ng-container>
+    }
   </ng-template>
 
   <ng-template #forTemplate let-route>
-    <ng-container *ngFor="let child of route.children">
+    @for (child of route.children; track $index) {
       <ng-template
         [ngTemplateOutlet]="child.children?.length ? dropdownChild : defaultChild"
         [ngTemplateOutletContext]="{ $implicit: child }"
       ></ng-template>
-    </ng-container>
+    }
   </ng-template>
 
   <ng-template #defaultChild let-child>
-    <ng-container *ngIf="child.path">
+    @if (child.path) {
       <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
         <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
-          <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
+          @if (child.iconClass) {
+            <i [ngClass]="child.iconClass"></i>
+          }
           {{ child.name | abpLocalization }}</a
         >
       </div>
-    </ng-container>
+    }
   </ng-template>
 
   <ng-template #dropdownChild let-child>
@@ -87,7 +94,9 @@
           role="button"
           class="btn d-block text-start dropdown-toggle"
         >
-          <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
+          @if (child.iconClass) {
+            <i [ngClass]="child.iconClass"></i>
+          }
           {{ child.name | abpLocalization }}
         </a>
       </div>

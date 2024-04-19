@@ -12,14 +12,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.OpenApi.Models;
+using MyCompanyName.MyProjectName.Blazor.Server.Tiered.Components;
 using MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
+using Volo.Abp.AspNetCore.Components.Server;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
@@ -84,12 +87,21 @@ public class MyProjectNameBlazorModule : AbpModule
                 typeof(MyProjectNameBlazorModule).Assembly
             );
         });
+
+        PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
+        {
+            options.IsBlazorWebApp = true;
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
+
+        // Add services to the container.
+        context.Services.AddRazorComponents()
+            .AddInteractiveServerComponents();
 
         ConfigureUrls(configuration);
         ConfigureCache();
@@ -358,6 +370,7 @@ public class MyProjectNameBlazorModule : AbpModule
             app.UseMultiTenancy();
         }
         app.UseDynamicClaims();
+        app.UseAntiforgery();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
@@ -365,6 +378,11 @@ public class MyProjectNameBlazorModule : AbpModule
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
         });
         app.UseAbpSerilogEnrichers();
-        app.UseConfiguredEndpoints();
+        app.UseConfiguredEndpoints(builder =>
+        {
+            builder.MapRazorComponents<App>()
+                .AddInteractiveServerRenderMode()
+                .AddAdditionalAssemblies(builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies.ToArray());
+        });
     }
 }
