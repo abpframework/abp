@@ -187,15 +187,15 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         var personCreatedEventCount = 0;
         var entityUpdatedEventTriggerCount = 0;
 
-        LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
+        LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(_ =>
         {
             personCreatedEventCount++;
            return Task.CompletedTask;
         });
 
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigations>>(async data =>
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigations>>(async _ =>
         {
-            entityUpdatedEventTriggered = !entityUpdatedEventTriggered;
+            entityUpdatedEventTriggered = true;
             await PersonRepository.InsertAsync(new Person(Guid.NewGuid(), Guid.NewGuid().ToString(), new Random().Next(1, 100)));
         });
 
@@ -230,7 +230,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         entityUpdatedEventTriggered.ShouldBeTrue();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithValueObjectAddress>>(data =>
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithValueObjectAddress>>(_ =>
         {
             throw new Exception("Should not trigger this event");
         });
@@ -263,6 +263,18 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         entityUpdatedEventTriggered.ShouldBeTrue();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
+        var oneToOneEntityUpdatedEventTriggered = false;
+        var oneToOneAndOneToOneEntityUpdatedEventTriggered = false;
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToOne>>(async _ =>
+        {
+            oneToOneEntityUpdatedEventTriggered = true;
+        });
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToOneAndOneToOne>>(async _ =>
+        {
+            oneToOneAndOneToOneEntityUpdatedEventTriggered = true;
+        });
+
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
         {
@@ -271,9 +283,13 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        oneToOneEntityUpdatedEventTriggered.ShouldBeTrue();
+        oneToOneAndOneToOneEntityUpdatedEventTriggered.ShouldBeFalse();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
         entityUpdatedEventTriggered = false;
+        oneToOneEntityUpdatedEventTriggered = false;
+        oneToOneAndOneToOneEntityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
@@ -281,9 +297,11 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        oneToOneEntityUpdatedEventTriggered.ShouldBeTrue();
+        oneToOneAndOneToOneEntityUpdatedEventTriggered.ShouldBeTrue();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToOne>>(data =>
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToOne>>(_ =>
         {
             throw new Exception("Should not trigger this event");
         });
@@ -323,6 +341,18 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         entityUpdatedEventTriggered.ShouldBeTrue();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
+        var oneToManyEntityUpdatedEventTriggered = false;
+        var oneToManyAndOneToManyEntityUpdatedEventTriggered = false;
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToMany>>(async _ =>
+        {
+            oneToManyEntityUpdatedEventTriggered = true;
+        });
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToManyAndOneToMany>>(async _ =>
+        {
+            oneToManyAndOneToManyEntityUpdatedEventTriggered = true;
+        });
+
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
         {
@@ -331,9 +361,13 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        oneToManyEntityUpdatedEventTriggered.ShouldBeTrue();
+        oneToManyAndOneToManyEntityUpdatedEventTriggered.ShouldBeFalse();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
         entityUpdatedEventTriggered = false;
+        oneToManyEntityUpdatedEventTriggered = false;
+        oneToManyAndOneToManyEntityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
@@ -341,9 +375,11 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
+        oneToManyEntityUpdatedEventTriggered.ShouldBeTrue();
+        oneToManyAndOneToManyEntityUpdatedEventTriggered.ShouldBeTrue();
         personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
 
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToMany>>(data =>
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToMany>>(_ =>
         {
             throw new Exception("Should not trigger this event");
         });
@@ -439,7 +475,7 @@ public abstract class AbpEntityChangeOptions_DomainEvents_Tests<TStartupModule> 
 
         LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigations>>(data =>
         {
-            entityUpdatedEventTriggered = !entityUpdatedEventTriggered;
+            entityUpdatedEventTriggered = true;
             return Task.CompletedTask;
         });
 

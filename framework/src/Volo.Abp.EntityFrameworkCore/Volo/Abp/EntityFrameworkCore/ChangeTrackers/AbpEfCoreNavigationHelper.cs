@@ -36,7 +36,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
             return;
         }
 
-        var entryId = GetEntityId(entityEntry);
+        var entryId = GetEntityEntryIdentity(entityEntry);
         if (entryId == null)
         {
             return;
@@ -81,7 +81,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                 continue;
             }
 
-            var entryId = GetEntityId(principal.ToEntityEntry());
+            var entryId = GetEntityEntryIdentity(principal.ToEntityEntry());
             if (entryId == null || !EntityEntries.TryGetValue(entryId, out var abpEntityEntry))
             {
                 continue;
@@ -120,7 +120,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                     continue;
                 }
 
-                var entryId = GetEntityId(principal.ToEntityEntry());
+                var entryId = GetEntityEntryIdentity(principal.ToEntityEntry());
                 if (entryId == null || !EntityEntries.TryGetValue(entryId, out var abpEntityEntry))
                 {
                     continue;
@@ -158,7 +158,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
             return true;
         }
 
-        var entryId = GetEntityId(entityEntry);
+        var entryId = GetEntityEntryIdentity(entityEntry);
         if (entryId == null)
         {
             return false;
@@ -169,7 +169,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
 
     public virtual bool IsNavigationEntryModified(EntityEntry entityEntry,  int navigationEntryIndex)
     {
-        var entryId = GetEntityId(entityEntry);
+        var entryId = GetEntityEntryIdentity(entityEntry);
         if (entryId == null)
         {
             return false;
@@ -184,11 +184,14 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         return navigationEntryProperty != null && navigationEntryProperty.IsModified;
     }
 
-    protected virtual string? GetEntityId(EntityEntry entityEntry)
+    protected virtual string? GetEntityEntryIdentity(EntityEntry entityEntry)
     {
-        return entityEntry.Entity is IEntity entryEntity && entryEntity.GetKeys().Length == 1
-            ? entryEntity.GetKeys().FirstOrDefault()?.ToString()
-            : null;
+        if (entityEntry.Entity is IEntity entryEntity && entryEntity.GetKeys().Length == 1)
+        {
+            return $"{entityEntry.Metadata.ClrType.FullName}:{entryEntity.GetKeys().FirstOrDefault()}";
+        }
+
+        return null;
     }
 
     public void Clear()
