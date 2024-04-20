@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Volo.Abp.EntityFrameworkCore.ChangeTrackers;
@@ -17,7 +18,7 @@ public class AbpEntityEntry
     {
         get
         {
-            return _isModified || NavigationEntries.Any(n => n.IsModified);
+            return _isModified || EntityEntry.State == EntityState.Modified || NavigationEntries.Any(n => n.IsModified);
         }
         set
         {

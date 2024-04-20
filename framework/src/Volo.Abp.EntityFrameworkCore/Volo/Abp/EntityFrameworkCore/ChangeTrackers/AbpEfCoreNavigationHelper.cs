@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 
@@ -20,16 +17,16 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
 {
     protected Dictionary<string, AbpEntityEntry> EntityEntries { get; } = new();
 
-    public virtual void ChangeTracker_Tracked(ChangeTracker changeTracker, object? sender, EntityTrackedEventArgs e)
+    public virtual void ChangeTracker_Tracked(object? sender, EntityTrackedEventArgs e)
     {
         EntityEntryTrackedOrStateChanged(e.Entry);
-        DetectChanges(changeTracker, e.Entry);
+        DetectChanges(e.Entry);
     }
 
-    public virtual void ChangeTracker_StateChanged(ChangeTracker changeTracker, object? sender, EntityStateChangedEventArgs e)
+    public virtual void ChangeTracker_StateChanged(object? sender, EntityStateChangedEventArgs e)
     {
         EntityEntryTrackedOrStateChanged(e.Entry);
-        DetectChanges(changeTracker, e.Entry);
+        DetectChanges(e.Entry);
     }
 
     protected virtual void EntityEntryTrackedOrStateChanged(EntityEntry entityEntry)
@@ -53,7 +50,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         EntityEntries.Add(entryId, new AbpEntityEntry(entryId, entityEntry));
     }
 
-    protected virtual void DetectChanges(ChangeTracker changeTracker, EntityEntry entityEntry)
+    protected virtual void DetectChanges(EntityEntry entityEntry)
     {
         if (entityEntry.State != EntityState.Added &&
             entityEntry.State != EntityState.Deleted &&
@@ -62,8 +59,13 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
             return;
         }
 
-#pragma warning disable EF1001
-        var stateManager = changeTracker.Context.GetDependencies().StateManager;
+        RecursiveDetectChanges(entityEntry);
+    }
+
+    protected virtual void RecursiveDetectChanges(EntityEntry entityEntry)
+    {
+        #pragma warning disable EF1001
+        var stateManager = entityEntry.Context.GetDependencies().StateManager;
         var internalEntityEntityEntry = stateManager.Entries.FirstOrDefault(x => x.Entity == entityEntry.Entity);
         if (internalEntityEntityEntry == null)
         {
@@ -85,7 +87,12 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                 continue;
             }
 
-            abpEntityEntry.IsModified = true;
+            if (!abpEntityEntry.IsModified)
+            {
+                abpEntityEntry.IsModified = true;
+                RecursiveDetectChanges(abpEntityEntry.EntityEntry);
+            }
+
             var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == foreignKey) ??
                                   abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == foreignKey);
             if (navigationEntry != null)
@@ -119,7 +126,12 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                     continue;
                 }
 
-                abpEntityEntry.IsModified = true;
+                if (!abpEntityEntry.IsModified)
+                {
+                    abpEntityEntry.IsModified = true;
+                    RecursiveDetectChanges(abpEntityEntry.EntityEntry);
+                }
+
                 var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == inverseForeignKey) ??
                                       abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == inverseForeignKey);
                 if (navigationEntry != null)

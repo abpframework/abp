@@ -274,14 +274,14 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual void ChangeTracker_Tracked(object? sender, EntityTrackedEventArgs e)
     {
-        AbpEfCoreNavigationHelper.ChangeTracker_Tracked(ChangeTracker, sender, e);
+        AbpEfCoreNavigationHelper.ChangeTracker_Tracked(sender, e);
         FillExtraPropertiesForTrackedEntities(e);
         PublishEventsForTrackedEntity(e.Entry);
     }
 
     protected virtual void ChangeTracker_StateChanged(object? sender, EntityStateChangedEventArgs e)
     {
-        AbpEfCoreNavigationHelper.ChangeTracker_StateChanged(ChangeTracker, sender, e);
+        AbpEfCoreNavigationHelper.ChangeTracker_StateChanged(sender, e);
         PublishEventsForTrackedEntity(e.Entry);
     }
 

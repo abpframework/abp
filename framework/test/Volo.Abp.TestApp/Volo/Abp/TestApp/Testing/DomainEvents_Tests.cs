@@ -252,7 +252,11 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
             entity.OneToOne = new AppEntityWithNavigationChildOneToOne
             {
-                ChildName = "ChildName"
+                ChildName = "ChildName",
+                OneToOne = new AppEntityWithNavigationChildOneToOneAndOneToOne
+                {
+                    ChildName = "OneToOne-ChildName"
+                }
             };
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -264,6 +268,16 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
             entity.OneToOne.ChildName = "ChildName2";
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+        });
+        entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
+        entityUpdatedEventTriggered = false;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            entity.OneToOne.OneToOne.ChildName = "OneToOne-ChildName2";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
@@ -294,7 +308,14 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
                 new AppEntityWithNavigationChildOneToMany
                 {
                     AppEntityWithNavigationId = entity.Id,
-                    ChildName = "ChildName1"
+                    ChildName = "ChildName1",
+                    OneToMany = new List<AppEntityWithNavigationChildOneToManyAndOneToMany>()
+                    {
+                        new AppEntityWithNavigationChildOneToManyAndOneToMany()
+                        {
+                            ChildName = "OneToMany-ChildName1"
+                        }
+                    }
                 }
             };
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
@@ -307,6 +328,16 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
             entity.OneToMany[0].ChildName = "ChildName2";
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+        });
+        entityUpdatedEventTriggered.ShouldBeTrue();
+        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
+
+        entityUpdatedEventTriggered = false;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            entity.OneToMany[0].OneToMany[0].ChildName = "OneToMany-ChildName2";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
