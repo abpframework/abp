@@ -2,7 +2,7 @@
 
 Authorization is used to check if a user is allowed to perform some specific operations in the application.
 
-ABP extends [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing authorization system to be usable in the **[application services](Application-Services.md)** too.
+ABP extends [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing authorization system to be usable in the **[application services](../architecture/domain-driven-design/application-services.md)** too.
 
 So, all the ASP.NET Core authorization features and the documentation are valid in an ABP based application. This document focuses on the features that are added on top of ASP.NET Core authorization features.
 
@@ -86,7 +86,7 @@ In the `Define` method, you first need to add a **permission group** or get an e
 
 When you define a permission, it becomes usable in the ASP.NET Core authorization system as a **policy** name. It also becomes visible in the UI. See permissions dialog for a role:
 
-![authorization-new-permission-ui](images/authorization-new-permission-ui.png)
+![authorization-new-permission-ui](../../images/authorization-new-permission-ui.png)
 
 - The "BookStore" group is shown as a new tab on the left side.
 - "BookStore_Author_Create" on the right side is the permission name. You can grant or prohibit it for the role.
@@ -315,7 +315,7 @@ See the following documents to learn how to re-use the authorization system on t
 
 * [ASP.NET Core MVC / Razor Pages UI: Authorization](../ui/mvc-razor-pages/javascript-api/auth.md)
 * [Angular UI Authorization](../ui/angular/authorization.md)
-* [Blazor UI Authorization](../ui/blazor/Authorization.md)
+* [Blazor UI Authorization](../ui/blazor/authorization.md)
 
 ## Permission Management
 

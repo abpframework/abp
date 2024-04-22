@@ -1,12 +1,12 @@
 # Settings
 
-[Configuration system](Configuration.md) is a good way to configure the application on startup. In addition to the configurations, ABP provides another way to set and get some application settings.
+[Configuration system](./configuration.md) is a good way to configure the application on startup. In addition to the configurations, ABP provides another way to set and get some application settings.
 
 A setting is a name-value pair stored in a dynamic data source, generally in a database. Setting system is extensible and there are pre-built providers for a user, a tenant, global and default.
 
 ## Defining Settings
 
-A setting must be defined before its use. ABP was designed to be [modular](Module-Development-Basics.md), so different modules can have different settings. A module must create a class derived from the `SettingDefinitionProvider` in order to define its settings. An example setting definition provider is shown below:
+A setting must be defined before its use. ABP was designed to be [modular](../architecture/modularity/basics.md), so different modules can have different settings. A module must create a class derived from the `SettingDefinitionProvider` in order to define its settings. An example setting definition provider is shown below:
 
 ````csharp
 public class EmailSettingProvider : SettingDefinitionProvider
@@ -44,7 +44,7 @@ ABP automatically discovers this class and registers the setting definitions.
 
 In some cases, you may want to change some properties of a settings defined in some other module that your application/module depends on. A setting definition provider can query and update setting definitions. 
 
-The following example gets a setting defined by the [Volo.Abp.Emailing](Emailing.md) package and changes its properties:
+The following example gets a setting defined by the [Volo.Abp.Emailing](../infrastructure/emailing.md) package and changes its properties:
 
 ````csharp
 public class MySettingDefinitionProvider : SettingDefinitionProvider
@@ -114,9 +114,9 @@ public class MyService
 
 If a setting is allowed to be visible on the client side, current value of the setting can also be read from the client code. See the following documents to understand how to get the setting values in different UI types;
 
-* [MVC / Razor Pages](UI/AspNetCore/JavaScript-API/Settings.md)
-* [Angular](UI/Angular/Settings.md)
-* [Blazor](UI/Blazor/Settings.md)
+* [MVC / Razor Pages](../ui/mvc-razor-pages/javascript-api/settings.md)
+* [Angular](../ui/angular/settings.md)
+* [Blazor](../ui/blazor/settings.md)
 
 ## Setting Value Providers
 
@@ -127,10 +127,10 @@ Setting system is extensible, you can extend it by defining setting value provid
 There are 5 pre-built setting value providers registered by the order below:
 
 * `DefaultValueSettingValueProvider`: Gets the value from the default value of the setting definition, if set (see the SettingDefinition section above).
-* `ConfigurationSettingValueProvider`: Gets the value from the [IConfiguration service](Configuration.md).
+* `ConfigurationSettingValueProvider`: Gets the value from the [IConfiguration service](./configuration.md).
 * `GlobalSettingValueProvider`: Gets the global (system-wide) value for a setting, if set.
-* `TenantSettingValueProvider`: Gets the setting value for the current tenant, if set (see the [multi-tenancy](Multi-Tenancy.md) document).
-* `UserSettingValueProvider`: Gets the setting value for the current user, if set (see the [current user](CurrentUser.md) document).
+* `TenantSettingValueProvider`: Gets the setting value for the current tenant, if set (see the [multi-tenancy](../architecture/multi-tenancy/index.md) document).
+* `UserSettingValueProvider`: Gets the setting value for the current user, if set (see the [current user](../infrastructure/current-user.md) document).
 
 > Setting fallback system works from bottom (user) to top (default).
 
@@ -140,7 +140,7 @@ Global, Tenant and User setting value providers use the `ISettingStore` to read 
 
 As mentioned in the previous section, `ConfigurationSettingValueProvider` reads the settings from the `IConfiguration` service, which can read values from the `appsettings.json` by default. So, the easiest way to configure setting values to define them in the `appsettings.json` file.
 
-For example, you can configure  [IEmailSender](Emailing.md) settings as shown below:
+For example, you can configure  [IEmailSender](../infrastructure/emailing.md) settings as shown below:
 
 ````json
 {
@@ -182,7 +182,7 @@ public class CustomSettingValueProvider : SettingValueProvider
 }
 ````
 
-> Alternatively, you can implement the `ISettingValueProvider` interface. Remember to register it to the [dependency injection](Dependency-Injection.md) in this case.
+> Alternatively, you can implement the `ISettingValueProvider` interface. Remember to register it to the [dependency injection](./dependency-injection.md) in this case.
 
 Every provider should have a unique Name (which is "Custom" here). Built-in providers use the given names:
 
@@ -213,10 +213,10 @@ While a setting value provider is free to use any source to get the setting valu
 
 `ISettingEncryptionService` is used to encrypt/decrypt setting values when `IsEncrypted` property of a setting definition was set to `true`.
 
-You can replace this service in the dependency injection system to customize the encryption/decryption process. Default implementation uses the `StringEncryptionService` which is implemented with the AES algorithm by default (see string [encryption document](String-Encryption.md) for more).
+You can replace this service in the dependency injection system to customize the encryption/decryption process. Default implementation uses the `StringEncryptionService` which is implemented with the AES algorithm by default (see string [encryption document](../infrastructure/string-encryption.md) for more).
 
 ## Setting Management Module
 
 The core setting system is pretty independent and doesn't make any assumption about how you manage (change) the setting values. Even the default `ISettingStore` implementation is the `NullSettingStore` which returns null for all setting values.
 
-The setting management module completes it (and implements `ISettingStore`) by managing setting values in a database. See the [Setting Management Module document](Modules/Setting-Management.md) for more.
+The setting management module completes it (and implements `ISettingStore`) by managing setting values in a database. See the [Setting Management Module document](../../modules/setting-management.md) for more.

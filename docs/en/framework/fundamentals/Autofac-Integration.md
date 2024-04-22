@@ -4,15 +4,15 @@
 
 ## Install Autofac Integration
 
-> All the [startup templates](Startup-Templates/Index.md) and samples are Autofac integrated. So, most of the time you don't need to manually install this package.
+> All the [startup templates](../../get-started/index.md) and samples are Autofac integrated. So, most of the time you don't need to manually install this package.
 
-If you're not using a startup template, you can use the [ABP CLI](CLI.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project (suggested to add it to the executable/web project):
+If you're not using a startup template, you can use the [ABP CLI](../../cli/index.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project (suggested to add it to the executable/web project):
 
 ````bash
 abp add-package Volo.Abp.Autofac
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Autofac).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Autofac).
 >
 
 Finally, configure `AbpApplicationCreationOptions` to replace default dependency injection services by Autofac. It depends on the application type.
@@ -87,7 +87,7 @@ namespace AbpConsoleDemo
 
 If you want to use Autofac's advanced [registration API](https://autofac.readthedocs.io/en/latest/register/registration.html), you need to access the `ContainerBuilder` object. [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) nuget package defines the `IServiceCollection.GetContainerBuilder()` extension method to obtain the `ContainerBuilder` object.
 
-**Example: Get the `ContainerBuilder` object in the `ConfigureServices` method of your [module class](Module-Development-Basics.md)**
+**Example: Get the `ContainerBuilder` object in the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md)**
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)

@@ -2,13 +2,13 @@
 
 ABP Framework extends the [ASP.NET Core distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
 
-> **Default implementation of the `IDistributedCache` interface is` MemoryDistributedCache` which works in-memory.** See [ASP.NET Core's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to see how to switch to Redis or another cache provider. Also, see the [Redis Cache](Redis-Cache.md) document if you want to use Redis as the distributed cache server.
+> **Default implementation of the `IDistributedCache` interface is` MemoryDistributedCache` which works in-memory.** See [ASP.NET Core's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to see how to switch to Redis or another cache provider. Also, see the [Redis Cache](./redis-cache.md) document if you want to use Redis as the distributed cache server.
 
 ## Installation
 
-> This package is already installed by default with the [application startup template](Startup-Templates/Application.md). So, most of the time, you don't need to install it manually.
+> This package is already installed by default with the [application startup template](../../solution-templates/layered-web-application/index.md). So, most of the time, you don't need to install it manually.
 
-[Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching) is the main package of the caching system. You can install it a project using the add-package command of the [ABP CLI](CLI.md):
+[Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching) is the main package of the caching system. You can install it a project using the add-package command of the [ABP CLI](../../cli/index.md):
 
 ```bash
 abp add-package Volo.Abp.Caching
@@ -25,7 +25,7 @@ ASP.NET Core defines the `IDistributedCache` interface to get/set the cache valu
 * It works with **byte arrays** rather than .NET objects. So, you need to **serialize/deserialize** the objects you need to cache.
 * It provides a **single key pool** for all cache items, so;
   * You need to care about the keys to distinguish **different type of objects**.
-  * You need to care about the cache items of **different tenants** in a [multi-tenant](Multi-Tenancy.md) system.
+  * You need to care about the cache items of **different tenants** in a [multi-tenant](../architecture/multi-tenancy/index.md) system.
 
 > `IDistributedCache` is defined in the `Microsoft.Extensions.Caching.Abstractions` package. That means it is not only usable for ASP.NET Core applications, but also available to **any type of applications**.
 
@@ -37,9 +37,9 @@ ABP framework defines the generic `IDistributedCache<TCacheItem>` interface in t
 
 `IDistributedCache<TCacheItem>` solves the difficulties explained above;
 
-* It internally **serializes/deserializes** the cached objects. Uses **JSON** serialization by default, but can be overridden by replacing the `IDistributedCacheSerializer` service in the [dependency injection](Dependency-Injection.md) system.
+* It internally **serializes/deserializes** the cached objects. Uses **JSON** serialization by default, but can be overridden by replacing the `IDistributedCacheSerializer` service in the [dependency injection](./dependency-injection.md) system.
 * It automatically adds a **cache name** prefix to the cache keys based on the object type stored in the cache. Default cache name is the full name of the cache item class (`CacheItem` postfix is removed if your cache item class ends with it). You can use the **`CacheName` attribute** on the cache item class to set the cache name.
-* It automatically adds the **current tenant id** to the cache key to distinguish cache items for different tenants (if your application is [multi-tenant](Multi-Tenancy.md)). Define `IgnoreMultiTenancy` attribute on the cache item class to disable this if you want to share the cached objects among all tenants in a multi-tenant application.
+* It automatically adds the **current tenant id** to the cache key to distinguish cache items for different tenants (if your application is [multi-tenant](../architecture/multi-tenancy/index.md)). Define `IgnoreMultiTenancy` attribute on the cache item class to disable this if you want to share the cached objects among all tenants in a multi-tenant application.
 * Allows to define a **global cache key prefix** per application, so different applications can use their isolated key pools in a shared distributed cache server.
 * It **can tolerate errors** wherever possible and bypasses the cache. This is useful when you have temporary problems on the cache server.
 * It has methods like `GetManyAsync` and `SetManyAsync` which significantly improve the performance on **batch operations**.
@@ -211,7 +211,7 @@ public class BookService : ITransientDependency
 
 ### AbpDistributedCacheOptions
 
-`AbpDistributedCacheOptions` is the main [options class](Options.md) to configure the caching.
+`AbpDistributedCacheOptions` is the main [options class](./options.md) to configure the caching.
 
 **Example: Set the cache key prefix for the application**
 
@@ -222,7 +222,7 @@ Configure<AbpDistributedCacheOptions>(options =>
 });
 ```
 
-> Write that code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md).
+> Write that code inside the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md).
 
 #### Available Options
 
@@ -236,7 +236,7 @@ When you design a cache for your objects, you typically try to get the value fro
 
 In most cases, you want to **tolerate the cache errors**; If you get error from the cache server you don't want to cancel the operation. Instead, you silently hide (and log) the error and **query from the original source**. This is what the ABP Framework does by default.
 
-ABP's Distributed Cache [handle](Exception-Handling.md), log and hide errors by default. There is an option to change this globally (see the options below).
+ABP's Distributed Cache [handle](./exception-handling.md), log and hide errors by default. There is an option to change this globally (see the options below).
 
 In addition, all of the `IDistributedCache<TCacheItem>` (and `IDistributedCache<TCacheItem, TCacheKey>`) methods have an optional `hideErrors` parameter, which is `null` by default. The global value is used if this parameter left as `null`, otherwise you can decide to hide or throw the exceptions for individual method calls.
 
@@ -250,15 +250,15 @@ ABP's distributed cache interfaces provide methods to perform batch methods thos
 * `RefreshManyAsync` and `RefreshMany` methods can be used to resets the sliding expiration timeout of multiple values from the cache
 * `RemoveManyAsync` and `RemoveMany` methods can be used to remove multiple values from the cache
 
-> These are not standard methods of the ASP.NET Core caching. So, some providers may not support them. They are supported by the [ABP Redis Cache integration package](Redis-Cache.md). If the provider doesn't support, it fallbacks to `SetAsync` and `GetAsync` ... methods (called once for each item).
+> These are not standard methods of the ASP.NET Core caching. So, some providers may not support them. They are supported by the [ABP Redis Cache integration package](./redis-cache.md). If the provider doesn't support, it fallbacks to `SetAsync` and `GetAsync` ... methods (called once for each item).
 
 ## Caching Entities
 
-ABP Framework provides a [Distributed Entity Cache System](Entity-Cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
+ABP Framework provides a [Distributed Entity Cache System](../infrastructure/entity-cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
 
 It's designed as read-only and automatically invalidates a cached entity if the entity is updated or deleted.
 
-> See the [Entity Cache](Entity-Cache.md) documentation for more information.
+> See the [Entity Cache](../infrastructure/entity-cache.md) documentation for more information.
 
 ## Advanced Topics
 
@@ -266,19 +266,19 @@ It's designed as read-only and automatically invalidates a cached entity if the 
 
 Distributed cache service provides an interesting feature. Assume that you've updated the price of a book in the database, then set the new price to the cache, so you can use the cached value later. What if you have an exception after setting the cache and you **rollback the transaction** that updates the price of the book? In this case, cache value will be incorrect.
 
-`IDistributedCache<..>` methods gets an optional parameter, named `considerUow`, which is `false` by default. If you set it to `true`, then the changes you made for the cache are not actually applied to the real cache store, but associated with the current [unit of work](Unit-Of-Work.md). You get the value you set in the same unit of work, but the changes are applied **only if the current unit of work succeed**.
+`IDistributedCache<..>` methods gets an optional parameter, named `considerUow`, which is `false` by default. If you set it to `true`, then the changes you made for the cache are not actually applied to the real cache store, but associated with the current [unit of work](../architecture/domain-driven-design/unit-of-work.md). You get the value you set in the same unit of work, but the changes are applied **only if the current unit of work succeed**.
 
 ### IDistributedCacheSerializer
 
 `IDistributedCacheSerializer` service is used to serialize and deserialize the cache items. Default implementation is the `Utf8JsonDistributedCacheSerializer` class that uses `IJsonSerializer` service to convert objects to [JSON](Json-Serialization.md) and vice verse. Then it uses UTC8 encoding to convert the JSON string to a byte array which is accepted by the distributed cache.
 
-You can [replace](Dependency-Injection.md) this service by your own implementation if you want to implement your own serialization logic.
+You can [replace](./dependency-injection.md) this service by your own implementation if you want to implement your own serialization logic.
 
 ### IDistributedCacheKeyNormalizer
 
-`IDistributedCacheKeyNormalizer` is implemented by the `DistributedCacheKeyNormalizer` class by default. It adds cache name, application cache prefix and current tenant id to the cache key. If you need a more advanced key normalization, you can [replace](Dependency-Injection.md) this service by your own implementation.
+`IDistributedCacheKeyNormalizer` is implemented by the `DistributedCacheKeyNormalizer` class by default. It adds cache name, application cache prefix and current tenant id to the cache key. If you need a more advanced key normalization, you can [replace](./dependency-injection.md) this service by your own implementation.
 
 ## See Also
 
-* [Entity Cache](Entity-Cache.md)
-* [Redis Cache](Redis-Cache.md)
+* [Entity Cache](../infrastructure/entity-cache.md)
+* [Redis Cache](./redis-cache.md)

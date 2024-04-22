@@ -1,6 +1,6 @@
 # Object Extensions
 
-ABP Framework provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](Modules/Index.md), especially when you want to [extend entities](Customizing-Application-Modules-Extending-Entities.md) and [DTOs](Customizing-Application-Modules-Overriding-Services.md) defined by the module.
+ABP Framework provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](../../modules/index.md), especially when you want to [extend entities](../architecture/modularity/extending/customizing-application-modules-extending-entities.md) and [DTOs](../architecture/modularity/extending/customizing-application-modules-overriding-services.md) defined by the module.
 
 > Object extension system normally is not needed for your own objects since you can easily add regular properties to your own classes.
 
@@ -18,8 +18,8 @@ ExtraPropertyDictionary ExtraProperties { get; }
 
 `IHasExtraProperties` interface is implemented by several base classes by default:
 
-* Implemented by the `AggregateRoot` class (see [entities](Entities.md)).
-* Implemented by `ExtensibleEntityDto`, `ExtensibleAuditedEntityDto`... base [DTO](Data-Transfer-Objects.md) classes.
+* Implemented by the `AggregateRoot` class (see [entities](../architecture/domain-driven-design/entities.md)).
+* Implemented by `ExtensibleEntityDto`, `ExtensibleAuditedEntityDto`... base [DTO](../architecture/domain-driven-design/data-transfer-objects.md) classes.
 * Implemented by the `ExtensibleObject`, which is a simple base class can be inherited for any type of object.
 
 So, if you inherit from these classes, your class will also be extensible. If not, you can always implement it manually.
@@ -112,9 +112,9 @@ While you can set arbitrary properties to an extensible object (which implements
 Explicitly defining an extra property has some use cases:
 
 * Allows to control how the extra property is handled on object to object mapping (see the section below).
-* Allows to define metadata for the property. For example, you can map an extra property to a table field in the database while using the [EF Core](Entity-Framework-Core.md).
+* Allows to define metadata for the property. For example, you can map an extra property to a table field in the database while using the [EF Core](../data/entity-framework-core/index.md).
 
-> `ObjectExtensionManager` implements the singleton pattern (`ObjectExtensionManager.Instance`) and you should define object extensions before your application startup. The [application startup template](Startup-Templates/Application.md) has some pre-defined static classes to safely define object extensions inside.
+> `ObjectExtensionManager` implements the singleton pattern (`ObjectExtensionManager.Instance`) and you should define object extensions before your application startup. The [application startup template](../../solution-templates/layered-web-application/index.md) has some pre-defined static classes to safely define object extensions inside.
 
 ### AddOrUpdate
 
@@ -170,7 +170,7 @@ ObjectExtensionManager.Instance
         });
 ````
 
-> `options` has a dictionary, named `Configuration` which makes the object extension definitions even extensible. It is used by the EF Core to map extra properties to table fields in the database. See the [extending entities](Customizing-Application-Modules-Extending-Entities.md) document.
+> `options` has a dictionary, named `Configuration` which makes the object extension definitions even extensible. It is used by the EF Core to map extra properties to table fields in the database. See the [extending entities](../architecture/modularity/extending/customizing-application-modules-extending-entities.md) document.
 
 The following sections explain the fundamental property configuration options.
 
@@ -323,7 +323,7 @@ ObjectExtensionManager.Instance
 
 ## Object to Object Mapping
 
-Assume that you've added an extra property to an extensible entity object and used auto [object to object mapping](Object-To-Object-Mapping.md) to map this entity to an extensible DTO class. You need to be careful in such a case, because the extra property may contain a **sensitive data** that should not be available to clients.
+Assume that you've added an extra property to an extensible entity object and used auto [object to object mapping](../infrastructure/object-to-object-mapping.md) to map this entity to an extensible DTO class. You need to be careful in such a case, because the extra property may contain a **sensitive data** that should not be available to clients.
 
 This section offers some **good practices** to control your extra properties on object mapping.
 
@@ -409,8 +409,8 @@ ObjectExtensionManager.Instance
     );
 ````
 
-See the [Entity Framework Core Integration document](Entity-Framework-Core.md) for more.
+See the [Entity Framework Core Integration document](../data/entity-framework-core/index.md) for more.
 
 ## See Also
 
-* [Module Entity Extensions](Module-Entity-Extensions.md)
+* [Module Entity Extensions](../architecture/modularity/extending/module-entity-extensions.md)

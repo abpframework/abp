@@ -6,13 +6,13 @@ ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-You can use the [ABP CLI](CLI.md) to install the Volo.Abp.Localization package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
+You can use the [ABP CLI](../../cli/index.md) to install the Volo.Abp.Localization package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
 
 ```bash
 abp add-package Volo.Abp.Localization
 ```
 
-> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Localization).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Localization).
 
 Then you can add **AbpLocalizationModule** dependency to your module:
 
@@ -32,7 +32,7 @@ namespace MyCompany.MyProject
 
 ## Creating A Localization Resource
 
-A localization resource is used to group related localization strings together and separate them from other localization strings of the application. A [module](Module-Development-Basics.md) generally defines its own localization resource. Localization resource is just a plain class. Example:
+A localization resource is used to group related localization strings together and separate them from other localization strings of the application. A [module](../architecture/modularity/basics.md) generally defines its own localization resource. Localization resource is just a plain class. Example:
 
 ````C#
 public class TestResource
@@ -69,11 +69,11 @@ In this example;
 
 * Added a new localization resource with "en" (English) as the default culture.
 * Used JSON files to store the localization strings.
-* JSON files are embedded into the assembly using `AbpVirtualFileSystemOptions` (see [virtual file system](Virtual-File-System.md)).
+* JSON files are embedded into the assembly using `AbpVirtualFileSystemOptions` (see [virtual file system](../infrastructure/virtual-file-system.md)).
 
 JSON files are located under "/Localization/Resources/Test" project folder as shown below:
 
-![localization-resource-json-files](images/localization-resource-json-files.png)
+![localization-resource-json-files](../../images/localization-resource-json-files.png)
 
 A JSON localization file content is shown below:
 
@@ -102,7 +102,7 @@ Configure<AbpLocalizationOptions>(options =>
 });
 ````
 
-> The [application startup template](Startup-Templates/Application.md) sets `DefaultResourceType` to the localization resource of the application.
+> The [application startup template](../../solution-templates/layered-web-application/index.md) sets `DefaultResourceType` to the localization resource of the application.
 
 ### Short Localization Resource Name
 
@@ -229,7 +229,7 @@ namespace MyProject
 
 When you set the `LocalizationResource` in the constructor, the `ApplicationService` class uses that resource type when you use the `L` property, just like in the `DoIt()` method.
 
-Setting `LocalizationResource` in every application service can be tedious. You can create an abstract base application service class, set it there and derive your application services from that base class. This is already implemented when you create a new project with the [startup templates](Startup-Templates/Application.md). So, you can simply inherit from the base class directly use the `L` property:
+Setting `LocalizationResource` in every application service can be tedious. You can create an abstract base application service class, set it there and derive your application services from that base class. This is already implemented when you create a new project with the [startup templates](../../solution-templates/layered-web-application/index.md). So, you can simply inherit from the base class directly use the `L` property:
 
 ```csharp
 using System.Threading.Tasks;
@@ -252,7 +252,7 @@ The `L` property is also available for some other base classes like `AbpControll
 
 See the following documents to learn how to reuse the same localization texts in the JavaScript side;
 
-* [Localization for the MVC / Razor Pages UI](UI/AspNetCore/JavaScript-API/Localization.md)
-* [Localization for the Blazor UI](UI/Blazor/Localization.md)
-* [Localization for the Angular UI](UI/Angular/Localization.md)
+* [Localization for the MVC / Razor Pages UI](../ui/mvc-razor-pages/javascript-api/localization)
+* [Localization for the Blazor UI](../ui/blazor/localization.md)
+* [Localization for the Angular UI](../ui/angular/localization.md)
 * [Video tutorial](https://abp.io/video-courses/essentials/localization)

@@ -8,7 +8,7 @@ Since [the Microsoft documentation](https://docs.microsoft.com/en-us/aspnet/core
 
 ## Configure Options
 
-You typically configure options in the `ConfigureServices` of the `Startup` class. However, since ABP framework provides a modular infrastructure, you configure options in the `ConfigureServices` of your [module](Module-Development-Basics.md). Example:
+You typically configure options in the `ConfigureServices` of the `Startup` class. However, since ABP framework provides a modular infrastructure, you configure options in the `ConfigureServices` of your [module](../architecture/modularity/basics.md). Example:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -50,7 +50,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 ### Get the Option Value
 
-Whenever you need to get the value of an option, [inject](Dependency-Injection.md) the `IOptions<TOption>` service into your class and use its `.Value` property. Example:
+Whenever you need to get the value of an option, [inject](./dependency-injection.md) the `IOptions<TOption>` service into your class and use its `.Value` property. Example:
 
 ````csharp
 public class MyService : ITransientDependency
@@ -89,7 +89,7 @@ public class MyPreOptions
 }
 ````
 
-Then any [module class](Module-Development-Basics.md) depends on your module can use the `PreConfigure<TOptions>` method in its `PreConfigureServices` method. Example:
+Then any [module class](../architecture/modularity/basics.md) depends on your module can use the `PreConfigure<TOptions>` method in its `PreConfigureServices` method. Example:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)

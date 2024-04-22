@@ -161,7 +161,7 @@ throw new UserFriendlyException(
 );
 ````
 
-In this way, there is **no need for localization** at all. If you want to localize the message, you can inject and use the standard **string localizer** (see the [localization document](Localization.md)). Example:
+In this way, there is **no need for localization** at all. If you want to localize the message, you can inject and use the standard **string localizer** (see the [localization document](./localization.md)). Example:
 
 ````C#
 throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage"]);
@@ -293,7 +293,7 @@ services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
 
 ## Subscribing to the Exceptions
 
-It is possible to be informed when the ABP Framework **handles an exception**. It automatically **logs** all the exceptions to the standard [logger](Logging.md), but you may want to do more.
+It is possible to be informed when the ABP Framework **handles an exception**. It automatically **logs** all the exceptions to the standard [logger](./logging.md), but you may want to do more.
 
 In this case, create a class derived from the `ExceptionSubscriber` class in your application:
 
@@ -315,15 +315,15 @@ The `context` object contains necessary information about the exception occurred
 
 Some exception types are automatically thrown by the framework:
 
-- `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See [authorization](Authorization.md) for more.
-- `AbpValidationException` is thrown if the input of the current request is not valid. See [validation](Validation.md) for more.
-- `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](Repositories.md).
+- `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See [authorization](./authorization.md) for more.
+- `AbpValidationException` is thrown if the input of the current request is not valid. See [validation](./validation.md) for more.
+- `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](../architecture/domain-driven-design/repositories.md).
 
 You can also throw these type of exceptions in your code (although it's rarely needed).
 
 ## AbpExceptionHandlingOptions
 
-`AbpExceptionHandlingOptions` is the main [options object](Options.md) to configure the exception handling system. You can configure it in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+`AbpExceptionHandlingOptions` is the main [options object](./options.md) to configure the exception handling system. You can configure it in the `ConfigureServices` method of your [module](../architecture/modularity/basics.md):
 
 ````csharp
 Configure<AbpExceptionHandlingOptions>(options =>

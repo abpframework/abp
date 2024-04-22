@@ -6,7 +6,7 @@ ABP is compatible with the ASP.NET Core Model Validation system and everything w
 
 In addition, ABP adds the following benefits:
 
-* Defines `IValidationEnabled` to add automatic validation to an arbitrary class. Since all the [application services](Application-Services.md) inherently implements it, they are also validated automatically.
+* Defines `IValidationEnabled` to add automatic validation to an arbitrary class. Since all the [application services](../architecture/domain-driven-design/application-services.md) inherently implements it, they are also validated automatically.
 * Automatically localize the validation errors for the data annotation attributes.
 * Provides extensible services to validate a method call or an object state.
 * Provides [FluentValidation](https://fluentvalidation.net/) integration.
@@ -17,7 +17,7 @@ This section briefly introduces the validation system. For details, see the [ASP
 
 ### Data Annotation Attributes
 
-Using data annotations is a simple way to implement the formal validation for a [DTO](Data-Transfer-Objects.md) in a declarative way. Example:
+Using data annotations is a simple way to implement the formal validation for a [DTO](../architecture/domain-driven-design/data-transfer-objects.md) in a declarative way. Example:
 
 ````csharp
 public class CreateBookDto
@@ -35,7 +35,7 @@ public class CreateBookDto
 }
 ````
 
-When you use this class as a parameter to an [application service](Application-Services.md) or a controller, it is automatically validated and a localized validation exception is thrown ([and handled](Exception-Handling.md) by the ABP framework).
+When you use this class as a parameter to an [application service](../architecture/domain-driven-design/application-services.md) or a controller, it is automatically validated and a localized validation exception is thrown ([and handled](../fundamentals/exception-handling.md) by the ABP framework).
 
 ### IValidatableObject
 
@@ -77,7 +77,7 @@ namespace Acme.BookStore
 
 #### Resolving a Service
 
-If you need to resolve a service from the [dependency injection system](Dependency-Injection.md), you can use the `ValidationContext` object. Example:
+If you need to resolve a service from the [dependency injection system](./dependency-injection.md), you can use the `ValidationContext` object. Example:
 
 ````csharp
 var myService = validationContext.GetRequiredService<IMyService>();
@@ -91,7 +91,7 @@ This section explains a few additional services provided by the ABP framework.
 
 ### IValidationEnabled Interface
 
-`IValidationEnabled` is an empty marker interface that can be implemented by any class (registered to and resolved from the [DI](Dependency-Injection.md)) to let the ABP framework perform the validation system for the methods of the class. Example:
+`IValidationEnabled` is an empty marker interface that can be implemented by any class (registered to and resolved from the [DI](./dependency-injection.md)) to let the ABP framework perform the validation system for the methods of the class. Example:
 
 ````csharp
 using System.Threading.Tasks;
@@ -140,14 +140,14 @@ public class InputClass
 Once ABP determines a validation error, it throws an exception of type `AbpValidationException`. Your application code can throw `AbpValidationException`, but most of the times it is not needed.
 
 * `ValidationErrors` property of the `AbpValidationException` contains the validation error list.
-* Log level of the `AbpValidationException` is set to `Warning`. It logs all the validation errors to the [logging system](Logging.md).
-* `AbpValidationException` is automatically caught by the ABP framework and converted to a usable error into with HTTP 400 status code. See the [exception handling](Exception-Handling.md) document for more.
+* Log level of the `AbpValidationException` is set to `Warning`. It logs all the validation errors to the [logging system](../fundamentals/logging.md).
+* `AbpValidationException` is automatically caught by the ABP framework and converted to a usable error into with HTTP 400 status code. See the [exception handling](./exception-handling.md) document for more.
 
 ## Advanced Topics
 
 ### IObjectValidator
 
-In addition to the automatic validation, you may want to manually validate an object. In this case, [inject](Dependency-Injection.md) and use the `IObjectValidator` service:
+In addition to the automatic validation, you may want to manually validate an object. In this case, [inject](./dependency-injection.md) and use the `IObjectValidator` service:
 
 * `ValidateAsync` method validates the given object based on the validation rules and throws an `AbpValidationException` if it is not in a valid state.
 * `GetErrorsAsync` doesn't throw an exception, but only returns the validation errors.
@@ -170,7 +170,7 @@ public class MyObjectValidationContributor
 }
 ````
 
-* Remember to register your class to the [DI](Dependency-Injection.md) (implementing `ITransientDependency` does it just like in this example)
+* Remember to register your class to the [DI](./dependency-injection.md) (implementing `ITransientDependency` does it just like in this example)
 * ABP will automatically discover your class and use on any type of object validation (including automatic method call validation).
 
 ### IMethodInvocationValidator
@@ -179,4 +179,4 @@ public class MyObjectValidationContributor
 
 ## FluentValidation Integration
 
-Volo.Abp.FluentValidation package integrates the FluentValidation library to the validation system (by implementing the `IObjectValidationContributor`). See the [FluentValidation Integration document](FluentValidation.md) for more.
+Volo.Abp.FluentValidation package integrates the FluentValidation library to the validation system (by implementing the `IObjectValidationContributor`). See the [FluentValidation Integration document](./fluent-validation.md) for more.
