@@ -6,7 +6,7 @@ Welcome to ABP Studio. In this quick start guide, you will learn how to create a
 
 > ABP Commercial startup solution templates have many options for your specific needs. If you don't understand an option that probably means you don't need it. We selected common defaults for you, so you can leave these options as they are.
 
-Assuming that you have [installed and logged in](../installation.md) to the application, you should see the following screen when you open ABP Studio:
+Assuming that you have [installed and logged in](../studio/installation.md) to the application, you should see the following screen when you open ABP Studio:
 
 ![abp-studio-welcome-screen](images/abp-studio-welcome-screen.png)
 
@@ -81,7 +81,7 @@ You can explore the solution, but you need to wait for background tasks to be co
 
 This **solution** consists of several **modules** shown in the *Solution Explorer* section:
 
-> You can refer the ***[Concepts](../concepts.md)*** document to learn what do **solution** and **module** terms mean.
+> You can refer the ***[Concepts](../modules/index.md)*** document to learn what do **solution** and **module** terms mean.
 
 ![abp-studio-created-microservice-solution-explorer](images/abp-studio-created-microservice-solution-explorer.png)
 

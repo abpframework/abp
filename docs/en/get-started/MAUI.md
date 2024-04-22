@@ -4,7 +4,7 @@ This template is used to create a minimalist MAUI application project.
 
 ## How to Start With?
 
-First, install the [ABP CLI](../CLI.md) if you haven't installed before:
+First, install the [ABP CLI](../cli/index.md) if you haven't installed before:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
@@ -24,4 +24,4 @@ After you use the above command to create a solution, you will have a solution l
 
 ![basic-maui-application-solution](../images/basic-maui-application-solution.png)
 
-* `HelloWorldService` is a sample service that implements the `ITransientDependency` interface to register this service to the [dependency injection](../Dependency-Injection.md) system.
+* `HelloWorldService` is a sample service that implements the `ITransientDependency` interface to register this service to the [dependency injection](../framework/fundamentals/dependency-injection.md) system.
