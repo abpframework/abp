@@ -83,10 +83,10 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
     }, set);
   }
 
-  private publish(flatItems: T[], visibleItems: T[]): T[] {
+  private publish(flatItems: T[]): T[] {
     this._flat$.next(flatItems);
     this._tree$.next(this.createTree(flatItems));
-    this._visible$.next(this.createTree(visibleItems));
+    this._visible$.next(this.createTree(flatItems.filter(item => !this.hide(item))));
     return flatItems;
   }
 
@@ -99,13 +99,11 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
       map.forEach(pushValueTo(flatItems));
 
       flatItems.sort(this.sort);
-      const visibleItems = flatItems.filter(item => !this.hide(item));
-      return this.publish(flatItems, visibleItems);
+      return this.publish(flatItems);
     } else {
       const flatItems = this.flat.concat(items);
       flatItems.sort(this.sort);
-      const visibleItems = flatItems.filter(item => !this.hide(item));
-      return this.publish(flatItems, visibleItems);
+      return this.publish(flatItems);
     }
   }
 
@@ -125,9 +123,7 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
       });
 
       const flatItems = this.flat.filter(item => !willRemoveItems.includes(item));
-      const visibleItems = flatItems.filter(item => !this.hide(item));
-
-      return this.publish(flatItems, visibleItems);
+      return this.publish(flatItems);
     }
 
     return this.flat;
@@ -156,9 +152,7 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
     flatItems[index] = { ...flatItems[index], ...props };
 
     flatItems.sort(this.sort);
-    const visibleItems = flatItems.filter(item => !this.hide(item));
-
-    return this.publish(flatItems, visibleItems);
+    return this.publish(flatItems);
   }
 
   refresh(): T[] {
@@ -171,9 +165,7 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
 
     const setToRemove = this.findItemsToRemove(set);
     const flatItems = this.filterWith(setToRemove);
-    const visibleItems = flatItems.filter(item => !this.hide(item));
-
-    return this.publish(flatItems, visibleItems);
+    return this.publish(flatItems);
   }
 
   search(params: Partial<T>, tree = this.tree): TreeNode<T> | null {
