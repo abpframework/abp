@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.AspNetCore.Components.Server;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 using Volo.Abp.AspNetCore.Components.Web.Security;
@@ -49,6 +50,15 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
         context.Services
             .GetHostBuilder().Logging
             .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
+        
+        if (!context.Services.ExecutePreConfiguredActions<AbpAspNetCoreComponentsWebOptions>().IsBlazorWebApp)
+        {
+            Configure<AbpAuthenticationOptions>(options =>
+            {
+                options.LoginUrl = "authentication/login";
+                options.LogoutUrl = "authentication/logout";
+            });
+        }
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
