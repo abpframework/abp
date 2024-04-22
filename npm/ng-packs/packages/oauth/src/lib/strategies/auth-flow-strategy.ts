@@ -83,7 +83,7 @@ export abstract class AuthFlowStrategy {
       .loadDiscoveryDocument()
       .then(() => {
         const isTokenExpire = isTokenExpired(this.oAuthService.getAccessTokenExpiration());
-        if (!isTokenExpire || this.oAuthService.getRefreshToken()) {
+        if (isTokenExpire && this.oAuthService.getRefreshToken()) {
           return this.refreshToken();
         }
 

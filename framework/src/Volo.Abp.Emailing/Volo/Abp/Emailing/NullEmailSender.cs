@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Emailing;
 
@@ -15,8 +16,8 @@ public class NullEmailSender : EmailSenderBase
     /// <summary>
     /// Creates a new <see cref="NullEmailSender"/> object.
     /// </summary>
-    public NullEmailSender(IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
-        : base(configuration, backgroundJobManager)
+    public NullEmailSender(ICurrentTenant currentTenant, IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
+        : base(currentTenant, configuration, backgroundJobManager)
     {
 
     }
