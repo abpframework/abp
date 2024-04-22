@@ -1,10 +1,10 @@
 ## ABP Application Startup
 
-You typically use the [ABP CLI](CLI.md)'s `abp new` command to [get started](Getting-Started.md) with one of the pre-built [startup solution templates](Startup-Templates/Index.md). When you do that, you generally don't need to know the details of how the ABP Framework is integrated with your application or how it is configured and initialized. The startup template also comes with the fundamental ABP packages and [application modules](Modules/Index) are pre-installed and configured for you.
+You typically use the [ABP CLI](../../cli/index.md)'s `abp new` command to [get started](../../get-started/layered-web-application.md) with one of the pre-built [startup solution templates](../../solution-templates/index.md). When you do that, you generally don't need to know the details of how the ABP Framework is integrated with your application or how it is configured and initialized. The startup template also comes with the fundamental ABP packages and [application modules](../../modules/index.md) are pre-installed and configured for you.
 
-> It is always suggested to [get started with a startup template](Getting-Started.md) and modify it for your requirements. Read this document only if you want to understand the details or if you need to modify how the ABP Framework starts.
+> It is always suggested to [get started with a startup template](../../get-started/index.md) and modify it for your requirements. Read this document only if you want to understand the details or if you need to modify how the ABP Framework starts.
 
-While the ABP Framework has a lot of features and integrations, it is built as a lightweight and modular framework. It consists of [hundreds of NuGet and NPM packages](https://abp.io/packages), so you can only use the features you need. If you follow the [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](Getting-Started-AspNetCore-Application.md) document, you'll see how easy it is to install the ABP Framework into an empty ASP.NET Core project from scratch. You only need to install a single NuGet package and make a few small changes.
+While the ABP Framework has a lot of features and integrations, it is built as a lightweight and modular framework. It consists of [hundreds of NuGet and NPM packages](https://abp.io/packages), so you can only use the features you need. If you follow the [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](../../get-started/empty-aspnet-core-application.md) document, you'll see how easy it is to install the ABP Framework into an empty ASP.NET Core project from scratch. You only need to install a single NuGet package and make a few small changes.
 
 This document is for who wants to better understand how the ABP Framework is initialized and configured on startup.
 
@@ -24,7 +24,7 @@ The first step is to install the [Volo.Abp.Core](https://www.nuget.org/packages/
 abp add-package Volo.Abp.Core
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
 
 Alternatively, you can use a command-line terminal in the root folder of the project (the folder containing the `MyConsoleDemo.csproj` file, for this example):
 
@@ -32,7 +32,7 @@ Alternatively, you can use a command-line terminal in the root folder of the pro
 dotnet add package Volo.Abp.Core
 ````
 
-After adding the NuGet package, we should create a root [module class](Module-Development-Basics.md) for our application. We can create the following class in the project:
+After adding the NuGet package, we should create a root [module class](../architecture/modularity/basics.md) for our application. We can create the following class in the project:
 
 ````csharp
 using Volo.Abp.Modularity;
@@ -45,7 +45,7 @@ namespace MyConsoleDemo
 }
 ````
 
-This is an empty class deriving from the `AbpModule` class. It is the main class that you will control your application's dependencies with, and implement your configuration and startup/shutdown logic. For more information, please check the [Modularity](Module-Development-Basics.md) document.
+This is an empty class deriving from the `AbpModule` class. It is the main class that you will control your application's dependencies with, and implement your configuration and startup/shutdown logic. For more information, please check the [Modularity](../architecture/modularity/basics.md) document.
 
 As the second and the last step, change the `Program.cs` as shown in the following code block:
 
@@ -69,7 +69,7 @@ That's all. Now, ABP Framework is installed, integrated, started and stopped in 
 
 ## Installing a Framework Package
 
-If you want to send emails from your .NET application, you can use .NET's standard [SmtpClient class](https://learn.microsoft.com/en-us/dotnet/api/system.net.mail.smtpclient). ABP also provides an `IEmailSender` service that simplifies [sending emails](Emailing.md) and configuring the email settings in a central place. If you want to use it, you should install the [Volo.Abp.Emailing](https://www.nuget.org/packages/Volo.Abp.Emailing) NuGet package to your project:
+If you want to send emails from your .NET application, you can use .NET's standard [SmtpClient class](https://learn.microsoft.com/en-us/dotnet/api/system.net.mail.smtpclient). ABP also provides an `IEmailSender` service that simplifies [sending emails](../infrastructure/emailing.md) and configuring the email settings in a central place. If you want to use it, you should install the [Volo.Abp.Emailing](https://www.nuget.org/packages/Volo.Abp.Emailing) NuGet package to your project:
 
 ````bash
 dotnet add package Volo.Abp.Emailing
@@ -112,11 +112,11 @@ await emailsender.SendAsync(
 await application.ShutdownAsync();
 ````
 
-> If you run that application, you get a runtime error indicating that the email sending settings haven't been done yet. You can check the [Email Sending document](Emailing.md) to learn how to configure it.
+> If you run that application, you get a runtime error indicating that the email sending settings haven't been done yet. You can check the [Email Sending document](../infrastructure/emailing.md) to learn how to configure it.
 
 That's all. Install an ABP NuGet package, add the module dependency (using the `[DependsOn]` attribute) and use any service inside the NuGet package.
 
-The [ABP CLI](CLI.md) already has a special command to perform the addition of an ABP NuGet and also adding the `[DependsOn]` attribute to your module class for you with a single command:
+The [ABP CLI](../../cli/index.md) already has a special command to perform the addition of an ABP NuGet and also adding the `[DependsOn]` attribute to your module class for you with a single command:
 
 ````bash
 abp add-package Volo.Abp.Emailing
@@ -144,7 +144,7 @@ AbpApplicationFactory.CreateAsync(typeof(MyConsoleDemoModule));
 
 Both overloads work exactly the same. So, you can use the second one if you don't know the module class type on development time and you (somehow) calculate it on runtime.    
 
-If you use one of the methods above, ABP creates an internal service collection (`IServiceCollection`) and an internal service provider (`IServiceProvider`) to setup the [dependency injection](Dependency-Injection.md) system internally. Notice that we've used the `application.ServiceProvider` property in the *Installing a Framework Package* section to resolve the `IEmailSender` service from the dependency injection system.
+If you use one of the methods above, ABP creates an internal service collection (`IServiceCollection`) and an internal service provider (`IServiceProvider`) to setup the [dependency injection](./dependency-injection.md) system internally. Notice that we've used the `application.ServiceProvider` property in the *Installing a Framework Package* section to resolve the `IEmailSender` service from the dependency injection system.
 
 The next overload gets an `IServiceCollection` parameter from you to allow you to setup the dependency injection system yourself, or integrate to another framework (like ASP.NET Core) that also sets up the dependency injection system internally.
 
@@ -179,7 +179,7 @@ In this example, we've used .NET's standard dependency injection container. The 
 IServiceProvider serviceProvider = services.BuildServiceProviderFromFactory();
 ````
 
-> You can check the [Autofac Integration](Autofac-Integration.md) document if you want to learn how you can integrate the [Autofac](https://autofac.org/) dependency injection container with the ABP Framework.
+> You can check the [Autofac Integration](./autofac-integration.md) document if you want to learn how you can integrate the [Autofac](https://autofac.org/) dependency injection container with the ABP Framework.
 
 Finally, the `CreateAsync` method has a last overload that takes the module class name as a `Type` parameter and a `IServiceCollection` object. So, we could re-write the last `CreateAsync` method usage as in the following code block:
 
@@ -205,20 +205,20 @@ using var application = await AbpApplicationFactory
 We've passed a lambda method to configure the `ApplicationName` option. Here's a list of all standard options:
 
 * `ApplicationName`: A human-readable name for the application. It is a unique value for an application.
-* `Configuration`: Can be used to setup the [application configuration](Configuration.md) when it is not provided by the hosting system. It is not needed for ASP.NET Core and other .NET hosted applications. However, if you've used `AbpApplicationFactory` with an internal service provider, you can use this option to configure how the application configuration is built.
+* `Configuration`: Can be used to setup the [application configuration](./configuration.md) when it is not provided by the hosting system. It is not needed for ASP.NET Core and other .NET hosted applications. However, if you've used `AbpApplicationFactory` with an internal service provider, you can use this option to configure how the application configuration is built.
 * `Environment`: Environment name for the application.
-* `PlugInSources`: A list of plugin sources. See the [Plug-In Modules documentation](PlugIn-Modules) to learn how to work with plugins.
-* `Services`: The `IServiceCollection` object that can be used to register service dependencies. You generally don't need that, because you configure your services in your [module class](Module-Development-Basics.md). However, it can be used while writing extension methods for the `AbpApplicationCreationOptions` class.
+* `PlugInSources`: A list of plugin sources. See the [Plug-In Modules documentation](../architecture/modularity/plugin-modules.md) to learn how to work with plugins.
+* `Services`: The `IServiceCollection` object that can be used to register service dependencies. You generally don't need that, because you configure your services in your [module class](../architecture/modularity/basics.md). However, it can be used while writing extension methods for the `AbpApplicationCreationOptions` class.
 
 #### The ApplicationName option
 
 As defined above, the `ApplicationName` option is a human-readable name for the application. It is a unique value for an application.
 
-`ApplicationName` is used by the ABP Framework in several places to distinguish the application. For example, the [audit logging](Audit-Logging.md) system saves the `ApplicationName` in each audit log record written by the related application, so you can understand which application has created the audit log entry. So, if your system consists of multiple applications (like a microservice solution) that are saving audit logs to a single point, you should be sure that each application has a different `ApplicationName`.
+`ApplicationName` is used by the ABP Framework in several places to distinguish the application. For example, the [audit logging](../infrastructure/audit-logging.md) system saves the `ApplicationName` in each audit log record written by the related application, so you can understand which application has created the audit log entry. So, if your system consists of multiple applications (like a microservice solution) that are saving audit logs to a single point, you should be sure that each application has a different `ApplicationName`.
 
 The `ApplicationName` property's value is set automatically from the **entry assembly's name** (generally, the project name in a .NET solution) by default, which is proper for most cases, since each application typically has a unique entry assembly name.
 
-There are two ways to set the application name to a different value. In this first approach, you can set the `ApplicationName` property in your application's [configuration](Configuration.md). The easiest way is to add an `ApplicationName` field to your `appsettings.json` file:
+There are two ways to set the application name to a different value. In this first approach, you can set the `ApplicationName` property in your application's [configuration](./configuration.md). The easiest way is to add an `ApplicationName` field to your `appsettings.json` file:
 
 ````json
 {
@@ -243,13 +243,13 @@ If you need to access the `ApplicationName` later in your solution, you can inje
 
 ## IAbpApplication
 
-`AbpApplicationFactory` returns an `IAbpApplication` object from its `CreateAsync` (or `Create`) method. `IAbpApplication` is the main container for an ABP application. It is also registered to the [dependency injection](Dependency-Injection.md) system, so you can inject `IAbpApplication` in your services to use its properties and methods.
+`AbpApplicationFactory` returns an `IAbpApplication` object from its `CreateAsync` (or `Create`) method. `IAbpApplication` is the main container for an ABP application. It is also registered to the [dependency injection](./dependency-injection.md) system, so you can inject `IAbpApplication` in your services to use its properties and methods.
 
 Here's a list of `IAbpApplication` properties you may want to know:
 
 * `StartupModuleType`: Gets the root module of the application that was used while creating the application container (on the `AbpApplicationFactory.CreateAsync` method).
 * `Services`: A list of all service registrations (the `IServiceCollection` object). You can not add new services to this collection after application initialization (you can actually add, but it won't have any effect).
-* `ServiceProvider`: A reference to the root service provider used by the application. This can not be used before initializing the application. If you need to resolve non-singleton services from that `IServiceProvider` object, always create a new service scope and dispose it after usage. Otherwise, your application will have memory leak problems. See the *Releasing/Disposing Services* section of the [dependency injection](Dependency-Injection.md) document for more information about service scopes.
+* `ServiceProvider`: A reference to the root service provider used by the application. This can not be used before initializing the application. If you need to resolve non-singleton services from that `IServiceProvider` object, always create a new service scope and dispose it after usage. Otherwise, your application will have memory leak problems. See the *Releasing/Disposing Services* section of the [dependency injection](./dependency-injection.md) document for more information about service scopes.
 * `Modules`: A read-only list of all the modules loaded into the current application. Alternatively, you can inject the `IModuleContainer` service if you need to access the module list in your application code.
 
 The `IAbpApplication` interface extends the `IApplicationInfoAccessor` interface, so you can get the `ApplicationName` and `InstanceId` values from it. However, if you only need to access these properties, inject and use the `IApplicationInfoAccessor` service instead.
@@ -268,7 +268,7 @@ However, we can not use these services in a class library, which is used by the 
 2. Tries to obtain the environment name from the `IWebHostEnvironment` or `IWebAssemblyHostEnvironment` services for ASP.NET Core & Blazor WASM applications if the environment name isn't specified in the `AbpApplicationCreationOptions`.
 3. Sets the environment name as **Production**, if the environment name is not specified or can not be obtained from the services.
 
-You can configure the `AbpApplicationCreationOptions` [options class](Options.md) while creating the ABP application and set an environment name to its `Environment` property. You can find the `AddApplication` or `AddApplicationAsync` call in your solution (typically in the `Program.cs` file), and set the `Environment` option as shown below:
+You can configure the `AbpApplicationCreationOptions` [options class](./options.md) while creating the ABP application and set an environment name to its `Environment` property. You can find the `AddApplication` or `AddApplicationAsync` call in your solution (typically in the `Program.cs` file), and set the `Environment` option as shown below:
 
 ```csharp
 await builder.AddApplicationAsync<OrderingServiceHttpApiHostModule>(options =>
@@ -308,13 +308,13 @@ public class MyDemoService
 
 `AbpApplicationFactory` can create a standalone ABP application container without any external dependency. However, in most cases, you will want to integrate it with [.NET's generic host](https://learn.microsoft.com/en-us/dotnet/core/extensions/generic-host) or ASP.NET Core. For such usages, ABP provides built-in extension methods to easily create an ABP application container that is well-integrated to these systems.
 
-The [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](Getting-Started-AspNetCore-Application.md) document clearly explains how you can create an ABP application container in an ASP.NET Core application.
+The [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](../../get-started/empty-aspnet-core-application.md) document clearly explains how you can create an ABP application container in an ASP.NET Core application.
 
-You can also [create a console application](Startup-Templates/Console) to see how it is integrated with .NET Generic Host.
+You can also [create a console application](../../get-started/console.md) to see how it is integrated with .NET Generic Host.
 
 > Most of the times, you will directly create ABP applications using the ABP CLI's `new` command. So, you don't need to care about these integration details.
 
 ## See Also
 
-* [Dependency injection](Dependency-Injection.md)
-* [Modularity](Module-Development-Basics.md)
+* [Dependency injection](./dependency-injection.md)
+* [Modularity](../architecture/modularity/basics.md)
