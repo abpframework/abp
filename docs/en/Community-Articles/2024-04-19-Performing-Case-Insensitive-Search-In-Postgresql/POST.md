@@ -1,6 +1,6 @@
 # Performing Case-Insensitive Search in ABP Based-PostgreSQL Application: Using `citext` and Collation
 
-PostgreSQL, by default, is a case-sensitive database. This means that text data stored in the database is treated as case-sensitive. However, in many cases, users may need to perform searches regardless of case sensitivity. Since PostgreSQL is case-sensitive this creates some questions in the mind, while when selecting and and using it within an ABP-based application. For example:
+PostgreSQL, by default, is a case-sensitive database. This means that text data stored in the database is treated as case-sensitive. However, in many cases, users may need to perform searches regardless of case sensitivity. Since PostgreSQL is case-sensitive this creates some questions in the mind, when selecting and using it within an ABP-based application. For example:
 
 * Does not ABP Framework support case-sensitive queries for the PostgreSQL database?
 * ABP Framework supports PostgreSQL but does not support case-insensitive search for it?
@@ -9,7 +9,7 @@ PostgreSQL, by default, is a case-sensitive database. This means that text data 
 
 None of these questions are related to ABP Framework but PostgreSQL is being case-sensitive database by default and in this article, I will try to answer to these questions and I will address two possible solutions to perform case-insensitive operations: **Using the `citext` data type for text fields** and **using collations**. 
 
-> As you would know, ABP Framework provides a [EF Core PostgreSQL Provider package](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-PostgreSQL) called `Volo.Abp.EntityFrameworkCore.PostgreSql`. Throughout this article, I will give the example codes, by assuming that you created an ABP-based application with PostgreSQL as the database option, however all the steps in this article, also applicable to any .NET based application.
+> As you would know, ABP Framework provides a [EF Core PostgreSQL Provider package](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-PostgreSQL) called `Volo.Abp.EntityFrameworkCore.PostgreSql`. Throughout this article, I will give the example codes, by assuming that you created an ABP-based application with PostgreSQL as the database option, however all the steps in this article, are also applicable to any .NET-based application.
 
 ## Using the `citext` Data Type
 
@@ -118,11 +118,11 @@ protected override void ConfigureConventions(ModelConfigurationBuilder configura
 
 After these configurations, you should create a migration and apply it to your database as always. 
 
-However, this solution comes with some problems, for example, by using non-deterministic collations, it's not yet possible to use pattern matching operators such as `LIKE` on columns. This is a huge problem, because it makes it hard to use LINQ. For example, you can't use `.EndsWith` or `.StartsWith` methods, because they are [translated to `LIKE` command on the SQL level](https://www.npgsql.org/efcore/mapping/translations.html).
+However, this solution comes with some problems, for example, by using non-deterministic collations, it's not yet possible to use pattern-matching operators such as `LIKE` on columns. This is a huge problem because it makes it hard to use LINQ. For example, you can't use the `.EndsWith` or `.StartsWith` methods, because they are [translated to `LIKE` command on the SQL level](https://www.npgsql.org/efcore/mapping/translations.html).
 
 ## Conclusion
 
-In PostgreSQL, you can perform case-insensitive searches by using the citext data type or by utilizing collation settings. Nevertheless, if you have an ABP-based PostgreSQL application or a plain .NET application with PostgreSQL as the database option, to make a decision to pick one of these options, you can follow the following points:
+In PostgreSQL, you can perform case-insensitive searches by using the `citext` data type or by utilizing collation settings. Nevertheless, if you have an ABP-based PostgreSQL application or a plain .NET application with PostgreSQL as the database option, to make a decision to pick one of these options, you can follow the following points:
 
 * If the accent is not important for you and the only thing you want to do, is make the PostgreSQL queries case-insensitive, using the `citext` data type option should be selected
 * If the accent is really important to you, and you don't use LINQ methods (such as `StartsWith` and `EndsWith` methods), you can use collations. 
