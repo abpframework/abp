@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Emailing.Smtp;
 
@@ -19,9 +20,10 @@ public class SmtpEmailSender : EmailSenderBase, ISmtpEmailSender, ITransientDepe
     /// Creates a new <see cref="SmtpEmailSender"/>.
     /// </summary>
     public SmtpEmailSender(
+        ICurrentTenant currentTenant,
         ISmtpEmailSenderConfiguration smtpConfiguration,
         IBackgroundJobManager backgroundJobManager)
-        : base(smtpConfiguration, backgroundJobManager)
+        : base(currentTenant, smtpConfiguration, backgroundJobManager)
     {
         SmtpConfiguration = smtpConfiguration;
     }
