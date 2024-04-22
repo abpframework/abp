@@ -8,7 +8,7 @@ So, all the ASP.NET Core authorization features and the documentation are valid 
 
 ## Authorize Attribute
 
-ASP.NET Core defines the [**Authorize**](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/simple) attribute that can be used for an action, a controller or a page. ABP allows you to use the same attribute for an [application service](Application-Services.md) too.
+ASP.NET Core defines the [**Authorize**](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/simple) attribute that can be used for an action, a controller or a page. ABP allows you to use the same attribute for an [application service](../architecture/domain-driven-design/application-services.md) too.
 
 Example:
 
@@ -80,7 +80,7 @@ namespace Acme.BookStore.Permissions
 
 > ABP automatically discovers this class. No additional configuration required!
 
-> You typically define this class inside the `Application.Contracts` project of your [application](Startup-Templates/Application.md). The startup template already comes with an empty class named *YourProjectNamePermissionDefinitionProvider* that you can start with.
+> You typically define this class inside the `Application.Contracts` project of your [application](../../solution-templates/layered-web-application/index.md). The startup template already comes with an empty class named *YourProjectNamePermissionDefinitionProvider* that you can start with.
 
 In the `Define` method, you first need to add a **permission group** or get an existing group then add **permissions** to this group.
 
@@ -118,15 +118,15 @@ Then you can define texts for "BookStore" and "Permission:BookStore_Author_Creat
 "Permission:BookStore_Author_Create": "Creating a new author"
 ```
 
-> For more information, see the [localization document](Localization.md) on the localization system.
+> For more information, see the [localization document](./localization.md) on the localization system.
 
 The localized UI will be as seen below:
 
-![authorization-new-permission-ui-localized](images/authorization-new-permission-ui-localized.png)
+![authorization-new-permission-ui-localized](../../images/authorization-new-permission-ui-localized.png)
 
 #### Multi-Tenancy
 
-ABP supports [multi-tenancy](Multi-Tenancy.md) as a first class citizen. You can define multi-tenancy side option while defining a new permission. It gets one of the three values defined below:
+ABP supports [multi-tenancy](../architecture/multi-tenancy/index.md) as a first class citizen. You can define multi-tenancy side option while defining a new permission. It gets one of the three values defined below:
 
 - **Host**: The permission is available only for the host side.
 - **Tenant**: The permission is available only for the tenant side.
@@ -173,7 +173,7 @@ authorManagement.AddChild("Author_Management_Delete_Books");
 
 The result on the UI is shown below (you probably want to localize permissions for your application):
 
-![authorization-new-permission-ui-hierarcy](images/authorization-new-permission-ui-hierarcy.png)
+![authorization-new-permission-ui-hierarcy](../../images/authorization-new-permission-ui-hierarcy.png)
 
 For the example code, it is assumed that a role/user with "Author_Management" permission granted may have additional permissions. Then a typical application service that checks permissions can be defined as shown below:
 
@@ -222,7 +222,7 @@ See [policy based authorization](https://docs.microsoft.com/en-us/aspnet/core/se
 
 ### Changing Permission Definitions of a Depended Module
 
-A class deriving from the `PermissionDefinitionProvider` (just like the example above) can also get existing permission definitions (defined by the depended [modules](Module-Development-Basics.md)) and change their definitions.
+A class deriving from the `PermissionDefinitionProvider` (just like the example above) can also get existing permission definitions (defined by the depended [modules](../architecture/modularity/basics.md)) and change their definitions.
 
 Example:
 
@@ -232,7 +232,7 @@ context
     .IsEnabled = false;
 ````
 
-When you write this code inside your permission definition provider, it finds the "role deletion" permission of the [Identity Module](Modules/Identity.md) and disabled the permission, so no one can delete a role on the application.
+When you write this code inside your permission definition provider, it finds the "role deletion" permission of the [Identity Module](../../modules/identity.md) and disabled the permission, so no one can delete a role on the application.
 
 > Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined.
 
@@ -240,8 +240,8 @@ When you write this code inside your permission definition provider, it finds th
 
 You may want to disable a permission based on a condition. Disabled permissions are not visible on the UI and always returns `prohibited` when you check them. There are two built-in conditional dependencies for a permission definition;
 
-* A permission can be automatically disabled if a [Feature](Features.md) was disabled.
-* A permission can be automatically disabled if a [Global Feature](Global-Features.md) was disabled.
+* A permission can be automatically disabled if a [Feature](../infrastructure/features.md) was disabled.
+* A permission can be automatically disabled if a [Global Feature](../infrastructure/global-features.md) was disabled.
 
 In addition, you can create your custom extensions.
 
@@ -265,7 +265,7 @@ myGroup.AddPermission("Book_Creation")
 
 #### Creating a Custom Permission Dependency
 
-`PermissionDefinition` supports state check, Please refer to [Simple State Checker's documentation](SimpleStateChecker.md) 
+`PermissionDefinition` supports state check, Please refer to [Simple State Checker's documentation](../infrastructure/simple-state-checker.md) 
 
 ## IAuthorizationService
 
@@ -288,7 +288,7 @@ public async Task CreateAsync(CreateAuthorDto input)
 }
 ```
 
-> `AuthorizationService` is available as a property when you derive from ABP's `ApplicationService` base class. Since it is widely used in application services, `ApplicationService` pre-injects it for you. Otherwise, you can directly [inject](Dependency-Injection.md) it into your class.
+> `AuthorizationService` is available as a property when you derive from ABP's `ApplicationService` base class. Since it is widely used in application services, `ApplicationService` pre-injects it for you. Otherwise, you can directly [inject](./dependency-injection.md) it into your class.
 
 Since this is a typical code block, ABP provides extension methods to simplify it.
 
@@ -313,15 +313,15 @@ public async Task CreateAsync(CreateAuthorDto input)
 
 See the following documents to learn how to re-use the authorization system on the client side:
 
-* [ASP.NET Core MVC / Razor Pages UI: Authorization](UI/AspNetCore/JavaScript-API/Auth.md)
-* [Angular UI Authorization](UI/Angular/Permission-Management.md)
-* [Blazor UI Authorization](UI/Blazor/Authorization.md)
+* [ASP.NET Core MVC / Razor Pages UI: Authorization](../ui/mvc-razor-pages/javascript-api/auth.md)
+* [Angular UI Authorization](../ui/angular/authorization.md)
+* [Blazor UI Authorization](../ui/blazor/Authorization.md)
 
 ## Permission Management
 
 Permission management is normally done by an admin user using the permission management modal:
 
-![authorization-new-permission-ui-localized](images/authorization-new-permission-ui-localized.png)
+![authorization-new-permission-ui-localized](../../images/authorization-new-permission-ui-localized.png)
 
 If you need to manage permissions by code, inject the `IPermissionManager` and use as shown below:
 
@@ -349,7 +349,7 @@ public class MyService : ITransientDependency
 
 `SetForUserAsync` sets the value (true/false) for a permission of a user. There are more extension methods like `SetForRoleAsync` and `SetForClientAsync`.
 
-`IPermissionManager` is defined by the permission management module. See the [permission management module documentation](Modules/Permission-Management.md) for more information.
+`IPermissionManager` is defined by the permission management module. See the [permission management module documentation](../../modules/permission-management.md) for more information.
 
 ## Advanced Topics
 
@@ -407,13 +407,13 @@ Configure<AbpPermissionOptions>(options =>
 
 ### Permission Store
 
-`IPermissionStore` is the only interface that needs to be implemented to read the value of permissions from a persistence source, generally a database system. The Permission Management module implements it  and pre-installed in the application startup template. See the [permission management module documentation](Modules/Permission-Management.md) for more information
+`IPermissionStore` is the only interface that needs to be implemented to read the value of permissions from a persistence source, generally a database system. The Permission Management module implements it  and pre-installed in the application startup template. See the [permission management module documentation](../../modules/permission-management.md) for more information
 
 ### AlwaysAllowAuthorizationService
 
 `AlwaysAllowAuthorizationService` is a class that is used to bypass the authorization service. It is generally used in integration tests where you may want to disable the authorization system.
 
-Use `IServiceCollection.AddAlwaysAllowAuthorization()` extension method to register the `AlwaysAllowAuthorizationService` to the [dependency injection](Dependency-Injection.md) system:
+Use `IServiceCollection.AddAlwaysAllowAuthorization()` extension method to register the `AlwaysAllowAuthorizationService` to the [dependency injection](./dependency-injection.md) system:
 
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -470,7 +470,7 @@ Configure<AbpClaimsServiceOptions>(options =>
 
 ## See Also
 
-* [Permission Management Module](Modules/Permission-Management.md)
-* [ASP.NET Core MVC / Razor Pages JavaScript Auth API](UI/AspNetCore/JavaScript-API/Auth.md)
-* [Permission Management in Angular UI](UI/Angular/Permission-Management.md)
+* [Permission Management Module](../../modules/permission-management.md)
+* [ASP.NET Core MVC / Razor Pages JavaScript Auth API](../ui/mvc-razor-pages/javascript-api/auth.md)
+* [Permission Management in Angular UI](../ui/angular/Permission-Management.md)
 * [Video tutorial](https://abp.io/video-courses/essentials/authorization)

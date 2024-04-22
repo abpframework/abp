@@ -14,7 +14,7 @@ A .NET Console application is the minimalist .NET application. So, it is best to
 
 If you [create a new console application with Visual Studio](https://learn.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio) (for .NET 8.0 or later), you will see the following solution structure (I named the solution as `MyConsoleDemo`):
 
-![app-startup-console-initial](images/app-startup-console-initial.png)
+![app-startup-console-initial](../../images/app-startup-console-initial.png)
 
 This example uses the [top level statements](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/top-level-statements), so it consists of only a single line of code.
 

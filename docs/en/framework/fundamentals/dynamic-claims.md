@@ -8,7 +8,7 @@ ABP's dynamic claims feature is used to automatically and dynamically override t
 
 This feature is disabled by default. You should enable it for your application and use the Dynamic Claims middleware.
 
-> **Beginning from the v8.0, all the [startup templates](Startup-Templates/Index.md) are pre-configured and the dynamic claims feature is enabled by default. So, if you have created a solution with v8.0 and above, you don't need to make any configuration. Follow the instructions only if you've upgraded from a version lower than 8.0.**
+> **Beginning from the v8.0, all the [startup templates](../../solution-templates/index.md) are pre-configured and the dynamic claims feature is enabled by default. So, if you have created a solution with v8.0 and above, you don't need to make any configuration. Follow the instructions only if you've upgraded from a version lower than 8.0.**
 
 ### Enabling the Dynamic Claims
 
@@ -61,13 +61,13 @@ The `DynamicClaims` middleware will use `IAbpClaimsPrincipalFactory` to dynamica
 
 There are three pre-built implementations of `IAbpDynamicClaimsPrincipalContributor` for different scenarios:
 
-* `IdentityDynamicClaimsPrincipalContributor`: Provided by the [Identity module](Modules/Identity.md) and generates and overrides the actual dynamic claims, and writes to the distributed cache. Typically works in the authentication server in a distributed system.
+* `IdentityDynamicClaimsPrincipalContributor`: Provided by the [Identity module](../../modules/identity.md) and generates and overrides the actual dynamic claims, and writes to the distributed cache. Typically works in the authentication server in a distributed system.
 * `RemoteDynamicClaimsPrincipalContributor`: For distributed scenarios, this implementation works in the UI application. It tries to get dynamic claim values in the distributed cache. If not found in the distributed cache, it makes an HTTP call to the authentication server and requests filling it by the authentication server. `AbpClaimsPrincipalFactoryOptions.RemoteRefreshUrl` should be properly configure to make it running.
 * `WebRemoteDynamicClaimsPrincipalContributor`: Similar to the `RemoteDynamicClaimsPrincipalContributor` but works in the microservice applications.
 
 ### IAbpDynamicClaimsPrincipalContributor
 
-If you want to add your own dynamic claims contributor, you can create a class that implement the `IAbpDynamicClaimsPrincipalContributor` interface (and register it to the [dependency injection](Dependency-Injection.md) system. ABP Framework will call the `ContributeAsync` method to get the claims. It better to use a kind of cache to improve the performance since that is a frequently executed method (in every HTTP request).
+If you want to add your own dynamic claims contributor, you can create a class that implement the `IAbpDynamicClaimsPrincipalContributor` interface (and register it to the [dependency injection](./dependency-injection.md) system. ABP Framework will call the `ContributeAsync` method to get the claims. It better to use a kind of cache to improve the performance since that is a frequently executed method (in every HTTP request).
 
 ## AbpClaimsPrincipalFactoryOptions
 
@@ -87,6 +87,6 @@ If you want to add your own dynamic claims contributor, you can create a class t
   
 ## See Also
 
-* [Authorization](Authorization.md)
+* [Authorization](./authorization.md)
 * [Claims-based authorization in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/claims)
 * [Mapping, customizing, and transforming claims in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/claims)
