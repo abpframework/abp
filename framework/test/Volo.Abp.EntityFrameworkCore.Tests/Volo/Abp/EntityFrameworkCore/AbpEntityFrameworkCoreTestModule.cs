@@ -51,7 +51,7 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
 
             options.Entity<AppEntityWithNavigations>(opt =>
             {
-                opt.DefaultWithDetailsFunc = q => q.Include(p => p.OneToOne).Include(p => p.OneToMany).Include(p => p.ManyToMany);
+                opt.DefaultWithDetailsFunc = q => q.Include(p => p.OneToOne).ThenInclude(x => x.OneToOne).Include(p => p.OneToMany).ThenInclude(x => x.OneToMany).Include(p => p.ManyToMany);
             });
         });
 

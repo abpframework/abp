@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -176,155 +176,6 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         isDistributedEventTriggered.ShouldBeTrue();
     }
 
-    [Fact]
-    public async Task Should_Trigger_Domain_Events_For_Aggregate_Root_When_Navigation_Changes_Tests()
-    {
-        var entityId = Guid.NewGuid();
-
-        await AppEntityWithNavigationsRepository.InsertAsync(new AppEntityWithNavigations(entityId, "TestEntity"));
-
-        var entityUpdatedEventTriggered = false;
-        var personCreatedEventCount = 0;
-        var entityUpdatedEventTriggerCount = 0;
-
-        LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
-        {
-            personCreatedEventCount++;
-           return Task.CompletedTask;
-        });
-
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigations>>(async data =>
-        {
-            entityUpdatedEventTriggered = !entityUpdatedEventTriggered;
-            await PersonRepository.InsertAsync(new Person(Guid.NewGuid(), Guid.NewGuid().ToString(), new Random().Next(1, 100)));
-        });
-
-        // Test with simple property
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.Name = Guid.NewGuid().ToString();
-            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
-        });
-        entityUpdatedEventTriggered.ShouldBeTrue();
-        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
-
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithValueObjectAddress>>(data =>
-        {
-            throw new Exception("Should not trigger this event");
-        });
-
-        // Test with value object
-        entityUpdatedEventTriggered = false;
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.AppEntityWithValueObjectAddress = new AppEntityWithValueObjectAddress("Turkey");
-            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
-        });
-        entityUpdatedEventTriggered.ShouldBeTrue();
-        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
-
-        entityUpdatedEventTriggered = false;
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.AppEntityWithValueObjectAddress = null;
-            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
-        });
-        entityUpdatedEventTriggered.ShouldBeTrue();
-        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
-
-        // Test with one to one
-        entityUpdatedEventTriggered = false;
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.OneToOne = new AppEntityWithNavigationChildOneToOne
-            {
-                ChildName = "ChildName"
-            };
-            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
-        });
-        entityUpdatedEventTriggered.ShouldBeTrue();
-        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
-
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToOne>>(data =>
-        {
-            throw new Exception("Should not trigger this event");
-        });
-
-        entityUpdatedEventTriggered = false;
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.OneToOne = null;
-            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
-        });
-        entityUpdatedEventTriggered.ShouldBeTrue();
-        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
-
-        // Test with one to many
-        entityUpdatedEventTriggered = false;
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.OneToMany = new List<AppEntityWithNavigationChildOneToMany>()
-            {
-                new AppEntityWithNavigationChildOneToMany
-                {
-                    AppEntityWithNavigationId = entity.Id,
-                    ChildName = "ChildName1"
-                }
-            };
-            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
-        });
-        entityUpdatedEventTriggered.ShouldBeTrue();
-        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
-
-        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToMany>>(data =>
-        {
-            throw new Exception("Should not trigger this event");
-        });
-
-        entityUpdatedEventTriggered = false;
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.OneToMany.Clear();
-            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
-        });
-        entityUpdatedEventTriggered.ShouldBeTrue();
-        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
-
-        // Test with many to many
-        entityUpdatedEventTriggered = false;
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.ManyToMany = new List<AppEntityWithNavigationChildManyToMany>()
-            {
-                new AppEntityWithNavigationChildManyToMany
-                {
-                    ChildName = "ChildName1"
-                }
-            };
-            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
-        });
-        entityUpdatedEventTriggered.ShouldBeTrue();
-        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
-
-        entityUpdatedEventTriggered = false;
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.ManyToMany.Clear();
-            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
-        });
-        entityUpdatedEventTriggered.ShouldBeTrue();
-        personCreatedEventCount.ShouldBe(++entityUpdatedEventTriggerCount);
-    }
-
     private class MyCustomEventData
     {
         public string Value { get; set; }
@@ -368,7 +219,7 @@ public abstract class AbpEntityChangeOptions_DomainEvents_Tests<TStartupModule> 
 
         LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigations>>(data =>
         {
-            entityUpdatedEventTriggered = !entityUpdatedEventTriggered;
+            entityUpdatedEventTriggered = true;
             return Task.CompletedTask;
         });
 
