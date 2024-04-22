@@ -111,7 +111,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 #### Options
 
 * `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a web application. Available templates:
-  * **`app`** (default): [Application template](../solution-templates/application-module/index.md). Additional options:
+  * **`app`** (default): [Application template](../solution-templates/layered-web-application/index.md). Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
@@ -132,9 +132,9 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
     * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
-        * `leptonx-lite`: [LeptonX Lite Theme](../ui-themes/lepton-x-lite/AspNetCore.md).
+        * `leptonx-lite`: [LeptonX Lite Theme](../ui-themes/lepton-x-lite/asp-net-core.md).
         * `basic`: [Basic Theme](../framework/ui/mvc-razor-pages/basic-theme.md).
-  * **`module`**: [Module template](Startup-Templates/Module.md). Additional options:
+  * **`module`**: [Module template](../solution-templates/application-module/index.md). Additional options:
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
   * **`console`**: [Console template](../get-started/console.md).
   * **`app-nolayers`**: [Single-layer application template](../solution-templates/single-layer-web-application/index.md). Additional options:
@@ -588,7 +588,7 @@ abp bundle [options]
   * `webassembly`
   * `maui-blazor`
 
-`bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../framework/ui/blazor/Global-Scripts-Styles.md)
+`bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../framework/ui/blazor/global-scripts-styles.md)
 
 ### install-libs
 
