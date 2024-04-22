@@ -103,6 +103,18 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
             b.HasMany(x => x.ManyToMany).WithMany(x => x.ManyToMany).UsingEntity<AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany>();
         });
 
+        modelBuilder.Entity<AppEntityWithNavigationChildOneToOne>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOneAndOneToOne>(x => x.Id);
+        });
+
+        modelBuilder.Entity<AppEntityWithNavigationChildOneToMany>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationChildOneToManyId);
+        });
+
         modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
     }
 }
