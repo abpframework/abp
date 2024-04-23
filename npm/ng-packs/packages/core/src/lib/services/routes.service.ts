@@ -26,7 +26,7 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
   private _visible$ = new BehaviorSubject<TreeNode<T>[]>([]);
 
   protected othersGroup: string;
-  private filterRoutesEnabled = true;
+  protected shouldSingularizeRoutes = true;
 
   get flat(): T[] {
     return this._flat$.value;
@@ -94,53 +94,25 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
   }
 
   add(items: T[]): T[] {
-    if (this.filterRoutesEnabled) {
+    let flatItems: T[] = [];
+
+    if (!this.shouldSingularizeRoutes) {
+      flatItems = [...this.flat, ...items];
+    }
+
+    if (this.shouldSingularizeRoutes) {
       const map = new Map<string, T>();
       items.forEach(item => map.set(item[this.id], item));
-
-      const flatItems = this.filterWith(map);
+      flatItems = this.filterWith(map);
       map.forEach(pushValueTo(flatItems));
-
-      flatItems.sort(this.sort);
-      return this.publish(flatItems);
-    } else {
-      const flatItems = this.flat.concat(items);
-      flatItems.sort(this.sort);
-      return this.publish(flatItems);
-    }
-  }
-
-  delete(params: Partial<T>): T[] {
-    const willRemoveItems = this.flat.filter(item => {
-      const keys = Object.keys(params) as Array<keyof Partial<T>>;
-      const isValid = keys.every(key => item[key] === params[key]);
-
-      return isValid;
-    });
-
-    if (willRemoveItems?.length) {
-      willRemoveItems.forEach(item => {
-        this.delete({
-          [this.parentId]: item[this.id],
-        } as Partial<T>);
-      });
-
-      const flatItems = this.flat.filter(item => !willRemoveItems.includes(item));
-      return this.publish(flatItems);
     }
 
-    return this.flat;
+    flatItems.sort(this.sort);
+
+    return this.publish(flatItems);
   }
 
-  disableFiltering(): void {
-    this.filterRoutesEnabled = false;
-  }
-
-  enableFiltering(): void {
-    this.filterRoutesEnabled = true;
-  }
-
- find(predicate: (item: TreeNode<T>) => boolean, tree = this.tree): TreeNode<T> | null {
+  find(predicate: (item: TreeNode<T>) => boolean, tree = this.tree): TreeNode<T> | null {
     return tree.reduce<TreeNode<T> | null>((acc, node) => {
       if (acc) {
         return acc;
@@ -180,6 +152,29 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
     return this.publish(flatItems);
   }
 
+  removeByParams(params: Partial<T>): T[] | null {
+    if (!params) {
+      return null;
+    }
+
+    const keys = Object.keys(params) as Array<keyof Partial<T>>;
+    if (keys.length === 0) {
+      return null;
+    }
+
+    const excludedList = this.flat.filter(item => keys.every(key => item[key] === params[key]));
+    if (!excludedList?.length) {
+      return null;
+    }
+
+    for (const item of excludedList) {
+      this.removeByParams({ [this.parentId]: item[this.id] } as Partial<T>);
+    }
+
+    const flatItems = this.flat.filter(item => !excludedList.includes(item));
+    return this.publish(flatItems);
+  }
+
   search(params: Partial<T>, tree = this.tree): TreeNode<T> | null {
     const searchKeys = Object.keys(params) as Array<keyof Partial<T>>;
 
@@ -188,12 +183,16 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
         return acc;
       }
 
-      if (searchKeys.every(key => node.item[key] === params[key])) {
+      if (searchKeys.every(key => node[key] === params[key])) {
         return node;
       }
 
       return this.search(params, node.children);
     }, null);
+  }
+
+  setSingularizeStatus(singularize = true): void {
+    this.shouldSingularizeRoutes = singularize;
   }
 }
 

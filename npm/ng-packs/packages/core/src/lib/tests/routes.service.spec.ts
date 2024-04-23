@@ -172,9 +172,9 @@ describe('Routes Service', () => {
     });
   });
 
-  describe('#disableFiltering', () => {
-    it('should allow to duplicate routes', () => {
-      service.disableFiltering();
+  describe('#setSingularizeStatus', () => {
+    it('should allow to duplicate routes when called with false', () => {
+      service.setSingularizeStatus(false);
 
       service.add(routes);
 
@@ -183,8 +183,8 @@ describe('Routes Service', () => {
       expect(flat.length).toBe(routes.length);
     });
 
-    it('should allow to duplicate routes with the same name', () => {
-      service.disableFiltering();
+    it('should allow to duplicate routes with the same name when called with false', () => {
+      service.setSingularizeStatus(false);
 
       service.add([...routes, { path: '/foo/bar/test', name: 'bar', parentName: 'foo', order: 2 }]);
 
@@ -193,8 +193,8 @@ describe('Routes Service', () => {
       expect(flat.length).toBe(routes.length + 1);
     });
 
-    it('should allow to routes with the same name but different parentName', () => {
-      service.disableFiltering();
+    it('should allow to routes with the same name but different parentName when called with false', () => {
+      service.setSingularizeStatus(false);
 
       service.add([
         { path: '/foo/bar', name: 'bar', parentName: 'foo', order: 2 },
@@ -205,15 +205,13 @@ describe('Routes Service', () => {
 
       expect(flat.length).toBe(2);
     });
-  });
 
-  describe('#enableFiltering', () => {
-    it('should not allow to duplicate routes', () => {
-      service.disableFiltering();
+    it('should not allow to duplicate routes when called with true', () => {
+      service.setSingularizeStatus(false);
 
       service.add(routes);
 
-      service.enableFiltering();
+      service.setSingularizeStatus(true);
 
       service.add(routes);
 
@@ -222,8 +220,8 @@ describe('Routes Service', () => {
       expect(flat.length).toBe(5);
     });
 
-    it('should not allow to duplicate routes with the same name', () => {
-      service.enableFiltering();
+    it('should not allow to duplicate routes with the same name when called with true', () => {
+      service.setSingularizeStatus(true);
       service.add([...routes, { path: '/foo/bar/test', name: 'bar', parentName: 'any', order: 2 }]);
 
       const flat = service.flat;
@@ -302,11 +300,11 @@ describe('Routes Service', () => {
     });
   });
 
-  describe('#delete', () => {
+  describe('#removeByParams', () => {
     it('should remove route based on given route', () => {
       service.add(routes);
 
-      service.delete({
+      service.removeByParams({
         name: 'bar',
         parentName: 'foo',
       });
@@ -321,7 +319,7 @@ describe('Routes Service', () => {
     });
 
     it('should remove if more than one route has the same properties', () => {
-      service.disableFiltering();
+      service.setSingularizeStatus(false);
 
       service.add([
         ...routes,
@@ -335,7 +333,7 @@ describe('Routes Service', () => {
         },
       ]);
 
-      service.delete({
+      service.removeByParams({
         path: '/foo/bar',
         name: 'bar',
         parentName: 'foo',
@@ -345,7 +343,6 @@ describe('Routes Service', () => {
       });
 
       const flat = service.flat;
-      console.log(flat);
       expect(flat.length).toBe(5);
 
       const notFound = service.search({
@@ -363,7 +360,7 @@ describe('Routes Service', () => {
       service.add(routes);
       const flatLengthBeforeRemove = service.flat.length;
 
-      service.delete({
+      service.removeByParams({
         name: 'bar',
         parentName: 'baz',
       });
