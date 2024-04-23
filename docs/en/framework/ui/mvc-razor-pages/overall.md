@@ -1,7 +1,7 @@
 # ASP.NET Core MVC / Razor Pages UI
 
 ## Introduction
-Testtt
+
 ABP Framework provides a convenient and comfortable way of creating web applications using the ASP.NET Core MVC / Razor Pages as the User Interface framework.
 
 > ABP doesn't offer a new/custom way of UI development. You can continue to use your current skills to create the UI. However, it offers a lot of features to make your development easier and have a more maintainable code base.
