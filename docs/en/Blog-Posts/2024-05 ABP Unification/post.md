@@ -41,16 +41,6 @@ As I said above, the abp.io UI design is also being revised. One of the big revi
 
 We believe that new mega menu will allow you to navigate through the web pages much easier.
 
-### The New Pricing Page
-
-Since the [ABP Commercial website](https://commercial.abp.io/) is merged to the main website, you will see the *Pricing* page located on the main menu of the abp.io website. We have completely revised the design and content of this page to better reflect what is open source, free, and what features are included in the paid licenses.
-
-***TODO: UPDATE THE PICTURE***
-
-![new-pricing](new-pricing.png)
-
-As mentioned above, all the free & open source features are still free & open source. In addition, we included the ABP Studio Community edition (will be explained below) to the free license.
-
 ### The New Get Started Page
 
 We are constantly working to improve ABP's onboarding experience. With the new platform changes, we now offer ABP Studio as the starting point for the ABP Platform. You can still use the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) to created new ABP solutions, but the new ABP Studio makes it much easier and understandable. It also provides features to easily run and monitor your applications, even in the Community edition.
@@ -60,6 +50,16 @@ We are constantly working to improve ABP's onboarding experience. With the new p
 ![new-get-started](new-get-started.png)
 
 You can easily download and install ABP Studio, login with your abp.io account and create your first ABP solution.
+
+### The New Pricing Page
+
+Since the [ABP Commercial website](https://commercial.abp.io/) is merged to the main website, you will see the *Pricing* page located on the main menu of the abp.io website. We have completely revised the design and content of this page to better reflect what is open source, free, and what features are included in the paid licenses.
+
+***TODO: UPDATE THE PICTURE***
+
+![new-pricing](new-pricing.png)
+
+As mentioned above, all the free & open source features are still free & open source. In addition, we included the ABP Studio Community edition (will be explained below) to the free license.
 
 ## Merging the ABP Platform Documentation
 
