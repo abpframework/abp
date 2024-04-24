@@ -4,7 +4,7 @@
 
 **Data Transfer Objects** (DTO) are used to transfer data between the **Application Layer** and the **Presentation Layer** or other type of clients.
 
-Typically, an [application service](Application-Services.md) is called from the presentation layer (optionally) with a **DTO** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
+Typically, an [application service](./application-services.md) is called from the presentation layer (optionally) with a **DTO** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
 
 ### The Need for DTOs
 
@@ -48,7 +48,7 @@ You typically create DTOs corresponding to your entities, which results similar 
 
 #### EntityDto
 
-`IEntityDto<TKey>` is a simple interface that only defines an `Id` property. You can implement it or inherit from the `EntityDto<TKey>` for your DTOs that matches to an [entity](Entities.md).
+`IEntityDto<TKey>` is a simple interface that only defines an `Id` property. You can implement it or inherit from the `EntityDto<TKey>` for your DTOs that matches to an [entity](./entities.md).
 
 **Example:**
 
@@ -79,7 +79,7 @@ If your entity inherits from audited entity classes (or implements auditing inte
 
 #### Extensible DTOs
 
-If you want to use the [object extension system](Object-Extensions.md) for your DTOs, you can use or inherit from the following DTO classes:
+If you want to use the [object extension system](../../fundamentals/object-extensions.md) for your DTOs, you can use or inherit from the following DTO classes:
 
 * `ExtensibleObject` implements the `IHasExtraProperties` (other classes inherits this class).
 * `ExtensibleEntityDto`
@@ -241,22 +241,22 @@ var query = _productRepository
 
 > Notice that we added `Volo.Abp.EntityFrameworkCore` package to the project to be able to use the `ToListAsync` and `CountAsync` methods since they are not included in the standard LINQ, but defined by the Entity Framework Core.
 
-See also the [repository documentation](Repositories.md) to if you haven't understood the example code.
+See also the [repository documentation](./repositories.md) to if you haven't understood the example code.
 
 ## Related Topics
 
 ### Validation
 
-Inputs of [application service](Application-Services.md) methods, controller actions, page model inputs... are automatically validated. You can use the standard data annotation attributes or a custom validation method to perform the validation.
+Inputs of [application service](./application-services.md) methods, controller actions, page model inputs... are automatically validated. You can use the standard data annotation attributes or a custom validation method to perform the validation.
 
-See the [validation document](Validation.md) for more.
+See the [validation document](../../fundamentals/validation.md) for more.
 
 ### Object to Object Mapping
 
 When you create a DTO that is related to an entity, you generally need to map these objects. ABP provides an object to object mapping system to simplify the mapping process. See the following documents:
 
-* [Object to Object Mapping document](Object-To-Object-Mapping.md) covers all the features.
-* [Application Services document](Application-Services.md) provides a full example.
+* [Object to Object Mapping document](../../infrastructure/object-to-object-mapping.md) covers all the features.
+* [Application Services document](./application-services.md) provides a full example.
 
 ## Best Practices
 
@@ -265,9 +265,9 @@ You are free to design your DTO classes. However, there are some best practices 
 ### Common Principles
 
 * DTOs should be **well serializable** since they are generally serialized and deserialized (to JSON or other format). It is suggested to have an empty (parameterless) public constructor if you have another constructor with parameter(s).
-* DTOs **should not contain any business logic**, except some formal [validation](Validation.md) code.
-* Do not inherit DTOs from entities and **do not reference to entities**. The [application startup template](Startup-Templates/Application.md) already prevents it by separating the projects.
-* If you use an auto [object to object mapping](Object-To-Object-Mapping.md) library, like AutoMapper, enable the **mapping configuration validation** to prevent potential bugs.
+* DTOs **should not contain any business logic**, except some formal [validation](../../fundamentals/validation.md) code.
+* Do not inherit DTOs from entities and **do not reference to entities**. The [application startup template](../../../solution-templates/layered-web-application/index.md) already prevents it by separating the projects.
+* If you use an auto [object to object mapping](../../infrastructure/object-to-object-mapping.md) library, like AutoMapper, enable the **mapping configuration validation** to prevent potential bugs.
 
 ### Input DTO Principles
 

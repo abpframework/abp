@@ -9,7 +9,7 @@
 * **Do** use the `AppService` postfix for the interface name (ex: `IProductAppService`).
 * **Do** create DTOs (Data Transfer Objects) for inputs and outputs of the service.
 * **Do not** get/return entities for the service methods.
-* **Do** define DTOs based on the [DTO best practices](Data-Transfer-Objects.md).
+* **Do** define DTOs based on the [DTO best practices](./data-transfer-objects.md).
 
 #### Outputs
 
@@ -206,7 +206,7 @@ This method votes a question and returns the current score of the question.
 
 #### Extra Properties
 
-* **Do** use either `MapExtraPropertiesTo` extension method ([see](../Object-Extensions.md)) or configure the object mapper (`MapExtraProperties`) to allow application developers to be able to extend the objects and services.
+* **Do** use either `MapExtraPropertiesTo` extension method ([see](../../fundamentals/object-extensions.md)) or configure the object mapper (`MapExtraProperties`) to allow application developers to be able to extend the objects and services.
 
 #### Manipulating / Deleting Entities
 

@@ -21,8 +21,8 @@ The following method types are considered as a unit of work:
 
 A UOW automatically begins for these methods **except** if there is already a **surrounding (ambient)** UOW in action. Examples;
 
-* If you call a [repository](Repositories.md) method and there is no UOW started yet, it automatically **begins a new transactional UOW** that involves all the operations done in the repository method and **commits the transaction** if the repository method **doesn't throw any exception.** The repository method doesn't know about UOW or transaction at all. It just works on a regular database objects (`DbContext` for [EF Core](Entity-Framework-Core.md), for example) and the UOW is handled by the ABP Framework.
-* If you call an [application service](Application-Services.md) method, the same UOW system works just as explained above. If the application service method uses some repositories, the repositories **don't begin a new UOW**, but **participates to the current unit of work** started by the ABP Framework for the application service method.
+* If you call a [repository](./repositories.md) method and there is no UOW started yet, it automatically **begins a new transactional UOW** that involves all the operations done in the repository method and **commits the transaction** if the repository method **doesn't throw any exception.** The repository method doesn't know about UOW or transaction at all. It just works on a regular database objects (`DbContext` for [EF Core](../../data/entity-framework-core/index.md), for example) and the UOW is handled by the ABP Framework.
+* If you call an [application service](./application-services.md) method, the same UOW system works just as explained above. If the application service method uses some repositories, the repositories **don't begin a new UOW**, but **participates to the current unit of work** started by the ABP Framework for the application service method.
 * The same is true for an ASP.NET Core controller action. If the operation has started with a controller action, then the **UOW scope is the controller action's method body**.
 
 All of these are automatically handled by the ABP Framework.
@@ -38,7 +38,7 @@ This is because an HTTP GET request doesn't (and shouldn't) make any change in t
 
 ## Default Options
 
-`AbpUnitOfWorkDefaultOptions` is used to configure the default options for the unit of work system. Configure the options in the `ConfigureServices` method of your [module](Module-Development-Basics.md).
+`AbpUnitOfWorkDefaultOptions` is used to configure the default options for the unit of work system. Configure the options in the `ConfigureServices` method of your [module](../modularity/basics.md).
 
 **Example: Completely disable the database transactions**
 
@@ -300,9 +300,9 @@ namespace AbpDemo
 }
 ````
 
-This example uses auto-increment `int` primary key for the `Category` [entity](Entities.md). Auto-increment PKs require to save the entity to the database to get the id of the new entity.
+This example uses auto-increment `int` primary key for the `Category` [entity](./entities.md). Auto-increment PKs require to save the entity to the database to get the id of the new entity.
 
-This example is an [application service](Application-Services.md) derived from the base `ApplicationService` class, which already has the `IUnitOfWorkManager` service injected as the `UnitOfWorkManager` property. So, no need to inject it manually.
+This example is an [application service](./application-services.md) derived from the base `ApplicationService` class, which already has the `IUnitOfWorkManager` service injected as the `UnitOfWorkManager` property. So, no need to inject it manually.
 
 Since getting the current UOW is pretty common, there is also a `CurrentUnitOfWork` property as a shortcut to the `UnitOfWorkManager.Current`. So, the example above can be changed to use it:
 
@@ -312,7 +312,7 @@ await CurrentUnitOfWork.SaveChangesAsync();
 
 ##### Alternative to the SaveChanges()
 
-Since saving changes after inserting, updating or deleting an entity can be frequently needed, corresponding [repository](Repositories.md) methods has an optional `autoSave` parameter. So, the `CreateAsync` method above could be re-written as shown below:
+Since saving changes after inserting, updating or deleting an entity can be frequently needed, corresponding [repository](./repositories.md) methods has an optional `autoSave` parameter. So, the `CreateAsync` method above could be re-written as shown below:
 
 ````csharp
 public async Task<int> CreateAsync(string name)

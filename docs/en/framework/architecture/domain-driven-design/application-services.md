@@ -2,7 +2,7 @@
 
 Application services are used to implement the **use cases** of an application. They are used to **expose domain logic to the presentation layer**.
 
-An Application Service is called from the presentation layer (optionally) with a **DTO ([Data Transfer Object](Data-Transfer-Objects.md))** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
+An Application Service is called from the presentation layer (optionally) with a **DTO ([Data Transfer Object](./data-transfer-objects.md))** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
 
 ## Example
 
@@ -89,7 +89,7 @@ public class CreateBookDto
 }
 ````
 
-> See [data transfer objects document](Data-Transfer-Objects.md) for more about DTOs.
+> See [data transfer objects document](./data-transfer-objects.md) for more about DTOs.
 
 ### BookAppService (Implementation)
 
@@ -117,22 +117,22 @@ public class BookAppService : ApplicationService, IBookAppService
 }
 ````
 
-* `BookAppService` inherits from the `ApplicationService` base class. It's not required, but the `ApplicationService` class provides helpful properties for common application service requirements like `GuidGenerator` used in this service. If we didn't inherit from it, we would need to inject the `IGuidGenerator` service manually (see [guid generation](Guid-Generation.md) document).
+* `BookAppService` inherits from the `ApplicationService` base class. It's not required, but the `ApplicationService` class provides helpful properties for common application service requirements like `GuidGenerator` used in this service. If we didn't inherit from it, we would need to inject the `IGuidGenerator` service manually (see [guid generation](../../infrastructure/guid-generation.md) document).
 * `BookAppService` implements the `IBookAppService` as expected.
-* `BookAppService` [injects](Dependency-Injection.md) `IRepository<Book, Guid>` (see [repositories](Repositories.md)) and uses it inside the `CreateAsync` method to insert a new entity to the database.
+* `BookAppService` [injects](../../fundamentals/dependency-injection.md) `IRepository<Book, Guid>` (see [repositories](./repositories.md)) and uses it inside the `CreateAsync` method to insert a new entity to the database.
 * `CreateAsync` uses the constructor of the `Book` entity to create a new book from the properties of given `input`.
 
 ## Data Transfer Objects
 
 Application services get and return DTOs instead of entities. ABP does not force this rule. However, exposing entities to the presentation layer (or to remote clients) has significant problems and is not suggested. 
 
-See the [DTO documentation](Data-Transfer-Objects.md) for more.
+See the [DTO documentation](./data-transfer-objects.md) for more.
 
 ## Object to Object Mapping
 
 The `CreateAsync` method above manually creates a `Book` entity from given `CreateBookDto` object, because the `Book` entity enforces it (we designed it like that).
 
-However, in many cases, it's very practical to use **auto object mapping** to set properties of an object from a similar object. ABP provides an [object to object mapping](Object-To-Object-Mapping.md) infrastructure to make this even easier.
+However, in many cases, it's very practical to use **auto object mapping** to set properties of an object from a similar object. ABP provides an [object to object mapping](../../infrastructure/object-to-object-mapping.md) infrastructure to make this even easier.
 
 Object to object mapping provides abstractions and it is implemented by the [AutoMapper](https://automapper.org/) library by default.
 
@@ -147,7 +147,7 @@ public interface IBookAppService : IApplicationService
 }
 ````
 
-`BookDto` is a simple [DTO](Data-Transfer-Objects.md) class defined as below:
+`BookDto` is a simple [DTO](./data-transfer-objects.md) class defined as below:
 
 ````csharp
 public class BookDto
@@ -203,19 +203,19 @@ public async Task<BookDto> GetAsync(Guid id)
 }
 ````
 
-See the [object to object mapping document](Object-To-Object-Mapping.md) for more.
+See the [object to object mapping document](../../infrastructure/object-to-object-mapping.md) for more.
 
 ## Validation
 
 Inputs of application service methods are automatically validated (like ASP.NET Core controller actions). You can use the standard data annotation attributes or a custom validation method to perform the validation. ABP also ensures that the input is not null.
 
-See the [validation document](Validation.md) for more.
+See the [validation document](../../fundamentals/validation.md) for more.
 
 ## Authorization
 
 It's possible to use declarative and imperative authorization for application service methods.
 
-See the [authorization document](Authorization.md) for more.
+See the [authorization document](../../fundamentals/authorization.md) for more.
 
 ## CRUD Application Services
 
@@ -440,7 +440,7 @@ These methods are low level methods that can control how to query entities from 
 
 #### Object to Object Mapping
 
-These methods are used to convert Entities to DTOs and vice verse. They use the [IObjectMapper](Object-To-Object-Mapping.md) by default.
+These methods are used to convert Entities to DTOs and vice verse. They use the [IObjectMapper](../../infrastructure/object-to-object-mapping.md) by default.
 
 * `MapToGetOutputDtoAsync` is used to map the entity to the DTO returned from the `GetAsync`, `CreateAsync` and `UpdateAsync` methods. Alternatively, you can override the `MapToGetOutputDto` if you don't need to perform any async operation.
 * `MapToGetListOutputDtosAsync` is used to map a list of entities to a list of DTOs returned from the `GetListAsync` method. It uses the `MapToGetListOutputDtoAsync` to map each entity in the list. You can override one of them based on your case. Alternatively, you can override the `MapToGetListOutputDto` if you don't need to perform any async operation.
@@ -489,7 +489,7 @@ namespace MyProject.Test
 }
 ````
 
-**You need to configure `AbpAspNetCoreMvcOptions` to add DTO class to `FormBodyBindingIgnoredTypes` to use `IRemoteStreamContent` in** **DTO ([Data Transfer Object](Data-Transfer-Objects.md))**
+**You need to configure `AbpAspNetCoreMvcOptions` to add DTO class to `FormBodyBindingIgnoredTypes` to use `IRemoteStreamContent` in** **DTO ([Data Transfer Object](./data-transfer-objects.md))**
 
 ````csharp
 Configure<AbpAspNetCoreMvcOptions>(options =>
@@ -556,11 +556,11 @@ namespace MyProject.Test
 }
 ````
 
-`IRemoteStreamContent` is compatible with the [Auto API Controller](API/Auto-API-Controllers.md) and [Dynamic C# HTTP Proxy](API/Dynamic-CSharp-API-Clients.md) systems.
+`IRemoteStreamContent` is compatible with the [Auto API Controller](../../api-development/auto-controllers.md) and [Dynamic C# HTTP Proxy](../../api-development/dynamic-csharp-clients.md) systems.
 
 ## Lifetime
 
-Lifetime of application services are [transient](Dependency-Injection.md) and they are automatically registered to the dependency injection system.
+Lifetime of application services are [transient](../../fundamentals/dependency-injection.md) and they are automatically registered to the dependency injection system.
 
 ## See Also
 

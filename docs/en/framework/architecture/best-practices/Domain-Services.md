@@ -64,5 +64,5 @@ public async Task AssignToAsync(Issue issue, IdentityUser user)
 ## See Also
 
 * [Video tutorial](https://abp.io/video-courses/essentials/domain-services)
-* [Domain Services](../Domain-Services.md)
-* [Exception Handling](../Exception-Handling.md)
+* [Domain Services](../domain-driven-design/domain-services.md)
+* [Exception Handling](../../fundamentals/exception-handling.md)

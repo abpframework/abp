@@ -1,6 +1,6 @@
 # Customizing the Application Modules: Overriding Services
 
-You may need to **change behavior (business logic)** of a depended module for your application. In this case, you can use the power of the [dependency injection system](Dependency-Injection.md) to replace a service, controller or even a page model of the depended module by your own implementation.
+You may need to **change behavior (business logic)** of a depended module for your application. In this case, you can use the power of the [dependency injection system](../../../fundamentals/dependency-injection.md) to replace a service, controller or even a page model of the depended module by your own implementation.
 
 **Replacing a service** is possible for any type of class registered to the dependency injection, including services of the ABP Framework.
 
@@ -50,7 +50,7 @@ context.Services.Replace(
 );
 ````
 
-You can write this inside the `ConfigureServices` method of your [module](Module-Development-Basics.md).
+You can write this inside the `ConfigureServices` method of your [module](../../modularity/basics.md).
 
 ## Overriding a Service Class
 
@@ -95,7 +95,7 @@ public class MyIdentityUserAppService : IdentityUserAppService
 }
 ````
 
-This class **overrides** the `CreateAsync` method of the `IdentityUserAppService` [application service](Application-Services.md) to check the phone number. Then calls the base method to continue to the **underlying business logic**. In this way, you can perform additional business logic **before** and **after** the base logic.
+This class **overrides** the `CreateAsync` method of the `IdentityUserAppService` [application service](../../domain-driven-design/application-services.md) to check the phone number. Then calls the base method to continue to the **underlying business logic**. In this way, you can perform additional business logic **before** and **after** the base logic.
 
 You could completely **re-write** the entire business logic for a user creation without calling the base method.
 
@@ -155,11 +155,11 @@ public class MyIdentityUserManager : IdentityUserManager
 }
 ````
 
-This example class inherits from the `IdentityUserManager` [domain service](Domain-Services.md) and overrides the `CreateAsync` method to perform the same phone number check implemented above. The result is same, but this time we've implemented it inside the domain service assuming that this is a **core domain logic** for our system.
+This example class inherits from the `IdentityUserManager` [domain service](../../domain-driven-design/domain-services.md) and overrides the `CreateAsync` method to perform the same phone number check implemented above. The result is same, but this time we've implemented it inside the domain service assuming that this is a **core domain logic** for our system.
 
 > `[ExposeServices(typeof(IdentityUserManager))]`  attribute is **required** here since `IdentityUserManager` does not define an interface (like `IIdentityUserManager`) and dependency injection system doesn't expose services for inherited classes (like it does for the implemented interfaces) by convention.
 
-Check the [localization system](Localization.md) to learn how to localize the error messages.
+Check the [localization system](../../../fundamentals/localization.md) to learn how to localize the error messages.
 
 ### Example: Overriding a Repository
 
@@ -176,7 +176,7 @@ public class MyEfCoreIdentityUserRepository : EfCoreIdentityUserRepository
 }
 ````
 
-In this example, we are overriding the `EfCoreIdentityUserRepository` class that is defined by the [Identity module](Modules/Identity.md). This is the [Entity Framework Core](Entity-Framework-Core.md) implementation of the user repository. 
+In this example, we are overriding the `EfCoreIdentityUserRepository` class that is defined by the [Identity module](../../../../modules/identity.md). This is the [Entity Framework Core](../../../data/entity-framework-core/index.md) implementation of the user repository. 
 
 Thanks to the naming convention (`MyEfCoreIdentityUserRepository` ends with `EfCoreIdentityUserRepository`), no additional setup is required. You can override any base method to customize it for your needs.
 
@@ -259,7 +259,7 @@ namespace MyProject.Controllers
 }
 ````
 
-This example replaces the `AccountController` (An API Controller defined in the [Account Module](Modules/Account.md)) and overrides the `SendPasswordResetCodeAsync` method.
+This example replaces the `AccountController` (An API Controller defined in the [Account Module](../../../../modules/account.md)) and overrides the `SendPasswordResetCodeAsync` method.
 
 **`[ExposeServices(typeof(AccountController))]` is essential** here since it registers this controller for the `AccountController` in the dependency injection system. `[Dependency(ReplaceServices = true)]` is also recommended to clear the old registration (even the ASP.NET Core DI system selects the last registered one).
 
@@ -283,15 +283,15 @@ Overriding controllers, framework services, view component classes and any other
 
 ## Extending Data Transfer Objects
 
-**Extending [entities](Entities.md)** is possible as described in the [Extending Entities document](Customizing-Application-Modules-Extending-Entities.md). In this way, you can add **custom properties** to entities and perform **additional business logic** by overriding the related services as described above.
+**Extending [entities](Entities.md)** is possible as described in the [Extending Entities document](./customizing-application-modules-extending-entities.md). In this way, you can add **custom properties** to entities and perform **additional business logic** by overriding the related services as described above.
 
 It is also possible to extend Data Transfer Objects (**DTOs**) used by the application services. In this way, you can get extra properties from the UI (or client) and return extra properties from the service.
 
 ### Example
 
-Assuming that you've already added a `SocialSecurityNumber` as described in the [Extending Entities document](Customizing-Application-Modules-Extending-Entities.md) and want to include this information while getting the list of users from the `GetListAsync`  method of the `IdentityUserAppService`.
+Assuming that you've already added a `SocialSecurityNumber` as described in the [Extending Entities document](./customizing-application-modules-extending-entities.md) and want to include this information while getting the list of users from the `GetListAsync`  method of the `IdentityUserAppService`.
 
-You can use the [object extension system](Object-Extensions.md) to add the property to the `IdentityUserDto`. Write this code inside the `YourProjectNameDtoExtensions` class comes with the application startup template:
+You can use the [object extension system](../../../fundamentals/object-extensions.md) to add the property to the `IdentityUserDto`. Write this code inside the `YourProjectNameDtoExtensions` class comes with the application startup template:
 
 ````csharp
 ObjectExtensionManager.Instance
@@ -339,7 +339,7 @@ All pre-built modules support extra properties in their DTOs, so you can configu
 
 ### Definition Check
 
-When you [define](Customizing-Application-Modules-Extending-Entities.md) an extra property for an entity, it doesn't automatically appear in all the related DTOs, because of the security. The extra property may contain a sensitive data and you may not want to expose it to the clients by default.
+When you [define](./customizing-application-modules-extending-entities.md) an extra property for an entity, it doesn't automatically appear in all the related DTOs, because of the security. The extra property may contain a sensitive data and you may not want to expose it to the clients by default.
 
 So, you need to explicitly define the same property for the corresponding DTO if you want to make it available for the DTO (as just done above). If you want to allow to set it on user creation, you also need to define it for the `IdentityUserCreateDto`.
 
@@ -357,7 +357,7 @@ ObjectExtensionManager.Instance
     );
 ````
 
-This is another approach to define a property for an entity (`ObjectExtensionManager` has more, see [its document](Object-Extensions.md)). This time, we set `CheckPairDefinitionOnMapping` to false to skip definition check while mapping entities to DTOs and vice verse.
+This is another approach to define a property for an entity (`ObjectExtensionManager` has more, see [its document](../../../fundamentals/object-extensions.md)). This time, we set `CheckPairDefinitionOnMapping` to false to skip definition check while mapping entities to DTOs and vice verse.
 
 If you don't like this approach but want to add a single property to multiple objects (DTOs) easier, `AddOrUpdateProperty` can get an array of types to add the extra property:
 
@@ -378,8 +378,8 @@ ObjectExtensionManager.Instance
 
 This system allows you to add extra properties to entities and DTOs and execute custom business code, however it does nothing related to the User Interface.
 
-See [Overriding the User Interface](Customizing-Application-Modules-Overriding-User-Interface.md) guide for the UI part.
+See [Overriding the User Interface](./overriding-user-interface.md) guide for the UI part.
 
 ## How to Find the Services?
 
-[Module documents](Modules/Index.md) includes the list of the major services they define. In addition, you can investigate [their source code](https://github.com/abpframework/abp/tree/dev/modules) to explore all the services.
+[Module documents](../../../../modules/index.md) includes the list of the major services they define. In addition, you can investigate [their source code](https://github.com/abpframework/abp/tree/dev/modules) to explore all the services.

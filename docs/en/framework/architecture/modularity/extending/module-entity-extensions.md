@@ -6,7 +6,7 @@ Module entity extension system is a **high level** extension system that allows 
 
 ## Quick Example
 
-Open the `YourProjectNameModuleExtensionConfigurator` class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties`method  as shown below to add a `SocialSecurityNumber` property to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md).
+Open the `YourProjectNameModuleExtensionConfigurator` class inside the `Domain.Shared` project of your solution and change the `ConfigureExtraProperties`method  as shown below to add a `SocialSecurityNumber` property to the `IdentityUser` entity of the [Identity Module](../../../../modules/identity.md).
 
 ````csharp
 public static void ConfigureExtraProperties()
@@ -52,7 +52,7 @@ public static void ConfigureExtraProperties()
 
 Once you define a property, it appears in the create and update forms of the related entity:
 
-![add-new-property-to-user-form](images/add-new-property-to-user-form.png)
+![add-new-property-to-user-form](../../../../images/add-new-property-to-user-form.png)
 
 `SocialSecurityNumber` field comes into the form. Next sections will explain the localization and the validation for this new property.
 
@@ -60,7 +60,7 @@ Once you define a property, it appears in the create and update forms of the rel
 
 New properties also appear in the data table of the related page:
 
-![add-new-property-to-user-form](images/add-new-property-to-user-table.png)
+![add-new-property-to-user-form](../../../../images/add-new-property-to-user-table.png)
 
 `SocialSecurityNumber` column comes into the table. Next sections will explain the option to hide this column from the data table.
 
@@ -117,7 +117,7 @@ property =>
 
 * `MyProjectNameResource` is the localization resource and `UserSocialSecurityNumberDisplayName` is the localization key in the localization resource.
 
-> See [the localization document](Localization.md) if you want to learn more about the localization system.
+> See [the localization document](../../../fundamentals/localization.md) if you want to learn more about the localization system.
 
 #### Default Value
 
@@ -169,13 +169,13 @@ property =>
 
 When you run the application, you see that the validation works out of the box:
 
-![add-new-propert-to-user-form](images/add-new-property-to-user-form-validation-error.png)
+![add-new-propert-to-user-form](../../../../images/add-new-property-to-user-form-validation-error.png)
 
 Since we've added the `RequiredAttribute`, it doesn't allow to left it blank. The validation system works;
 
 * On the user interface (with automatic localization).
 * On the HTTP API. Even if you directly perform an HTTP request, you get validation errors with a proper HTTP status code.
-* On the `SetProperty(...)` method on the entity (see [the document](Entities.md) if you wonder what is the `SetProperty()` method).
+* On the `SetProperty(...)` method on the entity (see [the document](../../domain-driven-design/entities.md) if you wonder what is the `SetProperty()` method).
 
 So, it automatically makes a full stack validation.
 
@@ -218,11 +218,11 @@ property =>
 
 Using a `RegularExpressionAttribute` might be better in this case, but this is just an example. Anyway, if you enter a value starts with the letter `B` you get the following error **while saving the form**:
 
-![add-new-propert-to-user-form](images/add-new-property-to-user-form-validation-error-custom.png)
+![add-new-propert-to-user-form](../../../../images/add-new-property-to-user-form-validation-error-custom.png)
 
 ##### The Context Object
 
-The `context` object has useful properties that can be used in your custom validation action. For example, you can use the `context.ServiceProvider` to resolve services from the [dependency injection system](Dependency-Injection.md). The example below gets the localizer and adds a localized error message:
+The `context` object has useful properties that can be used in your custom validation action. For example, you can use the `context.ServiceProvider` to resolve services from the [dependency injection system](../../../fundamentals/dependency-injection.md). The example below gets the localizer and adds a localized error message:
 
 ````csharp
 if (((string) context.Value).StartsWith("B"))
@@ -239,7 +239,7 @@ if (((string) context.Value).StartsWith("B"))
 }
 ````
 
->`context.ServiceProvider` is nullable! It can be `null` only if you use the `SetProperty(...)` method on the object. Because DI system is not available on this time. While this is a rare case, you should perform a fallback logic when `context.ServiceProvider` is `null`. For this example, you would add a non-localized error message. This is not a problem since setting an invalid value to a property generally is a programmer mistake and you mostly don't need to localization in this case. In any way, you would not be able to use localization even in a regular property setter. But, if you are serious about localization, you can throw a business exception (see the [exception handling document](https://docs.abp.io/en/abp/latest/Exception-Handling) to learn how to localize a business exception).
+>`context.ServiceProvider` is nullable! It can be `null` only if you use the `SetProperty(...)` method on the object. Because DI system is not available on this time. While this is a rare case, you should perform a fallback logic when `context.ServiceProvider` is `null`. For this example, you would add a non-localized error message. This is not a problem since setting an invalid value to a property generally is a programmer mistake and you mostly don't need to localization in this case. In any way, you would not be able to use localization even in a regular property setter. But, if you are serious about localization, you can throw a business exception (see the [exception handling document](../../../fundamentals/exception-handling.md) to learn how to localize a business exception).
 
 ### UI Visibility
 
@@ -319,11 +319,11 @@ user.AddOrUpdateProperty<UserType>("Type");
 
 An enum properties is shown as combobox (select) in the create/edit forms:
 
-![add-new-property-enum](images/add-new-property-enum.png)
+![add-new-property-enum](../../../../images/add-new-property-enum.png)
 
 #### Localization
 
-Enum member name is shown on the table and forms by default. If you want to localize it, just create a new entry on your [localization](https://docs.abp.io/en/abp/latest/Localization) file:
+Enum member name is shown on the table and forms by default. If you want to localize it, just create a new entry on your [localization](../../../fundamentals/localization.md) file:
 
 ````json
 "Enum:UserType.0": "Super user" 
@@ -363,7 +363,7 @@ ObjectExtensionManager.Instance.Modules()
     });
 ````
 
-`UI.Lookup.Url` option takes a URL to get list of departments to select on edit/create forms. This endpoint can be a typical controller, an [auto API controller](API/Auto-API-Controllers.md) or any type of endpoint that returns a proper JSON response.
+`UI.Lookup.Url` option takes a URL to get list of departments to select on edit/create forms. This endpoint can be a typical controller, an [auto API controller](../../../api-development/auto-controllers.md) or any type of endpoint that returns a proper JSON response.
 
 An example implementation that returns a fixed list of departments (in real life, you get the list from a data source):
 
@@ -409,11 +409,11 @@ This API returns such a JSON response:
 
 ABP can now show an auto-complete select component to pick the department while creating or editing a user:
 
-![extension-navigation-property-form](images/extension-navigation-property-form.png)
+![extension-navigation-property-form](../../../../images/extension-navigation-property-form.png)
 
 And shows the department name on the data table:
 
-![extension-navigation-property-form](images/extension-navigation-property-table.png)
+![extension-navigation-property-form](../../../../images/extension-navigation-property-table.png)
 
 #### Lookup Options
 
@@ -433,7 +433,7 @@ It is easy to understand how to fill the dropdown on edit and create forms: ABP 
 
 However, for the data table, multiple items are shown on the UI and performing a separate AJAX call to get display name of the department for each row would not be so efficient.
 
-Instead, the display name of the foreign entity is also saved as an extra property of the entity (see *Extra Properties* section of the [Entities](Entities.md) document) in addition to Id of the foreign entity. If you check the database, you can see the `DepartmentId_Text` in the `ExtraProperties` field in the database table:
+Instead, the display name of the foreign entity is also saved as an extra property of the entity (see *Extra Properties* section of the [Entities](../../domain-driven-design/entities.md) document) in addition to Id of the foreign entity. If you check the database, you can see the `DepartmentId_Text` in the `ExtraProperties` field in the database table:
 
 ````json
 {"DepartmentId":"21c7b61f-330c-489e-8b8c-80e0a78a5cc5","DepartmentId_Text":"Production"}
@@ -445,7 +445,7 @@ So, this is a type of *data duplication*. If your target entity's name changes i
 
 For relational databases, all extension property values are stored in a single field in the table:
 
-![add-new-propert-to-user-database-extra-properties](images/add-new-propert-to-user-database-extra-properties.png)
+![add-new-propert-to-user-database-extra-properties](../../../../images/add-new-propert-to-user-database-extra-properties.png)
 
 `ExtraProperties` field stores the properties as a JSON object. While that's fine for some scenarios, you may want to create a dedicated field for your new property. Fortunately, it is very easy to configure.
 
@@ -489,17 +489,17 @@ public partial class Added_SocialSecurityNumber_To_IdentityUser : Migration
 
 Once you update your database, you will see that the `AbpUsers` table has the new property as a standard table field:
 
-![add-new-propert-to-user-database-extra-properties](images/add-new-propert-to-user-database-field.png)
+![add-new-propert-to-user-database-extra-properties](../../../../images/add-new-propert-to-user-database-field.png)
 
 > If you first created a property without a database table field, then you later needed to move this property to  a database table field, it is suggested to execute an SQL command in your migration to copy the old values to the new field.
 >
 > However, if you don't make it, the ABP Framework seamlessly manages it. It uses the new database field, but fallbacks to the `ExtraProperties` field if it is null. When you save the entity, it moves the value to the new field.
 
-See the [Extending Entities](Customizing-Application-Modules-Extending-Entities.md) document for more.
+See the [Extending Entities](./customizing-application-modules-extending-entities.md) document for more.
 
 ## More
 
-See the [Customizing the Modules](Customizing-Application-Modules-Guide.md) guide for an overall index for all the extensibility options.
+See the [Customizing the Modules](./customizing-application-modules-guide.md) guide for an overall index for all the extensibility options.
 
 Here, a few things you can do:
 
@@ -509,4 +509,4 @@ Here, a few things you can do:
 
 ## See Also
 
-* [Angular UI Extensions](UI/Angular/Extensions-Overall.md)
+* [Angular UI Extensions](../../../ui/angular/Extensions-Overall.md)

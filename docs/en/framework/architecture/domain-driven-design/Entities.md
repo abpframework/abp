@@ -28,7 +28,7 @@ If your entity's Id type is `Guid`, there are some good practices to implement:
 * Create a constructor that gets the Id as a parameter and passes to the base class.
   * If you don't set a GUID Id, **ABP Framework sets it on save**, but it is good to have a valid Id on the entity even before saving it to the database.
 * If you create an entity with a constructor that takes parameters, also create a `private` or `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
-* Don't use the `Guid.NewGuid()` to set the Id! **Use [the `IGuidGenerator` service](Guid-Generation.md)** while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
+* Don't use the `Guid.NewGuid()` to set the Id! **Use [the `IGuidGenerator` service](../../infrastructure/guid-generation.md)** while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
 
 An example entity:
 
@@ -52,7 +52,7 @@ public class Book : Entity<Guid>
 }
 ````
 
-Example usage in an [application service](Application-Services.md):
+Example usage in an [application service](./application-services.md):
 
 ````csharp
 public class BookAppService : ApplicationService, IBookAppService
@@ -77,8 +77,8 @@ public class BookAppService : ApplicationService, IBookAppService
 }
 ````
 
-* `BookAppService` injects the default [repository](Repositories.md) for the book entity and uses its `InsertAsync` method to insert a `Book` to the database.
-* `GuidGenerator` is type of `IGuidGenerator` which is a property defined in the `ApplicationService` base class. ABP defines such frequently used base properties as pre-injected for you, so you don't need to manually [inject](Dependency-Injection.md) them.
+* `BookAppService` injects the default [repository](./repositories.md) for the book entity and uses its `InsertAsync` method to insert a `Book` to the database.
+* `GuidGenerator` is type of `IGuidGenerator` which is a property defined in the `ApplicationService` base class. ABP defines such frequently used base properties as pre-injected for you, so you don't need to manually [inject](../../fundamentals/dependency-injection.md) them.
 * If you want to follow the DDD best practices, see the *Aggregate Example* section below.
 
 ### Entities with Composite Keys
@@ -108,9 +108,9 @@ public class UserRole : Entity
 
 For the example above, the composite key is composed of `UserId` and `RoleId`. For a relational database, it is the composite primary key of the related table. Entities with composite keys should implement the `GetKeys()` method as shown above.
 
-> Notice that you also need to define keys of the entity in your **object-relational mapping** (ORM) configuration. See the [Entity Framework Core](Entity-Framework-Core.md) integration document for example.
+> Notice that you also need to define keys of the entity in your **object-relational mapping** (ORM) configuration. See the [Entity Framework Core](../../data/entity-framework-core/index.md) integration document for example.
 
-> Also note that Entities with Composite Primary Keys cannot utilize the `IRepository<TEntity, TKey>` interface since it requires a single Id property.  However, you can always use `IRepository<TEntity>`. See [repositories documentation](Repositories.md) for more.
+> Also note that Entities with Composite Primary Keys cannot utilize the `IRepository<TEntity, TKey>` interface since it requires a single Id property.  However, you can always use `IRepository<TEntity>`. See [repositories documentation](./repositories.md) for more.
 
 ### EntityEquals
 
@@ -134,16 +134,16 @@ if (book1.EntityEquals(book2)) //Check equality
 
 `AggregateRoot<TKey>` class extends the `Entity<TKey>` class. So, it also has an `Id` property by default.
 
-> Notice that ABP creates default repositories only for aggregate roots by default. However, it's possible to include all entities. See the [repositories documentation](Repositories.md) for more. 
+> Notice that ABP creates default repositories only for aggregate roots by default. However, it's possible to include all entities. See the [repositories documentation](./repositories.md) for more. 
 
-ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement the [Domain Driven Design](Domain-Driven-Design.md) and want to create aggregate root classes, there are some best practices you may want to consider:
+ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement the [Domain Driven Design](./index.md) and want to create aggregate root classes, there are some best practices you may want to consider:
 
 * An aggregate root is responsible for preserving its own integrity. This is also true for all entities, but the aggregate root has responsibility for its sub-entities too. So, the aggregate root must always be in a valid state.
 * An aggregate root can be referenced by its `Id`. Do not reference it by its navigation property.
 * An aggregate root is treated as a single unit. It's retrieved and updated as a single unit. It's generally considered as a transaction boundary.
 * Work with sub-entities over the aggregate root- do not modify them independently.
 
-See the [entity design best practice guide](Best-Practices/Entities.md) if you want to implement DDD in your application.
+See the [entity design best practice guide](../best-practices/entities.md) if you want to implement DDD in your application.
 
 ### Aggregate Example
 
@@ -282,7 +282,7 @@ There are a lot of auditing interfaces, so you can implement the one that you ne
   * `CreatorId`
   * `LastModificationTime`
   * `LastModifierId`
-* `ISoftDelete` (see the [data filtering document](Data-Filtering.md)) defines the following properties:
+* `ISoftDelete` (see the [data filtering document](../../infrastructure/data-filtering.md)) defines the following properties:
   * `IsDeleted`
 * `IHasDeletionTime` extends the `ISoftDelete` and adds the `DeletionTime` property. So, it defines the following properties:
   * `IsDeleted`
@@ -302,7 +302,7 @@ There are a lot of auditing interfaces, so you can implement the one that you ne
 
 Once you implement any of the interfaces, or derive from a class defined in the next section, ABP Framework automatically manages these properties wherever possible.
 
-> Implementing `ISoftDelete`, `IDeletionAuditedObject` or `IFullAuditedObject` makes your entity **soft-delete**. See the [data filtering document](Data-Filtering.md) to learn about the soft-delete pattern.
+> Implementing `ISoftDelete`, `IDeletionAuditedObject` or `IFullAuditedObject` makes your entity **soft-delete**. See the [data filtering document](../../infrastructure/data-filtering.md) to learn about the soft-delete pattern.
 
 ### Auditing Base Classes
 
@@ -314,15 +314,15 @@ While you can manually implement any of the interfaces defined above, it is sugg
 
 All these base classes also have non-generic versions to take `AuditedEntity` and `FullAuditedAggregateRoot` to support the composite primary keys.
 
-All these base classes also have `...WithUser` pairs, like `FullAuditedAggregateRootWithUser<TUser>`  and `FullAuditedAggregateRootWithUser<TKey, TUser>`. This makes possible to add a navigation property to your user entity. However, it is not a good practice to add navigation properties between aggregate roots, so this usage is not suggested (unless you are using an ORM, like EF Core, that well supports this scenario and you really need it - otherwise remember that this approach doesn't work for NoSQL databases like MongoDB where you must truly implement the aggregate pattern). Also, if you add navigation properties to the AppUser class that comes with the startup template, consider to handle (ignore/map) it on the migration dbcontext (see [the EF Core migration document](Entity-Framework-Core-Migrations.md)). 
+All these base classes also have `...WithUser` pairs, like `FullAuditedAggregateRootWithUser<TUser>`  and `FullAuditedAggregateRootWithUser<TKey, TUser>`. This makes possible to add a navigation property to your user entity. However, it is not a good practice to add navigation properties between aggregate roots, so this usage is not suggested (unless you are using an ORM, like EF Core, that well supports this scenario and you really need it - otherwise remember that this approach doesn't work for NoSQL databases like MongoDB where you must truly implement the aggregate pattern). Also, if you add navigation properties to the AppUser class that comes with the startup template, consider to handle (ignore/map) it on the migration dbcontext (see [the EF Core migration document](../../data/entity-framework-core/migrations.md)). 
 
 ## Caching Entities
 
-ABP Framework provides a [Distributed Entity Cache System](Entity-Cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
+ABP Framework provides a [Distributed Entity Cache System](../../infrastructure/entity-cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
 
 It's designed as read-only and automatically invalidates a cached entity if the entity is updated or deleted.
 
-> See the [Entity Cache](Entity-Cache.md) documentation for more information.
+> See the [Entity Cache](../../infrastructure/entity-cache.md) documentation for more information.
 
 ## Versioning Entities
 
@@ -417,10 +417,10 @@ So, you can directly use the `ExtraProperties` property to use  the dictionary A
 
 The way to store this dictionary in the database depends on the database provider you're using.
 
-* For [Entity Framework Core](Entity-Framework-Core.md), here are two type of configurations;
+* For [Entity Framework Core](../../data/entity-framework-core/index.md), here are two type of configurations;
   * By default, it is stored in a single `ExtraProperties` field as a `JSON` string (that means all extra properties stored in a single database table field). Serializing to `JSON` and deserializing from the `JSON` are automatically done by the ABP Framework using the [value conversions](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions) system of the EF Core.
-  * If you want, you can use the `ObjectExtensionManager` to define a separate table field for a desired extra property. Properties those are not configured through the `ObjectExtensionManager` will continue to use a single `JSON` field as described above. This feature is especially useful when you are using a pre-built [application module](Modules/Index.md) and want to [extend its entities](Customizing-Application-Modules-Extending-Entities.md). See the [EF Core integration document](Entity-Framework-Core.md) to learn how to use the `ObjectExtensionManager`.
-* For [MongoDB](MongoDB.md), it is stored as a **regular field**, since MongoDB naturally supports this kind of [extra elements](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) system.
+  * If you want, you can use the `ObjectExtensionManager` to define a separate table field for a desired extra property. Properties those are not configured through the `ObjectExtensionManager` will continue to use a single `JSON` field as described above. This feature is especially useful when you are using a pre-built [application module](../../../modules/index.md) and want to [extend its entities](../modularity/extending/customizing-application-modules-extending-entities.md). See the [EF Core integration document](../../data/entity-framework-core/index.md) to learn how to use the `ObjectExtensionManager`.
+* For [MongoDB](../../data/mongodb/index.md), it is stored as a **regular field**, since MongoDB naturally supports this kind of [extra elements](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) system.
 
 ### Discussion for the Extra Properties
 
@@ -429,7 +429,7 @@ Extra Properties system is especially useful if you are using a **re-usable modu
 You typically **don't need** to use this system for your own entities, because it has the following drawbacks:
 
 * It is **not fully type safe** since it works with strings as property names.
-* It is **not easy to [auto map](Object-To-Object-Mapping.md)** these properties from/to other objects.
+* It is **not easy to [auto map](../../infrastructure/object-to-object-mapping.md)** these properties from/to other objects.
 
 ### Extra Properties Behind Entities
 
@@ -437,5 +437,5 @@ You typically **don't need** to use this system for your own entities, because i
 
 ## See Also
 
-* [Best practice guide to design the entities](Best-Practices/Entities.md)
+* [Best practice guide to design the entities](../best-practices/entities.md)
 * [Video tutorial](https://abp.io/video-courses/essentials/entities)

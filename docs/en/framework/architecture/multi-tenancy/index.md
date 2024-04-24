@@ -30,7 +30,7 @@ Configure<AbpMultiTenancyOptions>(options =>
 });
 ```
 
-> Multi-Tenancy is disabled in the ABP Framework by default. However, it is **enabled by default** when you create a new solution using the [startup template](Startup-Templates/Application.md). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
+> Multi-Tenancy is disabled in the ABP Framework by default. However, it is **enabled by default** when you create a new solution using the [startup template](../../../solution-templates/layered-web-application/index.md). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
 
 ### Database Architecture
 
@@ -40,7 +40,7 @@ ABP Framework supports all the following approaches to store the tenant data in 
 * **Database per Tenant**: Every tenant has a separate, dedicated database to store the data related to that tenant.
 * **Hybrid**: Some tenants share a single databases while some tenants may have their own databases.
 
-[Tenant management module](Modules/Tenant-Management.md) (which comes pre-installed with the startup projects) allows you to set a connection string for any tenant (as optional), so you can achieve any of the approaches.
+[Tenant management module](../../../modules/tenant-management.md) (which comes pre-installed with the startup projects) allows you to set a connection string for any tenant (as optional), so you can achieve any of the approaches.
 
 ## Usage
 
@@ -48,7 +48,7 @@ Multi-tenancy system is designed to **work seamlessly** and make your applicatio
 
 ### IMultiTenant
 
-You should implement the `IMultiTenant` interface for your [entities](Entities.md) to make them **multi-tenancy ready**. 
+You should implement the `IMultiTenant` interface for your [entities](../domain-driven-design/entities.md) to make them **multi-tenancy ready**. 
 
 **Example: A multi-tenant *Product* entity**
 
@@ -70,13 +70,13 @@ namespace MultiTenancyDemo.Products
 }
 ````
 
-`IMultiTenant` interface just defines a `TenantId` property. When you implement this interface, ABP Framework **automatically** [filters](Data-Filtering.md) entities for the current tenant when you query from database. So, you don't need to manually add `TenantId` condition while performing queries. A tenant can not access to data of another tenant by default.
+`IMultiTenant` interface just defines a `TenantId` property. When you implement this interface, ABP Framework **automatically** [filters](../../infrastructure/data-filtering.md) entities for the current tenant when you query from database. So, you don't need to manually add `TenantId` condition while performing queries. A tenant can not access to data of another tenant by default.
 
 #### Why the TenantId Property is Nullable?
 
 `IMultiTenant.TenantId` is **nullable**. When it is null that means the entity is owned by the **Host** side and not owned by a tenant. It is useful when you create a functionality in your system that is both used by the tenant and the host sides.
 
-For example, `IdentityUser` is an entity defined by the [Identity Module](Modules/Identity.md). The host and all the tenants have their own users. So, for the host side, users will have a `null` `TenantId` while tenant users will have their related `TenantId`.
+For example, `IdentityUser` is an entity defined by the [Identity Module](../../../modules/identity.md). The host and all the tenants have their own users. So, for the host side, users will have a `null` `TenantId` while tenant users will have their related `TenantId`.
 
 > **Tip**: If your entity is tenant-specific and has no meaning in the host side, you can force to not set `null` for the `TenantId` in the constructor of your entity.
 
@@ -144,7 +144,7 @@ namespace MultiTenancyDemo.Products
 
 ### Data Filtering: Disable the Multi-Tenancy Filter
 
-As mentioned before, ABP Framework handles data isolation between tenants using the [Data Filtering](Data-Filtering.md) system. In some cases, you may want to disable it and perform a query on all the data, without filtering for the current tenant.
+As mentioned before, ABP Framework handles data isolation between tenants using the [Data Filtering](../../infrastructure/data-filtering.md) system. In some cases, you may want to disable it and perform a query on all the data, without filtering for the current tenant.
 
 **Example: Get count of products in the database, including all the products of all the tenants.**
 
@@ -183,7 +183,7 @@ namespace MultiTenancyDemo.Products
 
 ````
 
-See the [Data Filtering document](Data-Filtering.md) for more.
+See the [Data Filtering document](../../infrastructure/data-filtering.md) for more.
 
 > Note that this approach won't work if your tenants have **separate databases** since there is no built-in way to query from multiple database in a single database query. You should handle it yourself if you need it.
 
@@ -285,7 +285,7 @@ Configure<AbpTenantResolveOptions>(options =>
 ````
 
 * `{0}` is the placeholder to determine the current tenant's unique name.
-* Add this code to the `ConfigureServices` method of your [module](Module-Development-Basics.md).
+* Add this code to the `ConfigureServices` method of your [module](../modularity/basics.md).
 * This should be done in the *Web/API Layer* since the URL is a web related stuff.
 
 Openiddict is the default Auth Server in ABP (since v6.0). When you use OpenIddict, you must add this code to the `PreConfigure` method as well.
@@ -376,7 +376,7 @@ namespace MultiTenancyDemo.Web
 ````
 
 * A tenant resolver should set `context.TenantIdOrName` if it can determine it. If not, just leave it as is to allow the next resolver to determine it.
-* `context.ServiceProvider` can be used if you need to additional services to resolve from the [dependency injection](Dependency-Injection.md) system.
+* `context.ServiceProvider` can be used if you need to additional services to resolve from the [dependency injection](../../fundamentals/dependency-injection.md) system.
 
 #### Multi-Tenancy Middleware
 
@@ -398,11 +398,11 @@ app.UseMultiTenancy();
 
 #### Tenant Management Module
 
-The [tenant management module](Modules/Tenant-Management) is **included in the startup templates** and implements the `ITenantStore` interface to get the tenants and their configuration from a database. It also provides the necessary functionality and UI to manage the tenants and their connection strings.
+The [tenant management module](../../../modules/tenant-management.md) is **included in the startup templates** and implements the `ITenantStore` interface to get the tenants and their configuration from a database. It also provides the necessary functionality and UI to manage the tenants and their connection strings.
 
 #### Configuration Data Store
 
-**If you don't want to use the tenant management module**, the `DefaultTenantStore` is used as the `ITenantStore` implementation. It gets the tenant configurations from the [configuration system](Configuration.md) (`IConfiguration`). You can either configure the `AbpDefaultTenantStoreOptions` [options](Options.md) or set it in your `appsettings.json` file:
+**If you don't want to use the tenant management module**, the `DefaultTenantStore` is used as the `ITenantStore` implementation. It gets the tenant configurations from the [configuration system](../../fundamentals/configuration.md) (`IConfiguration`). You can either configure the `AbpDefaultTenantStoreOptions` [options](../../fundamentals/options.md) or set it in your `appsettings.json` file:
 
 **Example: Define tenants in appsettings.json**
 
@@ -436,8 +436,8 @@ BLOB Storing, Caching, Data Filtering, Data Seeding, Authorization and all the o
 
 ABP Framework provides all the the infrastructure to create a multi-tenant application, but doesn't make any assumption about how you manage (create, delete...) your tenants.
 
-The [Tenant Management module](Modules/Tenant-Management.md) provides a basic UI to manage your tenants and set their connection strings. It is pre-configured for the [application startup template](Startup-Templates/Application.md).
+The [Tenant Management module](../../../modules/tenant-management.md) provides a basic UI to manage your tenants and set their connection strings. It is pre-configured for the [application startup template](../../../solution-templates/layered-web-application/index.md).
 
 ## See Also
 
-* [Features](Features.md)
+* [Features](../../infrastructure/features.md)

@@ -5,10 +5,10 @@
 ABP Framework was designed to support to build fully modular applications and systems where every module may have entities, services, database integration, APIs, UI components and so on;
 
 * This document introduces the basics of the module system.
-* [Module development best practice guide](Best-Practices/Index.md) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.
-* [Pre-built application modules](Modules/Index.md) are **ready to use** in any kind of application.
-* [Module startup template](Startup-Templates/Module.md) is a jump start way to **create a new module**.
-* [ABP CLI](CLI.md) has commands to support modular development.
+* [Module development best practice guide](../best-practices/index.md) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.
+* [Pre-built application modules](../../../modules/index.md) are **ready to use** in any kind of application.
+* [Module startup template](../../../solution-templates/layered-web-application/index.md) is a jump start way to **create a new module**.
+* [ABP CLI](../../../cli/index.md) has commands to support modular development.
 * All other framework features are compatible to the modularity system.
 
 ## Module Class
@@ -40,7 +40,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-You can register dependencies one by one as stated in Microsoft's [documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection). But ABP has a **conventional dependency registration system** which automatically register all services in your assembly. See the [dependency Injection](Dependency-Injection.md) documentation for more about the dependency injection system.
+You can register dependencies one by one as stated in Microsoft's [documentation](../../fundamentals/dependency-injection.md). But ABP has a **conventional dependency registration system** which automatically register all services in your assembly. See the [dependency Injection](../../fundamentals/dependency-injection.md) documentation for more about the dependency injection system.
 
 You can also configure other services and modules in this way. Example:
 
@@ -60,7 +60,7 @@ public class BlogModule : AbpModule
 
 > `ConfigureServices` method has an asynchronous version too: `ConfigureServicesAsync`. If you want to make asynchronous calls (use the `await` keyword) inside this method, override the asynchronous version instead of the synchronous one. If you override both asynchronous and synchronous versions, only the asynchronous version will be executed.
 
-See the [Configuration](Configuration.md) document for more about the configuration system.
+See the [Configuration](../../fundamentals/configuration.md) document for more about the configuration system.
 
 #### Pre & Post Configure Services
 
@@ -164,7 +164,7 @@ A depended module may depend on another module, but you only need to define your
 
 ## Additional Module Assemblies
 
-ABP automatically registers all the services of your module to the [dependency injection](Dependency-Injection.md) system. It finds the service types by scanning types in the assembly that defines your module class. That assembly is considered as the main assembly of your module.
+ABP automatically registers all the services of your module to the [dependency injection](../../fundamentals/dependency-injection.md) system. It finds the service types by scanning types in the assembly that defines your module class. That assembly is considered as the main assembly of your module.
 
 Typically, every assembly contains a separate module class definition. Then modules depend on each other using the `DependsOn` attribute as explained in the previous section. However, in some rare cases, your module may consist of multiple assemblies, and only one of them defines a module class, and you want to make the other assemblies parts of your module. In that case, you can use the `AdditionalAssembly` attribute as shown below:
 
@@ -188,7 +188,7 @@ Notice that `BlogService` is only an arbitrary selected type in the target assem
 There are **two types of modules.** They don't have any structural difference but categorized by functionality and purpose:
 
 - **Framework modules**: These are **core modules of the framework** like caching, emailing, theming, security, serialization, validation, EF Core integration, MongoDB integration... etc. They do not have application/business functionalities but makes your daily development easier by providing common infrastructure, integration and abstractions.
-- **Application modules**: These modules implement **specific application/business functionalities** like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components. See [pre-built application modules](Modules/Index.md).
+- **Application modules**: These modules implement **specific application/business functionalities** like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components. See [pre-built application modules](../../../modules/index.md).
 
 ## See Also
 * [Video tutorial](https://abp.io/video-courses/essentials/modularity)

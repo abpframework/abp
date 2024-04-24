@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In a [Domain Driven Design](Domain-Driven-Design.md) (DDD) solution, the core business logic is generally implemented in aggregates ([entities](Entities.md)) and the Domain Services. Creating a Domain Service is especially needed when;
+In a [Domain Driven Design](./index.md) (DDD) solution, the core business logic is generally implemented in aggregates ([entities](./entities.md)) and the Domain Services. Creating a Domain Service is especially needed when;
 
 * You implement a core domain logic that depends on some services (like repositories or other external services).
 * The logic you need to implement is related to more than one aggregate/entity, so it doesn't properly fit in any of the aggregates.
@@ -32,7 +32,7 @@ namespace MyProject.Issues
 When you do that;
 
 * ABP Framework automatically registers the class to the Dependency Injection system with a Transient lifetime.
-* You can directly use some common services as base properties, without needing to manually inject (e.g. [ILogger](Logging.md) and [IGuidGenerator](Guid-Generation.md)).
+* You can directly use some common services as base properties, without needing to manually inject (e.g. [ILogger](../../fundamentals/logging.md) and [IGuidGenerator](../../infrastructure/guid-generation.md)).
 
 > It is suggested to name a Domain Service with a `Manager` or `Service` suffix. We typically use the `Manager` suffix as used in the sample above.
 
@@ -64,7 +64,7 @@ public class IssueManager : DomainService
 }
 ````
 
-Issue is an [aggregate root](Entities.md) defined as shown below:
+Issue is an [aggregate root](./entities.md) defined as shown below:
 
 ````csharp
 public class Issue : AggregateRoot<Guid>
@@ -79,7 +79,7 @@ public class Issue : AggregateRoot<Guid>
 
 ### Using a Domain Service
 
-A Domain Service is typically used in an [application service](Application-Services.md).
+A Domain Service is typically used in an [application service](./application-services.md).
 
 **Example: Use the `IssueManager` to assign an Issue to a User**
 
@@ -124,15 +124,15 @@ Since the `IssueAppService` is in the Application Layer, it can't directly assig
 
 ## Application Services vs Domain Services
 
-While both of [Application Services](Application-Services.md) and Domain Services implement the business rules, there are fundamental logical and formal differences;
+While both of [Application Services](./application-services.md) and Domain Services implement the business rules, there are fundamental logical and formal differences;
 
 * Application Services implement the **use cases** of the application (user interactions in a typical web application), while Domain Services implement the **core, use case independent domain logic**.
-* Application Services get/return [Data Transfer Objects](Data-Transfer-Objects.md), Domain Service methods typically get and return the **domain objects** ([entities](Entities.md), [value objects](Value-Objects.md)).
+* Application Services get/return [Data Transfer Objects](./data-transfer-objects.md), Domain Service methods typically get and return the **domain objects** ([entities](./entities.md), [value objects](./value-objects.md)).
 * Domain services are typically used by the Application Services or other Domain Services, while Application Services are used by the Presentation Layer or Client Applications.
 
 ## Lifetime
 
-Lifetime of Domain Services are [transient](https://docs.abp.io/en/abp/latest/Dependency-Injection) and they are automatically registered to the dependency injection system.
+Lifetime of Domain Services are [transient](../../fundamentals/dependency-injection.md) and they are automatically registered to the dependency injection system.
 
 ## See Also
 

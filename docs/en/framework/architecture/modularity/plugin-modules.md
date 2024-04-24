@@ -1,6 +1,6 @@
 # Plug-In Modules
 
-It is possible to load [modules](Module-Development-Basics.md) as plug-ins. That means you may not reference to a module's assembly in your solution, but you can load that module in the application startup just like any other module.
+It is possible to load [modules](../modularity/basics.md) as plug-ins. That means you may not reference to a module's assembly in your solution, but you can load that module in the application startup just like any other module.
 
 ## Basic Usage
 
@@ -41,7 +41,7 @@ If you need, you can create your own `IPlugInSource` implementation and add to t
 
 Create a simple **Class Library Project** in a solution:
 
-![simple-plugin-library](images/simple-plugin-library.png)
+![simple-plugin-library](../../../images/simple-plugin-library.png)
 
 You can add the ABP Framework packages that you need to use in the module. At least, you should add the `Volo.Abp.Core` package to the project, Execute the following command in the folder of the .csproj file that you want to install the package on:
 
@@ -49,9 +49,9 @@ You can add the ABP Framework packages that you need to use in the module. At le
 abp add-package Volo.Abp.Core
 ````
 
- If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
+ If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
 
-Every [module](Module-Development-Basics.md) must declare a class derived from the `AbpModule`. Here, a simple module class that resolves a service and initializes it on the application startup:
+Every [module](../modularity/basics.md) must declare a class derived from the `AbpModule`. Here, a simple module class that resolves a service and initializes it on the application startup:
 
 ````csharp
 using Microsoft.Extensions.DependencyInjection;
@@ -73,7 +73,7 @@ namespace MyPlugIn
 }
 ````
 
-`MyService` can be any class registered to [Dependency Injection](Dependency-Injection.md) system, as show below:
+`MyService` can be any class registered to [Dependency Injection](../../fundamentals/dependency-injection.md) system, as show below:
 
 ````csharp
 using Microsoft.Extensions.Logging;
@@ -100,7 +100,7 @@ namespace MyPlugIn
 
 Build the project, open the build folder, find the `MyPlugIn.dll`:
 
-![simple-plug-in-dll-file](images/simple-plug-in-dll-file.png)
+![simple-plug-in-dll-file](../../../images/simple-plug-in-dll-file.png)
 
 Copy `MyPlugIn.dll` into the plug-in folder (`D:\Temp\MyPlugIns` for this example).
 
@@ -116,7 +116,7 @@ Creating plug-ins with views inside requires a bit more attention.
 
 Create a new **Class Library** project in a solution:
 
-![simple-razor-plugin](images/simple-razor-plugin.png)
+![simple-razor-plugin](../../../images/simple-razor-plugin.png)
 
 Edit the `.csproj` file content:
 
@@ -140,7 +140,7 @@ Edit the `.csproj` file content:
 * Added `OutputType` and `IsPackable` properties.
 * Added `Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared` NuGet package.
 
-> Depending on [Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared) package is not required. You can reference to a more base package like [Volo.Abp.AspNetCore.Mvc](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc/). However, if you will build a UI page/component, it is suggested to reference to the [Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared) package since it is the most high-level package without depending on a particular [theme](UI/AspNetCore/Theming.md). If there is no problem to depend on a particular theme, you can directly reference to the theme's package to be able to use the theme-specific features in your plug-in.
+> Depending on [Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared) package is not required. You can reference to a more base package like [Volo.Abp.AspNetCore.Mvc](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc/). However, if you will build a UI page/component, it is suggested to reference to the [Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared) package since it is the most high-level package without depending on a particular [theme](../../ui/mvc-razor-pages/theming.md). If there is no problem to depend on a particular theme, you can directly reference to the theme's package to be able to use the theme-specific features in your plug-in.
 
 Then create your module class in the plug-in:
 
@@ -186,13 +186,13 @@ You can now add a razor page, like `MyPlugInPage.cshtml` inside the `Pages` fold
 
 Now, you can build the plug-in project. It will produce the following output:
 
-![simple-razor-plug-in-dll-file](images/simple-razor-plug-in-dll-file.png)
+![simple-razor-plug-in-dll-file](../../../images/simple-razor-plug-in-dll-file.png)
 
 Copy the `MyMvcUIPlugIn.dll` into the plug-in folder (`D:\Temp\MyPlugIns` for this example).
 
 If you have configured the main application like described above (see Basic Usage section), you should be able to visit the `/MyPlugInPage` URL when your application:
 
-![simple-plugin-output](images/simple-plugin-output.png)
+![simple-plugin-output](../../../images/simple-plugin-output.png)
 
 ## Discussions
 
@@ -208,7 +208,7 @@ For package/dll dependencies, you can copy the related dlls to the plug-in folde
 
 ### Database Schema
 
-If your module uses a relational database and [Entity Framework Core](Entity-Framework-Core.md), it will need to have its tables available in the database. There are different ways to ensure the tables have been created when an application uses the plug-in. Some examples;
+If your module uses a relational database and [Entity Framework Core](../../data/entity-framework-core/index.md), it will need to have its tables available in the database. There are different ways to ensure the tables have been created when an application uses the plug-in. Some examples;
 
 1. The Plugin may check if the database tables does exists and create the tables on the application startup or migrate them if the plug-in has been updated and requires some schema changes. You can use EF Core's migration API to do that.
 2. You can improve the `DbMigrator` application to find migrations of the plug-ins and execute them.

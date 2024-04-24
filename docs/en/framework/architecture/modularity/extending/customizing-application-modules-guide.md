@@ -1,8 +1,8 @@
 # Customizing the Existing Modules
 
-ABP Framework has been designed to support to build fully [modular applications](Module-Development-Basics.md) and systems. It also provides some [pre-built application modules](Modules/Index.md) those are **ready to use** in any kind of application.
+ABP Framework has been designed to support to build fully [modular applications](../../modularity/basics.md) and systems. It also provides some [pre-built application modules](../../../../modules/index.md) those are **ready to use** in any kind of application.
 
-For example, you can **re-use** the [Identity Management Module](Modules/Identity.md) to add user, role and permission management to your application. The [application startup template](Startup-Templates/Application.md) already comes with Identity and some other modules **pre-installed**.
+For example, you can **re-use** the [Identity Management Module](../../../../modules/identity.md) to add user, role and permission management to your application. The [application startup template](../../../../solution-templates/layered-web-application/index.md) already comes with Identity and some other modules **pre-installed**.
 
 ## Re-Using an Application Module
 
@@ -12,12 +12,12 @@ You have two options to re-use an application module.
 
 You can add **NuGet** & **NPM** package references of the related module to your application and configure the module (based on its documentation) to integrate to your application.
 
-As mentioned before, the [application startup template](Startup-Templates/Application.md) already comes with some **fundamental modules pre-installed**. It uses the modules as NuGet & NPM package references.
+As mentioned before, the [application startup template](../../../../solution-templates/layered-web-application/index.md) already comes with some **fundamental modules pre-installed**. It uses the modules as NuGet & NPM package references.
 
 This approach has the following benefits:
 
 * Your solution will be **clean** and only contains your **own application code**.
-* You can **easily upgrade** a module when a new version is available. `abp update` [CLI](CLI.md) command makes it even easier. In this way, you can continue to get **new features and bug fixes**.
+* You can **easily upgrade** a module when a new version is available. `abp update` [CLI](../../../../cli/index.md) command makes it even easier. In this way, you can continue to get **new features and bug fixes**.
 
 However, there is a drawback:
 
@@ -31,7 +31,7 @@ If you don't think to make huge changes on the pre-built modules, re-using them 
 
 If you want to make **huge changes** or add **major features** on a pre-built module, but the available extension points are not enough, you can consider to directly work the source code of the depended module.
 
-In this case, you typically **add the source code** of the module to your solution and replace **every** package reference in the solution with its corresponding local project references.  **[ABP CLI](CLI.md)**'s `add-module` command automates this process for you with the `--with-source-code` parameter. This command can also replace a module by its source code if the module already installed as NuGet packages.
+In this case, you typically **add the source code** of the module to your solution and replace **every** package reference in the solution with its corresponding local project references.  **[ABP CLI](../../../../cli/index.md)**'s `add-module` command automates this process for you with the `--with-source-code` parameter. This command can also replace a module by its source code if the module already installed as NuGet packages.
 
 
 #### Separating the Module Solution
@@ -54,18 +54,18 @@ This section suggests some approaches if you decided to use pre-built applicatio
 
 > Module entity extension system is the **main and high level extension system** that allows you to **define new properties** for existing entities of the depended modules. It automatically **adds properties to the entity, database, HTTP API and the user interface** in a single point.
 
-See the [Module Entity Extensions document](Module-Entity-Extensions.md) to learn how to use it.
+See the [Module Entity Extensions document](./module-entity-extensions.md) to learn how to use it.
 
 ### Extending Entities
 
-If you only need to get/set extra data on an existing entity, follow the [Extending Entities](Customizing-Application-Modules-Extending-Entities.md) document.
+If you only need to get/set extra data on an existing entity, follow the [Extending Entities](./customizing-application-modules-extending-entities.md) document.
 
 ### Overriding Services/Components
 
 In addition to the extensibility systems, you can partially or completely override any service or user interface page/component.
 
-* [Overriding Services](Customizing-Application-Modules-Overriding-Services.md)
-* [Overriding the User Interface](Customizing-Application-Modules-Overriding-User-Interface.md)
+* [Overriding Services](./customizing-application-modules-overriding-services.md)
+* [Overriding the User Interface](./overriding-user-interface.md)
 
 ### Additional UI Extensibility Points
 
@@ -75,34 +75,34 @@ There are some low level systems that you can control entity actions, table colu
 
 Entity action extension system allows you to add a new action to the action menu for an entity on the user interface;
 
-* [Entity Action Extensions for ASP.NET Core UI](UI/AspNetCore/Entity-Action-Extensions.md)
-* [Entity Action Extensions for Blazor UI](UI/Blazor/Entity-Action-Extensions.md)
-* [Entity Action Extensions for Angular](UI/Angular/Entity-Action-Extensions.md)
+* [Entity Action Extensions for ASP.NET Core UI](../../../ui/mvc-razor-pages/entity-action-extensions.md)
+* [Entity Action Extensions for Blazor UI](../../../ui/blazor/entity-action-extensions.md)
+* [Entity Action Extensions for Angular](../../../ui/angular/entity-action-extensions.md)
 
 #### Data Table Column Extensions
 
 Data table column extension system allows you to add a new column in the data table on the user interface;
 
-* [Data Table Column Extensions for ASP.NET Core UI](UI/AspNetCore/Data-Table-Column-Extensions.md)
-* [Data Table Column Extensions for Blazor UI](UI/Blazor/Data-Table-Column-Extensions.md)
-* [Data Table Column Extensions for Angular](UI/Angular/Data-Table-Column-Extensions.md)
+* [Data Table Column Extensions for ASP.NET Core UI](../../../ui/mvc-razor-pages/data-table-column-extensions.md)
+* [Data Table Column Extensions for Blazor UI](../../../ui/blazor/data-table-column-extensions.md)
+* [Data Table Column Extensions for Angular](../../../ui/angular/data-table-column-extensions.md)
 
 #### Page Toolbar
 
 Page toolbar system allows you to add components to the toolbar of a page;
 
-* [Page Toolbar Extensions for ASP.NET Core UI](UI/AspNetCore/Page-Toolbar-Extensions.md)
-* [Page Toolbar Extensions for Blazor UI](UI/Blazor/Page-Toolbar-Extensions.md)
-* [Page Toolbar Extensions for Angular](UI/Angular/Page-Toolbar-Extensions.md)
+* [Page Toolbar Extensions for ASP.NET Core UI](../../../ui/mvc-razor-pages/page-toolbar-extensions.md)
+* [Page Toolbar Extensions for Blazor UI](../../../ui/blazor/page-toolbar-extensions.md)
+* [Page Toolbar Extensions for Angular](../../../ui/angular/page-toolbar-extensions.md)
 
 #### Others
 
-* [Dynamic Form Extensions for Angular](UI/Angular/Dynamic-Form-Extensions.md)
+* [Dynamic Form Extensions for Angular](../../../ui/angular/dynamic-form-extensions.md)
 
 ## See Also
 
 Also, see the following documents:
 
-* See [the localization document](Localization.md) to learn how to extend existing localization resources.
-* See [the settings document](Settings.md) to learn how to change setting definitions of a depended module.
-* See [the authorization document](Authorization.md) to learn how to change permission definitions of a depended module.
+* See [the localization document](../../../fundamentals/localization.md) to learn how to extend existing localization resources.
+* See [the settings document](../../../fundamentals/settings.md) to learn how to change setting definitions of a depended module.
+* See [the authorization document](../../../fundamentals/authorization.md) to learn how to change permission definitions of a depended module.

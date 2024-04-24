@@ -13,17 +13,17 @@ Also, this guide is mostly usable for general **application development**.
 ### Guides
 
 * Overall
-  * [Module Architecture](Module-Architecture.md)
+  * [Module Architecture](./module-architecture.md)
 * Domain Layer
-  * [Entities](Entities.md)
-  * [Repositories](Repositories.md)
-  * [Domain Services](Domain-Services.md)
+  * [Entities](./entities.md)
+  * [Repositories](./repositories.md)
+  * [Domain Services](./domain-services.md)
 * Application Layer
-  * [Application Services](Application-Services.md)
-  * [Data Transfer Objects](Data-Transfer-Objects.md)
+  * [Application Services](./application-services.md)
+  * [Data Transfer Objects](./data-transfer-objects.md)
 * Data Access
-  * [Entity Framework Core Integration](Entity-Framework-Core-Integration.md)
-  * [MongoDB Integration](MongoDB-Integration.md)  
+  * [Entity Framework Core Integration](./entity-framework-core-integration.md)
+  * [MongoDB Integration](./mongodb-integration.md)  
 
 ## See Also
 

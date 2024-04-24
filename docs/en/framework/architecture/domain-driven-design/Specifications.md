@@ -8,7 +8,7 @@ Specification Pattern is used to define **named, reusable, combinable and testab
 
 > This package is **already installed** when you use the startup templates. So, most of the times you don't need to manually install it.
 
-Install the [Volo.Abp.Specifications](https://abp.io/package-detail/Volo.Abp.Specifications) package to your project. You can use the [ABP CLI](CLI.md) *add-package* command in a command line terminal when the current folder is the root folder of your project (`.csproj`):
+Install the [Volo.Abp.Specifications](https://abp.io/package-detail/Volo.Abp.Specifications) package to your project. You can use the [ABP CLI](../../../cli/index.md) *add-package* command in a command line terminal when the current folder is the root folder of your project (`.csproj`):
 
 ````bash
 abp add-package Volo.Abp.Specifications
@@ -133,7 +133,7 @@ namespace MyProject
 }
 ````
 
-> Specifications are correctly translated to SQL/Database queries and executed efficiently in the DBMS side. While it is not related to the Specifications, see the [Repositories](Repositories.md) document if you want to know more about the `AsyncExecuter`.
+> Specifications are correctly translated to SQL/Database queries and executed efficiently in the DBMS side. While it is not related to the Specifications, see the [Repositories](./repositories.md) document if you want to know more about the `AsyncExecuter`.
 
 Actually, using the `ToExpression()` method is not necessary since the specifications are automatically casted to Expressions. This would also work:
 
@@ -238,7 +238,7 @@ While the specification pattern is older than C# lambda expressions, it's genera
 var count = await _customerRepository.CountAsync(c => c.Balance > 100000 && c.Age => 18);
 ````
 
-Since ABP's [Repository](Repositories.md) supports Expressions, this is a completely valid use. You don't have to define or use any specification in your application and you can go with expressions.
+Since ABP's [Repository](./repositories.md) supports Expressions, this is a completely valid use. You don't have to define or use any specification in your application and you can go with expressions.
 
 So, what's the point of a specification? Why and when should we consider to use them?
 

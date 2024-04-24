@@ -4,7 +4,7 @@
 >
 > (Eric Evans)
 
-Two [Entities](Entities.md) with the same properties but with different `Id`s are considered as different entities. However, Value Objects have no `Id`s and they are considered as equals if they have the same property values.
+Two [Entities](./entities.md) with the same properties but with different `Id`s are considered as different entities. However, Value Objects have no `Id`s and they are considered as equals if they have the same property values.
 
 ## The ValueObject Class
 
@@ -72,4 +72,4 @@ Here are some best practices when using Value Objects:
 
 ## See Also
 
-* [Entities](Entities.md)
+* [Entities](./entities.md)

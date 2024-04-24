@@ -11,7 +11,7 @@
 
 The following diagram shows the packages of a well-layered module and dependencies of those packages between them:
 
-![module-layers-and-packages](../images/module-layers-and-packages.jpg)
+![module-layers-and-packages](../../../images/module-layers-and-packages.jpg)
 
 The ultimate goal is to allow an application to use the module in a flexible manner. Example applications:
 
