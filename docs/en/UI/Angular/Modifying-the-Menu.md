@@ -241,7 +241,7 @@ After adding the `routes` property as described above, the navigation menu looks
 
 ## How to Patch or Remove a Navigation Element
 
-The `patch` method of `RoutesService` finds a route by its name and replaces its configuration with the new configuration passed as the second parameter. Similarly, `remove` method finds a route and removes it along with its children. Also you can use `removeByParams` method to delete the routes with given properties.
+The `patch` method of `RoutesService` finds a route by its name and replaces its configuration with the new configuration passed as the second parameter. Similarly, `remove` method finds a route and removes it along with its children. Also you can use `removeByParam` method to delete the routes with given properties.
 
 ```js
 // this.routes is instance of RoutesService
@@ -266,7 +266,7 @@ this.routes.patch('::Menu:Home', newHomeRouteConfig);
 this.routes.remove(['Your navigation']);
 
 // or
-this.routes.removeByParams({ name: 'Your navigation' });
+this.routes.removeByParam({ name: 'Your navigation' });
 ```
 
 - Moved the _Home_ navigation under the _Administration_ dropdown based on given `parentName`.

@@ -300,11 +300,11 @@ describe('Routes Service', () => {
     });
   });
 
-  describe('#removeByParams', () => {
+  describe('#removeByParam', () => {
     it('should remove route based on given route', () => {
       service.add(routes);
 
-      service.removeByParams({
+      service.removeByParam({
         name: 'bar',
         parentName: 'foo',
       });
@@ -333,7 +333,7 @@ describe('Routes Service', () => {
         },
       ]);
 
-      service.removeByParams({
+      service.removeByParam({
         path: '/foo/bar',
         name: 'bar',
         parentName: 'foo',
@@ -360,7 +360,7 @@ describe('Routes Service', () => {
       service.add(routes);
       const flatLengthBeforeRemove = service.flat.length;
 
-      service.removeByParams({
+      service.removeByParam({
         name: 'bar',
         parentName: 'baz',
       });

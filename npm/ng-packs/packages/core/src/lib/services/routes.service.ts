@@ -152,7 +152,7 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
     return this.publish(flatItems);
   }
 
-  removeByParams(params: Partial<T>): T[] | null {
+  removeByParam(params: Partial<T>): T[] | null {
     if (!params) {
       return null;
     }
@@ -168,7 +168,7 @@ export abstract class AbstractTreeService<T extends { [key: string | number | sy
     }
 
     for (const item of excludedList) {
-      this.removeByParams({ [this.parentId]: item[this.id] } as Partial<T>);
+      this.removeByParam({ [this.parentId]: item[this.id] } as Partial<T>);
     }
 
     const flatItems = this.flat.filter(item => !excludedList.includes(item));
