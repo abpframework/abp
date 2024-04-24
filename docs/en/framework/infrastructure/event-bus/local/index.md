@@ -8,7 +8,7 @@ There are two ways of publishing local events explained in the following section
 
 ### Publishing Events Using the ILocalEventBus
 
-`ILocalEventBus` can be [injected](Dependency-Injection.md) and used to publish a local event.
+`ILocalEventBus` can be [injected](../../../fundamentals/dependency-injection.md) and used to publish a local event.
 
 **Example: Publish a local event when the stock count of a product changes**
 
@@ -66,7 +66,7 @@ Even if you don't need to transfer any data, you need to create a class (which i
 
 ### Publishing Events Inside Entity / Aggregate Root Classes
 
-[Entities](Entities.md) can not inject services via dependency injection, but it is very common to publish local events inside entity / aggregate root classes.
+[Entities](../../../architecture/domain-driven-design/entities.md) can not inject services via dependency injection, but it is very common to publish local events inside entity / aggregate root classes.
 
 **Example: Publish a local event inside an aggregate root method**
 
@@ -154,9 +154,9 @@ That's all. `MyHandler` is **automatically discovered** by the ABP Framework and
 * **One or more handlers** can subscribe to the same event.
 * A single event handler class can **subscribe to multiple events** by implementing the `ILocalEventHandler<TEvent>` interface for each event type.
 
-If you perform **database operations** and use the [repositories](Repositories.md) inside the event handler, you may need to create a [unit of work](Unit-Of-Work.md), because some repository methods need to work inside an **active unit of work**. Make the handle method `virtual` and add a `[UnitOfWork]` attribute for the method, or manually use the `IUnitOfWorkManager` to create a unit of work scope.
+If you perform **database operations** and use the [repositories](../../../architecture/domain-driven-design/repositories.md) inside the event handler, you may need to create a [unit of work](../../../architecture/domain-driven-design/unit-of-work.md), because some repository methods need to work inside an **active unit of work**. Make the handle method `virtual` and add a `[UnitOfWork]` attribute for the method, or manually use the `IUnitOfWorkManager` to create a unit of work scope.
 
-> The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
+> The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](../../../fundamentals/dependency-injection.md) for more options.
 
 ### LocalEventHandlerOrder Attribute
 
@@ -183,7 +183,7 @@ public class MyHandler
 
 ### Transaction & Exception Behavior
 
-Event handlers are always executed in the same [unit of work](Unit-Of-Work.md) scope, that means in the same database transaction with the code that published the event. If an event handler throws an exception, the unit of work (database transaction) is rolled back. So, **use try-catch yourself** in the event handler if you want to hide the error.
+Event handlers are always executed in the same [unit of work](../../../architecture/domain-driven-design/unit-of-work.md) scope, that means in the same database transaction with the code that published the event. If an event handler throws an exception, the unit of work (database transaction) is rolled back. So, **use try-catch yourself** in the event handler if you want to hide the error.
 
 When you call `ILocalEventBus.PublishAsync`, the event handlers are not immediately executed. Instead, they are executed just before the current unit of work completed (an unhandled exception in the handler still rollbacks the current unit of work). If you want to immediately execute the handlers, set the optional `onUnitOfWorkComplete` parameter to `false`.
 

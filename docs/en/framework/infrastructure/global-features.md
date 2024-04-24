@@ -3,7 +3,7 @@ Global Feature system is used to enable/disable an application feature on develo
 
 Global Features system is especially useful if you want to develop a reusable application module with optional features. If the final application doesn't want to use some of the features, it can disable these features.
 
-> If you are looking for a system to enable/disable features based on current tenant or any other condition, please see the [Features](Features.md) document.
+> If you are looking for a system to enable/disable features based on current tenant or any other condition, please see the [Features](./features.md) document.
 
 ## Installation
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.

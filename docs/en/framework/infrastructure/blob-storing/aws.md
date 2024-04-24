@@ -2,13 +2,13 @@
 
 BLOB Storing Aws Provider can store BLOBs in [Amazon Simple Storage Service](https://aws.amazon.com/s3/).
 
-> Read the [BLOB Storing document](Blob-Storing.md) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a Aws BLOB as the storage provider.
+> Read the [BLOB Storing document](./index.md) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a Aws BLOB as the storage provider.
 
 ## Installation
 
 Use the ABP CLI to add [Volo.Abp.BlobStoring.Aws](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Aws) NuGet package to your project:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Install the [ABP CLI](../../../cli/index.md) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BlobStoring.Aws` package.
 * Run `abp add-package Volo.Abp.BlobStoring.Aws` command.
 
@@ -16,7 +16,7 @@ If you want to do it manually, install the [Volo.Abp.BlobStoring.Aws](https://ww
 
 ## Configuration
 
-Configuration is done in the `ConfigureServices` method of your [module](Module-Development-Basics.md) class, as explained in the [BLOB Storing document](Blob-Storing.md).
+Configuration is done in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) class, as explained in the [BLOB Storing document](./index.md).
 
 **Example: Configure to use the Aws storage provider by default**
 
@@ -46,7 +46,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 ````
 
-> See the [BLOB Storing document](Blob-Storing.md) to learn how to configure this provider for a specific container.
+> See the [BLOB Storing document](./index.md) to learn how to configure this provider for a specific container.
 
 ### Options
 
@@ -60,7 +60,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **Region** (string): The system name of the service.
 * **Policy** (string): An IAM policy in JSON format that you want to use as an inline session policy.
 * **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600. **note**: Using sub-accounts operated OSS,if the value is 0.
-* **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
+* **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](./index.md)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
     * Bucket names must be between **3** and **63** characters long.
     * Bucket names can consist only of **lowercase** letters, numbers, dots (.), and hyphens (-).
     * Bucket names must begin and end with a letter or number.
@@ -74,12 +74,12 @@ Configure<AbpBlobStoringOptions>(options =>
 
 Aws Blob Provider organizes BLOB name and implements some conventions. The full name of a BLOB is determined by the following rules by default:
 
-* Appends `host` string if [current tenant](Multi-Tenancy.md) is `null` (or multi-tenancy is disabled for the container - see the [BLOB Storing document](Blob-Storing.md) to learn how to disable multi-tenancy for a container).
+* Appends `host` string if [current tenant](../../architecture/multi-tenancy/index.md) is `null` (or multi-tenancy is disabled for the container - see the [BLOB Storing document](./index.md) to learn how to disable multi-tenancy for a container).
 * Appends `tenants/<tenant-id>` string if current tenant is not `null`.
 * Appends the BLOB name.
 
 ## Other Services
 
-* `AwsBlobProvider` is the main service that implements the Aws BLOB storage provider, if you want to override/replace it via [dependency injection](Dependency-Injection.md) (don't replace `IBlobProvider` interface, but replace `AwsBlobProvider` class).
+* `AwsBlobProvider` is the main service that implements the Aws BLOB storage provider, if you want to override/replace it via [dependency injection](../../fundamentals/dependency-injection.md) (don't replace `IBlobProvider` interface, but replace `AwsBlobProvider` class).
 * `IAwsBlobNameCalculator` is used to calculate the full BLOB name (that is explained above). It is implemented by the `DefaultAwsBlobNameCalculator` by default.
 * `IAmazonS3ClientFactory` is used create OSS client. It is implemented by the `DefaultAmazonS3ClientFactory` by default. You can override/replace it,if you want customize.

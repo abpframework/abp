@@ -21,8 +21,8 @@ Template rendering engine is very powerful;
 
 ABP Framework provides two templating engines;
 
-* **[Razor](Text-Templating-Razor.md)**
-* **[Scriban](Text-Templating-Scriban.md)**
+* **[Razor](./razor.md)**
+* **[Scriban](./scriban.md)**
 
 You can use different template engines in the same application, or even create a new custom template engine.
 
@@ -33,5 +33,5 @@ Get [the source code of the sample application](https://github.com/abpframework/
 ## See Also
 
 * [The source code of the sample application](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo) developed and referred through this document.
-* [Localization system](Localization.md).
-* [Virtual File System](Virtual-File-System.md).
+* [Localization system](../../fundamentals/localization.md).
+* [Virtual File System](../../infrastructure/virtual-file-system.md).

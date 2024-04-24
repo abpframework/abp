@@ -1,12 +1,12 @@
 # Hangfire Background Job Manager
 
-[Hangfire](https://www.hangfire.io/) is an advanced background job manager. You can integrate Hangfire with the ABP Framework to use it instead of the [default background job manager](Background-Jobs.md). In this way, you can use the same background job API for Hangfire and your code will be independent of Hangfire. If you like, you can directly use Hangfire's API, too.
+[Hangfire](https://www.hangfire.io/) is an advanced background job manager. You can integrate Hangfire with the ABP Framework to use it instead of the [default background job manager](./index.md). In this way, you can use the same background job API for Hangfire and your code will be independent of Hangfire. If you like, you can directly use Hangfire's API, too.
 
-> See the [background jobs document](Background-Jobs.md) to learn how to use the background job system. This document only shows how to install and configure the Hangfire integration.
+> See the [background jobs document](./index.md) to learn how to use the background job system. This document only shows how to install and configure the Hangfire integration.
 
 ## Installation
 
-It is suggested to use the [ABP CLI](CLI.md) to install this package.
+It is suggested to use the [ABP CLI](../../../cli/index.md) to install this package.
 
 ### Using the ABP CLI
 
@@ -16,7 +16,7 @@ Open a command line window in the folder of the project (.csproj file) and type 
 abp add-package Volo.Abp.BackgroundJobs.HangFire
 ````
 
->  If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.BackgroundJobs.HangFire).
+>  If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.BackgroundJobs.HangFire).
 
 ### Manual Installation
 
@@ -124,7 +124,7 @@ namespace MyProject
 Hangfire Dashboard provides information about your background jobs, including method names and serialized arguments as well as gives you an opportunity to manage them by performing different actions – retry, delete, trigger, etc. So it is important to restrict access to the Dashboard.
 To make it secure by default, only local requests are allowed, however you can change this by following the [official documentation](http://docs.hangfire.io/en/latest/configuration/using-dashboard.html) of Hangfire.
 
-You can integrate the Hangfire dashboard to [ABP authorization system](Authorization.md) using the **AbpHangfireAuthorizationFilter**
+You can integrate the Hangfire dashboard to [ABP authorization system](../../fundamentals/authorization.md) using the **AbpHangfireAuthorizationFilter**
 class. This class is defined in the `Volo.Abp.Hangfire` package. The following example, checks if the current user is logged in to the application:
 
 ```csharp

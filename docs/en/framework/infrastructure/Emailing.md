@@ -3,15 +3,15 @@
 ABP Framework provides various services, settings and integrations for sending emails;
 
 * Provides `IEmailSender` service that is used to send emails.
-* Defines [settings](Settings.md) to configure email sending.
-* Integrates to the [background job system](Background-Jobs.md) to send emails via background jobs.
-* Provides [MailKit integration](MailKit.md) package.
+* Defines [settings](../fundamentals/settings.md) to configure email sending.
+* Integrates to the [background job system](./background-jobs/index.md) to send emails via background jobs.
+* Provides [MailKit integration](./mail-kit.md) package.
 
 ## Installation
 
-> This package is already installed if you are using the [application startup template](Startup-Templates/Application.md).
+> This package is already installed if you are using the [application startup template](../../solution-templates/layered-web-application).
 
-It is suggested to use the [ABP CLI](CLI.md) to install this package. Open a command line window in the folder of the project (.csproj file) and type the following command:
+It is suggested to use the [ABP CLI](../../cli/index.md) to install this package. Open a command line window in the folder of the project (.csproj file) and type the following command:
 
 ````bash
 abp add-package Volo.Abp.Emailing
@@ -23,7 +23,7 @@ If you haven't done it yet, you first need to install the ABP CLI. For other ins
 
 ### IEmailSender
 
-[Inject](Dependency-Injection.md) the `IEmailSender` into any service and use the `SendAsync` method to send emails.
+[Inject](../fundamentals/dependency-injection.md) the `IEmailSender` into any service and use the `SendAsync` method to send emails.
 
 **Example**
 
@@ -82,11 +82,11 @@ Most of the time you want to directly use the `IEmailSender` to make your code p
 
 Queueing emails tolerates errors since the background job system has re-try mechanism to overcome temporary network/server problems. 
 
-See the [background jobs document](Background-Jobs.md) for more about the background job system.
+See the [background jobs document](./background-jobs/index.md) for more about the background job system.
 
 ## Email Settings
 
-Email sending uses the [setting system](Settings.md) to define settings and get the values of these settings on the runtime. `Volo.Abp.Emailing.EmailSettingNames` defines constants for the setting names, just listed below:
+Email sending uses the [setting system](../fundamentals/settings.md) to define settings and get the values of these settings on the runtime. `Volo.Abp.Emailing.EmailSettingNames` defines constants for the setting names, just listed below:
 
 * **Abp.Mailing.DefaultFromAddress**: Used as the sender's email address when you don't specify a sender when sending emails (just like in the example above).
 * **Abp.Mailing.DefaultFromDisplayName**: Used as the sender's display name when you don't specify a sender when sending emails (just like in the example above).
@@ -98,9 +98,9 @@ Email sending uses the [setting system](Settings.md) to define settings and get 
 * **Abp.Mailing.Smtp.EnableSsl**: A value that indicates if the SMTP server uses SSL or not ("true" or "false". Default: "false").
 * **Abp.Mailing.Smtp.UseDefaultCredentials**: If true, uses default credentials instead of the provided username and password ("true" or "false". Default: "true").
 
-Email settings can be managed from the *Settings Page* of the [Setting Management](Modules/Setting-Management.md) module:
+Email settings can be managed from the *Settings Page* of the [Setting Management](../../modules/setting-management.md) module:
 
-![email-settings](images/email-settings.png)
+![email-settings](../../images/email-settings.png)
 
 > Setting Management module is already installed if you've created your solution from the ABP Startup template.
 
@@ -120,7 +120,7 @@ If you don't use the Setting Management module, you can simply define the settin
 }
 ````
 
-You can set/change these settings programmatically using the `ISettingManager` and store values in a database. See the [setting system document](Settings.md) to understand the setting system better.
+You can set/change these settings programmatically using the `ISettingManager` and store values in a database. See the [setting system document](../fundamentals/settings.md) to understand the setting system better.
 
 ### Encrypt the SMTP Password
 
@@ -134,7 +134,7 @@ If you don't want to use the setting system to store the email sending configura
 
 ## Text Template Integration
 
-ABP Framework provides a strong and flexible [text templating system](Text-Templating.md). You can use the text templating system to create dynamic email contents. Inject the `ITemplateRenderer` and use the `RenderAsync` to render a template. Then use the result as the email body.
+ABP Framework provides a strong and flexible [text templating system](./text-templating/index.md). You can use the text templating system to create dynamic email contents. Inject the `ITemplateRenderer` and use the `RenderAsync` to render a template. Then use the result as the email body.
 
 While you can define and use your own text templates, email sending system provides two simple built-in text templates.
 
@@ -226,7 +226,7 @@ The final rendered message was shown above.
 
 ### Overriding/Replacing the Standard Templates
 
-You typically want to replace the standard templates with your own ones, so you can prepare a branded email messages. To do that, you can use the power of the [virtual file system](Virtual-File-System.md) (VFS) or replace them in your own template definition provider.
+You typically want to replace the standard templates with your own ones, so you can prepare a branded email messages. To do that, you can use the power of the [virtual file system](../infrastructure/virtual-file-system.md) (VFS) or replace them in your own template definition provider.
 
 Pathes of the templates in the virtual file system are shown below:
 
@@ -235,17 +235,17 @@ Pathes of the templates in the virtual file system are shown below:
 
 If you add files to the same location in the virtual file system, your files will override them.
 
-Templates are inline localized, that means you can take the power of the [localization system](Localization.md) to make your templates multi-cultural.
+Templates are inline localized, that means you can take the power of the [localization system](../fundamentals/localization.md) to make your templates multi-cultural.
 
-See the [text templating system](Text-Templating.md) document for details.
+See the [text templating system](./text-templating/index.md) document for details.
 
 > Notice that you can define and use your own templates for your application, rather than using the standard simple templates. These standard templates are mostly for reusable modules where they don't define their own templates but rely on the built-in ones. This makes easy to customize emails sent by the used modules, by just overriding the standard email layout template.
 
 ## NullEmailSender
 
-`NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the [standard log system](Logging.md), rathen than actually sending the emails.
+`NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the [standard log system](../fundamentals/logging.md), rathen than actually sending the emails.
 
-This class can be useful especially in development time where you generally don't want to send real emails. The [application startup template](Startup-Templates/Application.md) already uses this class in the **DEBUG mode** with the following configuration in the domain layer:
+This class can be useful especially in development time where you generally don't want to send real emails. The [application startup template](../../solution-templates/layered-web-application/index.md) already uses this class in the **DEBUG mode** with the following configuration in the domain layer:
 
 ````csharp
 #if DEBUG
@@ -257,4 +257,4 @@ So, don't confuse if you don't receive emails on DEBUG mode. Emails will be sent
 
 ## See Also
 
-* [MailKit integration for sending emails](MailKit.md)
+* [MailKit integration for sending emails](./mail-kit.md)

@@ -12,20 +12,20 @@ An **audit log object** (see the Audit Log Object section below) is typically cr
 * **Exception** information (if there was an error while executing the request).
 * **Request duration** (to measure the performance of the application).
 
-> [Startup templates](Startup-Templates/Index.md) are configured for the audit logging system which is suitable for most of the applications. Use this document for a detailed control over the audit log system.
+> [Startup templates](../../solution-templates/index.md) are configured for the audit logging system which is suitable for most of the applications. Use this document for a detailed control over the audit log system.
 
 ### Database Provider Support
 
-* Fully supported by the [Entity Framework Core](Entity-Framework-Core.md) provider.
-* Entity change logging is not supported by the [MongoDB](MongoDB.md) provider. Other features work as expected.
+* Fully supported by the [Entity Framework Core](../data/entity-framework-core/index.md) provider.
+* Entity change logging is not supported by the [MongoDB](../data/mongodb/index.md) provider. Other features work as expected.
 
 ## UseAuditing()
 
-`UseAuditing()` middleware should be added to the ASP.NET Core request pipeline in order to create and save the audit logs. If you've created your applications using [the startup templates](Startup-Templates/Index.md), it is already added.
+`UseAuditing()` middleware should be added to the ASP.NET Core request pipeline in order to create and save the audit logs. If you've created your applications using [the startup templates](../../solution-templates/index.md), it is already added.
 
 ## AbpAuditingOptions
 
-`AbpAuditingOptions` is the main [options object](Options.md) to configure the audit log system. You can configure it in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+`AbpAuditingOptions` is the main [options object](../fundamentals/options.md) to configure the audit log system. You can configure it in the `ConfigureServices` method of your [module](../architecture/modularity/basics.md):
 
 ````csharp
 Configure<AbpAuditingOptions>(options =>
@@ -37,10 +37,10 @@ Configure<AbpAuditingOptions>(options =>
 Here, a list of the options you can configure:
 
 * `IsEnabled` (default: `true`): A root switch to enable or disable the auditing system. Other options is not used if this value is `false`.
-* `HideErrors` (default: `true`): Audit log system hides and write regular [logs](Logging.md) if any error occurs while saving the audit log objects. If saving the audit logs is critical for your system, set this to `false` to throw exception in case of hiding the errors.
+* `HideErrors` (default: `true`): Audit log system hides and write regular [logs](../fundamentals/localization.md) if any error occurs while saving the audit log objects. If saving the audit logs is critical for your system, set this to `false` to throw exception in case of hiding the errors.
 * `IsEnabledForAnonymousUsers` (default: `true`): If you want to write audit logs only for the authenticated users, set this to `false`. If you save audit logs for anonymous users, you will see `null` for `UserId` values for these users.
 * `AlwaysLogOnException` (default: `true`): If you set to true, it always saves the audit log on an exception/error case without checking other options (except `IsEnabled`, which completely disables the audit logging).
-* `IsEnabledForIntegrationService` (default: `false`): Audit Logging is disabled for [integration services](Integration-Services.md) by default. Set this property as `true` to enable it.
+* `IsEnabledForIntegrationService` (default: `false`): Audit Logging is disabled for [integration services](../api-development/integration-services.md) by default. Set this property as `true` to enable it.
 * `IsEnabledForGetRequests` (default: `false`): HTTP GET requests should not make any change in the database normally and audit log system doesn't save audit log objects for GET request. Set this to `true` to enable it also for the GET requests.
 * `DisableLogActionInfo` (default: `false`):If you set to true, Will no longer log `AuditLogActionInfo`.
 * `ApplicationName`: If multiple applications are saving audit logs into a single database, set this property to your application name, so you can distinguish the logs of different applications. If you don't set, it will set from the `IApplicationInfoAccessor.ApplicationName` value, which is the entry assembly name by default.
@@ -95,7 +95,7 @@ The condition `typeof(IEntity).IsAssignableFrom(type)` will be `true` for any cl
 
 ## AbpAspNetCoreAuditingOptions
 
-`AbpAspNetCoreAuditingOptions` is the [options object](Options.md) to configure audit logging in the ASP.NET Core layer. You can configure it in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+`AbpAspNetCoreAuditingOptions` is the [options object](../fundamentals/options.md) to configure audit logging in the ASP.NET Core layer. You can configure it in the `ConfigureServices` method of your [module](../architecture/modularity/basics.md):
 
 ````csharp
 Configure<AbpAspNetCoreAuditingOptions>(options =>
@@ -142,11 +142,11 @@ public class HomeController : AbpController
 
 ### Enable/Disable for Application Services & Methods
 
-[Application service](Application-Services.md) method calls also included into the audit log by default. You can use the `[DisableAuditing]` in service or method level.
+[Application service](../architecture/domain-driven-design/application-services.md) method calls also included into the audit log by default. You can use the `[DisableAuditing]` in service or method level.
 
 #### Enable/Disable for Other Services
 
-Action audit logging can be enabled for any type of class (registered to and resolved from the [dependency injection](Dependency-Injection.md)) while it is only enabled for the controllers and the application services by default.
+Action audit logging can be enabled for any type of class (registered to and resolved from the [dependency injection](../fundamentals/dependency-injection.md)) while it is only enabled for the controllers and the application services by default.
 
 Use `[Audited]` and `[DisableAuditing]` for any class or method that need to be audit logged. In addition, your class can (directly or inherently) implement the `IAuditingEnabled` interface to enable the audit logging for that class by default.
 
@@ -155,7 +155,7 @@ Use `[Audited]` and `[DisableAuditing]` for any class or method that need to be 
 An entity is ignored on entity change audit logging in the following cases;
 
 * If you add an entity type to the `AbpAuditingOptions.IgnoredTypes` (as explained before), it is completely ignored in the audit logging system.
-* If the object is not an [entity](Entities.md) (not implements `IEntity` directly or inherently - All entities implement this interface by default).
+* If the object is not an [entity](../architecture/domain-driven-design/entities.md) (not implements `IEntity` directly or inherently - All entities implement this interface by default).
 * If entity type is not public.
 
 Otherwise, you can use `Audited` to enable entity change audit logging for an entity:
@@ -214,17 +214,17 @@ public class MyUser : Entity<Guid>
 
 ## IAuditingStore
 
-`IAuditingStore` is an interface that is used to save the audit log objects (explained below) by the ABP Framework. If you need to save the audit log objects to a custom data store, you can implement the `IAuditingStore` in your own application and replace using the [dependency injection system](Dependency-Injection.md).
+`IAuditingStore` is an interface that is used to save the audit log objects (explained below) by the ABP Framework. If you need to save the audit log objects to a custom data store, you can implement the `IAuditingStore` in your own application and replace using the [dependency injection system](../fundamentals/dependency-injection.md).
 
-`SimpleLogAuditingStore` is used if no audit store was registered. It simply writes the audit object to the standard [logging system](Logging.md).
+`SimpleLogAuditingStore` is used if no audit store was registered. It simply writes the audit object to the standard [logging system](../fundamentals/logging.md).
 
-[The Audit Logging Module](Modules/Audit-Logging.md) has been configured in [the startup templates](Startup-Templates/Index.md) saves audit log objects to a database (it supports multiple database providers). So, most of the times you don't care about how `IAuditingStore` was implemented and used.
+[The Audit Logging Module](../../modules/audit-logging.md) has been configured in [the startup templates](../../solution-templates/index.md) saves audit log objects to a database (it supports multiple database providers). So, most of the times you don't care about how `IAuditingStore` was implemented and used.
 
 ## Audit Log Object
 
 An **audit log object** is created for each **web request** by default. An audit log object can be represented by the following relation diagram:
 
-![**auditlog-object-diagram**](images/auditlog-object-diagram.png)
+![**auditlog-object-diagram**](../../images/auditlog-object-diagram.png)
 
 * **AuditLogInfo**: The root object with the following properties:
   * `ApplicationName`: When you save audit logs of different applications to the same database, this property is used to distinguish the logs of the applications.
@@ -237,12 +237,12 @@ An **audit log object** is created for each **web request** by default. An audit
   * `ClientId`: Id of the current client, if the client has been authenticated. A client is generally a 3rd-party application using the system over an HTTP API.
   * `ClientName`: Name of the current client, if available.
   * `ClientIpAddress`: IP address of the client/user device.
-  * `CorrelationId`: Current [Correlation Id](CorrelationId.md). Correlation Id is used to relate the audit logs written by different applications (or microservices) in a single logical operation.
+  * `CorrelationId`: Current [Correlation Id](./correlation-id.md). Correlation Id is used to relate the audit logs written by different applications (or microservices) in a single logical operation.
   * `BrowserInfo`: Browser name/version info of the current user, if available.
   * `HttpMethod`: HTTP method of the current request (GET, POST, PUT, DELETE... etc.).
   * `HttpStatusCode`: HTTP response status code for this request.
   * `Url`: URL of the request.
-* **AuditLogActionInfo**: An audit log action is typically a controller action or an [application service](Application-Services.md) method call during the web request. One audit log may contain multiple actions. An action object has the following properties:
+* **AuditLogActionInfo**: An audit log action is typically a controller action or an [application service](../architecture/domain-driven-design/application-services.md) method call during the web request. One audit log may contain multiple actions. An action object has the following properties:
   * `ServiceName`: Name of the executed controller/service.
   * `MethodName`: Name of the executed method of the controller/service.
   * `Parameters`: A JSON formatted text representing the parameters passed to the method.
@@ -293,7 +293,7 @@ public class MyAuditLogContributor : AuditLogContributor
 }
 ````
 
-* `context.ServiceProvider` can be used to resolve services from the [dependency injection](Dependency-Injection.md).
+* `context.ServiceProvider` can be used to resolve services from the [dependency injection](../fundamentals/dependency-injection.md).
 * `context.AuditInfo` can be used to access to the current audit log object to manipulate it.
 
 After creating such a contributor, you must add it to the `AbpAuditingOptions.Contributors` list:
@@ -388,4 +388,4 @@ You can call other services, they may call others, they may change entities and 
 
 The Audit Logging Module basically implements the `IAuditingStore` to save the audit log objects to a database. It supports multiple database providers. This module is added to the startup templates by default.
 
-See [the Audit Logging Module document](Modules/Audit-Logging.md) for more about it.
+See [the Audit Logging Module document](../../modules/audit-logging.md) for more about it.

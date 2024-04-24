@@ -5,7 +5,7 @@ ABP Framework provides services to compress and resize images and implements the
 
 ## Installation
 
-You can add this package to your application by either using the [ABP CLI](CLI.md) or manually installing it. Using the [ABP CLI](CLI.md) is the recommended approach.
+You can add this package to your application by either using the [ABP CLI](../../cli/index.md) or manually installing it. Using the [ABP CLI](../../cli/index.md) is the recommended approach.
 
 ### Using the ABP CLI
 
@@ -50,7 +50,7 @@ You should install one of these provides to make it actually working.
 
 ## IImageResizer
 
-You can [inject](Dependency-Injection.md) the `IImageResizer` service and use it for image resize operations. Here is the available methods of the `IImageResizer` service:
+You can [inject](../fundamentals/dependency-injection.md) the `IImageResizer` service and use it for image resize operations. Here is the available methods of the `IImageResizer` service:
 
 ```csharp
 public interface IImageResizer
@@ -150,13 +150,13 @@ public enum ImageProcessState : byte
 
 ### ImageResizeOptions
 
-`ImageResizeOptions` is an [options object](Options.md) that is used to configure the image resize system. It has the following properties:
+`ImageResizeOptions` is an [options object](../fundamentals/options.md) that is used to configure the image resize system. It has the following properties:
 
 * `DefaultResizeMode`: The default resize mode. (Default: `ImageResizeMode.None`)
 
 ## IImageCompressor
 
-You can [inject](Dependency-Injection.md) the `IImageCompressor` service and use it for image compression operations. Here is the available methods of the `IImageCompressor` service:
+You can [inject](../fundamentals/dependency-injection.md) the `IImageCompressor` service and use it for image compression operations. Here is the available methods of the `IImageCompressor` service:
 
 ```csharp
 public interface IImageCompressor
@@ -223,7 +223,7 @@ public enum ImageProcessState : byte
 
 ## Installation
 
-You can add this package to your application by either using the [ABP CLI](CLI.md) or manually installing it. Using the [ABP CLI](CLI.md) is the recommended approach.
+You can add this package to your application by either using the [ABP CLI](../../cli/index.md) or manually installing it. Using the [ABP CLI](../../cli/index.md) is the recommended approach.
 
 ### Using the ABP CLI
 
@@ -243,7 +243,7 @@ If you want to manually install;
 Install-Package Volo.Abp.Imaging.MagickNet
 ```
 
-2. Add `AbpImagingMagickNetModule` to your [module](Module-Development-Basics.md)'s dependency list:
+2. Add `AbpImagingMagickNetModule` to your [module](../architecture/modularity/basics.md)'s dependency list:
 
 ```csharp
 [DependsOn(typeof(AbpImagingMagickNetModule))]
@@ -255,7 +255,7 @@ public class MyModule : AbpModule
 
 ### Configuration
 
-`MagickNetCompressOptions` is an [options object](Options.md) that is used to configure the Magick.NET image compression system. It has the following properties:
+`MagickNetCompressOptions` is an [options object](../fundamentals/options.md) that is used to configure the Magick.NET image compression system. It has the following properties:
 
 * `OptimalCompression`: Indicates whether the optimal compression is enabled or not. (Default: `false`)
 * `IgnoreUnsupportedFormats`: Indicates whether the unsupported formats are ignored or not. (Default: `false`)
@@ -267,7 +267,7 @@ public class MyModule : AbpModule
 
 ## Installation
 
-You can add this package to your application by either using the [ABP CLI](CLI.md) or manually installing it. Using the [ABP CLI](CLI.md) is the recommended approach.
+You can add this package to your application by either using the [ABP CLI](../../cli/index.md) or manually installing it. Using the [ABP CLI](../../cli/index.md) is the recommended approach.
 
 ### Using the ABP CLI
 
@@ -287,7 +287,7 @@ If you want to manually install;
 Install-Package Volo.Abp.Imaging.ImageSharp
 ```
 
-2. Add `AbpImagingImageSharpModule` to your [module](Module-Development-Basics.md)'s dependency list:
+2. Add `AbpImagingImageSharpModule` to your [module](../architecture/modularity/basics.md)'s dependency list:
 
 
 ```csharp
@@ -300,7 +300,7 @@ public class MyModule : AbpModule
 
 ### Configuration
 
-`ImageSharpCompressOptions` is an [options object](Options.md) that is used to configure the ImageSharp image compression system. It has the following properties:
+`ImageSharpCompressOptions` is an [options object](../fundamentals/options.md) that is used to configure the ImageSharp image compression system. It has the following properties:
 
 * `DefaultQuality`: The default quality of the JPEG and WebP encoders. (Default: `75`)
 * [`JpegEncoder`](https://docs.sixlabors.com/api/ImageSharp/SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder.html): The JPEG encoder. (Default: `JpegEncoder` with `Quality` set to `DefaultQuality`)
@@ -333,7 +333,7 @@ Configure<ImageSharpCompressOptions>(options =>
 
 ## Installation
 
-You can add this package to your application by either using the [ABP CLI](CLI.md) or manually installing it. Using the [ABP CLI](CLI.md) is the recommended approach.
+You can add this package to your application by either using the [ABP CLI](../../cli/index.md) or manually installing it. Using the [ABP CLI](../../cli/index.md) is the recommended approach.
 
 ### Using the ABP CLI
 
@@ -353,7 +353,7 @@ If you want to manually install;
 Install-Package Volo.Abp.Imaging.AspNetCore
 ```
 
-2. Add `AbpImagingAspNetCoreModule` to your [module](Module-Development-Basics.md)'s dependency list:
+2. Add `AbpImagingAspNetCoreModule` to your [module](../architecture/modularity/basics.md)'s dependency list:
 
 ```csharp
 [DependsOn(typeof(AbpImagingAspNetCoreModule))]

@@ -1,10 +1,10 @@
 # Quartz Background Worker Manager
 
-[Quartz](https://www.quartz-scheduler.net/) is an advanced background worker manager. You can integrate Quartz with the ABP Framework to use it instead of the [default background worker manager](Background-Workers.md). ABP simply integrates quartz.
+[Quartz](https://www.quartz-scheduler.net/) is an advanced background worker manager. You can integrate Quartz with the ABP Framework to use it instead of the [default background worker manager](./index.md). ABP simply integrates quartz.
 
 ## Installation
 
-It is suggested to use the [ABP CLI](CLI.md) to install this package.
+It is suggested to use the [ABP CLI](../../../cli/index.md) to install this package.
 
 ### Using the ABP CLI
 
@@ -36,11 +36,11 @@ public class YourModule : AbpModule
 }
 ````
 
-> Quartz background worker integration provided `QuartzPeriodicBackgroundWorkerAdapter` to adapt `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived class. So, you can still fllow the [background workers document](Background-Workers.md) to define the background worker.
+> Quartz background worker integration provided `QuartzPeriodicBackgroundWorkerAdapter` to adapt `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived class. So, you can still fllow the [background workers document](./index.md) to define the background worker.
 
 ## Configuration
 
-See [Configuration](Background-Jobs-Quartz#Configuration).
+See [Configuration](../background-jobs/quartz.md).
 
 ## Create a Background Worker
 
@@ -63,7 +63,7 @@ public class MyLogWorker : QuartzBackgroundWorkerBase
 }
 ````
 
-We simply implemented the Execute method to write a log. The background worker is a **singleton by default**. If you want, you can also implement a [dependency interface](Dependency-Injection#DependencyInterfaces) to register it as another life cycle.
+We simply implemented the Execute method to write a log. The background worker is a **singleton by default**. If you want, you can also implement a [dependency interface](../../fundamentals/dependency-injection.md) to register it as another life cycle.
 
 > Tips: Add identity to background workers is a best practice,because quartz distinguishes different jobs based on identity.
 

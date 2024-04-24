@@ -4,17 +4,17 @@ The Virtual File System makes it possible to manage files that do not physically
 
 ## Installation
 
-> Most of the times you don't need to manually install this package since it comes pre-installed with the [application startup template](Startup-Templates/Application.md).
+> Most of the times you don't need to manually install this package since it comes pre-installed with the [application startup template](../../solution-templates/layered-web-application/index.md).
 
 [Volo.Abp.VirtualFileSystem](https://www.nuget.org/packages/Volo.Abp.VirtualFileSystem) is the main package of the Virtual File System.
 
 Use the ABP CLI to add this package to your project:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI), if you haven't installed it.
+* Install the [ABP CLI](../../cli/index.md), if you haven't installed it.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.VirtualFileSystem` package.
 * Run `abp add-package Volo.Abp.VirtualFileSystem` command.
 
-If you want to do it manually, install the [Volo.Abp.VirtualFileSystem](https://www.nuget.org/packages/Volo.Abp.VirtualFileSystem) NuGet package to your project and add `[DependsOn(typeof(AbpVirtualFileSystemModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.VirtualFileSystem](https://www.nuget.org/packages/Volo.Abp.VirtualFileSystem) NuGet package to your project and add `[DependsOn(typeof(AbpVirtualFileSystemModule))]` to the [ABP module](../architecture/modularity/basics.md) class inside your project.
 
 ## Working with the Embedded Files
 
@@ -22,7 +22,7 @@ If you want to do it manually, install the [Volo.Abp.VirtualFileSystem](https://
 
 A file should be first marked as **embedded resource** to embed the file into the assembly. The easiest way to do it is to select the file from the **Solution Explorer** and set **Build Action** to **Embedded Resource** from the **Properties** window. Example:
 
-![build-action-embedded-resource-sample](images/build-action-embedded-resource-sample.png)
+![build-action-embedded-resource-sample](../../images/build-action-embedded-resource-sample.png)
 
 If you want to add multiple files, this can be tedious. Alternatively, you can directly edit your `.csproj` file:
 
@@ -44,7 +44,7 @@ Embedding a file in the project/assembly may cause problems if a file name conta
 
 ### Configure the AbpVirtualFileSystemOptions
 
-Use `AbpVirtualFileSystemOptions` [options class](Options.md) to register the embedded files to the virtual file system in the `ConfigureServices` method of your [module](Module-Development-Basics.md).
+Use `AbpVirtualFileSystemOptions` [options class](../fundamentals/options.md) to register the embedded files to the virtual file system in the `ConfigureServices` method of your [module](../architecture/modularity/basics.md).
 
 **Example: Add embedded files to the virtual file system**
 
@@ -167,13 +167,13 @@ public class MyWebAppModule : AbpModule
 
 The code above assumes that `MyWebAppModule` and `MyModule` are two different projects in a Visual Studio solution and `MyWebAppModule` depends on the `MyModule`.
 
-> The [application startup template](Startup-Templates/Application.md) already uses this technique for the localization files. So, when you change a localization file it automatically detects the change.
+> The [application startup template](../../solution-templates/layered-web-application/index.md) already uses this technique for the localization files. So, when you change a localization file it automatically detects the change.
 
 ## Replacing/Overriding Virtual Files
 
 Virtual File System creates a unified file system on runtime, where the actual files are distributed into different modules in the development time.
 
-If two modules adds a file to the same virtual path (like `my-path/my-file.css`), the one added later overrides/replaces the previous one ([module dependency](Module-Development-Basics.md) order determines the order of the files being added).
+If two modules adds a file to the same virtual path (like `my-path/my-file.css`), the one added later overrides/replaces the previous one ([module dependency](../architecture/modularity/basics.md) order determines the order of the files being added).
 
 This feature allows your application to override/replace any virtual file defined a module that is used by your application. This is one of the fundamental extensibility features of the ABP Framework.
 

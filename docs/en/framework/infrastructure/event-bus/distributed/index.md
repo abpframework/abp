@@ -7,14 +7,14 @@ Distributed Event bus system allows to **publish** and **subscribe** to events t
 Distributed event bus system provides an **abstraction** that can be implemented by any vendor/provider. There are four providers implemented out of the box:
 
 * `LocalDistributedEventBus` is the default implementation that implements the distributed event bus to work as in-process. Yes! The **default implementation works just like the [local event bus](Local-Event-Bus.md)**, if you don't configure a real distributed provider.
-* `AzureDistributedEventBus` implements the distributed event bus with the [Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/). See the [Azure Service Bus integration document](azure.md) to learn how to configure it.
-* `RabbitMqDistributedEventBus` implements the distributed event bus with the [RabbitMQ](https://www.rabbitmq.com/). See the [RabbitMQ integration document](rabbitmq.md) to learn how to configure it.
-* `KafkaDistributedEventBus` implements the distributed event bus with the [Kafka](https://kafka.apache.org/). See the [Kafka integration document](kafka.md) to learn how to configure it.
-* `RebusDistributedEventBus` implements the distributed event bus with the [Rebus](http://mookid.dk/category/rebus/). See the [Rebus integration document](rebus.md) to learn how to configure it.
+* `AzureDistributedEventBus` implements the distributed event bus with the [Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/). See the [Azure Service Bus integration document](./azure.md) to learn how to configure it.
+* `RabbitMqDistributedEventBus` implements the distributed event bus with the [RabbitMQ](https://www.rabbitmq.com/). See the [RabbitMQ integration document](./rabbitmq.md) to learn how to configure it.
+* `KafkaDistributedEventBus` implements the distributed event bus with the [Kafka](https://kafka.apache.org/). See the [Kafka integration document](./kafka.md) to learn how to configure it.
+* `RebusDistributedEventBus` implements the distributed event bus with the [Rebus](http://mookid.dk/category/rebus/). See the [Rebus integration document](./rebus.md) to learn how to configure it.
 
 Using a local event bus as default has a few important advantages. The most important one is that: It allows you to write your code compatible to distributed architecture. You can write a monolithic application now that can be split into microservices later. It is a good practice to communicate between bounded contexts (or between application modules) via distributed events instead of local events.
 
-For example, [pre-built application modules](Modules/Index.md) is designed to work as a service in a distributed system while they can also work as a module in a monolithic application without depending an external message broker.
+For example, [pre-built application modules](../../../../modules/index.md) is designed to work as a service in a distributed system while they can also work as a module in a monolithic application without depending an external message broker.
 
 ## Publishing Events
 
@@ -22,7 +22,7 @@ There are two ways of publishing distributed events explained in the following s
 
 ### Using IDistributedEventBus to Publish Events
 
-`IDistributedEventBus` can be [injected](Dependency-Injection.md) and used to publish a distributed event.
+`IDistributedEventBus` can be [injected](../../../fundamentals/dependency-injection.md) and used to publish a distributed event.
 
 **Example: Publish a distributed event when the stock count of a product changes**
 
@@ -76,7 +76,7 @@ namespace AbpDemo
 
 Even if you don't need to transfer any data, you need to create a class (which is an empty class in this case).
 
-> `Eto` is a suffix for **E**vent **T**ransfer **O**bjects we use by convention. While it is not required, we find it useful to identify such event classes (just like [DTOs](Data-Transfer-Objects.md) on the application layer).
+> `Eto` is a suffix for **E**vent **T**ransfer **O**bjects we use by convention. While it is not required, we find it useful to identify such event classes (just like [DTOs](../../../architecture/domain-driven-design/data-transfer-objects.md) on the application layer).
 
 #### Event Name
 
@@ -90,7 +90,7 @@ Avoid circular references, polymorphism, private setters and provide default (em
 
 ### Publishing Events Inside Entity / Aggregate Root Classes
 
-[Entities](Entities.md) can not inject services via dependency injection, but it is very common to publish distributed events inside entity / aggregate root classes.
+[Entities](../../../architecture/domain-driven-design/entities.md) can not inject services via dependency injection, but it is very common to publish distributed events inside entity / aggregate root classes.
 
 **Example: Publish a distributed event inside an aggregate root method**
 
@@ -181,9 +181,9 @@ That's all.
 
 You can inject any service and perform any required logic here. A single event handler class can **subscribe to multiple events** but implementing the `IDistributedEventHandler<TEvent>` interface for each event type.
 
-If you perform **database operations** and use the [repositories](Repositories.md) inside the event handler, you may need to create a [unit of work](Unit-Of-Work.md), because some repository methods need to work inside an **active unit of work**. Make the handle method `virtual` and add a `[UnitOfWork]` attribute for the method, or manually use the `IUnitOfWorkManager` to create a unit of work scope.
+If you perform **database operations** and use the [repositories](../../../architecture/domain-driven-design/repositories.md) inside the event handler, you may need to create a [unit of work](../../../architecture/domain-driven-design/unit-of-work.md), because some repository methods need to work inside an **active unit of work**. Make the handle method `virtual` and add a `[UnitOfWork]` attribute for the method, or manually use the `IUnitOfWorkManager` to create a unit of work scope.
 
-> The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
+> The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](../../../fundamentals/dependency-injection.md) for more options.
 
 ## Monitoring Distributed Events
 
@@ -233,7 +233,7 @@ You can seamlessly integrate event-tracking capabilities into your application b
 
 ## Pre-Defined Events
 
-ABP Framework **automatically publishes** distributed events for **create, update and delete** operations for an [entity](Entities.md) once you configure it.
+ABP Framework **automatically publishes** distributed events for **create, update and delete** operations for an [entity](../../../architecture/domain-driven-design/entities.md) once you configure it.
 
 ### Event Types
 
@@ -273,11 +273,11 @@ namespace AbpDemo
 ````
 
 * `MyHandler` implements the `IDistributedEventHandler<EntityUpdatedEto<ProductEto>>`.
-* It is required to register your handler class to the [dependency injection](Dependency-Injection.md) system. Implementing `ITransientDependency` like in this example is an easy way.
+* It is required to register your handler class to the [dependency injection](../../../fundamentals/dependency-injection.md) system. Implementing `ITransientDependency` like in this example is an easy way.
 
 ### Configuration
 
-You can configure the `AbpDistributedEntityEventOptions` in the `ConfigureServices` of your [module](Module-Development-Basics.md) to add a selector.
+You can configure the `AbpDistributedEntityEventOptions` in the `ConfigureServices` of your [module](../../../architecture/modularity/basics.md) to add a selector.
 
 **Example: Configuration samples**
 
@@ -339,11 +339,11 @@ This example;
 * Adds a selector to allow to publish the create, update and delete events for the `Product` entity.
 * Configure to use the `ProductEto` as the event transfer object to publish for the `Product` related events.
 
-> Distributed event system use the [object to object mapping](Object-To-Object-Mapping.md) system to map `Product` objects to `ProductEto` objects. So, you need to configure the object mapping (`Product` -> `ProductEto`) too. You can check the [object to object mapping document](Object-To-Object-Mapping.md) to learn how to do it.
+> Distributed event system use the [object to object mapping](../../object-to-object-mapping.md) system to map `Product` objects to `ProductEto` objects. So, you need to configure the object mapping (`Product` -> `ProductEto`) too. You can check the [object to object mapping document](../../object-to-object-mapping.md) to learn how to do it.
 
 ## Entity Synchronizer
 
-In a distributed (or microservice) system, it is typical to subscribe to change events for an [entity](Entities.md) type of another service, so you can get notifications when the subscribed entity changes. In that case, you can use ABP's Pre-Defined Events as explained in the previous section.
+In a distributed (or microservice) system, it is typical to subscribe to change events for an [entity](../../../architecture/domain-driven-design/entities.md) type of another service, so you can get notifications when the subscribed entity changes. In that case, you can use ABP's Pre-Defined Events as explained in the previous section.
 
 If your purpose is to store your local copies of a remote entity, you typically subscribe to create, update and delete events of the remote entity and update your local database in your event handler. ABP provides a pre-built `EntitySynchronizer` base class to make that operation easier for you.
 
@@ -385,11 +385,11 @@ public class ProductSynchronizer : EntitySynchronizer<OrderProduct, Guid, Produc
 }
 ````
 
-The main point of this class is it subscribes to the create, update and delete events of the source entity and updates the local entity in the database. It uses the [Object Mapper](Object-To-Object-Mapping.md) system to create or update the `OrderProduct` objects from the `ProductEto` objects. So, you should also configure the object mapper to make it properly work. Otherwise, you should manually perform the object mapping by overriding the `MapToEntityAsync(TSourceEntityEto)` and `MapToEntityAsync(TSourceEntityEto,TEntity)` methods in your `ProductSynchronizer` class.
+The main point of this class is it subscribes to the create, update and delete events of the source entity and updates the local entity in the database. It uses the [Object Mapper](../../object-to-object-mapping.md) system to create or update the `OrderProduct` objects from the `ProductEto` objects. So, you should also configure the object mapper to make it properly work. Otherwise, you should manually perform the object mapping by overriding the `MapToEntityAsync(TSourceEntityEto)` and `MapToEntityAsync(TSourceEntityEto,TEntity)` methods in your `ProductSynchronizer` class.
 
-If your entity has a composite primary key (see the [Entities document](Entities.md)), then you should inherit from the `EntitySynchronizer<TEntity, TSourceEntityEto>` class (just don't use the `Guid` generic argument in the previous example) and implement `FindLocalEntityAsync` to find the entity in your local database using the `Repository`.
+If your entity has a composite primary key (see the [Entities document](../../../architecture/domain-driven-design/entities.md)), then you should inherit from the `EntitySynchronizer<TEntity, TSourceEntityEto>` class (just don't use the `Guid` generic argument in the previous example) and implement `FindLocalEntityAsync` to find the entity in your local database using the `Repository`.
 
-`EntitySynchronizer` is compatible with the *Entity Versioning* system (see the [Entities document](Entities.md)). So, it works as expected even if the events are received as disordered. If the entity's version in your local database is newer than the entity in the received event, then the event is ignored. You should implement the `IHasEntityVersion` interface for the entity and ETO classes (for this example, you should implement for the `Product`, `ProductEto` and `OrderProduct` classes).
+`EntitySynchronizer` is compatible with the *Entity Versioning* system (see the [Entities document](../../../architecture/domain-driven-design/entities.md)). So, it works as expected even if the events are received as disordered. If the entity's version in your local database is newer than the entity in the received event, then the event is ignored. You should implement the `IHasEntityVersion` interface for the entity and ETO classes (for this example, you should implement for the `Product`, `ProductEto` and `OrderProduct` classes).
 
 If you want to ignore some type of change events, you can set `IgnoreEntityCreatedEvent`, `IgnoreEntityUpdatedEvent` and `IgnoreEntityDeletedEvent` in the constructor of your class. Example:
 
@@ -411,9 +411,9 @@ public class ProductSynchronizer
 
 ## Transaction and Exception Handling
 
-Distributed event bus works in-process (since default implementation is `LocalDistributedEventBus`) unless you configure an actual provider (e.g. [Kafka](Distributed-Event-Bus-Kafka-Integration.md) or [RabbitMQ](Distributed-Event-Bus-RabbitMQ-Integration.md)). In-process event bus always executes event handlers in the same [unit of work](Unit-Of-Work.md) scope that you publishes the events in. That means, if an event handler throws an exception, then the related unit of work (the database transaction) is rolled back. In this way, your application logic and event handling logic becomes transactional (atomic) and consistent. If you want to ignore errors in an event handler, you must use a `try-catch` block in your handler and shouldn't re-throw the exception.
+Distributed event bus works in-process (since default implementation is `LocalDistributedEventBus`) unless you configure an actual provider (e.g. [Kafka](./kafka.md) or [RabbitMQ](./rabbitmq.md)). In-process event bus always executes event handlers in the same [unit of work](../../../architecture/domain-driven-design/unit-of-work.md) scope that you publishes the events in. That means, if an event handler throws an exception, then the related unit of work (the database transaction) is rolled back. In this way, your application logic and event handling logic becomes transactional (atomic) and consistent. If you want to ignore errors in an event handler, you must use a `try-catch` block in your handler and shouldn't re-throw the exception.
 
-When you switch to an actual distributed event bus provider (e.g. [Kafka](Distributed-Event-Bus-Kafka-Integration.md) or [RabbitMQ](Distributed-Event-Bus-RabbitMQ-Integration.md)), then the event handlers will be executed in different processes/applications as their purpose is to create distributed systems. In this case, the only way to implement transactional event publishing is to use the outbox/inbox patterns as explained in the *Outbox / Inbox for Transactional Events* section.
+When you switch to an actual distributed event bus provider (e.g. [Kafka](./kafka.md) or [RabbitMQ](./rabbitmq.md)), then the event handlers will be executed in different processes/applications as their purpose is to create distributed systems. In this case, the only way to implement transactional event publishing is to use the outbox/inbox patterns as explained in the *Outbox / Inbox for Transactional Events* section.
 
 If you don't configure outbox/inbox pattern or use the `LocalDistributedEventBus`, then events are published at the end of the unit of work by default, just before the unit of work is completed (that means throwing exception in an event handler still rollbacks the unit of work), even if you publish them in the middle of unit of work. If you want to immediately publish the event, you can set `onUnitOfWorkComplete` to `false` while using `IDistributedEventBus.PublishAsync` method.
 
@@ -421,9 +421,9 @@ If you don't configure outbox/inbox pattern or use the `LocalDistributedEventBus
 
 ## Outbox / Inbox for Transactional Events
 
-The **[transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)** is used to publishing distributed events within the **same transaction** that manipulates the application's database. When you enable outbox, distributed events are saved into the database inside the same transaction with your data changes, then sent to the actual message broker by a separate [background worker](Background-Workers.md) with a re-try system. In this way, it ensures the consistency between your database state and the published events.
+The **[transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)** is used to publishing distributed events within the **same transaction** that manipulates the application's database. When you enable outbox, distributed events are saved into the database inside the same transaction with your data changes, then sent to the actual message broker by a separate [background worker](../../background-workers/index.md) with a re-try system. In this way, it ensures the consistency between your database state and the published events.
 
-The **transactional inbox pattern**, on the other hand, saves incoming events into database first. Then (in a [background worker](Background-Workers.md)) executes the event handler in a transactional manner and removes the event from the inbox queue in the same transaction. It ensures that the event is only executed one time by keeping the processed messages for a while and discarding the duplicate events received from the message broker.
+The **transactional inbox pattern**, on the other hand, saves incoming events into database first. Then (in a [background worker](../../background-workers/index.md)) executes the event handler in a transactional manner and removes the event from the inbox queue in the same transaction. It ensures that the event is only executed one time by keeping the processed messages for a while and discarding the duplicate events received from the message broker.
 
 Enabling the event outbox and inbox systems require a few manual steps for your application. Please apply  the instructions in the following sections to make them running.
 
@@ -431,10 +431,10 @@ Enabling the event outbox and inbox systems require a few manual steps for your 
 
 ### Pre-requirements
 
-* The outbox/inbox system uses the distributed lock system to handle concurrency when you run multiple instances of your application/service. So, you should **configure the distributed lock system** with one of the providers as [explained in this document](Distributed-Locking.md).
-* The outbox/inbox system supports [Entity Framework Core](Entity-Framework-Core.md) (EF Core) and [MongoDB](MongoDB.md) **database providers** out of the box. So, your applications should use one of these database providers. For other database providers, see the *Implementing a Custom Database Provider* section.
+* The outbox/inbox system uses the distributed lock system to handle concurrency when you run multiple instances of your application/service. So, you should **configure the distributed lock system** with one of the providers as [explained in this document](../../distributed-locking.md).
+* The outbox/inbox system supports [Entity Framework Core](../../../data/entity-framework-core/index.md) (EF Core) and [MongoDB](../../../data/mongodb/index.md) **database providers** out of the box. So, your applications should use one of these database providers. For other database providers, see the *Implementing a Custom Database Provider* section.
 
-> If you are using MongoDB, be sure that you enabled multi-document database transactions  that was introduced in MongoDB version 4.0. See the *Transactions* section of the [MongoDB](MongoDB.md) document.
+> If you are using MongoDB, be sure that you enabled multi-document database transactions  that was introduced in MongoDB version 4.0. See the *Transactions* section of the [MongoDB](../../../data/mongodb/index.md) document.
 
 ### Enabling event outbox
 
@@ -461,7 +461,7 @@ dotnet ef migrations add "Added_Event_Outbox"
 dotnet ef database update
 ```
 
-Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md) (replace `YourDbContext` with your own `DbContext` class):
+Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](../../../architecture/modularity/basics.md) (replace `YourDbContext` with your own `DbContext` class):
 
 ````csharp
 Configure<AbpDistributedEventBusOptions>(options =>
@@ -487,7 +487,7 @@ Add the following lines inside the `CreateModel` method of your `DbContext` clas
 modelBuilder.ConfigureEventOutbox();
 ```
 
-Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md) (replace `YourDbContext` with your own `DbContext` class):
+Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](../../../architecture/modularity/basics.md) (replace `YourDbContext` with your own `DbContext` class):
 
 ````csharp
 Configure<AbpDistributedEventBusOptions>(options =>
@@ -528,7 +528,7 @@ dotnet ef migrations add "Added_Event_Inbox"
 dotnet ef database update
 ```
 
-Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md) (replace `YourDbContext` with your own `DbContext` class):
+Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](../../../architecture/modularity/basics.md) (replace `YourDbContext` with your own `DbContext` class):
 
 ````csharp
 Configure<AbpDistributedEventBusOptions>(options =>
@@ -554,7 +554,7 @@ Add the following lines inside the `CreateModel` method of your `DbContext` clas
 modelBuilder.ConfigureEventInbox();
 ```
 
-Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md) (replace `YourDbContext` with your own `DbContext` class):
+Finally, write the following configuration code inside the `ConfigureServices` method of your [module class](../../../architecture/modularity/basics.md) (replace `YourDbContext` with your own `DbContext` class):
 
 ````csharp
 Configure<AbpDistributedEventBusOptions>(options =>
@@ -621,7 +621,7 @@ Here, the following properties are available on the `config` object:
 
 `AbpEventBusBoxesOptions` can be used to fine-tune how inbox and outbox systems work. For most of the systems, using the defaults would be more than enough, but you can configure it to optimize your system when it is needed.
 
-Just like all the [options classes](Options.md), `AbpEventBusBoxesOptions` can be configured in the `ConfigureServices` method of your [module class](Module-Development-Basics.md) as shown in the following code block:
+Just like all the [options classes](../../../fundamentals/options.md), `AbpEventBusBoxesOptions` can be configured in the `ConfigureServices` method of your [module class](../../../architecture/modularity/basics.md) as shown in the following code block:
 
 ````csharp
 Configure<AbpEventBusBoxesOptions>(options =>
@@ -638,7 +638,7 @@ Configure<AbpEventBusBoxesOptions>(options =>
 * `WaitTimeToDeleteProcessedInboxEvents`: Inbox events are not deleted from the database for a while even if they are successfully processed. This is for a system to prevent multiple process of the same event (if the event broker sends it twice). This configuration value determines the time to keep the processed events. Default value is 2 hours (`TimeSpan.FromHours(2)`).
 * `InboxWaitingEventMaxCount`: The maximum number of events to query at once from the inbox in the database. Default value is 1000.
 * `OutboxWaitingEventMaxCount`: The maximum number of events to query at once from the outbox in the database. Default value is 1000.
-* `DistributedLockWaitDuration`: ABP uses [distributed locking](Distributed-Locking.md) to prevent concurrent access to the inbox and outbox messages in the database, when running multiple instance of the same application. If an instance of the application can not obtain the lock, it tries after a duration. This is the configuration of that duration. Default value is 15 seconds (`TimeSpan.FromSeconds(15)`).
+* `DistributedLockWaitDuration`: ABP uses [distributed locking](../../distributed-locking.md) to prevent concurrent access to the inbox and outbox messages in the database, when running multiple instance of the same application. If an instance of the application can not obtain the lock, it tries after a duration. This is the configuration of that duration. Default value is 15 seconds (`TimeSpan.FromSeconds(15)`).
 
 ### Skipping Outbox
 
@@ -682,11 +682,11 @@ Multiple outboxes can be needed if your application have more than one database 
 
 #### Implementing a Custom Outbox/Inbox Database Provider
 
-If your application or service is using a database provider other than [EF Core](Entity-Framework-Core.md) and [MongoDB](MongoDB.md), you should manually integrate outbox/inbox system with your database provider.
+If your application or service is using a database provider other than [EF Core](../../../data/entity-framework-core/index.md) and [MongoDB](../../../data/mongodb/index.md), you should manually integrate outbox/inbox system with your database provider.
 
 > Outbox and Inbox table/data must be stored in the same database with your application's data (since we want to create a single database transaction that includes application's database operations and outbox/inbox table operations). Otherwise, you should care about distributed (multi-database) transaction support which is not provided by most of the vendors and may require additional configuration.
 
-ABP provides `IEventOutbox` and `IEventInbox` abstractions as extension point for the outbox/inbox system. You can create classes by implementing these interfaces and register them to [dependency injection](Dependency-Injection.md).
+ABP provides `IEventOutbox` and `IEventInbox` abstractions as extension point for the outbox/inbox system. You can create classes by implementing these interfaces and register them to [dependency injection](../../../fundamentals/dependency-injection.md).
 
 Once you implement your custom event boxes, you can configure `AbpDistributedEventBusOptions` to use your event box classes:
 

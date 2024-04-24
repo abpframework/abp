@@ -1,6 +1,6 @@
 # GUID Generation
 
-GUID is a common **primary key type** that is used in database management systems. ABP Framework prefers GUID as the primary for pre-built [application modules](Modules/Index.md). Also, `ICurrentUser.Id` property ([see](CurrentUser.md)) is type of GUID, that means the ABP Framework assumes that the User Id is always GUID.
+GUID is a common **primary key type** that is used in database management systems. ABP Framework prefers GUID as the primary for pre-built [application modules](../../modules/index.md). Also, `ICurrentUser.Id` property ([see](./current-user.md)) is type of GUID, that means the ABP Framework assumes that the User Id is always GUID.
 
 ## Why Prefer GUID?
 
@@ -22,11 +22,11 @@ The most important problem with GUID is that it is **not sequential by default**
 
 So, **never use `Guid.NewGuid()` to create Ids** for your entities!
 
-One good solution to this problem is to generate **sequential GUIDs**, which is provided by the ABP Framework out of the box. `IGuidGenerator` service creates sequential GUIDs (implemented by the `SequentialGuidGenerator` by default). Use `IGuidGenerator.Create()` when you need to manually set Id of an [entity](Entities.md).
+One good solution to this problem is to generate **sequential GUIDs**, which is provided by the ABP Framework out of the box. `IGuidGenerator` service creates sequential GUIDs (implemented by the `SequentialGuidGenerator` by default). Use `IGuidGenerator.Create()` when you need to manually set Id of an [entity](../architecture/domain-driven-design/entities.md).
 
 **Example: An entity with GUID primary key and creating the entity**
 
-Assume that you've a `Product` [entity](Entities.md) that has a `Guid` key:
+Assume that you've a `Product` [entity](../architecture/domain-driven-design/entities.md) that has a `Guid` key:
 
 ````csharp
 using System;
@@ -83,23 +83,23 @@ namespace AbpDemo
 }
 ````
 
-This service injects the `IGuidGenerator` in the constructor. If your class is an [application service](Application-Services.md) or deriving from one of the other base classes, you can directly use the `GuidGenerator` base property which is a pre-injected `IGuidGenerator` instance.
+This service injects the `IGuidGenerator` in the constructor. If your class is an [application service](../architecture/domain-driven-design/application-services.md) or deriving from one of the other base classes, you can directly use the `GuidGenerator` base property which is a pre-injected `IGuidGenerator` instance.
 
 ## Options
 
 ### AbpSequentialGuidGeneratorOptions
 
-`AbpSequentialGuidGeneratorOptions` is the [option class](Options.md) that is used to configure the sequential GUID generation. It has a single property:
+`AbpSequentialGuidGeneratorOptions` is the [option class](../fundamentals/options.md) that is used to configure the sequential GUID generation. It has a single property:
 
 * `DefaultSequentialGuidType` (`enum` of type `SequentialGuidType`): The strategy used while generating GUID values.
 
 Database providers behaves differently while processing GUIDs, so you should set it based on your database provider. `SequentialGuidType` has the following `enum` members:
 
-* `SequentialAtEnd` (**default**) works well with the [SQL Server](Entity-Framework-Core.md).
-* `SequentialAsString` is used by [MySQL](Entity-Framework-Core-MySQL.md) and [PostgreSQL](Entity-Framework-Core-PostgreSQL.md).
-* `SequentialAsBinary` is used by [Oracle](Entity-Framework-Core-Oracle.md).
+* `SequentialAtEnd` (**default**) works well with the [SQL Server](../data/entity-framework-core/index.md).
+* `SequentialAsString` is used by [MySQL](../data/entity-framework-core/mysql.md) and [PostgreSQL](../data/entity-framework-core/postgresql.md).
+* `SequentialAsBinary` is used by [Oracle](../data/entity-framework-core/oracle.md).
 
-Configure this option in the `ConfigureServices` method of your [module](Module-Development-Basics.md), as shown below:
+Configure this option in the `ConfigureServices` method of your [module](../architecture/modularity/basics.md), as shown below:
 
 ````csharp
 Configure<AbpSequentialGuidGeneratorOptions>(options =>
@@ -108,4 +108,4 @@ Configure<AbpSequentialGuidGeneratorOptions>(options =>
 });
 ````
 
-> EF Core [integration packages](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Other-DBMS) sets this option to a proper value for the related DBMS. So, most of the times, you don't need to set this option if you are using these integration packages.
+> EF Core [integration packages](../data/entity-framework-core/other-dbms.md) sets this option to a proper value for the related DBMS. So, most of the times, you don't need to set this option if you are using these integration packages.

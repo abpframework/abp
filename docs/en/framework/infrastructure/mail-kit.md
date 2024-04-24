@@ -1,10 +1,10 @@
 # MailKit Integration
 
-[MailKit](http://www.mimekit.net/) is a cross-platform, popular open source mail client library for .net. ABP Framework provides an integration package to use the MailKit as the [email sender](Emailing.md).
+[MailKit](http://www.mimekit.net/) is a cross-platform, popular open source mail client library for .net. ABP Framework provides an integration package to use the MailKit as the [email sender](./emailing.md).
 
 ## Installation
 
-It is suggested to use the [ABP CLI](CLI.md) to install this package. Open a command line window in the folder of the project (.csproj file) and type the following command:
+It is suggested to use the [ABP CLI](../../cli/index.md) to install this package. Open a command line window in the folder of the project (.csproj file) and type the following command:
 
 ````bash
 abp add-package Volo.Abp.MailKit
@@ -16,7 +16,7 @@ If you haven't done it yet, you first need to install the ABP CLI. For other ins
 
 ### IEmailSender
 
-[Inject](Dependency-Injection.md) the standard `IEmailSender` into any service and use the `SendAsync` method to send emails. See the [email sending document](Emailing.md) for details.
+[Inject](Dependency-Injection.md) the standard `IEmailSender` into any service and use the `SendAsync` method to send emails. See the [email sending document](./emailing.md) for details.
 
 > `IEmailSender` is the suggested way to send emails even if you use MailKit, since it makes your code provider independent.
 
@@ -26,9 +26,9 @@ MailKit package also exposes the `IMailKitSmtpEmailSender` service that extends 
 
 ## Configuration
 
-MailKit integration package uses the same settings defined by the email sending system. So, refer to the [email sending document](Emailing.md) for the settings.
+MailKit integration package uses the same settings defined by the email sending system. So, refer to the [email sending document](./emailing.md) for the settings.
 
-In addition to the standard settings, this package defines `AbpMailKitOptions` as a simple [options](Options.md) class. This class defines only one options:
+In addition to the standard settings, this package defines `AbpMailKitOptions` as a simple [options](../fundamentals/options.md) class. This class defines only one options:
 
 * **SecureSocketOption**: Used to set one of the `SecureSocketOptions`. Default: `null` (uses the defaults).
 
@@ -45,4 +45,4 @@ Refer to the [MailKit documentation](http://www.mimekit.net/) to learn more abou
 
 ## See Also
 
-* [Email sending](Emailing.md)
+* [Email sending](./emailing.md)

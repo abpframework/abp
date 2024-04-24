@@ -47,7 +47,7 @@ namespace AbpDemo
 
 ### Clock Options
 
-`AbpClockOptions` is the [options](Options.md) class that used to set the clock kind.
+`AbpClockOptions` is the [options](../fundamentals/options.md) class that used to set the clock kind.
 
 **Example: Use UTC Clock**
 
@@ -58,7 +58,7 @@ Configure<AbpClockOptions>(options =>
 });
 ````
 
-Write this inside the `ConfigureServices` method of your [module](Module-Development-Basics.md).
+Write this inside the `ConfigureServices` method of your [module](../architecture/modularity/basics.md).
 
 > Default `Kind` is `Unspecified`, that actually make the Clock as it doesn't exists at all. Either make it `Utc` or `Local` if you want to get benefit of the Clock system.
 
@@ -82,7 +82,7 @@ var normalizedDateTime = Clock.Normalize(dateTime)
 `Normalize` method is used by the ABP Framework when the it gets a `DateTime` that is not created by `IClock.Now` and may not be compatible with the current Clock type. Examples;
 
 * `DateTime` type binding in the ASP.NET Core MVC model binding.
-* Saving data to and reading data from database via [Entity Framework Core](Entity-Framework-Core.md).
+* Saving data to and reading data from database via [Entity Framework Core](../data/entity-framework-core/index.md).
 * Working with `DateTime` objects on [JSON deserialization](Json-Serialization.md).
 
 #### DisableDateTimeNormalization Attribute
@@ -102,9 +102,9 @@ This section covers the ABP Framework infrastructure related to managing time zo
 
 ### TimeZone Setting
 
-ABP Framework defines **a setting**, named `Abp.Timing.TimeZone`, that can be used to set and get the time zone for a user, [tenant](Multi-Tenancy.md) or globally for the application. The default value is `UTC`.
+ABP Framework defines **a setting**, named `Abp.Timing.TimeZone`, that can be used to set and get the time zone for a user, [tenant](../architecture/multi-tenancy/index.md) or globally for the application. The default value is `UTC`.
 
-See the [setting documentation](Settings.md) to learn more about the setting system.
+See the [setting documentation](../fundamentals/settings.md) to learn more about the setting system.
 
 ### ITimezoneProvider
 

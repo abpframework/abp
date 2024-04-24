@@ -1,6 +1,6 @@
 # Object To Object Mapping
 
-It's common to map an object to another similar object. It's also tedious and repetitive since generally both classes have the same or similar properties mapped to each other. Imagine a typical [application service](Application-Services.md) method below:
+It's common to map an object to another similar object. It's also tedious and repetitive since generally both classes have the same or similar properties mapped to each other. Imagine a typical [application service](../architecture/domain-driven-design/application-services.md) method below:
 
 ```csharp
 public class UserAppService : ApplicationService
@@ -28,7 +28,7 @@ public class UserAppService : ApplicationService
 }
 ```
 
-`CreateUserInput` is a simple [DTO](Data-Transfer-Objects.md) class and the `User` is a simple [entity](Entities.md). The code above creates a `User` entity from the given input object. The `User` entity will have more properties in a real-world application and manually creating it will become tedious and error-prone. You also have to change the mapping code when you add new properties to `User` and `CreateUserInput` classes.
+`CreateUserInput` is a simple [DTO](../architecture/domain-driven-design/data-transfer-objects.md) class and the `User` is a simple [entity](../architecture/domain-driven-design/entities.md). The code above creates a `User` entity from the given input object. The `User` entity will have more properties in a real-world application and manually creating it will become tedious and error-prone. You also have to change the mapping code when you add new properties to `User` and `CreateUserInput` classes.
 
 We can use a library to automatically handle these kind of mappings. ABP provides abstractions for object to object mapping and has an integration package to use [AutoMapper](http://automapper.org/) as the object mapper. 
 
@@ -129,7 +129,7 @@ public class MyModule : AbpModule
 
 ### Configuration Validation
 
-`AddMaps` optionally takes a `bool` parameter to control the [configuration validation](https://docs.automapper.org/en/stable/Configuration-validation.html) for your [module](Module-Development-Basics.md):
+`AddMaps` optionally takes a `bool` parameter to control the [configuration validation](https://docs.automapper.org/en/stable/Configuration-validation.html) for your [module](../architecture/modularity/basics.md):
 
 ````csharp
 options.AddMaps<MyModule>(validate: true);
@@ -147,7 +147,7 @@ options.AddProfile<MyProfile>(validate: true);
 
 ### Mapping the Object Extensions
 
-[Object extension system](Object-Extensions.md) allows to define extra properties for existing classes. ABP Framework provides a mapping definition extension to properly map extra properties of two objects.
+[Object extension system](../fundamentals/object-extensions.md) allows to define extra properties for existing classes. ABP Framework provides a mapping definition extension to properly map extra properties of two objects.
 
 ````csharp
 public class MyProfile : Profile
@@ -160,7 +160,7 @@ public class MyProfile : Profile
 }
 ````
 
-It is suggested to use the `MapExtraProperties()` method if both classes are extensible objects (implement the `IHasExtraProperties` interface). See the [object extension document](Object-Extensions.md) for more.
+It is suggested to use the `MapExtraProperties()` method if both classes are extensible objects (implement the `IHasExtraProperties` interface). See the [object extension document](../fundamentals/object-extensions.md) for more.
 
 ### Other Useful Extension Methods
 
@@ -170,7 +170,7 @@ There are some more extension methods those can simplify your mapping code.
 
 It is common to ignore audit properties when you map an object to another.
 
-Assume that you need to map a `ProductDto` ([DTO](Data-Transfer-Objects.md)) to a `Product` [entity](Entities.md) and the entity is inheriting from the `AuditedEntity` class (which provides properties like `CreationTime`, `CreatorId`, `IHasModificationTime`... etc).
+Assume that you need to map a `ProductDto` ([DTO](../architecture/domain-driven-design/data-transfer-objects.md)) to a `Product` [entity](../architecture/domain-driven-design/entities.md) and the entity is inheriting from the `AuditedEntity` class (which provides properties like `CreationTime`, `CreatorId`, `IHasModificationTime`... etc).
 
 You probably want to ignore these base properties while mapping from the DTO. You can use `IgnoreAuditedObjectProperties()` method to ignore all audit properties (instead of manually ignoring them one by one):
 
@@ -187,7 +187,7 @@ public class MyProfile : Profile
 
 There are more extension methods like `IgnoreFullAuditedObjectProperties()` and `IgnoreCreationAuditedObjectProperties()` those can be used based on your entity type.
 
-> See the "*Base Classes & Interfaces for Audit Properties*" section in the [entities document](Entities.md) to know more about auditing properties.
+> See the "*Base Classes & Interfaces for Audit Properties*" section in the [entities document](../architecture/domain-driven-design/entities.md) to know more about auditing properties.
 
 #### Ignoring Other Properties
 
@@ -221,7 +221,7 @@ public class MyProfile : Profile
 
 ### IObjectMapper<TContext> Interface
 
-Assume that you have created a **reusable module** which defines AutoMapper profiles and uses `IObjectMapper` when it needs to map objects. Your module then can be used in different applications, by nature of the [modularity](Module-Development-Basics.md).
+Assume that you have created a **reusable module** which defines AutoMapper profiles and uses `IObjectMapper` when it needs to map objects. Your module then can be used in different applications, by nature of the [modularity](../architecture/modularity/basics.md).
 
 `IObjectMapper` is an abstraction and can be replaced by the final application to use another mapping library. The problem here that your reusable module is designed to use the AutoMapper library, because it only defines mappings for it. In such a case, you will want to guarantee that your module always uses AutoMapper even if the final application uses another default object mapping library.
 

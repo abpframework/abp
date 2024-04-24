@@ -6,7 +6,7 @@ It is very common to retrieve the information about the logged in user in a web 
 
 `ICurrentUser` is the main service to get info about the current active user.
 
-Example: [Injecting](Dependency-Injection.md) the `ICurrentUser` into a service:
+Example: [Injecting](../fundamentals/dependency-injection.md) the `ICurrentUser` into a service:
 
 ````csharp
 using System;
@@ -32,7 +32,7 @@ namespace AbpDemo
 }
 ````
 
-Common base classes have already injected this service as a base property. For example, you can directly use the `CurrentUser` property in an [application service](Application-Services.md):
+Common base classes have already injected this service as a base property. For example, you can directly use the `CurrentUser` property in an [application service](../architecture/domain-driven-design/application-services.md):
 
 ````csharp
 using System;
@@ -57,7 +57,7 @@ Here are the fundamental properties of the `ICurrentUser` interface:
 * **IsAuthenticated** (bool): Returns `true` if the current user has logged in (authenticated). If the user has not logged in then `Id` and `UserName` returns `null`.
 * **Id** (Guid?): Id of the current user. Returns `null`, if the current user has not logged in.
 * **UserName** (string): User name of the current user. Returns `null`, if the current user has not logged in.
-* **TenantId** (Guid?): Tenant Id of the current user, which can be useful for a [multi-tenant](Multi-Tenancy.md) application. Returns `null`, if the current user is not assigned to a tenant.
+* **TenantId** (Guid?): Tenant Id of the current user, which can be useful for a [multi-tenant](../architecture/multi-tenancy/index.md) application. Returns `null`, if the current user is not assigned to a tenant.
 * **Email** (string): Email address of the current user.Returns `null`, if the current user has not logged in or not set an email address.
 * **EmailVerified** (bool): Returns `true`, if the email address of the current user has been verified.
 * **PhoneNumber** (string): Phone number of the current user. Returns `null`, if the current user has not logged in or not set a phone number.

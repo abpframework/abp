@@ -1,20 +1,20 @@
 # Distributed Event Bus RabbitMQ Integration
 
-> This document explains **how to configure the [RabbitMQ](https://www.rabbitmq.com/)** as the distributed event bus provider. See the [distributed event bus document](Distributed-Event-Bus.md) to learn how to use the distributed event bus system
+> This document explains **how to configure the [RabbitMQ](https://www.rabbitmq.com/)** as the distributed event bus provider. See the [distributed event bus document](./index.md) to learn how to use the distributed event bus system
 
 ## Installation
 
 Use the ABP CLI to add [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) NuGet package to your project:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Install the [ABP CLI](../../../../cli/index.md) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.EventBus.RabbitMQ` package.
 * Run `abp add-package Volo.Abp.EventBus.RabbitMQ` command.
 
-If you want to do it manually, install the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) NuGet package to your project and add `[DependsOn(typeof(AbpEventBusRabbitMqModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) NuGet package to your project and add `[DependsOn(typeof(AbpEventBusRabbitMqModule))]` to the [ABP module](../../../architecture/modularity/basics.md) class inside your project.
 
 ## Configuration
 
-You can configure using the standard [configuration system](Configuration.md), like using the `appsettings.json` file, or using the [options](Options.md) classes.
+You can configure using the standard [configuration system](../../../fundamentals/configuration.md), like using the `appsettings.json` file, or using the [options](../../../fundamentals/options.md) classes.
 
 ### `appsettings.json` file configuration
 
@@ -127,7 +127,7 @@ If you need to connect to the RabbitMQ cluster, you can use the `;` character to
 
 `AbpRabbitMqOptions` and `AbpRabbitMqEventBusOptions` classes can be used to configure the connection strings and event bus options for the RabbitMQ.
 
-You can configure this options inside the `ConfigureServices` of your [module](Module-Development-Basics.md).
+You can configure this options inside the `ConfigureServices` of your [module](../../../architecture/modularity/basics.md).
 
 **Example: Configure the connection**
 

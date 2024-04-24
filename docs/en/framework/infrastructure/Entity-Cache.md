@@ -1,8 +1,8 @@
 # Entity Cache
 
-ABP Framework provides an entity caching system that works on top of the [distributed caching](Caching.md) system. It does the following operations on behalf of you:
+ABP Framework provides an entity caching system that works on top of the [distributed caching](../fundamentals/caching.md) system. It does the following operations on behalf of you:
 
-* Gets the entity from the database (by using the [repositories](Repositories.md)) in its first call and then gets it from the cache in subsequent calls.
+* Gets the entity from the database (by using the [repositories](../architecture/domain-driven-design/repositories.md)) in its first call and then gets it from the cache in subsequent calls.
 * Automatically invalidates the cached entity if the entity is updated or deleted. Thus, it will be retrieved from the database in the next call and will be re-cached.
 
 ## Caching Entity Objects
@@ -19,7 +19,7 @@ public class Product : AggregateRoot<Guid>
 }
 ```
 
-If you want to cache this entity, you should first configure the [dependency injection](Dependency-Injection.md) system to register the `IEntityCache` service in the `ConfigureServices` method of your [module class](Module-Development-Basics.md):
+If you want to cache this entity, you should first configure the [dependency injection](../fundamentals/dependency-injection.md) system to register the `IEntityCache` service in the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md):
 
 ```csharp
 context.Services.AddEntityCache<Product, Guid>();
@@ -45,9 +45,9 @@ public class ProductAppService : ApplicationService, IProductAppService
 }
 ```
 
-> Note that we've used the `ObjectMapper` service to map from `Product` to `ProductDto`. You should configure that [object mapping](Object-To-Object-Mapping.md) to make that example service properly work.
+> Note that we've used the `ObjectMapper` service to map from `Product` to `ProductDto`. You should configure that [object mapping](./object-to-object-mapping.md) to make that example service properly work.
 
-That's all. The cache name (in the distributed cache server) will be the full name (with namespace) of the `Product` class. You can use the `[CacheName]` attribute to change it. Please refer to the [caching document](Caching.md) for details.
+That's all. The cache name (in the distributed cache server) will be the full name (with namespace) of the `Product` class. You can use the `[CacheName]` attribute to change it. Please refer to the [caching document](../fundamentals/caching.md) for details.
 
 ## Using a Cache Item Class
 
@@ -65,13 +65,13 @@ public class ProductDto : EntityDto<Guid>
 }
 ```
 
-Now, we can register the entity cache services to [dependency injection](Dependency-Injection.md) in the `ConfigureServices` method of your [module class](Module-Development-Basics.md) with three generic parameters, as shown below:
+Now, we can register the entity cache services to [dependency injection](../fundamentals/dependency-injection.md) in the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md) with three generic parameters, as shown below:
 
 ```csharp
 context.Services.AddEntityCache<Product, ProductDto, Guid>();
 ```
 
-Since the entity cache system will perform the [object mapping](Object-To-Object-Mapping.md) (from `Product` to `ProductDto`), we should configure the object map. Here, an example configuration with [AutoMapper](https://automapper.org/):
+Since the entity cache system will perform the [object mapping](./object-to-object-mapping.md) (from `Product` to `ProductDto`), we should configure the object map. Here, an example configuration with [AutoMapper](https://automapper.org/):
 
 ```csharp
 public class MyMapperProfile : Profile
@@ -121,11 +121,11 @@ context.Services.AddEntityCache<Product, ProductDto, Guid>(
 
 ## Additional Notes
 
-* Entity classes should be serializable/deserializable to/from JSON to be cached (because it's serialized to JSON when saving in the [Distributed Cache](Caching.md)). If your entity class is not serializable, you can consider using a cache-item/DTO class instead, as explained before.
-* Entity Caching System is designed as **read-only**. You should use the standard [repository](Repositories.md) methods to manipulate the entity if you need to. If you need to manipulate (update) the entity, do not get it from the entity cache. Instead, read it from the repository, change it and update using the repository.
+* Entity classes should be serializable/deserializable to/from JSON to be cached (because it's serialized to JSON when saving in the [Distributed Cache](../fundamentals/caching.md)). If your entity class is not serializable, you can consider using a cache-item/DTO class instead, as explained before.
+* Entity Caching System is designed as **read-only**. You should use the standard [repository](../architecture/domain-driven-design/repositories.md) methods to manipulate the entity if you need to. If you need to manipulate (update) the entity, do not get it from the entity cache. Instead, read it from the repository, change it and update using the repository.
 
 ## See Also
 
-* [Distributed caching](Caching.md)
-* [Entities](Entities.md)
-* [Repositories](Repositories.md)
+* [Distributed caching](../fundamentals/caching.md)
+* [Entities](../architecture/domain-driven-design/entities.md)
+* [Repositories](../architecture/domain-driven-design/repositories.md)

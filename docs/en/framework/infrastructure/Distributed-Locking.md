@@ -17,7 +17,7 @@ This package provides the necessary API to use the distributed locking system, h
 
 The [DistributedLock](https://github.com/madelson/DistributedLock) library provides [various of implementations](https://github.com/madelson/DistributedLock#implementations) for the locking, like [Redis](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.Redis.md) and [ZooKeeper](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.ZooKeeper.md).
 
-For example, if you want to use the [Redis provider](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.Redis.md), you should add [DistributedLock.Redis](https://www.nuget.org/packages/DistributedLock.Redis) NuGet package to your project, then add the following code into the `ConfigureServices` method of your ABP [module](Module-Development-Basics.md) class:
+For example, if you want to use the [Redis provider](https://github.com/madelson/DistributedLock/blob/master/docs/DistributedLock.Redis.md), you should add [DistributedLock.Redis](https://www.nuget.org/packages/DistributedLock.Redis) NuGet package to your project, then add the following code into the `ConfigureServices` method of your ABP [module](../architecture/modularity/basics.md) class:
 
 ````csharp
 using Medallion.Threading;
@@ -47,7 +47,7 @@ namespace AbpDemo
 }
 ````
 
-This code gets the Redis connection string from the [configuration](Configuration.md), so you can add the following lines to your `appsettings.json` file:
+This code gets the Redis connection string from the [configuration](../fundamentals/configuration.md), so you can add the following lines to your `appsettings.json` file:
 
 ````json
 "Redis": {
@@ -116,7 +116,7 @@ Configure<AbpDistributedLockOptions>(options =>
 });
 ```
 
-> Write that code inside the `ConfigureServices` method of your [module class](Module-Development-Basics.md).
+> Write that code inside the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md).
 
 ##### Available Options
 
@@ -128,4 +128,4 @@ ABP's `IAbpDistributedLock` service is very limited and mainly designed to be in
 
 ## The Volo.Abp.DistributedLocking.Abstractions Package
 
-If you are building a reusable library or an application module, then you may not want to bring an additional dependency to your module for simple applications that run as a single instance. In this case, your library can depend on the [Volo.Abp.DistributedLocking.Abstractions](https://nuget.org/packages/Volo.Abp.DistributedLocking.Abstractions) package which defines the `IAbpDistributedLock` service and implements it as in-process (not distributed actually). In this way, your library can run properly (without a distributed lock provider dependency) in an application that runs as a single instance. If the application is deployed to a [clustered environment](Deployment/Clustered-Environment.md), then the application developer should install a real distributed provider as explained in the *Installation* section.
+If you are building a reusable library or an application module, then you may not want to bring an additional dependency to your module for simple applications that run as a single instance. In this case, your library can depend on the [Volo.Abp.DistributedLocking.Abstractions](https://nuget.org/packages/Volo.Abp.DistributedLocking.Abstractions) package which defines the `IAbpDistributedLock` service and implements it as in-process (not distributed actually). In this way, your library can run properly (without a distributed lock provider dependency) in an application that runs as a single instance. If the application is deployed to a [clustered environment](../../deployment/clustered-environment.md), then the application developer should install a real distributed provider as explained in the *Installation* section.

@@ -25,7 +25,7 @@ ABP Framework provides `[AbpValidateAntiForgeryToken]` and `[AbpAutoValidateAnti
 
 ABP Framework also automates the following infrastructure;
 
-* Server side sets a **special cookie**, named `XSRF-TOKEN` by default, that is used make the antiforgery token value available to the browser. This is **done automatically** (by the [application configuration](API/Application-Configuration.md) endpoint). Nothing to do in the client side.
+* Server side sets a **special cookie**, named `XSRF-TOKEN` by default, that is used make the antiforgery token value available to the browser. This is **done automatically** (by the [application configuration](../api-development/standard-apis/configuration.md) endpoint). Nothing to do in the client side.
 * In the client side, it reads the token from the cookie and sends it in the **HTTP header** (named `RequestVerificationToken` by default). This is implemented for all the supported UI types.
 * Server side validates the antiforgery token **only for same and cross site requests** made by the browser. It bypasses the validation for non-browser clients.
 
@@ -35,7 +35,7 @@ That's all. The systems works smoothly.
 
 ### AbpAntiForgeryOptions
 
-`AbpAntiForgeryOptions` is the main [options class](Options.md) to configure the ABP Antiforgery system. It has the following properties;
+`AbpAntiForgeryOptions` is the main [options class](../fundamentals/options.md) to configure the ABP Antiforgery system. It has the following properties;
 
 * `TokenCookie`:  Can be used to configure the cookie details. This cookie is used to store the antiforgery token value in the client side, so clients can read it and sends the value as the HTTP header. Default cookie name is `XSRF-TOKEN`, expiration time is 10 years (yes, ten years! It should be a value longer than the authentication cookie max life time, for the security).
 * `AuthCookieSchemaName`: The name of the authentication cookie used by your application. Default value is `Identity.Application` (which becomes `AspNetCore.Identity.Application` on runtime). The default value properly works with the ABP startup templates. **If you change the authentication cookie name, you also must change this.**
@@ -43,7 +43,7 @@ That's all. The systems works smoothly.
 * `AutoValidateFilter`: A predicate that gets a type and returns a boolean. ABP uses this predicate to check a controller type. If it returns false for a controller type, the controller is excluded from the automatic antiforgery token validation.
 * `AutoValidateIgnoredHttpMethods`: A list of HTTP Methods to ignore on automatic antiforgery validation. Default value: "GET", "HEAD", "TRACE", "OPTIONS". These HTTP Methods are safe to skip antiforgery validation since they don't change the application state.
 
-If you need to change these options, do it in the `ConfigureServices` method of your [module](Module-Development-Basics.md).
+If you need to change these options, do it in the `ConfigureServices` method of your [module](../architecture/modularity/basics.md).
 
 **Example: Configuring the AbpAntiForgeryOptions**
 
@@ -65,7 +65,7 @@ This configuration;
 
 ### AntiforgeryOptions
 
-`AntiforgeryOptions` is the standard [options class](Options.md) of the ASP.NET Core. **You can find all the information about this class in its [own documentation](https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery)**.
+`AntiforgeryOptions` is the standard [options class](../fundamentals/options.md) of the ASP.NET Core. **You can find all the information about this class in its [own documentation](https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery)**.
 
 `HeaderName` option is especially important for the ABP Framework point of view. Default value of this value is `RequestVerificationToken` and the clients uses this name while sending the token value in the header. So, if you change this option, you should also arrange your clients to align the change. If you don't have a good reason, leave it as default.
 

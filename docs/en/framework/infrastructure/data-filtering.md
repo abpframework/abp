@@ -8,7 +8,7 @@ ABP defines some filters out of the box.
 
 ### ISoftDelete
 
-Used to mark an [entity](Entities.md) as deleted instead of actually deleting it. Implement the `ISoftDelete` interface to make your entity "soft delete".
+Used to mark an [entity](../architecture/domain-driven-design/entities.md) as deleted instead of actually deleting it. Implement the `ISoftDelete` interface to make your entity "soft delete".
 
 Example:
 
@@ -28,7 +28,7 @@ namespace Acme.BookStore
 }
 ````
 
-`ISoftDelete` defines the `IsDeleted` property. When you delete a book using [repositories](Repositories.md), ABP automatically sets `IsDeleted` to true and protects it from actual deletion (you can also manually set the `IsDeleted` property to true if you need). In addition, it **automatically filters deleted entities** when you query the database.
+`ISoftDelete` defines the `IsDeleted` property. When you delete a book using [repositories](../architecture/domain-driven-design/repositories.md), ABP automatically sets `IsDeleted` to true and protects it from actual deletion (you can also manually set the `IsDeleted` property to true if you need). In addition, it **automatically filters deleted entities** when you query the database.
 
 > `ISoftDelete` filter is enabled by default and you can not get deleted entities from database unless you explicitly disable it. See the `IDataFilter` service below.
 
@@ -36,7 +36,7 @@ namespace Acme.BookStore
 
 ### IMultiTenant
 
-[Multi-tenancy](Multi-Tenancy.md) is an efficient way of creating SaaS applications. Once you create a multi-tenant application, you typically want to isolate data between tenants. Implement `IMultiTenant` interface to make your entity "multi-tenant aware".
+[Multi-tenancy](../architecture/multi-tenancy/index.md) is an efficient way of creating SaaS applications. Once you create a multi-tenant application, you typically want to isolate data between tenants. Implement `IMultiTenant` interface to make your entity "multi-tenant aware".
 
 Example:
 
@@ -59,7 +59,7 @@ namespace Acme.BookStore
 }
 ````
 
-`IMultiTenant` interface defines the `TenantId` property which is then used to automatically filter the entities for the current tenant. See the [Multi-tenancy](Multi-Tenancy.md) document for more.
+`IMultiTenant` interface defines the `TenantId` property which is then used to automatically filter the entities for the current tenant. See the [Multi-tenancy](../architecture/multi-tenancy/index.md) document for more.
 
 ## IDataFilter Service: Enable/Disable Data Filters
 
@@ -103,7 +103,7 @@ namespace Acme.BookStore
 }
 ````
 
-* [Inject](Dependency-Injection.md) the `IDataFilter` service to your class.
+* [Inject](../fundamentals/dependency-injection.md) the `IDataFilter` service to your class.
 * Use the `Disable` method within a `using` statement to create a code block where the `ISoftDelete` filter is disabled inside it.
 
 In addition to the `Disable<T>()` method;
@@ -159,7 +159,7 @@ namespace Acme.BookStore
 
 ## AbpDataFilterOptions
 
-`AbpDataFilterOptions` can be used to [set options](Options.md) for the data filter system.
+`AbpDataFilterOptions` can be used to [set options](../fundamentals/options.md) for the data filter system.
 
 The example code below disables the `ISoftDelete` filter by default which will cause to include deleted entities when you query the database unless you explicitly enable the filter:
 
@@ -187,7 +187,7 @@ public interface IIsActive
 }
 ````
 
-Such an `IIsActive` interface can be used to filter active/passive data and can be easily implemented by any [entity](Entities.md):
+Such an `IIsActive` interface can be used to filter active/passive data and can be easily implemented by any [entity](../architecture/domain-driven-design/entities.md):
 
 ````csharp
 public class Book : AggregateRoot<Guid>, IIsActive
@@ -200,7 +200,7 @@ public class Book : AggregateRoot<Guid>, IIsActive
 
 ### EntityFramework Core
 
-ABP uses [EF Core's Global Query Filters](https://docs.microsoft.com/en-us/ef/core/querying/filters) system for the [EF Core Integration](Entity-Framework-Core.md). So, it is well integrated to EF Core and works as expected even if you directly work with `DbContext`.
+ABP uses [EF Core's Global Query Filters](https://docs.microsoft.com/en-us/ef/core/querying/filters) system for the [EF Core Integration](../data/entity-framework-core/index.md). So, it is well integrated to EF Core and works as expected even if you directly work with `DbContext`.
 
 Best way to implement a custom filter is to override  `ShouldFilterEntity` and `CreateFilterExpression` method for your `DbContext`. Example:
 
@@ -253,7 +253,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 ### MongoDB
 
-ABP abstracts the `IMongoDbRepositoryFilterer` interface to implement data filtering for the [MongoDB Integration](MongoDB.md), it works only if you use the repositories properly. Otherwise, you should manually filter the data.
+ABP abstracts the `IMongoDbRepositoryFilterer` interface to implement data filtering for the [MongoDB Integration](../data/mongodb/index.md), it works only if you use the repositories properly. Otherwise, you should manually filter the data.
 
 Currently, the best way to implement a data filter for the MongoDB integration is to create a derived class of `MongoDbRepositoryFilterer` and override `FilterQueryable`. Example:
 

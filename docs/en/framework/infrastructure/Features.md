@@ -4,9 +4,9 @@ ABP Feature system is used to **enable**, **disable** or **change the behavior**
 
 The runtime value for a feature is generally a `boolean` value, like `true` (enabled) or `false` (disabled). However, you can get/set **any kind** of value for feature.
 
-Feature system was originally designed to control the tenant features in a **[multi-tenant](Multi-Tenancy.md)** application. However, it is **extensible** and capable of determining the features by any condition.
+Feature system was originally designed to control the tenant features in a **[multi-tenant](../architecture/multi-tenancy/index.md)** application. However, it is **extensible** and capable of determining the features by any condition.
 
-> The feature system is implemented with the [Volo.Abp.Features](https://www.nuget.org/packages/Volo.Abp.Features) NuGet package. Most of the times you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Features) since it comes pre-installed with the [application startup template](Startup-Templates/Application.md).
+> The feature system is implemented with the [Volo.Abp.Features](https://www.nuget.org/packages/Volo.Abp.Features) NuGet package. Most of the times you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Features) since it comes pre-installed with the [application startup template](../../solution-templates/layered-web-application/index.md).
 
 ## Checking for the Features
 
@@ -29,7 +29,7 @@ public class ReportingAppService : ApplicationService, IReportingAppService
 }
 ```
 
-* `RequiresFeature(...)` simply gets a feature name to check if it is enabled or not. If not enabled, an authorization [exception](Exception-Handling.md) is thrown and a proper response is returned to the client side.
+* `RequiresFeature(...)` simply gets a feature name to check if it is enabled or not. If not enabled, an authorization [exception](../fundamentals/exception-handling.md) is thrown and a proper response is returned to the client side.
 * `[RequiresFeature]` can be used for a **method** or a **class**. When you use it for a class, all the methods of that class require the given feature.
 * `RequiresFeature` may get multiple feature names, like `[RequiresFeature("Feature1", "Feature2")]`. In this case ABP checks if any of the features enabled. Use `RequiresAll` option, like `[RequiresFeature("Feature1", "Feature2", RequiresAll = true)]` to force to check all of the features to be enabled.
 * Multiple usage of `[RequiresFeature]` attribute is supported for a method or class. ABP checks all of them in that case.
@@ -38,7 +38,7 @@ public class ReportingAppService : ApplicationService, IReportingAppService
 
 #### About the Interception
 
-ABP Framework uses the interception system to make the `[RequiresFeature]` attribute working. So, it can work with any class (application services, controllers...) that is injected from the [dependency injection](Dependency-Injection.md).
+ABP Framework uses the interception system to make the `[RequiresFeature]` attribute working. So, it can work with any class (application services, controllers...) that is injected from the [dependency injection](../fundamentals/dependency-injection.md).
 
 However, there are **some rules should be followed** in order to make it working;
 
@@ -228,7 +228,7 @@ namespace FeaturesDemo
 }
 ```
 
-* `FeaturesDemoResource` is the project name in this example code. See the [localization document](Localization.md) for details about the localization system.
+* `FeaturesDemoResource` is the project name in this example code. See the [localization document](../fundamentals/localization.md) for details about the localization system.
 * First feature is set to `ToggleStringValueType`, while the second one is set to `FreeTextStringValueType` with a numeric validator that allows to the values from `0` to `1,000,000`.
 
 Remember to define the localization the keys in your localization file:
@@ -238,19 +238,19 @@ Remember to define the localization the keys in your localization file:
 "MaxProductCount": "Maximum number of products"
 ````
 
-See the [localization document](Localization.md) for details about the localization system.
+See the [localization document](../fundamentals/localization.md) for details about the localization system.
 
 ### Feature Management Modal
 
-The [application startup template](Startup-Templates/Application.md) comes with the [tenant management](Modules/Tenant-Management.md) and the [feature management](Modules/Feature-Management.md) modules pre-installed.
+The [application startup template](../../solution-templates/layered-web-application/index.md) comes with the [tenant management](../../modules/tenant-management.md) and the [feature management](../../modules/feature-management.md) modules pre-installed.
 
 Whenever you define a new feature, it will be available on the **feature management modal**. To open this modal, navigate to the **tenant management page** and select the `Features` action for a tenant (create a new tenant if there is no tenant yet):
 
-![features-action](images/features-action.png)
+![features-action](../../images/features-action.png)
 
 This action opens a modal to manage the feature values for the selected tenant:
 
-![features-modal](images/features-modal.png)
+![features-modal](../../images/features-modal.png)
 
 So, you can enable, disable and set values for a tenant. These values will be used whenever a user of this tenant uses the application.
 
@@ -308,7 +308,7 @@ The example above defines a *Reporting* feature with two children: *PDF Reportin
 
 ### Changing Features Definitions of a Depended Module
 
-A class deriving from the `FeatureDefinitionProvider` (just like the example above) can also get the existing feature definitions (defined by the depended [modules](Module-Development-Basics.md)) and change their definitions.
+A class deriving from the `FeatureDefinitionProvider` (just like the example above) can also get the existing feature definitions (defined by the depended [modules](../architecture/modularity/basics.md)) and change their definitions.
 
 **Example: Manipulate an existing feature definition**
 
@@ -324,12 +324,12 @@ if (feature != null)
 
 ## Check a Feature in the Client Side
 
-A feature value is available at the client side too, unless you set `IsVisibleToClients` to `false` on the feature definition. The feature values are exposed from the [Application Configuration API](API/Application-Configuration.md) and usable via some services on the UI.
+A feature value is available at the client side too, unless you set `IsVisibleToClients` to `false` on the feature definition. The feature values are exposed from the [Application Configuration API](../api-development/standard-apis/configuration.md) and usable via some services on the UI.
 
 See the following documents to learn how to check features in different UI types:
 
-* [ASP.NET Core MVC / Razor Pages / JavaScript API](UI/AspNetCore/JavaScript-API/Features.md)
-* [Angular](UI/Angular/Features.md)
+* [ASP.NET Core MVC / Razor Pages / JavaScript API](../ui/mvc-razor-pages/javascript-api/features.md)
+* [Angular](../ui/angular/features.md)
 
 **Blazor** applications can use the same `IFeatureChecker` service as explained above.
 
@@ -337,7 +337,7 @@ See the following documents to learn how to check features in different UI types
 
 Feature management is normally done by an admin user using the feature management modal:
 
-![features-modal](images/features-modal.png)
+![features-modal](../../images/features-modal.png)
 
 This modal is available on the related entities, like tenants in a multi-tenant application. To open it, navigate to the **Tenant Management** page (for a multi-tenant application), click to the **Actions** button left to the Tenant and select the **Features** action.
 
@@ -366,7 +366,7 @@ public class MyService : ITransientDependency
 }
 ```
 
-`IFeatureManager` is defined by the Feature Management module. It comes pre-installed with the application startup template. See the [feature management module documentation](Modules/Feature-Management.md) for more information.
+`IFeatureManager` is defined by the Feature Management module. It comes pre-installed with the application startup template. See the [feature management module documentation](../../modules/feature-management.md) for more information.
 
 ## Advanced Topics
 
@@ -379,7 +379,7 @@ Feature value providers are **executed one by one**. If one of them return a non
 There are three pre-defined value providers, executed by the given order:
 
 * `TenantFeatureValueProvider` tries to get if the feature value is explicitly set for the **current tenant**.
-* `EditionFeatureValueProvider` tries to get the feature value for the current edition. Edition Id is obtained from the current principal identity (`ICurrentPrincipalAccessor`) with the claim name `editionid` (a constant defined as`AbpClaimTypes.EditionId`). Editions are not implemented for the [tenant management](Modules/Tenant-Management.md) module. You can implement it yourself or consider to use the [SaaS module](https://commercial.abp.io/modules/Volo.Saas) of the ABP Commercial.
+* `EditionFeatureValueProvider` tries to get the feature value for the current edition. Edition Id is obtained from the current principal identity (`ICurrentPrincipalAccessor`) with the claim name `editionid` (a constant defined as`AbpClaimTypes.EditionId`). Editions are not implemented for the [tenant management](../../modules/tenant-management.md) module. You can implement it yourself or consider to use the [SaaS module](https://commercial.abp.io/modules/Volo.Saas) of the ABP Commercial.
 * `DefaultValueFeatureValueProvider` gets the default value of the feature.
 
 You can write your own provider by inheriting the `FeatureValueProvider`.
@@ -433,8 +433,8 @@ Configure<AbpFeatureOptions>(options =>
 });
 ```
 
-Use this code inside the `ConfigureServices` of your [module](Module-Development-Basics.md) class.
+Use this code inside the `ConfigureServices` of your [module](../architecture/modularity/basics.md) class.
 
 ### Feature Store
 
-`IFeatureStore` is the only interface that needs to be implemented to read the value of features from a persistence source, generally a database system. The Feature Management module implements it and pre-installed in the application startup template. See the [feature management module documentation](https://docs.abp.io/en/abp/latest/Modules/Feature-Management) for more information
+`IFeatureStore` is the only interface that needs to be implemented to read the value of features from a persistence source, generally a database system. The Feature Management module implements it and pre-installed in the application startup template. See the [feature management module documentation](../../modules/feature-management.md) for more information
