@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Validation;
 
@@ -25,19 +26,24 @@ public abstract class EmailSenderBase : IEmailSender
 
     protected IBackgroundJobManager BackgroundJobManager { get; }
 
+    private IDistributedEventBus DistributedEventBus { get; set; }
+
+
     /// <summary>
     /// Constructor.
     /// </summary>
     protected EmailSenderBase(
         ICurrentTenant currentTenant,
         IEmailSenderConfiguration configuration,
-        IBackgroundJobManager backgroundJobManager)
+        IBackgroundJobManager backgroundJobManager,
+        IDistributedEventBus distributedEventBus)
     {
         Logger = NullLogger<EmailSenderBase>.Instance;
 
         CurrentTenant = currentTenant;
         Configuration = configuration;
         BackgroundJobManager = backgroundJobManager;
+        DistributedEventBus = distributedEventBus;
     }
 
     public virtual async Task SendAsync(string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
@@ -81,13 +87,33 @@ public abstract class EmailSenderBase : IEmailSender
     }
 
     public virtual async Task SendAsync(MailMessage mail, bool normalize = true)
-    {
-        if (normalize)
+    {     
+        try
         {
-            await NormalizeMailAsync(mail);
-        }
+            throw new Exception("Mail Error");
+            if (normalize)
+            {
+                await NormalizeMailAsync(mail);
+            }
 
-        await SendEmailAsync(mail);
+            await SendEmailAsync(mail);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Error sending email", ex, ex.Message);
+
+
+            await DistributedEventBus.PublishAsync(
+                new EmailExceptionEvent
+                {
+                    Date = DateTime.Now,
+                    From = mail.From,
+                    To = mail.To,
+                    Subject = mail.Subject,
+                    Sender = mail.Sender
+                });
+
+        }
     }
 
     public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)

@@ -11,6 +11,9 @@ using MimeKit;
 using MimeKit.Utils;
 using Volo.Abp.MultiTenancy;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
+using Microsoft.Extensions.Logging;
+using System;
+using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.MailKit;
 
@@ -21,15 +24,19 @@ public class MailKitSmtpEmailSender : EmailSenderBase, IMailKitSmtpEmailSender
 
     protected ISmtpEmailSenderConfiguration SmtpConfiguration { get; }
 
+    private IDistributedEventBus _distributedEventBus { get; set; }
+
     public MailKitSmtpEmailSender(
         ICurrentTenant currentTenant,
         ISmtpEmailSenderConfiguration smtpConfiguration,
         IBackgroundJobManager backgroundJobManager,
-        IOptions<AbpMailKitOptions> abpMailKitConfiguration)
-        : base(currentTenant, smtpConfiguration, backgroundJobManager)
+        IOptions<AbpMailKitOptions> abpMailKitConfiguration,
+        IDistributedEventBus distributedEventBus)
+        : base(currentTenant, smtpConfiguration, backgroundJobManager, distributedEventBus)
     {
         AbpMailKitOptions = abpMailKitConfiguration.Value;
         SmtpConfiguration = smtpConfiguration;
+        _distributedEventBus = distributedEventBus;
     }
 
     protected async override Task SendEmailAsync(MailMessage mail)

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Emailing.Smtp;
@@ -22,8 +23,9 @@ public class SmtpEmailSender : EmailSenderBase, ISmtpEmailSender, ITransientDepe
     public SmtpEmailSender(
         ICurrentTenant currentTenant,
         ISmtpEmailSenderConfiguration smtpConfiguration,
-        IBackgroundJobManager backgroundJobManager)
-        : base(currentTenant, smtpConfiguration, backgroundJobManager)
+        IBackgroundJobManager backgroundJobManager,
+        IDistributedEventBus distributedEventBus)
+        : base(currentTenant, smtpConfiguration, backgroundJobManager, distributedEventBus)
     {
         SmtpConfiguration = smtpConfiguration;
     }
