@@ -152,8 +152,11 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
 export class AppModule {}
 ```
 
-**Note:**
-Route items's `name` property is must be a unique key. If there are multiple items with the same name, the last one will be displayed in the menu. If you want to display multiple items with the same name, you can call the `setSingularizeStatus(false)` method of the `RoutesService` to disable the singularization of the names. This method should be called before adding the routes. If you want to enable the singularization of the names, you can call the `setSingularizeStatus(true)` method of the `RoutesService` to enable the singularization of the names. This method should be called before adding the routes. The default value of the singularization status is `true`. The default value of the singularization status is `true`.
+### Singularize Route Item
+- `name` property is must be a unique key. If there are multiple items with the same name, the last one will be displayed in the menu.
+- If you want to display multiple items in different parent with the same name, you can call the **setSingularizeStatus(false)** method of the `RoutesService` to disable the singularization.
+  - **This method should be called before adding the routes.**
+- To enable the singularization of the names, you can call the **setSingularizeStatus(true) `(default value: true)`** method of the `RoutesService`.
 
 ```typescript
 import { RoutesService } from '@abp/ng.core';
