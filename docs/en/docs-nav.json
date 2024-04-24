@@ -965,7 +965,7 @@
                     },
                     {
                       "text": "LeptonX Lite",
-                      "path": "Themes/LeptonXLite/blazor.md"
+                      "path": "themes/lepton-x-lite/blazor.md"
                     },
                     {
                       "text": "Branding",
@@ -1281,7 +1281,7 @@
                         },
                         {
                           "text": "LeptonX Lite",
-                          "path": "Themes/LeptonXLite/angular.md"
+                          "path": "themes/lepton-x-lite/angular.md"
                         }
                       ]
                     },
@@ -1677,7 +1677,7 @@
       "items": [
         {
           "text": "All Samples",
-          "path": "Samples/Index.md"
+          "path": "samples/index.md"
         },
         {
           "text": "eShopOnAbp",
@@ -1689,7 +1689,7 @@
         },
         {
           "text": "Easy CRM",
-          "path": "Samples/easy-crm.md"
+          "path": "samples/easy-crm.md"
         }
       ]
     },
@@ -1715,23 +1715,23 @@
         },
         {
           "text": "Migration Guides",
-          "path": "release-info/Migration-Guides/Index.md"
+          "path": "release-info/migration-guides/index.md"
         },
         {
           "text": "Road Map",
-          "path": "release-info/Road-Map.md"
+          "path": "release-info/road-map.md"
         },
         {
           "text": "Upgrading",
-          "path": "release-info/Upgrading.md"
+          "path": "release-info/upgrading.md"
         },
         {
           "text": "Preview Releases",
-          "path": "release-info/Previews.md"
+          "path": "release-info/previews.md"
         },
         {
           "text": "Nightly Builds",
-          "path": "release-info/Nightly-Builds.md"
+          "path": "release-info/nightly-builds.md"
         },
         {
           "text": "Official Packages",
