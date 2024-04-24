@@ -110,7 +110,9 @@ public abstract class EmailSenderBase : IEmailSender
                     From = mail.From,
                     To = mail.To,
                     Subject = mail.Subject,
-                    Sender = mail.Sender
+                    Body = mail.Body,
+                    Sender = mail.Sender,
+                    MailFailDescription = ex.Message
                 });
 
         }

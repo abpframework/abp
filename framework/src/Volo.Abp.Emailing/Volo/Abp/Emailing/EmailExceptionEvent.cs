@@ -11,5 +11,7 @@ public class EmailExceptionEvent
     public MailAddress? From { get; set; }
     public MailAddressCollection? To { get; set; }
     public MailAddress? Sender { get; set; }
+    public string? MailFailDescription { get; set; }
+    public string? Body { get; set; }
     public DateTime Date { get; set; }
 }
