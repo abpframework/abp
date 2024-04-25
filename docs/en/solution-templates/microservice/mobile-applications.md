@@ -5,7 +5,7 @@ The ABP Studio microservice solution template comes with an optional mobile appl
 * MAUI
 * React Native
 
-You can select the mobile application type while [creating your solution](../../quick-starts/microservice.md).
+You can select the mobile application type while [creating your solution](../../get-started/microservice.md).
 
 ## Fundamental Structures
 
@@ -19,13 +19,13 @@ You can refer to the *[API Gateways](api-gateways.md)* document to understand th
 
 ### Authentication
 
-Both of the MAUI and React Native applications are installed as native applications to the devices. So, they are using the [OpenID Connect](../../../modules/openiddict.md) protocol to authenticate the users. The authentication is done by the `AuthServer` application.
+Both of the MAUI and React Native applications are installed as native applications to the devices. So, they are using the [OpenID Connect](../../modules/openiddict.md) protocol to authenticate the users. The authentication is done by the `AuthServer` application.
 
-They don't run on a browser, so they can't use the [Cookie Authentication](../../../modules/account.md#cookie-authentication) method. They are using the [JWT Bearer Authentication](../../../modules/account.md#jwt-bearer-authentication) method. 
+They don't run on a browser, so they can't use the [Cookie Authentication](../../modules/account.md#cookie-authentication) method. They are using the [JWT Bearer Authentication](../../modules/account.md#jwt-bearer-authentication) method. 
 
 Best way to communicate with the `AuthServer` application is using the browser. So, the mobile applications are opening a browser window to authenticate the user. Then browser redirects back to the mobile application with the authentication result.
 
-The following screenshot was taken from the *Login* page of the [Account](../../../modules/account.md) module in the mobile application's UI:
+The following screenshot was taken from the *Login* page of the [Account](../../modules/account.md) module in the mobile application's UI:
 
 ![mobile-application-login-page](images/authserver-login-page-maui.png)
 
@@ -120,7 +120,7 @@ You can start the MAUI application with the solution runner. You can click the s
 
 #### Development on MAUI Application
 
-You can follow [Mobile Application Development Tutorial - MAUI](../../../tutorials/book-store/mobile/maui.md) to learn how to develop on MAUI Application.
+You can follow [Mobile Application Development Tutorial - MAUI](../../tutorials/mobile/maui/index.md) to learn how to develop on MAUI Application.
 
 ### The React Native Application
 
@@ -152,4 +152,4 @@ React Native applications can't be run with the solution runner. You need to run
 
 Before running the React Native application, rest of the applications in the solution must be running. Such as AuthServer, MobileGateway and the microservices.
 
-Then you can run the React Native application by following this documentation: [Getting Started with the React Native](../../../getting-started-react-native.md).
+Then you can run the React Native application by following this documentation: [Getting Started with the React Native](../../_deleted/getting-started-react-native.md).

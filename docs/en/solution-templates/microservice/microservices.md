@@ -5,7 +5,7 @@ The ABP Studio Microservice solution consists of a few microservices at the begi
 The microservice count varies based on the options you've selected during the solution creation. However, the following microservices are always included:
 
 * **Administration** microservice is used to manage permissions, languages and other fundamental settings of the system.
-* **Identity** microservice is used to manage users, roles and their permissions. It basically serves to the [Identity](../../../modules/identity.md) module's UI (and [OpenIddict](../../../modules/openiddict.md) module's UI, if selected).
+* **Identity** microservice is used to manage users, roles and their permissions. It basically serves to the [Identity](../../modules/identity.md) module's UI (and [OpenIddict](../../modules/openiddict.md) module's UI, if selected).
 
 In the next section, you will learn the fundamental solution structure that is applied to all the microservices.
 
@@ -43,7 +43,7 @@ The following figure shows the Administration microservice's module structure in
 
 ![administration-microservice-in-solution-explorer](images/administration-microservice-in-solution-explorer.png)
 
-Administration service is basically used to to manage **permissions** (using the [Permission Management](https://docs.abp.io/en/abp/latest/Modules/Permission-Management) module), **features** (using the [Feature Management](https://docs.abp.io/en/abp/latest/Modules/Feature-Management) module), **settings** (using the [Setting Management](https://docs.abp.io/en/abp/latest/Modules/Setting-Management) module) and **languages** (using the [Language Management](../../../modules/language-management.md) module) (maybe some others based on your preferences) of the system. These are the common infrastructure services that are used by all the services and applications in the solution. Administration service is responsible to serve management HTTP APIs to UI for these services, and it also maintains the database schema for them.
+Administration service is basically used to to manage **permissions** (using the [Permission Management](https://docs.abp.io/en/abp/latest/Modules/Permission-Management) module), **features** (using the [Feature Management](https://docs.abp.io/en/abp/latest/Modules/Feature-Management) module), **settings** (using the [Setting Management](https://docs.abp.io/en/abp/latest/Modules/Setting-Management) module) and **languages** (using the [Language Management](../../modules/language-management.md) module) (maybe some others based on your preferences) of the system. These are the common infrastructure services that are used by all the services and applications in the solution. Administration service is responsible to serve management HTTP APIs to UI for these services, and it also maintains the database schema for them.
 
 In addition to these fundamental infrastructure services, Administration service also creates the [BLOB Storing database](https://docs.abp.io/en/abp/latest/Blob-Storing-Database), so other services can easily store BLOBs.
 
@@ -53,33 +53,33 @@ The following figure shows the Identity microservice's module structure in ABP S
 
 ![identity-microservice-in-solution-explorer](images/identity-microservice-in-solution-explorer.png)
 
-Identity microservice is used by the UI to manage users, roles and their permissions. It uses the [Identity](../../../modules/identity.md) module for that. If you've selected the OpenIddict UI while [creating your solution](../../quick-starts/microservice.md), it also serves the management API for OpenIddict. It created and manages the database schema for these modules.
+Identity microservice is used by the UI to manage users, roles and their permissions. It uses the [Identity](../../modules/identity.md) module for that. If you've selected the OpenIddict UI while [creating your solution](../../get-started/microservice.md), it also serves the management API for OpenIddict. It created and manages the database schema for these modules.
 
 ### SaaS Microservice (optional)
 
-If you've selected the [SaaS](../../../modules/saas.md) module while [creating your solution](../../quick-starts/microservice.md), the Saas microservice is added to the solution as shown in the following figure:
+If you've selected the [SaaS](../../modules/saas.md) module while [creating your solution](../../get-started/microservice.md), the Saas microservice is added to the solution as shown in the following figure:
 
 ![saas-microservice-in-solution-explorer](images/saas-microservice-in-solution-explorer.png)
 
-This microservice serves the [SaaS](../../../modules/saas.md) module's HTTP API, creates and manages its database.
+This microservice serves the [SaaS](../../modules/saas.md) module's HTTP API, creates and manages its database.
 
 > [Multi-Tenancy](https://docs.abp.io/en/abp/latest/Multi-Tenancy) is a common feature of the solution. If you install the SaaS module, multi-tenancy is automatically enabled for all the services and applications in the solution and the necessary configurations are done for you.
 
 ### Audit Logging Microservice (optional)
 
-If you've selected the [Audit Logging](../../../modules/audit-logging.md) module while [creating your solution](../../quick-starts/microservice.md), the Audit Logging microservice is added to the solution as shown in the following figure:
+If you've selected the [Audit Logging](../../modules/audit-logging.md) module while [creating your solution](../../get-started/microservice.md), the Audit Logging microservice is added to the solution as shown in the following figure:
 
 ![audit-logging-microservice-in-solution-explorer](images/audit-logging-microservice-in-solution-explorer.png)
 
-This microservice basically serves the [Audit Logging](../../../modules/audit-logging.md) module's HTTP API, creates and manages its database.
+This microservice basically serves the [Audit Logging](../../modules/audit-logging.md) module's HTTP API, creates and manages its database.
 
 ### GDPR Microservice (optional)
 
-If you've selected the [GDPR](../../../modules/gdpr.md) module while [creating your solution](../../quick-starts/microservice.md), the Gdpr microservice is added to the solution as shown in the following figure:
+If you've selected the [GDPR](../../modules/gdpr.md) module while [creating your solution](../../get-started/microservice.md), the Gdpr microservice is added to the solution as shown in the following figure:
 
 ![gdpr-microservice-in-solution-explorer](images/gdpr-microservice-in-solution-explorer.png)
 
-This microservice basically serves the [GDPR](../../../modules/gdpr.md) module's HTTP API, creates and manages its database.
+This microservice basically serves the [GDPR](../../modules/gdpr.md) module's HTTP API, creates and manages its database.
 
 Next
 

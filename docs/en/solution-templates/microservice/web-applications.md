@@ -8,7 +8,7 @@ The following figure shows the application in the *[Solution Explorer](../../sol
 
 
 
-Count and types of the web applications depends on the options you've selected while [creating your solution](../../quick-starts/microservice.md). This document introduces and explains all the pre-built web applications included in the microservice solution template. 
+Count and types of the web applications depends on the options you've selected while [creating your solution](../../get-started/microservice.md). This document introduces and explains all the pre-built web applications included in the microservice solution template. 
 
 ## AuthServer
 
@@ -18,21 +18,21 @@ The `AuthServer` application is also used by microservices as Authority for JWT 
 
 > You normally do not directly browse this application. It is used by the other applications to authenticate the users and applications..
 
-The following screenshot was taken from the *Login* page of the [Account](../../../modules/account.md) module in the application's UI:
+The following screenshot was taken from the *Login* page of the [Account](../../modules/account.md) module in the application's UI:
 
 ![authserver-login-page](images/authserver-login-page.png)
 
-That application is mainly based on the [OpenIddict](../../../modules/openiddict.md), the [Identity](../../../modules/identity.md), and the [Account](../../../modules/account.md) modules. So, it basically has login, register, forgot password, two factor authentication and other authentication related pages.
+That application is mainly based on the [OpenIddict](../../modules/openiddict.md), the [Identity](../../modules/identity.md), and the [Account](../../modules/account.md) modules. So, it basically has login, register, forgot password, two factor authentication and other authentication related pages.
 
 ## The Main Web Application (optional)
 
 This is the main web application of the solution. It uses the `Acme.CloudCrm.AuthServer` application as the [API gateway](api-gateways.md). It also uses the Authentication Server application to make users login.
 
-The following screenshot was taken from the *Role Management* page of the [Identity](../../../modules/identity.md) module in the web application's UI:
+The following screenshot was taken from the *Role Management* page of the [Identity](../../modules/identity.md) module in the web application's UI:
 
 ![web-application-ui](images/web-application-ui.png)
 
-The following options are provided while [creating the solution](../../quick-starts/microservice.md):
+The following options are provided while [creating the solution](../../get-started/microservice.md):
 
 * MVC / Razor Pages UI
 * Angular

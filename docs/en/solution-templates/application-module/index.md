@@ -1,10 +1,10 @@
 # Module Startup Template
 
-This template can be used to create a **reusable [application module](../Modules/Index.md)** based on the [module development best practices & conventions](../Best-Practices/Index.md). It is also suitable for creating **microservices** (with or without UI).
+This template can be used to create a **reusable [application module](../../modules/index.md)** based on the [module development best practices & conventions](../../framework/architecture/best-practices/index.md). It is also suitable for creating **microservices** (with or without UI).
 
 ## How to Start With?
 
-You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
+You can use the [ABP CLI](../../cli/index.md) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
 
 First, install the ABP CLI if you haven't installed before:
 
@@ -56,7 +56,7 @@ An `IssueType` enum and an `IssueConsts` class (which may have some constant fie
 
 ### .Domain Project
 
-This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), value types, [repository interfaces](../Repositories.md) and other domain objects.
+This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../../framework/architecture/domain-driven-design/entities.md), [domain services](../../framework/architecture/domain-driven-design/domain-services.md), value types, [repository interfaces](../../framework/architecture/domain-driven-design/repositories.md) and other domain objects.
 
 An `Issue` entity, an `IssueManager` domain service and an `IIssueRepository` interface are good candidates for this project.
 
@@ -64,7 +64,7 @@ An `Issue` entity, an `IssueManager` domain service and an `IIssueRepository` in
 
 ### .Application.Contracts Project
 
-This project mainly contains [application service](../Application-Services.md) **interfaces** and [Data Transfer Objects](../Data-Transfer-Objects.md) (DTO) of the application layer. It does exists to separate interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
+This project mainly contains [application service](../../framework/architecture/domain-driven-design/application-services.md) **interfaces** and [Data Transfer Objects](../../framework/architecture/domain-driven-design/data-transfer-objects.md) (DTO) of the application layer. It does exists to separate interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
 
 An `IIssueAppService` interface and an `IssueCreationDto` class are good candidates for this project.
 
@@ -72,7 +72,7 @@ An `IIssueAppService` interface and an `IssueCreationDto` class are good candida
 
 ### .Application Project
 
-This project contains the [application service](../Application-Services.md) **implementations** of the interfaces defined in the `.Application.Contracts` project.
+This project contains the [application service](../../framework/architecture/domain-driven-design/application-services.md) **implementations** of the interfaces defined in the `.Application.Contracts` project.
 
 An `IssueAppService` class is a good candidate for this project.
 
@@ -222,7 +222,7 @@ Now, let's have a closer look at some key elements of your project.
 - Loads `DynamicLayoutComponent` at base path it is given.
 - Loads `IssueManagementComponent` as child to the layout, again at the given base path.
 
-You can rearrange this module to load more than one component at different routes, but you need to update the route provider at _angular/projects/issue-management/config/src/providers/route.provider.ts_ to match the new routing structure with the routes in the menu. Please check [Modifying the Menu](../UI/Angular/Modifying-the-Menu.md) to see how route providers work.
+You can rearrange this module to load more than one component at different routes, but you need to update the route provider at _angular/projects/issue-management/config/src/providers/route.provider.ts_ to match the new routing structure with the routes in the menu. Please check [Modifying the Menu](../../framework/ui/angular/modifying-the-menu.md) to see how route providers work.
 
 #### Config Module
 
@@ -247,4 +247,4 @@ The difference between the `forRoot` method of the config module and the `forLaz
 
 #### Testing Angular UI
 
-Please see the [testing document](../UI/Angular/Testing.md).
+Please see the [testing document](../../framework/ui/angular/testing.md).

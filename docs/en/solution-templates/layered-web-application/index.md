@@ -2,16 +2,16 @@
 
 ## Introduction
 
-This template provides a layered application structure based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices. 
+This template provides a layered application structure based on the [Domain Driven Design](../../framework/architecture/domain-driven-design/index.md) (DDD) practices. 
 
 This document explains **the solution structure** and projects in details. If you want to start quickly, follow the guides below:
 
-* [The getting started document](../Getting-Started.md) explains how to create a new application in a few minutes.
-* [The application development tutorial](../Tutorials/Part-1) explains step by step application development.
+* [The getting started document](../../_deleted/getting-started-single-layered.md) explains how to create a new application in a few minutes.
+* [The application development tutorial](../../tutorials/book-store/part-01.md) explains step by step application development.
 
 ## How to Start With?
 
-You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
+You can use the [ABP CLI](../../cli/index.md) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
 
 First, install the ABP CLI if you haven't installed it before:
 
@@ -80,7 +80,7 @@ If you don't specify any additional options, you will have a solution as shown b
 
 ![bookstore-rider-solution-v6](../images/solution-structure-solution-explorer-rider.png)
 
-Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../Domain-Driven-Design.md) principles as mentioned before.
+Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../../framework/architecture/domain-driven-design/index.md) principles as mentioned before.
 
 The diagram below shows the layers & project dependencies of the application:
 
@@ -98,7 +98,7 @@ A `BookType` enum and a `BookConsts` class (which may have some constant fields 
 
 #### .Domain Project
 
-This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), [value objects](../Value-Objects.md), [repository interfaces](../Repositories.md) and other domain objects.
+This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../../framework/architecture/domain-driven-design/entities.md), [domain services](../../framework/architecture/domain-driven-design/domain-services.md), [value objects](../../framework/architecture/domain-driven-design/value-objects.md), [repository interfaces](../../framework/architecture/domain-driven-design/repositories.md) and other domain objects.
 
 A `Book` entity, a `BookManager` domain service and an `IBookRepository` interface are good candidates for this project.
 
@@ -106,7 +106,7 @@ A `Book` entity, a `BookManager` domain service and an `IBookRepository` interfa
 
 #### .Application.Contracts Project
 
-This project mainly contains [application service](../Application-Services.md) **interfaces** and [Data Transfer Objects](../Data-Transfer-Objects.md) (DTO) of the application layer. It exists to separate the interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
+This project mainly contains [application service](../../framework/architecture/domain-driven-design/application-services.md) **interfaces** and [Data Transfer Objects](../../framework/architecture/domain-driven-design/data-transfer-objects.md) (DTO) of the application layer. It exists to separate the interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
 
 An `IBookAppService` interface and a `BookCreationDto` class are good candidates for this project.
 
@@ -114,7 +114,7 @@ An `IBookAppService` interface and a `BookCreationDto` class are good candidates
 
 #### .Application Project
 
-This project contains the [application service](../Application-Services.md) **implementations** of the interfaces defined in the `.Application.Contracts` project.
+This project contains the [application service](../../framework/architecture/domain-driven-design/application-services.md) **implementations** of the interfaces defined in the `.Application.Contracts` project.
 
 A `BookAppService` class is a good candidate for this project.
 
@@ -150,7 +150,7 @@ While creating database & applying migrations seem only necessary for relational
 
 This project is used to define your API Controllers.
 
-Most of the time you don't need to manually define API Controllers since ABP's [Auto API Controllers](../API/Auto-API-Controllers.md) feature creates them automagically based on your application layer. However, in case of you need to write API controllers, this is the best place to do it.
+Most of the time you don't need to manually define API Controllers since ABP's [Auto API Controllers](../../framework/api-development/auto-controllers.md) feature creates them automagically based on your application layer. However, in case of you need to write API controllers, this is the best place to do it.
 
 * Depends on the `.Application.Contracts` project to be able to inject the application service interfaces.
 
@@ -158,7 +158,7 @@ Most of the time you don't need to manually define API Controllers since ABP's [
 
 This is a project that defines C# client proxies to use the HTTP APIs of the solution. You can share this library to 3rd-party clients, so they can easily consume your HTTP APIs in their Dotnet applications (For other types of applications, they can still use your APIs, either manually or using a tool in their own platform)
 
-Most of the time you don't need to manually create C# client proxies, thanks to ABP's [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature.
+Most of the time you don't need to manually create C# client proxies, thanks to ABP's [Dynamic C# API Clients](../../framework/api-development/dynamic-csharp-clients.md) feature.
 
 `.HttpApi.Client.ConsoleTestApp` project is a console application created to demonstrate the usage of the client proxies.
 
@@ -206,7 +206,7 @@ You can still create unit tests for your classes which will be harder to write (
 
 Set `.Web` as the startup project and run the application. The default username is `admin` and the password is `1q2w3E*`.
 
-See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) for more information.
+See [Getting Started With the ASP.NET Core MVC Template](../../_deleted/getting-started-asp-net-core-mvc-template.md) for more information.
 
 ### Tiered Structure
 
@@ -235,7 +235,7 @@ This project is used as an authentication server for other projects. `.Web` proj
 
 ![tiered-solution-applications](../images/tiered-solution-applications-authserver.png)
 
-ABP uses the [OpenIddict Module](../Modules/OpenIddict.md) that uses the open-source [OpenIddict-core](https://github.com/openiddict/openiddict-core) library for the authentication between applications. See [OpenIddict documentation](https://documentation.openiddict.com/) for details about the OpenIddict and OpenID Connect protocol.
+ABP uses the [OpenIddict Module](../../modules/openiddict.md) that uses the open-source [OpenIddict-core](https://github.com/openiddict/openiddict-core) library for the authentication between applications. See [OpenIddict documentation](https://documentation.openiddict.com/) for details about the OpenIddict and OpenID Connect protocol.
 
 It has its own `appsettings.json` that contains database connection and other configurations.
 
@@ -457,8 +457,8 @@ If you want to configure social/external logins for your application, please fol
 
 ## What's Next?
 
-- [The getting started document](../Getting-Started.md) explains how to create a new application in a few minutes.
-- [The application development tutorial](../Tutorials/Part-1.md) explains step by step application development.
+- [The getting started document](../../_deleted/Getting-Started-Overall.md) explains how to create a new application in a few minutes.
+- [The application development tutorial](../../tutorials/book-store/part-01.md) explains step by step application development.
 
 ## See Also
 * [Video tutorial](https://abp.io/video-courses/essentials/app-template)
