@@ -82,7 +82,7 @@ Here, a screenshot from the *Solution Runner* screen of ABP Studio:
 
 ![abp-studio-solution-runner](abp-studio-solution-runner.png)
 
-ABP Studio has been started as a commercial product, as a part of [ABP Commercial](https://commercial.abp.io/). We are very excited to announce that the *Community Edition* will be available for free soon. It will have some missing features and limitations compared to the full edition, but will be enough to create, explore and run ABP solutions easily.
+ABP Studio has been started as a commercial product, as a part of [ABP Commercial](https://commercial.abp.io/). We are very excited to announce that the *Community Edition* will be available soon for free. It will have some missing features and limitations compared to the full edition, but will be enough to create, explore and run ABP solutions easily.
 
 We will be offering ABP Studio as a starting point to the ABP platform. The [Getting Started](https://docs.abp.io/en/abp/latest/Getting-Started-Overall) and other documents will use ABP Studio to create new solutions and perform ABP-related operations.
 
