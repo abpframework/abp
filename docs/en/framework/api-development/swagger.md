@@ -107,7 +107,7 @@ services.AddAbpSwaggerGen(
 
 For non MVC/Tiered applications, we need to configure Swagger with OAUTH to handle authorization.  
 
-> ABP Framework uses OpenIddict by default. To get more information about OpenIddict, check this [documentation](../../modules/open-iddict.md). 
+> ABP Framework uses OpenIddict by default. To get more information about OpenIddict, check this [documentation](../../modules/openiddict.md). 
 
 To do that, we need to use `AddAbpSwaggerGenWithOAuth` extension to configure Swagger with OAuth issuer and scopes in `ConfigureServices` method of our module:
 

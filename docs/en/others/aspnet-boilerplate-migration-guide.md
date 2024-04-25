@@ -52,24 +52,24 @@ ABP Framework is (and ASP.NET Boilerplate was) designed based on the [Domain Dri
 
 ## Creating the Solution
 
-First step of the migration is to create a new solution. We suggest you to create a fresh new project using [the startup templates](https://abp.io/get-started) (see [this document](https://docs.abp.io/en/commercial/latest/getting-started) for the ABP Commercial).
+First step of the migration is to create a new solution. We suggest you to create a fresh new project using [the startup templates](https://abp.io/get-started) (see [this document](../get-started/index.md) for the ABP Commercial).
 
 After creating the project and running the application, you can copy your code from your existing solution to the new solution step by step, layer by layer.
 
 ### About Pre-Built Modules
 
-The startup projects for the ABP Framework use the [pre-built modules](https://docs.abp.io/en/abp/latest/Modules/Index) (not all of them, but the essentials) and themes as NuGet/NPM packages. So, you don't see the source code of the modules/themes in your solution. This has an advantage that you can easily update these packages when a new version is released. However, you can not easily customize them as their source code in your hands.
+The startup projects for the ABP Framework use the [pre-built modules](../modules/index.md) (not all of them, but the essentials) and themes as NuGet/NPM packages. So, you don't see the source code of the modules/themes in your solution. This has an advantage that you can easily update these packages when a new version is released. However, you can not easily customize them as their source code in your hands.
 
-We suggest to continue to use these modules as package references, in this way you can get new features easily (see [abp update command](https://docs.abp.io/en/abp/latest/CLI#update)). In this case, you have a few options to customize or extend the functionality of the used modules;
+We suggest to continue to use these modules as package references, in this way you can get new features easily (see [abp update command](../cli/index.md#update)). In this case, you have a few options to customize or extend the functionality of the used modules;
 
 * You can create your own entity and share the same database table with an entity in a used module. An example of this is the `AppUser` entity comes in the startup template.
-* You can [replace](https://docs.abp.io/en/abp/latest/Dependency-Injection#replace-a-service) a domain service, application service, controller, page model or other types of services with your own implementation. We suggest you to inherit from the existing implementation and override the method you need.
-* You can replace a `.cshtml` view, page, view component, partial view... with your own one using the [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System).
-* You can override javascript, css, image or any other type of static files using the [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System).
+* You can [replace](../framework/fundamentals/dependency-injection.md#replace-a-service) a domain service, application service, controller, page model or other types of services with your own implementation. We suggest you to inherit from the existing implementation and override the method you need.
+* You can replace a `.cshtml` view, page, view component, partial view... with your own one using the [Virtual File System](../framework/infrastructure/virtual-file-system.md).
+* You can override javascript, css, image or any other type of static files using the [Virtual File System](../framework/infrastructure/virtual-file-system.md).
 
 More extend/customization options will be developed and documented by the time. However, if you need to fully change the module implementation, it is best to add the [source code](https://github.com/abpframework/abp/tree/dev/modules) of the related module into your own solution and remove the package dependencies.
 
-The source code of the modules and the themes are [MIT](https://opensource.org/licenses/MIT) licensed, you can fully own and customize it without any limitation (for the ABP Commercial, you can download the source code of a [module](https://commercial.abp.io/modules)/[theme](https://commercial.abp.io/themes) if you have a [license](https://commercial.abp.io/pricing) type that includes the source code).
+The source code of the modules and the themes are [MIT](https://opensource.org/licenses/MIT) licensed, you can fully own and customize it without any limitation (for the ABP Commercial, you can download the source code of a [module](../modules/index.md)/[theme](https://commercial.abp.io/themes) if you have a [license](https://commercial.abp.io/pricing) type that includes the source code).
 
 ## The Domain Layer
 
@@ -110,11 +110,11 @@ public class Person : Entity<Guid> //Set explicit PK in the ASP.NET Boilerplate
 
 #### Composite Primary Keys
 
-ABP Framework also has a non-generic `Entity` base class, but this time it has no `Id` property. Its purpose is to allow you to create entities with composite PKs. See [the documentation](https://docs.abp.io/en/abp/latest/Entities#entities-with-composite-keys) to learn more about the composite PKs.
+ABP Framework also has a non-generic `Entity` base class, but this time it has no `Id` property. Its purpose is to allow you to create entities with composite PKs. See [the documentation](../framework/architecture/domain-driven-design/entities.md#entities-with-composite-keys) to learn more about the composite PKs.
 
 #### Aggregate Root
 
-It is best practice now to use the `AggregateRoot` base class instead of `Entity` for aggregate root entities. See [the documentation](https://docs.abp.io/en/abp/latest/Entities#aggregateroot-class) to learn more about the aggregate roots.
+It is best practice now to use the `AggregateRoot` base class instead of `Entity` for aggregate root entities. See [the documentation](../framework/architecture/domain-driven-design/entities.md#aggregateroot-class) to learn more about the aggregate roots.
 
 In opposite to the ASP.NET Boilerplate, the ABP Framework creates default repositories (`IRepository<T>`) **only for the aggregate roots**. It doesn't create for other types derived from the `Entity`.
 
@@ -131,7 +131,7 @@ The challenging part will be the primary keys of the ASP.NET Boilerplate related
 See the documentation for details on the entities:
 
 * [ASP.NET Boilerplate - Entity documentation](https://aspnetboilerplate.com/Pages/Documents/Entities)
-* [ABP Framework - Entity documentation](https://docs.abp.io/en/abp/latest/Entities)
+* [ABP Framework - Entity documentation](../framework/architecture/domain-driven-design/entities.md)
 
 ### Repositories
 
@@ -148,7 +148,7 @@ In the ASP.NET Boilerplate, there are two default repository interfaces you can 
 
 ABP Framework doesn't have a default PK type, so you need to **explicitly declare the PK type** of your entity, like `IRepository<Person, int>` or `IRepository<Person, Guid>`.
 
-ABP Framework also has the `IRepository<TEntity>` (without PK), but it is mostly used when your entity has a composite PK (because this repository has no methods work with the `Id` property). See [the documentation](https://docs.abp.io/en/abp/latest/Entities#entities-with-composite-keys) to learn more about the **composite PKs**.
+ABP Framework also has the `IRepository<TEntity>` (without PK), but it is mostly used when your entity has a composite PK (because this repository has no methods work with the `Id` property). See [the documentation](../framework/architecture/domain-driven-design/entities.md#entities-with-composite-keys) to learn more about the **composite PKs**.
 
 #### Restricted Repositories
 
@@ -206,7 +206,7 @@ public class PersonAppService : ApplicationService, IPersonAppService
 }
 ````
 
-> Note that in order to use the async LINQ extension methods (like `ToListAsync` here), you may need to depend on the database provider (like EF Core) since these methods are defined in the database provider package, they are not standard LINQ methods. See the [repository document](Repositories.md) for alternative approaches for async query execution.
+> Note that in order to use the async LINQ extension methods (like `ToListAsync` here), you may need to depend on the database provider (like EF Core) since these methods are defined in the database provider package, they are not standard LINQ methods. See the [repository document](../framework/architecture/domain-driven-design/repositories.md) for alternative approaches for async query execution.
 
 #### FirstOrDefault(predicate), Single()... Methods
 
@@ -228,7 +228,7 @@ In general, ABP Framework forces you to completely use async everywhere, because
 See the documentation for details on the repositories:
 
 * [ASP.NET Boilerplate - Repository documentation](https://aspnetboilerplate.com/Pages/Documents/Repositories)
-* [ABP Framework - Repository documentation](https://docs.abp.io/en/abp/latest/Repositories)
+* [ABP Framework - Repository documentation](../framework/architecture/domain-driven-design/repositories.md)
 
 ### Domain Services
 
@@ -304,7 +304,7 @@ ASP.NET Boilerplate is using the [Castle Windsor](http://www.castleproject.org/p
 
 ABP Framework is dependency injection framework independent since it uses Microsoft's [Dependency Injection Extensions](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) library as an abstraction. None of the ABP Framework or module packages depends on any specific library.
 
-However, ABP Framework doesn't use the Microsoft's base DI library because it has some missing features ABP Framework needs to: Property Injection and Interception. All the startup templates and the samples are using the [Autofac](https://autofac.org/) as the DI library and it is the only [officially integrated](Autofac-Integration.md) library to the ABP Framework. We suggest you to use the Autofac with the ABP Framework if you have not a good reason. If you have a good reason, please create an [issue](https://github.com/abpframework/abp/issues/new) on GitHub to request it or just implement it and send a pull request :)
+However, ABP Framework doesn't use the Microsoft's base DI library because it has some missing features ABP Framework needs to: Property Injection and Interception. All the startup templates and the samples are using the [Autofac](https://autofac.org/) as the DI library and it is the only [officially integrated](../framework/fundamentals/autofac-integration.md) library to the ABP Framework. We suggest you to use the Autofac with the ABP Framework if you have not a good reason. If you have a good reason, please create an [issue](https://github.com/abpframework/abp/issues/new) on GitHub to request it or just implement it and send a pull request :)
 
 #### Registering the Dependencies
 
@@ -328,7 +328,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-See the ABP Framework [dependency injection document](https://docs.abp.io/en/abp/latest/Dependency-Injection) for details.
+See the ABP Framework [dependency injection document](..//framework/fundamentals/dependency-injection.md) for details.
 
 ### Configuration vs Options System
 
@@ -341,7 +341,7 @@ public override void Initialize()
 }
 ````
 
-ABP Framework uses [the options pattern](Options.md) to configure the framework and the modules. You typically configure the options in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+ABP Framework uses [the options pattern](../framework/fundamentals/options.md) to configure the framework and the modules. You typically configure the options in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md):
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -363,7 +363,7 @@ ABP Framework doesn't have the same service. Instead, use `ICurrentUser` and `IC
 
 ### Authorization
 
-ABP Framework extends the [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing the authorization system to be usable in the [application services](Application-Services.md) too.
+ABP Framework extends the [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing the authorization system to be usable in the [application services](../framework/architecture/domain-driven-design/application-services.md) too.
 
 #### AbpAuthorize vs Authorize
 
@@ -387,9 +387,9 @@ Unit of work system has been designed to work seamlessly. For most of the cases,
 
 ASP.NET Boilerplate implements the data filtering system as a part of the unit of work. ABP Framework has a separate `IDataFilter` service.
 
-See the [data filtering document](Data-Filtering.md) to learn how to enable/disable a filter.
+See the [data filtering document](../framework/infrastructure/data-filtering.md) to learn how to enable/disable a filter.
 
-See [the UOW documentation](Unit-Of-Work.md) for more about the UOW system.
+See [the UOW documentation](../framework/architecture/domain-driven-design/unit-of-work.md) for more about the UOW system.
 
 ### Multi-Tenancy
 
@@ -435,7 +435,7 @@ Pass `null` to the `Change` method to switch to the host side.
 
 ASP.NET Boilerplate has its [own distributed caching abstraction](https://aspnetboilerplate.com/Pages/Documents/Caching) which has in-memory and Redis implementations. You typically inject the `ICacheManager` service and use its `GetCache(...)` method to obtain a cache, then get and set objects in the cache.
 
-ABP Framework uses and extends ASP.NET Core's [distributed caching abstraction](Caching.md). It defines the `IDistributedCache<T>` services to inject a cache and get/set objects.
+ABP Framework uses and extends ASP.NET Core's [distributed caching abstraction](../framework/fundamentals/caching.md). It defines the `IDistributedCache<T>` services to inject a cache and get/set objects.
 
 ### Logging
 
@@ -519,7 +519,7 @@ public async Task UpdateUserAsync(Guid id, UpdateUserInput input)
 }
 ````
 
-ABP Framework has the same `IObjectMapper` service ([see](Object-To-Object-Mapping.md)) and the AutoMapper integration with a slightly different mapping methods.
+ABP Framework has the same `IObjectMapper` service ([see](../framework/infrastructure/object-to-object-mapping.md)) and the AutoMapper integration with a slightly different mapping methods.
 
 Example usage: Create a `User` object with the given `CreateUserInput` object:
 
@@ -570,7 +570,7 @@ ABP Framework follows AutoMapper principles closely. You can define classes deri
 
 Configuration validation is a best practice for the AutoMapper to maintain your mapping configuration in a safe way.
 
-See [the documentation](Object-To-Object-Mapping.md) for more information related to the object mapping.
+See [the documentation](../framework/infrastructure/object-to-object-mapping.md) for more information related to the object mapping.
 
 ### Setting Management
 
@@ -596,7 +596,7 @@ ABP Framework separates it and provides the setting management module (pre-added
 
 ASP.NET Boilerplate has a static `Clock` service ([see](https://aspnetboilerplate.com/Pages/Documents/Timing)) which is used to abstract the `DateTime` kind, so you can easily switch between Local and UTC times. You don't inject it, but just use the `Clock.Now` static method to obtain the current time.
 
-ABP Framework has the `IClock` service ([see](Timing.md)) which has a similar goal, but now you need to inject it whenever you need it.
+ABP Framework has the `IClock` service ([see](../framework/infrastructure/timing.md)) which has a similar goal, but now you need to inject it whenever you need it.
 
 ### Event Bus
 
@@ -621,7 +621,7 @@ Feature system is used in multi-tenant applications to define features of your a
 
 In the ASP.NET Boilerplate ([see](https://aspnetboilerplate.com/Pages/Documents/Feature-Management)), you create a class inheriting from the `FeatureProvider`, override the `SetFeatures` method and add your class to the `Configuration.Features.Providers` list.
 
-In the ABP Framework ([see](Features.md)), you derive your class from the `FeatureDefinitionProvider` and override the `Define` method. No need to add your class to the configuration, it is automatically discovered by the framework.
+In the ABP Framework ([see](../framework/infrastructure/features.md)), you derive your class from the `FeatureDefinitionProvider` and override the `Define` method. No need to add your class to the configuration, it is automatically discovered by the framework.
 
 #### Checking Features
 
@@ -633,11 +633,11 @@ In the ABP Framework you use the `IFeatureManager` to change a feature value for
 
 ### Audit Logging
 
-The ASP.NET Boilerplate ([see](https://aspnetboilerplate.com/Pages/Documents/Audit-Logging)) and the ABP Framework ([see](Audit-Logging.md)) has similar audit logging systems. ABP Framework requires to add `UseAuditing()` middleware to the ASP.NET Core pipeline, which is already added in the startup templates. So, most of the times it will be work out of the box.
+The ASP.NET Boilerplate ([see](https://aspnetboilerplate.com/Pages/Documents/Audit-Logging)) and the ABP Framework ([see](../framework/infrastructure/audit-logging.md)) has similar audit logging systems. ABP Framework requires to add `UseAuditing()` middleware to the ASP.NET Core pipeline, which is already added in the startup templates. So, most of the times it will be work out of the box.
 
 ### Localization
 
-ASP.NET Boilerplate supports XML and JSON files to define the localization key-values for the UI ([see](https://aspnetboilerplate.com/Pages/Documents/Localization)). ABP Framework only supports the JSON formatter localization files ([see](Localization.md)). So, you need to convert your XML file to JSON.
+ASP.NET Boilerplate supports XML and JSON files to define the localization key-values for the UI ([see](https://aspnetboilerplate.com/Pages/Documents/Localization)). ABP Framework only supports the JSON formatter localization files ([see](../framework/fundamentals/localization.md)). So, you need to convert your XML file to JSON.
 
 The ASP.NET Boilerplate has its own the `ILocalizationManager` service to be injected and used for the localization in the server side.
 
@@ -728,4 +728,4 @@ The following features are not present for the ABP Framework. Here, a list of so
 * [Real time notification system](https://aspnetboilerplate.com/Pages/Documents/Notification-System) ([#633](https://github.com/abpframework/abp/issues/633))
 * [NHibernate Integration](https://aspnetboilerplate.com/Pages/Documents/NHibernate-Integration) ([#339](https://github.com/abpframework/abp/issues/339)) - We don't intent to work on this, but any community contribution welcome.
 
-Some of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](Contribution/Index.md) to the framework, it is appreciated.
+Some of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](../contribution/index.md) to the framework, it is appreciated.

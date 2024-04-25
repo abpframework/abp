@@ -6,7 +6,7 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Abp.Sms
 
 ## Installation
 
-It is suggested to use the [ABP CLI](CLI.md) to install this package.
+It is suggested to use the [ABP CLI](../cli/index.md) to install this package.
 
 Open a command line window in the folder of the project (.csproj file) and type the following command:
 
@@ -18,7 +18,7 @@ You can also check detailed installation guide [here](https://abp.io/package-det
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and depends on the below NuGet packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and depends on the below NuGet packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Twilio SMS module package list page](https://abp.io/packages?moduleName=Volo.Abp.Sms.Twilio) to see list of packages related with this module.
 
@@ -28,7 +28,7 @@ You can configure `Twilio SMS` module in several ways. It uses the [options patt
 
 ### Configure by AbpTwilioSmsOptions
 
-`AbpTwilioSmsOptions` can be used to configure the module. You can use the below code to configure it in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics) (eg: `BookStoreApplicationModule`).
+`AbpTwilioSmsOptions` can be used to configure the module. You can use the below code to configure it in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md) (eg: `BookStoreApplicationModule`).
 
 ```csharp
 Configure<AbpTwilioSmsOptions>(options =>
@@ -69,4 +69,4 @@ Twilio allows you to create a free trial to send test SMS. Get your Twilio `Acco
 
 ## Sending SMS
 
-See [SMS Sending](https://docs.abp.io/en/abp/latest/SMS-Sending) document of the ABP Framework.
+See [SMS Sending](../framework/infrastructure/sms-sending.md) document of the ABP Framework.

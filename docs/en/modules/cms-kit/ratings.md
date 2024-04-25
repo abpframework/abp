@@ -6,15 +6,15 @@ CMS kit provides a **rating** system to to add ratings feature to any kind of re
 
 ## Enabling the Rating Feature
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
-> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
 ## Options
 
 The rating system provides a mechanism to group ratings by entity types. For example, if you want to use the rating system for products, you need to define an entity type named `Product` and then add ratings under the defined entity type.
 
-`CmsKitRatingOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`CmsKitRatingOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](../../framework/architecture/modularity/basics.md). Example:
 
 ```csharp
 Configure<CmsKitRatingOptions>(options =>
@@ -23,7 +23,7 @@ Configure<CmsKitRatingOptions>(options =>
 });
 ```
 
-> If you're using the [Blogging Feature](Blogging.md), the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
+> If you're using the [Blogging Feature](./blogging.md), the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
 
 `CmsKitRatingOptions` properties:
 
@@ -54,7 +54,7 @@ The ratings system provides a rating widget to allow users send ratings to resou
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../../framework/architecture/best-practices/entities.md) guide.
 
 ##### Rating
 
@@ -64,7 +64,7 @@ A rating represents a given rating from a user.
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this feature:
 
@@ -72,7 +72,7 @@ Following custom repositories are defined for this feature:
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### Reaction Manager
 
@@ -96,7 +96,7 @@ All tables/collections use the `Cms` prefix by default. Set static properties on
 
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 

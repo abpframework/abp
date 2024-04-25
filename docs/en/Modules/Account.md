@@ -2,11 +2,11 @@
 
 Account module implements the basic authentication features like **login**, **register**, **forgot password** and **account management**.
 
-This module is based on [Microsoft's Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity) and the [Identity Module](Identity.md). It has [IdentityServer](https://github.com/IdentityServer) integration (based on the [IdentityServer Module](IdentityServer.md)) and [OpenIddict](https://github.com/openiddict) integration (based on the [OpenIddict Module](OpenIddict.md)) to provide **single sign-on**, access control and other advanced authentication features.
+This module is based on [Microsoft's Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity) and the [Identity Module](./identity.md). It has [IdentityServer](https://github.com/IdentityServer) integration (based on the [IdentityServer Module](./identity-server.md)) and [OpenIddict](https://github.com/openiddict) integration (based on the [OpenIddict Module](./openiddict.md)) to provide **single sign-on**, access control and other advanced authentication features.
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
 
 ### The Source Code
 
@@ -44,11 +44,11 @@ Social/external login buttons becomes visible if you setup it. See the *Social/E
 
 ## OpenIddict Integration
 
-[Volo.Abp.Account.Web.OpenIddict](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) package provides integration for the [OpenIddict](https://github.com/openiddict). This package comes as installed with the [application startup template](../Startup-Templates/Application.md). See the [OpenIddict Module](OpenIddict.md) documentation.
+[Volo.Abp.Account.Web.OpenIddict](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) package provides integration for the [OpenIddict](https://github.com/openiddict). This package comes as installed with the [application startup template](../solution-templates/layered-web-application/index.md). See the [OpenIddict Module](./openiddict.md) documentation.
 
 ## IdentityServer Integration
 
-[Volo.Abp.Account.Web.IdentityServer](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) package provides integration for the [IdentityServer](https://github.com/IdentityServer). This package comes as installed with the [application startup template](../Startup-Templates/Application.md). See the [IdentityServer Module](IdentityServer.md) documentation.
+[Volo.Abp.Account.Web.IdentityServer](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) package provides integration for the [IdentityServer](https://github.com/IdentityServer). This package comes as installed with the [application startup template](../Startup-Templates/Application.md). See the [IdentityServer Module](./identity-server.md) documentation.
 
 ## Social/External Logins
 
@@ -64,7 +64,7 @@ Add the [Microsoft.AspNetCore.Authentication.Facebook](https://www.nuget.org/pac
 
 #### Configure the Provider
 
-Use the `.AddFacebook(...)` extension method in the `ConfigureServices` method of your [module](../Module-Development-Basics.md), to configure the client:
+Use the `.AddFacebook(...)` extension method in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md), to configure the client:
 
 ````csharp
 context.Services.AddAuthentication()

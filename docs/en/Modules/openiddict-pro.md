@@ -10,11 +10,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.OpenIdd
 
 ## How to Install
 
-OpenIddict is pre-installed in [the startup templates](../Startup-Templates/Index) from version 6.0.0-rc1. So, no need to manually install it. You can also migrate your existing application by following the [Migrating to OpenIddict Step by Step Guide](../migration-guides/openIddict-step-by-step).
+OpenIddict is pre-installed in [the startup templates](../solution-templates/index.md) from version 6.0.0-rc1. So, no need to manually install it. You can also migrate your existing application by following the [Migrating to OpenIddict Step by Step Guide](../migration-guides/openIddict-step-by-step).
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Identity module package list page](https://abp.io/packages?moduleName=Volo.Identity.Pro) to see list of packages related with this module.
 
@@ -53,7 +53,7 @@ You can create a new API resource or edit an existing API resource in this page:
 
 ## Data Seed
 
-This module adds some initial data (see [the data seed system](https://docs.abp.io/en/abp/latest/Data-Seeding)) to the database when you run the `.DbMigrator` application:
+This module adds some initial data (see [the data seed system](../framework/infrastructure/data-seeding.md)) to the database when you run the `.DbMigrator` application:
 
 * Creates standard identity resources which are role, profile, phone, openid, email and address.
 * Creates applications.
@@ -65,7 +65,7 @@ You can delete or edit created applications in the application management page.
 
 ### OpenIddictBuilder
 
-`OpenIddictBuilder` can be configured in the `PreConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+`OpenIddictBuilder` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
 
 Example:
 
@@ -296,7 +296,7 @@ All tables/collections use the `OpenIddict` prefix by default. Set static proper
 
 This module uses `AbpOpenIddict` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -333,7 +333,7 @@ UserInfoController  -> connect/userinfo
 
 #### AbpOpenIddictAspNetCoreOptions
 
-`AbpOpenIddictAspNetCoreOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+`AbpOpenIddictAspNetCoreOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
 
 Example:
 
@@ -353,7 +353,7 @@ PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
 
 The background task that automatically removes orphaned tokens/authorizations. This can be configured by `TokenCleanupOptions` to manage it.
 
-`TokenCleanupOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+`TokenCleanupOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
 
 Example:
 
@@ -375,7 +375,7 @@ PreConfigure<TokenCleanupOptions>(options =>
 
 #### Updating Claims In Access_token and Id_token
 
-[Claims Principal Factory](https://docs.abp.io/en/abp/latest/Authorization#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
+[Claims Principal Factory](../framework/fundamentals/authorization.md#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
 
 The `AbpDefaultOpenIddictClaimDestinationsProvider` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
 

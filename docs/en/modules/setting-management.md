@@ -1,8 +1,8 @@
 # Setting Management Module
 
-Setting Management Module implements the `ISettingStore` (see [the setting system](../Settings.md)) to store the setting values in a database and provides the `ISettingManager` to manage (change) the setting values in the database.
+Setting Management Module implements the `ISettingStore` (see [the setting system](../framework/fundamentals/settings.md)) to store the setting values in a database and provides the `ISettingManager` to manage (change) the setting values in the database.
 
-> Setting Management module is already installed and configured for [the startup templates](../Startup-Templates/Index.md). So, most of the times you don't need to manually add this module to your application.
+> Setting Management module is already installed and configured for [the startup templates](../solution-templates/index.md). So, most of the times you don't need to manually add this module to your application.
 
 ## ISettingManager
 
@@ -71,14 +71,14 @@ So, you can get or set a setting value for different setting value providers (De
 
 ### Setting Cache
 
-Setting values are cached using the [distributed cache](../Caching.md) system. Always use the `ISettingManager` to change the setting values which manages the cache for you.
+Setting values are cached using the [distributed cache](../framework/fundamentals/caching.md) system. Always use the `ISettingManager` to change the setting values which manages the cache for you.
 
 ## Setting Management Providers
 
-Setting Management module is extensible, just like the [setting system](../Settings.md).  You can extend it by defining setting management providers. There are 5 pre-built setting management providers registered it the following order:
+Setting Management module is extensible, just like the [setting system](../framework/fundamentals/settings.md).  You can extend it by defining setting management providers. There are 5 pre-built setting management providers registered it the following order:
 
 * `DefaultValueSettingManagementProvider`: Gets the value from the default value of the setting definition. It can not set the default value since default values are hard-coded on the setting definition.
-* `ConfigurationSettingManagementProvider`: Gets the value from the [IConfiguration service](../Configuration.md). It can not set the configuration value because it is not possible to change the configuration values on runtime.
+* `ConfigurationSettingManagementProvider`: Gets the value from the [IConfiguration service](../framework/fundamentals/configuration.md). It can not set the configuration value because it is not possible to change the configuration values on runtime.
 * `GlobalSettingManagementProvider`: Gets or sets the global (system-wide) value for a setting.
 * `TenantSettingManagementProvider`: Gets or sets the setting value for a tenant.
 * `UserSettingManagementProvider`: Gets the setting value for a user.
@@ -101,7 +101,7 @@ public class CustomSettingProvider : SettingManagementProvider, ITransientDepend
 
 `SettingManagementProvider` base class makes the default implementation (using the `ISettingManagementStore`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each setting value record).
 
-Once you create your provider class, you should register it using the `SettingManagementOptions` [options class](../Options.md):
+Once you create your provider class, you should register it using the `SettingManagementOptions` [options class](../framework/fundamentals/options.md):
 
 ````csharp
 Configure<SettingManagementOptions>(options =>

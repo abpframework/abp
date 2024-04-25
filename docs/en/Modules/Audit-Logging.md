@@ -2,11 +2,11 @@
 
 The Audit Logging Module basically implements the `IAuditingStore` to save the audit log objects to a database.
 
-> This document covers only the audit logging module which persists audit logs to a database. See [the audit logging](../Audit-Logging.md) document for more about the audit logging system.
+> This document covers only the audit logging module which persists audit logs to a database. See [the audit logging](../framework/infrastructure/audit-logging.md) document for more about the audit logging system.
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
 
 ### The Source Code
 
@@ -38,7 +38,7 @@ All tables/collections use the `Abp` prefix by default. Set static properties on
 
 ##### Connection string
 
-This module uses `AbpAuditLogging` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string. See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+This module uses `AbpAuditLogging` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string. See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -57,4 +57,4 @@ This module uses `AbpAuditLogging` for the connection string name. If you don't 
 
 ## See Also
 
-* [Audit logging system](../Audit-Logging.md)
+* [Audit logging system](../framework/infrastructure/audit-logging.md)

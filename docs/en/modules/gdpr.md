@@ -8,7 +8,7 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Gdpr) f
 
 ## How to install
 
-The GDPR module is pre-installed in the [Application](../startup-templates/application/index.md) and [Application (Single Layer) templates](../startup-templates/application-single-layer/index.md). So, no need to manually install it. 
+The GDPR module is pre-installed in the [Application](../solution-templates/layered-web-application/index.md) and [Application (Single Layer) templates](../solution-templates/single-layer-web-application/index.md). So, no need to manually install it. 
 
 If you need to install it manually, there are 2 ways of installing it:
 
@@ -18,11 +18,11 @@ If you need to install it manually, there are 2 ways of installing it:
 abp add-module Volo.Gdpr
 ```
 
-* **Via ABP Suite:** [Run ABP Suite](../abp-suite/how-to-start.md), select your project, go to the **modules** page from the top menu and find the **GDPR** card and click the **add as project (with source-code)** or **add as package (without source-code)** button to add the module into your project.
+* **Via ABP Suite:** [Run ABP Suite](../suite/how-to-start.md), select your project, go to the **modules** page from the top menu and find the **GDPR** card and click the **add as project (with source-code)** or **add as package (without source-code)** button to add the module into your project.
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and the relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and the relations between them.
 
 You can visit the [Gdpr module package list page](https://abp.io/packages?moduleName=Volo.Abp.Gdpr) to see a list of packages related to this module.
 
@@ -52,7 +52,7 @@ To see the other features of the GDPR module, visit [the module description page
 
 ### AbpGdprOptions
 
-`AbpGdprOptions` can be configured in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+`AbpGdprOptions` can be configured in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). 
 
 Example:
 
@@ -70,7 +70,7 @@ Configure<AbpGdprOptions>(options =>
 
 ### AbpCookieConsentOptions
 
-`AbpCookieConsentOptions` is used to configure the options of the [**Cookie Consent**](#cookie-consent) and can be configured in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics).
+`AbpCookieConsentOptions` is used to configure the options of the [**Cookie Consent**](#cookie-consent) and can be configured in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md).
 
 Example:
 
@@ -97,7 +97,7 @@ Configure<AbpCookieConsentOptions>(options =>
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/entities.md) guide.
 
 ##### GdprRequest
 
@@ -121,7 +121,7 @@ This entity is used to store the collected data from a module/provider.
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/repositories.md) guide.
 
 The following custom repositories are defined for this module:
 
@@ -151,7 +151,7 @@ Set static properties on the `GdprDbProperties` class if you need to change the 
 
 This module uses `AbpGdpr` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core / MongoDB
 
@@ -208,11 +208,11 @@ export class AppRoutingModule {}
 
 You can modify the look and behavior of the module pages by passing the following options to the `GdprModule.forLazy` static method:
 
-- **entityActionContributors:** Changes the grid actions. Please check [Entity Action Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Entity-Action-Extensions) for details.
-- **toolbarActionContributors:** Changes the page toolbar. Please check [Page Toolbar Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Page-Toolbar-Extensions) for details.
-- **entityPropContributors:** Changes the table columns. Please check [Data Table Column Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Data-Table-Column-Extensions) for details.
-- **createFormPropContributors:** Changes the create form fields. Please check [Dynamic Form Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions) for details.
-- **editFormPropContributors:** Changes the create form fields. Please check [Dynamic Form Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions) for details.
+- **entityActionContributors:** Changes the grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
+- **toolbarActionContributors:** Changes the page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.
+- **entityPropContributors:** Changes the table columns. Please check [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-column-extensions.md) for details.
+- **createFormPropContributors:** Changes the create form fields. Please check [Dynamic Form Extensions for Angular](../framework/ui/angular/dynamic-form-extensions.md) for details.
+- **editFormPropContributors:** Changes the create form fields. Please check [Dynamic Form Extensions for Angular](../framework/ui/angular/dynamic-form-extensions.md) for details.
 
 
 ## Distributed Events
@@ -221,11 +221,11 @@ The GDPR module collects the data asynchronous to work that is compatible with m
 
 ### GdprUserDataRequestedEto
 
-This [Event Transfer Object](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#event-transfer-object) is published to trigger all personal data collectors to begin preparing their data. If you want to collect personal data for your module, you need to subscribe to this ETO class and publish the `GdprUserDataPreparedEto` event with your collected data.
+This [Event Transfer Object](../framework/infrastructure/event-bus/distributed/index.md#event-transfer-object) is published to trigger all personal data collectors to begin preparing their data. If you want to collect personal data for your module, you need to subscribe to this ETO class and publish the `GdprUserDataPreparedEto` event with your collected data.
 
 ### GdprUserDataPreparedEto
 
-This [Event Transfer Object](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#event-transfer-object) is used to save the collected personal data into a single JSON file by module.
+This [Event Transfer Object](../framework/infrastructure/event-bus/distributed/index.md#event-transfer-object) is used to save the collected personal data into a single JSON file by module.
 
 
 ## Cookie Consent
@@ -234,7 +234,7 @@ This [Event Transfer Object](https://docs.abp.io/en/abp/latest/Distributed-Event
 
 Cookie Consent can be used to inform the users of the application, before saving any specific data about the users. 
 
-This feature is enabled by default for the [Application](../startup-templates/application/index.md) and [Application Single Layer](../startup-templates/application-single-layer/index.md) Startup Templates.
+This feature is enabled by default for the [Application](../solution-templates/layered-web-application/index.md) and [Application Single Layer](../solution-templates/single-layer-web-application/index.md) Startup Templates.
 
 > You can easily enable/disable to show the Cookie Consent by configuring the `AbpCookieConsentOptions`, which explained above.
 

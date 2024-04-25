@@ -4,15 +4,15 @@ CMS kit provides a **comment** system to add the comment feature to any kind of 
 
 ## Enabling the Comment Feature
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
-> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
 ## Options
 
 The comment system provides a mechanism to group comment definitions by entity types. For example, if you want to use the comment system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product`, and add comments under these entity types.
 
-`CmsKitCommentOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`CmsKitCommentOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](../../framework/architecture/modularity/basics.md). Example:
 
 ```csharp
 Configure<CmsKitCommentOptions>(options =>
@@ -32,7 +32,7 @@ Configure<CmsKitCommentOptions>(options =>
 });
 ```
 
-> If you're using the [Blogging Feature](Blogging.md), the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
+> If you're using the [Blogging Feature](./blogging.md), the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
 
 `CmsKitCommentOptions` properties:
 
@@ -46,7 +46,7 @@ Configure<CmsKitCommentOptions>(options =>
 
 ## The Comments Widget
 
-The comment system provides a commenting [widget](../../UI/AspNetCore/Widgets.md) to allow users to send comments to resources on public websites. You can simply place the widget on a page like below. 
+The comment system provides a commenting [widget](../../framework/ui/mvc-razor-pages/widgets.md) to allow users to send comments to resources on public websites. You can simply place the widget on a page like below. 
 
 ```csharp
 @await Component.InvokeAsync(typeof(CommentingViewComponent), new
@@ -129,7 +129,7 @@ All tables/collections use the `Cms` prefix by default. Set static properties on
 
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 

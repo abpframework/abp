@@ -10,7 +10,7 @@ By default, CMS Kit features are disabled. Therefore, you need to enable the fea
 
 ## Contact Widget
 
-The contact management system provides a contact form [widget](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) to create contact forms on the UI:
+The contact management system provides a contact form [widget](../../framework/ui/mvc-razor-pages/widgets.md) to create contact forms on the UI:
 
 ```csharp
 @await Component.InvokeAsync(typeof(ContactViewComponent))
@@ -48,7 +48,7 @@ Here, is a screenshot that shows multiple contact forms on a page:
 
 ## Options
 
-You can configure the `CmsKitContactOptions` to enable/disable recaptcha for contact form in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics).
+You can configure the `CmsKitContactOptions` to enable/disable recaptcha for contact form in the `ConfigureServices` method of your [module](../../framework/architecture/modularity/basics.md).
 
 Example:
 

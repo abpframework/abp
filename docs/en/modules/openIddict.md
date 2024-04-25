@@ -4,7 +4,7 @@ OpenIddict module provides an integration with the [OpenIddict](https://github.c
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as a package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as a package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
 
 ### The Source Code
 
@@ -16,13 +16,13 @@ This module implements the domain logic and database integrations but does not p
 
 ## Relations to Other Modules
 
-This module is based on the [Identity Module](Identity.md) and has an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) with the [Account Module](Account.md).
+This module is based on the [Identity Module](./identity.md) and has an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) with the [Account Module](account.md).
 
 ## Options
 
 ### OpenIddictBuilder
 
-`OpenIddictBuilder` can be configured in the `PreConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+`OpenIddictBuilder` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
 
 Example:
 
@@ -246,7 +246,7 @@ All tables/collections use the `OpenIddict` prefix by default. Set static proper
 
 This module uses `AbpOpenIddict` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -281,7 +281,7 @@ UserInfoController  -> connect/userinfo
 
 #### AbpOpenIddictAspNetCoreOptions
 
-`AbpOpenIddictAspNetCoreOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+`AbpOpenIddictAspNetCoreOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
 
 Example:
 
@@ -303,7 +303,7 @@ PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
 
 The background task that automatically removes orphaned tokens/authorizations. This can be configured by `TokenCleanupOptions` to manage it.
 
-`TokenCleanupOptions` can be configured in the `ConfigureServices` method of your OpenIddict [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). 
+`TokenCleanupOptions` can be configured in the `ConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
 
 Example:
 
@@ -325,7 +325,7 @@ Configure<TokenCleanupOptions>(options =>
 
 #### Updating Claims In Access_token and Id_token
 
-[Claims Principal Factory](https://docs.abp.io/en/abp/latest/Authorization#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
+[Claims Principal Factory](../framework/fundamentals/authorization.md#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
 
 The `AbpDefaultOpenIddictClaimsPrincipalHandler` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
 

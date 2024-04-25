@@ -4,9 +4,9 @@ CMS Kit Menu system allows to manage public menus dynamically.
 
 ## Enabling the Menu Feature
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
-> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
 ## The User Interface
 
@@ -36,13 +36,13 @@ The created menu items will be visible on the public-web side, as shown below:
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../../framework/architecture/best-practices/entities.md) guide.
 
 - `MenuItem` (aggregate root): A Menu Item presents a single node at menu tree.
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this feature:
 
@@ -50,7 +50,7 @@ Following custom repositories are defined for this feature:
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### Menu Item Manager
 
@@ -75,7 +75,7 @@ All tables/collections use the `Cms` prefix by default. Set static properties on
 
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 

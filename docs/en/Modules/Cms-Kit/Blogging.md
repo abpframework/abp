@@ -4,9 +4,9 @@ The blogging feature provides the necessary UI to manage and render blogs and bl
 
 ## Enabling the Blogging Feature
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
-> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
 ## User Interface
 
@@ -71,7 +71,7 @@ You can create and edit an existing blog post on this page. If you enable specif
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../../framework/architecture/best-practices/entities.md) guide.
 
 - `Blog` _(aggregate root)_: Presents blogs of application.
 - `BlogPost`_(aggregate root)_: Presents blog posts in blogs.
@@ -79,7 +79,7 @@ This module follows the [Entity Best Practices & Conventions](https://docs.abp.i
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide. The following repositories are defined for this feature:
+This module follows the [Repository Best Practices & Conventions](../../framework/architecture/domain-driven-design/repositories.md) guide. The following repositories are defined for this feature:
 
 - `IBlogRepository`
 - `IBlogPostRepository`
@@ -87,7 +87,7 @@ This module follows the [Repository Best Practices & Conventions](https://docs.a
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../../framework/architecture/domain-driven-design/domain-services.md) guide.
 
 - `BlogManager`
 - `BlogPostManager`
@@ -131,4 +131,4 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 
 ## Entity Extensions
 
-Check the ["Entity Extensions" section of the CMS Kit Module documentation](Index.md#entity-extensions) to see how to extend entities of the Blogging Feature of the CMS Kit module.
+Check the ["Entity Extensions" section of the CMS Kit Module documentation](index.md#entity-extensions) to see how to extend entities of the Blogging Feature of the CMS Kit module.

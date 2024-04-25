@@ -18,7 +18,7 @@ The form module doesn't come pre-installed. You need to install it manually. The
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit the [forms module package list page](https://abp.io/packages?moduleName=Volo.Forms) to see list of packages related with this module.
 
@@ -45,7 +45,7 @@ To see the other features of the Forms module, visit [the module description pag
 
 ## Data seed
 
-This module adds a sample initial form (see [the data seed system](https://docs.abp.io/en/abp/latest/Data-Seeding)) to the database when you run the `.DbMigrator` application:
+This module adds a sample initial form (see [the data seed system](../framework/infrastructure/data-seeding.md)) to the database when you run the `.DbMigrator` application:
 
 * **Form title:** "Test Form"
 * **Form description:** "Test Description"
@@ -56,7 +56,7 @@ This module adds a sample initial form (see [the data seed system](https://docs.
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/entities.md) guide.
 
 - ##### Form
 
@@ -72,7 +72,7 @@ This module follows the [Entity Best Practices & Conventions](https://docs.abp.i
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this module:
 
@@ -83,7 +83,7 @@ Following custom repositories are defined for this module:
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions]( https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions]( ../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### QuestionManager
 
@@ -109,7 +109,7 @@ All tables/collections use the `Frm` prefix by default. Set static properties on
 
 This module uses `Forms` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core / MongoDB
 
@@ -147,4 +147,4 @@ Forms module support Blazor-Server. Blazor-Server uses Razor pages and it's almo
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).

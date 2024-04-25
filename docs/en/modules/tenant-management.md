@@ -1,10 +1,10 @@
 # Tenant Management Module
 
-[Multi-Tenancy](../Multi-Tenancy.md) is one of the core features of ABP Framework. It provides the fundamental infrastructure to build your own SaaS (Software-as-a-Service) solution. ABP's multi-tenancy system abstracts where your tenants are stored, by providing the `ITenantStore` interface. All you need to do is to implement that interface.
+[Multi-Tenancy](../framework/architecture/multi-tenancy/index.md) is one of the core features of ABP Framework. It provides the fundamental infrastructure to build your own SaaS (Software-as-a-Service) solution. ABP's multi-tenancy system abstracts where your tenants are stored, by providing the `ITenantStore` interface. All you need to do is to implement that interface.
 
-**The Tenant Management module is an implementation of the the `ITenantStore` interface. It stores tenants in a database. It also provides UI to manage your tenants and their [features](../Features.md).**
+**The Tenant Management module is an implementation of the the `ITenantStore` interface. It stores tenants in a database. It also provides UI to manage your tenants and their [features](../framework/infrastructure/features.md).**
 
-> Please **refer to the [Multi-Tenancy](../Multi-Tenancy.md) documentation** to understand the multi-tenancy system of the ABP Framework. This document focuses on the Tenant Management module.
+> Please **refer to the [Multi-Tenancy](../framework/architecture/multi-tenancy/index.md) documentation** to understand the multi-tenancy system of the ABP Framework. This document focuses on the Tenant Management module.
 
 ### About the ABP Commercial SaaS Module
 
@@ -12,7 +12,7 @@ The [SaaS Module](https://commercial.abp.io/modules/Volo.Saas) is an alternative
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages) when you [create a new solution](https://abp.io/get-started) with the ABP Framework. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages) when you [create a new solution](https://abp.io/get-started) with the ABP Framework. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
 
 ### The Source Code
 
@@ -40,7 +40,7 @@ When you click to *Actions* button near to a tenant, you will see the actions yo
 
 ### Managing the Tenant Features
 
-The Features action opens a modal to enable/disable/set [features](../Features.md) for the related tenant. Here, an example modal:
+The Features action opens a modal to enable/disable/set [features](../framework/infrastructure/features.md) for the related tenant. Here, an example modal:
 
 ![features-modal](../images/features-modal.png)
 
@@ -77,7 +77,7 @@ public class MyHandler :
 
 ## Internals
 
-This section can be used as a reference if you want to [customize](../Customizing-Application-Modules-Guide.md) this module without changing [its source code](https://github.com/abpframework/abp/tree/dev/modules/tenant-management).
+This section can be used as a reference if you want to [customize](../framework/architecture/modularity/extending/customizing-application-modules-guide.md) this module without changing [its source code](https://github.com/abpframework/abp/tree/dev/modules/tenant-management).
 
 ### Domain Layer
 
@@ -126,9 +126,9 @@ This section can be used as a reference if you want to [customize](../Customizin
 
 ## Notices
 
-ABP Framework allows to use *database per tenant* approach that allows a tenant can have a dedicated database. This module has the fundamental infrastructure to make that implementation possible (see its source code), however it doesn't implement the application layer and UI functionalities to provide it as an out of the box implementation. You can implement these features yourself, or consider to use the [ABP Commercial Saas Module](https://docs.abp.io/en/commercial/latest/modules/saas) that fully implements it and provides much more business features.
+ABP Framework allows to use *database per tenant* approach that allows a tenant can have a dedicated database. This module has the fundamental infrastructure to make that implementation possible (see its source code), however it doesn't implement the application layer and UI functionalities to provide it as an out of the box implementation. You can implement these features yourself, or consider to use the [ABP Commercial Saas Module](./saas.md) that fully implements it and provides much more business features.
 
 ## See Also
 
-* [Multi-Tenancy](../Multi-Tenancy.md)
-* [ABP Commercial SaaS Module](https://docs.abp.io/en/commercial/latest/modules/saas)
+* [Multi-Tenancy](../framework/architecture/multi-tenancy/index.md)
+* [ABP Commercial SaaS Module](./saas.md)

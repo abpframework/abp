@@ -51,7 +51,7 @@ Follow the [instructions here](payment-custom-gateway) to create a custom paymen
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Payment module package list page](https://abp.io/packages?moduleName=Volo.Payment) to see list of packages related with this module.
 
@@ -301,7 +301,7 @@ Instead of configuring options in your module class, you can configure it in you
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/entities.md) guide.
 
 ##### PaymentRequest
 
@@ -328,7 +328,7 @@ A plan is used for subscription payments. Contains PlanGateway list to configure
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this module:
 
@@ -355,7 +355,7 @@ All tables/collections use the `Pay` prefix by default. Set static properties on
 
 This module uses `AbpPayment` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -376,7 +376,7 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 
 ## Entity Extensions
 
-[Module entity extension](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) system is a **high-level** extension system that allows you to **define new properties** for existing entities of the dependent modules. It automatically **adds properties to the entity**, **database**, **HTTP API and user interface** in a single point.
+[Module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) system is a **high-level** extension system that allows you to **define new properties** for existing entities of the dependent modules. It automatically **adds properties to the entity**, **database**, **HTTP API and user interface** in a single point.
 
 To extend entities of the payment module, open your `YourProjectNameModuleExtensionConfigurator` class inside of your `DomainShared` project and change the `ConfigureExtraProperties` method like shown below.
 
@@ -474,7 +474,7 @@ public static void ConfigureExtraProperties()
   - `PeriodEndDate`: Represents end date of subscription. _Subscriptions may canceled but lasts until end of last period._
 
   
-> Couldn't find what you need? Check out the [standard distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus).
+> Couldn't find what you need? Check out the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).
 
 ## One-Time Payments
 

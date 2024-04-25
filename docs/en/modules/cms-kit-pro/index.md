@@ -1,28 +1,28 @@
 # CMS Kit Pro Module
 
-This module extends the [open-source CMS Kit module](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index) and adds additional CMS (Content Management System) capabilities to your application.
+This module extends the [open-source CMS Kit module](../cms-kit/index.md) and adds additional CMS (Content Management System) capabilities to your application.
 
 > **This module is currently available for MVC / Razor Pages and Blazor UIs**.
 
 The following features are provided by the open source CMS Kit module:
 
-- [**Page**](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Pages) management system to manage dynamic pages with dynamic URLs.
-- [**Blogging**](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Blogging) system to create publish blog posts with multiple blog support.
-- [**Tagging**](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Tags) system to tag any kind of resource, like a blog post.
-- [**Comment**](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments) system to add comments feature to any kind of resource, like blog post or a product review page.
-- [**Reaction**](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Reactions) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
-- [**Rating**](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Ratings) system to add rating feature to any kind of resource.
-- [**Menu**](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Menus) system to manage public menus dynamically.
-- [**Global resources**](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Global-Resources) system to add global styles and scripts dynamically.
-- [**Dynamic widget**](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Dynamic-Widget) system to create dynamic widgets for page and blog posts.
+- [**Page**](../cms-kit/pages.md) management system to manage dynamic pages with dynamic URLs.
+- [**Blogging**](../cms-kit/blogging.md) system to create publish blog posts with multiple blog support.
+- [**Tagging**](../cms-kit/tags.md) system to tag any kind of resource, like a blog post.
+- [**Comment**](../cms-kit/comments.md) system to add comments feature to any kind of resource, like blog post or a product review page.
+- [**Reaction**](../cms-kit/reactions.md) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
+- [**Rating**](../cms-kit/ratings.md) system to add rating feature to any kind of resource.
+- [**Menu**](../cms-kit/menus.md) system to manage public menus dynamically.
+- [**Global resources**](../cms-kit/global-resources.md) system to add global styles and scripts dynamically.
+- [**Dynamic widget**](../cms-kit/dynamic-widget.md) system to create dynamic widgets for page and blog posts.
 
 And the following features are provided by the CMS Kit pro version:
 
-* [**Newsletter**](newsletter.md) system to allow users to subscribe to newsletters.
-* [**Contact form**](contact-form.md) system to allow users to write messages to you.
-* [**URL forwarding**](url-forwarding.md) system to create URLs that redirect to other pages or external websites.
-* [**Poll**](poll.md) system to create quick polls for users
-* [**Page Feedback**](page-feedback.md) system to allow users to send feedback about pages.
+* [**Newsletter**](./newsletter.md) system to allow users to subscribe to newsletters.
+* [**Contact form**](./contact-form.md) system to allow users to write messages to you.
+* [**URL forwarding**](./url-forwarding.md) system to create URLs that redirect to other pages or external websites.
+* [**Poll**](./poll.md) system to create quick polls for users
+* [**Page Feedback**](./page-feedback.md) system to allow users to send feedback about pages.
 
 Click on a feature to understand and learn how to use it. See [the module description page](https://commercial.abp.io/modules/Volo.CmsKit.Pro) for an overview of the module features.
 
@@ -30,7 +30,7 @@ Click on a feature to understand and learn how to use it. See [the module descri
 
 ### New Solutions
 
-CMS Kit Pro is pre-installed in [the startup templates](../../startup-templates/application/index.md) if you create the solution with the **public website** option. If you are using ABP CLI, you should specify the the `--with-public-website` option as shown below:
+CMS Kit Pro is pre-installed in [the startup templates](../../solution-templates/index.md) if you create the solution with the **public website** option. If you are using ABP CLI, you should specify the the `--with-public-website` option as shown below:
 
 ```bash
 abp new Acme.BookStore --with-public-website
@@ -64,7 +64,7 @@ Alternatively, you can enable features individually, like `cmsKit.Comments.Enabl
 
 ## Entity Extensions
 
-[Module entity extension](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) system is a **high-level** extension system that allows you to **define new properties** for existing entities of the dependent modules. It automatically **adds properties to the entity**, **database**, **HTTP API and user interface** in a single point.
+[Module entity extension](../../framework/architecture/modularity/extending/module-entity-extensions.md) system is a **high-level** extension system that allows you to **define new properties** for existing entities of the dependent modules. It automatically **adds properties to the entity**, **database**, **HTTP API and user interface** in a single point.
 
 To extend entities of the CMS Kit Pro module, open your `YourProjectNameModuleExtensionConfigurator` class inside of your `DomainShared` project and change the `ConfigureExtraProperties` method like shown below.
 

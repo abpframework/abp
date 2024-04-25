@@ -8,7 +8,7 @@ See [the module description page](https://commercial.abp.io/modules/Volo.TextTem
 
 ## How to Install
 
-Text Template Management module is pre-installed in [the startup templates](../Startup-Templates/Index). So, no need to manually install it.
+Text Template Management module is pre-installed in [the startup templates](../solution-templates/index.md). So, no need to manually install it.
 
 ### Existing Solutions
 
@@ -20,7 +20,7 @@ abp add-module Volo.TextTemplateManagement
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Text Template Management module package list page](https://abp.io/packages?moduleName=Volo.TextTemplateManagement) to see list of packages related with this module.
 
@@ -74,7 +74,7 @@ Configure<TextTemplateManagementOptions>(options =>
 
 You can get cache store by injecting `IDistributedCache<string, TemplateContentCacheKey>`.
 
-For more information, please check the [Caching](https://docs.abp.io/en/abp/latest/Caching) guide.
+For more information, please check the [Caching](../framework/fundamentals/caching.md) guide.
 
 ### TemplateContentCacheKey
 
@@ -92,7 +92,7 @@ This module doesn't seed any data.
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/entities.md) guide.
 
 ##### TextTemplateContent
 
@@ -100,7 +100,7 @@ This module follows the [Entity Best Practices & Conventions](https://docs.abp.i
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this module:
 
@@ -108,7 +108,7 @@ Following custom repositories are defined for this module:
 
 #### Domain Services
 
-This module follows the [Domain Services Best Practices & Conventions]( https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### DatabaseTemplateContentContributor
 
@@ -137,7 +137,7 @@ All tables/collections use the `Abp` prefix by default. Set static properties on
 
 This module uses `TextTemplateManagement` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -200,14 +200,14 @@ export class AppRoutingModule {}
 
 You can modify the look and behavior of the module pages by passing the following options to `TextTemplateManagementModule.forLazy` static method:
 
-- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Entity-Action-Extensions) for details.
-- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Page-Toolbar-Extensions) for details.
-- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Data-Table-Column-Extensions) for details.
+- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
+- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.
+- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-column-extensions.md) for details.
 
 
 #### Services / Models
 
-Text Template Management module services and models are generated via `generate-proxy` command of the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI). If you need the module's proxies, you can run the following command in the Angular project directory:
+Text Template Management module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following command in the Angular project directory:
 
 ```bash
 abp generate-proxy --module textTemplateManagement
@@ -219,7 +219,7 @@ abp generate-proxy --module textTemplateManagement
 
 `eTextTemplateManagementComponents` enum provides all replaceable component keys. It is available for import from `@volo/abp.ng.text-template-management`.
 
-Please check [Component Replacement document](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement) for details.
+Please check [Component Replacement document](../framework/ui/angular/component-replacement.md) for details.
 
 
 #### Remote Endpoint URL
@@ -246,4 +246,4 @@ The Text Template Management module remote URL configuration shown above is opti
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).

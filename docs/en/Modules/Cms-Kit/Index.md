@@ -6,27 +6,27 @@ This module provides CMS (Content Management System) capabilities for your appli
 
 The following features are currently available:
 
-* Provides a [**page**](Pages.md) management system to manage dynamic pages with dynamic URLs.
-* Provides a [**blogging**](Blogging.md) system to create publish blog posts with multiple blog support.
-* Provides a [**tagging**](Tags.md) system to tag any kind of resource, like a blog post.
-* Provides a [**comment**](Comments.md) system to add comments feature to any kind of resource, like blog post or a product review page.
-* Provides a [**reaction**](Reactions.md) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
-* Provides a [**rating**](Ratings.md) system to add rating feature to any kind of resource.
-* Provides a [**menu**](Menus.md) system to manage public menus dynamically.
-* Provides a [**global resources**](Global-Resources.md) system to add global styles and scripts dynamically.
-* Provides a [**Dynamic Widget**](Dynamic-Widget.md) system to create dynamic widgets for page and blog posts.
+* Provides a [**page**](./pages.md) management system to manage dynamic pages with dynamic URLs.
+* Provides a [**blogging**](./blogging.md) system to create publish blog posts with multiple blog support.
+* Provides a [**tagging**](./tags.md) system to tag any kind of resource, like a blog post.
+* Provides a [**comment**](./comments.md) system to add comments feature to any kind of resource, like blog post or a product review page.
+* Provides a [**reaction**](./reactions.md) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
+* Provides a [**rating**](./ratings.md) system to add rating feature to any kind of resource.
+* Provides a [**menu**](./menus.md) system to manage public menus dynamically.
+* Provides a [**global resources**](./global-resources.md) system to add global styles and scripts dynamically.
+* Provides a [**Dynamic Widget**](./dynamic-widget.md) system to create dynamic widgets for page and blog posts.
 
 > You can click on the any feature links above to understand and learn how to use it.
 
-All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, with the help of the [Global Features](../../Global-Features.md) system.
+All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, with the help of the [Global Features](../../framework/infrastructure/global-features.md) system.
 
 ## Pre Requirements
 
--  This module depends on [BlobStoring](../../Blob-Storing.md) module for keeping media content.
-> Make sure `BlobStoring` module is installed and at least one provider is configured properly. For more information, check the [documentation](../../Blob-Storing.md).
+-  This module depends on [BlobStoring](../../framework/infrastructure/blob-storing/index.md) module for keeping media content.
+> Make sure `BlobStoring` module is installed and at least one provider is configured properly. For more information, check the [documentation](../../framework/infrastructure/blob-storing/index.md).
 
-- CMS Kit uses [distributed cache](../../Caching.md) for responding faster. 
-> Using a distributed cache, such as [Redis](../../Redis-Cache.md), is highly recommended for data consistency in distributed/clustered deployments.
+- CMS Kit uses [distributed cache](../../framework/fundamentals/caching.md) for responding faster. 
+> Using a distributed cache, such as [Redis](../../framework/fundamentals/redis-cache.md), is highly recommended for data consistency in distributed/clustered deployments.
 
 ## How to Install
 
@@ -47,7 +47,7 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 });
 ```
 
-Instead of enabling all, you may prefer to enable the features one by one. The following example enables only the [tags](Tags.md) and [comments](Comments.md) features:
+Instead of enabling all, you may prefer to enable the features one by one. The following example enables only the [tags](./tags.md) and [comments](./comments.md) features:
 
 ````csharp
 GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
@@ -61,7 +61,7 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 
 ## The Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 CMS kit packages are designed for various usage scenarios. If you check the [CMS kit packages](https://www.nuget.org/packages?q=Volo.CmsKit), you will see that some packages have `Admin` and `Public` suffixes. The reason is that the module has two application layers, considering they might be used in different type of applications. These application layers uses a single domain layer:
 
@@ -79,11 +79,11 @@ All tables/collections use the `Cms` prefix by default. Set static properties on
 
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
 ## Entity Extensions
 
-[Module entity extension](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) system is a **high-level** extension system that allows you to **define new properties** for existing entities of the dependent modules. It automatically **adds properties to the entity**, **database**, **HTTP API, and user interface** in a single point.
+[Module entity extension](../../framework/architecture/modularity/extending/module-entity-extensions.md) system is a **high-level** extension system that allows you to **define new properties** for existing entities of the dependent modules. It automatically **adds properties to the entity**, **database**, **HTTP API, and user interface** in a single point.
 
 To extend entities of the CMS Kit module, open your `YourProjectNameModuleExtensionConfigurator` class inside of your `DomainShared` project and change the `ConfigureExtraProperties` method like shown below.
 

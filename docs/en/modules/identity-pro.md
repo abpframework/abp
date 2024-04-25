@@ -21,11 +21,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Identit
 
 ## How to install
 
-Identity is pre-installed in [the startup templates](../startup-templates/application/index.md). So, no need to manually install it.
+Identity is pre-installed in [the startup templates](../solution-templates/layered-web-application/index.md). So, no need to manually install it.
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Identity module package list page](https://abp.io/packages?moduleName=Volo.Identity.Pro) to see list of packages related with this module.
 
@@ -66,7 +66,7 @@ You can manage permissions of a role:
 
 * A permission is an **action of the application** granted to roles and users.
 * A user with a role will **inherit** all the permissions granted for the role.
-* Any module can **[define permissions](https://docs.abp.io/en/abp/latest/Authorization#permission-system)**. Once you define a new permission, it will be available in this page.
+* Any module can **[define permissions](../framework/fundamentals/authorization.md#permission-system)**. Once you define a new permission, it will be available in this page.
 * Left side is the **list of modules**. Once you click to a module name, you can check/uncheck permissions related to that module.
 
 ##### Role claims
@@ -154,7 +154,7 @@ Also, each user can view security logs for his/her account as shown in the scree
 
 ## Data seed
 
-This module adds some initial data (see [the data seed system](https://docs.abp.io/en/abp/latest/Data-Seeding)) to the database when you run the `.DbMigrator` application:
+This module adds some initial data (see [the data seed system](../framework/infrastructure/data-seeding.md)) to the database when you run the `.DbMigrator` application:
 
 * Creates an `admin` role with all the permissions granted.
 * Creates an `admin` user with the `admin` role and `1q2w3E*` as the password.
@@ -176,13 +176,13 @@ await _dataSeeder.SeedAsync(
 
 Just like the password, you can also set the admin email (use the `AdminEmail` key in this case).
 
-> The [data seed contributor](https://docs.abp.io/en/abp/latest/Data-Seeding) class of the Identity module is `IdentityDataSeedContributor` which internally uses the `IIdentityDataSeeder` service.
+> The [data seed contributor](../framework/infrastructure/data-seeding.md) class of the Identity module is `IdentityDataSeedContributor` which internally uses the `IIdentityDataSeeder` service.
 
 ## Options
 
 ### AbpIdentityAspNetCoreOptions
 
-`AbpIdentityAspNetCoreOptions` can be configured in the UI layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`AbpIdentityAspNetCoreOptions` can be configured in the UI layer, in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
 
 ````csharp
 Configure<AbpIdentityAspNetCoreOptions>(options =>
@@ -201,7 +201,7 @@ Configure<AbpIdentityAspNetCoreOptions>(options =>
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/index.md) guide.
 
 ##### User
 
@@ -241,7 +241,7 @@ An Organization unit is a entity in a hierarchical structure.
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this module:
 
@@ -253,7 +253,7 @@ Following custom repositories are defined for this module:
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions]( https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### User manager
 
@@ -304,7 +304,7 @@ All tables/collections use the `Abp` prefix by default. Set static properties on
 
 This module uses `AbpIdentity` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -381,15 +381,15 @@ export class AppRoutingModule {}
 
 You can modify the look and behavior of the module pages by passing the following options to `IdentityModule.forLazy` static method:
 
-- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Entity-Action-Extensions) for details.
-- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Page-Toolbar-Extensions) for details.
-- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Data-Table-Column-Extensions) for details.
-- **createFormPropContributors:** Changes create form fields. Please check [Dynamic Form Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions) for details.
-- **editFormPropContributors:** Changes create form fields. Please check [Dynamic Form Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions) for details.
+- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
+- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.
+- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-column-extensions.md) for details.
+- **createFormPropContributors:** Changes create form fields. Please check [Dynamic Form Extensions for Angular](../framework/ui/angular/dynamic-form-extensions.md) for details.
+- **editFormPropContributors:** Changes create form fields. Please check [Dynamic Form Extensions for Angular](../framework/ui/angular/dynamic-form-extensions.md) for details.
 
 #### Services / Models
 
-Identity module services and models are generated via `generate-proxy` command of the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI). If you need the module's proxies, you can run the following command in the Angular project directory:
+Identity module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following command in the Angular project directory:
 
 ```bash
 abp generate-proxy --module identity
@@ -400,7 +400,7 @@ abp generate-proxy --module identity
 
 `eIdentityComponents` enum provides all replaceable component keys. It is available for import from `@volo/abp.ng.identity`.
 
-Please check [Component Replacement document](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement) for details.
+Please check [Component Replacement document](../framework/ui/angular/component-replacement.md) for details.
 
 
 #### Remote Endpoint URL
@@ -426,7 +426,7 @@ The Identity module remote URL configuration shown above is optional. If you don
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).
 
 ## See Also
 

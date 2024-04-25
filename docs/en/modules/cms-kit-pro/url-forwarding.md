@@ -4,7 +4,7 @@ CMS kit provides a **URL forwarding** system to create URLs that redirect to oth
 
 ## Enabling the URL Forwarding System
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](https://docs.abp.io/en/abp/latest/Global-Features) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
 In addition to enabling [Url Shorting global feature](index.md), you need to add `UrlShortingMiddleware` to your final application.
 
@@ -41,7 +41,7 @@ You can create new forwardings or update/delete existing ones, in the admin side
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../../framework/architecture/best-practices/entities.md) guide.
 
 ##### **ShortenedUrl**
 
@@ -49,7 +49,7 @@ This module follows the [Entity Best Practices & Conventions](https://docs.abp.i
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this feature:
 
@@ -74,7 +74,7 @@ All tables/collections use the `Cms` prefix by default. Set static properties on
 
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 

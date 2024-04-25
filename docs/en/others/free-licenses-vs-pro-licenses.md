@@ -1,6 +1,6 @@
 # Free (Open Source) License vs Paid (Pro) Licenses
 
-[ABP Framework](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](https://docs.abp.io/en/abp/latest/Startup-Templates/Index), [CLI](https://docs.abp.io/en/abp/latest/CLI), theme called [LeptonX Lite](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/AspNetCore) and ready to use [application modules](https://docs.abp.io/en/abp/latest/Modules/Index). 
+[ABP Framework](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](../solution-templates/index.md), [CLI](../cli/index.md), theme called [LeptonX Lite](../ui-themes/lepton-x-lite/AspNetCore.md) and ready to use [application modules](../modules/index.md). 
 
 [ABP Pro licenses](https://commercial.abp.io) adds important benefits on top of the open-source ABP framework project with a set of professional [application modules](https://commercial.abp.io/modules), [UI themes](https://commercial.abp.io/themes), CRUD page generator: [ABP Suite](https://commercial.abp.io/tools/suite), [premium support](https://commercial.abp.io/support) and [additional services](https://commercial.abp.io/additional-services). 
 
@@ -140,7 +140,7 @@ On the other hand, ABP Suite is a commercial tool that aims to assist your devel
 
 A screenshot from the CRUD Page Generator:
 
-![abp-suite-example](images/abp-suite-example.png)
+![abp-suite-example](../images/abp-suite-example.png)
 
 ## Is ABP Suite free?
 
@@ -160,19 +160,19 @@ The following themes are available:
 
 A screenshot of the LeptonX Lite (free version):
 
-![abp-basic-theme](images/leptonx-lite-users-page.png)
+![abp-basic-theme](../images/leptonx-lite-users-page.png)
 
 [LeptonX Theme](https://commercial.abp.io/themes) is a commercial theme developed by the ABP Framework Core Team. It is **100% Bootstrap** compatible, lightweight and powerful with multiple color styles and layout options.
 
 A screenshot of the LeptonX Theme (paid version):
 
-![lepton-theme-users-page](images/leptonx-theme-users-page.png)
+![lepton-theme-users-page](../images/leptonx-theme-users-page.png)
 
 ## Samples
 
 We provide many sample solutions based on the ABP Framework and ABP Commercial. All the [sample solutions](https://docs.abp.io/en/abp/latest/Samples/Index) built with the ABP Framework are also valid for the ABP Commercial. So, ABP Commercial users can benefit from these samples as well. For that reason, we create many samples on the open-source side to provide more value for everyone.
 
-However, there are some samples valid only for the ABP Commercial. See the [samples for the ABP Commercial](https://docs.abp.io/en/commercial/latest/samples/index).
+However, there are some samples valid only for the ABP Commercial. See the [samples for the ABP Commercial](../samples/index.md).
 
 ## Support
 

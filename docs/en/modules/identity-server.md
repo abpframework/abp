@@ -1,12 +1,12 @@
 # IdentityServer Module
 
-IdentityServer module provides a full integration with the [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) (IDS) framework, which provides advanced authentication features like single sign-on and API access control. This module persists clients, resources and other IDS-related objects to database. **This module is replaced by** [OpenIddict module](https://docs.abp.io/en/abp/latest/Modules/OpenIddict) after ABP v6.0 in the startup templates.
+IdentityServer module provides a full integration with the [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) (IDS) framework, which provides advanced authentication features like single sign-on and API access control. This module persists clients, resources and other IDS-related objects to database. **This module is replaced by** [OpenIddict module](./openiddict.md) after ABP v6.0 in the startup templates.
 
 > Note: You can not use IdentityServer and OpenIddict modules together. They are separate OpenID provider libraries for the same job.
 
 ## How to Install
 
-You don't need this module when you are using OpenIddict module. However, if you want to keep using IdentityServer4 for your applications, you can install this module and remove the OpenIddict module. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+You don't need this module when you are using OpenIddict module. However, if you want to keep using IdentityServer4 for your applications, you can install this module and remove the OpenIddict module. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
 
 ### The Source Code
 
@@ -18,13 +18,13 @@ This module implements the domain logic and database integrations, but not provi
 
 ## Relations to Other Modules
 
-This module is based on the [Identity Module](Identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) with the [Account Module](Account.md).
+This module is based on the [Identity Module](./identity.md) and have an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) with the [Account Module](account.md).
 
 ## Options
 
 ### AbpIdentityServerBuilderOptions
 
-`AbpIdentityServerBuilderOptions` can be configured in `PreConfigureServices` method of your Identity Server [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`AbpIdentityServerBuilderOptions` can be configured in `PreConfigureServices` method of your Identity Server [module](../framework/architecture/modularity/basics.md). Example:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -43,7 +43,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 * `IntegrateToAspNetIdentity` (default: true): Integrate to ASP.NET Identity.
 * `AddDeveloperSigningCredential` (default: true): Set false to suppress AddDeveloperSigningCredential() call on the IIdentityServerBuilder.
 
-`IIdentityServerBuilder` can be configured in `PreConfigureServices` method of your Identity Server [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`IIdentityServerBuilder` can be configured in `PreConfigureServices` method of your Identity Server [module](../framework/architecture/modularity/basics.md). Example:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -140,7 +140,7 @@ All tables/collections use the `IdentityServer` prefix by default. Set static pr
 
 This module uses `AbpIdentityServer` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 

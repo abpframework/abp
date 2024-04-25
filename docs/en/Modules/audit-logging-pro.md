@@ -13,11 +13,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.AuditLo
 
 ## How to install
 
-Identity is pre-installed in [the startup templates](../Startup-Templates/Index). So, no need to manually install it.
+Identity is pre-installed in [the startup templates](../solution-templates/index.md). So, no need to manually install it.
 
 ### Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Audit Logging module package list page](https://abp.io/packages?moduleName=Volo.AuditLogging.Ui) to see list of packages related with this module.
 
@@ -85,7 +85,7 @@ This module doesn't seed any data.
 
 ### AbpAuditingOptions
 
-`AbpAuditingOptions` can be configured in the UI layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`AbpAuditingOptions` can be configured in the UI layer, in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
 
 ````csharp
 Configure<AbpAuditingOptions>(options =>
@@ -94,7 +94,7 @@ Configure<AbpAuditingOptions>(options =>
 });
 ````
 
-To see `AbpAuditingOptions` properties, please see its [documentation](https://docs.abp.io/en/abp/latest/Audit-Logging#abpauditingoptions).
+To see `AbpAuditingOptions` properties, please see its [documentation](../framework/infrastructure/audit-logging.md#abpauditingoptions).
 
 ## Internals
 
@@ -102,7 +102,7 @@ To see `AbpAuditingOptions` properties, please see its [documentation](https://d
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/entities.md) guide.
 
 ##### AuditLog
 
@@ -114,7 +114,7 @@ An audit log is a security-relevant chronological record, set of records, and/or
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this module:
 
@@ -138,7 +138,7 @@ All tables/collections use the `Abp` prefix by default. Set static properties on
 
 This module uses `AbpAuditLogging` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -204,9 +204,9 @@ export class AppRoutingModule {}
 
 You can modify the look and behavior of the module pages by passing the following options to `AuditLoggingModule.forLazy` static method:
 
-- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Entity-Action-Extensions) for details.
-- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Page-Toolbar-Extensions) for details.
-- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Data-Table-Column-Extensions) for details.
+- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
+- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.
+- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-oclumn-extensions.md) for details.
 
 
 #### Services / Models
@@ -221,7 +221,7 @@ abp generate-proxy --module auditLogging
 
 `eAuditLoggingComponents` enum provides all replaceable component keys. It is available for import from `@volo/abp.ng.audit-logging`.
 
-Please check [Component Replacement document](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement) for details.
+Please check [Component Replacement document](../framework/ui/angular/component-replacement.md) for details.
 
 
 #### Remote Endpoint URL
@@ -247,4 +247,4 @@ The Audit Logging module remote URL configuration shown above is optional. If yo
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).

@@ -21,7 +21,7 @@ Even creating an almost-empty solution is challenging;
 *   How do you **integrate** to 3rd-party library and systems?
 *   How to set up the automated **tests**?
 
-ABP provides a **well-architected**, **layered** and **production-ready** [startup solution](https://docs.abp.io/en/abp/latest/Startup-Templates/Application) based on the [Domain Driven Design](https://docs.abp.io/en/abp/latest/Domain-Driven-Design) principles. The solution also includes a pre-configured **unit** and **integration** [test](https://docs.abp.io/en/abp/latest/Testing) projects for each layer.
+ABP provides a **well-architected**, **layered** and **production-ready** [startup solution](../solution-templates/layered-web-application/index.md) based on the [Domain Driven Design](../framework/architecture/domain-driven-design/index.md) principles. The solution also includes a pre-configured **unit** and **integration** [test](../testing/overall.md) projects for each layer.
 
 Creating such a solution structure requires a good **architectural experience** and a **significant time to prepare** it. ABP provides it in just one minute.
 
@@ -37,7 +37,7 @@ When it comes to the UI, there are a lot of challenges, including preparing a fo
 
 Even if you buy a pre-built theme, **integrating** it into your solution may take **days of development**. Upgrading such a theme is another problem. Most of the time, the theme's HTML/CSS structure is mixed with your UI code, and it is not easy to **upgrade** or **change** the theme later.
 
-ABP Framework provides a [theming](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Theming) system that makes your UI code independent from the theme. Themes are isolated, and they are **NuGet/NPM packages**. Installing or upgrading a theme is just a minute. While you can build your theme (or integrate an existing theme), ABP Commercial offers **professional and modern** [themes](https://commercial.abp.io/themes).
+ABP Framework provides a [theming](../framework/ui/mvc-razor-pages/theming.md) system that makes your UI code independent from the theme. Themes are isolated, and they are **NuGet/NPM packages**. Installing or upgrading a theme is just a minute. While you can build your theme (or integrate an existing theme), ABP Commercial offers **professional and modern** [themes](https://commercial.abp.io/themes).
 
 > There are also UI **component providers** (like Telerik and DevExpress). But they only provide individual components. You are responsible for creating your own **layout system**. You **can use** such libraries in your ABP-based solutions just like in any other project.
 
@@ -45,19 +45,19 @@ ABP Framework provides a [theming](https://docs.abp.io/en/abp/latest/UI/AspNetCo
 
 Preparing a robust test environment takes time. You need to **setup test projects** in your solution, select the tools, **mock the services and database**, create the required base classes and utility services to reduce repeating code in the tests and so on.
 
-ABP Startup Templates comes with the test projects already configured for you, and you can immediately write your first unit or integration test code on day 1. Writing unit tests is very clear with the ABP Framework; see [how to write tests](https://docs.abp.io/en/abp/latest/Testing).
+ABP Startup Templates comes with the test projects already configured for you, and you can immediately write your first unit or integration test code on day 1. Writing unit tests is very clear with the ABP Framework; see [how to write tests](../testing/overall.md).
 
 ### Coding Standards & Training
 
 Once you create the development-ready solution, you typically need to **train the developers** to explain the system and develop it with the same **conventions** in a **standard** and consistent way. Even if you train the developers, it is **hard to prepare and maintain your documentation**. Over time, every developer will write the code differently, and coding standards will begin to diverge.
 
-ABP solution is already **well-defined** and **well-documented**. [Tutorials](https://docs.abp.io/en/abp/latest/Tutorials/Part-1) and [best practice guides](https://docs.abp.io/en/abp/latest/Best-Practices/Index) clearly explain how to make development on an ABP project.
+ABP solution is already **well-defined** and **well-documented**. [Tutorials](../tutorials/book-store/part-01.md) and [best practice guides](../framework/architecture/best-practices/index.md) clearly explain how to make development on an ABP project.
 
 ### Keeping Your Solution Up to Date
 
 After you start your development, you must keep track of the new versions of the libraries you use for upgrades & patches. We regularly update all packages to the latest versions and test them before the stable release. When you update the ABP Framework, all its dependencies are upgraded to edge technology.
 
-`abp update` [CLI](https://docs.abp.io/en/abp/latest/CLI) command automatically discovers and upgrades all ABP-dependant NuGet and NPM packages in a solution. With ABP, it is easier to stay with the latest versions.
+`abp update` [CLI](../cli/index.md) command automatically discovers and upgrades all ABP-dependant NuGet and NPM packages in a solution. With ABP, it is easier to stay with the latest versions.
 
 ## Don't Repeat Yourself!
 
@@ -133,7 +133,7 @@ The ABP Framework is born to be a modular application development structure. Eve
 
 ### SaaS / Multi-Tenancy
 
-[Multi-Tenancy](https://docs.abp.io/en/abp/latest/Multi-Tenancy) is a common way to implement SaaS systems. However, implementing a consistent multi-tenant infrastructure may become complicated.
+[Multi-Tenancy](../framework/architecture/multi-tenancy/index.md) is a common way to implement SaaS systems. However, implementing a consistent multi-tenant infrastructure may become complicated.
 
 ABP Framework provides a complete multi-tenant infrastructure and abstract complexity from your business code. Your application code will be mostly multi-tenancy aware while the ABP Framework automatically isolates the database, cache and other details of the tenants from each other. It supports single database, per tenant database and hybrid approaches. It properly configures the libraries like Microsoft Identity and OpenIddict, which are not normally multi-tenancy compatible.
 
@@ -141,9 +141,9 @@ ABP Framework provides a complete multi-tenant infrastructure and abstract compl
 
 Building a microservice system requires many infrastructure details: Authenticating and authorizing applications and microservices and implementing asynchronous messaging and synchronous (Rest/GRPC) communication patterns between microservices are the most fundamental issues.
 
-The ABP Framework provides services, [guides](https://docs.abp.io/en/abp/latest/Microservice-Architecture), and samples to help you implement your microservice solution using the industry standard tools.
+The ABP Framework provides services, [guides](../framework/architecture/microservices/index.md), and samples to help you implement your microservice solution using the industry standard tools.
 
-ABP Commercial even goes one step further and provides a complete [startup template](startup-templates/microservice/index.md) to kick-start your microservice solution.
+ABP Commercial even goes one step further and provides a complete [startup template](../solution-templates/microservice/index.md) to kick-start your microservice solution.
 
 ## Pre-Built Modules
 
@@ -196,8 +196,8 @@ We definitely know that there is no limit to the **mountain of complexity** and 
 Customization has different types and levels;
 
 * ABP Framework itself is highly customizable. You can almost replace and override any service. 3rd-party dependencies are abstracted, and generally, multiple alternatives are provided. You can implement your integrations to extend the framework.
-* Modules are designed to be customizable and extensible from the database to the user interface. The Framework provides a [standard extensibility model](https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Guide) implemented wherever possible.
-* Modules are designed as layered and compatible with [different architectures](https://docs.abp.io/en/abp/latest/Best-Practices/Index). They can be used as part of a monolithic application or deployed as standalone microservices with their own databases.
+* Modules are designed to be customizable and extensible from the database to the user interface. The Framework provides a [standard extensibility model](../framework/architecture/modularity/extending/customizing-application-modules-guide.md) implemented wherever possible.
+* Modules are designed as layered and compatible with [different architectures](../framework/architecture/best-practices/index.md). They can be used as part of a monolithic application or deployed as standalone microservices with their own databases.
 * Modules are independent of each other. You can remove one module without touching others.
 
 For most of the applications, these are more than necessary. However, it can be different from the code in your solution. You can always replace a module with its source code when you want to change it completely. For ABP Commercial modules, we always provide a source code option.
@@ -226,7 +226,7 @@ So, for most systems, the performance overhead can be safely ignored. For others
 
 **ABP is not a CMS** (Content Management System). It is a **generic business application development framework**. The Framework doesn't make any assumption for CMS or any applications. It is well-layered so that the core modules are Web or ASP.NET Core independent and can be used to develop console applications, background services or any .NET compatible application.
 
-By the way, the ABP Framework provides modularity, and a CMS module or CMS system can be developed on top of it. We are already providing a [CMS Kit module](modules/cms-kit/index.md) that provides some common CMS primitives so that you can build your CMS on top of it.
+By the way, the ABP Framework provides modularity, and a CMS module or CMS system can be developed on top of it. We are already providing a [CMS Kit module](../modules/cms-kit/index.md) that provides some common CMS primitives so that you can build your CMS on top of it.
 
 ## See Also
 

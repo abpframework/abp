@@ -4,15 +4,15 @@ CMS kit provides a **tag** system to tag any kind of resources, like a blog post
 
 ## Enabling the Tag Management Feature
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
-> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
 ## Options
 
 The tag system provides a mechanism to group tags by entity types. For example, if you want to use the tag system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product` and add tags under these entity types.
 
-`CmsKitTagOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics) class.
+`CmsKitTagOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](../../framework/architecture/modularity/basics.md) class.
 
 **Example: Adding tagging support for products**
 
@@ -23,7 +23,7 @@ Configure<CmsKitTagOptions>(options =>
 });
 ```
 
-> If you're using the [Blogging Feature](Blogging.md), the ABP framework defines an entity type for the blog feature automatically.
+> If you're using the [Blogging Feature](./blogging.md), the ABP framework defines an entity type for the blog feature automatically.
 
 `CmsKitTagOptions` properties:
 
@@ -39,7 +39,7 @@ Configure<CmsKitTagOptions>(options =>
 
 ## The Tag Widget
 
-The tag system provides a tag [widget](../../UI/AspNetCore/Widgets.md) to display associated tags of a resource that was configured for tagging. You can simply place the widget on a page like the one below:
+The tag system provides a tag [widget](../../framework/ui/mvc-razor-pages/widgets.md) to display associated tags of a resource that was configured for tagging. You can simply place the widget on a page like the one below:
 
 ```csharp
 @await Component.InvokeAsync(typeof(TagViewComponent), new
@@ -54,7 +54,7 @@ The tag system provides a tag [widget](../../UI/AspNetCore/Widgets.md) to displa
 
 ## The Popular Tags Widget
 
-The tag system provides a popular tags [widget](../../UI/AspNetCore/Widgets.md) to display popular tags of a resource that was configured for tagging. You can simply place the widget on a page as below:
+The tag system provides a popular tags [widget](../../framework/ui/mvc-razor-pages/widgets.md) to display popular tags of a resource that was configured for tagging. You can simply place the widget on a page as below:
 
 ```csharp
 @await Component.InvokeAsync(typeof(PopularTagsViewComponent), new
@@ -93,7 +93,7 @@ You can create or edit an existing tag on this page.
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../../framework/architecture/best-practices/entities.md) guide.
 
 ##### Tag
 
@@ -109,7 +109,7 @@ An entity tag represents a connection between the tag and the tagged entity.
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../../framework/architecture/best-practices/repositories.md) guide.
 
 The following custom repositories are defined for this feature:
 
@@ -118,7 +118,7 @@ The following custom repositories are defined for this feature:
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### Tag Manager
 
@@ -148,7 +148,7 @@ All tables/collections use the `Cms` prefix by default. Set static properties on
 
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 

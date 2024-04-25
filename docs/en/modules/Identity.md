@@ -4,7 +4,7 @@ Identity module is used to manage roles, users and their permissions, based on t
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
 
 ### The Source Code
 
@@ -12,7 +12,7 @@ The source code of this module can be accessed [here](https://github.com/abpfram
 
 ## User Interface
 
-This module provides [Blazor](../UI/Blazor/Overall.md), [Angular](../UI/Angular/Quick-Start.md) and [MVC / Razor Pages](../UI/AspNetCore/Overall.md) UI options.
+This module provides [Blazor](../framework/ui/blazor/overall.md), [Angular](../framework/ui/angular/uick-start.md) and [MVC / Razor Pages](../framework/ui/mvc-razor-pages/overall.md) UI options.
 
 ### Menu Items
 
@@ -24,7 +24,7 @@ The menu items and the related pages are authorized. That means the current user
 
 ![identity-module-permissions](../images/identity-module-permissions.png)
 
-See the [Authorization document](../Authorization.md) to understand the permission system.
+See the [Authorization document](../framework/fundamentals/authorization.md) to understand the permission system.
 
 ### Pages
 
@@ -46,7 +46,7 @@ Roles are used to group permissions assign them to users.
 
 Beside the role name, there are two properties of a role:
 
-* `Default`: If a role is marked as "default", then that role is assigned to new users by default when they register to the application themselves (using the [Account Module](Account.md)).
+* `Default`: If a role is marked as "default", then that role is assigned to new users by default when they register to the application themselves (using the [Account Module](account.md)).
 * `Public`: A public role of a user can be seen by other users in the application. This feature has no usage in the Identity module, but provided as a feature that you may want to use in your own application.
 
 ## Other Features
@@ -81,7 +81,7 @@ OU code is automatically generated and maintained by the `OrganizationUnitManage
 
 This code can be used to easily query the database for all the children of an OU (recursively). There are some rules for this code (automatically applied when you use `OrganizationUnitManager`):
 
-- It is **unique** for a [tenant](../Multi-Tenancy.md).
+- It is **unique** for a [tenant](../framework/architecture/multi-tenancy/index.md).
 - All the children of the same OU have codes that **start with the parent OU's code**.
 - It's **fixed length** and based on the level of the OU in the tree, as shown in the sample.
 - While the OU code is unique, it can be **changed** if you move the related OU.
@@ -90,7 +90,7 @@ Notice that you must reference an OU by Id, not Code, because the Code can be ch
 
 #### OrganizationUnit Manager
 
-The `OrganizationUnitManager` class can be [injected](../Dependency-Injection.md) and used to manage OUs. Common use cases are:
+The `OrganizationUnitManager` class can be [injected](../framework/fundamentals/dependency-injection.md) and used to manage OUs. Common use cases are:
 
 - Create, Update or Delete an OU
 - Move an OU in the OU tree.
@@ -121,7 +121,7 @@ Configure<AbpSecurityLogOptions>(options =>
 
 ## Options
 
-`IdentityOptions` is the standard [options class](../Options.md) provided by the Microsoft [Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity). So, you can set these options in the `ConfigureServices` method of your [module](../Module-Development-Basics.md) class.
+`IdentityOptions` is the standard [options class](../framework/fundamentals/options.md) provided by the Microsoft [Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity). So, you can set these options in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md) class.
 
 **Example: Set minimum required length of passwords**
 
@@ -132,7 +132,7 @@ Configure<IdentityOptions>(options =>
 });
 ````
 
-ABP takes these options one step further and allows you to change them on runtime by using the [setting system](../Settings.md). You can [inject](../Dependency-Injection.md) `ISettingManager` and use one of the `Set...` methods to change the option values for a user, a tenant or globally for all users.
+ABP takes these options one step further and allows you to change them on runtime by using the [setting system](../framework/fundamentals/settings.md). You can [inject](../framework/fundamentals/dependency-injection.md) `ISettingManager` and use one of the `Set...` methods to change the option values for a user, a tenant or globally for all users.
 
 **Example: Change minimum required length of passwords for the current tenant**
 
@@ -182,9 +182,9 @@ public class MyHandler :
 }
 ````
 
-`UserEto` and `IdentityRoleEto` are configured to automatically publish the events. You should configure yourself for the others. See the [Distributed Event Bus document](../Distributed-Event-Bus.md) to learn details of the pre-defined events.
+`UserEto` and `IdentityRoleEto` are configured to automatically publish the events. You should configure yourself for the others. See the [Distributed Event Bus document](../framework/infrastructure/event-bus/distributed/index.md) to learn details of the pre-defined events.
 
-> Subscribing to the distributed events is especially useful for distributed scenarios (like microservice architecture). If you are building a monolithic application, or listening events in the same process that runs the Identity Module, then subscribing to the [local events](../Local-Event-Bus.md) can be more efficient and easier.
+> Subscribing to the distributed events is especially useful for distributed scenarios (like microservice architecture). If you are building a monolithic application, or listening events in the same process that runs the Identity Module, then subscribing to the [local events](../framework/infrastructure/event-bus/local/index.md) can be more efficient and easier.
 
 ## Internals
 
@@ -277,7 +277,7 @@ Following custom repositories are defined for this module:
 
 ### Database Providers
 
-This module provides [Entity Framework Core](../Entity-Framework-Core.md) and [MongoDB](../MongoDB.md) options for the database.
+This module provides [Entity Framework Core](../framework/data/entity-framework-core/index.md) and [MongoDB](../framework/data/mongodb/index.md) options for the database.
 
 #### Entity Framework Core
 
@@ -316,7 +316,7 @@ You can set the following properties of the `AbpIdentityDbProperties` class to c
 
 * `DbTablePrefix` (`Abp` by default) is the prefix for table/collection names.
 * `DbSchema` (`null` by default) is the database schema.
-* `ConnectionStringName` (`AbpIdentity` by default) is the [connection string](../Connection-Strings.md) name for this module.
+* `ConnectionStringName` (`AbpIdentity` by default) is the [connection string](../framework/fundamentals/connection-strings.md) name for this module.
 
 These are static properties. If you want to set, do it in the beginning of your application (typically, in `Program.cs`).
 

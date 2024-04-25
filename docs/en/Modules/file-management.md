@@ -2,17 +2,17 @@
 
 This module is used to upload, download and organize files in a hierarchical folder structure. It is also compatible to multi-tenancy and you can determine total size limit for your tenants.
 
-This module is based on the [BLOB Storing](https://docs.abp.io/en/abp/latest/Blob-Storing) system, so it can use different storage providers to store the file contents.
+This module is based on the [BLOB Storing](../framework/infrastructure/blob-storing/index.md) system, so it can use different storage providers to store the file contents.
 
 See [the module description page](https://commercial.abp.io/modules/Volo.FileManagement) for an overview of the module features.
 
 ## How to Install
 
-File Management module is not installed in [the startup templates](../Startup-Templates/Index). So, it needs to be installed manually. There are two ways of installing a module into your application.
+File Management module is not installed in [the startup templates](../solution-templates/layered-web-application/index.md). So, it needs to be installed manually. There are two ways of installing a module into your application.
 
 ### 1. Using ABP CLI
 
-ABP CLI allows adding a module to a solution using `add-module` command. You can check its [documentation](https://docs.abp.io/en/abp/latest/CLI#add-module) for more information. So, file management module can be added using the command below;
+ABP CLI allows adding a module to a solution using `add-module` command. You can check its [documentation](../cli/index.md#add-module) for more information. So, file management module can be added using the command below;
 
 ```bash
 abp add-module Volo.FileManagement
@@ -62,7 +62,7 @@ File Management module's MVC user interface depends on following npm packages. a
 
 For user interface, an Angular module called `FileManagementModule` is included in the `@volo/abp.ng.file-management` library.
 
-Please visit [document on feature libraries](https://docs.abp.io/en/abp/latest/UI/Angular/Feature-Libraries) to learn how you can install and set it up in your Angular application.
+Please visit [document on feature libraries](../framework/ui/angular/feature-libraries.md) to learn how you can install and set it up in your Angular application.
 
 #### Blazor & Blazor Server
 
@@ -77,7 +77,7 @@ Configure<HubOptions>(options =>
 
 ## Setting BLOB Provider
 
-File Management module is based on the [BLOB Storing](https://docs.abp.io/en/abp/latest/Blob-Storing) system as defined before, and it uses `FileManagementContainer` as a BLOB container.
+File Management module is based on the [BLOB Storing](../framework/infrastructure/blob-storing/index.md) system as defined before, and it uses `FileManagementContainer` as a BLOB container.
 
 You must set a BLOB provider for `FileManagementContainer`.
 
@@ -91,11 +91,11 @@ Configure<AbpBlobStoringOptions>(options =>
 });
 ```
 
-Please check the [BLOB Storage Providers documentation](https://docs.abp.io/en/abp/latest/Blob-Storing#blob-storage-providers) for more information about providers and how to use them.
+Please check the [BLOB Storage Providers documentation](../framework/infrastructure/blob-storing/index.md#blob-storage-providers) for more information about providers and how to use them.
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [File Management module package list page](https://abp.io/packages?moduleName=Volo.FileManagement) to see list of packages related with this module.
 
@@ -143,7 +143,7 @@ This module doesn't seed any data.
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/entities.md) guide.
 
 ##### TextTemplateContent
 
@@ -152,7 +152,7 @@ This module follows the [Entity Best Practices & Conventions](https://docs.abp.i
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this module:
 
@@ -161,7 +161,7 @@ Following custom repositories are defined for this module:
 
 #### Domain Services
 
-This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### DirectoryManager
 
@@ -199,7 +199,7 @@ All tables/collections use the `Fm` prefix by default. Set static properties on 
 
 This module uses `FileManagement` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -221,4 +221,4 @@ See the `FileManagementPermissions` class members for all permissions defined fo
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).

@@ -2,11 +2,11 @@
 
 This module implements the `IPermissionStore` to store and manage permissions values in a database.
 
-> This document covers only the permission management module which persists permission values to a database. See the [Authorization document](../Authorization.md) to understand the authorization and permission systems.
+> This document covers only the permission management module which persists permission values to a database. See the [Authorization document](../framework/fundamentals/authorization.md) to understand the authorization and permission systems.
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
 
 ### The Source Code
 
@@ -16,7 +16,7 @@ The source code of this module can be accessed [here](https://github.com/abpfram
 
 ### Permission Management Dialog
 
-Permission management module provides a reusable dialog to manage permissions related to an object. For example, the [Identity Module](Identity.md) uses it to manage permissions of users and roles. The following image shows Identity Module's Role Management page:
+Permission management module provides a reusable dialog to manage permissions related to an object. For example, the [Identity Module](identity.md) uses it to manage permissions of users and roles. The following image shows Identity Module's Role Management page:
 
 ![permissions-module-open-dialog](../images/permissions-module-open-dialog.png)
 
@@ -30,7 +30,7 @@ In this dialog, you can grant permissions for the selected role. The tabs in the
 
 `IPermissionManager` is the main service provided by this module. It is used to read and change the permission values. `IPermissionManager` is typically used by the *Permission Management Dialog*. However, you can inject it if you need to set a permission value.
 
-> If you just want to read/check permission values for the current user, use the `IAuthorizationService` or the `[Authorize]` attribute as explained in the [Authorization document](../Authorization.md).
+> If you just want to read/check permission values for the current user, use the `IAuthorizationService` or the `[Authorize]` attribute as explained in the [Authorization document](../framework/fundamentals/authorization.md).
 
 **Example: Grant permissions to roles and users using the `IPermissionManager` service**
 
@@ -62,9 +62,9 @@ public class MyService : ITransientDependency
 
 ## Permission Management Providers
 
-Permission Management Module is extensible, just like the [permission system](../Authorization.md).  You can extend it by defining permission management providers.
+Permission Management Module is extensible, just like the [permission system](../framework/fundamentals/authorization.md).  You can extend it by defining permission management providers.
 
-[Identity Module](Identity.md) defines the following permission management providers:
+[Identity Module](identity.md) defines the following permission management providers:
 
 * `UserPermissionManagementProvider`: Manages user-based permissions.
 * `RolePermissionManagementProvider`: Manages role-based permissions.
@@ -93,7 +93,7 @@ public class CustomPermissionManagementProvider : PermissionManagementProvider
 
 `PermissionManagementProvider` base class makes the default implementation (using the `IPermissionGrantRepository`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each permission value record).
 
-Once you create your provider class, you should register it using the `PermissionManagementOptions` [options class](../Options.md):
+Once you create your provider class, you should register it using the `PermissionManagementOptions` [options class](../framework/fundamentals/options.md):
 
 ````csharp
 Configure<PermissionManagementOptions>(options =>
@@ -106,4 +106,4 @@ The order of the providers are important. Providers are executed in the reverse 
 
 ## See Also
 
-* [Authorization](../Authorization.md)
+* [Authorization](../framework/fundamentals/authorization.md)

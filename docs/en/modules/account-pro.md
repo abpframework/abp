@@ -16,7 +16,7 @@ The account is pre-installed in [the startup templates](../startup-templates/app
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and the relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and the relations between them.
 
 You can visit the [Account module package list page](https://abp.io/packages?moduleName=Volo.Account.Pro) to see a list of packages related to this module.
 
@@ -64,7 +64,7 @@ This module doesn't seed any data.
 
 ### AbpIdentityAspNetCoreOptions
 
-`AbpAccountOptions` can be configured in the UI layer in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`AbpAccountOptions` can be configured in the UI layer in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
 
 ````csharp
 Configure<AbpAccountOptions>(options =>
@@ -79,7 +79,7 @@ Configure<AbpAccountOptions>(options =>
 
 ### AbpProfilePictureOptions
 
-`AbpProfilePictureOptions` can be configured in the UI layer in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`AbpProfilePictureOptions` can be configured in the UI layer in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
 
 ````csharp
 Configure<AbpProfilePictureOptions>(options =>
@@ -90,7 +90,7 @@ Configure<AbpProfilePictureOptions>(options =>
 
 `AbpProfilePictureOptions` properties:
 
-* `EnableImageCompression` (default: false): Enables the image compression for the profile picture. When enabled, the selected compression library will compress the profile picture to decrease the image size. For more information see [image manipulation](https://docs.abp.io/en/abp/latest/Image-Manipulation)
+* `EnableImageCompression` (default: false): Enables the image compression for the profile picture. When enabled, the selected compression library will compress the profile picture to decrease the image size. For more information see [image manipulation](../framework/infrastructure/image-manipulation.md)
 
 ## Local login
 
@@ -266,13 +266,13 @@ export class AppRoutingModule {}
 You can modify the look and behavior of the module pages by passing the following options to `AccountModule.forLazy` static method:
 
 - **redirectUrl**: Default redirect URL after logging in.
-- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Entity-Action-Extensions) for details.
-- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Page-Toolbar-Extensions) for details.
-- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Data-Table-Column-Extensions) for details.
+- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
+- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.
+- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-column-extensions.md) for details.
 
 #### Services / Models
 
-Account module services and models are generated via `generate-proxy` command of the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI). If you need the module's proxies, you can run the following commands in the Angular project directory.
+Account module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following commands in the Angular project directory.
 
 The command below generates `AccountPublicModule` proxies:
 
@@ -289,7 +289,7 @@ abp generate-proxy --module accountAdmin
 
 `eAccountComponents` enum provides all replaceable component keys. It is available for import from `@volo/abp.ng.account/public`.
 
-Please check [Component Replacement document](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement) for details.
+Please check [Component Replacement document](../framework/ui/angular/component-replacement.md) for details.
 
 
 #### Remote Endpoint URL
@@ -336,7 +336,7 @@ OAuth is preconfigured as authorization code flow in MauiBlazor application temp
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/index.md).
 
 ## See Also
 

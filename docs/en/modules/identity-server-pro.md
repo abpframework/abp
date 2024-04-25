@@ -13,11 +13,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.identit
 
 ## How to Install
 
-Identity Server is pre-installed in [the startup templates](../Startup-Templates/Index). So, no need to manually install it.
+Identity Server is pre-installed in [the startup templates](../solution-templates/index.md). So, no need to manually install it.
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Identity module package list page](https://abp.io/packages?moduleName=Volo.Identity.Pro) to see list of packages related with this module.
 
@@ -69,7 +69,7 @@ You can create a new API resource or edit an existing API resource in this page:
 
 ## Data Seed
 
-This module adds some initial data (see [the data seed system](https://docs.abp.io/en/abp/latest/Data-Seeding)) to the database when you run the `.DbMigrator` application:
+This module adds some initial data (see [the data seed system](../framework/infrastructure/data-seeding.md)) to the database when you run the `.DbMigrator` application:
 
 * Creates standard identity resources which are role, profile, phone, openid, email and address.
 
@@ -79,7 +79,7 @@ You can delete or edit created standard identity resources in the identity resou
 
 ### AbpIdentityServerBuilderOptions
 
-`AbpIdentityServerBuilderOptions` can be configured in `PreConfigureServices` method of your Identity Server [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`AbpIdentityServerBuilderOptions` can be configured in `PreConfigureServices` method of your Identity Server [module](../framework/architecture/modularity/basics.md). Example:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -98,7 +98,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 * `IntegrateToAspNetIdentity` (default: true): Integrate to ASP.NET Identity.
 * `AddDeveloperSigningCredential` (default: true): Set false to suppress AddDeveloperSigningCredential() call on the IIdentityServerBuilder.
 
-`IIdentityServerBuilder` can be configured in `PreConfigureServices` method of your Identity Server [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`IIdentityServerBuilder` can be configured in `PreConfigureServices` method of your Identity Server [module](../framework/architecture/modularity/basics.md). Example:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -116,7 +116,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/entities.md) guide.
 
 ##### ApiResource
 
@@ -157,7 +157,7 @@ Identity resources are data like user ID, name, or email address of a user.
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this module:
 
@@ -168,7 +168,7 @@ Following custom repositories are defined for this module:
 
 #### Domain Services
 
-This module follows the [Domain Services Best Practices & Conventions]( https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../framework/architecture/best-practices/domain-services.md) guide.
 
 Identity Server module doesn't contain any domain service but overrides services below;
 
@@ -201,7 +201,7 @@ All tables/collections use the `IdentityServer` prefix by default. Set static pr
 
 This module uses `AbpIdentityServer` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -283,16 +283,16 @@ export class AppRoutingModule {}
 
 You can modify the look and behavior of the module pages by passing the following options to `IdentityServerModule.forLazy` static method:
 
-- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Entity-Action-Extensions) for details.
-- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Page-Toolbar-Extensions) for details.
-- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Data-Table-Column-Extensions) for details.
-- **createFormPropContributors:** Changes create form fields. Please check [Dynamic Form Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions) for details.
-- **editFormPropContributors:** Changes create form fields. Please check [Dynamic Form Extensions for Angular](https://docs.abp.io/en/abp/latest/UI/Angular/Dynamic-Form-Extensions) for details.
+- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
+- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.
+- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-column-extensions.md) for details.
+- **createFormPropContributors:** Changes create form fields. Please check [Dynamic Form Extensions for Angular](../framework/ui/angular/dynamic-form-extensions.md) for details.
+- **editFormPropContributors:** Changes create form fields. Please check [Dynamic Form Extensions for Angular](../framework/ui/angular/dynamic-form-extensions.md) for details.
 
 
 #### Services / Models
 
-Identity Server module services and models are generated via `generate-proxy` command of the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI). If you need the module's proxies, you can run the following command in the Angular project directory:
+Identity Server module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following command in the Angular project directory:
 
 ```bash
 abp generate-proxy --module identityServer
@@ -302,7 +302,7 @@ abp generate-proxy --module identityServer
 
 `eIdentityServerComponents` enum provides all replaceable component keys. It is available for import from `@volo/abp.ng.identity-server`.
 
-Please check [Component Replacement document](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement) for details.
+Please check [Component Replacement document](../framework/ui/angular/component-replacement.md) for details.
 
 
 #### Remote Endpoint URL
@@ -329,4 +329,4 @@ The Identity Server module remote URL configuration shown above is optional. If 
 
 ## Distributed Events
 
-This module defines events for `Client` aggregate and `ClientCorsOrigin` entity. When a `Client` or  `ClientCorsOrigin` changes, `AllowedCorsOriginsCacheItemInvalidator` invalidates the cache for `AllowedCorsOriginsCacheItem`. See the [standard distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) for more information about distributed events.
+This module defines events for `Client` aggregate and `ClientCorsOrigin` entity. When a `Client` or  `ClientCorsOrigin` changes, `AllowedCorsOriginsCacheItemInvalidator` invalidates the cache for `AllowedCorsOriginsCacheItem`. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md) for more information about distributed events.

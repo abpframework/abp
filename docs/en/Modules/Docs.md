@@ -16,9 +16,9 @@ Docs module is an application module and does not offer any hosting solution. Yo
 
 When you use GitHub to store your docs, Docs Module supports versioning. If you have multiple versions for your docs, there will be a combo-box on the UI to switch between versions. If you choose file system to store your docs, it does not support multiple versions. 
 
-[The documents](https://docs.abp.io/) for ABP framework is also using this module.
+[The documents](../index.md) for ABP framework is also using this module.
 
-> Docs module follows the [module architecture best practices](../Best-Practices/Module-Architecture.md) guide.
+> Docs module follows the [module architecture best practices](../framework/architecture/best-practices/module-architecture.md) guide.
 
 ## Installation
 
@@ -26,7 +26,7 @@ This document covers `Entity Framework Core` provider but you can also select `M
 
 ### 1- Creating an application
 
-If you do not have an existing ABP project, you can either [generate a CLI command from the get started page of the abp.io website](https://abp.io/get-started) and runs it or run the command below:
+If you do not have an existing ABP project, you can either [generate a CLI command from the get started page of the abp.io website](../get-started/index.md) and runs it or run the command below:
 
 ```bash
 abp new Acme.MyProject
@@ -620,7 +620,7 @@ Configure<DocsElasticSearchOptions>(options =>
 The `Index` is automatically created after the application starts if the `Index` does not exist.
 
 `DefaultElasticClientProvider` is responsible for creating `IElasticClient`. By default, it reads Elastic Search's `Url` from `IConfiguration`.
-If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](../Dependency-Injection.md) system.
+If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](../framework/fundamentals/dependency-injection.md) system.
 
 ```json
 {

@@ -2,7 +2,7 @@
 
 This documentation describes all database tables and their purposes. You can read this documentation to get general knowledge of the database tables that come from each module.
 
-## [Audit Logging Module](Audit-Logging.md)
+## [Audit Logging Module](./audit-logging.md)
 
 ### AbpAuditLogs
 
@@ -38,13 +38,13 @@ This table stores information about property changes to entities in the applicat
 | --- | --- | --- |
 | [AbpEntityChanges](#abpentitychanges) | Id | 	Links each property change to a specific entity change. |
 
-## [Background Jobs Module](Background-Jobs.md)
+## [Background Jobs Module](./background-jobs.md)
 
 ### AbpBackgroundJobs
 
 This table stores information about the background jobs in the application and facilitates their efficient management and tracking. Each entry in the table contains details of a background job, including the job name, arguments, try count, next try time, last try time, abandoned status, and priority.
 
-## [Tenant Management Module](Tenant-Management.md)
+## [Tenant Management Module](./tenant-management.md)
 
 ### AbpTenants
 
@@ -104,7 +104,7 @@ This table is used to associate tags with blog posts in order to categorize and 
 | [BlgTags](#blgtags) | Id | Links the post tag to the corresponding tag. |
 | [BlgPosts](#blgposts) | Id | Links the post tag to the corresponding blog post. |
 
-## [CMS Kit Module](Cms-Kit/Index.md)
+## [CMS Kit Module](cms-kit/index.md)
 
 ### CmsUsers
 
@@ -130,7 +130,7 @@ This table stores information about the blog features. You can query this table 
 
 ### CmsComments
 
-This table is utilized by the [CMS Kit Comment system](Cms-Kit/Comments.md) to store comments made on the blog posts. You can query this table to get comments by posts.
+This table is utilized by the [CMS Kit Comment system](cms-kit/comments.md) to store comments made on the blog posts. You can query this table to get comments by posts.
 
 ### CmsTags
 
@@ -138,31 +138,31 @@ This table stores information about the tags. When a new tag is used, a new reco
 
 ### CmsEntityTags
 
-This table is utilized by the [Tag Management system](Cms-Kit/Tags.md) to store tags and their relationship with various entities, thus enabling efficient categorization and organization of content. You can query this table to get entity tags by entities.
+This table is utilized by the [Tag Management system](cms-kit/tags.md) to store tags and their relationship with various entities, thus enabling efficient categorization and organization of content. You can query this table to get entity tags by entities.
 
 ### CmsGlobalResources
 
-This table is a database table for the [CMS Kit Global Resources system](Cms-Kit/Global-Resources.md), allowing dynamic addition of global styles and scripts.
+This table is a database table for the [CMS Kit Global Resources system](cms-kit/global-resources.md), allowing dynamic addition of global styles and scripts.
 
 ### CmsMediaDescriptors
 
-This table is utilized by the CMS kit module to manage media files by using the [BlobStoring](../Blob-Storing.md) module.
+This table is utilized by the CMS kit module to manage media files by using the [BlobStoring](../framework/infrastructure/blob-storing/index.md) module.
 
 ### CmsMenuItems
 
-This table is used by the [CMS Kit Menu system](Cms-Kit/Menus.md) to manage and store information about dynamic public menus, including details such as menu item display names, URLs, and hierarchical relationships.
+This table is used by the [CMS Kit Menu system](cms-kit/menus.md) to manage and store information about dynamic public menus, including details such as menu item display names, URLs, and hierarchical relationships.
 
 ### CmsPages
 
-This table is utilized by the [CMS Kit Page system](Cms-Kit/Pages.md) to store dynamic pages within the application, including information such as page URLs, titles, and content.
+This table is utilized by the [CMS Kit Page system](cms-kit/pages.md) to store dynamic pages within the application, including information such as page URLs, titles, and content.
 
 ### CmsRatings
 
-This table is utilized by the [CMS Kit Rating system](Cms-Kit/Ratings.md) to store ratings made on blog posts. You can query this table to get ratings by posts.
+This table is utilized by the [CMS Kit Rating system](cms-kit/ratings.md) to store ratings made on blog posts. You can query this table to get ratings by posts.
 
 ### CmsUserReactions
 
-This table is utilized by the [CMS Kit Reaction system](Cms-Kit/Reactions.md) to store reactions made on blog posts. You can query this table to get reactions by posts.
+This table is utilized by the [CMS Kit Reaction system](cms-kit/reactions.md) to store reactions made on blog posts. You can query this table to get reactions by posts.
 
 ## [Docs Module](Docs.md)
 
@@ -184,7 +184,7 @@ This table stores information about the contributors of the documents. You can q
 | --- | --- | --- |
 | [DocsDocuments](#docsdocuments) | Id | Links the document contributor to the corresponding document. |
 
-## [Feature Management Module](Feature-Management.md)
+## [Feature Management Module](feature-management.md)
 
 ### AbpFeatureGroups
 
@@ -198,7 +198,7 @@ This table stores information about the features in the application. You can use
 
 This table stores the values of the features for different providers. You can use the `Name` column to link each feature value with its corresponding feature in the [`AbpFeatures`](#abpfeatures) table, so that you can easily manage and organize the features.
 
-## [Identity Module](Identity.md)
+## [Identity Module](identity.md)
 
 ### AbpUsers
 
@@ -303,7 +303,7 @@ This table is useful for managing role-based access control by allowing to assig
 
 This table logs important operations and changes related to user accounts, allowing users to save the security logs for future reference.
 
-## [Permission Management](Permission-Management.md)
+## [Permission Management](permission-management.md)
 
 ### AbpPermissionGroups
 
@@ -317,13 +317,13 @@ This table is important for managing and controlling access to different parts o
 
 The table stores and manage the permissions in the application and to keep track of permissions that are granted, to whom and when. Columns such as `Name`, `ProviderName`, `ProviderKey`, `TenantId` can be used to filter the granted permissions by name, provider name, provider key, and tenant id respectively, so that you can easily manage and track the granted permissions in the application. 
 
-## [Setting Management](Setting-Management.md)
+## [Setting Management](setting-management.md)
 
 ### AbpSettings
 
 This table stores key-value pairs of settings for the application, and it allows dynamic configuration of the application without the need for recompilation.
 
-## [OpenIddict](OpenIddict.md)
+## [OpenIddict](openiddict.md)
 
 ### OpenIddictApplications
 
@@ -354,7 +354,7 @@ This table can store information about the OpenID Connect tokens, including the 
 
 This table can store information about the OpenID Connect scopes, including the name and description of the scope. It can also be used to define the permissions or access rights associated with the scopes, which are then used to control access to protected resources.
 
-## [IdentityServer](IdentityServer.md)
+## [IdentityServer](identity-server.md)
 
 ### IdentityServerApiResources
 

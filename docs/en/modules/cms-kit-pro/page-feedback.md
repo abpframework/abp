@@ -7,7 +7,7 @@ The CMS kit provides a **Page Feedback** system to collect feedback from users a
 
 ## Enabling the Page Feedback System
 
-All CMS Kit features are disabled bu default. Therefore, you need to enable the features you want before starting to use it. You can use the [Global Feature](https://docs.abp.io/en/abp/latest/Global-Features) system to enable/disable the CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+All CMS Kit features are disabled bu default. Therefore, you need to enable the features you want before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable the CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
 > Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
@@ -34,7 +34,7 @@ You can list, view, update and delete page feedbacks in the admin side of your s
 
 ## Page Feedback Widget
 
-The page feedback system provides a page feedback [widget](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) for users to send feedback about the current page. You can place the widget on a page like the below:
+The page feedback system provides a page feedback [widget](../../framework/ui/mvc-razor-pages/widgets.md) for users to send feedback about the current page. You can place the widget on a page like the below:
 
 ```csharp
 @(await Component.InvokeAsync(typeof(PageFeedbackViewComponent), new PageFeedbackViewDto
@@ -69,7 +69,7 @@ The page feedback system provides a page feedback [widget](https://docs.abp.io/e
 
 ### Page Feedback Modal Widget
 
-The page feedback system provides a page feedback modal [widget](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) for users to send feedback about the current page. You can place the widget on a page like the below:
+The page feedback system provides a page feedback modal [widget](../../framework/ui/mvc-razor-pages/widgets.md) for users to send feedback about the current page. You can place the widget on a page like the below:
 
 ```html
 <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#page-feedback-modal">
@@ -101,7 +101,7 @@ The page feedback system sends an email notification to the configured email add
 
 The page feedback system provides a mechanism to group feedbacks by entity types. For example, you can group feedbacks by pages, blog posts, etc.
 
-`CmsKitPageFeedbackOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics) class.
+`CmsKitPageFeedbackOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](../../framework/architecture/modularity/basics.md) class.
 
 **Example: Adding page feedback support for the post entity type**
 
@@ -130,7 +130,7 @@ Configure<CmsKitPageFeedbackOptions>(options =>
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../../framework/architecture/best-practices/entities.md) guide.
 
 ##### PageFeedback
 
@@ -146,7 +146,7 @@ A page feedback setting is a setting to configure the page feedback system.
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../../framework/architecture/best-practices/repositories.md) guide.
 
 The following custom repositories are defined for these features:
 
@@ -155,7 +155,7 @@ The following custom repositories are defined for these features:
 
 #### Domain Services
 
-This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### Page Feedback Manager
 
@@ -180,7 +180,7 @@ All tables/collections use the `Cms` prefix by default. Set static properties in
 
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
