@@ -17,14 +17,18 @@
     <PackageReference Include="SharpZipLib" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" />
     <PackageReference Include="NuGet.Versioning" />
-    <PackageReference Include="System.Text.Encoding.CodePages" />
     <PackageReference Include="System.Security.Permissions" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Polly" />
     <PackageReference Include="Polly.Extensions.Http" />
     <PackageReference Include="LibGit2Sharp" />
+    <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="StackExchange.Redis" />
     <PackageReference Include="DeepL.net" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="System.Text.Encoding.CodePages" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +37,5 @@
     <ProjectReference Include="..\Volo.Abp.IdentityModel\Volo.Abp.IdentityModel.csproj" />
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
-    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 </Project>

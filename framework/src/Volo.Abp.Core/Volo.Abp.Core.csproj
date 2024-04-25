@@ -16,7 +16,6 @@
     <RootNamespace />
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" />
     <PackageReference Include="Microsoft.Extensions.Localization" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
@@ -26,10 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
-    <PackageReference Include="System.Text.Encodings.Web" />
-    <PackageReference Include="System.Runtime.Loader" />
     <PackageReference Include="System.Linq.Dynamic.Core" />
-    <PackageReference Include="System.Linq.Queryable" />
     <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="Nito.AsyncEx.Context" />
   </ItemGroup>
@@ -37,6 +33,10 @@
     <PackageReference Include="System.ComponentModel.Annotations" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETStandard' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '2.0')) ">
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Text.Encodings.Web" />
+    <PackageReference Include="System.Runtime.Loader" />
+    <PackageReference Include="System.Linq.Queryable" />
     <PackageReference Include="Nullable">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
