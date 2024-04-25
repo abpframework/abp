@@ -45,8 +45,6 @@ We believe that new mega menu will allow you to navigate through the web pages m
 
 We are constantly working to improve ABP's onboarding experience. With the new platform changes, we now offer ABP Studio as the starting point for the ABP Platform. You can still use the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) to created new ABP solutions, but the new ABP Studio makes it much easier and understandable. It also provides features to easily run and monitor your applications, even in the Community edition.
 
-***TODO: UPDATE THE PICTURE***
-
 ![new-get-started](new-get-started.png)
 
 You can easily download and install ABP Studio, login with your abp.io account and create your first ABP solution.
