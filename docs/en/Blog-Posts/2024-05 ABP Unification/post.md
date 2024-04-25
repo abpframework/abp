@@ -78,7 +78,6 @@ The left navigation panel tree is also completely revisited and simplified:
 
 [ABP Studio](https://docs.abp.io/en/commercial/latest/studio/index) is a cross-platform desktop application designed for ABP and .NET developers. It aims to provide a comfortable development environment by automating tasks, providing insights about your solution, and simplifying the processes of creation, development, execution, browsing, monitoring, tracing, and deploying your solutions.
 
-
 Here, a screenshot from the *Solution Runner* screen of ABP Studio:
 
 ![abp-studio-solution-runner](abp-studio-solution-runner.png)
