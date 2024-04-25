@@ -10,16 +10,16 @@ This document explains how to integrate EF Core as an ORM provider to ABP based 
 abp add-package Volo.Abp.EntityFrameworkCore
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.EntityFrameworkCore).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.EntityFrameworkCore).
 >
 
 > Note: Instead, you can directly download a [startup template](https://abp.io/Templates) with EF Core pre-installed.
 
 ### Database Management System Selection
 
-Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document don't depend on any specific DBMS. If you are creating a [reusable application module](Modules/Index.md), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
+Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document don't depend on any specific DBMS. If you are creating a [reusable application module](../../../modules/index.md), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
 
-> See [Switch to Another DBMS for Entity Framework Core](Entity-Framework-Core-Other-DBMS.md) document to learn how to switch the DBMS.
+> See [Switch to Another DBMS for Entity Framework Core](./other-dbms.md) document to learn how to switch the DBMS.
 
 ## Creating DbContext
 
@@ -45,11 +45,11 @@ namespace MyCompany.MyProject
 
 ### About the EF Core Fluent Mapping
 
-The [application startup template](Startup-Templates/Application.md) has been configured to use the [EF Core fluent configuration API](https://docs.microsoft.com/en-us/ef/core/modeling/) to map your entities to your database tables.
+The [application startup template](../../../solution-templates/layered-web-application/index.md) has been configured to use the [EF Core fluent configuration API](https://docs.microsoft.com/en-us/ef/core/modeling/) to map your entities to your database tables.
 
 You can still use the **data annotation attributes** (like `[Required]`) on the properties of your entity while the ABP documentation generally follows the **fluent mapping API** approach. It is up to you.
 
-ABP Framework has some **base entity classes** and **conventions** (see the [entities document](Entities.md)) and it provides some useful **extension methods** to configure the properties inherited from the base entity classes.
+ABP Framework has some **base entity classes** and **conventions** (see the [entities document](../../architecture/domain-driven-design/entities.md)) and it provides some useful **extension methods** to configure the properties inherited from the base entity classes.
 
 #### ConfigureByConvention Method
 
@@ -102,7 +102,7 @@ public class MyDbContext : AbpDbContext<MyDbContext>
 }
 ```
 
-If you don't configure, the `Default` connection string is used. If you configure a specific connection string name, but not define this connection string name in the application configuration then it fallbacks to the `Default` connection string (see [the connection strings document](Connection-Strings.md) for more information).
+If you don't configure, the `Default` connection string is used. If you configure a specific connection string name, but not define this connection string name in the application configuration then it fallbacks to the `Default` connection string (see [the connection strings document](../../fundamentals/connection-strings.md) for more information).
 
 ### AbpDbContextOptions
 
@@ -182,11 +182,11 @@ Configure<AbpDbContextOptions>(options =>
 });
 ````
 
-> See [Switch to Another DBMS for Entity Framework Core](Entity-Framework-Core-Other-DBMS.md) document to learn how to configure the DBMS.
+> See [Switch to Another DBMS for Entity Framework Core](./other-dbms.md) document to learn how to configure the DBMS.
 
 ## Registering DbContext To Dependency Injection
 
-Use `AddAbpDbContext` method in your module to register your `DbContext` class for [dependency injection](Dependency-Injection.md) system.
+Use `AddAbpDbContext` method in your module to register your `DbContext` class for [dependency injection](../../fundamentals/dependency-injection.md) system.
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -210,7 +210,7 @@ namespace MyCompany.MyProject
 
 ### Add Default Repositories
 
-ABP can automatically create default [generic repositories](Repositories.md) for the entities in your DbContext. Just use `AddDefaultRepositories()` option on the registration:
+ABP can automatically create default [generic repositories](../../architecture/domain-driven-design/repositories.md) for the entities in your DbContext. Just use `AddDefaultRepositories()` option on the registration:
 
 ````C#
 services.AddAbpDbContext<MyDbContext>(options =>
@@ -219,7 +219,7 @@ services.AddAbpDbContext<MyDbContext>(options =>
 });
 ````
 
-This will create a repository for each [aggregate root entity](Entities.md) (classes derived from `AggregateRoot`) by default. If you want to create repositories for other entities too, then set `includeAllEntities` to `true`:
+This will create a repository for each [aggregate root entity](../../architecture/domain-driven-design/entities.md) (classes derived from `AggregateRoot`) by default. If you want to create repositories for other entities too, then set `includeAllEntities` to `true`:
 
 ````C#
 services.AddAbpDbContext<MyDbContext>(options =>
@@ -239,7 +239,7 @@ public class Book : AggregateRoot<Guid>
 }
 ```
 
-(`BookType` is a simple `enum` here and not important) And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
+(`BookType` is a simple `enum` here and not important) And you want to create a new `Book` entity in a [domain service](../../architecture/domain-driven-design/domain-services.md):
 
 ````csharp
 public class BookManager : DomainService
@@ -309,7 +309,7 @@ public class BookRepository
 }
 ````
 
-Now, it's possible to [inject](Dependency-Injection.md) the `IBookRepository` and use the `DeleteBooksByType` method when needed.
+Now, it's possible to [inject](../../fundamentals/dependency-injection.md) the `IBookRepository` and use the `DeleteBooksByType` method when needed.
 
 #### Override the Default Generic Repository
 
@@ -447,7 +447,7 @@ namespace AbpDemo.Orders
 }
 ````
 
-> `AsyncExecuter` is used to execute async LINQ extensions without depending on the EF Core. If you add EF Core NuGet package reference to your project, then you can directly use `await query.FirstOrDefaultAsync()`. But, this time you depend on the EF Core in your domain layer. See the [repository document](Repositories.md) to learn more.
+> `AsyncExecuter` is used to execute async LINQ extensions without depending on the EF Core. If you add EF Core NuGet package reference to your project, then you can directly use `await query.FirstOrDefaultAsync()`. But, this time you depend on the EF Core in your domain layer. See the [repository document](../../architecture/domain-driven-design/repositories.md) to learn more.
 
 **Example: Get a list of orders with their lines**
 
@@ -468,7 +468,7 @@ public async Task TestWithDetails()
 
 If you don't pass any expression to the `WithDetailsAsync` method, then it includes all the details using the `DefaultWithDetailsFunc` option you provide.
 
-You can configure `DefaultWithDetailsFunc` for an entity in the `ConfigureServices` method of your [module](Module-Development-Basics.md) in your `EntityFrameworkCore` project.
+You can configure `DefaultWithDetailsFunc` for an entity in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) in your `EntityFrameworkCore` project.
 
 **Example: Include `Lines` while querying an `Order`**
 
@@ -501,7 +501,7 @@ public async Task TestWithDetails()
 
 #### Repository Get/Find Methods
 
-Some of the standard [Repository](Repositories.md) methods have optional `includeDetails` parameters;
+Some of the standard [Repository](../../architecture/domain-driven-design/repositories.md) methods have optional `includeDetails` parameters;
 
 * `GetAsync` and `FindAsync` gets `includeDetails` with default value is `true`.
 * `GetListAsync` and `GetPagedListAsync` gets `includeDetails` with default value is `false`.
@@ -620,7 +620,7 @@ See also [lazy loading document](https://docs.microsoft.com/en-us/ef/core/queryi
 
 ## Read-Only Repositories
 
-ABP Framework provides read-only [repository](Repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
+ABP Framework provides read-only [repository](../../architecture/domain-driven-design/repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
 
 Entity Framework Core read-only repository implementation uses [EF Core's No-Tracking feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries). That means the entities returned from the repository will not be tracked by the EF Core [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/), because it is expected that you won't update entities queried from a read-only repository. If you need to track the entities, you can still use the [AsTracking()](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.entityframeworkqueryableextensions.astracking) extension method on the LINQ expression, or `EnableTracking()` extension method on the repository object (See *Enabling / Disabling the Change Tracking* section in this document).
 
@@ -628,7 +628,7 @@ Entity Framework Core read-only repository implementation uses [EF Core's No-Tra
 
 ## Enabling / Disabling the Change Tracking
 
-In addition to the read-only repositories, ABP allows to manually control the change tracking behavior for querying objects. Please see the *Enabling / Disabling the Change Tracking* section of the [Repositories documentation](Repositories.md) to learn how to use it.
+In addition to the read-only repositories, ABP allows to manually control the change tracking behavior for querying objects. Please see the *Enabling / Disabling the Change Tracking* section of the [Repositories documentation](../../architecture/domain-driven-design/repositories.md) to learn how to use it.
 
 ## Access to the EF Core API
 
@@ -649,14 +649,14 @@ public async Task TestAsync()
 
 ## Extra Properties & Object Extension Manager
 
-Extra Properties system allows you to set/get dynamic properties to entities those implement the `IHasExtraProperties` interface. It is especially useful when you want to add custom properties to the entities defined in an [application module](Modules/Index.md), when you use the module as package reference.
+Extra Properties system allows you to set/get dynamic properties to entities those implement the `IHasExtraProperties` interface. It is especially useful when you want to add custom properties to the entities defined in an [application module](../../../modules/index.md), when you use the module as package reference.
 
 By default, all the extra properties of an entity are stored as a single `JSON` object in the database.
 
 Entity extension system allows you to to store desired extra properties in separate fields in the related database table. For more information about the extra properties & the entity extension system, see the following documents:
 
-* [Customizing the Application Modules: Extending Entities](Customizing-Application-Modules-Extending-Entities.md)
-* [Entities](Entities.md)
+* [Customizing the Application Modules: Extending Entities](../../architecture/modularity/extending/customizing-application-modules-extending-entities.md)
+* [Entities](../../architecture/domain-driven-design/entities.md)
 
 This section only explains the EF Core related usage of the `ObjectExtensionManager`.
 
@@ -753,7 +753,7 @@ public static class QADbContextModelCreatingExtensions
 
 > If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` and `ConfigureEfCoreEntity` methods. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
 
-> The `Object Extension` feature need the `Change Tracking`, which means you can't use the read-only repositories for the entities that have `extension properties(MapEfCoreProperty)`, Please see the [Repositories documentation](Repositories.md) to learn the change tracking behavior.
+> The `Object Extension` feature need the `Change Tracking`, which means you can't use the read-only repositories for the entities that have `extension properties(MapEfCoreProperty)`, Please see the [Repositories documentation](../../architecture/domain-driven-design/repositories.md) to learn the change tracking behavior.
 
 See the "*ConfigureByConvention Method*" section above for more information.
 
@@ -761,7 +761,7 @@ See the "*ConfigureByConvention Method*" section above for more information.
 
 ### Controlling the Multi-Tenancy
 
-If your solution is [multi-tenant](Multi-Tenancy.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](Connection-Strings.md), even if you are in a tenant context.
+If your solution is [multi-tenant](../../architecture/multi-tenancy/index.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](../../fundamentals/connection-strings.md), even if you are in a tenant context.
 
 **Example:**
 
@@ -805,7 +805,7 @@ public class MyRepositoryBase<TEntity, TKey>
 }
 ```
 
-First one is for [entities with composite keys](Entities.md), second one is for entities with single primary key.
+First one is for [entities with composite keys](../../architecture/domain-driven-design/entities.md), second one is for entities with single primary key.
 
 It's suggested to inherit from the `EfCoreRepository` class and override methods if needed. Otherwise, you will have to implement all the standard repository methods manually.
 
@@ -883,7 +883,7 @@ In this example, `OtherDbContext` implements `IBookStoreDbContext`. This feature
 
 #### Replacing with Multi-Tenancy
 
-It is also possible to replace a DbContext based on the [multi-tenancy](Multi-Tenancy.md) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
+It is also possible to replace a DbContext based on the [multi-tenancy](../../architecture/multi-tenancy/index.md) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
 
 **Example:** Replace DbContext only for tenants, using the `ReplaceDbContext` attribute
 
@@ -960,6 +960,6 @@ public class MyCustomEfCoreBulkOperationProvider
 
 ## See Also
 
-* [Entities](Entities.md)
-* [Repositories](Repositories.md)
+* [Entities](../../architecture/domain-driven-design/entities.md)
+* [Repositories](../../architecture/domain-driven-design/repositories.md)
 * [Video tutorial](https://abp.io/video-courses/essentials/abp-ef-core)

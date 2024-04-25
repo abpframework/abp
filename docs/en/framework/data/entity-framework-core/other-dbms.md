@@ -1,6 +1,6 @@
 # Switch to Another DBMS for Entity Framework Core
 
-[ABP CLI](CLI.md) provides a `-dbms` option to allow you to choose your Database Management System (DBMS) while creating a new solution. It accepts the following values:
+[ABP CLI](../../../cli/index.md) provides a `-dbms` option to allow you to choose your Database Management System (DBMS) while creating a new solution. It accepts the following values:
 
 - `SqlServer` (default)
 - `MySQL`
@@ -21,14 +21,14 @@ Also, the [Get Started page](https://abp.io/get-started) on the ABP website allo
 
 You can use the following documents to learn how to **switch to your favorite DBMS**:
 
-* [MySQL](Entity-Framework-Core-MySQL.md)
-* [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
-* [Oracle](Entity-Framework-Core-Oracle.md)
-* [SQLite](Entity-Framework-Core-SQLite.md)
+* [MySQL](./mysql.md)
+* [PostgreSQL](./postgresql.md)
+* [Oracle](./oracle.md)
+* [SQLite](./sqlite.md)
 
 You can also configure your DBMS provider **without** these integration packages. While using the integration package is always recommended (it also makes standard for the depended version across different modules), you can do it yourself if there is no integration package for your DBMS provider.
 
-For an example, this document explains how to switch to MySQL without using [the MySQL integration package](Entity-Framework-Core-MySQL.md).
+For an example, this document explains how to switch to MySQL without using [the MySQL integration package](./mysql.md).
 
 ## Replace the SQL Server Dependency
 
@@ -71,7 +71,7 @@ Configure<AbpDbContextOptions>(options =>
 
 * `UseMySql` calls in this code is defined by the Pomelo.EntityFrameworkCore.MySql package and you can use its additional options if you need.
 * This code first checks if there is an existing (active) connection to the same database in the current request and reuses it if possible. This allows to share a single transaction among different DbContext types. ABP handles the rest of the things.
-* It uses `ctx.ConnectionString` and passes to the `UseMySql` if there is no active connection (which will cause to create a new database connection). Using the `ctx.ConnectionString` is important here. Don't pass a static connection string (or a connection string from a configuration). Because ABP [dynamically determines the correct connection string](Connection-Strings.md) in a multi-database or [multi-tenant](Multi-Tenancy.md) environment.
+* It uses `ctx.ConnectionString` and passes to the `UseMySql` if there is no active connection (which will cause to create a new database connection). Using the `ctx.ConnectionString` is important here. Don't pass a static connection string (or a connection string from a configuration). Because ABP [dynamically determines the correct connection string](../../fundamentals/connection-strings.md) in a multi-database or [multi-tenant](../../architecture/multi-tenancy/index.md) environment.
 
 ## Change the Connection Strings
 
@@ -81,7 +81,7 @@ You typically will change the `appsettings.json` inside the `.DbMigrator` and `.
 
 ## DBMS restrictions
 
-MySQL DBMS has some slight differences than the SQL Server. Some module database mapping configuration (especially the field lengths) causes problems with MySQL. For example, some of the the [IdentityServer module](Modules/IdentityServer.md) tables has such problems and it provides an option to configure the fields based on your DBMS.
+MySQL DBMS has some slight differences than the SQL Server. Some module database mapping configuration (especially the field lengths) causes problems with MySQL. For example, some of the the [IdentityServer module](../../../modules/identity-server.md) tables has such problems and it provides an option to configure the fields based on your DBMS.
 
 The module may provide some built-in solutions. You can configure it via `ModelBuilder`. eg: `Auth Server` module.
 
