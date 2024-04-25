@@ -26,6 +26,6 @@ public class DefaultDocsLinkGenerator : IDocsLinkGenerator, ITransientDependency
         };
 
         var encodedUrl = LinkGenerator.GetPathByPage("/Documents/Project/Index", values: routeValues);
-        return WebUtility.UrlDecode(encodedUrl); //Document name can contain path separators like /, so we need to decode it
+        return encodedUrl?.Replace("%2F", "/"); //Document name can contain path separator(/), so we need to decode it.
     }
 }
