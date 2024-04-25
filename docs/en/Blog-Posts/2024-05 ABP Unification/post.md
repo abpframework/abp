@@ -51,7 +51,7 @@ You can easily download and install ABP Studio, login with your abp.io account a
 
 ### The New Pricing Page
 
-Since the [ABP Commercial website](https://commercial.abp.io/) is merged to the main website, you will see the *Pricing* page located on the main menu of the abp.io website. We have completely revised the design and content of this page to better reflect what is open source, free, and what features are included in the paid licenses.
+Since the [ABP Commercial website](https://commercial.abp.io/) has merged with the main website, you will see the *Pricing* page located on the main menu of the abp.io website. We have completely revised the design and content of this page to better reflect which features are open source and free, and what is included in the paid licenses.
 
 ![new-pricing](new-pricing.png)
 
