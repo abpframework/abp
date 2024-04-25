@@ -10,17 +10,17 @@ In this version, the `Microsoft.Extensions.FileProviders.Embedded` (and other `M
 
 ## Renamed the `AddGlobalFilters<>` method as `FilterQueryable<>` in `IMongoDbRepositoryFilterer`
 
-ABP Framework provides services to automatically filter data on querying from a database. Prior to this version, creating a new class that derives from the `MongoDbRepositoryFilterer` and overriding its `AddGlobalFilters` method was needed for implementing a data filter for [MongoDB](../MongoDB.md).
+ABP Framework provides services to automatically filter data on querying from a database. Prior to this version, creating a new class that derives from the `MongoDbRepositoryFilterer` and overriding its `AddGlobalFilters` method was needed for implementing a data filter for [MongoDB](../../framework/data/mongodb/index.md).
 
 In this version, the `AddGlobalFilters<>` method is renamed as `FilterQueryable<>`. Therefore, you need to update the method name if you have used data filtering for MongoDB, in your application.
 
 ## Exposing Integration Services
 
-[Integration Services](../Integration-Services.md) are now not being exposed by default. In a monolith application, integration services don't need to be exposed outside since the modules would probably be in-process communication with each other. Therefore, they don't need to be exposed for most of the time.
+[Integration Services](../../framework/api-development/integration-services.md) are now not being exposed by default. In a monolith application, integration services don't need to be exposed outside since the modules would probably be in-process communication with each other. Therefore, they don't need to be exposed for most of the time.
 
 If you build a microservice solution or you need to access an integration service via a network call from any other application, you will probably need to expose the integration services so the other applications can consume them.
 
-To expose integration services and controllers, you can configure the `AbpAspNetCoreMvcOptions` and set the `ExposeIntegrationServices` property as *true* in the `ConfigureServices` method of your [module class](../Module-Development-Basics.md):
+To expose integration services and controllers, you can configure the `AbpAspNetCoreMvcOptions` and set the `ExposeIntegrationServices` property as *true* in the `ConfigureServices` method of your [module class](../../framework/architecture/modularity/basics.md):
 
 ```csharp
 Configure<AbpAspNetCoreMvcOptions>(options =>
@@ -90,7 +90,7 @@ This is a breaking change for microservice solutions because of the following tw
 * `IdentityUserIntegrationService` provides non-authorized services. This is not breaking the application but should be taken care of. Since, everyone can use the service to retrieve some information for a certain user (for example, the role names of a user).
 * Secondly, since integration services are not exposed by default anymore as explained in the *Exposing Integration Services* section above, you should explicitly enable exposing integration services. Otherwise, the operation will fail and you'll get a `404` error from the identity microservice.
 
-To expose integration services and controllers, you can configure the `AbpAspNetCoreMvcOptions` and set the `ExposeIntegrationServices` property as *true* in the `ConfigureServices` method of your [module class](../Module-Development-Basics.md):
+To expose integration services and controllers, you can configure the `AbpAspNetCoreMvcOptions` and set the `ExposeIntegrationServices` property as *true* in the `ConfigureServices` method of your [module class](../../framework/architecture/modularity/basics.md):
 
 ```csharp
 Configure<AbpAspNetCoreMvcOptions>(options =>

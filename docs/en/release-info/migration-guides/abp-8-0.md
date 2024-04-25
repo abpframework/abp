@@ -8,7 +8,7 @@ This document is a guide for upgrading ABP v7.x solutions to ABP v8.0. There are
 
 The 5.0 release of OpenIddict is a major release that introduces breaking changes.
 
-See [OpenIddict 4.x to 5.x Migration Guide](OpenIddict4-to-5.md) for more information.
+See [OpenIddict 4.x to 5.x Migration Guide](openiddict4-to-5.md) for more information.
 
 ## Injected the `IDistributedEventBus` Dependency into the `IdentityUserManager`
 
@@ -26,7 +26,7 @@ See https://github.com/abpframework/abp/issues/17864 for more information.
 
 ## Replaced `IdentityUserLookupAppService` with the `IIdentityUserIntegrationService`
 
-[Integration Services](../Integration-Services.md) are built for module-to-module (or microservice-to-microservice) communication rather than consumed from a UI or a client application as [Application Services](../Application-Services.md) are intended to do.
+[Integration Services](../../framework/api-development/integration-services.mdd) are built for module-to-module (or microservice-to-microservice) communication rather than consumed from a UI or a client application as [Application Services](../../framework/architecture/domain-driven-design/application-services.md) are intended to do.
 
 In that regard, we are discarding the `IIdentityUserLookupAppService` in the Identity Module and moving its functionality to the `IIdentityUserIntegrationService`. Therefore, if you have used that application service directly, use the integration service (`IIdentityUserIntegrationService`) instead. `IIdentityUserLookupAppService` will be removed in thes next versions, so you may need to create a similar service in your application.
 
@@ -59,11 +59,11 @@ In this version, we have made some enhancements in the transactional inbox/outbo
 
 If you call one of these methods in your DbContext class, then this introduces a breaking-change because if you do it, MongoDB collection names will be changed. Therefore, it should be carefully done since existing (non-processed) event records are not automatically moved to new collection and they will be lost. Existing applications with event records should rename the collection manually while deploying their solutions.
 
-See https://github.com/abpframework/abp/pull/17723 for more information. Also, check the documentation for the related configurations: [Distributed Event Bus](../Distributed-Event-Bus.md)
+See https://github.com/abpframework/abp/pull/17723 for more information. Also, check the documentation for the related configurations: [Distributed Event Bus](../../framework/infrastructure/event-bus/distributed/index.md)
 
 ## Moved the CMS Kit Pages Feature's Routing to a `DynamicRouteValueTransformer`
 
-In this version, we have made some improvements in the [CMS Kit's Pages Feature](../Modules/Cms-Kit/Pages.md), such as moving the routing logic to a `DynamicRouteValueTransformer` and etc...
+In this version, we have made some improvements in the [CMS Kit's Pages Feature](../../modules/cms-kit/pages.md), such as moving the routing logic to a `DynamicRouteValueTransformer` and etc...
 
 These enhancements led to some breaking changes as listed below that should be taken care of:
 
@@ -78,7 +78,7 @@ These enhancements led to some breaking changes as listed below that should be t
 
 ## Added Integration Postfix for Auto Controllers
 
-With this version on, the `Integration` suffix from controller names while generating [auto controllers](../API/Auto-API-Controllers.md) are not going to be removed, to differ the integration services from application services in the OpenAPI specification:
+With this version on, the `Integration` suffix from controller names while generating [auto controllers](../../framework/api-development/auto-controllers.md) are not going to be removed, to differ the integration services from application services in the OpenAPI specification:
 
 ![](./images/integration-postfix-not-removed.png)
 
@@ -88,7 +88,7 @@ See https://github.com/abpframework/abp/issues/17625 for more information (how t
 
 ## Revised the reCaptcha Generator for CMS Kit's Comment Feature
 
-In this version, we have made improvements on the [CMS Kit's Comment Feature](../Modules/Cms-Kit/Comments.md) and revised the reCaptcha generation process, and made a performance improvement.
+In this version, we have made improvements on the [CMS Kit's Comment Feature](../../modules/cms-kit/comments.md) and revised the reCaptcha generation process, and made a performance improvement.
 
 This introduced some breaking changes that you should aware of:
 
@@ -99,7 +99,7 @@ If you haven't override the comment view component, then you don't need to make 
 
 ## Disabled Logging for `HEAD` HTTP Methods
 
-HTTP GET requests should not make any change in the database normally and audit log system of ABP Framework doesn't save audit log objects for GET requests by default. You can configure the `AbpAuditingOptions` and set the `IsEnabledForGetRequests` to **true** if you want to record _GET_ requests as described in [the documentation](../Audit-Logging.md).
+HTTP GET requests should not make any change in the database normally and audit log system of ABP Framework doesn't save audit log objects for GET requests by default. You can configure the `AbpAuditingOptions` and set the `IsEnabledForGetRequests` to **true** if you want to record _GET_ requests as described in [the documentation](../../framework/infrastructure/audit-logging.md).
 
 Prior to this version, only the _GET_ requests were not saved as audit logs. From this version on, also the _HEAD_ requests will not be saved as audit logs, if the `IsEnabledForGetRequests` explicitly set as **true**.
 

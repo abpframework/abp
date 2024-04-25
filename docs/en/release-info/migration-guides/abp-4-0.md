@@ -136,7 +136,7 @@ app.Use((httpContext, next) =>
 
 ## Auto API Controller Route Changes
 
-The route calculation for the [Auto API Controllers](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) is changing with the ABP Framework version 4.0 ([#5325](https://github.com/abpframework/abp/issues/5325)). Before v4.0 the route paths were **camelCase**. After version 4.0, it's changed to **kebab-case** route paths where it is possible.
+The route calculation for the [Auto API Controllers](../../framework/api-development/auto-controllers.md) is changing with the ABP Framework version 4.0 ([#5325](https://github.com/abpframework/abp/issues/5325)). Before v4.0 the route paths were **camelCase**. After version 4.0, it's changed to **kebab-case** route paths where it is possible.
 
 **A typical auto API before v4.0**
 
@@ -150,7 +150,7 @@ The route calculation for the [Auto API Controllers](https://docs.abp.io/en/abp/
 
 You may not take any action for the MVC & Blazor UI projects.
 
-For the Angular UI, this change may effect your client UI. If you have used the [ABP CLI Service Proxy Generation](../UI/Angular/Service-Proxies.md), you can run the server side and re-generate the service proxies. If you haven't used this tool, you should manually update the related URLs in your application.
+For the Angular UI, this change may effect your client UI. If you have used the [ABP CLI Service Proxy Generation](../../framework/ui/angular/service-proxies.md), you can run the server side and re-generate the service proxies. If you haven't used this tool, you should manually update the related URLs in your application.
 
 If there are other type of clients (e.g. 3rd-party companies) using your APIs, they also need to update the URLs.
 
@@ -183,7 +183,7 @@ Setting it globally affects all the modules in a modular application.
 
 ## Removed Retry for the Dynamic HTTP Client Proxies
 
-[Dynamic C# HTTP Client Proxies](../API/Dynamic-CSharp-API-Clients.md) were trying up to 3 times if a request fails using the [Polly](https://github.com/App-vNext/Polly) library. Starting from the version 4.0, this logic has been removed. If you need it, you should configure it in your own application, by configuring the `AbpHttpClientBuilderOptions` in the `PreConfigureServices` method of your module.
+[Dynamic C# HTTP Client Proxies](../../framework/api-development/dynamic-csharp-clients.md) were trying up to 3 times if a request fails using the [Polly](https://github.com/App-vNext/Polly) library. Starting from the version 4.0, this logic has been removed. If you need it, you should configure it in your own application, by configuring the `AbpHttpClientBuilderOptions` in the `PreConfigureServices` method of your module.
 
 **Example: Retry 3 times on failure by incremental waiting between tries**
 
@@ -269,12 +269,12 @@ Use the `goto definition` function in Visual Studio or Rider to check `Handler` 
 
 ## ASP.NET Core MVC / Razor Pages UI
 
-See the [ASP.NET Core MVC / Razor Pages UI Migration Guide](Abp-4_0-MVC-Razor-Pages.md).
+See the [ASP.NET Core MVC / Razor Pages UI Migration Guide](Abp-4-0-MVC-Razor-Pages.md).
 
 ## Angular UI
 
-See the [Angular UI Migration Guide](Abp-4_0-Angular.md).
+See the [Angular UI Migration Guide](Abp-4-0-Angular.md).
 
 ## Blazor UI
 
-See the [Blazor UI Migration Guide](Abp-4_0-Blazor.md).
+See the [Blazor UI Migration Guide](Abp-4-0-Blazor.md).

@@ -38,17 +38,17 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-7-3-Final-Has-Been-Released)** for the v7.3 release.
 
-* [Account Module](./modules/account.md): Using Authenticator App for Two-Factor Authentication.
-* Support for the [Module Entity Extensions](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) in the [CMS Kit Pro Module](./modules/cms-kit/index.md).
-* New Account Layout Design for [LeptonX Theme](./themes/lepton-x/index.md).
+* [Account Module](../modules/account.md): Using Authenticator App for Two-Factor Authentication.
+* Support for the [Module Entity Extensions](../framework/architecture/modularity/extending/module-entity-extensions.md) in the [CMS Kit Pro Module](../modules/cms-kit/index.md).
+* New Account Layout Design for [LeptonX Theme](../ui-themes/lepton-x/index.md).
 * Many enhancements and fixes for the 7.3 version.
 
 ## 7.2 (2023-05-03)
 
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-7-2-Final-Has-Been-Released)** for the v7.2 release.
 
-* **[LeptonX Theme](./themes/lepton-x/index.md)** - Navigation Menu Item Grouping.
-* Support for the **Authority Delegation** in the **[Account Module](./modules/account.md)**.
+* **[LeptonX Theme](../ui-themes/lepton-x/index.md)** - Navigation Menu Item Grouping.
+* Support for the **Authority Delegation** in the **[Account Module](../modules/account.md)**.
 * Forcing Password Change at Next Logon.
 * Periodic Password Changes / Password Aging.
 * Suite: Show/Hide Properties on Create/Update/List Pages
@@ -95,8 +95,8 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-5.3-Final-Has-Been-Released)** for the v5.3 release.
 
 * New module: **GDPR** (currently, allows to download/delete user's personal data).
-* **Polling** feature for the [CMS Kit module](modules/cms-kit/index.md).
-* OAuth as **external login provider** for the [Identity module](modules/identity.md).
+* **Polling** feature for the [CMS Kit module](../modules/cms-kit/index.md).
+* OAuth as **external login provider** for the [Identity module](../modules/identity.md).
 * **ABP Suite**: Support for the no-layers startup template, concurrency stamp support on code generation, downloading Suite logs, using ABP CLI to trigger code generation.
 * **Docker-compose** configuration for the no-layers startup template.
 * **PWA** support for Blazor WASM and Angular UI.
@@ -105,7 +105,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Platform-5-2-Final-Has-Been-Released)** for the v5.2 release.
 
-* Code generation with **many to many relation** support for the [ABP Suite](abp-suite/index.md).
+* Code generation with **many to many relation** support for the [ABP Suite](../suite/index.md).
 * The new **single-layer**, simpler startup solution template.
 * Migrated to **Blazorise 1.0** for the Blazor UI.
 * Improvements on the microservice startup solution, pre-built application modules and other existing features.
@@ -139,9 +139,9 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Pla
 
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-4.4-Final-Has-Been-Released!)** for the v4.4.
 
-* **Subscription** system & **payment** integration for the [SaaS module](modules/saas.md).
+* **Subscription** system & **payment** integration for the [SaaS module](../modules/saas.md).
 * SaaS module: Allow to make a **tenant active/passive** and **limit user count**.
-* [ABP Suite](abp-suite/index.md) **code generation** for the [microservice solution](startup-templates/microservice/index.md).
+* [ABP Suite](../suite/index.md) **code generation** for the [microservice solution](../solution-templates/microservice/index.md).
 * Allow to set **multiple connection strings** for each tenant, to separate a tenant's database per module/microservice.
 * Angular UI: **Two-factor** authentication for resource owner password flow.
 * **New localizations**: Hindi, Italian, Arabic, Finnish, French.
@@ -279,7 +279,7 @@ This post also covers the [road map](road-map.md) and other news for the ABP.IO 
 * New module: Created a **real time [Chat Module](https://commercial.abp.io/modules/Volo.Chat)** that is built on ASP.NET Core SignalR. It currently has only the MVC / Razor Pages UI. Angular UI is on the way.
 * Implemented **[module entity extension](guides/module-entity-extensions.md) system** for the **Angular UI**. Also improved the system to better handle float/double/decimal, date, datetime, enum and boolean properties.
 * **Gravatar** integration for the Angular UI.
-* Managing product groups on a **tree view** for the [EasyCRM sample application](samples/easy-crm.md).
+* Managing product groups on a **tree view** for the [EasyCRM sample application](../samples/easy-crm.md).
 
 ## 2.7 (2020-05-07)
 
@@ -289,10 +289,10 @@ See the detailed **blog post / announcement** for the v2.7 release:  https://blo
 
 ### Major Features
 
-* New module: **Text template management** (with angular and mvc UI - document is [coming](modules/text-template-management.md)).
-* **Dynamically add properties** to current entities of the depended modules (see [module entity extensions](guides/module-entity-extensions.md))
+* New module: **Text template management** (with angular and mvc UI - document is [coming](../modules/text-template-management.md)).
+* **Dynamically add properties** to current entities of the depended modules (see [module entity extensions](../framework/architecture/modularity/extending/module-entity-extensions.md))
 * To be able to add **navigation properties** to entities with the ABP Suite (see [navigation properties](https://docs.abp.io/en/commercial/latest/abp-suite/generating-crud-page#navigation-properties))
-* Dynamically add **data table columns** on the user interface (see the documents: [angular](ui/angular/data-table-column-extensions.md), [mvc](ui/aspnetcore/data-table-column-extensions.md))
+* Dynamically add **data table columns** on the user interface (see the documents: [angular](../framework/ui/angular/data-table-column-extensions.md), [mvc](../framework/ui/mvc-razor-pages/data-table-column-extensions.md))
 * Created a rich **sample solution**, named "Easy CRM" (see the document)
 
 ### Other Enhancements

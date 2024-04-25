@@ -12,7 +12,7 @@ ABP 5.0 uses the Bootstrap 5 as the fundamental HTML/CSS framework. We've migrat
 
 ## Startup Template Changes
 
-The startup template has changed. You don't need to apply all the changes, but it is strongly suggested to follow [this guide](Upgrading-Startup-Template.md) and make the necessary changes for your solution.
+The startup template has changed. You don't need to apply all the changes, but it is strongly suggested to follow [this guide](upgrading-startup-template.md) and make the necessary changes for your solution.
 
 ## ABP Framework
 
@@ -20,7 +20,7 @@ This section contains breaking changes in the ABP Framework.
 
 ### MongoDB
 
-ABP Framework will serialize the datetime based on [AbpClockOptions](https://docs.abp.io/en/abp/latest/Timing#clock-options) starting from ABP v5.0. It was saving `DateTime` values as UTC in MongoDB. Check out [MongoDB Datetime Serialization Options](https://mongodb.github.io/mongo-csharp-driver/2.13/reference/bson/mapping/#datetime-serialization-options).
+ABP Framework will serialize the datetime based on [AbpClockOptions](../../framework/infrastructure/timing.md#clock-options) starting from ABP v5.0. It was saving `DateTime` values as UTC in MongoDB. Check out [MongoDB Datetime Serialization Options](https://mongodb.github.io/mongo-csharp-driver/2.13/reference/bson/mapping/#datetime-serialization-options).
 
 If you want to revert back this feature, set `UseAbpClockHandleDateTime` to `false` in `AbpMongoDbOptions`:
 
@@ -42,7 +42,7 @@ If you've used these classes, please remove their usages and use the static prop
 
 ### Removed Obsolete APIs
 
-* `IRepository` doesn't inherit from `IQueryable` anymore. It was [made obsolete in 4.2](https://docs.abp.io/en/abp/latest/Migration-Guides/Abp-4_2#irepository-getqueryableasync).
+* `IRepository` doesn't inherit from `IQueryable` anymore. It was [made obsolete in 4.2](../migration-guides/abp-4-2.md#irepository-getqueryableasync).
 
 ### Automatically Setting the TenantId for New Entities
 
@@ -58,9 +58,9 @@ This can be a breaking change in rare cases (for example, if you create host sid
 
 ## UI Providers
 
-* [Angular UI 4.x to 5.0 Migration Guide](Abp-5_0-Angular.md)
-* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide](Abp-5-0-MVC.md)
-* [Blazor UI 4.x to 5.0 Migration Guide](Abp-5-0-Blazor.md)
+* [Angular UI 4.x to 5.0 Migration Guide](abp-5-0-angular.md)
+* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide](abp-5-0-mvc.md)
+* [Blazor UI 4.x to 5.0 Migration Guide](abp-5-0-blazor.md)
 
 ## Modules
 
@@ -116,6 +116,6 @@ db.AbpUsers.updateMany({},{$set:{ IsActive : true }})
 
 ## See Also
 
-* [Angular UI 4.x to 5.0 Migration Guide](Abp-5_0-Angular.md)
-* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide](Abp-5-0-MVC.md)
-* [Blazor UI 4.x to 5.0 Migration Guide](Abp-5-0-Blazor.md)
+* [Angular UI 4.x to 5.0 Migration Guide](abp-5-0-angular.md)
+* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide](abp-5-0-mvc.md)
+* [Blazor UI 4.x to 5.0 Migration Guide](abp-5-0-blazor.md)

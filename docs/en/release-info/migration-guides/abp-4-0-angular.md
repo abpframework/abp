@@ -36,7 +36,7 @@ export class AppModule {}
 ```
 
 You can find the related issue [here](https://github.com/abpframework/abp/issues/6066)
-Also, please refer to [the docs](https://docs.abp.io/en/abp/latest/UI/Angular/Localization#registering-a-new-locale) for more information.
+Also, please refer to [the docs](../../framework/ui/angular/localization.md#registering-a-new-locale) for more information.
 
 ### **Removed the Angular Account Module Public UI**
 
@@ -88,9 +88,9 @@ Moving away from the global store, we create small services with a single respon
 See [the related issue](https://github.com/abpframework/abp/issues/6154)
 
 Please refer to the following docs for detail information and examples
-- [`ConfigStateService`](../UI/Angular/Config-State-Service)
-- [`EnvironmentService`](../UI/Angular/Environment#EnvironmentService)
-- [`PermissionService`](../UI/Angular/Permission-Management#)
+- [`ConfigStateService`](../../framework/ui/angular/config-state-service.md)
+- [`EnvironmentService`](../../framework/ui/angular/environment.md#EnvironmentService)
+- [`PermissionService`](../../framework/ui/angular/permission-management.md)
 
 ### Deprecated Interfaces
 

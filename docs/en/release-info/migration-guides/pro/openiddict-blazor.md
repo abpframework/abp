@@ -264,4 +264,4 @@ This project is renamed to **AuthServer** after v6.0.0. You can also refactor an
 
 ## See Also
 
-* [OpenIddict Step-by-Step Guide](openIddict-step-by-step.md)
+* [OpenIddict Step-by-Step Guide](openiddict-step-by-step.md)

@@ -4,7 +4,7 @@ Sometimes we introduce new features/changes that requires to **make changes in t
 
 This guide explains a suggested way of upgrading your solution templates, using the WinMerge tool.
 
-> See also the [Upgrading document](../Upgrading.md) for an overall progress of upgrading. This document focuses on upgrading the startup template.
+> See also the [Upgrading document](../upgrading.md) for an overall progress of upgrading. This document focuses on upgrading the startup template.
 
 ## 1) Create Dummy Solutions
 
@@ -17,7 +17,7 @@ Assume that we are upgrading from the version **4.2.2** to version **4.3.0-rc.1*
 
 ![upgrade-diff-empty-folders](../images/upgrade-diff-empty-folders.png)
 
-**A)** Open a command-line terminal inside the `4_2_2` folder and create a new solution with the version `4.2.2` using the ABP [CLI](../CLI.md) (install it if you haven't installed before).
+**A)** Open a command-line terminal inside the `4_2_2` folder and create a new solution with the version `4.2.2` using the ABP [CLI](../../cli/index.md) (install it if you haven't installed before).
 
 **Example:**
 
@@ -27,7 +27,7 @@ abp new MyCompareApp -u blazor -v 4.2.2
 
 > Important: You need to create the solution with the exact configuration of your solution. If your application has Angular UI and MongoDB, you should use the same options here.
 
-**B)** Then open a command-line terminal inside the `4_3_0-rc1` folder and create a new solution with the version `4.3.0-rc.1` using the ABP [CLI](../CLI.md).
+**B)** Then open a command-line terminal inside the `4_3_0-rc1` folder and create a new solution with the version `4.3.0-rc.1` using the ABP [CLI](../../cli/index.md).
 
 **Example:**
 
@@ -84,5 +84,5 @@ Comparison result clearly shows the necessary changes should be done on upgrade.
 ## Notes
 
 * Sometimes, you may find some changes are unnecessary for your own solution. You may deleted these or already customized. In these cases, you can just ignore it.
-* If you do not upgrade your solution as described in this document, your application will continue to work as long as you implement the breaking changes documented in the [migration guide](Index.md). However, you may not get benefit of some new features those require changes in your solution files.
+* If you do not upgrade your solution as described in this document, your application will continue to work as long as you implement the breaking changes documented in the [migration guide](index.md). However, you may not get benefit of some new features those require changes in your solution files.
 * Most of the times, there will be a few or no differences on the startup templates. When there are  important changes, we write a note to the related migration guide, so you apply them manually.

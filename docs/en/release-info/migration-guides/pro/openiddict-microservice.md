@@ -9,7 +9,7 @@ On the other hand, Identity Server ends support for the open-source Identity Ser
 
 ## OpenIddict Migration Steps
 
-Use the `abp update` command to update your existing application. See [Upgrading docs](../Upgrading.md) for more info. Apply required migrations by following the [Migration Guides](Index.md) based on your application version.
+Use the `abp update` command to update your existing application. See [Upgrading docs](../upgrading-startup-template.md) for more info. Apply required migrations by following the [Migration Guides](index.md) based on your application version.
 
 ### AuthServer Application
 
@@ -532,4 +532,4 @@ To update the menu, navigate to **MyApplicationMenuContributor.cs** (or Navigati
 
 ## See Also
 
-* [ABP Version 6.0 Migration Guide](Abp-6_0.md)
+* [ABP Version 6.0 Migration Guide](v6-0.md)

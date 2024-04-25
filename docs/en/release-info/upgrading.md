@@ -4,7 +4,7 @@ This document explains how to upgrade your existing solution when a new ABP vers
 
 ## ABP UPDATE Command
 
-ABP platform consist of hundreds of NuGet and NPM packages. It would be tedious to manually update all these packages to upgrade your application. [ABP CLI](CLI.md) provides a handy command to update all the ABP related NuGet and NPM packages in your solution with a single command:
+ABP platform consist of hundreds of NuGet and NPM packages. It would be tedious to manually update all these packages to upgrade your application. [ABP CLI](../cli/index.md) provides a handy command to update all the ABP related NuGet and NPM packages in your solution with a single command:
 
 ````bash
 abp update
@@ -31,13 +31,13 @@ Whenever you upgrade your solution, it is strongly suggested to check the [ABP B
 
 ### Migration Guides
 
-We prepare migration guides if the new version brings breaking changes for existing applications. See the [Migration Guides](Migration-Guides/Index.md) document for all the guides.
+We prepare migration guides if the new version brings breaking changes for existing applications. See the [Migration Guides](migration-guides/index.md) document for all the guides.
 
 ### Upgrading the Startup Template
 
 Sometimes we introduce new features/changes that requires to **make changes in the startup template**. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your existing solution.
 
-It is not practical to document the necessary changes line by line. In this case, we suggest you to create an example solution, one with your existing version and one with the new version and compare them using a diff tool. You can [see this guide](Migration-Guides/Upgrading-Startup-Template.md) to learn how you can do it using WinMerge application.
+It is not practical to document the necessary changes line by line. In this case, we suggest you to create an example solution, one with your existing version and one with the new version and compare them using a diff tool. You can [see this guide](migration-guides/upgrading-startup-template.md) to learn how you can do it using WinMerge application.
 
 ## Semantic Versioning & Breaking Changes
 
@@ -52,9 +52,9 @@ However, there are some cases we may introduce breaking changes in feature versi
 
 Preview releases and nightly builds can help you to try new features and adapt your solution earlier than a new stable release.
 
-* [Preview releases](Previews.md) are typically published ~4 weeks before a minor (feature) version. The minor (feature) version development cycle is about ~12 weeks.
-* [Nightly builds](Nightly-Builds.md) are published in every night (except weekends) from the development branch. That means you can try the previous day's development.
+* [Preview releases](previews.md) are typically published ~4 weeks before a minor (feature) version. The minor (feature) version development cycle is about ~12 weeks.
+* [Nightly builds](nightly-builds.md) are published in every night (except weekends) from the development branch. That means you can try the previous day's development.
 
 ## See Also
 
-* [Migration Guides](Migration-Guides/Index.md)
+* [Migration Guides](migration-guides/index.md)

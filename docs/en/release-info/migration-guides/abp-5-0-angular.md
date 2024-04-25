@@ -1,6 +1,6 @@
 # Angular UI v4.x to v5.0 Migration Guide
 
-> This document is for the Angular UI. See also [the main migration guide](Abp-5_0.md).
+> This document is for the Angular UI. See also [the main migration guide](abp-5-0.md).
 
 ## Overall
 
@@ -138,7 +138,7 @@ Following proxies have been affected:
 
 ## ChartComponent
 
-[`ChartComponent`](../UI/Angular/Chart-Component.md) has moved from `@abp/ng.theme.shared` to `@abp/ng.components/chart.js`. To use the component, you need to import the `ChartModule` to your module as follows:
+[`ChartComponent`](../../framework/ui/angular/chart-component.md) has moved from `@abp/ng.theme.shared` to `@abp/ng.components/chart.js`. To use the component, you need to import the `ChartModule` to your module as follows:
 
 ```ts
 import { ChartModule } from '@abp/ng.components/chart.js';

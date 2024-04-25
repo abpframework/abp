@@ -9,7 +9,7 @@ On the other hand, Identity Server ends support for the open-source Identity Ser
 
 ## OpenIddict Migration Steps
 
-Use the `abp update` command to update your existing application. See the [Upgrading docs](../Upgrading.md) for more info. Apply the required migrations by following the [Migration Guides](Index.md) based on your application version.
+Use the `abp update` command to update your existing application. See the [Upgrading docs](../upgrading-startup-template.md) for more info. Apply the required migrations by following the [Migration Guides](index.md) based on your application version.
 
 ### Domain.Shared Layer
 
@@ -363,10 +363,10 @@ dotnet ef migrations add AbpOpenIddictMigration
 
 ### UI Layer
 
-- [Angular UI Migration](openIddict-angular.md)
-- [MVC/Razor UI Migration](openIddict-mvc.md)
-- [Blazor-Server UI Migration](openIddict-blazor-server.md)
-- [Blazor-Wasm UI Migration](openIddict-blazor.md)
+- [Angular UI Migration](openiddict-angular.md)
+- [MVC/Razor UI Migration](openiddict-mvc.md)
+- [Blazor-Server UI Migration](openiddict-blazor-server.md)
+- [Blazor-Wasm UI Migration](openiddict-blazor.md)
 
 ## Source code of the samples and module
 
@@ -377,4 +377,4 @@ dotnet ef migrations add AbpOpenIddictMigration
 
 ## See Also
 
-* [ABP Version 6.0 Migration Guide](Abp-6_0.md)
+* [ABP Version 6.0 Migration Guide](v6-0.md)

@@ -14,7 +14,7 @@ If you are using the microservice template, please check [Migrating the Microser
 
 ## OpenIddict Migration Steps
 
-Use the `abp update` command to update your existing application. See [Upgrading docs](../Upgrading.md) for more info. Apply required migrations by following the [Migration Guides](Index.md) based on your application version.
+Use the `abp update` command to update your existing application. See [Upgrading docs](../upgrading.md) for more info. Apply required migrations by following the [Migration Guides](index.md) based on your application version.
 
 ### Domain.Shared Layer
 
@@ -250,10 +250,10 @@ for creating the host builder.
 
 ### UI Layer
 
-- [Angular UI Migration](OpenIddict-Angular.md)
-- [MVC/Razor UI Migration](OpenIddict-Mvc.md)
-- [Blazor-Server UI Migration](OpenIddict-Blazor-Server.md)
-- [Blazor-Wasm UI Migration](OpenIddict-Blazor.md)
+- [Angular UI Migration](openiddict-angular.md)
+- [MVC/Razor UI Migration](openiddict-mvc.md)
+- [Blazor-Server UI Migration](openiddict-blazor-server.md)
+- [Blazor-Wasm UI Migration](openiddict-blazor.md)
 
 ## Source code of samples and module
 
@@ -263,4 +263,4 @@ for creating the host builder.
 
 ## See Also
 
-* [ABP Version 6.0 Migration Guide](Abp-6_0.md)
+* [ABP Version 6.0 Migration Guide](abp-6-0.md)

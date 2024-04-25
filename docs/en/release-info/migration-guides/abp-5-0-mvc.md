@@ -1,6 +1,6 @@
 # ABP MVC / Razor Pages UI v4.x to v5.0 Migration Guide
 
-> This document is for the ABP MVC / Razor Pages UI. See also [the main migration guide](Abp-5_0.md).
+> This document is for the ABP MVC / Razor Pages UI. See also [the main migration guide](abp-5-0.md).
 
 ## Use install-libs by default
 

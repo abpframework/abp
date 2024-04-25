@@ -53,7 +53,7 @@ public async Task DoItInNewWayAsync()
 }
 ````
 
-ABP may start a database transaction when you get an `IQueryable` (If current [Unit Of Work](https://docs.abp.io/en/abp/latest/Unit-Of-Work) is transactional). In this new way, it is possible to **start the database transaction in an asynchronous way**. Previously, we could not get the advantage of asynchronous while starting the transactions.
+ABP may start a database transaction when you get an `IQueryable` (If current [Unit Of Work](../../framework/architecture/domain-driven-design/unit-of-work.md) is transactional). In this new way, it is possible to **start the database transaction in an asynchronous way**. Previously, we could not get the advantage of asynchronous while starting the transactions.
 
 > **The new way has a significant performance and scalability gain. The old usage (directly using LINQ over the repositories) will be removed in the next major version (5.0).** You have a lot of time for the change, but we recommend to immediately take the action since the old usage has a big **scalability problem**.
 

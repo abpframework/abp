@@ -29,7 +29,7 @@ The template project use different render modes for different types of projects 
 
 ## The key changes of the new Blazor Web App template
 
-The new Web App template has two projects, each containing a system of [ABP modules](https://docs.abp.io/en/abp/latest/Modules/Index).
+The new Web App template has two projects, each containing a system of [ABP modules](../../modules/index.md).
 
 - MyCompanyName.MyProjectName.Blazor.WebApp
 - MyCompanyName.MyProjectName.Blazor.WebApp.Client

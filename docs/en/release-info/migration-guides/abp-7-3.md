@@ -19,7 +19,7 @@ Please check [this PR](https://github.com/abpframework/abp/pull/16537) if you en
 
 ABP Framework supports adding unique value to nonce attribute for script tags which can be used by Content Security Policy to determine whether or not a given fetch will be allowed to proceed for a given element. In other words, it provides a mechanism to execute only correct script tags with the correct nonce value. 
 
-> See the [Security Headers](../UI/AspNetCore/Security-Headers.md) documentation for more information.
+> See the [Security Headers](../../framework/ui/mvc-razor-pages/security-headers.md) documentation for more information.
 
 This feature comes with a small restriction. If you use any C# code used inside the script tag, it may cause errors (Because a new `NonceScriptTagHelper` has been added, and it replaces script tags in the HTML contents). 
 

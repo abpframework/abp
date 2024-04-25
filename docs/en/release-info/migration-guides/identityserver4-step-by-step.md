@@ -4,7 +4,7 @@ ABP startup templates use `OpenIddict` OpenID provider from v6.0.0 by default an
 
 ## IdentityServer4 Migration Steps
 
-Use the `abp update` command to update your existing application. See [Upgrading docs](../Upgrading.md) for more info. Apply required migrations by following the [Migration Guides](Index.md) based on your application version.
+Use the `abp update` command to update your existing application. See [Upgrading docs](../upgrading.md) for more info. Apply required migrations by following the [Migration Guides](index.md) based on your application version.
 
 ### Domain.Shared Layer
 
@@ -218,10 +218,10 @@ typeof(AbpIdentityServerMongoDbModule),
 
 You can follow the migrations guides from IdentityServer to OpenIddict in **reverse order** to update your UIs. You can also check the source-code for [Index.cshtml.cs](https://github.com/abpframework/abp-samples/blob/master/OpenId2Ids/src/OpenId2Ids.AuthServer/Pages/Index.cshtml) and  [Index.cshtml](https://github.com/abpframework/abp-samples/blob/master/OpenId2Ids/src/OpenId2Ids.AuthServer/Pages/Index.cshtml.cs) files for **AuthServer** project.
 
-- [Angular UI Migration](OpenIddict-Angular.md)
-- [MVC/Razor UI Migration](OpenIddict-Mvc.md)
-- [Blazor-Server UI Migration](OpenIddict-Blazor-Server.md)
-- [Blazor-Wasm UI Migration](OpenIddict-Blazor.md)
+- [Angular UI Migration](openiddict-angular.md)
+- [MVC/Razor UI Migration](openiddict-mvc.md)
+- [Blazor-Server UI Migration](openiddict-blazor-server.md)
+- [Blazor-Wasm UI Migration](openiddict-blazor.md)
 
 ## Source code of samples and module
 
