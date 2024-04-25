@@ -6,9 +6,9 @@ However, there are some topics that you should care about when you are deploying
 
 ## Guides
 
-* [Configuring SSL certificate(HTTPS)](SSL.md): Explains how to configure SSL certificate(HTTPS) for your application.
-* [Configuring OpenIddict](Configuring-OpenIddict.md): Notes for some essential configurations for OpenIddict.
-* [Configuring for Production](Configuring-Production.md): Notes for some essential configurations for production environments.
-* [Optimization for Production](Optimizing-Production.md): Tips and suggestions for optimizing your application on production environments.
-* [Deploying to a Clustered Environment](Clustered-Environment.md): Explains how to configure your application when you want to run multiple instances of your application concurrently.
-* [Deploying Distributed / Microservice Solutions](Distributed-Microservice.md): Deployment notes for solutions consisting of multiple applications and/or services.
+* [Configuring SSL certificate(HTTPS)](./ssl.md): Explains how to configure SSL certificate(HTTPS) for your application.
+* [Configuring OpenIddict](./configuring-openIddict.md): Notes for some essential configurations for OpenIddict.
+* [Configuring for Production](./configuring-production.md): Notes for some essential configurations for production environments.
+* [Optimization for Production](./optimizing-production.md): Tips and suggestions for optimizing your application on production environments.
+* [Deploying to a Clustered Environment](./clustered-environment.md): Explains how to configure your application when you want to run multiple instances of your application concurrently.
+* [Deploying Distributed / Microservice Solutions](./distributed-microservice.md): Deployment notes for solutions consisting of multiple applications and/or services.
