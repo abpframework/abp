@@ -87,3 +87,27 @@ Here, a screenshot from the *Solution Runner* screen of ABP Studio:
 ABP Studio has been started as a commercial product, as a part of [ABP Commercial](https://commercial.abp.io/). We are very excited to announce that the *Community Edition* will be available for free soon. It will have some missing features and limitations compared to the full edition, but will be enough to create, explore and run ABP solutions easily.
 
 We will be offering ABP Studio as a starting point to the ABP platform. The [Getting Started](https://docs.abp.io/en/abp/latest/Getting-Started-Overall) and other documents will use ABP Studio to create new solutions and perform ABP-related operations.
+
+## Other News
+
+We are also working on some other topics related to these changes. Some of them are;
+
+* Completely renewing the [startup templates](https://docs.abp.io/en/abp/latest/Startup-Templates/Index) (with ABP Studio), so they will be more flexible and will provide more options.
+* Providing a tool to automatically convert ABP solutions created with open source startup templates into ABP commercial.
+
+## Questions
+
+I tried to explain all the important changes in this post. However, you may have some questions in your mind.
+
+### What should open source users expect?
+
+Since the [ABP Commercial](https://commercial.abp.io/) website content is merged with the main [abp.io](https://abp.io/) website, you will see paid features being introduced on the main website. The pricing page will also be available on the same website. This may lead you to wonder whether the ABP Platform is a fully paid product. The simple answer to this question is "No". Actually, nothing has changed on the open source side. Everything will be the same. Additionally, open source users will now have ABP Studio Community Edition for free. So open source has more for its users than before.
+
+### What should ABP Commercial customers expect?
+
+ABP Commercial license holders may wonder if any license change happens. The answer is "No". All the license types, rules, restrictions and features are the same. With the changes explained in this post, you will follow the documentation easier (since you won't need to go to another website for the framework documentation) and you will better understand what special features are available to you.
+
+## Last Words
+
+With this post, we wanted to announce the changes to be made on the ABP platform to the ABP community, so don't be surprised or curious about what happened. If you have any questions or suggestions, feel free to write a comment for this blog post or send an email to info@abp.io.
+
