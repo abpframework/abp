@@ -34,7 +34,7 @@ export class AppModule {}
   - `hideCloseIcon` hides close icon in default ABP component.
 
 ## Custom HTTP Error Handler
-When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./HTTP-Error-Reporter-Service), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
+When the `RestService` is used, all HTTP errors are reported to the [`HttpErrorReporterService`](./http-error-reporter-service.md), and then `ErrorHandler`, a service exposed by the `@abp/ng.theme.shared` package automatically handles the errors.
 
 ### Function Method `Deprecated`
 

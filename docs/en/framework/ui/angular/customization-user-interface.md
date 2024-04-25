@@ -1,3 +1,3 @@
 # Angular User Interface Customization Guide
 
-* [Replacing a component](Component-Replacement.md)
+* [Replacing a component](component-replacement.md)

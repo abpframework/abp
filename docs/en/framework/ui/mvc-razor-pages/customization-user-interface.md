@@ -1,6 +1,6 @@
 # ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide
 
-This document explains how to override the user interface of a depended [application module](../../Modules/Index.md) or [theme](Theming.md) for ASP.NET Core MVC / Razor Page applications.
+This document explains how to override the user interface of a depended [application module](../../../modules/index.md) or [theme](theming.md) for ASP.NET Core MVC / Razor Page applications.
 
 ## Overriding a Page
 
@@ -55,15 +55,15 @@ Overriding a `.cshtml` file (razor page, razor view, view component... etc.) is 
 
 #### Example
 
-This example overrides the **login page** UI defined by the [Account Module](../../Modules/Account.md).
+This example overrides the **login page** UI defined by the [Account Module](../../../modules/account.md).
 
 The account module defines a `Login.cshtml` file under the `Pages/Account` folder. So, you can override it by creating a file in the same path:
 
-![overriding-login-cshtml](../../images/overriding-login-cshtml.png)
+![overriding-login-cshtml](../../../images/overriding-login-cshtml.png)
 
 You typically want to copy the original `.cshtml` file of the module, then make the necessary changes. You can find the original file [here](https://github.com/abpframework/abp/blob/dev/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml). Do not copy the `Login.cshtml.cs` file which is the code behind file for the razor page and we don't want to override it yet (see the next section).
 
-> Don't forget to add [_ViewImports.cshtml](https://learn.microsoft.com/en-us/aspnet/core/mvc/views/layout?view=aspnetcore-7.0#importing-shared-directives) if the page you want to override contains [ABP Tag Helpers](../AspNetCore/Tag-Helpers/Index.md).
+> Don't forget to add [_ViewImports.cshtml](https://learn.microsoft.com/en-us/aspnet/core/mvc/views/layout?view=aspnetcore-7.0#importing-shared-directives) if the page you want to override contains [ABP Tag Helpers](tag-helpers/index.md).
 
 ````csharp
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -85,7 +85,7 @@ In such a case;
 
 #### Example
 
-This example overrides the **login page** defined by the [Account Module](../../Modules/Account.md).
+This example overrides the **login page** defined by the [Account Module](../../../modules/account.md).
 
 Create a page model class deriving from the ` LoginModel ` (defined in the ` Volo.Abp.Account.Web.Pages.Account ` namespace):
 
@@ -137,15 +137,15 @@ The ABP Framework, pre-built themes and modules define some **re-usable view com
 
 ### Example
 
-The screenshot below was taken from the [Basic Theme](Basic-Theme.md) comes with the application startup template.
+The screenshot below was taken from the [Basic Theme](basic-theme.md) comes with the application startup template.
 
-![bookstore-brand-area-highlighted](../../images/bookstore-brand-area-highlighted.png)
+![bookstore-brand-area-highlighted](../../../images/bookstore-brand-area-highlighted.png)
 
-The [Basic Theme](Basic-Theme.md) defines some view components for the layout. For example, the highlighted area with the red rectangle above is called **Brand component**. You probably want to customize this component by adding your **own application logo**. Let's see how to do it.
+The [Basic Theme](basic-theme.md) defines some view components for the layout. For example, the highlighted area with the red rectangle above is called **Brand component**. You probably want to customize this component by adding your **own application logo**. Let's see how to do it.
 
 First, create your logo and place under a folder in your web application. We used `wwwroot/logos/bookstore-logo.png` path. Then copy the Brand component's view ([from here](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml)) from the basic theme files under the `Themes/Basic/Components/Brand` folder. The result should be similar the picture below:
 
-![bookstore-added-brand-files](../../images/bookstore-added-brand-files.png)
+![bookstore-added-brand-files](../../../images/bookstore-added-brand-files.png)
 
 Then change the `Default.cshtml` as you like. Example content can be like that:
 
@@ -163,15 +163,15 @@ If you need, you can also replace [the code behind c# class](https://github.com/
 
 ### Overriding the Theme
 
-Just as explained above, you can replace any component, layout or c# class of the used theme. See the [theming document](Theming.md) for more information on the theming system.
+Just as explained above, you can replace any component, layout or c# class of the used theme. See the [theming document](theming.md) for more information on the theming system.
 
 ## Overriding Static Resources
 
-Overriding a static embedded resource (like JavaScript, Css or image files) of a module is pretty easy. Just place a file in the same path in your solution and let the [Virtual File System](../../Virtual-File-System.md) to handle it.
+Overriding a static embedded resource (like JavaScript, Css or image files) of a module is pretty easy. Just place a file in the same path in your solution and let the [Virtual File System](../../infrastructure/virtual-file-system.md) to handle it. 
 
 ## Manipulating the Bundles
 
-The [Bundling & Minification](Bundling-Minification.md) system provides an **extensible and dynamic** system to create **script** and **style** bundles. It allows you to extend and manipulate the existing bundles.
+The [Bundling & Minification](bundling-minification.md) system provides an **extensible and dynamic** system to create **script** and **style** bundles. It allows you to extend and manipulate the existing bundles.
 
 ### Example: Add a Global CSS File
 
@@ -179,7 +179,7 @@ For example, ABP Framework defines a **global style bundle** which is added to e
 
 First, create a CSS file and locate it in a folder inside the `wwwroot`:
 
-![bookstore-global-css-file](../../images/bookstore-global-css-file.png)
+![bookstore-global-css-file](../../../images/bookstore-global-css-file.png)
 
 Define some custom CSS rules inside the file. Example:
 
@@ -195,7 +195,7 @@ Define some custom CSS rules inside the file. Example:
 }
 ````
 
-Then add this file to the standard global style bundle in the `ConfigureServices` method of your [module](../../Module-Development-Basics.md):
+Then add this file to the standard global style bundle in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md):
 
 ````csharp
 Configure<AbpBundlingOptions>(options =>
@@ -287,7 +287,7 @@ In addition to adding new CSS/JavaScript file to a page, you also can replace th
 
 ## Layout Customization
 
-Layouts are defined by the theme ([see the theming](Theming.md)) by design. They are not included in a downloaded application solution. In this way you can easily **upgrade** the theme and get new features. You can not **directly change** the layout code in your application unless you replace it by your own layout (will be explained in the next sections).
+Layouts are defined by the theme ([see the theming](theming.md)) by design. They are not included in a downloaded application solution. In this way you can easily **upgrade** the theme and get new features. You can not **directly change** the layout code in your application unless you replace it by your own layout (will be explained in the next sections).
 
 There are some common ways to **customize the layout** described in the next sections.
 
@@ -295,20 +295,20 @@ There are some common ways to **customize the layout** described in the next sec
 
 There are two **standard menus** defined by the ABP Framework:
 
-![bookstore-menus-highlighted](../../images/bookstore-menus-highlighted.png)
+![bookstore-menus-highlighted](../../../images/bookstore-menus-highlighted.png)
 
 * `StandardMenus.Main`: The main menu of the application.
 * `StandardMenus.User`: The user menu (generally at the top right of the screen).
 
 Rendering the menus is a responsibility of the theme, but **menu items** are determined by the modules and your application code. Just implement the `IMenuContributor` interface and **manipulate the menu items** in the `ConfigureMenuAsync` method.
 
-Menu contributors are executed whenever need to render the menu. There is already a menu contributor defined in the **application startup template**, so you can take it as an example and improve if necessary. See the [navigation menu](Navigation-Menu.md) document for more.
+Menu contributors are executed whenever need to render the menu. There is already a menu contributor defined in the **application startup template**, so you can take it as an example and improve if necessary. See the [navigation menu](navigation-menu.md) document for more.
 
 ### Toolbar Contributors
 
-[Toolbar system](Toolbars.md) is used to define **toolbars** on the user interface. Modules (or your application) can add **items** to a toolbar, then the theme renders the toolbar on the **layout**.
+[Toolbar system](toolbars.md) is used to define **toolbars** on the user interface. Modules (or your application) can add **items** to a toolbar, then the theme renders the toolbar on the **layout**.
 
-There is only one **standard toolbar** (named "Main" - defined as a constant: `StandardToolbars.Main`). For the basic theme, it is rendered as shown below:![bookstore-toolbar-highlighted](../../images/bookstore-toolbar-highlighted.png)
+There is only one **standard toolbar** (named "Main" - defined as a constant: `StandardToolbars.Main`). For the basic theme, it is rendered as shown below:![bookstore-toolbar-highlighted](../../../images/bookstore-toolbar-highlighted.png)
 
 In the screenshot above, there are two items added to the main toolbar: Language switch component & user menu. You can add your own items here.
 
@@ -316,7 +316,7 @@ In the screenshot above, there are two items added to the main toolbar: Language
 
 In this example, we will add a **notification (bell) icon** to the left of the language switch item. A item in the toolbar should be a **view component**. So, first, create a new view component in your project:
 
-![bookstore-notification-view-component](../../images/bookstore-notification-view-component.png)
+![bookstore-notification-view-component](../../../images/bookstore-notification-view-component.png)
 
 **NotificationViewComponent.cs**
 
@@ -369,21 +369,21 @@ Configure<AbpToolbarOptions>(options =>
 
 That's all, you will see the notification icon on the toolbar when you run the application:
 
-![bookstore-notification-icon-on-toolbar](../../images/bookstore-notification-icon-on-toolbar.png)
+![bookstore-notification-icon-on-toolbar](../../../images/bookstore-notification-icon-on-toolbar.png)
 
 `NotificationViewComponent` in this sample simply returns a view without any data. In real life, you probably want to **query database** (or call an HTTP API) to get notifications and pass to the view. If you need, you can add a `JavaScript` or `CSS` file to the global bundle (as described before) for your toolbar item.
 
-See the [toolbars document](Toolbars.md) for more about the toolbar system.
+See the [toolbars document](toolbars.md) for more about the toolbar system.
 
 ### Layout Hooks
 
-[Layout Hooks](Layout-Hooks.md) system allows you to **add code** at some specific parts of the layout. All layouts of all themes should implement these hooks. Then you can then add a **view component** into a hook point.
+[Layout Hooks](layout-hooks.md) system allows you to **add code** at some specific parts of the layout. All layouts of all themes should implement these hooks. Then you can then add a **view component** into a hook point.
 
 #### Example: Add Google Analytics Script
 
 Assume that you need to add the Google Analytics script to the layout (that will be available for all the pages). First, **create a view component** in your project:
 
-![bookstore-google-analytics-view-component](../../images/bookstore-google-analytics-view-component.png)
+![bookstore-google-analytics-view-component](../../../images/bookstore-google-analytics-view-component.png)
 
 **GoogleAnalyticsViewComponent.cs**
 

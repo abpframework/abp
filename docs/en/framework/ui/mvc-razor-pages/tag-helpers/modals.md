@@ -1,6 +1,6 @@
 # Modals
 
-> This document explains the details of the `abp-modal` Tag Helper, which simplifies to build the HTML markup for a modal dialog. Read [that documentation](../Modals.md) to learn how to work with modals.
+> This document explains the details of the `abp-modal` Tag Helper, which simplifies to build the HTML markup for a modal dialog. Read [that documentation](../modals.md) to learn how to work with modals.
 
 ## Introduction
 

@@ -4,19 +4,19 @@
 
 Entity action extension system allows you to add a **new action** to the action menu for an entity. A **Click Me** action was added to the *User Management* page below:
 
-![user-action-extension-click-me](../../images/user-action-extension-click-me.png)
+![user-action-extension-click-me](../../../images/user-action-extension-click-me.png)
 
 You can take any action (open a modal, make an HTTP API call, redirect to another page... etc) by writing your custom code. You can access to the current entity in your code.
 
 ## How to Set Up
 
-In this example, we will add a "Click Me!" action and execute a JavaScript code for the user management page of the [Identity Module](../../Modules/Identity.md).
+In this example, we will add a "Click Me!" action and execute a JavaScript code for the user management page of the [Identity Module](../../../../../../modules/identity.md).
 
 ### Create a JavaScript File
 
 First, add a new JavaScript file to your solution. We added inside the `/Pages/Identity/Users` folder of the `.Web` project:
 
-![user-action-extension-on-solution](../../images/user-action-extension-on-solution.png)
+![user-action-extension-on-solution](../../../images/user-action-extension-on-solution.png)
 
 Here, the content of this JavaScript file:
 
@@ -40,7 +40,7 @@ In the `action` function, you can do anything you need. See the API section for 
 
 ### Add the File to the User Management Page
 
-Then you need to add this JavaScript file to the user management page. You can take the power of the [Bundling & Minification System](Bundling-Minification.md).
+Then you need to add this JavaScript file to the user management page. You can take the power of the [Bundling & Minification System](bundling-minification.md).
 
 Write the following code inside the `ConfigureServices` of your module class:
 
@@ -74,7 +74,7 @@ This method is used to access the entity actions of a specific module. It takes 
 
 ### abp.ui.extensions.entityActions.get(entityName).actions
 
-The `actions` property is used to retrieve a [doubly linked list](../Common/Utils/Linked-List.md) of previously defined actions for an entity. All contributors are executed in order to prepare the final actions list. This is normally called by the modules to show the actions in the grid. However, you can use it if you are building your own extensible UIs.
+The `actions` property is used to retrieve a [doubly linked list](../common/utils/linked-list.md) of previously defined actions for an entity. All contributors are executed in order to prepare the final actions list. This is normally called by the modules to show the actions in the grid. However, you can use it if you are building your own extensible UIs.
 
 ### abp.ui.extensions.entityActions.get(entityName).addContributor(contributeCallback)
 
@@ -105,4 +105,4 @@ abp.ui.extensions.entityActions
     });
 ```
 
-> `actionList` is [linked list](../Common/Utils/Linked-List.md). You can use its methods to build a list of columns however you need.
+> `actionList` is [linked list](../common/utils/linked-list.md). You can use its methods to build a list of columns however you need.

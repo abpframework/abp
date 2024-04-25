@@ -54,7 +54,7 @@ The `load` method returns an observable to which you can subscibe in your compon
 
 > You can subscribe multiple times in your template with `async` pipe. The Scripts will only be loaded once.
 
-Please refer to [LoadingStrategy](./Loading-Strategy.md) to see all available loading strategies and how you can build your own loading strategy.
+Please refer to [LoadingStrategy](./loading-strategy.md) to see all available loading strategies and how you can build your own loading strategy.
 
 
 
@@ -83,7 +83,7 @@ The `load` method returns an observable to which you can subscibe in your compon
 
 > You can subscribe multiple times in your template with `async` pipe. The styles will only be loaded once.
 
-Please refer to [LoadingStrategy](./Loading-Strategy.md) to see all available loading strategies and how you can build your own loading strategy.
+Please refer to [LoadingStrategy](./loading-strategy.md) to see all available loading strategies and how you can build your own loading strategy.
 
 
 

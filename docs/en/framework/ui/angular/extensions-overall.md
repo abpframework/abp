@@ -4,10 +4,10 @@ Angular UI extensions system allows you to add a new action to the actions menu,
 
 See the documents below for the details:
 
-* [Entity Action Extensions](Entity-Action-Extensions.md)
-* [Data Table Column (or Entity Prop) Extensions](Data-Table-Column-Extensions.md)
-* [Page Toolbar Extension](Page-Toolbar-Extensions.md)
-* [Dynamic Form (or Form Prop) Extensions](Dynamic-Form-Extensions.md)
+* [Entity Action Extensions](entity-action-extensions.md)
+* [Data Table Column (or Entity Prop) Extensions](data-table-column-extensions.md)
+* [Page Toolbar Extension](page-toolbar-extensions.md)
+* [Dynamic Form (or Form Prop) Extensions](dynamic-form-extensions.md)
 
 ##  Extensible Table Component
 

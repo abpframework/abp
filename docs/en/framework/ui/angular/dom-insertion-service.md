@@ -44,7 +44,7 @@ class DemoComponent {
 
 In the example above, `<script>alert()</script>` element will place at the **end** of `<body>` and `scriptElement` will be an `HTMLScriptElement`.
 
-Please refer to [ContentStrategy](./Content-Strategy.md) to see all available content strategies and how you can build your own content strategy.
+Please refer to [ContentStrategy](./content-strategy.md) to see all available content strategies and how you can build your own content strategy.
 
 > Important Note: `DomInsertionService` does not insert the same content twice. In order to add a content again, you first should remove the old content using `removeContent` method.
 
@@ -71,7 +71,7 @@ class DemoComponent {
 
 In the example above, `<style>body {margin: 0;}</style>` element will place at the **end** of `<head>` and `styleElement` will be an `HTMLStyleElement`.
 
-Please refer to [ContentStrategy](./Content-Strategy.md) to see all available content strategies and how you can build your own content strategy.
+Please refer to [ContentStrategy](./content-strategy.md) to see all available content strategies and how you can build your own content strategy.
 
 > Important Note: `DomInsertionService` does not insert the same content twice. In order to add a content again, you first should remove the old content using `removeContent` method.
 

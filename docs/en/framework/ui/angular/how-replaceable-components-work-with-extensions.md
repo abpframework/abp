@@ -1,6 +1,6 @@
 # How Replaceable Components Work with Extensions
 
-Additional UI extensibility points ([Entity action extensions](https://docs.abp.io/en/abp/latest/UI/Angular/Entity-Action-Extensions), [data table column extensions](https://docs.abp.io/en/abp/latest/UI/Angular/Data-Table-Column-Extensions), [page toolbar extensions](https://docs.abp.io/en/abp/latest/UI/Angular/Page-Toolbar-Extensions) and others) are used in ABP pages to allow to control entity actions, table columns and page toolbar of a page. If you replace a page, you need to apply some configurations to be able to work extension components in your component. Let's see how to do this by replacing the roles page.
+Additional UI extensibility points ([Entity action extensions](../angular/entity-action-extensions.md), [data table column extensions](../angular/data-table-column-extensions.md), [page toolbar extensions](../angular/page-toolbar-extensions.md) and others) are used in ABP pages to allow to control entity actions, table columns and page toolbar of a page. If you replace a page, you need to apply some configurations to be able to work extension components in your component. Let's see how to do this by replacing the roles page.
 
 Create a new module called `MyRolesModule`:
 

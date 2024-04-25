@@ -66,7 +66,7 @@ export interface Application {
 
 - `name`: Name of the backend Application. It is also used by `logo.component` if `logoUrl` is not provided.
 - `logoUrl`: Url of the application logo. It is used by `logo.component`
-- `baseUrl`: [For detailed information](./Multi-Tenancy.md#domain-tenant-resolver)
+- `baseUrl`: [For detailed information](./multi-tenancy.md#domain-tenant-resolver)
 
 ## AuthConfig
 

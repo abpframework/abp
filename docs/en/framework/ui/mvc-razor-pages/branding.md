@@ -6,7 +6,7 @@
 
 The screenshot below shows *MyProject* as the application name:
 
-![branding-nobrand](../../images/branding-nobrand.png)
+![branding-nobrand](../../../images/branding-nobrand.png)
 
 You can implement the `IBrandingProvider` interface or inherit from the `DefaultBrandingProvider` to set the application name:
 
@@ -26,11 +26,11 @@ namespace MyProject.Web
 }
 ````
 
-> Currently, setting the `AppName` is only applicable to the [Basic Theme](../../Themes/Basic.md), it does not have any effect on the other [official themes](../../Themes/Index.md).
+> Currently, setting the `AppName` is only applicable to the [Basic Theme](../../../themes/basic.md), it does not have any effect on the other [official themes](../../../ui-themes/index.md).
 
 The result will be like shown below:
 
-![bookstore-added-logo](../../images/bookstore-added-logo.png)
+![bookstore-added-logo](../../../images/bookstore-added-logo.png)
 
 `IBrandingProvider` has the following properties:
 
@@ -42,4 +42,4 @@ The result will be like shown below:
 
 ## Overriding the Branding Area
 
-You can see the [UI Customization Guide](Customization-User-Interface.md) to learn how you can replace the branding area with a custom view component.
+You can see the [UI Customization Guide](customization-user-interface.md) to learn how you can replace the branding area with a custom view component.

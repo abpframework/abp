@@ -31,7 +31,7 @@ According to this flow, the user is redirected to an external login page which i
 
 ### Resource Owner Password Flow
 
-If you have used the [Angular UI account module](./Account-Module) in your project, you can switch to the resource owner password flow by changing the OAuth configuration in the _environment.ts_ files as shown below:
+If you have used the [Angular UI account module](./account-module) in your project, you can switch to the resource owner password flow by changing the OAuth configuration in the _environment.ts_ files as shown below:
 
 ```js
 import { Config } from '@abp/ng.core';

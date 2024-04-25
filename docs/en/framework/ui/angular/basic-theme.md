@@ -4,7 +4,7 @@ The Basic Theme is a theme implementation for the Angular UI. It is a minimalist
 
 > If you are looking for a professional, enterprise ready theme, you can check the [Lepton Theme](https://commercial.abp.io/themes), which is a part of the [ABP Commercial](https://commercial.abp.io/).
 
-> See the [Theming document](Theming.md) to learn about themes.
+> See the [Theming document](theming.md) to learn about themes.
 
 ## Installation
 
@@ -18,14 +18,14 @@ The `ThemeBasicModule` is registered own layouts (`ApplicationLayoutComponent`, 
 
 ## Application Layout
 
-![basic-theme-application-layout](../../images/basic-theme-application-layout.png)
+![basic-theme-application-layout](../../../images/basic-theme-application-layout.png)
 
 Application Layout implements the following parts, in addition to the common parts mentioned above;
 
 * Logo area
 * Routes area
 * Language selection & user menu
-* [Page Alerts](Page-Alerts.md)
+* [Page Alerts](page-alerts.md)
 
 See Application Layout components:
 
@@ -49,11 +49,11 @@ You can simply override the styles in the global styles (`src/styles.scss`) file
 
 #### Override the Components
 
-See the [Component Replacement](Component-Replacement.md) to learn how you can replace components, customize and extend the user interface.
+See the [Component Replacement](component-replacement.md) to learn how you can replace components, customize and extend the user interface.
 
 ### Copy & Customize
 
-You can run the following [ABP CLI](../../CLI.md) command in **Angular** project directory to copy the source code to your solution:
+You can run the following [ABP CLI](../../../cli/index.md) command in **Angular** project directory to copy the source code to your solution:
 
 `abp add-package @abp/ng.theme.basic --with-source-code`
 
@@ -104,4 +104,4 @@ You can now freely customize the theme based on your application requirements.
 
 ## See Also
 
-* [Theming](Theming.md)
+* [Theming](theming.md)

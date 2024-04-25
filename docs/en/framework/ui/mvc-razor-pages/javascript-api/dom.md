@@ -50,7 +50,7 @@ The Form initializer (defined as `abp.dom.initializers.initializeForms`) initial
 * Can automatically show a confirmation message when you submit the form. To enable this feature, just add `data-confirm` attribute with a message (like `data-confirm="Are you sure?"`) to the `form` element.
 * If the `form` element has `data-ajaxForm="true"` attribute, then automatically calls the `.abpAjaxForm()` on the `form` element, to make the form posted via AJAX.
 
-See the [Forms & Validation](../Forms-Validation.md) document for more.
+See the [Forms & Validation](../forms-validation.md) document for more.
 
 ### Script Initializer
 

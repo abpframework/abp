@@ -42,7 +42,7 @@ app.UseAbpSecurityHeaders();
 
 After that, you have registered the `UseAbpSecurityHeaders` middleware into the request pipeline, the defined security headers will be shown in the response headers as in the figure below:
 
-![](../../images/security-response-headers.png)
+![](../../../images/security-response-headers.png)
 
 ## Content Security Policy Script Nonce
 

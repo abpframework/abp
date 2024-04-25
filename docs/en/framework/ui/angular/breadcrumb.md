@@ -2,7 +2,7 @@
 
 ABP provides a component that listens to the angular router's `NavigationEnd`
 event and creates inputs for `BreadcrumbItemsComponent`. This component is used in
-ABP components with [`PageComponent`](./Page-Component.md).
+ABP components with [`PageComponent`](./page-component.md).
 
 ## Breadcrumb Items Component
 
@@ -47,4 +47,4 @@ export class YourComponent {
 
 ## See Also
 
-- [Page Component](./Page-Component.md)
+- [Page Component](./page-component.md)

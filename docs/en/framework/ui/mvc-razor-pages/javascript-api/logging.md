@@ -4,7 +4,7 @@
 
 > The logs are written to console, using the `console.log`, by default.
 
-> This document is for simple client side logging. See the [Logging](../../../Logging.md) document for server side logging system.
+> This document is for simple client side logging. See the [Logging](../../../fundamentals/logging.md) document for server side logging system.
 
 ## Basic Usage
 

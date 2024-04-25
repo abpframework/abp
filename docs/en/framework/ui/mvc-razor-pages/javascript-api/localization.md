@@ -2,7 +2,7 @@
 
 Localization API allows you to reuse the server side localization resources in the client side.
 
-> This document only explains the JavaScript API. See the [localization document](../../../Localization.md) to understand the ABP localization system.
+> This document only explains the JavaScript API. See the [localization document](../../../fundamentals/localization.md) to understand the ABP localization system.
 
 ## Basic Usage
 
@@ -32,7 +32,7 @@ If given texts was not localized, localization method returns the given key as t
 
 ### Default Localization Resource
 
-If you don't specify the localization resource name, it uses the **default localization resource** defined on the `AbpLocalizationOptions` (see the [localization document](../../../Localization.md)).
+If you don't specify the localization resource name, it uses the **default localization resource** defined on the `AbpLocalizationOptions` (see the [localization document](../../../fundamentals/localization.md)).
 
 **Example: Using the default localization resource**
 

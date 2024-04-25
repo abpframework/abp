@@ -4,7 +4,7 @@ While you can continue to use the standard [Bootstrap way](https://getbootstrap.
 
 **Example: A modal dialog to create a new role entity**
 
-![modal-manager-example-modal](../../images/modal-manager-example-modal.png)
+![modal-manager-example-modal](../../../images/modal-manager-example-modal.png)
 
 ABP Framework provides the following benefits for such a modal with a form inside it;
 
@@ -23,7 +23,7 @@ So, it makes you write less code when you deal with the modals, especially the m
 
 To demonstrate the usage, we are creating a simple Razor Page, named `ProductInfoModal.cshtml`, under the `/Pages/Products` folder:
 
-![modal-page-on-rider](../../images/modal-page-on-rider.png)
+![modal-page-on-rider](../../../images/modal-page-on-rider.png)
 
 **ProductInfoModal.cshtml Content:**
 
@@ -52,7 +52,7 @@ To demonstrate the usage, we are creating a simple Razor Page, named `ProductInf
 ````
 
 * This page sets the `Layout` to `null` since we will show this as a modal. So, no need to wrap with a layout.
-* It uses [abp-modal tag helper](Tag-Helpers/Modals.md) to simplify creating the modal HTML code. You can use the standard  Bootstrap modal code if you prefer it.
+* It uses [abp-modal tag helper](tag-helpers/modals.md) to simplify creating the modal HTML code. You can use the standard  Bootstrap modal code if you prefer it.
 
 **ProductInfoModalModel.cshtml.cs Content:**
 
@@ -113,7 +113,7 @@ $('#OpenProductInfoModal').click(function(){
 
 The resulting modal will be like that:
 
-![modal-example-product-info](../../images/modal-example-product-info.png)
+![modal-example-product-info](../../../images/modal-example-product-info.png)
 
 #### Opening the Modal with Arguments
 
@@ -161,7 +161,7 @@ This section shows an example form to create a new product.
 
 For this example, creating a new Razor Page, named `ProductCreateModal.cshtml`, under the `/Pages/Products` folder:
 
-![product-create-modal-page-on-rider](../../images/product-create-modal-page-on-rider.png)
+![product-create-modal-page-on-rider](../../../images/product-create-modal-page-on-rider.png)
 
 **ProductCreateModal.cshtml Content:**
 
@@ -186,7 +186,7 @@ For this example, creating a new Razor Page, named `ProductCreateModal.cshtml`, 
 ````
 
 * The `abp-modal` has been wrapped by the `form`. This is needed to place the `Save` and the `Cancel` buttons into the form. In this way, the `Save` button acts as the `submit` button for the `form`.
-* Used the [abp-input tag helpers](Tag-Helpers/Form-elements.md) to simplify to create the form elements. Otherwise, you need to write more HTML.
+* Used the [abp-input tag helpers](tag-helpers/form-elements.md) to simplify to create the form elements. Otherwise, you need to write more HTML.
 
 **ProductCreateModal.cshtml.cs Content:**
 
@@ -247,7 +247,7 @@ namespace MyProject.Web.Pages.Products
 }
 ````
 
-* `abp-input` Tag Helper can understand the data annotation attributes and uses them to shape and validate the form elements. See the [abp-input tag helpers](Tag-Helpers/Form-elements.md) document to learn more.
+* `abp-input` Tag Helper can understand the data annotation attributes and uses them to shape and validate the form elements. See the [abp-input tag helpers](tag-helpers/form-elements.md) document to learn more.
 
 #### Defining the Modal Manager
 
@@ -293,7 +293,7 @@ $(function () {
 
 The resulting modal will be like that:
 
-![modal-example-product-create](../../images/modal-example-product-create.png)
+![modal-example-product-create](../../../images/modal-example-product-create.png)
 
 #### Saving the Modal
 
@@ -315,7 +315,7 @@ If the server returns a failed response, it shows the error message returned fro
 
 If you click to the Cancel button with some changes made but not saved, you get such a warning message:
 
-![modal-manager-cancel-warning](../../images/modal-manager-cancel-warning.png)
+![modal-manager-cancel-warning](../../../images/modal-manager-cancel-warning.png)
 
 If you don't want such a check & message, you can add `data-check-form-on-close="false"` attribute to your `form` element. Example:
 
@@ -329,9 +329,9 @@ If you don't want such a check & message, you can add `data-check-form-on-close=
 
 `ModalManager` automatically triggers the form validation when you click to the `Save` button or hit the `Enter` key on the form:
 
-![modal-manager-validation](../../images/modal-manager-validation.png)
+![modal-manager-validation](../../../images/modal-manager-validation.png)
 
-See the [Forms & Validation document](Forms-Validation.md) to learn more about the validation.
+See the [Forms & Validation document](forms-validation.md) to learn more about the validation.
 
 ## Modals with Script Files
 
@@ -366,7 +366,7 @@ Then include this file to the page that you use the modal:
 <abp-script src="/Pages/Products/Index.js"/>
 ````
 
-* We've use the `abp-script` Tag Helper here. See the [Bundling & Minification](Bundling-Minification.md) document if you want to understand it. You can use the standard `script` tag. It doesn't matter for this case.
+* We've use the `abp-script` Tag Helper here. See the [Bundling & Minification](bundling-minification.md) document if you want to understand it. You can use the standard `script` tag. It doesn't matter for this case.
 
 Finally, set the `modalClass` option while creating the `ModalManager` instance:
 
@@ -398,7 +398,7 @@ var productInfoModal = new abp.ModalManager({
 
 While lazy loading seems cool at the beginning, it requires an additional call to the server when you first open the modal.
 
-Instead, you can use the [Bundling & Minification](Bundling-Minification.md) system to create a bundle (that is a single and minified file on production) for all the used script files for a page:
+Instead, you can use the [Bundling & Minification](bundling-minification.md) system to create a bundle (that is a single and minified file on production) for all the used script files for a page:
 
 ````html
 <abp-script-bundle>

@@ -218,7 +218,7 @@ In ABP v2.x, adding a route to the menu was done by one of two ways:
 - [Via `routes` Property in `AppRoutingModule`](https://docs.abp.io/en/abp/2.9.0/UI/Angular/Modifying-the-Menu#via-routes-property-in-approutingmodule)
 - [Via ConfigState](https://docs.abp.io/en/abp/2.9.0/UI/Angular/Modifying-the-Menu#via-configstate)
 
-As of v3.0, we have changed how routes are added and modified. We are no longer storing routes in `ConfigState` (breaking change). Instead, there is a new service called `RoutesService` which is used for adding, patching, or removing menu items. Please check [the documentation](./Modifying-the-Menu.md) for details.
+As of v3.0, we have changed how routes are added and modified. We are no longer storing routes in `ConfigState` (breaking change). Instead, there is a new service called `RoutesService` which is used for adding, patching, or removing menu items. Please check [the documentation](./modifying-the-menu.md) for details.
 
 #### What to Do When Migrating?
 
@@ -231,7 +231,7 @@ As of v3.0, we have changed how routes are added and modified. We are no longer 
 
 In ABP v2.x, adding a navigation element was done [via LayoutStateService](https://docs.abp.io/en/abp/2.9.0/UI/Angular/Modifying-the-Menu#how-to-add-an-element-to-right-part-of-the-menu)
 
-As of v3.0, we have changed how navigation items are added and modified and previous method of doing so is no longer available (breaking change). Please check [the documentation](./Modifying-the-Menu.md) for details.
+As of v3.0, we have changed how navigation items are added and modified and previous method of doing so is no longer available (breaking change). Please check [the documentation](./modifying-the-menu.md) for details.
 
 #### What to Do When Migrating?
 
@@ -267,7 +267,7 @@ For proper styling, you need to add the following in the styles section of your 
 ]
 ```
 
-Since `abp-table` is not dropped yet, modules previously built by ABP v2.x will not suddenly lose all their tables. Yet, they will look and feel different from built-in ABP v3 modules. Therefore, you will probably want to convert the tables in those modules to ngx-datatable. In order to decrease the amount of work required to convert an abp-table into ngx-datatable, we have modified the [ListService](./List-Service.md) to work well with ngx-datatable and [introduced](https://volosoft.com/blog/attribute-directives-to-avoid-repetition-in-angular-templates) two new directives: `NgxDatatableListDirective` and `NgxDatatableDefaultDirective`.
+Since `abp-table` is not dropped yet, modules previously built by ABP v2.x will not suddenly lose all their tables. Yet, they will look and feel different from built-in ABP v3 modules. Therefore, you will probably want to convert the tables in those modules to ngx-datatable. In order to decrease the amount of work required to convert an abp-table into ngx-datatable, we have modified the [ListService](./list-service.md) to work well with ngx-datatable and [introduced](https://volosoft.com/blog/attribute-directives-to-avoid-repetition-in-angular-templates) two new directives: `NgxDatatableListDirective` and `NgxDatatableDefaultDirective`.
 
 The usage of those directives is rather simple:
 
@@ -360,7 +360,7 @@ Once you bind the injected `ListService` instance through `NgxDatatableListDirec
 - Install `@swimlane/ngx-datatable` package.
 - Add ngx-datatable styles in the angular.json file.
 - If you can, update your modules according to the example above.
-- If you have to do that later and are planning to keep abp-table for a while, make sure you update your pagination according to the [breaking change described here](./List-Service.md).
+- If you have to do that later and are planning to keep abp-table for a while, make sure you update your pagination according to the [breaking change described here](./list-service.md).
 
 **Important Note:** The `abp-table` is not removed, but is deprecated and will be removed in the future. Please consider switching to ngx-datatable.
 

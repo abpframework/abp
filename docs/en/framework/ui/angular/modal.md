@@ -8,7 +8,7 @@ The `abp-modal` provides some additional benefits:
  - Provides several inputs be able to customize the modal and several outputs be able to listen to some events.
  - Automatically detects the close button which has a `abpClose` directive attached to and closes the modal when pressed this button.
  - Automatically detects the `abp-button` and triggers its loading spinner when the `busy` input value of the modal component is true.
- - Automatically checks if the form inside the modal **has changed, but not saved**. It warns the user by displaying a [confirmation popup](Confirmation-Service) in this case when a user tries to close the modal or refresh/close the tab of the browser.
+ - Automatically checks if the form inside the modal **has changed, but not saved**. It warns the user by displaying a [confirmation popup](confirmation-service.md) in this case when a user tries to close the modal or refresh/close the tab of the browser.
 
 
 > Note: A modal can also be rendered by using the `ng-bootstrap` modal. For further information, see [Modal doc](https://ng-bootstrap.github.io/#/components/modal) on the `ng-bootstrap` documentation.

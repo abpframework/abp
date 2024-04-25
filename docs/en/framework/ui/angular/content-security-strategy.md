@@ -69,6 +69,6 @@ Nothing will be done.
 
 ## See Also
 
-- [DomInsertionService](./Dom-Insertion-Service.md)
-- [ContentStrategy](./Content-Strategy.md)
+- [DomInsertionService](./dom-insertion-service.md)
+- [ContentStrategy](./content-strategy.md)
 

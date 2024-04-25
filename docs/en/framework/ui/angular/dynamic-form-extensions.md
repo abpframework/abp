@@ -11,7 +11,7 @@ You can validate the field, perform visibility checks, and do more. You will als
 
 ## How to Set Up
 
-In this example, we will add a "Date of Birth" field in the user management page of the [Identity Module](../../Modules/Identity.md) and validate it.
+In this example, we will add a "Date of Birth" field in the user management page of the [Identity Module](../../../modules/identity.md) and validate it.
 
 ### Step 1. Create Form Prop Contributors
 
@@ -53,7 +53,7 @@ export const identityEditFormPropContributors = identityCreateFormPropContributo
 ```
 
 
-The list of props, conveniently named as `propList`, is a **doubly linked list**. That is why we have used the `addByIndex` method, which adds the given value to the specified index of the list. You may find [all available methods here](../Common/Utils/Linked-List.md).
+The list of props, conveniently named as `propList`, is a **doubly linked list**. That is why we have used the `addByIndex` method, which adds the given value to the specified index of the list. You may find [all available methods here](../common/utils/linked-list.md).
 
 ### Step 2. Import and Use Form Prop Contributors
 
@@ -284,7 +284,7 @@ It also has two static methods to create its instances:
 
 ### FormPropList\<R = any\>
 
-`FormPropList` is the list of props passed to every prop contributor callback as the first parameter named `propList`. It is a **doubly linked list**. You may find [all available methods here](../Common/Utils/Linked-List.md).
+`FormPropList` is the list of props passed to every prop contributor callback as the first parameter named `propList`. It is a **doubly linked list**. You may find [all available methods here](../common/utils/linked-list.md).
 
 The items in the list will be displayed according to the linked list order, i.e. from head to tail. If you want to re-order them, all you have to do is something like this:
 
@@ -343,4 +343,4 @@ export const identityEditFormPropContributors = {
 
 ## See Also
 
-- [Customizing Application Modules Guide](../../Customizing-Application-Modules-Guide.md)
+- [Customizing Application Modules Guide](../../architecture/modularity/extending/customizing-application-modules-guide.md)

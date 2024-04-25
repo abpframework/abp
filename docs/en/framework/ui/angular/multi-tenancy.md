@@ -21,7 +21,7 @@ You can switch between existing tenants by using the tenant switching box in the
 
 ## Domain/Subdomain Tenant Resolver
 
-> **Note:** If you are going to implement the steps below, you should also implement the domain/subdomain tenant resolver feature for the backend. See the [Domain/Subdomain Tenant Resolver section in Multi-Tenancy document](../../Multi-Tenancy#domain-subdomain-tenant-resolver) to learn the backend implementation.
+> **Note:** If you are going to implement the steps below, you should also implement the domain/subdomain tenant resolver feature for the backend. See the [Domain/Subdomain Tenant Resolver section in Multi-Tenancy document](../../architecture/multi-tenancy/index#domain-subdomain-tenant-resolver) to learn the backend implementation.
 
 Angular UI can get the tenant name from the app running URL. You can determine the current tenant by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). To do this, you need to set the `application.baseUrl` property in the environment:
 
@@ -157,5 +157,5 @@ export class AppModule {}
 
 ## See Also
 
-- [Multi Tenancy in ABP](../../Multi-Tenancy.md)
+- [Multi Tenancy in ABP](../../architecture/multi-tenancy/index.md)
 

@@ -12,34 +12,34 @@ ABP Framework also adds some **useful features** to the standard bootstrap compo
 
 Here, the list of components those are wrapped by the ABP Framework:
 
-* [Alerts](Alerts.md)
-* [Badges](Badges.md)
-* [Blockquote](Blockquote.md)
-* [Borders](Borders.md)
-* [Breadcrumb](Breadcrumbs.md)
-* [Buttons](Buttons.md)
-* [Cards](Cards.md)
-* [Carousel](Carousel.md)
-* [Collapse](Collapse.md)
-* [Dropdowns](Dropdowns.md)
-* [Figures](Figure.md)
-* [Grids](Grids.md)
-* [List Groups](List-Groups.md)
-* [Modals](Modals.md)
-* [Navigation](Navs.md)
-* [Paginator](Paginator.md)
-* [Popovers](Popovers.md)
-* [Progress Bars](Progress-Bars.md)
-* [Tables](Tables.md)
-* [Tabs](Tabs.md)
-* [Tooltips](Tooltips.md)
+* [Alerts](alerts.md)
+* [Badges](badges.md)
+* [Blockquote](blockquote.md)
+* [Borders](borders.md)
+* [Breadcrumb](breadcrumbs.md)
+* [Buttons](buttons.md)
+* [Cards](cards.md)
+* [Carousel](carousel.md)
+* [Collapse](collapse.md)
+* [Dropdowns](dropdowns.md)
+* [Figures](figure.md)
+* [Grids](grids.md)
+* [List Groups](list-groups.md)
+* [Modals](modals.md)
+* [Navigation](navs.md)
+* [Paginator](paginator.md)
+* [Popovers](popovers.md)
+* [Progress Bars](progress-bars.md)
+* [Tables](tables.md)
+* [Tabs](tabs.md)
+* [Tooltips](tooltips.md)
 
 > Until all the tag helpers are documented, you can visit https://bootstrap-taghelpers.abp.io/ to see them with live samples.
 
 ## Form Elements
 
-**Abp Tag Helpers** add new features to standard **Asp.Net Core MVC input & select Tag Helpers** and wrap them with **Bootstrap** form controls. See [Form Elements documentation](Form-elements.md) .
+**Abp Tag Helpers** add new features to standard **Asp.Net Core MVC input & select Tag Helpers** and wrap them with **Bootstrap** form controls. See [Form Elements documentation](form-elements.md) .
 
 ## Dynamic Forms
 
-**Abp Tag helpers** offer an easy way to build complete **Bootstrap forms**. See [Dynamic Forms documentation](Dynamic-Forms.md).
+**Abp Tag helpers** offer an easy way to build complete **Bootstrap forms**. See [Dynamic Forms documentation](dynamic-forms.md).

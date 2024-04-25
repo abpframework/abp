@@ -10,7 +10,7 @@ You can take any action (open a modal, make an HTTP API call, redirect to anothe
 
 ## How to Add an Action to Page Toolbar
 
-In this example, we will add a "Click Me!" action and log `userName` of all users in the user management page of the [Identity Module](../../Modules/Identity.md) to the console.
+In this example, we will add a "Click Me!" action and log `userName` of all users in the user management page of the [Identity Module](../../../modules/identity.md) to the console.
 
 ### Step 1. Create Toolbar Action Contributors
 
@@ -49,7 +49,7 @@ export const identityToolbarActionContributors: IdentityToolbarActionContributor
 
 ```
 
-The list of actions, conveniently named as `actionList`, is a **doubly linked list**. That is why we have used the `addHead` method, which adds the given value to the beginning of the list. You may find [all available methods here](../Common/Utils/Linked-List.md).
+The list of actions, conveniently named as `actionList`, is a **doubly linked list**. That is why we have used the `addHead` method, which adds the given value to the beginning of the list. You may find [all available methods here](../common/utils/linked-list.md).
 
 ### Step 2. Import and Use Toolbar Action Contributors
 
@@ -82,7 +82,7 @@ That is it, `logUserNames` toolbar action will be added as the first action on t
 
 ## How to Add a Custom Component to Page Toolbar
 
-In this example, we will add a custom "Click Me!" button and log `userName` of all users in the user management page of the [Identity Module](../../Modules/Identity.md) to the console.
+In this example, we will add a custom "Click Me!" button and log `userName` of all users in the user management page of the [Identity Module](../../../modules/identity.md) to the console.
 
 <img alt="Page Toolbar Extension Example: Custom Component" src="./images/toolbar-action-extensions---custom-component.gif" width="800px" style="max-width:100%">
 
@@ -152,7 +152,7 @@ export const identityToolbarActionContributors: IdentityToolbarActionContributor
 
 ```
 
-The list of actions, conveniently named as `actionList`, is a **doubly linked list**. That is why we have used the `addHead` method, which adds the given value to the beginning of the list. You may find [all available methods here](../Common/Utils/Linked-List.md).
+The list of actions, conveniently named as `actionList`, is a **doubly linked list**. That is why we have used the `addHead` method, which adds the given value to the beginning of the list. You may find [all available methods here](../common/utils/linked-list.md).
 
 ### Step 3. Import and Use Toolbar Action Contributors
 
@@ -185,7 +185,7 @@ That is it, `logUserNames` toolbar action will be added as the first action on t
 
 ## How to Place a Custom Modal and Trigger It by Toolbar Actions
 
-Please check the same topic in [entity action extensions document](Entity-Action-Extensions.md) and replace entity action with a toolbar action.
+Please check the same topic in [entity action extensions document](entity-action-extensions.md) and replace entity action with a toolbar action.
 
 ## API
 
@@ -352,7 +352,7 @@ It also has two static methods to create its instances:
 
 ### ToolbarActionList\<R = any\>
 
-`ToolbarActionList` is the list of actions passed to every action contributor callback as the first parameter named `actionList`. It is a **doubly linked list**. You may find [all available methods here](../Common/Utils/Linked-List.md).
+`ToolbarActionList` is the list of actions passed to every action contributor callback as the first parameter named `actionList`. It is a **doubly linked list**. You may find [all available methods here](../common/utils/linked-list.md).
 
 The items in the list will be displayed according to the linked list order, i.e. from head to tail. If you want to re-order them, all you have to do is something like this:
 
@@ -399,4 +399,4 @@ export const identityEntityActionContributors = {
 
 ## See Also
 
-- [Customizing Application Modules Guide](../../Customizing-Application-Modules-Guide.md)
+- [Customizing Application Modules Guide](../../architecture/modularity/extending/customizing-application-modules-guide.md)

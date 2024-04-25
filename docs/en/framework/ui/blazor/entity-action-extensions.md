@@ -8,7 +8,7 @@ You can take any action (open a modal, make an HTTP API call, redirect to anothe
 
 ## How to Set Up
 
-In this example, we will add a "Click Me!" action and execute a C# code for the user management page of the [Identity Module](../../Modules/Identity.md).
+In this example, we will add a "Click Me!" action and execute a C# code for the user management page of the [Identity Module](../../../../../modules/identity.md).
 
 ### Create a C# File
 

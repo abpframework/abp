@@ -1,6 +1,6 @@
 # Modifying the Menu
 
-The menu is inside the `ApplicationLayoutComponent` in the @abp/ng.theme.basic package. There are several methods for modifying the menu elements. This document covers these methods. If you would like to replace the menu completely, please refer to [Component Replacement documentation](./Component-Replacement.md) and learn how to replace a layout.
+The menu is inside the `ApplicationLayoutComponent` in the @abp/ng.theme.basic package. There are several methods for modifying the menu elements. This document covers these methods. If you would like to replace the menu completely, please refer to [Component Replacement documentation](./component-replacement.md) and learn how to replace a layout.
 
 
 ## How to Add a Logo
@@ -157,7 +157,7 @@ Here is what every property works as:
 - `path` is the absolute path of the navigation element.
 - `name` is the label of the navigation element. A localization key or a localization object can be passed.
 - `parentName` is a reference to the `name` of the parent route in the menu and is used for creating multi-level menu items.
-- `requiredPolicy` is the permission key to access the page. See the [Permission Management document](./Permission-Management.md)
+- `requiredPolicy` is the permission key to access the page. See the [Permission Management document](./permission-management.md)
 - `order` is the order of the navigation element. "Administration" has an order of `100`, so keep that in mind when ordering top level menu items.
 - `iconClass` is the class of the `i` tag, which is placed to the left of the navigation label.
 - `layout` defines in which layout the route is loaded. (default: `eLayoutType.empty`)

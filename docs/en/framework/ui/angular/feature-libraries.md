@@ -1,6 +1,6 @@
 # About Feature Libraries
 
-ABP has an ever-growing number of feature modules and [introducing a new one](../../Module-Development-Basics.md) is always possible. When the UI is Angular, these features have modular Angular libraries accompanying them.
+ABP has an ever-growing number of feature modules and [introducing a new one](../../architecture/modularity/basics.md) is always possible. When the UI is Angular, these features have modular Angular libraries accompanying them.
 
 ## Feature Library Content
 
@@ -89,4 +89,4 @@ Depending on the library, the `.forLazy` static method may also receive some opt
 
 ---
 
-<sup id="f-modify-route"><b>1</b></sup> _Libraries expect to work at a predefined path. Please check [how to patch a navigation element](./Modifying-the-Menu.md#how-to-patch-or-remove-a-navigation-element), if you want to use a different path from the default one (e.g. '/identity')._ <sup>[↩](#a-modify-route)</sup>
+<sup id="f-modify-route"><b>1</b></sup> _Libraries expect to work at a predefined path. Please check [how to patch a navigation element](./modifying-the-menu.md#how-to-patch-or-remove-a-navigation-element), if you want to use a different path from the default one (e.g. '/identity')._ <sup>[↩](#a-modify-route)</sup>

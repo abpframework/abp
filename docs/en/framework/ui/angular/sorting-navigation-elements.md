@@ -2,7 +2,7 @@
 
 This documentation describes how the navigation elements are sorted and how to change this default behaviour.
 
-- When you want to add the `Navigation Element` you can use the `RoutesService`. For more details, see the [document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu#how-to-add-a-navigation-element).
+- When you want to add the `Navigation Element` you can use the `RoutesService`. For more details, see the [document](../angular/modifying-the-menu.md).
 - However, in this documentation, we will talk more about how to sort the navigation elements.
 
 ### Order Property

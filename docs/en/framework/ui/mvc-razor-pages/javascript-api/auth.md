@@ -2,7 +2,7 @@
 
 Auth API allows you to check permissions (policies) for the current user in the client side. In this way, you can conditionally show/hide UI parts or perform your client side logic based on the current permissions.
 
-> This document only explains the JavaScript API. See the [authorization document](../../../Authorization.md) to understand the ABP authorization & permission system.
+> This document only explains the JavaScript API. See the [authorization document](../../../fundamentals/authorization.md) to understand the ABP authorization & permission system.
 
 ## Basic Usage
 

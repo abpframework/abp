@@ -114,4 +114,4 @@ This strategy will help you pass the given context to the projected template.
 
 ## See Also
 
-- [ProjectionStrategy](./Projection-Strategy.md)
+- [ProjectionStrategy](./projection-strategy.md)

@@ -46,7 +46,7 @@ this.confirmation
   });
 ```
 
-- The `message` and `title` parameters accept a string, localization key or localization object. See the [localization document](./Localization.md)
+- The `message` and `title` parameters accept a string, localization key or localization object. See the [localization document](./localization.md)
 - `Confirmation.Status` is an enum and has three properties;
   - `Confirmation.Status.confirm` is a closing event value that will be emitted when the popup is closed by the confirm button.
   - `Confirmation.Status.reject` is a closing event value that will be emitted when the popup is closed by the cancel button.
@@ -115,7 +115,7 @@ this.confirmation.warn(
 );
 ```
 
-Since the values are HTML now, localization should be handled manually. Check out the [LocalizationService](./Localization#using-the-localization-service) to see how you can accomplish that.
+Since the values are HTML now, localization should be handled manually. Check out the [LocalizationService](./localization#using-the-localization-service) to see how you can accomplish that.
 
 > Please note that all strings will be sanitized by Angular and not every HTML string will work. Only values that are considered as "safe" by Angular will be displayed.
 

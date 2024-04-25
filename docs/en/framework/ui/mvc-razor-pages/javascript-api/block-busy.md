@@ -41,7 +41,7 @@ abp.ui.block({
 
 The resulting UI will look like below:
 
-![ui-busy](../../../images/ui-busy.png)
+![ui-busy](../../../../images/ui-busy.png)
 
 ## setBusy
 

@@ -8,7 +8,7 @@ You can add any type of view component item to the page toolbar or modify existi
 
 ## How to Set Up
 
-In this example, we will add an "Import users from excel" button and execute a C# code for the user management page of the [Identity Module](../../Modules/Identity.md). 
+In this example, we will add an "Import users from excel" button and execute a C# code for the user management page of the [Identity Module](../../../../../modules/identity.md). 
 
 ### Create a C# File
 
@@ -95,7 +95,7 @@ protected override async ValueTask SetToolbarItemsAsync()
 
 #### Permissions
 
-If your button/component should be available based on a [permission/policy](../../Authorization.md), you can pass the permission/policy name as the `RequiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
+If your button/component should be available based on a [permission/policy](../../fundamentals/authorization.md), you can pass the permission/policy name as the `RequiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
 
 ### Add a Page Toolbar Contributor
 

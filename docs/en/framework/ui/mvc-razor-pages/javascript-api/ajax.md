@@ -2,13 +2,13 @@
 
 `abp.ajax` API provides a convenient way of performing AJAX calls to the server. It internally uses JQuery's `$.ajax`, but automates some common tasks for you;
 
-* Automatically **handles & localize the errors** and informs the user (using the [abp.message](Message.md)). So you typically don't care about errors.
+* Automatically **handles & localize the errors** and informs the user (using the [abp.message](message.md)). So you typically don't care about errors.
 * Automatically adds **anti forgery** token to the HTTP header to satisfy CSRF protection validation on the server side.
 * Automatically sets **default options** and allows to configure the defaults in a single place.
 * Can **block** a UI part (or the full page) during the AJAX operation.
 * Allows to fully customize any AJAX call, by using the standard `$.ajax` **options**.
 
-> While `abp.ajax` makes the AJAX call pretty easier, you typically will use the [Dynamic JavaScript Client Proxy](../Dynamic-JavaScript-Proxies.md) system to perform calls to your server side HTTP APIs. `abp.ajax` can be used when you need to perform low level AJAX operations.
+> While `abp.ajax` makes the AJAX call pretty easier, you typically will use the [Dynamic JavaScript Client Proxy](../dynamic-javascript-proxies.md) system to perform calls to your server side HTTP APIs. `abp.ajax` can be used when you need to perform low level AJAX operations.
 
 ## Basic Usage
 
@@ -25,19 +25,19 @@ abp.ajax({
 });
 ````
 
-This command logs the list of users to the console, if you've **logged in** to the application and have [permission](../../../Authorization.md) for the user management page of the [Identity Module](../../../Modules/Identity.md).
+This command logs the list of users to the console, if you've **logged in** to the application and have [permission](../../../fundamentals/authorization.md) for the user management page of the [Identity Module](../../../../modules/identity.md).
 
 ## Error Handling
 
 The example AJAX call above shows an **error message** if you haven't login to the application or you don't have the necessary permissions to perform this request:
 
-![ajax-error](../../../images/ajax-error.png)
+![ajax-error](../../../../images/ajax-error.png)
 
 All kinds of errors are automatically handled by `abp.ajax`, unless you want to disable it.
 
 ### Standard Error Response
 
-`abp.ajax` is compatible with the [exception handling system](../../../Exception-Handling.md) of the ABP Framework and it properly handles the standard error format returned from the server. A typical error message is a JSON as like below:
+`abp.ajax` is compatible with the [exception handling system](../../fundamentals/exception-handling.md) of the ABP Framework and it properly handles the standard error format returned from the server. A typical error message is a JSON as like below:
 
 ````json
 {
@@ -124,14 +124,14 @@ So, if you want to change the default request type, you can do it as shown below
 abp.ajax.defaultOpts.type = 'GET';
 ````
 
-Write this code before all of your JavaScript code. You typically want to place such a configuration into a separate JavaScript file and add it to the layout using the global [bundle](../Bundling-Minification.md).
+Write this code before all of your JavaScript code. You typically want to place such a configuration into a separate JavaScript file and add it to the layout using the global [bundle](../bundling-minification.md).
 
 ### Log/Show Errors
 
 The following functions can be overridden to customize the logging and showing the error messages:
 
-* `abp.ajax.logError` function logs errors using the [abp.log.error(...)](Logging.md) by default.
-* `abp.ajax.showError` function shows the error message using the [abp.message.error(...)](Message.md) by default.
+* `abp.ajax.logError` function logs errors using the [abp.log.error(...)](logging.md) by default.
+* `abp.ajax.showError` function shows the error message using the [abp.message.error(...)](message.md) by default.
 * `abp.ajax.handleErrorStatusCode` handles different HTTP status codes and shows different messages based on the code.
 * `abp.ajax.handleAbpErrorResponse` handles the errors sent with the standard ABP error format.
 * `abp.ajax.handleNonAbpErrorResponse` handles the non-standard error responses.

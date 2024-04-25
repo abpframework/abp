@@ -61,7 +61,7 @@ BreadCrumbItems are used to render breadcrumbs in the PageHeader.
 ## Toolbar
 ToolbarItems are used to render action toolbar items in the PageHeader.
 
-Check out [Page Toolbar](https://docs.abp.io/en/abp/latest/UI/Blazor/Page-Header#page-toolbar)
+Check out [Page Toolbar](../blazor/page-header.md/#page-toolbar)
 
 ```csharp
 @inject PageLayout PageLayout

@@ -1,6 +1,6 @@
 # Permission Management
 
-A permission is a simple policy that is granted or prohibited for a particular user, role or client. You can read more about [authorization in ABP](../../Authorization.md) document.
+A permission is a simple policy that is granted or prohibited for a particular user, role or client. You can read more about [authorization in ABP](../../fundamentals/authorization.md) document.
 
 You can get permission of authenticated user using `getGrantedPolicy` or `getGrantedPolicy$` method of `PermissionService`.
 

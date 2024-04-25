@@ -56,7 +56,7 @@ In this example, the `viewContainerRefOfTarget`, which is a `ViewContainerRef` i
 
 > You should keep the returned `ComponentRef` or `EmbeddedViewRef`, as they are a reference to the projected content and you will need them to destroy it when necessary.
 
-Please refer to [ProjectionStrategy](./Projection-Strategy.md) to see all available projection strategies and how you can build your own projection strategy.
+Please refer to [ProjectionStrategy](./projection-strategy.md) to see all available projection strategies and how you can build your own projection strategy.
 
 ## API
 

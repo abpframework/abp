@@ -23,7 +23,7 @@ constructor(
 - `containerStrategy` is the `ContainerStrategy` that will be used when projecting the component.
 - `contextStrategy` is the `ContextStrategy` that will be used on the projected component. (_default: None_)
 
-Please refer to [ContainerStrategy](./Container-Strategy.md) and [ContextStrategy](./Context-Strategy.md) documentation for their usage.
+Please refer to [ContainerStrategy](./container-strategy.md) and [ContextStrategy](./context-strategy.md) documentation for their usage.
 
 
 ### injectContent
@@ -55,7 +55,7 @@ constructor(
 - `contextStrategy` is the `ContextStrategy` that will be used on the projected component. (_default: None_)
 - `domStrategy` is the `DomStrategy` that will be used when inserting component. (_default: AppendToBody_)
 
-Please refer to [ContextStrategy](./Context-Strategy.md) and [DomStrategy](./Dom-Strategy.md) documentation for their usage.
+Please refer to [ContextStrategy](./context-strategy.md) and [DomStrategy](./dom-strategy.md) documentation for their usage.
 
 
 ### injectContent
@@ -87,7 +87,7 @@ constructor(
 - `containerStrategy` is the `ContainerStrategy` that will be used when projecting the component.
 - `contextStrategy` is the `ContextStrategy` that will be used on the projected component. (_default: None_)
 
-Please refer to [ContainerStrategy](./Container-Strategy.md) and [ContextStrategy](./Context-Strategy.md) documentation for their usage.
+Please refer to [ContainerStrategy](./container-strategy.md) and [ContextStrategy](./context-strategy.md) documentation for their usage.
 
 
 ### injectContent
@@ -197,4 +197,4 @@ Clears the container, sets given context to the template, and places it **in the
 
 ## See Also
 
-- [DomInsertionService](./Dom-Insertion-Service.md)
+- [DomInsertionService](./dom-insertion-service.md)

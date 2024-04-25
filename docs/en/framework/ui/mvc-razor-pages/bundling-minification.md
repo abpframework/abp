@@ -12,13 +12,13 @@ ABP offers a simple, dynamic, powerful, modular and built-in way.
 
 > This package is already installed by default with the startup templates. So, most of the time, you don't need to install it manually.
 
-If you're not using a startup template, you can use the [ABP CLI](../../CLI.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
+If you're not using a startup template, you can use the [ABP CLI](../../../cli/index.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
 
 ````
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Bundling).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Bundling).
 
 ## Razor Bundling Tag Helpers
 
@@ -37,7 +37,7 @@ This bundle defines a style bundle with a **unique name**: `MyGlobalBundle`. It'
 
 * ABP creates the bundle as **lazy** from the provided files when it's **first requested**. For the subsequent calls, it's returned from the **cache**. That means if you conditionally add the files to the bundle, it's executed only once and any changes of the condition will not effect the bundle for the next requests.
 * ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for other environments (`staging`, `production`...). See the *Bundling Mode* section to change that behavior.
-* The bundle files may be **physical** files or [**virtual/embedded** files](../../Virtual-File-System.md).
+* The bundle files may be **physical** files or [**virtual/embedded** files](../../infrastructure/virtual-file-system.md).
 * ABP automatically adds **version query string** to the bundle file URL to prevent browsers from caching when the bundle is being updated. (like ?_v=67872834243042 - generated from last change date of the related files). The versioning works even if the bundle files are individually added to the page (on the development environment).
 
 ### Importing The Bundling Tag Helpers
@@ -88,7 +88,7 @@ The bundle name will be *scripts.my-scripts* for the example above ("/" is repla
 
 ## Bundling Options
 
-If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../../Module-Development-Basics.md) class.
+If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../../architecture/modularity/basics.md) class.
 
 ### Creating A New Bundle
 
@@ -129,7 +129,7 @@ This time, no file defined in the tag helper definition because the bundle files
 
 ### Configuring An Existing Bundle
 
-ABP supports [modularity](../../Module-Development-Basics.md) for bundling as well. A module can modify an existing bundle that is created by a depended module. Example:
+ABP supports [modularity](../../architecture/modularity/basics.md) for bundling as well. A module can modify an existing bundle that is created by a depended module. Example:
 
 ````C#
 [DependsOn(typeof(MyWebModule))]
@@ -273,7 +273,7 @@ While it is rarely needed, `BundleConfigurationContext` has a `ServiceProvider` 
 
 Adding a specific NPM package resource (js, css files) into a bundle is pretty straight forward for that package. For example you always add the `bootstrap.css` file for the bootstrap NPM package.
 
-There are built-in contributors for all [standard NPM packages](Client-Side-Package-Management.md). For example, if your contributor depends on the bootstrap, you can just declare it, instead of adding the bootstrap.css yourself.
+There are built-in contributors for all [standard NPM packages](client-side-package-management.md). For example, if your contributor depends on the bootstrap, you can just declare it, instead of adding the bootstrap.css yourself.
 
 ````C#
 [DependsOn(typeof(BootstrapStyleContributor))] //Define the bootstrap style dependency
@@ -294,13 +294,13 @@ Using the built-in contributors for standard packages;
 
 > This package is already installed by default in the startup templates. So, most of the time, you don't need to install it manually.
 
-If you're not using a startup template, you can use the [ABP CLI](../../CLI.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
+If you're not using a startup template, you can use the [ABP CLI](../../../cli/index.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
 
 ````
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Packages
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Packages).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Packages).
 
 ### Bundle Inheritance
 
@@ -335,7 +335,7 @@ ABP adds bundle files individually to the page for the `development` environment
 * `Bundle`: Bundled but not minified.
 * `BundleAndMinify`: Bundled and minified.
 
-You can configure `AbpBundlingOptions` in the `ConfigureServices` of your [module](../../Module-Development-Basics.md).
+You can configure `AbpBundlingOptions` in the `ConfigureServices` of your [module](../../architecture/modularity/basics.md).
 
 **Example:**
 
@@ -461,7 +461,7 @@ Configure<AbpBundlingOptions>(options =>
 
 ## Themes
 
-Themes uses the standard package contributors to add library resources to page layouts. Themes may also define some standard/global bundles, so any module can contribute to these standard/global bundles. See the [theming documentation](Theming.md) for more.
+Themes uses the standard package contributors to add library resources to page layouts. Themes may also define some standard/global bundles, so any module can contribute to these standard/global bundles. See the [theming documentation](theming.md) for more.
 
 ## Best Practices & Suggestions
 
@@ -476,5 +476,5 @@ Establish a balance between performance, network bandwidth usage and count of ma
 
 ## See Also
 
-* [Client Side Package Management](Client-Side-Package-Management.md)
-* [Theming](Theming.md)
+* [Client Side Package Management](client-side-package-management.md)
+* [Theming](theming.md)

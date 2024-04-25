@@ -665,5 +665,5 @@ The final UI looks like below:
 
 ## See Also
 
-- [How Replaceable Components Work with Extensions](./How-Replaceable-Components-Work-with-Extensions.md)
-- [How to Replace PermissionManagementComponent](./Permission-Management-Component-Replacement.md)
+- [How Replaceable Components Work with Extensions](./how-replaceable-components-work-with-extensions.md)
+- [How to Replace PermissionManagementComponent](./permission-management-component-replacement.md)

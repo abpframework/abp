@@ -17,4 +17,4 @@ this.config.getOne$("currentUser").subscribe(currentUser => {
 })
 ```
  
-> See the [ConfigStateService](./Config-State-Service) for more information.
+> See the [ConfigStateService](./config-state-service) for more information.

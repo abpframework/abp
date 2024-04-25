@@ -6,7 +6,7 @@
 
 The Application Startup Template contains the `.Web` project that contains UI views/pages/components of the application and a `.Web.Tests` project to test these.
 
-![aspnetcore-web-tests-in-solution](../../images/aspnetcore-web-tests-in-solution.png)
+![aspnetcore-web-tests-in-solution](../../../images/aspnetcore-web-tests-in-solution.png)
 
 ## Testing the Razor Pages
 
@@ -77,7 +77,7 @@ namespace MyProject.Web.Pages
 
 This page simply creates a table with the issues:
 
-![issue-list](../../images/issue-list.png)
+![issue-list](../../../images/issue-list.png)
 
 You can write a test class inside the `.Web.Tests` project just like the example below:
 
@@ -119,7 +119,7 @@ namespace MyProject.Pages
 
 This example uses the [HtmlAgilityPack](https://html-agility-pack.net/) library to parse the incoming HTML and test if it contains the issue table.
 
-> This example assumes there are some initial issues in the database. See the *The Data Seed* section of the [Testing document](../../Testing.md) to learn how to seed test data, so your tests can assume some initial data available in the database.
+> This example assumes there are some initial issues in the database. See the *The Data Seed* section of the [Testing document](../../../testing/overall.md) to learn how to seed test data, so your tests can assume some initial data available in the database.
 
 ## Testing the Controllers
 
@@ -204,4 +204,4 @@ The `MyProjectWebTestBase` base class used above inherits from the `AbpWebApplic
 
 See Also
 * [Integration tests in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests)
-* [Overall / Server Side Testing](../../Testing.md)
+* [Overall / Server Side Testing](../../../testing/overall.md)

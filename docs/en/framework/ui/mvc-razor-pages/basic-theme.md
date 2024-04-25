@@ -6,14 +6,14 @@ The Basic Theme has RTL (Right-to-Left language) support.
 
 > If you are looking for a professional, enterprise ready theme, you can check the [Lepton Theme](https://commercial.abp.io/themes), which is a part of the [ABP Commercial](https://commercial.abp.io/).
 
-> See the [Theming document](Theming.md) to learn about themes.
+> See the [Theming document](theming.md) to learn about themes.
 
 ## Installation
 
 If you need to manually this theme, follow the steps below:
 
 * Install the [Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) NuGet package to your web project.
-* Add `AbpAspNetCoreMvcUiBasicThemeModule` into the `[DependsOn(...)]` attribute for your [module class](../../Module-Development-Basics.md) in the web project.
+* Add `AbpAspNetCoreMvcUiBasicThemeModule` into the `[DependsOn(...)]` attribute for your [module class](../../architecture/modularity/basics.md) in the web project.
 * Install the [@abp/aspnetcore.mvc.ui.theme.basic](https://www.npmjs.com/package/@abp/aspnetcore.mvc.ui.theme.basic) NPM package to your web project (e.g. `npm install @abp/aspnetcore.mvc.ui.theme.basic` or `yarn add @abp/aspnetcore.mvc.ui.theme.basic`).
 * Run `abp install-libs` command in a command line terminal in the web project's folder.
 
@@ -21,10 +21,10 @@ If you need to manually this theme, follow the steps below:
 
 The Basic Theme implements the standard layouts. All the layouts implement the following parts;
 
-* Global [Bundles](Bundling-Minification.md)
-* [Page Alerts](Page-Alerts.md)
-* [Layout Hooks](Layout-Hooks.md)
-* [Widget](Widgets.md) Resources
+* Global [Bundles](bundling-minification.md)
+* [Page Alerts](page-alerts.md)
+* [Layout Hooks](layout-hooks.md)
+* [Widget](widgets.md) Resources
 
 ### The Application Layout
 
@@ -33,18 +33,18 @@ The Basic Theme implements the standard layouts. All the layouts implement the f
 Application Layout implements the following parts, in addition to the common parts mentioned above;
 
 * Branding
-* Main [Menu](Navigation-Menu.md)
-* Main [Toolbar](Toolbars.md) with Language Selection & User Menu
+* Main [Menu](navigation-menu.md)
+* Main [Toolbar](toolbars.md) with Language Selection & User Menu
 
 ### The Account Layout
 
-![basic-theme-account-layout](../../images/basic-theme-account-layout.png)
+![basic-theme-account-layout](../../../images/basic-theme-account-layout.png)
 
 Application Layout implements the following parts, in addition to the common parts mentioned above;
 
 * Branding
-* Main [Menu](Navigation-Menu.md)
-* Main [Toolbar](Toolbars.md) with Language Selection & User Menu
+* Main [Menu](navigation-menu.md)
+* Main [Toolbar](toolbars.md) with Language Selection & User Menu
 * Tenant Switch Area
 
 ### Empty Layout
@@ -63,9 +63,9 @@ In this approach, you continue to use the the theme as NuGet and NPM packages an
 
 1. Create a CSS file in the `wwwroot` folder of your project:
 
-![example-global-styles](../../images/example-global-styles.png)
+![example-global-styles](../../../images/example-global-styles.png)
 
-2. Add the style file to the global bundle, in the `ConfigureServices` method of your [module](../../Module-Development-Basics.md):
+2. Add the style file to the global bundle, in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md):
 
 ````csharp
 Configure<AbpBundlingOptions>(options =>
@@ -79,11 +79,11 @@ Configure<AbpBundlingOptions>(options =>
 
 #### Override the Components
 
-See the [User Interface Customization Guide](Customization-User-Interface.md) to learn how you can replace components, customize and extend the user interface.
+See the [User Interface Customization Guide](customization-user-interface.md) to learn how you can replace components, customize and extend the user interface.
 
 ### Copy & Customize
 
-You can run the following [ABP CLI](../../CLI.md) command in **Web** project directory to copy the source code to your solution:
+You can run the following [ABP CLI](../../cli.md) command in **Web** project directory to copy the source code to your solution:
 
 `abp add-module Volo.BasicTheme --with-source-code --add-to-solution-file`
 
@@ -93,4 +93,4 @@ Or, you can download the [source code](https://github.com/abpframework/abp/tree/
 
 ## See Also
 
-* [Theming](Theming.md)
+* [Theming](theming.md)

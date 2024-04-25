@@ -83,8 +83,8 @@ DOM_STRATEGY.BeforeElement(target: HTMLElement)
 
 ## See Also
 
-- [DomInsertionService](./Dom-Insertion-Service.md)
-- [LazyLoadService](./Lazy-Load-Service.md)
-- [LoadingStrategy](./Loading-Strategy.md)
-- [ContentStrategy](./Content-Strategy.md)
-- [ProjectionStrategy](./Projection-Strategy.md)
+- [DomInsertionService](./dom-insertion-service.md)
+- [LazyLoadService](./lazy-load-service.md)
+- [LoadingStrategy](./loading-strategy.md)
+- [ContentStrategy](./content-strategy.md)
+- [ProjectionStrategy](./projection-strategy.md)

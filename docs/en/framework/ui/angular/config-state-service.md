@@ -89,7 +89,7 @@ this.config.getFeature$("Account.EnableLdapLogin").subscribe(enableLdapLogin => 
 })
 ```
 
-> For more information, see the [features document](./Features).
+> For more information, see the [features document](./features.md).
 
 ### How to Get a Setting
 
@@ -106,7 +106,7 @@ this.config.getSetting$("Abp.Identity.TwoFactor.Behaviour").subscribe(twoFactorB
 })
 ```
 
-> For more information, see the [settings document](./Settings).
+> For more information, see the [settings document](./settings.md).
 
 #### State Properties
 
@@ -131,5 +131,5 @@ constructor(private abpApplicationConfigurationService: AbpApplicationConfigurat
 
 ## See Also
 
-- [Settings](./Settings.md)
-- [Features](./Features.md)
+- [Settings](./settings.md)
+- [Features](./features.md)

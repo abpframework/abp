@@ -1,10 +1,10 @@
 # ASP.NET Core MVC / Razor Pages: Layout Hooks
 
-ABP Framework theming system places the page layout into the [theme](Theming.md) NuGet packages. That means the final application doesn't include a `Layout.cshtml`, so you can't directly change the layout code to customize it.
+ABP Framework theming system places the page layout into the [theme](theming.md) NuGet packages. That means the final application doesn't include a `Layout.cshtml`, so you can't directly change the layout code to customize it.
 
 You copy the theme code into your solution. In this case you are completely free to customize it. However, then you won't be able to get automatic updates of the theme (by upgrading the theme NuGet package).
 
-ABP Framework provides different ways of [customizing the UI](Customization-User-Interface.md).
+ABP Framework provides different ways of [customizing the UI](customization-user-interface.md).
 
 The **Layout Hook System** allows you to **add code** at some specific parts of the layout. All layouts of all themes should implement these hooks. Finally, you can add a **view component** into a hook point.
 
@@ -12,7 +12,7 @@ The **Layout Hook System** allows you to **add code** at some specific parts of 
 
 Assume that you need to add the Google Analytics script to the layout (that will be available for all the pages). First, **create a view component** in your project:
 
-![bookstore-google-analytics-view-component](../../images/bookstore-google-analytics-view-component.png)
+![bookstore-google-analytics-view-component](../../../images/bookstore-google-analytics-view-component.png)
 
 **NotificationViewComponent.cs**
 
@@ -102,4 +102,4 @@ You can find the layout files [here](https://github.com/abpframework/abp/blob/de
 
 ## See Also
 
-* [Customizing the User Interface](Customization-User-Interface.md)
+* [Customizing the User Interface](customization-user-interface.md)

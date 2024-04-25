@@ -98,4 +98,4 @@ Projected content will be inserted into to the container at given index (clamped
 
 ## See Also
 
-- [ProjectionStrategy](./Projection-Strategy.md)
+- [ProjectionStrategy](./projection-strategy.md)

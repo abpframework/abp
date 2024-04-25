@@ -2,7 +2,7 @@
 
 It is common to show error, warning or information alerts to inform the user. An example *Service Interruption* alert is shown below:
 
-![page-alert-example](../../images/page-alert-example.png)
+![page-alert-example](../../../images/page-alert-example.png)
 
 ## Basic Usage
 
@@ -26,15 +26,15 @@ namespace MyProject.Web.Pages
 }
 ```
 
-This usage renders an alert that was shown above. If you need to localize the messages, you can always use the standard [localization](../../Localization.md) system.
+This usage renders an alert that was shown above. If you need to localize the messages, you can always use the standard [localization](../../fundamentals/localization.md) system.
 
 ### Exceptions / Invalid Model States
 
 It is typical to show alerts when you manually handle exceptions (with try/catch statements) or want to handle `!ModelState.IsValid` case and warn the user. For example, the Account Module shows a warning if user enters an incorrect username or password:
 
-![page-alert-account-layout](../../images/page-alert-account-layout.png)
+![page-alert-account-layout](../../../images/page-alert-account-layout.png)
 
-> Note that you generally don't need to manually handle exceptions since ABP Framework provides an automatic [exception handling](../../Exception-Handling.md) system.
+> Note that you generally don't need to manually handle exceptions since ABP Framework provides an automatic [exception handling](../../fundamentals/exception-handling.md) system.
 
 ### Alert Types
 
@@ -81,4 +81,4 @@ namespace MyProject.Web.Pages
 
 Page Alert system was designed to be used in a regular full page request. It is not for AJAX/partial requests. The alerts are rendered in the page layout, so a full page refresh is needed.
 
-For AJAX requests, it is more proper to throw exceptions (e.g. `UserFriendlyException`). See the [exception handling](../../Exception-Handling.md) document.
+For AJAX requests, it is more proper to throw exceptions (e.g. `UserFriendlyException`). See the [exception handling](../../fundamentals/exception-handling.md) document.

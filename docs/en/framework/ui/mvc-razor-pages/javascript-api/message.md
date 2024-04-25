@@ -12,7 +12,7 @@ abp.message.success('Your changes have been successfully saved!', 'Congratulatio
 
 It will show a dialog on the UI:
 
-![js-message-success](../../../images/js-message-success.png)
+![js-message-success](../../../../images/js-message-success.png)
 
 ## Informative Messages
 
@@ -34,7 +34,7 @@ All these methods get two parameters:
 abp.message.error('Your credit card number is not valid!');
 ````
 
-![js-message-error](../../../images/js-message-error.png)
+![js-message-error](../../../../images/js-message-error.png)
 
 ## Confirmation Message
 
@@ -55,7 +55,7 @@ abp.message.confirm('Are you sure to delete the "admin" role?')
 
 The resulting UI will be like shown below:
 
-![js-message-confirm](../../../images/js-message-confirm.png)
+![js-message-confirm](../../../../images/js-message-confirm.png)
 
 If user has clicked the `Yes` button, the `confirmed` argument in the `then` callback function will be `true`.
 

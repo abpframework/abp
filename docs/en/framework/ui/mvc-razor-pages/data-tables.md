@@ -4,7 +4,7 @@ A Data Table (aka Data Grid) is a UI component to show tabular data to the users
 
 An example screenshot from the user management page that shows the user list in a data table:
 
-![datatables-example](../../images/datatables-example.png)
+![datatables-example](../../../images/datatables-example.png)
 
 ## DataTables.Net Integration
 
@@ -12,9 +12,9 @@ First of all, you can follow the official documentation to understand how the [D
 
 ### A Quick Example
 
-You can follow the [web application development tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC) for a complete example application that uses the DataTables.Net as the Data Table. This section shows a minimalist example.
+You can follow the [web application development tutorial](../../../tutorials/book-store/part-01.md?UI=MVC) for a complete example application that uses the DataTables.Net as the Data Table. This section shows a minimalist example.
 
-You do nothing to add DataTables.Net library to the page since it is already added to the global [bundle](Bundling-Minification.md) by default.
+You do nothing to add DataTables.Net library to the page since it is already added to the global [bundle](bundling-minification.md) by default.
 
 First, add an `abp-table` as shown below, with an `id`:
 
@@ -22,7 +22,7 @@ First, add an `abp-table` as shown below, with an `id`:
 <abp-table striped-rows="true" id="BooksTable"></abp-table>
 ````
 
-> `abp-table` is a [Tag Helper](Tag-Helpers/Index.md) defined by the ABP Framework, but a simple `<table...>` tag would also work.
+> `abp-table` is a [Tag Helper](tag-helpers/index.md) defined by the ABP Framework, but a simple `<table...>` tag would also work.
 
 Then call the `DataTable` plugin on the table selector:
 
@@ -81,7 +81,7 @@ The example code above uses some ABP integration features those will be explaine
 
 * Sets `scrollX` option to `true`, if not set.
 * Sets `target` index for the column definitions.
-* Sets the `language` option to [localize](../../Localization.md) the table in the current language.
+* Sets the `language` option to [localize](../../fundamentals/localization.md) the table in the current language.
 
 #### Default Configuration
 
@@ -99,11 +99,11 @@ Here, the all configuration options;
 
 ### AJAX Adapter
 
-DataTables.Net has its own expected data format while getting results of an AJAX call to the server to get the table data. They are especially related how paging and sorting parameters are sent and received. ABP Framework also offers its own conventions for the client-server [AJAX](JavaScript-API/Ajax.md) communication. 
+DataTables.Net has its own expected data format while getting results of an AJAX call to the server to get the table data. They are especially related how paging and sorting parameters are sent and received. ABP Framework also offers its own conventions for the client-server [AJAX](javascript-api/ajax.md) communication. 
 
-The `abp.libs.datatables.createAjax` method (used in the example above) adapts request and response data format and perfectly works with the [Dynamic JavaScript Client Proxy](Dynamic-JavaScript-Proxies.md) system.
+The `abp.libs.datatables.createAjax` method (used in the example above) adapts request and response data format and perfectly works with the [Dynamic JavaScript Client Proxy](dynamic-javascript-proxies.md) system.
 
-This works automatically, so most of the times you don't need to know how it works. See the [DTO document](../../Data-Transfer-Objects.md) if you want to learn more about `IPagedAndSortedResultRequest`, `IPagedResult` and other standard interfaces and base DTO classes those are used in client to server communication.
+This works automatically, so most of the times you don't need to know how it works. See the [DTO document](../../architecture/domain-driven-design/data-transfer-objects.md)Data-Transfer-Objects.md if you want to learn more about `IPagedAndSortedResultRequest`, `IPagedResult` and other standard interfaces and base DTO classes those are used in client to server communication.
 
 The `createAjax` also supports you to customize request parameters and handle the responses.
 
@@ -146,7 +146,7 @@ ajax: abp.libs.datatables.createAjax(
 
 The example screenshot below shows the actions for each user in the user management table:
 
-![datatables-example](../../images/datatables-row-actions.png)
+![datatables-example](../../../images/datatables-row-actions.png)
 
 `rowAction` is defined as a part of a column definition:
 
@@ -202,11 +202,11 @@ The example screenshot below shows the actions for each user in the user managem
   * `data.table`: The DataTables instance.
 * `confirmMessage`: A `function` (see the example above) that returns a message (`string`) to show a dialog to get a confirmation from the user before executing the `action`. Example confirmation dialog:
 
-![datatables-row-actions-confirmation](../../images/datatables-row-actions-confirmation.png)
+![datatables-row-actions-confirmation](../../../images/datatables-row-actions-confirmation.png)
 
-You can use the [localization](JavaScript-API/Localization.md) system to show a localized message.
+You can use the [localization](javascript-api/localization.md) system to show a localized message.
 
-* `visible`: A `bool` or a `function` that returns a `bool`. If the result is `false`, then the action is not shown in the actions dropdown. This is generally combined by the [authorization](JavaScript-API/Auth.md) system to hide the action if the user has no permission to take this action. Example:
+* `visible`: A `bool` or a `function` that returns a `bool`. If the result is `false`, then the action is not shown in the actions dropdown. This is generally combined by the [authorization](javascript-api/auth.md) system to hide the action if the user has no permission to take this action. Example:
 
 ````js
 visible: abp.auth.isGranted('BookStore.Books.Delete');
@@ -216,7 +216,7 @@ If you define a `function`, then the `function` has two arguments: `record` (the
 
 * `iconClass`: Can be used to show a font-icon, like a [Font-Awesome](https://fontawesome.com/) icon (ex: `fas fa-trash-alt`), near to the action text. Example screenshot:
 
-![datatables-row-actions-confirmation](../../images/datatables-row-actions-icon.png)
+![datatables-row-actions-confirmation](../../../images/datatables-row-actions-icon.png)
 
 * `enabled`: A `function` that returns a `bool` to disable the action. The `function` takes a `data` object with two fields: `data.record` is the data object related to the row and `data.table` is the DataTables instance.
 * `displayNameHtml`: Set this to `true` is the `text` value contains HTML tags.
@@ -247,11 +247,11 @@ See the *Creation Time* column in the example below:
 
 The `render` is a standard DataTables option to render the column content by a custom function. This example uses the [luxon](https://moment.github.io/luxon/) library (which is installed by default) to write a human readable value of the `creationTime` in the current user's language. Example output of the column:
 
-![datatables-custom-render-date](../../images/datatables-custom-render-date.png)
+![datatables-custom-render-date](../../../images/datatables-custom-render-date.png)
 
 If you don't define the render option, then the result will be ugly and not user friendly:
 
-![datatables-custom-render-date](../../images/datatables-default-render-date.png)
+![datatables-custom-render-date](../../../images/datatables-default-render-date.png)
 
 However, rendering a `DateTime` is almost same and repeating the same rendering logic everywhere is against to the DRY (Don't Repeat Yourself!) principle.
 
@@ -291,7 +291,7 @@ abp.libs.datatables.defaultRenderers['gender'] = function(value) {
 
 Assuming that the possible values for a column data is `f` and `m`, the `gender` data format shows female/male icons instead of `f` and `m` texts. You can now set `dataFormat: 'gender'` for a column definition that has the proper data values.
 
-> You can write the default renderers in a single JavaScript file and add it to the [Global Script Bundle](Bundling-Minification.md), so you can reuse them in all the pages.
+> You can write the default renderers in a single JavaScript file and add it to the [Global Script Bundle](bundling-minification.md), so you can reuse them in all the pages.
 
 ## Other Data Grids
 

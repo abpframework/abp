@@ -250,4 +250,4 @@ Removes all open toasts.
 
 ## See Also
 
-- [Confirmation Popup](./Confirmation-Service.md)
+- [Confirmation Popup](./confirmation-service.md)

@@ -1,8 +1,8 @@
 # Features
 
-You can get the value of a feature on the client-side using the [config state service](./Config-State.md) if it is allowed by the feature definition on the server-side.
+You can get the value of a feature on the client-side using the [config state service](./config-state.md) if it is allowed by the feature definition on the server-side.
 
-> This document explains how to get feature values in an Angular application. See the [Features document](../../Features.md) to learn the feature system.
+> This document explains how to get feature values in an Angular application. See the [Features document](../../infrastructure/features.md) to learn the feature system.
 
 ## Before Use
 

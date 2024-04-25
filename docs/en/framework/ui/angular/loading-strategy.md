@@ -21,7 +21,7 @@ constructor(
 - `domStrategy` is the `DomStrategy` that will be used when inserting the created element. (_default: AppendToHead_)
 - `crossOriginStrategy` is the `CrossOriginStrategy` that will be used on the created element before inserting it. (_default: Anonymous_)
 
-Please refer to [DomStrategy](./Dom-Strategy.md) and [CrossOriginStrategy](./Cross-Origin-Strategy.md) documentation for their usage.
+Please refer to [DomStrategy](./dom-strategy.md) and [CrossOriginStrategy](./cross-origin-strategy.md) documentation for their usage.
 
 
 ### createElement
@@ -107,4 +107,4 @@ Sets given parameters and `crossorigin="anonymous"` as attributes of created `<s
 
 ## See Also
 
-- [LazyLoadService](./Lazy-Load-Service.md)
+- [LazyLoadService](./lazy-load-service.md)

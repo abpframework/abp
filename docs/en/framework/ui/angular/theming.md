@@ -4,7 +4,7 @@
 
 ABP Framework provides a complete **UI Theming** system with the following goals:
 
-* Reusable [application modules](../../Modules/Index.md) are developed **theme-independent**, so they can work with any UI theme.
+* Reusable [application modules](../../../modules/index.md) are developed **theme-independent**, so they can work with any UI theme.
 * UI theme is **decided by the final application**.
 * The theme is distributed via an NPM package, so it is **easily upgradable**.
 * The final application can **customize** the selected theme.
@@ -18,9 +18,9 @@ In order to accomplish these goals, ABP Framework;
 
 Currently, three themes are **officially provided**:
 
-* The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
+* The [Basic Theme](basic-theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
-* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/angular) and [lite](../../Themes/LeptonXLite/Angular.md) choices.
+* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/angular) and [lite](../../../ui-themes/lepton-x-lite/angular.md) choices.
 
 ## Overall
 
@@ -41,13 +41,13 @@ These libraries are selected as the base libraries and available to the applicat
 
 ### The Layout
 
-All themes must define a layout for the application. The following image shows the user management page in the [Basic Theme](Basic-Theme.md) application layout:
+All themes must define a layout for the application. The following image shows the user management page in the [Basic Theme](basic-theme.md) application layout:
 
-![basic-theme-application-layout](../../images/basic-theme-application-layout.png)
+![basic-theme-application-layout](../../../images/basic-theme-application-layout.png)
 
 And the same page is shown below with the [Lepton Theme](https://commercial.abp.io/themes) application layout:
 
-![lepton-theme-application-layout](../../images/lepton-theme-application-layout.png)
+![lepton-theme-application-layout](../../../images/lepton-theme-application-layout.png)
 
 As you can see, the page is the same, but the look is completely different in the themes above.
 
@@ -57,7 +57,7 @@ The application layout typically includes the following parts;
 * Nav items area with the following components;
   * User menu
   * Language switch dropdown
-* [Page alerts](Page-Alerts.md)
+* [Page alerts](page-alerts.md)
 * The page content (aka `<router-outlet>`)
 
 ## Implementing a Theme
@@ -66,7 +66,7 @@ A theme is simply an NPM package and comes with startup templates.
 
 ### The Easy Way
 
-The easiest way to create a new theme is to add Basic Theme Source Code to your project via [ABP CLI](../../CLI.md) command and customize it.
+The easiest way to create a new theme is to add Basic Theme Source Code to your project via [ABP CLI](../../../cli/index.md) command and customize it.
 
 You can run the following command in **Angular** project directory to copy the source code to your solution:
 
@@ -93,9 +93,9 @@ The following sections explain the fundamental parts pre-defined by the ABP Fram
 
 #### Logo
 
-The `application` object of an environment file should be configured to get the name and the logo URL of the application to render in the logo part. Additionally, `LogoComponent` can be replaced. See [Component Replacement](Component-Replacement.md) document for more.
+The `application` object of an environment file should be configured to get the name and the logo URL of the application to render in the logo part. Additionally, `LogoComponent` can be replaced. See [Component Replacement](component-replacement.md) document for more.
 
-The [Application Startup Template](../../Startup-Templates/Application.md) has an implementation of this interface to set the values by the application developer.
+The [Application Startup Template](../../../solution-templates/application-module/index.md) has an implementation of this interface to set the values by the application developer.
 
 #### Main Menu / Routes
 
@@ -131,7 +131,7 @@ export class AppComponent {
 }
 ```
 
-See the [Modifying the Menu](Modifying-the-Menu.md) document to learn more about the navigation system.
+See the [Modifying the Menu](modifying-the-menu.md) document to learn more about the navigation system.
 
 #### Toolbar / Nav Items
 
@@ -279,4 +279,4 @@ See the result:
 
 #### Page Alerts
 
-`PageAlertService` service is used to get the current page alerts to render on the layout. See the [Page Alerts](Page-Alerts.md) document to learn more.
+`PageAlertService` service is used to get the current page alerts to render on the layout. See the [Page Alerts](page-alerts.md) document to learn more.

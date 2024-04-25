@@ -51,7 +51,7 @@ If you need a third-party NPM package that is not in the standard set of package
 * It should be the **latest stable** version of the package.
 * It should only depend a **single** third-party package. It can depend on multiple `@abp/*` packages.
 * The package should include a `abp.resourcemapping.js` file formatted as defined in the *Mapping The Library Resources* section. This file should only map resources for the depended package.
-* You also need to create [bundle contributor(s)](Bundling-Minification.md) for the package you have created.
+* You also need to create [bundle contributor(s)](bundling-minification.md) for the package you have created.
 
 See current standard packages for examples.
 
@@ -112,5 +112,5 @@ When you run this command, all packages will copy their own resources into the `
 
 #### See Also
 
-* [Bundling & Minification](Bundling-Minification.md)
-* [Theming](Theming.md)
+* [Bundling & Minification](bundling-minification.md)
+* [Theming](theming.md)

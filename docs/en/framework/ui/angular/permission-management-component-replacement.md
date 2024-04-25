@@ -479,4 +479,4 @@ export class AppComponent implements OnInit {
 
 ## See Also
 
-- [Component Replacement](./Component-Replacement.md)
+- [Component Replacement](./component-replacement.md)

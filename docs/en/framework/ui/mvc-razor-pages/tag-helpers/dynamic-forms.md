@@ -198,7 +198,7 @@ In this example, no input will be generated for `Surname` property.
 
 ## Indicating Text box, Radio Group and Combobox
 
-If you have read the [Form elements document](Form-elements.md), you noticed that  `abp-radio` and `abp-select`  tags are very similar on c# model. So we have to use `[AbpRadioButton()]` attribute to tell `abp-dynamic-form` which of your properties will be radio group and which will be combobox. See example below:
+If you have read the [Form elements document](form-elements.md), you noticed that  `abp-radio` and `abp-select`  tags are very similar on c# model. So we have to use `[AbpRadioButton()]` attribute to tell `abp-dynamic-form` which of your properties will be radio group and which will be combobox. See example below:
 
 ````xml
 <abp-dynamic-form abp-model="@Model.MyDetailedModel"/>
@@ -278,4 +278,4 @@ public string Name { get; set; }
 
 ## See Also
 
-* [Form Elements](Form-elements.md)
+* [Form Elements](form-elements.md)

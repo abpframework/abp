@@ -4,11 +4,11 @@
 
 Data table column extension system allows you to add a **new table column** on the user interface. The example below adds a new column with the "Social security no" title:
 
-![user-action-extension-click-me](../../images/table-column-extension-example.png)
+![user-action-extension-click-me](../../../images/table-column-extension-example.png)
 
 You can use the standard column options to fine control the table column.
 
-> Note that this is a low level API to find control the table column. If you want to show an extension property on the table, see the [module entity extension](../../Module-Entity-Extensions.md) document.
+> Note that this is a low level API to find control the table column. If you want to show an extension property on the table, see the [module entity extension](../../architecture/modularity/extending/module-entity-extensions.md) document.
 
 ## How to Set Up
 
@@ -16,7 +16,7 @@ You can use the standard column options to fine control the table column.
 
 First, add a new JavaScript file to your solution. We added inside the `/Pages/Identity/Users` folder of the `.Web` project:
 
-![user-action-extension-on-solution](../../images/user-action-extension-on-solution.png)
+![user-action-extension-on-solution](../../../images/user-action-extension-on-solution.png)
 
 Here, the content of this JavaScript file:
 
@@ -45,7 +45,7 @@ This example defines a custom `render` function to return a custom HTML to rende
 
 ### Add the File to the User Management Page
 
-Then you need to add this JavaScript file to the user management page. You can take the power of the [Bundling & Minification system](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification).
+Then you need to add this JavaScript file to the user management page. You can take the power of the [Bundling & Minification system](../mvc-razor-pages/bundling-minification.md).
 
 Write the following code inside the `ConfigureServices` of your module class:
 
@@ -67,7 +67,7 @@ This configuration adds `my-user-extensions.js` to the user management page of t
 
 ### Rendering the Column
 
-This example assumes that you've defined a `SocialSecurityNumber` extra property using the [module entity extension](../../Module-Entity-Extensions.md) system. However;
+This example assumes that you've defined a `SocialSecurityNumber` extra property using the [module entity extension](../../architecture/modularity/extending/module-entity-extensions.md) system. However;
 
 * You can add a new column that is related to an existing property of the user (that was not added to the table by default). Example:
 
@@ -122,7 +122,7 @@ This method is used to access the table columns for an entity of a specific modu
 
 ### abp.ui.extensions.tableColumns.get(entityName).columns
 
-The `columns` property is used to retrieve a [doubly linked list](../Common/Utils/Linked-List.md) of previously defined columns for a table. All contributors are executed in order to prepare the final column list. This is normally called by the modules to show the columns in the table. However, you can use it if you are building your own extensible UIs.
+The `columns` property is used to retrieve a [doubly linked list](../common/utils/linked-list.md) of previously defined columns for a table. All contributors are executed in order to prepare the final column list. This is normally called by the modules to show the columns in the table. However, you can use it if you are building your own extensible UIs.
 
 ### abp.ui.extensions.tableColumns.get(entityName).addContributor(contributeCallback [, order])
 
@@ -158,4 +158,4 @@ abp.ui.extensions.tableColumns
     });
 ```
 
-> `columnList` is [linked list](../Common/Utils/Linked-List.md). You can use its methods to build a list of columns however you need.
+> `columnList` is [linked list](../common/utils/linked-list.md). You can use its methods to build a list of columns however you need.

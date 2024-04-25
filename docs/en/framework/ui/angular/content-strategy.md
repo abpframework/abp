@@ -21,7 +21,7 @@ constructor(
 - `contentSecurityStrategy` is the `ContentSecurityStrategy` that will be used on the created element before inserting it. (_default: None_)
 - `options` can be used to pass any option to the element that will be created. e.g: `{ id: "some-id" }` (_default: empty object_)
 
-Please refer to [DomStrategy](./Dom-Strategy.md) and [ContentSecurityStrategy](./Content-Security-Strategy.md) documentation for their usage.
+Please refer to [DomStrategy](./dom-strategy.md) and [ContentSecurityStrategy](./content-security-strategy.md) documentation for their usage.
 
 
 ### createElement
@@ -94,4 +94,4 @@ Creates a `<style>` element with the given content and places it at the **beginn
 
 ## See Also
 
-- [DomInsertionService](./Dom-Insertion-Service.md)
+- [DomInsertionService](./dom-insertion-service.md)

@@ -25,15 +25,15 @@ You have multiple options to initiate a new Angular project that works with ABP:
 
 ### 1. Using ABP CLI
 
-ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with an Angular frontend. Simply [install the ABP CLI](../../CLI.md) and run the following command in your terminal:
+ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with an Angular frontend. Simply [install the ABP CLI](../../../cli/index.md) and run the following command in your terminal:
 
 ```shell
 abp new MyCompanyName.MyProjectName -csf -u angular
 ```
 
-> To see further options in the CLI, please visit the [CLI manual](../../CLI.md).
+> To see further options in the CLI, please visit the [CLI manual](../../../cli/index.md).
 
-This command will prepare a solution with an Angular and a .NET Core project in it. Please visit [Getting Started section](../../Getting-Started.md?UI=NG&DB=EF&Tiered=No#abp-cli-commands-options) for further instructions on how to set up the backend of your solution.
+This command will prepare a solution with an Angular and a .NET Core project in it. Please visit [Getting Started section](../../../_deleted/getting-started.md?UI=NG&DB=EF&Tiered=No#abp-cli-commands-options) for further instructions on how to set up the backend of your solution.
 
 To continue reading without checking other methods, visit [Angular project structure section](#angular-project-structure).
 
@@ -74,7 +74,7 @@ Now let us take a look at the contents of the source folder.
 - **app-routing.module.ts** is where your top-level routes are defined. Angular is capable of [lazy loading feature modules](https://angular.io/guide/lazy-loading-ngmodules), so not all routes will be here. You may think of Angular routing as a tree and this file is the top of the tree.
 - **app.component.ts** is essentially the top component that holds the dynamic application layout.
 - **app.module.ts** is the [root module](https://angular.io/guide/bootstrapping) that includes information about how parts of your application are related and what to run at the initiation of your application.
-- **route.provider.ts** is used for [modifying the menu](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu).
+- **route.provider.ts** is used for [modifying the menu](../angular/modifying-the-menu.md).
 - **assets** is for static files. A file (e.g. an image) placed in this folder will be available as is when the application is served.
 - **environments** includes one file per environment configuration. There are two configurations by default, but you may always introduce another one. These files are directly referred to in _angular.json_ and help you have different builds and application variables. Please refer to [configuring Angular application environments](https://angular.io/guide/build#configuring-application-environments) for details.
 - **index.html** is the HTML page served to visitors and will contain everything required to run your application. Servers should be configured to redirect every request to this page so that the Angular router can take over. Do not worry about how to add JavaScript and CSS files to it, because Angular CLI will do it automatically.

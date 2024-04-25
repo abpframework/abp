@@ -2,12 +2,12 @@
 
 ABP Framework provides infrastructure and conventions to make easier to create forms, localize display names for the form elements and handle server & client side validation;
 
-* [abp-dynamic-form](Tag-Helpers/Dynamic-Forms.md) tag helper automates **creating a complete form** from a C# model class: Creates the input elements, handles localization and client side validation.
-* [ABP Form tag helpers](Tag-Helpers/Form-elements.md) (`abp-input`, `abp-select`, `abp-radio`...) render **a single form element** with handling localization and client side validation.
+* [abp-dynamic-form](tag-helpers/dynamic-forms.md) tag helper automates **creating a complete form** from a C# model class: Creates the input elements, handles localization and client side validation.
+* [ABP Form tag helpers](tag-helpers/form-elements.md) (`abp-input`, `abp-select`, `abp-radio`...) render **a single form element** with handling localization and client side validation.
 * ABP Framework automatically **localizes the display name** of a form element without needing to add a `[DisplayName]` attribute.
 * **Validation errors** are automatically localized based on the user culture.
 
-> This document is for the **client side validation** and it doesn't cover the server side validation. Check the [validation document](../../Validation.md) for server side validation infrastructure.
+> This document is for the **client side validation** and it doesn't cover the server side validation. Check the [validation document](../../fundamentals/validation.md) for server side validation infrastructure.
 
 ## The Classic Way
 
@@ -25,7 +25,7 @@ You can continue to use this approach if you need or prefer it. However, ABP For
 
 ## ABP Dynamic Forms
 
-[abp-dynamic-form](Tag-Helpers/Dynamic-Forms.md) tag helper completely automates the form creation. Take this model class as an example:
+[abp-dynamic-form](tag-helpers/dynamic-forms.md) tag helper completely automates the form creation. Take this model class as an example:
 
 ```csharp
 using System;
@@ -117,17 +117,17 @@ Then you can render the form in the `.cshtml` file:
 
 The result is shown below:
 
-![abp-dynamic-form-result](../../images/abp-dynamic-form-result.png)
+![abp-dynamic-form-result](../../../images/abp-dynamic-form-result.png)
 
 See the *Localization & Validation* section below to localize the field display names and see how the validation works.
 
-> See [its own document](Tag-Helpers/Dynamic-Forms.md) for all options of the `abp-dynamic-form` tag helper.
+> See [its own document](tag-helpers/dynamic-forms.md) for all options of the `abp-dynamic-form` tag helper.
 
 ## ABP Form Tag Helpers
 
 `abp-dynamic-form` covers most of the scenarios and allows you to control and customize the form using the attributes.
 
-However, if you want to **render the form body yourself** (for example, you may want to fully control the **form layout**), you can directly use the [ABP Form Tag Helpers](Tag-Helpers/Form-elements.md). The same auto-generated form above can be created using the ABP Form Tag Helpers as shown below:
+However, if you want to **render the form body yourself** (for example, you may want to fully control the **form layout**), you can directly use the [ABP Form Tag Helpers](tag-helpers/form-elements.md). The same auto-generated form above can be created using the ABP Form Tag Helpers as shown below:
 
 ```html
 @page
@@ -146,7 +146,7 @@ However, if you want to **render the form body yourself** (for example, you may 
 </form>
 ```
 
-> See the [ABP Form Tag Helpers](Tag-Helpers/Form-elements.md) document for details of these tag helpers and their options.
+> See the [ABP Form Tag Helpers](tag-helpers/form-elements.md) document for details of these tag helpers and their options.
 
 ## Validation & Localization
 
@@ -154,17 +154,17 @@ Both of the Dynamic Form and the Form Tag Helpers **automatically validate** the
 
 **Example: User leaves empty a required string property**
 
-![abp-form-input-validation-error](../../images/abp-form-input-validation-error.png)
+![abp-form-input-validation-error](../../../images/abp-form-input-validation-error.png)
 
 The error message below is shown if the language is French:
 
-![abp-form-input-validation-error](../../images/abp-form-input-validation-error-french.png)
+![abp-form-input-validation-error](../../../images/abp-form-input-validation-error-french.png)
 
-Validation errors are already [translated](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.Validation/Volo/Abp/Validation/Localization) a lot of languages. You can [contribute](../../Contribution/Index.md) to the translation for your own language or override the texts for your own application by following the [localization](../../Localization.md) documentation.
+Validation errors are already [translated](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.Validation/Volo/Abp/Validation/Localization) a lot of languages. You can [contribute](../../Contribution/Index.md) to the translation for your own language or override the texts for your own application by following the [localization](../../fundamentals/localization.md) documentation.
 
 ## Display Name Localization
 
-ABP Framework uses the property name as the field name on the user interface. You typically want to [localize](../../Localization.md) this name based on the current culture.
+ABP Framework uses the property name as the field name on the user interface. You typically want to [localize](../../fundamentals/localization.md) this name based on the current culture.
 
 ABP Framework can conventionally localize the fields on the UI when you add the localization keys to the localization JSON files.
 
@@ -176,7 +176,7 @@ Example: French localization for the *Name* property (add into the `fr.json` in 
 
 Then the UI will use the given name for French language:
 
-![abp-form-input-validation-error](../../images/abp-form-input-validation-error-french-name.png)
+![abp-form-input-validation-error](../../../images/abp-form-input-validation-error-french-name.png)
 
 ### Using the `DisplayName:` Prefix
 
@@ -224,4 +224,4 @@ You can use one of the following syntaxes for the localization keys:
 
 ## See Also
 
-* [Server Side Validation](../../Validation.md)
+* [Server Side Validation](../../fundamentals/Validation.md)

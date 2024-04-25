@@ -10,7 +10,7 @@ You can take any action (open a modal, make an HTTP API call, redirect to anothe
 
 ## How to Set Up
 
-In this example, we will add a "Click Me!" action and alert the current row's `userName` in the user management page of the [Identity Module](../../Modules/Identity.md).
+In this example, we will add a "Click Me!" action and alert the current row's `userName` in the user management page of the [Identity Module](../../../modules/identity.md).
 
 ### Step 1. Create Entity Action Contributors
 
@@ -45,7 +45,7 @@ export const identityEntityActionContributors: IdentityEntityActionContributors 
 };
 ```
 
-The list of actions, conveniently named as `actionList`, is a **doubly linked list**. That is why we have used the `addTail` method, which adds the given value to the end of the list. You may find [all available methods here](../Common/Utils/Linked-List.md).
+The list of actions, conveniently named as `actionList`, is a **doubly linked list**. That is why we have used the `addTail` method, which adds the given value to the end of the list. You may find [all available methods here](../common/utils/linked-list.md).
 
 ### Step 2. Import and Use Entity Action Contributors
 
@@ -366,7 +366,7 @@ It also has two static methods to create its instances:
 
 ### EntityActionList\<R = any\>
 
-`EntityActionList` is the list of actions passed to every action contributor callback as the first parameter named `actionList`. It is a **doubly linked list**. You may find [all available methods here](../Common/Utils/Linked-List.md).
+`EntityActionList` is the list of actions passed to every action contributor callback as the first parameter named `actionList`. It is a **doubly linked list**. You may find [all available methods here](../common/utils/linked-list.md).
 
 The items in the list will be displayed according to the linked list order, i.e. from head to tail. If you want to re-order them, all you have to do is something like this:
 
@@ -406,4 +406,4 @@ export const identityEntityActionContributors = {
 
 ## See Also
 
-- [Customizing Application Modules Guide](../../Customizing-Application-Modules-Guide.md)
+- [Customizing Application Modules Guide](../../architecture/modularity/extending/customizing-application-modules-guide.md)
