@@ -10,7 +10,7 @@ ABP Studio CLI is installed automatically when you install ABP Studio.
 
 As ABP Studio CLI extends [ABP CLI](https://docs.abp.io/en/abp/latest/CLI), all commands provided by [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) is also valid for ABP Studio CLI. Here, is the list of additional commands before explaining their details:
 
-* new-solution: Generates a new solution based on the ABP Studio [startup templates](solution-templates/index.md).
+* new-solution: Generates a new solution based on the ABP Studio [startup templates](../solution-templates/index.md).
 * new-module: Generates a new module based on the given template.
 * new-package: Generates a new package based on the given template.
 * add-package-ref: Adds package to given project.
@@ -23,7 +23,7 @@ As ABP Studio CLI extends [ABP CLI](https://docs.abp.io/en/abp/latest/CLI), all 
 
 ### new-solution
 
-Generates a new solution based on the ABP Studio [startup templates](solution-templates/index.md).
+Generates a new solution based on the ABP Studio [startup templates](../solution-templates/index.md).
 
 ````bash
 abpc new-solution <solution-name> [options]

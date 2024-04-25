@@ -51,17 +51,17 @@ The Welcome Screen is the initial user interface users encounter upon starting A
 
 ## Sidebar
 
-Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](../solution-explorer.md), [Solution Runner](../running-applications.md), and Kubernetes Integration. Now let's examine each item.
+Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](./solution-explorer.md), [Solution Runner](./running-applications.md), and Kubernetes Integration. Now let's examine each item.
 
 ### Solution Explorer
 
-The [Solution Explorer](../solution-explorer.md) is a feature for managing your project's structure, allowing operations such as add package reference, add new package, new module creation, and etc. within ABP Studio.
+The [Solution Explorer](./solution-explorer.md) is a feature for managing your project's structure, allowing operations such as add package reference, add new package, new module creation, and etc. within ABP Studio.
 
 ![solution-explorer](./images/overview/solution-explorer.png)
 
 ### Solution Runner
 
-[Solution Runner](../running-applications.md) is a tool within ABP Studio that enables users to build, run, and monitor their applications directly from the user interface.
+[Solution Runner](./running-applications.md) is a tool within ABP Studio that enables users to build, run, and monitor their applications directly from the user interface.
 
 ![solution-runner](./images/overview/solution-runner.png)
 
@@ -83,7 +83,7 @@ This pane is dedicated to managing Kubernetes services. It simplifies the proces
 
 ## Application Monitoring Area
 
-The [Application Monitoring Area](../monitoring-applications.md) is a functional component within ABP Studio that displays real-time operational status and metrics for applications. It indicates the active state of applications, the count of running instances, and so on. The user interface is organized into several tabs: Overall, Browse, HTTP Requests, Events, Exceptions, and Logs. Now let's examine the **Overall** tab.
+The [Application Monitoring Area](./monitoring-applications.md) is a functional component within ABP Studio that displays real-time operational status and metrics for applications. It indicates the active state of applications, the count of running instances, and so on. The user interface is organized into several tabs: Overall, Browse, HTTP Requests, Events, Exceptions, and Logs. Now let's examine the **Overall** tab.
 
 ![application-monitor-overall](./images/overview/application-monitor-overall.png)
 
