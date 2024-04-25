@@ -51,7 +51,7 @@ You can easily download and install ABP Studio, login with your abp.io account a
 
 ### The New Pricing Page
 
-Since the [ABP Commercial website](https://commercial.abp.io/) is merged to the main website, you will see the *Pricing* page located on the main menu of the abp.io website. We have completely revised the design and content of this page to better reflect what is open source, free, and what features are included in the paid licenses.
+Since the [ABP Commercial website](https://commercial.abp.io/) has merged with the main website, you will see the *Pricing* page located on the main menu of the abp.io website. We have completely revised the design and content of this page to better reflect which features are open source and free, and what is included in the paid licenses.
 
 ![new-pricing](new-pricing.png)
 
@@ -76,13 +76,13 @@ The left navigation panel tree is also completely revisited and simplified:
 
 ## The ABP Studio Community Edition
 
-[ABP Studio](https://docs.abp.io/en/commercial/latest/studio/index) is a cross-platform desktop application designed for ABP and .NET developers. It aims to provide a comfortable development environment by automating tasks, providing insights about your solution, and simplifying the processes of creation, development, execution, browsing, monitoring, tracing, and deploying your solutions
+[ABP Studio](https://docs.abp.io/en/commercial/latest/studio/index) is a cross-platform desktop application designed for ABP and .NET developers. It aims to provide a comfortable development environment by automating tasks, providing insights about your solution, and simplifying the processes of creation, development, execution, browsing, monitoring, tracing, and deploying your solutions.
 
 Here, a screenshot from the *Solution Runner* screen of ABP Studio:
 
 ![abp-studio-solution-runner](abp-studio-solution-runner.png)
 
-ABP Studio has been started as a commercial product, as a part of [ABP Commercial](https://commercial.abp.io/). We are very excited to announce that the *Community Edition* will be available for free soon. It will have some missing features and limitations compared to the full edition, but will be enough to create, explore and run ABP solutions easily.
+ABP Studio has been started as a commercial product, as a part of [ABP Commercial](https://commercial.abp.io/). We are very excited to announce that the *Community Edition* will be available soon for free. It will have some missing features and limitations compared to the full edition, but will be enough to create, explore and run ABP solutions easily.
 
 We will be offering ABP Studio as a starting point to the ABP platform. The [Getting Started](https://docs.abp.io/en/abp/latest/Getting-Started-Overall) and other documents will use ABP Studio to create new solutions and perform ABP-related operations.
 
