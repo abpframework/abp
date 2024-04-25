@@ -122,6 +122,11 @@ public class MyProjectNameBlazorHostModule : AbpModule
             options.UseSqlServer();
         });
 
+        Configure<AbpMultiTenancyOptions>(options =>
+        {
+            options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
+
         Configure<AbpBundlingOptions>(options =>
         {
                 // MVC UI
