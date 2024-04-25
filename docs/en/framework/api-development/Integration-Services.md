@@ -1,6 +1,6 @@
 # Integration Services
 
-The *Integration Service* concept was created to distinguish the [application services](Application-Services.md) that are built for inter-module (or inter-microservice) communication from the application services that are intended to be consumed from a UI or a client application.
+The *Integration Service* concept was created to distinguish the [application services](../architecture/domain-driven-design/application-services.md) that are built for inter-module (or inter-microservice) communication from the application services that are intended to be consumed from a UI or a client application.
 
 The following figure shows a few microservices behind an API Gateway that is consumed by a UI application and 3rd-party client applications:
 
@@ -35,7 +35,7 @@ public interface IProductAppService : IApplicationService
 That's all. From now, ABP will handle your application service as integration service and implement the followings by convention:
 
 * That service is **not exposed** by default, unless you explicitly set `ExposeIntegrationServices` options (see the *Exposing Integration Services* section).
-* If you are using the [Auto API Controllers](API/Auto-API-Controllers.md) feature in your application, the **URL prefix** will be `/integration-api` instead of `/api` for your integration services. Thus, you can distinguish internal and external service communications and take additional actions, such as preventing REST API calls for integration services out of API Gateway.
+* If you are using the [Auto API Controllers](./auto-controllers.md) feature in your application, the **URL prefix** will be `/integration-api` instead of `/api` for your integration services. Thus, you can distinguish internal and external service communications and take additional actions, such as preventing REST API calls for integration services out of API Gateway.
 * **Audit logging** is disabled by default for the integration services. See the next section if you want to enable it.
 
 ## Marking an MVC Controller as Integration Service
@@ -64,7 +64,7 @@ When you use the `IntegrationService` attribute, ABP will handle your controller
 
 Integration services and controllers are not exposed by default for security reasons. They typically don't require authorization, so you should **carefully and explicitly** allow them to be visible and usable to client applications.
 
-To expose integration services and controllers, set `AbpAspNetCoreMvcOptions.ExposeIntegrationServices` to `true` in the `ConfigureServices` method of your [module class](Module-Development-Basics.md):
+To expose integration services and controllers, set `AbpAspNetCoreMvcOptions.ExposeIntegrationServices` to `true` in the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md):
 
 ````csharp
 Configure<AbpAspNetCoreMvcOptions>(options =>
@@ -77,7 +77,7 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 
 ### Enabling/Disabling the Audit Logging
 
-Audit Logging is disabled by default for integration services but it can be enabled by configuring the `AbpAuditingOptions` [options class](Options.md) in the `ConfigureServices` method of your [module class](Module-Development-Basics.md):
+Audit Logging is disabled by default for integration services but it can be enabled by configuring the `AbpAuditingOptions` [options class](../fundamentals/options.md) in the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md):
 
 ```csharp
 Configure<AbpAuditingOptions>(options =>
@@ -86,11 +86,11 @@ Configure<AbpAuditingOptions>(options =>
 });
 ```
 
-> Please refer to the [audit logging document](Audit-Logging.md) for other options and details.
+> Please refer to the [audit logging document](../infrastructure/audit-logging.md) for other options and details.
 
 ### Filtering Auto API Controllers
 
-You can filter integration services (or non-integration services) while creating [Auto API Controllers](API/Auto-API-Controllers.md), using the `ApplicationServiceTypes` option of the `ConventionalControllerSetting` by configuring the `AbpAspNetCoreMvcOptions` as shown below:
+You can filter integration services (or non-integration services) while creating [Auto API Controllers](./auto-controllers.md), using the `ApplicationServiceTypes` option of the `ConventionalControllerSetting` by configuring the `AbpAspNetCoreMvcOptions` as shown below:
 
 ```csharp
 PreConfigure<AbpAspNetCoreMvcOptions>(options =>
@@ -107,10 +107,10 @@ PreConfigure<AbpAspNetCoreMvcOptions>(options =>
 
 Tip: You can call the `options.ConventionalControllers.Create` multiple times to configure regular application services and integration services with different options.
 
-> Please refer to the [Auto API Controllers document](API/Auto-API-Controllers.md) for more information about the Auto API Controller system.
+> Please refer to the [Auto API Controllers document](./auto-controllers.md) for more information about the Auto API Controller system.
 
 ## See Also
 
-* [Application Services](Application-Services.md)
-* [Auto API Controllers](API/Auto-API-Controllers.md)
-* [Audit Logging](Audit-Logging.md)
+* [Application Services](../architecture/domain-driven-design/application-services.md)
+* [Auto API Controllers](./auto-controllers.md)
+* [Audit Logging](../infrastructure/audit-logging.md)

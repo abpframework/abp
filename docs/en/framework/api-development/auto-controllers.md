@@ -1,6 +1,6 @@
 # Auto API Controllers
 
-Once you create an [application service](../Application-Services.md), you generally want to create an API controller to expose this service as an HTTP (REST) API endpoint. A typical API controller does nothing but redirects method calls to the application service and configures the REST API using attributes like [HttpGet], [HttpPost], [Route]... etc.
+Once you create an [application service](../architecture/domain-driven-design/application-services.md), you generally want to create an API controller to expose this service as an HTTP (REST) API endpoint. A typical API controller does nothing but redirects method calls to the application service and configures the REST API using attributes like [HttpGet], [HttpPost], [Route]... etc.
 
 ABP can **automagically** configure your application services as API Controllers by convention. Most of time you don't care about its detailed configuration, but it's possible to fully customize it.
 
@@ -26,7 +26,7 @@ public class BookStoreWebModule : AbpModule
 
 This example code configures all the application services in the assembly containing the class `BookStoreApplicationModule`. The figure below shows the resulting API on the [Swagger UI](https://swagger.io/tools/swagger-ui/).
 
-![bookstore-apis](../images/bookstore-apis.png)
+![bookstore-apis](../../images/bookstore-apis.png)
 
 ### Examples
 
@@ -172,7 +172,7 @@ Disabled `IsMetadataEnabled` which hides this service from API explorer and it w
 
 ## Replace or Remove Controllers.
 
-In addition to [Overriding a Controller](../Customizing-Application-Modules-Overriding-Services.md#example-overriding-a-controller), you can also use a completely independent **Controller** to replace the controller in the framework or module. 
+In addition to [Overriding a Controller](../architecture/modularity/extending/customizing-application-modules-overriding-services.md#example-overriding-a-controller), you can also use a completely independent **Controller** to replace the controller in the framework or module. 
 
 They have the same [route](https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/routing?view=aspnetcore-7.0), but can have **different** input and output parameters.
 

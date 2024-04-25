@@ -48,16 +48,16 @@ A new language is published after these minimum translations have been completed
 
 ## Resource Localization
 
-ABP framework has a flexible [localization system](../Localization.md). You can create localized user interfaces for your own application.
+ABP framework has a flexible [localization system](../framework/fundamentals/localization.md). You can create localized user interfaces for your own application.
 
-In addition to that, the framework and the [pre-build modules](https://docs.abp.io/en/abp/latest/Modules/Index) have localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). 
+In addition to that, the framework and the [pre-build modules](../modules/index.md) have localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). 
 
 ### Using the "abp translate" command
 
 This is the recommended approach, since it automatically finds all missing texts for a specific culture and lets you to translate in one place.
 
 * Clone the [ABP repository](https://github.com/abpframework/abp/) from Github.
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Install the [ABP CLI](../cli/index.md) if you haven't installed before.
 * Run `abp translate -c <culture-name>` command for your language in the root folder of the abp repository. For example, use `abp translate -c fr` for French. Check [this document](https://docs.microsoft.com/en-us/bingmaps/rest-services/common-parameters-and-types/supported-culture-codes) to find the culture code for your language.
 * This command creates a file in the same folder, named `abp-translation.json`. Open this file in your favorite editor and fill the missing text values.
 * Once you done the translation, use `abp translate -a` command to apply changes to the related files.

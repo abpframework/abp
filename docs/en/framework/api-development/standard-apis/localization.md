@@ -1,6 +1,6 @@
 # Application Localization Endpoint
 
-ABP Framework provides a pre-built and standard endpoint that returns all the [localization](../Localization.md) resources and texts defined in the server.
+ABP Framework provides a pre-built and standard endpoint that returns all the [localization](../../fundamentals/localization.md) resources and texts defined in the server.
 
 > If you have started with ABP's startup solution templates and using one of the official UI options, then all these are set up for you and you don't need to know these details. However, if you are building a UI application from scratch, you may want to know this endpoint.
 
@@ -19,7 +19,7 @@ ABP Framework provides a pre-built and standard endpoint that returns all the [l
 
 ## Script
 
-For [ASP.NET Core MVC (Razor Pages)](../UI/AspNetCore/Overall.md) applications, the same localization data is also available on the JavaScript side. `/Abp/ApplicationLocalizationScript` is the URL of the script that is auto-generated based on the HTTP API above.
+For [ASP.NET Core MVC (Razor Pages)](../../ui/mvc-razor-pages/overall.md) applications, the same localization data is also available on the JavaScript side. `/Abp/ApplicationLocalizationScript` is the URL of the script that is auto-generated based on the HTTP API above.
 
 **Example request:**
 
@@ -27,7 +27,7 @@ For [ASP.NET Core MVC (Razor Pages)](../UI/AspNetCore/Overall.md) applications, 
 /Abp/ApplicationLocalizationScript?cultureName=en
 ````
 
-See the [JavaScript API document](../UI/AspNetCore/JavaScript-API/Index.md) for the ASP.NET Core UI.
+See the [JavaScript API document](../../ui/mvc-razor-pages/javascript-api/index.md) for the ASP.NET Core UI.
 
-Other UI types provide services native to the related platform. For example, see the [Angular UI localization documentation](../UI/Angular/Localization.md) to learn how to use the localization values exposes by this endpoint.
+Other UI types provide services native to the related platform. For example, see the [Angular UI localization documentation](../../ui/angular/localization.md) to learn how to use the localization values exposes by this endpoint.
 

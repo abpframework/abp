@@ -11,7 +11,7 @@ ABP Framework offers a prebuilt module for full Swagger integration with small c
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-If installation is needed, it is suggested to use the [ABP CLI](../CLI.md) to install this package.
+If installation is needed, it is suggested to use the [ABP CLI](../../cli/index.md) to install this package.
 
 ### Using the ABP CLI
 
@@ -21,7 +21,7 @@ Open a command line window in the folder of the `Web` or `HttpApi.Host` project 
 abp add-package Volo.Abp.Swashbuckle
 ```
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Swashbuckle).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Swashbuckle).
 
 ### Manual Installation
 
@@ -107,7 +107,7 @@ services.AddAbpSwaggerGen(
 
 For non MVC/Tiered applications, we need to configure Swagger with OAUTH to handle authorization.  
 
-> ABP Framework uses OpenIddict by default. To get more information about OpenIddict, check this [documentation](../Modules/OpenIddict.md). 
+> ABP Framework uses OpenIddict by default. To get more information about OpenIddict, check this [documentation](../../modules/open-iddict.md). 
 
 To do that, we need to use `AddAbpSwaggerGenWithOAuth` extension to configure Swagger with OAuth issuer and scopes in `ConfigureServices` method of our module:
 

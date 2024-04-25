@@ -15,7 +15,7 @@ This system can be used by any type of .NET client to consume your HTTP APIs.
 
 ## Static vs Dynamic Client Proxies
 
-ABP provides **two types** of client proxy generation system. This document explains the **dynamic client proxies**, which generates client-side proxies on runtime. You can also see the [Static C# API Client Proxies](Static-CSharp-API-Clients.md) documentation to learn how to generate proxies on development time.
+ABP provides **two types** of client proxy generation system. This document explains the **dynamic client proxies**, which generates client-side proxies on runtime. You can also see the [Static C# API Client Proxies](./static-csharp-clients.md) documentation to learn how to generate proxies on development time.
 
 Development-time (static) client proxy generation has a **performance advantage** since it doesn't need to obtain the HTTP API definition on runtime. However, you should **re-generate** the client proxy code whenever you change your API endpoint definition. On the other hand, dynamic client proxies are generated on runtime and provides an **easier development experience**.
 
@@ -34,7 +34,7 @@ public interface IBookAppService : IApplicationService
 
 > Your interface should implement the `IRemoteService` interface to be automatically discovered. Since the `IApplicationService` inherits the `IRemoteService` interface, the `IBookAppService` above satisfies this condition.
 
-Implement this class in your service application. You can use [auto API controller system](Auto-API-Controllers.md) to expose the service as a REST API endpoint.
+Implement this class in your service application. You can use [auto API controller system](./auto-controllers.md) to expose the service as a REST API endpoint.
 
 ## Client Proxy Generation
 
@@ -46,7 +46,7 @@ If you're not using a startup template, then execute the following command in th
 abp add-package Volo.Abp.Http.Client
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Http.Client).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Http.Client).
 
 Now, it's ready to create the client proxies. Example:
 
@@ -120,7 +120,7 @@ While you can inject `IBookAppService` like above to use the client proxy, you c
 
 ### AbpRemoteServiceOptions
 
-`AbpRemoteServiceOptions` is automatically set from the `appsettings.json` by default. Alternatively, you can configure it in the `ConfigureServices` method of your [module](../Module-Development-Basics.md) to set or override it. Example:
+`AbpRemoteServiceOptions` is automatically set from the `appsettings.json` by default. Alternatively, you can configure it in the `ConfigureServices` method of your [module](../architecture/modularity/basics.md) to set or override it. Example:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -206,4 +206,4 @@ This example uses the [Microsoft.Extensions.Http.Polly](https://www.nuget.org/pa
 
 ## See Also
 
-* [Static C# Client Proxies](Static-CSharp-API-Clients.md)
+* [Static C# Client Proxies](./static-csharp-clients.md)
