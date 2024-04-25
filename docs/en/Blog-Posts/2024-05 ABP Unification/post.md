@@ -61,4 +61,22 @@ As mentioned above, all the free & open source features are still free & open so
 
 ## Merging the ABP Platform Documentation
 
+Currently, ABP Framework (open source) and ABP Commercial [documents](https://docs.abp.io/) are completely separated. You can switch between them on the left side:
+
+![docs-project-selection](docs-project-selection.png)
+
+Based on our and customers' experiences, there are some problems with that approach:
+
+* Getting started, development tutorials, release notes, road map and some other documents are duplicated (or very similar) among ABP Framework and ABP Commercial documents.
+* For ABP Commercial users, it is not clear if they also need to read the ABP Framework (open source) documentation or not. Actually they should, but we are getting feedbacks that they can not clearly understand it. Also, when they read the framework document, some parts are different for ABP Commercial users, and it is also not clear in some cases.
+
+We are currently working to completely merge the ABP Framework (open source) and ABP Commercial documentation, remove duplications and revisit the contents. We will clearly indicate if a part of a document requires a paid license.
+
+The left navigation panel tree is also completely revisited and simplified:
+
+![docs-new-navigation](docs-new-navigation.png)
+
+## The ABP Studio Community Edition
+
 TODO
+
