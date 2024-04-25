@@ -8,7 +8,7 @@
 
 ## Introduction
 
-One of the major goals of the ABP framework is to provide a [convenient infrastructure to create microservice solutions](../Microservice-Architecture.md).
+One of the major goals of the ABP framework is to provide a [convenient infrastructure to create microservice solutions](../framework/architecture/microservices/index.md).
 
 This sample aims to demonstrate a simple yet complete microservice solution;
 
@@ -132,7 +132,7 @@ Microservices have no UI, but exposes some REST APIs.
 
 ### Modules
 
-* **Product**: A layered module that is developed with the [module development best practices](../Best-Practices/Index.md). It can be embedded into a monolithic application or can be hosted as a microservice by separately deploying API and UI (as done in this demo solution).
+* **Product**: A layered module that is developed with the [module development best practices](../framework/architecture/best-practices/index.md). It can be embedded into a monolithic application or can be hosted as a microservice by separately deploying API and UI (as done in this demo solution).
 
 ### Databases
 
@@ -284,7 +284,7 @@ Backend admin application uses the Identity and Product microservices for all op
 
 ##### HTTP Clients
 
-ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
+ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
 
 For that purpose, `BackendAdminAppHostModule` class declares dependencies for `AbpIdentityHttpApiClientModule` and `ProductManagementHttpApiClientModule`.
 
@@ -570,7 +570,7 @@ This configuration uses standard MVC middleware when request path starts with `/
 
 #### Swagger
 
-This gateway is configured to use the [swagger UI](https://swagger.io/tools/swagger-ui/), a popular tool to discover & test HTTP APIs. Normally, Ocelot does not support to show APIs on the swagger, because it can not know details of each microservice API. But it is possible when you follow ABP layered module architecture [best practices](../Best-Practices/Index.md).
+This gateway is configured to use the [swagger UI](https://swagger.io/tools/swagger-ui/), a popular tool to discover & test HTTP APIs. Normally, Ocelot does not support to show APIs on the swagger, because it can not know details of each microservice API. But it is possible when you follow ABP layered module architecture [best practices](../framework/architecture/best-practices/index.md).
 
 `BackendAdminAppGatewayHostModule` adds dependency to `AbpIdentityHttpApiModule` (*[Volo.Abp.Identity.HttpApi](https://www.nuget.org/packages/Volo.Abp.Identity.HttpApi)* package) and `ProductManagementHttpApiModule` (*ProductManagement.HttpApi* project) to include their HTTP API Controllers. In this way, swagger can discover them. While it references to the API layer, it does not reference to the implementation of application services, because they will be running in the related microservice endpoints and redirected by the Ocelot based on the request URL.
 
@@ -1030,9 +1030,9 @@ Swagger UI is configured and is the default page for this service. If you naviga
 
 ## Modules
 
-ABP provides a strong infrastructure to make modular application development easier by providing services and architecture (see the [module development best practices guide](../Best-Practices/Index.md)).
+ABP provides a strong infrastructure to make modular application development easier by providing services and architecture (see the [module development best practices guide](../framework/architecture/best-practices/index.md)).
 
-This solution demonstrate how to use [prebuilt application modules](../Modules/Index.md) in a distributed architecture. The solution also includes a simple "Product Management" module to show the implementation of a well layered module example.
+This solution demonstrate how to use [prebuilt application modules](../modules/index.md) in a distributed architecture. The solution also includes a simple "Product Management" module to show the implementation of a well layered module example.
 
 ### Product Management
 
@@ -1046,7 +1046,7 @@ Product Management is a module that consists of several layers and packages/proj
 * `ProductManagement.Application` contains the implementation of application services.
 * `ProductManagement.EntityFrameworkCore` contains DbConext and other EF Core related classes and configuration.
 * `ProductManagement.HttpApi` contains API Controllers.
-* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature of the ABP framework.
+* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP framework.
 * `ProductManagement.Web` contains the UI elements (pages, scripts, styles... etc).
 
 By the help of this layering, it is possible to use the same module as a package reference in a monolithic application or use as a service that runs in another server. It is possible to separate UI (Web) and API layers, so they run in different servers.
@@ -1057,7 +1057,7 @@ This tutorial will highlight some important aspects of the module. But, it's sug
 
 #### Domain Layer
 
-`Product` is the main [Aggregate Root](../Entities.md) of this module:
+`Product` is the main [Aggregate Root](../framework/architecture/domain-driven-design/entities.md) of this module:
 
 ````csharp
 public class Product : AuditedAggregateRoot<Guid>
@@ -1175,7 +1175,7 @@ private Product SetStockCountInternal(int stockCount, bool triggerEvent = true)
 
 This method also triggers a **distributed event** with the `ProductStockCountChangedEto` parameter (Eto is a conventional postfix stands for **E**vent **T**ransfer **O**bject, but not required) to notify listeners that stock count of a product has changed. Any subscriber can receive this event and perform an action based on that knowledge.
 
-Events are distributed by RabbitMQ for this solution. But ABP is message broker independent by providing necessary abstractions (see the [Event Bus](../Event-Bus.md) document).
+Events are distributed by RabbitMQ for this solution. But ABP is message broker independent by providing necessary abstractions (see the [Event Bus](../framework/infrastructure/event-bus/index.md) document).
 
 As said before, this module forces to always use the `ProductManager` to create a new `Product`. `ProductManager` is a simple domain service defined as shown:
 
@@ -1235,7 +1235,7 @@ public class ProductCodeAlreadyExistsException : BusinessException
 }
 ````
 
-`PM:000001` is a code for the exception type that is sent to the clients, so they can understand the error type. Not implemented for this case, but it is also possible to localize business exceptions. See the [exception handling documentation](../Exception-Handling.md).
+`PM:000001` is a code for the exception type that is sent to the clients, so they can understand the error type. Not implemented for this case, but it is also possible to localize business exceptions. See the [exception handling documentation](../framework/fundamentals/exception-handling.md).
 
 #### Application Layer
 
@@ -1266,9 +1266,9 @@ public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto input)
 * Gets the id of the product and a DTO contains the values to update.
 * Gets the related product entity from the repository.
 * Uses the related methods (like `SetName`) of the `Product` class to change properties, because they are with private setters and the only way to change a value is to use an entity method.
-* Returns an updated `ProductDto` to the client (client may need it for some reason) by using the [ObjectMapper](../Object-To-Object-Mapping.md).
+* Returns an updated `ProductDto` to the client (client may need it for some reason) by using the [ObjectMapper](../framework/infrastructure/object-to-object-mapping.md).
 
-The implementation may vary based on the requirements. This implementation follows the [best practices offered here](../Best-Practices/Application-Services.md).
+The implementation may vary based on the requirements. This implementation follows the [best practices offered here](../framework/architecture/best-practices/application-services.md).
 
 #### Other Layers
 
@@ -1331,7 +1331,7 @@ public class MyHandler : IDistributedEventHandler<ProductStockCountChangedEto>
 
 All the integration and communication are done by the ABP framework when you use the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package. If you need to publish events out of an entity, just inject the `IDistributedEventBus` and use the `PublishAsync` method.
 
-See the [Event Bus](../Event-Bus.md) documentation for more information about the distributed event system.
+See the [Event Bus](../framework/infrastructure/event-bus/index.md) documentation for more information about the distributed event system.
 
 #### RabbitMQ Configuration
 
@@ -1410,7 +1410,7 @@ Kibana URL is `http://localhost:5601/` by default.
 
 ### Audit Logging
 
-ABP provides automatic audit logging which saves every request in detail (who is the current user, what is the browser/client, what actions performed, which entities changed, even which properties of entities has been updated). See the [audit logging document](../Audit-Logging.md) for details.
+ABP provides automatic audit logging which saves every request in detail (who is the current user, what is the browser/client, what actions performed, which entities changed, even which properties of entities has been updated). See the [audit logging document](../framework/infrastructure/audit-logging.md) for details.
 
 All of the services and applications are configured to write audit logs. Audit logs are saved to the MsDemo_Identity SQL database. So, you can query all audit logs of all applications from a single point.
 
@@ -1418,4 +1418,4 @@ An Audit Log record has a `CorrelationId` property that can be used to track a r
 
 ### Multi-Tenancy
 
-The solution has been configured to provide a [multi-tenant](../Multi-Tenancy.md) system, where each tenant can have their isolated users, roles, permissions and other data.
+The solution has been configured to provide a [multi-tenant](../framework/architecture/multi-tenancy/index.md) system, where each tenant can have their isolated users, roles, permissions and other data.

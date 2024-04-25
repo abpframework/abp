@@ -59,23 +59,23 @@ The following samples uses the pro modules.
   * [Article](https://community.abp.io/articles/creating-an-event-organizer-application-with-the-blazor-ui-wbe0sf2z)
 * **Entity Framework Migrations**: A solution to demonstrate how to split your application into multiple databases each database contains different modules.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo)
-  * [EF Core database migrations document](../Entity-Framework-Core-Migrations.md)
+  * [EF Core database migrations document](../framework/data/entity-framework-core/migrations.md)
 * **SignalR Demo**: A simple chat application that allows to send and receive messages among authenticated users.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/SignalRDemo)
-  * [SignalR Integration document](../SignalR-Integration.md)
+  * [SignalR Integration document](../framework/real-time/signalr.md)
 * **Real Time Messaging In A Distributed Architecture** (using SingalR & RabbitMQ)
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/SignalRTieredDemo)
   * [Article](https://community.abp.io/articles/real-time-messaging-in-a-distributed-architecture-using-abp-framework-singalr-rabbitmq-daf47e17)
 * **Dashboard Demo**: A simple application to show how to use the widget system for the ASP.NET Core MVC UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/DashboardDemo)
-  * [Widget documentation](../UI/AspNetCore/Widgets.md)
+  * [Widget documentation](../framework/ui/mvc-razor-pages/widgets.md)
 * **RabbitMQ Event Bus Demo**: A solution consists of two applications communicating to each other via distributed events with RabbitMQ integration.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/RabbitMqEventBus)
-  * [Distributed event bus document](../Distributed-Event-Bus.md)
-  * [RabbitMQ distributed event bus integration document](../Distributed-Event-Bus-RabbitMQ-Integration.md)
+  * [Distributed event bus document](../framework//infrastructure/event-bus/distributed/index.md)
+  * [RabbitMQ distributed event bus integration document](../framework/infrastructure/event-bus/distributed/rabbitmq.md)
 * **Text Templates Demo**: Shows different use cases of the text templating system.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo)
-  * [Text templating documentation](../Text-Templating.md)
+  * [Text templating documentation](../framework/infrastructure/text-templating/index.md)
 * **Stored Procedure Demo**: Demonstrates how to use stored procedures, database views and functions with best practices.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/StoredProcedureDemo)
 * **Passwordless Authentication**: Shows how to add a custom token provider to authenticate a user with a link, instead of entering a password.
@@ -105,7 +105,7 @@ The following samples uses the pro modules.
   * [Article](https://community.abp.io/articles/using-syncfusion-components-with-the-abp-framework-5ccvi8kc)
 * **Empty ASP.NET Core Application**: The most basic ASP.NET Core application with ABP installed.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)
-  * [Documentation](../Getting-Started-AspNetCore-Application.md)
+  * [Documentation](../get-started/empty-aspnet-core-application.md)
 * **Using Elsa Workflow with ABP**: Shows how to use the Elsa Core workflow library within an ABP-based application. 
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/ElsaDemo)
   * [Article](https://community.abp.io/articles/using-elsa-workflow-with-the-abp-framework-773siqi9)
