@@ -154,6 +154,9 @@ public class MyProjectNameModule : AbpModule
         {
             options.IsBlazorWebApp = true;
         });
+        
+        MyProjectNameGlobalFeatureConfigurator.Configure();
+        MyProjectNameModuleExtensionConfigurator.Configure();
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
